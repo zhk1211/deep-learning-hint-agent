@@ -1,0 +1,218 @@
+\documentclass{article}
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
+\usepackage[preprint]{neurips_2024}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+
+
+\title{An Intelligent Hint Generation Agent for Competitive Programming}
+
+\author{%
+  Team Leader \\
+  \texttt{2025040161} \\
+  \And
+  Team Member 1 \\
+  \texttt{2025040141} \\
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+  We propose an LLM-based agentic workflow to automatically generate progressive, Codeforces-style hints for competitive programming problems, culminating in an interactive educational live demo.
+\end{abstract}
+
+\section{Introduction}
+Competitive Programming (CP), including elite competitions like the Olympiad in Informatics (OI), presents a steep learning curve. Students widely practice on platforms like Codeforces (CF) \cite{codeforces}. However, when stuck, reading full editorial solutions often spoils the problem and bypasses the critical thinking process. A highly effective pedagogical alternative is providing progressive hints (e.g., Hint 1, Hint 2) to guide learners step-by-step.
+
+While current Large Language Models (LLMs) possess strong zero-shot coding capabilities \cite{OpenCodeInterpreter}, they typically act as direct "solution printers" rather than interactive tutors. Furthermore, simply applying Supervised Fine-Tuning (SFT) rarely improves a model's underlying logic limitation. Therefore, we propose an intelligent agentic workflow. Our system digests a CP problem and its full solution, strategically decomposing the logic to generate high-quality, CF-style progressive hints.
+
+\section{Goal of Achievement}
+The primary goal of this project is to build an interactive AI tutoring system for competitive programming. Specifically, we aim to achieve:
+\begin{enumerate}
+    \item \textbf{High-Quality Hint Generation:} The system should generate structured, non-spoiling, and logically sound hints mirroring the classic CF tutorial style.
+    \item \textbf{Live Interactive Demo:} We will deliver a web-based UI where a user can input a competitive programming problem and its solution. The system will dynamically generate and reveal hints step-by-step as the user requests them, serving as a real-time coding tutor.
+\end{enumerate}
+
+\section{Methods}
+Based on the capabilities of modern LLMs, we will adopt a workflow-driven approach over a pure Supervised Fine-Tuning (SFT) paradigm, structured as follows:
+
+\paragraph{1. Data Collection} We will crawl problems, full solutions, and existing human-written progressive hints from Codeforces. This dataset will serve as both a reference for prompt engineering and a training set if style-alignment is required.
+
+\paragraph{2. Agentic Workflow Construction} We will utilize a strong base model (e.g., DeepSeek-Coder or an open-source equivalent) as the foundation. We will design a \textit{Multi-Agent} or \textit{Chain-of-Thought (CoT)} workflow \cite{cot}:
+\begin{itemize}
+    \item \textbf{Decomposer Agent:} Analyzes the problem and the full solution, breaking the logic down into multiple distinct conceptual steps.
+    \item \textbf{Reviewer/Critic Agent:} Evaluates the generated hints to ensure they are educational, do not reveal the entire solution at once, and provide progressive guidance.
+\end{itemize}
+
+\paragraph{3. Style Alignment via SFT (Optional/Enhancement)} As modern LLMs possess strong 0-shot logic capabilities, SFT will be strictly utilized to align the output \textit{format} and \textit{tone} with the authentic Codeforces tutorial style (if the agentic prompt engineering falls short in style mimicry). We plan to use LoRA for parameter-efficient fine-tuning \cite{hu2021lora}.
+
+\section{Timeline}
+The project will run from May 3, 2026, to the final presentation on June 8, 2026.
+\begin{itemize}
+    \item \textbf{May 03 - May 10:} Develop crawler; collect and clean Codeforces dataset. Test baseline LLM API zero-shot performance.
+    \item \textbf{May 11 - May 20:} Design and implement the Multi-Agent workflow (Decomposer and Critic). Test and evaluate hint quality.
+    \item \textbf{May 21 - May 28:} (If necessary) Perform SFT using LoRA to format the output style. Begin backend integration.
+    \item \textbf{May 29 - June 04:} Develop the interactive web UI (e.g., using Gradio/Streamlit) for the live demo. Complete system integration.
+    \item \textbf{June 05 - June 08:} Final testing, bug fixing, and preparation of the poster for the final presentation.
+\end{itemize}
+
+\section{Workload Distribution}
+% The workload will be distributed equally among the two team members to ensure the success of both the underlying AI system and the final interactive demo:
+
+% \begin{itemize}
+%     \item \textbf{Team Leader (2025040161):} Responsible for designing the Agentic Workflow (Prompt Engineering, Decomposer/Critic logic), integrating the base LLM, and handling the Supervised Fine-Tuning (SFT) process if style alignment is needed.
+%     \item \textbf{Team Member 1 (2025040141):} Responsible for building the data pipeline (crawling and cleaning Codeforces data), developing the frontend Interactive Web UI (the live demo), deploying the system, and designing the final poster.
+% \end{itemize}
+
+
+\subsection*{Module 1: Data Preparation and Processing (2025040161, more familiar with CP, CF and solution hints with CF style)}
+
+Data is the foundation of large language models. Since we aim to imitate the Codeforces style, high-quality training data is extremely important.
+
+\subsubsection*{Task 1.1: Developing a Codeforces Crawler}
+
+\begin{itemize}
+    \item \textbf{Goal:} Crawl problem statements and official solutions, namely editorials or tutorials, from Codeforces.
+    \item \textbf{Difficulty:} \begin{itemize}
+      \item Understanding the anti-crawling mechanisms of CF and extracting texts with specific formats, such as spoiler panels.
+      \item CF solutions to problems from different periods have different encodings.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Task 1.2: Data Cleaning and Filtering}
+
+\begin{itemize}
+    \item \textbf{Goal:} Problems with no solutions or solutions of extremely poor quality will be removed. The core criterion is to select solutions that already contain a progressive structure such as ``Hint 1, Hint 2, Solution'', so that they can serve as high-quality reference materials.
+    \item \textbf{Difficulty:} Preserving and cleaning Markdown / LaTeX mathematical formulas.
+\end{itemize}
+
+\subsubsection*{Task 1.3: Dataset Construction}
+
+\begin{itemize}
+    \item \textbf{Goal:} Organize the cleaned data into a specific JSON/JSONL format. For example:
+\end{itemize}
+
+\begin{verbatim}
+{
+  "problem": "...",
+  "full_solution": "...",
+  "hints": ["hint1", "hint2", "hint3"]
+}
+\end{verbatim}
+
+This dataset will be used for subsequent testing comparisons and, optionally, SFT training.
+
+\subsection*{Module 2: Agent Workflow and Prompting}
+
+
+\subsubsection*{Task 2.1: Baseline Testing (2025040141)}
+
+\begin{itemize}
+    \item \textbf{Goal:} Select a baseline model, such as GPT-4o, Claude 3.5, or DeepSeek-Coder. Write a basic prompt, such as ``Please generate hints based on the problem statement and solution,'' and observe the output generated directly in a zero-shot setting. Analyze failure cases, such as excessive verbosity, too much irrelevant text, or lack of a Codeforces-style tone.
+\end{itemize}
+
+\subsubsection*{Task 2.2: Agent Architecture Design and Prompt Writing (2025040141\&2025040161)}
+
+\begin{itemize}
+    \item \textbf{Goal:} Design a multi-step generation pipeline.
+    \begin{itemize}
+        \item \textbf{Decomposer:} Ask the large language model not to write hints directly at first, but instead to output the key logical chains in the solution.
+        \item \textbf{Generator:} Generate Hint 1, Hint 2, and Hint 3 step by step according to the logical chains.
+        \item \textbf{Critic:} Ask the large language model to review the generated hints and determine whether they are too explicit. If they reveal too much, the model should be asked to rewrite them.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Task 2.3: Implementing the Agent Logic (2025040141\&2025040161)}
+
+\begin{itemize}
+    \item \textbf{Goal:} Use Python to connect the above logic together. This can be implemented by combining plain handwritten code with API calls, or by using a lightweight framework.
+\end{itemize}
+
+\subsection*{Module 3: Model Fine-tuning with SFT (2025040161)}
+
+% This module is optional and serves as an advanced enhancement.
+
+If after completing Module 2, the hints generated by the Agent are logically good but the language style and formatting do not resemble authentic Codeforces editorials, then this module can be started.
+
+\subsubsection*{Task 3.1: Constructing the SFT Dataset}
+
+\begin{itemize}
+    \item \textbf{Goal:} Convert the high-quality Codeforces data with hints selected from Module 1 into the instruction-tuning format required for SFT training.
+\end{itemize}
+
+\subsubsection*{Task 3.2: Model Training with LoRA}
+
+\begin{itemize}
+    \item \textbf{Goal:} Use an open-source model, such as Qwen-2-Coder, and perform efficient fine-tuning based on LoRA, so that the model is better aligned with the output style of Codeforces.
+\end{itemize}
+
+\subsection*{Task 3.3: Result Comparison and Evaluation}
+
+\begin{itemize}
+    \item \textbf{Goal:} Compare the performance difference between \texttt{Base Model + Agent} and \texttt{SFT Model + Agent}.
+\end{itemize}
+
+\subsection*{Module 4: Front-end Interaction and Live Demo Engineering (2025040141)}
+
+This part is demo-oriented. An impressive interactive interface directly determines the final score to a large extent.
+
+\subsubsection*{Task 4.1: Choosing and Building a UI Framework}
+
+\begin{itemize}
+    \item \textbf{Goal:} It is recommended to use Streamlit or Gradio, as they are very suitable for quickly building interactive interfaces for AI applications.
+\end{itemize}
+
+\subsubsection*{Task 4.2: Implementing the Interaction Logic}
+
+\begin{itemize}
+    \item \textbf{Goal:} Provide an input box on the interface, where users can enter a Codeforces problem link or paste the problem text. After the user clicks generate, do not display all hints at once.
+    \item Implement a Codeforces-like spoiler or accordion panel. The user clicks ``Show Hint 1'' to reveal the first hint, then clicks ``Show Hint 2'' after reading it to reveal the second hint.
+\end{itemize}
+
+\subsubsection*{Task 4.3: LaTeX and Mathematical Formula Rendering}
+
+\begin{itemize}
+    \item \textbf{Goal:} Algorithm problems often contain many mathematical formulas. Use MathJax to ensure that the front end can correctly render mathematical formulas enclosed by \texttt{\$} or \texttt{\$\$}. Otherwise, the user experience will be poor.
+\end{itemize}
+
+\subsection*{Module 5: Project Deliverables and Defense Preparation}
+
+\subsubsection*{Task 5.1: Writing the Project Proposal (2025040161)}
+
+\begin{itemize}
+    \item \textbf{Goal:} Clarify the division of labor and submit the proposal on time. The file should be named \texttt{project.tex}.
+\end{itemize}
+
+\subsubsection*{Task 5.2: Human Evaluation with Case Studies (2025040161)}
+
+\begin{itemize}
+    \item \textbf{Goal:} Select 5--10 classic algorithm problems, run your system to generate hints, and record the results for presentation on the poster. Demonstrate the difference between ``the rough baseline performance without the Agent'' and ``the progressively guided hints generated by your system.''
+\end{itemize}
+
+\subsubsection*{Task 5.3: Academic Poster Design (2025040141)}
+
+\begin{itemize}
+    \item \textbf{Goal:} Design a poster for the presentation on June 8. The poster should include the problem motivation, the Agent Workflow architecture diagram, which is very important and should be drawn clearly and prominently, comparison results, and screenshots of the demo.
+\end{itemize}
+
+\subsubsection*{Task 5.4: Demo Rehearsal and Contingency Preparation (2025040141)}
+
+\begin{itemize}
+    \item \textbf{Goal:} The network or API may be unstable during the defense. Therefore, several high-quality selected cases must be cached or hardcoded in advance in the demo library. During the live presentation, these cases should be demonstrated first.
+\end{itemize}
+
+\bibliographystyle{unsrt}
+\bibliography{ref}
+
+\end{document}
