@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nSteve stumbled upon a collection of $$$n$$$ gears, where gear $$$i$$$ has $$$a\\_i$$$ teeth, and he wants to arrange them into a row.\n\nAfter he arranges them, Steve will spin the leftmost gear at a speed of $$$1$$$ revolution per second. For each of the other gears, let $$$x$$$ be the number of teeth it has, $$$y$$$ be the number of teeth of the gear to its left, and $$$z$$$ be the speed the gear to its left spins at. Then, its speed will be $$$\\\\frac{y}{x} \\\\cdot z$$$ revolutions per second.\n\nSteve considers the contraption satisfactory if the rightmost gear spins at a speed of $$$1$$$ revolution per second. Determine whether Steve can rearrange the gears into a satisfactory contraption.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\\\le t \\\\le 1000$$$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $$$n$$$ ($$$2 \\\\le n \\\\le 100$$$) — the number of gears Steve has.\n\nThe second line of each test case contains $$$n$$$ integers $$$a\\_1,a\\_2,\\\\ldots,a\\_n$$$ ($$$2 \\\\le a\\_i \\\\le 100$$$) — the number of teeth of each gear.\n\nOutput Format\nFor each test case, print \"YES\" if Steve can rearrange the gears in a satisfactory way, and \"NO\" otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n5\n2\n5 5\n4\n6 3 6 9\n2\n2 3\n7\n30 10 12 10 10 9 18\n5\n2 4 8 16 32\nOutput\nYES\nYES\nNO\nYES\nNO\n\nNote\nIn the first test case, the second gear will always spin at speed $$$\\\\frac{5}{5} \\\\cdot 1 = 1$$$ revolution per second, so any arrangement is satisfactory.\n\nIn the second test case, one possible arrangement is $$$\\[6, 3, 9, 6\\]$$$. Then:\n\n- The second gear spins at speed $$$\\\\frac{6}{3} \\\\cdot 1 = 2$$$ revolutions per second.\n- The third gear spins at speed $$$\\\\frac{3}{9} \\\\cdot 2 = \\\\frac{2}{3}$$$ revolutions per second.\n- The fourth spins at speed $$$\\\\frac{9}{6} \\\\cdot \\\\frac{2}{3} = 1$$$ revolution per second.\n\nSince the rightmost gear spins at a speed of $$$1$$$ revolution per second, the arrangement is satisfactory.In the third test case, neither of the possible arrangements $$$\\[2, 3\\]$$$ and $$$\\[3, 2\\]$$$ are satisfactory."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What does the speed of each gear depend on?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Suppose we have some arrangement of gears where gear $$$i$$$ from the left has $$$b_i$$$ teeth. Then the speed of gear $$$n$$$ is $$$1 \\cdot \\frac{b_1}{b_2} \\cdot \\frac{b_2}{b_3} \\cdot \\ldots \\cdot \\frac{b_{n-1}}{b_n}$$$. Notice that most of the fractions cancel, leaving only $$$\\frac{b_1}{b_n}$$$. So in fact, the speed of gear $$$n$$$ depends only on $$$b_n$$$ and $$$b_1$$$.\nTherefore if we want the rightmost gear to have the same speed as the leftmost gear, we need to arrange them in such a way that $$$\\frac{b_1}{b_n} = 1$$$, so $$$b_1 = b_n$$$. This is possible if and only if there are two gears with the same number of teeth. So we just need to find if there are any duplicated values in the given array. This can be checked in $$$\\mathcal{O}(n\\,\\text{log}\\,n)$$$ using a set, although the constraints are low enough to allow checking all pairs in $$$\\mathcal{O}(n^2)$$$ as well."
+        }
+    ]
+}

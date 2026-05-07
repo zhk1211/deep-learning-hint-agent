@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWave is given five integers $ k $ , $ l_1 $ , $ r_1 $ , $ l_2 $ , and $ r_2 $ . Wave wants you to help her count the number of ordered pairs $ (x, y) $ such that all of the following are satisfied:\n\n- $ l_1 \\leq x \\leq r_1 $ .\n- $ l_2 \\leq y \\leq r_2 $ .\n- There exists a non-negative integer $ n $ such that $ \\frac{y}{x} = k^n $ .\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases.\n\nThe only line of each test case contains five integers $ k $ , $ l_1 $ , $ r_1 $ , $ l_2 $ , and $ r_2 $ ( $ 2 \\leq k \\leq 10^9, 1 \\leq l_1 \\leq r_1 \\leq 10^9, 1 \\leq l_2 \\leq r_2 \\leq 10^9 $ ).\n\nOutput Format\nFor each test case, output the number of matching ordered pairs $ (x, y) $ on a new line.\n\nExamples\nSample 1\nInput\n5\n2 2 6 2 12\n2 1 1000000000 1 1000000000\n3 5 7 15 63\n1000000000 1 5 6 1000000000\n15 17 78 2596 20914861\nOutput\n12\n1999999987\n6\n1\n197\n\nNote\nIn the third test case, the matching ordered pairs are the following:\n\n- $ (5,15) $\n- $ (5,45) $\n- $ (6,18) $\n- $ (6,54) $\n- $ (7,21) $\n- $ (7,63) $\n\nIn the fourth test case, the only valid ordered pair is $ (1,1\\,000\\,000\\,000) $"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution 1 (Binary Search)",
+            "content": "Clearly, trying to bruteforce over all possible values of $$$x$$$ or $$$y$$$ is too slow, because the bounds are $$$1 \\leq l_1 \\leq r_1 \\leq 10^9$$$. However, there is another variable that you can actually bruteforce over — and that is $$$n$$$. This is because exponentiation famously makes numbers very big very quickly — and if we set $$$k$$$ as small as possible (i.e. $$$2$$$), we only need to check $$$1 \\leq n \\leq 32$$$. This is because $$$2^{32} \\gt 10^9$$$, so there cannot possibly be any solutions for $$$n \\gt 32$$$ for any $$$k$$$.\nNow, let's rephrase the problem. We need to find pairs $$$(x, y)$$$ such that $$$x \\cdot k^n = y$$$. Now, we can check every value of $$$n$$$ from $$$1$$$ to $$$32$$$, and for each, binary search to find the smallest $$$x$$$ such that $$$y$$$ fits the conditions, and the largest $$$x$$$. Now, we can subtract these two values and add this to the answer."
+        },
+        {
+            "title": "Solution 2 (Intervals)",
+            "content": "Note that we do not need to care about more than $$$32$$$ different values of $$$k^n$$$, because obviously $$$k^{32} \\ge 2^{32} \\gt 10^9$$$. From here and on, we focus on solving for only one value of $$$k^n$$$.\nWhen $$$k^n$$$ is fixed and you are given $$$\\frac{y}{x}=k^n$$$, notice $$$y$$$ is fixed as $$$x k^n$$$. Therefore, if we count the values $$$x$$$ such that $$$y$$$ is in the given interval as well, we will be properly counting the ordered pairs.\nFormally, this condition can be cleared out as:\n$$$l_2 \\le x k^n \\le r_2$$$\n$$$\\frac{l_2}{k^n} \\le x \\le \\frac{r_2}{k^n}$$$\nBecause $$$x$$$ is an integer, $$$\\left \\lceil {\\frac{l_2}{k^n}} \\right \\rceil \\le x \\le \\left \\lfloor {\\frac{r_2}{k^n}} \\right \\rfloor$$$\nThus, when we intersect the two intervals, we get the following interval at last.\n$$$\\max \\left({l_1,\\left \\lceil {\\frac{l_2}{k^n}} \\right \\rceil}\\right) \\le x \\le \\min \\left({r_1,\\left \\lfloor {\\frac{r_2}{k^n}} \\right \\rfloor}\\right)$$$\nCompute the size of this interval for all $$$k^n$$$ (at most $$$32$$$ values) and the answer can be found.\nDo note the following details while implementing:\nWhen $$$r \\lt l$$$, the size of the interval is $$$0$$$, not negative.\nBeware of overflows. Dealing with big integers can be helpful in avoiding this, but it may make your solution slow.\nDo not round up a fraction using the\nceil\nfunction; This has been a recurring issue in almost every Div.4!"
+        }
+    ]
+}

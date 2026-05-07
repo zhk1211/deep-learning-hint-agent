@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are three types of 2D blocks: T-shaped, H-shaped, and U-shaped. Their exact shapes are shown in the figure below:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2216B/9bec90d27e4d779ada62eaa9b162ab6b3ed828927999df00077b053c2c2456c0.png)\n\nYou are given three non-negative integers $ c_T $ , $ c_H $ , and $ c_U $ , representing the numbers of T-shaped, H-shaped, and U-shaped blocks, respectively. Your task is to pack all $ (c_T + c_H + c_U) $ blocks into an $ n \\times 3 $ grid, following these rules:\n\n- Every block must be placed entirely inside the grid;\n- No two blocks may overlap (i.e., no unit cell can be covered by more than one block);\n- Blocks can be rotated by any multiple of $ 90^{\\circ} $ , but their edges must remain parallel to the grid borders.\n\nYou have to find the minimum possible value of $ n $ for which such a packing exists.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe only line of each test case contains three integers $ c_T $ , $ c_H $ , and $ c_U $ ( $ 0\\le c_T,c_H,c_U\\le 10^9 $ , $ c_T+c_H+c_U \\gt 0 $ ) — the numbers of T-shaped, H-shaped, and U-shaped blocks, respectively.\n\nOutput Format\nFor each test case, output a single integer — the minimum possible value of $ n $ .\n\nExamples\nSample 1\nInput\n5\n1 1 1\n2 0 0\n1 1 0\n0 0 1000000000\n1000000000 1000000000 1000000000\nOutput\n7\n5\n5\n3000000000\n7000000000\n\nNote\nThe optimal solutions for the first three test cases are listed below:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2216B/20acef9e7b964af0023fb2cbeba7fbf2b88c1b809ffe906e126a44833ac4572e.png)"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Combining T with U decreases $$$n$$$ by $$$2$$$. Combining T with H decreases $$$n$$$ by 1. One H can be inserted from both directions. Combining k rotated T's decreases $$$n$$$ by $$$k-1$$$. THUs, if $$$c_T \\gt c_U+2c_H$$$, the answer will be $$$2c_T+3c_H+2c_U+1$$$; otherwise, the answer will be $$$2c_T+3c_H+3c_U-\\min{c_T,c_U}$$$."
+        }
+    ]
+}

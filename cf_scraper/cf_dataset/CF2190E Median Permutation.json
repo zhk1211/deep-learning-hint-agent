@@ -1,0 +1,52 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nFor a permutation $ ^{\\text{∗}} $ $ q $ of size $ m \\ge 3 $ , define $ f(q) $ to be a sequence $ b $ of size $ m - 2 $ such that $ b_i = \\operatorname{med}(q_i, q_{i + 1}, q_{i + 2}) $ for all $ 1 \\le i \\le m - 2 $ . Here, $ \\operatorname{med}(x, y, z) $ denotes the second smallest element among $ \\{x, y, z\\} $ .\n\nYou are given an array $ a $ of size $ n $ , where some elements may be $ 0 $ . It is guaranteed that $ a $ contains the values $ 1 $ and $ n $ (that is, there exist indices $ i, j $ such that $ a_i = 1 $ and $ a_j = n $ ).\n\nFind the number of permutations $ p $ of size $ n $ satisfying the following conditions:\n\n- $ p $ is consistent with $ a $ : for all $ 1 \\le i \\le n $ , if $ a_i \\neq 0 $ , then $ p_i = a_i $ .\n- All elements of $ f(p) $ are distinct.\n\nSince the answer can be large, print it modulo $ 998\\,244\\,353 $ .\n\n$ ^{\\text{∗}} $ A permutation of length $ n $ is an array consisting of $ n $ distinct integers from $ 1 $ to $ n $ in arbitrary order. For example, $ [2,3,1,5,4] $ is a permutation, but $ [1,2,2] $ is not a permutation ( $ 2 $ appears twice in the array), and $ [1,3,4] $ is also not a permutation ( $ n=3 $ but there is $ 4 $ in the array).\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 3 \\le n \\le 2 \\cdot 10^5 $ ) — the size of the array.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le n $ ).\n\nIt is guaranteed that all non-zero elements of $ a $ are pairwise distinct. It is also guaranteed that $ a $ contains the values $ 1 $ and $ n $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single integer — the number of permutations $ p $ satisfying the conditions, modulo $ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n5\n3\n1 3 2\n5\n0 5 4 1 0\n7\n0 0 1 0 0 7 0\n10\n1 10 0 0 0 0 0 0 0 0\n15\n0 0 10 0 0 15 0 0 6 7 0 1 0 0 3\nOutput\n1\n0\n10\n1\n4\n\nNote\nIn the first example, the only permutation consistent with the input is $ p = [1, 3, 2] $ . We have $ f(p) = [2] $ , since $ \\operatorname{med}(1, 3, 2) = 2 $ . The elements of $ f(p) $ are distinct, so this permutation is valid. The answer is $ 1 $ .\n\nIn the second example, there are two permutations consistent with the input: $ p = [3, 5, 4, 1, 2] $ and $ p = [2, 5, 4, 1, 3] $ .\n\n- For $ p = [3, 5, 4, 1, 2] $ , $ f(p) = [4, 4, 2] $ .\n- For $ p = [2, 5, 4, 1, 3] $ , $ f(p) = [4, 4, 3] $ .\n\nIn both cases, the value $ 4 $ appears twice in $ f(p) $ . Thus, there are no valid permutations, and the answer is $ 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nIf you bruteforce and oeis, you'll find out that the total number of valid permutations is $$$n \\cdot 2^{n - 2}$$$. You should forget about this, trying to prove this directly is not gonna work.\nHint 2\nConsider the case where $$$p_1 = 1$$$ and $$$p_n = n$$$.\nHint 3\nLook at even and odd indices separately.\nHint 4\nWhen $$$p_1 = 1$$$ and $$$p_n = n$$$, the condition is that $$$p_{i - 2} \\lt p_i$$$ must hold for all $$$i$$$. Try to generalize this condition for other cases.\nHint 5\nIf $$$p_{i - 2} \\lt p_i \\gt p_{i + 2}$$$, we must have $$$p_i = n$$$, so even and odd indices are almost monotonic.\nHint 6\nConsider a case where $$$p_1 \\lt p_3$$$ and $$$p_2 \\gt p_4$$$ and the restrictions this puts on the problem.\nHint 7\nThe two cases above are sufficient, try to make them easier two count.\nHint 8\nThere are $$$2$$$ chains of increasing values."
+        },
+        {
+            "title": "Hint 1",
+            "content": "If you bruteforce and oeis, you'll find out that the total number of valid permutations is $$$n \\cdot 2^{n - 2}$$$. You should forget about this, trying to prove this directly is not gonna work."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Consider the case where $$$p_1 = 1$$$ and $$$p_n = n$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Look at even and odd indices separately."
+        },
+        {
+            "title": "Hint 4",
+            "content": "When $$$p_1 = 1$$$ and $$$p_n = n$$$, the condition is that $$$p_{i - 2} \\lt p_i$$$ must hold for all $$$i$$$. Try to generalize this condition for other cases."
+        },
+        {
+            "title": "Hint 5",
+            "content": "If $$$p_{i - 2} \\lt p_i \\gt p_{i + 2}$$$, we must have $$$p_i = n$$$, so even and odd indices are almost monotonic."
+        },
+        {
+            "title": "Hint 6",
+            "content": "Consider a case where $$$p_1 \\lt p_3$$$ and $$$p_2 \\gt p_4$$$ and the restrictions this puts on the problem."
+        },
+        {
+            "title": "Hint 7",
+            "content": "The two cases above are sufficient, try to make them easier two count."
+        },
+        {
+            "title": "Hint 8",
+            "content": "There are $$$2$$$ chains of increasing values."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Notice that $$$1$$$ and $$$n$$$ can never be medians, so $$$f(p)$$$ has to be a permutation of $$${ 2, \\ldots, n }$$$.\nSuppose that we have 5 consecutive elements $$$[p_1, p_2, p_3, p_4, p_5]$$$, and $$$p_1 \\lt p_3 \\gt p_5$$$. WLOG, assume that $$$p_2 \\lt p_4$$$. It turns out there's a very tight condition for this case to not have duplicates. Mainly, $$$p_3$$$ has to be the largest element.\nProof\nSuppose $$$p_4$$$ is the largest element instead. Median of $$$[3, 5]$$$ is $$$p_3$$$. For $$$[2, 4]$$$ to not have $$$p_3$$$ as the median, we must have $$$p_3 \\lt p_2 \\lt p_4$$$, and the median of $$$[2, 4]$$$ is $$$p_2$$$. But then in $$$[1, 3]$$$ we have $$$p_1 \\lt p_3 \\lt p_2$$$, so $$$p_3$$$ is the median again, which is a contradiction.\nNotice that since $$$p_3$$$ is the largest element among all $$$3$$$ subarrays in which it takes part in, $$$p_3$$$\ncannot\nappear in $$$f(p)$$$. Therefore, an important observation is: if $$$p_{i - 2} \\lt p_i \\gt p_{i + 2}$$$, then $$$p_i = n$$$. Similarly, if $$$p_{i - 2} \\gt p_i \\lt p_{i + 2}$$$, then $$$p_i = 1$$$.\nFrom this we can see that all indices with the same parity are almost monotonic. But how do even and odd indices interact with each other?\nLet's consider another case: $$$[p_1, p_2, p_3, p_4]$$$, $$$p_1 \\lt p_3$$$ and $$$p_2 \\gt p_4$$$ (odd is increasing, even is decreasing). We can see that this case also has a simple structure. Mainly, if we bruteforce (to not consider a lot of cases) all valid permutations of size $$$4$$$ that satisfy the two inequalities above, we'll get only two solutions: $$$[1, 4, 2, 3]$$$ and $$$[3, 2, 4, 1]$$$. This means that either all even indices have values greater than all odd indices, or vice versa.\nThe two conditions we found are actually already sufficient, and it's very easy to prove this.\nSuppose $$$f(p)_i = f(p)_j$$$ with $$$i \\lt j$$$, so $$$p$$$ is invalid. Notice that for this to happen $$$[i, i + 2]$$$ and $$$[j, j + 2]$$$ have to both include the same value in $$$p$$$, so $$$[i, i + 2]$$$ and $$$[j, j + 2]$$$ have to intersect, so $$$i + 2 \\ge j$$$, or $$$j - i \\le 2$$$. Therefore, it is sufficient to check that there are no \"bad\" subarrays $$$[i, i + 4]$$$, and if all subarrays of size $$$5$$$ are valid in $$$p$$$, $$$p$$$ is valid as well.\nUsing this and our two conditions above we can just check all permutations of size $$$5$$$ and verify that they are sufficient.\nSo now we only have to understand how to count. The conditions we have are actually pretty restrictive.\nWLOG, assume that $$$1$$$ is located earlier than $$$n$$$.\nFirst consider the case where $$$pos_1$$$ and $$$pos_n$$$ have the different parity.\nConsider the picture below. Each arrow denotes that the element should be smaller than the element arrow points to. Let's see how even and odd indices compare to each other.\nSpoiler\nLook at $$$i = 2$$$. We have $$$p_2 \\gt p_4$$$ and $$$p_3 \\lt p_5$$$, which is the second condition we had. Since $$$p_4 = 1$$$, we must have $$$p_4 \\lt p_2 \\lt p_3 \\lt p_5$$$. For $$$i = 1$$$ the same thing holds, and since we already know that $$$p_3 \\gt p_2$$$ (and all odd indices in this case must have a larger element than even indices), we must have $$$p_4 \\lt p_2 \\lt p_1 \\lt p_3 \\lt p_5$$$.\nThe same thing happens after $$$n$$$ on the right side, we must have: $$$p_{10} \\lt p_{12} \\lt p_{13} \\lt p_{11} \\lt p_9$$$, so essentially can add two new (purple) arrows to the picture:\nSpoiler\nAnd after some recoloring, we can see that the when $$$1$$$ and $$$n$$$ are located on different parities, there must be two chains of values:\nSpoiler\nAfter applying the same logic, we get a similar situation when $$$1$$$ and $$$n$$$ are located on the same parity:\nSpoiler\nFrom this we can see that in all cases there are at most two increasing chains (dark-red and orange on the two pictures above).\nSince we know the positions of $$$1$$$ and $$$n$$$, the problem now transformed into: given two chains of increasing values, we have to count the number of ways to put all values $$$1, 2, \\ldots, n$$$ into the chains with some values already being placed.\nSuppose we have two chains $$$a$$$ and $$$b$$$ with sizes $$$k$$$ and $$$l$$$, and we know that some $$$a_i = x$$$. Notice that this means that $$$i - 1$$$ of the $$$x - 1$$$ elements before $$$x$$$ have to be in $$$a$$$, and all the others must be in $$$b$$$. This means that we can go through all placed elements and count the number of ways to position the unplaced ones using binomial coefficients. You can read the code for better understanding.\nTime complexity: $$$O(n)$$$."
+        }
+    ]
+}

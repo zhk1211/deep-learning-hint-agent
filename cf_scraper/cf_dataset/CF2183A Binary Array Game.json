@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlice and Bob are playing a game on an array $ a $ of size $ n $ , containing only numbers 0 and 1. Alice moves first, with each player alternating turns.\n\nIn a player's turn, he or she chooses two integers $ l $ and $ r $ such that $ 1 \\leq l \\color{red}{<} r \\leq |a| $ (here, $ |a| $ denotes the current length of $ a $ ). Then, the subarray $ [a_l,a_{l+1},\\ldots,a_r] $ is replaced with a single number $ 1-\\operatorname{min}(a_l,a_{l+1},\\ldots,a_r) $ . That is, if all numbers in the subarray are $ 1 $ , then the subarray $ [a_l,a_{l+1},\\ldots,a_r] $ is removed, and the number $ 0 $ is inserted where the subarray was. Otherwise, the subarray $ [a_l,a_{l+1},\\ldots,a_r] $ is removed, and the number $ 1 $ is inserted where the subarray was.\n\nThe game ends when there is exactly one number left in the array (where the player to go cannot make legal moves). Alice wins if the final number is $ 0 $ . Otherwise, Bob wins. Please determine who wins this game with optimal play.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 100 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a positive integer $ n $ ( $ 3 \\le n \\le 100 $ ), denoting the length of the array $ a $ .\n\nThe second line of each test case contains $ n $ integers $ a_1,a_2,\\ldots,a_n $ ( $ 0 \\le a_i \\le 1 $ ).\n\nOutput Format\nFor each test case, output Alice if Alice wins, and Bob otherwise. You may output each character in any case. For example, the answers Alice, alice, ALICE, AliCe will all be interpreted the same.\n\nExamples\nSample 1\nInput\n7\n3\n1 1 0\n3\n1 1 1\n3\n0 1 0\n4\n0 0 0 0\n5\n1 0 1 0 1\n6\n0 1 0 1 0 1\n6\n0 1 0 1 0 0\nOutput\nAlice\nAlice\nBob\nBob\nAlice\nAlice\nBob\n\nNote\nIn the first test case, Alice can win by choosing $ l=2 $ and $ r=3 $ . Since $ 1-\\operatorname{min}(a_2,a_3)=1 $ , the subarray $ [1,0] $ is replaced with a single integer $ 1 $ , and $ a $ becomes $ [1,1] $ . At this point, it is Bob's turn, and the only move he has is to choose $ l=1 $ and $ r=2 $ . Since $ 1-\\operatorname{min}(a_1,a_2)=0 $ , the array $ a $ becomes $ [0] $ . The game now ends, and Alice wins because the last number is $ 0 $ .\n\nIn the second test case, Alice can win by choosing $ l=1 $ and $ r=3 $ in her first move. The array becomes $ [0] $ , and the game ends as a win for Alice immediately."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "If the sequence $$$a$$$ consists entirely of $$$1$$$ s, what will Alice do?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Consider discussing the values of $$$a_1$$$ and $$$a_n$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "First, if the entire sequence consists of $$$1$$$ s, Alice wins immediately by operating on the whole sequence.\nNote that the last operation must involve at least one of $$$a_1$$$ or $$$a_n$$$. We discuss based on the values of $$$a_1$$$ and $$$a_n$$$:\nIf $$$a_1 = 1$$$, then Alice can directly operate on the interval $$$[2,n]$$$ to win, because $$$a_{2 \\sim n}$$$ must contain at least one $$$0$$$.\nIf $$$a_n = 1$$$, then Alice can directly operate on the interval $$$[1,n-1]$$$ to win, because $$$a_{1 \\sim n-1}$$$ must contain at least one $$$0$$$.\nIf $$$a_1 = 0$$$ and $$$a_n = 0$$$, then operating on the entire sequence would certainly cause Alice to lose. This implies that Alice cannot operate on both $$$a_1$$$ and $$$a_n$$$ simultaneously. Therefore, after Alice's operation, there will still be at least one $$$0$$$ in the sequence $$$a$$$. Bob can then operate on the entire sequence to win. Hence, in this case, Bob wins.\nTime complexity: $$$O(\\sum n)$$$."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\n_t_\n,\nn\n,\na\n[\n100010\n];\nvoid\nsolve\n()\n{\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nif\n(\na\n[\n1\n]+\na\n[\nn\n]==\n0\n)\ncout\n<<\n\"NO\\n\"\n;\nelse\ncout\n<<\n\"YES\\n\"\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n),\ncout\n.\ntie\n(\n0\n);\ncin\n>>\n_t_\n;\nwhile\n(\n_t_\n--)\nsolve\n();\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a graph of $ n $ nodes and $ m $ undirected edges. Find the [shortest path](https://en.wikipedia.org/wiki/Shortest_path_problem) from node $ 1 $ to each node with Dikjstra's algorithm.\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ $ (2 \\leq n \\leq 100, 0 \\leq m \\leq \\frac{n(n-1)}{2}) $ .\n\nThe following $ m $ lines contain $ 3 $ integers each: $ u $ , $ v $ , and $ w $ , denoting an undirected edge from $ u $ to $ v $ with weight $ w $ $ (1 \\leq u, v \\leq n, 0 \\leq w \\leq 10^5) $ .\n\nOutput Format\nOutput the shortest path from node $ 1 $ to each node $ 2, \\dots, n $ . If a node is not reachable from node $ 1 $ , output $ -1 $ .\n\nExamples\nSample 1\nInput\n2 1\n1 2 1\nOutput\n1"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "It is intentional."
+        },
+        {
+            "title": "Hint 2",
+            "content": "use Dikjstra's algorithm."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "The astute reader may have noticed that \"Dijkstra\" is spelled incorrectly as \"Dikjstra\" in the problem statement. As a reference to\nthis Meta Hacker Cup problem\n, we can use\nFloyd Warshall\nwith a loop order of\ni\n,\nk\n, then\nj\nto find the correct shortest paths."
+        }
+    ]
+}

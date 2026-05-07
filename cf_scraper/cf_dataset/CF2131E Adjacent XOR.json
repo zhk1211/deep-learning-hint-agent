@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou're given an array $$$a$$$ of length $$$n$$$. For each index $$$i$$$ such that $$$1 \\\\le i &lt; n$$$, you can perform the following operation at most once:\n\n- Assign $$$a\\_i := a\\_i \\\\oplus a\\_{i+1}$$$, where $$$\\\\oplus$$$ denotes the <a>bitwise XOR operation</a>. .\n\nYou can choose indices and perform the operations in any sequential order.\n\nGiven another array $$$b$$$ of length $$$n$$$, determine if it is possible to transform $$$a$$$ to $$$b$$$.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\\\le t \\\\le 10^4$$$). The description of the test cases follows.\n\nThe first line of each test case contains one integer $$$n$$$ ($$$2 \\\\le n \\\\le 2 \\\\cdot 10^5$$$).\n\nThe second line of each test case contains $$$n$$$ integers $$$a\\_1, a\\_2, \\\\dots, a\\_n$$$ ($$$0 \\\\le a\\_i &lt; 2^{30}$$$).\n\nThe third line of each test case contains $$$n$$$ integers $$$b\\_1, b\\_2, \\\\dots, b\\_n$$$ ($$$0 \\\\le b\\_i &lt; 2^{30}$$$).\n\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$2 \\\\cdot 10^5$$$.\n\nOutput Format\nFor each test case, output \"YES\" (quotes excluded) if $$$a$$$ can be transformed to $$$b$$$; otherwise, output \"NO\". You can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n7\n5\n1 2 3 4 5\n3 2 7 1 5\n3\n0 0 1\n1 0 1\n3\n0 0 1\n0 0 0\n4\n0 0 1 2\n1 3 3 2\n6\n1 1 4 5 1 4\n0 5 4 5 5 4\n3\n0 1 2\n2 3 2\n2\n10 10\n11 10\nOutput\nYES\nNO\nNO\nNO\nYES\nNO\nNO\n\nNote\nIn the first test case, you can perform the operations in the following order:\n\n1. Choose index $$$i=3$$$ and assign $$$a\\_3 := a\\_3 \\\\oplus a\\_4 = 7$$$, and $$$a$$$ becomes $$$\\[1, 2, 7, 4, 5\\]$$$.\n2. Choose index $$$i=4$$$ and assign $$$a\\_4 := a\\_4 \\\\oplus a\\_5 = 1$$$, and $$$a$$$ becomes $$$\\[1, 2, 7, 1, 5\\]$$$.\n3. Choose index $$$i=1$$$ and assign $$$a\\_1 := a\\_1 \\\\oplus a\\_2 = 3$$$, and $$$a$$$ becomes $$$\\[3, 2, 7, 1, 5\\]$$$."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        }
+    ]
+}

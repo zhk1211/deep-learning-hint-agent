@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer array $ a $ of length $ n $ .\n\nYou can perform the following operation: choose a range $ [l, r] $ ( $ 1 \\le l \\le r \\le n $ ) and replace the value of elements $ a_l, a_{l+1}, \\dots, a_r $ with $ (l + r) $ .\n\nYour task is to calculate the maximum possible total array sum if you can perform the aforementioned operation at most once.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i \\le 2n $ ).\n\nAdditional constraint on the input: the sum of $ n $ over all test cases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single integer — the maximum possible total array sum if you can perform the aforementioned operation at most once.\n\nExamples\nSample 1\nInput\n4\n3\n2 5 1\n2\n4 4\n4\n1 3 2 1\n5\n3 2 0 9 10\nOutput\n13\n8\n20\n32\n\nNote\nIn the first example, you can perform the operation on the subarray $ [3, 3] $ , resulting in the array $ [2, 5, 6] $ and the sum $ 13 $ .\n\nIn the second example, you don't need to perform any operation.\n\nIn the third example, you can perform the operation on the subarray $ [1, 4] $ , resulting in the array $ [5, 5, 5, 5] $ and the sum $ 20 $ .\n\nIn the fourth example, you can perform the operation on the subarray $ [2, 3] $ , resulting in the array $ [3, 5, 5, 9, 10] $ and the sum $ 32 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nli\n=\nlong\nlong\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nli s\n=\n0\n,\nmn\n=\n0\n,\nbst\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nint\nx\n;\ncin\n>>\nx\n;\ns\n+=\nx\n;\nli cur\n=\n(\ni\n+\n1\n)\n*\nli\n(\ni\n+\n2\n)\n-\ns\n;\nmn\n=\nmin\n(\nmn\n,\ncur\n);\nbst\n=\nmax\n(\nbst\n,\ncur\n-\nmn\n);\n}\ncout\n<<\ns\n+\nbst\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

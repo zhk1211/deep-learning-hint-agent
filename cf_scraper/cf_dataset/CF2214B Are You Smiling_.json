@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nShow us a smile! 😁\n\nOutput Format\nFor a properly chosen $ \\mathrm{?} $ , the following equation holds: $ \\mathrm{U} + \\mathrm{?} = \\mathrm{HAPPY} $ .\n\nOutput $ \\mathrm{?} $ , a string consisting of uppercase letters and numbers.\n\nExamples\nSample 1\nInput\nshow us your smile!\nOutput"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "One unusual thing about the statement is the presence of a emoji. More precisely, a smiling, emoji.\nOkay, let's try to print a smiling emoji.\nHowever, the output should be a string of characters and numbers, so we cannot do it directly.\nThere's one more suspicious thing in the statement — the $$$U+?=HAPPY$$$ equation. If we should print ?, what is the meaning of U?\nU+ often indicates that an unicode of a special character is given — an international standardized encoding for characters, including emojis. A quick Google search can be used to obtain an unicode of any emoji, for example 😁 is represented as U+1F601 (in hexadecimal system). Outputing 😁 indeed works — however there are many possible answers.\nSince both hexadecimal and decimal representation is commonly used, the checker was accepting smiling emojis in both formats."
+        }
+    ]
+}

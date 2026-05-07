@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMouf is bored with themes, so he decided not to use any themes for this problem.\n\nYou are given a binary $ ^{\\text{∗}} $ string $ s $ of length $ n $ . You are to perform the following operation exactly $ k $ times:\n\n- select an index $ i $ ( $ 1 \\le i \\le n $ ) such that $ s_i = \\mathtt{0} $ ;\n- then flip $ ^{\\text{†}} $ each $ s_j $ for all indices $ j $ ( $ 1 \\le j \\le i $ ).\n\nYou need to count the number of possible ways to perform all $ k $ operations.\n\nSince the answer could be ginormous, print it modulo $ 998\\,244\\,353 $ .\n\nTwo sequences of operations are considered different if they differ in the index selected at any step.\n\n$ ^{\\text{∗}} $ A binary string is a string that consists only of the characters $ \\mathtt{0} $ and $ \\mathtt{1} $ .\n\n$ ^{\\text{†}} $ Flipping a binary character is changing it from $ \\mathtt{0} $ to $ \\mathtt{1} $ or vice versa.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 100 $ ). The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 500 $ ) — the length of the binary string $ s $ and the number of times the operation must be performed, respectively.\n\nThe second line of each test case contains a binary string $ s $ of length $ n $ consisting of only characters $ \\mathtt{0} $ and $ \\mathtt{1} $ .\n\nIt is guaranteed that the sum of $ n $ does not exceed $ 500 $ over all test cases.\n\nOutput Format\nFor each test case, output a single integer — the number of ways you can perform exactly $ k $ operations, modulo $ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n5\n3 1\n010\n3 2\n000\n5 4\n01001\n8 8\n11001100\n20 20\n10010110101101010110\nOutput\n2\n3\n10\n27286\n915530405\n\nNote\nIn the first test case, here are all the possible sequences of operations:\n\n- $ \\mathtt{\\color{red}{0}10} \\xrightarrow{i = 1} \\mathtt{110} $\n- $ \\mathtt{\\color{red}{010}} \\xrightarrow{i = 3} \\mathtt{101} $\n\nIn the second test case, here are all the possible sequences of operations:\n\n- $ \\mathtt{\\color{red}{0}00} \\xrightarrow{i = 1} \\mathtt{\\color{red}{1}00} \\xrightarrow{i = 2} \\mathtt{010} $\n- $ \\mathtt{\\color{red}{0}00} \\xrightarrow{i = 1} \\mathtt{\\color{red}{1}00} \\xrightarrow{i = 3} \\mathtt{011} $\n- $ \\mathtt{\\color{red}{00}0} \\xrightarrow{i = 2} \\mathtt{\\color{red}{11}0} \\xrightarrow{i = 3} \\mathtt{001} $"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nThe state of $$$s_i$$$ depend entirely on how many operations have been performed on the suffix $$$s_i, s_{i+1}, \\ldots, s_n$$$.\nHint 2\nLet $$$dp[i][j]$$$ denote the number of ways to perform exactly $$$j$$$ moves on the suffix $$$s_i, s_{i+1}, \\ldots, s_n$$$."
+        },
+        {
+            "title": "Hint 1",
+            "content": "The state of $$$s_i$$$ depend entirely on how many operations have been performed on the suffix $$$s_i, s_{i+1}, \\ldots, s_n$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Let $$$dp[i][j]$$$ denote the number of ways to perform exactly $$$j$$$ moves on the suffix $$$s_i, s_{i+1}, \\ldots, s_n$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Some useful insight is to see that if you operate on an element, then every element after it will be unaffected; similarly, the state of an element in the string depends only on the number of operations used on the suffix after it. More specifically, an element's state flips with each operation applied to a suffix that includes it, so its value depends entirely on the number of operations done to its suffix.\nThis inspires the following $$$dp$$$ state:\n$$$ {} $$$\n$$$ dp[i][j] = \\text{the number of ways to make exactly } j \\text{ moves on the suffix only } s_i,...,s_n. $$$\nNow, regarding transitions — the number of ways to move from state $$$dp[i][j]$$$ to $$$dp[i - 1][j + k]$$$ (in other words the number of ways to add $$$k$$$ operations at the $$$(i - 1)$$$-th index) can be thought of in terms of forming strings composed of characters $$$A$$$ and $$$B$$$, where $$$A$$$ represents making a move on $$$s_{i - 1}$$$ and $$$B$$$ represents making a move on $$$s_i,...,s_n$$$. Each valid string with $$$j$$$ $$$B$$$s and $$$k$$$ $$$A$$$s represents a unique sequence of moves, so the total number of transitions corresponds to the number of such valid strings. Notice that a string will be valid if and only if every $$$A$$$ occurs when $$$s_{i - 1}$$$ is $$$0$$$, because $$$s_{i - 1}$$$ flips every operation, meaning that every $$$A$$$ should occur on either only even indices or only odd indices depending on the initial value of $$$s_{i - 1}$$$.\nThis means that the transition will be either $$$\\displaystyle\\binom{\\left\\lfloor \\frac{j + k}{2} \\right\\rfloor}{k}$$$ or $$$\\displaystyle\\binom{\\left\\lceil \\frac{j + k}{2} \\right\\rceil}{k}$$$.\nFinally, the answer can be found in $$$dp[1][k]$$$.\nThe overall time complexity is: $$$O(n \\cdot k^2)$$$."
+        }
+    ]
+}

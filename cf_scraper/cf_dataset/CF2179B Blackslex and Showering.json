@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAfter his IMO medalist friend showered for two hours so that \"he doesn't have to shower this again this week,\" Blackslex will be late for class!\n\nIn order to get to class, Blackslex must take the crowded elevator to many floors in a certain order. Because he is a hacker, he can skip visiting up to one floor without the other people knowing. His time taken is the sum of the absolute differences between consecutive floor numbers. Find the minimum time taken, given that he can skip up to one floor.\n\nMore formally, given an array $ a = [a_1, a_2, \\ldots, a_n] $ of $ n $ integers, you can choose up to one index $ k \\in \\{1, 2, \\ldots, n\\} $ to erase such that the sum $$$\n\\sum_{i=1}^{n-2} |b_i - b_{i+1}|\n$$$ is minimized, where $ b = [a_1, \\ldots, a_{k-1}, a_{k+1}, \\ldots, a_n] $ is the array after erasing element $ a_k $ . Report the minimum sum.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains one integer $ n $ ( $ 3 \\le n \\le 2 \\cdot 10^5 $ ) — the size of the array.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 100 $ ).\n\nIt is guaranteed that the sum of $ n $ does not exceed $ 2 \\cdot 10^5 $ over all test cases.\n\nOutput Format\nFor each test case, output a single real number — the minimum time taken.\n\nExamples\nSample 1\nInput\n3\n5\n4 15 1 7 9\n3\n2 4 8\n6\n11 13 17 19 23 29\nOutput\n11\n2\n12\n\nNote\nFor the first test case, one optimal index to remove from $ [4, 15, 1, 7, 9] $ is $ k = 2 $ . The array becomes $ [4, 1, 7, 9] $ and the time taken is $ 11 $ . For the second test case, the optimal index to remove is $ k = 3 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "First observe that it is always helpful to remove a floor. Now the question becomes which floor to remove."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "You can simply simulate the process of removing any possible floor. To do this efficiently, compute the current time taken and consider the change to the time taken if a floor is removed. If we remove floor $$$i$$$ where $$$i \\neq 1$$$ and $$$i \\neq n$$$, then the differences $$$|a[i] - a[i-1]|$$$ and $$$|a[i+1] - a[i]|$$$ are removed and the difference $$$|a[i-1] - a[i+1]|$$$ is added. If $$$i = 1$$$ or $$$i = n$$$, only the adjacent difference is removed.\nTime complexity: $$$\\mathcal{O}(n)$$$"
+        },
+        {
+            "title": "Implementation (C++)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nvoid\ntest_case_run\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nll a\n[\nn\n+\n1\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nll sum\n=\n0\n;\nfor\n(\nint\ni\n=\n2\n;\ni\n<=\nn\n;\ni\n++)\nsum\n+=\nabs\n(\na\n[\ni\n]-\na\n[\ni\n-\n1\n]);\nll ans\n=\nmin\n(\nsum\n-\nabs\n(\na\n[\n2\n]-\na\n[\n1\n]),\nsum\n-\nabs\n(\na\n[\nn\n]-\na\n[\nn\n-\n1\n]));\nfor\n(\nint\ni\n=\n2\n;\ni\n<\nn\n;\ni\n++)\n{\nans\n=\nmin\n(\nans\n,\nsum\n-\nabs\n(\na\n[\ni\n+\n1\n]-\na\n[\ni\n])\n-\nabs\n(\na\n[\ni\n]-\na\n[\ni\n-\n1\n])\n+\nabs\n(\na\n[\ni\n+\n1\n]-\na\n[\ni\n-\n1\n]));\n}\ncout\n<<\nans\n<<\n\"\\n\"\n;\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\ntest_case_run\n();\nreturn\n0\n;\n}"
+        }
+    ]
+}

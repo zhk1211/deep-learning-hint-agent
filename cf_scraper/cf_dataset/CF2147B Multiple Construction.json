@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer $ n $ . Your task is to construct an array of length $ 2 \\cdot n $ such that:\n\n- Each integer from $ 1 $ to $ n $ appears exactly twice in the array.\n- For each integer $ x $ ( $ 1 \\le x \\le n $ ), the distance between the two occurrences of $ x $ is a multiple of $ x $ . In other words, if $ p_x $ and $ q_x $ are the indices of the two occurrences of $ x $ , $ | q_x - p_x | $ must be divisible by $ x $ .\n\nIt can be shown that a solution always exists.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nEach of the next $ t $ lines contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^{5} $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^{5} $ .\n\nOutput Format\nFor each test case, print a line containing $ 2 \\cdot n $ integers — the array that satisfies the given conditions.\n\nIf there are multiple valid answers, print any of them.\n\nExamples\nSample 1\nInput\n3\n2\n3\n1\nOutput\n1 2 1 2\n1 3 1 2 3 2\n1 1\n\nNote\n[Visualizer link](https://codeforces.com/assets/contests/2147/B_RlbLXHyL5DuDqDlx4DG1.html)\n\nIn the first test case:\n\n- The number $ 1 $ appears at positions $ 1 $ and $ 3 $ : the distance is $ 2 $ , which is divisible by $ 1 $ .\n- The number $ 2 $ appears at positions $ 2 $ and $ 4 $ : the distance is $ 2 $ , which is divisible by $ 2 $ .\n\nIn the second test case:\n\n- The number $ 1 $ appears at positions $ 1 $ and $ 3 $ : the distance is $ 2 $ , which is divisible by $ 1 $ .\n- The number $ 2 $ appears at positions $ 4 $ and $ 6 $ : the distance is $ 2 $ , which is divisible by $ 2 $ .\n- The number $ 3 $ appears at positions $ 2 $ and $ 5 $ : the distance is $ 3 $ , which is divisible by $ 3 $ .\n\nIn the third test case, the two occurrences of $ 1 $ are at positions $ 1 $ and $ 2 $ , so the distance between them is $ 1 $ , which is a multiple of $ 1 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "Don't over complicate, there is a simple construction"
+        },
+        {
+            "title": "Hint2",
+            "content": "There is a construction where each number $$$x$$$ is placed at distance either $$$x$$$ or $$$2 \\cdot x$$$."
+        },
+        {
+            "title": "Hint3",
+            "content": "Here is a construction where only the number $$$n$$$ is placed at distance $$$n$$$. All other numbers are placed at distance $$$2 \\cdot x$$$."
+        },
+        {
+            "title": "Hint4",
+            "content": "There is a construction where the first element of the array is always $$$n$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        }
+    ]
+}

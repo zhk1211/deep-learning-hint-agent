@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Under what circumstances can an edge with cost $$$w$$$ be added between vertex $$$u$$$ and vertex $$$v$$$ in a new graph?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Consider divide and conquer."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2222F - Building Tree\nNote that in the new graph, an edge with weight $$$w$$$ exists between two points if and only if, after adding edges with weights in $$$[0,w-1]$$$ and $$$[w+1,\\infty]$$$ to the original graph, these two points become connected.\nSort the edges of the original graph and apply a divide-and-conquer approach by edge weight. Suppose the current interval is $$$[l,r]$$$:\nLet $$$mid=\\lfloor\\frac{l+r}{2}\\rfloor$$$;\nAdd edges with weights in $$$[mid+1,r]$$$ to the original graph;\nRecursively process $$$[l,mid]$$$;\nUndo the edges added in the previous steps, add edges with weights in $$$[l,mid]$$$, and recursively process the interval $$$[mid+1,r]$$$;\nUndo the edges added in step 4.\nThis process of adding and removing edges can be maintained using a reversible union-find data structure. It is not difficult to see that, for any two points $$$(u,v)$$$, the $$$\\text{mex}$$$ of the weights of the edges added when they are first connected during this process is minimized.\nThen, consider Kruskal's algorithm: each time two connected components $$$S$$$ and $$$T$$$ are merged in the original graph, arbitrarily take one point $$$x$$$ from $$$S$$$ and one point $$$y$$$ from $$$T$$$ in the new graph, and attempt to add an edge $$$(x,y,w)$$$ to the minimum spanning tree of the new graph, where $$$w$$$ is the $$$\\text{mex}$$$ of the weights of the edges currently added in the original graph.\nAny point from the new graph can be chosen because the points in the connected component are already connected in the new graph at this stage, and $$$w$$$ can be easily maintained during the divide-and-conquer process.\nThus, the problem is solved. The time complexity is $$$O(n\\log^2 n)$$$ (assuming all parameters are of the same order). Since one $$$\\log$$$ factor comes from the reversible union-find, the algorithm runs quite efficiently."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<iostream>\n#include\n<algorithm>\n#include\n<cstdio>\n#include\n<vector>\nusing\nnamespace\nstd\n;\nconst\nint\nS\n=\n300005\n;\nint\nn\n,\nm\n,\nk\n;\nvector\n<\npair\n<\nint\n,\nint\n>\n>\nvec\n[\nS\n];\nint\nfa\n[\nS\n],\nhei\n[\nS\n],\npt\n[\nS\n],\nfa2\n[\nS\n];\nint\ntop\n,*\npot\n[\nS\n*\n3\n],\nval\n[\nS\n*\n3\n];\nlong\nlong\nans\n;\nint\nfnd\n(\nint\nx\n){\nreturn\nfa\n[\nx\n]==\nx\n?\nx\n:\nfnd\n(\nfa\n[\nx\n]);}\nint\nfnd2\n(\nint\nx\n){\nreturn\nfa2\n[\nx\n]==\nx\n?\nx\n:\nfa2\n[\nx\n]=\nfnd2\n(\nfa2\n[\nx\n]);}\ninline\nvoid\npush\n(\nint\n&\nx\n){\npot\n[++\ntop\n]=&\nx\n,\nval\n[\ntop\n]=\nx\n;}\ninline\nvoid\npop\n(){*\npot\n[\ntop\n]=\nval\n[\ntop\n],\ntop\n--;}\ninline\nvoid\nmerge\n(\nint\nx\n,\nint\ny\n,\nint\nw\n)\n{\nint\nrx\n=\nfnd\n(\nx\n),\nry\n=\nfnd\n(\ny\n);\nif\n(\nrx\n==\nry\n)\nreturn\n;\nint\npx\n=\npt\n[\nrx\n],\npy\n=\npt\n[\nry\n];\nif\n(\npx\n!=\n0\n&&\npy\n!=\n0\n)\n{\nint\nrx\n=\nfnd2\n(\npx\n),\nry\n=\nfnd2\n(\npy\n);\nif\n(\nrx\n!=\nry\n)\nans\n+=\nw\n,\nfa2\n[\nrx\n]=\nfa2\n[\nry\n];\n}\nif\n(\nhei\n[\nrx\n]>\nhei\n[\nry\n])\nswap\n(\nrx\n,\nry\n);\npush\n(\nhei\n[\nry\n]),\nhei\n[\nry\n]=\nmax\n(\nhei\n[\nry\n],\nhei\n[\nrx\n]+\n1\n);\npush\n(\npt\n[\nry\n]),\npt\n[\nry\n]=\nmax\n(\npt\n[\nry\n],\npt\n[\nrx\n]);\npush\n(\nfa\n[\nrx\n]),\nfa\n[\nrx\n]=\nry\n;\n}\nvoid\ndoit\n(\nint\nl\n,\nint\nr\n,\nint\nw\n)\n{\nif\n(\nl\n==\nr\n)\nreturn\n;\nint\ntp\n=\ntop\n;\nint\nmid\n=\nl\n+\nr\n>>\n1\n;\nfor\n(\nint\ni\n=\nr\n;\ni\n>=\nmid\n+\n1\n;\ni\n--)\nfor\n(\nauto\nt\n:\nvec\n[\ni\n])\nmerge\n(\nt\n.\nfirst\n,\nt\n.\nsecond\n,\nw\n);\ndoit\n(\nl\n,\nmid\n,\nw\n);\nwhile\n(\ntop\n>\ntp\n)\npop\n();\nfor\n(\nint\ni\n=\nl\n;\ni\n<=\nmid\n;\ni\n++)\n{\nif\n(!\nvec\n[\ni\n].\nempty\n()&&\nw\n==\ni\n)\nw\n++;\nfor\n(\nauto\nt\n:\nvec\n[\ni\n])\nmerge\n(\nt\n.\nfirst\n,\nt\n.\nsecond\n,\nw\n);\n}\ndoit\n(\nmid\n+\n1\n,\nr\n,\nw\n);\nwhile\n(\ntop\n>\ntp\n)\npop\n();\n}\ninline\nvoid\nslove\n()\n{\ncin\n>>\nn\n>>\nm\n>>\nk\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nm\n;\ni\n++)\nvec\n[\ni\n].\nclear\n();\nfor\n(\nint\ni\n=\n1\n,\nx\n,\ny\n,\nw\n;\ni\n<=\nm\n;\ni\n++)\ncin\n>>\nx\n>>\ny\n>>\nw\n,\nvec\n[\nw\n].\nemplace_back\n(\nx\n,\ny\n);\nvector\n<int>\ntmp\n;\nfor\n(\nint\ni\n=\n1\n,\nx\n;\ni\n<=\nk\n;\ni\n++)\ncin\n>>\nx\n,\ntmp\n.\npush_back\n(\nx\n);\nsort\n(\ntmp\n.\nbegin\n(),\ntmp\n.\nend\n());\ntmp\n.\nerase\n(\nunique\n(\ntmp\n.\nbegin\n(),\ntmp\n.\nend\n()),\ntmp\n.\nend\n());\nk\n=\ntmp\n.\nsize\n();\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\npt\n[\ni\n]=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\ni\n++)\npt\n[\ntmp\n[\ni\n]]=\ni\n+\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nfa\n[\ni\n]=\ni\n,\nhei\n[\ni\n]=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nk\n;\ni\n++)\nfa2\n[\ni\n]=\ni\n;\nans\n=\n0\n;\ndoit\n(\n0\n,\nm\n,\n0\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nk\n;\ni\n++)\nif\n(\nfnd2\n(\ni\n)!=\nfnd2\n(\n1\n))\nreturn\ncout\n<<\n\"-1\\n\"\n,\nvoid\n();\ncout\n<<\nans\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n),\ncin\n.\ntie\n(\n0\n),\ncout\n.\ntie\n(\n0\n);\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n-->\n0\n)\nslove\n();\nreturn\n0\n;\n}"
+        }
+    ]
+}

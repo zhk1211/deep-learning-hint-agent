@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou're given integers $ k $ and $ n $ . For each integer $ x $ from $ 1 $ to $ k $ , count the number of integer arrays $ a $ such that all of the following are satisfied:\n\n- $ 1 \\leq |a| \\leq n $ where $ |a| $ represents the length of $ a $ .\n- $ 1 \\leq a_i \\leq k $ for all $ 1 \\leq i \\leq |a| $ .\n- $ a_1 \\times a_2 \\times \\dots \\times a_{|a|}=x $ (i.e., the product of all elements is $ x $ ).\n\nNote that two arrays $ b $ and $ c $ are different if either their lengths are different, or if there exists an index $ 1 \\leq i \\leq |b| $ such that $ b_i\\neq c_i $ .\n\nOutput the answer modulo $ 998\\,244\\,353 $ .\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t\\leq 10^3 $ ) — the number of independent test cases.\n\nThe only line of each test case contains two integers $ k $ and $ n $ ( $ 1 \\leq k \\leq 10^5, 1\\leq n \\leq 9\\cdot 10^8 $ ).\n\nIt is guaranteed that the sum of $ k $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, output $ k $ space-separated integers on a new line: the number of arrays for $ x=1,2,\\ldots,k $ , modulo $ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n3\n2 2\n4 3\n10 6969420\nOutput\n2 3\n3 6 6 10\n6969420 124188773 124188773 729965558 124188773 337497990 124188773 50981194 729965558 337497990\n\nNote\nIn the first test case, there are $ 2 $ arrays $ a $ with $ |a|\\leq 2 $ and the product of elements equal to $ 1 $ :\n\n- $ [1] $\n- $ [1,1] $\n\nThere are $ 3 $ arrays $ a $ with $ |a|\\leq 2 $ and the product of elements equal to $ 2 $ :\n\n- $ [2] $\n- $ [1,2] $\n- $ [2,1] $"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "When $$$n$$$ is large, many of the array's elements will be $$$1$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The number of non-$$$1$$$ elements can't be so large."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Try to precompute all arrays without $$$1$$$ and then use combinatorics."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution 1",
+            "content": "The naive solution is to define $$$f_k(n)$$$ as the number of arrays containing $$$n$$$ elements with a product of $$$k$$$. We could then try to compute this by considering the last element of the array among the divisors of $$$k$$$, giving us:\n$$$ f_k(n)=\\sum_{j|k}f_j(n-1), $$$\nwith $$$f_k(1)=1$$$.\nThe answers would then be $$$\\sum_{i=1}^{n}f_1(i),\\sum_{i=1}^{n}f_2(i),\\dots,\\sum_{i=1}^{n}f_k(i)$$$. However, this leads to an $$$O(nk\\log k)$$$ solution, which exceeds our time constraints. We need to optimize this approach.\nWe can prove that there are at most $$$16$$$ non-$$$1$$$ elements in our arrays. This is because:\nThe prime factorization of $$$k=p_1p_2\\cdots p_t$$$ divides $$$k$$$ into the most non-$$$1$$$ elements.\nWith $$$17$$$ non-$$$1$$$ elements, the smallest possible value would be $$$k=2^{17}=131072 \\gt 10^5$$$.\nBased on this observation, we can define our dynamic programming state as:\nLet $$$dp[i][j]$$$ represent the number of arrays with product $$$i$$$ containing only $$$j$$$\nnon-$$$1$$$\nelements.\nThe recurrence relation becomes: $$$dp[i][j]=\\sum_{p|i,p \\gt 1}dp[\\frac{i}{p}][j-1]$$$.\nBase case: $$$dp[i][1]=1$$$ for $$$i \\gt 1$$$.\nThis computation has a time complexity of $$$O(k\\log^2k)$$$, as we perform $$$\\sum_{j=1}^{k}d(j)=O(k\\log{k})$$$ additions for each $$$i$$$.\nTo calculate $$$f_k(n)$$$, we:\nEnumerate the number of non-$$$1$$$ elements from $$$1$$$ to $$$16$$$.\nFor $$$j$$$ non-$$$1$$$ elements in the array:\nWe have $$$n-j$$$ elements that are $$$1$$$.\nWe need to choose $$$j$$$ positions for non-$$$1$$$ elements.\nFill these positions with $$$dp[k][j]$$$ possible sequences.\nThis gives us:\n$$$ f_k(n)=\\sum_{j=1}^{16}\\binom{n}{j}dp[k][j]. $$$\nTherefore:\n$$$ \\begin{align*} &\\sum_{i=1}^{n}f_k(n)\\\\ =&\\sum_{i=1}^{n}\\sum_{j=1}^{16}\\binom{i}{j}dp[k][j]\\\\ =&\\sum_{j=1}^{16}\\left(dp[k][j]\\sum_{i=1}^{n}\\binom{i}{j}\\right)\\\\ =&\\sum_{j=1}^{16}\\binom{n+1}{j+1}dp[k][j]. \\end{align*} $$$\nNote that $$$\\sum_{i=1}^{n}\\binom{i}{j} = \\binom{n+1}{j+1}$$$ is given by the\nHockey Stick Identity\n.\nEach answer can be calculated in $$$O(\\log^2k)$$$ time, giving an overall time complexity of $$$O(k\\log^2k)$$$."
+        },
+        {
+            "title": "Solution 2",
+            "content": "Let's revisit the naive approach and define $$$S_k(n)=\\sum_{i=1}^{n}f_{k}(n)$$$ as our answers. We can observe:\n$$$ \\begin{align} f_{k}(n)&=\\sum_{j|k}f_j(n-1)\\nonumber\\\\ \\Leftrightarrow f_{k}(n)-f_{k}(n-1)&=\\sum_{j|k,j \\lt k}f_j(n-1). \\end{align} $$$\nAccumulating Formula $$$(1)$$$ yields:\n$$$ \\begin{align} &&\\sum_{i=2}^{n}\\left(f_{k}(i)-f_{k}(i-1)\\right)&=\\sum_{i=2}^{n}\\sum_{j|k,j \\lt k}f_j(i-1)\\nonumber\\\\ &\\Leftrightarrow& f_{k}(n)-f_{k}(1)&=\\sum_{j|k,j \\lt k}\\sum_{i=1}^{n-1}f_{j}(i)\\nonumber\\\\ &\\Leftrightarrow& f_{k}(n)&=\\sum_{j|k,j \\lt k}S_j(n-1)+1. \\end{align} $$$\nBy induction, we can prove that both $$$f_{k}(n)$$$ and $$$S_k(n)$$$ are polynomials. Let's denote:\nDegree of $$$f_k(n)$$$ as $$$p(k)$$$.\nDegree of $$$S_k(n)$$$ as $$$q(k)$$$.\nFrom the definition of $$$S_k(n)$$$, we have $$$q(k)=p(k)+1$$$. Formula $$$(2)$$$ gives us:\n$$$ p(k)=\\max_{j|k,j \\lt k}q(k)=\\max_{j|k,j \\lt k}p(j)+1, $$$\nwith $$$p(1)=0$$$. By induction, we can show that $$$p(k)$$$ equals the number of primes in $$$k$$$'s prime factorization. Therefore, $$$p(k)\\le16$$$ and $$$q(k)\\le17$$$.\nSince $$$q(k)$$$ doesn't exceed $$$17$$$, we can:\nPrecompute $$$S_k(1),S_k(2),S_k(3),\\dots,S_k(18)$$$.\nUse\nLagrange Interpolation\nto compute any $$$S_k(n)$$$.\nThis also yields an $$$O(k\\log^2k)$$$ time complexity."
+        }
+    ]
+}

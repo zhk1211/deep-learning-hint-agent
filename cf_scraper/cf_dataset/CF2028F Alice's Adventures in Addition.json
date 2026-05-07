@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nNote that the memory limit is unusual.\n\nThe Cheshire Cat has a riddle for Alice: given $ n $ integers $ a_1, a_2, \\ldots, a_n $ and a target $ m $ , is there a way to insert $ + $ and $ \\times $ into the circles of the expression $ a_1 \\circ a_2 \\circ \\cdots \\circ a_n = m $ to make it true? We follow the usual order of operations: $ \\times $ is done before $ + $.\n\nAlthough Alice is excellent at chess, she is not good at math. Please help her so she can find a way out of Wonderland!\n\nInput Format\nEach test contains multiple test cases. The first line of input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n, m $ ( $ 1\\le n\\le 2\\cdot 10^5 $ ; $ 1\\le m\\le 10^4 $ ) — the number of integers and the target, respectively.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0\\le a_i\\le 10^4 $ ) — the elements of the array $ a $ .\n\nThe sum of $ n $ over all test cases does not exceed $ 2\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output `YES` without quotes if it is possible to get the target by inserting $ + $ or $ \\times $ and `NO` otherwise.\n\nYou can output each letter in any case (for example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n6\n5 4\n2 1 1 1 2\n5 5\n2 1 1 1 2\n5 6\n2 1 1 1 2\n5 7\n2 1 1 1 2\n5 8\n2 1 1 1 2\n5 6\n2 0 2 2 3\nOutput\nYES\nYES\nYES\nYES\nNO\nYES\n\nNote\nPossible solutions for the first four test cases are shown below.\n\n$$\n\\begin{align*} 2 \\times 1 + 1 \\times 1 \\times 2 &= 4 \\\\ 2 \\times 1 + 1 + 1 \\times 2 &= 5 \\\\ 2 \\times 1 + 1 + 1 + 2 &= 6 \\\\ 2 + 1 + 1 + 1 + 2 &= 7 \\\\ \\end{align*}\n$$\nIt is impossible to get a result of $ 8$ in the fifth test case."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Come up with a DP algorithm running in time $$$O(n^2 m)$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Try optimizing the Hint 1 DP to run in time $$$O(nm \\log m)$$$ when $$$a_i \\ge 2$$$ for all $$$i$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Do some casework to extend Hint 2 to $$$a_i \\ge 0$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Bitset"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "2028F - Alice's Adventures in Addition\nLet $$$dp[i][j]$$$ be whether $$$a_1\\circ a_2\\circ \\ldots \\circ a_i = j$$$ can be satisfied. Then, let's case on $$$a_i$$$.\nIf $$$a_i = 0$$$, then $$$dp[i][j] = dp[i - 1][j] \\lor dp[i - 2][j]\\lor \\cdots \\lor dp[0][j]$$$ (where we will take $$$dp[0][j]= \\boldsymbol{1}[j = 0]$$$, the indicator that $$$j = 0$$$). This is because we can multiply together any suffix to form $$$0$$$. We can do this in time $$$O(1)$$$ by keeping these prefix ORs.\nIf $$$a_i = 1$$$, then $$$dp[i][j] = dp[i - 1][j] \\lor dp[i - 1][j - 1]$$$ (since $$$m \\ge 1$$$ we don't have to worry about accidentally allowing $$$0$$$s). This is because we can either multiply $$$a_{i-1}$$$ by $$$1$$$ or add $$$1$$$.\nOtherwise, note that we can only multiply together at most $$$\\log_2(j)$$$ many $$$a_i  \\gt  1$$$ before the result exceeds $$$j$$$. So, for each $$$i$$$ let $$$\\text{back}(i)$$$ denote the biggest $$$k  \\lt  i$$$ such that $$$a_k \\neq 1$$$. Then, we can write $$$$$$dp[i][j] = dp[i - 1][j - a_i] \\lor dp[\\text{back}(i) - 1][j - a_i \\cdot a_{\\text{back}(i)}] \\lor \\cdots$$$$$$ where we continue until we either reach $$$i = 0$$$, hit $$$0$$$, or exceed $$$j$$$.\nThere is one special case: if $$$a_k = 0$$$ for any $$$k  \\lt  i$$$, then we should also allow $$$dp[i][j] |= dp[k - 1][j] \\lor dp[k - 2][j] \\lor \\cdots \\lor dp[0][j]$$$. We can keep track of the last time $$$a_k = 0$$$ and use the same prefix OR idea as above.\nNote that all of these operations are \"batch\" operations: that is, we can do them for all $$$j$$$ simultaneously for a given $$$i$$$. Thus, this gives a bitset solution in time $$$O(\\frac{nm\\log m}{w})$$$ and with space complexity $$$O(\\frac{nm}{w})$$$. However, this uses too much space.\nWe can optimize the space complexity to only store $$$\\log_2(m) + 4$$$ bitsets (with some extra integers) instead. To do this, note that for the $$$0$$$ case we only require one bitset which we can update after each $$$i$$$, for the $$$1$$$ case we only have to keep the previous bitset, and for the $$$ \\gt  1$$$ case we only need to store the most recent $$$\\log_2(m)$$$ bitsets for indices $$$i$$$ with $$$a_{i+1}  \\gt  1$$$. We can keep this in a deque and pop from the back if the size exceeds $$$\\log_2(m)$$$. For the special case at the end, we can keep track of a prefix bitset for the last occurrence of a $$$0$$$.\nOverall, this uses space complexity $$$O(\\frac{m\\log_2 m}{w})$$$ which is sufficient (interestingly, we don't even have to store the input!)"
+        }
+    ]
+}

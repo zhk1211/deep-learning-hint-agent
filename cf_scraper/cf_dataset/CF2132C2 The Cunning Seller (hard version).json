@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the hard version of the problem. The easy version differs from the hard one in that it requires determining the minimum cost with the least number of deals, while the hard version requires determining the minimum cost with a limited number of deals.\n\nAfter the cunning seller sold three watermelons instead of one, he decided to increase his profit — namely, he bought even more watermelons. Now he can sell $$$3^x$$$ watermelons for $$$3^{x+1} + x \\\\cdot 3^{x-1}$$$ coins, where $$$x$$$ is a non-negative integer. Such a sale is called a deal.\n\nA calculating buyer came to him, but he has little time, so the buyer can make no more than $$$k$$$ deals and plans to buy exactly $$$n$$$ watermelons.\n\nThe buyer is in a hurry and has therefore turned to you to determine the minimum number of coins he must pay the seller for $$$n$$$ watermelons if he makes no more than $$$k$$$ deals. If it is impossible to buy exactly $$$n$$$ watermelons while making no more than $$$k$$$ deals, output $$$-1$$$.\n\nInput Format\nThe first line contains an integer $$$t$$$ $$$(1 \\\\le t \\\\le 10^4)$$$ — the number of test cases. The description of each test case follows.\n\nIn a single line of each test case, there are two integers $$$n$$$ and $$$k$$$ $$$(1 \\\\le n, k \\\\le 10^9)$$$ — how many watermelons need to be bought and how many deals can be made.\n\nOutput Format\nFor each test case, output a single integer — the minimum cost of the watermelons or $$$-1$$$ if it is impossible to buy the watermelons while meeting all the conditions.\n\nExamples\nSample 1\nInput\n8\n1 1\n3 3\n8 3\n2 4\n10 10\n20 14\n3 2\n9 1\nOutput\n3\n9\n-1\n6\n30\n63\n10\n33\n\nNote\nNote that there is no point in buying more watermelons than needed, so we will not consider deals where there are more watermelons than necessary.\n\nLet's consider the costs of the first two deal options:\n\nDeal A: $$$1$$$ watermelon — $$$3$$$ coins.\n\nDeal B: $$$3$$$ watermelons — $$$10$$$ coins.\n\nIn the first sample, the only way to buy $$$1$$$ watermelon is to use Deal A, so the answer is $$$3$$$.\n\nIn the second sample, you can buy $$$3$$$ watermelons either with Deal B for $$$10$$$ coins or with three Deal A for $$$9$$$ coins, so the answer is $$$9$$$.\n\nIn the third sample, there are the following options for $$$3$$$ deals:\n\n$$$3$$$ Deals A — $$$3$$$ watermelons.\n\n$$$2$$$ Deals A and $$$1$$$ Deal B — $$$5$$$ watermelons.\n\n$$$1$$$ Deal A and $$$2$$$ Deals B — $$$7$$$ watermelons.\n\n$$$3$$$ Deals B — $$$9$$$ watermelons.\n\nIt can be seen that it is impossible to buy exactly 8 watermelons."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What is more profitable: 3 deals for $$$3^x$$$ watermelons each, or 1 deal for $$$3^{x+1}$$$ watermelons?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Recall the solution to problem C1."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "2132C2 - The Cunning Seller (hard version)\nNote that buying $$$3 \\cdot 3^x$$$ watermelons is always more profitable than buying $$$3^{x+1}$$$ watermelons, and the larger $$$x$$$ is, the more money we lose if we buy $$$3^{x+1}$$$ watermelons. Let $$$a$$$ be the amount of money spent if we buy $$$3^{x+1}$$$ watermelons, then $$$a = 3^{x+2} + (x+1) \\cdot 3^x$$$, and let $$$b$$$ be the amount of money spent on buying $$$3 \\cdot 3^x$$$ watermelons, then $$$b = 3 \\cdot (3^{x+1}+x \\cdot 3^{x-1})$$$. We find $$$a - b$$$ and get $$$3^x$$$. It is obvious that $$$3^x  \\gt  0$$$. And as $$$x$$$ increases, the difference will grow.\nNow we will solve the problem in 2 steps:\nWe will find the minimum number of deals required to buy $$$n$$$ watermelons. How to do this is described in the analysis of the simple version of the problem. If it is greater than $$$k$$$, we will output $$$-1$$$.\nWe will use the observation above. We will choose the largest deal and break it down into 3 smaller deals as long as possible. To do this more efficiently, we will process all maximum deals in each iteration. For better understanding, see the implementation. Each power of three is processed in $$$O(1)$$$ time, so the overall asymptotic complexity is $$$O(\\log_3(n))$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nvector\n<\nlong\nlong\n>\ncost\n;\nlong\nlong\nc\n=\n3\n;\nlong\nlong\ncnt\n=\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n21\n;\n++\ni\n)\n{\ncost\n.\npush_back\n(\nc\n);\nc\n=\n3\n*\nc\n+\ncnt\n;\ncnt\n*=\n3\n;\n}\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nlong\nlong\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<\nlong\nlong\n>\ntr\n;\nlong\nlong\nmin_k\n=\n0\n;\nwhile\n(\nn\n)\n{\ntr\n.\npush_back\n(\nn\n%\n3\n);\nmin_k\n+=\nn\n%\n3\n;\nn\n/=\n3\n;\n}\nif\n(\nmin_k\n>\nk\n)\n{\ncout\n<<\n-\n1\n<<\n'\\n'\n;\ncontinue\n;\n}\nk\n-=\nmin_k\n;\nk\n/=\n2\n;\nfor\n(\nint\ni\n=\n(\nint\n)\ntr\n.\nsize\n()\n-\n1\n;\ni\n>=\n1\n;\n--\ni\n)\n{\nif\n(\ntr\n[\ni\n]\n<=\nk\n)\n{\ntr\n[\ni\n-\n1\n]\n+=\n3\n*\ntr\n[\ni\n];\nk\n-=\ntr\n[\ni\n];\ntr\n[\ni\n]\n=\n0\n;\n}\nelse\n{\ntr\n[\ni\n-\n1\n]\n+=\nk\n*\n3\n;\ntr\n[\ni\n]\n-=\nk\n;\nbreak\n;\n}\n}\nll an\n=\n0\n;\nfor\n(\nint\ni\n=\n(\nint\n)\ntr\n.\nsize\n()\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n)\nan\n+=\ncost\n[\ni\n]\n*\ntr\n[\ni\n];\ncout\n<<\nan\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nBlackslex worked too hard and started dreaming about numbers. Solve the following task from his dreams.\n\nYou are given an array $ a_1, a_2, \\ldots, a_n $ .\n\nIn one operation you choose an index $ i $ ( $ 1 \\le i \\le n $ ) and an integer $ x $ which is at least $ k $ and set $$$\na_i := a_i \\bmod x,\n$$$ where $ u \\bmod v $ denotes the remainder of dividing $ u $ by $ v $ .\n\nYour goal is to make all elements of the array identical. Among all positive integers $ k $ , determine the maximum $ k $ for which there exists a finite sequence of the above operations that makes all array elements equal.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ , all values of $ a $ are distinct).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single integer — the maximum positive integer $ k $ such that it is possible to make all elements of the array identical using any number of operations with moduli $ x $ restricted to $ k \\le x $ .\n\nExamples\nSample 1\nInput\n3\n3\n5 7 9\n2\n2 3\n7\n11 74 5 22 52 97 82\nOutput\n5\n2\n6"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Making everying zeros works often."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Sometimes, it's better to make all numbers something else that's not zero."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Following Hint 2, if we don't make everything zero, then what's our target number?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Sort the array from small to large.\nWe can mod every number in the array by itself, and this would require $$$k = a_1$$$.\nFor a larger value of $$$k$$$, we cannot modify the value of $$$a_1$$$, so every number must be made into $$$a_1$$$. We can mod $$$a_i$$$ with $$$a_i - a_1$$$, using $$$k = a_2 - a_1$$$.\nThe answer is thus $$$\\max(a_1, a_2 - a_1)$$$.\nTime complexity: $$$\\mathcal{O}(n)$$$ or $$$\\mathcal{O}(n \\log n)$$$ depending on implementation."
+        },
+        {
+            "title": "Implementation (Python)",
+            "content": "for\ntest_case\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\na\n=\nsorted\n([\nint\n(\n_\n)\nfor\n_\nin\ninput\n().\nsplit\n()])\nprint\n(\nmax\n(\na\n[\n0\n],\na\n[\n1\n]-\na\n[\n0\n]))"
+        }
+    ]
+}

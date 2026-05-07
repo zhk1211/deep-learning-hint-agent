@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ of size $ n $ , and an integer $ k $ . You may perform the following operation any number of times:\n\n- Select two integers $ l $ and $ r $ $ (1 \\le l \\le r \\le |a|) $ such that $ r-l+1 \\geq k $ .\n- Then, select an index $ i $ such that $ l\\leq i \\leq r $ where $ a_i $ is the $ k $ -th smallest number out of the subarray $ [a_l,a_{l+1},\\ldots,a_r] $ . If there are multiple possible $ i $ , you may select any. For example, consider $ a = [1, 2, 2, 1, 3], l = 1, r = 5 $ and $ k = 3 $ , the possible candidates of $ i $ are indices $ 2 $ and $ 3 $ .\n- Then, delete $ a_i $ from $ a $ , concatenating the remaining parts of the array.\n\nDetermine if it is possible to get an array that is a palindrome $ ^{\\text{∗}} $ after any number of operations. Note that an empty array is considered a palindrome.\n\n$ ^{\\text{∗}} $ An array $ b=[b_1,b_2,\\ldots,b_m] $ is a palindrome if for each $ 1 \\leq i \\leq m $ , $ b_i=b_{m+1-i} $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line contains two integers $ n $ and $ k $ ( $ 1 \\leq k \\leq n \\leq 2\\cdot 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1,a_2,\\ldots,a_n $ ( $ 1 \\leq a_i \\leq n $ ) — denoting the array $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output YES if it is possible to create a palindrome, and NO otherwise. You can output in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n8\n5 3\n5 4 3 4 5\n4 1\n1 1 2 1\n6 6\n2 3 4 5 3 2\n5 4\n5 2 4 3 1\n8 5\n4 7 1 2 3 1 3 4\n5 4\n1 2 1 2 2\n3 3\n1 2 2\n4 4\n2 1 2 2\nOutput\nYES\nYES\nYES\nNO\nNO\nYES\nNO\nYES\n\nNote\nIn the first test case, $ a $ is already a palindrome.\n\nIn the second test case, we can perform two operations as follows: $ [\\mathbf{1,1},2,1]\\rightarrow [1,\\mathbf{2},1]\\rightarrow[1,1] $\n\nIn the third test case, we can perform one operation as follows: $ [\\mathbf{2,3,4,5,3,2}]\\rightarrow[2,3,4,3,2] $ .\n\nIn the fourth and fifth test cases, it can be shown it is impossible to create a palindrome no matter what operations are used."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Determine which elements you can delete with the operation."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Come up with a greedy solution that erases as little elements as possible."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "First, let's come up with some conditions that determines whether erasing an element is possible.\nClaim: as long as the $$$k-1$$$ smallest elements remain in the array, we can erase other elements in any way we want.\nProof: It is obvious why we cannot erase the $$$k-1$$$ smallest elements. If we want to erase any other element, we can simply start the following process to determine a pair of $$$(l,r)$$$ where we can erase the element: initially, start $$$l=1$$$ and $$$r=n$$$. Clearly, the element we want to erase is at least the $$$k$$$-th smallest element. After that, we can incrementally either increase $$$l$$$ or decrease $$$r$$$ until the element is exactly the $$$k$$$-th smallest. This process should always terminate because after $$$r-l+1 \\lt k$$$, the element we want to delete is definitely less than the $$$k$$$-th smallest.\nLet the $$$k-1$$$-th smallest element be $$$x$$$. Now, we can categorize each element in the array into three groups: elements less than $$$x$$$, elements equal to $$$x$$$, and elements greater than $$$x$$$. Note there is no point in keeping any elements in the third group, so we can erase them first (by creating a second array $$$b$$$ filled with only elements of the first and second groups). Now, we must strategically delete elements of the second group to make a palindrome. Note that we should try to erase as little elements as possible, because we must ensure the number of elements we don't erase is at least $$$k-1$$$. We can maintain this process with a two-pointers approach. Initialize $$$l=1$$$ and $$$r=|b|$$$. Then, if $$$b_l=b_r$$$, we can keep both. If $$$b_l\\neq b_r$$$ and neither elements is $$$x$$$, we can conclude it's impossible. If one of $$$b_l,b_r$$$ is equal to $$$x$$$, we should flag the one equal to $$$x$$$ as being deleted and move the pointer. In the end, we can do a final check to ensure we did not erase too many elements.\nThe final solution runs in $$$O(n \\log(n))$$$ due to sorting to find the $$$k$$$-th smallest element."
+        }
+    ]
+}
