@@ -10,6 +10,8 @@ from playwright.sync_api import sync_playwright
 
 BASE_URL = "https://codeforces.com"
 SAVE_DIR = "cf_dataset"
+WITH_HINT_DIR = os.path.join(SAVE_DIR, "with_hint")
+WITHOUT_HINT_DIR = os.path.join(SAVE_DIR, "without_hint")
 LUOGU_BASE_URL = "https://www.luogu.com.cn/problem"
 
 
@@ -305,8 +307,8 @@ def scrape_cf_dynamic(page, tutorial_url):
 
 	try:
 		page.goto(tutorial_url, wait_until="domcontentloaded", timeout=60000)
-		print("⏳ 等待 5 秒，让 JS 加载真正的题解内容...")
-		page.wait_for_timeout(5000)
+		print("⏳ 等待 10 秒，让 JS 加载真正的题解内容...")
+		page.wait_for_timeout(10000)
 		html_content = page.content()
 
 	except Exception as e:
@@ -579,7 +581,7 @@ def fetch_luogu_problem_statement(page, problem_info):
 	try:
 		page.goto(luogu_url, wait_until="domcontentloaded", timeout=60000)
 
-		wait_ms = random.randint(3000, 6000)
+		wait_ms = random.randint(5000, 8000)
 		print(f"⏳ 等待洛谷题面加载 {wait_ms / 1000:.2f} 秒...")
 		page.wait_for_timeout(wait_ms)
 
@@ -687,10 +689,14 @@ def process_contest(contest_url, processed_tutorial_urls):
 
 			if data:
 				os.makedirs(SAVE_DIR, exist_ok=True)
+				os.makedirs(WITH_HINT_DIR, exist_ok=True)
+				os.makedirs(WITHOUT_HINT_DIR, exist_ok=True)
 
 				luogu_statement_cache = {}
 
 				saved_count = 0
+				with_hint_count = 0
+				without_hint_count = 0
 
 				for idx, (problem_key, content) in enumerate(data.items(), start=1):
 					if not content["hints"] and not content["solutions"]:
@@ -738,17 +744,36 @@ def process_contest(contest_url, processed_tutorial_urls):
 						f"{statement_info['problem_title']}.json"
 					)
 					filename_base = sanitize_filename(filename_base)
-					filename = make_unique_filename(SAVE_DIR, filename_base)
+
+					# 分类规则：
+					# 1. 有至少一个 Hint -> cf_dataset/with_hint/
+					# 2. 没有 Hint 但有 Solution -> cf_dataset/without_hint/
+					has_hint = bool(content.get("hints"))
+					if has_hint:
+						target_dir = WITH_HINT_DIR
+						category_name = "with_hint"
+					else:
+						target_dir = WITHOUT_HINT_DIR
+						category_name = "without_hint"
+
+					filename = make_unique_filename(target_dir, filename_base)
 
 					output_json = build_output_json(statement_info, content)
 
 					with open(filename, "w", encoding="utf-8") as f:
 						json.dump(output_json, f, ensure_ascii=False, indent=4)
 
-					print(f"✅ 生成文件: {filename}")
+					print(f"✅ 生成文件 [{category_name}]: {filename}")
 					saved_count += 1
+					if has_hint:
+						with_hint_count += 1
+					else:
+						without_hint_count += 1
 
-				print(f"🎉 题解 {tutorial_url} 爬取完毕，共保存了 {saved_count} 道有价值的题目！\n")
+				print(
+					f"🎉 题解 {tutorial_url} 爬取完毕，共保存了 {saved_count} 道有价值的题目！"
+					f"其中有 Hint: {with_hint_count} 道，无 Hint: {without_hint_count} 道。\n"
+				)
 
 			else:
 				print("❌ 题解抓取或解析失败。")
@@ -767,4 +792,4 @@ if __name__ == "__main__":
 	for contest in contests_to_scrape:
 		process_contest(contest, processed_tutorial_urls)
 
-		polite_sleep(30, 70, "本场比赛处理结束，进入下一场前")
+		polite_sleep(3, 5, "本场比赛处理结束，进入下一场前")
