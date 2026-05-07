@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nSo, Macaque has passed his first challenge (and is not acknowledging your help whatsoever). After all, it was only given to him so he could engage in his greatest pleasure — crunching on desiccated freezedried hamburgers and yelling 'trivial' at the screen. However, he has another, much more important task ahead of him, and he has once again enlisted you to help him.\n\nYou are given $ 7 $ integers $ a_1, a_2, \\ldots, a_7 $ .\n\nYou must negate $ 6 $ out of the $ 7 $ integers (that is, multiply them by $ -1 $ ). Over all possible ways to negate $ 6 $ out of the $ 7 $ integers, find the maximum possible sum of $ a $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 6767 $ ). The description of the test cases follows.\n\nThe first and only line of each test case contains $ 7 $ space-separated integers $ a_1, a_2, \\ldots, a_7 $ ( $ -67 \\le a_i \\le 67 $ ).\n\nOutput Format\nFor each test case, output the maximum sum of $ a $ after negating $ 6 $ out of the $ 7 $ integers, on a new line.\n\nExamples\nSample 1\nInput\n4\n41 41 41 41 41 41 41\n6 9 4 20 6 7 67\n1 2 3 4 5 6 7\n6 7 6 7 6 7 6\nOutput\n-205\n15\n-14\n-31\n\nNote\nIn the first test case, no matter which $ 6 $ integers we pick to negate, the maximum sum is $ -41-41-41-41-41-41+41=-205 $ .\n\nIn the second test case, we can negate all integers except $ a_7 $ to obtain a sum of $ -6-9-4-20-6-7+67=15 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Note how negating 6 out of 7 numbers is equivalent to negating all of them, and then negating one out of 7 numbers. Therefore, you can negate all 7 numbers, and then negate the least one afterwards.\nCode (Python)\nfor\ni\nin\nrange\n(\nint\n(\ninput\n())):\nnums\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nprint\n(\n2\n*\nmax\n(\nnums\n)\n-\nsum\n(\nnums\n))"
+        }
+    ]
+}

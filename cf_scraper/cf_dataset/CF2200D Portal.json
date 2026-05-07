@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a permutation $ ^{\\text{∗}} $ $ p $ of length $ n $ . There are also two portals located at positions $ x $ and $ y $ ( $ x \\lt y $ ).\n\nA portal at position $ i $ is initially located between the $ i $ -th and $ (i+1) $ -th elements of the array. Specifically, if $ i=0 $ , then the portal is located before the first element of the array, and if $ i=n $ , then the portal is located after the last element.\n\nYou may perform either of the following two operations as many times as you like:\n\n1. Remove the element to the immediate left of one portal and insert it to the immediate right of the other portal.\n2. Remove the element to the immediate right of one portal and insert it to the immediate left of the other portal.\n\nLet $ \\mathbf{\\color{red}{\\mathcal{O}}} $ denote a portal. For example, if $ p $ is $ [3,\\mathbf{\\color{red}{\\mathcal{O}}},2,4,\\mathbf{\\color{red}{\\mathcal{O}}},1] $ :\n\n- Using operation $ 1 $ on the left and right portals respectively results in the arrays $ [\\mathbf{\\color{red}{\\mathcal{O}}},2,4,\\mathbf{\\color{red}{\\mathcal{O}}},3,1] $ and $ [3,\\mathbf{\\color{red}{\\mathcal{O}}},4,2,\\mathbf{\\color{red}{\\mathcal{O}}},1] $ .\n- Using operation $ 2 $ on the left and right portals respectively results in the arrays $ [3,\\mathbf{\\color{red}{\\mathcal{O}}},4,2,\\mathbf{\\color{red}{\\mathcal{O}}},1] $ and $ [3,1,\\mathbf{\\color{red}{\\mathcal{O}}},2,4,\\mathbf{\\color{red}{\\mathcal{O}}}] $ .\n\nFind the lexicographically $ ^{\\text{†}} $ smallest permutation you can obtain using these operations. Note that portals do not affect the lexicographical comparison of permutations.\n\n$ ^{\\text{∗}} $ A permutation of length $ n $ is an array of length $ n $ containing each integer from $ 1 $ to $ n $ exactly once.\n\n$ ^{\\text{†}} $ A permutation $ a $ is lexicographically smaller than permutation $ b $ if there exists an index $ i $ such that $ a_j = b_j $ for all indices $ 1 \\leq j \\lt i $ and $ a_i \\lt b_i $ .\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 2\\cdot 10^4 $ ) — the number of test cases.\n\nFor each test case, the first line contains three integers $ n $ , $ x $ , and $ y $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ , $ 0 \\leq x \\lt y \\leq n $ ).\n\nThe second line of each test case contains $ n $ integers $ p_1, p_2, \\dots, p_n $ — a permutation of length $ n $ .\n\nThe sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a line with $ n $ integers — the lexicographically smallest permutation you can obtain.\n\nExamples\nSample 1\nInput\n4\n4 0 4\n3 1 4 2\n3 1 2\n3 2 1\n5 1 3\n1 3 5 2 4\n2 0 1\n1 2\nOutput\n1 4 2 3\n2 3 1\n1 2 3 5 4\n1 2\n\nNote\nLet $ \\mathbf{\\color{red}{\\mathcal{O}}} $ denote a portal.\n\nIn the first test case, the array is $ [\\mathbf{\\color{red}{\\mathcal{O}}},3,1,4,2,\\mathbf{\\color{red}{\\mathcal{O}}}] $ . Using operation $ 2 $ on the left portal results in $ [\\mathbf{\\color{red}{\\mathcal{O}}},1,4,2,3,\\mathbf{\\color{red}{\\mathcal{O}}}] $ , which is the lexicographically smallest possible permutation that can be obtained.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2200D/bf7a48e1c79e71c3e889536e868ef40ee24ee2624b05810609882e5e9ede20a5.gif) The operation described above.In the second test case, the array is $ [3,\\mathbf{\\color{red}{\\mathcal{O}}},2,\\mathbf{\\color{red}{\\mathcal{O}}},1] $ . Using operation $ 1 $ on the left portal results in $ [\\mathbf{\\color{red}{\\mathcal{O}}},2,\\mathbf{\\color{red}{\\mathcal{O}}},3,1] $ , which is the lexicographically smallest possible permutation that can be obtained.\n\nIn the fourth test case, it is optimal not to do any operations."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What invariants does $$$p$$$ have?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Consider the elements in between the portals and the elements outside of them."
+        },
+        {
+            "title": "Hint 3",
+            "content": "What invariant does each of these two regions have?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2200D - Portal\nLet $$$A$$$ denote the subarray of elements between the two portals and $$$B$$$ denote the remaining elements. The operations can cyclically shift $$$A$$$. They cannot change the order of elements of $$$B$$$, but they can change the position of $$$A$$$ within $$$B$$$. Importantly, an element cannot move from $$$A$$$ to $$$B$$$ or vice versa.\nTo make the lexicographically minimum permutation, we should cyclically shift $$$A$$$ until its leftmost element is its minimum element. Then, insert $$$A$$$ to the left of the leftmost element in $$$B$$$ that is greater than the minimum of $$$A$$$ (or after $$$A$$$ if no such element exists)."
+        }
+    ]
+}

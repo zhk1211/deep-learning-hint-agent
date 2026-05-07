@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have $ n $ classes today, which are numbered from $ 1 $ to $ n $ .\n\nThe classes are described by a binary string $ ^{\\text{∗}} $ $ s $ of length $ n $ . We call class $ i $ important if and only if $ s_i = \\mathtt 1 $ . For each important class, you must stay awake and listen to it.\n\nYou are very tired and wish to sleep through as many classes as possible. However, falling asleep takes time. If you listen to an important class $ i $ , then you cannot fall asleep for the next $ k $ classes, i.e., you must also stay awake in classes $ i+1, i+2, \\ldots, i+k $ (or until the end of the day, if fewer than $ k $ classes remain).\n\nFor classes that are not important, you may sleep through them unless the rule above forces you to stay awake.\n\nYour task is to find out the maximum number of classes you can sleep through today.\n\n$ ^{\\text{∗}} $ A binary string is a string where each character is either $ \\mathtt{0} $ or $ \\mathtt{1} $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 500 $ ). The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le n, k \\le 100 $ ).\n\nThe second line of each test case contains the string $ s $ of length $ n $ ( $ s_i = \\mathtt 0 $ or $ \\mathtt 1 $ ).\n\nOutput Format\nFor each test case, output a single integer — the maximum number of classes you can sleep through today.\n\nExamples\nSample 1\nInput\n4\n4 1\n1001\n3 3\n000\n3 1\n001\n8 2\n01000101\nOutput\n1\n3\n2\n2\n\nNote\nIn the first test case, you must listen to class $ 1 $ and class $ 4 $ . After listening to class $ 1 $ , you cannot fall asleep in class $ 2 $ . So the only class you can sleep through is class $ 3 $ .\n\nIn the second test case, you can sleep through all the classes.\n\nIn the fourth test case, you can only sleep through classes $ 1 $ and $ 5 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "From the statement we can conclude that a class can be slept through $$$\\textbf{if and only if}$$$:\nThe class itself is not an important class.\nThe class is not within $$$k$$$ classes after any important class.\nHere's an $$$O(nk)$$$ approach:\nWe directly simulate the process: for each important class at position $$$i$$$, mark positions $$$i+1, i+2, \\dots, \\min(i+k, n)$$$ as “must stay awake”. After processing all important classes, count the classes that are neither important nor marked. This $$$O(nk)$$$ solution is acceptable under the constraints.\nThere's also an $$$O(n)$$$ solution:\nFor each unimportant class, we only need to focus on the nearest important class before it. Thus we maintain a variable $$$last$$$ storing the index of the most recent important class (or $$$-\\infty$$$ if none seen yet), then for each $$$i$$$ from $$$1$$$ to $$$n$$$, if it's an important class we let $$$last = i$$$, otherwise if $$$last + k \\lt i$$$, the class is able to be slept through and we add $$$1$$$ to the answer."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n,\nk\n;\nstring\ns\n;\nvoid\nsolve\n(){\ncin\n>>\nn\n>>\nk\n>>\ns\n;\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++){\nif\n(\ns\n[\ni\n]==\n'0'\n){\nint\nok\n=\n1\n;\nfor\n(\nint\nj\n=\nmax\n(\n0\n,(\nint\n)\ni\n-\nk\n);\nj\n<\ni\n;\nj\n++){\nif\n(\ns\n[\nj\n]==\n'1'\n){\nok\n=\n0\n;\nbreak\n;\n}\n}\nans\n+=\nok\n;\n}\n}\ncout\n<<\nans\n<<\nendl\n;\n}\nint\nmain\n(){\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n),\ncout\n.\ntie\n(\n0\n);\nint\nT\n;\ncin\n>>\nT\n;\nfor\n(;\nT\n--;)\nsolve\n();\nreturn\n0\n;\n}"
+        }
+    ]
+}

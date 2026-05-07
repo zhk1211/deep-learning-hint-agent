@@ -1,0 +1,72 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a rooted tree with $ n $ vertices $ ^{\\text{∗}} $ . The vertices of the tree are numbered with integers from $ 1 $ to $ n $ . The root of the tree is vertex number $ 1 $ .\n\nIn each leaf $ ^{\\text{†}} $ of the tree, there grows one cherry. You want to collect all the cherries, and to do this, you perform the following action several times:\n\nYou choose any vertex of the tree $ v $ (including the root or a leaf) and \"shake\" it. After that, cherries fall from all the leaves that are descendants $ ^{\\text{‡}} $ of vertex $ v $ (if vertex $ v $ itself is a leaf, then a cherry falls from it). If cherries have already fallen from any leaf before, the tree will break, so such a situation must be avoided.\n\nAccording to an ancient legend of the cherry orchard, the number of vertices you shake should be a multiple of three.\n\nIs it possible to collect all the cherries in this way?\n\n$ ^{\\text{∗}} $ A tree with $ n $ vertices is an undirected connected graph with $ n $ vertices and $ n - 1 $ edges. A rooted tree is a tree in which one of the vertices is special and is called the root.\n\n$ ^{\\text{†}} $ A leaf is a vertex that has no descendants.\n\n$ ^{\\text{‡}} $ The descendants of vertex $ v $ are all vertices $ u \\neq v $ such that on the shortest path from the root to $ u $ , vertex $ v $ is encountered.\n\nInput Format\nEach test consists of several test cases. The first line contains a single integer $ t $ $ (1 \\le t \\le 10^4) $ — the number of test cases. The following lines describe the test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\leq n \\leq 2 \\cdot 10^5 $ ).\n\nThe next $ n - 1 $ lines of each test case contain two integers $ u $ and $ v $ ( $ 1 \\leq u, v \\leq n, u \\neq v $ ) — the vertices connected by the next edge of the tree.\n\nIt is guaranteed that the graph in each data set is a tree.\n\nIt is guaranteed that the sum of $ n $ across all input data sets does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each input data set, output \"YES\" on a separate line if it is possible to collect all the cherries. Otherwise, output \"NO\".\n\nYou can print each letter in any case (upper or lower). For example, \"YeS\", \"no\" and \"yES\" are all acceptable.\n\nExamples\nSample 1\nInput\n3\n4\n1 2\n1 3\n1 4\n3\n1 2\n1 3\n9\n1 2\n3 1\n2 4\n5 2\n5 6\n3 7\n8 3\n8 9\nOutput\nYES\nNO\nYES\n\nNote\nIn the first test case, you can shake vertices $ 2, 3, 4 $ .\n\nIn the second test case, the only way to shake a number of vertices that is a multiple of three is to shake all the vertices. However, doing so would break the tree, so this is not allowed.\n\nIn the third test case, you can, for example, shake vertices $ 2, 7, 9 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints for the first method",
+            "content": "Hint 1\nCome up with a dynamic programming array $$$dp[u][k]$$$ with $$$O(n^2)$$$ states, where $$$u$$$ is the vertex number, $$$k$$$ is an additional parameter, and $$$dp[u][k]$$$ indicates whether it is possible to collect all the cherries in the subtree of vertex $$$u$$$ given that the additional parameter equals $$$k$$$.\nAnswer\nYou can use an additional parameter equal to the number of vertices in the subtree of vertex $$$u$$$ that were shaken.\nHint 2\nThe parameter $$$k$$$ should be considered modulo $$$3$$$. Thus, the number of states in the dynamic programming becomes $$$O(n)$$$.\nHint 3\nWhere will the answer to the problem be located?\nAnswer\nThe answer to the problem is located in $$$dp[1][0]$$$.\nHint 4\nWhat will be the base case for the dynamic programming?\nAnswer\nIf vertex $$$u$$$ is a leaf, then $$$dp[u][0] = False, dp[u][1] = True, dp[u][2] = False$$$.\nHint 5\nTo recalculate the dynamic programming $$$dp[u]$$$, two cases need to be considered: whether vertex $$$u$$$ was shaken or not. If vertex $$$u$$$ was shaken, then it is obviously the only vertex in the entire subtree that was shaken.\nHint 6\nIf vertex $$$u$$$ was not shaken, then it is necessary to collect cherries in each of its children independently. The information on how this can be done for child $$$v$$$ is stored in $$$dp[v]$$$.\nHint 7\nTo recalculate $$$dp[u]$$$ through its children, dynamic programming needs to be used again."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Come up with a dynamic programming array $$$dp[u][k]$$$ with $$$O(n^2)$$$ states, where $$$u$$$ is the vertex number, $$$k$$$ is an additional parameter, and $$$dp[u][k]$$$ indicates whether it is possible to collect all the cherries in the subtree of vertex $$$u$$$ given that the additional parameter equals $$$k$$$.\nAnswer\nYou can use an additional parameter equal to the number of vertices in the subtree of vertex $$$u$$$ that were shaken."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The parameter $$$k$$$ should be considered modulo $$$3$$$. Thus, the number of states in the dynamic programming becomes $$$O(n)$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Where will the answer to the problem be located?\nAnswer\nThe answer to the problem is located in $$$dp[1][0]$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "What will be the base case for the dynamic programming?\nAnswer\nIf vertex $$$u$$$ is a leaf, then $$$dp[u][0] = False, dp[u][1] = True, dp[u][2] = False$$$."
+        },
+        {
+            "title": "Hint 5",
+            "content": "To recalculate the dynamic programming $$$dp[u]$$$, two cases need to be considered: whether vertex $$$u$$$ was shaken or not. If vertex $$$u$$$ was shaken, then it is obviously the only vertex in the entire subtree that was shaken."
+        },
+        {
+            "title": "Hint 6",
+            "content": "If vertex $$$u$$$ was not shaken, then it is necessary to collect cherries in each of its children independently. The information on how this can be done for child $$$v$$$ is stored in $$$dp[v]$$$."
+        },
+        {
+            "title": "Hint 7",
+            "content": "To recalculate $$$dp[u]$$$ through its children, dynamic programming needs to be used again."
+        },
+        {
+            "title": "Hints for the second method",
+            "content": "Hint 1\nInitially, we will only shake the root vertex. Then we will take some vertex that needs to be shaken and replace it with its children. This way, we can obtain any correct solution.\nHint 2\nDuring this process, the number of selected vertices changes depending on the number of children of the vertex being replaced. Only the number of children modulo $$$3$$$ matters.\nHint 3\nFor each vertex that is not a leaf, we can record the number of its children modulo $$$3$$$ and find a pattern between the answer and these numbers."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Initially, we will only shake the root vertex. Then we will take some vertex that needs to be shaken and replace it with its children. This way, we can obtain any correct solution."
+        },
+        {
+            "title": "Hint 2",
+            "content": "During this process, the number of selected vertices changes depending on the number of children of the vertex being replaced. Only the number of children modulo $$$3$$$ matters."
+        },
+        {
+            "title": "Hint 3",
+            "content": "For each vertex that is not a leaf, we can record the number of its children modulo $$$3$$$ and find a pattern between the answer and these numbers."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution 1",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAXN\n=\n200001\n;\nint\nn\n;\nvector\n<int>\ngraph\n[\nMAXN\n];\nvector\n<bool>\ndp\n[\nMAXN\n];\nvoid\nmerge_dp\n(\nvector\n<bool>\n&\nlhs\n,\nvector\n<bool>\n&\nrhs\n,\nvector\n<bool>\n&\nresult\n)\n{\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n3\n;\n++\ni\n)\n{\nif\n(!\nlhs\n[\ni\n])\ncontinue\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n3\n;\n++\nj\n)\n{\nif\n(!\nrhs\n[\nj\n])\ncontinue\n;\nresult\n[(\ni\n+\nj\n)\n%\n3\n]\n=\ntrue\n;\n}\n}\n}\nvoid\ndfs\n(\nint\nu\n,\nint\np\n)\n{\nvector\n<int>\nchild\n;\nfor\n(\nauto\nv\n:\ngraph\n[\nu\n])\nif\n(\nv\n!=\np\n)\n{\ndfs\n(\nv\n,\nu\n);\nchild\n.\npush_back\n(\nv\n);\n}\ndp\n[\nu\n].\nresize\n(\n3\n);\nif\n(!\nchild\n.\nempty\n())\n{\ndp\n[\nu\n][\n0\n]\n=\ntrue\n;\nfor\n(\nauto\nv\n:\nchild\n)\n{\nvector\n<bool>\nresult\n(\n3\n,\nfalse\n);\nmerge_dp\n(\ndp\n[\nu\n],\ndp\n[\nv\n],\nresult\n);\ndp\n[\nu\n]\n=\nresult\n;\n}\n}\ndp\n[\nu\n][\n1\n]\n=\ntrue\n;\n}\nsigned\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\n{\ngraph\n[\ni\n].\nclear\n();\ndp\n[\ni\n].\nclear\n();\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\n++\ni\n)\n{\nint\nu\n,\nv\n;\ncin\n>>\nu\n>>\nv\n;\ngraph\n[\nu\n].\npush_back\n(\nv\n);\ngraph\n[\nv\n].\npush_back\n(\nu\n);\n}\ndfs\n(\n1\n,\n-\n1\n);\ncout\n<<\n(\ndp\n[\n1\n][\n0\n]\n?\n\"YES\"\n:\n\"NO\"\n)\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Solution 2",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAXN\n=\n200001\n;\nint\nn\n;\nvector\n<int>\ngraph\n[\nMAXN\n];\nbool\nans\n;\nint\ndfs\n(\nint\nu\n,\nint\np\n)\n{\nvector\n<int>\nchild\n;\nint\ncnt\n=\n0\n;\nfor\n(\nauto\nv\n:\ngraph\n[\nu\n])\nif\n(\nv\n!=\np\n)\n{\ncnt\n++;\nauto\nt\n=\ndfs\n(\nv\n,\nu\n);\nif\n(\nt\n!=\n0\n)\n{\nchild\n.\npush_back\n(\nt\n);\n}\n}\nif\n(\nchild\n.\nsize\n()\n>\n1\n)\n{\nans\n=\ntrue\n;\nreturn\n0\n;\n}\nint\ntype\n=\ncnt\n==\n0\n?\n0\n:\n(\ncnt\n+\n2\n)\n%\n3\n;\nvector\n<int>\nord\n;\nif\n(\ntype\n)\n{\nord\n.\npush_back\n(\ntype\n);\n}\nif\n(!\nchild\n.\nempty\n())\n{\nord\n.\npush_back\n(\nchild\n[\n0\n]);\n}\nif\n(\nord\n.\nsize\n()\n==\n2\n&&\nord\n[\n0\n]\n+\nord\n[\n1\n]\n!=\n3\n)\n{\nans\n=\ntrue\n;\nreturn\n0\n;\n}\nif\n(\nord\n.\nsize\n()\n>=\n1\n)\nreturn\nord\n[\n0\n];\nreturn\n0\n;\n}\nsigned\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\n{\ngraph\n[\ni\n].\nclear\n();\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\n++\ni\n)\n{\nint\nu\n,\nv\n;\ncin\n>>\nu\n>>\nv\n;\ngraph\n[\nu\n].\npush_back\n(\nv\n);\ngraph\n[\nv\n].\npush_back\n(\nu\n);\n}\nans\n=\nfalse\n;\nint\nres\n=\ndfs\n(\n1\n,\n1\n);\nif\n(\nres\n==\n2\n)\n{\nans\n=\ntrue\n;\n}\ncout\n<<\n(\nans\n?\n\"YES\"\n:\n\"NO\"\n)\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

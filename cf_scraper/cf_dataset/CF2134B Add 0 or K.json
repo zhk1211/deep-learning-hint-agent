@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array of $$$n$$$ positive integers $$$a_1, a_2, \\ldots, a_n$$$ and a positive integer $$$k$$$.\n\nIn one operation, you may add either $$$0$$$ or $$$k$$$ to each $$$a_i$$$, i.e., choose another array of $$$n$$$ integers $$$b_1, b_2, \\ldots, b_n$$$ where each $$$b_i$$$ is either $$$0$$$ or $$$k$$$, and update $$$a_i$$$ to $$$a_i + b_i$$$ for $$$1 \\le i \\le n$$$. Note that you can choose different values for each element of the array $$$b$$$.\n\nYour task is to perform at most $$$k$$$ such operations to make $$$\\gcd(a_1, a_2, \\ldots, a_n) > 1$$$ $$$^{\\text{∗}}$$$. It can be proved that this is always possible.\n\nOutput the final array after the operations. You do not have to output the operations themselves.\n\n$$$^{\\text{∗}}$$$ $$$\\gcd(a_1, a_2, \\ldots, a_n)$$$ denotes the [greatest common divisor (GCD)](https://en.wikipedia.org/wiki/Greatest_common_divisor) of $$$a_1, a_2, \\ldots, a_n$$$.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 1000$$$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $$$n$$$ and $$$k$$$ ($$$1 \\le n \\le 10^5$$$, $$$1 \\leq k \\leq 10^9$$$) — the length of the array $$$a$$$ and the given constant.\n\nThe second line of each test case contains $$$n$$$ integers $$$a_1,a_2,\\ldots,a_n$$$ ($$$1 \\le a_i \\le 10^9$$$) — the elements of the array $$$a$$$.\n\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$10^5$$$.\n\nOutput Format\nFor each test case, output an array of $$$n$$$ integers in a new line — the final array after the operations. The integers in the output should be within the range from $$$1$$$ to $$$10^9 + k^2$$$.\n\nIf there are multiple valid outputs, you can output any of them.\n\nNote that you do not have to minimize the number of operations.\n\nExamples\nSample 1\nInput\n8\n3 3\n2 7 1\n4 5\n2 9 16 14\n4 1\n1 2 3 4\n5 2\n5 6 7 8 9\n2 10\n7 9\n1 1000000000\n1\n1 371\n1000000000\n3 6\n1 3 5\nOutput\n8 10 10\n7 14 21 14\n2 2 4 4\n9 6 9 12 9\n77 99\n1000000000000000001\n1000000000\n25 15 5\n\nNote\nIn the first test case, the output $$$[8,10,10]$$$ is valid because $$$\\gcd(8, 10, 10) = 2 > 1$$$, and the array $$$[2, 7, 1]$$$ can be transformed into $$$[8, 10, 10]$$$ using at most $$$3$$$ operations. One possible sequence of operations is shown below:\n\n|Operation|$b$ |Resulting $a$|\n|:-------:|:-------:|:--------:|\n|$1$ |$[3, 0, 3]$|$[5, 7, 4]$ |\n|$2$ |$[0, 0, 3]$|$[5, 7, 7]$ |\n|$3$ |$[3, 3, 3]$|$[8, 10, 10]$|\n\nOther outputs like $$$[2, 10, 4]$$$, $$$[8, 16, 4]$$$, and $$$[5, 10, 10]$$$ are also considered valid.\n\nIn the second test case, the output $$$[7, 14, 21, 14]$$$ is valid because:\n\n- $$$\\gcd(7, 14, 21, 14) = 7 > 1$$$.\n- Starting from $$$[2, 9, 16, 14]$$$, applying the operation with $$$b = [5, 5, 5, 0]$$$ yields $$$[7, 14, 21, 14]$$$, requiring no more than $$$5$$$ operations."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Find an integer $$$g \\gt 1$$$ and integers $$$c_1, c_2, \\ldots, c_n$$$ such that each $$$a_i + k \\cdot c_i$$$ is divisible by $$$g$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Decide the value of $$$g$$$ only based on $$$k$$$. There may be more than one possible choices."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "The problem is equivalent to finding an array of $$$n$$$ non-negative integers $$$c_1, c_2, \\ldots, c_n$$$ such that $$$0 \\le c_i \\le k$$$ for $$$1 \\le i \\le n$$$ and\n$$$\\gcd(a_1 + k \\cdot c_1, a_2 + k \\cdot c_2, \\ldots, a_n + k \\cdot c_n)  \\gt  1$$$\nThe idea is as follows. If we can find an integer $$$g \\gt 1$$$ and integers $$$c_1, c_2, \\ldots, c_n$$$ such that each $$$a_i + k \\cdot c_i$$$ is divisible by $$$g$$$ (for $$$1 \\le i \\le n$$$), then the GCD condition is satisfied.\nThere are (at least) two ways to construct such a solution. The simplest solution is to take $$$g = k+1$$$ and define $$$c_i = a_i \\bmod (k+1)$$$. This works because\n$$$a_i + k \\cdot c_i \\equiv c_i + k \\cdot c_i \\equiv (k+1) \\cdot c_i \\equiv 0 \\pmod{k+1}$$$\nHence every term is divisible by $$$k+1$$$.\nAlternatively, you can also find the smallest integer $$$x$$$ such that $$$\\gcd(x,k) = 1$$$, and set $$$g = x$$$. Note that $$$g \\leq 29$$$, since $$$k \\leq 10^9$$$ and the product of all prime numbers from $$$2$$$ to $$$29$$$ already exceeds $$$10^9$$$.\nThen, for each $$$a_i$$$, we can add $$$k$$$ to it until it becomes divisible by $$$g$$$. In fact, the value of $$$c_i$$$ can be determined explicitly (though it is not required) as\n$$$a_i + k \\cdot c_i \\equiv 0 \\pmod{g} \\quad \\implies \\quad c_i \\equiv (-a_i \\cdot k^{-1}) \\pmod{g}$$$\nwhere $$$k^{-1}$$$ is the modular inverse of $$$k$$$ modulo $$$g$$$.\nThus, in either method, we can always construct a valid array so that the GCD of the resulting numbers is greater than $$$1$$$."
+        },
+        {
+            "title": "Code for solution 1 (C++)",
+            "content": "#include\n<iostream>\n#include\n<vector>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<\nlong\nlong\n>\na\n(\nn\n);\nfor\n(\nauto\n&\ni\n:\na\n)\n{\ncin\n>>\ni\n;\ni\n+=\n(\ni\n%\n(\nk\n+\n1\n))\n*\nk\n;\n}\nfor\n(\nauto\ni\n:\na\n)\ncout\n<<\ni\n<<\n' '\n;\ncout\n<<\n'\\n'\n;\n}\n}"
+        },
+        {
+            "title": "Code for solution 1 (Python)",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\nn\n,\nk\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nfor\ni\nin\nrange\n(\nn\n):\na\n[\ni\n]\n+=\n(\na\n[\ni\n]\n%\n(\nk\n+\n1\n))\n*\nk\nprint\n(*\na\n)"
+        },
+        {
+            "title": "Code for solution 2 (C++)",
+            "content": "#include\n<iostream>\n#include\n<numeric>\n#include\n<vector>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<\nlong\nlong\n>\na\n(\nn\n);\nfor\n(\nauto\n&\ni\n:\na\n)\n{\ncin\n>>\ni\n;\n}\nfor\n(\nint\ng\n=\n2\n;;\ng\n++)\n{\nif\n(\ngcd\n(\ng\n,\nk\n)\n!=\n1\n)\ncontinue\n;\nfor\n(\nauto\n&\ni\n:\na\n)\n{\nwhile\n(\ni\n%\ng\n!=\n0\n)\ni\n+=\nk\n;\n}\nfor\n(\nauto\ni\n:\na\n)\ncout\n<<\ni\n<<\n' '\n;\ncout\n<<\n'\\n'\n;\nbreak\n;\n}\n}\n}"
+        },
+        {
+            "title": "Code for solution 2 (Python)",
+            "content": "import\nmath\nt\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\nn\n,\nk\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nfor\ng\nin\nrange\n(\n2\n,\nk\n+\n2\n):\nif\nmath\n.\ngcd\n(\ng\n,\nk\n)\n>\n1\n:\ncontinue\nok\n=\nTrue\nb\n=\nlist\n(\na\n)\nfor\ni\nin\nrange\n(\nn\n):\nif\nb\n[\ni\n]\n%\ng\n==\n0\n:\ncontinue\nfor\nj\nin\nrange\n(\n1\n,\nk\n+\n1\n):\nb\n[\ni\n]\n+=\nk\nif\nb\n[\ni\n]\n%\ng\n==\n0\n:\nbreak\nif\nb\n[\ni\n]\n%\ng\n!=\n0\n:\nok\n=\nFalse\nif\nok\n:\nprint\n(*\nb\n)\nbreak"
+        }
+    ]
+}

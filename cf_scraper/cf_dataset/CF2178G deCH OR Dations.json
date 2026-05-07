@@ -1,0 +1,44 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nDue to supply chain issues in the North Pole (allegedly caused by a lazy elf), Santa is planning to give out hand-drawn circles as presents this Christmas. Please help him decorate them!\n\nThere are $ 2n $ equally spaced points around the circle, labeled $ 1,2,\\ldots,2n $ in clockwise order. Santa has chosen $ n $ chords with distinct endpoints, where chord $ i $ connects the points $ a_i $ and $ b_i $ . He draws these chords onto the circle one by one, in order.\n\nAfter Santa has drawn the first $ \\ell $ chords, consider any non-empty subset $ S $ of the $ \\ell $ chords and let $ 1\\leq c_1<c_2<\\cdots<c_{|S|}\\leq \\ell $ be their indices. $ S $ is defined to be a chain if and only if chord $ c_k $ intersects chord $ c_{k+1} $ for all $ 1\\leq k < |S| $ . Note that $ S $ is always a chain if $ |S|=1 $ .\n\nSanta does not want any chord to be the odd one out. Therefore, he considers the chords to be tight-knit if and only if every chord appears in an even number of chains, taken over all chains that are subsets of the first $ \\ell $ chords.\n\nFor each $ \\ell $ from $ 1 $ to $ n $ , help Santa determine whether his chords are tight-knit.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2\\le n\\le 5\\cdot 10^5 $ ) — the number of chords.\n\nThen $ n $ lines follow, the $ i $ -th line containing two integers $ a_i $ and $ b_i $ ( $ 1\\le a_i<b_i\\le 2n $ ) — the endpoints of the $ i $ -th chord.\n\nIt is guaranteed that all endpoints are distinct.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 5\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a string of length $ n $ — the $ \\ell $ -th character should be $ \\texttt{1} $ if the first $ \\ell $ chords are tight-knit and $ \\texttt{0} $ otherwise.\n\nExamples\nSample 1\nInput\n3\n3\n1 6\n2 3\n4 5\n4\n1 7\n3 8\n4 6\n2 5\n5\n1 6\n4 9\n2 7\n5 10\n3 8\nOutput\n000\n0100\n01111\n\nNote\nIn the first test case, no pairs of chords intersect, and thus every chord appears in exactly one chain consisting of itself. Therefore, the chords are not tight-knit for all $ \\ell $ .\n\nIn the second test case, below is an illustration and explanation after the first $ \\ell=1,2,3,4 $ chords are drawn. Sets of chords are denoted as a set of the indices of the corresponding chords.\n\nExplanationIllustrationChains- $ \\{1\\} $ .\n\nAppearances- Chord $ 1 $ appears in $ 1 $ chain.\n\nNotes- The chords are not tight-knit since chord $ 1 $ is in an odd number of chains.\n- Recall that a set containing a single chord is always a chain.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2178G/65934b98c7bc3c09320f98c4446dac1764dcb47e12e504697f167eac1885f308.png)Chains- $ \\{1\\} $ , $ \\{1,2\\} $ , and $ \\{2\\} $ .\n\nAppearances- Chord $ 1 $ appears in $ 2 $ chains;\n- Chord $ 2 $ appears in $ 2 $ chains.\n\nNotes- The chords are tight-knit since every chord appears in an even number of chains.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2178G/0f641338b555add9ccfc0c4b519d0451814c8e65966da501d5cfa8daafb34bb2.png)Chains- $ \\{1\\} $ , $ \\{1,2\\} $ , $ \\{2\\} $ , and $ \\{3\\} $ .\n\nAppearances- Chord $ 1 $ appears in $ 2 $ chains;\n- Chord $ 2 $ appears in $ 2 $ chains;\n- Chord $ 3 $ appears in $ 1 $ chain.\n\nNotes- The chords are not tight-knit since chord $ 3 $ is in an odd number of chains.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2178G/5308fc9fb02ebccbc71638d62b639c55b67309d33e9fc623fb62d74c23070e74.png)Chains- $ \\{1\\} $ , $ \\{1,2\\} $ , $ \\{1,2,4\\} $ , $ \\{2\\} $ , $ \\{2,4\\} $ , $ \\{3\\} $ , $ \\{3,4\\} $ , and $ \\{4\\} $ .\n\nAppearances- Chord $ 1 $ appears in $ 3 $ chains;\n- Chord $ 2 $ appears in $ 4 $ chains;\n- Chord $ 3 $ appears in $ 2 $ chains;\n- Chord $ 4 $ appears in $ 4 $ chains.\n\nNotes- The chords are not tight-knit since chord $ 1 $ is in an odd number of chains.\n- Note that $ \\{2,3,4\\} $ is not a chain since chord $ 2 $ does not intersect chord $ 3 $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2178G/aaaaaa7998841d3e9ac72237c70ce7264647c03127d14fd9120a08adb59229ec.png)Thus, we output $ \\mathtt{0100} $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Try to solve the problem for only $$$\\ell=n$$$.\nHint 1.1\nFigure out how to count the number of chains containing a specific chord (without caring about complexity)\nAnswer 1.1\nAny chain containing a specific chord can be decomposed into a chain ending at the chord and a chain starting at the chord. Because these parts are independent the number of chains is [number of chains ending at the chord] x [number of chains starting at the chord].\nHint 1.2\nFigure out how we can compute the number of chains ending at chord $$$1\\ldots n$$$ in quadratic time.\nAnswer 1.2\nFor a given chord $$$j$$$, the number of chains ending at $$$j$$$ is the sum of number of chains ending at chord $$$i \\lt j$$$ for every chord $$$i$$$ that intersects chord $$$j$$$ plus one (for the chain consisting of just $$$j$$$)\nHint 1.3\nYou only care about parity. Figure out how to speed this up to $$$O(n\\log n)$$$.\nAnswer 1.3\nConsider an XOR Fenwick Tree of size $$$2n$$$, where at $$$x_i$$$ and $$$y_i$$$ you store the parity of number of chains ending at chord $$$I$$$. Then, the value in Hint 1.2 can be found by a range XOR query over $$$[x_j, y_j]$$$ because any chord not intersecting chord $$$j$$$ will either be accounted for $$$0$$$ or $$$2$$$ times."
+        },
+        {
+            "title": "Hint 1.1",
+            "content": "Figure out how to count the number of chains containing a specific chord (without caring about complexity)"
+        },
+        {
+            "title": "Hint 1.2",
+            "content": "Figure out how we can compute the number of chains ending at chord $$$1\\ldots n$$$ in quadratic time."
+        },
+        {
+            "title": "Hint 1.3",
+            "content": "You only care about parity. Figure out how to speed this up to $$$O(n\\log n)$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The problem forces you to incrementally compute the values for $$$\\ell=1\\ldots n$$$. Try to solve the problem in quadratic or cubic time while only allowing yourself to consider the chords in order (i.e. you're not allowed to go backwards to compute the number of chains starting at a given chord)."
+        },
+        {
+            "title": "Hint 3",
+            "content": "You have yet to use the fact that we want\nevery\nchord to appear an even number of times (that is, we do not need to know the specific parity for each chord). Use this to speed the solution up to $$$O(n\\log n)$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "Python\n(by\ngolomb\n),\nC++"
+        }
+    ]
+}

@@ -1,0 +1,64 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given $ n $ machines arranged in a circle, where $ n $ is at most $ 20 $ . Each machine is either of type A or type B. The machines are numbered clockwise from $ 1 $ to $ n $ , and the type of the $ i $ -th machine is denoted by $ s_i $ . Each machine takes an integer $ x $ and updates it according to its type:\n\n- Type A: Decrease $ x $ by $ 1 $ . Formally, update $ x := x - 1 $ .\n- Type B: Replace $ x $ with the floor of half its value. Formally, update $ x := \\left\\lfloor\\frac{x}{2}\\right\\rfloor $ , where $ \\lfloor y\\rfloor $ denotes the [floor](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions) of $ y $ , which is the greatest integer less than or equal to $ y $ .\n\nYou are given $ q $ queries, each consisting of a single integer $ a $ . In each query, you start at machine $ 1 $ holding an integer $ a $ . Each second, the following two actions occur in order:\n\n1. The current machine updates $ a $ according to its type.\n2. Then, move one step clockwise to the next machine. Formally\n- If you are at machine $ i $ where $ 1 \\le i \\le n - 1 $ , move to machine $ i + 1 $ .\n- If you are at machine $ n $ , move to machine $ 1 $ .\n\nThis process continues until your integer $ a $ becomes $ 0 $ . For each query, determine the number of seconds required for $ a $ to reach $ 0 $ .\n\nNote that all queries are independent of each other.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ q $ ( $ 1\\le n\\le 20 $ , $ 1\\le q\\le 10^4 $ ) — the number of machines, and the number of queries, respectively.\n\nThe second line of each test case contains a string $ s $ ( $ |s| = n $ and $ s_i = \\mathtt{A} \\text{ or }\\mathtt{B} $ ) — the types of the machines.\n\nThe third line of each test case contains $ q $ integers $ a_1, a_2, \\ldots, a_q $ ( $ 1\\le a_i\\le 10^9 $ ) — the initial integer of each query.\n\nNote that there are no constraints on the sum of $ n $ over all test cases.\n\nIt is guaranteed that the sum of $ q $ over all test cases does not exceed $ 10^4 $ .\n\nOutput Format\nFor each test case, output $ q $ integers representing the answers to each query.\n\nExamples\nSample 1\nInput\n3\n2 2\nBA\n3 4\n1 1\nB\n20\n6 4\nBAABBA\n2 8 32 95\nOutput\n2\n3\n5\n2\n5\n8\n11\n\nNote\nIn the first test case, the queries are as follows:\n\n- Query $ 1 $ : $ a = 3 $\n1. Start at machine $ 1 $ . Machine $ 1 $ replaces $ a $ with the floor of half its value. Now, $ a = \\left\\lfloor\\frac{3}{2}\\right\\rfloor = 1 $ .\n2. Move to machine $ 2 $ . Machine $ 2 $ decreases $ a $ by $ 1 $ . Now, $ a = 1 - 1 = 0 $ .\n\nTherefore, it takes $ 2 $ seconds for $ a $ to reach $ 0 $ .\n- Query $ 2 $ : $ a = 4 $\n1. Start at machine $ 1 $ . Machine $ 1 $ replaces $ a $ with the floor of half its value. Now, $ a = \\left\\lfloor\\frac{4}{2}\\right\\rfloor = 2 $ .\n2. Move to machine $ 2 $ . Machine $ 2 $ decreases $ a $ by $ 1 $ . Now, $ a = 2 - 1 = 1 $ .\n3. Move back to machine $ 1 $ . Machine $ 1 $ replaces $ a $ with the floor of half its value. Now, $ a = \\left\\lfloor\\frac{1}{2}\\right\\rfloor = 0 $ .\n\nTherefore, it takes $ 3 $ seconds for $ a $ to reach $ 0 $ .\n\nIn the second test case, there is only one query with $ a = 20 $ :\n\n1. Start at machine $ 1 $ . Machine $ 1 $ replaces $ a $ with the floor of half its value. Now, $ a = \\left\\lfloor\\frac{20}{2}\\right\\rfloor = 10 $ .\n2. Move to machine $ 1 $ . Machine $ 1 $ replaces $ a $ with the floor of half its value. Now, $ a = \\left\\lfloor\\frac{10}{2}\\right\\rfloor = 5 $ .\n3. Move to machine $ 1 $ . Machine $ 1 $ replaces $ a $ with the floor of half its value. Now, $ a = \\left\\lfloor\\frac{5}{2}\\right\\rfloor = 2 $ .\n4. Move to machine $ 1 $ . Machine $ 1 $ replaces $ a $ with the floor of half its value. Now, $ a = \\left\\lfloor\\frac{2}{2}\\right\\rfloor = 1 $ .\n5. Move to machine $ 1 $ . Machine $ 1 $ replaces $ a $ with the floor of half its value. Now, $ a = \\left\\lfloor\\frac{1}{2}\\right\\rfloor = 0 $ .\n\nTherefore, it takes $ 5 $ seconds for $ a $ to reach $ 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nWhat's the consuming part of processing the string of operations $$$s$$$ ?\nHint 2\nIf the string $$$s$$$ contained at least one $$$\\mathtt{B}$$$ operation , What's the maximum count of iterations we're going to run so that $$$a=0$$$ ?\nHint 3\nIf the string $$$s$$$ contains $$$x$$$ copies of $$$\\mathtt{B}$$$ then $$$a$$$ is guaranteed to be $$$a=0$$$ in at most $$$\\mathcal{O}(\\log_{2x} A)$$$ where $$$A=\\max(a_1,a_2,\\ldots ,a_n)$$$ , that's at most $$$\\mathcal{O}(n \\log_2 A) \\sim \\mathcal{O}(30n)$$$ operations are required .\nHint 4\nHow to manage too many appearances of $$$\\mathtt{A}$$$ for efficiency ?\nHint 5\nIt's enough to handle the case where $$$\\underbrace{\\color{red}{\\mathtt{AAAAA\\ldots AAA}}}_{}$$$ that's the answer for query $$$a$$$ is $$$a$$$ because we're incrementing by 1 at each iteration ; otherwise the complexity becomes $$$\\mathcal{O}(10^9q)$$$ for such cases which is slow. and the rest can be done in $$$\\mathcal{O}(nq \\log_2(10^9))$$$ which is safe according to the constraints."
+        },
+        {
+            "title": "Hint 1",
+            "content": "What's the consuming part of processing the string of operations $$$s$$$ ?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "If the string $$$s$$$ contained at least one $$$\\mathtt{B}$$$ operation , What's the maximum count of iterations we're going to run so that $$$a=0$$$ ?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "If the string $$$s$$$ contains $$$x$$$ copies of $$$\\mathtt{B}$$$ then $$$a$$$ is guaranteed to be $$$a=0$$$ in at most $$$\\mathcal{O}(\\log_{2x} A)$$$ where $$$A=\\max(a_1,a_2,\\ldots ,a_n)$$$ , that's at most $$$\\mathcal{O}(n \\log_2 A) \\sim \\mathcal{O}(30n)$$$ operations are required ."
+        },
+        {
+            "title": "Hint 4",
+            "content": "How to manage too many appearances of $$$\\mathtt{A}$$$ for efficiency ?"
+        },
+        {
+            "title": "Hint 5",
+            "content": "It's enough to handle the case where $$$\\underbrace{\\color{red}{\\mathtt{AAAAA\\ldots AAA}}}_{}$$$ that's the answer for query $$$a$$$ is $$$a$$$ because we're incrementing by 1 at each iteration ; otherwise the complexity becomes $$$\\mathcal{O}(10^9q)$$$ for such cases which is slow. and the rest can be done in $$$\\mathcal{O}(nq \\log_2(10^9))$$$ which is safe according to the constraints."
+        },
+        {
+            "title": "Bonus Hints",
+            "content": "Hint 1\nCompress the string $$$s$$$ into sequence of \"Move Blocks\" that's for $$$s=\\mathtt{AABBBABAAA}$$$ the sequence of moves will be\n$$$\\{[\\mathtt{A},2],[\\mathtt{B},3],[\\mathtt{A},1],[\\mathtt{B},1],[\\mathtt{A},3]\\}$$$\nHint 2\nBe careful in simulation"
+        },
+        {
+            "title": "Hint 1",
+            "content": "Compress the string $$$s$$$ into sequence of \"Move Blocks\" that's for $$$s=\\mathtt{AABBBABAAA}$$$ the sequence of moves will be\n$$$\\{[\\mathtt{A},2],[\\mathtt{B},3],[\\mathtt{A},1],[\\mathtt{B},1],[\\mathtt{A},3]\\}$$$"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Be careful in simulation"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution 1 : O(nq log A)",
+            "content": "If you've one $$$\\color{blue}{\\mathtt{B}}$$$ in string $$$s$$$ , then you'll have to do operations in $$$\\mathcal{O}(n\\log_2(A))$$$ which is $$$\\sim \\mathcal{O}(20 \\cdot 30)$$$ which is fine for $$$n \\le 20$$$ and $$$\\sum q \\le 10^4$$$ , at worst case this is roughly $$$\\mathcal{O}(6 \\cdot 10^5)$$$ which is safe.\nIf we've a string $$$s$$$ that's all $$$\\color{red}{\\mathtt{A}}$$$ i.e. :\n$$$s=\\underbrace{\\color{red}{\\mathtt{AAAAA\\ldots AAA}}}_{}$$$\nthen answer is simply for each $$$a_i$$$ is $$$a_i$$$ itself because we cannot do anything except just subtracting by $$$1$$$ many times ; otherwise the complexity becomes $$$\\mathcal{O}(10^9q)$$$ for such cases which is slow.\nComplexity $$$\\mathcal{O}(nq \\log_2(10^9))$$$."
+        },
+        {
+            "title": "Implementation 1 (MathModel)",
+            "content": "def\nsolve\n():\nn\n,\nq\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\ns\n=\ninput\n().\nstrip\n()\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nA\n,\nB\n=\ns\n.\ncount\n(\n'A'\n),\ns\n.\ncount\n(\n'B'\n)\nfor\ni\nin\nrange\n(\nq\n):\nif\n(\nB\n==\n0\n):\nprint\n(\na\n[\ni\n])\nelse\n:\nans\n=\n0\nwhile\n(\na\n[\ni\n]):\nfor\nj\nin\ns\n:\nif\n(\na\n[\ni\n]==\n0\n):\nbreak\nans\n+=\n1\nif\n(\nj\n==\n'A'\n):\na\n[\ni\n]-=\n1\nelse\n:\na\n[\ni\n]\n//=2\nprint\n(\nans\n)\nfor\n_\nin\nrange\n(\nint\n(\ninput\n())):\nsolve\n()"
+        },
+        {
+            "title": "Solution 2 (Bonus) : O(n+qlog^2 A)",
+            "content": "Observation :\nThe consuming part of processing the operations where a segment of $$$\\underbrace{\\color{red}{\\mathtt{AAAAA\\ldots AAA}}}_{}$$$ because we're processing one by one which is inefficient and answering query will take $$$\\mathcal{O}(nq \\log_2(10^9))$$$ , why ? , because processing $$$\\underbrace{\\color{red}{\\mathtt{AAAAA\\ldots AAA}}}_{}$$$ operation-by-operation is slow , for example consider the sequence $$$\\underbrace{\\color{red}{\\mathtt{AAAAA\\ldots AAA}} \\color{blue}{\\mathtt{B}}}_{}$$$\nThis case will take $$$\\mathcal{O}(nq \\log_2(10^9))$$$ at worst case , which is inefficient.\nA good way to optimize is by compress the blocks of same type of operations as $$$(\\mathrm{type},\\mathrm{count})$$$ that way all long blocks of $$$\\color{red}{\\mathtt{A}}$$$ will be performed much faster , For blocks of $$$\\color{blue}{\\mathtt{B}}$$$ it's already fast to process them in order because of $$$\\mathcal{O}(\\log_2(a))$$$ and it reduces $$$a$$$ to $$$0$$$ in $$$\\mathcal{O}(\\log_2(10^9)) \\sim 30$$$ at most , However compressing the operations is still better to compose the operations.\nThat's we're going to process at most $$$\\sim 60$$$ blocks , because if we started with $$$\\color{red}{\\mathtt{A}}\\color{blue}{\\mathtt{B}}\\color{red}{\\mathtt{A}}\\color{blue}{\\mathtt{B}}\\color{red}{\\mathtt{A}}\\color{blue}{\\mathtt{B}}\\ldots $$$ assuming $$$a=10^9$$$ , which is the worst case of the algorithm.\nNow after composing the blocks as $$$(\\mathrm{type},\\mathrm{count})$$$ , you should iterate through them :\nIf $$$s_i=\\color{red}{\\mathtt{A}}$$$ then we perform $$$a_i=a_i-\\min(\\mathrm{count},a_i)$$$\nIf $$$s_i=\\color{blue}{\\mathtt{B}}$$$ then we perform $$$\\displaystyle a_i=\\left \\lfloor \\frac{a_i}{\\displaystyle 2^{\\min(\\text{count},\\lceil \\log_2(n) \\rceil)}} \\right \\rfloor$$$\nmake sure to update number of operations accordingly.\nComplexity $$$\\sim \\mathcal{O}(n+q \\log^2(10^9))$$$."
+        },
+        {
+            "title": "Implementation 2 (MathModel)",
+            "content": "def\nsolve\n():\nn\n,\nq\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\ns\n=\ninput\n()\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nA\n=\ns\n.\ncount\n(\n'A'\n)\nB\n=\ns\n.\ncount\n(\n'B'\n)\nlast\n=\ns\n[\n0\n]\nseq\n=[]\ncur\n=\n1\nfor\ni\nin\nrange\n(\n1\n,\nn\n):\nif\n(\ns\n[\ni\n]==\nlast\n):\ncur\n+=\n1\nelse\n:\nseq\n.\nappend\n([\nlast\n,\ncur\n])\ncur\n=\n1\nlast\n=\ns\n[\ni\n]\nif\n(\ncur\n!=\n0\n):\nseq\n.\nappend\n([\nlast\n,\ncur\n])\nif\n(\nB\n==\n0\n):\nfor\ni\nin\na\n:\nprint\n(\ni\n)\nelse\n:\nfor\ni\nin\nrange\n(\nq\n):\nans\n=\n0\nwhile\n(\na\n[\ni\n]>\n0\n):\nfor\nj\nin\nseq\n:\nif\n(\na\n[\ni\n]==\n0\n):\nbreak\nif\n(\nj\n[\n0\n]==\n'A'\n):\nmn\n=\nmin\n(\nj\n[\n1\n],\na\n[\ni\n])\nans\n+=\nmn\n                        a\n[\ni\n]-=\nmn\nelse\n:\nif\na\n[\ni\n]==\n0\n:\nbreak\nx\n=\na\n[\ni\n]\np\n=\n0\nwhile\n(\nx\n):\nx\n//=2\np\n+=\n1\nmn\n=\nmin\n(\np\n,\nj\n[\n1\n])\nans\n+=\nmn\n                        a\n[\ni\n]\n//=(2**mn)\nprint\n(\nans\n)\nfor\n_\nin\nrange\n(\nint\n(\ninput\n())):\nsolve\n()"
+        }
+    ]
+}

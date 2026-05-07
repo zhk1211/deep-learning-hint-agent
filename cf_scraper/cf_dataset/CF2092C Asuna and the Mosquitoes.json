@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nFor her birthday, each of Asuna's $ n $ admirers gifted her a tower. The height of the tower from the $ i $ -th admirer is equal to $ a_i $ .\n\nAsuna evaluates the beauty of the received gifts as $ \\max(a_1, a_2, \\ldots, a_n) $ . She can perform the following operation an arbitrary number of times (possibly, zero).\n\n- Take such $ 1 \\le i \\neq j \\le n $ that $ a_i + a_j $ is odd and $ a_i > 0 $ , then decrease $ a_i $ by $ 1 $ and increase $ a_j $ by $ 1 $ .\n\nIt is easy to see that the heights of the towers remain non-negative during the operations. Help Asuna find the maximum possible beauty of the gifts after any number of operations!\n\nInput Format\nEach test consists of several test cases. The first line of the input data contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ ) — the number of admirers of Asuna.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n \\ (1 \\le a_i \\le 10^9) $ — the heights of the towers.\n\nIt is guaranteed that the sum of $ n $ across all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer: the maximum value of the beauty of the gifts that Asuna can achieve.\n\nExamples\nSample 1\nInput\n4\n3\n5 3 9\n2\n3 2\n4\n1 2 2 1\n5\n5 4 3 2 9\nOutput\n9\n5\n5\n21\n\nNote\nIn the first test case, no pair of towers satisfies the required condition for applying the operation, so no operations can be performed. In this case, the answer is $ \\max(5, \\ 3, \\ 9) = 9 $ .\n\nIn the second test case, the operation with $ i = 2 $ and $ j = 1 $ can be applied twice. After that, the array becomes: $ a \\ = \\ [5, \\ 0] $ . Thus, the answer is 5.\n\nIn the third test case, the following sequence of operations can be applied:\n\n1. Operation with $ i=1 $ and $ j=2 $ . $ [1, \\ 2, \\ 2, \\ 1] \\quad \\rightarrow \\quad [0, \\ 3, \\ 2, \\ 1] $\n2. Operation with $ i=3 $ and $ j=2 $ . $ [0, \\ 3, \\ 2, \\ 1] \\quad \\rightarrow \\quad [0, \\ 4, \\ 1, \\ 1] $\n3. Operation with $ i=3 $ and $ j=2 $ . $ [0, \\ 4, \\ 1, \\ 1] \\quad \\rightarrow \\quad [0, \\ 5, \\ 0, \\ 1] $\n\n$ \\max(0, \\ 5, \\ 0, \\ 1) \\ = \\ 5 $ .\n\nTherefore, the answer is 5."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider two cases: first, when all numbers have the same parity; and second, when there is at least one even and one odd number."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Let $$$S$$$ be the sum of all numbers, and $$$k$$$ be the number of odd numbers in the array. Then, in the second case, the answer is $$$S - k + 1$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Case 1.\nAll numbers in $$$a$$$ have the same parity. In this case, it is impossible to perform any operation, so the answer is $$$\\max(a)$$$.\nCase 2.\nThere is at least one even and one odd number. Let $$$S$$$ be the sum of all numbers, and $$$k$$$ be the number of odd numbers in the array. We will now prove that the answer is $$$S - k + 1$$$.\nFirst of all, the answer cannot exceed $$$S - k + 1$$$, since the number of odd elements in the array remains unchanged after performing the operation.\nSecondly, we will show that $$$S - k + 1$$$ is always achievable. Consider an arbitrary odd number $$$A \\in a$$$. We can then\nmerge\nall even numbers into $$$A$$$ $$$\\left( \\text{i.e.} \\ (A, 2k) \\to (A + 2k, 0) \\right)$$$, resulting in an array consisting of the number $$$A + 2m$$$, $$$k-1$$$ odd numbers, and zeros for the remaining elements (here $$$2m$$$ denotes the sum of all even numbers in the initial array).\nAfter this step, for each remaining odd number, we can\nsacrifice\none unit by transferring it to any zero element in the array and then merge the resulting even number into $$$A$$$. It's easy to see that there will always be at least one zero available in the array before merging each odd number. Eventually, we will obtain an array consisting of one element equal to $$$S - k + 1$$$, $$$k - 1$$$ elements equal to one, and zeros filling the remaining positions.\nTherefore, the answer in this case will be $$$S-k+1$$$."
+        }
+    ]
+}

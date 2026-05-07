@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n[Clan War Map — Supercell, Clash of Clans ](https://www.youtube.com/watch?v=HmB4MwbxWGY)This is the constructive version of the problem. The difference between the versions is that in this version, you need to either construct an answer or report that it is impossible, and $ 0 \\leq b_i \\leq 10^9 $ . You can hack only if you solved all versions of this problem.\n\nThe Master Builder doesn't like repetitive tasks — repairing the base, upgrading the town hall fifteen times, and doing yet more programming problems about MEX. So, this is not going to be your ordinary MEX problem.\n\nFor any positive integer $ k $ , define the $ k $ -mex of a collection of integers $ S $ to be the $ k $ -th smallest nonnegative integer not present in $ S $ . For instance, the $ 1 $ -mex and $ 2 $ -mex of $ [1, 2, 1] $ are $ 0 $ and $ 3 $ , respectively.\n\nLet $ n $ be a positive integer, and consider an array of nonnegative integers $ [a_1, \\ldots, a_n] $ . Determine whether or not there exists an array of nonnegative integers $ [b_1, \\ldots, b_n] $ such that:\n\n- For all $ 1 \\leq i \\leq n $ , the $ (n-i+1) $ -mex of $ [b_1, \\ldots, b_i] $ is $ a_i $ .\n\nAdditionally, if such an array $ b $ exists, find any such $ [b_1, \\ldots, b_n] $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ ) — the length of the array $ a $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, \\ldots, a_n $ ( $ 0 \\leq a_i \\leq 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a line containing either \"YES\" or \"NO\", representing whether or not the array $ b $ exists. You can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nThen, if you responded with \"YES\", print a second line containing $ n $ integers $ b_1, \\ldots, b_n $ ( $ 0 \\leq b_i \\leq 10^9 $ ) such that for all $ 1 \\leq i \\leq n $ , the $ (n-i+1) $ -mex of $ [b_1, \\ldots, b_i] $ is $ a_i $ .\n\nExamples\nSample 1\nInput\n6\n3\n3 3 1\n3\n2 1 3\n1\n0\n1\n2\n4\n7 5 2 2\n6\n6 6 6 4 3 3\nOutput\nYES\n2 0 2\nNO\nYES\n67\nNO\nNO\nYES\n5 2 1 5 2 0\n\nNote\nIn the first test case, the array $ a = [3, 3, 1] $ . We can check that the array $ b = [2, 0, 2] $ satisfies the conditions because:\n\n- the $ 3 $ -mex of $ [b_1] = [2] $ is $ a_1 = 3 $ ,\n- the $ 2 $ -mex of $ [b_1, b_2] = [2, 0] $ is $ a_2 = 3 $ ,\n- the $ 1 $ -mex of $ [b_1, b_2, b_3] = [2, 0, 2] $ is $ a_3 = 1 $ .\n\nIn the second test case, the array $ a = [2, 1, 3] $ . It can be shown that no suitable array $ b $ exists.\n\nIn the third test case, the array $ a = [0] $ . We can check that the array $ b = [67] $ satisfies the conditions because the $ 1 $ -mex of $ [b_1] = [67] $ is $ a_1 = 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Write some bounds for the $$$a_i$$$. What's the biggest/smallest each one can be?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Try to pick only numbers that aren't in the $$$a_i$$$, and $$$+\\infty$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "INF\n=\n10\n**\n9\nT\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nT\n):\nN\n=\nint\n(\ninput\n())\nA\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\ntaken\n=\n[\nFalse\n]\n*\n(\nN\n+\n1\n)\nok\n=\nTrue\nfor\ni\nin\nrange\n(\nN\n):\nif\nnot\n(\nN\n-\ni\n-\n1\n<=\nA\n[\ni\n]\n<=\nN\n):\nok\n=\nFalse\nif\ni\n>\n0\nand\nA\n[\ni\n]\n>\nA\n[\ni\n-\n1\n]:\nok\n=\nFalse\nif\nnot\nok\n:\nbreak\ntaken\n[\nA\n[\ni\n]]\n=\nTrue\nif\nok\n:\nprint\n(\n\"YES\"\n)\nptr\n=\nN\n        prev\n=\nN\nfor\ni\nin\nrange\n(\nN\n):\nif\nprev\n>\nA\n[\ni\n]:\nprint\n(\nINF\n,\nend\n=\n\" \"\n)\nelse\n:\nptr\n-=\n1\nwhile\ntaken\n[\nptr\n]:\nptr\n-=\n1\nprint\n(\nptr\n,\nend\n=\n\" \"\n)\nprev\n=\nA\n[\ni\n]\nprint\n()\nelse\n:\nprint\n(\n\"NO\"\n)"
+        }
+    ]
+}

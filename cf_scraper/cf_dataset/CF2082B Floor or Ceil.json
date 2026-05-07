@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nEcrade has an integer $ x $ . There are two kinds of operations.\n\n1. Replace $ x $ with $ \\left\\lfloor \\dfrac{x}{2}\\right\\rfloor $ , where $ \\left\\lfloor \\dfrac{x}{2}\\right\\rfloor $ is the greatest integer $ \\le \\dfrac{x}{2} $ .\n2. Replace $ x $ with $ \\left\\lceil \\dfrac{x}{2}\\right\\rceil $ , where $ \\left\\lceil \\dfrac{x}{2}\\right\\rceil $ is the smallest integer $ \\ge \\dfrac{x}{2} $ .\n\nEcrade will perform exactly $ n $ first operations and $ m $ second operations in any order. He wants to know the minimum and the maximum possible value of $ x $ after $ n+m $ operations. However, it seems a little difficult, so please help him!\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe only line of each test case contains three integers $ x $ , $ n $ , and $ m $ ( $ 0 \\le x, n, m \\le 10^9 $ ).\n\nOutput Format\nFor each test case, print two integers in one line, representing the minimum and the maximum possible value of $ x $ after $ n + m $ operations.\n\nExamples\nSample 1\nInput\n5\n12 1 2\n12 1 1\n12 0 0\n12 1000000000 1000000000\n706636307 0 3\nOutput\n1 2\n3 3\n12 12\n0 0\n88329539 88329539\n\nNote\nFor simplicity, we call the first operation $ \\text{OPER 1} $ and the second operation $ \\text{OPER 2} $ .\n\nIn the first test case:\n\n- If we perform $ 12 \\xrightarrow{\\text{OPER 2}} 6 \\xrightarrow{\\text{OPER 2}} 3 \\xrightarrow{\\text{OPER 1}} 1 $ , we can obtain the minimum possible value $ 1 $ .\n- If we perform $ 12 \\xrightarrow{\\text{OPER 2}} 6 \\xrightarrow{\\text{OPER 1}} 3 \\xrightarrow{\\text{OPER 2}} 2 $ , we can obtain the maximum possible value $ 2 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider $$$x$$$ in binary form."
+        },
+        {
+            "title": "Hint 2",
+            "content": "What are all possible values of $$$x$$$ after $$$n+m$$$ operations?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's consider how to find the maximum value first.\nConsider $$$x$$$ in binary form. Let the number formed by the last $$$n+m$$$ bits of $$$x$$$ be denoted as $$$r$$$, and the remaining higher bits form the number $$$l$$$ (for instance, if $$$x=12=(1100)_2$$$, $$$n=1$$$, $$$m=2$$$, then $$$l=1=(1)_2$$$, $$$r=4=(100)_2$$$), then the final value of $$$x$$$ after $$$n+m$$$ operations will be either $$$l$$$ or $$$l+1$$$, depending on whether a carry-over occurs in $$$r$$$ during the last operation.\nIf there are no $$$1$$$s in the higher $$$m$$$ bits of $$$r$$$, then the carry-over in $$$r$$$ during the last operation can never occur (operating on some small tests may give you a better understanding). Otherwise, we can choose to perform $$$n$$$ floor operations first followed by $$$m$$$ ceil operations, which can guarantee a carry-over in $$$r$$$ during the last operation.\nThis demonstrates that performing $$$n$$$ floor operations first followed by $$$m$$$ ceil operations will always yield the maximum value. Similarly, performing $$$m$$$ ceil operations first followed by $$$n$$$ floor operations will always produce the minimum value. We can simply simulate these operations because after $$$O(\\log x)$$$ same operations, $$$x$$$ will remain unchanged.\nThe time complexity is $$$O(T\\log x)$$$."
+        }
+    ]
+}

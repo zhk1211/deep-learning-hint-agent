@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou've been staring at your computer screen for too long; it is time to give it a break and go touch some grass.\n\nYour screen is a line of length $ a $ , and there are $ n $ tabs displayed on it. You want to close all of the tabs by clicking on the x's at their right endpoint.\n\nEvery tab is a segment of length $ \\textrm{len}=\\min(b,\\frac{a}{m}) $ , where $ m $ is the number of remaining tabs. The tabs are always tightly arranged in sequence from the left endpoint of the screen; that is, the x's will be at $ \\textrm{len},2\\cdot \\textrm{len},3\\cdot \\textrm{len},\\ldots,m\\cdot\\textrm{len} $ units away from the left endpoint. Please note that the length of each tab will change as you are closing tabs.\n\nNow your cursor is at the left endpoint of the screen. You wonder what the minimum number of times you need to move the mouse to close all tabs is.\n\nIf you have difficulty understanding the statement, you may also refer to your browser tab for a visualization, or click [here](https://codeforces.com/assets/contests/2166/B_ohLashaeLa4aizeiceij.html).\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nEach test case is a line of three integers $ a $ , $ b $ , and $ n $ ( $ 1\\le b\\le a \\le 10^9 $ , $ 1\\le n \\le 10^9 $ ).\n\nOutput Format\nFor each test case, output a single integer — the minimum number of times you need to move the mouse to close all tabs.\n\nExamples\nSample 1\nInput\n12\n8 1 6\n9 6 2\n10 3 1\n10 1 10\n9 2 1\n5 5 6\n6 2 7\n9 1 9\n3 2 6\n8 1 7\n8 1 9\n8 2 4\nOutput\n1\n2\n1\n1\n1\n1\n2\n1\n2\n1\n2\n1\n\nNote\nIn the first test case, a possible course of action is to move your cursor to $ 1 $ and press $ 6 $ times.\n\nIn the second test case, a possible course of action is to move your cursor to $ 4.5 $ and press once, then move it to $ 6 $ and press again. It can be proved that the tabs cannot be closed with less than $ 2 $ moves."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "After some experimenting, it can be seen that the answer does not exceed $$$2$$$. Simply click at $$$a$$$ as long as there's still a tab at that point. After that, each tab must have length of $$$b$$$, move the cursor to $$$b$$$, and click until all tabs have been closed.\nNow it remains to be seen under what scenarios we can achieve $$$1$$$ move. Since the last tab closed will have length $$$b$$$, our cursor should be moved to $$$b$$$. Therefore, the answer will be $$$1$$$ when $$$nb\\le a$$$, or $$$b=a$$$, and $$$2$$$ otherwise.\nRemember to use long long if using multiplication to calculate $$$nb$$$.\nTime Complexity: $$$O(1)$$$ per test case."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n,\nn\n,\na\n,\nb\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nwhile\n(\nt\n--)\n{\nscanf\n(\n\"%d%d%d\"\n,\n&\na\n,\n&\nb\n,\n&\nn\n);\nprintf\n(((\nlong\nlong\n)\nb\n*\nn\n<=\na\n||\nb\n>=\na\n)\n?\n\"1\\n\"\n:\n\"2\\n\"\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

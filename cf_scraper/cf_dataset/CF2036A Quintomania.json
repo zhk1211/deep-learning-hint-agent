@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nBoris Notkin composes melodies. He represents them as a sequence of notes, where each note is encoded as an integer from $ 0 $ to $ 127 $ inclusive. The interval between two notes $ a $ and $ b $ is equal to $ |a - b| $ semitones.\n\nBoris considers a melody perfect if the interval between each two adjacent notes is either $ 5 $ semitones or $ 7 $ semitones.\n\nAfter composing his latest melodies, he enthusiastically shows you his collection of works. Help Boris Notkin understand whether his melodies are perfect.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of melodies.\n\nEach melody is described by two lines.\n\nThe first line contains an integer $ n $ ( $ 2 \\leq n \\leq 50 $ ) — the number of notes in the melody.\n\nThe second line contains $ n $ integers $ a_{1}, a_{2}, \\dots, a_{n} $ ( $ 0 \\leq a_{i} \\leq 127 $ ) — the notes of the melody.\n\nOutput Format\nFor each melody, output \"YES\", if it is perfect; otherwise, output \"NO\".\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n8\n2\n114 109\n2\n17 10\n3\n76 83 88\n8\n38 45 38 80 85 92 99 106\n5\n63 58 65 58 65\n8\n117 124 48 53 48 43 54 49\n5\n95 102 107 114 121\n10\n72 77 82 75 70 75 68 75 68 75\nOutput\nYES\nYES\nYES\nNO\nYES\nNO\nYES\nYES"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "If for all $$$i$$$ $$$(1 \\leq i \\leq n - 1)$$$ is true $$$|a_i - a_{i+1}| = 5$$$ or $$$|a_i - a_{i+1}| = 7$$$, the answer to the problem is “YES”, otherwise it is “NO”.\nComplexity: $$$O(n)$$$"
+        },
+        {
+            "title": "Solution (myav)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nbool\nsolve\n(){\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\nabs\n(\na\n[\ni\n]\n-\na\n[\ni\n-\n1\n])\n!=\n5\n&&\nabs\n(\na\n[\ni\n]\n-\na\n[\ni\n-\n1\n])\n!=\n7\n)\nreturn\nfalse\n;\n}\nreturn\ntrue\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\ncout\n<<\n(\nsolve\n()\n?\n\"YES\"\n:\n\"NO\"\n)\n<<\n\"\\n\"\n;\n}\n}"
+        }
+    ]
+}

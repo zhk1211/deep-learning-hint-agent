@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA string consisting of only characters 'p', 'q', and 'w' is painted on a glass window of a store. Ship walks past the store, standing directly in front of the glass window, and observes string $ a $ . Ship then heads inside the store, looks directly at the same glass window, and observes string $ b $ .\n\nShip gives you string $ a $ . Your job is to find and output $ b $ .\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 100 $ ) — the number of test cases.\n\nThe only line of each test case contains a string $ a $ ( $ 1 \\leq |a| \\leq 100 $ ) — the string Ship observes from outside the store. It is guaranteed that $ a $ only contains characters 'p', 'q', and 'w'.\n\nOutput Format\nFor each test case, output string $ b $ , the string Ship observes from inside the store, on a new line.\n\nExamples\nSample 1\nInput\n5\nqwq\nppppp\npppwwwqqq\nwqpqwpqwwqp\npqpqpqpq\nOutput\npwp\nqqqqq\npppwwwqqq\nqpwwpqwpqpw\npqpqpqpq"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "The letters she reads that comprise string $$$b$$$ are just the letters that comprise string $$$a$$$, flipped left-to-right. This means that 'p' becomes 'q', 'q' becomes 'p', and 'w' stays 'w', since it is vertically symmetrical. The order in which the letters are read is also reversed, because what used to be the left side of string $$$a$$$ gets flipped over to the right side of string $$$b$$$, and vice versa.\nWe now have an algorithm for constructing string $$$b$$$, which is to iterate from right-to-left on string $$$a$$$, outputting 'p' when there is a 'q', 'q' when there is a 'p', and 'w' when there is a 'w'."
+        }
+    ]
+}

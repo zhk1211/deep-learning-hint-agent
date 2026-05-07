@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "README: Notice about solutions",
+            "content": "All editorial codes contain solutions wrapped in classes. I'll only paste the important part (\nnamespace solution\nin C++,\nclass Solution\nin Python 3) as plaintext in the solution code section (along with the corresponding AC submission link). You might want to see the code template here.\nC++ template\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nnamespace\nsolution\n{\nbool\nhasMultipleTests\n=\ntrue\n;\nvoid\npreprocess\n()\n{\n// something\n}\nvoid\ninput\n(\nint\ntestcase\n)\n{\n// something\n}\nvoid\nsolve\n(\nint\ntestcase\n)\n{\n// something\n}\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nsolution\n::\npreprocess\n();\nint\nt\n=\n1\n;\nif\n(\nsolution\n::\nhasMultipleTests\n)\ncin\n>>\nt\n;\nfor\n(\nint\ntestcase\n=\n1\n;\ntestcase\n<=\nt\n;\ntestcase\n++)\n{\nsolution\n::\ninput\n(\ntestcase\n);\nsolution\n::\nsolve\n(\ntestcase\n);\n}\nreturn\n0\n;\n}\nPython 3 template\nimport\nsys\ninput\n=\nsys\n.\nstdin\n.\nreadline\nclass\nSolution\n:\nhasMultipleTests\n=\nTrue\n@classmethod\ndef\npreprocess\n(\ncls\n):\npass\n@classmethod\ndef\ninput\n(\ncls\n,\ntestcase\n):\npass\n@classmethod\ndef\nsolve\n(\ncls\n,\ntestcase\n):\npass\n# end Solution\nif\n__name__\n==\n'__main__'\n:\nSolution\n.\npreprocess\n()\nt\n=\nint\n(\ninput\n())\nif\nSolution\n.\nhasMultipleTests\nelse\n1\nfor\ntestcase\nin\nrange\n(\n1\n,\nt\n+\n1\n):\nSolution\n.\ninput\n(\ntestcase\n)\nSolution\n.\nsolve\n(\ntestcase\n)\nAlso, per my own custom ever since 2019, solution codes will only be published\nafter\nsystem testing, to ensure all codes used here guarantee AC. Thank you for your patience."
+        }
+    ]
+}

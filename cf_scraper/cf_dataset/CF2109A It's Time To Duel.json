@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nSomething you may not know about Mouf is that he is a big fan of the Yu-Gi-Oh! card game. He loves to duel with anyone he meets. To gather all fans who love to play as well, he decided to organize a big Yu-Gi-Oh! tournament and invited $ n $ players.\n\nMouf arranged the $ n $ players in a line, numbered from $ 1 $ to $ n $ . They then held $ n - 1 $ consecutive duels: for each $ i $ from $ 1 $ to $ n - 1 $ , player $ i $ faced player $ i + 1 $ , producing one winner and one loser per match. Afterward, each player reports a value $ a_i(0 \\le a_i \\le 1) $ :\n\n- $ 0 $ indicating they won no duels;\n- $ 1 $ indicating they won at least one duel.\n\nSince some may lie about their results (e.g., reporting a $ 1 $ instead of a $ 0 $ , or vice versa) to influence prize outcomes, Mouf will cancel the tournament if he can prove any report to be false.\n\nGiven the array $ a $ , determine whether at least one player must be lying.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 100 $ ). The description of the test cases follows.\n\nThe first line of each test case contains one integer $ n $ ( $ 2 \\le n \\le 100 $ ) — the number of players in the tournament.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le 1 $ ) — denoting the report of the $ i $ -th player.\n\nOutput Format\nFor each test case, print \"YES\" (without quotes) if there is at least one liar among the players, and \"NO\" (without quotes) otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n6\n3\n0 1 0\n2\n0 0\n2\n1 1\n4\n0 1 1 1\n4\n1 0 0 1\n7\n0 1 0 1 0 1 0\nOutput\nNO\nYES\nYES\nNO\nYES\nNO\n\nNote\nIn the first test case, it is consistent if player $ 2 $ defeats both players $ 1 $ and $ 3 $ , so nobody's report is necessarily false.\n\nIn the second test case, in the only match between players $ 1 $ and $ 2 $ , one must win — but both claimed zero wins, so someone must be lying.\n\nIn the third test case, the tournament consists of exactly one duel between players $ 1 $ and $ 2 $ — but it's impossible for both to win, concluding that at least one report is false.\n\nIn the fourth test case, a possible scenario is that player $ 2 $ won against player $ 1 $ , then $ 3 $ won against $ 2 $ , and then $ 4 $ won against $ 3 $ . All reports align, so there is no evidence that someone lied."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nWhat can you say when every player has reported a win?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "What can you say when every player has reported a win?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "A report array can be genuine only if it meets both of these conditions:\nThere must be at least one player who reported $$$0$$$ — there are $$$n - 1$$$ duels and $$$n$$$ players.\nThere cannot be two adjacent players who both reported $$$0$$$ — one of them must have won the duel between them.\nIf either condition fails, the answer is\nYES\n(there is definitely a liar); otherwise, the answer is\nNO\n."
+        }
+    ]
+}

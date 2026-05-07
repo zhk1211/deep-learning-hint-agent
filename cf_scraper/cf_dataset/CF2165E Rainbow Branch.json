@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven a tree with $ n $ vertices, you need to assign a color to each edge. Define the inconvenience of an assignment as the maximum number of colors on the path between any two vertices.\n\nYou need to assign exactly $ k $ different colors (each color must appear at least once) to the edges while minimizing the inconvenience of the assignment.\n\nPlease calculate the minimum inconvenience for all $ k=1,2,\\ldots,n-1 $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of the input contains one positive integer $ n $ ( $ 3\\le n\\le3\\cdot10^5 $ ) — the number of vertices.\n\nThe next $ n-1 $ lines each contain two positive integers $ u_i,v_i $ ( $ 1\\le u_i,v_i\\le n $ ) — indicating that there is an edge between vertices $ u_i $ and $ v_i $ .\n\nIt is guaranteed that the edges in the input form a tree.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 3\\cdot10^5 $ .\n\nOutput Format\nFor each test case, print a single line containing $ n-1 $ integers. The $ i $ -th integer represents the minimum inconvenience for $ k=i $ .\n\nExamples\nSample 1\nInput\n3\n6\n3 4\n6 1\n3 2\n3 1\n4 5\n8\n8 6\n7 4\n8 5\n2 7\n3 2\n5 2\n1 2\n3\n1 2\n2 3\nOutput\n1 2 2 3 4\n1 2 2 2 3 4 5\n1 2\n\nNote\nIn the first test case, possible solutions for $ k=1,2,\\ldots,n-1 $ are as follows:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2165E/e381e41154e8ddf7ffe8fa90033f99a90f3006b8e48e505f248364f8ef97f9b6.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "The answer is increasing, try solve for the maximum number of colors for a certain inconvenience $$$d$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Every color is a connected component."
+        },
+        {
+            "title": "Hint 3",
+            "content": "There exists a diameter-midpoint like structure."
+        },
+        {
+            "title": "Hint 4",
+            "content": "The optimal answer has a certain structure, try finding it."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "We switch the answer and the parameter, and solve for the maximum number of colors for a given diameter $$$d$$$.\nA simple intuition is that each color should be a connected component, this is also easily provable: If some color is not connected, we can choose one of its \"outermost\" components (a more rigorous definition would be the leaves of the auxiliary tree of its components), and change it to the color of its adjacent component. In doing this, the number of different components is decreased, and our inconvenience has not increased. Therefore, after enough changes, each color will be a connected component.\nThe problem asks for a diameter-like value, therefore, we can try to find a diameter-midpoint-like structure:\nWhen $$$d$$$ is odd, there exists a color component such that the distance to all other vertices does not exceed $$$\\frac{d-1}2$$$.\nWhen $$$d$$$ is even, there exists a vertex such that the distance to all other vertices does not exceed $$$\\frac d2$$$.\nNow, observe that we can \"push\" colors away from the midpoint and out to the leaves, to increase the number of color used, our optimal solution would look something like this:\nTherefore, the optimal solution is:\nFor odd $$$d$$$, remove the outermost $$$(d-1)/2$$$ levels of leaves.\nFor even $$$d$$$, remove the outermost $$$d/2-1$$$ levels of leaves, and choose a maximum degree vertex in the remaining tree.\nTime Complexity: $$$O(n\\log n)$$$ or $$$O(n)$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n3e5\n+\n5\n;\nvector\n<int>\ne\n[\nN\n];\nint\nval\n[\nN\n],\ncnt\n[\nN\n],\ndeg\n[\nN\n],\nh\n[\nN\n],\nd\n;\nqueue\n<int>\nq\n;\nint\ndel\n(\nint\nx\n)\n{\ncnt\n[\ndeg\n[\nx\n]]--;\ncnt\n[--\ndeg\n[\nx\n]]++;\nreturn\ndeg\n[\nx\n];\n}\nint\nmain\n()\n{\nint\nt\n,\nn\n,\ni\n,\nu\n,\nv\n,\nk\n,\nc\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nwhile\n(\nt\n--)\n{\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nfor\n(\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ne\n[\ni\n].\nclear\n();\nfor\n(\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\n{\nscanf\n(\n\"%d%d\"\n,\n&\nu\n,\n&\nv\n);\ne\n[\nu\n].\nemplace_back\n(\nv\n);\ne\n[\nv\n].\nemplace_back\n(\nu\n);\n}\nfor\n(\ni\n=\n0\n;\ni\n<=\nn\n;\ni\n++)\n{\nval\n[\ni\n]\n=\n1e9\n;\ncnt\n[\ni\n]\n=\n0\n;\nh\n[\ni\n]\n=\n1\n;\n}\nfor\n(\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ncnt\n[\ndeg\n[\ni\n]\n=\ne\n[\ni\n].\nsize\n()]++;\nfor\n(\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nif\n(\ndeg\n[\ni\n]\n==\n1\n)\nq\n.\npush\n(\ni\n);\nc\n=\n0\n;\nd\n=\nn\n;\nwhile\n(!\ncnt\n[\nd\n])\nd\n--;\nval\n[\n1\n]\n=\nmin\n(\nval\n[\n1\n],\n1\n);\nval\n[\nd\n]\n=\nmin\n(\nval\n[\nd\n],\n2\n);\nwhile\n(!\nq\n.\nempty\n())\n{\nk\n=\nq\n.\nfront\n();\nq\n.\npop\n();\nfor\n(\nauto\no\n:\ne\n[\nk\n])\nif\n(\ndel\n(\no\n)\n==\n1\n)\n{\nh\n[\no\n]\n=\nh\n[\nk\n]\n+\n1\n;\nq\n.\npush\n(\no\n);\n}\n++\nc\n;\nwhile\n(!\ncnt\n[\nd\n])\nd\n--;\nval\n[\nc\n+\n1\n]\n=\nmin\n(\nval\n[\nc\n+\n1\n],\n2\n*\nh\n[\nk\n]\n+\n1\n);\nval\n[\nc\n+\nd\n]\n=\nmin\n(\nval\n[\nc\n+\nd\n],\n2\n*\nh\n[\nk\n]\n+\n2\n);\n}\nfor\n(\ni\n=\nn\n-\n1\n;\ni\n>=\n1\n;\ni\n--)\nval\n[\ni\n]\n=\nmin\n(\nval\n[\ni\n],\nval\n[\ni\n+\n1\n]);\nfor\n(\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\nprintf\n(\n\"%d \"\n,\nval\n[\ni\n]);\nprintf\n(\n\"\\n\"\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

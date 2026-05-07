@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given three positive integers $$$n$$$, $$$a$$$, and $$$b$$$ ($$$1\\leq a,b \\leq n$$$).\n\nConsider a row of $$$n$$$ cells, initially all white and indexed from $$$1$$$ to $$$n$$$. You will perform the following two steps in order:\n\n1. Choose an integer $$$x$$$ such that $$$1 \\le x \\le n - a + 1$$$, and paint the $$$a$$$ consecutive cells $$$x, x+1, \\ldots, x+a-1$$$ red.\n2. Choose an integer $$$y$$$ such that $$$1 \\le y \\le n - b + 1$$$, and paint the $$$b$$$ consecutive cells $$$y, y+1, \\ldots, y+b-1$$$ blue.\n\nIf a cell is painted both red and blue, its final color is blue.\n\nA coloring of the grid is considered symmetric if, for every integer $$$i$$$ from $$$1$$$ to $$$n$$$ (inclusive), the color of cell $$$i$$$ is the same as the color of cell $$$(n+1-i)$$$. Your task is to determine whether there exist integers $$$x$$$ and $$$y$$$ such that the final coloring of the grid is symmetric.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 500$$$). The description of the test cases follows.\n\nThe first and the only line of each test case contains three integers $$$n$$$, $$$a$$$, and $$$b$$$ ($$$1 \\le n \\le 10^9$$$, $$$1 \\le a,b \\le n$$$) — the number of cells of the grid and the number of cells to be painted in each step.\n\nOutput Format\nFor each testcase, output \"YES\" if it is possible that the final coloring of the grid is symmetric; otherwise, output \"NO\".\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n7\n5 3 1\n4 1 2\n7 7 4\n8 3 7\n1 1 1\n1000000000 1000000000 1000000000\n3 2 1\nOutput\nYES\nYES\nNO\nNO\nYES\nYES\nNO\n\nNote\nIn the first test case, the grid becomes symmetric when choosing $$$x = 2$$$ and $$$y = 3$$$, so the answer is \"YES\". The following figure illustrates each step of the coloring process:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2134A/a89d3090882f9db38bdb83ec74102bc2586c44577eaaff44042e05e193d81d79.png)In the second test case, the grid becomes symmetric when choosing $$$x = 2$$$ and $$$y = 2$$$, so the answer is \"YES\". The following figure illustrates each step of the coloring process:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2134A/4327af4acb153f53363bc5d9bdc060e57a85b36f1ae1fef98aec81cb5d9aea69.png)In the third and fourth test cases, it can be proved that no choice of $$$x$$$ and $$$y$$$ results in a symmetric grid, so the answer is \"NO\"."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Check the parity of numbers $$$a$$$, $$$b$$$, and $$$n$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let us first consider the $$$b$$$ blue cells. Since all $$$b$$$ cells appear in the final painting, for the coloring to be symmetric, they must be placed at the middle of the grid. Consequently, $$$b$$$ and $$$n$$$ must have the same parity.\nNext, we examine two possible cases:\nIf $$$b \\geq a$$$, then the blue cells can fully cover all red cells. In this situation, the value of $$$a$$$ does not affect the final coloring.\nIf $$$b \\lt a$$$, then the red cells are not completely covered by the blue ones. Therefore, the red cells must also be placed in the middle of the grid, which means $$$a$$$ and $$$n$$$ must have the same parity as well.\nThus, by checking these conditions, we can determine whether a symmetric coloring exists. This requires only $$$\\mathcal{O}(1)$$$ time."
+        }
+    ]
+}

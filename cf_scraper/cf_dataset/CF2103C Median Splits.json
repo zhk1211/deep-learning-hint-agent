@@ -1,0 +1,48 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe median of an array $ b_1, b_2, \\ldots b_m $ , written as $ \\operatorname{med}(b_1, b_2, \\ldots, b_m) $ , is the $ \\left\\lceil \\frac{m}{2} \\right\\rceil $ -th $ $ smallest element of array $ b $ .\n\nYou are given an array of integers $ a_1, a_2, \\ldots, a_n $ and an integer $ k $ . You need to determine whether there exists a pair of indices $ 1 \\le l < r < n $ such that:\n\n$$\n\\operatorname{med}(\\operatorname{med}(a_1, a_2 \\dots a_l), \\operatorname{med}(a_{l + 1}, a_{l + 2} \\dots a_r), \\operatorname{med}(a_{r + 1}, a_{r + 2} \\dots a_n)) \\leq k.\n$$\n\nIn other words, determine whether it is possible to split the array into three contiguous subarrays\nsuch that the median of the three subarray medians is less than or equal to $k$.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 3 \\le n \\le 2 \\cdot 10^5 $ , $ 1 \\le k \\le 10^9 $ ) — the length of the array $ a $ and the constant $ k $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the elements of the array $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each testcase, output \"YES\" if such a split exists, and \"NO\" otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n6\n3 2\n3 2 1\n3 1\n3 2 1\n6 3\n8 5 3 1 6 4\n8 7\n10 7 12 16 3 15 6 11\n6 8\n7 11 12 4 9 17\n3 500000000\n1000 1000000000 1000\nOutput\nYES\nNO\nNO\nYES\nYES\nYES\n\nNote\nIn the first and second test case, the only possible partition of the array into three contiguous subarrays is $ [3] $ , $ [2] $ , $ [1] $ . Their respective medians are $ 3 $ , $ 2 $ , and $ 1 $ . The median of the three subarray medians is $ \\operatorname{med}(3, 2, 1) = 2 $ . Therefore, the answer for the first test case is \"YES\" since $ 2\\le 2 $ , while the answer for the second test case is \"NO\" since $ 2 > 1 $ .\n\nIn the third test case, it can be proven that no partition satisfies the constraints.\n\nIn the fourth test case, one of the partitions satisfying the constraints is $ [10, 7] $ , $ [12, 16, 3, 15] $ , $ [6, 11] $ . The respective medians of subarrays are $ 7 $ , $ 12 $ , and $ 6 $ . The median of the three subarray medians is $ \\operatorname{med}(7, 12, 6) = 7 \\le k $ , hence this partition satisfies the constraints.\n\nIn the fifth test case, one of the partitions satisfying the constraints is $ [7, 11] $ , $ [12, 4] $ , $ [9, 17] $ . The respective medians of the subarrays are $ 7 $ , $ 4 $ , and $ 9 $ . The median of the three subarray medians is $ \\operatorname{med}(7, 4, 9) = 7 \\le k $ , hence this partition satisfies the constraints.\n\nIn the sixth test case, the only possible partition of the array into three contiguous subarrays is $ [1000] $ , $ [10^9] $ , $ [1000] $ . The respective medians of the subarrays are $ 1000 $ , $ 10^9 $ , and $ 1000 $ . The median of the three subarray medians is $ \\operatorname{med}(1000, 10^9, 1000) = 1000 \\le k $ , hence this partition satisfies the constraints."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "We split our array into $$$3$$$ subarrays, take their medians, and the final median needs to be $$$\\le k$$$. That means that the median of at least $$$2$$$ of those subarrays needs to be $$$\\le k$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "For a given array $$$x$$$ of length $$$m$$$, what is the condition that $$$\\operatorname{med}(x_1, x_2, \\ldots, x_m) \\le k$$$?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "There need to be at least as many elements in $$$x$$$ that are $$$\\le k$$$ as those that are $$$ \\gt k$$$. How can we simplify this?"
+        },
+        {
+            "title": "Hint 4",
+            "content": "We can replace all elements that are $$$\\le k$$$ with $$$1$$$ and all elementsthat are $$$ \\gt k$$$ with $$$-1$$$. Now the median of $$$x$$$ is $$$\\le k$$$ if and only if the sum of elements in $$$x$$$ is non-negative."
+        },
+        {
+            "title": "Hint 5",
+            "content": "Now that we replaced the elements of $$$a$$$, the question is if it is possible to split it into $$$3$$$ subarrays, of which at least $$$2$$$ have a non-negative sum. There are $$$3$$$ cases:\nThe first and second subarrays have non-negative sums.\nThe second and third subarrays have non-negative sums.\nThe first and third subarrays have non-negative sums."
+        },
+        {
+            "title": "Hint 6",
+            "content": "Use prefix/suffix sums and maximums/ minimums to help you compute the answer in linear time."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Read the hints.\nCases $$$1$$$ and $$$2$$$ from hint 5 are symmetric, so we will only explain how to do case $$$1$$$. Compute the prefix sum of the array, let it be array $$$p$$$. The subarray [$l$, $$$r$$$] has non-negative sum if $$$p_{l-1} \\le p_{r}$$$. For each index $$$2 \\le i \\lt n$$$ compute value $$$msp$$$ (max suffix prefix), such that $$$msp_i = max(p_i, p_{i+1},\\ldots, p_{n-1})$$$. Then iterate over index $$$1 \\le i \\le n-2$$$ that will be the end of the first subarray. If $$$p_i \\ge 0$$$ and $$$msp_{i+1} \\ge p_i$$$, then it will be possible to split the array such that the medians of the first and second subarrays are $$$\\le k$$$.\nCase $$$3$$$ is even easier. Find positions $$$x$$$ and $$$y$$$ such that [ $$$1$$$ , $$$x$$$ ] is the shortest prefix with median $$$ \\le k$$$ and [ $$$y$$$, $$$n$$$ ] is the shortest suffix with median $$$\\le k$$$. Then the split into three subarrays such that the first and third have median $$$\\le k$$$ is possible if and only if [ $$$x+1$$$ , $$$y-1$$$ ] is a valid subarray, in other words, if $$$x + 2 \\le y$$$.\nAs both cases can be checked with a few array passes, the time and memory complexities are $$$O(n)$$$ per testcase."
+        },
+        {
+            "title": "Implementation (c++)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nll\nlong\nlong\nusing\nnamespace\nstd\n;\nconst\nint\nmaxn\n=\n2e5\n+\n5\n;\nint\nn\n,\nk\n,\narr\n[\nmaxn\n],\nsuf\n[\nmaxn\n],\nminsuf\n[\nmaxn\n];\nbool\ncheck_prefix_and_middle\n(){\nsuf\n[\nn\n]=\nminsuf\n[\nn\n]=\narr\n[\nn\n];\nfor\n(\nint\ni\n=\nn\n-\n1\n;\ni\n>=\n1\n;\ni\n--){\nsuf\n[\ni\n]=\nsuf\n[\ni\n+\n1\n]+\narr\n[\ni\n];\nminsuf\n[\ni\n]=\nmin\n(\nminsuf\n[\ni\n+\n1\n],\nsuf\n[\ni\n]);\n}\nint\ns\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n+\n2\n<=\nn\n;\ni\n++){\ns\n+=\narr\n[\ni\n];\nif\n(\ns\n<\n0\n)\ncontinue\n;\nif\n(\nsuf\n[\ni\n+\n1\n]>=\nminsuf\n[\ni\n+\n2\n])\nreturn\ntrue\n;\n}\nreturn\nfalse\n;\n}\nvoid\nsolve\n(){\ncin\n>>\nn\n>>\nk\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ncin\n>>\narr\n[\ni\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nif\n(\narr\n[\ni\n]<=\nk\n)\narr\n[\ni\n]=\n1\n;\nelse\narr\n[\ni\n]=-\n1\n;\nint\na\n=\nn\n+\n1\n,\nb\n=-\n1\n;\nint\ns\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++){\ns\n+=\narr\n[\ni\n];\nif\n(\ns\n>=\n0\n){\na\n=\ni\n;\nbreak\n;\n}\n}\ns\n=\n0\n;\nfor\n(\nint\ni\n=\nn\n;\ni\n>=\n1\n;\ni\n--){\ns\n+=\narr\n[\ni\n];\nif\n(\ns\n>=\n0\n){\nb\n=\ni\n;\nbreak\n;\n}\n}\nif\n(\na\n+\n1\n<\nb\n){\ncout\n<<\n\"YES\\n\"\n;\nreturn\n;\n}\nif\n(\ncheck_prefix_and_middle\n()){\ncout\n<<\n\"YES\\n\"\n;\nreturn\n;\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n-\ni\n+\n1\n;\ni\n++)\nswap\n(\narr\n[\ni\n],\narr\n[\nn\n-\ni\n+\n1\n]);\nif\n(\ncheck_prefix_and_middle\n()){\ncout\n<<\n\"YES\\n\"\n;\nreturn\n;\n}\ncout\n<<\n\"NO\\n\"\n;\nreturn\n;\n}\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\nsolve\n();\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Implementation (python)",
+            "content": "def\ncheck_prefix_and_middle\n(\nn\n,\narr\n):\nsuf\n=\n[\n0\n]\n*\n(\nn\n+\n1\n)\nminsuf\n=\n[\n0\n]\n*\n(\nn\n+\n1\n)\nsuf\n[\nn\n]\n=\nminsuf\n[\nn\n]\n=\narr\n[\nn\n-\n1\n]\nfor\ni\nin\nrange\n(\nn\n-\n2\n,\n-\n1\n,\n-\n1\n):\nsuf\n[\ni\n+\n1\n]\n=\nsuf\n[\ni\n+\n2\n]\n+\narr\n[\ni\n]\nminsuf\n[\ni\n+\n1\n]\n=\nmin\n(\nminsuf\n[\ni\n+\n2\n],\nsuf\n[\ni\n+\n1\n])\ns\n=\n0\nfor\ni\nin\nrange\n(\nn\n-\n2\n):\ns\n+=\narr\n[\ni\n]\nif\ns\n<\n0\n:\ncontinue\nif\nsuf\n[\ni\n+\n2\n]\n>=\nminsuf\n[\ni\n+\n3\n]:\nreturn\nTrue\nreturn\nFalse\ndef\nsolve\n():\nn\n,\nk\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\narr\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\n# Transform the array based on the value of k\nfor\ni\nin\nrange\n(\nn\n):\narr\n[\ni\n]\n=\n1\nif\narr\n[\ni\n]\n<=\nk\nelse\n-\n1\na\n,\nb\n=\nn\n+\n1\n,\n-\n1\ns\n=\n0\nfor\ni\nin\nrange\n(\nn\n):\ns\n+=\narr\n[\ni\n]\nif\ns\n>=\n0\n:\na\n=\ni\n+\n1\nbreak\ns\n=\n0\nfor\ni\nin\nrange\n(\nn\n-\n1\n,\n-\n1\n,\n-\n1\n):\ns\n+=\narr\n[\ni\n]\nif\ns\n>=\n0\n:\nb\n=\ni\n+\n1\nbreak\nif\na\n+\n1\n<\nb\n:\nprint\n(\n\"YES\"\n)\nreturn\nif\ncheck_prefix_and_middle\n(\nn\n,\narr\n):\nprint\n(\n\"YES\"\n)\nreturn\narr\n.\nreverse\n()\nif\ncheck_prefix_and_middle\n(\nn\n,\narr\n):\nprint\n(\n\"YES\"\n)\nreturn\nprint\n(\n\"NO\"\n)\nt\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\nsolve\n()"
+        }
+    ]
+}

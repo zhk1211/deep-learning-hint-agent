@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n[Ferus Melek - Brute Force](https://soundcloud.com/ferusmelek/brute-force)\n\n⠀\n\nYou are given three positive integers $ n $ , $ k $ , and $ q $ . You are also given $ q $ tuples $ (c, l, r) $ , with $ 1 \\leq c \\leq 2 $ and $ 1 \\leq l \\leq r \\leq n $ .\n\nAn array $ a_1, a_2, \\ldots, a_n $ is meximum if $ 0 \\leq a_i \\leq 10^9 $ for each $ i $ in $ [1, n] $ , and for each given tuple $ (c, l, r) $ ,\n\n- if $ c = 1 $ , then $ \\min(a_l, a_{l+1}, \\ldots, a_r) = k $ ;\n- if $ c = 2 $ , then $ \\operatorname{MEX} $ $ ^{\\text{∗}} $ $ (a_l, a_{l+1}, \\ldots, a_r) = k $ .\n\nNote that the parameter $ k $ is the same for all the conditions.\n\nFind a meximum array $ a_1, a_2, \\ldots, a_n $ of length $ n $ . The input is generated in such a way that a valid array always exists. If there are multiple possible arrays, you can print any one of them.\n\n$ ^{\\text{∗}} $ The minimum excluded (MEX) of a collection of integers $ a_1, a_2, \\ldots, a_k $ is defined as the smallest non-negative integer $ x $ which does not occur in the collection $ a $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 500 $ ). The description of the test cases follows.\n\nThe first line of each test case contains three integers $ n $ , $ k $ , $ q $ ( $ 1 \\leq k \\leq n \\leq 100 $ , $ 1 \\leq q \\leq 100 $ ) — the length of the array $ a_1, a_2, \\ldots, a_n $ , the result of the $ \\min $ and $ \\operatorname{MEX} $ calculations described by the tuples, and the number of tuples.\n\nThen, $ q $ lines follow. The $ i $ -th line contains a tuple $ (c, l, r) $ , which gives a constraint to $ a_l, a_{l+1}, \\ldots, a_r $ according to the statement.\n\nIt is guaranteed that there exists a valid array corresponding to the given input.\n\nNote that there are no constraints on the sum of $ n $ , $ k $ , or $ q $ over all test cases.\n\nOutput Format\nFor each test case, print a single line containing a meximum array $ a_1, a_2, \\ldots, a_n $ .\n\nExamples\nSample 1\nInput\n4\n6 2 2\n1 1 3\n2 2 6\n3 3 1\n2 1 3\n3 3 2\n1 1 1\n1 3 3\n3 2 2\n2 1 2\n2 2 3\nOutput\n2 5 4 3 0 1\n2 0 1\n3 3 3\n1 0 1\n\nNote\nIn the first test case, you have to build a meximum array with $ n = 6 $ , $ k = 2 $ and with $ q = 2 $ constraints given by tuples.\n\n- tuple $ (1, 1, 3) $ : $ \\min(a_1, a_2, a_3) $ must be $ 2 $ ;\n- tuple $ (2, 2, 6) $ : $ \\operatorname{MEX}(a_2, a_3, a_4, a_5, a_6) $ must be $ 2 $ .\n\nA possible array that satisfies all these constraints, and has elements $ 0 \\leq a_i \\leq 10^9 $ , is $ [2, 5, 4, 3, 0, 1] $ .\n\nIn the second test case, you have to build a meximum array with $ n = 3 $ , $ k = 3 $ and with $ q = 1 $ constraint given by a tuple.\n\n- tuple $ (2, 1, 3) $ : $ \\operatorname{MEX}(a_1, a_2, a_3) $ must be $ 3 $ .\n\nA possible array that satisfies this constraint, and has elements $ 0 \\leq a_i \\leq 10^9 $ , is $ [2, 0, 1] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "For each element, determine whether it belongs to a $$$\\texttt{MEX}$$$ constraint, a $$$\\min$$$ constraint, both, or none."
+        },
+        {
+            "title": "Hint 2",
+            "content": "If an element belongs to both a $$$\\texttt{MEX}$$$ constraint and a $$$\\min$$$ constraint, it is useless for both constraints."
+        },
+        {
+            "title": "Hint 3",
+            "content": "If an element only belongs to a $$$\\min$$$ constraint, you can set it to $$$k$$$ for convenience."
+        },
+        {
+            "title": "Hint 4",
+            "content": "What's the \"fastest\" way to satisfy a $$$\\texttt{MEX}$$$ constraint? What about several constraints simultaneously?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "For each element, determine whether it belongs to a $$$\\texttt{MEX}$$$ constraint, a $$$\\min$$$ constraint, both, or none.\nIf an element is covered by a $$$\\min$$$ constraint, it must be $$$\\geq k$$$, and ideally it should be $$$= k$$$ (so that the constraint is immediately satisfied).\nIf an element is covered by a $$$\\texttt{MEX}$$$ constraint, it must be $$$\\neq k$$$, and ideally it should be $$$ \\lt k$$$ (to make the constraint easier to satisfy).\nThen\nIf an element is not covered by any constraints, it does not matter, and you can set it to any value.\nIf an element belongs to both a $$$\\texttt{MEX}$$$ constraint and a $$$\\min$$$ constraint, it is useless for both constraints, but you must set it to something both $$$\\neq k$$$ and $$$\\geq k$$$. For example, you can set it to $$$k+1$$$.\nIf an element only belongs to a $$$\\min$$$ constraint, it is optimal to set it to $$$k$$$.\nThe remaining elements are the ones which are only covered by a $$$\\texttt{MEX}$$$ constraint. In order to be satisfied, a $$$\\texttt{MEX}$$$ constraint must contain at least $$$k$$$ such elements (because it must contain all the elements between $$$0$$$ and $$$k-1$$$, which would violate a $$$\\min$$$ constraint). In particular, assigning $$$i \\text{ mod } k$$$ at the $$$i$$$-th such element works (if a $$$\\texttt{MEX}$$$ constraint contains $$$k$$$ such elements, their values are $$$[0, 1, \\ldots, k-1]$$$, possibly shifted).\nComplexity: $$$O(nq)$$$ or $$$O(n+q)$$$ per test case.\nBonus: in the above solution, we assign $$$i \\text{ mod } k$$$ to the $$$i$$$-th element only covered by $$$\\texttt{MEX}$$$ constraints. However, assigning $$$a_i = i \\text{ mod } k$$$ to such elements (where $$$i$$$ is the position in the whole array, instead of the position only considering such elements) also works. Can you prove it?"
+        }
+    ]
+}

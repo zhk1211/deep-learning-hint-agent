@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAksLolCoding is playing a game on a string $ s $ of length $ n $ . Initially, $ s $ contains only lowercase Latin characters.\n\nIn one turn, AksLolCoding can choose any pair of integers $ (i,j) $ such that:\n\n- $ 1 \\leq i \\lt j \\leq n $ ;\n- $ s_i = s_j \\neq * $ ; and\n- $ s_k = * $ for all $ i \\lt k \\lt j $ .\n\nIf no such $ i,j $ exists, then the game ends. Otherwise, AksLolCoding sets $ s_i:=* $ and $ s_j:=* $ .Once the game ends, AksLolCoding wins if and only if every character in $ s $ is equal to $ * $ . Determine if it is possible for AksLolCoding to win.\n\nNote: $ * $ represents ASCII character 42.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 100 $ ), the number of test cases.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\leq n \\leq 5000 $ ), the length of the string.\n\nThe second line of each test case contains a string $ s $ consisting of lowercase Latin characters.\n\nThe sum of $ n $ over all test cases does not exceed $ 5000 $ .\n\nOutput Format\nOutput the answer to each test case on its own line. If AksLolCoding can win, output \"YES\" (without quotes). Else, output \"NO\" (without quotes).\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n6\n1\na\n6\nllmllm\n6\nuwuuwu\n6\nbyebye\n6\noooioi\n12\nsiixxsevvenn\nOutput\nNO\nYES\nYES\nNO\nNO\nYES\n\nNote\nIn the first test case, it can be shown that it is impossible for AksLolCoding to win.\n\nIn the second test case, AksLolCoding can win by making the following moves: llmllm $ \\rightarrow $ llm\\*\\*m $ \\rightarrow $ \\*\\*m\\*\\*m $ \\rightarrow $ \\*\\*\\*\\*\\*\\*\n\nIn the third test case, AksLolCoding can win by making the following moves: uwuuwu $ \\rightarrow $ uw\\*\\*wu $ \\rightarrow $ u\\*\\*\\*\\*u $ \\rightarrow $ \\*\\*\\*\\*\\*\\*"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "What if you delete characters instead of replacing them with $$$*$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2200C - Specialty String\nInstead of replacing characters with\n*\ns, just delete them from the string. Then, the operation becomes deleting two adjacent characters that are equal. AksLolCoding wins if the string becomes empty. Since deleting a pair can never disrupt another pair, the order in which we do the operations does not matter.\nWe search through the array $$$\\frac{n}{2}$$$ times, removing a pair of equal elements whenever we find one. At the end, just output whether the string is empty.\nThe problem can also be solved in $$$O(n)$$$ using a stack."
+        }
+    ]
+}
