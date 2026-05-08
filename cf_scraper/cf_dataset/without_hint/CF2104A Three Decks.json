@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMonocarp placed three decks of cards in a row on the table. The first deck consists of $ a $ cards, the second deck consists of $ b $ cards, and the third deck consists of $ c $ cards, with the condition $ a < b < c $ .\n\nMonocarp wants to take some number of cards (at least one, but no more than $ c $ ) from the third deck and distribute them between the first two decks so that each of the taken cards ends up in either the first or the second deck. It is possible that all the cards taken from the third deck will go into the same deck.\n\nYour task is to determine whether Monocarp can make the number of cards in all three decks equal using the described operation.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe only line of each test case contains three integers $ a, b $ , and $ c $ ( $ 1 \\le a, b, c \\le 10^8 $ ) — the number of cards in the first, second, and third decks, respectively.\n\nAdditional constraint on the input: $ a < b < c $ .\n\nOutput Format\nFor each test case, output \"YES\" (without quotes) if Monocarp can make the number of cards in all three decks equal using the described operation. Otherwise, output \"NO\" (without quotes).\n\nExamples\nSample 1\nInput\n4\n3 5 10\n12 20 30\n3 5 7\n1 5 6\nOutput\nYES\nNO\nYES\nNO\n\nNote\nIn the first test case, Monocarp has to take $ 4 $ cards from the third deck, put $ 3 $ cards in the first deck, and $ 1 $ card in the second deck. Thus, there will be $ 6 $ cards in all three decks.\n\nIn the second test case, it is impossible to make the number of cards in all three decks equal.\n\nIn the third test case, Monocarp has to take $ 2 $ cards from the third deck and put both in the first deck. Thus, there will be $ 5 $ cards in all three decks.\n\nIn the fourth test case, it is also impossible to make the number of cards in all three decks equal."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2104A - Three Decks\nLet us assume that we have managed to make the number of cards equal. Then each deck contains $$$x$$$ cards. Since the total number of cards from the hasn't changed, there were $$$3x$$$ cards in total.\nThis means that if $$$a + b + c$$$ is not divisible by $$$3$$$, the answer is definitely \"\nNO\n\".\nOtherwise, we know that $$$3x = a + b + c$$$, which means $$$x = \\frac{a + b + c}{3}$$$. If the first or the second deck already has more cards than $$$x$$$, the answer is also \"\nNO\n\". Otherwise, we can move $$$x - a$$$ cards to the first deck and $$$x - b$$$ cards to the second deck. Since $$$b  \\gt  a$$$, it's enough to check if $$$b \\le x$$$.\nOverall complexity: $$$O(1)$$$ per test case."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\na\n,\nb\n,\nc\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nif\n(\na\n+\nb\n+\nc\n)\n%\n3\n!=\n0\n:\nprint\n(\n\"NO\"\n)\ncontinue\nx\n=\n(\na\n+\nb\n+\nc\n)\n// 3\nprint\n(\n\"YES\"\nif\nb\n<=\nx\nelse\n\"NO\"\n)"
+        }
+    ]
+}

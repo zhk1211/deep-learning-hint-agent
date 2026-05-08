@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ of $ n $ numbers and a number $ k $ . The value $ a_i $ describes the weather on the $ i $ -th day: if it rains on the $ i $ -th day, then $ a_i = 1 $ ; otherwise, if the weather is good on the $ i $ -th day, then $ a_i = 0 $ .\n\nJean wants to visit as many peaks as possible. One hike to a peak takes exactly $ k $ days, and during each of these days, the weather must be good ( $ a_i = 0 $ ). That is, formally, he can start a hike on day $ i $ only if all $ a_j = 0 $ for all $ j $ $ (i \\leq j \\leq i + k - 1) $ .\n\nAfter each hike, before starting the next one, Jean must take a break of at least one day, meaning that on the day following a hike, he cannot go on another hike.\n\nFind the maximum number of peaks that Jean can visit.\n\nInput Format\nEach test consists of several test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 10^5 $ , $ 1 \\le k \\le n $ ).\n\nThe second line contains $ n $ numbers $ a_i $ ( $ a_i \\in \\{0, 1\\} $ ), where $ a_i $ denotes the weather on the $ i $ -th day.\n\nIt is guaranteed that the total value of $ n $ across all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer: the maximum number of hikes that Jean can make.\n\nExamples\nSample 1\nInput\n5\n5 1\n0 1 0 0 0\n7 3\n0 0 0 0 0 0 0\n3 1\n1 1 1\n4 2\n0 1 0 1\n6 2\n0 0 1 0 0 0\nOutput\n3\n2\n0\n0\n2\n\nNote\nIn the first sample:\n\n- Day $ 1 $ — good weather, Jean goes on a hike. ( $ a_1 = 0 $ )\n- Day $ 2 $ — mandatory break.\n- Day $ 3 $ — again good weather, Jean goes on the second hike. ( $ a_3 = 0 $ )\n- Day $ 4 $ — break.\n- Day $ 5 $ — good weather, third hike. ( $ a_5 = 0 $ )\n\nThus, Jean can make 3 hikes, alternating each with a mandatory day of rest. In the second sample:\n\n- From day $ 1 $ to day $ 3 $ — three days of good weather, Jean goes on a hike. ( $ a_1 = a_2 = a_3 = 0 $ )\n- Day $ 4 $ — mandatory break.\n- From day $ 5 $ to day $ 7 $ — again three days of good weather, Jean goes on the second hike. ( $ a_5 = a_6 = a_7 = 0 $ )\n\nIn total, Jean makes 2 hikes. In the third sample:\n\n- There are no days with good weather ( $ a_i = 1 $ for all $ i $ )\n\nJean cannot make any hikes. Answer: 0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2126B - В горах нет казино\nKey observation\nInside one block of length len (all zeros) we must place patterns of $$$k$$$ good days (the hike) plus one mandatory rest day after each hike except the last. Thus each hike consumes $$$k + 1$$$ slots, except the final one, which does not need a trailing rest day.\nTherefore, the maximum number of hikes in one block is\nhikes_in_block = $$$\\lfloor \\frac {(len + 1)} {(k + 1)} \\rfloor$$$\nIntuition: add an imaginary rest day to the end of the block, then just cut the segment into chunks of size $$$k + 1$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nint\na\n[\nn\n+\n1\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nint\nans\n=\n0\n;\nint\ncnt\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nif\n(\na\n[\ni\n]\n==\n1\n)\n{\nans\n+=(\ncnt\n+\n1\n)/(\nk\n+\n1\n);\ncnt\n=\n0\n;\ncontinue\n;\n}\nelse\n{\ncnt\n++;\n}\n}\nans\n+=(\ncnt\n+\n1\n)/(\nk\n+\n1\n);\ncout\n<<\nans\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

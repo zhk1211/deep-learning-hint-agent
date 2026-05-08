@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nCalin has $ n $ buckets, the $ i $ -th of which contains $ a_i $ wooden squares of side length $ 1 $ .\n\nCan Calin build a square using all the given squares?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ ) — the number of buckets.\n\nThe second line of each test case contains $ n $ integers $ a_1, \\ldots, a_n $ ( $ 1 \\leq a_i \\leq 10^9 $ ) — the number of squares in each bucket.\n\nThe sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output \"YES\" if Calin can build a square using all of the given $ 1 \\times 1 $ squares, and \"NO\" otherwise.\n\nYou can output the answer in any case (for example, the strings \"yEs\", \"yes\", \"Yes\" and \"YES\" will be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n5\n1\n9\n2\n14 2\n7\n1 2 3 4 5 6 7\n6\n1 3 5 7 9 11\n4\n2 2 2 2\nOutput\nYES\nYES\nNO\nYES\nNO\n\nNote\nIn the first test case, Calin can build a $ 3 \\times 3 $ square.\n\nIn the second test case, Calin can build a $ 4 \\times 4 $ square.\n\nIn the third test case, Calin cannot build a square using all the given squares."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1915C - Can I Square?\nYou should add up all the values to get the sum $$$s$$$. Then we just need to check if $$$s$$$ is a perfect square. There are many ways, for example you can use inbuilt\nsqrt\nfunction or binary search. Be careful with precision errors, since\nsqrt\nfunction might return a floating-point type."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n\"bits/stdc++.h\"\nusing\nnamespace\nstd\n;\n#define\nll\nlong\nlong\n#define\nall\n(\nv\n)\nv\n.\nbegin\n(),\nv\n.\nend\n()\n#define\nrall\n(\nv\n)\nv\n.\nrbegin\n(),\nv\n.\nrend\n()\n#define\npb                push_back\n#define\nsz\n(\na\n)\n(\nint\n)\na\n.\nsize\n()\nbool\nis_square\n(\nll x\n)\n{\nll l\n=\n1\n,\nr\n=\n1e9\n;\nwhile\n(\nl\n<=\nr\n)\n{\nll mid\n=\nl\n+\n(\nr\n-\nl\n)\n/\n2\n;\nif\n(\nmid\n*\nmid\n==\nx\n)\nreturn\ntrue\n;\nif\n(\nmid\n*\nmid\n>\nx\n)\nr\n=\nmid\n-\n1\n;\nelse\nl\n=\nmid\n+\n1\n;\n}\nreturn\nfalse\n;\n}\nvoid\nsolve\n()\n{\nll n\n;\ncin\n>>\nn\n;\nll s\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n,\nx\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\nx\n;\ns\n+=\nx\n;\n}\nif\n(\nis_square\n(\ns\n))\ncout\n<<\n\"YES\\n\"\n;\nelse\ncout\n<<\n\"NO\\n\"\n;\n}\nint32_t\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\nint\nt\n=\n1\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

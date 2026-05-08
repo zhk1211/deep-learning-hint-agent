@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA palindrome is a string that reads the same in both directions, for example z, uwu, or moom.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 100 $ ) — the number of testcases.\n\nThe following $ t $ lines each contain a string of length at most $ 100 $ consisting of lowercase English letters.\n\nOutput Format\nFor each test case, output \"YES\" or \"NO\", denoting the answer.\n\nExamples\nSample 1\nInput\n8\nac\ntle\nradar\nracecar\nphp\natcoder\ncodeforces\nsteam\nOutput\nNO\nNO\nYES\nYES\nNO\nNO\nYES\nYES\n\nSample 2\nInput\n2\na\nz\nOutput\nNO\nYES"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Why are there two examples when each one already has multiple test cases?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "A change of perspective might help you solve the problem."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "1952H - Palindrome\nOne obvious weird thing in the statement is that there are 2 sample tests despite the multi-test input format. This implies that the lines (\"tests\") in each input might not be independent tests and are related in some way.\nIf we read very closely we might notice two weird things about the statement. First, instead of the usual \"Each test case contains a line...\", it says \"The following t lines each contain...\". This is because one line does not correspond to one test case. Another is the unusual definition of palindromes: \"in both directions\".\nThis problem is solved by seeing it in a different direction. If we read the third and fourth columns, we may notice that they are palindromes — which read the same in both directions, up and down. The solution is to read $$$t$$$ strings, vertically, from the input and determine whether they are palindromes. Empty strings count as palindromes as you can see in sample 2."
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nJane has decided to solve a list of $ n $ problems on Codeforces. The $ i $ -th problem in her list has difficulty $ d_i $ , and the last problem in the list is the hardest one (for every problem $ j < n $ , $ d_j < d_n $ ).\n\nJane's problem-solving skill is some integer $ x $ (unknown to you). If a problem's difficulty is greater than $ x $ , then Jane cannot solve it, otherwise she can solve it.\n\nJane has solved all problems form the list, except for the last one — she found out that it was too difficult for her. Can you uniquely determine the value of $ x $ — Jane's problem solving skill?\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nEach test case consists of two lines:\n\n- the first line contains one integer $ n $ ( $ 2 \\le n \\le 50 $ ) — the number of problems;\n- the second line contains $ n $ integers $ d_1, d_2, \\dots, d_n $ ( $ 1 \\le d_i \\le 50 $ ).\n\nAdditional constraint on the input: in every test case, the last problem is more difficult than every other problem (i. e. $ d_n > d_j $ for every $ j < n $ ). This means that at least one possible value of $ x $ exists.\n\nOutput Format\nFor each test case, print one line:\n\n- if you can determine the value of $ x $ uniquely, print $ x $ ;\n- otherwise, print Ambiguous. The checking program is case-sensitive, so if you print ambiguous or AMBIGUOUS, your answer will be considered wrong.\n\nExamples\nSample 1\nInput\n3\n5\n1 2 3 4 5\n8\n8 8 5 3 4 6 8 12\n4\n3 3 3 4\nOutput\n4\nAmbiguous\n3\n\nNote\nIn the second test case of the example, the value of $ x $ could be $ 11 $ , but it also could be $ 10 $ (other possible values for $ x $ also exist)."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2011A - Problem Solving\nIf we want to determine that Jane's skill is $$$x$$$, then there should be a problem of difficulty $$$x$$$ which she solved, and a problem of difficulty $$$x+1$$$ which she didn't. Since the only problem she didn't solve has difficulty $$$d_n$$$, then if $$$x$$$ is unique, it should be equal to $$$d_n-1$$$.\nSo, let's check if there exists a problem of difficulty $$$d_n - 1$$$ which Jane solved. This can be done in a multitude of ways; the model solution uses the functions\ndropLast\nto form a version of the given array without the last element, and\ncontains\nto check if the resulting array contains the value we need."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "fun main\n()\n=\nrepeat\n(\nreadln\n().\ntoInt\n())\n{\nreadln\n().\ntoInt\n()\nval a\n=\nreadln\n().\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nprintln\n(\nif\n(\na\n.\ndropLast\n(\n1\n).\ncontains\n(\na\n.\nlast\n()\n-\n1\n))\na\n.\nlast\n()\n-\n1\nelse\n\"Ambiguous\"\n)\n}"
+        }
+    ]
+}

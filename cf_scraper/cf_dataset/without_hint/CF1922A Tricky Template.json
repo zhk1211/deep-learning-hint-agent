@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer $ n $ and three strings $ a, b, c $ , each consisting of $ n $ lowercase Latin letters.\n\nLet a template be a string $ t $ consisting of $ n $ lowercase and/or uppercase Latin letters. The string $ s $ matches the template $ t $ if the following conditions hold for all $ i $ from $ 1 $ to $ n $ :\n\n- if the $ i $ -th letter of the template is lowercase, then $ s_i $ must be the same as $ t_i $ ;\n- if the $ i $ -th letter of the template is uppercase, then $ s_i $ must be different from the lowercase version of $ t_i $ . For example, if there is a letter 'A' in the template, you cannot use the letter 'a' in the corresponding position of the string.\n\nAccordingly, the string doesn't match the template if the condition doesn't hold for at least one $ i $ .\n\nDetermine whether there exists a template $ t $ such that the strings $ a $ and $ b $ match it, while the string $ c $ does not.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\le n \\le 20 $ ) — the length of the given strings.\n\nThe next three lines contain the strings $ a, b $ and $ c $ . Each string consists of exactly $ n $ lowercase Latin letters.\n\nOutput Format\nFor each testcase, print \"YES\" if there exists a template $ t $ such that the strings $ a $ and $ b $ match it, while the string $ c $ does not. Otherwise, print \"NO\".\n\nExamples\nSample 1\nInput\n4\n1\na\nb\nc\n2\naa\nbb\naa\n10\nmathforces\nluckforces\nadhoccoder\n3\nacc\nabd\nabc\nOutput\nYES\nNO\nYES\nNO\n\nNote\nIn the first test case, you can use the template \"C\". The first letter of strings $ a $ and $ b $ differ from 'c', so they match the template. The first letter of string $ c $ equals 'c', so it doesn't match.\n\nIn the third test case, you can use the template \"CODEforces\"."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1922A - Tricky Template\nIn order for a string not to match the pattern, there must be at least one position $$$i$$$ from $$$1$$$ to $$$n$$$ where the condition doesn't hold. Let's iterate over this position and check if it is possible to pick a letter in the pattern such that $$$a_i$$$ and $$$b_i$$$ match, while $$$c_i$$$ doesn't match. If $$$a_i$$$ or $$$b_i$$$ equal $$$c_i$$$, then it is definitely not possible. Since $$$c_i$$$ does not match, the equal letter also doesn't match. And if both are different from $$$c_i$$$, then it is always possible to pick the uppercase letter $$$c_i$$$ to only prohibit it.\nGreat, now the string $$$c$$$ definitely doesn't match the pattern. Now we should guarantee that the strings $$$a$$$ and $$$b$$$ match. Complete the template as follows: for all other positions, we will pick uppercase letters that differ from both $$$a_i$$$ and $$$b_i$$$. Obviously, among $$$26$$$ letters, there will always be such a letter.\nTherefore, the solution is as follows: iterate over the positions and check that there is at least one where $$$a_i$$$ differs from $$$c_i$$$ and $$$b_i$$$ differs from $$$c_i$$$. If there is, the answer is \"\nYES\n\". Otherwise, the answer is \"\nNO\n\".\nOverall complexity: $$$O(n)$$$ for each testcase."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\na\n=\ninput\n()\nb\n=\ninput\n()\nc\n=\ninput\n()\nprint\n(\n\"YES\"\nif\nany\n([\na\n[\ni\n]\n!=\nc\n[\ni\n]\nand\nb\n[\ni\n]\n!=\nc\n[\ni\n]\nfor\ni\nin\nrange\n(\nn\n)])\nelse\n\"NO\"\n)"
+        }
+    ]
+}

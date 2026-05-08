@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis time, the pink soldiers have given you an integer $ x $ ( $ x \\ge 2 $ ).\n\nPlease determine if there exists a positive integer $ y $ that satisfies the following conditions.\n\n- $ y $ is strictly less than $ x $ .\n- There exists a non-degenerate triangle $ ^{\\text{∗}} $ with side lengths $ x $ , $ y $ , $ x \\oplus y $ . Here, $ \\oplus $ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).\n\nAdditionally, if there exists such an integer $ y $ , output any.\n\n$ ^{\\text{∗}} $ A triangle with side lengths $ a $ , $ b $ , $ c $ is non-degenerate when $ a+b > c $ , $ a+c > b $ , $ b+c > a $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 2000 $ ). The description of the test cases follows.\n\nThe only line of each test case contains a single integer $ x $ ( $ 2 \\le x \\le 10^9 $ ).\n\nOutput Format\nFor each test case, print one integer on a separate line. The integer you must output is as follows:\n\n- If there exists an integer $ y $ satisfying the conditions, output the value of $ y $ ( $ 1 \\le y < x $ );\n- Otherwise, output $ -1 $ .\n\nIf there exist multiple integers that satisfy the conditions, you may output any.\n\nExamples\nSample 1\nInput\n7\n5\n2\n6\n3\n69\n4\n420\nOutput\n3\n-1\n5\n-1\n66\n-1\n320\n\nNote\nIn the first test case, there exists a non-degenerate triangle with side lengths $ 3 $ , $ 5 $ , and $ 3 \\oplus 5 = 6 $ . Therefore, $ y=3 $ is a valid answer.\n\nIn the second test case, $ 1 $ is the only possible candidate for $ y $ , but it cannot make a non-degenerate triangle. Therefore, the answer is $ -1 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        }
+    ]
+}

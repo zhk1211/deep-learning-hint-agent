@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMegumin is a wizard who can cast powerful magic spells that affect large areas. She is obsessed with the extremely devastating Explosion spell that can destroy everything around its target.\n\nThere are currently $ n $ slimes in the wild. Each slime's location can be described in 2D Cartesian coordinates. Megumin wishes to kill at least $ k $ slimes so she can earn more experience points to level up her Explosion. To do that, she can choose any circle on the plane and cast an Explosion spell which kills every slime inside or on the border of the circle.\n\nHowever, the Explosion magic requires a large amount of mana to cast, and Megumin can only use it once per day. The amount of mana used is equal to the area inside the circle she chooses. What is the minimum amount of mana she needs to spend to kill $ k $ slimes with a single Explosion?\n\nInput Format\nThe first line contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 10^5 $ ) — the number of slimes and how many slimes Megumin needs to defeat.\n\nEach of the next $ n $ lines contains two integers $ x $ and $ y $ ( $ -10^9 \\le x, y \\le 10^9 $ ), denoting the coordinates $ (x, y) $ of a slime's location. It is guaranteed that all locations are distinct and that no three slimes lie on the same circle.\n\nOutput Format\nPrint one real number — the answer.\n\nYour answer is considered correct if its absolute or relative error does not exceed $ 10^{-6} $ . Formally, let your answer be $ a $ , and the jury's answer be $ b $ . Your answer is accepted if and only if $ \\frac{|a-b|}{\\max(1,|b|)} \\le 10^{-6} $ .\n\nExamples\nSample 1\nInput\n1 1\n0 0\nOutput\n0.000000000000000\n\nSample 2\nInput\n3 2\n0 0\n100 0\n2 0\nOutput\n3.141592653589793\n\nNote\nIn the first example, Megumin can hit the slime with a circle centered at $ (0, 0) $ with radius $ 0 $ .\n\nIn the second example, Megumin can hit the first and last slimes with a circle centered at $ (1, 0) $ with radius $ 1 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "No three slimes lie on the same circle, so in fact all of them lie on the same line.\nThis means that you only need to sort the slimes $$$s_1, \\dots, s_n$$$, and find the smallest diameter $$$d := \\min_{1 \\leq i \\leq n-k+1} \\text{dist}(s_i, s_{i+k-1})$$$. Then we just need to output $$$\\pi \\frac{d^2}{4}$$$."
+        }
+    ]
+}

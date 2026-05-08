@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a positive integer sequence $ a $ of length $ n $ . Determine if it is possible to rearrange $ a $ such that there exists an integer $ i $ ( $ 1 \\le i<n $ ) satisfying $ $$$ \\min([a_1,a_2,\\ldots,a_i])=\\gcd([a_{i+1},a_{i+2},\\ldots,a_n]). $ $ </p><p>Here $ \\\\gcd(c) $ denotes the <a href=\"https://en.wikipedia.org/wiki/Greatest_common_divisor\">greatest common divisor</a> of $ c $ , which is the maximum positive integer that divides all integers in $ c$$$.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^{18} $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, output \"Yes\" if it is possible, and \"No\" otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n7\n2\n1 1\n2\n1 2\n3\n2 2 3\n3\n2 3 4\n5\n4 5 6 9 3\n3\n998244359987710471 99824435698771045 1000000007\n6\n1 1 4 5 1 4\nOutput\nYes\nNo\nYes\nNo\nYes\nYes\nYes\n\nNote\nIn the first test case, rearrange $ a $ to $ [1,1] $ and let $ i=1 $ , then $ \\min([1])=\\gcd([1]) $ .\n\nIn the second test case, it can be shown that it is impossible.\n\nIn the third test case, rearrange $ a $ to $ [3,2,2] $ and let $ i=2 $ , then $ \\min([3,2])=\\gcd([2]) $ .\n\nIn the fifth test case, rearrange $ a $ to $ [3,4,5,6,9] $ and let $ i=3 $ , then $ \\min([3,4,5])=\\gcd([6,9]) $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider the position of the minimum value after rearranging the sequence."
+        },
+        {
+            "title": "Hint 2",
+            "content": "What kind of numbers should be placed on the $$$\\min$$$ side, and what kind should be placed on the $$$\\gcd$$$ side?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "2084B - MIN = GCD\nFor any positive integer sequence $$$a$$$, we always have $$$\\gcd(a) \\leq \\min(a)$$$. Let $$$x = \\min(a)$$$, then $$$x$$$ must be placed on the $$$\\min([a_1, a_2, \\ldots, a_i])$$$ side. Thus, we can conclude that:\n$$$$$$\\min([a_1, a_2, \\ldots, a_i]) = \\gcd([a_{i + 1}, a_{i + 2}, \\ldots, a_n]) = x$$$$$$\nNow, we need to select some numbers, excluding one occurrence of $$$x$$$, to be placed on the $$$\\gcd([a_{i + 1}, a_{i + 2}, \\ldots, a_n])$$$ side, ensuring that $$$\\gcd([a_{i + 1}, a_{i + 2}, \\ldots, a_n]) = x$$$.\nA greedy strategy is to place all multiples of $$$x$$$ on the $$$\\gcd$$$ side after removing one occurrence of $$$x$$$. This minimizes $$$\\gcd$$$ while ensuring it remains a multiple of $$$x$$$.\nThus, we only need to check whether the $$$\\gcd$$$ of the remaining multiples of $$$x$$$ (after removing one occurrence of $$$x$$$) is still equal to $$$x$$$.\nTime complexity\n: $$$O(n + \\log a)$$$ or $$$O(n \\log a)$$$ (depending on which $$$\\gcd$$$ implementation you use) per test case."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nT\n,\nn\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n--)\n{\ncin\n>>\nn\n;\nvector\n<ll>\na\n(\nn\n);\nfor\n(\nll\n&\nx\n:\na\n)\n{\ncin\n>>\nx\n;\n}\nint\np\n=\nmin_element\n(\na\n.\nbegin\n(),\na\n.\nend\n())\n-\na\n.\nbegin\n();\nll g\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\ni\n!=\np\n&&\na\n[\ni\n]\n%\na\n[\np\n]\n==\n0\n)\n{\ng\n=\n__gcd\n(\ng\n,\na\n[\ni\n]);\n}\n}\ncout\n<<\n(\ng\n==\na\n[\np\n]\n?\n\"Yes\\n\"\n:\n\"No\\n\"\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

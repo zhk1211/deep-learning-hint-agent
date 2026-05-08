@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1958D - Staircase\nThere are two approaches to this problem: greedy and dynamic programming.\nGreedy approach.\nIt's quite easy to see that we only have to consider broken steps, and repair them only once. So, we can consider each consecutive block of broken steps and solve the problem separately for it.\nIf a block has even length, then there is only one way to repair it in the minimum possible number of days — repair the first and the second step on the same day, then the third and the fourth, and so on. So, for an even-length block, the total effort is the $$$2 \\cdot \\sum a_i$$$.\nIf a block has odd length, we can choose a step which will be left without a pair (so the effort for this step will not be doubled), and all the other steps will be paired. However, if we choose a step on an even position as a single step, it has an odd number of steps to the left and an odd number of steps to the right, so we cannot split them into pairs. So, we can choose a \"single\" step only among steps on odd positions from the block, and it's quite easy to see that the best step to choose is having the maximum $$$a_i$$$.\nDynamic programming approach.\nLet $$$dp_i$$$ be a pair of two integers:\nthe minimum number of days to repair the first $$$i$$$ steps;\nthe minimum total effort to repair the first $$$i$$$ steps, if we do it in the minimum number of days.\nWhen updating dynamic programming values, we try to minimize the first value, and to break ties, minimize the second value.\nThe transitions are pretty straightforward:\nif the step $$$i+1$$$ is intact, you can just skip it and go from $$$dp_i$$$ to $$$dp_{i+1}$$$;\nif the step $$$i+1$$$ is broken, you can go from $$$dp_i$$$ to $$$dp_{i+1}$$$, adding $$$1$$$ to the number of days and $$$a_{i+1}$$$ to the total effort;\nif both steps $$$i+1$$$ and $$$i+2$$$ are broken, you can go from $$$dp_i$$$ to $$$dp_{i+2}$$$, adding $$$1$$$ to the number of days and $$$2 \\cdot (a_{i+1} + a_{i+2})$$$ to the total effort.\nBoth of these solutions can be implemented in $$$O(n)$$$."
+        },
+        {
+            "title": "Solution (PavelKunyavskiy)",
+            "content": "fun main\n()\n{\nrepeat\n(\nreadInt\n())\n{\nreadInt\n()\nval d\n=\nmutableListOf\n(\nmutableListOf\n<\nLong\n>())\nfor\n(\ni\nin\nreadLongs\n())\n{\nif\n(\ni\n==\n0L\n)\n{\nd\n.\nadd\n(\nmutableListOf\n())\n}\nelse\n{\nd\n.\nlast\n().\nadd\n(\ni\n)\n}\n}\nprintln\n(\nd\n.\nsumOf\n{\nl\n->\n2\n*\nl\n.\nsum\n()\n-\n((\nl\n.\nindices step\n2\n).\ntakeIf\n{\nl\n.\nsize\n%\n2\n==\n1\n}?.\nmaxOfOrNull\n{\nl\n[\nit\n]\n}\n?:\n0\n)\n})\n}\n}\nprivate\nfun readInt\n()\n=\nreadln\n().\ntoInt\n()\nprivate\nfun readLongs\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoLong\n()\n}\nprivate\nfun readStrings\n()\n=\nreadln\n().\nsplit\n(\n\" \"\n)\nprivate\nfun readInts\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoInt\n()\n}"
+        }
+    ]
+}

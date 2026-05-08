@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ of the form &lt;block of digits&gt;+&lt;block of digits&gt;+...+&lt;block of digits&gt;. Every block of digits consists of at least $ 2 $ and at most $ 13 $ digits; every digit is from $ 1 $ to $ 9 $ .\n\nYou have to split this string into expressions of the form &lt;integer&gt;+&lt;integer&gt;. Every expression must be a contiguous part of the given string, and every character of the given string must belong to exactly one expression. For example, if you have a string 123+456+789+555, then:\n\n- you are allowed to split it into 123+4, 56+7 and 89+555;\n- you are not allowed to split it into 123+456 and +789+555, since the second part begins with a + sign;\n- you are not allowed to split it into 123+4, 56+7, 8 and 9+555, since the third part does not contain a + sign;\n- you are not allowed to split it into 123+456+78 and 9+555, since the first part contains two + signs.\n\nAmong all allowed ways to split the string, find one which maximizes the sum of results of all expressions you get, and print this sum.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nEach test case consists of one line containing the string $ s $ ( $ 5 \\le |s| \\le 1000 $ ) of the form &lt;block of digits&gt;+&lt;block of digits&gt;+...+&lt;block of digits&gt;. The string contains at least one '+' sign. Every block of digits consists of at least $ 2 $ and at most $ 13 $ digits; every digit is from $ 1 $ to $ 9 $ .\n\nOutput Format\nFor each test case, print one integer — the maximum possible sum of results of all expressions you get after splitting the string.\n\nExamples\nSample 1\nInput\n3\n123+456+789+555\n13+37\n9999999999999+1111111111111+9999999999999\nOutput\n834\n50\n20111111111110\n\nNote\nIn the first test case of the example, you should split the string into expressions 123+4, 56+7 and 89+555. The sum of results of these expressions is $ 834 $ .\n\nIn the second test case of the example, the given string is already a valid expression and cannot be split any further."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2011C - Split the Expression\nThis problem is much easier to implement in Kotlin than in, for example, C++.\nFirst of all, since every expression contains one\n+\nsign, the number of expressions should be equal to the number of\n+\nsigns. Furthermore, we can find the positions to split the given expression: in every block of digits except for the first and the last block, we need to choose a \"cut\" that leaves both parts of the block non-empty.\nAfter we've chosen our \"cut\" positions, the sum of all expressions is just the sum of all integers we obtained. So, for every block (except for the first block and the last block), we have to split it so that the sum of two parts is the maximum possible. This can be done in two ways: either iterate on the position of the cut in a block, or check two options: make the left part a single digit, or the right part a single digit.\nTo split the given string into blocks of digits, you can use the method\nsplit(\"+\")\n. The method\ntoLong()\nwill also be very helpful to convert blocks of digits into numbers (32-bit integers are not enough in this problem)."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "fun main\n()\n=\nrepeat\n(\nreadln\n().\ntoInt\n())\n{\nval a\n=\nreadln\n().\nsplit\n(\n\"+\"\n)\nval ans\n=\na\n.\nfoldIndexed\n(\n0L\n)\n{\ni\n,\nres\n,\ns\n->\nres\n+\nif\n(\ni\n==\n0\n||\ni\n==\na\n.\nsize\n-\n1\n)\ns\n.\ntoLong\n()\nelse\n(\n1\nuntil\ns\n.\nlength\n).\nmaxOf\n{\ns\n.\ntake\n(\nit\n).\ntoLong\n()\n+\ns\n.\ndrop\n(\nit\n).\ntoLong\n()\n}\n}\nprintln\n(\nans\n)\n}"
+        }
+    ]
+}

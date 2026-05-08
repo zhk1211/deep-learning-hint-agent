@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer array $ a $ of size $ n $ . Initially, all elements of the array are colored red.\n\nYou have to choose exactly $ k $ elements of the array and paint them blue. Then, while there is at least one red element, you have to select any red element with a blue neighbor and make it blue.\n\nThe cost of painting the array is defined as the sum of the first $ k $ chosen elements and the last painted element.\n\nYour task is to calculate the maximum possible cost of painting for the given array.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^3 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 2 \\le n \\le 5000 $ ; $ 1 \\le k < n $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nAdditional constraint on the input: the sum of $ n $ over all test cases doesn't exceed $ 5000 $ .\n\nOutput Format\nFor each test case, print a single integer — the maximum possible cost of painting for the given array.\n\nExamples\nSample 1\nInput\n3\n3 1\n1 2 3\n5 2\n4 2 3 1 3\n4 3\n2 2 2 2\nOutput\n5\n10\n8\n\nNote\nIn the first example, you can initially color the $ 2 $ -nd element, and then color the elements in the order $ 1, 3 $ . Then the cost of painting is equal to $ 2+3=5 $ .\n\nIn the second example, you can initially color the elements $ 1 $ and $ 5 $ , and then color the elements in the order $ 2, 4, 3 $ . Then the cost of painting is equal to $ 4+3+3=10 $ .\n\nIn the third example, you can initially color the elements $ 2, 3, 4 $ , and then color the $ 1 $ -st element. Then the cost of painting is equal to $ 2+2+2+2=8 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2075B - Array Recoloring\nSince the cost depends on the first $$$k$$$ painted elements and the last one, it cannot exceed the sum of $$$(k+1)$$$ maximum elements of the array. In fact, in most cases, you can get exactly that cost.\nLet $$$k \\ge 2$$$ and the positions of the $$$(k+1)$$$ maxima are $$$p_1, p_2, \\dots, p_k, p_{k+1}$$$. In this case, you can initially color the elements $$$p_1, p_3, \\dots, p_k, p_{k + 1}$$$, then all except $$$p_2$$$, and then color the element $$$p_2$$$ last. So the cost is exactly the sum of $$$(k+1)$$$ maxima. This works because the element we want to color last is between two elements we choose initially.\nHowever, if $$$k=1$$$, then whatever element we choose and how we color the remaining elements, the first or the last element of the array will be the last to be colored. Therefore, in this case, you can consider two options (and pick the one with the maximum cost): the element among the first $$$(n-1)$$$ positions is painted first, and the $$$n$$$-th element is painted last; or the element among the last $$$(n-1)$$$ positions is painted first, and the $$$1$$$-st element is painted last."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nauto\n&\nx\n:\na\n)\ncin\n>>\nx\n;\nlong\nlong\nans\n=\n0\n;\nif\n(\nk\n>\n1\n)\n{\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n(),\ngreater\n<int>\n());\nans\n=\naccumulate\n(\na\n.\nbegin\n(),\na\n.\nbegin\n()\n+\nk\n+\n1\n,\n0LL\n);\n}\nelse\n{\nint\nl\n=\n*\nmax_element\n(\na\n.\nbegin\n(),\na\n.\nend\n()\n-\n1\n);\nint\nr\n=\n*\nmax_element\n(\na\n.\nbegin\n()\n+\n1\n,\na\n.\nend\n());\nans\n=\nmax\n(\nl\n+\na\n.\nback\n(),\nr\n+\na\n[\n0\n]);\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

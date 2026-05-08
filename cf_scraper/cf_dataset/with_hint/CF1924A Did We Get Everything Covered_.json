@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two integers $ n $ and $ k $ along with a string $ s $ .\n\nYour task is to check whether all possible strings of length $ n $ that can be formed using the first $ k $ lowercase English alphabets occur as a subsequence of $ s $ . If the answer is NO, you also need to print a string of length $ n $ that can be formed using the first $ k $ lowercase English alphabets which does not occur as a subsequence of $ s $ .\n\nIf there are multiple answers, you may print any of them.\n\nNote: A string $ a $ is called a subsequence of another string $ b $ if $ a $ can be obtained by deleting some (possibly zero) characters from $ b $ without changing the order of the remaining characters.\n\nInput Format\nThe first line of input contains a single integer $ t \\, (1 \\le t \\le 10^5) $ , the number of test cases.\n\nThe first line of each test case contains $ 3 $ integers $ n \\, (1 \\le n \\le 26), \\: k \\, (1 \\le k \\le 26), \\: m \\, (1 \\le m \\le 1000) $ , where $ n $ and $ k $ are the same as described in the input and $ m $ is the length of the string $ s $ .\n\nThe second line of each test case contains a single string $ s $ of length $ m $ , comprising only of the first $ k $ lowercase English alphabets.\n\nIt is guaranteed that the sum of $ m $ and the sum of $ n $ over all test cases does not exceed $ 10^6 $ .\n\nOutput Format\nFor each test case, print YES if all possible strings of length $ n $ that can be formed using the first $ k $ lowercase English alphabets occur as a subsequence of $ s $ , else print NO.\n\nIf your answer is NO, print a string of length $ n $ that can be formed using the first $ k $ lowercase English alphabets which does not occur as a subsequence of $ s $ in the next line.\n\nYou may print each letter of YES or NO in any case (for example, YES, yES, YeS will all be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n3\n2 2 4\nabba\n2 2 3\nabb\n3 3 10\naabbccabab\nOutput\nYES\nNO\naa\nNO\nccc\n\nNote\nFor the first test case, all possible strings (aa, ab, ba, bb) of length $ 2 $ that can be formed using the first $ 2 $ English alphabets occur as a subsequence of abba.\n\nFor the second test case, the string aa is not a subsequence of abb."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Try to build the counter-case greedily."
+        },
+        {
+            "title": "Hint 2",
+            "content": "While building the counter-case, it is always optimal to choose the first character as the one whose first index of occurrence in the given string is the highest."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "We will try to construct a counter-case. If we can't the answer is\nYES\notherwise\nNO\n.\nWe will greedily construct the counter-case. It is always optimal to choose the first character of our counter-case as the character (among the first $$$k$$$ English alphabets) whose first index of occurrence in $$$s$$$ is the highest. Add this character to our counter-case, remove the prefix up to this character from $$$s$$$ and repeat until the length of the counter-case reaches $$$n$$$ or we reach the end of $$$s$$$.\nIf the length of the counter-case is less than $$$n$$$, find a character which does not appear in the last remaining suffix of $$$s$$$. Keep adding this character to the counter-case until its length becomes $$$n$$$. This is a valid string which does not occur as a subsequence of $$$s$$$.\nOtherwise, all possible strings of length $$$n$$$ formed using the first $$$k$$$ English alphabets occur as a subsequence of $$$s$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nstd\n::\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\ncout\n.\ntie\n(\nNULL\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nk\n,\nm\n;\ncin\n>>\nn\n>>\nk\n>>\nm\n;\nstring\ns\n;\ncin\n>>\ns\n;\nstring\nres\n=\n\"\"\n;\nbool\nfound\n[\nk\n];\nmemset\n(\nfound\n,\nfalse\n,\nsizeof\n(\nfound\n));\nint\ncount\n=\n0\n;\nfor\n(\nchar\nc\n:\ns\n)\n{\nif\n(\nres\n.\nsize\n()==\nn\n)\nbreak\n;\ncount\n+=(!\nfound\n[\nc\n-\n'a'\n]);\nfound\n[\nc\n-\n'a'\n]=\ntrue\n;\nif\n(\ncount\n==\nk\n)\n{\nmemset\n(\nfound\n,\nfalse\n,\nsizeof\n(\nfound\n));\ncount\n=\n0\n;\nres\n+=\nc\n;\n}\n}\nif\n(\nres\n.\nsize\n()==\nn\n)\ncout\n<<\n\"YES\\n\"\n;\nelse\n{\ncout\n<<\n\"NO\\n\"\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\ni\n++)\n{\nif\n(!\nfound\n[\ni\n])\n{\nwhile\n(\nres\n.\nsize\n()<\nn\n)\nres\n+=(\nchar\n)(\n'a'\n+\ni\n);\n}\n}\ncout\n<<\nres\n<<\n\"\\n\"\n;\n}\n}\n}"
+        }
+    ]
+}

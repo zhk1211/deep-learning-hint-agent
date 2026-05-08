@@ -1,0 +1,48 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n[Vicious Hobo - Break the Targets](https://soundcloud.com/moogle-knights-5-wryyyyy/ez-pz-lemongrab)\n\n⠀\n\nYou and Bob are playing Hyper Smawk Bros against each other, facing a single boss with health $ n $ .\n\nYou and Bob act alternately, and you start. On your turn, you may use an attack that deals an integer amount of damage $ x $ in $ [1, m] $ , replacing $ n $ with $ n - x $ . However, one cannot use the same $ x $ that his opponent just used on the previous turn (on the very first move of the game, any $ x $ in $ [1, m] $ is allowed).\n\nThe winner is the first player to reduce the boss's health to $ n \\leq 0 $ . Determine whether you can force a win if Bob plays optimally.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe only line of each test case contains two integers $ n $ , $ m $ ( $ 1 \\le n \\le 10^6 $ , $ 2 \\leq m \\leq 10^6 $ ) — the starting health $ n $ and the maximum damage per attack $ m $ .\n\nNote that there are no constraints on the sum of $ n $ over all test cases, and there are no constraints on the sum of $ m $ over all test cases.\n\nOutput Format\nFor each test case, output $ \\texttt{YES} $ if you can force a win against Bob, and $ \\texttt{NO} $ otherwise.\n\nThe judge is case-insensitive (for example, $ \\texttt{YES} $ , $ \\texttt{Yes} $ , $ \\texttt{yes} $ , $ \\texttt{yEs} $ will all be recognized as positive answers).\n\nExamples\nSample 1\nInput\n8\n6 9\n20 10\n69 2\n42 9\n42 10\n44 9\n44 10\n400000 400000\nOutput\nYES\nYES\nNO\nNO\nYES\nYES\nNO\nYES\n\nNote\nIn the first test case, you can win immediately by dealing damage $ 8 $ , so that $ n $ becomes $ 6-8 = -2 \\leq 0 $ .\n\nIn the second test case,\n\n- you choose to deal damage $ 10 $ ;\n- Bob can choose to deal any damage in $ [1, 10] $ different from $ 10 $ ;\n- then you can choose to deal damage $ 10 $ and win.\n\nIn the third test case,\n\n- either you start by dealing damage $ 1 $ , then Bob must deal damage $ 2 $ , then you must deal damage $ 1 $ , etc.;\n- or you start by dealing damage $ 2 $ , then Bob must deal damage $ 1 $ , then you must deal damage $ 2 $ , etc.\n\nIn both cases, you lose."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Solve the problem with even $$$m$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Solve the problem with $$$t = 1$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "For a fixed $$$n$$$, how do \"losing\" $$$m$$$ look like?"
+        },
+        {
+            "title": "Hint 4",
+            "content": "Let $$$(n, l)$$$ ($$$0 \\leq m$$$) be losing if you lose if it's your turn, the current integer is $$$n$$$, and you cannot subtract $$$l$$$.\nIf $$$(n, l)$$$ is losing, then $$$(n+l, l')$$$ with $$$l' \\neq l$$$ is winning. This means that the number of losing $$$l$$$ for a fixed $$$n$$$ is either $$$0$$$, $$$1$$$, or $$$m+1$$$. Let's call $$$n$$$ \"good\", \"neutral\", and \"evil\", respectively."
+        },
+        {
+            "title": "Hint 5",
+            "content": "How do the losing states $$$(n, l)$$$ look like?"
+        },
+        {
+            "title": "Hint 6",
+            "content": "Our goal is to solve $$$t = 1$$$ in $$$O(n/m)$$$."
+        },
+        {
+            "title": "Hint 7",
+            "content": "How to determine efficiently whether some $$$n$$$ is good or neutral?"
+        },
+        {
+            "title": "Hint 8",
+            "content": "In order to determine whether some $$$n$$$ is good or neutral, you can write a recursive function which terminates in $$$O(1)$$$ on average."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Losing positions.\nLet $$$(n, l)$$$ ($$$0 \\leq m$$$) be losing if you lose if it's your turn, the current integer is $$$n$$$, and you cannot subtract $$$l$$$ (if $$$l$$$ is $$$0$$$, you can subtract everything).\nEvil $$$n$$$.\nLet $$$n$$$ be evil if $$$(n, 0)$$$ is losing (i.e., you lose even without constraints on the number you subtract).\nBound on the evil $$$n$$$ (I).\nThere are $$$O(N/m)$$$ evil $$$n$$$. Specifically, let $$$v_1, v_2, \\ldots, v_k$$$ be the evil $$$n \\leq N$$$. Then, $$$v_i - v_{i-1} \\geq m+1$$$ (otherwise you would be able to move from an evil $$$n$$$ to another, contradiction).\nStructure of losing positions and solution in $$$O(t(N+m))$$$.\nIf $$$(n, l)$$$ is losing, then $$$(n+l, l')$$$ with $$$l' \\neq l$$$ is winning. This means that the number of losing $$$l$$$ for a fixed $$$n$$$ is either $$$0$$$, $$$1$$$, or $$$m+1$$$. Let's call $$$n$$$ \"good\", \"neutral\", and \"evil\", respectively.\nNote that the losing states are $$$O(N+m)$$$ in total.\nEven $$$m$$$.\nFor even $$$m$$$, only the multiples of $$$m+1$$$ are evil. In order to win, you can ensure that the last two moves have sum $$$m+1$$$. Since $$$m+1$$$ is odd, the last move will never be the same as the second last.\nFrom now, let's only consider odd $$$m$$$.\nMore structure.\nLet $$$f(n)$$$ be the distance from the largest evil $$$n' \\leq n$$$.\nThere are three types of losing states.\n$$$(n, l)$$$ with $$$f(n) = 0$$$.\n$$$(n, f(n))$$$.\n$$$(n, f(n)/2)$$$ with $$$f(n) = m+1$$$.\nThis is a consequence of the slow solution described above. If $$$s$$$ is evil:\nthe losing states $$$(s, l)$$$ propagate to $$$n$$$ in $$$[s+1, s+m]$$$;\nonly the losing state $$$(s + \\frac{m+1}{2}, \\frac{m+1}{2})$$$ can propagate to $$$(s+m+1, \\frac{m+1}{2})$$$, and in that case $$$s+m+2$$$ is evil.\nSo $$$s+m+1$$$ cannot be good (it is either neutral or evil).\nBound on the evil $$$n$$$ (II).\nLet $$$v_1, v_2, \\ldots, v_k$$$ be the evil $$$n \\leq N$$$. Then, $$$m+1 \\leq v_i - v_{i-1} \\leq m+2$$$.\nOur goal.\nLet $$$v_1, v_2, \\ldots, v_k$$$ be the evil $$$n \\leq N$$$. We want to find them in $$$O(k) = O(N/m)$$$. In this way, we can solve the problem for all $$$m$$$ in $$$O(\\sum_{1 \\leq m \\leq M} N/m) = O(N \\log M)$$$.\nFinding $$$v_{i+1}$$$.\nWe have $$$v_1, v_2, \\ldots, v_i$$$, and we want to find $$$v_{i+1}$$$ in $$$O(1)$$$. It is enough to check whether $$$v_i + m + 1$$$ is evil. It's easier to check whether it is\nnot\nevil, i.e., whether there exists a winning move.\nLet's start from some $$$n$$$ which satisfies $$$v_j \\leq n \\leq v_{j+1}$$$. A winning move must ensure that the opponent cannot move to an evil state (necessary condition). So there are three candidate winning moves.\nSubtracting $$$n-v_j+1$$$ (so that the opponent is too far from $$$v_{j-1}$$$; this can only work if $$$v_j-v_{j-1} = m+2$$$).\nSubtracting $$$\\frac{n-v_j}{2}$$$ (so that the opponent would have to subtract $$$\\frac{n-v_j}{2}$$$ again to reach $$$v_j$$$).\nSubtracting $$$\\frac{n-v_{j-1}}{2}$$$ (so that the opponent would have to subtract $$$\\frac{n-v_{j-1}}{2}$$$ again to reach $$$v_{j-1}$$$).\nFinding $$$v_{i+1}$$$ efficiently.\nThe previous observation provides a recursive function which can call itself up to $$$3$$$ times.\nThe recursive function answers the question \"can we win starting from $$$(n, n-v_j)$$$?\" (i.e., it is forbidden to make the move which would win immediately). This is equivalent to \"is $$$n$$$ good or neutral?\"\nWe want to make the average number of recursive calls less than $$$1$$$, so that the function terminates in $$$O(1)$$$.\nWe do not need the first call, because $$$v_{j-1}+m+1$$$ is neutral (proved before).\nThe second call happens with probability $$$\\lesssim 1/2$$$ ($$$n-v_j$$$ must be even, and the first case must not apply).\nThe third call happens with probability $$$\\lesssim 3/8$$$ ($$$n-v_{j-1}$$$ must be even, the first case must not apply, and the second call must not succeed).\nSo the function calls itself $$$\\lesssim 7/8$$$ times on average. This is fast enough for all $$$m$$$ (it can be tested locally)."
+        }
+    ]
+}

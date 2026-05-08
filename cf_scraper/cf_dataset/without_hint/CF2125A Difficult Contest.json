@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIt is known that a contest can be represented by a string $ s $ , consisting of uppercase Latin letters that denote problems. It is also known that a contest is difficult if it contains \"FFT\" or \"NTT\" as a contiguous substring.\n\nYour task is to rearrange the problem in contest $ s $ in such a way that this contest is not difficult. If the initial contest is not difficult, you may leave it as it is.\n\nInput Format\nEach test consists of several test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^{4} $ ) — the number of test cases. The description of the test cases follows.\n\nThe only line of each test case contains $ s $ ( $ 1 \\le |s| \\le 2 \\cdot 10^{5} $ ).\n\nAdditional constraints on the input data:\n\n- the total length of strings across all test cases does not exceed $ 2 \\cdot 10^{5} $ .\n\nOutput Format\nFor each test case, output a string — a non-difficult contest that was obtained from $ s $ by rearranging the letters.\n\nIf there are multiple correct answers, you may output any. It can be shown that at least one correct answer always exists.\n\nExamples\nSample 1\nInput\n5\nFFT\nABFBANTTA\nFFTNTT\nFFTFFTFFTNNTNNT\nAFFTBFFNTTFTTZ\nOutput\nFTF\nABFBANATT\nNTFTFT\nTFFFFFFNTNTNTNT\nAFTFBTTFFNFTTZ"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2125A - Difficult Contest\nNotice that in the strings \"\nFFT\n\" and \"\nNTT\n\", the letter \"\nT\n\" is at the end. From this, we can come up with a solution: place all the letters \"\nT\n\" before all the letters \"\nF\n\" and \"\nN\n\".\nWe can do this directly in one pass through the string, or we can use a slightly more clever approach: let's sort all the letters in non-increasing order, then \"\nT\n\" will come before \"\nF\n\" and \"\nN\n\" in the sorted string, since \"\nT\n\" has a higher position in the alphabet.\nAsymptotic complexity: $$$O(n)$$$ or $$$O(n \\log n)$$$"
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\ntc\n;\ncin\n>>\ntc\n;\nwhile\n(\ntc\n--){\nstring\ns\n;\ncin\n>>\ns\n;\nsort\n(\ns\n.\nbegin\n(),\ns\n.\nend\n());\nreverse\n(\ns\n.\nbegin\n(),\ns\n.\nend\n());\ncout\n<<\ns\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

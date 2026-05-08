@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIn Sherwood, the trees are our shelter, and we are all children of the forest.\n\nThe Major Oak in Sherwood is known for its majestic foliage, which provided shelter to Robin Hood and his band of merry men and women.\n\nThe Major Oak grows $ i^i $ new leaves in the $ i $ -th year. It starts with $ 1 $ leaf in year $ 1 $ .\n\nLeaves last for $ k $ years on the tree. In other words, leaves grown in year $ i $ last between years $ i $ and $ i+k-1 $ inclusive.\n\nRobin considers even numbers lucky. Help Robin determine whether the Major Oak will have an even number of leaves in year $ n $ .\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nEach test case consists of two integers $ n $ , $ k $ ( $ 1 \\le n \\le 10^9 $ , $ 1 \\le k \\le n $ ) — the requested year and the number of years during which the leaves remain.\n\nOutput Format\nFor each test case, output one line, \"YES\" if in year $ n $ the Major Oak will have an even number of leaves and \"NO\" otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n5\n1 1\n2 1\n2 2\n3 2\n4 4\nOutput\nNO\nYES\nNO\nNO\nYES\n\nNote\nIn the first test case, there is only $ 1 $ leaf.\n\nIn the second test case, $ k=1 $ , so in the $ 2 $ -nd year there will be $ 2^2=4 $ leaves.\n\nIn the third test case, $ k=2 $ , so in the $ 2 $ -nd year there will be $ 1+2^2=5 $ leaves.\n\nIn the fourth test case, $ k=2 $ , so in the $ 3 $ -rd year there will be $ 2^2 + 3^3 = 4 + 27 = 31 $ leaves."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "On last day only leaf grown between n-k+1 and n day will remain."
+        },
+        {
+            "title": "Hint 2",
+            "content": "pow(i,i) is odd if i is odd, even if i is even."
+        },
+        {
+            "title": "Hint 3",
+            "content": "We need no of odd numbers between n-k+1 and n"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Video Editorial",
+            "content": ""
+        }
+    ]
+}

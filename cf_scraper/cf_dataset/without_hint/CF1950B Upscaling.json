@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer $ n $ . Output a $ 2n \\times 2n $ checkerboard made of $ 2 \\times 2 $ squares alternating ' $ \\texttt{#} $ ' and ' $ \\texttt{.} $ ', with the top-left cell being ' $ \\texttt{#} $ '.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1950B/883bc02f0b7d07cb0bca7d12d6264453443bc86b.png)The picture above shows the answers for $ n=1,2,3,4 $ .\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 20 $ ) — the number of test cases.\n\nThe only line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq 20 $ ) — it means you need to output a checkerboard of side length $ 2n $ .\n\nOutput Format\nFor each test case, output $ 2n $ lines, each containing $ 2n $ characters without spaces — the checkerboard, as described in the statement. Do not output empty lines between test cases.\n\nExamples\nSample 1\nInput\n4\n1\n2\n3\n4\nOutput\n##\n##\n##..\n##..\n..##\n..##\n##..##\n##..##\n..##..\n..##..\n##..##\n##..##\n##..##..\n##..##..\n..##..##\n..##..##\n##..##..\n##..##..\n..##..##\n..##..##"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n2\n*\nn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n2\n*\nn\n;\nj\n++)\n{\ncout\n<<\n(\ni\n/\n2\n+\nj\n/\n2\n&\n1\n?\n'.'\n:\n'#'\n);\n}\ncout\n<<\n'\\n'\n;\n}\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

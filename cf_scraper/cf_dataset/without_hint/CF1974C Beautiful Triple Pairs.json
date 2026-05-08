@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp was given an array $ a $ of $ n $ integers. He really likes triples of numbers, so for each $ j $ ( $ 1 \\le j \\le n - 2 $ ) he wrote down a triple of elements $ [a_j, a_{j + 1}, a_{j + 2}] $ .\n\nPolycarp considers a pair of triples $ b $ and $ c $ beautiful if they differ in exactly one position, that is, one of the following conditions is satisfied:\n\n- $ b_1 \\ne c_1 $ and $ b_2 = c_2 $ and $ b_3 = c_3 $ ;\n- $ b_1 = c_1 $ and $ b_2 \\ne c_2 $ and $ b_3 = c_3 $ ;\n- $ b_1 = c_1 $ and $ b_2 = c_2 $ and $ b_3 \\ne c_3 $ .\n\nFind the number of beautiful pairs of triples among the written triples $ [a_j, a_{j + 1}, a_{j + 2}] $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 3 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the array $ a $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^6 $ ) — the elements of the array.\n\nIt is guaranteed that the sum of the values of $ n $ for all test cases in the test does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of beautiful pairs of triples among the pairs of the form $ [a_j, a_{j + 1}, a_{j + 2}] $ .\n\nNote that the answer may not fit into 32-bit data types.\n\nExamples\nSample 1\nInput\n8\n5\n3 2 2 2 3\n5\n1 2 1 2 1\n8\n1 2 3 2 2 3 4 2\n4\n2 1 1 1\n8\n2 1 1 2 1 1 1 1\n7\n2 1 1 1 1 1 1\n6\n2 1 1 1 1 1\n5\n2 1 1 1 1\nOutput\n2\n0\n3\n1\n8\n4\n3\n2\n\nNote\nIn the first example, $ a = [3, 2, 2, 2, 3] $ , Polycarp will write the following triples:\n\n1. $ [3, 2, 2] $ ;\n2. $ [2, 2, 2] $ ;\n3. $ [2, 2, 3] $ .\n\nThe beautiful pairs are triple $ 1 $ with triple $ 2 $ and triple $ 2 $ with triple $ 3 $ .In the third example, $ a = [1, 2, 3, 2, 2, 3, 4, 2] $ , Polycarp will write the following triples:\n\n1. $ [1, 2, 3] $ ;\n2. $ [2, 3, 2] $ ;\n3. $ [3, 2, 2] $ ;\n4. $ [2, 2, 3] $ ;\n5. $ [2, 3, 4] $ ;\n6. $ [3, 4, 2] $ ;\n\nThe beautiful pairs are triple $ 1 $ with triple $ 4 $ , triple $ 2 $ with triple $ 5 $ , and triple $ 3 $ with triple $ 6 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1974C - Beautiful Triple Pairs\nTo consider each pair only once, we will go from left to right and while adding a new triplet, we will add to the answer the number of already added triplets that form a beautiful pair with the current one.\nWe will maintain a\nmap\nwith triplets, to denote a triplet with an error, we will place $$$0$$$ (or any other value that cannot occur in the array $$$a$$$) in place of the error.\nThus, for each triplet $$$b$$$, the already found triplets $$$(0, b_2, b_3)$$$, $$$(b_1, 0, b_3)$$$, $$$(b_1, b_2, 0)$$$ will be good. In each case, triplets equal to $$$b$$$ will also be included, so they need to be subtracted from each of the three cases."
+        },
+        {
+            "title": "Solution",
+            "content": "def\nsolve\n():\nn\n=\nint\n(\ninput\n())\na\n=\n[\nint\n(\nx\n)\nfor\nx\nin\ninput\n().\nsplit\n()]\ncnt\n=\ndict\n()\nans\n=\n0\nfor\ni\nin\nrange\n(\nn\n-\n2\n):\ntriplet\n=\n(\na\n[\ni\n],\na\n[\ni\n+\n1\n],\na\n[\ni\n+\n2\n])\nmist\n=\n[\n0\n]\n*\n3\nmist\n[\n0\n]\n=\n(\n0\n,\na\n[\ni\n+\n1\n],\na\n[\ni\n+\n2\n])\nmist\n[\n1\n]\n=\n(\na\n[\ni\n],\n0\n,\na\n[\ni\n+\n2\n])\nmist\n[\n2\n]\n=\n(\na\n[\ni\n],\na\n[\ni\n+\n1\n],\n0\n)\nfor\ntrip\nin\nmist\n:\nans\n+=\ncnt\n.\nget\n(\ntrip\n,\n0\n)\n-\ncnt\n.\nget\n(\ntriplet\n,\n0\n)\ncnt\n[\ntrip\n]\n=\ncnt\n.\nget\n(\ntrip\n,\n0\n)\n+\n1\ncnt\n[\ntriplet\n]\n=\ncnt\n.\nget\n(\ntriplet\n,\n0\n)\n+\n1\nprint\n(\nans\n)\nfor\ni\nin\nrange\n(\nint\n(\ninput\n())):\nsolve\n()"
+        }
+    ]
+}

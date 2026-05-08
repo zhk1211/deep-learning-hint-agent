@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have $ n $ rectangles, the $ i $ -th of which has a width of $ a_i $ and a height of $ b_i $ .\n\nYou can perform the following operation an unlimited number of times: choose a rectangle and a cell in it, and then color it.\n\nEach time you completely color any row or column, you earn $ 1 $ point. Your task is to score at least $ k $ points with as few operations as possible.\n\nSuppose you have a rectangle with a width of $ 6 $ and a height of $ 3 $ . You can score $ 4 $ points by coloring all the cells in any $ 4 $ columns, thus performing $ 12 $ operations.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases. The following are the descriptions of the test cases.\n\nThe first line of each test case description contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 1000, 1 \\le k \\le 100 $ ) — the number of rectangles in the case and the required number of points.\n\nThe next $ n $ lines contain the descriptions of the rectangles. The $ i $ -th line contains two integers $ a_i $ and $ b_i $ ( $ 1 \\le a_i, b_i \\le 100 $ ) — the width and height of the $ i $ -th rectangle.\n\nIt is guaranteed that the sum of the values of $ n $ across all test cases does not exceed $ 1000 $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum number of operations required to score at least $ k $ points. If it is impossible to score at least $ k $ points, output -1.\n\nExamples\nSample 1\nInput\n7\n1 4\n6 3\n1 5\n4 4\n5 10\n1 1\n1 1\n1 1\n1 1\n1 1\n2 100\n1 2\n5 6\n3 11\n2 2\n3 3\n4 4\n3 25\n9 2\n4 3\n8 10\n4 18\n5 4\n8 5\n8 3\n6 2\nOutput\n12\n14\n5\n-1\n17\n80\n35"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2000F - Color Rows and Columns\nWe will use the idea from the knapsack problem: let $$$dp[i][j]$$$ be the minimum number of operations required to achieve $$$j$$$ points using the first $$$i$$$ rectangles.\nTo calculate the next value, we will iterate over the number of points scored in the $$$i$$$-th rectangle. To count the number of operations, we note that it is always better to paint the outer row of the smaller side of the unpainted part of the rectangle (which may change after painting the row)."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\n#include\n<algorithm>\n#include\n<vector>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\na\n(\nn\n),\nb\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n]\n>>\nb\n[\ni\n];\n}\nvector\n<\nvector\n<int>\n>\ndp\n(\nn\n+\n1\n,\nvector\n<int>\n(\nk\n+\n1\n,\n1e9\n));\ndp\n[\n0\n][\n0\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nint\nx\n=\na\n[\ni\n],\ny\n=\nb\n[\ni\n];\nint\nxy\n=\nx\n+\ny\n;\nint\ncost\n=\n0\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\nxy\n;\n++\nj\n)\n{\nfor\n(\nint\nj1\n=\n0\n;\nj1\n+\nj\n<=\nk\n;\n++\nj1\n)\n{\ndp\n[\ni\n+\n1\n][\nj1\n+\nj\n]\n=\nmin\n(\ndp\n[\ni\n+\n1\n][\nj1\n+\nj\n],\ndp\n[\ni\n][\nj1\n]\n+\ncost\n);\n}\nif\n(\nj\n<\nxy\n)\n{\nif\n(\nx\n>=\ny\n)\n{\nx\n--,\ncost\n+=\ny\n;\n}\nelse\n{\ny\n--,\ncost\n+=\nx\n;\n}\n}\n}\n}\ncout\n<<\n(\ndp\n[\nn\n][\nk\n]\n==\n1e9\n?\n-\n1\n:\ndp\n[\nn\n][\nk\n])\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\n++\ni\n)\n{\nsolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

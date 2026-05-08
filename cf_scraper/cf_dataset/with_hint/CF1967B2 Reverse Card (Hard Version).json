@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe two versions are different problems. You may want to read both versions. You can make hacks only if both versions are solved.\n\nYou are given two positive integers $ n $ , $ m $ .\n\nCalculate the number of ordered pairs $ (a, b) $ satisfying the following conditions:\n\n- $ 1\\le a\\le n $ , $ 1\\le b\\le m $ ;\n- $ b \\cdot \\gcd(a,b) $ is a multiple of $ a+b $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1\\le t\\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ , $ m $ ( $ 1\\le n,m\\le 2 \\cdot 10^6 $ ).\n\nIt is guaranteed that neither the sum of $ n $ nor the sum of $ m $ over all test cases exceeds $ 2 \\cdot 10^6 $ .\n\nOutput Format\nFor each test case, print a single integer: the number of valid pairs.\n\nExamples\nSample 1\nInput\n6\n1 1\n2 3\n3 5\n10 8\n100 1233\n1000000 1145141\nOutput\n0\n1\n1\n6\n423\n5933961\n\nNote\nIn the first test case, no pair satisfies the conditions.\n\nIn the fourth test case, $ (2,2),(3,6),(4,4),(6,3),(6,6),(8,8) $ satisfy the conditions."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Denote $$$\\gcd(a,b)$$$ as $$$d$$$. Assume that $$$a=pd$$$ and $$$b=qd$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "$$$\\gcd(p,q)=1$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "How large could $$$p$$$ and $$$q$$$ be?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1967B2 - Reverse Card (Hard Version)\nDenote $$$\\gcd(a,b)$$$ as $$$d$$$. Assume that $$$a=pd$$$ and $$$b=qd$$$, then we know that $$$\\gcd(p,q)=1$$$.\n$$$(a+b)\\mid (b\\cdot\\gcd(a,b))\\iff (pd+qd)\\mid (qd^2)\\iff (p+q)\\mid (qd)$$$.\nWe know that $$$\\gcd(p+q,q)=\\gcd(p,q)=1$$$, so $$$(p+q)\\mid d$$$.\nWe also know that $$$p\\ge 1,q\\ge 1$$$, so $$$p  \\lt  d=\\frac{a}{p}\\le \\frac{n}{p}$$$ and thus $$$p^2  \\lt  n$$$. Similarly, we can prove $$$q^2  \\lt  m$$$.\nSo the number of $$$(p,q)$$$ is $$$\\mathcal O(\\sqrt{nm})=\\mathcal O(n+m)$$$. We can enumerate each $$$(p,q)$$$ such that $$$\\gcd(p,q)=1$$$ and calculate the answer. $$$(p+q)\\mid d$$$ is required, so we add $$$\\left\\lfloor\\frac{\\min\\{\\lfloor\\frac{n}{p}\\rfloor,\\lfloor\\frac{m}{q}\\rfloor\\}}{p+q}\\right\\rfloor$$$.\nTime Complexity: $$$\\mathcal O(\\sum n + \\sum m)$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nnl\n\"\\n\"\n#define\nnf endl\n#define\nll\nlong\nlong\n#define\npb push_back\n#define\n_\n<<\n' '\n<<\n#define\nINF\n(\nll\n)\n1e18\n#define\nmod\n998244353\n#define\nmaxn\n110\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\n#if !ONLINE_JUDGE && !EVAL\nifstream cin\n(\n\"input.txt\"\n);\nofstream cout\n(\n\"output.txt\"\n);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nll n\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nll sq\n=\nsqrt\n(\nn\n)\n+\n2\n,\nsqm\n=\nsqrt\n(\nm\n)+\n2\n;\nvector bad\n(\nsq\n+\n1\n,\nvector\n<bool>\n(\nsqm\n+\n1\n,\n0\n));\nfor\n(\nll i\n=\n2\n;\ni\n<=\nmin\n(\nsq\n,\nsqm\n);\ni\n++)\n{\nfor\n(\nll a\n=\ni\n;\na\n<=\nsq\n;\na\n+=\ni\n)\n{\nfor\n(\nll b\n=\ni\n;\nb\n<=\nsqm\n;\nb\n+=\ni\n)\n{\nbad\n[\na\n][\nb\n]\n=\ntrue\n;\n}\n}\n}\nll ans\n=\n0\n;\nfor\n(\nll a\n=\n1\n;\na\n*\na\n<=\nn\n;\na\n++)\n{\nfor\n(\nll b\n=\n1\n;\nb\n*\nb\n<=\nm\n;\nb\n++)\n{\nif\n(\nbad\n[\na\n][\nb\n])\ncontinue\n;\nans\n+=\nmin\n(\nn\n/(\na\n+\nb\n)/\na\n,\nm\n/(\na\n+\nb\n)/\nb\n);\n}\n}\ncout\n<<\nans\n<<\nnl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

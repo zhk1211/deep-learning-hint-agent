@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the hard version of the problem. The only difference between the two versions is the constraint on $ n $ and $ q $ , the memory and time limits. You can make hacks only if all versions of the problem are solved.\n\nTheofanis really likes to play with the bits of numbers. He has an array $ a $ of size $ n $ and an integer $ k $ . He can make at most $ k $ operations in the array. In each operation, he picks a single element and increases it by $ 1 $ .\n\nHe found the maximum [bitwise AND](https://en.wikipedia.org/wiki/Bitwise_operation#AND) that array $ a $ can have after at most $ k $ operations.\n\nTheofanis has put a lot of work into finding this value and was very happy with his result. Unfortunately, Adaś, being the evil person that he is, decided to bully him by repeatedly changing the value of $ k $ .\n\nHelp Theofanis by calculating the maximum possible [bitwise AND](https://en.wikipedia.org/wiki/Bitwise_operation#AND) for $ q $ different values of $ k $ . Note that queries are independent.\n\nInput Format\nThe first line contains two integers $ n $ and $ q $ ( $ 1 \\le n, q \\le 10^6 $ ) — the size of the array and the number of queries.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le 10^6 $ ) — the elements of the array.\n\nNext $ q $ lines describe the queries. The $ i $ -th line contains one integer $ k_i $ ( $ 0 \\le k_i \\le 10^{18} $ ) — the number of operations that can be done in the $ i $ -th query.\n\nOutput Format\nFor each query, print one integer — the maximum bitwise AND that array $ a $ can have after at most $ k_i $ operations.\n\nExamples\nSample 1\nInput\n4 2\n1 3 7 5\n2\n10\nOutput\n2\n6\n\nSample 2\nInput\n3 5\n4 0 2\n9\n8\n17\n1\n3\nOutput\n5\n4\n7\n0\n1\n\nSample 3\nInput\n1 2\n10\n5\n2318381298321\nOutput\n15\n2318381298331\n\nNote\nIn the first test case, in the first query, we add $ 1 $ in the first and last elements of the array.\n\nThus, the array becomes $ [2,3,7,6] $ with bitwise AND equal to $ 2 $ .\n\nIn the second test case, in the first query, we add $ 1 $ in the first element, $ 5 $ in the second, and $ 3 $ in the third and now all the elements are equal to $ 5 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Try optimizing the greedy approach from $$$O$$$($$$n$$$) to $$$O$$$($$$1$$$)."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "1903D2 - Maximum And Queries (hard version)\nLet $$$S = \\sum (2^{20} - a_i)$$$. If $$$k \\ge S$$$ then the answer is $$$2^{20} + \\lfloor \\frac{k-S}{n} \\rfloor$$$.\nSimilarly to D1 let's construct the answer bit by bit. Let $$$x$$$ be the current answer and $$$b$$$ be the bit we want to add.\nLet's look at the amount of operations we need to do on the $$$i$$$-th element to change our answer from $$$x$$$ to $$$x+2^b$$$.\nif $$$x$$$ is not a submask of $$$a_i$$$, then after constructing answer $$$x$$$ it has $$$0$$$s on all bits not greater than $$$b$$$. In this case we need to increase the $$$i$$$-th element by $$$2^b$$$.\nif $$$x+2^b$$$ is a submask of $$$a_i$$$, then we do not need to increase the $$$i$$$-th element.\notherwise we need to increase the $$$i$$$-th element by $$$2^b - a_i$$$ $$$mod$$$ $$$2^b$$$.\nWe can handle all three cases efficiently if we precompute the following two arrays:\n$$$A(mask)$$$ – how many elements from the array is $$$mask$$$ a submask of.\n$$$B(mask, b)$$$ – sum of $$$a_i$$$ $$$mod$$$ $$$2^b$$$ over all $$$a_i$$$ for which $$$x$$$ is a submask.\nBoth arrays can be calculated efficiently using SOS dp.\nThis allows us to answer the queries in $$$O$$$($$$q \\times log$$$ $$$a$$$) with $$$O$$$($$$a$$$ $$$log^2$$$ $$$a$$$) preprocessing"
+        }
+    ]
+}

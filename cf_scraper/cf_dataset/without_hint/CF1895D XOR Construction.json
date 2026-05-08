@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given $ n-1 $ integers $ a_1, a_2, \\dots, a_{n-1} $ .\n\nYour task is to construct an array $ b_1, b_2, \\dots, b_n $ such that:\n\n- every integer from $ 0 $ to $ n-1 $ appears in $ b $ exactly once;\n- for every $ i $ from $ 1 $ to $ n-1 $ , $ b_i \\oplus b_{i+1} = a_i $ (where $ \\oplus $ denotes the bitwise XOR operator).\n\nInput Format\nThe first line contains one integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line contains $ n-1 $ integers $ a_1, a_2, \\dots, a_{n-1} $ ( $ 0 \\le a_i \\le 2n $ ).\n\nAdditional constraint on the input: it's always possible to construct at least one valid array $ b $ from the given sequence $ a $ .\n\nOutput Format\nPrint $ n $ integers $ b_1, b_2, \\dots, b_n $ . If there are multiple such arrays, you may print any of them.\n\nExamples\nSample 1\nInput\n4\n2 1 2\nOutput\n0 2 3 1\n\nSample 2\nInput\n6\n1 6 1 4 1\nOutput\n2 3 5 4 0 1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1895D - XOR Construction\nWe can see that the first element of the array $$$b$$$ determines all other values, $$$b_{i + 1} = b_1 \\oplus a_1 \\cdots \\oplus a_i$$$.\nSo let's iterate over the value of $$$b_1$$$. For every value of $$$b_1$$$, we need to check whether it produces correct permutation or not (i. e. all $$$b_i  \\lt  n$$$). To do it in a fast way, we can generate an array $$$c$$$, where $$$c_i$$$ is the XOR of the first $$$i$$$ element of the array $$$a$$$ (i.e. $$$c_i = a_1 \\oplus a_2 \\oplus \\cdots \\oplus a_i$$$ and $$$c_0 = 0$$$). We can see that $$$b_{i + 1} = b_1 \\oplus c_i$$$. Let's store all values of $$$c_i$$$ in a binary trie. To check that $$$b_1$$$ produces an array where all elements are less than $$$n$$$, we can calculate the maximum value of $$$b_1 \\oplus c_i$$$ using descending on the trie. If the maximum is less than $$$n$$$, then it's a valid first element of the permutation.\nNote that we don't actually need to check that the minimum is exactly $$$0$$$ and all elements are distinct: we are guaranteed that the answer exists, so all values $$$[0, c_1, c_2, c_3, \\dots, c_{n-1}]$$$ are pairwise distinct, and no matter which $$$b_1$$$ we choose, all $$$b_i$$$ will also be pairwise distinct."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nLOG\n=\n20\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\na\n[\ni\n]\n^=\na\n[\ni\n-\n1\n];\n}\nvector\n<\narray\n<\nint\n,\n2\n>>\nt\n({{-\n1\n,\n-\n1\n}});\nauto\nadd\n=\n[&](\nint\nx\n)\n{\nint\nv\n=\n0\n;\nfor\n(\nint\ni\n=\nLOG\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n)\n{\nint\nj\n=\n(\nx\n>>\ni\n)\n&\n1\n;\nif\n(\nt\n[\nv\n][\nj\n]\n==\n-\n1\n)\n{\nt\n[\nv\n][\nj\n]\n=\nt\n.\nsize\n();\nt\n.\npush_back\n({-\n1\n,\n-\n1\n});\n}\nv\n=\nt\n[\nv\n][\nj\n];\n}\n};\nfor\n(\nint\nx\n:\na\n)\nadd\n(\nx\n);\nauto\nget\n=\n[&](\nint\nx\n)\n{\nint\nv\n=\n0\n;\nfor\n(\nint\ni\n=\nLOG\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n)\n{\nint\nj\n=\n(\nx\n>>\ni\n)\n&\n1\n;\nif\n(\nt\n[\nv\n][\nj\n^\n1\n]\n!=\n-\n1\n)\nj\n^=\n1\n;\nx\n^=\nj\n<<\ni\n;\nv\n=\nt\n[\nv\n][\nj\n];\n}\nreturn\nx\n;\n};\nfor\n(\nint\nx\n=\n0\n;\nx\n<\nn\n;\n++\nx\n)\n{\nif\n(\nget\n(\nx\n)\n==\nn\n-\n1\n)\n{\nfor\n(\nint\ni\n:\na\n)\ncout\n<<\n(\nx\n^\ni\n)\n<<\n' '\n;\nbreak\n;\n}\n}\n}"
+        }
+    ]
+}

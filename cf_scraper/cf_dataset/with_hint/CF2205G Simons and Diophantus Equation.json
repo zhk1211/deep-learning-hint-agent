@@ -1,0 +1,48 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nI walk alone, into distance, through the fading light, biding my time for the sunset's final light.\n\n— SHUN, [CHAKA](https://open.spotify.com/track/1WL7sDRLAWmMGGJgQMUAGv)\n\nSimons has given you two integers $ n $ and $ m $ .\n\nCount the number of ordered tuples $ (i, j, k) $ , such that:\n\n- $ 0\\le i, j, k\\le m $ , and\n- There exist two integers $ x $ and $ y $ , such that $ (i \\oplus j) \\cdot x + (j \\oplus k) \\cdot y = n $ , where $ \\oplus $ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe only line contains two integers $ n $ and $ m $ ( $ 1\\le n\\le 10^9 $ , $ 1\\le m\\le 3\\cdot 10^5 $ ) — the given integers.\n\nIt is guaranteed that the sum of $ m $ over all test cases does not exceed $ 3\\cdot10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of ordered tuples $ (i,j,k) $ that satisfy the condition.\n\nExamples\nSample 1\nInput\n5\n3 2\n4 6\n1 1\n7 20\n720 2025\nOutput\n18\n254\n6\n5558\n7864357450\n\nNote\nIn the first test case, there are $ 18 $ tuples that satisfy the conditions. For example:\n\n- $ (2,1,2) $ is a valid tuple because the equation $ (2\\oplus 1)\\cdot x+(1\\oplus 2)\\cdot y=3 $ has an integer solution $ x=3 $ , $ y=-2 $ .\n- $ (1,1,0) $ is also a valid tuple because the equation $ (1\\oplus 1)\\cdot x+(1\\oplus 0)\\cdot y=3 $ has an integer solution $ x=100 $ , $ y=3 $ .\n- $ (2,0,2) $ is not a valid tuple because the equation $ (2\\oplus 0)\\cdot x+(0\\oplus 2)\\cdot y=3 $ has no integer solution.\n- $ (1,1,1) $ is not a valid tuple because the equation $ (1\\oplus 1)\\cdot x+(1\\oplus 1)\\cdot y=3 $ has no integer solution.\n- $ (3,2,1) $ is not a valid tuple because $ 3 \\gt 2 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "The equation has an integral solution if and only if $$$\\gcd(i\\oplus j,j\\oplus k)$$$ is a divisor of $$$n$$$. This is a famous theorem, called\nBézout's theorem\n."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Considering enumerating $$$g=\\gcd(i\\oplus j,j\\oplus k)$$$, then we calculate how many tuples $$$(i,j,k)$$$ can exactly get this $$$g$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Consider\nMöbius inversion formula\n. There is a famous equation that $$$[n=1]=\\sum\\limits_{d|n}\\mu (d)$$$, where $$$\\mu$$$ is the\nMöbius function\n.\nApply Möbius' formula, and try to transform the formula we need to calculate until you have to calculate $$$f(T)$$$ for every $$$T$$$ from $$$1$$$ to $$$2m$$$, where $$$f(T)$$$ is the number of tuples $$$(i,j,k)$$$ such that $$$T$$$ is a divisor of both $$$i\\oplus j$$$ and $$$j\\oplus k$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Consider enumerating $$$j$$$, $$$d_1T=i\\oplus j$$$ and $$$d_2T=j\\oplus k$$$. It's easy to see that the number of tuples $$$(j,d_1,d_2)$$$ is equal to the number of tuples $$$(i,j,k)$$$, if we ensure that $$$d_1T\\oplus j \\le m$$$ and $$$d_2T\\oplus j\\le m$$$."
+        },
+        {
+            "title": "Hint 5",
+            "content": "Due to the series sum of\nHarmonic series\n, it can be accepted to enumerate $$$T$$$ and $$$d_1$$$."
+        },
+        {
+            "title": "Hint 6",
+            "content": "Observation: although a pair of $$$T$$$ and $$$d_1$$$ will process a set of $$$j$$$ such that $$$d_1T\\oplus j\\le m$$$, these $$$j$$$ will be distributed in $$$\\mathcal O(\\log m)$$$ intervals.\nYou can prove the observation by considering the bitmask of $$$m$$$ and $$$d_1T$$$."
+        },
+        {
+            "title": "Hint 7",
+            "content": "The sum of the number of intervals will be $$$\\mathcal O(m\\ln m\\log m)$$$. How about applying a data structure to record the intervals?\nAfter recording, we can enumerate $$$d_2$$$ in the same complexity. It's easy to see we need to find the intersection of some intervals (the number of $$$j$$$ that satisfy both conditions simultaneously). We will make queries on our data structure to complete it."
+        },
+        {
+            "title": "Hint 8",
+            "content": "Trie\nis a suitable data structure. If you are sensitive to some observations,\nFenwick Tree\nalso works."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "We will ignore a few corner cases, such as $$$i=j$$$ or $$$j=k$$$, and other corner cases involving $$$0$$$. The contributions of those cases are relatively simple or classical, so we omit them here; Consequently, some summation bounds below are not written with full formal tightness.\nWe actually want to compute\n$$$ \\sum\\limits_{i=0}^m\\sum\\limits_{j=0}^m\\sum\\limits_{k=0}^m[\\gcd(i\\oplus j,j\\oplus k)|n] $$$\nAs usual, enumerate the value of the $$$\\gcd$$$. Thus\n$$$ \\begin{aligned} =&\\sum\\limits_{d|n} \\sum\\limits_{i=0}^m\\sum\\limits_{j=0}^m\\sum\\limits_{k=0}^m[\\gcd(i\\oplus j,j\\oplus k)=d]\\\\ =&\\sum\\limits_{d|n}\\sum\\limits_{p=i\\oplus j}\\sum\\limits_{q=j\\oplus k}[\\gcd(p,q)=d]c(p,q) \\end{aligned} $$$\nwhere $$$p=i\\oplus j$$$, $$$q=j\\oplus k$$$, and $$$c(p,q)$$$ is the number of tuples $$$(i,j,k)$$$ with those values of $$$p$$$ and $$$q$$$.\nApply Möbius inversion to the condition $$$\\gcd(p,q)=d$$$:\n$$$ \\begin{aligned} =&\\sum\\limits_{d|n} \\sum\\limits_{d|p}\\sum\\limits_{d|q}[\\gcd(\\frac{p}{d},\\frac{q}{d})=1]c(p,q)\\\\ =&\\sum\\limits_{d|n} \\sum\\limits_{d|p}\\sum\\limits_{d|q}\\sum\\limits_{d'|\\frac{p}{d},d'|\\frac{q}{d}}\\mu(d')c(p,q)\\\\ \\end{aligned} $$$\nwhere $$$\\mu$$$ is the Möbius function.\nWe now change the summation order and pull $$$d'$$$ outward.\n$$$ \\begin{aligned} =&\\sum\\limits_{d|n}\\sum\\limits_{d'}^{\\frac{2m}{d}}\\mu(d')\\sum\\limits_{p}\\sum\\limits_{q}[dd'|p\\land dd'|q]c(p,q)\\\\ \\end{aligned} $$$\nWriting $$$T=dd'$$$ we obtain\n$$$ \\begin{aligned} =&\\sum\\limits_{T=1}^{2m}\\sum\\limits_{d|\\gcd(n,T)}\\mu(\\frac{T}{d})\\sum\\limits_{p}\\sum\\limits_{q}[T|p\\land T|q]c(p,q)\\\\ \\end{aligned} $$$\nThe outer sum over $$$T$$$ runs up to $$$2m$$$ because $$$p,q\\in[0,2m]$$$.\nThe inner quantity depends on $$$T$$$ only. Let $$$f(T)$$$ be the number of tuples $$$(i,j,k)$$$ such that $$$T$$$ is a divisor of both $$$i\\oplus j$$$ and $$$j\\oplus k$$$.\nThen the entire sum becomes\n$$$ \\begin{aligned} =&\\sum\\limits_{T=1}^{2m}\\sum\\limits_{d|\\gcd(n,T)}\\mu(\\frac{T}{d})f(T)\\\\ \\end{aligned} $$$\nDue to the series sum of the Harmonic series, we can enumerate $$$T$$$ and $$$d$$$ in $$$\\mathcal O(m\\ln m)$$$. Hence, the main task is to compute $$$f(T)$$$ efficiently for all $$$T$$$.\nFix $$$T$$$. We enumerate $$$j$$$ and count the number of pairs $$$(i,k)$$$ such that $$$i\\oplus j$$$ and $$$j\\oplus k$$$ are multiples of $$$T$$$.\nEquivalently, we count the number of pairs $$$(d_1,d_2)$$$ under the enumerated $$$j$$$ such that\n$$$ i\\oplus j=d_1T, j\\oplus k=d_2T $$$\nwith the additional constraints $$$d_1T\\oplus j\\le m$$$ and $$$d_2T\\oplus j\\le m$$$ (because $$$(i,k)$$$ must lie in $$$[0,m]$$$).\nEquivalently, if we can enumerate $$$d_1,d_2$$$ to get $$$d_1T$$$ and $$$d_2T$$$, we only need to find the number of $$$j$$$ that satisfy both constraints. If we enumerate $$$d_1$$$ to find the set of $$$j$$$ and record it, we can enumerate $$$d_2$$$ similarly, and what we need to calculate is the size of the intersection of the two sets.\nConsider enumerating $$$d_1$$$ to get $$$d_1T$$$, due to bitmask theory, the $$$j$$$ such that $$$d_1T\\oplus j\\le m$$$ will be distributed in $$$\\mathcal O(\\log m)$$$ intervals.\nBy using Segment Tree or Fenwick Tree naively, we will solve the problem in $$$\\mathcal O(m\\ln m\\log^2 m)$$$, which is too slow to get accepted in the problem.\nBy\nLiHn\n's observation, actually, we can apply a Trie instead of a Segment Tree to record the intervals, because each interval can be formed by a subtree in the Trie. This will allow us to avoid incurring a logarithmic cost to find intervals in data structures every time.\nBy\nLeftist_G\n's observation, there are only two types of intervals, but one type of intervals has $$$\\mathcal O(\\log)$$$, and another has $$$\\mathcal O(1)$$$. We can avoid using Segment Tree or Fenwick Tree in the former.\nBy\nliuhangxin\n's observation, we can avoid using any data structure. We can naively save the intervals, sort them, and then apply two pointers to calculate the intersection. Note that if we implement the method naively, the complexity will turn to $$$\\mathcal O(m\\ln m\\log m\\log\\log m)$$$ (although it may be enough to get Accepted). He used a designed order and implmented carefully to ensure his complexity.\nAll solutions above can solve the problem in $$$\\mathcal O(m\\ln m\\log m)$$$.\nNote that some not-so-good solutions may apply\n__int128\nto avoid integer overflow. Don't forget to deal with corner cases."
+        }
+    ]
+}

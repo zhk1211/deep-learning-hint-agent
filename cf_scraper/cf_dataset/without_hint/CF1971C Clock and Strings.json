@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a clock labeled with the numbers $ 1 $ through $ 12 $ in clockwise order, as shown below.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1971C/dc1b9b8cdcc08927ff93e17ee0e104c325e2c451.png)In this example, $ (a,b,c,d)=(2,9,10,6) $ , and the strings intersect.\n\nAlice and Bob have four distinct integers $ a $ , $ b $ , $ c $ , $ d $ not more than $ 12 $ . Alice ties a red string connecting $ a $ and $ b $ , and Bob ties a blue string connecting $ c $ and $ d $ . Do the strings intersect? (The strings are straight line segments.)\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 5940 $ ) — the number of test cases.\n\nThe only line of each test case contains four distinct integers $ a $ , $ b $ , $ c $ , $ d $ ( $ 1 \\leq a, b, c, d \\leq 12 $ ).\n\nOutput Format\nFor each test case, output \"YES\" (without quotes) if the strings intersect, and \"NO\" (without quotes) otherwise.\n\nYou can output \"YES\" and \"NO\" in any case (for example, strings \"yEs\", \"yes\", and \"Yes\" will be recognized as a positive response).\n\nExamples\nSample 1\nInput\n15\n2 9 10 6\n3 8 9 1\n1 2 3 4\n5 3 4 12\n1 8 2 10\n3 12 11 8\n9 10 12 1\n12 1 10 2\n3 12 6 9\n1 9 8 4\n6 7 9 12\n7 12 9 6\n10 12 11 1\n3 9 6 12\n1 4 3 5\nOutput\nYES\nNO\nNO\nYES\nYES\nNO\nNO\nNO\nNO\nNO\nNO\nYES\nYES\nYES\nYES\n\nNote\nThe first test case is pictured in the statement.\n\nIn the second test case, the strings do not intersect, as shown below.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1971C/23548bb954ac5431bdc4259b9b8d572eb5d94e6e.png)"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1971C - Clock and Strings\nThere are many ways to implement the solution, but many involve a lot of casework. Below is the shortest solution we know of.\nWalk around the clock in the order $$$1$$$, $$$2$$$, $$$\\dots$$$, $$$12$$$. If we pass by two red strings or two blue strings in a row, the strings don't intersect; otherwise, they do.\nThis is because if we don't have two red or blue in a row, then the red and blue strings alternate, so there must be an intersection."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200\n'007;\nconst int MOD = 1'\n000\n'000'\n007\n;\nvoid\nsolve\n()\n{\nint\na\n,\nb\n,\nc\n,\nd\n;\ncin\n>>\na\n>>\nb\n>>\nc\n>>\nd\n;\nstring\ns\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\n12\n;\ni\n++)\n{\nif\n(\ni\n==\na\n||\ni\n==\nb\n)\n{\ns\n+=\n\"a\"\n;}\nif\n(\ni\n==\nc\n||\ni\n==\nd\n)\n{\ns\n+=\n\"b\"\n;}\n}\ncout\n<<\n(\ns\n==\n\"abab\"\n||\ns\n==\n\"baba\"\n?\n\"YES\\n\"\n:\n\"NO\\n\"\n);\n}\nint\nmain\n()\n{\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

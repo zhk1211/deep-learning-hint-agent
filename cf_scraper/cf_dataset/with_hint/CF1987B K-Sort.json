@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array of integers $ a $ of length $ n $ .\n\nYou can apply the following operation any number of times (maybe, zero):\n\n- First, choose an integer $ k $ such that $ 1 \\le k \\le n $ and pay $ k + 1 $ coins.\n- Then, choose exactly $ k $ indices such that $ 1 \\le i_1 < i_2 < \\ldots < i_k \\le n $ .\n- Then, for each $ x $ from $ 1 $ to $ k $ , increase $ a_{i_x} $ by $ 1 $ .\n\nFind the minimum number of coins needed to make $ a $ non-decreasing. That is, $ a_1 \\le a_2 \\le \\ldots \\le a_n $ .\n\nInput Format\nEach test contains multiple test cases. The first line of input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^5 $ ) — the length of the array $ a $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the elements of the array $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum number of coins needed to make $ a $ non-decreasing.\n\nExamples\nSample 1\nInput\n5\n3\n1 7 9\n5\n2 1 4 7 6\n4\n1 3 2 4\n1\n179\n9\n344 12 37 60 311 613 365 328 675\nOutput\n0\n3\n2\n0\n1821\n\nNote\nIn the first test case, $ a $ is already sorted, so you don't have to spend any coins.\n\nIn the second test case, the optimal sequence of operations is:\n\n- Choose $ k = 2 $ and the indices $ 2 $ and $ 5 $ : $ [ 2, \\color{red}{1}, 4, 7, \\color{red}{6} ] \\rightarrow [2, 2, 4, 7, 7] $ . This costs $ 3 $ coins.\n\nIt can be proven that it is not possible to make $ a $ non-decreasing by spending less than $ 3 $ coins."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nTry solving the problem if instead of paying $$$k + 1$$$ coins, you pay $$$k$$$ coins.\nHint 2\nWhat if you pay only $$$1$$$ coin per operation?\nHint 3\nCan you add the answers to the $$$k$$$ coins per operation problem and $$$1$$$ coin per operation problem to get the answer?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "Try solving the problem if instead of paying $$$k + 1$$$ coins, you pay $$$k$$$ coins."
+        },
+        {
+            "title": "Hint 2",
+            "content": "What if you pay only $$$1$$$ coin per operation?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Can you add the answers to the $$$k$$$ coins per operation problem and $$$1$$$ coin per operation problem to get the answer?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\n#define\nallr\n(\nx\n)\n(\nx\n).\nrbegin\n(),\n(\nx\n).\nrend\n()\nconst\nchar\nnl\n=\n'\\n'\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\nlong\ndouble\nld\n;\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nll pref_max\n=\n0\n,\ns\n=\n0\n,\nmx\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\npref_max\n=\nmax\n(\npref_max\n,\n(\nll\n)\na\n[\ni\n]);\nll d\n=\npref_max\n-\na\n[\ni\n];\ns\n+=\nd\n;\nmx\n=\nmax\n(\nmx\n,\nd\n);\n}\ncout\n<<\ns\n+\nmx\n<<\nnl\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1958E - Yet Another Permutation Constructive\nLet the current size of the array be $$$m$$$. When an operation is applied, at least $$$\\lfloor \\frac{m}{2} \\rfloor$$$ elements will be removed, because if an element is not removed, both of its neighbors will be removed.\nSo, for every value of $$$k$$$, we can calculate the minimum possible size of an array $$$n$$$ (let's call it $$$f_k$$$). For $$$k = 1$$$, $$$f_k = 2$$$; for $$$k  \\gt  1$$$, this value is $$$f_i = 2 \\cdot f_{k-1} - 1$$$. We can actually derive an exact formula $$$f_k = 2^{k-1} + 1$$$, but we don't actually have to, since it can be calculated in $$$O(n)$$$.\nIf $$$n  \\lt  f_k$$$, obviously, there is no solution. Let's show how to construct the answer for $$$n = f_k$$$, and then let's deal with the case $$$n  \\gt  f_k$$$.\nFor $$$k = 1$$$, we can use an array $$$[1, 2]$$$. If we want to go from $$$k$$$ to $$$k+1$$$, we can insert elements which will be removed on the first operation between the existing elements, while increasing the existing elements by the number of elements we added (so that they are actually greater). For example, $$$[1, 2] \\rightarrow [2, 1, 3] \\rightarrow [4, 1, 3, 2, 5]$$$ (every element on even position is a newly inserted element). That's how we can resolve the case $$$n = f_k$$$.\nWhat if $$$n  \\gt  f_k$$$? Construct the answer for $$$n = f_k$$$. Let's say we have $$$m = n - f_k$$$ \"extra\" elements. Let's insert them in such a way that they will all be deleted during the first operation, and will not affect the existing elements. For example, we can increase every existing element by $$$m$$$, and then add $$$1, 2, 3, \\dots, m$$$ to the beginning of the array, so that they don't affect existing elements, and are all deleted during the first operation.\nYou have to take into account that $$$f_k$$$ might overflow. And you should first check that $$$f_k \\le n$$$, and only then construct the answer, since it takes $$$O(f_k + n)$$$."
+        },
+        {
+            "title": "Solution (PavelKunyavskiy)",
+            "content": "private\nfun solve\n():\nString\n{\nval\n(\nn\n,\nk\n)\n=\nreadInts\n()\nvar\nans\n=\nlistOf\n(\nn\n-\n1\n,\nn\n)\nrepeat\n(\nk\n-\n1\n)\n{\nval min\n=\nans\n.\nmin\n()\nval prevStart\n=\nmin\n-\nans\n.\nsize\n+\n1\nif\n(\nprevStart\n<=\n0\n)\n{\nreturn\n\"-1\"\n}\nans\n=\nans\n.\nzip\n(\nprevStart\n..\nmin\n).\nflatMap\n{\n(\na\n,\nb\n)\n->\nlistOf\n(\na\n,\nb\n)\n}.\ndropLast\n(\n1\n)\n}\nans\n=\n(\n1\nuntil\nans\n.\nmin\n())\n+\nans\nreturn\nans\n.\njoinToString\n(\n\" \"\n)\n}\nfun main\n()\n{\nrepeat\n(\nreadInt\n())\n{\nprintln\n(\nsolve\n())\n}\n}\nprivate\nfun readInt\n()\n=\nreadln\n().\ntoInt\n()\nprivate\nfun readLongs\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoLong\n()\n}\nprivate\nfun readStrings\n()\n=\nreadln\n().\nsplit\n(\n\" \"\n)\nprivate\nfun readInts\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoInt\n()\n}"
+        }
+    ]
+}

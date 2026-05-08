@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two integers $ a $ and $ b $ ( $ a \\leq b $ ). Over all possible integer values of $ c $ ( $ a \\leq c \\leq b $ ), find the minimum value of $ (c - a) + (b - c) $ .\n\nInput Format\nThe first line contains $ t $ ( $ 1 \\leq t \\leq 55 $ ) — the number of test cases.\n\nEach test case contains two integers $ a $ and $ b $ ( $ 1 \\leq a \\leq b \\leq 10 $ ).\n\nOutput Format\nFor each test case, output the minimum possible value of $ (c - a) + (b - c) $ on a new line.\n\nExamples\nSample 1\nInput\n3\n1 2\n3 10\n5 5\nOutput\n1\n7\n0\n\nNote\nIn the first test case, you can choose $ c = 1 $ and obtain an answer of $ (1 - 1) + (2 - 1) = 1 $ . It can be shown this is the minimum value possible.\n\nIn the second test case, you can choose $ c = 6 $ and obtain an answer of $ (6 - 3) + (10 - 6) = 7 $ . It can be shown this is the minimum value possible."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "We choose $$$c$$$ between $$$a$$$ and $$$b$$$ $$$(a \\leq c \\leq b)$$$. The distance is $$$(c - a) + (b - c) = b - a$$$. Note that the distance does not depend on the the position $$$c$$$ at all."
+        }
+    ]
+}

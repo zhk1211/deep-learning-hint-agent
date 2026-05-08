@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nOh no, the ForceCodes servers are running out of memory! Luckily, you can help them out by uploading some of your RAM!\n\nYou want to upload $ n $ GBs of RAM. Every second, you will upload either $ 0 $ or $ 1 $ GB of RAM. However, there is a restriction on your network speed: in any $ k $ consecutive seconds, you can upload only at most $ 1 $ GB of RAM in total.\n\nFind the minimum number of seconds needed to upload $ n $ GBs of RAM!\n\nInput Format\nEach test contains multiple test cases. The first line of input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first and only line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le n, k \\le 100 $ ) — the number of GBs that you want to upload and the length of the time window respectively.\n\nOutput Format\nFor each test case, output a single integer — the minimum number of seconds needed to upload $ n $ GBs of RAM.\n\nExamples\nSample 1\nInput\n6\n5 1\n2 2\n2 3\n1 7\n11 5\n100 100\nOutput\n5\n3\n4\n1\n51\n9901\n\nNote\nIn the first test case, you can upload $ 1 $ GB of RAM per second, so to upload $ 5 $ GBs, you need $ 5 $ seconds.\n\nIn the second test case, you can upload $ 1 $ GB in the first second, $ 0 $ GBs in the second second, and $ 1 $ GB in the third second, which in total adds up to exactly $ 2 $ GBs of uploaded RAM.\n\nIn the third test case, you can upload $ 1 $ GB in the first second, $ 0 $ GBs in the second second, $ 0 $ GBs in the third second, and $ 1 $ GB in the fourth second, which in total adds up to exactly $ 2 $ GBs of uploaded RAM."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nYour strategy is to upload more RAM as soon as you can upload.\nHint 2\nYou will upload on the seconds $$$1, k + 1, 2k + 1, 3k + 1 \\ldots$$$."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Your strategy is to upload more RAM as soon as you can upload."
+        },
+        {
+            "title": "Hint 2",
+            "content": "You will upload on the seconds $$$1, k + 1, 2k + 1, 3k + 1 \\ldots$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\n#define\nallr\n(\nx\n)\n(\nx\n).\nrbegin\n(),\n(\nx\n).\nrend\n()\nconst\nchar\nnl\n=\n'\\n'\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\nlong\ndouble\nld\n;\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\ncout\n<<\n1\n+\n(\nn\n-\n1\n)\n*\nk\n<<\nnl\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

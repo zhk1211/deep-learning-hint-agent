@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven an integer $ r $ , find the number of lattice points that have a Euclidean distance from $ (0, 0) $ greater than or equal to $ r $ but strictly less than $ r+1 $ .\n\nA lattice point is a point with integer coordinates. The Euclidean distance from $ (0, 0) $ to the point $ (x,y) $ is $ \\sqrt{x^2 + y^2} $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases.\n\nThe only line of each test case contains a single integer $ r $ ( $ 1 \\leq r \\leq 10^5 $ ).\n\nThe sum of $ r $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of lattice points that have an Euclidean distance $ d $ from $ (0, 0) $ such that $ r \\leq d < r+1 $ .\n\nExamples\nSample 1\nInput\n6\n1\n2\n3\n4\n5\n1984\nOutput\n8\n16\n20\n24\n40\n12504\n\nNote\nThe points for the first three test cases are shown below.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1971F/aff456cddb623f0decb8386de3943888d72800f7.png)"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1971F - Circle Perimeter\nThere are many solutions to this problem, some of which involve binary search, but we will present a solution that doesn't use it. In fact, our solution is basically just brute force, but with some small observations that make it pass. See the implementation for more detail.\nFirst, we can only count points $$$(x,y)$$$ such that $$$x \\geq 0$$$ and $$$y  \\gt  0$$$; we can multiply by $$$4$$$ at the end to get points in all four quadrants, by symmetry.\nLet's store a variable $$$\\mathrm{height}$$$ initially equal to $$$r$$$. It will tell us the maximum $$$y$$$-value to look at.\nIterate through all values of $$$x$$$ from $$$0$$$ to $$$r$$$. For each $$$x$$$, decrease $$$\\mathrm{height}$$$ until the distance of $$$(x,\\mathrm{height})$$$ to the origin is $$$ \\lt  r+1$$$. Then, brute force all values of $$$y$$$ from $$$\\mathrm{height}$$$ downwards until we hit a point whose distance to the origin is $$$ \\lt  r$$$; at this point, we break and add the number of valid points to our total.\nNote that we essentially only look at points whose distance to the origin is between $$$r$$$ and $$$r+1$$$; that is, we brute force over all valid points.\nHow many valid points are there? Well, we can roughly estimate the number of points as the area of the region, which is $$$\\pi(r^2 - (r-1)^2) = 2\\pi r - \\pi$$$. This means we only visit $$$\\mathcal{O}(r)$$$ points per test case, which is fast enough."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nlong\nlong\nr\n;\ncin\n>>\nr\n;\nlong\nlong\nheight\n=\nr\n;\nlong\nlong\nans\n=\n0\n;\nfor\n(\nlong\nlong\ni\n=\n0\n;\ni\n<=\nr\n;\ni\n++)\n{\nwhile\n(\ni\n*\ni\n+\nheight\n*\nheight\n>=\n(\nr\n+\n1\n)*(\nr\n+\n1\n))\n{\nheight\n--;\n}\nlong\nlong\ncop\n=\nheight\n;\nwhile\n(\ni\n*\ni\n+\ncop\n*\ncop\n>=\nr\n*\nr\n&&\ncop\n>\n0\n)\n{\ncop\n--;\nans\n++;\n}\n}\ncout\n<<\nans\n*\n4\n<<\nendl\n;\n}\nint32_t\nmain\n(){\nint\nt\n=\n1\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

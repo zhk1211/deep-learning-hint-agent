@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ coins on the table forming a circle, and each coin is either facing up or facing down. Alice and Bob take turns to play the following game, and Alice goes first.\n\nIn each operation, the player chooses a facing-up coin, removes the coin, and flips the two coins that are adjacent to it. If (before the operation) there are only two coins left, then one will be removed and the other won't be flipped (as it would be flipped twice). If (before the operation) there is only one coin left, no coins will be flipped. If (before the operation) there are no facing-up coins, the player loses.\n\nDecide who will win the game if they both play optimally. It can be proved that the game will end in a finite number of operations, and one of them will win.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1\\le t\\le 100 $ ). The description of the test cases follows.\n\nThe first line of each test case contains only one positive integer $ n $ ( $ 1 \\leq n \\leq 100 $ ), representing the number of the coins.\n\nA string $ s $ of length $ n $ follows on the second line of each test case, containing only \"U\" and \"D\", representing that each coin is facing up or facing down.\n\nOutput Format\nFor each test case, print \"YES\" if Alice will win the game, and \"NO\" otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n3\n5\nUUDUD\n5\nUDDUD\n2\nUU\nOutput\nYES\nNO\nNO\n\nNote\nIn the first test case, the game may go as follows.\n\n- Alice chooses the first coin and $ s $ becomes \"DDUU\".\n- Bob chooses the last coin and $ s $ becomes \"UDD\".\n- Alice chooses the first coin and $ s $ becomes \"UU\".\n- Bob chooses the first coin and $ s $ becomes \"U\".\n- Alice chooses the only coin and $ s $ becomes empty.\n- Bob can't choose any coin now, and he loses the game.\n\nIt can be proved that Bob will always lose if they both play optimally."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Is there anything that\nnever\n/\nalways\nchanges after each operation?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "The parity."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1972B - Игры с монетками\nIt can be proved that Alice will win the game if and only if the number of facing-up coins is odd.\nTime complexity: $$$\\mathcal O(n)$$$ for each case.\nProof:\nConsider all possible operations:\n...U\nU\nU... -> ...DD...\n: The number of\nU\ndecreases by $$$3$$$.\n...U\nU\nD... -> ...DU...\n: The number of\nU\ndecreases by $$$1$$$.\n...D\nU\nU... -> ...UD...\n: The number of\nU\ndecreases by $$$1$$$.\n...D\nU\nD... -> ...UU...\n: The number of\nU\nincreases by $$$1$$$.\nIt can be seen that the parity always changes.\nIt's obvious that if the number of\nU\nis equal to $$$0$$$, the player loses because there aren't any available operations. So Alice wins if and only if the number of\nU\nis odd."
+        },
+        {
+            "title": "Solution",
+            "content": "//By: OIer rui_er\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nrep\n(\nx\n,\ny\n,\nz\n)\nfor\n(\nint\nx\n=\n(\ny\n);\nx\n<=\n(\nz\n);\n++\nx\n)\n#define\nper\n(\nx\n,\ny\n,\nz\n)\nfor\n(\nint\nx\n=\n(\ny\n);\nx\n>=\n(\nz\n);\n--\nx\n)\n#define\nendl\n'\\n'\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nint\nT\n,\nn\n;\nstring\ns\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\nfor\n(\ncin\n>>\nT\n;\nT\n;\n--\nT\n)\n{\ncin\n>>\nn\n>>\ns\n;\nint\ncntU\n=\n0\n;\nfor\n(\nchar\nc\n:\ns\n)\nif\n(\nc\n==\n'U'\n)\n++\ncntU\n;\nif\n(\ncntU\n&\n1\n)\ncout\n<<\n\"YES\"\n<<\nendl\n;\nelse\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

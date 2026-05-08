@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given $ n $ positive integers $ a_1,a_2,\\ldots,a_n $ .\n\nPlease determine if it is possible to select any number of elements in $ a $ , so that their product is $ 67 $ .\n\nNote that you may not select zero elements, as the product of zero elements is not defined in this problem.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 5 $ ).\n\nThe second line of each test case contains $ n $ positive integers $ a_1,a_2,\\ldots,a_n $ ( $ 1 \\le a_i \\le 67 $ ).\n\nOutput Format\nIf it is possible to select elements so that their product is $ 67 $ , output \"YES\" on one line. Otherwise, output \"NO\" on one line.\n\nYou can output the answer in any case. For example, the strings \"yEs\", \"yes\", and \"Yes\" will also be recognized as positive responses.\n\nExamples\nSample 1\nInput\n2\n5\n1 7 6 7 67\n5\n1 3 5 7 8\nOutput\nYES\nNO\n\nNote\nIn the first test case, you can select $ a_1 $ and $ a_5 $ to get $ a_1\\cdot a_5 = 1 \\cdot 67 = 67 $ .\n\nIn the second test case, it is impossible to select any number of elements so that their product is $ 67 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "2195A - Sieve of Erato67henes\nNote that $$$67$$$ is a prime number. Therefore, if you want a number of elements to have a product of $$$67$$$, at least one of them must be $$$67$$$. And if there is $$$67$$$ in the sequence $$$a$$$, you know that you can select that element to make $$$67$$$.\nTherefore, you can simply check if $$$67$$$ appears in the sequence $$$a$$$.\nAlternatively, you can run an algorithm similar to knapsack to get a solution in $$$\\mathcal{O}(67n)$$$, but this is overkill compared to the intended solution."
+        }
+    ]
+}

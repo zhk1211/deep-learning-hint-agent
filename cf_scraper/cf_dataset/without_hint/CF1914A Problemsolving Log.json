@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMonocarp is participating in a programming contest, which features $ 26 $ problems, named from 'A' to 'Z'. The problems are sorted by difficulty. Moreover, it's known that Monocarp can solve problem 'A' in $ 1 $ minute, problem 'B' in $ 2 $ minutes, ..., problem 'Z' in $ 26 $ minutes.\n\nAfter the contest, you discovered his contest log — a string, consisting of uppercase Latin letters, such that the $ i $ -th letter tells which problem Monocarp was solving during the $ i $ -th minute of the contest. If Monocarp had spent enough time in total on a problem to solve it, he solved it. Note that Monocarp could have been thinking about a problem after solving it.\n\nGiven Monocarp's contest log, calculate the number of problems he solved during the contest.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of testcases.\n\nThe first line of each testcase contains a single integer $ n $ ( $ 1 \\le n \\le 500 $ ) — the duration of the contest, in minutes.\n\nThe second line contains a string of length exactly $ n $ , consisting only of uppercase Latin letters, — Monocarp's contest log.\n\nOutput Format\nFor each testcase, print a single integer — the number of problems Monocarp solved during the contest.\n\nExamples\nSample 1\nInput\n3\n6\nACBCBC\n7\nAAAAFPC\n22\nFEADBBDFFEDFFFDHHHADCC\nOutput\n3\n1\n4"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1914A - Problemsolving Log\nFor each problem, we will calculate the total number of minutes Monocarp spent on it. Then we will compare it to the minimum required time for solving the problem.\nOne of the possible implementations is as follows. Create a string $$$t = $$$\"\nABC ... Z\n\" in the program. Then problem $$$t_i$$$ can be solved in $$$i + 1$$$ minutes. We can compare\ns.count(t[i])\nto $$$i + 1$$$.\nWe can also use the ASCII table to convert the problem number to a letter. In Python, there are functions\nchr\nand\nord\nfor this purpose. For example, the letter for the $$$i$$$-th problem is\nchr(ord('A') + $$$i$$$)\n. In C++, you can directly obtain a char from an int using\nchar('A' + $$$i$$$)\n.\nIt is also possible to solve this problem in linear time of the length of the string, but it was not required."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\ns\n=\ninput\n()\nprint\n(\nsum\n([\ns\n.\ncount\n(\nchr\n(\nord\n(\n'A'\n)\n+\ni\n))\n>=\ni\n+\n1\nfor\ni\nin\nrange\n(\n26\n)]))"
+        }
+    ]
+}

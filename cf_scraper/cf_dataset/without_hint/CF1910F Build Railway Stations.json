@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1910F - Build Railway Stations\nConsider an easier problem. Instead of upgrading cities, let's upgrade the roads directly.\nSince every path between two vertices on a tree is unique, upgrading a single road will decrease the answer by the number of paths that pass through it. These upgrades are completely independent of each other, so the solution would be to upgrade $$$k$$$ roads that have the most paths passing through them. This is easy to calculate. Root the tree by any vertex. For each vertex, calculate the number of vertices in its subtree. Then the value for an edge $$$(v, u)$$$, where $$$u$$$ is the lower vertex, is $$$\\textit{size}_u \\cdot (n - \\textit{size}_u)$$$.\nTurns out, this solution is basically the solution to the original problem. The edges with the most paths passing through them actually compose a connected subgraph of the tree. So it's always possible to choose $$$k-1$$$ best edges overall by picking some $$$k$$$ vertices.\nHow to prove it? Root the tree by its centroid. This will guarantee that the size of every subtree (except the root) is less than or equal to $$$\\frac{n}{2}$$$. Consider some edge $$$(v, u)$$$. The idea is that for any child of $$$u$$$, an edge $$$(u, w)$$$ has lower value. Their numbers of paths are: $$$x \\cdot (n - x)$$$ and $$$y \\cdot (n - y)$$$ for some $$$x  \\gt  y$$$. On the other hand, $$$\\frac{n}{2} \\ge x$$$. So it's common knowledge that it holds. Since going down the tree only decreases the number of paths, the edges with the most paths will always form a connected subgraph that includes the root — the centroid.\nOverall complexity: $$$O(n \\log n)$$$ or $$$O(n)$$$ (by coding nth_element function yourself) per testcase."
+        },
+        {
+            "title": "Solution (PavelKunyavskiy)",
+            "content": "fun main\n()\n{\nrepeat\n(\nreadInt\n())\n{\nval\n(\nn\n,\nk\n)\n=\nreadInts\n()\nval g\n=\nList\n(\nn\n)\n{\nmutableListOf\n<\nInt\n>()\n}\nrepeat\n(\nn\n-\n1\n)\n{\nval\n(\na\n,\nb\n)\n=\nreadInts\n().\nmap\n{\nit\n-\n1\n}\ng\n[\na\n].\nadd\n(\nb\n)\ng\n[\nb\n].\nadd\n(\na\n)\n}\nval size\n=\nIntArray\n(\nn\n)\nfun dfs\n(\nv\n:\nInt\n,\np\n:\nInt\n)\n:\nInt\n{\nsize\n[\nv\n]\n=\n1\n+\ng\n[\nv\n].\nsumOf\n{\nif\n(\nit\n==\np\n)\n0\nelse\ndfs\n(\nit\n,\nv\n)\n}\nreturn\nsize\n[\nv\n]\n}\ndfs\n(\n0\n,\n0\n)\nval ns\n=\nsize\n.\nmap\n{\nit\n.\ntoLong\n()\n*\n(\nn\n-\nit\n)\n}.\nsortedDescending\n()\nprintln\n(\nns\n.\nsubList\n(\n0\n,\nk\n-\n1\n).\nsum\n()\n+\nns\n.\nsubList\n(\nk\n-\n1\n,\nns\n.\nsize\n).\nsum\n()\n*\n2\n)\n}\n}\nprivate\nfun readInt\n()\n=\nreadln\n().\ntoInt\n()\nprivate\nfun readLongs\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoLong\n()\n}\nprivate\nfun readStrings\n()\n=\nreadln\n().\nsplit\n(\n\" \"\n)\nprivate\nfun readInts\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoInt\n()\n}"
+        }
+    ]
+}

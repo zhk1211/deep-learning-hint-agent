@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVladislav has $ n $ cards numbered $ 1, 2, \\dots, n $ . He wants to lay them down in a row as follows:\n\n- First, he lays down all the odd-numbered cards from smallest to largest.\n- Next, he lays down all cards that are twice an odd number from smallest to largest (i.e. $ 2 $ multiplied by an odd number).\n- Next, he lays down all cards that are $ 3 $ times an odd number from smallest to largest (i.e. $ 3 $ multiplied by an odd number).\n- Next, he lays down all cards that are $ 4 $ times an odd number from smallest to largest (i.e. $ 4 $ multiplied by an odd number).\n- And so on, until all cards are laid down.\n\nWhat is the $ k $ -th card he lays down in this process? Once Vladislav puts a card down, he cannot use that card again.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 5 \\cdot 10^4 $ ) — the number of test cases.\n\nThe only line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\leq k \\leq n \\leq 10^9 $ ) — the number of cards Vlad has, and the position of the card you need to output.\n\nOutput Format\nFor each test case, output a single integer — the $ k $ -th card Vladislav lays down.\n\nExamples\nSample 1\nInput\n11\n7 1\n7 2\n7 3\n7 4\n7 5\n7 6\n7 7\n1 1\n34 14\n84 19\n1000000000 1000000000\nOutput\n1\n3\n5\n7\n2\n6\n4\n1\n27\n37\n536870912\n\nNote\nIn the first seven test cases, $ n=7 $ . Vladislav lays down the cards as follows:\n\n- First — all the odd-numbered cards in the order $ 1 $ , $ 3 $ , $ 5 $ , $ 7 $ .\n- Next — all cards that are twice an odd number in the order $ 2 $ , $ 6 $ .\n- Next, there are no remaining cards that are $ 3 $ times an odd number. (Vladislav has only one of each card.)\n- Next — all cards that are $ 4 $ times an odd number, and there is only one such card: $ 4 $ .\n- There are no more cards left, so Vladislav stops.\n\nThus the order of cards is $ 1 $ , $ 3 $ , $ 5 $ , $ 7 $ , $ 2 $ , $ 6 $ , $ 4 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200\n'007;\nconst int MOD = 1'\n000\n'000'\n007\n;\nvoid\nsolve\n()\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\nv\n;\nwhile\n(\nn\n)\n{\nv\n.\npush_back\n((\nn\n+\n1\n)\n/\n2\n);\nn\n/=\n2\n;\n}\nint\ntot\n=\n0\n,\npow2\n=\n1\n;\nfor\n(\nint\nx\n:\nv\n)\n{\nif\n(\ntot\n<\nk\n&&\nk\n<=\ntot\n+\nx\n)\n{\ncout\n<<\npow2\n*\n(\n2\n*\n(\nk\n-\ntot\n)\n-\n1\n)\n<<\n'\\n'\n;\nreturn\n;\n}\ntot\n+=\nx\n;\npow2\n*=\n2\n;\n}\n}\nint\nmain\n()\n{\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

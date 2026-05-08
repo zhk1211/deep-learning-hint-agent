@@ -1,0 +1,48 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nFor a positive integer $ a $ , we define a recurrence $ \\{b_n\\}_{n\\geq 0} $ as $ b_n = a^{b_{n-1}} $ , with $ b_0 = 1 $ .\n\nWe say that a positive integer $ a $ is $ m $ -tetrative if the sequence $ b $ stabilizes to $ 1 $ modulo $ m $ , that is, there exists $ N \\ge 0 $ such that $ b_n \\equiv 1 \\pmod m $ for all $ n \\geq N $ .\n\nFor a given $ m $ , calculate the density of the $ m $ -tetrative integers. Here, the density of a set $ S $ is the limit $$$\n\\lim\\limits_{n\\rightarrow \\infty}\\frac{|S\\cap [1,2,\\ldots,n]|}{n}.\n$$$ Informally, it is the \"proportion\" of positive integers that are $ m $ -tetrative.\n\nIt can be proven (under the constraints of this problem) that the density is well-defined and is always a rational number, whose denominator is not divisible by $ 998\\,244\\,353 $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe number $ m $ will be given to you as a product of three integers $ x $ , $ y $ , and $ z $ . The first and only line of each test case contains three integers $ x $ , $ y $ , $ z $ ( $ 1\\leq x,y,z \\leq 10^6 $ , $ m = xyz \\geq 2 $ ).\n\nOutput Format\nFor each test case, print the density of $ m $ -tetrative integers ( $ a $ such that its corresponding sequence $ b_n $ converges to $ 1 $ modulo $ m $ ), modulo $ 998\\,244\\,353 $ .\n\nFormally, let $ M = 998\\,244\\,353 $ . It can be shown that the exact answer can be expressed as an irreducible fraction $ \\frac{p}{q} $ , where $ p $ and $ q $ are integers and $ q \\not \\equiv 0 \\pmod{M} $ . Output the integer equal to $ p \\cdot q^{-1} \\bmod M $ . In other words, output such an integer $ x $ that $ 0 \\le x < M $ and $ x \\cdot q \\equiv p \\pmod{M} $ .\n\nExamples\nSample 1\nInput\n5\n5 1 1\n5 2 1\n23 1 1\n10 10 2\n9 3 37\nOutput\n499122177\n299473306\n893685162\n913393583\n705965601\n\nNote\nIn the first test case, $ m = 5 $ . For example, $ a=1 $ is $ 5 $ -tetrative since $ b_n = 1 $ for all $ n $ . For $ a= 8 $ , the sequence $ b $ is $ [1, 8, 8^8, 8^{(8^8)}, \\ldots] $ , which is $ [1, 3, 1, 1, \\ldots] $ if we look at it modulo $ 5 $ . It can be proven that the sequence is always $ 1 \\pmod 5 $ for big enough $ n $ , so $ 8 $ is $ 5 $ -tetrative. For $ a=10 $ , the sequence $ b $ is $ [1, 10, 10^{10}, 10^{(10^{10})}, \\ldots] $ , which is $ [1, 0, 0, 0, \\ldots] $ if we look at it modulo $ 5 $ . It can be proven that the sequence is always $ 0 \\pmod 5 $ for big enough $ n $ , so $ 10 $ is not $ 5 $ -tetrative. The answer for the first test case is $ \\frac{1}{2} $ .\n\nIn the second test case, $ m= 10 $ and the answer is $ \\frac{1}{10} $ .\n\nIn the third test case, $ m= 23 $ and the answer is $ \\frac{63}{506} $ .\n\nIn the fourth test case, $ m= 200 $ and the answer is $ \\frac{1}{200} $ .\n\nIn the fifth test case, $ m= 999 $ and the answer is $ \\frac{1}{222} $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "What happens when $$$n$$$ is big?"
+        },
+        {
+            "title": "Hint2",
+            "content": "$$$b_n$$$ is $$$a^{a^N}$$$ for some big $$$N$$$."
+        },
+        {
+            "title": "Hint3",
+            "content": "Given $$$a$$$ and $$$m$$$ find a condition for $$$a$$$ to be $$$m$$$-tetrative."
+        },
+        {
+            "title": "Hint4",
+            "content": "The condition is $$$\\forall p|ord_m(a), p|a$$$."
+        },
+        {
+            "title": "Hint5",
+            "content": "Fix the number of values of $$$a$$$ such that $$$ord_m(a) = k$$$ and get a formula."
+        },
+        {
+            "title": "Hint6",
+            "content": "If $$$m$$$ is an odd prime power, the number above for $$$k|\\varphi(m)$$$ is $$$\\varphi(k)$$$."
+        },
+        {
+            "title": "Hint7",
+            "content": "Manipulate the formula until it only depends on the prime divisors of $$$\\varphi(m)$$$ that are not in $$$m$$$."
+        },
+        {
+            "title": "Hint8",
+            "content": "Factor it to calculate it in $$$O(\\log m)$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "2147G - Modular Tetration\nSuppose $$$a \\gt 1$$$ and $$$\\gcd(a,m) = 1$$$. Observe that the sequence $$$b$$$ is of the form $$$a^{a^N}$$$ for a very big $$$N$$$ after $$$n \\gt 3$$$. So $$$b_n \\equiv 1 \\pmod m$$$ is equivalent to $$$a^N \\equiv 0 \\pmod {ord_m(a)}$$$. Since $$$N$$$ goes to infinity as $$$n$$$ increases, it is equivalent to the condition $$$\\forall p| ord_m(a), p| a$$$ or $$$rad(ord_m(a))|a$$$. This implies that solutions are periodic: if $$$a$$$ is a solution, so is $$$a+m \\cdot ord_m(a)$$$, hence $$$m \\varphi(m)$$$ is a period. Fixing an $$$1\\leq a  \\lt  m$$$ try to find numbers of the form $$$a+ \\lambda m$$$ such that $$$rad(ord_a(m))| a+\\lambda m$$$. Since $$$gcd(a,m)=1$$$, as long as $$$\\gcd(ord_a(m),m) = 1$$$ we have by CRT that there exists a unique $$$\\lambda$$$ modulo $$$rad(ord_m(a))$$$ that satisfies that condition. Finally, grouping solutions by their order, the density can be written as follows: $$$$$$\\frac{1}{m} \\sum_{x | \\varphi(m), \\gcd(x,m)=1} \\frac{cnt(x)}{rad(x)}$$$$$$ Where $$$cnt(x)$$$ is the number of values $$$a$$$ that have order exactly $$$x$$$. The sum is over divisors of $$$\\varphi(m)$$$ since orders must divide it.\nWe are close to a $$$O(d(m))$$$ solution. The values of $$$cnt(x)$$$ are well known for odd prime power modulos: there are $$$\\varphi(x)$$$ values $$$a$$$ with order exactly $$$x$$$ modulo $$$p_i^{\\alpha_i}$$$ (and powers of $$$2$$$ do not matter since the order has to be coprime with $$$m$$$). Using that $$$ord_{xy}(a) = lcm(ord_x(a), ord_y(a))$$$ one can compute $$$cnt$$$ and have a $$$O(d(m))$$$ solution. This is however not enough to pass since there are $$$T = 10000$$$ tests.\nSo we had that the answer is $$$\\frac{1}{m} \\sum_{x | \\varphi(m), \\gcd(x,m)=1} \\frac{cnt(x)}{rad(x)}$$$ Where $$$cnt$$$ is the number of values a that have order exactly $$$x$$$. Our goal is to fix $$$rad(x)$$$ and compute $$$\\sum cnt(x)$$$ over $$$x$$$'s such that $$$rad(x) = k$$$. There might be an easier way to derive it but the following works: denoting $$$q_i$$$ the primes of $$$k$$$ and $$$q_i^{\\beta_i}$$$ the exponents of $$$q_i$$$ in $$$\\varphi(m)$$$, $$$$$$ \\sum_{x|\\varphi(m), rad(x) | k} cnt(x) = \\sum_{d_1| q_1^{\\beta_1}, \\ldots , d_t | q_t^{\\beta_t}} \\prod \\varphi(d_i) $$$$$$ $$$$$$= \\prod_i \\sum_{d | q_i^{\\beta_i}} \\varphi(d) $$$$$$ $$$$$$= \\prod q_i^{\\beta_i} $$$$$$ Möbius inversion (or inclusion exclusion) gives $$$$$$\\sum_{x|\\varphi(m), rad(x) = k} cnt(x) = \\sum_{I \\subset [t]} (-1)^{t-|I|}\\prod_{i \\in I}q_i^{\\beta_i} = \\prod (q_i^{\\beta_i}-1)$$$$$$ So the answer can be written as $$$$$$\\frac{1}{m} \\sum_{I \\subset [t]}\\sum_{rad(x) = \\prod q_i} \\frac{\\prod {(q_i^{\\beta_i} -1)}}{\\prod q_i }$$$$$$ Which can be factored as $$$\\frac{1}{m} \\prod (1 + \\frac{q_i^{\\beta_i}-1}{q_i})$$$, the product is over all prime factors $$$q_i^{\\beta_i}$$$ of $$$\\varphi(m)$$$ that are not of $$$m$$$. This formula can be computed in $$$O(\\log m)$$$ by factoring $$$m$$$ and $$$\\varphi(m)$$$."
+        }
+    ]
+}

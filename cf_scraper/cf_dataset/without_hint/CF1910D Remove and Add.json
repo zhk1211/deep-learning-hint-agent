@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1910D - Remove and Add\nConsider the problem with no removal operation. You are allowed to increase some elements by $$$1$$$, and you are asked to determine if you can make the array strictly increasing.\nThis can be solved with a simple greedy. Process elements one by one. If some element is smaller than the previous one, you definitely can't. If it's equal, you have to increase it by $$$1$$$. If it's greater, it's optimal to not change it. You are allowed to not change it, and this will give more freedom to later elements.\nHow can a removal help? Well, if the process completes as is, then it doesn't matter. You can remove any element, and the array will remain strictly increasing.\nOtherwise, it gets stuck at some point: some element is smaller than the previous one. The idea is that it's enough to only consider removing one of these two elements. The solution would be to try both options and run the algorithms with no removals on both of them. If any succeeds, then the answer is\nYES\n. If neither does, the answer is\nNO\n.\nWhy are they enough? Obviously, removing anything to the right of them won't help, they will still fail the algorithm. The next step is to realize that the former of the two elements have to be increased by $$$1$$$ in the algorithm. Moreover, before the increase, it had to be equal to the latter one. If any of these things don't hold, nothing will get fixed. Why was that element increased then? The element before it was equal to it. Thus, removing the former element will leave an element equal to the latter one. And not removing it will also leave an element equal to the latter one. Thus, it's never more optimal to remove anything to the left of these elements.\nOverall complexity: $$$O(n)$$$ per testcase."
+        },
+        {
+            "title": "Solution (PavelKunyavskiy)",
+            "content": "private\nfun solve\n()\n:\nBoolean\n{\nval n\n=\nreadInt\n()\nval a\n=\nreadInts\n().\ntoIntArray\n()\nvar\ndropped\n=\nfalse\nfor\n(\ni\nin\n1\nuntil\nn\n)\n{\nif\n(\na\n[\ni\n]\n==\na\n[\ni\n-\n1\n])\n{\na\n[\ni\n]++\n}\nelse\nif\n(\na\n[\ni\n]\n<\na\n[\ni\n-\n1\n])\n{\nif\n(\ndropped\n)\nreturn\nfalse\ndropped\n=\ntrue\nif\n(\ni\n!=\n1\n)\n{\nwhen\n{\na\n[\ni\n-\n2\n]\n>\na\n[\ni\n]\n->\na\n[\ni\n]\n=\na\n[\ni\n-\n1\n]\na\n[\ni\n-\n2\n]\n==\na\n[\ni\n]\n->\na\n[\ni\n]++\nelse\n->\n{}\n}\n}\n}\n}\nreturn\ntrue\n}\nfun main\n()\n{\nrepeat\n(\nreadInt\n())\n{\nprintln\n(\nif\n(\nsolve\n())\n\"YES\"\nelse\n\"NO\"\n)\n}\n}\nprivate\nfun readInt\n()\n=\nreadln\n().\ntoInt\n()\nprivate\nfun readLongs\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoLong\n()\n}\nprivate\nfun readStrings\n()\n=\nreadln\n().\nsplit\n(\n\" \"\n)\nprivate\nfun readInts\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoInt\n()\n}"
+        }
+    ]
+}

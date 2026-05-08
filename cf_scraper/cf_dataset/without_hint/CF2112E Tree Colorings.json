@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nConsider a rooted undirected tree. Each vertex can be colored blue, green, or yellow. A coloring is called beautiful if it meets these conditions:\n\n- the root of the tree is green;\n- if you consider all blue and green vertices, they are reachable from each other without passing through any yellow vertices;\n- if you consider all yellow and green vertices, they are reachable from each other without passing through any blue vertices;\n\nYou are given an integer $ m $ . Your task is to calculate the minimum number of vertices in a tree with exactly $ m $ beautiful colorings.\n\nInput Format\nThe first line contains a single integer ( $ 1 \\le t \\le 10^5 $ ) — the number of test cases.\n\nThe only line of each test case contains a single integer $ m $ ( $ 1 \\le m \\le 5 \\cdot 10^5 $ ).\n\nOutput Format\nFor each test case, print a single integer — the minimum number of vertices in a tree with exactly $ m $ beautiful colorings. If such a tree does not exist, print $ -1 $ .\n\nExamples\nSample 1\nInput\n5\n1\n3\n5\n7\n9\nOutput\n1\n2\n3\n4\n3\n\nNote\nIn the following notes, let $ g $ describe green color, $ b $ be blue, and $ y $ be yellow.\n\nIn the first example, consider a simple tree with just $ 1 $ vertex. This tree has exactly $ 1 $ beautiful coloring: the root is green.\n\nIn the second example, consider a simple tree with $ 2 $ vertices with a root at the $ 1 $ -st vertex. There are exactly $ 3 $ beautiful colorings: $ [g, g] $ , $ [g, b] $ and $ [g, y] $ .\n\nIn the third example, consider a bamboo tree with $ 3 $ vertices with a root at the $ 1 $ -st vertex. There are exactly $ 5 $ beautiful colorings: $ [g, g, g] $ , $ [g, g, b] $ , $ [g, g, y] $ , $ [g, b, b] $ and $ [g, y, y] $ .\n\nIn the fifth example, consider a tree with $ 3 $ vertices with a root at the $ 1 $ -st vertex, and the other $ 2 $ vertices connected to it. There are exactly $ 9 $ beautiful colorings: $ [g, g, g] $ , $ [g, g, b] $ , $ [g, g, y] $ , $ [g, b, g] $ , $ [g, b, b] $ , $ [g, b, y] $ , $ [g, y, g] $ , $ [g, y, b] $ and $ [g, y, y] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution in M sqrt M (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nM\n=\n5e5\n;\nconst\nint\nINF\n=\n1e9\n;\nint\nmain\n()\n{\nvector\n<int>\ndp\n(\nM\n+\n1\n,\nINF\n);\ndp\n[\n1\n]\n=\n1\n;\nfor\n(\nint\nm\n=\n2\n;\nm\n<=\nM\n;\n++\nm\n)\n{\nfor\n(\nint\ni\n=\n1\n;\ni\n*\ni\n<=\nm\n;\n++\ni\n)\n{\nif\n(\nm\n%\ni\n!=\n0\n)\ncontinue\n;\nif\n(\nm\n/\ni\n>\n2\n)\ndp\n[\nm\n]\n=\nmin\n(\ndp\n[\nm\n],\ndp\n[\ni\n]\n+\ndp\n[\nm\n/\ni\n-\n2\n]);\nif\n(\ni\n>\n2\n)\ndp\n[\nm\n]\n=\nmin\n(\ndp\n[\nm\n],\ndp\n[\nm\n/\ni\n]\n+\ndp\n[\ni\n-\n2\n]);\n}\n}\nint\nq\n;\ncin\n>>\nq\n;\nwhile\n(\nq\n--)\n{\nint\nm\n;\ncin\n>>\nm\n;\ncout\n<<\n(\ndp\n[\nm\n]\n==\nINF\n?\n-\n1\n:\ndp\n[\nm\n])\n<<\n'\\n'\n;\n}\n}"
+        },
+        {
+            "title": "Solution in M log M (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n500043\n;\nvector\n<int>\ndivisors\n[\nN\n];\nint\ndp\n[\nN\n],\ndp2\n[\nN\n];\nint\ncalc\n(\nint\nx\n);\nint\ncalc2\n(\nint\nx\n)\n{\nif\n(\ndp2\n[\nx\n]\n!=\n-\n1\n)\nreturn\ndp2\n[\nx\n];\nif\n(\nx\n==\n1\n)\nreturn\ndp2\n[\nx\n]\n=\n0\n;\ndp2\n[\nx\n]\n=\ncalc\n(\nx\n);\nfor\n(\nauto\ny\n:\ndivisors\n[\nx\n])\ndp2\n[\nx\n]\n=\nmin\n(\ndp2\n[\nx\n],\ncalc\n(\ny\n)\n+\ncalc2\n(\nx\n/\ny\n));\nreturn\ndp2\n[\nx\n];\n}\nint\ncalc\n(\nint\nx\n)\n{\nif\n(\ndp\n[\nx\n]\n!=\n-\n1\n)\nreturn\ndp\n[\nx\n];\nif\n(\nx\n==\n1\n)\nreturn\ndp\n[\nx\n]\n=\n0\n;\nif\n(\nx\n==\n3\n)\nreturn\ndp\n[\nx\n]\n=\n1\n;\nreturn\ndp\n[\nx\n]\n=\ncalc2\n(\nx\n-\n2\n)\n+\n1\n;\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nfor\n(\nint\ni\n=\n2\n;\ni\n<\nN\n;\ni\n++)\nfor\n(\nint\nj\n=\ni\n*\n2\n;\nj\n<\nN\n;\nj\n+=\ni\n)\ndivisors\n[\nj\n].\npush_back\n(\ni\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nN\n;\ni\n++)\ndp\n[\ni\n]\n=\ndp2\n[\ni\n]\n=\n-\n1\n;\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\ni\n++)\n{\nint\nx\n;\ncin\n>>\nx\n;\nif\n(\nx\n%\n2\n==\n0\n)\ncout\n<<\n-\n1\n<<\nendl\n;\nelse\ncout\n<<\ncalc\n(\nx\n+\n2\n)\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

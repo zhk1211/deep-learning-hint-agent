@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlice and Bob are playing a game in an array $ a $ of size $ n $ .\n\nThey take turns to do operations, with Alice starting first. The player who can not operate will lose. At first, a variable $ mx $ is set to $ 0 $ .\n\nIn one operation, a player can do:\n\n- Choose an index $ i $ ( $ 1 \\le i \\le n $ ) such that $ a_{i} \\geq mx $ and set $ mx $ to $ a_{i} $ . Then, set $ a_{i} $ to $ 0 $ .\n\nDetermine whether Alice has a winning strategy.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 10^3 $ ) — the number of test cases.\n\nFor each test case:\n\n- The first line contains an integer $ n $ ( $ 2 \\leq n \\leq 50 $ ) — the size of the array.\n- The second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\leq a_i \\leq n $ ) — the elements of the array.\n\nOutput Format\nFor each test case, if Alice has a winning strategy, output \"YES\". Otherwise, output \"NO\".\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n5\n2\n2 1\n2\n1 1\n3\n3 3 3\n4\n3 3 4 4\n4\n1 2 2 2\nOutput\nYES\nNO\nYES\nNO\nYES\n\nNote\nIn the first test case, Alice can choose $ i=1 $ since $ a_1=2 \\ge mx=0 $ .\n\nAfter Alice's operation, $ a=[0,1] $ and $ mx=2 $ . Bob can not do any operation. Alice wins.\n\nIn the second test case, Alice doesn't have a winning strategy.\n\nFor example, if Alice chooses $ i=1 $ , after Alice's operation: $ a=[0,1] $ and $ mx=1 $ . Then, Bob can choose $ i=2 $ since $ a_2=1 \\ge mx=1 $ . After Bob's operation: $ a=[0,0] $ and $ mx=1 $ . Alice can not do any operation. Bob wins."
+        }
+    ],
+    "hints": [
+        {
+            "title": "hint1",
+            "content": "For Alice, what if choosing the maximum value doesn't work?"
+        },
+        {
+            "title": "hint2",
+            "content": "Consider parity."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "solution 1",
+            "content": "Case $$$1$$$: When all values appear an even number of times, Alice will lose. This is because no matter which number Alice chooses, Bob can mimic Alice's move.\nCase $$$2$$$: When at least one value appears an odd number of times, Alice will win. Alice only needs to choose the maximum value that appears an odd number of times, which will force Bob into Case $$$1$$$.\nTime complexity: $$$O(n)$$$."
+        },
+        {
+            "title": "solution 2",
+            "content": "Sort the array $$$a$$$ in non-increasing order. We can observe that any state can be represented as a prefix of the array $$$a$$$. Consider dynamic programming: let $$$dp_i$$$ denote whether the first player is guaranteed to win when the state is $$$a_{1...i}$$$ ($$$dp_i=1$$$ indicates a guaranteed win for the first player). We have the following formula:\n$$$dp_1=1$$$;\n$$$dp_i= \\sim (dp_{i-1}$$$ & $$$dp_{id_1-1}$$$ & $$$dp_{id_2-1} \\ldots)$$$, where $$$id_j$$$ satisfies $$$a_{id_j} \\neq a_{id_j+1}$$$ and $$$id_j \\lt i$$$.\nTime complexity: $$$O(n^2)$$$."
+        },
+        {
+            "title": "code(solution 1)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nm_p make_pair\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),(\nx\n).\nend\n()\n#define\nsz\n(\nx\n)\n((\nint\n)(\nx\n).\nsize\n())\n#define\nfi\nfirst\n#define\nse second\ntypedef\nlong\nlong\nll\n;\nmt19937 rnd\n(\nchrono\n::\nsteady_clock\n::\nnow\n().\ntime_since_epoch\n().\ncount\n());\nmt19937 rnf\n(\n2106\n);\nconst\nint\nN\n=\n55\n;\nint\nn\n;\nint\nq\n[\nN\n];\nvoid\nsolv\n()\n{\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\nq\n[\ni\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\n{\nint\nx\n;\ncin\n>>\nx\n;\n++\nq\n[\nx\n];\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\n{\nif\n(\nq\n[\ni\n]\n%\n2\n==\n1\n)\n{\ncout\n<<\n\"YES\\n\"\n;\nreturn\n;\n}\n}\ncout\n<<\n\"NO\\n\"\n;\n}\nint\nmain\n()\n{\n#ifdef\nSOMETHING\n    freopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//freopen(\"output.txt\", \"w\", stdout);\n#endif\n// SOMETHING\nios_base\n::\nsync_with_stdio\n(\nfalse\n),\ncin\n.\ntie\n(\n0\n);\nint\ntt\n=\n1\n;\ncin\n>>\ntt\n;\nwhile\n(\ntt\n--)\n{\nsolv\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

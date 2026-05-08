@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe two versions are different problems. You may want to read both versions. You can make hacks only if both versions are solved.\n\nYou are given two positive integers $ n $ , $ m $ .\n\nCalculate the number of ordered pairs $ (a, b) $ satisfying the following conditions:\n\n- $ 1\\le a\\le n $ , $ 1\\le b\\le m $ ;\n- $ a+b $ is a multiple of $ b \\cdot \\gcd(a,b) $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1\\le t\\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ , $ m $ ( $ 1\\le n,m\\le 2 \\cdot 10^6 $ ).\n\nIt is guaranteed that neither the sum of $ n $ nor the sum of $ m $ over all test cases exceeds $ 2 \\cdot 10^6 $ .\n\nOutput Format\nFor each test case, print a single integer: the number of valid pairs.\n\nExamples\nSample 1\nInput\n6\n1 1\n2 3\n3 5\n10 8\n100 1233\n1000000 1145141\nOutput\n1\n3\n4\n14\n153\n1643498\n\nNote\nIn the first test case, only $ (1,1) $ satisfies the conditions.\n\nIn the fourth test case, $ (1,1),(2,1),(2,2),(3,1),(4,1),(5,1),(6,1),(6,2),(6,3),(7,1),(8,1),(9,1),(10,1),(10,2) $ satisfy the conditions."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Denote $$$\\gcd(a,b)$$$ as $$$d$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Did you notice that $$$b\\mid a$$$? How to prove that?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1967B1 - Переворотная карта (простая версия)\nDenote $$$\\gcd(a,b)$$$ as $$$d$$$. Assume that $$$a=pd$$$ and $$$b=qd$$$, then we know that $$$\\gcd(p,q)=1$$$.\n$$$(b\\cdot\\gcd(a,b))\\mid (a+b)\\iff (qd^2)\\mid (pd+qd)\\iff (qd)\\mid (p+q)$$$.\nAssume that $$$p+q=kqd$$$, then $$$p=(kd-1)q$$$. We know $$$q=1$$$ because $$$\\gcd(p,q)=1$$$.\nEnumerate $$$d$$$ from $$$1$$$ to $$$m$$$, we know $$$p+1=kd\\le\\lfloor\\frac{n}{d}\\rfloor+1$$$, so we add $$$\\left\\lfloor\\frac{\\lfloor\\frac{n}{d}\\rfloor+1}{d}\\right\\rfloor$$$ to answer.\nIn this method, $$$p=0,k=1,d=1$$$ will also be included in the answer, so we should subtract $$$1$$$ from the answer.\nTime Complexity: $$$\\mathcal O(\\sum m)$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nconst\nint\nN\n=\n2000005\n;\nint\ntc\n,\nn\n,\nm\n;\nll ans\n;\ninline\nvoid\nsolve\n(){\ncin\n>>\nn\n>>\nm\n;\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nm\n;\ni\n++)\nans\n+=(\nn\n+\ni\n)/(\n1ll\n*\ni\n*\ni\n);\ncout\n<<\nans\n-\n1\n<<\n'\\n'\n;\n}\nint\nmain\n(){\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\ncin\n>>\ntc\n;\nwhile\n(\ntc\n--)\nsolve\n();\nreturn\n0\n;\n}"
+        }
+    ]
+}

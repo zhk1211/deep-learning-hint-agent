@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n[Level 3 — David Luis Ortega, Where's My Water? ](https://www.youtube.com/watch?v=3yV8PPnShSw)Let $ n, h $ be positive integers. Swampy the Alligator needs water for his bathtub, and you are tasked with getting it to him. Above his house, there is an $ h \\times n $ grid of dirt and water tiles with $ n $ columns numbered $ 1, \\ldots, n $ . In column $ i $ , the bottom $ a_i $ tiles are dirt, and the rest on top are water tiles.\n\nTo get water to Swampy, you can place a drain on any tile that isn't a dirt tile. Placing a drain takes away all water tiles that can access the drain by moving only down, left, or right on the grid without crossing any dirt tiles.\n\nFor example, placing the drain on the $ \\times $ in the grid below will drain both the top left and top right water tiles and result in $ 10 $ tiles being drained:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2207C/60b08f5290a489960693936583d67903134ed07ac9d9f444f8a0730941e52414.png)What is the maximum amount of water you can get to Swampy after placing at most two drains? Note that water tiles that could have been taken by either drain are only counted once.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^3 $ ). The description of the test cases follows.\n\nThe first line contains two integers $ n $ and $ h $ ( $ 1 \\leq n \\leq 2000, 1 \\leq h \\leq 10^9 $ ) — the number of columns and height of the grid.\n\nThe next line contains $ n $ integers $ a_i $ ( $ 1 \\leq a_i \\leq h $ ) — the elevation of the dirt in column $ i $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2000 $ .\n\nOutput Format\nFor each test case, output a single integer — the maximum number of water tiles that can be obtained with at most two drains.\n\nExamples\nSample 1\nInput\n6\n7 4\n1 3 1 2 3 1 1\n8 10\n7 5 1 3 2 5 6 8\n1 1\n1\n10 20\n5 2 1 2 1 3 6 7 1 1\n5 1000000000\n1 420420420 1 420420420 1\n1 1000000000\n1\nOutput\n14\n43\n0\n170\n3738738738\n999999999\n\nNote\nIn the first test case, the grid is the example shown in the statement. It is possible to drain $ 14 $ tiles of water by placing the drains as shown:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2207C/7da283f17711496aeda1750c9fa6966a2045db328c1716b7bf5db31b201bd7c0.png)In the second test case, the grid is shown below:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2207C/cdb8ceb2594d555a4a03357ca0a3016219c0fde6f88a4974feca510fdd8d2a29.png)It is possible to drain all $ 43 $ tiles of water by placing the drains as shown:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2207C/076bec40c1db767644d4dd39c5251361a0dba8cfd528cc95ede910ba1d7eb198.png)In the third test case, the grid is a single dirt tile, and no drains may be placed. So, the answer is $ 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Solve the case of one drain first! You should aim for $$$O(n)$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "If you pick two drains, what's the shape of their overlap?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Brute force."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "Implementation by\nmisteg168\n.\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nint\nlong\nlong\nvoid\nsolve\n()\n{\nint\nn\n,\nh\n;\ncin\n>>\nn\n>>\nh\n;\nvector\n<int>\nv\n(\nn\n);\nfor\n(\nauto\n&\nx\n:\nv\n)\ncin\n>>\nx\n;\nvector\n<int>\ncnt\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\ncurr\n=\nv\n[\ni\n];\ncnt\n[\ni\n]\n=\nh\n-\ncurr\n;\nfor\n(\nint\nj\n=\ni\n+\n1\n;\nj\n<\nn\n;\nj\n++)\ncurr\n=\nmax\n(\ncurr\n,\nv\n[\nj\n]),\ncnt\n[\ni\n]\n+=\nh\n-\ncurr\n;\ncurr\n=\nv\n[\ni\n];\nfor\n(\nint\nj\n=\ni\n-\n1\n;\nj\n>=\n0\n;\nj\n--)\ncurr\n=\nmax\n(\ncurr\n,\nv\n[\nj\n]),\ncnt\n[\ni\n]\n+=\nh\n-\ncurr\n;\n}\n//~ for (int i = 0; i < n; i++)\n//~ cout << v[i] << \"\\n\";\nint\nbest\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\nmx\n=\nv\n[\ni\n],\narg\n=\ni\n;\nfor\n(\nint\nj\n=\ni\n;\nj\n<\nn\n;\nj\n++)\n{\nif\n(\nv\n[\nj\n]\n>\nmx\n)\n{\nmx\n=\nv\n[\nj\n];\narg\n=\nj\n;\n}\nbest\n=\nmax\n(\ncnt\n[\ni\n]\n+\ncnt\n[\nj\n]\n-\ncnt\n[\narg\n],\nbest\n);\n}\n}\ncout\n<<\nbest\n<<\n\"\\n\"\n;\n}\nsigned\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\nsolve\n();\n}"
+        }
+    ]
+}

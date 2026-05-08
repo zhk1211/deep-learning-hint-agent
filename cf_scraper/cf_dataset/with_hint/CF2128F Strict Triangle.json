@@ -1,0 +1,60 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an undirected connected graph with $ n $ nodes and $ m $ edges. The weight $ w_i $ of the $ i $ -th edge is not yet decided and must be a real number between $ l_i $ and $ r_i $ .\n\nYou are given a node $ k $ . Determine if there exists a valid assignment of weights $ (w_1, \\ldots, w_m) $ such that:\n\n- $ l_i \\leq w_i \\leq r_i $ for all $ i $ , and\n- $ \\mathrm{dist}_w(1, n) \\neq \\mathrm{dist}_w(1, k) + \\mathrm{dist}_w(k, n) $ $ ^{\\text{∗}} $ .\n\n$ ^{\\text{∗}} $ Given an assignment of weights $ w $ , $ \\mathrm{dist}_w(u, v) $ is the minimum value of $ w_{e_1} + w_{e_2} + \\ldots + w_{e_p} $ over all sequences of $ p $ edges $ (e_1, e_2, \\ldots, e_p) $ that form a path from $ u $ to $ v $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10\\,000 $ ). The description of the test cases follows.\n\nThe first line of each test case contains three integers $ n $ , $ m $ , and $ k $ ( $ 4 \\le n \\le 200\\,000 $ , $ n-1 \\le m \\le 200\\,000 $ , $ 2 \\le k \\le n - 1 $ ) — the number of nodes, the number of edges, and the node $ k $ .\n\nThe $ i $ -th of the following $ m $ lines contains four integers $ u_i $ , $ v_i $ , $ l_i $ , and $ r_i $ ( $ 1 \\le u_i, v_i \\le n $ , $ u_i \\ne v_i $ , $ 1 \\le l_i \\le r_i \\le 10^9 $ ), representing an edge between $ u_i $ and $ v_i $ whose weight must be between $ l_i $ and $ r_i $ inclusive. No edge appears in the input more than once.\n\nIt is guaranteed that:\n\n- the sum of $ n $ over all test cases doesn't exceed $ 200\\,000 $\n- the sum of $ m $ over all test cases doesn't exceed $ 200\\,000 $\n\nOutput Format\nPrint YES if there exists a valid assignment of weights and NO otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n7\n4 4 2\n1 2 10 20\n2 3 10 30\n1 3 49 90\n4 3 1 1000\n4 4 2\n1 2 10 20\n2 3 10 30\n1 3 50 90\n4 3 1 1000\n5 7 3\n1 2 1 100000\n1 4 10 100\n2 3 1 100000\n3 4 1 100000\n2 5 2 100000\n3 5 1 1\n4 5 1 31\n5 7 3\n1 2 1 100000\n1 4 100000 100000\n2 3 1 1\n3 4 1 100000\n2 5 2 100000\n3 5 1 1\n4 5 1 31\n5 5 3\n1 2 1 42\n2 4 1 42\n4 5 1 42\n1 3 1 1\n3 5 1 42\n5 5 3\n1 2 1 42\n2 4 1 42\n4 5 1 42\n1 3 1 1\n3 5 1 1\n5 5 3\n1 2 1 42\n2 4 1 42\n4 5 1 42\n1 3 1 1\n3 5 2 2\nOutput\nYES\nNO\nYES\nYES\nYES\nNO\nNO\n\nNote\nIn the first test case, $ w = (20, 30, 49, 21) $ is a valid assignment of weights, since $ \\mathrm{dist}_w(1, 4) = 70 \\neq 71 = \\mathrm{dist}_w(1, 2) + \\mathrm{dist}_w(2, 4) $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2128F/3969dd4fb685de99c15905537fd79374a72f3db9.png)In the second test case, there is no valid assignment of weights.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2128F/6ffd0acacd88cc01f3b6877141352e325f2c932b.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "Hint1a\nSay an edge is green if its weight is $$$l_i$$$ and red if its weight is $$$r_i$$$. If the answer is YES, prove there exists a solution that colors a path from $$$1$$$ to $$$n$$$ in green and the rest of the edges in red.\nHint1b\nConsider an arbitrary solution $$$w$$$ and let $$$P$$$ be the shortest path from $$$1$$$ to $$$n$$$ with respect to $$$w$$$. Decreasing the weight of an edge in $$$P$$$ will decrease $$$d(1, n)$$$ by exactly one and will decrease $$$d(1, k) + d(k, n)$$$ by at most one. Increasing the weight of an edge outside $$$P$$$ will not increase $$$d(1, n)$$$ and will not decrease $$$d(1, k) + d(k, n)$$$. By repeating these operations, we can make $$$P$$$ green and the rest red."
+        },
+        {
+            "title": "Hint1a",
+            "content": "Say an edge is green if its weight is $$$l_i$$$ and red if its weight is $$$r_i$$$. If the answer is YES, prove there exists a solution that colors a path from $$$1$$$ to $$$n$$$ in green and the rest of the edges in red."
+        },
+        {
+            "title": "Hint1b",
+            "content": "Consider an arbitrary solution $$$w$$$ and let $$$P$$$ be the shortest path from $$$1$$$ to $$$n$$$ with respect to $$$w$$$. Decreasing the weight of an edge in $$$P$$$ will decrease $$$d(1, n)$$$ by exactly one and will decrease $$$d(1, k) + d(k, n)$$$ by at most one. Increasing the weight of an edge outside $$$P$$$ will not increase $$$d(1, n)$$$ and will not decrease $$$d(1, k) + d(k, n)$$$. By repeating these operations, we can make $$$P$$$ green and the rest red."
+        },
+        {
+            "title": "Hint2",
+            "content": "Hint2a\nLet $$$P$$$ be the chosen green path. Find a necessary condition for the corresponding weight assignment to be correct. Then, prove if it's sufficient.\nHint2b\nThe condition is $$$d_L(u, v) \\lt d_R(u, k) + d_R(k, v)$$$ for all $$$u, v \\in P$$$.\nHint2c\nIt's obviously necessary; otherwise, $$$1 \\rightarrow_L u \\rightarrow_R k \\rightarrow_R v \\rightarrow_L n$$$ would have length $$$d(1, n)$$$. Conversely, if there exists a $$$1-n$$$ shortest path going through $$$k$$$, if you consider the last node in $$$P$$$ you visited before reaching $$$k$$$ and the first node in $$$P$$$ you visited after reaching $$$k$$$, this pair of nodes will violate the condition."
+        },
+        {
+            "title": "Hint2a",
+            "content": "Let $$$P$$$ be the chosen green path. Find a necessary condition for the corresponding weight assignment to be correct. Then, prove if it's sufficient."
+        },
+        {
+            "title": "Hint2b",
+            "content": "The condition is $$$d_L(u, v) \\lt d_R(u, k) + d_R(k, v)$$$ for all $$$u, v \\in P$$$."
+        },
+        {
+            "title": "Hint2c",
+            "content": "It's obviously necessary; otherwise, $$$1 \\rightarrow_L u \\rightarrow_R k \\rightarrow_R v \\rightarrow_L n$$$ would have length $$$d(1, n)$$$. Conversely, if there exists a $$$1-n$$$ shortest path going through $$$k$$$, if you consider the last node in $$$P$$$ you visited before reaching $$$k$$$ and the first node in $$$P$$$ you visited after reaching $$$k$$$, this pair of nodes will violate the condition."
+        },
+        {
+            "title": "Hint3",
+            "content": "Try to build a correct path using a Dijkstra-like algorithm. It might be helpful to have an intuitive understanding of the condition found in the previous hint in order to\nquantify with a single integer how good the current path is\n. Imagine you're a robber going from $$$1$$$ to $$$n$$$ and you don't want to be caught by cops."
+        },
+        {
+            "title": "Hint4",
+            "content": "Imagine nodes are cities, $$$k$$$ is a police station, and you're some robber. Traversing the $$$i$$$-th edge takes $$$l_i$$$ seconds for the robber, and $$$r_i$$$ seconds for the citizens and the cops.\nEach time you go through a city, the citizens of this city will run to the police station to warn the cops. Once the cops are warned, they start dispatching in all directions as fast as they can to catch up to you."
+        },
+        {
+            "title": "Hint5",
+            "content": "The current danger can be represented by an integer timer $$$x$$$. If $$$x \\lt 0$$$, it means the cops will be warned in $$$-x$$$ seconds. If $$$x \\geq 0$$$, it means the cops have been warned since $$$0$$$ seconds. It's the only information you need to remember."
+        },
+        {
+            "title": "Hint6",
+            "content": "Try to find for each node $$$u$$$ what is the corresponding minimum timer $$$t_u$$$. As the robber runs through the graph, the timer always increases, so you can do this with Dijkstra."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Please read all the hints first.\nWe first make a classical Dijkstra from $$$k$$$ with $$$r$$$-weighted edges. Let $$$d_u$$$ be the distance between $$$u$$$ and $$$k$$$ for citizens/cops.\nWe then make a modified Dijkstra, starting from the situation $$$(1, t_1)$$$ with $$$t_1 = -d_1$$$ (meaning the cops will be warned in $$$d_1$$$ seconds).\nWhen you traverse the $$$i$$$-th edge to go from $$$(u, t)$$$ to $$$v$$$, the new timer will be\n$$$t' = \\max(t + l_i, -d_v).$$$\nWe have $$$t' \\geq t+l_i$$$ because the previous timer continued to advance while the robber was traversing the edge, and $$$t' \\geq -d_v$$$ because a new citizen started running from $$$v$$$ to the police station.\nEach time, we take the situation with the minimum timer from the priority queue. If the node has already been processed, or if $$$d_u \\leq t_u$$$ (meaning the cops can catch up to the robber in $$$v$$$), the situation is skipped. The answer is YES if and only if we processed the node $$$n$$$.\nThe time complexity is $$$\\mathcal{O}((n + m) \\log (n+m))$$$."
+        }
+    ]
+}

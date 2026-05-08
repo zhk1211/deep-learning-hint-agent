@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nI grip my troubles within my hand, then hurl them off a thousand lands.\n\n— SHUN, [ONMYWAY](https://open.spotify.com/track/0ZOaDlRReh6qeZWipAMHDu)\n\nConsider that Simons is given an array $ a $ of size $ m $ .\n\nSimons must operate on the array exactly once as follows:\n\n- First, he has to select an integer $ k $ and choose $ k $ pairs of integers $ [l_1,r_1],[l_2,r_2],\\ldots,[l_k,r_k] $ , such that:\n- $ l_i\\le r_i $ for each $ 1\\le i\\le k $ ,\n- $ l_1=1 $ , $ r_k=m $ , and\n- $ r_i+1=l_{i+1} $ for each $ i $ from $ 1 $ to $ k-1 $ .\n- Then, he reverses each subarray $ [a_{l_i},a_{l_i+1},\\ldots, a_{r_i}] $ independently. After this, the array will become $ [a_{r_1},a_{r_1-1},\\ldots,a_{l_1},a_{r_2},\\ldots,a_{l_{k-1}},a_{r_{k}},a_{r_k-1},\\ldots,a_{l_k}] $ .\n\nYou are given an array $ T $ of size $ n $ . Count the number of arrays $ S $ such that Simons can transform $ S $ to $ T $ , modulo $ 998\\,244\\,353 $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 8000 $ ). The description of the test cases follows.\n\nThe first line contains an integer $ n $ ( $ 1\\le n\\le 8000 $ ) — the length of $ T $ .\n\nThe second line contains $ n $ integers $ T_1,T_2,\\ldots,T_n $ ( $ 1\\le T_i\\le 8000 $ ) — the elements of $ T $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 8000 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of arrays $ S $ , modulo $ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n5\n4\n1 1 2 1\n4\n1 2 3 1\n6\n1 3 2 3 3 2\n10\n2 3 1 4 3 1 4 3 1 2\n1\n8000\nOutput\n4\n7\n22\n383\n1\n\nNote\nIn the first test case, we can see only the following arrays can be transformed to $ T $ :\n\n- For $ S=[2,1,1,1] $ , Simons will choose $ [1,3] $ and $ [4,4] $ . Thus, the array will become $ [1,1,2,1] $ , equal to $ T $ .\n- For $ S=[1,2,1,1] $ , Simons will choose $ [1,4] $ .\n- For $ S=[1,1,2,1] $ , Simons will choose $ [1,2] $ , $ [3,3] $ , and $ [4,4] $ .\n- For $ S=[1,1,1,2] $ , Simons will choose $ [1,2] $ and $ [3,4] $ .\n\nIn the second test case, we can see only the following arrays can be transformed to $ T $ :\n\n- For $ S=[1,1,3,2] $ , Simons will choose $ [1,1] $ and $ [2,4] $ .\n- For $ S=[1,2,1,3] $ , Simons will choose $ [1,1] $ , $ [2,2] $ , and $ [3,4] $ .\n- For $ S=[1,2,3,1] $ , Simons will choose $ [1,1] $ , $ [2,2] $ , $ [3,3] $ , and $ [4,4] $ .\n- For $ S=[1,3,2,1] $ , Simons will choose $ [1,4] $ .\n- For $ S=[2,1,1,3] $ , Simons will choose $ [1,2] $ and $ [3,4] $ .\n- For $ S=[2,1,3,1] $ , Simons will choose $ [1,2] $ , $ [3,3] $ , and $ [4,4] $ .\n- For $ S=[3,2,1,1] $ , Simons will choose $ [1,3] $ and $ [4,4] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider applying Dynamic Programming (DP) to solve the problem. What may the state be?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Assign a unique way to operate $$$s$$$ to $$$t$$$ for every different $$$s$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "For any $$$[l_i, r_i]$$$ you chose, consider the border of $$$t_{[l_i, r_i]}$$$. A border of an array $$$a[1 \\sim n]$$$ means the subarray $$$a[1,l]$$$ such that $$$a[1,l] = a[n - l + 1,n]$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Let's apply Dynamic Programming to the problem.\nAssume $$$dp_i$$$ represents the different arrays $$$s[1:i]$$$ can generate $$$t[1:i]$$$.\nto update $$$dp_{i + 1}$$$, consider the last subarray in the decomposition $$$dp_{[a, i + 1]}$$$. To ensure no duplicate counting, $$$dp_{[a, i + 1]}$$$ can't have a border. Which is to say, for any $$$s$$$ which could be operated to $$$t$$$, it could be realized by decomposing $$$s$$$ into subarrays without a border and reversing them.\nWhy can the solution above calculate the answer correctly?\nProof.\nRecall that a border of an array $$$a[1 \\sim n]$$$ means the subarray $$$a[1,l]$$$ such that $$$a[1,l] = a[n - l + 1,n]$$$.\nFor two different ways to operate $$$s$$$, assume the first different pair of decomposition of $$$s$$$ be $$$[l, r_1], [l, r_2] (r_1 \\lt r_2)$$$, then $$$s_{[r_2 - r_1 + l, r_2]} = s_{[l, r_1]}$$$ since after flipping, they will be mapped to the same place in $$$t$$$. So $$$[l, r_2]$$$ has a border.\nSo by taking the shortest possible length of the next segment $$$[a, b]$$$ every time, we can find a solution without a border. (If there's a border $$$s_{[a, r]} = s_{[l, b]}$$$, we can show that the length of shortest border $$$B \\lt \\frac{b - a + 1}{2}$$$ . So $$$r \\lt l$$$ holds. We could reverse $$$s_{[a, r]}, s_{[r + 1, l]}, s_{[l, b]}$$$ seperately to achieve the same goal.)\nTo check if any $$$dp_{[l, r]}$$$ has a border, we need to apply the KMP algorithm (starting from $$$t_{1 \\sim n}$$$)for $$$n$$$ times, whose time complexity is $$$O(n^2)$$$. The dp progress also takes $$$O(n^2)$$$ time. So the total time complexity is $$$O(n^2)$$$."
+        }
+    ]
+}

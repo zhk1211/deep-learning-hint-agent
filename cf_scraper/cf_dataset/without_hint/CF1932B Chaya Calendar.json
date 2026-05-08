@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe Chaya tribe believes that there are $ n $ signs of the apocalypse. Over time, it has been found out that the $ i $ -th sign occurs every $ a_i $ years (in years $ a_i $ , $ 2 \\cdot a_i $ , $ 3 \\cdot a_i $ , $ \\dots $ ).\n\nAccording to the legends, for the apocalypse to happen, the signs must occur sequentially. That is, first they wait for the first sign to occur, then strictly after it, the second sign will occur, and so on. That is, if the $ i $ -th sign occurred in the year $ x $ , the tribe starts waiting for the occurrence of the $ (i+1) $ -th sign, starting from the year $ x+1 $ .\n\nIn which year will the $ n $ -th sign occur and the apocalypse will happen?\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases. Then follow the descriptions of the test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 100 $ ) — the number of signs.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, a_3, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^6 $ ) — the periodicities of the signs.\n\nOutput Format\nFor each test case, output a single integer — the year in which all $ n $ signs will occur.\n\nExamples\nSample 1\nInput\n4\n6\n3 2 4 5 9 18\n5\n1 2 3 4 5\n5\n1 1 1 1 1\n6\n50 30 711 200 503 1006\nOutput\n36\n5\n5\n2012\n\nNote\nIn the first set of input data of the example:\n\n- The tribe will wait for the first sign in the $ 3 $ -rd year;\n- the tribe will wait for the second sign in the $ 4 $ -th year (since year $ 2 $ have already passed);\n- the tribe will wait for the third sign in the $ 8 $ -th year (since the second sign has already occurred in the $ 4 $ -th year);\n- the tribe will wait for the fourth sign in the $ 10 $ -th year (since year $ 5 $ have already passed);\n- the tribe will wait for the fifth sign in the $ 18 $ -th year (since year $ 9 $ have already passed);\n- the tribe will wait for the sixth sign in the $ 36 $ -th year (since the fifth sign has already occurred in the $ 18 $ -th year)."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1932B - Chaya Calendar\nThe tribe will wait for the first sign in year $$$a_1$$$. They will expect the second event in some year $$$x  \\gt  a_1$$$, which is divisible by $$$a_2$$$, this will happen after $$$a_2 - a_1 \\bmod a_2$$$ years.\nLet's maintain the number $$$cur$$$ of the year in which the $$$i$$$-th sign occurred, then the $$$(i+1)$$$-th will occur in the year $$$cur + a_{i+1} - cur \\bmod a_{i+1}$$$. Since this is the smallest year number divisible by $$$a_{i+1}$$$, which is strictly greater than $$$cur$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "def\nsolve\n():\nn\n=\nint\n(\ninput\n())\na\n=\n[\nint\n(\nx\n)\nfor\nx\nin\ninput\n().\nsplit\n()]\ncur\n=\n0\nfor\ne\nin\na\n:\ncur\n+=\ne\n-\ncur\n%\ne\nprint\n(\ncur\n)\nfor\n_\nin\nrange\n(\n1\n,\nint\n(\ninput\n())\n+\n1\n):\nsolve\n()"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a tale about the wise [King Keykhosrow](https://en.wikipedia.org/wiki/Kay_Khosrow) who owned a grand treasury filled with treasures from across the Persian Empire. However, to prevent theft and ensure the safety of his wealth, King Keykhosrow's vault was sealed with a magical lock that could only be opened by solving a riddle.\n\n![](https://espresso.codeforces.com/02ff1013de2c71e8f78fd7d74b43bd365dcc6a3b.webp)The riddle involves two sacred numbers $ a $ and $ b $ . To unlock the vault, the challenger must determine the smallest key number $ m $ that satisfies two conditions:\n\n- $ m $ must be greater than or equal to at least one of $ a $ and $ b $ .\n- The remainder when $ m $ is divided by $ a $ must be equal to the remainder when $ m $ is divided by $ b $ .\n\nOnly by finding the smallest correct value of $ m $ can one unlock the vault and access the legendary treasures!\n\nInput Format\nThe first line of the input contains an integer $ t $ ( $ 1 \\leq t \\leq 100 $ ), the number of test cases.\n\nEach test case consists of a single line containing two integers $ a $ and $ b $ ( $ 1 \\leq a, b \\leq 1000 $ ).\n\nOutput Format\nFor each test case, print the smallest integer $ m $ that satisfies the conditions above.\n\nExamples\nSample 1\nInput\n2\n4 6\n472 896\nOutput\n12\n52864\n\nNote\nIn the first test case, you can see that:\n\n- $ 4 \\bmod 4 = 0 $ but $ 4 \\bmod 6 = 4 $\n- $ 5 \\bmod 4 = 1 $ but $ 5 \\bmod 6 = 5 $\n- $ 6 \\bmod 4 = 2 $ but $ 6 \\bmod 6 = 0 $\n- $ 7 \\bmod 4 = 3 $ but $ 7 \\bmod 6 = 1 $\n- $ 8 \\bmod 4 = 0 $ but $ 8 \\bmod 6 = 2 $\n- $ 9 \\bmod 4 = 1 $ but $ 9 \\bmod 6 = 3 $\n- $ 10 \\bmod 4 = 2 $ but $ 10 \\bmod 6 = 4 $\n- $ 11 \\bmod 4 = 3 $ but $ 11 \\bmod 6 = 5 $\n\nso no integer less than $ 12 $ satisfies the desired properties."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Step 1:\nProve that for the minimum value of $$$m$$$, we must have $$$m \\% a = m \\% b = 0$$$.\nStep 2:\nTo prove this, show that if $$$m \\% a = m \\% b = x \\gt 0$$$, then $$$m-1$$$ will also satisfy the problem's requirements.\nStep 3:\nSince $$$m \\ge \\min(a , b)$$$, if $$$x \\gt 0$$$, then $$$m \\gt \\min(a , b)$$$ must hold. Therefore, $$$m - 1 \\ge \\min(a , b)$$$ implies that $$$m-1$$$ satisfies the requirements.\nStep 4:\nThus, $$$m$$$ must be divisible by both $$$a$$$ and $$$b$$$. The smallest such $$$m$$$ is $$$lcm(a, b)$$$ which can be calculated in $$$O(\\log(\\max(a, b)))$$$."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\ntt\n;\ncin\n>>\ntt\n;\nwhile\n(\ntt\n--){\nint\na\n,\nb\n;\ncin\n>>\na\n>>\nb\n;\ncout\n<<\nlcm\n(\na\n,\nb\n)\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

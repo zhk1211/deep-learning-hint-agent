@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe price of one yogurt at the \"Vosmiorochka\" store is $ a $ burles, but there is a promotion where you can buy two yogurts for $ b $ burles.\n\nMaxim needs to buy exactly $ n $ yogurts. When buying two yogurts, he can choose to buy them at the regular price or at the promotion price.\n\nWhat is the minimum amount of burles Maxim should spend to buy $ n $ yogurts?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le {10}^{4} $ ) — the number of test cases.\n\nThe first and only line of each test case contains three integers $ n $ , $ a $ , and $ b $ ( $ 1 \\le n \\le 100 $ , $ 1 \\le a, b \\le 30 $ ) — the number of yogurts Maxim wants to buy, the price for one yogurt, and the price for two yogurts on promotion.\n\nOutput Format\nFor each test case, print in a separate line the minimum cost of buying $ n $ yogurts at \"Vosmiorochka\".\n\nExamples\nSample 1\nInput\n4\n2 5 9\n3 5 9\n3 5 11\n4 5 11\nOutput\n9\n14\n15\n20\n\nNote\nIn the third test case of the example, it is more advantageous to buy three yogurts for $ 15 $ burles than two for $ 11 $ and one for $ 5 $ .\n\nIn the fourth test case of the example, you need to buy four yogurts, each for $ 5 $ burles."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nll\n=\nsigned\nlong\nlong\nint\n;\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nll n\n,\na\n,\nb\n;\ncin\n>>\nn\n>>\na\n>>\nb\n;\nll ans\n=\nn\n*\na\n;\nif\n(\nb\n<\n2\n*\na\n)\n{\nans\n=\n(\nn\n/\n2\n)\n*\nb\n+\n(\nn\n%\n2\n)\n*\na\n;\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

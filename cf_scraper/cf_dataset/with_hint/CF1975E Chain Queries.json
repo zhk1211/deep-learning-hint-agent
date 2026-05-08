@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a tree of $ n $ vertices numbered from $ 1 $ to $ n $ . Initially, all vertices are colored white or black.\n\nYou are asked to perform $ q $ queries:\n\n- \"u\" — toggle the color of vertex $ u $ (if it was white, change it to black and vice versa).\n\nAfter each query, you should answer whether all the black vertices form a chain. That is, there exist two black vertices such that the simple path between them passes through all the black vertices and only the black vertices. Specifically, if there is only one black vertex, they form a chain. If there are no black vertices, they do not form a chain.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1\\leq t\\leq 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ q $ ( $ 1\\leq n,q\\leq 2\\cdot 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ c_1,c_2,\\ldots,c_n $ ( $ c_i \\in \\{ \\mathtt{0}, \\mathtt{1} \\} $ ) — the initial color of the vertices. $ c_i $ denotes the color of vertex $ i $ where $ \\mathtt{0} $ denotes the color white, and $ \\mathtt{1} $ denotes the color black.\n\nThen $ n - 1 $ lines follow, each line contains two integers $ x_i $ and $ y_i $ ( $ 1 \\le x_i,y_i \\le n $ ), indicating an edge between vertices $ x_i $ and $ y_i $ . It is guaranteed that these edges form a tree.\n\nThe following $ q $ lines each contain an integer $ u_i $ ( $ 1 \\le u_i \\le n $ ), indicating the color of vertex $ u_i $ needs to be toggled.\n\nIt is guaranteed that the sum of $ n $ and $ q $ over all test cases respectively does not exceed $ 2\\cdot 10^5 $ .\n\nOutput Format\nFor each query, output \"Yes\" if the black vertices form a chain, and output \"No\" otherwise.\n\nYou can output \"Yes\" and \"No\" in any case (for example, strings \"yEs\", \"yes\", \"Yes\" and \"YES\" will be recognized as a positive response).\n\nExamples\nSample 1\nInput\n2\n2 1\n1 0\n1 2\n1\n5 4\n1 0 0 0 0\n1 2\n1 3\n1 5\n3 4\n4\n3\n2\n5\nOutput\nNo\nNo\nYes\nYes\nNo\n\nSample 2\nInput\n4\n5 3\n1 1 1 1 1\n3 5\n2 5\n3 4\n1 5\n1\n1\n1\n4 4\n0 0 0 0\n1 2\n2 3\n1 4\n1\n2\n3\n2\n1 1\n1\n1\n1 1\n0\n1\nOutput\nYes\nNo\nYes\nYes\nYes\nYes\nNo\nNo\nYes\n\nNote\nIn the second test case, the color of the vertices are as follows:\n\nThe initial tree:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1975E/d67482a066522c11f266b4eca3d7a1ef0055849d.png)The first query toggles the color of vertex $ 4 $ :\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1975E/4a07e30139deb2cb81867b3706db8e9ec51e4318.png)The second query toggles the color of vertex $ 3 $ :\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1975E/fd56e11f35468c4b51183822460fd341cde05e88.png)The third query toggles the color of vertex $ 2 $ :\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1975E/f1f02d1c42e642ef8cfd2174f0e71d8955cb85ac.png)The fourth query toggles the color of vertex $ 5 $ :\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1975E/72ebf27a994a252cc8de91446a4beacafa646ddb.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Suppose the tree is a rooted tree, we only need to care about the number of black child vertices of each vertex."
+        },
+        {
+            "title": "Hint 2",
+            "content": "If the black vertices form a chain, there is no black vertex that has three or more black child vertices. And there is at most one black vertex that has two black child vertices."
+        },
+        {
+            "title": "Hint 3",
+            "content": "If the black vertices form a chain, there is at most one black vertex whose parent vertex is white."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Read the hints.\nWe can maintain the number of black vertices with $$$0/1/2/3+$$$ black child vertices in $$$O(1)$$$. When we flip the color of one vertex, only it and its parent node are affected.\nIf the black vertices form a chain: - no black vertex that has three or more black child vertices and there is at most one black vertex that has two black child vertices. - there is at most one black vertex whose parent vertex is white. - if there is one black vertex that has two black child vertices, its parent vertex must be white."
+        }
+    ]
+}

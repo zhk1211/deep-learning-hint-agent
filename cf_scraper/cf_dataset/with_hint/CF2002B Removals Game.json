@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlice got a permutation $ a_1, a_2, \\ldots, a_n $ of $ [1,2,\\ldots,n] $ , and Bob got another permutation $ b_1, b_2, \\ldots, b_n $ of $ [1,2,\\ldots,n] $ . They are going to play a game with these arrays.\n\nIn each turn, the following events happen in order:\n\n- Alice chooses either the first or the last element of her array and removes it from the array;\n- Bob chooses either the first or the last element of his array and removes it from the array.\n\nThe game continues for $ n-1 $ turns, after which both arrays will have exactly one remaining element: $ x $ in the array $ a $ and $ y $ in the array $ b $ .\n\nIf $ x=y $ , Bob wins; otherwise, Alice wins. Find which player will win if both players play optimally.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1\\le t\\le10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1\\le n\\le 3\\cdot 10^5 $ ).\n\nThe next line contains $ n $ integers $ a_1,a_2,\\ldots,a_n $ ( $ 1\\le a_i\\le n $ , all $ a_i $ are distinct) — the permutation of Alice.\n\nThe next line contains $ n $ integers $ b_1,b_2,\\ldots,b_n $ ( $ 1\\le b_i\\le n $ , all $ b_i $ are distinct) — the permutation of Bob.\n\nIt is guaranteed that the sum of all $ n $ does not exceed $ 3\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single line with the name of the winner, assuming both players play optimally. If Alice wins, print $ \\texttt{Alice} $ ; otherwise, print $ \\texttt{Bob} $ .\n\nExamples\nSample 1\nInput\n2\n2\n1 2\n1 2\n3\n1 2 3\n2 3 1\nOutput\nBob\nAlice\n\nNote\nIn the first test case, Bob can win the game by deleting the same element as Alice did.\n\nIn the second test case, Alice can delete $ 3 $ in the first turn, and then in the second turn, delete the element that is different from the one Bob deleted in the first turn to win the game."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Find some conditions that Bob need to win."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "A general idea is that it is very difficult for Bob to win. We make some observations regarding the case where Bob wins. It is intuitive to see that for any subarray $$$[A_l,A_{l+1},\\cdots,A_r]$$$, the elements' positions in $$$B$$$ must also form an interval. If $$$A[l:r]$$$ does not form an interval in $$$B$$$, Alice can simply remove elements until only $$$A[l:r]$$$ is left, no matter how Bob plays, there must now be an element in $$$A$$$ but not in $$$B$$$ because of our previous condition. Alice can then remove everything other than this element to win.\nFrom here, it is easy to prove by induction that for Bob to win, either $$$A=B$$$ or $$$A=\\textrm{rev}(B)$$$.\nTime complexity: $$$O(n)$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nll\nlong\nlong\n#define\nlc\n(\nx\n)\n((\nx\n)\n<<\n1\n)\n#define\nrc\n(\nx\n)\n((\nx\n)\n<<\n1\n|\n1\n)\n#define\nru\n(\ni\n,\nl\n,\nr\n)\nfor\n(\nint\ni\n=\n(\nl\n);\ni\n<=\n(\nr\n);\ni\n++)\n#define\nrd\n(\ni\n,\nr\n,\nl\n)\nfor\n(\nint\ni\n=\n(\nr\n);\ni\n>=\n(\nl\n);\ni\n--)\n#define\nmid\n((\nl\n+\nr\n)\n>>\n1\n)\n#define\npii pair\n<\nint\n,\nint\n>\n#define\nmp make_pair\n#define\nfi\nfirst\n#define\nse second\n#define\nsz\n(\ns\n)\n(\nint\n)\ns\n.\nsize\n()\n#include\n<ext/pb_ds/assoc_container.hpp>\n#include\n<ext/pb_ds/tree_policy.hpp>\nusing\nnamespace\n__gnu_pbds\n;\n#define\nordered_set tree\n<\nint\n,\nnull_type\n,\nless\n<int>\n,\nrb_tree_tag\n,\ntree_order_statistics_node_update\n>\nusing\nnamespace\nstd\n;\nmt19937\nRand\n(\nchrono\n::\nsteady_clock\n::\nnow\n().\ntime_since_epoch\n().\ncount\n());\nint\nread\n()\n{\nint\nx\n=\n0\n,\nw\n=\n0\n;\nchar\nch\n=\ngetchar\n();\nwhile\n(!\nisdigit\n(\nch\n))\nw\n|=\nch\n==\n'-'\n,\nch\n=\ngetchar\n();\nwhile\n(\nisdigit\n(\nch\n))\nx\n=\nx\n*\n10\n+\nch\n-\n'0'\n,\nch\n=\ngetchar\n();\nreturn\nw\n?\n-\nx\n:\nx\n;\n}\nint\nmain\n()\n{\nint\nT\n=\nread\n();\nwhile\n(\nT\n--)\n{\nint\nn\n=\nread\n();\nvector\n<int>\na\n,\nb\n;\nru\n(\ni\n,\n1\n,\nn\n)\na\n.\npush_back\n(\nread\n());\nru\n(\ni\n,\n1\n,\nn\n)\nb\n.\npush_back\n(\nread\n());\nif\n(\na\n==\nb\n)\n{\nprintf\n(\n\"Bob\\n\"\n);\ncontinue\n;\n}\nreverse\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nif\n(\na\n==\nb\n)\n{\nprintf\n(\n\"Bob\\n\"\n);\ncontinue\n;\n}\nprintf\n(\n\"Alice\\n\"\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer $ n $ . You choose $ n $ cells $ (x_1,y_1), (x_2,y_2),\\dots,(x_n,y_n) $ in the grid $ n\\times n $ where $ 1\\le x_i\\le n $ and $ 1\\le y_i\\le n $ .\n\nLet $ \\mathcal{H} $ be the set of distinct Manhattan distances between any pair of cells. Your task is to maximize the size of $ \\mathcal{H} $ . Examples of sets and their construction are given in the notes.\n\nIf there exists more than one solution, you are allowed to output any.\n\nManhattan distance between cells $ (x_1,y_1) $ and $ (x_2,y_2) $ equals $ |x_1-x_2|+|y_1-y_2| $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1\\le t\\le 50 $ ) — the number of test cases.\n\nEach of the following $ t $ lines contains a single integer $ n $ ( $ 2\\le n\\le 10^3 $ ).\n\nOutput Format\nFor each test case, output $ n $ points which maximize the size of $ \\mathcal{H} $ . It is not necessary to output an empty line at the end of the answer for each test case.\n\nExamples\nSample 1\nInput\n5\n2\n3\n4\n5\n6\nOutput\n1 1\n1 2\n\n2 1\n2 3\n3 1\n\n1 1\n1 3\n4 3\n4 4\n\n1 1\n1 3\n1 4\n2 1\n5 5\n\n1 4\n1 5\n1 6\n5 2\n5 5\n6 1\n\nNote\nIn the first testcase we have $ n=2 $ . One of the possible arrangements is:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1968E/75dc943a7c64415a7537c95e5a0a8ab6f7bb8c40.png) The arrangement with cells located in $ (1,1) $ and $ (1,2) $ . In this case $ \\mathcal{H}=\\{|1-1|+|1-1|,|1-1|+|2-2|,|1-1|+|1-2|\\}=\\{0,0,1\\}=\\{0,1\\} $ . Hence, the size of $ \\mathcal{H} $ is $ 2 $ . It can be shown that it is the greatest possible answer.In the second testcase we have $ n=3 $ . The optimal arrangement is:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1968E/c33264fb4d38aae733c98659eb0f28334deed2c9.png) The arrangement with cells located in $ (2,1) $ , $ (2,3) $ and $ (3,1) $ . $ \\mathcal{H} $ = $ \\{|2-2|+|1-1|,|2-2|+|3-3|,|3-3|+|1-1|,|2-2|+|1-3|,|2-3|+|1-1|,|2-3|+|3-1|\\} $ = $ \\{0,0,0,2,1,3\\} $ = $ \\{0,1,2,3\\} $ .\n\nFor $ n=4 $ a possible arrangement is:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1968E/c8c88e231569a366e81dbe59dfe40f3bca88662e.png)For $ n=5 $ a possible arrangement is:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1968E/3a3f9b43e6fc8c9643d27a1bfc597d0efe1c8425.png)For $ n=6 $ a possible arrangement is:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1968E/b0bf5b17a4bc6da02c3ed5a2113cf7373a9e3ccc.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What is the maximal possible size of $$$\\mathcal{H}$$$?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Can you always get that size for $$$n\\geq 4$$$?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Consider odd and even distances independently."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let us find an interesting pattern for $$$n\\geq 4$$$.\nPattern for n=4\nPattern for n=5\nCan you generalize the pattern? We put $$$n-2$$$ cells on the main diagonal. Then put two cells at $$$(n-1,n)$$$ and $$$(n,n)$$$.\nBut why does it work? Interesting fact, that in such way we generate all possible Manhattan distances. Odd distances are generated between cells from the main diagonal and $$$(n-1,n)$$$. Even distances are generated between cells from the main diagonal and $$$(n,n)$$$."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<iostream>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nint\nn\n;\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n-\n2\n;\ni\n++){\ncout\n<<\ni\n<<\n' '\n<<\ni\n<<\n\"\\n\"\n;\n}\ncout\n<<\nn\n-\n1\n<<\n' '\n<<\nn\n<<\n\"\\n\"\n<<\nn\n<<\n' '\n<<\nn\n<<\n\"\\n\"\n;\n}\n}"
+        }
+    ]
+}

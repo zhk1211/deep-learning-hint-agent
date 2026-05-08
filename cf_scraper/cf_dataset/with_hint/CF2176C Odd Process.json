@@ -1,0 +1,48 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have $ n $ coins with denominations $ a_1, a_2, \\ldots, a_n $ and a natural number $ k $ . You also have a bag, which is initially empty, where you can place coins. You need to perform exactly $ k $ actions. In each action, you take one coin from those you have left and put it in your bag. After that, you can no longer take that coin.\n\nAt the same time, you have a cat that loves even numbers, so every time the sum of the denominations of the coins in your bag becomes even, your cat empties the bag, meaning it takes all the coins to a place known only to it, and the bag is empty again. Note that the bag is emptied every time the sum becomes even during the process of adding coins, not just at the very last moment.\n\nLet your score be the sum of the denominations of the coins in the bag. Your task is to perform $ k $ actions such that your final score is maximized. Find the answer for all $ 1 \\le k \\le n $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the number of coins you have.\n\nThe second line of each test case contains $ n $ natural numbers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the denominations of the coins.\n\nIt is guaranteed that the sum of $ n $ across all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output $ n $ numbers — the maximum possible score that can be achieved by performing exactly $ k $ actions for all $ k $ from $ 1 $ to $ n $ .\n\nExamples\nSample 1\nInput\n6\n3\n1 1 1\n3\n1 2 3\n5\n4 1 3 1 2\n5\n4 2 3 1 3\n3\n4 1 2\n3\n4 2 2\nOutput\n1 0 1\n3 5 0\n3 7 9 7 9\n3 7 9 7 9\n1 5 7\n0 0 0\n\nNote\nIn the first set of input data, you have coins with denominations \\[ $ 1,1,1 $ \\].\n\n- $ k=1 $ : in this case, the sum of the denominations in the bag is $ 1 $ , regardless of the chosen coin. The final score is also $ 1 $ .\n- $ k=2 $ : in this case, the sum of the denominations in the bag is initially $ 1 $ , regardless of the choice of coin. When choosing the second coin, the sum will be $ 2 $ , regardless of the choice of coin, and thus the bag will be emptied. The final score is $ 0 $ .\n- $ k=3 $ : in this case, when choosing the first two coins, the sum will be $ 2 $ and the bag will be emptied, after which the sum will be $ 0 $ . When choosing the third coin, the sum will become $ 1 $ .\n\nIn the second set of input data, you have coins with denominations \\[ $ 1,2,3 $ \\].\n\n- $ k=1 $ : in this case, when choosing the coin with denomination $ 2 $ , the bag will be emptied and the final score will be $ 0 $ . When choosing the coin with denomination $ 1 $ or $ 3 $ , the final scores will be $ 1 $ and $ 3 $ , respectively. The maximum possible final score is $ 3 $ .\n- $ k=2 $ : in this case, when choosing two coins $ 1 $ and $ 3 $ in any order, their sum will be $ 4 $ , after which the bag will be emptied and the final score will be $ 0 $ . However, when choosing $ 3 $ as the first coin, the score will be $ 3 $ . Then you can choose, for example, coin $ 2 $ , and the final score will become $ 5 $ .\n- $ k=3 $ : in this case, the sum of all coins will be $ 6 $ , and since each time the bag is emptied it does not change the parity of the accumulated sum, the final score is $ 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nYou have $$$n$$$ coins, and all of them are even. What will the answers be for all $$$k$$$?\nHint 2\nYou have two coins: one even and one odd. What will the answers be for $$$k = 1$$$ and $$$k = 2$$$?\nHint 3\nYou have $$$n$$$ coins, and exactly one of them is odd. What will the answers be for all $$$k$$$?\nHint 4\nYou have $$$n$$$ coins, and all of them are odd. What will the answers be for all $$$k$$$?\nHint 5\nYou have $$$n$$$ coins, and exactly three of them are odd. What will the answers be for $$$k = (n - 2)$$$, $$$(n - 1)$$$, and $$$n$$$, respectively?\nHint 6\nYou have $$$n$$$ coins, and exactly four of them are odd. What will the answers be for $$$k$$$ from $$$(n - 3)$$$ to $$$n$$$?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "You have $$$n$$$ coins, and all of them are even. What will the answers be for all $$$k$$$?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "You have two coins: one even and one odd. What will the answers be for $$$k = 1$$$ and $$$k = 2$$$?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "You have $$$n$$$ coins, and exactly one of them is odd. What will the answers be for all $$$k$$$?"
+        },
+        {
+            "title": "Hint 4",
+            "content": "You have $$$n$$$ coins, and all of them are odd. What will the answers be for all $$$k$$$?"
+        },
+        {
+            "title": "Hint 5",
+            "content": "You have $$$n$$$ coins, and exactly three of them are odd. What will the answers be for $$$k = (n - 2)$$$, $$$(n - 1)$$$, and $$$n$$$, respectively?"
+        },
+        {
+            "title": "Hint 6",
+            "content": "You have $$$n$$$ coins, and exactly four of them are odd. What will the answers be for $$$k$$$ from $$$(n - 3)$$$ to $$$n$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "If all the coins you have are even, then regardless of your actions, the bag will be empty every time.\nLet's say we have one odd coin $$$oc$$$ and several even coins $$$ec_1, ec_2, \\dots, ec_m$$$.\nWe will sort the even coins in descending order: $$$ec_1 \\ge ec_2 \\ge \\dots ec_m$$$.\nIn this case, for $$$k = 1 \\dots (m + 1)$$$, we can construct the following answers:\n$$$oc$$$\n$$$oc + ec_1$$$\n$$$oc + ec_1 + ec_2$$$\n$$$\\dots$$$\n$$$oc + ec_1 + ec_2 + \\dots + ec_m$$$.\nBut what to do if there are several odd coins?\nLet $$$oc$$$ be the largest of the odd coins.\nWe will perform the above actions for all $$$k$$$ from $$$1$$$ to $$$(m + 1)$$$.\nFor $$$k = (m + 2)$$$, we will use the following construction:\nFirst, we will put any two odd coins that are not the coin $$$oc$$$ into the bag.\nNext, we will put the coin $$$oc$$$ and all even coins except the smallest one $$$ec_m$$$.\nFor $$$k = (m + 3)$$$, we will add the smallest even coin $$$ec_m$$$ to the already constructed answer.\nFor $$$k = (m + 4)$$$, we will add two more \"unnecessary\" odd coins at the beginning and again remove $$$ec_m$$$.\nFor $$$k = (m + 5)$$$, we will add $$$ec_m$$$ again, and so on.\nNote for $$$k = n$$$: if you have an even number of odd coins in total, then regardless of the order of addition, the bag will be emptied in the end."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<iostream>\n#include\n<vector>\n#include\n<algorithm>\n#include\n<map>\n#include\n<ctime>\n#include\n<queue>\n#include\n<iomanip>\n#include\n\"assert.h\"\n#include\n<math.h>\n#include\n<set>\n#include\n<deque>\nusing\nnamespace\nstd\n;\n#define\nvi vector\n<int>\n#define\nvii vector\n<\npair\n<\nint\n,\nint\n>>\n#define\npii pair\n<\nint\n,\nint\n>\n#define\nll\nlong\nlong\n#define\npll pair\n<\nll\n,\nll\n>\nconst\nll INF\n=\n2e18\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nvi a\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nvi odd\n,\neven\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\na\n[\ni\n]\n&\n1\n)\nodd\n.\npush_back\n(\na\n[\ni\n]);\nelse\neven\n.\npush_back\n(\na\n[\ni\n]);\n}\nsort\n(\nodd\n.\nbegin\n(),\nodd\n.\nend\n());\nsort\n(\neven\n.\nbegin\n(),\neven\n.\nend\n());\nreverse\n(\neven\n.\nbegin\n(),\neven\n.\nend\n());\nvector\n<ll>\nprefeven\n((\nint\n)\neven\n.\nsize\n()\n+\n1\n);\nif\n(\neven\n.\nsize\n()\n>\n0\n)\n{\nprefeven\n[\n0\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\neven\n.\nsize\n();\ni\n++)\nprefeven\n[\ni\n+\n1\n]\n=\nprefeven\n[\ni\n]\n+\neven\n[\ni\n];\n}\nll ans\n=\n-\nINF\n;\nint\ncntodd\n=\n(\nint\n)\nodd\n.\nsize\n();\nint\ncnteven\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\na\n[\ni\n]\n%\n2\n==\n0\n)\ncnteven\n++;\n}\nint\nodd1\n=\n1\n,\neven1\n=\n0\n;\nif\n(\nodd\n.\nsize\n()\n==\n0\n)\nodd1\n=\n0\n,\neven1\n=\n1\n;\nfor\n(\nint\nk\n=\n1\n;\nk\n<=\nn\n;\nk\n++)\n{\nif\n(\nk\n>\n1\n)\n{\nif\n(\neven1\n<\neven\n.\nsize\n())\neven1\n++;\nelse\n{\nif\n(\nodd1\n+\n2\n<=\nodd\n.\nsize\n()\n&&\neven1\n>\n0\n)\n{\nodd1\n+=\n2\n;\neven1\n--;\n}\nelse\n{\nodd1\n++;\n}\n}\n}\nif\n(\nodd1\n&\n1\n)\n{\ncout\n<<\nodd\n.\nback\n()\n+\nprefeven\n[\neven1\n]\n<<\n\" \"\n;\n}\nelse\n{\ncout\n<<\n0\n<<\n\" \"\n;\n}\n}\ncout\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nsrand\n(\ntime\n(\n0\n));\nios\n::\nsync_with_stdio\n(\n0\n);\ncout\n.\ntie\n(\n0\n),\ncin\n.\ntie\n(\n0\n);\nint\nT\n=\n1\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

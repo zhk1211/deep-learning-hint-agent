@@ -1,0 +1,56 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the hard version of the problem. The only difference between the two versions is the constraint on $ k $ . You can make hacks only if all versions of the problem are solved.\n\nIn this statement, all strings are $ 0 $ -indexed.\n\nFor two strings $ a $ , $ b $ of the same length $ p $ , we define the following definitions:\n\n- The hamming distance between $ a $ and $ b $ , denoted as $ h(a, b) $ , is defined as the number of positions $ i $ such that $ 0 \\le i < p $ and $ a_i \\ne b_i $ .\n- $ b $ is a cyclic shift of $ a $ if there exists some $ 0 \\leq k < p $ such that $ b_{(i+k) \\bmod p} = a_i $ for all $ 0 \\le i < p $ . Here $ x \\bmod y $ denotes the remainder from dividing $ x $ by $ y $ .\n\nYou are given two binary strings $ s $ and $ t $ of length $ 2^{k+1} $ each. Both strings may contain missing characters (denoted by the character '?'). Your task is to count the number of ways to replace the missing characters in both strings with the characters '0' or '1' such that:\n\n- Each string $ s $ and $ t $ contains exactly $ 2^k $ occurrences of each character '0' and '1'\n- $ h(s, c) \\ge 2^k $ for all strings $ c $ that is a cyclic shift of $ t $ .\n\nAs the result can be very large, you should print the value modulo $ 998\\,244\\,353 $ .\n\nInput Format\nThe first line of the input contains a single integer $ k $ ( $ 1 \\le k \\le 12 $ ).\n\nThe second line of the input contains string $ s $ of size $ 2^{k+1} $ , consisting of the characters '0', '1' and '?'.\n\nThe third line of the input contains string $ t $ of size $ 2^{k+1} $ , consisting of the characters '0', '1' and '?'.\n\nIt is guaranteed that both strings $ s $ and $ t $ contains no more than $ 2^k $ character '0' or '1'.\n\nOutput Format\nPrint a single integer — the answer to the problem modulo $ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n1\n0011\n0101\nOutput\n1\n\nSample 2\nInput\n1\n0011\n0110\nOutput\n0\n\nSample 3\nInput\n1\n0??1\n01??\nOutput\n2\n\nSample 4\nInput\n2\n000?????\n01010101\nOutput\n3\n\nSample 5\nInput\n2\n0???????\n1???????\nOutput\n68\n\nSample 6\nInput\n5\n0101010101010101010101010101010101010101010101010101010101010101\n????????????????????????????????????????????????????????????????\nOutput\n935297567\n\nNote\nIn the first example, we can check that the condition $ h(s, c) \\ge 2^k $ for all cyclic shift $ c $ of $ t $ is satisfied. In particular:\n\n- for $ c = \\mathtt{0101} $ , $ h(s, c) = h(\\mathtt{0110}, \\mathtt{0101}) = 2 \\ge 2^1 $ ;\n- for $ c = \\mathtt{1010} $ , $ h(s, c) = h(\\mathtt{0110}, \\mathtt{1010}) = 2 \\ge 2^1 $ .\n\nIn the second example, there exists a cycle shift $ c $ of $ t $ such that $ h(s, c) < 2^k $ (in particular, $ c = \\mathtt{0011} $ , and $ h(s, c) = h(\\mathtt{0011}, \\mathtt{0011}) = 0 $ ).\n\nIn the third example, there are $ 2 $ possible ways to recover the missing characters:\n\n- $ s = \\mathtt{0101} $ , $ t = \\mathtt{0110} $ ;\n- $ s = \\mathtt{0011} $ , $ t = \\mathtt{0101} $ .\n\nIn the fourth example, there are $ 3 $ possible ways to recover the missing characters:\n\n- $ s = \\mathtt{00011110} $ , $ t = \\mathtt{01010101} $ ;\n- $ s = \\mathtt{00011011} $ , $ t = \\mathtt{01010101} $ ;\n- $ s = \\mathtt{00001111} $ , $ t = \\mathtt{01010101} $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "For any $$$c$$$ which is a cyclic shift of $$$t$$$, what will happen if $$$h(s,c) \\gt 2^k$$$?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Try finding some useful relationship between $$$1$$$-s of $$$s$$$ and $$$1$$$-s of $$$c$$$.\nHint\nThere are exactly $$$n/2$$$ positions $$$i$$$ such that $$$s[i]=c[i]=1$$$."
+        },
+        {
+            "title": "Hint",
+            "content": "There are exactly $$$n/2$$$ positions $$$i$$$ such that $$$s[i]=c[i]=1$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Think about polynomial multiplication.\nHint 1\nConsider $$$S\\cdot T$$$, where $$$S=\\sum s[i]x^i$$$ and $$$T=\\sum t[2n-i-1]x^i$$$ (reversed coefficients).\nHint 2\nWhat are some properties that the coefficients of $$$S\\cdot T$$$ tell us?\nHint\nDenote $$$A=S\\cdot T$$$, we have $$$A[x^i]+A[x^{i+2n}]=n/2$$$.\nHint 3\nTry factoring $$$S\\cdot T$$$ into some irreducible polynomials."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Consider $$$S\\cdot T$$$, where $$$S=\\sum s[i]x^i$$$ and $$$T=\\sum t[2n-i-1]x^i$$$ (reversed coefficients)."
+        },
+        {
+            "title": "Hint 2",
+            "content": "What are some properties that the coefficients of $$$S\\cdot T$$$ tell us?\nHint\nDenote $$$A=S\\cdot T$$$, we have $$$A[x^i]+A[x^{i+2n}]=n/2$$$."
+        },
+        {
+            "title": "Hint",
+            "content": "Denote $$$A=S\\cdot T$$$, we have $$$A[x^i]+A[x^{i+2n}]=n/2$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Try factoring $$$S\\cdot T$$$ into some irreducible polynomials."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Sort $$$0,1,\\ldots,2n-1$$$ based on their bit-reversal values and build a binary tree on top of it. What condition should be satisfied on each level of the tree?"
+        },
+        {
+            "title": "Hint",
+            "content": "Group the positions by the remainder when divided by $$$2^p$$$, find the necessary condition for each group, and consider its position on the tree."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Consider the polynomial product $$$A=S\\cdot T$$$, where $$$S=\\sum s[i]x^i$$$ and $$$T=\\sum t[2n-i-1]x^i$$$ (reversed coefficients).\nClaim 1.\nFor all $$$0\\le i \\lt 2n$$$, we have $$$A[x^i]+A[x^{i+2n}]=n/2$$$, where $$$A[x^k]$$$ denote the coefficient of $$$x^k$$$ in $$$A$$$.\nClaim 2.\nWe can express $$$A=(x+1)(x^2+1)(x^4+1)\\ldots (x^n+1)(n/2+C(x-1))$$$ where $$$C$$$ is some polynomial with degree not greater than $$$2n-2$$$.\nProof\n$$$ \\begin{align} &(x+1)(x^2+1)(x^4+1)\\ldots (x^n+1)(n/2+C(x-1))\\\\ =\\ &C(x^{2n}-1)+n/2\\cdot (x^0+x^1+x^2+\\ldots+x^{2n-1}) \\end{align} $$$\nIt is easy to see that this satisfies claim 1.\nClaim 3.\nSince $$$x^{2^p}+1$$$ is cyclotomic polynomial and hence irreducible for all $$$p$$$, each factor in $$$x+1,x^2+1,\\ldots,x^n+1$$$ must divide at least one of $$$S$$$ and $$$T$$$. And under the constraints that each of $$$s$$$ and $$$t$$$ must have exactly $$$n$$$ $$$1$$$-s, this condition is also sufficient.\nProof\nLet $$$A=(x+1)(x^2+1)(x^4+1)\\ldots (x^n+1)\\cdot D$$$. We have $$$A(1)=n^2$$$, hence $$$D(1)=n/2$$$, which means that $$$D$$$ has the form of $$$n/2+C(x-1)$$$. Therefore $$$A$$$ satisfies claim 2.\nRecall $$$n=2^k$$$, define $$$f_s(mask)$$$ ($$$0\\le mask \\lt 2n$$$) as the number of string $$$s$$$ such that for each $$$p$$$ where $$$p$$$-th bit of $$$mask$$$ is on, $$$S$$$ is divisible by $$$x^{p}+1$$$. Define $$$f_t$$$ similarly for $$$T$$$. Define $$$f^{\\prime}_t$$$ such that $$$f^{\\prime}_t(mask)=f_t(mask\\oplus (2n-1))$$$ where $$$\\oplus$$$ denotes bitwise XOR.\nThe answer to the problem is $$$\\displaystyle\\sum_{mask} f_s(mask)\\cdot \\mu(f^{\\prime}_t(mask))$$$ where $$$\\mu$$$ denote\nMobius transform\n. The reason we need Mobius transform is that $$$mask_s$$$ does not represent all divisors, just a subset of it.\nLet rearrange elements of $$$s$$$ into a new array $$$s^{\\prime}$$$ so that $$$s^{\\prime}[\\text{reverse_bit}(i)]=s[i]$$$ (for example, with $$$n=8$$$, the new order will be $$$[0,8,4,12,2,6,10,14,1,9,5,13,3,11,7,15]$$$). Construct a perfect binary tree based on the array $$$s^{\\prime}$$$. This binary will have $$$k+2$$$ levels from $$$0$$$ to $$$k+1$$$, starting at the root.\nClaim 4.\n$$$S$$$ is divisible by $$$x^{2^p}+1$$$ if only if for every tree node at $$$p$$$-th level, the number of $$$1$$$-s of $$$s^{\\prime}$$$ under both children are equal (the proof is left as an exercise for readers).\nHint\nGroup the positions by the remainder when divided by $$$2^p$$$, find the necessary condition for each group, and consider its position on the tree.\nConsider the following dynamic programming: $$$dp_s[i][mask][num]$$$, where the levels in $$$mask$$$ satisfy claim 4 and $$$num$$$ is the number of $$$1$$$-s under $$$i$$$-th node on the tree. Denote $$$l$$$ as level of $$$i$$$-th node, transitions are:\n$$$dp_s[i][mask][num_1+num_2]\\text{ += }dp_s[2i][mask][num_1]\\cdot dp_s[2i+1][mask][num_2]$$$\n$$$dp_s[i][mask+2^l][2\\cdot num]\\text{ += }dp_s[2i][mask][num]\\cdot dp_s[2i+1][mask][num]$$$\nThe above dp took $$$\\mathcal{O}(n^3)$$$, which is sufficient to solve the easy version.\nTo solve the hard version, we will optimize the above transitions:\nThe first transition is actually the convolution of $$$dp_s[2i][mask]$$$ and $$$dp_s[2i+1][mask]$$$, we can use FFT to optimize it.\nIn the second transition, because $$$num$$$ is multiplied by $$$2$$$ every time, we can omit it and just make the transition to $$$dp_s[i][mask+2^l][num]$$$, reduce the length of $$$dp_s[i][mask+2^l]$$$ by two.\nBy careful analysis, we can show that the time complexity is now $$$\\mathcal{O}(3^k\\cdot k)$$$ (recall $$$n=2^k$$$) with a fair constant factor, which solved the hard version."
+        }
+    ]
+}

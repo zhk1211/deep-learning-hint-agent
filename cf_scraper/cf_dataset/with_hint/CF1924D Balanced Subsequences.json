@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA sequence of brackets is called balanced if one can turn it into a valid math expression by adding characters '+' and '1'. For example, sequences '(())()', '()', and '(()(()))' are balanced, while ')(', '(()', and '(()))(' are not.\n\nA subsequence is a sequence that can be derived from the given sequence by deleting zero or more elements without changing the order of the remaining elements.\n\nYou are given three integers $ n $ , $ m $ and $ k $ . Find the number of sequences consisting of $ n $ '(' and $ m $ ')', such that the longest balanced subsequence is of length $ 2 \\cdot k $ . Since the answer can be large calculate it modulo $ 1\\,000\\,000\\,007 $ ( $ 10^9 + 7 $ ).\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 3 \\cdot 10^3 $ ). Description of the test cases follows.\n\nThe first line of each test case contains three integers $ n $ , $ m $ and $ k $ ( $ 1 \\le n, m, k \\le 2 \\cdot 10^3 $ )\n\nOutput Format\nFor each test case, print one integer — the answer to the problem.\n\nExamples\nSample 1\nInput\n3\n2 2 2\n3 2 3\n3 2 1\nOutput\n2\n0\n4\n\nNote\nFor the first test case \"()()\", \"(())\" are the $ 2 $ sequences\n\nFor the second test case no sequence is possible.\n\nFor the third test case \")((()\", \")(()(\", \")()((\", \"())((\" are the $ 4 $ sequences."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider a function $$$f(n, m, k)$$$ which returns the number of permutations such that length of longest regular bracket subsequence is at most $$$2 \\cdot k$$$ where $$$n$$$ is the number of '(' and $$$m$$$ is the number of ')'."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Answer to the problem is $$$f(n, m, k) - f(n, m, k-1)$$$"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Now to compute $$$f(n, m, k)$$$, we can consider the following cases:\nCase 1: $$$k \\ge min(n, m)\\rightarrow$$$ Here, the answer is $$${n+m} \\choose {m}$$$, since none of the strings can have a subsequence of length greater than $$$k$$$.\nCase 2: $$$k \\lt min(n, m)\\rightarrow$$$ Here we can write $$$f(n, m, k) = f(n-1, m, k-1) + f(n, m-1, k)$$$ since all strings will either start with:\na) ')' $$$\\rightarrow$$$ Here, count is equal to $$$f(n, m-1, k)$$$.\nb) '(' $$$\\rightarrow$$$ Here, count is equal to $$$f(n-1, m, k-1)$$$, the first opening bracket will always add $$$1$$$ to the optimal subsequence length because all strings where each of the $$$m$$$ ')' is paired to some '(' don't contribute to the count since $$$k \\lt m$$$.\nAfter this recurrence relation we have 2 base cases:\n$$$k=0\\rightarrow$$$ Here, count is $$$1$$$ which can also be written as $$${n+m} \\choose {k}$$$.\n$$$k=min(n, m)\\rightarrow$$$ Here, count is $$${n+m} \\choose {m}$$$ (as proved in Case 1) which can also be written as $$${n+m} \\choose {k}$$$.\nNow using induction we can prove that the value of $$$f(n, m, k)$$$ for Case 2 is $$${n+m} \\choose {k}$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nint\nlong\nlong\nusing\nnamespace\nstd\n;\nconst\nlong\nlong\nN\n=\n4005\n,\nmod\n=\n1000000007\n;\nint\npower\n(\nint\na\n,\nint\nb\n,\nint\np\n)\n{\nif\n(\na\n==\n0\n)\nreturn\n0\n;\nint\nres\n=\n1\n;\na\n%=\np\n;\nwhile\n(\nb\n>\n0\n)\n{\nif\n(\nb\n&\n1\n)\nres\n=(\n1ll\n*\nres\n*\na\n)%\np\n;\nb\n>>=\n1\n;\na\n=(\n1ll\n*\na\n*\na\n)%\np\n;\n}\nreturn\nres\n;\n}\nint\nfact\n[\nN\n],\ninv\n[\nN\n];\nvoid\npre\n()\n{\nfact\n[\n0\n]=\ninv\n[\n0\n]=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nN\n;\ni\n++)\nfact\n[\ni\n]=(\nfact\n[\ni\n-\n1\n]*\ni\n)%\nmod\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nN\n;\ni\n++)\ninv\n[\ni\n]=\npower\n(\nfact\n[\ni\n],\nmod\n-\n2\n,\nmod\n);\n}\nint\nnCr\n(\nint\nn\n,\nint\nr\n)\n{\nif\n(\nmin\n(\nn\n,\nr\n)<\n0\n||\nr\n>\nn\n)\nreturn\n0\n;\nif\n(\nn\n==\nr\n)\nreturn\n1\n;\nreturn\n(((\nfact\n[\nn\n]*\ninv\n[\nr\n])%\nmod\n)*\ninv\n[\nn\n-\nr\n])%\nmod\n;\n}\nint\nf\n(\nint\nn\n,\nint\nm\n,\nint\nk\n)\n{\nif\n(\nk\n>=\nmin\n(\nn\n,\nm\n))\nreturn\nnCr\n(\nn\n+\nm\n,\nm\n);\nreturn\nnCr\n(\nn\n+\nm\n,\nk\n);\n}\nint32_t\nmain\n()\n{\npre\n();\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nm\n,\nk\n;\ncin\n>>\nn\n>>\nm\n>>\nk\n;\ncout\n<<(\nf\n(\nn\n,\nm\n,\nk\n)\n-\nf\n(\nn\n,\nm\n,\nk\n-\n1\n)\n+\nmod\n)%\nmod\n<<\n\"\\n\"\n;\n}\n}"
+        }
+    ]
+}

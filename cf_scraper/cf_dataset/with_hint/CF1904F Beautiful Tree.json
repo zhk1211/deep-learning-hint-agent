@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLunchbox has a tree of size $ n $ rooted at node $ 1 $ . Each node is then assigned a value. Lunchbox considers the tree to be beautiful if each value is distinct and ranges from $ 1 $ to $ n $ . In addition, a beautiful tree must also satisfy $ m $ requirements of $ 2 $ types:\n\n- \"1 a b c\" — The node with the smallest value on the path between nodes $ a $ and $ b $ must be located at $ c $ .\n- \"2 a b c\" — The node with the largest value on the path between nodes $ a $ and $ b $ must be located at $ c $ .\n\nNow, you must assign values to each node such that the resulting tree is beautiful. If it is impossible to do so, output $ -1 $ .\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ ( $ 2 \\le n, m \\le 2 \\cdot 10^5 $ ).\n\nThe next $ n - 1 $ lines contain two integers $ u $ and $ v $ ( $ 1 \\le u, v \\le n, u \\ne v $ ) — denoting an edge between nodes $ u $ and $ v $ . It is guaranteed that the given edges form a tree.\n\nThe next $ m $ lines each contain four integers $ t $ , $ a $ , $ b $ , and $ c $ ( $ t \\in \\{1,2\\} $ , $ 1 \\le a, b, c \\le n $ ). It is guaranteed that node $ c $ is on the path between nodes $ a $ and $ b $ .\n\nOutput Format\nIf it is impossible to assign values such that the tree is beautiful, output $ -1 $ . Otherwise, output $ n $ integers, the $ i $ -th of which denotes the value of node $ i $ .\n\nExamples\nSample 1\nInput\n7 5\n1 2\n1 3\n1 4\n3 5\n4 6\n3 7\n1 6 5 1\n2 6 7 3\n1 2 7 1\n1 7 5 7\n2 4 2 2\nOutput\n1 6 7 5 3 4 2\n\nSample 2\nInput\n2 2\n1 2\n1 1 2 1\n1 1 2 2\nOutput\n-1"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Can we represent the conditions as a graph?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Lets rewrite the condition that node $$$a$$$ must be smaller than node $$$b$$$ as a directed edge from $$$a$$$ to $$$b$$$. Then, we can assign each node a value based on the topological sort of this new directed graph. If this directed graph had a cycle, it is clear that there is no way to order the nodes.\nWith this in mind, we can try to construct a graph that would have these properties. Once we have the graph, we can topological sort to find the answer.\nFor now, let's consider the problem if it only had type 1 requirements (type 2 requirements can be done very similarly).\nThus, the problem reduces to \"given a path and a node, add a directed edge from the node to every node in that path.\" To do this, we can use binary lifting. For each node, create $$$k$$$ dummy nodes, the $$$i$$$th of which represents the minimum number from the path between node $$$a$$$ and the $$$2^i$$$th parent of $$$a$$$. Now, we can draw a directed edge from the the $$$i$$$th dummy node of $$$a$$$ to the $$$i-1$$$th dummy node of $$$a$$$ and the $$$i-1$$$th dummy node of the $$$2^{i-1}$$$th parent of $$$a$$$.\nNow, to add an edge from any node to a vertical path of the tree, we can repeatedly add an edge from that node to the largest node we can. This will add $$$O(\\log n)$$$ edges per requirement.\nThe final complexity is $$$O((n+m)\\log n)$$$ time and $$$O((n+m)\\log n)$$$."
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ flowers in a row, the $ i $ -th of them initially has a positive height of $ h_i $ meters.\n\nEvery second, the wind will blow from the left, causing the height of some flowers to decrease.\n\nSpecifically, every second, for each $ i $ from $ 1 $ to $ n $ , in this order, the following happens:\n\n- If $ i = n $ or $ h_i > h_{i + 1} $ , the value of $ h_i $ changes to $ \\max(0, h_i - 1) $ .\n\nHow many seconds will pass before $ h_i=0 $ for all $ 1 \\le i \\le n $ for the first time?\n\nInput Format\nEach test contains multiple test cases. The first line of input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^5 $ ) — the number of flowers.\n\nThe second line of each test case contains $ n $ integers $ h_1, h_2, \\ldots, h_n $ ( $ 1 \\le h_i \\le 10 ^ 9 $ ) — the heights of the flowers.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of seconds that will pass before $ h_i=0 $ for all $ 1 \\le i \\le n $ .\n\nExamples\nSample 1\nInput\n4\n3\n1 1 2\n2\n3 1\n1\n9\n5\n7 4 4 3 2\nOutput\n4\n3\n9\n7\n\nNote\nIn the first test case, the flower heights change as follows: $ [1, 1, 2] \\rightarrow [1, 1, 1] \\rightarrow [1, 1, 0] \\rightarrow [1, 0, 0] \\rightarrow [0, 0, 0] $ .\n\nIn the second test case, the flower heights change as follows: $ [3, 1] \\rightarrow [2, 0] \\rightarrow [1, 0] \\rightarrow [0, 0] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nWhen will $$$h_n$$$ first become equal to zero?\nHint 2\nWhen will $$$h_{n-1}$$$ first become equal to zero?\nHint 3\nConsider solving from right to left.\nHint 4\nSuppose you want to find when $$$h_i$$$ will fist be equal to zero. Try splitting into the cases $$$h_i = h_{i+1}$$$ at some point (before both are zero) and when that is not true."
+        },
+        {
+            "title": "Hint 1",
+            "content": "When will $$$h_n$$$ first become equal to zero?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "When will $$$h_{n-1}$$$ first become equal to zero?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Consider solving from right to left."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Suppose you want to find when $$$h_i$$$ will fist be equal to zero. Try splitting into the cases $$$h_i = h_{i+1}$$$ at some point (before both are zero) and when that is not true."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\n#define\nallr\n(\nx\n)\n(\nx\n).\nrbegin\n(),\n(\nx\n).\nrend\n()\nconst\nchar\nnl\n=\n'\\n'\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\nlong\ndouble\nld\n;\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\nh\n(\nn\n);\nfor\n(\nauto\n&\nx\n:\nh\n)\ncin\n>>\nx\n;\nint\nans\n=\nh\n[\nn\n-\n1\n];\nfor\n(\nint\ni\n=\nn\n-\n2\n;\ni\n>=\n0\n;\ni\n--)\n{\nans\n=\nmax\n(\nans\n+\n1\n,\nh\n[\ni\n]);\n}\ncout\n<<\nans\n<<\nnl\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n--)\nsolve\n();\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ , consisting of lowercase Latin letters and/or question marks.\n\nA tandem repeat is a string of an even length such that its first half is equal to its second half.\n\nA string $ a $ is a substring of a string $ b $ if $ a $ can be obtained from $ b $ by the deletion of several (possibly, zero or all) characters from the beginning and several (possibly, zero or all) characters from the end.\n\nYour goal is to replace each question mark with some lowercase Latin letter in such a way that the length of the longest substring that is a tandem repeat is maximum possible.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of testcases.\n\nThe only line of each testcase contains a string $ s $ ( $ 1 \\le |s| \\le 5000 $ ), consisting only of lowercase Latin letters and/or question marks.\n\nThe total length of the strings over all testcases doesn't exceed $ 5000 $ .\n\nOutput Format\nFor each testcase, print a single integer — the maximum length of the longest substring that is a tandem repeat after you replace each question mark in the string with some lowercase Latin letter.\n\nIf it's impossible to make any tandem repeat substrings in the string, print $ 0 $ .\n\nExamples\nSample 1\nInput\n4\nzaabaabz\n?????\ncode?????s\ncodeforces\nOutput\n6\n4\n10\n0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1948D - Tandem Repeats?\nThe key idea of the problem is to believe that no algorithms are required to solve the problem. Now, we can start looking for ways to iterate over all substrings so that it doesn't degenerate into $$$O(n^3)$$$.\nOne of the ways is the following. How to check if the substring $$$[l; r)$$$ is a tandem repeat? Let $$$d = \\frac{r - l}{2}$$$. Then $$$s_i$$$ should match (either be equal or one of them should be a question mark) $$$s_{i + d}$$$ for all $$$i$$$ from $$$l$$$ to $$$l + d$$$ exclusive.\nIf you iterate over the left border, then the right border of the substring, a lot of these checks change. However, if you iterate over the length $$$d$$$ first, then over the left border, it becomes much easier. What changes when you go from checking $$$[l; r)$$$ to checking $$$[l + 1; r + 1)$$$? One check is removed: $$$s_l$$$ matches $$$s_{l + d}$$$ is now irrelevant, since $$$l$$$ doesn't belong to the substring anymore. One check is added: $$$s_{l + d}$$$ matches $$$s_r$$$ is required, since $$$r$$$ belongs to the substring now.\nSo, the solution can be as follows: maintain the number of successful checks for the current substring $$$[l; r)$$$. If that value is equal to $$$d$$$, then the substring is a tandem repeat, and you can update the answer with its length. Otherwise, subtract the contribution of the check ($$$1$$$ if it's successful, and $$$0$$$ otherwise) for $$$l$$$ and $$$l + d$$$, add the contribution for $$$l + d$$$ and $$$r$$$ and proceed to $$$[l + 1; r + 1)$$$.\nOverall complexity: $$$O(n^2)$$$ per testcase."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\ns\n=\ninput\n()\nn\n=\nlen\n(\ns\n)\nans\n=\n0\nfor\nd\nin\nrange\n(\n1\n,\nn\n// 2 + 1):\ncnt\n=\n0\nfor\ni\nin\nrange\n(\nn\n-\nd\n):\ncnt\n+=\ns\n[\ni\n]\n==\ns\n[\ni\n+\nd\n]\nor\ns\n[\ni\n]\n==\n'?'\nor\ns\n[\ni\n+\nd\n]\n==\n'?'\nif\ni\n-\nd\n>=\n0\n:\ncnt\n-=\ns\n[\ni\n-\nd\n]\n==\ns\n[\ni\n]\nor\ns\n[\ni\n-\nd\n]\n==\n'?'\nor\ns\n[\ni\n]\n==\n'?'\nif\ni\n-\nd\n>=\n-\n1\nand\ncnt\n==\nd\n:\nans\n=\n2\n*\nd\nprint\n(\nans\n)"
+        }
+    ]
+}

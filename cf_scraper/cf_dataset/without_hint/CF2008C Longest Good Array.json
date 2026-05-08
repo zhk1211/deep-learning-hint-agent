@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nToday, Sakurako was studying arrays. An array $ a $ of length $ n $ is considered good if and only if:\n\n- the array $ a $ is increasing, meaning $ a_{i - 1} < a_i $ for all $ 2 \\le i \\le n $ ;\n- the differences between adjacent elements are increasing, meaning $ a_i - a_{i-1} < a_{i+1} - a_i $ for all $ 2 \\le i < n $ .\n\nSakurako has come up with boundaries $ l $ and $ r $ and wants to construct a good array of maximum length, where $ l \\le a_i \\le r $ for all $ a_i $ .\n\nHelp Sakurako find the maximum length of a good array for the given $ l $ and $ r $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1\\le t\\le 10^4 $ ) — the number of test cases.\n\nThe only line of each test case contains two integers $ l $ and $ r $ ( $ 1\\le l\\le r\\le 10^9 $ ).\n\nOutput Format\nFor each test case, output a single integer — the length of the longest good array Sakurako can form given $ l $ and $ r $ .\n\nExamples\nSample 1\nInput\n5\n1 2\n1 5\n2 2\n10 20\n1 1000000000\nOutput\n2\n3\n1\n5\n44721\n\nNote\nFor $ l=1 $ and $ r=5 $ , one possible array could be $ (1,2,5) $ . It can be proven that an array of length $ 4 $ does not exist for the given $ l $ and $ r $ .\n\nFor $ l=2 $ and $ r=2 $ , the only possible array is $ (2) $ .\n\nFor $ l=10 $ and $ r=20 $ , the only possible array is $ (10,11,13,16,20) $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2008C - Longest Good Array\nWe can solve this problem greedily. Let's choose the first element equal to $$$l$$$. Then, the second element should be $$$l+1$$$. The third $$$l+3$$$, and so on. In general, the $$$i-$$$th element is equal to $$$l+\\frac{i\\cdot (i+1)}{2}$$$.\nProof of this solution:\nAssume that array $$$a$$$ is the array made by our algorithm and $$$b$$$ is the array with a better answer. This means that $$$len(b) \\gt len(a)$$$. By the construction of $$$a$$$, there exists an integer $$$i$$$ such that for all $$$j \\lt i$$$, $$$a_j=b_j$$$ and $$$a_i \\lt b_i$$$, because $$$a_i$$$ we choose as the smallest possible element. WLOG assume that $$$len(b)=len(a)+1=n$$$. Then $$$b_n-b_{n-1} \\gt b_{n-1}-b_{n-2}\\ge a_{n-1}-a_{n-2}$$$. So, we can append $$$b_n$$$ to the array $$$a$$$, which leads to a contradiction.\nNow, the task is to find the biggest $$$x$$$ such that $$$l+\\frac{x\\cdot (x+1)}{2}\\le r$$$. In fact, it can be found by binary search, the formula of discriminant, or just by brute force."
+        },
+        {
+            "title": "Solution in C++",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nlong\nlong\na\n,\nb\n;\ncin\n>>\na\n>>\nb\n;\nb\n-=\na\n;\nlong\nlong\nl\n=\n2\n,\nr\n=\n1000000000\n;\nwhile\n(\nl\n<\nr\n)\n{\nlong\nlong\nm\n=(\nl\n+\nr\n)/\n2\n;\nif\n(\nm\n*(\nm\n-\n1\n)/\n2\n<=\nb\n)\n{\nl\n=\nm\n+\n1\n;\n}\nelse\n{\nr\n=\nm\n;\n}\n}\ncout\n<<\nl\n-\n1\n<<\nendl\n;\n}\n}"
+        },
+        {
+            "title": "Solution in Python",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\na\n,\nb\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\ni\n=\n0\nwhile\na\n+\ni\n<=\nb\n:\na\n+=\ni\n        i\n+=\n1\nprint\n(\ni\n)"
+        }
+    ]
+}

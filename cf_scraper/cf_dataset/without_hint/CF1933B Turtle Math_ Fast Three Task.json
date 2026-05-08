@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a_1, a_2, \\ldots, a_n $ .\n\nIn one move, you can perform either of the following two operations:\n\n- Choose an element from the array and remove it from the array. As a result, the length of the array decreases by $ 1 $ ;\n- Choose an element from the array and increase its value by $ 1 $ .\n\nYou can perform any number of moves. If the current array becomes empty, then no more moves can be made.\n\nYour task is to find the minimum number of moves required to make the sum of the elements of the array $ a $ divisible by $ 3 $ . It is possible that you may need $ 0 $ moves.\n\nNote that the sum of the elements of an empty array (an array of length $ 0 $ ) is equal to $ 0 $ .\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^4 $ ).\n\nThe sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer: the minimum number of moves.\n\nExamples\nSample 1\nInput\n8\n4\n2 2 5 4\n3\n1 3 2\n4\n3 7 6 8\n1\n1\n4\n2 2 4 2\n2\n5 5\n7\n2 4 8 1 9 3 4\n2\n4 10\nOutput\n1\n0\n0\n1\n1\n2\n1\n1\n\nNote\nIn the first test case, initially the array $ a = [2, 2, 5, 4] $ . One of the optimal ways to make moves is:\n\n- remove the current $ 4 $ th element and get $ a = [2, 2, 5] $ ;\n\nAs a result, the sum of the elements of the array $ a $ will be divisible by $ 3 $ (indeed, $ a_1 + a_2 + a_3 = 2 + 2 + 5 = 9 $ ).In the second test case, initially, the sum of the array is $ 1+3+2 = 6 $ , which is divisible by $ 3 $ . Therefore, no moves are required. Hence, the answer is $ 0 $ .\n\nIn the fourth test case, initially, the sum of the array is $ 1 $ , which is not divisible by $ 3 $ . By removing its only element, you will get an empty array, so its sum is $ 0 $ . Hence, the answer is $ 1 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1933B - Turtle Math: Fast Three Task\nLet's denote the sum of elements as $$$s$$$. If $$$s$$$ is already divisible by $$$3$$$, then the answer is $$$0$$$.\nThe answer is $$$1$$$ in the following cases:\nIf $$$s \\bmod 3 = 2$$$, then we can add $$$1$$$ to any element to make the sum divisible by $$$3$$$;\nIf there exists an $$$a_i$$$ such that $$$s \\bmod 3 = a_i \\bmod3$$$, then we can remove such $$$a_i$$$ to make the sum divisible by $$$3$$$.\nOtherwise, if $$$s \\bmod 3 = 1$$$, we cannot achieve the required sum in one operation. We can increase any element twice, then the sum will increase by $$$2$$$ and become divisible by $$$3$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nint\nk\n;\ncin\n>>\nk\n;\nint\nACC\n=\n0\n;\nbool\nhv\n=\nfalse\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\ni\n++){\nint\nx\n;\ncin\n>>\nx\n;\nACC\n+=\nx\n;\nif\n(\nx\n%\n3\n==\n1\n){\nhv\n=\ntrue\n;\n}\n}\nif\n(\nACC\n%\n3\n==\n0\n){\ncout\n<<\n0\n<<\nendl\n;\n}\nelse\nif\n(\nACC\n%\n3\n==\n2\n){\ncout\n<<\n1\n<<\nendl\n;\n}\nelse\n{\nif\n(\nhv\n==\ntrue\n){\ncout\n<<\n1\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\n2\n<<\nendl\n;\n}\n}\n}\n}"
+        }
+    ]
+}

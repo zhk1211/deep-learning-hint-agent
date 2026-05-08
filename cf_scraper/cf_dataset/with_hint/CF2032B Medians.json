@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a = [1, 2, \\ldots, n] $ , where $ n $ is odd, and an integer $ k $ .\n\nYour task is to choose an odd positive integer $ m $ and to split $ a $ into $ m $ subarrays $ ^{\\dagger} $ $ b_1, b_2, \\ldots, b_m $ such that:\n\n- Each element of the array $ a $ belongs to exactly one subarray.\n- For all $ 1 \\le i \\le m $ , $ |b_i| $ is odd, i.e., the length of each subarray is odd.\n- $ \\operatorname{median}([\\operatorname{median}(b_1), \\operatorname{median}(b_2), \\ldots, \\operatorname{median}(b_m)]) = k $ , i.e., the median $ ^{\\ddagger} $ of the array of medians of all subarrays must equal $ k $ . $ \\operatorname{median}(c) $ denotes the median of the array $ c $ .\n\n$ ^{\\dagger} $ A subarray of the array $ a $ of length $ n $ is the array $ [a_l, a_{l + 1}, \\ldots, a_r] $ for some integers $ 1 \\le l \\le r \\le n $ .\n\n$ ^{\\ddagger} $ A median of the array of odd length is the middle element after the array is sorted in non-decreasing order. For example: $ \\operatorname{median}([1,2,5,4,3]) = 3 $ , $ \\operatorname{median}([3,2,1]) = 2 $ , $ \\operatorname{median}([2,1,2,1,2,2,2]) = 2 $ .\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 5000 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n < 2 \\cdot 10^5 $ , $ n $ is odd) — the length of array $ a $ and the desired median of the array of medians of all subarrays.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case:\n\n- If there is no suitable partition, output $ -1 $ in a single line.\n- Otherwise, in the first line, output an odd integer $ m $ ( $ 1 \\le m \\le n $ ), and in the second line, output $ m $ distinct integers $ p_1, p_2 , p_3 , \\ldots, p_m $ ( $ 1 = p_1 < p_2 < p_3 < \\ldots < p_m \\le n $ ) — denoting the left borders of each subarray.\n\nIn detail, for a valid answer $ [p_1, p_2, \\ldots, p_m] $ :\n\n- $ b_1 = \\left[ a_{p_1}, a_{p_1 + 1}, \\ldots, a_{p_2 - 1} \\right] $\n- $ b_2 = \\left[ a_{p_2}, a_{p_2 + 1}, \\ldots, a_{p_3 - 1} \\right] $\n- $ \\ldots $\n- $ b_m = \\left[ a_{p_m}, a_{p_m + 1}, \\ldots, a_n \\right] $ .\n\nIf there are multiple solutions, you can output any of them.\n\nExamples\nSample 1\nInput\n4\n1 1\n3 2\n3 3\n15 8\nOutput\n1\n1\n3\n1 2 3\n-1\n5\n1 4 7 10 13\n\nNote\nIn the first test case, the given partition has $ m = 1 $ and $ b_1 = [1] $ . It is obvious that $ \\operatorname{median}([\\operatorname{median}([1])]) = \\operatorname{median}([1]) = 1 $ .\n\nIn the second test case, the given partition has $ m = 3 $ and:\n\n- $ b_1 = [1] $\n- $ b_2 = [2] $\n- $ b_3 = [3] $\n\nTherefore, $ \\operatorname{median}([\\operatorname{median}([1]), \\operatorname{median}([2]), \\operatorname{median}([3])]) = \\operatorname{median}([1, 2, 3]) = 2 $ .\n\nIn the third test case, there is no valid partition for $ k = 3 $ .\n\nIn the fourth test case, the given partition has $ m = 5 $ and:\n\n- $ b_1 = [1, 2, 3] $\n- $ b_2 = [4, 5, 6] $\n- $ b_3 = [7, 8, 9] $\n- $ b_4 = [10, 11, 12] $\n- $ b_5 = [13, 14, 15] $\n\nTherefore, $ \\operatorname{median}([\\operatorname{median}([1, 2, 3]), \\operatorname{median}([4, 5, 6]), \\operatorname{median}([7, 8, 9]), \\operatorname{median}([10, 11, 12]), \\operatorname{median}([13, 14, 15])]) = \\operatorname{median}([2, 5, 8, 11, 14]) = 8 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint #1",
+            "content": "There is always exactly one solution for $$$n = 1$$$. For $$$n \\ge 3$$$, for which $$$k$$$ should there be no solution at all?"
+        },
+        {
+            "title": "Hint #2A",
+            "content": "Try to find a solution with $$$k = 2$$$ and $$$k = 4$$$, assuming $$$n$$$ allows at least one solution to exist. Can you find a pattern and generalize it for all even $$$k$$$?"
+        },
+        {
+            "title": "Hint #2B",
+            "content": "Try to find a solution with $$$k = 3$$$ and $$$k = 5$$$, assuming $$$n$$$ allows at least one solution to exist. Can you find a pattern and generalize it for all odd $$$k$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2032B - Medians\nFor $$$n = 1$$$ (and $$$k = 1$$$ as well), the obvious answer would be not partitioning anything, i.e., partition with 1 subarray being itself.\nFor $$$n  \\gt  1$$$, we see that $$$k = 1$$$ and $$$k = n$$$ cannot yield a satisfactory construction. Proof is as follows:\n$$$m = 1$$$ will yield $$$ans = \\lfloor \\frac{n+1}{2} \\rfloor$$$, which will never be equal to $$$1$$$ or $$$n$$$ when $$$n \\ge 3$$$.\nIf $$$m  \\gt  1$$$, considering the case of $$$k = 1$$$, we see that $$$\\operatorname{median}(b_i) = 1$$$ iff $$$i \\ge 2$$$, and since the original array $$$a$$$ is an increasingly-sorted permutation, we can conclude that $$$\\operatorname{median}(b_1)  \\lt  1$$$. This is not possible.\nSimilarly, $$$k = n$$$ also doesn't work with $$$m  \\gt  1$$$, as it'll require $$$\\operatorname{median}(b_m)  \\gt  n$$$.\nApart from these cases, any other $$$k$$$ can yield an answer with $$$m = 3$$$  — a prefix subarray $$$b_1$$$, a middle subarray $$$b_2$$$ containing $$$k$$$ ($$$b_2$$$ will be centered at $$$k$$$, of course), and a suffix subarray $$$b_3$$$. This way, the answer will be $$$\\operatorname{median}(b_2) = k$$$.\nThe length of $$$b_2$$$ can be either $$$1$$$ or $$$3$$$, depending on the parity of $$$k$$$ (so that $$$b_1$$$ and $$$b_3$$$ could have odd lengths). In detail: $$$b_2$$$ will have length $$$1$$$ (i.e., $$$[k]$$$) if $$$k$$$ is an even integer, and length $$$3$$$ (i.e., $$$[k-1, k, k+1]$$$) if $$$k$$$ is an odd integer.\nTime complexity: $$$\\mathcal{O}(1)$$$."
+        },
+        {
+            "title": "Solution (C++)",
+            "content": "Submission link:\n289291698\nPlaintext\nnamespace\nsolution\n{\nbool\nhasMultipleTests\n=\ntrue\n;\nint\nn\n,\nk\n;\nvoid\npreprocess\n()\n{\n}\nvoid\ninput\n(\nint\ntestcase\n)\n{\ncin\n>>\nn\n>>\nk\n;\n}\nvoid\nsolve\n(\nint\ntestcase\n)\n{\nif\n(\nn\n==\n1\n)\n{\ncout\n<<\n\"1\\n1\\n\"\n;\nreturn\n;}\nif\n(\nk\n==\n1\n||\nk\n==\nn\n)\n{\ncout\n<<\n\"-1\\n\"\n;\nreturn\n;}\nint\np2\n=\nk\n-\nk\n%\n2\n;\nint\np3\n=\nk\n+\n1\n+\nk\n%\n2\n;\ncout\n<<\n\"3\\n1 \"\n<<\np2\n<<\n\" \"\n<<\np3\n<<\nendl\n;\n}\n}"
+        },
+        {
+            "title": "Solution (Python 3)",
+            "content": "Submission link:\n289291693\nPlaintext\nclass\nSolution\n:\nhasMultipleTests\n=\nTrue\nn\n:\nint\n=\nNone\nk\n:\nint\n=\nNone\n@classmethod\ndef\npreprocess\n(\ncls\n):\npass\n@classmethod\ndef\ninput\n(\ncls\n,\ntestcase\n):\ncls\n.\nn\n,\ncls\n.\nk\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\n@classmethod\ndef\nsolve\n(\ncls\n,\ntestcase\n):\nif\ncls\n.\nn\n==\n1\n:\nreturn\n(\nprint\n(\n'1\\n1'\n))\nif\ncls\n.\nk\nin\n{\n1\n,\ncls\n.\nn\n}:\nreturn\n(\nprint\n(-\n1\n))\np2\n,\np3\n=\ncls\n.\nk\n-\ncls\n.\nk\n%\n2\n,\ncls\n.\nk\n+\n1\n+\ncls\n.\nk\n%\n2\nprint\n(\nf\n'3\\n1 {p2} {p3}'\n)\n# end Solution"
+        }
+    ]
+}

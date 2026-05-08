@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nFor an array $ b $ of size $ m $ , we define:\n\n- the maximum prefix position of $ b $ is the smallest index $ i $ that satisfies $ b_1+\\ldots+b_i=\\max_{j=1}^{m}(b_1+\\ldots+b_j) $ ;\n- the maximum suffix position of $ b $ is the largest index $ i $ that satisfies $ b_i+\\ldots+b_m=\\max_{j=1}^{m}(b_j+\\ldots+b_m) $ .\n\nYou are given three integers $ n $ , $ x $ , and $ y $ ( $ x > y $ ). Construct an array $ a $ of size $ n $ satisfying:\n\n- $ a_i $ is either $ 1 $ or $ -1 $ for all $ 1 \\le i \\le n $ ;\n- the maximum prefix position of $ a $ is $ x $ ;\n- the maximum suffix position of $ a $ is $ y $ .\n\nIf there are multiple arrays that meet the conditions, print any. It can be proven that such an array always exists under the given conditions.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases.\n\nFor each test case:\n\n- The only line contains three integers $ n $ , $ x $ , and $ y $ ( $ 2 \\leq n \\leq 10^5, 1 \\le y \\lt x \\le n) $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases will not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, output $ n $ space-separated integers $ a_1, a_2, \\ldots, a_n $ in a new line.\n\nExamples\nSample 1\nInput\n3\n2 2 1\n4 4 3\n6 5 1\nOutput\n1 1\n1 -1 1 1\n1 1 -1 1 1 -1\n\nNote\nIn the second test case,\n\n- $ i=x=4 $ is the smallest index that satisfies $ a_1+\\ldots +a_i=\\max_{j=1}^{n}(a_1+\\ldots+a_j)=2 $ ;\n- $ i=y=3 $ is the greatest index that satisfies $ a_i+\\ldots +a_n=\\max_{j=1}^{n}(a_j+\\ldots+a_n)=2 $ .\n\nThus, the array $ a=[1,-1,1,1] $ is considered correct."
+        }
+    ],
+    "hints": [
+        {
+            "title": "hint1",
+            "content": "Starting from a trival construction."
+        },
+        {
+            "title": "hint2",
+            "content": "Utilize the condition $$$x \\gt y$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "solution",
+            "content": "First, we consider making $$$presum_x \\gt presum_j$$$ for all $$$x \\lt i \\le n$$$, and similarly for $$$y$$$. We can think of a trivial construction: $$$a[r, \\ldots ,l]=[1, \\ldots ,1], a[1, \\ldots...,r-1]=[-1, \\ldots, -1]$$$ and $$$a[l+1,\\ldots,n]=[-1, \\ldots, -1]$$$.\nThe construction doesn't works when $$$presum_x \\lt 0$$$, but we are close to the correct solution. Next, we will make a little adjustment: $$$a[r, \\ldots, l]=[1,\\ldots,1], a[1, \\ldots...,r-1]=[\\ldots,1, -1]$$$ and $$$a[l+1,\\ldots,n]=[-1,1, \\ldots]$$$.\nIt is not hard to see $$$presum_x \\ge presum_j$$$ for all $$$x \\lt i \\le n$$$, and for $$$1 \\le i \\le y$$$, $$$\\max(presum_i)-min(presum_i)\\le 1$$$. Thus, we get $$$presum_x \\ge 2+presum_{y-1} \\ge 2+min(presum_i) \\ge 1+max(presum_i)$$$. The same applies to the suffix sum as well. Therefore, this construction is valid.\nTime complexity: $$$O(n)$$$."
+        }
+    ]
+}

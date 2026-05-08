@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ of $ n $ positive integers. Alice and Bob will play a game with this array. They will take alternating turns, with Alice going first.\n\nAt each turn, the player must choose a value $ x>0 $ that appears in $ a $ at least once. Then,\n\n1. the player earns $ 1 $ point for each value $ x $ in the array,\n2. each value $ x $ in the array is decreased by $ 1 $ and becomes $ x-1 $ .\n\nNote that the player can choose $ x $ only if it is present in $ a $ at the moment, so each valid move earns a positive amount of points. For example, if the array is $ [3,8,5,8] $ and Alice chooses $ x=8 $ , the array will become $ [3,7,5,7] $ and Alice will earn $ 2 $ points.The game ends when no $ x $ can be chosen; that is, when all the elements in the array are zero.\n\nGiven that both players want to maximize their points and play optimally, calculate the amount of points that each player will end up with.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^3 $ ). The description of the test cases follows.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\leq n \\leq 2\\cdot 10^{5} $ ) — the size of the array.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\leq a_i \\leq 10^{9} $ ) — the elements of the array.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\\cdot 10^{5} $ .\n\nOutput Format\nFor each test case, output two integers, the amount of points Alice and Bob will get if both play optimally.\n\nExamples\nSample 1\nInput\n3\n3\n2 1 1\n5\n3 3 3 5 5\n4\n9 9 9 9\nOutput\n3 1\n10 9\n20 16\n\nNote\n[Visualizer link](https://codeforces.com/assets/contests/2147/D_L6mCC2TWFOxWZySjNzRU.html)\n\nIn the first test case, Alice chooses $ x=1 $ with her first move. The array becomes $ [2,0,0] $ and she earns $ 2 $ points. After that, Bob is forced to choose $ x=2 $ . The array becomes $ [1,0,0] $ and Bob earns $ 1 $ point. Finally, Alice is forced to choose $ x=1 $ and earn one more point. After that, the array is $ [0,0,0] $ , so the game ends. In total, Alice finishes with $ 3 $ points and Bob with $ 1 $ point.\n\nIn the third test case, each player will decrement all the elements and earn $ 4 $ points each move. Alice will earn $ 5 \\cdot 4 = 20 $ points while Bob will only earn $ 4\\cdot 4 = 16 $ points."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "Solve small cases."
+        },
+        {
+            "title": "Hint2",
+            "content": "What happens when every value is even?"
+        },
+        {
+            "title": "Hint3",
+            "content": "How can we add exactly one odd number to the solution of hint 2?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "2147D - Game on Array\nLet's separate odd and even numbers. One can intuitively see that it is bad to choose $$$x$$$ even since right after the other player can choose $$$x-1$$$ and get at least as many points as you did. This however is not true for odd numbers since after picking $$$x=1$$$ the opposite player cannot pick $$$x=0$$$.\nLet the frequencies of the odd numbers (sorted) be $$$f_0 \\geq f_1 \\geq \\ldots \\geq f_k$$$. We claim that the difference in points between players will be $$$S = \\sum_{i=0}^k (-1)^i f_i$$$. The following strategy gets at least $$$S$$$ points difference: if $$$k \\gt 0$$$ choose $$$f_0$$$, otherwise choose any $$$x$$$. Now there are 3 cases.\nIf player 2 chooses $$$f_i$$$ with odd $$$i$$$ you have by induction exactly $$$S$$$ points difference at the end.\nIf player 2 chooses $$$f_i$$$ with even $$$i$$$ you can choose $$$f_{i-1}$$$ and by induction end up with $$$S - f_i+f_{i-1} \\geq S$$$ difference at the end.\nIf player 2 chooses an even $$$x$$$, copy and take $$$x-1$$$. Repeat until player 2 chooses an odd $$$x$$$. During this process you will have collected some (possibly 0) $$$f_i$$$'s and after that you will also get the alternating sum of the remaining $$$f_i$$$. Assume you remove one $$$f_i$$$ from $$$f$$$ to collect $$$f_i$$$ points. If $$$i$$$ is even, all $$$f_j$$$ signs for $$$j \\gt i$$$ will be changed so you end up with $$$S + 2\\sum_{j=i+1}^k(-1)^{j-(i-1)}f_j \\geq S$$$. If $$$i$$$ is odd, all $$$f_j$$$ signs will be changed for $$$j\\geq i$$$ so you end up with $$$S + 2\\sum_{j=i}^k(-1)^{j-i}f_j \\geq S$$$ which is at least $$$S$$$ in any case.\nThis bound is also an upper bound since player 2 gets at least $$$-f_0 + \\sum_{i=1}^k (-1)^{i-1} f_i = -S$$$ points using this same strategy."
+        }
+    ]
+}

@@ -1,0 +1,48 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the hard version of the problem. The difference between the versions is that in this version, $ 1 \\leq n \\leq 5 \\cdot 10^{4} $ , $ 1 \\leq b_i \\leq 10^{9} $ for $ 1 \\leq i \\leq n $ , and the time limit is $ 6 $ seconds. Note that a solution for one version does not necessarily solve the other version. You can hack only if you solved all versions of this problem.\n\nYou are given two arrays $ a $ and $ b $ of length $ n $ .\n\nFor each index $ i $ ( $ 1 \\le i \\le n $ ) of array $ a $ , you can perform the following operation at most once:\n\n- choose an arbitrary integer $ m $ ( $ \\mathbf{m \\neq a_i} $ ) such that $ 1 \\leq m \\leq b_i $ , and set $ a_i := m $ .\n\nLet the array after performing all the operations be $ a' $ . You can only perform operations in such a way that the following condition holds:\n\n- For all $ 1\\leq l \\lt r\\leq n $ , $ \\operatorname{gcd}(a_l,a_{l+1},\\ldots,{a_r})=\\operatorname{gcd}(a'_l,a'_{l+1},\\ldots,a'_r) $\n\nHere, $ \\gcd(x, y) $ denotes the [greatest common divisor (GCD)](https://en.wikipedia.org/wiki/Greatest_common_divisor) of integers $ x $ and $ y $ .\n\nYou have to determine the maximum number of operations that can be performed while ensuring that the condition remains satisfied.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains an integer $ n $ ( $ 2 \\leq n \\leq 5\\cdot 10^4 $ ) — the length of $ a $ .\n\nThe following line of each test case contains $ n $ space-separated integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\leq a_i \\leq 10^9 $ ).\n\nThe next line of each test case contains $ n $ space-separated integers $ b_1, b_2, \\ldots, b_n $ ( $ 1 \\le b_i \\le 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 5\\cdot 10^4 $ .\n\nOutput Format\nFor each test case, output the maximum number of operations which can be done.\n\nExamples\nSample 1\nInput\n9\n7\n1 2 3 4 5 6 7\n100 6 12 20 5 2 7\n3\n67 67 67\n1000000000 1000000000 1000000000\n6\n8 10 10 12 12 14\n1 1 1 1 1 1\n8\n2010 330 550 2 210 385 1001 323\n2010 1000 1200 30 500 1000 2000 1000\n4\n1 2 4 3\n1 1 1 1\n6\n2 3 4 5 1 6\n10 15 20 25 5 30\n2\n1 2\n2 100\n5\n2860 2860 143 9009 9009\n2860 2860 1430 9009 9009\n3\n2 60 60\n10 60 60\nOutput\n7\n3\n0\n7\n1\n6\n2\n0\n0\n\nNote\nIn the first test, since the gcd of all subarrays is $ 1 $ , we can change the array to $ a' = [67, 5, 7, 11, 1, 2, 1] $ . Here we have performed $ 7 $ operations, and since there are only $ 7 $ elements in the array, it is the maximum possible.\n\nIn the second test case, we can change the array to $ a' = [938, 2613, 4489] $ . It can be shown that after this transformation, gcd of all subarrays remains the same. Hence the answer is $ 3 $ here.\n\nIn the third test case, it can be shown that no operation can be performed, hence the answer is $ 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "If you are able to set the value at a particular index < $$$a_i$$$, do it."
+        },
+        {
+            "title": "Hint 2",
+            "content": "What can you say about remaining indices whose value is unchanged?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "We can only increase the value of the indices with unchanged values, and while increasing, we can only change them to their multiples"
+        },
+        {
+            "title": "Hint 4",
+            "content": "Do we need to consider all multiples? No!"
+        },
+        {
+            "title": "Hint 5",
+            "content": "We only need to consider prime multiples. Do we need to consider all prime multiples? No!"
+        },
+        {
+            "title": "Hint 6",
+            "content": "We only need to consider first few prime multiples, 20 should suffice, but why?"
+        },
+        {
+            "title": "Hint 7",
+            "content": "Note that as discussed in previous part, we only need to consider adjacent elements. How can we use this to implement our logic?"
+        },
+        {
+            "title": "Hint 8",
+            "content": "Use $$$dp$$$!. Let $$$dp[i][j]$$$ denotes max changes till index $$$i$$$, if we multiply index $$$i$$$ by $$$j^{th}$$$ prime."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Refer to the editorial of C1 first. We consider only indices $$$i$$$ ($$$1 \\lt i \\lt n$$$). For the endpoints, we can do a similar analysis as well. Let $$$A = \\gcd(a_i, a_{i-1})$$$ and $$$B = \\gcd(a_i, a_{i+1})$$$.\nFirst of all, it is trivial to observe that if $$$b_i \\lt \\text{lcm}(A, B)$$$, or if $$$ a_i = lcm(A,B)$$$. It is impossible to \"reduce\" the value of $$$a_i$$$, we can only increase it. Furthermore, if we can reduce the value of $$$a_i$$$, it is optimal to always reduce it to minimum possible value.\nNow lets consider the unchanged values so far. They fall in either of the $$$2$$$ categories:  $$$\\text{lcm}(A,B) \\gt b_i$$$  $$$\\text{lcm}(A,B) = a_i$$$\nIf an index falls in category $$$1$$$, it is easy to see that it is impossible to change it without altering subarray GCD. However if the index falls in category $$$2$$$, then we can multiply it by some number $$$x$$$ such that $$$a_i \\cdot x \\lt b_i$$$ and GCD is preserved.\nIt is easy to see that it is optimal to choose a prime number as $$$x$$$, since any composite number can be written as product of primes, and choosing either of those primes will result in same subarray GCD.\nNow notice that we can only choose prime numbers which are NOT a factor of $$$a_{i-1}/ \\gcd(a_i, a_{i-1})$$$ and $$$a_{i+1}/\\gcd(a_i, a_{i+1})$$$, since if the prime number was present in those values, the subarray GCD will increase.\nAlso notice that we don't have to consider all the primes, just the first $$$20$$$ prime numbers will do, since it can be easily seen that the product of first $$$20$$$ primes > $$$10^{18}$$$. This is important because the product of adjacent elements can be atmost $$$10^{18}$$$, and hence cannot cover all these primes.\nNow we can use dp to solve from here, where $$$dp[i][j]$$$ = maximum number of changes in array from index $$$1$$$ to $$$i$$$, if we multiply $$$a_i$$$ with $$$j$$$. Also for $$$j = 0$$$, define $$$dp[i][0]$$$ = maximum number of changes in array from index $$$1$$$ to $$$i$$$, if we keep a[i] unchanged. Initially assign all values negative infinity.\nCreate a new array $$$c_i$$$, such that $$$c_i = \\text{lcm}(A,B)$$$ for all $$$i$$$. Furthermore, if ($$$c_i \\gt b_i$$$), set $$$c_i = a_i$$$ only. The reason for this is that if $$$a_i$$$ can be successfully reduced, then we just use that value in our analysis. Else we use $$$a_i$$$ only.\nNow lets focus on base case. For $$$i = 0$$$, if $$$c_0 \\neq a_0$$$, then $$$dp[0][0] = 1$$$, else $$$dp[0][0] = 0$$$. Now for $$$j = 1$$$ to $$$j = 20$$$, let $$$x = c_i \\cdot p_j$$$. if $$$x \\leq b_0$$$ and gcd($$$x, c_1$$$) = gcd($$$a_0, a_1$$$), and $$$x \\neq a_0$$$ then multiplying is a valid option, and hence set $$$dp[0][j] = 1$$$, else it is invalid and let it stay negative infinity. We take gcd($$$x, c_1$$$) here and in subsequent test cases as well, since we want to consider the least possible value in next index, to minimize prime collisions.\nNow for remaining indices, let's say we multiplied previous element by $$$k^{th}$$$ prime, and are trying to multiply the current element with $$$j^{th}$$$ prime, then the following conditions must hold true (let $$$x = c_i \\cdot p_j$$$ and $$$y = c_{i-1} \\cdot p_k$$$)\n$$$x \\le b_i$$$\ngcd($$$x, c_{i+1}$$$) = gcd($$$a_i, a_{i+1}$$$)\ngcd($$$x, y$$$) = gcd($$$a_i, a_{i-1}$$$)\n$$$x \\neq a_i$$$\nIf these $$$4$$$ conditions hold, then multiplying by $$$j$$$ is a valid combination, considering we multiplied previous number by $$$k$$$. In this case the answer will be $$$dp[i][j]$$$ = max($$$dp[i][j], dp[i-1][k] + 1$$$).\nNote that we will handle $$$j = 0$$$ case explicitly, by setting $$$dp[i][0] = \\text{max}_k(dp[i-1][k]) + 1$$$ if $$$c_i \\lt a_i$$$, and $$$dp[i][0] = \\text{max}_k(dp[i-1][k]$$$, otherwise. This is to ensure we always have a valid transition (number is unchanged) in case of impossibility, (the case where $$$a_i$$$ can never be changed) and dp[i] values are not just all negative infinity in that case. (Basically even if we can't change the value, we have to keep the number as $$$a_i$$$ only).\nThe overall time complexity of this logic is $$$O(n \\cdot L^{2} \\cdot log(max(A_i)))$$$, where $$$L$$$ is the number of primes used in our logic. This comfortably passes within the time constraints, in both python and cpp. For larger L, like 25-30, some basic optimizations, like exiting the loop if $$$c_i \\cdot p_j \\gt b_i$$$ might be required depending on the implementation."
+        }
+    ]
+}

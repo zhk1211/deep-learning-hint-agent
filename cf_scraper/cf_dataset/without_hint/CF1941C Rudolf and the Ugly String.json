@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nRudolf has a string $ s $ of length $ n $ . Rudolf considers the string $ s $ to be ugly if it contains the substring $ ^\\dagger $ \"pie\" or the substring \"map\", otherwise the string $ s $ will be considered beautiful.\n\nFor example, \"ppiee\", \"mmap\", \"dfpiefghmap\" are ugly strings, while \"mathp\", \"ppiiee\" are beautiful strings.\n\nRudolf wants to shorten the string $ s $ by removing some characters to make it beautiful.\n\nThe main character doesn't like to strain, so he asks you to make the string beautiful by removing the minimum number of characters. He can remove characters from any positions in the string (not just from the beginning or end of the string).\n\n$ ^\\dagger $ String $ a $ is a substring of $ b $ if there exists a consecutive segment of characters in string $ b $ equal to $ a $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The descriptions of the test cases follow.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^6 $ ) — the length of the string $ s $ .\n\nThe next line of each test case contains the string $ s $ of length $ n $ . The string $ s $ consists of lowercase Latin letters.\n\nThe sum of $ n $ over all test cases does not exceed $ 10^6 $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum number of characters that need to be deleted to make the string $ s $ beautiful. If the string is initially beautiful, then output $ 0 $ .\n\nExamples\nSample 1\nInput\n6\n9\nmmapnapie\n9\nazabazapi\n8\nmappppie\n18\nmapmapmapmapmapmap\n1\np\n11\npppiepieeee\nOutput\n2\n0\n2\n6\n0\n2\n\nNote\nIn the first test case, for example, you can delete the $ 4 $ th and $ 9 $ th characters to make the string beautiful.\n\nIn the second test case, the string is already beautiful."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\n#include\n<vector>\n#include\n<string>\n#include\n<algorithm>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nlong\nlong\nt\n;\ncin\n>>\nt\n;\nfor\n(\nlong\nlong\nc\n=\n0\n;\nc\n<\nt\n;\nc\n++){\nlong\nlong\nn\n;\ncin\n>>\nn\n;\nstring\ns\n;\ncin\n>>\ns\n;\nvector\n<\nlong\nlong\n>\nva\n;\nfor\n(\nstring\nsul\n:\n{\n\"mapie\"\n,\n\"pie\"\n,\n\"map\"\n})\n{\nfor\n(\nsize_t\npos\n=\n0\n;\n(\npos\n=\ns\n.\nfind\n(\nsul\n,\npos\n))\n!=\nstring\n::\nnpos\n;)\n{\ns\n[\npos\n+\nsul\n.\nlength\n()\n/\n2\n]\n=\n'?'\n;\nva\n.\npush_back\n(\npos\n+\nsul\n.\nlength\n()\n/\n2\n);\n}\n}\ncout\n<<\nva\n.\nsize\n()\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

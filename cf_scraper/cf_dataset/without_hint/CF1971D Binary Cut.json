@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a binary string $ ^{\\dagger} $ . Please find the minimum number of pieces you need to cut it into, so that the resulting pieces can be rearranged into a sorted binary string.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1971D/198c30d478b8cd51c898ff4b7c617ab4c8bcae49.png)Note that:\n\n- each character must lie in exactly one of the pieces;\n- the pieces must be contiguous substrings of the original string;\n- you must use all the pieces in the rearrangement.\n\n$ ^{\\dagger} $ A binary string is a string consisting of characters $ \\texttt{0} $ and $ \\texttt{1} $ . A sorted binary string is a binary string such that all characters $ \\texttt{0} $ come before all characters $ \\texttt{1} $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 500 $ ) — the number of test cases.\n\nThe only line of each test case contains a single string $ s $ ( $ 1 \\leq |s| \\leq 500 $ ) consisting of characters $ \\texttt{0} $ and $ \\texttt{1} $ , where $ |s| $ denotes the length of the string $ s $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum number of pieces needed to be able to rearrange the string into a sorted binary string.\n\nExamples\nSample 1\nInput\n6\n11010\n00000000\n1\n10\n0001111\n0110\nOutput\n3\n1\n1\n2\n1\n2\n\nNote\nThe first test case is pictured in the statement. It can be proven that you can't use fewer than $ 3 $ pieces.\n\nIn the second and third test cases, the binary string is already sorted, so only $ 1 $ piece is needed.\n\nIn the fourth test case, you need to make a single cut between the two characters and rearrange them to make the string $ \\texttt{01} $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1971D - Binary Cut\nFirst, note that it's always optimal to divide the string into \"blocks\" of equal values; there is no use having two strings $$$\\texttt{111}|\\texttt{11}$$$ when we can just have $$$\\texttt{11111}$$$ and use fewer pieces.\nNow note that to sort the string, we need all blocks of $$$\\texttt{0}$$$ to come before all blocks of $$$\\texttt{1}$$$. The only way that two blocks can join is if we have a block of $$$\\texttt{0}$$$s before a block of $$$\\texttt{1}$$$s, and we can have at most one such block. That is, all strings look like: $$$$$$(\\text{blocks of }\\texttt{0}\\text{s}) \\underbrace{\\texttt{0...1}}_{\\leq 1\\text{joined block of }\\texttt{0}\\text{s and }\\texttt{1}\\text{s}} (\\text{blocks of }\\texttt{1}\\text{s})$$$$$$\nSo the answer is the number of blocks, but we should subtract $$$1$$$ if a substring $$$\\texttt{01}$$$ exists (because then we can make the center block above). The time complexity is $$$\\mathcal{O}(|s|)$$$.\nFor example, for the string $$$\\texttt{111000110}$$$, we can use three pieces: $$$\\texttt{111}|\\texttt{00011}|\\texttt{0} \\to \\texttt{0}|\\texttt{00011}|\\texttt{111}$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200\n'007;\nconst int MOD = 1'\n000\n'000'\n007\n;\nvoid\nsolve\n()\n{\nstring\ns\n;\ncin\n>>\ns\n;\nint\nres\n=\n1\n;\nbool\nex\n=\nfalse\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n+\n1\n<\n(\nint\n)(\ns\n.\nsize\n());\ni\n++)\n{\nres\n+=\n(\ns\n[\ni\n]\n!=\ns\n[\ni\n+\n1\n]);\nex\n|=\n(\ns\n[\ni\n]\n==\n'0'\n&&\ns\n[\ni\n+\n1\n]\n==\n'1'\n);\n}\ncout\n<<\nres\n-\nex\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

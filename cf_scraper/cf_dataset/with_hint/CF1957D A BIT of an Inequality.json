@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a_1, a_2, \\ldots, a_n $ . Find the number of tuples ( $ x, y, z $ ) such that:\n\n- $ 1 \\leq x \\leq y \\leq z \\leq n $ , and\n- $ f(x, y) \\oplus f(y, z) > f(x, z) $ .\n\nWe define $ f(l, r) = a_l \\oplus a_{l + 1} \\oplus \\ldots \\oplus a_{r} $ , where $ \\oplus $ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\leq a_i \\leq 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer on a new line — the number of described tuples.\n\nExamples\nSample 1\nInput\n3\n3\n6 2 4\n1\n3\n5\n7 3 7 2 1\nOutput\n4\n0\n16\n\nNote\nIn the first case, there are 4 such tuples in the array $ [6, 2, 4] $ :\n\n- ( $ 1 $ , $ 2 $ , $ 2 $ ): $ (a_1 \\oplus a_2) \\oplus (a_2) = 4 \\oplus 2 > (a_1 \\oplus a_2) = 4 $\n- ( $ 1 $ , $ 1 $ , $ 3 $ ): $ (a_1) \\oplus (a_1 \\oplus a_2 \\oplus a_3) = 6 \\oplus 0 > (a_1 \\oplus a_2 \\oplus a_3) = 0 $\n- ( $ 1 $ , $ 2 $ , $ 3 $ ): $ (a_1 \\oplus a_2) \\oplus (a_2 \\oplus a_3) = 4 \\oplus 6 > (a_1 \\oplus a_2 \\oplus a_3) = 0 $\n- ( $ 1 $ , $ 3 $ , $ 3 $ ): $ (a_1 \\oplus a_2 \\oplus a_3) \\oplus (a_3) = 0 \\oplus 4 > (a_1 \\oplus a_2 \\oplus a_3) = 0 $\n\nIn the second test case, there are no such tuples."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "How can you simplify the given inequality? Use the fact that the XOR of a number with itself is 0."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The inequality simplifies to $$$f(x, z) \\oplus a_y \\gt f(x, z)$$$. For a given $$$a_y$$$ what subarrays (that include $$$a_y$$$) would satisfy this?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "First we may rewrite the inequality as $$$f(x, z) \\oplus a_y \\gt f(x, z)$$$. So, for each index $$$y$$$, we want to find the total number of subarrays that contain $$$y$$$ but whose $$$\\text{xor}$$$ decreases when we include the contribution of $$$a_y$$$.\nIncluding $$$a_y$$$ in some subarray $$$[x, z]$$$ (where $$$x \\le y \\le z$$$) can make the $$$\\text{xor}$$$ lower only when some set bit of $$$a_y$$$ cancels out an existing set bit in $$$f(x, y - 1) \\oplus f(y + 1, z)$$$. Consider the most signicant set bit in $$$a_y$$$. Call this bit $$$i$$$. Including $$$a_y$$$ would decrease the subarray $$$\\text{xor}$$$ in subarrays where $$$f(x, y - 1)$$$ has $$$i$$$ set while $$$f(y+1, z)$$$ is unset or vice-versa.\nNow, for the subarrays where both the prefix subarray ($$$[x \\dots y - 1]$$$) as well as the suffix subarray ($$$[y + 1 \\dots z]$$$) where either both have bit $$$i$$$ set or both have it unset, by including $$$a_y$$$, we increment the xor by at least $$$2^i$$$. Even if by including $$$a_y$$$, every other smaller bit gets unset (because of cancelling out with $$$a_y$$$), this sum of these decrements is still less than $$$2^i$$$ thereby resulting in an overall positive contribution by including $$$a_y$$$."
+        }
+    ]
+}

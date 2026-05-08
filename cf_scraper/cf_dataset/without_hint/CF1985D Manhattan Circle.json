@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven a $ n $ by $ m $ grid consisting of '.' and '#' characters, there exists a whole manhattan circle on the grid. The top left corner of the grid has coordinates $ (1,1) $ , and the bottom right corner has coordinates $ (n, m) $ .\n\nPoint ( $ a, b $ ) belongs to the manhattan circle centered at ( $ h, k $ ) if $ |h - a| + |k - b| < r $ , where $ r $ is a positive constant.\n\nOn the grid, the set of points that are part of the manhattan circle is marked as '#'. Find the coordinates of the center of the circle.\n\nInput Format\nThe first line contains $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases.\n\nThe first line of each test case contains $ n $ and $ m $ ( $ 1 \\leq n \\cdot m \\leq 2 \\cdot 10^5 $ ) — the height and width of the grid, respectively.\n\nThe next $ n $ lines contains $ m $ characters '.' or '#'. If the character is '#', then the point is part of the manhattan circle.\n\nIt is guaranteed the sum of $ n \\cdot m $ over all test cases does not exceed $ 2 \\cdot 10^5 $ , and there is a whole manhattan circle on the grid.\n\nOutput Format\nFor each test case, output the two integers, the coordinates of the center of the circle.\n\nExamples\nSample 1\nInput\n6\n5 5\n.....\n.....\n..#..\n.....\n.....\n5 5\n..#..\n.###.\n#####\n.###.\n..#..\n5 6\n......\n......\n.#....\n###...\n.#....\n1 1\n#\n5 6\n...#..\n..###.\n.#####\n..###.\n...#..\n2 10\n..........\n...#......\nOutput\n3 3\n3 3\n4 2\n1 1\n3 4\n2 4"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Note that the manhattan circle is always in a diamond shape, symmetric from the center. Let's take notice of some special characteristics that can help us. One way is to find the top and bottom points of the circle. Note that these points will have columns at the center of the circle, so here we can acquire the value of $$$k$$$. To find $$$h$$$, since the circle is symmetric, it is just the middle of the rows of the top and bottom points.\nNote that we never needed to find the value of $$$r$$$."
+        }
+    ]
+}

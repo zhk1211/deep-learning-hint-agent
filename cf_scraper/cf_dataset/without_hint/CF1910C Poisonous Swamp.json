@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1910C - Poisonous Swamp\nView the grid the following way: first, there is a line of lily pads in the first row, then a line in the second row, and so on. Notice that you can solve the problem completely independently over these lines and sum up the answers.\nSo we will solve a problem for one line of lily pads with frogs of length $$$x$$$. Can all $$$x$$$ frogs survive? Well, no. In order to survive, the first frog has to jump right. So the second frog also has to jump right. So one until the last frog. It has nowhere safe to jump, so it can't survive. However, $$$x - 1$$$ is totally fine, using the same algorithm.\nThus, the task is to extract the lines from the grid, then sum up their lengths minus one. This can be calculated in a lot of ways. For my solution, I also realized that this number is equal to $$$n$$$ minus the number of lines. Or even $$$n - 1$$$ minus the number of times it changes from a lily pad to swamp or vice versa in the first row (or the second row, since these values are the same).\nOverall complexity: $$$O(n)$$$ per testcase."
+        },
+        {
+            "title": "Solution (PavelKunyavskiy)",
+            "content": "fun main\n()\n{\nrepeat\n(\nreadInt\n())\n{\nreadInt\n()\nval s\n=\nreadln\n()\n+\n'.'\n+\nreadln\n()\nprintln\n(\ns\n.\nsplit\n(\n\".\"\n).\nsumOf\n{\nmaxOf\n(\n0\n,\nit\n.\nlength\n-\n1\n)\n})\n}\n}\nprivate\nfun readInt\n()\n=\nreadln\n().\ntoInt\n()"
+        }
+    ]
+}

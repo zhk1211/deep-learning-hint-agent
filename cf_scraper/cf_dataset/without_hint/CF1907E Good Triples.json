@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven a non-negative integer number $ n $ ( $ n \\ge 0 $ ). Let's say a triple of non-negative integers $ (a, b, c) $ is good if $ a + b + c = n $ , and $ digsum(a) + digsum(b) + digsum(c) = digsum(n) $ , where $ digsum(x) $ is the sum of digits of number $ x $ .\n\nFor example, if $ n = 26 $ , then the pair $ (4, 12, 10) $ is good, because $ 4 + 12 + 10 = 26 $ , and $ (4) + (1 + 2) + (1 + 0) = (2 + 6) $ .\n\nYour task is to find the number of good triples for the given number $ n $ . The order of the numbers in a triple matters. For example, the triples $ (4, 12, 10) $ and $ (10, 12, 4) $ are two different triples.\n\nInput Format\nThe first line of input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Descriptions of test cases follow.\n\nThe first and only line of the test case contains one integer $ n $ ( $ 0 \\le n \\le 10^7 $ ).\n\nOutput Format\nFor each test case output one integer, the number of good triples for the given integer $ n $ . Order of integers in a triple matters.\n\nExamples\nSample 1\nInput\n12\n11\n0\n1\n2\n3\n4\n5\n3141\n999\n2718\n9999999\n10000000\nOutput\n9\n1\n3\n6\n10\n15\n21\n1350\n166375\n29160\n1522435234375\n3\n\nNote\nIn the first example, the good triples are $ (0, 0, 11) $ , $ (0, 1, 10) $ , $ (0, 10, 1) $ , $ (0, 11, 0) $ , $ (1, 0, 10) $ , $ (1, 10, 0) $ , $ (10, 0, 1) $ , $ (10, 1, 0) $ , $ (11, 0, 0) $ .\n\nIn the second example, there is only one good triple $ (0, 0, 0) $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1907E - Good Triples\nA triplet is considered good only if each digit of the number $$$n$$$ was obtained without carrying over during addition. For example, consider $$$a=2$$$, $$$b=7$$$, $$$c=4$$$; the sum of the digits is $$$2 + 7 + 4 = 13$$$, and the sum of the digits of their sum is $$$1 + 3 = 4$$$. This means that whenever there is a carry in one of the digits, the sum $$$digsum(a) + digsum(b) + digsum(c)$$$ always increases more than $$$digsum(n)$$$.\nThis allows us to consider each digit separately and multiply their answers. The answer for each digit $$$x$$$ will be the number of digit triplets with the sum $$$x$$$. These values do not depend on the input data, so they can be precalculated, but this is not necessary to pass the tests."
+        },
+        {
+            "title": "Solution",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\nn\n=\nint\n(\ninput\n())\ncnt\n=\n1\nwhile\nn\n>\n0\n:\nd\n=\nn\n%\n10\nn\n//= 10\nmul\n=\n0\nfor\ni\nin\nrange\n(\nd\n+\n1\n):\nfor\nj\nin\nrange\n(\nd\n+\n1\n):\nif\nd\n-\ni\n-\nj\n>=\n0\n:\nmul\n+=\n1\ncnt\n*=\nmul\nprint\n(\ncnt\n)"
+        }
+    ]
+}

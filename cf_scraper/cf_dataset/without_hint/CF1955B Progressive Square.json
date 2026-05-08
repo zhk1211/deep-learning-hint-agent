@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA progressive square of size $ n $ is an $ n \\times n $ matrix. Maxim chooses three integers $ a_{1,1} $ , $ c $ , and $ d $ and constructs a progressive square according to the following rules:\n\n$ $$$a_{i+1,j} = a_{i,j} + c $ $ </p><p> $ $ a_{i,j+1} = a_{i,j} + d $ $ </p><p>For example, if $ n = 3 $ , $ a\\_{1,1} = 1 $ , $ c=2 $ , and $ d=3 $ , then the <span class=\"tex-font-style-it\">progressive square</span> looks as follows:</p><p> $ $ \\begin{pmatrix} 1 & 4 & 7 \\\\ 3 & 6 & 9 \\\\ 5 & 8 & 11 \\end{pmatrix} $ $ </p><p>Last month Maxim constructed a <span class=\"tex-font-style-it\">progressive square</span> and remembered the values of $ n $ , $ c $ , and $ d $ . Recently, he found an array $ b $ of $ n^2 $ integers in random order and wants to make sure that these elements are the elements of <span class=\"tex-font-style-bf\">that specific</span> square.</p><p>It can be shown that for any values of $ n $ , $ a\\_{1,1} $ , $ c $ , and $ d$$$, there exists exactly one progressive square that satisfies all the rules.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le {10} ^ 4 $ ) — the number of test cases.\n\nThe first line of each test case contains three integers $ n $ , $ c $ , and $ d $ ( $ 2 \\le n \\le 500 $ , $ 1 \\le c, d \\le 10^6 $ ) — the size of the square and the values of $ c $ and $ d $ as described in the statement.\n\nThe second line of each test case contains $ n \\cdot n $ integers $ b_1, b_2, \\dots, b_{n \\cdot n} $ ( $ 1 \\le b_i \\le 10^9 $ ) — the elements found by Maxim.\n\nIt is guaranteed that the sum of $ n ^ 2 $ over all test cases does not exceed $ 25 \\cdot {10} ^ 4 $ .\n\nOutput Format\nFor each test case, output \"YES\" in a separate line if a progressive square for the given $ n $ , $ c $ , and $ d $ can be constructed from the array elements $ a $ , otherwise output \"NO\".\n\nYou can output each letter in any case (lowercase or uppercase). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be accepted as a positive answer.\n\nExamples\nSample 1\nInput\n5\n3 2 3\n3 9 6 5 7 1 10 4 8\n3 2 3\n3 9 6 5 7 1 11 4 8\n2 100 100\n400 300 400 500\n3 2 3\n3 9 6 6 5 1 11 4 8\n4 4 4\n15 27 7 19 23 23 11 15 7 3 19 23 11 15 11 15\nOutput\nNO\nYES\nYES\nNO\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\nusing\nll\n=\nsigned\nlong\nlong\nint\n;\nusing\npii\n=\npair\n<\nint\n,\nint\n>;\nusing\npll\n=\npair\n<\nll\n,\nll\n>;\nusing\nvi\n=\nvector\n<int>\n;\nusing\nvl\n=\nvector\n<ll>\n;\nvoid\nsolve\n()\n{\nint\nn\n;\nll c\n,\nd\n;\ncin\n>>\nn\n>>\nc\n>>\nd\n;\nvl a\n(\nn\n*\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n*\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nsort\n(\nall\n(\na\n));\nvl b\n(\nn\n*\nn\n);\nb\n[\n0\n]\n=\na\n[\n0\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\n++\ni\n)\n{\nb\n[\ni\n]\n=\nb\n[\ni\n-\n1\n]\n+\nc\n;\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nn\n;\n++\nj\n)\n{\nb\n[\ni\n*\nn\n+\nj\n]\n=\nb\n[(\ni\n-\n1\n)\n*\nn\n+\nj\n]\n+\nd\n;\n}\n}\nsort\n(\nall\n(\nb\n));\ncout\n<<\n(\na\n==\nb\n?\n\"YEs\"\n:\n\"nO\"\n)\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWhen I succeed, we'll share the cakes together!\n\n— SHUN\n\nSimons has $ n $ friends and a huge amount of cakes. To divide the cakes fairly, you are asked to help him solve the following problem:\n\n- Find the minimum positive integer $ k $ such that $ n $ is a divisor of $ k^n $ .\n\nIt can be proved that the answer always exists under the given constraints.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 100 $ ). The description of the test cases follows.\n\nThe only line of each test case contains a single integer $ n $ ( $ 2\\le n\\le 10^9 $ ) — the number of friends Simons has.\n\nOutput Format\nFor each test case, output a single integer — the minimum $ k $ you found.\n\nExamples\nSample 1\nInput\n4\n8\n12\n369\n55635800\nOutput\n2\n6\n123\n2090\n\nNote\nIn the first test case:\n\n- $ 1^8=1 $ , and $ 8 $ is not a divisor of $ 1 $ ;\n- $ 2^8=256 $ , and $ 8 $ is a divisor of $ 256 $ , because $ 256 = 8\\cdot 32 $ .\n\nThus, the minimum possible $ k $ is $ 2 $ .\n\nIn the second test case, $ 12 $ is a divisor of $ 6^{12}=2\\,176\\,782\\,336 $ , because $ 2\\,176\\,782\\,336=12\\cdot 181\\,398\\,528 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider the prime decomposition of the given $$$n$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "$$$n$$$ has at most $$$1$$$ prime divisor not smaller than $$$\\sqrt n$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Let $$$n=\\prod p_i^{\\alpha_i}$$$ be the prime factorization of $$$n$$$. Hence, if $$$n$$$ is a divisor of $$$k^n$$$, each $$$p_i$$$ must be a divisor of $$$k^n$$$ and then $$$k$$$.\nUnder constraints above, the minimum valid number is $$$k=\\prod p_i$$$. Due to $$$\\alpha_i\\le n$$$, each $$$p_i^{\\alpha_i}$$$ will be a divisor of $$$p_i^n$$$, so $$$n$$$ is a divisor of $$$k^n$$$.\nThus, we only need to find $$$\\prod p_i$$$. Because $$$n$$$ has at most $$$1$$$ prime divisor not smaller than $$$\\sqrt n$$$, we only need to check the prime numbers smaller than $$$\\sqrt n$$$, and the remaining part is $$$1$$$ or the only prime divisor bigger than $$$\\sqrt n$$$.\nSo we solve the problem in $$$\\mathcal O(\\sqrt n)$$$."
+        }
+    ]
+}

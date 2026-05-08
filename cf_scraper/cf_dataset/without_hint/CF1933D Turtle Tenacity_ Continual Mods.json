@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven an array $ a_1, a_2, \\ldots, a_n $ , determine whether it is possible to rearrange its elements into $ b_1, b_2, \\ldots, b_n $ , such that $ b_1 \\bmod b_2 \\bmod \\ldots \\bmod b_n \\neq 0 $ .\n\nHere $ x \\bmod y $ denotes the remainder from dividing $ x $ by $ y $ . Also, the modulo operations are calculated from left to right. That is, $ x \\bmod y \\bmod z = (x \\bmod y) \\bmod z $ . For example, $ 2024 \\bmod 1000 \\bmod 8 = (2024 \\bmod 1000) \\bmod 8 = 24 \\bmod 8 = 0 $ .\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nThe sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output \"YES\" if it is possible, \"NO\" otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n8\n6\n1 2 3 4 5 6\n5\n3 3 3 3 3\n3\n2 2 3\n5\n1 1 2 3 7\n3\n1 2 2\n3\n1 1 2\n6\n5 2 10 10 10 2\n4\n3 6 9 3\nOutput\nYES\nNO\nYES\nNO\nYES\nNO\nYES\nNO\n\nNote\nIn the first test case, rearranging the array into $ b = [1, 2, 3, 4, 5, 6] $ (doing nothing) would result in $ 1 \\bmod 2 \\bmod 3 \\bmod 4 \\bmod 5 \\bmod 6 = 1 $ . Hence it is possible to achieve the goal.\n\nIn the second test case, the array $ b $ must be equal to $ [3, 3, 3, 3, 3] $ , which would result in $ 3 \\bmod 3 \\bmod 3 \\bmod 3 \\bmod 3 = 0 $ . Hence it is impossible to achieve the goal.\n\nIn the third test case, rearranging the array into $ b = [3, 2, 2] $ would result in $ 3 \\bmod 2 \\bmod 2 = 1 $ . Hence it is possible to achieve the goal."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1933D - Turtle Tenacity: Continual Mods\nSort the array in non-decreasing order. Now, assume $$$a_1 \\le a_2 \\le \\ldots \\le a_n$$$.\nIf $$$a_1 \\neq a_2$$$, the minimum is unique. Therefore, place $$$a_1$$$ at the front, and the result after all modulo operations is just $$$a_1  \\gt  0$$$. Hence the answer is yes for this case.\nIf $$$a_1 = a_2$$$ and there exists some element $$$a_x$$$ such that $$$a_x \\not\\equiv 0 \\pmod {a_1}$$$, then a possible solution is rearranging the array to $$$[a_x, a_1, a_2, \\ldots, a_{x-1}, a_{x+1}, \\ldots, a_n]$$$. Since $$$a_x \\bmod a_1  \\lt  a_1$$$, $$$a_x \\bmod a_1$$$ is the minimum among the other elements and the result after all modulo operations equals $$$a_x \\bmod a_1  \\gt  0$$$. Hence the answer is yes for this case.\nOtherwise (if all elements are multiples of the minimum) the answer is no, because any element modulo the minimum equals $$$0$$$, and at least one of the minimums must not be the first element. So after passing through two minimums we are guaranteed to get a $$$0$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\na\n[\nn\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nsort\n(\na\n,\na\n+\nn\n);\nif\n(\na\n[\n0\n]\n!=\na\n[\n1\n])\n{\ncout\n<<\n\"YES\\n\"\n;\n}\nelse\n{\nbool\nPASS\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\na\n[\ni\n]\n%\na\n[\n0\n]\n!=\n0\n)\nPASS\n=\n1\n;\n}\nif\n(\nPASS\n)\ncout\n<<\n\"YES\\n\"\n;\nelse\ncout\n<<\n\"NO\\n\"\n;\n}\n}\n}"
+        }
+    ]
+}

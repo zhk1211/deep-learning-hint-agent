@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Something looks off with the text (literally)."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "1952I - Dark Matter\nIf you stare at the PDF hard enough, you'll notice that some of the text looks curved. Given the hint about \"gravitational lensing\", it should be clear that this is not a coincidence.\nHow can gravitational lensing distort text? If there's a lot of mass between you and the text, those matter can bend light going from text into your eyes, making straight text look curved. In addition, the meme image looks normal, implying such mass lies between the image and text (in other words, behind the image from your perspective). Here's a visualization of the configuration:\nNow let's do the difficult and technical part: finding the dark matter. To do this we need to first grab some PDF/vector graphics editor like LibreOffice or Inkscape. We can see a lot of random objects behind the image:\nThese are probably the mass causing distorted text. Unfortunately, as the problem suggests, these objects are dark matter so are transparent because they don't interact with light. We can set their transparency to 0 (or opacity to max) and change their color to see them better:\nWhich gives the formula $$$(a^2 + b^2) + (a - b) + |a| \\times 2b - (ab + 2)$$$. If we plug in $$$a$$$ and $$$b$$$ from the samples, we get $$$1$$$, which corresponds to the missing number in the image. Therefore the solution is to output $$$a + b + ((a^2 + b^2) + (a - b) + |a| \\times 2b - (ab + 2))$$$."
+        }
+    ]
+}

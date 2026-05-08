@@ -1,0 +1,52 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a permutation $ p_0, p_1, \\ldots, p_{n-1} $ of odd integers from $ 1 $ to $ 2n-1 $ and a permutation $ q_0, q_1, \\ldots, q_{k-1} $ of integers from $ 0 $ to $ k-1 $ .\n\nAn array $ a_0, a_1, \\ldots, a_{nk-1} $ of length $ nk $ is defined as follows:\n\n$ a_{i \\cdot k+j}=p_i \\cdot 2^{q_j} $ for all $ 0 \\le i < n $ and all $ 0 \\le j < k $ For example, if $ p = [3, 5, 1] $ and $ q = [0, 1] $ , then $ a = [3, 6, 5, 10, 1, 2] $ .\n\nNote that all arrays in the statement are zero-indexed. Note that each element of the array $ a $ is uniquely determined.\n\nFind the number of inversions in the array $ a $ . Since this number can be very large, you should find only its remainder modulo $ 998\\,244\\,353 $ .\n\nAn inversion in array $ a $ is a pair $ (i, j) $ ( $ 0 \\le i < j < nk $ ) such that $ a_i > a_j $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le n, k \\le 2 \\cdot 10^5 $ ) — the lengths of arrays $ p $ and $ q $ .\n\nThe second line of each test case contains $ n $ distinct integers $ p_0, p_1, \\ldots, p_{n-1} $ ( $ 1 \\le p_i \\le 2n-1 $ , $ p_i $ is odd) — the array $ p $ .\n\nThe third line of each test case contains $ k $ distinct integers $ q_0, q_1, \\ldots, q_{k-1} $ ( $ 0 \\le q_i < k $ ) — the array $ q $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases doesn't exceed $ 2 \\cdot 10^5 $ and the sum of $ k $ over all test cases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output one integer: the number of inversions in array $ a $ modulo $ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n4\n3 2\n3 5 1\n0 1\n3 4\n1 3 5\n3 2 0 1\n1 5\n1\n0 1 2 3 4\n8 3\n5 1 7 11 15 3 9 13\n2 0 1\nOutput\n9\n25\n0\n104\n\nNote\nIn the first test case, array $ a $ is equal to $ [3, 6, 5, 10, 1, 2] $ . There are $ 9 $ inversions in it: $ (0, 4) $ , $ (0, 5) $ , $ (1, 2) $ , $ (1, 4) $ , $ (1, 5) $ , $ (2, 4) $ , $ (2, 5) $ , $ (3, 4) $ , $ (3, 5) $ . Note that these are pairs $ (i, j) $ such that $ i < j $ and $ a_i > a_j $ .\n\nIn the second test case, array $ a $ is equal to $ [8, 4, 1, 2, 24, 12, 3, 6, 40, 20, 5, 10] $ . There are $ 25 $ inversions in it.\n\nIn the third test case, array $ a $ is equal to $ [1, 2, 4, 8, 16] $ . There are no inversions in it."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "How to count the number of inversions in the permutation of length $$$n$$$ in $$$\\mathcal{O}(n \\log n)$$$?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Consider two arrays $$$x_1, x_2, \\ldots, x_k$$$ and $$$\\alpha x_1, \\alpha x_2, \\ldots, \\alpha x_k$$$ for some positive $$$\\alpha$$$. How does the number of inversions in one of them correspond to the number of inversions in the other of them?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Consider splitting array $$$a$$$ into subarrays of the length $$$k$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Let's say you have two arrays $$$[11, 22, 44, \\ldots, 11 \\cdot 2^m]$$$ and $$$[13, 26, 52, \\ldots, 13 \\cdot 2^m]$$$ of the same length. How many inversions are there in their concatenation $$$[11, 22, 44, \\ldots, 11 \\cdot 2^m, 13, 26, 52, \\ldots, 13 \\cdot 2^m]$$$?"
+        },
+        {
+            "title": "Hint 5",
+            "content": "Consider the merging process of arrays $$$[11, 22, 44, \\ldots, 11 \\cdot 2^m]$$$ and $$$[13, 26, 52, \\ldots, 13 \\cdot 2^m]$$$ into the sorted array (as in the merge sort)."
+        },
+        {
+            "title": "Hint 6",
+            "content": "What if the first elements of the arrays you concatenate are not $$$11$$$ and $$$13$$$ but some odd positive integers $$$x$$$ and $$$y$$$? Merging processes for some pairs $$$(x, y)$$$ look quite similar."
+        },
+        {
+            "title": "Hint 7",
+            "content": "The number of inversions in the array $$$[x, 2x, 4x, \\ldots, 2^m x, y, 2y, 4y, \\ldots, 2^m y]$$$ depends only on $$$\\lfloor \\log_2(\\frac{y}{x}) \\rfloor$$$ and $$$m$$$. You don't need to think about rounding of $$$\\log_2(\\frac{y}{x})$$$ because $$$x$$$ and $$$y$$$ are odd in this problem. Also, $$$m$$$ is the same for all merges."
+        },
+        {
+            "title": "Hint 8",
+            "content": "Consider the following $$$\\mathcal{O}(n \\log n)$$$ algorithm to find the number of inversions in the permutation: make a segment tree corresponding to this permutation and fill it with zeroes. For all $$$i$$$ from $$$1$$$ to $$$n$$$ find $$$j$$$ such that $$$p_j=i$$$, increase the $$$j$$$-th element of this segment tree by $$$1$$$ and add the sum of elements on the right of the $$$j$$$-th element to the number of inversions. Improve this algorithm to count the number of inversions in array $$$a$$$ assuming $$$q=[0,1,\\ldots,k-1]$$$."
+        },
+        {
+            "title": "Hint 9",
+            "content": "The problem can be solved in $$$\\mathcal{O}(n \\log n \\min(\\log n, k) + k \\log k)$$$. The order of elements in $$$q$$$ matters only on the inversions inside the blocks of length $$$k$$$ you chosen in the hint $$$2$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's split the array $$$a$$$ into subarrays of the length $$$k$$$. The relative order of the elements in each of them is the same (as in permutation $$$q$$$), so the number of inversions is the same, too. You can find the number of invesions in one of them as described in the hint $$$7$$$. By multiplying this number by $$$n$$$, you count all the in-block inversions.\nAll the remaining inversions are formed by pairs of elements from the distinct blocks. You may assume that $$$q=[0, 1, \\ldots, k-1]$$$ now for simplicity: it won't change the number of such inversions.\nLet's fix two elements $$$x$$$ and $$$y$$$ of $$$p$$$ and count the number of inversions $$$(i, j)$$$ such that $$$a_i = x \\cdot 2^{\\alpha}$$$ and $$$a_j = y \\cdot 2^{\\beta}$$$ for some $$$\\alpha$$$ and $$$\\beta$$$. It is equivalent to counting the number of inversions in the array $$$[x, 2x, 4x, \\ldots, 2^mx, y, 2y, 4y, \\ldots, 2^my]$$$.\nConsider merging two arrays $$$[x, 2x, 4x, \\ldots, 2^mx]$$$ and $$$[y, 2y, 4y, \\ldots, 2^my]$$$ with $$$x \\lt y$$$ ($$$x$$$ and $$$y$$$ are odd) into one sorted subarray:\nif $$$\\color{blue}{x} \\lt \\color{red}{y} \\lt \\color{blue}{2x}$$$, then the resulting array would look like $$$[\\color{blue}{x}, \\color{red}{y}, \\color{blue}{2x}, \\color{red}{2y}, \\color{blue}{4x}, \\color{red}{4y}, \\ldots, \\color{blue}{2^mx}, \\color{red}{2^my}]$$$;\nif $$$\\color{blue}{2x} \\lt \\color{red}{y} \\lt \\color{blue}{4x}$$$, then the resulting array would look like $$$[\\color{blue}{x}, \\color{blue}{2x}, \\color{red}{y}, \\color{blue}{4x}, \\color{red}{2y}, \\color{blue}{8x}, \\color{red}{4y}, \\ldots, \\color{blue}{2^{m-1}x}, \\color{red}{2^{m-2}y}, \\color{blue}{2^mx}, \\color{red}{2^{m-1}y}, \\color{red}{2^my}]$$$;\nif $$$\\color{blue}{4x} \\lt \\color{red}{y} \\lt \\color{blue}{8x}$$$, then the resulting array would look like $$$[\\color{blue}{x}, \\color{blue}{2x}, \\color{blue}{4x}, \\color{red}{y}, \\color{blue}{8x}, \\color{red}{2y}, \\color{blue}{16x}, \\color{red}{4y}, \\ldots, \\color{blue}{2^{m-1}x}, \\color{red}{2^{m-3}y}, \\color{blue}{2^mx}, \\color{red}{2^{m-2}y}, \\color{red}{2^{m-1}y}, \\color{red}{2^my}]$$$;\n...\nYou can see several blue elements in the beginning, followed by alternating blue and red elements, which are followed by several red elements. The number of blue elements in the beginning is equal to the number of red elements in the end and equal to the largest $$$z$$$ such that $$$2^z x \\lt y$$$. Furthermore, this $$$z$$$ is also limited by $$$\\log n + 1$$$ because $$$x$$$ and $$$y$$$ are both positive integers less than $$$2n$$$.\nIf $$$x \\gt y$$$ the situation is similar, but the order of colors is reversed.\nGoing back to inversions, we have some array $$$[\\color{blue}{x}, \\color{blue}{2x}, \\color{blue}{4x}, \\ldots, \\color{blue}{2^mx}, \\color{red}{y}, \\color{red}{2y}, \\color{red}{4y}, \\ldots, \\color{red}{2^my}]$$$. Inversions are formed by a large blue element and a small red element.\nif $$$x \\lt y \\lt 2x$$$, then there are $$$0+1+2+\\ldots+m=\\frac{m(m+1)}{2}$$$ inversions;\nif $$$2x \\lt y \\lt 4x$$$, the there are $$$0+0+1+2+\\ldots+(m-1)=\\frac{m(m+1)}{2} - m$$$ inversions;\nif $$$4x \\lt y \\lt 8x$$$, the there are $$$0+0+0+1+2+\\ldots+(m-2)=\\frac{m(m+1)}{2} - m - (m-1)$$$ inversions;\n...\nFor $$$x \\gt y$$$ the situation is similar, but we will start with $$$1+2+3+\\ldots+m+(m+1)=\\frac{(m+1)(m+2)}{2}$$$ inversions for $$$y \\lt x \\lt 2y$$$ and we will add $$$m, (m-1), \\ldots$$$ terms instead of substracting them.\nWell, now we can solve this problem in $$$\\mathcal{O}(n^2 \\log n)$$$: enumerate pairs $$$(x, y)$$$, find $$$\\log_2(\\frac{y}{x})$$$ and add some value to the answer.\nNow let's add the inversion counting algorithm to solve this problem. Again, let's solve the problem for $$$x \\lt y$$$ first. Let's enumerate the value of $$$y$$$ from $$$1$$$ to $$$2n-1$$$.\nthe $$$x$$$-s on the right of $$$y$$$ should not be counted in now;\neach of the $$$x$$$-s on the left of $$$y$$$ such that $$$x \\lt y$$$ adds $$$\\frac{m(m+1)}{2}$$$ to the answer;\neach of the $$$x$$$-s on the left of $$$y$$$ such that $$$2x \\lt y$$$ adds $$$\\frac{m(m+1)}{2} - m$$$ to the answer;\neach of the $$$x$$$-s on the left of $$$y$$$ such that $$$4x \\lt y$$$ adds $$$\\frac{m(m+1)}{2} - m - (m-1)$$$ to the answer;\n...\nWe can maintain a segment tree to compute the sum of the values we should sum up. To update this segment tree let's additionally maintain $$$\\Theta(\\log n)$$$ pointers that maintain the largest $$$x$$$ such that $$$2^z x \\lt y$$$ for each $$$z$$$ from $$$0$$$ to $$$\\lceil\\log n\\rceil$$$.\nThe solution is similar for $$$x \\gt y$$$ pairs.\nYou should be careful when implementing this, because for small $$$k$$$ at some moment there becomes $$$0$$$ elements in the alternating segment of the blue-red array and you shouldn't substract anything further."
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nSakurako has prepared a task for you:\n\nShe gives you an array of $ n $ integers and allows you to choose $ i $ and $ j $ such that $ i \\neq j $ and $ a_i \\ge a_j $ , and then assign $ a_i = a_i - a_j $ or $ a_i = a_i + a_j $ . You can perform this operation any number of times for any $ i $ and $ j $ , as long as they satisfy the conditions.\n\nSakurako asks you what is the maximum possible value of $ mex_k $ $ ^{\\text{∗}} $ of the array after any number of operations.\n\n$ ^{\\text{∗}} $ $ mex_k $ is the $ k $ -th non-negative integer that is absent in the array. For example, $ mex_1(\\{1,2,3 \\})=0 $ , since $ 0 $ is the first element that is not in the array, and $ mex_2(\\{0,2,4 \\})=3 $ , since $ 3 $ is the second element that is not in the array.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1\\le t\\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1\\le n\\le 2\\cdot 10^5,1\\le k\\le 10^9 $ ) — the number of elements in the array and the value $ k $ for $ mex_k $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\dots,a_n $ ( $ 1\\le a_i\\le 10^9 $ ) — the elements of the array.\n\nIt is guaranteed that the sum of $ n $ across all test cases does not exceed $ 2\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output the maximum $ mex_k $ that can be achieved through the operations.\n\nExamples\nSample 1\nInput\n6\n1 3\n3\n2 10\n1 1\n3 1\n1 2 3\n3 2\n1 2 4\n4 5\n2 2 2 16\n4 5\n2 2 2 3\nOutput\n2\n11\n3\n4\n8\n8"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2008G - Sakurako's Task\nLet's look at case when $$$n=1$$$. We cannot change the value of the element, so we will not change the array.\nIf $$$n \\gt 1$$$, let's call $$$g=gcd(a_1,a_2,\\dots,a_n)$$$. Using operations in the statement, we can get only numbers 0 and that have $$$g$$$ as a divisor. So, the best array for this task will be $$$a_i=(i-1)\\cdot g$$$.\nNow, we can find where the $$$mex_k$$$ should be in linear time. Firstly, if it is before the first one, then the answer is $$$k$$$, otherwise, we can assign $$$k=k-a_1$$$. Then let's look at the second element. If $$$a_1+k \\lt a_2$$$, then answer should be $$$a_1+k$$$ and otherwise we can assign $$$k=k-a_2+a_1-1$$$. In other words, when we look if our $$$k$$$ can be in range from $$$a_i$$$ to $$$a_{i+1}$$$, we know that number of elements that were not in the array and less than $$$a_i$$$ equal to $$$k+a_i$$$. Then, when we find such $$$i$$$, we can output the answer."
+        },
+        {
+            "title": "Solution in C++",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nlong\nlong\na\n[\nn\n+\n1\n],\ng\n=\n0\n,\nmx\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\ng\n=\n__gcd\n(\ng\n,\na\n[\ni\n]);\nmx\n=\nmax\n(\nmx\n,\na\n[\ni\n]);\n}\nif\n(\ng\n==\n0\n)\n{\ncout\n<<\nk\n<<\nendl\n;\ncontinue\n;\n}\nsort\n(\na\n,\na\n+\nn\n);\nint\nq\n=-\ng\n;\nif\n(\nn\n!=\n1\n)\n{\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nq\n+=\ng\n;\na\n[\ni\n]=\nq\n;\n}\n}\na\n[\nn\n]=\n1e16\n;\nlong\nlong\nlst\n=-\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nn\n;\ni\n++)\n{\nif\n(\nk\n<=\na\n[\ni\n]-\nlst\n-\n1\n)\n{\nbreak\n;\n}\nk\n-=\nmax\n(\na\n[\ni\n]-\nlst\n-\n1\n,\n0ll\n);\nlst\n=\na\n[\ni\n];\n}\ncout\n<<\nlst\n+\nk\n<<\nendl\n;\n}\n}"
+        },
+        {
+            "title": "Solution in Python",
+            "content": "import\nmath\n\nt\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\nn\n,\nk\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\ng\n=\n0\nmx\n=\n0\nfor\ni\nin\nrange\n(\nn\n):\ng\n=\nmath\n.\ngcd\n(\ng\n,\na\n[\ni\n])\nmx\n=\nmax\n(\nmx\n,\na\n[\ni\n])\nif\ng\n==\n0\n:\nprint\n(\nk\n)\ncontinue\na\n.\nsort\n()\nq\n=\n-\ng\nif\nn\n!=\n1\n:\nfor\ni\nin\nrange\n(\nn\n):\nq\n+=\ng\n            a\n[\ni\n]\n=\nq\n    a\n.\nappend\n(\n10\n**\n16\n)\nlst\n=\n-\n1\nfor\ni\nin\nrange\n(\nn\n+\n1\n):\nif\nk\n<=\na\n[\ni\n]\n-\nlst\n-\n1\n:\nbreak\nk\n-=\nmax\n(\na\n[\ni\n]\n-\nlst\n-\n1\n,\n0\n)\nlst\n=\na\n[\ni\n]\nprint\n(\nlst\n+\nk\n)"
+        }
+    ]
+}

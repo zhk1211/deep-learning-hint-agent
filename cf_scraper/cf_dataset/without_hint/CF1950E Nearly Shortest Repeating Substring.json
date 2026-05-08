@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ of length $ n $ consisting of lowercase Latin characters. Find the length of the shortest string $ k $ such that several (possibly one) copies of $ k $ can be concatenated together to form a string with the same length as $ s $ and, at most, one different character.\n\nMore formally, find the length of the shortest string $ k $ such that $ c = \\underbrace{k + \\cdots + k}_{x\\rm\\ \\text{times}} $ for some positive integer $ x $ , strings $ s $ and $ c $ has the same length and $ c_i \\neq s_i $ for at most one $ i $ (i.e. there exist $ 0 $ or $ 1 $ such positions).\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^3 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq 2\\cdot10^5 $ ) — the length of string $ s $ .\n\nThe second line of each test case contains the string $ s $ , consisting of lowercase Latin characters.\n\nThe sum of $ n $ over all test cases does not exceed $ 2\\cdot10^5 $ .\n\nOutput Format\nFor each test case, print the length of the shortest string $ k $ satisfying the constraints in the statement.\n\nExamples\nSample 1\nInput\n5\n4\nabaa\n4\nabba\n13\nslavicgslavic\n8\nhshahaha\n20\nstormflamestornflame\nOutput\n1\n4\n13\n2\n10\n\nNote\nIn the first test case, you can select $ k = \\texttt{a} $ and $ k+k+k+k = \\texttt{aaaa} $ , which only differs from $ s $ in the second position.\n\nIn the second test case, you cannot select $ k $ of length one or two. We can have $ k = \\texttt{abba} $ , which is equal to $ s $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nstring\ns\n;\ncin\n>>\ns\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nif\n(\nn\n%\ni\n==\n0\n)\n{\nint\nsatisfy\n=\n2\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\ni\n;\nj\n++)\n{\nfor\n(\nint\nk\n=\nj\n+\ni\n;\nk\n<\nn\n;\nk\n+=\ni\n)\n{\nif\n(\ns\n[\nk\n]\n!=\ns\n[\nj\n])\n{\nsatisfy\n--;\n}\n}\n}\nif\n(\nsatisfy\n>\n0\n)\n{\ncout\n<<\ni\n<<\nendl\n;\nreturn\n;\n}\nsatisfy\n=\n2\n;\nfor\n(\nint\nj\n=\nn\n-\ni\n;\nj\n<\nn\n;\nj\n++)\n{\nfor\n(\nint\nk\n=\nj\n-\ni\n;\nk\n>=\n0\n;\nk\n-=\ni\n)\n{\nif\n(\ns\n[\nk\n]\n!=\ns\n[\nj\n])\n{\nsatisfy\n--;\n}\n}\n}\nif\n(\nsatisfy\n>\n0\n)\n{\ncout\n<<\ni\n<<\nendl\n;\nreturn\n;\n}\n}\n}\n}\nint32_t\nmain\n(){\nint\nt\n=\n1\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

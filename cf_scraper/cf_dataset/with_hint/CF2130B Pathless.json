@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is an array $ a_1, a_2, \\ldots, a_n $ consisting of values $ 0 $ , $ 1 $ , and $ 2 $ , and an integer $ s $ . It is guaranteed that $ a_1, a_2, \\ldots, a_n $ contains at least one $ 0 $ , one $ 1 $ , and one $ 2 $ .\n\nAlice wants to start from index $ 1 $ and perform steps of length $ 1 $ to the right or to the left, and reach index $ n $ at the end. While Alice moves, she calculates the sum of the values she is visiting, and she wants the sum to be exactly $ s $ .\n\nFormally, Alice wants to find a sequence $ [i_1, i_2, \\ldots, i_m] $ of indices, such that:\n\n- $ i_1 = 1 $ , $ i_m = n $ .\n- $ 1 \\leq i_j \\leq n $ for all $ 1 \\le j \\le m $ .\n- $ |i_{j} - i_{j+1}| = 1 $ for all $ 1 \\leq j < m $ .\n- $ a_{i_1} + a_{i_2} + \\ldots + a_{i_m} = s $ .\n\nHowever, Bob wants to rearrange $ a_1, a_2, \\ldots, a_n $ to prevent Alice from achieving her target. Determine whether it is possible to rearrange $ a_1, a_2, \\ldots, a_n $ such that Alice cannot find her target sequence (even if Alice is smart enough). If it is possible, you also need to output the rearranged array $ a_1, a_2, \\ldots, a_n $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^3 $ ). The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ s $ ( $ 3 \\le n \\le 50 $ , $ 0 \\le s \\le 1000 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le 2 $ ).\n\nIt is guaranteed that $ a $ contains at least one $ 0 $ , one $ 1 $ , and one $ 2 $ .\n\nOutput Format\nFor each test case, if it is possible to rearrange $ a $ such that Alice cannot find her target sequence, output $ n $ integers — such rearrangement of $ a $ . Otherwise, output $ -1 $ instead.\n\nExamples\nSample 1\nInput\n6\n3 2\n0 1 2\n3 3\n0 1 2\n3 6\n0 1 2\n3 4\n0 1 2\n3 10\n0 1 2\n5 1000\n2 0 1 1 2\nOutput\n0 1 2\n-1\n-1\n0 2 1\n-1\n-1\n\nNote\nIn the first test case, any rearrangement of $ a $ can prevent Alice from achieving her target.\n\nIn the second test case, regardless of rearranging $ a $ , Alice can always find the sequence $ [1,2,3] $ as her target sequence.\n\nIn the third test case,there is no rearrangement of $ a $ that can prevent Alice from achieving her target. For example, for $ a=[0,2,1] $ , Alice can find the sequence $ [1,2,3,2,3] $ as her target sequence."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "Casework. Consider two easy cases first: $$$\\Sigma a \\gt s$$$ and $$$\\Sigma a=s$$$."
+        },
+        {
+            "title": "Hint2",
+            "content": "What if there is an index $$$i$$$ such that $$$a_i+a_{i+1}=1$$$?"
+        },
+        {
+            "title": "Hint3",
+            "content": "To \"block\" $$$a_i+a_{i+1}=1$$$, what should Bob do?"
+        },
+        {
+            "title": "Hint4",
+            "content": "Consider cases of $$$\\Sigma a=s+1$$$ and $$$\\Sigma a \\gt s+1$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "The minimum path sum is the sum of the simple path from $$$1$$$ to $$$n$$$ (i.e., $$$1 \\rightarrow 2 \\rightarrow \\dots \\rightarrow n$$$), denoted as $$$\\text{base_sum} = \\sum_{i=1}^{n} a_i$$$.\nThe path can include back-and-forth movements (e.g., from $$$i$$$ to $$$i+1$$$ and back to $$$i$$$), which increases the path length and the path sum. Specifically, each back-and-forth movement between adjacent positions $$$(i, i+1)$$$ adds $$$a_i + a_{i+1}$$$ to the path sum.\nThus, the total path sum can be expressed as $$$\\text{base_sum} + d$$$, where $$$d$$$ is the additional sum contributed by zero or more back-and-forth movements. Here, $$$d$$$ can be represented as a non-negative integer linear combination of the sums of adjacent pairs.\nCasework:\nIf $$$s \\lt \\text{base_sum}$$$, no path sum can equal $$$s$$$ (since the base sum already exceeds $$$k$$$, and any additional movements will further increase the sum).\nIf $$$s = \\text{base_sum}$$$, the simple path ($$$1 \\rightarrow 2 \\rightarrow \\dots \\rightarrow n$$$) already satisfies the condition, so Alice cannot be stopped.\nIf $$$s \\gt \\text{base_sum}$$$, let $$$d = s - \\text{base_sum}$$$:\nIf $$$d = 1$$$, we can rearrange the array to avoid adjacent pairs summing to $$$1$$$ (i.e., avoid $$$0$$$ and $$$1$$$ being adjacent). Specifically, place all $$$0$$$s first, followed by all $$$2$$$s, and then all $$$1$$$s (e.g., $$$[0, 0, \\dots, 0, 2, 2, \\dots, 2, 1, 1, \\dots, 1]$$$). This ensures no adjacent pair sums to $$$1$$$, making $$$d = 1$$$ unachievable.\nIf $$$d \\neq 1$$$, no rearrangement can prevent Alice from achieving the path sum $$$s$$$ (since sums of adjacent pairs can cover all $$$T \\geq 2$$$ through linear combinations)."
+        },
+        {
+            "title": "solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n(){\nint\nn\n,\nk\n,\ntmp\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\na\n(\n3\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++){\ncin\n>>\ntmp\n;\na\n[\ntmp\n]++;}\nif\n(\nk\n==\na\n[\n1\n]\n+\n2\n*\na\n[\n2\n]\n||\nk\n>=\na\n[\n1\n]\n+\n2\n*\na\n[\n2\n]\n+\n2\n){\ncout\n<<\n-\n1\n<<\n'\\n'\n;\nreturn\n;}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\na\n[\n0\n];\ni\n++)\ncout\n<<\n0\n<<\n' '\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\na\n[\n2\n];\ni\n++)\ncout\n<<\n2\n<<\n' '\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\na\n[\n1\n];\ni\n++)\ncout\n<<\n1\n<<\n' '\n;\ncout\n<<\n'\\n'\n;\n}\nint\nmain\n(){\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\nsolve\n();\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's define $ F(x) $ as the sum of the digits of $ x $ . An integer $ x $ is considered beautiful if $ F(F(x)) = F(x) $ .\n\nYou are given an integer $ x $ . In one move, you can choose any digit in the number and replace it with another. The resulting number cannot have leading zeros.\n\nYour task is to calculate the minimum number of moves (possibly zero) required to make the given number beautiful.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe only line of each test case contains a single integer $ x $ ( $ 1 \\le x \\le 10^{18} $ ).\n\nOutput Format\nFor each test case, print a single integer — the minimum number of moves (possibly zero) required to make the given number beautiful.\n\nExamples\nSample 1\nInput\n4\n1\n37\n645\n2374236843276813\nOutput\n0\n1\n2\n12\n\nNote\nIn the first example, the given number is already beautiful.\n\nIn the second example, in one move, we can get the beautiful number $ 3\\underline{3} $ (the changed digit is underlined).\n\nIn the third example, in two moves, we can get the beautiful number $ \\underline{1}4\\underline{0} $ (the changed digits are underlined)."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2203B - Beautiful Numbers\nNote that $$$F(x)  \\lt  x$$$ for $$$x \\ge 10$$$, and $$$F(x) = x$$$ otherwise. Therefore, a number is beautiful only if $$$F(x) \\le 9$$$.\nConsider a number represented by the sequence of digits $$$a_1, a_2, \\dots, a_n$$$. For each position, we can calculate how much the sum of digits can be reduced by changing that position (let's call it $$$d_i$$$ for the $$$i$$$-th position). We can set $$$0$$$ in every position except the first one (since leading zeros are not allowed). Therefore, $$$d_i = a_i$$$ for $$$i  \\gt  1$$$ and $$$d_1 = a_1 - 1$$$.\nTo minimize the number of moves, we can sort the array $$$d$$$ in non-ascending order. Then, find the minimum $$$k$$$ such that the sum of all digits minus the sum of the first $$$k$$$ elements of $$$d$$$ is at most $$$9$$$ (i. e. $$$\\displaystyle\\sum\\limits_{i=1}^{n} a_i - \\displaystyle\\sum\\limits_{j=1}^{k} d_j \\le 9$$$). This value of $$$k$$$ is the answer to the problem."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nstring\ns\n;\ncin\n>>\ns\n;\nint\nsum\n=\n0\n;\nvector\n<int>\na\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\ns\n.\nsize\n());\n++\ni\n)\n{\nint\nx\n=\ns\n[\ni\n]\n-\n'0'\n;\nsum\n+=\nx\n;\na\n.\npush_back\n(\nx\n-\n(\ni\n==\n0\n));\n}\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nint\nans\n=\n0\n;\nwhile\n(\nsum\n>\n9\n)\n{\nsum\n-=\na\n.\nback\n();\na\n.\npop_back\n();\n++\nans\n;\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}
