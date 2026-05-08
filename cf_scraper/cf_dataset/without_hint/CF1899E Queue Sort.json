@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVlad found an array $ a $ of $ n $ integers and decided to sort it in non-decreasing order.\n\nTo do this, Vlad can apply the following operation any number of times:\n\n- Extract the first element of the array and insert it at the end;\n- Swap that element with the previous one until it becomes the first or until it becomes strictly greater than the previous one.\n\nNote that both actions are part of the operation, and for one operation, you must apply both actions.\n\nFor example, if you apply the operation to the array \\[ $ 4, 3, 1, 2, 6, 4 $ \\], it will change as follows:\n\n- \\[ $ \\color{red}{4}, 3, 1, 2, 6, 4 $ \\];\n- \\[ $ 3, 1, 2, 6, 4, \\color{red}{4} $ \\];\n- \\[ $ 3, 1, 2, 6, \\color{red}{4}, 4 $ \\];\n- \\[ $ 3, 1, 2, \\color{red}{4}, 6, 4 $ \\].\n\nVlad doesn't have time to perform all the operations, so he asks you to determine the minimum number of operations required to sort the array or report that it is impossible.\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Descriptions of the test cases follow.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the array.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, a_3, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the elements of the array.\n\nIt is guaranteed that the sum of $ n $ over all testcases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum number of operations needed to sort the array. If it is impossible to do so, output $ -1 $ as the answer.\n\nExamples\nSample 1\nInput\n5\n5\n6 4 1 2 5\n7\n4 5 3 7 8 6 2\n6\n4 3 1 2 6 4\n4\n5 2 4 2\n3\n2 2 3\nOutput\n2\n6\n-1\n-1\n0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Consider the position of the first minimum in the array, let it be equal to $$$k$$$. All elements standing on positions smaller than $$$k$$$ are strictly greater, so we must apply operations to them, because otherwise the array will not be sorted. Suppose we have applied operations to all such elements, they have taken some positions after $$$k$$$ (since they are strictly greater than the minimum), i.e. now the minimum element that moved from position $$$k$$$ is at the beginning of the array. If we apply the operation to it, it will return to its current position, since it is less than or equal to all elements of the array, i.e. the array will not change.\nThus, after the array has its minimum at the beginning, it is useless to apply operations, and all the operations applied before that will move the element from the beginning of the array to some position after the position of the first minimum.\nThen, if the part of the array after the position $$$k$$$ is not sorted, the answer is $$$-1$$$, because it is impossible to change the order of elements in it. Otherwise, the answer is equal to the number of elements standing before the first minimum, since the operation must be applied to them and they will be in the right place in the right part. Total complexity — $$$O(n)$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "def\nsolve\n():\nn\n=\nint\n(\ninput\n())\na\n=\n[\nint\n(\nx\n)\nfor\nx\nin\ninput\n().\nsplit\n()]\nfm\n=\n0\nfor\ni\nin\nrange\n(\nn\n):\nif\na\n[\ni\n]\n<\na\n[\nfm\n]:\nfm\n=\ni\nfor\ni\nin\nrange\n(\nfm\n+\n1\n,\nn\n):\nif\na\n[\ni\n]\n<\na\n[\ni\n-\n1\n]:\nprint\n(-\n1\n)\nreturn\nprint\n(\nfm\n)\nfor\n_\nin\nrange\n(\nint\n(\ninput\n())):\nsolve\n()"
+        }
+    ]
+}

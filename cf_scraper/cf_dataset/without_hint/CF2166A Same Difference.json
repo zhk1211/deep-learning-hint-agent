@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ of length $ n $ , consisting of lowercase letters.\n\nIn one operation, you can select an integer $ i $ such that $ 1\\leq i < n $ and change $ s_i $ into $ s_{i+1} $ .\n\nWhat is the minimum number of operations needed to make every character the same? It can be proved that this is always possible.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 20 $ ). The description of the test cases follows.\n\nThe first line of each test case contains an integer $ n $ ( $ 2\\le n\\le 100 $ ) — the length of the string.\n\nThe following line contains a string $ s $ of length $ n $ , consisting of lowercase letters.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 100 $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum number of operations needed to make every character the same.\n\nExamples\nSample 1\nInput\n5\n3\nqwq\n2\naa\n4\ntest\n5\nabbac\n6\nabcabc\nOutput\n1\n0\n2\n4\n4\n\nNote\nIn the first test case, you can change $ s_2 $ to $ s_3 $ using $ 1 $ operation to reach the goal.\n\nIn the third test case, you can change $ s_3 $ to $ s_4 $ and then change $ s_2 $ to $ s_3 $ , using $ 2 $ operations in total. It can be proved that the answer is not less than $ 2 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "It can be observed that $$$s_n$$$ will not change throughout the operations, therefore, for the final string to have every character the same, every character must be equal to $$$s_n$$$.\nTo change every character to $$$s_n$$$, we can iterate over all characters from right to left, repeatedly setting $$$s_{i-1}\\leftarrow s_i$$$ if $$$s_{i-1}\\neq s_n$$$. Through this, we can need one operation for every character not equal to $$$s_n$$$, which is also obvious as a lower bound.\nTime complexity: $$$O(n)$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nchar\ns\n[\n100005\n];\nint\nmain\n()\n{\nint\nn\n,\nt\n,\ni\n,\nm\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nwhile\n(\nt\n--)\n{\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nscanf\n(\n\"%s\"\n,\ns\n+\n1\n);\nm\n=\n0\n;\nfor\n(\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\nm\n+=\n(\ns\n[\ni\n]\n!=\ns\n[\nn\n]);\nprintf\n(\n\"%d\\n\"\n,\nm\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

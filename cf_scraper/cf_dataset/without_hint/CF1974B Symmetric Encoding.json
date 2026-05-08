@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp has a string $ s $ , which consists of lowercase Latin letters. He encodes this string using the following algorithm:\n\n- first, he constructs a new auxiliary string $ r $ , which consists of all distinct letters of the string $ s $ , written in alphabetical order;\n- then the encoding happens as follows: each character in the string $ s $ is replaced by its symmetric character from the string $ r $ (the first character of the string $ r $ will be replaced by the last, the second by the second from the end, and so on).\n\nFor example, encoding the string $ s $ =\"codeforces\" happens as follows:\n\n- the string $ r $ is obtained as \"cdefors\";\n- the first character $ s_1 $ ='c' is replaced by 's';\n- the second character $ s_2 $ ='o' is replaced by 'e';\n- the third character $ s_3 $ ='d' is replaced by 'r';\n- ...\n- the last character $ s_{10} $ ='s' is replaced by 'c'.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1974B/bdd77e5f1b5637622489d2d075a49b021a94a8b9.png) The string $ r $ and replacements for $ s $ =\"codeforces\".Thus, the result of encoding the string $ s $ =\"codeforces\" is the string \"serofedsoc\".\n\nWrite a program that performs decoding — that is, restores the original string $ s $ from the encoding result.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the string $ b $ .\n\nThe second line of each test case contains a string $ b $ of length $ n $ , consisting of lowercase Latin letters — the result of encoding the original string $ s $ .\n\nIt is guaranteed that the sum of the values of $ n $ over all test cases in the test does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output the string $ s $ from which the encoding result $ b $ was obtained.\n\nExamples\nSample 1\nInput\n5\n10\nserofedsoc\n3\nttf\n9\ntlrhgmaoi\n1\nw\n15\nhnndledmnhlttin\nOutput\ncodeforces\nfft\nalgorithm\nw\nmeetinthemiddle"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1974B - Symmetric Encoding\nLet's construct a string $$$r$$$ according to the definition from the condition: we write down all the letters from $$$s$$$ once in ascending order.\nAfter that, we just need to replace all the characters in $$$s$$$ with their symmetric characters in the string $$$r$$$. The length of string $$$r$$$ does not exceed $$$26$$$, so the position of this character can be found by linear search."
+        },
+        {
+            "title": "Solution",
+            "content": "def\nsolve\n():\nn\n=\nint\n(\ninput\n())\nb\n=\ninput\n()\ncnt\n=\n[\n0\n]\n*\n26\nfor\nc\nin\nb\n:\ncnt\n[\nord\n(\nc\n)\n-\nord\n(\n'a'\n)]\n=\n1\ntmp\n=\n''\nfor\ni\nin\nrange\n(\n26\n):\nif\ncnt\n[\ni\n]\n>\n0\n:\ntmp\n+=\nchr\n(\nord\n(\n'a'\n)\n+\ni\n)\na\n=\n''\nfor\nc\nin\nb\n:\na\n+=\ntmp\n[-\n1\n-\ntmp\n.\nfind\n(\nc\n)]\nprint\n(\na\n)\nfor\n_\nin\nrange\n(\nint\n(\ninput\n())):\nsolve\n()"
+        }
+    ]
+}

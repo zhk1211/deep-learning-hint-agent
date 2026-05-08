@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two integers $ x $ and $ y $ .\n\nOutput two integers: the minimum of $ x $ and $ y $ , followed by the maximum of $ x $ and $ y $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 100 $ ) — the number of test cases.\n\nThe only line of each test case contains two space-separated integers $ x $ and $ y $ ( $ 0 \\leq x, y \\leq 9 $ ).\n\nOutput Format\nFor each test case, output two integers: the minimum of $ x $ and $ y $ , followed by the maximum of $ x $ and $ y $ .\n\nExamples\nSample 1\nInput\n10\n1 9\n8 4\n1 4\n3 4\n2 0\n2 4\n6 9\n3 3\n0 0\n9 9\nOutput\n1 9\n4 8\n1 4\n3 4\n0 2\n2 4\n6 9\n3 3\n0 0\n9 9"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1971A - My First Sorting Problem\nYou can use, for example, an if-statement or some inbuilt $$$\\texttt{min}$$$ and $$$\\texttt{max}$$$ function available in most languages (like Python or C++)."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200\n'007;\nconst int MOD = 1'\n000\n'000'\n007\n;\nvoid\nsolve\n()\n{\nint\nx\n,\ny\n;\ncin\n>>\nx\n>>\ny\n;\ncout\n<<\nmin\n(\nx\n,\ny\n)\n<<\n' '\n<<\nmax\n(\nx\n,\ny\n)\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

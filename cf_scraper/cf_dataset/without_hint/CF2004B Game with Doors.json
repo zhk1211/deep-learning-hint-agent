@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ 100 $ rooms arranged in a row and $ 99 $ doors between them; the $ i $ -th door connects rooms $ i $ and $ i+1 $ . Each door can be either locked or unlocked. Initially, all doors are unlocked.\n\nWe say that room $ x $ is reachable from room $ y $ if all doors between them are unlocked.\n\nYou know that:\n\n- Alice is in some room from the segment $ [l, r] $ ;\n- Bob is in some room from the segment $ [L, R] $ ;\n- Alice and Bob are in different rooms.\n\nHowever, you don't know the exact rooms they are in.\n\nYou don't want Alice and Bob to be able to reach each other, so you are going to lock some doors to prevent that. What's the smallest number of doors you have to lock so that Alice and Bob cannot meet, regardless of their starting positions inside the given segments?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ l $ and $ r $ ( $ 1 \\le l < r \\le 100 $ ) — the bounds of the segment of rooms where Alice is located.\n\nThe second line of each test case contains two integers $ L $ and $ R $ ( $ 1 \\le L < R \\le 100 $ ) — the bounds of the segment of rooms where Bob is located.\n\nOutput Format\nFor each test case, print a single integer — the smallest number of doors you have to lock so that Alice and Bob cannot meet, regardless of their starting positions inside the given segments.\n\nExamples\nSample 1\nInput\n4\n1 2\n3 4\n2 5\n2 5\n3 7\n6 7\n4 5\n2 8\nOutput\n1\n3\n2\n3\n\nNote\nIn the first test case, it is sufficient to lock the door between rooms $ 2 $ and $ 3 $ .\n\nIn the second test case, the following doors have to be locked: $ (2,3) $ , $ (3,4) $ , $ (4,5) $ .\n\nIn the third test case, the following doors have to be locked: $ (5, 6) $ and $ (6,7) $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2004B - Game with Doors\nLet's find the segment of rooms where both Alice and Bob can be. This segment is $$$[\\max(L, l), \\min(R, r)]$$$.\nIf it is empty, then it is sufficient to simply block any door between Alice's segment and Bob's segment, so the answer is $$$1$$$.\nIf it is not empty, let's denote by $$$x$$$ the number of doors in this segment — $$$\\min(R, r) - \\max(L, l)$$$. Each of these doors definitely needs to be blocked so that Alice and Bob cannot meet if they are in adjacent rooms within this segment. Therefore, the answer is at least $$$x$$$.\nHowever, sometimes we also need to restrict this segment on the left and/or right. If either of them is to the left of this segment (i.e., the left boundaries of their segments do not coincide), we need to block the door to the left of the intersection (and increase the answer by $$$1$$$). Similarly for the right boundary."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nl\n,\nr\n,\nL\n,\nR\n;\ncin\n>>\nl\n>>\nr\n>>\nL\n>>\nR\n;\nint\ninter\n=\nmin\n(\nr\n,\nR\n)\n-\nmax\n(\nl\n,\nL\n)\n+\n1\n;\nint\nans\n=\ninter\n-\n1\n;\nif\n(\ninter\n<=\n0\n)\n{\nans\n=\n1\n;\n}\nelse\n{\nans\n+=\n(\nl\n!=\nL\n);\nans\n+=\n(\nr\n!=\nR\n);\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

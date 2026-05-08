@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "The stability of the wall is the number of horizontal bricks minus the number of vertical bricks. Since a horizontal brick has a length of at least $$$2$$$, no more than $$$\\lfloor\\frac{m}{2}\\rfloor$$$ horizontal bricks can be placed in one row. Therefore, the answer does not exceed $$$n \\cdot \\lfloor\\frac{m}{2}\\rfloor$$$. On the other hand, if horizontal bricks of length $$$2$$$ are placed in a row, and when $$$m$$$ is odd, the last brick has a length of $$$3$$$, then in each row there will be exactly $$$\\lfloor\\frac{m}{2}\\rfloor$$$ horizontal bricks, and there will be no vertical bricks in the wall at all. This achieves the maximum stability of $$$n \\cdot \\lfloor\\frac{m}{2}\\rfloor$$$. The solution is one formula, so it works in $$$O(1)$$$ time."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint64_t\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\ncout\n<<\nn\n*(\nm\n/\n2\n)\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

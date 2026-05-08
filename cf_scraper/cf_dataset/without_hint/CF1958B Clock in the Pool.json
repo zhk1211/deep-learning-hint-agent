@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1958B - Clock in the Pool\nLet's write down intervals when the clock shows time using formulas. Segments are $$$[3k \\cdot x + 2k, 3k \\cdot (x + 1))$$$ for all integer $$$x \\ge 0$$$.\nWe need to find the first interval that finished later than $$$m$$$. It may start either earlier or later than $$$m$$$, but it must finish later than $$$m$$$.\nIn formulas, it means that we should find the minimum $$$x$$$ such that $$$m  \\lt  3k \\cdot (x + 1)$$$ or $$$x  \\gt  \\frac{m}{3k} - 1$$$. It means that we should take $$$x = \\mathrm{floor}(\\frac{m}{3k})$$$.\nSince now we know $$$x$$$, we can calculate when the $$$x$$$-th interval starts: it's moment $$$3kx + 2k$$$. If $$$3kx + 2k  \\gt  m$$$, we should wait exactly $$$3kx + 2k - m$$$ seconds. If $$$3kx + 2k \\le m$$$, then time is showing right now, and we don't need to wait."
+        },
+        {
+            "title": "Solution (PavelKunyavskiy)",
+            "content": "fun main\n()\n{\nrepeat\n(\nreadInt\n())\n{\nval\n(\nk\n,\nm\n)\n=\nreadInts\n()\nprintln\n(\nmaxOf\n(\n0\n,\n2\n*\nk\n-\n(\nm\n%\n(\n3\n*\nk\n))))\n}\n}\nprivate\nfun readInt\n()\n=\nreadln\n().\ntoInt\n()\nprivate\nfun readLongs\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoLong\n()\n}\nprivate\nfun readStrings\n()\n=\nreadln\n().\nsplit\n(\n\" \"\n)\nprivate\nfun readInts\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoInt\n()\n}"
+        }
+    ]
+}

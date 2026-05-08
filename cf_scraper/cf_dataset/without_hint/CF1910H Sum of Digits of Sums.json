@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1910H - Sum of Digits of Sums\nTo solve this problem, we can use the fact that the sum of digits of $$$x+y$$$ is equal to $$$F(x) + F(y) - 9 \\cdot c$$$, where $$$c$$$ is the number of digits where the result of the addition was carried over to the next digit. So, to calculate the answer for $$$a_i$$$, we have to consider each digit and calculate the number of values of $$$a_j$$$ such that, when $$$a_i + a_j$$$ is calculated, this digit is carried over to the next digit.\nFor the lowest digit, it is quite easy: you have to consider if the sum of the last digit of $$$a_i$$$ and $$$a_j$$$ is greater than or equal to $$$10$$$. But for all other digits, it is way more difficult, because carrying from lower digits may affect higher digits.\nHowever, there is a simple way to avoid dealing with any carrying from lower digits. Suppose that we have to check that when we compute $$$a_i + a_j$$$, a carry happens from the $$$k$$$-th digit to the $$$k+1$$$-th digit. Let's consider both numbers modulo $$$10^k$$$ (i. e. consider $$$a_i \\bmod 10^{k+1}$$$ and $$$a_j \\bmod 10^{k+1}$$$). If the sum of these two numbers has more than $$$k$$$ digits, then a carry happens in the respective position.\nSo, for the fixed $$$a_i$$$ and $$$k$$$, we should find the number of integers $$$a_j$$$ such that $$$a_i \\bmod 10^{k+1} + a_j \\bmod 10^{k+1} \\ge 10^{k+1}$$$. In order to do it fast, for every $$$k$$$, we can prepare a sorted list of remainders modulo $$$10^{k}$$$, and then use binary search to calculate the number of integers that are greater than or equal to $$$10^{k+1} - a_i \\bmod 10^{k+1}$$$; this is exactly the number of integers $$$a_j$$$ such that computing $$$a_i + a_j$$$ requires a carry in the $$$k$$$-th digit.\nNote that the standard binary search function in Kotlin does not necessarily return the leftmost of equal elements, so you probably should implement your own binary search or make sure that no element meets the binary search criteria (as it is done in the solution by Pavel Kunyavskiy).\nSolution complexity: $$$O(n \\log n \\log A$$$)."
+        },
+        {
+            "title": "Solution (PavelKunyavskiy)",
+            "content": "private\nfun digitSum\n(\na\n:\nInt\n)\n=\na\n.\ntoString\n().\ntoCharArray\n().\nsumOf\n{\nit\n.\ndigitToInt\n()\n}\nprivate\nfun\nList\n<\nInt\n>.\nlowerBound\n(\nx\n:\nInt\n)\n=\nbinarySearch\n{\nif\n(\nit\n<\nx\n)\n-\n1\nelse\n1\n}.\ninv\n()\nfun main\n()\n{\nval n\n=\nreadInt\n()\nval a\n=\nreadInts\n()\nval pw10\n=\nbuildList\n<\nInt\n>\n{\nadd\n(\n1\n)\nrepeat\n(\n9\n)\n{\nadd\n(\nlast\n()\n*\n10\n)\n}\nremoveAt\n(\n0\n)\n}\nval d\n=\npw10\n.\nmap\n{\np\n->\na\n.\nmap\n{\nit\n%\np\n}.\nsorted\n()\n}\nval ds\n=\na\n.\nsumOf\n{\ndigitSum\n(\nit\n)\n}\nprintln\n(\na\n.\nmap\n{\nx\n->\nds\n+\nn\n*\ndigitSum\n(\nx\n)\n-\n9\n*\npw10\n.\nindices\n.\nsumOf\n{\nn\n-\nd\n[\nit\n].\nlowerBound\n(\npw10\n[\nit\n]\n-\n(\nx\n%\npw10\n[\nit\n]))\n}\n}.\njoinToString\n(\n\" \"\n))\n}\nprivate\nfun readInt\n()\n=\nreadln\n().\ntoInt\n()\nprivate\nfun readLongs\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoLong\n()\n}\nprivate\nfun readStrings\n()\n=\nreadln\n().\nsplit\n(\n\" \"\n)\nprivate\nfun readInts\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoInt\n()\n}"
+        }
+    ]
+}

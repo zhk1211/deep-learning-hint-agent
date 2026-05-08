@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA mathematician grabbed my computer as I was preparing this problem, deleted the statement, and changed the samples to fit his liking. The model solution and input/output format are still correct, but the samples are wrong.\n\nI've partially fixed the problem so that when you submit, it will be tested against the correct version of the problem. However, I can't fix the samples below. As a computer scientist, can you solve the correct problem?\n\nInput Format\nThe only line of input contains a real number $ x $ ( $ 1 \\leq x \\leq 100 $ ), given to exactly three decimal places.\n\nOutput Format\nOutput one real number — the answer. Your answer is considered correct if its absolute or relative error does not exceed $ 10^{-4} $ . Formally, let your answer be $ a $ , and the jury's answer be $ b $ . Your answer is accepted if and only if $ \\frac{|a-b|}{\\max(1,|b|)} \\le 10^{-4} $ .\n\nExamples\nSample 1\nInput\n1.234\nOutput\n0.21026\n\nSample 2\nInput\n4.113\nOutput\n1.41415\n\nSample 3\nInput\n99.000\nOutput\n4.59512"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "There is a function that has the same name but different definitions in math and computer science. What is it?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Try to fit a curve through the three points given in the problem. It can help you solve the previous question."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "1952G - Mathematician Takeover\nThe problem is a joke about the function $$$\\log$$$. For mathematicians, it means $$$\\log_e$$$, but for computer scientists, it means $$$\\log_2$$$. In particular, the samples all give the correct output for $$$\\log_e(x)$$$, but we really want to output $$$\\log_2(x)$$$."
+        }
+    ]
+}

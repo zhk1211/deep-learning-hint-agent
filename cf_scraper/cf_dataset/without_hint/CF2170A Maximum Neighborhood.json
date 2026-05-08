@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nConsider an $ n \\times n $ grid filled with numbers as follows:\n\n- the first row contains integers from $ 1 $ to $ n $ from left to right;\n- the second row contains integers from $ (n+1) $ to $ 2n $ from left to right;\n- this pattern continues until the $ n $ -th row, which contains integers from $ (n^2-n+1) $ to $ n^2 $ from left to right.\n\nLet's define the cost of a cell as its value plus the sum of its neighboring cells' values. Two cells are considered neighboring if they share a side.\n\nYour task is to calculate the maximum cost among all cells in the grid.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2170A/3a46ed12b1840b20cee360cfc51f472b2587e0ead855c7b9af3c520f8c53804c.png) The grid for $ n = 4 $ and the optimal answer for it. The yellow cell has the maximum possible cost; the green cells are its neighbors. The cost of the cell is $ 15+11+14+16=56 $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThe only line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 100 $ ).\n\nOutput Format\nFor each test case, print a single integer — the maximum cost among all cells in the grid.\n\nExamples\nSample 1\nInput\n5\n1\n2\n3\n4\n5\nOutput\n1\n9\n29\n56\n95\n\nNote\nIn the first example, there is only $ 1 $ cell with the cost $ 1 $ .\n\nIn the second example, the cell with value $ 4 $ has the maximum cost: $ 4 + 2 + 3 = 9 $ .\n\nIn the third example, the cell with value $ 8 $ has the maximum cost: $ 8 + 5 + 7 + 9 = 29 $ .\n\nIn the fourth example, the cell with value $ 15 $ has the maximum cost: $ 15 + 11 + 14 + 16 = 56 $ .\n\nIn the fifth example, the cell with value $ 19 $ has the maximum cost: $ 19 + 14 + 18 + 20 + 24 = 95 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2170A - Maximum Neighborhood\nBecause the matrix is small enough, you can iterate over each cell $$$(i, j)$$$ and its neighbors: $$$(i - 1, j)$$$, $$$(i + 1, j)$$$, $$$(i, j - 1)$$$, and $$$(i, j + 1)$$$ (don't forget to check if these cells exists). This allows you to calculate the cost for each cell.\nHowever, there are solutions which don't need to consider the whole matrix. We can show that the only four cells we have to consider are $$$(n, n)$$$, $$$(n-1, n)$$$, $$$(n, n-1)$$$ and $$$(n-1, n-1)$$$ — the two rightmost cells in the last two rows. For every other cell, the cost of the cell below it or to the right of it will be strictly greater. This allows us to check only four cells.\nIn fact, we can also show that for $$$n \\ge 5$$$, the cell $$$(n-1, n-1)$$$ is the optimal one, and its cost can be calculated using a simple formula. And the answers for $$$n  \\lt  5$$$ are given in the problem statement."
+        },
+        {
+            "title": "Solution 1 (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\ndx\n[]\n=\n{-\n1\n,\n0\n,\n1\n,\n0\n};\nint\ndy\n[]\n=\n{\n0\n,\n-\n1\n,\n0\n,\n1\n};\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nauto\nget\n=\n[&](\nint\nx\n,\nint\ny\n)\n{\nif\n(\nx\n>=\n0\n&&\nx\n<\nn\n&&\ny\n>=\n0\n&&\ny\n<\nn\n)\nreturn\nx\n*\nn\n+\ny\n+\n1\n;\nreturn\n0\n;\n};\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nn\n;\n++\nj\n)\n{\nint\ncur\n=\nget\n(\ni\n,\nj\n);\nfor\n(\nint\nd\n=\n0\n;\nd\n<\n4\n;\n++\nd\n)\ncur\n+=\nget\n(\ni\n+\ndx\n[\nd\n],\nj\n+\ndy\n[\nd\n]);\nans\n=\nmax\n(\nans\n,\ncur\n);\n}\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        },
+        {
+            "title": "Solution 2 (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nans\n=\n1\n;\nif\n(\nn\n==\n2\n)\nans\n=\n9\n;\nelse\nif\n(\nn\n==\n3\n||\nn\n==\n4\n)\nans\n=\n4\n*\nn\n*\nn\n-\nn\n-\n4\n;\nelse\nif\n(\nn\n>\n4\n)\nans\n=\n5\n*\nn\n*\nn\n-\n5\n*\nn\n-\n5\n;\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

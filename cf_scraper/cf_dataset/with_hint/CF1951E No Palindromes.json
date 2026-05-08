@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n[Christopher Tin ft. Soweto Gospel Choir - Baba Yetu](https://youtu.be/d4iOF4yoNQw)\n\nඞ\n\nYou are given a string $ s $ consisting of lowercase Latin characters. You need to partition $ ^\\dagger $ this string into some substrings, such that each substring is not a palindrome $ ^\\ddagger $ .\n\n$ ^\\dagger $ A partition of a string $ s $ is an ordered sequence of some $ k $ strings $ t_1, t_2, \\ldots, t_k $ , such that $ t_1 + t_2 + \\ldots + t_k = s $ , where $ + $ here represents the concatenation operation.\n\n$ ^\\ddagger $ A string $ s $ is considered a palindrome if it reads the same backwards as forwards. For example, $ \\mathtt{racecar} $ , $ \\mathtt{abccba} $ , and $ \\mathtt{a} $ are palindromes, but $ \\mathtt{ab} $ , $ \\mathtt{dokibird} $ , and $ \\mathtt{kurosanji} $ are not.\n\nInput Format\nEach test contains multiple test cases. The first line contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nEach test case contains a string $ s $ consisting of lowercase Latin characters ( $ 1 \\le |s| \\le 10^6 $ ).\n\nIt is guaranteed that the sum of $ |s| $ over all test cases does not exceed $ 10^6 $ .\n\nOutput Format\nFor each test case, print on one line \"YES\" if there exists a partition of $ s $ whose parts are not palindromes, or \"NO\" if there is no such partition.\n\nIf the answer is \"YES\", on the second line, print an integer $ k $ — the number of parts that $ s $ needs to be partitioned to such that each part is not a palindrome. On the third line, print $ k $ strings $ t_1, t_2, \\ldots, t_k $ representing such a partition. If there are multiple such partitions, print any of them.\n\nExamples\nSample 1\nInput\n3\nsinktheyacht\nlllllllll\nuwuowouwu\nOutput\nYES\n1\nsinktheyacht\nNO\nYES\n3\nuw uow ouwu\n\nNote\nIn the first test case, since $ \\mathtt{sinktheyacht} $ is already non-palindrome, the partition $ [\\mathtt{sinktheyacht}] $ is valid.\n\nIn the second test case, as any substring of the string $ s $ is palindrome, there are no valid partitions.\n\nIn the third test case, another valid partition is $ [\\mathtt{uw},\\mathtt{uo}, \\mathtt{wou}, \\mathtt{wu}] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Let $$$i$$$ be the first character that is different from $$$s_1$$$. Then $$$s_{1..i}$$$ is not a palindrome. If $$$s_{i+1..n}$$$ is also not a palindrome then we are done, but what can we do if it is?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial and Implementation",
+            "content": "Tutorial is loading...\n255371747"
+        }
+    ]
+}

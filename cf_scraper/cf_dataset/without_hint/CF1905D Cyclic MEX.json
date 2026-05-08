@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nFor an array $ a $ , define its cost as $ \\sum_{i=1}^{n} \\operatorname{mex} ^\\dagger ([a_1,a_2,\\ldots,a_i]) $ .\n\nYou are given a permutation $ ^\\ddagger $ $ p $ of the set $ \\{0,1,2,\\ldots,n-1\\} $ . Find the maximum cost across all cyclic shifts of $ p $ .\n\n$ ^\\dagger\\operatorname{mex}([b_1,b_2,\\ldots,b_m]) $ is the smallest non-negative integer $ x $ such that $ x $ does not occur among $ b_1,b_2,\\ldots,b_m $ .\n\n$ ^\\ddagger $ A permutation of the set $ \\{0,1,2,...,n-1\\} $ is an array consisting of $ n $ distinct integers from $ 0 $ to $ n-1 $ in arbitrary order. For example, $ [1,2,0,4,3] $ is a permutation, but $ [0,1,1] $ is not a permutation ( $ 1 $ appears twice in the array), and $ [0,2,3] $ is also not a permutation ( $ n=3 $ but there is $ 3 $ in the array).\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^5 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^6 $ ) — the length of the permutation $ p $ .\n\nThe second line of each test case contain $ n $ distinct integers $ p_1, p_2, \\ldots, p_n $ ( $ 0 \\le p_i < n $ ) — the elements of the permutation $ p $ .\n\nIt is guaranteed that sum of $ n $ over all test cases does not exceed $ 10^6 $ .\n\nOutput Format\nFor each test case, output a single integer — the maximum cost across all cyclic shifts of $ p $ .\n\nExamples\nSample 1\nInput\n4\n6\n5 4 3 2 1 0\n3\n2 1 0\n8\n2 3 6 7 0 1 4 5\n1\n0\nOutput\n15\n5\n31\n1\n\nNote\nIn the first test case, the cyclic shift that yields the maximum cost is $ [2,1,0,5,4,3] $ with cost $ 0+0+3+3+3+6=15 $ .\n\nIn the second test case, the cyclic shift that yields the maximum cost is $ [0,2,1] $ with cost $ 1+1+3=5 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's analyze how the values of each prefix mex changes upon performing a cyclic shift to the left:\nThe first prefix mex is popped.\nEach prefix mex with a value less than $$$p_1$$$ doesn't change.\nEach prefix mex with a value greater than $$$p_1$$$ becomes $$$p_1$$$.\n$$$n$$$ is appended to the back.\nLet's keep our prefix mexes compressed ( meaning that we keep the value and its frequency instead of keeping multiple same values ). After that, we can simulate the above process naively with a deque, because the potential will decrease by the number of performed operations.\nThis solution works in $$$O(n)$$$ time."
+        }
+    ]
+}

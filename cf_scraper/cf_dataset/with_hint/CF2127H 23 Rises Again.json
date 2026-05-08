@@ -1,0 +1,56 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nKiarash is picking strawberries to take home...\n\nA graph is called candy if and only if the degree of every vertex in it is at most $2$.\n\nYou are given a simple, undirected, and connected graph $G$ of $n\\le 30$ vertices, with a special property: **each vertex belongs to at most $5$ simple cycles$^{\\text{∗}}$**.\n\nWhat is the maximum number of edges among all subgraphs$^{\\text{†}}$ of $G$ that are candy?\n\n$^{\\text{∗}}$A simple cycle is a connected subgraph such that each vertex has a degree of exactly $2$.\n\n$^{\\text{†}}$A subgraph of $G$ is a graph whose vertices and edges are subsets of $G$.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 50$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($3 \\leq n \\leq 30$, $n-1 \\leq m \\leq \\frac{n(n-1)}{2}$) — the number of vertices and the number of edges.\n\nThen $m$ lines follow, the $i$-th line containing two integers $u$ and $v$ ($1 \\leq u, v \\leq n$) — the two vertices that the $i$-th edge connects.\n\nIt is guaranteed that the given graph is simple and connected, and each vertex belongs to at most $5$ simple cycles.\n\nIt is guaranteed that the sum of $n^2$ over all test cases does not exceed $900$.\n\nOutput Format\nFor each test case, output a single integer — the maximum number of edges among all subgraphs that are candy graphs.\n\nExamples\nSample 1\nInput\n3\n4 4\n1 2\n1 3\n2 3\n3 4\n7 10\n1 2\n1 3\n1 4\n2 4\n3 4\n4 5\n4 6\n5 6\n5 7\n6 7\n9 10\n1 2\n1 3\n3 4\n3 7\n4 5\n4 6\n5 6\n7 8\n7 9\n8 9\nOutput\n3\n7\n8\n\nNote\nIn the first test case, you can select the edges marked in the image below. On the other hand, you can't select all the edges because the degree of vertex $3$ would exceed $2$. So the maximum number of edges among all subgraphs that are candy is $3$.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2127H/4e385ae8ccd881c64e78419010d8397f1918241fdde12937208662ccc6504ed4.png)\n\nIn the second test case, you can select the edges marked in the image below. It can be proven that any subgraph that is candy has at most $7$ edges.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2127H/d0a49eeb99bf8da1f3a33e9d0a43fe13b87e8975b9f7c2ed1759b5b76af39e61.png)\n\nIn the third test case, the image below shows one of the subgraphs with the maximum possible number of edges that is candy.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2127H/6d8e62f2aeb083b9a5e63ce9a3217ca30fe8513ebd4d14f4268b6e38a5d30a29.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 0\nEach connected component of a\ncandy graph\nis either a simple path or a simple cycle.\nHint 1\nTry to break the problem down into smaller parts.\nHint 2\nTake a DFS tree, at most $$$5$$$ back-edges pass through each vertex.\nHint 3\nChoose a vertex $$$v$$$, brute force on the back-edges that pass through $$$v$$$ and appears in the subgraph with maximum number of edges, then remove $$$v$$$ and all back-edges that pass through $$$v$$$.\nHint 4\nNow we have to solve the following sub-problem for each connected component:\nYou are given a simple connected graph that each vertex belongs to at most $$$5$$$ simple cycles, and an array $$$d_1,d_2,\\ldots,d_n (0 \\leq d_i \\leq 2)$$$. What is the subgraph with maximum number of edges that degree of vertex $$$i$$$ is at most $$$d_i$$$.\nHint 5\nThe sub-problem can be solved in $$$\\mathcal{O}(2^nnm)$$$ with dp bitmask.\nHint 6\nLet $$$N$$$ be the size of the component with the maximum size after removing $$$v$$$ and back-edges that pass through $$$v$$$.\nWe can solve the problem in $$$\\mathcal{O}(2^5 2^NNm)$$$.\nHint 7\nChoose $$$v$$$ as the centroid of the DFS tree.\nSince $$$N \\leq n/2$$$ the complexity will be $$$\\mathcal{O}(2^5 2^{n/2}nm)$$$.\nHint 8\nIs the complexity really $$$\\mathcal{O}(2^5 2^{n/2}nm)$$$?"
+        },
+        {
+            "title": "Hint 0",
+            "content": "Each connected component of a\ncandy graph\nis either a simple path or a simple cycle."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Try to break the problem down into smaller parts."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Take a DFS tree, at most $$$5$$$ back-edges pass through each vertex."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Choose a vertex $$$v$$$, brute force on the back-edges that pass through $$$v$$$ and appears in the subgraph with maximum number of edges, then remove $$$v$$$ and all back-edges that pass through $$$v$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Now we have to solve the following sub-problem for each connected component:\nYou are given a simple connected graph that each vertex belongs to at most $$$5$$$ simple cycles, and an array $$$d_1,d_2,\\ldots,d_n (0 \\leq d_i \\leq 2)$$$. What is the subgraph with maximum number of edges that degree of vertex $$$i$$$ is at most $$$d_i$$$."
+        },
+        {
+            "title": "Hint 5",
+            "content": "The sub-problem can be solved in $$$\\mathcal{O}(2^nnm)$$$ with dp bitmask."
+        },
+        {
+            "title": "Hint 6",
+            "content": "Let $$$N$$$ be the size of the component with the maximum size after removing $$$v$$$ and back-edges that pass through $$$v$$$.\nWe can solve the problem in $$$\\mathcal{O}(2^5 2^NNm)$$$."
+        },
+        {
+            "title": "Hint 7",
+            "content": "Choose $$$v$$$ as the centroid of the DFS tree.\nSince $$$N \\leq n/2$$$ the complexity will be $$$\\mathcal{O}(2^5 2^{n/2}nm)$$$."
+        },
+        {
+            "title": "Hint 8",
+            "content": "Is the complexity really $$$\\mathcal{O}(2^5 2^{n/2}nm)$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Each connected component of a\ncandy graph\nis either a simple path or a simple cycle.\nTake a DFS tree, at most $$$5$$$ back-edges pass through each vertex, then choose a vertex $$$v$$$, brute force on the back-edges that pass through $$$v$$$ and appears in the subgraph with maximum number of edges, then remove $$$v$$$ and all back-edges that pass through $$$v$$$.\nLet $$$d_i$$$ be the maximum degree that vertex $$$i$$$ can have. Initially $$$d_i=2$$$ for each vertex. Each back-edge $$$(x,y)$$$ that you select, reduces $$$d_x$$$ and $$$d_y$$$ by $$$1$$$. If after selecting back-edges that pass through $$$v$$$, there exists a vertex with negative $$$d$$$, skip this case. Otherwise you have to solve the sub-problem in\nHint 4\nfor every connected component.\nWe can solve the sub-problem with the following dp bitmask:\nLet $$$ans_{mask}$$$ be the answer for $$$mask$$$, and let $$$dp_{mask,u,v,l1}$$$ be the answer for $$$mask$$$ where the last path we selected is from $$$u$$$ to $$$v$$$ and $$$l1 \\in \\text{{0, 1}}$$$ means that the length of the path is $$$1$$$ or not.\nTransitions:\nStart a new path: $$$ans_{mask}+1 \\to dp_{mask,u,v,1}$$$, if $$$(u,v)$$$ is an edge outside $$$mask$$$ with $$$d_u, d_v \\geq 1$$$.\nAdd a vertex to the last path: $$$dp_{mask,u,v,l1}+1 \\to dp_{mask+2^w,u,w,0}$$$, if $$$w$$$ is a vertex outside $$$mask$$$ and adjacent to $$$v$$$, and $$$d_v = 2, d_w \\geq 1$$$.\nMake the last path cycle: $$$dp_{mask,u,v,0}+1 \\to ans_{mask}$$$, if there exists a $$$(u, v)$$$ edge, and $$$d_u = d_v = 2$$$.\nSkip a vertex: $$$ans_{mask} \\to ans_{mask+2^w}$$$, if $$$w$$$ is a vertex outside $$$mask$$$.\nAlso, you have to solve the sub-problem for each component twice, because you can choose a DFS tree edge connected to the vertex that you've deleted and it reduces $$$d$$$ of one vertex in that component.\nIt can be seen that if $$$N$$$ be the size of the component with the maximum size, the complexity will be $$$\\mathcal{O}(2^NNm)$$$ for a fixed set of back-edges, and $$$\\mathcal{O}(2^52^NNm)$$$ in total.\nIf we select $$$v$$$ as the centroid of the DFS tree $$$N$$$ will be less than or equal to $$$n/2$$$ so the complexity will be $$$\\mathcal{O}(2^5 2^{n/2}nm)$$$.\nIt can be proven that $$$m \\leq 3n$$$ in graphs that each vertex belongs to at most $$$5$$$ simple cycles. So the complexity will be $$$\\mathcal{O}(2^52^{n/2}n^2)$$$.\nProof\nWe prove this by induction. suppose that $$$m \\leq 3n$$$ for all graphs with $$$n \\lt N$$$.\nTake a DFS tree, we can prove that the degree of a leaf is at most $$$3$$$, because otherwise at least $$$3$$$ back-edges would exit that leaf and there would be at least $$$6$$$ cycles containing that leaf.\nSo there always exists a vertex with degree $$$\\leq 3$$$, we can remove it, $$$m \\leq 3(N-1) + 3 = 3N$$$."
+        }
+    ]
+}

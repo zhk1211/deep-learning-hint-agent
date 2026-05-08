@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ consisting of lowercase English letters.\n\nRearrange the characters of $ s $ to form a new string $ r $ that is not equal to $ s $ , or report that it's impossible.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases.\n\nThe only line of each test case contains a string $ s $ of length at most $ 10 $ consisting of lowercase English letters.\n\nOutput Format\nFor each test case, if no such string $ r $ exists as described in the statement, output \"NO\" (without quotes).\n\nOtherwise, output \"YES\" (without quotes). Then, output one line — the string $ r $ , consisting of letters of string $ s $ .\n\nYou can output \"YES\" and \"NO\" in any case (for example, strings \"yEs\", \"yes\", and \"Yes\" will be recognized as a positive response).\n\nIf multiple answers are possible, you can output any of them.\n\nExamples\nSample 1\nInput\n8\ncodeforces\naaaaa\nxxxxy\nco\nd\nnutdealer\nmwistht\nhhhhhhhhhh\nOutput\nYES\nforcodesec\nNO\nYES\nxxyxx\nYES\noc\nNO\nYES\nundertale\nYES\nthtsiwm\nNO\n\nNote\nIn the first test case, another possible answer is $ \\texttt{forcescode} $ .\n\nIn the second test case, all rearrangements of $ \\texttt{aaaaa} $ are equal to $ \\texttt{aaaaa} $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1971B - Different String\nSince the string is length at most $$$10$$$, we can try all swaps of two characters of the string. This is $$$\\mathcal{O}(|s|^2)$$$ per test case, which is fast enough. If none of them create a different string, then all characters in the original string are the same, so the answer is\nNO\n.\nBonus:\nActually, it's enough to try all swaps with the first character, solving the problem in $$$\\mathcal{O}(|s|)$$$. Why?"
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200\n'007;\nconst int MOD = 1'\n000\n'000'\n007\n;\nvoid\nsolve\n()\n{\nstring\ns\n;\ncin\n>>\ns\n;\nbool\nok\n=\nfalse\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\n(\nint\n)(\ns\n.\nlength\n());\ni\n++)\n{\nif\n(\ns\n[\ni\n]\n!=\ns\n[\n0\n])\n{\nswap\n(\ns\n[\ni\n],\ns\n[\n0\n]);\nok\n=\ntrue\n;\nbreak\n;}\n}\nif\n(!\nok\n)\n{\ncout\n<<\n\"NO\\n\"\n;\nreturn\n;\n}\ncout\n<<\n\"YES\\n\"\n;\ncout\n<<\ns\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

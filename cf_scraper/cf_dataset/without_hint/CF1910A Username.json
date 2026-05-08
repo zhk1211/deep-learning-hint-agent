@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1910A - Username\nThere are many ways to find a valid username. Let's consider one of them.\nLet's look at the last character of the string. If it is a digit from $$$1$$$ to $$$9$$$, then we can take the given string except for the last character as the username. If the last character of the string is $$$0$$$, then the above method doesn't work because the number appended to the username must be positive and not have leading zeros. Therefore, we have to consider the second character from the end, and we can apply similar reasoning. Thus, we have obtained the following solution: remove all the zeros from the end of the string plus one more character. The remaining string is the answer to the problem.\nOne of the simplest ways to implement it is to use functions like\ndropLast\nand\ndropLastWhile\n."
+        },
+        {
+            "title": "Solution (PavelKunyavskiy)",
+            "content": "fun main\n()\n{\nrepeat\n(\nreadInt\n())\n{\nprintln\n(\nreadln\n().\ndropLastWhile\n{\nit\n==\n'0'\n}.\ndropLast\n(\n1\n))\n}\n}\nprivate\nfun readInt\n()\n=\nreadln\n().\ntoInt\n()"
+        }
+    ]
+}

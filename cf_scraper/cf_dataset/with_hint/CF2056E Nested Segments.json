@@ -1,0 +1,44 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA set $ A $ consisting of pairwise distinct segments $ [l, r] $ with integer endpoints is called good if $ 1\\le l\\le r\\le n $ , and for any pair of distinct segments $ [l_i, r_i], [l_j, r_j] $ in $ A $ , exactly one of the following conditions holds:\n\n- $ r_i < l_j $ or $ r_j < l_i $ (the segments do not intersect)\n- $ l_i \\le l_j \\le r_j \\le r_i $ or $ l_j \\le l_i \\le r_i \\le r_j $ (one segment is fully contained within the other)\n\nYou are given a good set $ S $ consisting of $ m $ pairwise distinct segments $ [l_i, r_i] $ with integer endpoints. You want to add as many additional segments to the set $ S $ as possible while ensuring that set $ S $ remains good.\n\nSince this task is too easy, you need to determine the number of different ways to add the maximum number of additional segments to $ S $ , ensuring that the set remains good. Two ways are considered different if there exists a segment that is being added in one of the ways, but not in the other.\n\nFormally, you need to find the number of good sets $ T $ of distinct segments, such that $ S $ is a subset of $ T $ and $ T $ has the maximum possible size. Since the result might be very large, compute the answer modulo $ 998\\,244\\,353 $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ m $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ , $ 0 \\le m \\le 2 \\cdot 10^5 $ ) — the maximum right endpoint of the segments, and the size of $ S $ .\n\nThe $ i $ -th of the next $ m $ lines contains two integers $ l_i $ and $ r_i $ ( $ 1 \\le l_i \\le r_i \\le n $ ) — the boundaries of the segments in set $ S $ .\n\nIt is guaranteed that the given set $ S $ is good, and the segments in set $ S $ are pairwise distinct.\n\nIt is guaranteed that both the sum of $ n $ and the sum of $ m $ over all test cases do not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer representing the number of different ways, modulo $ 998\\,244\\,353 $ , that you can add the maximum number of additional segments to set $ S $ while ensuring that set $ S $ remains good.\n\nExamples\nSample 1\nInput\n6\n1 0\n2 3\n1 1\n2 2\n1 2\n5 2\n1 3\n2 3\n4 1\n1 1\n6 2\n1 3\n4 6\n2300 0\nOutput\n1\n1\n2\n5\n4\n187997613\n\nNote\nIn the first example, the only possible segment is $ [1, 1] $ , so $ T = \\{[1, 1]\\} $ has the maximum size, and it is the only solution.\n\nIn the second example, it is not possible to add any additional segments to set $ S $ . Hence, the only way to add segments to $ S $ is adding nothing.\n\nIn the third example, it is possible to add $ 7 $ additional segments to $ S $ while ensuring that the set remains good. It can be proven that adding more than $ 7 $ additional segments to $ S $ is not possible. There are exactly $ 2 $ different ways to add these $ 7 $ segments to $ S $ , and their respective sets $ T $ are shown below:\n\n- $ \\{[1, 1], [1, 3], [1, 4], [1, 5], [2, 2], [2, 3], [3, 3], [4, 4], [5, 5]\\} $\n- $ \\{[1, 1], [1, 3], [1, 5], [2, 2], [2, 3], [3, 3], [4, 4], [4, 5], [5, 5]\\} $ .\n\nIn the fourth example, there are exactly $ 5 $ different ways to add a maximum of $ 6 $ additional segments to $ S $ , and their respective sets $ T $ are shown below:\n\n- $ \\{[1, 1], [1, 2], [1, 3], [1, 4], [2, 2], [3, 3], [4, 4]\\} $\n- $ \\{[1, 1], [1, 2], [1, 4], [2, 2], [3, 3], [3, 4], [4, 4]\\} $\n- $ \\{[1, 1], [1, 3], [1, 4], [2, 2], [2, 3], [3, 3], [4, 4]\\} $\n- $ \\{[1, 1], [1, 4], [2, 2], [2, 3], [2, 4], [3, 3], [4, 4]\\} $\n- $ \\{[1, 1], [1, 4], [2, 2], [2, 4], [3, 3], [3, 4], [4, 4]\\} $"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nForget about counting. What is the maximum size of $$$T$$$ if $$$m = 0$$$?\nHint 2\nIt is $$$2n - 1$$$. What if $$$m$$$ isn't $$$0$$$?\nHint 3\nIt is still $$$2n - 1$$$. To prove this represent a\ngood\nset as a forest.\nHint 4\nWe can always add $$$[1, n]$$$ and $$$[i, i]$$$ for all $$$1 \\le i \\le n$$$ to $$$S$$$. Now the tree of $$$S$$$ has exactly $$$n$$$ leaves. What if a vertex has more than $$$2$$$ children?\nHint 5\nWhat is the number of solutions when $$$m = 0$$$?\nHint 6\nIt is the number of full binary trees with $$$n$$$ leaves, which is $$$C_{n - 1}$$$, where $$$C$$$ denotes the Catalan's sequence. Extend this idea to count the number of solutions for a general tree of $$$S$$$."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Forget about counting. What is the maximum size of $$$T$$$ if $$$m = 0$$$?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "It is $$$2n - 1$$$. What if $$$m$$$ isn't $$$0$$$?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "It is still $$$2n - 1$$$. To prove this represent a\ngood\nset as a forest."
+        },
+        {
+            "title": "Hint 4",
+            "content": "We can always add $$$[1, n]$$$ and $$$[i, i]$$$ for all $$$1 \\le i \\le n$$$ to $$$S$$$. Now the tree of $$$S$$$ has exactly $$$n$$$ leaves. What if a vertex has more than $$$2$$$ children?"
+        },
+        {
+            "title": "Hint 5",
+            "content": "What is the number of solutions when $$$m = 0$$$?"
+        },
+        {
+            "title": "Hint 6",
+            "content": "It is the number of full binary trees with $$$n$$$ leaves, which is $$$C_{n - 1}$$$, where $$$C$$$ denotes the Catalan's sequence. Extend this idea to count the number of solutions for a general tree of $$$S$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Any\ngood\nset has a tree-like structure.\nSpecifically, represent $$$S$$$ as a forest the following way: segment $$$[l, r]$$$ has a parent $$$[L, R]$$$ iff $$$[l, r] \\in [L, R]$$$ and $$$R - L + 1$$$ is minimized (its parent is the shortest interval in which it lies). This segment is unique (or does not exist), because there can't be two segments with minimum length that cover $$$[l, r]$$$, as they would partially intersect otherwise.\nNotice that we can always add $$$[1, n]$$$ and $$$[i, i]$$$ for all $$$1 \\le i \\le n$$$ if they aren't in $$$S$$$ yet. Now the forest of $$$S$$$ is a tree with exactly $$$n$$$ leaves.\nSuppose $$$[L, R]$$$ has $$$k$$$ children $$$[l_1, r_1], [l_2, r_2], \\ldots, [l_k, r_k]$$$. If $$$k \\gt 2$$$, we can always add $$$[l_1, r_2]$$$ to $$$S$$$, which decreases the number of children of $$$[L, R]$$$ by $$$1$$$ and increases the size of $$$S$$$ by $$$1$$$.\nTherefore, in the optimal solution each segment has at most $$$2$$$ children. Having exactly one child is impossible, as we have added all $$$[i, i]$$$, so every index of $$$[L, R]$$$ is covered by its children.\nThis means that we have a tree where each vertex has either $$$0$$$ or $$$2$$$ children, which is a full binary tree.\nWe have $$$n$$$ leaves, and every full binary tree with $$$n$$$ leaves has exactly $$$2n - 1$$$ vertices, so this is always the optimal size of $$$T$$$ regardless of $$$S$$$.\nTo count the number of $$$T$$$, notice that when $$$m = 0$$$ the answer is the number of full binary trees with $$$n$$$ leaves, which is $$$C_{n - 1}$$$, where $$$C$$$ denotes the Catalan's sequence.\nTo extend this to a general tree, we can add $$$[1, n]$$$ and $$$[i, i]$$$ for all $$$1 \\le i \\le n$$$ to $$$S$$$.\nNow suppose $$$[L, R]$$$ has $$$k \\ge 2$$$ children $$$[l_1, r_1], [l_2, r_2], \\ldots, [l_k, r_k]$$$. We need to merge some children. We can treat $$$[l_1, r_1]$$$ as $$$[1, 1]$$$, $$$[l_2, r_2]$$$ as $$$[2, 2]$$$, etc. This is now the same case as $$$m = 0$$$, so there are $$$C_{k - 1}$$$ ways to merge children of $$$[L, R]$$$.\nEach vertex is independent of each other, so the answer is $$$\\prod C_{c_v - 1}$$$ over all non-leaves $$$v$$$, where $$$c_v$$$ is the number of children of $$$v$$$.\nWe can construct the tree in $$$O(n \\log n)$$$ by definition or in $$$O(n)$$$ using a stack."
+        }
+    ]
+}

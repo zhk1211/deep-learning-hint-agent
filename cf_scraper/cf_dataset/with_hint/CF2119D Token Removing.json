@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n[r-906 &amp; Hatsune Miku - All I Can See Is You](https://www.youtube.com/watch?v=xv7hJ32xK94)\n\nDefine a sequence of integers $ a $ valid if and only if $ \\forall 1 \\le i \\le n, 0 \\le a_i \\le i $ .\n\nDefine the weight $ f(a) $ of a valid sequence $ a $ of length $ n $ :\n\n- Initially, a token is placed at each integer point in the closed segment $ [1, n] $ on the number axis.\n- Perform $ n $ operations in sequence. During the $ i $ -th operation, if $ a_i \\ne 0 $ , remove a token in the closed segment $ [a_i, i] $ that has not been removed; otherwise, do nothing.\n- $ f(a) $ is the number of ways to remove tokens. Two ways are considered different if there exists a $ t $ such that the positions of the tokens removed by the two ways are different at the $ t $ -th operation.\n\nFor example, $ f([0, 2, 1]) = 2 $ , because we can remove tokens on $ 2, 1 $ or $ 2, 3 $ in sequence.\n\nJT gives you two integers $ n, m $ and asks you to find the sum of the weights over all $ (n + 1)! $ valid sequences of length $ n $ . Since the answer may be too large, print it modulo $ m $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 1000 $ ). The description of the test cases follows.\n\nThe only line of each test case contains two integers $ n $ and $ m $ ( $ 1 \\le n \\le 5000, 10^8 \\le m \\le 1.01 \\cdot 10^9 $ ) — the length of valid sequences, and the modulus.\n\nIt is guaranteed that the sum of $ n^2 $ over all test cases does not exceed $ 2.5 \\cdot 10^7 $ .\n\nOutput Format\nFor each test case, output an integer — the sum of the weights over all $ (n + 1)! $ valid sequences of length $ n $ , modulo $ m $ .\n\nExamples\nSample 1\nInput\n6\n1 1000000007\n2 1000000007\n3 1000000007\n4 1000000007\n5 1000000007\n114 514191981\nOutput\n2\n7\n37\n273\n2672\n393775292\n\nNote\nIn the first test case, valid sequences are $ [0] $ and $ [1] $ , and the answer is $ f([0]) + f([1]) = 1 + 1 = 2 $ .\n\nIn the second test case, valid sequences are $ [0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2] $ . The weight of $ [0, 1] $ is $ 2 $ , and the others are $ 1 $ , so the answer is $ 5 \\cdot 1 + 1 \\cdot 2 = 7 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Calculating the weight of a single valid sequence is difficult. Try another way?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2119D - Token Removing\nConsider determine which tokens will be removed first. Then we just need to count the number of ways that, for each position $$$p_i$$$ with a token to be removed, find an closed segment $$$[l_i, r_i]$$$ that contains position $$$p_i$$$, and these $$$r_i$$$ are different to each other.\nAssuming that the positions of the tokens are $$$n \\ge p_0  \\gt  p_1  \\gt  \\dots  \\gt  p_{k - 1} \\ge 1$$$, the answer to the above is obviously $$$\\prod_{i = 0}^{k - 1} p_i(n - p_i + 1 - i)$$$. This inspires the following DP state: let $$$f_{i, j}$$$ denote the answer for the sum of $$$\\prod_{i = 0}^{k - 1} p_i(n - p_i + 1 - i)$$$ when $$$p_{k - 1} \\ge n - i + 1$$$ and $$$k = i - j$$$. Consider whether $$$p_{k - 1}$$$ is equal to $$$n - i + 1$$$, we have:\n$$$$$$ f_{i, j} = f_{i - 1, j - 1} + (n - i + 1)(j + 1) f_{i - 1, j} $$$$$$\nThe answer is $$$\\sum_{j = 0}^n f_{n, j}$$$. The total time complexity is $$$O(n^2)$$$."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<algorithm>\n#include\n<cstring>\n#include\n<cstdio>\n#include\n<vector>\n#include\n<queue>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n5005\n;\nint\nt\n,\nn\n,\nmod\n,\nf\n[\nN\n][\nN\n],\nans\n;\ninline\nvoid\nadd\n(\nint\n&\nx\n,\nint\ny\n){\nx\n+=\ny\n;\nif\n(\nx\n>=\nmod\n)\nx\n-=\nmod\n;}\nint\nmain\n(){\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nwhile\n(\nt\n--){\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nmod\n),\nf\n[\n0\n][\n0\n]\n=\n1\n,\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\ni\n;\nj\n++)\nf\n[\ni\n][\nj\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nfor\n(\nint\nj\n=\n0\n,\nnow\n;\nj\n<\ni\n;\nj\n++)\nif\n(\nnow\n=\nf\n[\ni\n-\n1\n][\nj\n])\nadd\n(\nf\n[\ni\n][\nj\n+\n1\n],\nnow\n),\nf\n[\ni\n][\nj\n]\n=\n(\nf\n[\ni\n][\nj\n]\n+\n(\nn\n-\ni\n+\n1ll\n)\n*\n(\nj\n+\n1\n)\n*\nnow\n)\n%\nmod\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\nn\n;\nj\n++)\nadd\n(\nans\n,\nf\n[\nn\n][\nj\n]);\nprintf\n(\n\"%d\\n\"\n,\nans\n);\n}\n}"
+        }
+    ]
+}

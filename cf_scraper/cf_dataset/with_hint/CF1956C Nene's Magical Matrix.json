@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe magical girl Nene has an $ n\\times n $ matrix $ a $ filled with zeroes. The $ j $ -th element of the $ i $ -th row of matrix $ a $ is denoted as $ a_{i, j} $ .\n\nShe can perform operations of the following two types with this matrix:\n\n- Type $ 1 $ operation: choose an integer $ i $ between $ 1 $ and $ n $ and a permutation $ p_1, p_2, \\ldots, p_n $ of integers from $ 1 $ to $ n $ . Assign $ a_{i, j}:=p_j $ for all $ 1 \\le j \\le n $ simultaneously.\n- Type $ 2 $ operation: choose an integer $ i $ between $ 1 $ and $ n $ and a permutation $ p_1, p_2, \\ldots, p_n $ of integers from $ 1 $ to $ n $ . Assign $ a_{j, i}:=p_j $ for all $ 1 \\le j \\le n $ simultaneously.\n\nNene wants to maximize the sum of all the numbers in the matrix $ \\sum\\limits_{i=1}^{n}\\sum\\limits_{j=1}^{n}a_{i,j} $ . She asks you to find the way to perform the operations so that this sum is maximized. As she doesn't want to make too many operations, you should provide a solution with no more than $ 2n $ operations.\n\nA permutation of length $ n $ is an array consisting of $ n $ distinct integers from $ 1 $ to $ n $ in arbitrary order. For example, $ [2,3,1,5,4] $ is a permutation, but $ [1,2,2] $ is not a permutation ( $ 2 $ appears twice in the array), and $ [1,3,4] $ is also not a permutation ( $ n=3 $ but there is $ 4 $ in the array).\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 500 $ ). The description of test cases follows.\n\nThe only line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 500 $ ) — the size of the matrix $ a $ .\n\nIt is guaranteed that the sum of $ n^2 $ over all test cases does not exceed $ 5 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, in the first line output two integers $ s $ and $ m $ ( $ 0\\leq m\\leq 2n $ ) — the maximum sum of the numbers in the matrix and the number of operations in your solution.\n\nIn the $ k $ -th of the next $ m $ lines output the description of the $ k $ -th operation:\n\n- an integer $ c $ ( $ c \\in \\{1, 2\\} $ ) — the type of the $ k $ -th operation;\n- an integer $ i $ ( $ 1 \\le i \\le n $ ) — the row or the column the $ k $ -th operation is applied to;\n- a permutation $ p_1, p_2, \\ldots, p_n $ of integers from $ 1 $ to $ n $ — the permutation used in the $ k $ -th operation.\n\nNote that you don't need to minimize the number of operations used, you only should use no more than $ 2n $ operations. It can be shown that the maximum possible sum can always be obtained in no more than $ 2n $ operations.\n\nExamples\nSample 1\nInput\n2\n1\n2\nOutput\n1 1\n1 1 1\n7 3\n1 1 1 2\n1 2 1 2\n2 1 1 2\n\nNote\nIn the first test case, the maximum sum $ s=1 $ can be obtained in $ 1 $ operation by setting $ a_{1, 1}:=1 $ .\n\nIn the second test case, the maximum sum $ s=7 $ can be obtained in $ 3 $ operations as follows:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1956C/3b20fbb55df6b6d6328669ffd917221602db721d.png)It can be shown that it is impossible to make the sum of the numbers in the matrix larger than $ 7 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "When $$$n=3$$$, the optimal matrix is the following:\n1\n2\n3\n2\n2\n3\n3\n3\n3"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "The optimal matrix would be:\n1\n2\n3\n...\nn\n2\n2\n3\n...\nn\n3\n3\n3\n...\nn\n.....\n...\nn\nn n n n n n\nConstruction method:\nfor\ni\nin\n[\nn\n,\nn\n-\n1\n,\n...,\n1\n]:\nset\nthe i\n-\nth column to\n[\n1\n,\n2\n,\n...,\nn\n];\nset\nthe i\n-\nth row to\n[\n1\n,\n2\n,\n...,\nn\n];\nThis takes exactly $$$2n$$$ operations."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nll\nlong\nlong\n#define\nMP make_pair\nmt19937 rnd\n(\ntime\n(\n0\n));\nvoid\nsolve\n(){\nint\nn\n;\ncin\n>>\nn\n;\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nans\n+=(\n2\n*\ni\n-\n1\n)*\ni\n;\ncout\n<<\nans\n<<\n' '\n<<\n2\n*\nn\n<<\nendl\n;\nfor\n(\nint\ni\n=\nn\n;\ni\n>=\n1\n;\ni\n--){\ncout\n<<\n\"1 \"\n<<\ni\n<<\n' '\n;\nfor\n(\nint\nj\n=\n1\n;\nj\n<=\nn\n;\nj\n++)\ncout\n<<\nj\n<<\n' '\n;\ncout\n<<\nendl\n;\ncout\n<<\n\"2 \"\n<<\ni\n<<\n' '\n;\nfor\n(\nint\nj\n=\n1\n;\nj\n<=\nn\n;\nj\n++)\ncout\n<<\nj\n<<\n' '\n;\ncout\n<<\nendl\n;\n}\n}\nint\nmain\n(){\nios\n::\nsync_with_stdio\n(\nfalse\n);\nint\n_\n;\ncin\n>>\n_\n;\nwhile\n(\n_\n--)\nsolve\n();\n}"
+        }
+    ]
+}

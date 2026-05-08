@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nDuring a physical education class, $ n $ students are lined up, numbered from $ 1 $ to $ n $ from left to right.\n\nFor each student, it is known that if they receive the ball, they will pass it either to the neighbor on their left or to the neighbor on their right. This is specified by a string $ s $ of $ n $ characters. Each character of the string is either L or R, where $ s_i $ is L if the $ i $ -th student passes the ball to student $ (i-1) $ , or $ s_i $ is R if the $ i $ -th student passes the ball to student $ (i+1) $ . The first student always passes the ball to the second, and the last one to the second last (in other words, the string $ s $ starts with the character R and ends with the character L).\n\nConsider the following process:\n\n- first, the first student receives the ball;\n- then, exactly $ n $ times, the following occurs: the student who currently has the ball passes it to their neighbor (according to the rules described above).\n\nYour task is to determine how many students will receive the ball at least once during this process.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10000 $ ) — the number of test cases.\n\nEach test case consists of two lines:\n\n- the first line contains a single integer $ n $ ( $ 2 \\le n \\le 50 $ ) — the number of students;\n- the second line contains $ s $ — a sequence of $ n $ characters L and R. The first character of the sequence is R, and the last is L.\n\nOutput Format\nFor each test case, print one integer — the number of students who will receive the ball at least once during the described process.\n\nExamples\nSample 1\nInput\n3\n4\nRLRL\n6\nRRRRRL\n9\nRRLRRRRRL\nOutput\n2\n6\n3\n\nNote\nIn the first example, student $ 1 $ receives the ball and passes it to student $ 2 $ , who returns it back to student $ 1 $ , who passes it back to student $ 2 $ , and so on. Only students $ 1 $ and $ 2 $ received the ball.\n\nIn the second example, student $ 1 $ passes the ball to student $ 2 $ , who passes it to student $ 3 $ , who passes it to student $ 4 $ , who passes it to student $ 5 $ , who passes it to student $ 6 $ , who returns it to student $ 5 $ . Each student received the ball at least once."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2204A - Passing the Ball\nIt's possible to solve this problem by carefully implementing the process described in the statement: you should code a for-loop to iterate over all iterations, maintain which student has the ball now, and mark all students which have received the ball at least once in some array.\nHowever, there is a much easier (in terms of code) solution. Consider the first character\nL\nin the string $$$s$$$; let its index be $$$i$$$. When the student $$$(i-1)$$$ passes the ball to the student $$$i$$$, the student $$$i$$$ will pasa it back, then the student $$$(i-1)$$$ passes the ball back to the student $$$i$$$, and so on, until the ball has been passed $$$n$$$ times. So, no student after the $$$i$$$-th one will ever receive the ball, and every student before the $$$i$$$-th one (including him) will receive the ball at least once.\nSo, the answer depends only on the first occurrence of\nL\nin the string."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\ni\n++)\n{\nint\nn\n;\ncin\n>>\nn\n;\nstring\ns\n;\ncin\n>>\ns\n;\ncout\n<<\ns\n.\nfind\n(\n\"RL\"\n)\n+\n2\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

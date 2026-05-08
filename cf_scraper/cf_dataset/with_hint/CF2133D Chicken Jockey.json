@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nSteve made the foolish decision to mine at night, and came across a monstrous creature: the chicken jockey$$$^n$$$!\n\nA chicken jockey$$$^n$$$ consists of $$$n$$$ mobs stacked in order on top of each other, with mob $$$1$$$ at the bottom and mob $$$n$$$ at the top. Mob $$$i$$$ initially has $$$h\\_i$$$ health.\n\nIn one attack, Steve can deal $$$1$$$ damage to any mob. If any mob reaches $$$0$$$ or less health, it dies, and all the mobs on top of it fall down and form a new stack. The bottom mob in the new stack takes $$$1$$$ fall damage for every mob it was on top of before falling (i.e. the number of mobs below it in the previous stack, including the one that just died). This may kill it as well, in which case all mobs on top of it fall down again and the process repeats.\n\nFor example, consider a chicken jockey$$$^6$$$ with initial mob healths $$$[1, 2, 1, 3, 5, 2]$$$. If Steve damages the third mob in the stack, it dies and the mobs with health $$$[3, 5, 2]$$$ fall down in a new stack. The bottom mob takes $$$3$$$ units of fall damage so it also dies, and the mobs with health $$$[5, 2]$$$ fall down in a new stack. The bottom mob takes $$$1$$$ unit of fall damage. As a result, after Steve's first attack, there will be two stacks with healths $$$[1, 2]$$$ and $$$[4, 2]$$$.\n\nSteve's sword's durability is low, so he wishes to know the minimum attacks required to kill all the mobs.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 10^4$$$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $$$n$$$ ($$$2 \\le n \\le 2 \\cdot 10^5$$$) — the number of mobs.\n\nThe second line of each test case contains $$$n$$$ integers $$$h_1, h_2,\\ldots, h_n$$$ ($$$1 \\le h_i \\le 10^9$$$) — the initial health of each mob.\n\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$2 \\cdot 10^5$$$.\n\nOutput Format\nFor each test case, output a single integer — the minimum attacks required to kill all the mobs.\n\nExamples\nSample 1\nInput\n5\n5\n3 1 4 1 2\n4\n1 1 1 1\n6\n1 2 1 3 5 2\n6\n3 1 1 3 2 1\n3\n1000000000 1000000000 1000000000\nOutput\n7\n1\n7\n5\n2999999998\n\nNote\nIn the first test case, the initial stack has mobs with health $$$[3, 1, 4, 1, 2]$$$. Steve can use one attack to damage the second mob in the stack and kill it. The third mob takes $$$2$$$ units of fall damage. There are now two stacks: $$$[3]$$$ and $$$[2, 1, 2]$$$. Now Steve can kill the second mob in the second stack. The third mob in the stack takes $$$2$$$ units of fall damage, killing it. There are now two stacks: $$$[3]$$$ and $$$[2]$$$. Finally, Steve can use five attacks to kill the remaining mobs.\n\nIn the second test case, Steve can deal $$$1$$$ damage to the bottom mob in the stack. When it dies, the second mob will take $$$1$$$ unit of fall damage and die; then the third mob will take $$$1$$$ unit of fall damage and die; finally the fourth mob will take $$$1$$$ unit of fall damage and die."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "How many times can a mob take fall damage?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "If a mob takes more than $$$1$$$ fall damage, what about the mob below it?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Use DP."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's make a few observations. First of all, if a mob takes fall damage, it ends up at the bottom of a stack. This means a mob never takes fall damage more than once, because after taking fall damage there are no more mobs below it that it can fall off of.\nSecondly, if a mob takes more than $$$1$$$ fall damage, the mob below must have been killed without taking fall damage, otherwise it would have been at the bottom of the stack and hence the mob above would only have $$$1$$$ mob below it and take $$$1$$$ fall damage. Therefore the mob below must take $$$h_i$$$ attacks to kill, regardless of whether it is in the original stack or if other mobs below it had fallen off and taken damage. This means that if a mob should take more than $$$1$$$ fall damage, it is best to do so in the original stack, as that will maximise the fall damage without incurring any additional attacks.\nThis seems like a very local choice: for each mob $$$i$$$ we either kill it directly, let it take $$$i - 1$$$ fall damage by killing the mob below it directly, or let it take $$$1$$$ fall damage by falling down when the mob below it dies. So we could let $$$dp[i]$$$ be the minimum attacks needed to kill all the mobs up to mob $$$i$$$. Clearly $$$dp[0] = 0$$$ and $$$dp[1] = h_1$$$. For $$$i \\ge 2$$$, we either let it take $$$1$$$ fall damage which costs $$$dp[i - 1] + h_i - 1$$$ attacks, or let it take maximum fall damage which costs $$$dp[i - 2] + h_{i - 1} + \\text{max}(0, h_i - (i - 1))$$$ attacks; we set $$$dp[i]$$$ to the smaller of those two values. The answer is then $$$dp[n]$$$."
+        }
+    ]
+}

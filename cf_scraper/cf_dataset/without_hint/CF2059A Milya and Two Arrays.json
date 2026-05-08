@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAn array is called good if for any element $ x $ that appears in this array, it holds that $ x $ appears at least twice in this array. For example, the arrays $ [1, 2, 1, 1, 2] $ , $ [3, 3] $ , and $ [1, 2, 4, 1, 2, 4] $ are good, while the arrays $ [1] $ , $ [1, 2, 1] $ , and $ [2, 3, 4, 4] $ are not good.\n\nMilya has two good arrays $ a $ and $ b $ of length $ n $ . She can rearrange the elements in array $ a $ in any way. After that, she obtains an array $ c $ of length $ n $ , where $ c_i = a_i + b_i $ ( $ 1 \\le i \\le n $ ).\n\nDetermine whether Milya can rearrange the elements in array $ a $ such that there are at least $ 3 $ distinct elements in array $ c $ .\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 3 \\le n \\le 50 $ ) — the length of the arrays $ a $ and $ b $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the elements of the array $ a $ .\n\nThe third line of each test case contains $ n $ integers $ b_1, b_2, \\ldots, b_n $ ( $ 1 \\le b_i \\le 10^9 $ ) — the elements of the array $ b $ .\n\nOutput Format\nFor each test case, output $ « $ YES $ » $ (without quotes) if it is possible to obtain at least $ 3 $ distinct elements in array $ c $ , and $ « $ NO $ » $ otherwise.\n\nYou can output each letter in any case (for example, $ « $ YES $ » $ , $ « $ Yes $ » $ , $ « $ yes $ » $ , $ « $ yEs $ » $ will be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n5\n4\n1 2 1 2\n1 2 1 2\n6\n1 2 3 3 2 1\n1 1 1 1 1 1\n3\n1 1 1\n1 1 1\n6\n1 52 52 3 1 3\n59 4 3 59 3 4\n4\n100 1 100 1\n2 2 2 2\nOutput\nYES\nYES\nNO\nYES\nNO\n\nNote\nIn the first test case, you can swap the second and third elements. Then the array $ a = [1, 1, 2, 2] $ , $ b = [1, 2, 1, 2] $ , and then $ c = [2, 3, 3, 4] $ .\n\nIn the second test case, you can leave the elements unchanged. Then $ c = [2, 3, 4, 4, 3, 2] $ .\n\nIn the third test case, the array $ a $ will not change from rearranging the elements in it. Then $ c = [2, 2, 2] $ , so the answer is $ « $ NO $ » $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\na\n[\n55\n],\nb\n[\n55\n];\nvoid\nsolve\n(){\nint\nn\n;\ncin\n>>\nn\n;\nset\n<int>\nsa\n,\nsb\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n],\nsa\n.\ninsert\n(\na\n[\ni\n]);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ncin\n>>\nb\n[\ni\n],\nsb\n.\ninsert\n(\nb\n[\ni\n]);\nif\n(\nsa\n.\nsize\n()+\nsb\n.\nsize\n()<\n4\n){\ncout\n<<\n\"NO\\n\"\n;\n}\nelse\n{\ncout\n<<\n\"YES\\n\"\n;\n}\n}\nint\nmain\n(){\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nsolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

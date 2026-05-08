@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWe call an array $ a $ , consisting of $ k $ positive integers, palindromic if $ [a_1, a_2, \\dots, a_k] = [a_k, a_{k-1}, \\dots, a_1] $ . For example, the arrays $ [1, 2, 1] $ and $ [5, 1, 1, 5] $ are palindromic, while the arrays $ [1, 2, 3] $ and $ [21, 12] $ are not.\n\nWe call a number $ k $ an ideal generator if any integer $ n $ ( $ n \\ge k $ ) can be represented as the sum of the elements of a palindromic array of length exactly $ k $ . Each element of the array must be greater than $ 0 $ .\n\nFor example, the number $ 1 $ is an ideal generator because any natural number $ n $ can be generated using the array $ [n] $ . However, the number $ 2 $ is not an ideal generator — there is no palindromic array of length $ 2 $ that sums to $ 3 $ .\n\nDetermine whether the given number $ k $ is an ideal generator.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThe first and only line of each test case contains one integer $ k $ ( $ 1 \\le k \\le 1000 $ ).\n\nOutput Format\nFor each number $ k $ , you need to output the word \"YES\" if it is an ideal generator, or \"NO\" otherwise.\n\nYou may output \"Yes\" and \"No\" in any case (for example, the strings \"yES\", \"yes\", and \"Yes\" will be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n5\n1\n2\n3\n73\n1000\nOutput\nYES\nNO\nYES\nYES\nNO"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Prove that the number $$$2$$$ is not an ideal generator. What other numbers are not ideal generators for the same reason?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Prove that the number $$$3$$$ is an ideal generator. What is the difference from the previous case?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "2093A - Ideal Generator\nIf we consider some palindromic array $$$a$$$ of the form $$$[a_1, a_2, \\dots, a_k]$$$ and its sum, we should discuss two different cases.\nWhen $$$k$$$ is even ($$$k = 2m$$$), the array $$$a$$$ looks as follows: $$$[a_1, a_2, \\dots, a_{m - 1}, a_m, a_m, a_{m - 1}, \\dots, a_2, a_1]$$$. Its sum in this case is the number $$$2 \\cdot (a_1 + a_2 + \\dots + a_m)$$$. This implies that any palindromic array of even length also has an even sum, and thus it is impossible to generate odd numbers $$$n$$$ for even values of $$$k$$$.\nOn the other hand, if $$$k$$$ is an odd number ($$$k = 2m + 1$$$), the array $$$a$$$ looks like $$$[a_1, a_2, \\dots, a_m, a_{m + 1}, a_m, \\dots, a_2, a_1]$$$. Its sum is the number $$$a_{m + 1} + 2 \\cdot (a_1 + a_2 + \\dots + a_m)$$$. In this case, for any integer $$$n$$$, there exists a palindromic array of the form $$$[1, \\dots, 1, n - (k - 1), 1, \\dots, 1]$$$.\nIn conclusion, if $$$k$$$ is an odd number, the answer is\n«Yes»\n, and if $$$k$$$ is even, the answer will be\n«No»\n."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nif\n(\nn\n%\n2\n==\n1\n)\n{\ncout\n<<\n\"YES\\n\"\n;\n}\nelse\n{\ncout\n<<\n\"NO\\n\"\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

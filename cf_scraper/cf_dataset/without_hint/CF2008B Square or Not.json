@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA beautiful binary matrix is a matrix that has ones on its edges and zeros inside.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2008B/82ff9b44b2f58835e7545bc3f71e9003425cf95f.png) Examples of four beautiful binary matrices.Today, Sakurako was playing with a beautiful binary matrix of size $ r \\times c $ and created a binary string $ s $ by writing down all the rows of the matrix, starting from the first and ending with the $ r $ -th. More formally, the element from the matrix in the $ i $ -th row and $ j $ -th column corresponds to the $ ((i-1)*c+j) $ -th element of the string.\n\nYou need to check whether the beautiful matrix from which the string $ s $ was obtained could be squared. In other words, you need to check whether the string $ s $ could have been build from a square beautiful binary matrix (i.e., one where $ r=c $ ).\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the string.\n\nThe second line of each test case contains the string $ s $ of length $ n $ . The string is always the result of writing out the strings of a beautiful matrix.\n\nIt is guaranteed that the sum of $ n $ across all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nPrint \"Yes\", if the original matrix could have been square, and \"No\" otherwise.\n\nExamples\nSample 1\nInput\n5\n2\n11\n4\n1111\n9\n111101111\n9\n111111111\n12\n111110011111\nOutput\nNo\nYes\nYes\nNo\nNo\n\nNote\nFor the second test case, string 1111 can be obtained from the matrix:\n\n$ 1 $ $ 1 $ $ 1 $ $ 1 $ For the third test case, string 111101111 can be obtained from the matrix:\n\n$ 1 $ $ 1 $ $ 1 $ $ 1 $ $ 0 $ $ 1 $ $ 1 $ $ 1 $ $ 1 $ There is no square matrix in the fourth case, such that the string can be obtained from it."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2008B - Square or Not\nAssume that string was created from the beautiful binary matrix with size $$$r\\times c$$$.\nIf $$$r\\le 2$$$ or $$$c\\le 2$$$, then the whole matrix consists of '1'. This means that the string will have only one character and this is the only case such happening. So, if the whole string is constructed out of '1', we print \"Yes\" only if the size of the string is 4, since only $$$r=c=2$$$ is a good matrix for us.\nOtherwise, we have at least one '0' in the string. Let's look at what is the index of the first '0'. If it has index $$$r+1$$$, since the whole first line and the first character of the first line equal to '1', so now, we have a fixed value of $$$r$$$ (index of the first '0' minus 1) and the answer is \"Yes\" only if $$$r$$$ is the square root of $$$n$$$."
+        },
+        {
+            "title": "Solution in C++",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nstring\ns\n;\ncin\n>>\ns\n;\nint\nid\n=\n0\n;\nwhile\n(\nid\n<\nn\n&&\ns\n[\nid\n]==\n'1'\n)\n{\nid\n++;\n}\nif\n(\nid\n==\nn\n)\n{\nif\n(\nn\n==\n4\n)\n{\ncout\n<<\n\"Yes\"\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\n\"No\"\n<<\nendl\n;\n}\n}\nelse\n{\nif\n((\nid\n-\n1\n)*(\nid\n-\n1\n)==\nn\n)\n{\ncout\n<<\n\"Yes\"\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\n\"No\"\n<<\nendl\n;\n}\n}\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Solution in Python",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\ns\n=\ninput\n()\ni\n=\n0\nwhile\ni\n<\nn\nand\ns\n[\ni\n]==\n'1'\n:\ni\n+=\n1\nif\ni\n==\nn\n:\nif\nn\n==\n4\n:\nprint\n(\n\"Yes\"\n)\nelse\n:\nprint\n(\n\"No\"\n)\ncontinue\ni\n-=\n1\nif\ni\n*\ni\n==\nn\n:\nprint\n(\n\"Yes\"\n)\nelse\n:\nprint\n(\n\"No\"\n)"
+        }
+    ]
+}

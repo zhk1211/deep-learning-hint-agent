@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are doing a research paper on the famous Collatz Conjecture. In your experiment, you start off with an integer $$$x$$$, and you do the following procedure $$$k$$$ times:\n\n- If $$$x$$$ is even, divide $$$x$$$ by $$$2$$$.\n- Otherwise, set $$$x$$$ to $$$3\\\\cdot x+1$$$.\n\nFor example, starting off with $$$21$$$ and doing the procedure $$$5$$$ times, you get $$$21\\\\rightarrow64\\\\rightarrow32\\\\rightarrow16\\\\rightarrow8\\\\rightarrow4$$$.\n\nAfter all $$$k$$$ iterations, you are left with the final value of $$$x$$$. Unfortunately, you forgot the initial value. Please output any possible initial value of $$$x$$$.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\\\le t \\\\le 400$$$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $$$k$$$ and $$$x$$$ ($$$1 \\\\leq k,x \\\\leq 20$$$).\n\nOutput Format\nFor each test case, print any possible initial value on a new line. It can be shown that the answer always exists.\n\nExamples\nSample 1\nInput\n3\n1 4\n1 5\n5 4\nOutput\n1\n10\n21\n\nNote\nIn the first test case, since $$$1$$$ is odd, performing the procedure $$$k=1$$$ times results in $$$1\\\\cdot3+1=4$$$, so $$$1$$$ is a valid output.\n\nIn the second test case, since $$$10$$$ is even, performing the procedure $$$k=1$$$ times results in $$$\\\\frac{10}{2}=5$$$, so $$$10$$$ is a valid output.\n\nThe third test case is explained in the statement."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "The reverse of the Collatz conjecture can be written as follows:\nMultiply $$$x$$$ by $$$2$$$ (if $$$2x$$$ was even)\nSubtract $$$1$$$ from $$$x$$$, then divide by $$$3$$$ (if $$$\\frac{x-1}{3}$$$ is an integer and is odd).\nIn this problem, we can ignore the second type completely, because $$$2x$$$ is always an integer and is always even. We can simply print out $$$x\\cdot 2^k$$$ as our answer."
+        }
+    ]
+}

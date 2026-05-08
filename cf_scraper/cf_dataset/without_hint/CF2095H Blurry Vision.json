@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2095H/cae9ab4043cdf9519a2ec0868e43c640ca312014.png)Please direct your vision to line number $ x $ .\n\nNow, read the word you see on that line.\n\nIf you struggle, I might have to prescribe eyeglasses.\n\nInput Format\nThe only line contains one integer $ x $ ( $ 1 \\leq x \\leq 11 $ ) — the line number.\n\nOutput Format\nOutput the word on line number $ x $ .\n\nExamples\nSample 1\nInput\n1\nOutput\nCODEFORCES\n\nNote\nIf you fail to read the first line, even glasses won't save you."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "2095H - Blurry Vision\nThe problem has an image with some words and asks you print them. However, the words are blurry. How can you read them?\nYou should first think about how the image must have been blurred in the first place. The answer is\nGaussian Blur\n, which is one of the most used methods of blurring. The important fact is, contrary to what people might assume, it is reversible! (This is why you should not simply blur important information before posting it online.)\nOne good method of reversing Gaussian Blur with possible noise is\nWiener Deconvolution\n. There are multiple implementations online that you can find (but I suggest using Python). However, just having the algorithm is not enough as you need to find the kernel size and the sigma value. Luckily, you do not necessarily need the exact values as the image gets clearer the closer you get and you do not need to perfectly reverse it to be able to read the words. You can also simply brute force the values and see which ones look the best.\nEither way, the kernel size used to blur the image is $$$(25, 25)$$$ and the sigma value is $$$7$$$."
+        }
+    ]
+}

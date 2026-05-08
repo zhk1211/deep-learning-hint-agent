@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the easy version of the problem. The only difference between the two versions is the constraint on $ n $ . You can make hacks only if both versions of the problem are solved.\n\nAn array $ b $ of $ m $ non-negative integers is said to be good if all the elements of $ b $ can be made equal to $ 0 $ using the following operation some (possibly, zero) times:\n\n- Select two distinct indices $ l $ and $ r $ ( $ 1 \\leq l \\color{red} < \\color{normal}r \\leq m $ ) and subtract $ 1 $ from all $ b_i $ such that $ l \\leq i \\leq r $ .\n\nYou are given two positive integers $ n $ , $ k $ and a prime number $ p $ .\n\nOver all $ (k+1)^n $ arrays of length $ n $ such that $ 0 \\leq a_i \\leq k $ for all $ 1 \\leq i \\leq n $ , count the number of good arrays.\n\nSince the number might be too large, you are only required to find it modulo $ p $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^3 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains three positive integers $ n $ , $ k $ and $ p $ ( $ 3 \\leq n \\leq 400 $ , $ 1 \\leq k \\leq n $ , $ 10^8 < p < 10^9 $ ) — the length of the array $ a $ , the upper bound on the elements of $ a $ and modulus $ p $ .\n\nIt is guaranteed that the sum of $ n^2 $ over all test cases does not exceed $ 2 \\cdot 10^5 $ , and $ p $ is prime.\n\nOutput Format\nFor each test case, on a new line, output the number of good arrays modulo $ p $ .\n\nExamples\nSample 1\nInput\n4\n3 1 998244853\n4 1 998244353\n3 2 998244353\n343 343 998244353\nOutput\n4\n7\n10\n456615865\n\nNote\nIn the first test case, the $ 4 $ good arrays $ a $ are:\n\n- $ [0,0,0] $ ;\n- $ [0,1,1] $ ;\n- $ [1,1,0] $ ;\n- $ [1,1,1] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Try to come up with some necessary and sufficient conditions of a good array."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Apply dp once you have a good condition."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "All operations which include $$$i$$$ must also either include $$$i - 1$$$ or $$$i + 1$$$. Hence $$$a_i \\le a_{i - 1} + a_{i + 1}$$$ must hold. Throughout the editorial treat $$$a_i = 0$$$ for $$$(i \\le 0)$$$ or $$$(i \\gt n)$$$.\nBut, is this sufficient? Infact, it is and we can prove it by strong induction.\nProof\nGroup arrays according to the sum of the array. We will now apply strong induction on the sum of the array.\nBase Cases (sum = 0, 1 or 2) are all trivial.\nNow, assume that the condition is sufficient for all arrays with sum $$$ \\lt x$$$ ($$$x \\ge 3$$$).\nLet us consider some array $$$a_1, a_2, ...., a_n$$$ with sum $$$x$$$. Let $$$a_i$$$ be the first non-zero element of $$$a$$$.(Observe that $$$a_{i + 1}$$$ can't be $$$0$$$).\nWe claim that either operating on $$$[i, i + 1]$$$ or $$$[i, i + 2]$$$ will give still satisfy the condition $$$a_j \\le a_{j - 1} + a_{j + 1}$$$ for all $$$j$$$.\nLet's check it. The only time $$$[i, i + 1]$$$ operation causes an issue is when $$$a_{i + 2} \\gt a_{i + 1} - 1 + a_{i + 3}$$$, i.e. it should necessarily hold that $$$a_{i + 2} \\gt a_{i + 3}$$$, but then $$$a_{i + 3} \\le a_{i + 2} - 1$$$, and so, $$$a_{i + 3} \\le a_{i + 2} - 1 + a_{i + 4}$$$, meaning $$$[i, i + 2]$$$ is valid.\nNow that we have the condition, we can define a dynamic programming as follows :\n$$$dp(i, a, b)$$$ = number of ways to make an array upto the $$$i$$$-th index with $$$a_{i - 1} = a$$$, $$$a_i = b$$$ (since only the last $$$2$$$ elements are relevant).\nLet the new element be $$$c$$$, then it is a valid way iff $$$b \\le a + c$$$. So we have a $$$\\mathcal{O}(n^4)$$$ by iterating over all possibilities.\nAs a final optimization, we can speed it up to $$$\\mathcal{O}(n^3)$$$ by using prefix sums. Note that the valid values of $$$a$$$ for fixed $$$b$$$ and $$$c$$$ satisfy $$$a \\ge max(0, b - c)$$$, and hence maintaining prefix sums over $$$a$$$, we can speed it up."
+        }
+    ]
+}

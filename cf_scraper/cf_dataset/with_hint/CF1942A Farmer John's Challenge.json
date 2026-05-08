@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n[Trade Winds - Patrick Deng](https://soundcloud.com/patrick-deng-392681004/trade-winds-ft-alex-zhu)\n\n⠀\n\nLet's call an array $ a $ sorted if $ a_1 \\leq a_2 \\leq \\ldots \\leq a_{n - 1} \\leq a_{n} $ .\n\nYou are given two of Farmer John's favorite integers, $ n $ and $ k $ . He challenges you to find any array $ a_1, a_2, \\ldots, a_{n} $ satisfying the following requirements:\n\n- $ 1 \\leq a_i \\leq 10^9 $ for each $ 1 \\leq i \\leq n $ ;\n- Out of the $ n $ total cyclic shifts of $ a $ , exactly $ k $ of them are sorted. $ ^\\dagger $\n\nIf there is no such array $ a $ , output $ -1 $ .\n\n$ ^\\dagger $ The $ x $ -th ( $ 1 \\leq x \\leq n $ ) cyclic shift of the array $ a $ is $ a_x, a_{x+1} \\ldots a_n, a_1, a_2 \\ldots a_{x - 1} $ . If $ c_{x, i} $ denotes the $ i $ 'th element of the $ x $ 'th cyclic shift of $ a $ , exactly $ k $ such $ x $ should satisfy $ c_{x,1} \\leq c_{x,2} \\leq \\ldots \\leq c_{x, n - 1} \\leq c_{x, n} $ .\n\nFor example, the cyclic shifts for $ a = [1, 2, 3, 3] $ are the following:\n\n- $ x = 1 $ : $ [1, 2, 3, 3] $ (sorted);\n- $ x = 2 $ : $ [2, 3, 3, 1] $ (not sorted);\n- $ x = 3 $ : $ [3, 3, 1, 2] $ (not sorted);\n- $ x = 4 $ : $ [3, 1, 2, 3] $ (not sorted).\n\nInput Format\nThe first line contains $ t $ ( $ 1 \\leq t \\leq 10^3 $ ) — the number of test cases.\n\nEach test case contains two integers $ n $ and $ k $ ( $ 1 \\leq k \\leq n \\leq 10^3 $ ) — the length of $ a $ and the number of sorted cyclic shifts $ a $ must have.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^3 $ .\n\nOutput Format\nFor each test case, print a single line:\n\n- if there is a valid array $ a $ , output $ n $ integers, representing $ a_1, a_2, \\ldots, a_{n} $ ;\n- otherwise, output $ -1 $ .\n\nIf there are multiple solutions, print any of them.\n\nExamples\nSample 1\nInput\n3\n2 2\n3 1\n3 2\nOutput\n1 1\n69420 69 420\n-1\n\nNote\nIn the first testcase, $ a = [1, 1] $ satisfies $ n = 2, k = 2 $ :\n\nThe two cyclic shifts of $ a $ are $ [a_1, a_2] $ and $ [a_2, a_1] $ , which are both $ [1, 1] $ and are sorted.\n\nIn the second testcase, $ a = [69\\,420, 69, 420] $ satisfies $ n = 3, k = 1 $ :\n\nThe three cyclic shifts of $ a $ are $ [a_1, a_2, a_3] $ , $ [a_2, a_3, a_1] $ , $ [a_3, a_1, a_2] $ , which are $ [69\\,420, 69, 420] $ , $ [69, 420, 69\\,420] $ , and $ [420, 69\\,420, 69] $ , respectively.\n\nOnly $ [69, 420, 69\\,420] $ is sorted."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Solve for $$$k = 1$$$.\nAnswer\n$$$a = 1, 2, 3 \\dots n$$$ works. Why?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Solve for $$$k = n$$$.\nAnswer\n$$$a = 1, 1, 1 \\dots 1$$$ works. Why?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "What other $$$k$$$ work for a given $$$n$$$?\nAnswer\nOnly $$$k = 1$$$ and $$$k = n$$$ have possible answers."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Read the hints.\nFor $$$k=1$$$, the construction $$$1,2,3\\dots n$$$ will always work because in any other cyclic shift, $$$n$$$ will be before $$$1$$$.\nNow, consider what happens if we want to find an array with two or more cyclic shifts that are sorted. If we consider two of these cyclic shifts, notice they are actually shifts of each other as well.\nSo, there should be a sorted array, and a shift of it which is also sorted. What this means is that some of the first elements in the array move to the back and stays sorted, which can\nonly happen if all values in the array are equal.\nIf the array has all equal values, this gives us our construction for $$$k=n$$$. As we have seen, for $$$k \\gt 1$$$, only $$$k=n$$$ is possible. Thus, for any other $$$k$$$ not equal to $$$1$$$ or $$$n$$$, we can print $$$-1$$$."
+        }
+    ]
+}

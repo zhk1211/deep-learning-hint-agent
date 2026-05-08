@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMonocarp has found a treasure map. The map represents the treasure location as an OX axis. Monocarp is at $ 0 $ , the treasure chest is at $ x $ , the key to the chest is at $ y $ .\n\nObviously, Monocarp wants to open the chest. He can perform the following actions:\n\n- go $ 1 $ to the left or $ 1 $ to the right (spending $ 1 $ second);\n- pick the key or the chest up if he is in the same point as that object (spending $ 0 $ seconds);\n- put the chest down in his current point (spending $ 0 $ seconds);\n- open the chest if he's in the same point as the chest and has picked the key up (spending $ 0 $ seconds).\n\nMonocarp can carry the chest, but the chest is pretty heavy. He knows that he can carry it for at most $ k $ seconds in total (putting it down and picking it back up doesn't reset his stamina).\n\nWhat's the smallest time required for Monocarp to open the chest?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of testcases.\n\nThe only line of each testcase contains three integers $ x, y $ and $ k $ ( $ 1 \\le x, y \\le 100 $ ; $ x \\neq y $ ; $ 0 \\le k \\le 100 $ ) — the initial point of the chest, the point where the key is located, and the maximum time Monocarp can carry the chest for.\n\nOutput Format\nFor each testcase, print a single integer — the smallest time required for Monocarp to open the chest.\n\nExamples\nSample 1\nInput\n3\n5 7 2\n10 5 0\n5 8 2\nOutput\n7\n10\n9\n\nNote\nIn the first testcase, Monocarp can open the chest in $ 7 $ seconds with the following sequence of moves:\n\n- go $ 5 $ times to the right ( $ 5 $ seconds);\n- pick up the chest ( $ 0 $ seconds);\n- go $ 2 $ times to the right ( $ 2 $ seconds);\n- pick up the key ( $ 0 $ seconds);\n- put the chest down ( $ 0 $ seconds);\n- open the chest ( $ 0 $ seconds).\n\nHe only carries the chest for $ 2 $ seconds, which he has the stamina for.\n\nIn the second testcase, Monocarp can pick up the key on his way to the chest.\n\nIn the third testcase, Monocarp can't use the strategy from the first testcase because he would have to carry the chest for $ 3 $ seconds, while he only has the stamina for $ 2 $ seconds. Thus, he carries the chest to $ 7 $ , puts it down, moves $ 1 $ to the right to pick up the key and returns $ 1 $ left to open the chest."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1895A - Treasure Chest\nLet's consider two cases:\nIf $$$y  \\lt  x$$$, then the answer is $$$x$$$, because we need to reach the chest and we can take the key on the way.\nIf $$$y  \\gt  x$$$, then the optimal option would be to bring the chest directly to the key. However, this is not always possible due to the value of $$$k$$$. If $$$y - x \\le k$$$, then we can do it and the answer is $$$y$$$. Otherwise, the answer is $$$y + y - (x + d)$$$, where $$$d$$$ is the time we carried the chest, and $$$y - (x + d)$$$ is the time to return from the key to the chest back. From here, we can see that this value is minimum when $$$d=k$$$. Thus, the answer is $$$y + y - (x + k)$$$."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nx\n,\ny\n,\nk\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nif\ny\n<\nx\n:\nprint\n(\nx\n)\nelse\n:\nprint\n(\ny\n+\nmax\n(\n0\n,\ny\n-\nx\n-\nk\n))"
+        }
+    ]
+}

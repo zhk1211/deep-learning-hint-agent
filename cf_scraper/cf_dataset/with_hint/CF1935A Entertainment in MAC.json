@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nCongratulations, you have been accepted to the Master's Assistance Center! However, you were extremely bored in class and got tired of doing nothing, so you came up with a game for yourself.\n\nYou are given a string $ s $ and an even integer $ n $ . There are two types of operations that you can apply to it:\n\n1. Add the reversed string $ s $ to the end of the string $ s $ (for example, if $ s = $ cpm, then after applying the operation $ s = $ cpmmpc).\n2. Reverse the current string $ s $ (for example, if $ s = $ cpm, then after applying the operation $ s = $ mpc).\n\nIt is required to determine the lexicographically smallest $ ^{\\dagger} $ string that can be obtained after applying exactly $ n $ operations. Note that you can apply operations of different types in any order, but you must apply exactly $ n $ operations in total.\n\n$ ^{\\dagger} $ A string $ a $ is lexicographically smaller than a string $ b $ if and only if one of the following holds:\n\n- $ a $ is a prefix of $ b $ , but $ a \\ne b $ ;\n- in the first position where $ a $ and $ b $ differ, the string $ a $ has a letter that appears earlier in the alphabet than the corresponding letter in $ b $ .\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 500 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single even integer $ n $ ( $ 2 \\leq n \\leq 10^9 $ ) — the number of operations applied to the string $ s $ .\n\nThe second line of each test case contains a single string $ s $ ( $ 1 \\leq |s| \\leq 100 $ ), consisting of lowercase English letters, — the string to which the operations are applied.\n\nOutput Format\nFor each test case, output a single line — the lexicographically smallest string that can be obtained after applying exactly $ n $ operations.\n\nExamples\nSample 1\nInput\n5\n4\ncpm\n2\ngrib\n10\nkupitimilablodarbuz\n1000000000\ncapybara\n6\nabacaba\nOutput\ncpm\nbirggrib\nkupitimilablodarbuz\narabypaccapybara\nabacaba\n\nNote\nIn the first test case, you can apply the operation of the second type (i.e., reverse the string $ s $ ) $ 4 $ times. Then the string $ s $ will remain equal to cpm.\n\nIn the second test case, you can do the following:\n\n- Apply the operation of the second type, after which $ s $ will become equal to birg.\n- Apply operation of the first type (i.e., add the reversed string $ s $ to the end of the string $ s $ ), after which $ s $ will become equal to birggrib."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nThe answer will always have either the prefix $$$s$$$, or the reversed string $$$s$$$.\nHint 2\nAdding the string to the end is required no more than once."
+        },
+        {
+            "title": "Hint 1",
+            "content": "The answer will always have either the prefix $$$s$$$, or the reversed string $$$s$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Adding the string to the end is required no more than once."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let $$$t$$$ be the reversed string $$$s$$$. Notice that it is advantageous for us to use operation 1 (adding the reversed string at the end) no more than once. Indeed, having obtained some string, we will simply spend the remaining operations on flipping the string. Thus, we will get the original string or the reversed one, depending on the parity of the number of remaining operations.\nIt is easy to see that the answer will always have either the prefix $$$s$$$, or $$$t$$$. Then, we find two lexicographically minimal strings with the prefix $$$s$$$ and $$$t$$$. These will be strings:\n$$$s$$$, flip the string $$$n$$$ times (since $$$n$$$ is even, every 2 operations we return the string to its original) $$$t + s$$$, initially flip the string, add the reversed string to the end, then flip the string $$$n - 2$$$ times. The answer will be the lexicographically minimal string out of $$$s$$$ and $$$t + s$$$."
+        },
+        {
+            "title": "Implementation on C++",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nint\nmain\n()\n{\nstd\n::\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\nstd\n::\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\nstd\n::\ncin\n>>\ntt\n;\nwhile\n(\ntt\n--)\n{\nint\nn\n;\nstd\n::\ncin\n>>\nn\n;\nstd\n::\nstring\ns\n;\nstd\n::\ncin\n>>\ns\n;\nstd\n::\nstring\nt\n=\ns\n;\nreverse\n(\nt\n.\nbegin\n(),\nt\n.\nend\n());\nstd\n::\ncout\n<<\nstd\n::\nmin\n(\ns\n,\nt\n+\ns\n)\n<<\n\"\\n\"\n;\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Implementation on Python",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\nn\n=\nint\n(\ninput\n())\ns\n=\ninput\n()\nt\n=\ns\n[::-\n1\n]\nprint\n(\nmin\n(\ns\n,\nt\n+\ns\n))"
+        }
+    ]
+}

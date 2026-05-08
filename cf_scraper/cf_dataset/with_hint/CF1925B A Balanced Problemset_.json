@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nJay managed to create a problem of difficulty $ x $ and decided to make it the second problem for Codeforces Round #921.\n\nBut Yash fears that this problem will make the contest highly unbalanced, and the coordinator will reject it. So, he decided to break it up into a problemset of $ n $ sub-problems such that the difficulties of all the sub-problems are a positive integer and their sum is equal to $ x $ .\n\nThe coordinator, Aleksey, defines the balance of a problemset as the [GCD](https://en.wikipedia.org/wiki/Greatest_common_divisor) of the difficulties of all sub-problems in the problemset.\n\nFind the maximum balance that Yash can achieve if he chooses the difficulties of the sub-problems optimally.\n\nInput Format\nThe first line of input contains a single integer $ t $ ( $ 1\\leq t\\leq 10^3 $ ) denoting the number of test cases.\n\nEach test case contains a single line of input containing two integers $ x $ ( $ 1\\leq x\\leq 10^8 $ ) and $ n $ ( $ 1\\leq n\\leq x $ ).\n\nOutput Format\nFor each test case, print a single line containing a single integer denoting the maximum balance of the problemset Yash can achieve.\n\nExamples\nSample 1\nInput\n3\n10 3\n5 5\n420 69\nOutput\n2\n1\n6\n\nNote\nFor the first test case, one possible way is to break up the problem of difficulty $ 10 $ into a problemset having three problems of difficulties $ 4 $ , $ 2 $ and $ 4 $ respectively, giving a balance equal to $ 2 $ .\n\nFor the second test case, there is only one way to break up the problem of difficulty $ 5 $ into a problemset of $ 5 $ problems with each problem having a difficulty $ 1 $ giving a balance equal to $ 1 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "$$$GCD(a_1,a_2,a_3,\\ldots,a_n) = GCD(a_1,a_1+a_2,a_1+a_2+a_3,\\ldots,a_1+a_2+a_3+\\ldots+a_n)$$$"
+        },
+        {
+            "title": "Hint 2",
+            "content": "The maximum GCD that can be achieved is always a divisor of $$$x$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Let the difficulties of the $$$n$$$ sub-problems be $$$a_1,a_2,a_3,\\ldots,a_n$$$. By properties of GCD, $$$GCD(a_1,a_2,a_3,\\ldots,a_n)$$$ $$$= GCD(a_1,a_1+a_2,a_1+a_2+a_3,\\ldots,a_1+a_2+a_3+\\ldots+a_n)$$$ $$$= GCD(a_1,a_1+a_2,a_1+a_2+a_3,\\ldots,x)$$$. So, the final answer will always be a divisor of $$$x$$$.\nNow, consider a divisor $$$d$$$ of $$$x$$$. If $$$n\\cdot d\\leq x$$$, you can choose the difficulties of the sub-problems to be $$$d,d,d,\\ldots,x-(n-1)d$$$ each of which is a multiple of $$$d$$$ and hence, the balance of this problemset will be $$$d$$$. Otherwise you cannot choose the difficulties of $$$n$$$ sub-problems such that each of them is a multiple of $$$d$$$.\nFind the maximum $$$d$$$ for which this condition holds. This can be done in $$$\\mathcal{O}(\\sqrt{x})$$$ using trivial factorization."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\ntc\n;\ncin\n>>\ntc\n;\nwhile\n(\ntc\n--)\n{\nint\nx\n,\nn\n;\ncin\n>>\nx\n>>\nn\n;\nint\nans\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n*\ni\n<=\nx\n;\ni\n++)\n{\nif\n(\nx\n%\ni\n==\n0\n)\n{\nif\n(\nn\n<=\nx\n/\ni\n)\nans\n=\nmax\n(\nans\n,\ni\n);\nif\n(\nn\n<=\ni\n)\nans\n=\nmax\n(\nans\n,\nx\n/\ni\n);\n}\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

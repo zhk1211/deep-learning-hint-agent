@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a $ 2 \\times n $ grid filled with zeros and ones. Let the number at the intersection of the $ i $ -th row and the $ j $ -th column be $ a_{ij} $ .\n\nThere is a grasshopper at the top-left cell $ (1, 1) $ that can only jump one cell right or downwards. It wants to reach the bottom-right cell $ (2, n) $ . Consider the binary string of length $ n+1 $ consisting of numbers written in cells of the path without changing their order.\n\nYour goal is to:\n\n1. Find the lexicographically smallest $ ^\\dagger $ string you can attain by choosing any available path;\n2. Find the number of paths that yield this lexicographically smallest string.\n\n$ ^\\dagger $ If two strings $ s $ and $ t $ have the same length, then $ s $ is lexicographically smaller than $ t $ if and only if in the first position where $ s $ and $ t $ differ, the string $ s $ has a smaller element than the corresponding element in $ t $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line of each test case contains a binary string $ a_{11} a_{12} \\ldots a_{1n} $ ( $ a_{1i} $ is either $ 0 $ or $ 1 $ ).\n\nThe third line of each test case contains a binary string $ a_{21} a_{22} \\ldots a_{2n} $ ( $ a_{2i} $ is either $ 0 $ or $ 1 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output two lines:\n\n1. The lexicographically smallest string you can attain by choosing any available path;\n2. The number of paths that yield this string.\n\nExamples\nSample 1\nInput\n3\n2\n00\n00\n4\n1101\n1100\n8\n00100111\n11101101\nOutput\n000\n2\n11000\n1\n001001101\n4\n\nNote\nIn the first test case, the lexicographically smallest string is $ \\mathtt{000} $ . There are two paths that yield this string:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1937B/28bc26c21acb39dafc863512440b57a82f70d617.png)In the second test case, the lexicographically smallest string is $ \\mathtt{11000} $ . There is only one path that yields this string:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1937B/f024d427300a33d2f71c9946e45249754a59348c.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "Let’s call path $$$(1,1) \\rightarrow \\ldots \\rightarrow (1,i)\\rightarrow(2,i) \\rightarrow \\ldots \\rightarrow (2,n)$$$ the $$$i$$$-th path. What's the difference between the $$$i$$$-th path and the $$$(i+1)$$$-th path?"
+        },
+        {
+            "title": "Hint2",
+            "content": "What if $$$a_{2i}=1$$$ and $$$a_{1(i+1)}=0$$$ ?"
+        },
+        {
+            "title": "Hint3",
+            "content": "What if $$$a_{2i}=0$$$ and $$$a_{1(i+1)}=1$$$ ?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Let the string achieved by moving down on the $$$i$$$-th column be $$$S_i$$$. Then, for any $$$1 \\le k \\lt n$$$, one can observe that $$$S_k$$$ and $$$S_{k+1}$$$ can only differ by at most one index, which is index $$$k+1$$$. Thus, comparing $$$S_k$$$ and $$$S_{k+1}$$$ lexicographically can be done in $$$O(1)$$$, by comparing this one index.\nAfter finding the lexicographically smallest string, counting the occurrence of this string can be done straightforwardly in $$$O(n)$$$.\nThe implementation can differ for each participant, but the following method provides a clean implementation. Let the initial coordinate be $$$(1,1)$$$, and maintain a counter which is initially reset to $$$1$$$. Then repeat the following until we reach $$$(2,n)$$$:\nIf we are on row $$$2$$$, move to the right.\nIf we are on column $$$n$$$, move downwards.\nFrom here, let the character on the right be $$$a$$$, and one below be $$$b$$$.\nIf $$$a \\gt b$$$, move downwards.\nIf $$$a \\lt b$$$, move to the right and reset the counter to $$$1$$$.\nIf $$$a=b$$$, move to the right and increment the counter.\nIn the end, the string on the path we passed through will be lexicographically smallest, and the integer on the counter will be the number of occurrences."
+        },
+        {
+            "title": "solution",
+            "content": "#include\n<map>\n#include\n<set>\n#include\n<cmath>\n#include\n<ctime>\n#include\n<queue>\n#include\n<stack>\n#include\n<cstdio>\n#include\n<cstdlib>\n#include\n<vector>\n#include\n<cstring>\n#include\n<algorithm>\n#include\n<iostream>\nusing\nnamespace\nstd\n;\ntypedef\ndouble\ndb\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\nunsigned\nlong\nlong\null\n;\nconst\nint\nN\n=\n1000010\n;\nconst\nint\nLOGN\n=\n28\n;\nconst\nll  TMD\n=\n0\n;\nconst\nll  INF\n=\n2147483647\n;\nint\nT\n,\nn\n;\nchar\na\n[\n3\n][\nN\n];\nint\nmain\n()\n{\nscanf\n(\n\"%d\"\n,&\nT\n);\nwhile\n(\nT\n--)\n{\nscanf\n(\n\"%d\"\n,&\nn\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\n2\n;\ni\n++)\n{\nscanf\n(\n\"\\n\"\n);\nfor\n(\nint\nj\n=\n1\n;\nj\n<=\nn\n;\nj\n++)\nscanf\n(\n\"%c\"\n,&\na\n[\ni\n][\nj\n]);\n}\nint\nmax_down\n=\nn\n,\nmin_down\n=\n1\n;\nfor\n(\nint\ni\n=\nn\n;\ni\n>=\n2\n;\ni\n--)\nif\n(\na\n[\n1\n][\ni\n]==\n'1'\n&&\na\n[\n2\n][\ni\n-\n1\n]==\n'0'\n)\nmax_down\n=\ni\n-\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nmax_down\n;\ni\n++)\nif\n(\na\n[\n2\n][\ni\n]==\n'1'\n&&\na\n[\n1\n][\ni\n+\n1\n]==\n'0'\n)\nmin_down\n=\ni\n+\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nmax_down\n;\ni\n++)\nprintf\n(\n\"%c\"\n,\na\n[\n1\n][\ni\n]);\nfor\n(\nint\ni\n=\nmax_down\n;\ni\n<=\nn\n;\ni\n++)\nprintf\n(\n\"%c\"\n,\na\n[\n2\n][\ni\n]);\nprintf\n(\n\"\\n\"\n);\nprintf\n(\n\"%d\\n\"\n,\nmax_down\n-\nmin_down\n+\n1\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

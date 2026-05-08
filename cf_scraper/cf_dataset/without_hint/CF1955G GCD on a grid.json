@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nNot long ago, Egor learned about the Euclidean algorithm for finding the greatest common divisor of two numbers. The greatest common divisor of two numbers $ a $ and $ b $ is the largest number that divides both $ a $ and $ b $ without leaving a remainder. With this knowledge, Egor can solve a problem that he once couldn't.\n\nVasily has a grid with $ n $ rows and $ m $ columns, and the integer $ {a_i}_j $ is located at the intersection of the $ i $ -th row and the $ j $ -th column. Egor wants to go from the top left corner (at the intersection of the first row and the first column) to the bottom right corner (at the intersection of the last row and the last column) and find the greatest common divisor of all the numbers along the path. He is only allowed to move down and to the right. Egor has written down several paths and obtained different GCD values. He became interested in finding the maximum possible GCD.\n\nUnfortunately, Egor is tired of calculating GCDs, so he asks for your help in finding the maximum GCD of the integers along the path from the top left corner to the bottom right corner of the grid.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le {10}^{4} $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ m $ ( $ 1 \\le n, m \\le 100 $ ) — the number of rows and columns of the grid.\n\nThen, there are $ n $ lines, where the $ i $ -th line contains $ m $ integers $ (1 \\le a_{i,j} \\le {10}^{6} $ ) — the integers written in the $ i $ -th row and the $ j $ -th column of the grid.\n\nIt is guaranteed that the sum of $ n \\cdot m $ does not exceed $ 2 \\cdot {10}^{5} $ over all test cases.\n\nOutput Format\nFor each test case, output the maximum possible GCD along the path from the top left cell to the bottom right cell in a separate line.\n\nExamples\nSample 1\nInput\n3\n2 3\n30 20 30\n15 25 40\n3 3\n12 4 9\n3 12 2\n8 3 12\n2 4\n2 4 6 8\n1 3 6 9\nOutput\n10\n3\n1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nll\n=\nsigned\nlong\nlong\nint\n;\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\nusing\npii\n=\nstd\n::\npair\n<\nint\n,\nint\n>;\nusing\npll\n=\nstd\n::\npair\n<\nll\n,\nll\n>;\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nvector\n<\nvector\n<int>\n>\na\n(\nn\n,\nvector\n<int>\n(\nm\n));\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nm\n;\n++\nj\n)\n{\ncin\n>>\na\n[\ni\n][\nj\n];\n}\n}\nint\nans\n=\n1\n,\ng\n=\ngcd\n(\na\n[\n0\n][\n0\n],\na\n[\nn\n-\n1\n][\nm\n-\n1\n]);\nvector\n<\nvector\n<char>\n>\ndp\n(\nn\n,\nvector\n<char>\n(\nm\n));\nfor\n(\nint\nx\n=\n1\n;\nx\n*\nx\n<=\ng\n;\n++\nx\n)\n{\nif\n(\ng\n%\nx\n>\n0\n)\n{\ncontinue\n;\n}\nvector\n<int>\ncand\n=\n{\nx\n,\ng\n/\nx\n};\nfor\n(\nint\nel\n:\ncand\n)\n{\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ndp\n[\ni\n].\nassign\n(\nm\n,\n0\n);\n}\ndp\n[\n0\n][\n0\n]\n=\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nm\n;\n++\nj\n)\n{\nif\n(\na\n[\ni\n][\nj\n]\n%\nel\n>\n0\n)\n{\ncontinue\n;\n}\nif\n(!\ndp\n[\ni\n][\nj\n]\n&&\ni\n)\n{\ndp\n[\ni\n][\nj\n]\n=\n(\ndp\n[\ni\n-\n1\n][\nj\n]\n==\n1\n?\n1\n:\n0\n);\n}\nif\n(!\ndp\n[\ni\n][\nj\n]\n&&\nj\n)\n{\ndp\n[\ni\n][\nj\n]\n=\n(\ndp\n[\ni\n][\nj\n-\n1\n]\n==\n1\n?\n1\n:\n0\n);\n}\n}\n}\nif\n(\ndp\n[\nn\n-\n1\n][\nm\n-\n1\n])\n{\nans\n=\nmax\n(\nans\n,\nel\n);\n}\n}\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

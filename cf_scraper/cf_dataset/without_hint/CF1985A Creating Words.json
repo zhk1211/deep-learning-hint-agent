@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMatthew is given two strings $ a $ and $ b $ , both of length $ 3 $ . He thinks it's particularly funny to create two new words by swapping the first character of $ a $ with the first character of $ b $ . He wants you to output $ a $ and $ b $ after the swap.\n\nNote that the new words may not necessarily be different.\n\nInput Format\nThe first line contains $ t $ ( $ 1 \\leq t \\leq 100 $ ) — the number of test cases.\n\nThe first and only line of each test case contains two space-separated strings, $ a $ and $ b $ , both of length $ 3 $ . The strings only contain lowercase Latin letters.\n\nOutput Format\nFor each test case, after the swap, output $ a $ and $ b $ , separated by a space.\n\nExamples\nSample 1\nInput\n6\nbit set\ncat dog\nhot dog\nuwu owo\ncat cat\nzzz zzz\nOutput\nsit bet\ndat cog\ndot hog\nowu uwo\ncat cat\nzzz zzz"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "To swap the first character of the strings, you can use the built-in method std::swap in C++, or for each string, separate the first character from the rest of the string and concatenate it with the other string."
+        }
+    ]
+}

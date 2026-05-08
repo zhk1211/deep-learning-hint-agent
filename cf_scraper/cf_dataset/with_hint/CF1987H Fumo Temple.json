@@ -1,0 +1,52 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis temple only magnifies the mountain's power.\n\nBadeline\n\nThis is an interactive problem.\n\nYou are given two positive integers $ n $ and $ m $ ( $ \\bf{n \\le m} $ ).\n\nThe jury has hidden from you a rectangular matrix $ a $ with $ n $ rows and $ m $ columns, where $ a_{i,j} \\in \\{ -1, 0, 1 \\} $ for all $ 1 \\le i \\le n $ and $ 1 \\le j \\le m $ . The jury has also selected a cell $ (i_0, j_0) $ . Your goal is to find $ (i_0,j_0) $ .\n\nIn one query, you give a cell $ (i, j) $ , then the jury will reply with an integer.\n\n- If $ (i, j) = (i_0, j_0) $ , the jury will reply with $ 0 $ .\n- Else, let $ S $ be the sum of $ a_{x,y} $ over all $ x $ and $ y $ such that $ \\min(i, i_0) \\le x \\le \\max(i, i_0) $ and $ \\min(j, j_0) \\le y \\le \\max(j, j_0) $ . Then, the jury will reply with $ |i - i_0| + |j - j_0| + |S| $ .\n\nFind $ (i_0, j_0) $ by making at most $ n + 225 $ queries.\n\nNote: the grader is not adaptive: $ a $ and $ (i_0,j_0) $ are fixed before any queries are made.\n\nInput Format\nEach test contains multiple test cases. The first line of input contains a single integer $ t $ ( $ 1 \\le t \\le 50 $ ) — the number of test cases. The description of the test cases follows.\n\nThe only line of each test case contains two integers $ n $ and $ m $ ( $ 1 \\le n \\le m \\le 5000 $ ) — the numbers of rows and the number of columns of the hidden matrix $ a $ respectively.\n\nIt is guaranteed that the sum of $ n \\cdot m $ over all test cases does not exceed $ 25 \\cdot 10^6 $ .\n\nOutput Format\nThe interaction for each test case begins by reading the integers $ n $ and $ m $ .\n\nTo make a query, output \"? i j\" ( $ 1 \\le i \\le n, 1 \\le j \\le m $ ) without quotes. Afterwards, you should read one single integer — the answer to your query.\n\nIf you receive the integer $ -1 $ instead of an answer or a valid value of $ n $ or $ m $ , it means your program has made an invalid query, has exceeded the limit of queries, or has given an incorrect answer on the previous test case. Your program must terminate immediately to receive a Wrong Answer verdict. Otherwise, you can get an arbitrary verdict because your solution will continue to read from a closed stream.\n\nWhen you are ready to give the final answer, output \"! i j\" ( $ 1 \\le i \\le n, 1 \\le j \\le m $ ) without quotes — the indices of the hidden cell. After solving a test case, your program should move to the next one immediately. After solving all test cases, your program should be terminated immediately.\n\nAfter printing a query do not forget to output end of line and flush the output. Otherwise, you will get Idleness limit exceeded. To do this, use:\n\n- fflush(stdout) or cout.flush() in C++;\n- System.out.flush() in Java;\n- flush(output) in Pascal;\n- stdout.flush() in Python;\n- see documentation for other languages.\n\nHacks\n\nTo hack, use the following format:\n\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 50 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ m $ ( $ 1 \\le n \\le m \\le 5000 $ ) — the sizes of the hidden matrix.\n\nThe second line of each test case contains two integers $ i_0 $ and $ j_0 $ ( $ 1 \\le i_0 \\le n, 1 \\le j_0 \\le m $ ) — the hidden cell.\n\nThen $ n $ lines follow. The $ i $ -th of them contains the string $ s_i $ of length $ n $ , consisting only of the characters -, 0, and +. Here, $ a_{ij} = -1 $ if $ s_{ij} = \\mathtt{-} $ , $ a_{ij} = 0 $ if $ s_{ij} = \\mathtt{0} $ , and $ a_{ij} = 1 $ if $ s_{ij} = \\mathtt{+} $ .\n\nThe sum of $ n \\cdot m $ over all test cases should not exceed $ 25 \\cdot 10^6 $ .\n\nAs an example, the hack format for the example input is:\n\n$ \\texttt{2}\\\\ \\texttt{3}\\,\\texttt{4} \\\\ \\texttt{1}\\,\\texttt{4} \\\\ \\texttt{+0+0} \\\\ \\texttt{+00+} \\\\ \\texttt{0---} \\\\ \\texttt{1}\\,\\texttt{1}\\\\\\texttt{1}\\,\\texttt{1}\\\\\\texttt{0} $\n\nExamples\nSample 1\nInput\n2\n3 4\n\n5\n\n3\n\n5\n\n1 1\n\n0\nOutput\n? 1 1\n\n? 3 3\n\n? 3 2\n\n! 1 4\n\n? 1 1\n\n! 1 1\n\nNote\nThe hidden matrix in the first test case:\n\n$ 1 $ $ 0 $ $ 1 $ $ \\color{red}{\\textbf{0}} $ $ 1 $ $ 0 $ $ 0 $ $ 1 $ $ 0 $ $ -1 $ $ -1 $ $ -1 $ The hidden matrix in the second test case:\n\n$ \\color{red}{\\textbf{0}} $ Note that the line breaks in the example input and output are for the sake of clarity, and do not occur in the real interaction."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nThink of the query result as some number between $$$|i - i_0| + |j - j_0|$$$ and $$$|i - i_0| + |j - j_0| + (|i - i_0| + 1) \\cdot (|j - j_0| + 1)$$$.\nHint 2\nTry solving for $$$n = 1$$$.\nHint 3\nTry solving in $$$n \\log_2(m)$$$ queries (might be useful later).\nHint 4\nTry to either decrease $$$n$$$ by a bit, or decrease $$$m$$$ by a lot.\nHint 5\nOne way to do that would be to either decrease $$$n$$$ by $$$3$$$ or decrease $$$m$$$ by a lot.\nHint 6\nMake all the queries in the middle row of a three row strip.\nHint 7\n\"Binary search\" base case for small $$$m$$$."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Think of the query result as some number between $$$|i - i_0| + |j - j_0|$$$ and $$$|i - i_0| + |j - j_0| + (|i - i_0| + 1) \\cdot (|j - j_0| + 1)$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Try solving for $$$n = 1$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Try solving in $$$n \\log_2(m)$$$ queries (might be useful later)."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Try to either decrease $$$n$$$ by a bit, or decrease $$$m$$$ by a lot."
+        },
+        {
+            "title": "Hint 5",
+            "content": "One way to do that would be to either decrease $$$n$$$ by $$$3$$$ or decrease $$$m$$$ by a lot."
+        },
+        {
+            "title": "Hint 6",
+            "content": "Make all the queries in the middle row of a three row strip."
+        },
+        {
+            "title": "Hint 7",
+            "content": "\"Binary search\" base case for small $$$m$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\n#define\nallr\n(\nx\n)\n(\nx\n).\nrbegin\n(),\n(\nx\n).\nrend\n()\nconst\nchar\nnl\n=\n'\\n'\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\nlong\ndouble\nld\n;\nusing\nnamespace\nstd\n;\nint\nans_x\n=\n0\n,\nans_y\n=\n0\n,\ncnt_q\n=\n0\n;\n// Coordinates are flipped\nint\nquery\n(\nint\nx\n,\nint\ny\n)\n{\ncnt_q\n++;\nint\nres\n=\n0\n;\ncout\n<<\n\"? \"\n<<\ny\n<<\n' '\n<<\nx\n<<\nendl\n;\ncout\n.\nflush\n();\ncin\n>>\nres\n;\nif\n(\nres\n<\n0\n)\n{\nexit\n(\n0\n);\n}\nif\n(\nres\n==\n0\n)\n{\nans_x\n=\nx\n;\nans_y\n=\ny\n;\n}\nreturn\nres\n;\n}\n/* Explanation:\n * Splits the stripe of three into |a-O-a-b-O-b-a-O-a|.\n * O are the three query points (all in the same column). \n * Cons: hard to correctly account for errors in a non-bruteforce way.\n * Pros: gives a better constant factor (3 / 4 of the original length)\n * Number of queries: n + 3 * 21 + 25 * ceil(log(25, 2)) + eps \n * Though the binary search part uses less queries than that */\nvoid\nf\n(\nint\nlx\n,\nint\nrx\n,\nint\nly\n,\nint\nry\n)\n{\nint\nn\n=\nrx\n-\nlx\n+\n1\n;\n// Bruteforce base case (uses binary search)\nif\n(\nn\n<=\n25\n)\n{\n// can be n <= 22 or above\nfor\n(\nint\nx\n=\nlx\n;\nx\n<=\nrx\n;\nx\n++)\n{\nint\nlb\n=\nly\n,\nub\n=\nry\n;\nwhile\n(\nlb\n<=\nub\n)\n{\nint\nres\n=\nquery\n(\nx\n,\nlb\n);\nint\nlow_y\n=\n((\nres\n-\n1\n)\n+\n1\n)\n/\n2\n,\nhigh_y\n=\nres\n;\nint\nnew_lb\n=\nlb\n+\nmax\n(\n1\n,\nlow_y\n),\nnew_ub\n=\nmin\n(\nub\n,\nlb\n+\nhigh_y\n);\nlb\n=\nnew_lb\n;\nub\n=\nnew_ub\n;\n}\n}\nreturn\n;\n}\n// Here, (2a - 1) + (2b - 1) + (2a - 1) = n\nint\na\n=\n3\n*\n(\nn\n+\n3\n)\n/\n16\n;\nint\ny\n=\nmin\n(\nry\n,\nly\n+\n1\n);\nint\nx1\n=\nlx\n+\na\n-\n1\n;\nx1\n=\nmax\n(\nx1\n,\nlx\n);\nx1\n=\nmin\n(\nx1\n,\nrx\n);\nint\nx2\n=\n(\nlx\n+\nrx\n)\n/\n2\n;\nx2\n=\nmax\n(\nx2\n,\nx1\n+\n1\n);\nx2\n=\nmin\n(\nx2\n,\nrx\n);\nint\nx3\n=\nrx\n-\na\n+\n1\n;\nx3\n=\nmax\n(\nx3\n,\nx2\n+\n1\n);\nx3\n=\nmin\n(\nx3\n,\nrx\n);\nint\nm\n=\nmin\n(\n3\n,\nry\n-\nly\n+\n1\n);\nvector\n<\nvector\n<bool>\n>\ngood\n(\nn\n,\nvector\n<bool>\n(\nm\n,\ntrue\n));\nint\nnew_lx\n=\nlx\n,\nnew_rx\n=\nrx\n;\nint\nnew_ly\n=\nly\n,\nnew_ry\n=\nry\n;\nfor\n(\nint\nx\n:\n{\nx1\n,\nx2\n,\nx3\n})\n{\nint\nres\n=\nquery\n(\nx\n,\ny\n);\nnew_lx\n=\nmax\n(\nnew_lx\n,\nx\n-\nres\n);\nnew_rx\n=\nmin\n(\nnew_rx\n,\nx\n+\nres\n);\nnew_ly\n=\nmax\n(\nnew_ly\n,\ny\n-\nres\n);\nnew_ry\n=\nmin\n(\nnew_ry\n,\ny\n+\nres\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nm\n;\nj\n++)\n{\nint\nr_x\n=\nlx\n+\ni\n,\nr_y\n=\nly\n+\nj\n;\nint\ndx\n=\nabs\n(\nr_x\n-\nx\n);\nint\ndy\n=\nabs\n(\nr_y\n-\ny\n);\nint\nd\n=\ndx\n+\ndy\n;\nint\nS\n=\n(\ndx\n+\n1\n)\n*\n(\ndy\n+\n1\n);\n// d <= res <= d + S must hold\nif\n(\nres\n<\nd\n||\nd\n+\nS\n<\nres\n)\n{\ngood\n[\ni\n][\nj\n]\n=\nfalse\n;\n}\n}\n}\n}\nbool\nhas_good\n=\nfalse\n;\nfor\n(\nauto\nvx\n:\ngood\n)\n{\nfor\n(\nauto\nvy\n:\nvx\n)\n{\nif\n(\nvy\n)\n{\nhas_good\n=\ntrue\n;\n}\n}\n}\ngood\n.\nclear\n();\ngood\n.\nshrink_to_fit\n();\nif\n(\nhas_good\n)\n{\nf\n(\nnew_lx\n,\nnew_rx\n,\nnew_ly\n,\nnew_ry\n);\n}\nelse\n{\nf\n(\nlx\n,\nrx\n,\nly\n+\nm\n,\nry\n);\n}\n}\nvoid\nsolve\n()\n{\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nans_x\n=\n0\n;\nans_y\n=\n0\n;\ncnt_q\n=\n0\n;\nf\n(\n1\n,\nm\n,\n1\n,\nn\n);\ncout\n<<\n\"! \"\n<<\nans_y\n<<\n' '\n<<\nans_x\n<<\nendl\n;\ncout\n.\nflush\n();\ncerr\n<<\nn\n<<\n' '\n<<\ncnt_q\n<<\n\" | \"\n<<\nn\n+\n225\n<<\nendl\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

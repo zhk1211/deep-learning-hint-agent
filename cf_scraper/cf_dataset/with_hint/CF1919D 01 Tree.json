@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is an edge-weighted complete binary tree with $ n $ leaves. A complete binary tree is defined as a tree where every non-leaf vertex has exactly 2 children. For each non-leaf vertex, we label one of its children as the left child and the other as the right child.\n\nThe binary tree has a very strange property. For every non-leaf vertex, one of the edges to its children has weight $ 0 $ while the other edge has weight $ 1 $ . Note that the edge with weight $ 0 $ can be connected to either its left or right child.\n\nYou forgot what the tree looks like, but luckily, you still remember some information about the leaves in the form of an array $ a $ of size $ n $ . For each $ i $ from $ 1 $ to $ n $ , $ a_i $ represents the distance $ ^\\dagger $ from the root to the $ i $ -th leaf in dfs order $ ^\\ddagger $ . Determine whether there exists a complete binary tree which satisfies array $ a $ . Note that you do not need to reconstruct the tree.\n\n$ ^\\dagger $ The distance from vertex $ u $ to vertex $ v $ is defined as the sum of weights of the edges on the path from vertex $ u $ to vertex $ v $ .\n\n$ ^\\ddagger $ The dfs order of the leaves is found by calling the following $ \\texttt{dfs} $ function on the root of the binary tree.\n\n```\n<pre class=\"verbatim\"><br></br>dfs_order = []<br></br><br></br>function dfs(v):<br></br> if v is leaf:<br></br> append v to the back of dfs_order<br></br> else:<br></br> dfs(left child of v)<br></br> dfs(right child of v)<br></br><br></br>dfs(root)<br></br>\n```\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 2\\cdot 10^5 $ ) — the size of array $ a $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le n - 1 $ ) — the distance from the root to the $ i $ -th leaf.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print \"YES\" if there exists a complete binary tree which satisfies array $ a $ and \"NO\" otherwise.\n\nYou may print each letter in any case (for example, \"YES\", \"Yes\", \"yes\", \"yEs\" will all be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n2\n5\n2 1 0 1 1\n5\n1 0 2 1 3\nOutput\nYES\nNO\n\nNote\nIn the first test case, the following tree satisfies the array.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1919D/2af3796cd4a2a9733f8a3c061e8120f70b3cbf6a.png)\n\nIn the second test case, it can be proven that there is no complete binary tree that satisfies the array."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What does the distance of two leaves that share the same parent look like?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "What happens if we delete two leaves that share the same parent?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Consider two leaves that share the same parent. They will be adjacent to each other in the dfs order, so their distances will be adjacent in array $$$a$$$. Furthermore, their distances to the root will differ by exactly $$$1$$$ since one of the edges from the parent to its children will have weight $$$0$$$ while the other will have weight $$$1$$$.\nIf we delete two leaves that share the same parent, the parent itself will become the leaf. Since one of the edges from the parent to the child has weight $$$0$$$, the distance from the parent to the root is equal to the smaller distance between its two children. This means that deleting two leaves that share the same parent is the same as selecting an index $$$i$$$ such that $$$a_i = a_{i - 1} + 1$$$ or $$$a_i = a_{i + 1} + 1$$$, then removing $$$a_i$$$ from array $$$a$$$.\nConsider the largest value in $$$a$$$. If it is possible to delete it (meaning there is a value that is exactly one smaller than it to its left or right), we can delete it immediately. This is because keeping the largest value will not help to enable future operations as it can only help to delete elements that are $$$1$$$ greater than it, which is not possible for the largest value.\nNow, all we have to do is to maintain all elements that can be deleted and choose the element with the largest value each time. Then, whenever we delete an element, we need to check whether the two adjacent elements become deletable and update accordingly. We can do this using a priority_queue and a linked list in $$$O(n\\log n)$$$. Note that many other implementations exist, including several $$$O(n)$$$ solutions."
+        }
+    ]
+}

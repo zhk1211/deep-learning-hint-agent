@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlice and Bob are playing a game in which Alice has given Bob a positive integer $x\\le10^8$.\n\nTo win the game, Bob has to find another positive integer $y\\le10^9$ such that $x \\operatorname{\\#} y$ is divisible by $x + y$.\n\nHere $x\\operatorname{\\#}y$ denotes the integer formed by concatenating the integers $x$ and $y$ in that order. For example, if $x = 835$, $y = 47$, then $x \\operatorname{\\#} y = 83\\,547$.\n\nHowever, since Bob is dumb, he is unable to find such an integer. Please help him.\n\nIt can be shown that such an integer always exists.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe only line of each test case contains a single integer $x$ ($1 \\le x \\le 10^8$) — the integer that Alice has given to Bob.\n\nOutput Format\nFor each test case, print a single integer $y$ ($1 \\le y \\le 10^9$) so that Bob can win the game.\n\nIf there are multiple answers, print any one of them.\n\nExamples\nSample 1\nInput\n6\n8\n42\n1000\n66666\n106344\n9876543\nOutput\n1\n12\n998\n7872\n8190\n174036\n\nNote\nFor the first test case, $x = 8$, we can choose $y = 1$, and we have $x \\operatorname{\\#} y = 81$, which is divisible by $x + y = 9$.\n\nFor the second test case, $x = 42$, we can choose $y = 12$, and we have $x \\operatorname{\\#} y = 4212$, which is divisible by $x + y = 54$."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "2140B - Another Divisibility Problem\nLet's assume that the number $$$y$$$ has $$$d ( \\gt 0)$$$ digits.\nNow we try to express the number $$$x \\# y$$$ in an algebraic form.\n$$$x \\# y = x\\cdot10^d + y = x\\cdot(10^d - 1) + (x + y)$$$.\nFor $$$x \\# y$$$ to be divisible by $$$x + y$$$, we have that $$$x + y$$$ must be a factor of $$$x\\cdot(10^d - 1)$$$.\nNow that we know $$$d  \\gt  0$$$, we can surely say that the number $$$3 \\cdot x$$$ is a factor of $$$x\\cdot(10^d - 1)$$$. Thus, if we make $$$x + y = 3 \\cdot x$$$, the condition is satisfied.\nSo, we can just choose $$$y$$$ to be equal to $$$2 \\cdot x$$$.\nTime Complexity: $$$O(1)$$$ per testcase."
+        }
+    ]
+}

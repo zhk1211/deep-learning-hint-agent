@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMonocarp has $ n $ identical boxes. The weight of each box is $ m $ , and the durability of each box is $ d $ .\n\nTo save space, Monocarp wants to build several \"towers\" of boxes by stacking them on top of each other. Each tower will consist of a positive (greater than $ 0 $ ) integer number of boxes stacked on top of each other. To ensure that no box breaks, the following condition must be met:\n\n- for each box, the total weight of all boxes above it must not exceed the durability of that box.\n\nHelp Monocarp calculate the minimum number of towers he can achieve, given that each of the $ n $ boxes must be used.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nEach test case consists of a single line containing three integers $ n, m, d $ ( $ 1 \\le n, m, d \\le 50 $ ).\n\nOutput Format\nFor each test case, print one integer — the minimum number of towers.\n\nExamples\nSample 1\nInput\n3\n8 10 20\n8 1 20\n5 3 2\nOutput\n3\n1\n5\n\nNote\nIn the first example, it is possible to build three towers consisting of $ 3 $ , $ 2 $ , and $ 3 $ boxes, respectively.\n\nIn the second example, all boxes are durable enough to build one tower of $ 8 $ boxes.\n\nIn the third example, the weight of the box exceeds its durability, so they cannot be stacked on top of each other. As a result, $ 5 $ separate towers will have to be built."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2203A - Towers of Boxes\nThe main idea of this problem is to calculate how many boxes can be in one tower. Suppose we want to build a tower of $$$k$$$ boxes; then if we consider the very bottom box, there will be $$$k-1$$$ boxes on top of it, and their total weight is $$$m(k-1)$$$. This means that the constraint $$$d \\ge m(k-1)$$$ must hold, and then the maximum possible $$$k$$$ is equal to $$$\\lfloor \\frac{d}{m} \\rfloor + 1$$$. If there should be no more than $$$k$$$ boxes in the tower, then the minimum number of towers is $$$\\lceil \\frac{n}{k} \\rceil$$$.\nWhen it is necessary to compute a quotient with rounding down or up, it is not recommended to use floating-point numbers and functions like\nceil\n, as this can cause precision issues. For integer division with rounding down, all programming languages have standard operators; if rounding up is needed, you can use the relation $$$\\lceil \\frac{x}{y} \\rceil = \\lfloor \\frac{x+y-1}{y} \\rfloor$$$."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\nn\n,\nm\n,\nd\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nk\n=\n1\n+\nd\n// m\nprint\n((\nn\n+\nk\n-\n1\n)\n// k)"
+        }
+    ]
+}

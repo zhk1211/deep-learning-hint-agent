@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nUmi is given an array $$$a$$$ of length $$$n$$$, whose elements are integers between $$$1$$$ and $$$m$$$. She loves coprime integers and wants to find four distinct indices $$$p, q, r, s$$$ ($$$1 \\\\le p, q, r, s \\\\le n$$$), such that $$$\\\\gcd(a\\_p, a\\_q) = 1$$$ and $$$\\\\gcd(a\\_r, a\\_s) = 1$$$ $$$^{\\\\text{∗}}$$$.\n\nIf there are multiple solutions, you may output any one of them.\n\n$$$^{\\\\text{∗}}$$$ $$$\\\\gcd(x, y)$$$ denotes the [greatest common divisor (GCD)](https://en.wikipedia.org/wiki/Greatest_common_divisor) of integers $$$x$$$ and $$$y$$$.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\\\le t \\\\le 10^4$$$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $$$n$$$ and $$$m$$$ ($$$4 \\\\le n \\\\le 2 \\\\cdot 10^5, 1 \\\\le m \\\\le 10^6$$$).\n\nThe second line of each test case contains $$$n$$$ integers $$$a\\_1, a\\_2, \\\\dots, a\\_n$$$ ($$$1 \\\\le a\\_i \\\\le m$$$).\n\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$2 \\\\cdot 10^5$$$, and that the sum of $$$m$$$ over all test cases does not exceed $$$10^6$$$.\n\nOutput Format\nFor each test case:\n\n- If no such set of four distinct indices exists, output one integer $$$0$$$.\n- Otherwise, output four distinct integers $$$p, q, r, s$$$ ($$$1 \\\\le p, q, r, s \\\\le n$$$) that satisfy the condition. If there are multiple solutions, output any one of them.\n\nExamples\nSample 1\nInput\n5\n4 15\n4 7 9 15\n4 10\n1 2 4 8\n5 15\n6 10 11 12 15\n5 15\n6 10 11 14 15\n6 10000\n30 238 627 1001 1495 7429\nOutput\n1 3 2 4\n0\n0\n3 1 4 5\n1 4 2 3\n\nNote\nIn the first test case, $$$\\\\gcd(a\\_1, a\\_3) = \\\\gcd(4, 9) = 1$$$, $$$\\\\gcd(a\\_2, a\\_4) = \\\\gcd(7, 15) = 1$$$.\n\nIn the second test case, it can be shown that no such quadruple exists."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Let's consider an easier problem: how do we find one coprime pair from $$$a$$$?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Let's build a graph $$$G$$$ where vertex $$$i$$$ and $$$j$$$ has an undirected edge if and only if $$$\\gcd(a_i, a_j) = 1$$$. The problem becomes finding a match of size $$$2$$$ in the graph. However, we only has each vertex's degrees based on the discussion above. How do we find the match only based on degrees?"
+        }
+    ],
+    "solutions": []
+}

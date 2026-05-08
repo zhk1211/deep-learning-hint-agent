@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA string $ t $ is said to be $ k $ -good if there exists at least one substring $ ^\\dagger $ of length $ k $ which is not a palindrome $ ^\\ddagger $ . Let $ f(t) $ denote the sum of all values of $ k $ such that the string $ t $ is $ k $ -good.\n\nYou are given a string $ s $ of length $ n $ . You will have to answer $ q $ of the following queries:\n\n- Given $ l $ and $ r $ ( $ l < r $ ), find the value of $ f(s_ls_{l + 1}\\ldots s_r) $ .\n\n$ ^\\dagger $ A substring of a string $ z $ is a contiguous segment of characters from $ z $ . For example, \" $ \\mathtt{defor} $ \", \" $ \\mathtt{code} $ \" and \" $ \\mathtt{o} $ \" are all substrings of \" $ \\mathtt{codeforces} $ \" while \" $ \\mathtt{codes} $ \" and \" $ \\mathtt{aaa} $ \" are not.\n\n$ ^\\ddagger $ A palindrome is a string that reads the same backwards as forwards. For example, the strings \" $ \\texttt{z} $ \", \" $ \\texttt{aa} $ \" and \" $ \\texttt{tacocat} $ \" are palindromes while \" $ \\texttt{codeforces} $ \" and \" $ \\texttt{ab} $ \" are not.\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 2 \\cdot 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ q $ ( $ 2 \\le n \\le 2 \\cdot 10^5, 1 \\le q \\le 2 \\cdot 10^5 $ ), the size of the string and the number of queries respectively.\n\nThe second line of each test case contains the string $ s $ . It is guaranteed the string $ s $ only contains lowercase English characters.\n\nThe next $ q $ lines each contain two integers, $ l $ and $ r $ ( $ 1 \\le l < r \\le n $ ).\n\nIt is guaranteed the sum of $ n $ and the sum of $ q $ both do not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each query, output $ f(s_ls_{l + 1}\\ldots s_r) $ .\n\nExamples\nSample 1\nInput\n5\n4 4\naaab\n1 4\n1 3\n3 4\n2 4\n3 2\nabc\n1 3\n1 2\n5 4\npqpcc\n1 5\n4 5\n1 3\n2 4\n2 1\naa\n1 2\n12 1\nsteponnopets\n1 12\nOutput\n9\n0\n2\n5\n5\n2\n14\n0\n2\n5\n0\n65\n\nNote\nIn the first query of the first test case, the string is $ \\mathtt{aaab} $ . $ \\mathtt{aaab} $ , $ \\mathtt{aab} $ and $ \\mathtt{ab} $ are all substrings that are not palindromes, and they have lengths $ 4 $ , $ 3 $ and $ 2 $ respectively. Thus, the string is $ 2 $ -good, $ 3 $ -good and $ 4 $ -good. Hence, $ f(\\mathtt{aaab}) = 2 + 3 + 4 = 9 $ .\n\nIn the second query of the first test case, the string is $ \\mathtt{aaa} $ . There are no non-palindromic substrings. Hence, $ f(\\mathtt{aaa}) = 0 $ .\n\nIn the first query of the second test case, the string is $ \\mathtt{abc} $ . $ \\mathtt{ab} $ , $ \\mathtt{bc} $ and $ \\mathtt{abc} $ are all substrings that are not palindromes, and they have lengths $ 2 $ , $ 2 $ and $ 3 $ respectively. Thus, the string is $ 2 $ -good and $ 3 $ -good. Hence, $ f(\\mathtt{abc}) = 2 + 3 = 5 $ . Note that even though there are $ 2 $ non-palindromic substrings of length $ 2 $ , we count it only once."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "When is a string not $$$k$$$-good? (Ignore the trivial edge cases of $$$k = 1$$$ and $$$k = n$$$)."
+        },
+        {
+            "title": "Hint 2",
+            "content": "What happens when $$$s[i....j]$$$ and $$$s[i + 1....j + 1]$$$ are both palindromes?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "We first try to find the answer for a string\nLet $$$k = j - i + 1$$$, $$$s[i....j]$$$ -> I and $$$s[i + 1...j + 1]$$$ -> II are both palindromes.\nThen $$$s_i = s_j$$$ (due to I)\n$$$s_j = s_{i + 2}$$$ (due to II)\n$$$s_{i + 2} = s_{j - 2}$$$ (due to I)\n$$$s_{j - 2} = s_{i + 4}$$$ (due to II)\nand so on.... you can see that it forces $$$s_i = s_{i + 2} = s_{i + 4} = ....$$$. A similiar reasoning gives you $$$s_{i + 1} = s_{i + 3} = s_{i + 5}$$$.\nFurther, if $$$k$$$ is even, $$$i$$$ and $$$j$$$ have different parities, but $$$s_i = s_j$$$ implies that all characters must be equal actually.\nWe mentioned that the edge cases are $$$1$$$ and $$$n$$$, but why exactly? How does the analysis fail for them?(Left as a exercise)\nSo, the condition for a string to be $$$k$$$-good can be written as follows : $$$k = 1$$$ : never possible\n$$$1 \\lt k \\lt n$$$, odd : not an alternating string\n$$$1 \\lt k \\lt n$$$, even : not all characters same\n$$$k = n$$$ : non-palindromic string\nNow onto substring queries. The second and third things are easy to handle, you can store the next position where $$$s_i \\ne s_{i + 2}$$$ and $$$s_i \\ne s_{i + 1}$$$ respectively. Checking if a substring is a palindrome is standard with various methods such as string hashing or manacher's algorithm."
+        }
+    ]
+}

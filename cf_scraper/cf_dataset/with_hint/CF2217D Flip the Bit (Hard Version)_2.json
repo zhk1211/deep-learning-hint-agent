@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the hard version of the problem. The difference between the versions is that in this version, there can be multiple special indices ( $ 1 \\le k \\le n $ ). You can hack only if you solved all versions of this problem.\n\nYou are given a binary array $ a $ of length $ n $ and $ k $ special indices $ p_1, p_2, \\ldots, p_k $ ( $ 1 \\le p_i \\le n $ ). It is given that the values $ a_i $ of all elements at special indices are the same (i. e., $ a_{p_1} = a_{p_2} = \\ldots = a_{p_k} $ ).\n\nIn one operation, you can choose a range $ [l, r] $ ( $ 1 \\le l \\le r \\le n $ ) such that the range contains at least one special index ( $ l \\le p_i \\le r $ ) and flip all bits $ a_j $ for $ l \\le j \\le r $ . Flipping a bit changes $ 0 $ to $ 1 $ and $ 1 $ to $ 0 $ .\n\nLet $ x $ denote the value at special indices before any operations are applied. Find the minimum number of operations required to make all elements of the array equal to $ x $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 2 \\cdot 10^5 $ ) — the length of the array and the number of special indices.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le 1 $ ) — the elements of the array.\n\nThe third line contains $ k $ integers $ p_1, p_2, \\ldots, p_k $ ( $ 1 \\le p_1 \\lt p_2 \\lt \\ldots \\lt p_k \\le n $ ) — the special indices. It is guaranteed that $ a_{p_1} = a_{p_2} = \\ldots = a_{p_k} $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum number of operations required.\n\nExamples\nSample 1\nInput\n6\n2 1\n1 0\n1\n3 2\n0 1 0\n1 3\n5 5\n1 1 1 1 1\n1 2 3 4 5\n9 5\n0 1 0 0 1 0 0 1 0\n3 4 6 7 9\n13 4\n1 0 0 1 0 1 0 1 1 0 1 0 1\n4 8 11 13\n15 3\n1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n3 11 13\nOutput\n2\n2\n0\n3\n5\n8\n\nNote\nFor the first test case, you can choose the range $ [1, 2] $ and flip both the bits to get $ [0, 1] $ . Then you can choose the range $ [1, 1] $ and flip the first bit to get $ [1, 1] $ .\n\nFor the second test case, you can choose the range $ [1, 2] $ and flip the bits to get $ [1, 0, 0] $ . Then you can choose the range $ [1, 1] $ and flip the first bit to get $ [0, 0, 0] $ .\n\nFor the fourth test case, you can choose the range $ [2, 8] $ and flip the bits to get $ [0, 0, 1, 1, 0, 1, 1, 0, 0] $ . Then you can choose the range $ [3, 4] $ and flip the bits to get $ [0, 0, 0, 0, 0, 1, 1, 0, 0] $ . Then you can choose the range $ [6, 7] $ and flip the bits to get $ [0, 0, 0, 0, 0, 0, 0, 0, 0] $ . Note that, while there can be other ways to achieve this, it can be proved that the minimum number of operations is $ 3 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Similar to the easy version, think in terms of the boundaries where adjacent values differ. But now, the special indices divide the array into multiple regions."
+        },
+        {
+            "title": "Hint 2",
+            "content": "You want to maximize how many times you can pair two boundaries from different regions (removing two in one operation). When is this always possible?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Let $$$S$$$ be the total number of boundaries and $$$X$$$ the maximum number in any region. When does one region have too many boundaries compared to the rest?"
+        },
+        {
+            "title": "Hint 4",
+            "content": "If one region dominates (has more than half the total boundaries), some boundaries are forced to be removed individually. Otherwise, all boundaries can be paired."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Similar to the easy version, construct a padded binary array $$$b$$$ where $$$b_i = 1$$$ if $$$a_i$$$ matches the target value, else $$$0$$$. A boundary exists at $$$j$$$ if $$$b_j \\neq b_{j+1}$$$. Flipping $$$[l, r]$$$ toggles boundaries at $$$l-1$$$ and $$$r$$$.\nThe constraint that $$$[l, r]$$$ must contain at least one pivot $$$p_i$$$ means we can only pair two boundaries in a single operation if they are separated by at least one pivot.\nThe $$$k$$$ pivots divide the boundaries into $$$k + 1$$$ independent regions:\nRegion 1: $$$[0, p_1 - 1]$$$\nRegion $$$i$$$: $$$[p_{i-1}, p_i - 1]$$$ for $$$2 \\le i \\le k$$$\nRegion $$$k+1$$$: $$$[p_k, n]$$$\nLet $$$S$$$ be the total number of boundaries across all regions, and $$$X$$$ be the maximum number of boundaries in any single region.\nWe want to maximize pairing boundaries across different regions (which removes 2 boundaries for 1 operation). Removing a boundary stuck in its own region costs 1 operation per boundary.\nCase 1 ($$$X \\le S/2$$$):\nNo region dominates. We can optimally pair every boundary with one from a different region. Total operations: $$$S / 2$$$.\nCase 2 ($$$X  \\gt  S/2$$$):\nOne region has more boundaries than the rest combined. We pair all $$$S - X$$$ \"outsider\" boundaries with boundaries from the majority region. The remaining $$$X - (S - X) = 2X - S$$$ boundaries in the majority region must be resolved individually.          Total operations: $$$(S - X) + (2X - S) = X$$$.\nCombining these conditions gives the minimum number of operations:\n$$$ \\max(S / 2, X) $$$\nTime complexity:\n$$$O(n)$$$"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a ribbon divided into $ n $ cells, numbered from $ 1 $ to $ n $ from left to right. Each cell either contains a chip or is free.\n\nYou can perform the following operation any number of times (possibly zero): choose a chip and move it to the closest free cell to the left. You can choose any chip that you want, provided that there is at least one free cell to the left of it. When you move the chip, the cell where it was before the operation becomes free.\n\nYour goal is to move the chips in such a way that they form a single block, without any free cells between them. What is the minimum number of operations you have to perform?\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nEach test case consists of two lines:\n\n- the first line contains one integer $ n $ ( $ 2 \\le n \\le 50 $ ) — the number of cells;\n- the second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i \\le 1 $ ); $ a_i = 0 $ means that the $ i $ -th cell is free; $ a_i = 1 $ means that the $ i $ -th cell contains a chip.\n\nAdditional constraint on the input: in each test case, at least one cell contains a chip.\n\nOutput Format\nFor each test case, print one integer — the minimum number of operations you have to perform so that all chips form a single block without any free cells between them.\n\nExamples\nSample 1\nInput\n5\n8\n0 1 1 1 0 1 1 0\n6\n0 1 0 0 0 0\n6\n1 1 1 1 1 1\n5\n1 0 1 0 1\n9\n0 1 1 0 0 0 1 1 0\nOutput\n1\n0\n0\n2\n3\n\nNote\nIn the first example, you can perform the operation on the chip in the $ 7 $ -th cell. The closest free cell to the left is the $ 5 $ -th cell, so it moves there. After that, all chips form a single block.\n\nIn the second example, all chips are already in a single block. Same for the third example."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1923A - Moving Chips\nDenote the position of the leftmost chip as $$$l$$$, the position of the rightmost chip as $$$r$$$, and the number of chips as $$$c$$$.\nHaving all chips in one block without free spaces means that we need to reach the situation when $$$r - l = c - 1$$$. Since $$$r - l \\ge c - 1$$$ is always met (the situation when $$$r-l = c-1$$$ is when the chips are packed as close as possible), we need to decrease the value of $$$r-l$$$ as fast as possible.\nThere are two approaches to do it. One is to try decreasing $$$r$$$ every time; i. e. let's code a greedy solution that always applies an operation to the current rightmost chip. This is actually one of the correct solutions to the problem.\nBut if we prove it, we can design an easier solution. Whenever we apply an operation on any chip other than the rightmost chip, the value of $$$r-l$$$ does not decrease (we either don't change $$$l$$$ and $$$r$$$ at all, or decrease $$$l$$$). But whenever we apply an operation on the rightmost chip, $$$r$$$ decreases by exactly $$$1$$$ (the new rightmost chip will be in position $$$r-1$$$ — either it is present there before the operation, or it will be moved there from $$$r$$$). So, only applying the operations to the rightmost chip decreases $$$r-l$$$, and it always decreases $$$r-l$$$ by exactly $$$1$$$ no matter what. So, the answer to the problem is actually $$$(r-l) - (c-1)$$$."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\nn\n=\nint\n(\ninput\n())\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nl\n,\nr\n=\na\n.\nindex\n(\n1\n),\nn\n-\na\n[::-\n1\n].\nindex\n(\n1\n)\n-\n1\nc\n=\na\n.\ncount\n(\n1\n)\nprint\n(\nr\n-\nl\n-\nc\n+\n1\n)"
+        }
+    ]
+}

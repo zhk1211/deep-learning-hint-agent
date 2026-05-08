@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ consisting of lowercase Latin characters. Count the number of nonempty strings $ t \\neq $ \" $ \\texttt{a} $ \" such that it is possible to partition $ ^{\\dagger} $ $ s $ into some substrings satisfying the following conditions:\n\n- each substring either equals $ t $ or \" $ \\texttt{a} $ \", and\n- at least one substring equals $ t $ .\n\n$ ^{\\dagger} $ A partition of a string $ s $ is an ordered sequence of some $ k $ strings $ t_1, t_2, \\ldots, t_k $ (called substrings) such that $ t_1 + t_2 + \\ldots + t_k = s $ , where $ + $ represents the concatenation operation.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases.\n\nThe only line of each test case contains a string $ s $ consisting of lowercase Latin characters ( $ 2 \\leq |s| \\leq 2 \\cdot 10^5 $ ).\n\nThe sum of $ |s| $ over all test cases does not exceed $ 3 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of nonempty strings $ t \\neq $ \" $ \\texttt{a} $ \" that satisfy all constraints.\n\nExamples\nSample 1\nInput\n8\naaaaa\nbaba\ncabacb\naaabaaa\nbitset\nab\nabbaaaabbb\nyearnineteeneightyfour\nOutput\n4\n4\n1\n16\n1\n2\n3\n1\n\nNote\nIn the first test case, $ t $ can be \" $ \\texttt{aa} $ \", \" $ \\texttt{aaa} $ \", \" $ \\texttt{aaaa} $ \", or the full string.\n\nIn the second test case, $ t $ can be \" $ \\texttt{b} $ \", \" $ \\texttt{bab} $ \", \" $ \\texttt{ba} $ \", or the full string.\n\nIn the third test case, the only such $ t $ is the full string."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What does $$$t$$$ have to include?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Special case: the string consists of only \"$$$\\texttt{a}$$$\", then answer is $$$n - 1$$$.\nOtherwise, $$$t$$$ has to contain a character that is not \"$$$\\texttt{a}$$$\". Let's consider one approach of counting. Let's force all $$$t$$$ to start with the first non-a character, and see how many work.\nTo see if one of these strings $$$t$$$ will work, we can start with $$$i = 0$$$. As long as $$$i$$$ does not point to the end of the string, we can find the next non-a character in $$$s$$$, and then see if the next $$$|t|$$$ characters in $$$s$$$ matches $$$t$$$. The last check mentioned can be done through hashing or using the Z-function. If it doesn't, this value of $$$t$$$ doesn't work. Otherwise, we update $$$i$$$ to the new current position and continue checking.\nNow, if we find a string $$$t$$$ that does work, we need to count its contribution to the answer. We can just add $$$1$$$, but obviously not all working $$$t$$$ will start with a non-a character. Instead, we can find the minimum unused \"$$$\\texttt{a}$$$\"s before all of the substrings equal to $$$t$$$ (call this $$$m$$$), and the current $$$t$$$ will be able to extend out up to $$$m$$$ \"$$$\\texttt{a}$$$\"s at the beginning of the string. Thus, the contribution is $$$m + 1$$$ to the answer.\nHow fast is this? Because we are checking at most one string $$$t$$$ of each length, and the check itself can be made to take $$$O(\\frac{n}{|t|})$$$, we have a total time complexity of $$$O(n\\log{n})$$$ due to harmonic sums."
+        }
+    ]
+}

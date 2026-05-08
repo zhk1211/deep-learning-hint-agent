@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou received an $ n\\times m $ grid from a mysterious source. The source also gave you a magic positive integer constant $ k $ .\n\nThe source told you to color the grid with some colors, satisfying the following condition:\n\n- If $ (x_1,y_1) $ , $ (x_2,y_2) $ are two distinct cells with the same color, then $ \\max(|x_1-x_2|,|y_1-y_2|)\\ge k $ .\n\nYou don't like using too many colors. Please find the minimum number of colors needed to color the grid.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1\\le t\\le1000 $ ). The description of the test cases follows.\n\nThe only line of each test case consists of three positive integers $ n $ , $ m $ , $ k $ ( $ 1\\le n,m,k\\le10^4 $ ) — the dimensions of the grid and the magic constant.\n\nOutput Format\nFor each test case, print a single integer — the minimum number of colors needed to color the grid.\n\nExamples\nSample 1\nInput\n6\n3 3 2\n5 1 10000\n7 3 4\n3 2 7\n8 9 6\n2 5 4\nOutput\n4\n5\n12\n6\n36\n8\n\nNote\nIn the first test case, one of the optimal constructions is:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2002A/9ce95b69207ca02098572c656648bb834e503b1e.png)In the second test case, the color of all cells must be pairwise different, so the answer is $ 5 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider the case with $$$n=m=k$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Generalize the solution for all $$$n,m,k$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "It can be shown that for any $$$k\\times k$$$ subgrid, the colors we use must be pairwise distinct. Thus, we have an lower bound of $$$\\min(n,k)\\cdot\\min(m,k)$$$. We can show that this lower bound is indeed achievable by coloring the upper-left $$$\\min(n,k)\\cdot\\min(m,k)$$$ subgrid with distinct colors, and copy-pasting it to fill the rest of the grid.\nTime complexity: $$$O(1)$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nt\n,\nn\n,\nm\n,\nk\n;\nint\nmain\n()\n{\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nwhile\n(\nt\n--)\n{\nscanf\n(\n\"%d%d%d\"\n,\n&\nn\n,\n&\nm\n,\n&\nk\n);\nprintf\n(\n\"%d\\n\"\n,\nmin\n(\nn\n,\nk\n)*\nmin\n(\nm\n,\nk\n));\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

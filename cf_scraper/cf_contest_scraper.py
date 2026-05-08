@@ -15,6 +15,23 @@ WITHOUT_HINT_DIR = os.path.join(SAVE_DIR, "without_hint")
 LUOGU_BASE_URL = "https://www.luogu.com.cn/problem"
 
 
+def launch_browser_offscreen(p):
+	"""
+	启动可见 Chromium，但把窗口放到屏幕外，避免在 macOS 上反复闪烁。
+
+	说明：
+	- 不使用 headless=True，因为 Codeforces/Cloudflare 对 headless 更敏感；
+	- 不使用 AppleScript 反复 hide，因为会导致窗口闪来闪去；
+	- 用 --window-position 把窗口创建到屏幕外。
+	"""
+	return p.chromium.launch(
+		headless=False,
+		args=[
+			"--window-position=-32000,-32000",
+			"--window-size=800,600",
+			"--disable-features=CalculateNativeWinOcclusion",
+		],
+	)
 
 def polite_sleep(min_seconds=6, max_seconds=15, reason=""):
 	wait_time = random.uniform(min_seconds, max_seconds)
@@ -617,6 +634,7 @@ def build_output_json(statement_info, editorial_content):
 
 
 def make_unique_filename(save_dir, base_name):
+	os.makedirs(save_dir, exist_ok=True)
 	path = os.path.join(save_dir, base_name)
 
 	if not os.path.exists(path):
@@ -667,7 +685,7 @@ def process_contest(contest_url, processed_tutorial_urls):
 	每个 contest 单独启动 browser/new_context。
 	"""
 	with sync_playwright() as p:
-		browser = p.chromium.launch(headless=False)
+		browser = launch_browser_offscreen(p)
 		context = browser.new_context()
 
 		context.route("**/*mathjax*", lambda route: route.abort())
@@ -784,7 +802,7 @@ def process_contest(contest_url, processed_tutorial_urls):
 if __name__ == "__main__":
 	contests_to_scrape = [
 		f"https://codeforces.com/contest/{i}"
-		for i in range(2222, 999, -1)
+		for i in range(1895, 999, -1)
 	]
 
 	processed_tutorial_urls = set()

@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1910E - Maximum Sum Subarrays\nThere are greedy and dynamic programming solutions. We will describe the dynamic programming solution.\nThe main task is to choose two segments (one for the first array and one for the second) the sum of which is maximum, while we can swap $$$a_i$$$ and $$$b_i$$$. We can use dynamic programming $$$dp_{i, f1, f2}$$$, where $$$i$$$ is the number of positions that have already been considered (from $$$0$$$ to $$$n$$$), $$$f1$$$ ($$$f2$$$) is the flag showing the current state (whether we are before the chosen segment, inside the segment, or after the segment) for the first (second) array. Transitions in such dynamic programming are quite simple: we have a choice to take $$$a_i$$$ for the first array and $$$b_i$$$ for the second or vice versa; we can also change the state of any flag (note that you can only switch from the current state to the subsequent ones, i.e., for example, you cannot switch from the state \"the segment has already ended\" to the state \"inside the segment\"). If the current state of the flag is \"inside the segment\", then the corresponding value should be added to the dynamic programming value itself.\nYou can also simplify the implementation quite a bit by, for example, making sure that $$$a_i \\ge b_i$$$ since they can be swapped (that way, whenever the current index belongs to exactly one of two chosen segments, you always know which element to take).\nSo, we got a solution in $$$O(n)$$$."
+        },
+        {
+            "title": "Solution 1 (Neon)",
+            "content": "fun main\n()\n=\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval n\n=\nreadLine\n()!!.\ntoInt\n()\nval a\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoLong\n()\n}\nval b\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoLong\n()\n}\nval dp\n=\nArray\n(\n3\n)\n{\nLongArray\n(\n3\n)\n{\n0\n}\n}\nfor\n((\nx\n,\ny\n)\nin\na zip b\n)\n{\nfor\n(\ni\nin\n0.\n.\n2\n)\nfor\n(\nj\nin\n0.\n.\n2\n)\n{\ndp\n[\ni\n][\nj\n]\n+=\nmaxOf\n(\n(\nif\n(\ni\n==\n1\n)\nx\nelse\n0\n)\n+\n(\nif\n(\nj\n==\n1\n)\ny\nelse\n0\n),\n(\nif\n(\ni\n==\n1\n)\ny\nelse\n0\n)\n+\n(\nif\n(\nj\n==\n1\n)\nx\nelse\n0\n)\n);\n}\nfor\n(\ni\nin\n0.\n.\n2\n)\nfor\n(\nj\nin\n0.\n.\n2\n)\n{\nif\n(\ni\n<\n2\n)\ndp\n[\ni\n+\n1\n][\nj\n]\n=\nmaxOf\n(\ndp\n[\ni\n+\n1\n][\nj\n],\ndp\n[\ni\n][\nj\n]);\nif\n(\nj\n<\n2\n)\ndp\n[\ni\n][\nj\n+\n1\n]\n=\nmaxOf\n(\ndp\n[\ni\n][\nj\n+\n1\n],\ndp\n[\ni\n][\nj\n]);\n}\n}\nprintln\n(\ndp\n[\n2\n][\n2\n]);\n}"
+        },
+        {
+            "title": "Solution 2 (PavelKunyavskiy)",
+            "content": "fun best\n(\na\n:\nList\n<\nInt\n>,\nk\n:\nInt\n):\nLong\n{\nval r\n=\nLongArray\n(\n4\n)\nvar\nsum\n=\n0L\nfor\n(\nv\nin\na\n)\n{\nsum\n+=\nv\n        r\n[\n0\n]\n=\nmaxOf\n(\nr\n[\n0\n],\n-\nsum\n)\nr\n[\n1\n]\n=\nmaxOf\n(\nr\n[\n1\n],\nr\n[\n0\n]\n+\nsum\n)\nr\n[\n2\n]\n=\nmaxOf\n(\nr\n[\n2\n],\nr\n[\n1\n]\n-\nsum\n)\nr\n[\n3\n]\n=\nmaxOf\n(\nr\n[\n3\n],\nr\n[\n2\n]\n+\nsum\n)\n}\nreturn\nr\n[\n2\n*\nk\n-\n1\n]\n}\nfun main\n()\n{\nrepeat\n(\nreadInt\n())\n{\nreadInt\n()\nval a\n=\nreadInts\n()\nval b\n=\nreadInts\n()\nval mins\n=\na\n.\nzip\n(\nb\n).\nmap\n{\nminOf\n(\nit\n.\nfirst\n,\nit\n.\nsecond\n)\n}\nval maxs\n=\na\n.\nzip\n(\nb\n).\nmap\n{\nmaxOf\n(\nit\n.\nfirst\n,\nit\n.\nsecond\n)\n}\nprintln\n(\nmaxOf\n(\nbest\n(\nmins\n,\n1\n)\n+\nbest\n(\nmaxs\n,\n1\n),\nbest\n(\nmaxs\n,\n2\n)))\n}\n}\nprivate\nfun readInt\n()\n=\nreadln\n().\ntoInt\n()\nprivate\nfun readLongs\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoLong\n()\n}\nprivate\nfun readStrings\n()\n=\nreadln\n().\nsplit\n(\n\" \"\n)\nprivate\nfun readInts\n()\n=\nreadStrings\n().\nmap\n{\nit\n.\ntoInt\n()\n}"
+        }
+    ]
+}

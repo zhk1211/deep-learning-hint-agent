@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the easy version of the problem. In this version $ l=r $ .\n\nYou are given a string $ s $ . For a fixed $ k $ , consider a division of $ s $ into exactly $ k $ continuous substrings $ w_1,\\dots,w_k $ . Let $ f_k $ be the maximal possible $ LCP(w_1,\\dots,w_k) $ among all divisions.\n\n$ LCP(w_1,\\dots,w_m) $ is the length of the Longest Common Prefix of the strings $ w_1,\\dots,w_m $ .\n\nFor example, if $ s=abababcab $ and $ k=4 $ , a possible division is $ \\color{red}{ab}\\color{blue}{ab}\\color{orange}{abc}\\color{green}{ab} $ . The $ LCP(\\color{red}{ab},\\color{blue}{ab},\\color{orange}{abc},\\color{green}{ab}) $ is $ 2 $ , since $ ab $ is the Longest Common Prefix of those four strings. Note that each substring consists of a continuous segment of characters and each character belongs to exactly one substring.\n\nYour task is to find $ f_l,f_{l+1},\\dots,f_r $ . In this version $ l=r $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ , $ l $ , $ r $ ( $ 1 \\le l = r \\le n \\le 2 \\cdot 10^5 $ ) — the length of the string and the given range.\n\nThe second line of each test case contains string $ s $ of length $ n $ , all characters are lowercase English letters.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output $ r-l+1 $ values: $ f_l,\\dots,f_r $ .\n\nExamples\nSample 1\nInput\n7\n3 3 3\naba\n3 3 3\naaa\n7 2 2\nabacaba\n9 4 4\nabababcab\n10 1 1\ncodeforces\n9 3 3\nabafababa\n5 3 3\nzpozp\nOutput\n0\n1\n3\n2\n10\n2\n0\n\nNote\nIn the first sample $ n=k $ , so the only division of $ aba $ is $ \\color{red}a\\color{blue}b\\color{orange}a $ . The answer is zero, because those strings do not have a common prefix.\n\nIn the second sample, the only division is $ \\color{red}a\\color{blue}a\\color{orange}a $ . Their longest common prefix is one."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Binary search."
+        },
+        {
+            "title": "Hint 2",
+            "content": "How to check if two strings are equal?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "1968G1 - Division + LCP (easy version)\nConsider $$$F_{\\ell}$$$ is a function which returns true iff it is possible to divide the string into at least $$$k$$$ segments with their LCP equal to $$$\\ell$$$. Notice that $$$F_{\\ell}$$$ implies $$$F_{\\ell - 1}$$$ for $$$\\ell  \\gt  0$$$. So we may find the maximal $$$\\ell$$$ using binary search, which will be the answer for the problem.\nHow to compute $$$F_{\\ell}$$$? Let us find Z-function $$$z_1,\\dots,z_n$$$ of the given string. Notice that in the division $$$w_1,\\dots,w_k$$$ we have $$$w_1$$$ as the prefix of the given string and all the strings have the common prefix with $$$w_1$$$ of length $$$\\ell$$$. Notice that $$$z_p$$$ gives us the longest common prefix with $$$w_1$$$ and a segment starting at $$$p$$$. So if $$$z_p\\geq \\ell$$$ we may take this segment into account. In such greedy approach we count the maximal number of segments we can divide our string into. If this number is at least $$$k$$$, then $$$F_{\\ell}$$$ is true.\nThe complexity is $$$O(n\\log n)$$$."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvector\n<int>\nZfunc\n(\nstring\n&\nstr\n){\nint\nn\n=\nstr\n.\nsize\n();\nvector\n<int>\nz\n(\nn\n);\nint\nl\n=\n0\n,\nr\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++){\nif\n(\ni\n<=\nr\n){\nz\n[\ni\n]=\nmin\n(\nr\n-\ni\n+\n1\n,\nz\n[\ni\n-\nl\n]);\n}\nwhile\n(\ni\n+\nz\n[\ni\n]<\nn\n&&\nstr\n[\nz\n[\ni\n]]==\nstr\n[\ni\n+\nz\n[\ni\n]]){\nz\n[\ni\n]++;\n}\nif\n(\ni\n+\nz\n[\ni\n]-\n1\n>\nr\n){\nl\n=\ni\n;\nr\n=\ni\n+\nz\n[\ni\n]-\n1\n;\n}\n}\nreturn\nz\n;\n}\nint\nf\n(\nvector\n<int>\n&\nz\n,\nint\nlen\n){\nint\nn\n=\nz\n.\nsize\n();\nint\ncnt\n=\n1\n;\nfor\n(\nint\ni\n=\nlen\n;\ni\n<\nn\n;){\nif\n(\nz\n[\ni\n]>=\nlen\n){\ncnt\n++;\ni\n+=\nlen\n;\n}\nelse\n{\ni\n++;\n}\n}\nreturn\ncnt\n;\n}\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nint\nn\n,\nk\n;\nstring\ns\n;\ncin\n>>\nn\n>>\nk\n>>\nk\n>>\ns\n;\nvector\n<int>\nz\n=\nZfunc\n(\ns\n);\nint\nl\n=\n0\n,\nr\n=\nn\n+\n1\n;\nwhile\n(\nr\n-\nl\n>\n1\n){\nint\nmid\n=(\nl\n+\nr\n)/\n2\n;\nif\n(\nf\n(\nz\n,\nmid\n)>=\nk\n){\nl\n=\nmid\n;\n}\nelse\n{\nr\n=\nmid\n;\n}\n}\ncout\n<<\nl\n<<\n\"\\n\"\n;\n}\n}"
+        }
+    ]
+}

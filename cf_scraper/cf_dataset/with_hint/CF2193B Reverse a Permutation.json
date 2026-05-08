@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA permutation of length $ n $ is an array consisting of $ n $ distinct integers from $ 1 $ to $ n $ in arbitrary order. For example, $ [2,3,1,5,4] $ is a permutation, but $ [1,2,2] $ and $ [1,3,4] $ are not permutations.\n\nYou are given a permutation $ p $ of length $ n $ . You can perform the following operation exactly once:\n\n- Choose two integers $ l, $ $ r $ ( $ 1\\le l\\le r\\le n $ ).\n- Reverse the segment $ [l, r] $ in the permutation $ p $ .\n\nYour task is to output the lexicographically maximum permutation that can be obtained by performing this operation. A permutation $ a $ is lexicographically greater than a permutation $ b $ if for the first position $ i $ where they differ, it holds that $ a_i\\gt b_i $ .\n\nInput Format\nEach test consists of several test cases. The first line contains a single integer $ t $ ( $ 1\\le t\\le 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains the number $ n $ ( $ 1\\le n\\le 2\\cdot 10^5 $ ).\n\nThe second line of each test case contains $ n $ distinct integers $ p_1, p_2,...,p_n $ $ (1\\le p_i\\le n) $ .\n\nIt is guaranteed that the sum of the values of $ n $ across all test cases does not exceed $ 2\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output the lexicographically maximum permutation that can be obtained with one operation.\n\nExamples\nSample 1\nInput\n4\n4\n3 2 1 4\n3\n3 1 2\n4\n4 3 2 1\n2\n2 1\nOutput\n4 1 2 3\n3 2 1\n4 3 2 1\n2 1\n\nNote\nFor the first test case, the best segment is $ [1, 4] $ . After reversing, $ a = [4, 1, 2, 3] $ . For the second test case, the best segment is $ [2, 3] $ . After reversing, $ a = [3, 2, 1] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nIn the optimal permutation, the first element is always equal to $$$n$$$.\nHint 2\nWe need to find the minimum index $$$i$$$ that can be increased using the operation. This $$$i$$$ will be the left boundary of the operation."
+        },
+        {
+            "title": "Hint 1",
+            "content": "In the optimal permutation, the first element is always equal to $$$n$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "We need to find the minimum index $$$i$$$ that can be increased using the operation. This $$$i$$$ will be the left boundary of the operation."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "If $$$p_1 = n$$$, then there is no reason to change it. If $$$p_1 = n$$$ and $$$p_2 = n-1$$$, then the second element also does not need to be changed, and so on. Thus, we need to find the first index $$$i$$$ for which $$$p_i \\neq n-i+1$$$ and increase it. Our goal is to make $$$p_i$$$ equal to $$$n-i+1$$$ (then the permutation will be lexicographically maximal). Find an index $$$j$$$ such that $$$p_j = n-i+1$$$ and perform the operation on $$$[i, j]$$$."
+        }
+    ]
+}

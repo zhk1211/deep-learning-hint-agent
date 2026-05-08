@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ b_1, b_2, \\ldots, b_n $ .\n\nAn anonymous informant has told you that the array $ b $ was obtained as follows: initially, there existed an array $ a_1, a_2, \\ldots, a_n $ , after which the following two-component operation was performed $ k $ times:\n\n1. A fixed point $ ^{\\dagger} $ $ x $ of the array $ a $ was chosen.\n2. Then, the array $ a $ was cyclically shifted to the left $ ^{\\ddagger} $ exactly $ x $ times.\n\nAs a result of $ k $ such operations, the array $ b_1, b_2, \\ldots, b_n $ was obtained. You want to check if the words of the anonymous informant can be true or if they are guaranteed to be false.\n\n$ ^{\\dagger} $ A number $ x $ is called a fixed point of the array $ a_1, a_2, \\ldots, a_n $ if $ 1 \\leq x \\leq n $ and $ a_x = x $ .\n\n$ ^{\\ddagger} $ A cyclic left shift of the array $ a_1, a_2, \\ldots, a_n $ is the array $ a_2, \\ldots, a_n, a_1 $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n, k $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ , $ 1 \\le k \\le 10^9 $ ) — the length of the array $ b $ and the number of operations performed.\n\nThe second line of each test case contains $ n $ integers $ b_1, b_2, \\ldots, b_n $ ( $ 1 \\le b_i \\le 10^9 $ ) — the elements of the array $ b $ .\n\nIt is guaranteed that the sum of the values of $ n $ for all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output \"Yes\" if the words of the anonymous informant can be true, and \"No\" if they are guaranteed to be false.\n\nExamples\nSample 1\nInput\n6\n5 3\n4 3 3 2 3\n3 100\n7 2 1\n5 5\n6 1 1 1 1\n1 1000000000\n1\n8 48\n9 10 11 12 13 14 15 8\n2 1\n1 42\nOutput\nYes\nYes\nNo\nYes\nYes\nNo\n\nNote\nIn the first test case, the array $ a $ could be equal to $ [3, 2, 3, 4, 3] $ . In the first operation, a fixed point $ x = 2 $ was chosen, and after $ 2 $ left shifts, the array became $ [3, 4, 3, 3, 2] $ . In the second operation, a fixed point $ x = 3 $ was chosen, and after $ 3 $ left shifts, the array became $ [3, 2, 3, 4, 3] $ . In the third operation, a fixed point $ x = 3 $ was chosen again, and after $ 3 $ left shifts, the array became $ [4, 3, 3, 2, 3] $ , which is equal to the array $ b $ .\n\nIn the second test case, the array $ a $ could be equal to $ [7, 2, 1] $ . After the operation with a fixed point $ x = 2 $ , the array became $ [1, 7, 2] $ . Then, after the operation with a fixed point $ x = 1 $ , the array returned to its initial state $ [7, 2, 1] $ . These same $ 2 $ operations (with $ x = 2 $ , and $ x = 1 $ ) were repeated $ 49 $ times. So, after $ 100 $ operations, the array returned to $ [7, 2, 1] $ .\n\nIn the third test case, it can be shown that there is no solution."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "How to rollback one operation? Is rollback uniquely determined?"
+        },
+        {
+            "title": "Hint 1.1",
+            "content": "Of course it is."
+        },
+        {
+            "title": "Hint 2",
+            "content": "After performing operation $$$a_x = x$$$ always becomes a last element of array."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1893A - Anonymous Informant\nThe key idea is that after applying an operation with the number $$$x$$$, the last element of the resulting array will be equal to $$$x$$$. Since after $$$x$$$ cyclic shifts, the array $$$[a_1, a_2, \\ldots, a_n]$$$ will become $$$[a_{x+1}, \\ldots, a_n, a_1, \\ldots, a_x]$$$, and $$$a_x = x$$$, as $$$x$$$ was a fixed point of the array $$$a$$$.\nFrom this idea, we can deduce that the operation can always be undone in at most one way: we need to look at the last element ($$$a_n$$$), and if $$$a_n  \\gt  n$$$, it is not possible to undo the operation. Otherwise, we need to cyclically shift the array to the right $$$a_n$$$ times.\nTherefore, the solution to the problem will be to undo the operation on the array by $$$1$$$ step $$$k$$$ times. If at any point it becomes impossible to undo the operation, the answer is \"No\". Otherwise, the answer is \"Yes\".\nTo avoid explicitly shifting the array, we can store a variable $$$s$$$ representing the index of the initial element, indicating that the current array is equal to $$$[a_s, a_{s+1}, \\ldots, a_n, a_1, \\ldots, a_{s-1}]$$$. When cyclically shifting the array to the right by $$$x$$$, $$$s$$$ decreases by $$$x$$$, initially $$$s = 1$$$.\nAlso, since $$$k$$$ in the problem can be up to $$$10^9$$$, simulating $$$k$$$ undo operations would be very time-consuming. However, we can notice that if we manage to undo the operation $$$n$$$ times without breaking anything, we have entered a cycle. Therefore, if we successfully undo the operation $$$n$$$ times, the answer is definitely \"Yes\". In other words, it was sufficient to do\nk = min(k, n)\n.\nTime complexity: $$$O(n)$$$"
+        },
+        {
+            "title": "Solution",
+            "content": "231849420\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\n}\nk\n=\nmin\n(\nk\n,\nn\n);\nint\nlast\n=\nn\n-\n1\n;\nfor\n(\nint\n_\n=\n0\n;\n_\n<\nk\n;\n_\n++)\n{\nif\n(\na\n[\nlast\n]\n>\nn\n)\n{\ncout\n<<\n\"No\\n\"\n;\nreturn\n;\n}\nlast\n+=\nn\n-\na\n[\nlast\n];\nif\n(\nlast\n>=\nn\n)\n{\nlast\n-=\nn\n;\n}\n}\ncout\n<<\n\"Yes\\n\"\n;\n}\nsigned\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\ncout\n.\ntie\n(\nnullptr\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

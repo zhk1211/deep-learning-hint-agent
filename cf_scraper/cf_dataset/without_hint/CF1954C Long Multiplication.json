@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two integers $ x $ and $ y $ of the same length, consisting of digits from $ 1 $ to $ 9 $ .\n\nYou can perform the following operation any number of times (possibly zero): swap the $ i $ -th digit in $ x $ and the $ i $ -th digit in $ y $ .\n\nFor example, if $ x=73 $ and $ y=31 $ , you can swap the $ 2 $ -nd digits and get $ x=71 $ and $ y=33 $ .\n\nYour task is to maximize the product of $ x $ and $ y $ using the aforementioned operation any number of times. If there are multiple answers, print any of them.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ x $ ( $ 1 \\le x < 10^{100} $ ).\n\nThe second line of each test case contains a single integer $ y $ ( $ 1 \\le y < 10^{100} $ ).\n\nAdditional constraint on input: the integers $ x $ and $ y $ consist only of digits from $ 1 $ to $ 9 $ .\n\nOutput Format\nFor each test case, print two lines — the first line should contain the number $ x $ after performing the operations; similarly, the second line should contain the number $ y $ after performing the operations. If there are multiple answers, print any of them.\n\nExamples\nSample 1\nInput\n3\n73\n31\n2\n5\n3516\n3982\nOutput\n71\n33\n5\n2\n3912\n3586"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1954C - Long Multiplication\nThere are two observations to solve the problem:\napplying the operation does not change the sum of the numbers;\nthe smaller the difference of the numbers, the greater their product (the proof is given below).\nProof: let's denote the sum of the numbers as $$$s$$$, the smallest number as $$$\\frac{s}{2} - a$$$ and the largest number as $$$\\frac{s}{2} + a$$$. Then the product is equal to $$$\\left(\\frac{s}{2} - a\\right)\\left(\\frac{s}{2} + a\\right) = \\left(\\frac{s}{2}\\right)^2 - a^2$$$. We can see that, the smaller $$$a$$$ (the half of difference), the larger the product.\nIn order to get the minimum difference, we can use the following algorithm: let $$$i$$$ be the smallest index (the most significant digit) such that $$$x_i \\ne y_i$$$ and set the maximum digit among $$$x_i$$$ and $$$y_i$$$ to the number $$$x$$$ and smallest to the number $$$y$$$; thus $$$x$$$ is definitely greater than $$$y$$$, then the less significant digits should be the maximum possible for the number $$$y$$$ (i. e. the inequality $$$x_j \\le y_j$$$ must hold for all $$$j  \\gt  i$$$)."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nstring\nx\n,\ny\n;\ncin\n>>\nx\n>>\ny\n;\nint\nn\n=\nx\n.\nsize\n();\nbool\nf\n=\nfalse\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n((\nx\n[\ni\n]\n>\ny\n[\ni\n])\n==\nf\n)\nswap\n(\nx\n[\ni\n],\ny\n[\ni\n]);\nf\n|=\n(\nx\n[\ni\n]\n!=\ny\n[\ni\n]);\n}\ncout\n<<\nx\n<<\n'\\n'\n<<\ny\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

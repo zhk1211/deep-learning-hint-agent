@@ -1,0 +1,44 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAs all programmers know, there are $$$n \\\\times m$$$ ballerinas performing in a ballet, and their arrangement can be represented as a table with $$$n$$$ rows and $$$m$$$ columns. Each ballerina performs one of $$$26$$$ movements, which can be described by one of the English letters.\n\nChoreographer Vadim wants to dispel this myth. To do this, he wants to stage a show in which all the ballerinas gracefully move to the opposite side of the stage from their starting positions. Programmers will find it easier to understand this movement as a $$$180^{\\\\circ}$$$ rotation of the table. To maintain the sequence of visual storytelling in the ballet, the ballerinas perform this movement instantaneously, without stopping their movements, and the final arrangement is identical to the initial one.\n\nUnfortunately, Vadim understands that with the current performance and the already planned arrangement of the ballerinas, such a maneuver will not be possible. Therefore, he is ready to invite more ballerinas to the performance. They can perform any movement and occupy any position, but they cannot stand between those already participating in a ballet. The most important thing is that in the end, a rectangular table is formed, possibly larger than the original one. Additionally, it is essential that at least one ballerina from the original arrangement moves to the position of one of the other ballerinas from the original arrangement or remains in her place. Please advise Vadim on the smallest number of ballerinas he will need to invite.\n\nInput Format\nEach test consists of several test cases. The first line contains a single integer $$$t$$$ $$$(1 \\\\le t \\\\le 10^5)$$$ — the number of test cases. The following lines describe the test cases.\n\nIn the first line of each set, two integers $$$n$$$ and $$$m$$$ are given — the number of rows and the number of columns of the table $$$(1 \\\\le n, m \\\\le 10^6, 1 \\\\le n \\\\cdot m \\\\le 10^6)$$$.\n\nThe next $$$n$$$ lines of length $$$m$$$ describe the movements of the ballerinas — the ballerina in the $$$i$$$-th row and $$$j$$$-th column performs the movement $$$f\\_{ij}$$$, where $$$f\\_{ij}$$$ — is a lowercase English letter.\n\nIt is guaranteed that the sum of $$$n \\\\cdot m$$$ across all test cases does not exceed $$$10^6$$$.\n\nOutput Format\nFor each test case, output the minimum number of ballerinas that Vadim will need to invite.\n\nExamples\nSample 1\nInput\n6\n2 3\nhey\nhey\n3 3\nabc\ndef\nghi\n3 2\naf\nfa\nte\n1 1\nx\n3 3\nuoe\nvbe\nmbu\n2 3\nhyh\nkop\nOutput\n4\n16\n2\n0\n11\n3\n\nNote\nIn the first sample, you can invite 4 ballerinas and arrange them as follows:\n\nheyehheyehIn the second sample, you can invite 16 ballerinas and arrange them like this:\n\njkabckjdefihghifedjkcbakjIn the third sample, you can invite 2 ballerinas and arrange them like this:\n\netaffateHere, the invited ballerinas are marked in bold."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "There is no point in adding new symbols both above and below the original table simultaneously. Similarly, there is no point in adding symbols both to the left and to the right of the table at the same time."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The center of the optimal answer table lies within the original one."
+        },
+        {
+            "title": "Hint 3",
+            "content": "We do not need to construct the answer; it is sufficient to check that an answer exists for the current center. Think about how to do this."
+        },
+        {
+            "title": "Hint 4",
+            "content": "An answer exists for the current center if the subtable, which is the intersection of the original table and the one rotated around the center by $$$180^{\\circ}$$$, becomes identical to the original when rotated by $$$180^{\\circ}$$$. This subtable must contain at least one of the corners of the original table."
+        },
+        {
+            "title": "Hint 5",
+            "content": "The checking of centers can be replaced by the checking of subtables that contain at least one of the corners of the original table."
+        },
+        {
+            "title": "Hint 6",
+            "content": "To check the subtables to see if they become identical to the original when rotated by $$$180^{\\circ}$$$, we can use hashing."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\n998244353\n;\nconst\nint\nP\n[\n2\n]\n=\n{\n107\n,\n61\n};\nint\nBP\n[\n2\n];\nlong\nlong\nbin_pow\n(\nlong\nlong\na\n,\nint\nn\n)\n{\nlong\nlong\nret\n=\n1\n;\nwhile\n(\nn\n)\n{\nif\n(\nn\n&\n1\n)\nret\n=\n(\nret\n*\na\n)\n%\nMOD\n;\na\n=\n(\na\n*\na\n)\n%\nMOD\n;\nn\n>>=\n1\n;\n}\nreturn\nret\n;\n}\ninline\nint\nadd\n(\nint\na\n,\nint\nb\n)\n{\nint\nres\n=\na\n+\nb\n;\nif\n(\nres\n>=\nMOD\n)\nreturn\nres\n-\nMOD\n;\nreturn\nres\n;\n}\ninline\nint\nsub\n(\nint\na\n,\nint\nb\n)\n{\nint\nres\n=\na\n-\nb\n;\nif\n(\nres\n<\n0\n)\nreturn\nres\n+\nMOD\n;\nreturn\nres\n;\n}\ninline\nint\nmult\n(\nint\na\n,\nint\nb\n)\n{\nlong\nlong\nres\n=\n(\nlong\nlong\n)\na\n*\nb\n;\nif\n(\nres\n>=\nMOD\n)\nreturn\nres\n%\nMOD\n;\nreturn\nres\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nBP\n[\n0\n]\n=\nbin_pow\n(\nP\n[\n0\n],\nMOD\n-\n2\n);\nBP\n[\n1\n]\n=\nbin_pow\n(\nP\n[\n1\n],\nMOD\n-\n2\n);\nvector\n<int>\npows\n[\n2\n];\nvector\n<int>\nbpows\n[\n2\n];\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n2\n;\nj\n++)\n{\npows\n[\nj\n].\nresize\n(\n1e6\n,\n1\n);\nbpows\n[\nj\n].\nresize\n(\n1e6\n,\n1\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<\n1e6\n;\ni\n++)\n{\npows\n[\nj\n][\ni\n]\n=\nmult\n(\npows\n[\nj\n][\ni\n-\n1\n],\nP\n[\nj\n]);\nbpows\n[\nj\n][\ni\n]\n=\nmult\n(\nbpows\n[\nj\n][\ni\n-\n1\n],\nBP\n[\nj\n]);\n}\n}\nwhile\n(\nt\n--)\n{\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nvector\n<string>\nf\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\nf\n[\ni\n];\nvector\n<\nvector\n<int>\n>\nhash\n(\nn\n+\n2\n,\nvector\n<int>\n(\nm\n+\n2\n,\n0\n));\nvector\n<\nvector\n<int>\n>\nbhash\n(\nn\n+\n2\n,\nvector\n<int>\n(\nm\n+\n2\n,\n0\n));\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n1\n;\nj\n<=\nm\n;\nj\n++)\n{\nint\ncur\n=\nmult\n((\nf\n[\ni\n-\n1\n][\nj\n-\n1\n]\n-\n'a'\n+\n1\n),\nmult\n(\npows\n[\n0\n][\ni\n-\n1\n],\npows\n[\n1\n][\nj\n-\n1\n]));\nhash\n[\ni\n][\nj\n]\n=\nadd\n(\nsub\n(\nadd\n(\nhash\n[\ni\n-\n1\n][\nj\n],\nhash\n[\ni\n][\nj\n-\n1\n]),\nhash\n[\ni\n-\n1\n][\nj\n-\n1\n]),\ncur\n);\n}\n}\nfor\n(\nint\ni\n=\nn\n;\ni\n>=\n1\n;\ni\n--)\n{\nfor\n(\nint\nj\n=\nm\n;\nj\n>=\n1\n;\nj\n--)\n{\nint\ncur\n=\nmult\n((\nf\n[\ni\n-\n1\n][\nj\n-\n1\n]\n-\n'a'\n+\n1\n),\nmult\n(\npows\n[\n0\n][\nn\n-\ni\n],\npows\n[\n1\n][\nm\n-\nj\n]));\nbhash\n[\ni\n][\nj\n]\n=\nadd\n(\nsub\n(\nadd\n(\nbhash\n[\ni\n+\n1\n][\nj\n],\nbhash\n[\ni\n][\nj\n+\n1\n]),\nbhash\n[\ni\n+\n1\n][\nj\n+\n1\n]),\ncur\n);\n}\n}\nauto\nisp\n=\n[&](\nint\nx1\n,\nint\ny1\n,\nint\nx2\n,\nint\ny2\n)\n{\nint\nhsh\n=\nadd\n(\nsub\n(\nsub\n(\nhash\n[\nx2\n][\ny2\n],\nhash\n[\nx1\n-\n1\n][\ny2\n]),\nhash\n[\nx2\n][\ny1\n-\n1\n]),\nhash\n[\nx1\n-\n1\n][\ny1\n-\n1\n]);\nint\nbhsh\n=\nadd\n(\nsub\n(\nsub\n(\nbhash\n[\nx1\n][\ny1\n],\nbhash\n[\nx2\n+\n1\n][\ny1\n]),\nbhash\n[\nx1\n][\ny2\n+\n1\n]),\nbhash\n[\nx2\n+\n1\n][\ny2\n+\n1\n]);\nhsh\n=\nmult\n(\nhsh\n,\nmult\n(\nbpows\n[\n0\n][\nx1\n-\n1\n],\nbpows\n[\n1\n][\ny1\n-\n1\n]));\nbhsh\n=\nmult\n(\nbhsh\n,\nmult\n(\nbpows\n[\n0\n][\nn\n-\nx2\n],\nbpows\n[\n1\n][\nm\n-\ny2\n]));\nreturn\nhsh\n==\nbhsh\n;\n};\nint\nmn\n=\nn\n*\nm\n*\n4\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n1\n;\nj\n<=\nm\n;\nj\n++)\n{\nif\n(\nisp\n(\n1\n,\n1\n,\ni\n,\nj\n))\nmn\n=\nmin\n(\nmn\n,\n(\n2\n*\nn\n-\ni\n)\n*\n(\n2\n*\nm\n-\nj\n));\nif\n(\nisp\n(\n1\n,\nj\n,\ni\n,\nm\n))\nmn\n=\nmin\n(\nmn\n,\n(\n2\n*\nn\n-\ni\n)\n*\n(\nm\n+\nj\n-\n1\n));\nif\n(\nisp\n(\ni\n,\n1\n,\nn\n,\nj\n))\nmn\n=\nmin\n(\nmn\n,\n(\nn\n+\ni\n-\n1\n)\n*\n(\n2\n*\nm\n-\nj\n));\nif\n(\nisp\n(\ni\n,\nj\n,\nn\n,\nm\n))\nmn\n=\nmin\n(\nmn\n,\n(\nn\n+\ni\n-\n1\n)\n*\n(\nm\n+\nj\n-\n1\n));\n}\n}\ncout\n<<\nmn\n-\nm\n*\nn\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

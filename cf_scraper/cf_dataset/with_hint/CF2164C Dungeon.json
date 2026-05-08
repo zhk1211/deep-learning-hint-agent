@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "If you gain a new sword after killing a monster, its damage will be greater or equal than the previous sword."
+        },
+        {
+            "title": "Hint 2",
+            "content": "When will we attempt to kill monsters with $$$c_i = 0$$$?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Consider a greedy approach."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2164C - Dungeon\nWe will call \"killing monster $$$i$$$ with a certain sword\"\noperation\n$$$i$$$, and call the sword with smaller damage \"the smaller sword\".\nLemma 1\nIt's optimal to attempt to kill monsters with $$$c_i = 0$$$\nafter\nevery attempt to kill monsters with $$$c_i  \\gt  0$$$.\nProof\nSuppose we kill monster $$$j$$$ ($$$c_j = 0$$$) before killing monster $$$k$$$ ($$$c_k  \\gt  0$$$). Since we will not gain any swords after killing a monster with $$$c_j = 0$$$, the sword used for killing monster $$$k$$$ must exist before we kill monster $$$j$$$, thus we can defer\noperation\n$$$j$$$ until\noperation\n$$$k$$$. $$$\\square$$$\nNext, we will call the process of killing monsters with $$$c_i  \\gt  0$$$\nStage 1\n, and the process of killing monsters with $$$c_i = 0$$$\nStage 2\n.\nLemma 2\nIn Stage 1, it's optimal to kill them in increasing order with respect to $$$b_i$$$.\nProof\nSuppose\noperation\n$$$i$$$ and\noperation\n$$$j$$$ are\nadjacent\n(i.e. we kill monster $$$j$$$ immediately after killing monster $$$i$$$). If $$$b_i  \\gt  b_j$$$:\nIf will kill monster $$$j$$$ using the sword gained from killing monster $$$i$$$, then the sword $$$p$$$ used in operation $$$i$$$ should have a damage $$$a_p \\ge b_i$$$, thus $$$a_p \\ge b_j$$$. Since the damage of the gained new sword will not be less than the damage of the previous one, it is always valid for us to kill monster $$$j$$$ before monster $$$i$$$.\nOtherwise, the two operations are independent and can be freely swapped.\n$$$\\square$$$\nLemma 3\nIn stage 1, it's optimal to use the smallest possible sword in\noperation\n$$$i$$$ (i.e. we will choose the sword with the smallest damage greater than $$$b_i$$$).\nProof\nSuppose in\noperation\n$$$i$$$, two swords with damage $$$x$$$ and $$$y$$$ can be used ($$$b_i \\le x  \\lt  y$$$).\nDenote $$$S_i$$$ as the $$$i$$$-th smallest element in a multiset $$$S$$$. For two multiset $$$S$$$ and $$$T$$$ with the same size, we call $$$S$$$\ndominates\n$$$T$$$, if and only if $$$\\forall i \\in [1,|S|], S_i \\ge T_i$$$.\nIf we can prove that, the multiset of all swords after we finish\noperation\n$$$i$$$ using the smaller sword,\ndominates\nthat multiset when we use the bigger one, we can prove the correctness of the lemma, since for every subsequent\noperation\nwe will have a better or equivalent sword to use.\nThis can be proved by some casework. Denote the original multiset of swords as $$$S$$$, the one obtained by choosing the smaller sword as $$$A$$$, and the other one as $$$B$$$.\nIf $$$c_i \\le x$$$, then the multiset of all swords won't change no matter which sword we choose, so $$$A$$$ = $$$B$$$.\nOtherwise if $$$x  \\lt  c_i \\le y$$$, then when we choose the smaller sword we will obtain a better multiset (since one element is increased) while the bigger sword do not change the multiset, thus $$$A$$$ dominates $$$B$$$.\nOtherwise, we have $$$c_i  \\gt  y$$$. Suppose the $$$o$$$ is the largest index which satisfies $$$S_o \\le c_i$$$, $$$S_p = x$$$, $$$S_q = y$$$. For $$$j \\ge q$$$ and $$$j  \\lt  p$$$, we have $$$A_j = B_j$$$. For $$$j \\in [p, q)$$$, we have $$$A_j = S_{j+1}$$$ and $$$B_j = S_j$$$, so $$$A_j \\ge B_j$$$. Thus, $$$A$$$ dominates $$$B$$$.\n$$$\\square$$$\nLemma 4\nIn stage 2, the order of monsters to consider does not matter.\nProof\nIt can be proved by the fact that in this stage every sword can be used at most once.\nLemma 5\nIn stage 2, it's also optimal to use the smallest possible sword in an\noperation\n.\nProof\nThis lemma is quite straightforward: since in Stage 2 every sword can be only used once, using a smaller sword will leave a better set of available swords for later\noperations\n. $$$\\square$$$\nUsing the above lemmas we can implement the following greedy approach:\nIn Stage 1, we use a min heap to maintain all the available swords. Enumerate every monster in an increasing order with respect to $$$b_i$$$: extract the sword with the smallest damage, if its damage is smaller than $$$b_i$$$, pop it and store it for Stage 2, since it cannot be used anymore in Stage 1; otherwise use it to kill monster $$$i$$$, update the damage of it and insert it back to the heap. If the heap is empty, exit this stage immediately.\nIn Stage 2, we gather all the current swords. Enumerate all monsters with $$$c_i = 0$$$ in an arbitrary order, and kill it with the smallest possible sword. This can be implemented by using a BST (or\nstd::set\n) or by sorting these monsters and using the two-pointers method.\nThe time complexity is $$$O(n \\log n)$$$ and the space complexity is $$$O(n)$$$."
+        }
+    ]
+}

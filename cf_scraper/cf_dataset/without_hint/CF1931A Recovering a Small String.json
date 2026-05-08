@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nNikita had a word consisting of exactly $ 3 $ lowercase Latin letters. The letters in the Latin alphabet are numbered from $ 1 $ to $ 26 $ , where the letter \"a\" has the index $ 1 $ , and the letter \"z\" has the index $ 26 $ .\n\nHe encoded this word as the sum of the positions of all the characters in the alphabet. For example, the word \"cat\" he would encode as the integer $ 3 + 1 + 20 = 24 $ , because the letter \"c\" has the index $ 3 $ in the alphabet, the letter \"a\" has the index $ 1 $ , and the letter \"t\" has the index $ 20 $ .\n\nHowever, this encoding turned out to be ambiguous! For example, when encoding the word \"ava\", the integer $ 1 + 22 + 1 = 24 $ is also obtained.\n\nDetermine the lexicographically smallest word of $ 3 $ letters that could have been encoded.\n\nA string $ a $ is lexicographically smaller than a string $ b $ if and only if one of the following holds:\n\n- $ a $ is a prefix of $ b $ , but $ a \\ne b $ ;\n- in the first position where $ a $ and $ b $ differ, the string $ a $ has a letter that appears earlier in the alphabet than the corresponding letter in $ b $ .\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases in the test.\n\nThis is followed by the descriptions of the test cases.\n\nThe first and only line of each test case contains an integer $ n $ ( $ 3 \\le n \\le 78 $ ) — the encoded word.\n\nOutput Format\nFor each test case, output the lexicographically smallest three-letter word that could have been encoded on a separate line.\n\nExamples\nSample 1\nInput\n5\n24\n70\n3\n55\n48\nOutput\naav\nrzz\naaa\nczz\nauz"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n(){\nint\nn\n,\nsz\n=\n26\n;\ncin\n>>\nn\n;\nstring\nmins\n=\n\"zzz\"\n,\ncur\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nsz\n;\ni\n++){\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nsz\n;\nj\n++){\nfor\n(\nint\nk\n=\n0\n;\nk\n<\nsz\n;\nk\n++){\nif\n(\ni\n+\nj\n+\nk\n+\n3\n==\nn\n){\ncur\n+=\nchar\n(\ni\n+\n'a'\n);\ncur\n+=\nchar\n(\nj\n+\n'a'\n);\ncur\n+=\nchar\n(\nk\n+\n'a'\n);\nmins\n=\nmin\n(\ncur\n,\nmins\n);\n}\n}\n}\n}\ncout\n<<\nmins\n<<\n\"\\n\"\n;\n}\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

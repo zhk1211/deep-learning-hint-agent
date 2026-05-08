@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the hard version of the problem. The only difference between the two versions is the constraint on $ n $ . You can make hacks only if both versions of the problem are solved.\n\nAn array $ b $ of $ m $ non-negative integers is said to be good if all the elements of $ b $ can be made equal to $ 0 $ using the following operation some (possibly, zero) times:\n\n- Select two distinct indices $ l $ and $ r $ ( $ 1 \\leq l \\color{red}< \\color{normal}r \\leq m $ ) and subtract $ 1 $ from all $ b_i $ such that $ l \\leq i \\leq r $ .\n\nYou are given two positive integers $ n $ , $ k $ and a prime number $ p $ .\n\nOver all $ (k+1)^n $ arrays of length $ n $ such that $ 0 \\leq a_i \\leq k $ for all $ 1 \\leq i \\leq n $ , count the number of good arrays.\n\nSince the number might be too large, you are only required to find it modulo $ p $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^3 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains three positive integers $ n $ , $ k $ and $ p $ ( $ 3 \\leq n \\leq 3000 $ , $ 1 \\leq k \\leq n $ , $ 10^8 < p < 10^9 $ ) — the length of the array $ a $ , the upper bound on the elements of $ a $ and modulus $ p $ .\n\nIt is guaranteed that the sum of $ n^2 $ over all test cases does not exceed $ 10^7 $ , and $ p $ is prime.\n\nOutput Format\nFor each test case, on a new line, output the number of good arrays modulo $ p $ .\n\nExamples\nSample 1\nInput\n4\n3 1 998244853\n4 1 998244353\n3 2 998244353\n343 343 998244353\nOutput\n4\n7\n10\n456615865\n\nNote\nIn the first test case, the $ 4 $ good arrays $ a $ are:\n\n- $ [0,0,0] $ ;\n- $ [0,1,1] $ ;\n- $ [1,1,0] $ ;\n- $ [1,1,1] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Try to apply Principle of Inclusion Exclusion (PIE)."
+        },
+        {
+            "title": "Hint 2",
+            "content": "You do not need to store both last elements! Only the last is enough."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Since there are $$$n^3$$$ states in our dp, we will have to optimize the number of states somehow.\nLet us consider all arrays and not just good arrays. An element is bad if $$$a_i \\gt a_{i - 1} + a_{i + 1}$$$.\nSuppose, $$$f(x_1, x_2, ...., x_k)$$$ gave us the number of arrays where each of $$$x_i$$$ are distinct and bad. (Note that other positions may be bad as well). Then, by PIE, the answer is $$$(-1)^k \\cdot f(x_1, x_2, ....., x_k)$$$.\nFor example, for $$$n = 3$$$, we would want to compute $$$f([]) - f([1]) - f([2]) - f([3]) + f([1, 2]) + f([1, 3]) + f([2, 3]) - f([1, 2, 3])$$$. Note that $$$f([])$$$ is simply $$$(k + 1)^n$$$ as there are no restrictions placed on the array.\nThis has $$$2^n$$$ calculations, so we need to optimize it.\nFirst optimization : obviously, only $$$k$$$ matters and not the exact indices. This means we only have to maintain the count of the number of indices we have made sure are bad.\nSecond optimization : only parity of $$$k$$$ matters, due to the only dependence of $$$k$$$ being $$$(-1)^k$$$.\nWe now define $$$dp(i, last, x)$$$ = number of arrays such that $$$a_i = last$$$ and the parity of bad elements (that we know of) till $$$i$$$ is $$$x$$$.\nTransitions :\nWithout (necessarily) creating a bad element : $$$dp(i, last, x) += dp(i - 1, y, x)$$$ for all $$$0 \\le y \\le k$$$. We might accidentally create more bad elements, but remember that PIE allows us to not worry about that.\nWith creating a bad element : We view it as a transition from index $$$(i - 2)$$$, $$$a_{i - 1} \\gt a_i + a_{i - 2}$$$ for it to bad, so fix $$$a_i = l1$$$, $$$a_{i - 2} = l2$$$, and you get $$$dp(i, l1, x) += dp(i - 2, l2, 1 - x) \\cdot (max(0, k - l1 - l2))$$$.\nThe $$$max(0, k - l1 - l2)$$$ term comes from the ways to choose $$$a_{i - 1}$$$ such that $$$a_{i - 1} \\gt l1 + l2$$$.\nBoth the transitions are optimizable with some prefix sums and running totals to get a $$$\\mathcal{O}(n^2)$$$ solution."
+        }
+    ]
+}

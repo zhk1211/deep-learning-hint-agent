@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array of integers $ l_1, l_2, \\dots, l_n $ and an integer $ d $ . Is it possible to construct a tree satisfying the following three conditions?\n\n- The tree contains $ n + 1 $ nodes.\n- The length of the $ i $ -th edge is equal to $ l_i $ .\n- The (weighted) diameter of the tree is equal to $ d $ .\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 250 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ , $ d $ ( $ 2 \\leq n \\leq 2000, 1 \\leq d \\leq 2000 $ ).\n\nThe second line of each test case contains $ n $ integers $ l_1, l_2, \\dots, l_n $ ( $ 1 \\leq l_i \\leq d $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2000 $ .\n\nOutput Format\nFor each test case, output $ \\texttt{Yes} $ if it is possible to construct a tree that satisfies all the conditions, and $ \\texttt{No} $ otherwise.\n\nYou can print the letters in any case (upper or lower).\n\nExamples\nSample 1\nInput\n3\n4 10\n1 2 3 4\n4 7\n1 4 3 4\n6 18\n2 4 3 7 6 7\nOutput\nYes\nNo\nYes\n\nNote\nBelow, you are given the illustrations of trees for the first and third test cases. One of the diameters is highlighted by coloring its edges in red.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1917F/b0da55c56a8230f64464b5410b99445c4424c394.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "If a solution exists, then we can always construct a tree containing a diameter and edges incident to the vertex $$$v$$$ ($$$v$$$ is from diameter)."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Try to consider the maximum of the given lengths."
+        },
+        {
+            "title": "Hint 3",
+            "content": "What can we say when there exist two lengths with a sum greater than $$$d$$$?"
+        },
+        {
+            "title": "Hint 4",
+            "content": "If a solution exists, then there should be a subset of lengths with the sum equal to $$$d$$$."
+        },
+        {
+            "title": "Hint 5",
+            "content": "Consider cases when there exists a subset of lengths containing the maximum length with the sum equal to $$$d$$$ and doesn't."
+        },
+        {
+            "title": "Hint 6",
+            "content": "Knapsack with bitset."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's consider the lengths in increasing order: $$$l_1 \\leq l_2 \\leq \\ldots \\leq l_n$$$. We will discuss some cases depending on the maximum length $$$l_n$$$:\nIf $$$l_n + l_{n - 1} \\gt d$$$, then the solution doesn't exist since an arbitrary tree will have a diameter greater than $$$d$$$.\nThere exists the subset of the given lengths $$$l$$$, such that the sum of the lengths of that subset is equal to $$$d$$$ (for making a diameter) and $$$l_n$$$ is in that subset. In this case, the solution always exists, since we can construct a tree for example in the following way: let's consider that the size of the found subset is equal to $$$k$$$, then we can connect the vertices from $$$1$$$ to $$$k + 1$$$, such that the vertices $$$i$$$ and $$$i + 1$$$ are connected by edge for each $$$1 \\leq i \\leq k$$$ and $$$length(1, 2) = l_n$$$. We have some remaining lengths that we haven't used yet, so we can add edges for each length incident to the vertex $$$2$$$. Added edges will not increase the diameter, since $$$l_n$$$ is greater than or equal to all the remaining edges and $$$l_n + l_{n - 1} \\leq d$$$. To check if there exists a subset of lengths such that it contains $$$l_n$$$ and the sum of elements in the subset is equal to $$$d$$$, can be easily done by the knapsack algorithm.\nHere, we need to find the subset of the given lengths $$$l$$$, such that the sum of the lengths of that subset is equal to $$$d$$$ (for making a diameter and we also know that $$$l_n$$$ can not be in that subset). Let's consider that diameter consisting of the vertices $$$v_1$$$, $$$v_2$$$, $$$\\ldots$$$, $$$v_k$$$, such that $$$v_i$$$ and $$$v_{i + 1}$$$ are connected by edge for each $$$1 \\leq i \\leq k - 1$$$. Now, we need to connect an edge with length $$$l_n$$$ to the one vertex $$$v'$$$ from diameter, such that both $$$dist(v', v_1) + l_n \\lt d$$$ and $$$dist(v', v_k) + l_n \\lt d$$$. All the other not-used lengths we can also connect to the vertex $$$v'$$$. To check this, we should write knapsack but with two states: $$$dist(v', v_1)$$$ and $$$dist(v', v_k)$$$.\nKnapsack can be done using bitset and the final complexity will be $$$O(\\frac{n \\cdot d^2}{64})$$$. You can also optimize this two times, since we know that the minimum of $$$dist(v', v_1)$$$ and $$$dist(v', v_k)$$$ is at most $$$\\frac{d}{2}$$$."
+        }
+    ]
+}

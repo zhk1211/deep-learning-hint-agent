@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThose who don't work don't eat. Get the things you want with your own power. But believe, the earnest and serious people are the ones who have the last laugh... But even then, I won't give you a present.\n\n—Santa, Hayate no Gotoku!\n\nSince Hayate didn't get any Christmas presents from Santa, he is instead left solving a tree query problem.\n\nHayate has a tree with $ n $ nodes.\n\nHayate now wants you to answer $ q $ queries. Each query consists of a node $ x $ and $ k $ other additional nodes $ a_1,a_2,\\ldots,a_k $ . These $ k+1 $ nodes are guaranteed to be all distinct.\n\nFor each query, you must find the length of the longest simple path starting at node $ x^\\dagger $ after removing nodes $ a_1,a_2,\\ldots,a_k $ along with all edges connected to at least one of nodes $ a_1,a_2,\\ldots,a_k $ .\n\n$ ^\\dagger $ A simple path of length $ k $ starting at node $ x $ is a sequence of distinct nodes $ x=u_0,u_1,\\ldots,u_k $ such that there exists a edge between nodes $ u_{i-1} $ and $ u_i $ for all $ 1 \\leq i \\leq k $ .\n\nInput Format\nThe first line contains two integers $ n $ and $ q $ ( $ 1 \\le n, q \\le 2 \\cdot 10^5 $ ) — the number of nodes of the tree and the number of queries.\n\nThe following $ n - 1 $ lines contain two integers $ u $ and $ v $ ( $ 1 \\le u, v \\le n $ , $ u \\ne v $ ) — denoting an edge between nodes $ u $ and $ v $ . It is guaranteed that the given edges form a tree.\n\nThe following $ q $ lines describe the queries. Each line contains the integers $ x $ , $ k $ and $ a_1,a_2,\\ldots,a_k $ ( $ 1 \\leq x \\leq n $ , $ 0 \\leq k < n $ , $ 1 \\leq a_i \\leq n $ ) — the starting node, the number of removed nodes and the removed nodes.\n\nIt is guaranteed that for each query, $ x,a_1,a_2,\\ldots,a_k $ are all distinct.\n\nIt is guaranteed that the sum of $ k $ over all queries will not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each query, output a single integer denoting the answer for that query.\n\nExamples\nSample 1\nInput\n7 7\n1 2\n1 3\n3 4\n2 5\n2 6\n6 7\n2 0\n2 1 1\n2 2 1 6\n3 1 4\n3 1 1\n5 0\n5 2 1 6\nOutput\n3\n2\n1\n4\n1\n4\n1\n\nSample 2\nInput\n4 4\n1 2\n1 3\n2 4\n2 1 3\n3 1 4\n2 1 4\n2 3 1 3 4\nOutput\n1\n2\n2\n0\n\nNote\nIn the first example, the tree is as follows:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1904E/c5f1379037fd66e966f2028dba5fe4bd6a86c16c.png)In the first query, no nodes are missing. The longest simple path starting from node $ 2 $ is $ 2 \\to 1 \\to 3 \\to 4 $ . Thus, the answer is $ 3 $ .\n\nIn the third query, nodes $ 1 $ and $ 6 $ are missing and the tree is shown below. The longest simple path starting from node $ 2 $ is $ 2 \\to 5 $ . Thus, the answer is $ 1 $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1904E/a4bba31c35c424ba9748f1f5381325841a00f680.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "The solution doesn't involve virtual tree"
+        },
+        {
+            "title": "Hint 2",
+            "content": "What is an easy way to represent the tree?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "In a tree, one of the farthest nodes from some node $$$x$$$ is one of the two endpoints of the diameter."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Let's try to find the diameter of the connected subgraph node $$$x$$$ is in after the nodes $$$a_{1 \\dots n}$$$ are removed."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Consider an euler tour of the tree and order the nodes by their inorder traversal. When $$$k$$$ nodes are removed, the remaining nodes form $$$O(k)$$$ contiguous intervals in the tour."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Consider the Euler tour of the tree where $$$in[u]$$$ is the entry time of each node and $$$out[u]$$$ is the exit time. The interval $$$[in[u], out[u]]$$$ corresponds to the subtree of $$$u$$$.\nRemoving a node is equivalent to blocking some intervals on the Euler tour. There are two cases when $$$a$$$ is blocked with respect to query node $$$x$$$. If $$$a$$$ is an ancestor of $$$x$$$, then the set of reachable nodes is reduced to the interval $$$[in[nxt_a], out[nxt_a]]$$$, where $$$nxt_a$$$ is the first node on the path from $$$a$$$ to $$$x$$$. This is equivalent to blocking the intervals $$$[0, in[nxt_a])$$$ and $$$(out[nxt_a], n - 1]$$$. If $$$a$$$ is not an ancestor, then the interval $$$[in[a], out[a]]$$$ is blocked.\nLets build a lazy segment tree on the Euler tour of the tree. Each leaf node will correspond to the depth of a node on the tree. We can re-root the tree from $$$a$$$ to $$$b$$$ by subtracting one from all nodes the range $$$[in[b], out[b]]$$$ and adding one to all other nodes. Thus, we can traverse the tree while re-rooting and process our queries offline. When the query node $$$x$$$ is the root, block all the necessary intervals and then find the maximum value in the segment tree."
+        },
+        {
+            "title": "Solution",
+            "content": "Let's build a segtree/sparse table where each node stores the diameter (as a pair of nodes) for the nodes with $$$in$$$ values in the range $$$[l, r]$$$. To merge two diameters, we can enumerate all $$$4 \\choose 2$$$ ways to pick the new diameter and take the best one.\nTo answer a query, we can first generate a list of banned intervals (just like solution 1) and use that list to generate the list of unbanned intervals. Then we can query our segtree for the diameter of each of ranges. Finally, we can combine the answers of the seperate queries to obtain the diameter of the connected subgraph. We know the farthest node from node $$$x$$$ is one of the two endpoints, so it suffices to just manually check the distance of those two nodes.\nFinal complexity is $$$O(n \\log^2 n + \\sum k \\log n)$$$."
+        }
+    ]
+}

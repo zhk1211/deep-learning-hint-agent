@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have an array of non-negative integers $ a_1, a_2, \\ldots, a_n $ .\n\nThe value of a sub-array of length $ \\ge 2 $ , $ a[l, r] = [a_l, a_{l+1}, \\ldots, a_r] $ is the minimum value of $ a_i \\oplus a_j $ such that $ l \\le i < j \\le r $ , where $ \\oplus $ is the xor (exclusive-or) operator.\n\nYou have to find the $ k $ -th smallest value over all sub-arrays of length $ \\ge 2 $ .\n\nInput Format\nThe first line of the input contains multiple test cases $ t $ ( $ 1 \\le t \\le 2 \\cdot 10^4 $ ).\n\nThe first line of each test case contains integer numbers $ n $ and $ k $ ( $ 2 \\le n \\le 10^5 $ , $ 1 \\le k \\le \\frac{n\\cdot(n-1)}{2} $ ).\n\nThe second line of the input contains $ n $ non-negative integer numbers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le 10^9 $ ) — the array itself.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nPrint the $ k $ -th smallest value obtained over all subarrays of length at least $ 2 $ .\n\nExamples\nSample 1\nInput\n4\n5 2\n1 2 3 4 5\n2 1\n4 3\n4 6\n1 2 4 8\n5 9\n1 2 3 4 5\nOutput\n1\n7\n12\n3\n\nNote\nIn the first testcase, we have subarrays with their smallest exclusive-or pair as:\n\n$ [1,2]: 3 $\n\n$ [2,3]: 1 $\n\n$ [3,4]: 7 $\n\n$ [4,5]: 1 $\n\n$ [1,2,3]: 1 $\n\n$ [2,3,4]: 1 $\n\n$ [3,4,5]: 1 $\n\n$ [1,2,3,4]: 1 $\n\n$ [2,3,4,5]: 1 $\n\n$ [1,2,3,4,5]: 1 $\n\nThe sorted order would be: $ 1, 1, 1, 1, 1, 1, 1, 1, 3, 7 $ . Therefore, the second smallest element would be $ 1 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Hint 1\nCan we fix an upper bound to count the number of subarrays having xor-pair less than that?\nHint 2\nWe can use binary search to fix an upper bound and calculate all subarrays with xor-pair less than the given value.\nHint 3\nIn order to count the number of subarrays we can use a popular data-structure used for a lot of xor-operations.\nHint 4\nWe can binary search on the upper bound and use tries to count the number of subarrays with xor-pair less than given value. This way we can find the kth-smallest value."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Can we fix an upper bound to count the number of subarrays having xor-pair less than that?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "We can use binary search to fix an upper bound and calculate all subarrays with xor-pair less than the given value."
+        },
+        {
+            "title": "Hint 3",
+            "content": "In order to count the number of subarrays we can use a popular data-structure used for a lot of xor-operations."
+        },
+        {
+            "title": "Hint 4",
+            "content": "We can binary search on the upper bound and use tries to count the number of subarrays with xor-pair less than given value. This way we can find the kth-smallest value."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "1983F - array-value\nWe can binary search on the the value of the $$$k$$$th-smallest and maintain the number of subarrays with xor-pair less than the value. This way, we can find the $$$k$$$th-smallest value easily.\nIn order to maintain the number of subarrays, we can use our popular xor data structure called trie.\nFor a given binary searched value, we will traverse from left to right, putting in the values of the array in our trie with their highest corresponding indices.\nFor a fixed index $$$i$$$, we would like to find the highest index $$$j \\lt i$$$ such that the subarray from $$$[j,i]$$$ contains xor-pair less than the fixed upper bound. Then all subarrays with their left end between $$$[1,j]$$$ and right end fixed at $$$i$$$ will have xor-pair less than the value.\nTherefore, this becomes a sliding window where we want to maximize the value of the left end $$$j$$$ so that the number of subarrays for a fixed right end $$$i$$$ becomes as large as possible.\nTo achieve this, we would maintain in our trie the following two things: - the current bit (on/off) - the maximum index which reached this bit in our trie\nNow when querying: - if both searched bit and current array index bit is $$$1$$$: take the max for left index from child \"on\" bit and go to child \"off\" bit - if both searched bit and current array index bit is $$$0$$$: just go to child \"off\" bit - if searched bit is $$$1$$$ and current array index bit is $$$0$$$: take the max for left index from child \"off\" bit and go to child \"on\" bit - if searched bit is $$$0$$$ and current array index bit is $$$1$$$: just go to child \"on\" bit\nThis is done so that we can find the maximum left index for the given fixed right index at $$$i$$$. We follow binary searched value as closely as possible while traversing the trie to stay under the upper bound as well as maximize the left index.\nFinally, putting the values and corresponding index in the trie is trivial. Simply follow the trie and put in the corresponding bits the maximum index which can reach that bit.\nThis way we can solve this problem in $$$O(n \\log^2 n)$$$"
+        },
+        {
+            "title": "Implementation (C++)",
+            "content": "269305957"
+        }
+    ]
+}

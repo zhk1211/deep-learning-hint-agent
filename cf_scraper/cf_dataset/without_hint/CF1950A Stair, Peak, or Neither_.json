@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given three digits $ a $ , $ b $ , and $ c $ . Determine whether they form a stair, a peak, or neither.\n\n- A stair satisfies the condition $ a<b<c $ .\n- A peak satisfies the condition $ a<b>c $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases.\n\nThe only line of each test case contains three digits $ a $ , $ b $ , $ c $ ( $ 0 \\leq a $ , $ b $ , $ c \\leq 9 $ ).\n\nOutput Format\nFor each test case, output \"STAIR\" if the digits form a stair, \"PEAK\" if the digits form a peak, and \"NONE\" otherwise (output the strings without quotes).\n\nExamples\nSample 1\nInput\n7\n1 2 3\n3 2 1\n1 5 3\n3 4 1\n0 0 0\n4 1 7\n4 5 7\nOutput\nSTAIR\nNONE\nPEAK\nPEAK\nNONE\nNONE\nSTAIR"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\nvoid\nsolve\n()\n{\nint\na\n,\nb\n,\nc\n;\nstd\n::\ncin\n>>\na\n>>\nb\n>>\nc\n;\nif\n(\na\n<\nb\n&&\nb\n<\nc\n)\nstd\n::\ncout\n<<\n\"STAIR\"\n<<\n\"\\n\"\n;\nelse\nif\n(\na\n<\nb\n&&\nb\n>\nc\n)\nstd\n::\ncout\n<<\n\"PEAK\"\n<<\n\"\\n\"\n;\nelse\nstd\n::\ncout\n<<\n\"NONE\"\n<<\n\"\\n\"\n;\n}\nint\nmain\n()\n{\nint\ntt\n;\nstd\n::\ncin\n>>\ntt\n;\nwhile\n(\ntt\n--)\nsolve\n();\n}"
+        }
+    ]
+}

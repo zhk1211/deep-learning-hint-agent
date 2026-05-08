@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nSakurako's exams are over, and she did excellently. As a reward, she received a permutation $ p $ . Kosuke was not entirely satisfied because he failed one exam and did not receive a gift. He decided to sneak into her room (thanks to the code for her lock) and spoil the permutation so that it becomes simple.\n\nA permutation $ p $ is considered simple if for every $ i $ $ (1\\le i \\le n) $ one of the following conditions holds:\n\n- $ p_i=i $\n- $ p_{p_i}=i $\n\nFor example, the permutations $ [1, 2, 3, 4] $ , $ [5, 2, 4, 3, 1] $ , and $ [2, 1] $ are simple, while $ [2, 3, 1] $ and $ [5, 2, 1, 4, 3] $ are not.\n\nIn one operation, Kosuke can choose indices $ i,j $ $ (1\\le i,j\\le n) $ and swap the elements $ p_i $ and $ p_j $ .\n\nSakurako is about to return home. Your task is to calculate the minimum number of operations that Kosuke needs to perform to make the permutation simple.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1\\le t\\le 10^4 $ ) — the number of test cases.\n\nEach test case is described by two lines.\n\n- The first line contains one integer $ n $ ( $ 1\\le n \\le 10^6 $ ) — the length of the permutation $ p $ .\n- The second line contains $ n $ integers $ p_i $ ( $ 1\\le p_i\\le n $ ) — the elements of the permutation $ p $ .\n\nIt is guaranteed that the sum of $ n $ across all test cases does not exceed $ 10^6 $ .\n\nIt is guaranteed that $ p $ is a permutation.\n\nOutput Format\nFor each test case, output the minimum number of operations that Kosuke needs to perform to make the permutation simple.\n\nExamples\nSample 1\nInput\n6\n5\n1 2 3 4 5\n5\n5 4 3 2 1\n5\n2 3 4 5 1\n4\n2 3 4 1\n3\n1 3 2\n7\n2 3 1 5 6 7 4\nOutput\n0\n0\n2\n1\n0\n2\n\nNote\nIn the first and second examples, the permutations are already simple.\n\nIn the fourth example, it is sufficient to swap $ p_2 $ and $ p_4 $ . Thus, the permutation will become $ [2, 1, 4, 3] $ in $ 1 $ operation."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2033E - Sakurako, Kosuke, and the Permutation\nLets make this the shortest editorial out of all.\nObservation $$$1$$$:\nAll permutations can be split into cycles. All cycles of permutation can be traversed in $$$O(n)$$$ time.\nObservation $$$2$$$:\nWhen we are swapping $$$2$$$ elements that belong to one cycle, we are splitting our cycle into $$$2$$$ parts.\nIf we rephrase our definition of simple permutation, we can see that the permutation is called simple if every cycle in it has length not larger than $$$2$$$.\nObservation $$$3$$$:\nBy splitting our initial cycle of length $$$x$$$ repeatedly, we can achieve its division into cycles of length not larger than $$$2$$$ in $$$\\lfloor\\frac{x-1}{2}\\rfloor$$$ swaps. (this is achieved by repeatedly decreasing size of the cycle by $$$2$$$)\nObservation $$$4$$$:\nAll cycles are independent, so the answer for the initial task is the sum of answers for every cycle.\nTotal time complexity is $$$O(n)$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\nt\n;\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncout\n.\ntie\n(\nnullptr\n);\ncin\n.\ntie\n(\nnullptr\n);\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nint\nn\n;\ncin\n>>\nn\n;\nint\np\n[\nn\n+\n1\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++){\ncin\n>>\np\n[\ni\n];\n}\nbool\nus\n[\nn\n+\n1\n];\nmemset\n(\nus\n,\n0\n,\nsizeof\nus\n);\nint\nre\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++){\nif\n(!\nus\n[\ni\n]){\nint\ncu\n=\ni\n;\nint\nle\n=\n0\n;\nwhile\n(\nus\n[\ncu\n]==\n0\n){\nle\n++;\nus\n[\ncu\n]=\n1\n;\ncu\n=\np\n[\ncu\n];\n}\nre\n+=(\nle\n-\n1\n)/\n2\n;\n}\n}\ncout\n<<\nre\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

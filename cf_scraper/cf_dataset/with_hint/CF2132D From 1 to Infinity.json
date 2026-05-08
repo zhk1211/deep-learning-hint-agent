@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVadim wanted to understand the infinite sequence of digits that consists of the positive integers written consecutively from $1$ to infinity. That is, this sequence looks like $123456789101112131415\\ldots$\n\nTo avoid looking into infinity, Vadim cut this sequence at the $k$-th digit and discarded everything after it. Thus, exactly $k$ digits remained in the sequence. Help him find the sum of the digits in the remaining sequence.\n\nInput Format\nEach test consists of several test cases. The first line contains a single integer $t(1 \\le t \\le 2 \\cdot 10^4)$ — the number of test cases. The following lines describe the test cases.\n\nIn a single line of each test case, there is an integer $k$ — the number of digits in the remaining sequence $(1 \\le k \\le 10^{15})$.\n\nOutput Format\nFor each given $k$, output the sum of the digits in the sequence of length $k$.\n\nExamples\nSample 1\nInput\n6\n5\n10\n13\n29\n1000000000\n1000000000000000\nOutput\n15\n46\n48\n100\n4366712386\n4441049382716054\n\nNote\nIn the first sample, the remaining sequence will be $12345$.\n\nIn the second sample, the remaining sequence will be $1234567891$.\n\nIn the third sample, the remaining sequence will be $1234567891011$."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Find out which number the $$$k$$$-th digit belongs to in the infinite sequence. Let this number be $$$n$$$. Instead of analyzing the sequence, we can calculate the sum of the sums of the digits of all integers from $$$0$$$ to $$$n - 1$$$ and add to this the sum of the required digits of the number $$$n$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Mentally add leading zeros to all numbers from $$$0$$$ to $$$n - 1$$$ so that their lengths become the same. The sum of the sums of the digits will not change, but it will be more convenient to determine the formulas in this case."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nlong\nlong\nk\n;\ncin\n>>\nk\n;\nlong\nlong\ncur\n=\n9\n,\nlen\n=\n1\n;\nwhile\n(\nk\n-\ncur\n*\nlen\n>\n0\n)\n{\nk\n-=\ncur\n*\nlen\n;\ncur\n*=\n10\n;\nlen\n++;\n}\nstring\ns\n=\nto_string\n(\ncur\n/\n9\n+\n(\nk\n-\n1\n)\n/\nlen\n);\nlong\nlong\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n(\nk\n-\n1\n)\n%\nlen\n+\n1\n;\ni\n++)\nans\n+=\ns\n[\ni\n]\n-\n'0'\n;\nlong\nlong\npr_s\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\ns\n.\nlength\n();\ni\n++)\n{\nint\ncurd\n=\ns\n[\ni\n]\n-\n'0'\n;\nif\n(\ncurd\n)\nans\n+=\ncurd\n*\n(\nlen\n-\n1\n)\n*\ncur\n/\n2\n+\ncurd\n*\n(\n2\n*\npr_s\n+\ncurd\n-\n1\n)\n/\n2\n*\ncur\n/\n9\n;\ncur\n/=\n10\n,\nlen\n--;\npr_s\n+=\ncurd\n;\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

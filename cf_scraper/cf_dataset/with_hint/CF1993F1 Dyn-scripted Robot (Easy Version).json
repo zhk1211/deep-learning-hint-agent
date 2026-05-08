@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the easy version of the problem. The only difference is that in this version $ k \\le n $ . You can make hacks only if both versions of the problem are solved.\n\nGiven a $ w \\times h $ rectangle on the $ Oxy $ plane, with points $ (0, 0) $ at the bottom-left and $ (w, h) $ at the top-right of the rectangle.\n\nYou also have a robot initially at point $ (0, 0) $ and a script $ s $ of $ n $ characters. Each character is either L, R, U, or D, which tells the robot to move left, right, up, or down respectively.\n\nThe robot can only move inside the rectangle; otherwise, it will change the script $ s $ as follows:\n\n- If it tries to move outside a vertical border, it changes all L characters to R's (and vice versa, all R's to L's).\n- If it tries to move outside a horizontal border, it changes all U characters to D's (and vice versa, all D's to U's).\n\nThen, it will execute the changed script starting from the character which it couldn't execute.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1993F1/ff49f6aa11a19418f77260f4c00c02fa1a42de65.png) An example of the robot's movement process, $ s = \\texttt{\"ULULURD\"} $ The script $ s $ will be executed for $ k $ times continuously. All changes to the string $ s $ will be retained even when it is repeated. During this process, how many times will the robot move to the point $ (0, 0) $ in total? Note that the initial position does NOT count.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains four integers $ n $ , $ k $ , $ w $ , and $ h $ ( $ 1 \\le n, w, h \\le 10^6 $ ; $ 1 \\le k \\le n $ ).\n\nThe second line contains a single string $ s $ of size $ n $ ( $ s_i \\in \\{\\texttt{L}, \\texttt{R}, \\texttt{U}, \\texttt{D}\\} $ ) — the script to be executed.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^6 $ .\n\nOutput Format\nFor each test case, print a single integer — the number of times the robot reaches $ (0, 0) $ when executing script $ s $ for $ k $ times continuously.\n\nExamples\nSample 1\nInput\n5\n2 2 2 2\nUR\n4 2 1 1\nLLDD\n6 3 3 1\nRLRRRL\n5 5 3 3\nRUURD\n7 5 3 4\nRRDLUUU\nOutput\n0\n4\n3\n0\n1\n\nNote\nIn the first test case, the robot only moves up and right. In the end, it occupies the position $ (2, 2) $ but never visits $ (0, 0) $ . So the answer is $ 0 $ .\n\nIn the second test case, each time executing the script the robot visits the origin twice. And since $ k=2 $ , it visits the origin $ 2 \\cdot 2 = 4 $ times overall.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1993F1/4c04dc66914a3e1ee672ced7111b24a5891eec80.png)In the third test case, the visualization is shown as below:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1993F1/354b17fd45a6d2914b35f5325993193690563e94.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Let the robot moves freely (no modification on the script)."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The new path of the robot is the \"mirrored\" version of how the robot must go."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "So apparently, we need to calculate the number of times the robot reaches $$$(x, y)$$$, where $$$x$$$ is a multiple of $$$2W$$$ and $$$y$$$ is a multiple of $$$2H$$$ (see the general idea above).\nLet's call $$$t_k = (x_k, y_k)$$$ how much the robot moves (in direction) after executing the first $$$k$$$ commands of the script. Then: $$$t_0 = (0, 0)$$$ and $$$t_k$$$ can be calculated through $$$t_{k-1}$$$ and $$$s_k$$$.\nThe robot will execute the script $$$k$$$ times and the script contains $$$n$$$ commands, so we have $$$nk$$$ positions to check out. Each position can be represented by: $$$(x, y) = it_n + t_j = (ix_n + x_j, iy_n + y_j)$$$ (where $$$0\\le i\\le k-1$$$ and $$$1\\le j\\le n$$$). Besides, we need:\n$$$x\\equiv 0\\pmod{2W} \\Longrightarrow ix_n + x_j\\equiv 0\\pmod{2W} \\Longrightarrow x_j\\equiv -ix_n\\pmod{2W}$$$\n$$$y\\equiv 0\\pmod{2H} \\Longrightarrow iy_n + y_j\\equiv 0\\pmod{2H} \\Longrightarrow y_j\\equiv -iy_n\\pmod{2H}$$$\nLastly, we can traverse all possible $$$i$$$ from $$$0$$$ to $$$k-1$$$ and count the number of $$$j$$$ that satisfies the above equivalence. One possible way to do this is to use a map to count each element in the array $$$t_1, t_2, \\dots, t_n$$$. Summing all the counts will give the answer for this problem.\nTime complexity: $$$O((n + k)\\log n)$$$"
+        }
+    ]
+}

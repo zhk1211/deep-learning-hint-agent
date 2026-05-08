@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVladislav has a string of length $ 5 $ , whose characters are each either $ \\texttt{A} $ or $ \\texttt{B} $ .\n\nWhich letter appears most frequently: $ \\texttt{A} $ or $ \\texttt{B} $ ?\n\nInput Format\nThe first line of the input contains an integer $ t $ ( $ 1 \\leq t \\leq 32 $ ) — the number of test cases.\n\nThe only line of each test case contains a string of length $ 5 $ consisting of letters $ \\texttt{A} $ and $ \\texttt{B} $ .\n\nAll $ t $ strings in a test are different (distinct).\n\nOutput Format\nFor each test case, output one letter ( $ \\texttt{A} $ or $ \\texttt{B} $ ) denoting the character that appears most frequently in the string.\n\nExamples\nSample 1\nInput\n8\nABABB\nABABA\nBBBAB\nAAAAA\nBBBBB\nBABAA\nAAAAB\nBAAAA\nOutput\nB\nA\nB\nA\nB\nA\nA\nA"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200\n'007;\nconst int MOD = 1'\n000\n'000'\n007\n;\nvoid\nsolve\n()\n{\nstring\ns\n;\ncin\n>>\ns\n;\nint\na\n=\n0\n,\nb\n=\n0\n;\nfor\n(\nchar\nc\n:\ns\n)\n{\nif\n(\nc\n==\n'A'\n)\n{\na\n++;}\nelse\n{\nb\n++;}\n}\ncout\n<<\n(\na\n>\nb\n?\n'A'\n:\n'B'\n)\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

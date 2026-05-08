@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n$ n $ ships set out to explore the depths of the ocean. The ships are numbered from $ 1 $ to $ n $ and follow each other in ascending order; the $ i $ -th ship has a durability of $ a_i $ .\n\nThe Kraken attacked the ships $ k $ times in a specific order. First, it attacks the first of the ships, then the last, then the first again, and so on.\n\nEach attack by the Kraken reduces the durability of the ship by $ 1 $ . When the durability of the ship drops to $ 0 $ , it sinks and is no longer subjected to attacks (thus the ship ceases to be the first or last, and the Kraken only attacks the ships that have not yet sunk). If all the ships have sunk, the Kraken has nothing to attack and it swims away.\n\nFor example, if $ n=4 $ , $ k=5 $ , and $ a=[1, 2, 4, 3] $ , the following will happen:\n\n1. The Kraken attacks the first ship, its durability becomes zero and now $ a = [2, 4, 3] $ ;\n2. The Kraken attacks the last ship, now $ a = [2, 4, 2] $ ;\n3. The Kraken attacks the first ship, now $ a = [1, 4, 2] $ ;\n4. The Kraken attacks the last ship, now $ a = [1, 4, 1] $ ;\n5. The Kraken attacks the first ship, its durability becomes zero and now $ a = [4, 1] $ .\n\nHow many ships were sunk after the Kraken's attack?\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ , $ 1 \\le k \\le 10^{15} $ ) — the number of ships and how many times the Kraken will attack the ships.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the durability of the ships.\n\nIt is guaranteed that the sum of $ n $ for all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output the number of ships sunk by the Kraken on a separate line.\n\nExamples\nSample 1\nInput\n6\n4 5\n1 2 4 3\n4 6\n1 2 4 3\n5 20\n2 7 1 8 2\n2 2\n3 2\n2 15\n1 5\n2 7\n5 2\nOutput\n2\n3\n5\n0\n2\n2"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\nusing\nll\n=\nsigned\nlong\nlong\nint\n;\nvoid\nsolve\n()\n{\nint\nn\n;\nll k\n;\ncin\n>>\nn\n>>\nk\n;\ndeque\n<ll>\ndq\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\ndq\n[\ni\n];\n}\nwhile\n(\ndq\n.\nsize\n()\n>\n1\n&&\nk\n)\n{\nll mn\n=\nmin\n(\ndq\n.\nfront\n(),\ndq\n.\nback\n());\nif\n(\nk\n<\n2\n*\nmn\n)\n{\ndq\n.\nfront\n()\n-=\nk\n/\n2\n+\nk\n%\n2\n;\ndq\n.\nback\n()\n-=\nk\n/\n2\n;\nk\n=\n0\n;\n}\nelse\n{\ndq\n.\nfront\n()\n-=\nmn\n;\ndq\n.\nback\n()\n-=\nmn\n;\nk\n-=\n2\n*\nmn\n;\n}\nif\n(\ndq\n.\nfront\n()\n==\n0\n)\n{\ndq\n.\npop_front\n();\n}\nif\n(\ndq\n.\nback\n()\n==\n0\n)\n{\ndq\n.\npop_back\n();\n}\n}\nint\nans\n=\nn\n-\ndq\n.\nsize\n();\ncout\n<<\nans\n+\n(\ndq\n.\nsize\n()\n&&\ndq\n.\nfront\n()\n<=\nk\n)\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

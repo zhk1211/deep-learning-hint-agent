@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a sequence $ a_0, a_1, a_2, \\ldots $ of infinite length. Initially $ a_i = i $ for every non-negative integer $ i $ .\n\nAfter every second, each element of the sequence will simultaneously change. $ a_i $ will change to $ a_{i - 1} \\mid a_i \\mid a_{i + 1} $ for every positive integer $ i $ . $ a_0 $ will change to $ a_0 \\mid a_1 $ . Here, $ | $ denotes [bitwise OR](https://en.wikipedia.org/wiki/Bitwise_operation#OR).\n\nTurtle is asked to find the value of $ a_n $ after $ m $ seconds. In particular, if $ m = 0 $ , then he needs to find the initial value of $ a_n $ . He is tired of calculating so many values, so please help him!\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n, m $ ( $ 0 \\le n, m \\le 10^9 $ ).\n\nOutput Format\nFor each test case, output a single integer — the value of $ a_n $ after $ m $ seconds.\n\nExamples\nSample 1\nInput\n9\n0 0\n0 1\n0 2\n1 0\n5 2\n10 1\n20 3\n1145 14\n19198 10\nOutput\n0\n1\n3\n1\n7\n11\n23\n1279\n19455\n\nNote\nAfter $ 1 $ second, $ [a_0, a_1, a_2, a_3, a_4, a_5] $ will become $ [1, 3, 3, 7, 7, 7] $ .\n\nAfter $ 2 $ seconds, $ [a_0, a_1, a_2, a_3, a_4, a_5] $ will become $ [3, 3, 7, 7, 7, 7] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider each bit separately."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Calculate the time when the $$$d$$$-th bit of $$$a_n$$$ becomes $$$1$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution 1",
+            "content": "1981B - Turtle and an Infinite Sequence\nEach bit of the answer is independent, so we can calculate the value of each bit of the answer separately.\nLet's consider the $$$d$$$-th bit. Then, $$$a_i = \\left\\lfloor\\frac{i}{2^d}\\right\\rfloor \\bmod 2$$$.\nEvery second, a $$$1$$$ will \"spread\" one position to the left and right.\nIf $$$a_n$$$ is initially $$$1$$$, then the answer for this bit is $$$1$$$.\nOtherwise, $$$a_n$$$ is in a continuous segment of $$$0$$$s, and we need to calculate whether the $$$1$$$s on the left and right of this segment can \"spread\" to $$$a_n$$$. Let $$$x = n \\bmod 2^{d + 1}$$$, then $$$0 \\le x \\le 2^d - 1$$$. The left $$$1$$$ spreading to $$$a_n$$$ takes $$$x + 1$$$ seconds, and the right $$$1$$$ spreading to $$$a_n$$$ takes $$$2^d - x$$$ seconds. Therefore, if $$$\\min(x + 1, 2^d - x) \\le m$$$, then $$$a_n$$$ can become $$$1$$$. Specifically, if $$$n  \\lt  2^d$$$, then there is no $$$1$$$ on the left. Therefore, in this case, if $$$2^d - x \\le m$$$, then $$$a_n$$$ can become $$$1$$$.\nTime complexity: $$$O(\\log (n + m))$$$ per test case."
+        },
+        {
+            "title": "Solution 2",
+            "content": "The answer is the bitwise OR of the range $$$[\\max(0, n - m), n + m]$$$. Let's figure out how to calculate the bitwise OR of the range $$$[l, r]$$$.\nWe can consider each bit separately. If the $$$d$$$-th bit of $$$l$$$ is $$$1$$$ or the $$$d$$$-th bit of $$$r$$$ is $$$1$$$, then the $$$d$$$-th bit of the answer is $$$1$$$.\nOtherwise, if $$$\\left\\lfloor\\frac{l}{2^{d + 1}}\\right\\rfloor \\ne \\left\\lfloor\\frac{r}{2^{d + 1}}\\right\\rfloor$$$, then the $$$d$$$-th bit has been flipped at least twice from $$$l$$$ to $$$r$$$, so in this case the $$$d$$$-th bit of the answer is also $$$1$$$.\nTime complexity: $$$O(\\log (n + m))$$$ per test case."
+        },
+        {
+            "title": "Code for Solution 1",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\npb emplace_back\n#define\nfst first\n#define\nscd second\n#define\nmkp make_pair\n#define\nmems\n(\na\n,\nx\n)\nmemset\n((\na\n),\n(\nx\n),\nsizeof\n(\na\n))\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\ndouble\ndb\n;\ntypedef\nunsigned\nlong\nlong\null\n;\ntypedef\nlong\ndouble\nldb\n;\ntypedef\npair\n<\nll\n,\nll\n>\npii\n;\nvoid\nsolve\n()\n{\nll n\n,\nm\n;\nscanf\n(\n\"%lld%lld\"\n,\n&\nn\n,\n&\nm\n);\nll ans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\n30\n;\n++\ni\n)\n{\nll x\n=\nn\n&\n((\n1LL\n<<\n(\ni\n+\n1\n))\n-\n1\n);\nll t\n=\n(\n1LL\n<<\ni\n)\n-\nx\n;\nif\n(\nn\n>=\n(\n1LL\n<<\ni\n))\n{\nt\n=\nmin\n(\nt\n,\nx\n+\n1\n);\n}\nif\n(\nx\n>=\n(\n1LL\n<<\ni\n)\n||\nt\n<=\nm\n)\n{\nans\n|=\n(\n1LL\n<<\ni\n);\n}\n}\nprintf\n(\n\"%lld\\n\"\n,\nans\n);\n}\nint\nmain\n()\n{\nint\nT\n=\n1\n;\nscanf\n(\n\"%d\"\n,\n&\nT\n);\nwhile\n(\nT\n--)\n{\nsolve\n();\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Code for Solution 2",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\npb emplace_back\n#define\nfst first\n#define\nscd second\n#define\nmkp make_pair\n#define\nmems\n(\na\n,\nx\n)\nmemset\n((\na\n),\n(\nx\n),\nsizeof\n(\na\n))\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\ndouble\ndb\n;\ntypedef\nunsigned\nlong\nlong\null\n;\ntypedef\nlong\ndouble\nldb\n;\ntypedef\npair\n<\nll\n,\nll\n>\npii\n;\nvoid\nsolve\n()\n{\nll n\n,\nm\n;\nscanf\n(\n\"%lld%lld\"\n,\n&\nn\n,\n&\nm\n);\nll l\n=\nmax\n(\n0LL\n,\nn\n-\nm\n),\nr\n=\nn\n+\nm\n,\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n31\n;\n~\ni\n;\n--\ni\n)\n{\nif\n((\nl\n&\n(\n1LL\n<<\ni\n))\n||\n(\nr\n&\n(\n1LL\n<<\ni\n))\n||\n(\nl\n>>\n(\ni\n+\n1\n))\n!=\n(\nr\n>>\n(\ni\n+\n1\n)))\n{\nans\n|=\n(\n1LL\n<<\ni\n);\n}\n}\nprintf\n(\n\"%lld\\n\"\n,\nans\n);\n}\nint\nmain\n()\n{\nint\nT\n=\n1\n;\nscanf\n(\n\"%d\"\n,\n&\nT\n);\nwhile\n(\nT\n--)\n{\nsolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

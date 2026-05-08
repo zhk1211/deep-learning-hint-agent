@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMy loveliest wishes dissolved into the air; At eighteen, I poured my dreams into the mic to share.\n\n— SHUN, [720](https://open.spotify.com/track/3bhQrFuaaPk8pMMb7TcU2d)\n\nWe call an array $ b $ of length $ m $ cool if and only if:\n\n- There exists no index $ i $ ( $ 1 \\lt i \\lt m $ ) such that $ b_i=\\max(\\{b_{i-1}, b_i, b_{i+1}\\}) $ .\n\nSimons has an array $ a $ of size $ n $ . Initially, the array is a permutation $ ^{\\text{∗}} $ .\n\nHe must perform the following operation until the array is cool:\n\n- Choose an index $ i $ ( $ 1 \\lt i \\lt n $ ) such that $ a_i=\\max(\\{a_{i-1}, a_i, a_{i+1}\\}) $ .\n- Then, he can remove either $ a_{i-1} $ or $ a_{i+1} $ from the array. After removal, a gap appears in the array, and the left and right sides of the gap will be rejoined.\n\nFind the minimum number of operations for Simons to perform.\n\n$ ^{\\text{∗}} $ A permutation of length $ n $ is an array consisting of $ n $ distinct integers from $ 1 $ to $ n $ in arbitrary order. For example, $ [2,3,1,5,4] $ is a permutation, but $ [1,2,2] $ is not a permutation ( $ 2 $ appears twice in the array), and $ [1,3,4] $ is also not a permutation ( $ n=3 $ but there is $ 4 $ in the array).\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 5\\cdot 10^4 $ ). The description of the test cases follows.\n\nThe first line contains an integer $ n $ ( $ 3\\le n\\le 5\\cdot 10^5 $ ) — the size of $ a $ .\n\nThe second line contains $ n $ integers $ a_1,a_2,\\ldots,a_n $ ( $ 1\\le a_i\\le n $ , all $ a_i $ -s are distinct) — the array Simons has initially.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 5\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single integer — the minimum number of operations for Simons to perform.\n\nExamples\nSample 1\nInput\n5\n3\n1 2 3\n5\n4 1 3 2 5\n6\n4 5 3 6 2 1\n7\n6 5 1 7 4 2 3\n15\n7 4 10 12 9 14 5 3 8 11 1 15 2 13 6\nOutput\n0\n1\n3\n3\n9\n\nNote\nIn the first test case, the array is cool initially, so Simons can't perform any operation. The answer is $ 0 $ .\n\nIn the second test case, Simons can perform as follows:\n\n- Choose index $ 3 $ , because $ a_3=\\max(\\{a_2,a_3,a_4\\}) $ . Then, he removes $ a_{2} $ from the array. The array becomes $ [4,3,2,5] $ .\n\nWe can see the array is cool now. Thus, the answer is $ 1 $ .\n\nIn the third test case, Simons can perform as follows:\n\n- Choose index $ 2 $ . Then, he removes $ a_1 $ from the array. The array becomes $ [5,3,6,2,1] $ .\n- Choose index $ 3 $ . Then, he removes $ a_2 $ from the array. The array becomes $ [5,6,2,1] $ .\n- Choose index $ 2 $ . Then, he removes $ a_1 $ from the array. The array becomes $ [6,2,1] $ .\n\nThus, Simons makes the array cool in $ 3 $ operations."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Simons's goal of minimizing operations means that the remaining array should be as long as possible."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Which element is absolutely impossible to remove?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "The position of the maximum value cannot be removed, and we can see that splitting the array from the maximum value will result in two independent parts."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Consider the\nCartesian tree\nof the given permutation."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "It's noticed that the maximum number of each number cannot be moved, and either the left side or the right side will be removed completely, so we can solve both sides separately.\nThe maximum number of both sides cannot be removed, either. Accordingly, they became the same problem with smaller scale.\nBuild the Cartesian tree for the sequence. It's easy to see that any path from the root corresponds to a way to keep the maximum number on one side and delete the others.\nCalculate the depth of each node $$$d_u$$$, then the answer is $$$n - \\max d_u$$$.\nThe solution could be done in $$$\\Theta(n)$$$, and there are also solutions based on Dynamic Programming (DP) for time complexity $$$\\tilde O(n)$$$."
+        }
+    ]
+}

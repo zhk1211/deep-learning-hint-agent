@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1910G - Pool Records\nThere are basically two types of meetings between Alice and Bob: they meet while moving in opposite directions or while moving in the same direction (we will count meetings at the border of the pool as both types).\nLet's look at these types independently. Suppose they are moving in the opposite directions and met at point $$$p_1$$$. Suppose, the next time they met in point $$$p_2$$$. The total distance they swim is $$$(p_1 + p_2) + (50 - p_1 + 50 - p_2) = 2 \\cdot 50 = 100$$$. The total speed they travel until the next encounter is $$$v_A + v_B$$$.\nSo the period of time between two consecutive meeting moments are always $$$\\frac{100}{v_A + v_B}$$$. Let's name it as\nshort period\n$$$p_s$$$.\nAnalogically, let's analyze the case when they met while swimming in the same direction. Without loss of generality, let's say that $$$v_A  \\gt  v_B$$$. Then the relative speed of Alice with respect to Bob is $$$|v_A - v_B|$$$ and they will meet again after Alice will swim one more cycle, or $$$100$$$. Then, the period of time between two meeting moments is $$$\\frac{100}{|v_A - v_B|}$$$. Let's name it as\nlong period\n$$$p_l$$$.\nIn total, we understand that all values $$$t_i$$$ must be divisible either by $$$p_s$$$ or by $$$p_l$$$, since Alice and Bob started at $$$0$$$, each meeting moment is one of two types and difference between moments of the same type must be equal to the corresponding period.\nSo, if we know both values $$$p_s$$$ and $$$p_l$$$ we can check is $$$t$$$ valid or not. Since $$$v_A, v_B  \\gt  0$$$ then $$$p_s  \\lt  p_l$$$. And since $$$t_1$$$ is the first moment, then short period $$$p_s$$$ has to be equal to $$$t_1$$$.\nSo we know that $$$p_s = t_1$$$, but how to find $$$p_l$$$? Let's find the\nminimum\n$$$t_i$$$ such that $$$t_i$$$ is not divisible by $$$p_s$$$. Since it's not divisible by $$$p_s$$$ it has to be divisible by $$$p_l$$$. And it's not hard to prove that $$$p_l$$$ is exactly $$$t_i$$$. (We can prove it by contradiction: suppose $$$p_l = t_j$$$ ($$$j  \\lt  i$$$); since all $$$t_j  \\lt  t_i$$$ are divisible by $$$p_s$$$ then $$$p_l = t_j$$$ is also divisible by $$$p_s$$$, but $$$t_i$$$ is not divisible by $$$p_s$$$, so $$$t_i$$$ is not divisible by $$$p_l$$$ — contradiction).\nSo, now we know both $$$p_s$$$ and $$$p_l$$$, how to check: is $$$t$$$ valid? Let's just create an array $$$t'$$$ — the first $$$n$$$ meeting moments for a pair of periods $$$p_s$$$ and $$$p_l$$$ and compare it with a given array $$$t$$$.\nTo create $$$t'$$$ let's do the following:\ncreate list $$$S = [p_s, 2 p_s, \\dots, n \\cdot p_s]$$$;\ncreate list $$$L = [p_l, 2 p_l, \\dots, n \\cdot p_l]$$$;\nmerge $$$S$$$ and $$$L$$$ in one list $$$t'$$$ taking only unique values from both lists (for example, using\nunion\n);\nsort $$$t'$$$ if necessary and take only first $$$n$$$ elements from it.\nIf generated $$$t'$$$ and given $$$t$$$ are equal, then $$$t$$$ is a valid array, otherwise it's invalid."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "fun main\n()\n{\nrepeat\n(\nreadln\n().\ntoInt\n())\n{\nval n\n=\nreadln\n().\ntoInt\n()\nval t\n=\nreadln\n().\nsplit\n(\n' '\n).\nmap\n{\nit\n.\ntoLong\n()\n}\nfun\nLong\n.\ngenMoments\n()\n=\nList\n(\nn\n)\n{\n(\nit\n+\n1\n)\n*\nthis\n}\nval sPeriod\n=\nt\n[\n0\n]\nval lPeriod\n=\nt\n.\nfirstOrNull\n{\nit\n%\nsPeriod\n!=\n0L\n}\nval sMoments\n=\nsPeriod\n.\ngenMoments\n()\nval lMoments\n=\nlPeriod\n?.\ngenMoments\n()\n?:\nlistOf\n()\nval req\n=\nsMoments\n.\nunion\n(\nlMoments\n).\nsorted\n().\ntake\n(\nn\n)\nprintln\n(\nif\n(\nreq\n==\nt\n)\n\"VALID\"\nelse\n\"INVALID\"\n)\n}\n}"
+        }
+    ]
+}

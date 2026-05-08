@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIn the new messenger for the students of the Master's Assistance Center, Keftemerum, an update is planned, in which developers want to optimize the set of messages shown to the user. There are a total of $ n $ messages. Each message is characterized by two integers $ a_i $ and $ b_i $ . The time spent reading the set of messages with numbers $ p_1, p_2, \\ldots, p_k $ ( $ 1 \\le p_i \\le n $ , all $ p_i $ are distinct) is calculated by the formula:\n\n$\\Large \\sum_{i=1}^{k} a_{p_i} + \\sum_{i=1}^{k - 1} |b_{p_i} - b_{p_{i+1}}| $\nNote that the time to read a set of messages consisting of one message with number $ p_1 $ is equal to $ a_{p_1} $ . Also, the time to read an empty set of messages is considered to be $ 0 $ .The user can determine the time $ l $ that he is willing to spend in the messenger. The messenger must inform the user of the maximum possible size of the set of messages, the reading time of which does not exceed $ l $ . Note that the maximum size of the set of messages can be equal to $ 0.$\n\nThe developers of the popular messenger failed to implement this function, so they asked you to solve this problem.\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 5 \\cdot 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ l $ ( $ 1 \\leq n \\leq 2000 $ , $ 1 \\leq l \\leq 10^9 $ ) — the number of messages and the time the user is willing to spend in the messenger.\n\nThe $ i $ -th of the next $ n $ lines contains two integers $ a_i $ and $ b_i $ ( $ 1 \\le a_i, b_i \\le 10^9 $ ) — characteristics of the $ i $ -th message.\n\nIt is guaranteed that the sum of $ n^2 $ over all test cases does not exceed $ 4 \\cdot 10^6 $ .\n\nOutput Format\nFor each test case, output a single integer — the maximum possible size of a set of messages, the reading time of which does not exceed $ l $ .\n\nExamples\nSample 1\nInput\n5\n5 8\n4 3\n1 5\n2 4\n4 3\n2 3\n1 6\n4 10\n3 12\n4 8\n2 1\n2 12\n5 26\n24 7\n8 28\n30 22\n3 8\n17 17\n5 14\n15 3\n1000000000 998244353\n179 239\n228 1337\n993 1007\nOutput\n3\n1\n2\n1\n0\n\nNote\nIn the first test case, you can take a set of three messages with numbers $ p_1 = 3 $ , $ p_2 = 2 $ , and $ p_3 = 5 $ . The time spent reading this set is equal to $ a_3 + a_2 + a_5 + |b_3 - b_2| + |b_2 - b_5| = 2 + 1 + 2 + |4 - 5| + |5 - 3| = 8 $ .\n\nIn the second test case, you can take a set of one message with number $ p_1 = 1 $ . The time spent reading this set is equal to $ a_1 = 4 $ .\n\nIn the fifth test case, it can be shown that there is no such non-empty set of messages, the reading time of which does not exceed $ l $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nTry to find the answer to the problem by hand. How can changing the order of the messages reduce time?\nHint 2\nLet the order in the response be $$$p_1, p_2, \\ldots, p_k$$$. It is always advantageous for the response to satisfy $$$b_{p_1} \\leq b_{p_2} \\leq \\ldots \\leq b_{p_k}$$$.\nHint 3\nGreedy?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "Try to find the answer to the problem by hand. How can changing the order of the messages reduce time?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Let the order in the response be $$$p_1, p_2, \\ldots, p_k$$$. It is always advantageous for the response to satisfy $$$b_{p_1} \\leq b_{p_2} \\leq \\ldots \\leq b_{p_k}$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Greedy?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let the order in the response be $$$p_1, p_2, \\ldots, p_k$$$. Note that in the optimal response, it will hold that $$$b_{p_1} \\leq b_{p_2} \\leq \\ldots \\leq b_{p_k}$$$. It's not hard to prove that such an order minimizes the sum of the absolute differences of adjacent elements in the array $$$b$$$. Then, this sum will turn into $$$b_{p_k} - b_{p_1}$$$, that is, the difference between the highest and lowest value of $$$b$$$ in the set of messages.\nLet's sort the pairs $$$(a_i, b_i)$$$ in ascending order of $$$b_i$$$. Fix the minimum value in the set of messages $$$b_l$$$ and the maximum value $$$b_r$$$. Note that the sum of the absolute differences of $$$b$$$ in the response will not change if taking values $$$b_l \\leq b_i \\leq b_r$$$. Thus, the task reduces to finding the maximum number of messages so that $$$\\sum a \\leq L - (b_r - b_l)$$$.\nIterate over $$$b_l$$$ and $$$b_r$$$. Apply a greedy algorithm, sort all values of $$$a_i$$$ ($$$l \\leq i \\leq r$$$), and keep adding values until the time exceeds $$$L$$$. This solution works in $$$O(n^3\\log{}n)$$$, which is too slow.\nTo speed up the solution, while iterating over $$$b_r$$$, maintain a data structure that allows adding an element, removing the maximum, getting the maximum (in C++, there are $$$\\textit{multiset}$$$ and $$$\\textit{priority_queue}$$$). In this data structure, maintain the minimum values of $$$a$$$, so the sum of times does not exceed $$$L$$$. Then, if the current time exceeds $$$L$$$, remove from the structure until the current time becomes no more than $$$L$$$. There will be no more than $$$n$$$ such removals. We have obtained a solution in $$$O(n^2\\log{}n)$$$, which is feasibly fast."
+        },
+        {
+            "title": "Implementation on C++",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nsigned\nmain\n()\n{\nstd\n::\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\nstd\n::\ncin\n.\ntie\n(\nnullptr\n);\nint\nt\n=\n1\n;\nstd\n::\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nL\n;\nstd\n::\ncin\n>>\nn\n>>\nL\n;\nstd\n::\nvector\n<\nstd\n::\npair\n<\nint\n,\nint\n>>\nv\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nstd\n::\ncin\n>>\nv\n[\ni\n].\nsecond\n>>\nv\n[\ni\n].\nfirst\n;\n}\nstd\n::\nsort\n(\nv\n.\nbegin\n(),\nv\n.\nend\n());\nint\nans\n=\n0\n;\nfor\n(\nint\nl\n=\n0\n;\nl\n<\nn\n;\nl\n++)\n{\nstd\n::\nmultiset\n<int>\ns\n;\nint\ncur\n=\n0\n;\nfor\n(\nint\nr\n=\nl\n;\nr\n<\nn\n;\nr\n++)\n{\ns\n.\ninsert\n(\nv\n[\nr\n].\nsecond\n);\ncur\n+=\nv\n[\nr\n].\nsecond\n;\nwhile\n(!\ns\n.\nempty\n()\n&&\nv\n[\nr\n].\nfirst\n-\nv\n[\nl\n].\nfirst\n+\ncur\n>\nL\n)\n{\nint\nmax_value\n=\n*\ns\n.\nrbegin\n();\ncur\n-=\nmax_value\n;\ns\n.\nextract\n(\nmax_value\n);\n}\nans\n=\nstd\n::\nmax\n(\nans\n,\n(\nint\n)\ns\n.\nsize\n());\n}\n}\nstd\n::\ncout\n<<\nans\n<<\n\"\\n\"\n;\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Implementation on Python",
+            "content": "import\nheapq\nimport\nsys\n\ninput\n=\nsys\n.\nstdin\n.\nreadline\n\nt\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\nn\n,\nL\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nv\n=\n[]\nfor\ni\nin\nrange\n(\nn\n):\na\n,\nb\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nv\n.\nappend\n((\nb\n,\na\n))\nv\n.\nsort\n()\nans\n=\n0\nfor\nl\nin\nrange\n(\nn\n):\npq\n=\n[]\nheapq\n.\nheapify\n(\npq\n)\ncur\n=\n0\nsize\n=\n0\nfor\nr\nin\nrange\n(\nl\n,\nn\n):\nheapq\n.\nheappush\n(\npq\n,\n-\nv\n[\nr\n][\n1\n])\nsize\n+=\n1\ncur\n+=\nv\n[\nr\n][\n1\n]\nwhile\nsize\nand\nv\n[\nr\n][\n0\n]\n-\nv\n[\nl\n][\n0\n]\n+\ncur\n>\nL\n:\nmaxx\n=\n-\nheapq\n.\nheappop\n(\npq\n)\ncur\n-=\nmaxx\n                size\n-=\n1\nans\n=\nmax\n(\nans\n,\nsize\n)\nprint\n(\nans\n)"
+        }
+    ]
+}

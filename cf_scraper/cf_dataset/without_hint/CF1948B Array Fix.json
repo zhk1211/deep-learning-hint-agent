@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer array $ a $ of length $ n $ .\n\nYou can perform the following operation any number of times (possibly zero): take any element of the array $ a $ , which is at least $ 10 $ , delete it, and instead insert the digits that element consisted of in the same position, in order they appear in that element.\n\nFor example:\n\n- if we apply this operation to the $ 3 $ -rd element of the array $ [12, 3, 45, 67] $ , then the array becomes $ [12, 3, 4, 5, 67] $ .\n- if we apply this operation to the $ 2 $ -nd element of the array $ [2, 10] $ , then the array becomes $ [2, 1, 0] $ .\n\nYour task is to determine whether it is possible to make $ a $ sorted in non-descending order using the aforementioned operation any number of times (possibly zero). In other words, you have to determine if it is possible to transform the array $ a $ in such a way that $ a_1 \\le a_2 \\le \\dots \\le a_k $ , where $ k $ is the current length of the array $ a $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^3 $ ) — the number of test cases.\n\nEach test case consists of two lines:\n\n- the first line contains a single integer $ n $ ( $ 2 \\le n \\le 50 $ ).\n- the second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i \\le 99 $ ).\n\nOutput Format\nFor each test case, print YES if it is possible to make $ a $ sorted in non-decreasing order using the aforementioned operation; otherwise, print NO.\n\nYou can print each letter in any case. For example, yes, Yes, YeS will all be recognized as a positive answer.\n\nExamples\nSample 1\nInput\n3\n4\n12 3 45 67\n3\n12 28 5\n2\n0 0\nOutput\nYES\nNO\nYES\n\nNote\nIn the first example, you can split the first element, then the array becomes $ [1, 2, 3, 45, 67] $ .\n\nIn the second example, there is no way to get a sorted array.\n\nIn the third example, the array is already sorted."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1948B - Array Fix\nThe key to solving the problem is the following observation: if $$$a_i  \\gt  a_{i + 1}$$$, then the $$$i$$$-th element should always be split (since it is the only way to decrease the element compared with $$$a_{i+1}$$$).\nThis observation allows us to solve the problem greedily as follows: iterate on the array $$$a$$$ from right to left, keeping track of the list of elements we processed; if the current element is greater than the last element in our list, we have to split it (and add the digits it consists of to the list); otherwise, we don't have to split it (because it might forbid some of the next elements and force them to split as well).\nAfter that, we have to make sure we obtained a sorted array (because, for example, a number like $$$98$$$ will break the sorted order if we split it, and we didn't check that). But since we maintained the list of elements we processed, that's quite easy, because that list is the resulting array $$$a$$$ in reversed order."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nauto\n&\nx\n:\na\n)\ncin\n>>\nx\n;\nvector\n<int>\nb\n({\na\n[\nn\n-\n1\n]});\nfor\n(\nint\ni\n=\nn\n-\n2\n;\ni\n>=\n0\n;\n--\ni\n)\n{\nif\n(\na\n[\ni\n]\n>\nb\n.\nback\n())\n{\nb\n.\npush_back\n(\na\n[\ni\n]\n%\n10\n);\nb\n.\npush_back\n(\na\n[\ni\n]\n/\n10\n);\n}\nelse\n{\nb\n.\npush_back\n(\na\n[\ni\n]);\n}\n}\ncout\n<<\n(\nis_sorted\n(\nb\n.\nrbegin\n(),\nb\n.\nrend\n())\n?\n\"YES\"\n:\n\"NO\"\n)\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

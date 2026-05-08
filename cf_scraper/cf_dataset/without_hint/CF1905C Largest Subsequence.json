@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven is a string $ s $ of length $ n $ . In one operation you can select the lexicographically largest $ ^\\dagger $ subsequence of string $ s $ and cyclic shift it to the right $ ^\\ddagger $ .\n\nYour task is to calculate the minimum number of operations it would take for $ s $ to become sorted, or report that it never reaches a sorted state.\n\n$ ^\\dagger $ A string $ a $ is lexicographically smaller than a string $ b $ if and only if one of the following holds:\n\n- $ a $ is a prefix of $ b $ , but $ a \\ne b $ ;\n- In the first position where $ a $ and $ b $ differ, the string $ a $ has a letter that appears earlier in the alphabet than the corresponding letter in $ b $ .\n\n$ ^\\ddagger $ By cyclic shifting the string $ t_1t_2\\ldots t_m $ to the right, we get the string $ t_mt_1\\ldots t_{m-1} $ .\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the string $ s $ .\n\nThe second line of each test case contains a single string $ s $ of length $ n $ , consisting of lowercase English letters.\n\nIt is guaranteed that sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum number of operations required to make $ s $ sorted, or $ -1 $ if it's impossible.\n\nExamples\nSample 1\nInput\n6\n5\naaabc\n3\nacb\n3\nbac\n4\nzbca\n15\nczddeneeeemigec\n13\ncdefmopqsvxzz\nOutput\n0\n1\n-1\n2\n6\n0\n\nNote\nIn the first test case, the string $ s $ is already sorted, so we need no operations.\n\nIn the second test case, doing one operation, we will select cb and cyclic shift it. The string $ s $ is now abc which is sorted.\n\nIn the third test case, $ s $ cannot be sorted.\n\nIn the fourth test case we will perform the following operations:\n\n- The lexicographically largest subsequence is zca. Then $ s $ becomes abzc.\n- The lexicographically largest subsequence is zc. Then $ s $ becomes abcz. The string becomes sorted.\n\nThus, we need $ 2 $ operations."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "We can notice that this operation will ultimately reverse the lexicographically largest subset of the initial string.\nThus, we can easily check if the string is sortable, and for finding the number of operations we will subtract the length of the largest prefix of equal values of the subset from its length.\nThis solution works in $$$O(n)$$$ time."
+        }
+    ]
+}

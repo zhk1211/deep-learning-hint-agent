@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou can never buy enough happiness, so here we go again! In this version, you can only buy $ h_i = 1 $ unit of happiness each month, but the number of months is hugely increased. We are in the realm of quantum happiness and time dilation.\n\nBeing a physicist, Charlie likes to plan his life in simple and precise terms.\n\nFor the next $ m $ months, starting with no money, Charlie will work hard and earn $ x $ pounds per month. For the $ i $ -th month $ (1 \\le i \\le m) $ , there'll be a single opportunity of paying cost $ c_i $ pounds to obtain one unit of happiness. You cannot buy more than one unit each month.\n\nBorrowing is not allowed. Money earned in the $ i $ -th month can only be spent in a later $ j $ -th month ( $ j>i $ ).\n\nSince physicists don't code, help Charlie find the maximum reachable units of happiness.\n\nInput Format\nThe first line of the input contains $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers, $ m $ and $ x $ ( $ 1 \\le m \\le 2 \\cdot 10^5 $ , $ 1 \\le x \\le 10^3 $ ) — the total number of months and the monthly salary.\n\nThe second line of each test case contains $ m $ integers $ c_1, c_2, \\dots, c_m $ ( $ 1 \\leq c_i \\leq 10^3 $ ) — the cost of one unit of happiness for each month.\n\nIt is guaranteed that sum of $ m $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output one integer — the maximal amount of happiness Charlie can get.\n\nExamples\nSample 1\nInput\n6\n3 3\n2 2 2\n6 5\n2 2 8 2 6 8\n6 4\n4 10 3 8 6 10\n2 1\n1 1\n4 1\n4 1 3 1\n4 2\n1 3 4 3\nOutput\n2\n4\n3\n1\n2\n1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1974G - Money Buys Less Happiness Now\nLet us consider the smallest element $$$c_m$$$ (and the rightmost if equal). Suppose we do not take it. Now, we emulate the decisions from the first month up to month $$$m$$$. Note that if we chose some element on the left of $$$m$$$ we could have chosen the smallest one $$$c_m$$$ instead. Thus, we can go greedy: go over the costs in the sorted order and check whether we can take it. To check whether there are enough pounds from the previous months we can use the segment tree. When we take the happiness during month $$$m$$$ we need to reduce the amount of pounds on the left by $$$c_m$$$.\nThis greedy approach can be implemented simpler. We just need to go over the costs from the first month and maintain the heap (or set/priority queue) of chosen costs. When we go over a new cost we check whether we can pay for it and, if positive, we add it to our answer. Otherwise, we remove the largest chosen cost from the heap, compare it with the current cost, and put back the smaller one."
+        },
+        {
+            "title": "Solution",
+            "content": "from\nheapq\nimport\n*\nfor\n_\nin\nrange\n(\nint\n(\ninput\n())):\nm\n,\nx\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nc\n=\n[\nint\n(\nx\n)\nfor\nx\nin\ninput\n().\nsplit\n()]\nbudget\n=\n0\nQ\n=\n[]\nfor\ni\nin\nc\n:\nif\nbudget\n>=\ni\n:\nheappush\n(\nQ\n,\n-\ni\n)\nbudget\n-=\ni\nelif\nQ\nand\n-\nQ\n[\n0\n]\n>\ni\n:\nbudget\n+=\n-\nheappop\n(\nQ\n)-\ni\n            heappush\n(\nQ\n,\n-\ni\n)\nbudget\n+=\nx\nprint\n(\nlen\n(\nQ\n))"
+        }
+    ]
+}

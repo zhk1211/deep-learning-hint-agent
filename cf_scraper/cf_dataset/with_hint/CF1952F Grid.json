@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Input Format\nThe input contains $ 21 $ lines, each containing $ 21 $ characters $ \\texttt{0} $ or $ \\texttt{1} $ .\n\nExamples\nSample 1\nInput\n111111101011101111111\n100000100011001000001\n101110101101001011101\n101110101100101011101\n101110101001001011101\n100000100111101000001\n111111101010101111111\n000000000001100000000\n111100101111110011101\n000111010101100110101\n111101101101001000011\n001001000001000011000\n111101110000111001011\n000000001001001111100\n111111100001101010000\n100000100010010100111\n101110100110110011100\n101110101100000100010\n101110101010110000100\n100000101000011001001\n111111101011111111100\nOutput\n12"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Can you convert a grid of 0s and 1s into a useful piece of data?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Look in the top-left, top-right, and bottom-left corners. What do you notice?\nHint 2.2\nNamely, look at the the top-left, top-right, and bottom-left $$$7 \\times 7$$$ subgrids. They form a pattern. Have you seen this pattern elsewhere? (It is well-known.)"
+        },
+        {
+            "title": "Hint 2.2",
+            "content": "Namely, look at the the top-left, top-right, and bottom-left $$$7 \\times 7$$$ subgrids. They form a pattern. Have you seen this pattern elsewhere? (It is well-known.)"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "1952F - Grid\nReplace 0 with white and 1 with black to get this QR code:\nScanning it tells you that you need to find the $$$4 \\times 4$$$ grid with the maximum sum."
+        }
+    ]
+}

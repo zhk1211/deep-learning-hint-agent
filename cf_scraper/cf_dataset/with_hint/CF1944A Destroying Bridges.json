@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ islands, numbered $ 1, 2, \\ldots, n $ . Initially, every pair of islands is connected by a bridge. Hence, there are a total of $ \\frac{n (n - 1)}{2} $ bridges.\n\nEverule lives on island $ 1 $ and enjoys visiting the other islands using bridges. Dominater has the power to destroy at most $ k $ bridges to minimize the number of islands that Everule can reach using (possibly multiple) bridges.\n\nFind the minimum number of islands (including island $ 1 $ ) that Everule can visit if Dominater destroys bridges optimally.\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^3 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first and only line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 100 $ , $ 0 \\le k \\le \\frac{n \\cdot (n - 1)}{2} $ ).\n\nOutput Format\nFor each test case, output the minimum number of islands that Everule can visit if Dominater destroys bridges optimally.\n\nExamples\nSample 1\nInput\n6\n2 0\n2 1\n4 1\n5 10\n5 3\n4 4\nOutput\n2\n1\n4\n1\n5\n1\n\nNote\nIn the first test case, since no bridges can be destroyed, all the islands will be reachable.\n\nIn the second test case, you can destroy the bridge between islands $ 1 $ and $ 2 $ . Everule will not be able to visit island $ 2 $ but can still visit island $ 1 $ . Therefore, the total number of islands that Everule can visit is $ 1 $ .\n\nIn the third test case, Everule always has a way of reaching all islands despite what Dominater does. For example, if Dominater destroyed the bridge between islands $ 1 $ and $ 2 $ , Everule can still visit island $ 2 $ by traveling by $ 1 \\to 3 \\to 2 $ as the bridges between $ 1 $ and $ 3 $ , and between $ 3 $ and $ 2 $ are not destroyed.\n\nIn the fourth test case, you can destroy all bridges since $ k = \\frac{n \\cdot (n - 1)}{2} $ . Everule will be only able to visit $ 1 $ island (island $ 1 $ )."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What is the minimum number of bridges to burn if we want to make exactly $$$i$$$ islands visitable from $$$1$$$?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "What is the answer when $$$k \\ge n - 1$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "When $$$k \\lt n - 1$$$, is it possible to make any island non-visitable?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "O(n) Solution",
+            "content": "Atleast $$$i \\cdot (n - i)$$$ bridges need to burnt (the bridges connecting the $$$i$$$ reachable islands and the $$$n - i$$$ non-reachable islands).\nA simple $$$O(n)$$$ solution is for every $$$i$$$ from $$$1$$$ to $$$n$$$, check if $$$i \\cdot (n - i) \\le k$$$, in which case print $$$i$$$ and break."
+        },
+        {
+            "title": "O(1) Solution",
+            "content": "When $$$k \\ge n - 1$$$, the answer is $$$1$$$ since we can just destroy all bridges $$$(1, i)$$$ for $$$2 \\le i \\le n$$$.\nOtherwise, suppose we tried to make some set of $$$i$$$ islands non-visitable, and the other $$$n - i$$$ nodes reachable from $$$1$$$. Then we need to burn atleast $$$i \\cdot (n - i)$$$ bridges (the bridges connecting the $$$2$$$ sets). It is not hard to see that this function attains the minimum value when $$$i = 1$$$ or $$$i = n - 1$$$ for $$$1 \\le i \\lt n$$$. Hence the minimum number of bridges to burn always exceeds $$$n - 1$$$.\nFormal Proof\nThe function $$$f(x) = x \\cdot (n - x)$$$ is a quadratic function in $$$x$$$, which attains maximum value at $$$x = \\frac{n}{2}$$$, and the value decreasing proportionally as the distance from $$$\\frac{n}{2}$$$ increases. This means that $$$f(1) = f(n - 1)$$$, and $$$f(1) \\gt f(i)$$$ for all ($$$2 \\le i \\le (n - 2)$$$)."
+        }
+    ]
+}

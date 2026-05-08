@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nBe careful not to make a mistake. You might have to start all over again.\n\n— Someone, probably\n\nInput Format\nThe first line contains one integer $ n $ ( $ 1 \\leq n \\leq 10^5 $ ) — the length of the array $ a $ .\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\leq a_i \\leq 2 $ ) — the array $ a $ .\n\nOutput Format\nOutput a single integer — the number of solutions, modulo $ 20240401 $ .\n\nExamples\nSample 1\nInput\n7\n1 1 2 1 1 2 0\nOutput\n1\n\nSample 2\nInput\n7\n1 1 2 1 1 1 0\nOutput\n2\n\nSample 3\nInput\n7\n0 1 2 1 1 1 0\nOutput\n0\n\nNote\nIn the first sample, the array looks like this:\n\n$ \\color{blue}{1} $ $ \\color{blue}{1} $ $ \\color{darkgreen}{2} $ $ \\color{blue}{1} $ $ \\color{blue}{1} $ $ \\color{darkgreen}{2} $ $ \\color{gray}{0} $ Obviously, the answer here is $ 1 \\pmod{20240401} $ .\n\nIn the second sample, the array looks like this:\n\n$ \\color{blue}{1} $ $ \\color{blue}{1} $ $ \\color{darkgreen}{2} $ $ \\color{blue}{1} $ $ \\color{blue}{1} $ $ \\color{blue}{1} $ $ \\color{gray}{0} $ I do not know why the answer here is $ 2 \\pmod{20240401} $ , I had to take a guess.\n\nIn the third sample, the array looks like this:\n\n$ \\color{gray}{0} $ $ \\color{blue}{1} $ $ \\color{darkgreen}{2} $ $ \\color{blue}{1} $ $ \\color{blue}{1} $ $ \\color{blue}{1} $ $ \\color{gray}{0} $ If the answer here is not $ 0 \\pmod{20240401} $ , I am literally going to explode."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Almost everything in this problem is a hint."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The problem name is \"Sweep Line\". Does it sound familiar?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Look at the quote in the statement. When does a mistake force you to start all over again?"
+        },
+        {
+            "title": "Hint 4",
+            "content": "Why are the numbers in the note section are colored?"
+        },
+        {
+            "title": "Hint 5",
+            "content": "Why does the note section contain \"I had to take a guess.\" and \"I am literally going to explode.\""
+        },
+        {
+            "title": "Hint 6",
+            "content": "Minesweeper. This is a slightly different version, since all cells are numbered. Why do the numbers only go up to $$$2$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "1952E - Sweep Line\nThe theme of the problem is\nMinesweeper\n.\nIn Minesweeper, the numbers represent the count of mines around them.\nThe array given in the input represents a Minesweeper game that is only a line (hence the name\nSweep Line\n). The problem asks you to output the number of possible mine placements that is consistent with the given array.\nNote that here each cell refers to the number of mines in the neighboring cells, but\nnot\nincluding itself (since the input is only up to $$$2$$$).\nThe modulo $$$20240401$$$ part is unnecessary as the answer can be at most $$$2$$$ (try to prove this)."
+        }
+    ]
+}

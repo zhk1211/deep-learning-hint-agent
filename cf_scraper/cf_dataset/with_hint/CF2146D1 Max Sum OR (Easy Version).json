@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the easy version of the problem. The difference between the versions is that in this version, $ l=0 $ , and $ r<2\\cdot 10^5 $ . You can hack only if you solved all versions of this problem.\n\nYou are given two integers $ l $ and $ r $ ( $ l\\le r $ ).\n\nLet $ n = r - l + 1 $ . We will create two arrays $ a $ and $ b $ , both consisting of $ n $ integers. Initially, both $ a $ and $ b $ are equal to $ [l, l+1, \\ldots, r] $ . You have to reorder the array $ a $ arbitrarily to maximize the following value:\n\n$$$\n\\sum_{i=1}^n \\left (a_i\\;|\\;b_i \\right ).\n$$$\n\nHere, $ | $ denotes the [bitwise OR operation](https://en.wikipedia.org/wiki/Bitwise_operation#OR).\n\nYou also need to construct a possible way to reorder the array $ a $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe only line of each test case contains two integers $ l $ and $ r $ ( $ 0=l\\leq r<2\\cdot 10^5 $ ) — the minimum and maximum elements in $ a $ .\n\nLet $ n = r - l + 1 $ . It is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single integer in the first line of output — the maximum value of $ \\sum\\limits_{i=1}^n \\left (a_i\\;|\\;b_i \\right ) $ .\n\nThen, print $ n $ distinct integers $ a_1, a_2, \\ldots,a_n $ in the second line — the array $ a $ after reordering.\n\nIf there are multiple answers, you may print any of them.\n\nExamples\nSample 1\nInput\n3\n0 3\n0 9\n0 15\nOutput\n12\n3 2 1 0\n90\n7 8 5 4 3 2 9 0 1 6\n240\n15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0\n\nNote\nIn the first test case, the reordered array $ a $ is $ [3,2,1,0] $ . The value of the expression is $ (3\\;|\\;0)+(2\\;|\\;1)+(1\\;|\\;2)+(0\\;|\\;3)=3+3+3+3=12 $ . It can be proved that this is the maximum possible value of the expression.\n\nIn the second test case, the reordered array $ a $ is $ [7,8,5,4,3,2,9,0,1,6] $ . The value of the expression is $ 90 $ . It can be proved that this is the maximum possible value of the expression."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Try a few cases by hand or guess by the samples, what's the maximized answer for $$$l=0,r=n$$$?\nAnswer\nThe answer is $$$n(n+1)$$$. Actually, as $$$x\\mid y\\le x+y$$$, so the upper bound for the answer is $$$\\sum (a_i+b_i)=n(n+1)$$$. And we are going to reach the upper bound."
+        },
+        {
+            "title": "Hint 2",
+            "content": "We need to make the bitwise AND of $$$a_i$$$ and $$$b_i$$$ all equal to $$$0$$$. Let's remind you that the bitwise AND of $$$x$$$ and $$$2^k-1-x$$$ is $$$0$$$ for $$$0\\le x \\lt 2^k$$$. We can try to pair integers $$$x$$$ and $$$y$$$ by letting $$$a_x=y,a_y=x$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Construct from the back."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2146D1 - Max Sum OR (Easy Version)\nTry a few cases or guess by the samples that the answer is always $$$n(n+1)$$$.\nActually, $$$x~|~y=(x+y)-(x\\&y)\\le x+y$$$. So the clear upper bound of $$$\\sum_i(a_i~|~b_i)$$$ is $$$\\sum a_i+b_i=n(n+1)$$$. Let's construct the array $$$a$$$ as follows to prove that the upper bound can always be reached:\nOur target is to make $$$a_i\\&b_i=0$$$ for every $$$i$$$. Let the indices be $$$0\\sim n$$$.\nLet $$$k$$$ be the smallest integer such that $$$2^k \\gt n$$$. Clearly $$$0\\le 2^{k}-1-n\\le n$$$, otherwise $$$k$$$ can be smaller. Let $$$a_i=2^k-1-i$$$ for integers $$$i\\in[2^k-1-n,n]$$$. Clearly $$$a_i\\&i=0$$$. Then delete the suffix and let $$$n$$$ become $$$2^k-2-n$$$. Continue the process until $$$n$$$ becomes $$$-1$$$ (That is, when $$$n=2^{k}-1$$$, let's reverse the array and end the process).\nIt can be seen that $$$n$$$ decreases by at least one each time, so the process always ends.\nFor example, the construction for $$$[l,r]=[0,10]$$$ is: $$$[0,2,1,4,3,10,9,8,7,6,5]$$$.\nThe time complexity is $$$O(n)$$$."
+        },
+        {
+            "title": "Implementation",
+            "content": "By\nCaylex\n.\ndef\nsolve\n():\nl\n,\nr\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\npw\n=\n1\nans\n=\n0\nwhile\npw\n<\nr\n:\npw\n=\npw\n<<\n1\n|\n1\ns\n=\nset\n()\nfor\ni\nin\nrange\n(\nl\n,\nr\n+\n1\n):\ns\n.\nadd\n(\ni\n)\na\n=\n[\n0\n]\n*\n(\nr\n+\n1\n)\nfor\ni\nin\nrange\n(\nr\n,\nl\n-\n1\n,\n-\n1\n):\nwhile\npw\n-\ni\nnot\nin\ns\n:\npw\n>>=\n1\na\n[\ni\n]\n=\npw\n-\ni\n        ans\n+=\ni\n|\na\n[\ni\n]\ns\n.\nremove\n(\npw\n-\ni\n)\nprint\n(\nans\n)\nprint\n(*\na\n[\nl\n:\nr\n+\n1\n])\nreturn\nt\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\nsolve\n()"
+        }
+    ]
+}

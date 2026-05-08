@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer $ n $ .\n\nYour task is to build a string of uppercase Latin letters. There must be exactly $ n $ special characters in this string. Let's call a character special if it is equal to exactly one of its neighbors.\n\nFor example, there are $ 6 $ special characters in the AAABAACC string (at positions: $ 1 $ , $ 3 $ , $ 5 $ , $ 6 $ , $ 7 $ and $ 8 $ ).\n\nPrint any suitable string or report that there is no such string.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 50 $ ) — the number of test cases.\n\nThe only line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 50 $ ).\n\nOutput Format\nFor each test case, print the answer as follows:\n\n- if there is no suitable string, print one line containing the string NO;\n- otherwise, print two lines. The first line should contain the string YES; on the second line print a string of length at most $ 200 $ — the answer itself (it can be shown that if some answers exist, then there is an answer of length at most $ 200 $ ). If there are several solutions, print any of them.\n\nExamples\nSample 1\nInput\n3\n6\n1\n2\nOutput\nYES\nAAABAACC\nNO\nYES\nMM"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1948A - Special Characters\nLet's look at the blocks of consecutive equal characters (such that it cannot be extended to the left or to the right):\nif its length is $$$1$$$, then this block has $$$0$$$ special characters;\nif its length is $$$2$$$, then this block has $$$2$$$ special characters;\nif its length is at least $$$3$$$, then this block has $$$2$$$ special characters (only the leftmost and the rightmost elements);\nWe can see that there is no way to obtain an odd number of special characters. So the answer is\nNO\nfor all odd values of $$$n$$$. And we can easily build the string for all even values of $$$n$$$. The answer for an even $$$n$$$ may look like this:\nAABBAABB...\nwith $$$\\frac{n}{2}$$$ blocks of length $$$2$$$ alternating between two different letters."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nif\n(\nn\n%\n2\n==\n1\n)\n{\ncout\n<<\n\"NO\"\n<<\n'\\n'\n;\ncontinue\n;\n}\ncout\n<<\n\"YES\"\n<<\n'\\n'\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n/\n2\n;\n++\ni\n)\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n2\n;\n++\nj\n)\ncout\n<<\n\"AB\"\n[\ni\n&\n1\n];\ncout\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

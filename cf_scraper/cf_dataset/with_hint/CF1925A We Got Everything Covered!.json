@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two positive integers $ n $ and $ k $ .\n\nYour task is to find a string $ s $ such that all possible strings of length $ n $ that can be formed using the first $ k $ lowercase English alphabets occur as a subsequence of $ s $ .\n\nIf there are multiple answers, print the one with the smallest length. If there are still multiple answers, you may print any of them.\n\nNote: A string $ a $ is called a subsequence of another string $ b $ if $ a $ can be obtained by deleting some (possibly zero) characters from $ b $ without changing the order of the remaining characters.\n\nInput Format\nThe first line of input contains a single integer $ t $ ( $ 1\\leq t\\leq 676 $ ) denoting the number of test cases.\n\nEach test case consists of a single line of input containing two integers $ n $ ( $ 1\\leq n\\leq 26 $ ) and $ k $ ( $ 1\\leq k\\leq 26 $ ).\n\nOutput Format\nFor each test case, print a single line containing a single string $ s $ which satisfies the above property. If there are multiple answers, print the one with the smallest length. If there are still multiple answers, you may print any of them.\n\nExamples\nSample 1\nInput\n4\n1 2\n2 1\n2 2\n2 3\nOutput\nab\naa\nbaab\nabcbac\n\nNote\nFor the first test case, there are two strings of length $ 1 $ which can be formed using the first $ 2 $ lowercase English alphabets, and they are present in $ s $ as a subsequence as follows:\n\n- $ \\texttt{a}: {\\color{red}{\\texttt{a}}}\\texttt{b} $\n- $ \\texttt{b}: \\texttt{a}{\\color{red}{\\texttt{b}}} $\n\nFor the second test case, there is only one string of length $ 2 $ which can be formed using the first lowercase English alphabet, and it is present in $ s $ as a subsequence as follows:\n\n- $ \\texttt{aa}: {\\color{red}{\\texttt{aa}}} $\n\nFor the third test case, there are $ 4 $ strings of length $ 2 $ which can be formed using the first $ 2 $ lowercase English alphabets, and they are present in $ s $ as a subsequence as follows:\n\n- $ \\texttt{aa}: \\texttt{b}{\\color{red}{\\texttt{aa}}}\\texttt{b} $\n- $ \\texttt{ab}: \\texttt{ba}{\\color{red}{\\texttt{ab}}} $\n- $ \\texttt{ba}: {\\color{red}{\\texttt{ba}}}\\texttt{ab} $\n- $ \\texttt{bb}: {\\color{red}{\\texttt{b}}}\\texttt{aa}{\\color{red}{\\texttt{b}}} $\n\nFor the fourth test case, there are $ 9 $ strings of length $ 2 $ which can be formed using the first $ 3 $ lowercase English alphabets, and they are present in $ s $ as a subsequence as follows:\n\n- $ \\texttt{aa}: {\\color{red}{\\texttt{a}}}\\texttt{bcb}{\\color{red}{\\texttt{a}}}\\texttt{c} $\n- $ \\texttt{ab}: {\\color{red}{\\texttt{ab}}}\\texttt{cbac} $\n- $ \\texttt{ac}: \\texttt{abcb}{\\color{red}{\\texttt{ac}}} $\n- $ \\texttt{ba}: \\texttt{abc}{\\color{red}{\\texttt{ba}}}\\texttt{c} $\n- $ \\texttt{bb}: \\texttt{a}{\\color{red}{\\texttt{b}}}\\texttt{c}{\\color{red}{\\texttt{b}}}\\texttt{ac} $\n- $ \\texttt{bc}: \\texttt{a}{\\color{red}{\\texttt{bc}}}\\texttt{bac} $\n- $ \\texttt{ca}: \\texttt{ab}{\\color{red}{\\texttt{c}}}\\texttt{b}{\\color{red}{\\texttt{a}}}\\texttt{c} $\n- $ \\texttt{cb}: \\texttt{ab}{\\color{red}{\\texttt{cb}}}\\texttt{ac} $\n- $ \\texttt{cc}: \\texttt{ab}{\\color{red}{\\texttt{c}}}\\texttt{ba}{\\color{red}{\\texttt{c}}} $"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "The smallest length for such a string is $$$n\\cdot k$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "The smallest length possible for such a string is $$$n\\cdot k$$$.\nWhy?\nTo have the string $$$\\texttt{aaa}\\ldots\\texttt{a}$$$ as a subsequence, you need to have at least $$$n$$$ characters in the string as $$$\\texttt{a}$$$. Similarly for all $$$k$$$ different characters. So, that gives a total length of at least $$$n\\cdot k$$$.\nIn fact, it is always possible to construct a string of length $$$n\\cdot k$$$ that satisfies this property. One such string is $$$(a_1a_2a_3\\ldots a_k)(a_1a_2a_3\\ldots a_k)(a_1a_2a_3\\ldots a_k)\\ldots n$$$ times where $$$a_i$$$ is the $$$i^{th}$$$ letter of English alphabet. For example, the answer for $$$n=3,k=4$$$ can be $$$\\texttt{abcdabcdabcd}$$$. It is not hard to see that the first letter of the subsequence can be from the first group of $$$k$$$ letters, second letter from the second group and so on."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\ntc\n;\ncin\n>>\ntc\n;\nwhile\n(\ntc\n--)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nfor\n(\nchar\nc\n=\n'a'\n;\nc\n<\n'a'\n+\nk\n;\nc\n++)\ncout\n<<\nc\n;\ncout\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

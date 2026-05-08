@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two binary strings $ a $ and $ b $ . A binary string is a string consisting of the characters '0' and '1'.\n\nYour task is to determine the maximum possible number $ k $ such that a prefix of string $ a $ of length $ k $ is a subsequence of string $ b $ .\n\nA sequence $ a $ is a subsequence of a sequence $ b $ if $ a $ can be obtained from $ b $ by the deletion of several (possibly, zero or all) elements.\n\nInput Format\nThe first line consists of a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ m $ ( $ 1\\le n,m \\le 2 \\cdot 10^5 $ ) — the length of string $ a $ and the length of string $ b $ , respectively.\n\nThe second line of each test case contains a binary string $ a $ of length $ n $ .\n\nThe third line of each test case contains a binary string $ b $ of length $ m $ .\n\nIt is guaranteed that the sum of values $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ . Similarly, the sum of values $ m $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single number — the maximum $ k $ , such that the first $ k $ characters of $ a $ form a subsequence of $ b $ .\n\nExamples\nSample 1\nInput\n6\n5 4\n10011\n1110\n3 3\n100\n110\n1 3\n1\n111\n4 4\n1011\n1111\n3 5\n100\n11010\n3 1\n100\n0\nOutput\n2\n2\n1\n1\n3\n0\n\nNote\nIn the first example, the string ' $ 10 $ ' is a subsequence of ' $ 1\\color{red}11\\color{red}0 $ ' but the string ' $ 100 $ ' is not. So the answer is $ 2 $ .\n\nIn the fifth example, $ a $ =' $ 100 $ ', $ b $ =' $ 1\\color{red}{10}1\\color{red}0 $ ', whole string $ a $ is a subsequence of string $ b $ . So the answer is $ 3 $ .\n\nIn the sixth example, string $ b $ does not contain ' $ 1 $ ' so the answer is $ 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Try to check for every $$$k$$$ if the prefix of $$$a$$$ of length $$$k$$$ is a subsequence of $$$b$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "1968B - Prefiquence\nWe will be solving this task using dynamic programming.\nLet us define $$$dp_i$$$ as the maximal prefix of $$$a$$$ that is contained in $$$b_1,\\dots,b_i$$$ as a subsequence.\nThen the transitions are as follows:\nif $$$b_i$$$ is equal to $$$a_{dp_{i-1}+1}$$$ then $$$dp_i = dp_{i-1} + 1$$$.\notherwise $$$dp_i=dp_{i-1}$$$.\nThe answer is $$$dp_{m}$$$."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<iostream>\n#include\n<vector>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nvector\n<char>\na\n(\nn\n+\n1\n),\nb\n(\nm\n+\n1\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++){\ncin\n>>\na\n[\ni\n];\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nm\n;\ni\n++){\ncin\n>>\nb\n[\ni\n];\n}\nvector\n<int>\ndp\n(\nm\n+\n1\n);\ndp\n[\n1\n]=(\na\n[\n1\n]==\nb\n[\n1\n]?\n1\n:\n0\n);\nfor\n(\nint\ni\n=\n2\n;\ni\n<=\nm\n;\ni\n++){\nif\n(\ndp\n[\ni\n-\n1\n]!=\nn\n&&\nb\n[\ni\n]==\na\n[\ndp\n[\ni\n-\n1\n]+\n1\n]){\ndp\n[\ni\n]=\ndp\n[\ni\n-\n1\n]+\n1\n;\n}\nelse\n{\ndp\n[\ni\n]=\ndp\n[\ni\n-\n1\n];\n}\n}\ncout\n<<\ndp\n[\nm\n]<<\n\"\\n\"\n;\n}\n}"
+        }
+    ]
+}

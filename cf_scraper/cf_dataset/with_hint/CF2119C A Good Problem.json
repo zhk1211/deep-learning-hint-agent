@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n[Juggernaut. - Lost Dream feat.星名はる](https://www.youtube.com/watch?v=TCckJwjMGcc)\n\nYou are given four positive integers $ n, l, r, k $ . You need to find the lexicographically smallest $ ^{\\text{∗}} $ array $ a $ of length $ n $ , consisting of integers, such that:\n\n- For every $ 1 \\leq i \\leq n $ , $ l \\leq a_i \\leq r $ .\n- $ a_1 \\, \\& \\, a_2 \\, \\& \\, \\ldots \\, \\& \\, a_n = a_1 \\oplus a_2 \\oplus \\ldots \\oplus a_n $ , where $ \\& $ denotes the [bitwise AND operation](https://en.wikipedia.org/wiki/Bitwise_operation#AND) and $ \\oplus $ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).\n\nIf no such array exists, output $ -1 $ . Otherwise, since the entire array might be too large to output, output $ a_k $ only.\n\n$ ^{\\text{∗}} $ An array $ a $ is lexicographically smaller than an array $ b $ if and only if one of the following holds:\n\n- $ a $ is a prefix of $ b $ , but $ a \\ne b $ ; or\n- in the first position where $ a $ and $ b $ differ, the array $ a $ has a smaller element than the corresponding element in $ b $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nEach test case contains four positive integers $ n,l,r,k $ ( $ 1 \\le k \\le n \\le 10^{18} $ , $ 1 \\le l \\le r \\le 10^{18} $ ).\n\nOutput Format\nFor each test case, output $ a_k $ or $ -1 $ if no array meets the conditions.\n\nExamples\nSample 1\nInput\n9\n1 4 4 1\n3 1 3 3\n4 6 9 2\n4 6 9 3\n4 6 7 4\n2 5 5 1\n2 3 6 2\n999999999999999999 1000000000000000000 1000000000000000000 999999999999999999\n1000000000000000000 1 999999999999999999 1000000000000000000\nOutput\n4\n1\n6\n8\n-1\n-1\n-1\n1000000000000000000\n2\n\nNote\nIn the first test case, the array $ a = [4] $ . It can be proven that there is no array that meets the above requirements and has a smaller lexicographic order.\n\nIn the second test case, the array $ a= [1,1,1] $ . It can be proven that there is no array that meets the above requirements and has a smaller lexicographic order.\n\nIn the third test case and the fourth test case, the array $ a = [6,6,8,8] $ . It can be proven that there is no array that meets the above requirements and has a smaller lexicographic order.\n\nIn the fifth test case and the sixth test case, it can be proven that there is no array that meets the above requirements."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "For odd $$$n$$$, setting $$$a_i = l$$$ for all $$$i$$$ suffices."
+        },
+        {
+            "title": "Hint 2",
+            "content": "For even $$$n$$$, there does not exist a valid array $$$a$$$ that satisfies $$$a_1=a_2=\\dots=a_{n-1}=l$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "For even $$$n$$$, try to make $$$a_1=a_2=\\dots=a_{n-2}=l$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "2119C - A Good Problem\nFor odd $$$n$$$, setting $$$a_i = l$$$ for all $$$i$$$ suffices.\nConsider the even $$$n  \\gt  2$$$ (if $$$n=2$$$ then the only legal array is $$$[0,0]$$$, so no solution exists because $$$l\\ge 1$$$).\nTo achieve the lexicographically smallest array, we set $$$a_i = l$$$ for $$$i=1$$$ to $$$n-1$$$, then try choosing $$$a_n \\in [l, r]$$$, which would require satisfying $$$l \\, \\& \\, a_n=l\\oplus a_n$$$. Now to determine whether there is a legal $$$a_n$$$, then consider each bit separately. Since $$$l \\ge 1$$$, there must exist a bit in the binary representation of $$$l$$$ that is $$$1$$$, and we observe that for any bit where $$$l$$$ has $$$1$$$, $$$l \\, \\& \\, x \\neq l \\oplus x$$$ holds for $$$x=0$$$ and $$$x=1$$$, so we can't just change $$$a_n$$$.\nIf no valid $$$a_n$$$ exists, we adjust both $$$a_{n-1}$$$ and $$$a_n$$$. They must satisfy $$$a_{n-1}\\oplus a_n=l \\, \\& \\, a_{n-1} \\, \\& \\, a_n, l \\le a_{n-1},a_n \\le r$$$. Per-bit constraints:\nIf $$$l$$$'s bit is $$$1$$$: $$$a_{n-1}$$$ and $$$a_n$$$ must both be $$$0$$$.\nIf $$$l$$$'s bit is $$$0$$$: $$$a_{n-1}$$$ and $$$a_n$$$ must be equal (both $$$0$$$ or both $$$1$$$).\nFrom the per-bit constraints, $$$a_{n-1}$$$ and $$$a_n$$$ must be equal at every bit, implying $$$a_{n-1} = a_n$$$, so $$$a_{n-1}\\oplus a_n=0$$$ and $$$a_{n-1} \\, \\& \\, a_n=a_n$$$. From $$$a_{n-1}\\oplus a_n=l \\, \\& \\, a_{n-1} \\, \\& \\, a_n$$$, we have $$$l \\, \\& \\, a_n=0$$$. Finally, we solve for the minimum $$$a_n$$$ by greedily going from high to low bit.\nLet $$$b$$$ be the highest bit set in $$$l$$$. Since $$$a_n$$$ must be $$$\\ge l$$$ but have bit $$$b$$$ unset (due to $$$l \\, \\& \\, a_n=0$$$), $$$a_n$$$ requires a $$$1$$$ at some bit higher than $$$b$$$. And bit $$$b$$$ is already different, so the lower bits may be set to $$$0$$$, so eventually $$$a_n$$$ is the smallest power of two greater than $$$l$$$ that lies in $$$[l, r]$$$.\nIf no solution exists for $$$a_{n-1}, a_n$$$, then $$$l$$$ and $$$r$$$ share the same highest bit $$$b$$$. The bitwise AND value is $$$1$$$, and the bitwise XOR value is $$$0$$$ on this bit, so it is easy to see that there must be $$$\\&_{i=1}^{n}a_i\\neq\\oplus_{i=1}^{n}a_i$$$."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<iostream>\nusing\nnamespace\nstd\n;\n#define\nint\nlong\nlong\nint\nt\n,\nn\n,\nl\n,\nr\n,\nk\n;\nsigned\nmain\n()\n{\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\ncin\n>>\nn\n>>\nl\n>>\nr\n>>\nk\n;\nif\n(\nn\n%\n2\n==\n1\n)\n{\ncout\n<<\nl\n<<\nendl\n;\ncontinue\n;\n}\nif\n(\nn\n==\n2\n)\n{\ncout\n<<-\n1\n<<\nendl\n;\ncontinue\n;\n}\nint\nres\n=\n1\n;\nbool\nfl\n=\n0\n;\nwhile\n(\nres\n<=\nr\n)\n{\nif\n(\nres\n>\nl\n)\n{\nfl\n=\n1\n;\nif\n(\nk\n<=\nn\n-\n2\n)\ncout\n<<\nl\n<<\nendl\n;\nelse\ncout\n<<\nres\n<<\nendl\n;\nbreak\n;\n}\nres\n*=\n2\n;\n}\nif\n(!\nfl\n)\ncout\n<<-\n1\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

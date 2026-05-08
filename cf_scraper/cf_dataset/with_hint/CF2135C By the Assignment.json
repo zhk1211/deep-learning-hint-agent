@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nFor an undirected connected graph of $$$n$$$ vertices, where the $$$i$$$-th vertex has a weight of $$$v\\_i$$$, we define the value of a simple path$$$^{\\\\text{∗}}$$$ $$$l\\_1, l\\_2, \\\\ldots, l\\_m$$$ as $$$v\\_{l\\_1}\\\\oplus v\\_{l\\_2}\\\\oplus\\\\cdots\\\\oplus v\\_{l\\_m}$$$$$$^{\\\\text{†}}$$$. We call the graph balanced if and only if:\n\n- For every $$$1\\\\le p&lt;q\\\\le n$$$, all simple paths from $$$p$$$ to $$$q$$$ have the same value.\n\nAquawave has given you an undirected connected graph of $$$n$$$ vertices and $$$m$$$ edges, and the $$$i$$$-th vertex in the graph has a weight of $$$a\\_i$$$. However, some of the weights are missing, represented by $$$-1$$$.\n\nAquawave wants to assign an integer weight between $$$0$$$ and $$$V-1$$$ to each vertex with $$$a\\_i=-1$$$, so that the graph will be balanced.\n\nYou have to help Aquawave find the number of ways to assign weights to achieve the goal, modulo $$$998\\\\,244\\\\,353$$$.\n\n$$$^{\\\\text{∗}}$$$A simple path from $$$c$$$ to $$$d$$$ is a sequence of vertices $$$l\\_1, l\\_2, \\\\ldots, l\\_m$$$, where $$$l\\_1=c$$$, $$$l\\_m=d$$$, such that there is an edge between $$$l\\_i$$$ and $$$l\\_{i+1}$$$ for every $$$1\\\\le i\\\\le m-1$$$, and there are no repeated vertices, i.e. $$$l\\_i\\\\ne l\\_j$$$ for $$$1\\\\le i&lt;j\\\\le n$$$.\n\n$$$^{\\\\text{†}}$$$$$$\\\\oplus$$$ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\\\le t \\\\le 10^4$$$). The description of the test cases follows.\n\nThe first line of each test case contains three integers $$$n$$$, $$$m$$$, and $$$V$$$ ($$$2\\\\le n\\\\le 2\\\\cdot 10^5$$$, $$$n-1\\\\le m\\\\le \\\\min\\\\left(\\\\frac{n(n-1)}{2}, 4\\\\cdot 10^5\\\\right)$$$, $$$1\\\\le V\\\\le 10^9$$$) — the number of vertices, the number of edges, and the upper bound of weights.\n\nThe second line contains $$$n$$$ integers $$$a\\_1, a\\_2, \\\\ldots, a\\_n$$$ ($$$-1\\\\le a\\_i\\\\le V-1$$$) — the weights of the vertices. $$$a\\_i=-1$$$ represents that the weight of the $$$i$$$-th vertex is missing.\n\nThen $$$m$$$ lines follow, the $$$i$$$-th line containing two integers $$$u$$$ and $$$v$$$ ($$$1\\\\le u,v\\\\le n$$$) — the two vertices that the $$$i$$$-th edge connects.\n\nIt is guaranteed that the given graph is simple and connected.\n\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$2\\\\cdot 10^5$$$, and the sum of $$$m$$$ over all test cases does not exceed $$$4\\\\cdot 10^5$$$.\n\nOutput Format\nFor each test case, output a single integer — the number of ways to assign weights to make the graph balanced, modulo $$$998\\\\,244\\\\,353$$$.\n\nExamples\nSample 1\nInput\n5\n4 4 4\n-1 -1 -1 -1\n1 2\n2 3\n1 3\n4 3\n5 6 7\n2 2 -1 2 2\n1 2\n1 3\n1 4\n2 5\n3 5\n4 5\n7 8 9\n-1 -1 -1 -1 0 -1 0\n1 2\n2 3\n3 4\n1 4\n1 5\n5 6\n7 6\n7 5\n5 8 1000000000\n1 2 3 4 -1\n1 2\n3 2\n3 5\n5 1\n2 4\n4 3\n2 5\n1 4\n5 4 1000000000\n-1 2 -1 3 -1\n1 2\n1 3\n2 4\n2 5\nOutput\n4\n1\n9\n0\n747068572\n\nNote\nIn the first test case, there are four possible assignments:\n\n- $$$a=\\[0,0,0,0\\]$$$;\n- $$$a=\\[0,0,0,1\\]$$$;\n- $$$a=\\[0,0,0,2\\]$$$;\n- $$$a=\\[0,0,0,3\\]$$$.\n\nIt can be shown that all of these assignments can make the graph balanced.\n\nIn the second test case, we will pick $$$(p,q)=(1,5)$$$. The simple path $$$1\\\\to 2\\\\to 5$$$ has a value of $$$2\\\\oplus 2\\\\oplus 2=2$$$, and the simple path $$$1\\\\to 3\\\\to 5$$$ has a value of $$$2\\\\oplus a\\_3\\\\oplus 2=a\\_3$$$, so the only possible value for $$$a\\_3$$$ is $$$2$$$. It can be shown that $$$a\\_3=2$$$ can make the graph balanced.\n\nIn the fifth test case, the given graph is a tree, so there is only one simple path between any two vertices. Thus, we can assign an arbitrary value between $$$0$$$ and $$$V-1$$$ to each $$$a\\_i$$$, and the answer is $$$1\\\\,000\\\\,000\\\\,000^3\\\\bmod998\\\\,244\\\\,353=747\\\\,068\\\\,572$$$."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider the value of nodes on a cycle."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Consider the parity of the cycle's length."
+        },
+        {
+            "title": "Hint 3",
+            "content": "The following are equivalent statements:\n\"There is a cycle containing nodes $$$u, v$$$\";\n\"Nodes $$$u, v$$$ are in the same two-edge-connected component\"."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Two two-edge-connected components don't affect each other."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Read the hints.\nFirst, focus on a simple cycle only. Denote its length as $$$l$$$. We can choose two arbitrary nodes $$$u$$$ and $$$v$$$ on the cycle, obtaining two different simple paths. The two paths have equal values for all pairs of $$$(u, v)$$$. This implies that, for each set of size $$$l-2$$$ containing only nodes on the cycle, the bitwise XOR of the weight of the nodes in the set should equal $$$0$$$.\nThus, all nodes on the cycle have equal weight, since when sets $$$S_0 \\cup {v}$$$ and $$$S_0 \\cup {u}$$$ have equal bitwise XOR of node weights, this leads to nodes $$$u$$$ and $$$v$$$ having equal weights. Additionally, if $$$l$$$ is odd, one can verify that the weight of nodes on the cycle must be equal to $$$0$$$ (otherwise, it can be an arbitrary integer in $$$[0, V)$$$).\nBy decomposing the graph into two-edge-connected components, one can easily determine whether two nodes share a cycle —— by checking whether they belong to the same component. The answer is independent in each component, so we can simply multiply them together.\nHow to calculate the answer for a two-edge-connected component? First of all, the weight of all nodes must be equal. Then, if there exists an odd cycle (which can be detected with 2-coloring), it should equal $$$0$$$. There are only three different possible answers: $$$0$$$, $$$1$$$, and $$$V$$$.\nThus, one can calculate the answer to the original problem efficiently.\nTime Complexity: $$$\\mathcal O(n + m)$$$ per test case."
+        }
+    ]
+}

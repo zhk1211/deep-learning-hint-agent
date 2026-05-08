@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Input Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 100 $ ) — the number of testcases.\n\nThe following $ t $ lines each contain a string of length at most $ 100 $ consisting of lowercase English letters.\n\nOutput Format\nFor each test case, output \"YES\" or \"NO\", denoting the answer.\n\nExamples\nSample 1\nInput\n10\nis\nit\nstated\nsubmit\nac\naccepted\nwa\nwronganswer\ntle\ntimelimitexceeded\nOutput\nNO\nYES\nNO\nYES\nNO\nNO\nNO\nNO\nNO\nYES"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Can you interpret the question in the title another way?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "1952B - Is it stated?\nYou just need to check if there is a substring $$$\\texttt{it}$$$ in the string. (That is, the question is asking, \"is $$$\\texttt{it}$$$ stated?\")"
+        }
+    ]
+}

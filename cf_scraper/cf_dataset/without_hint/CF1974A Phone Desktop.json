@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLittle Rosie has a phone with a desktop (or launcher, as it is also called). The desktop can consist of several screens. Each screen is represented as a grid of size $ 5 \\times 3 $ , i.e., five rows and three columns.\n\nThere are $ x $ applications with an icon size of $ 1 \\times 1 $ cells; such an icon occupies only one cell of the screen. There are also $ y $ applications with an icon size of $ 2 \\times 2 $ cells; such an icon occupies a square of $ 4 $ cells on the screen. Each cell of each screen can be occupied by no more than one icon.\n\nRosie wants to place the application icons on the minimum number of screens. Help her find the minimum number of screens needed.\n\nInput Format\nThe first line of the input contains $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases.\n\nThe first and only line of each test case contains two integers $ x $ and $ y $ ( $ 0 \\leq x, y \\leq 99 $ ) — the number of applications with a $ 1 \\times 1 $ icon and the number of applications with a $ 2 \\times 2 $ icon, respectively.\n\nOutput Format\nFor each test case, output the minimal number of required screens on a separate line.\n\nExamples\nSample 1\nInput\n11\n1 1\n7 2\n12 4\n0 3\n1 0\n8 1\n0 0\n2 0\n15 0\n8 2\n0 9\nOutput\n1\n1\n2\n2\n1\n1\n0\n1\n1\n2\n5\n\nNote\nThe solution for the first test case can look as follows:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1974A/50fee263eb8faff81a1a0ba84255a68bc5871ae1.png) Blue squares represent empty spaces for icons, green squares represent $ 1 \\times 1 $ icons, red squares represent $ 2 \\times 2 $ iconsThe solution for the third test case can look as follows:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1974A/53e483ebe35e12a51af69c31e4cb0b1e5b05aee6.png)"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1974A - Phone Desktop\nNote that on one screen we can put no more than two $$$2 \\times 2$$$ icons. Thus, we need at least $$$Z = \\lceil y / 2 \\rceil$$$ screens. Then, we check how many $$$1 \\times 1$$$ icons we can put on these screens: $$$15 \\cdot Z - 4 \\cdot y$$$. The $$$1 \\times 1$$$ icons left we need to put on additional screens."
+        },
+        {
+            "title": "Solution",
+            "content": "nt\n=\nint\n(\ninput\n())\nfor\nt\nin\nrange\n(\nnt\n):\nline\n=\ninput\n()\nx\n,\ny\n=\n[\nint\n(\nq\n)\nfor\nq\nin\nline\n.\nsplit\n()]\nmm\n=\n(\ny\n+\n1\n)\n// 2\nx\n-=\n(\nmm\n*\n5\n*\n3\n-\ny\n*\n2\n*\n2\n)\nx\n=\nmax\n(\nx\n,\n0\n)\nmm\n+=\n(\nx\n+\n5\n*\n3\n-\n1\n)\n// (5 * 3)\nprint\n(\nmm\n)"
+        }
+    ]
+}

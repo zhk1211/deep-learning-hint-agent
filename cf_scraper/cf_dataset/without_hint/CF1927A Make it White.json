@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have a horizontal strip of $ n $ cells. Each cell is either white or black.\n\nYou can choose a continuous segment of cells once and paint them all white. After this action, all the black cells in this segment will become white, and the white ones will remain white.\n\nWhat is the minimum length of the segment that needs to be painted white in order for all $ n $ cells to become white?\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The descriptions of the test cases follow.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10 $ ) — the length of the strip.\n\nThe second line of each test case contains a string $ s $ , consisting of $ n $ characters, each of which is either 'W' or 'B'. The symbol 'W' denotes a white cell, and 'B' — a black one. It is guaranteed that at least one cell of the given strip is black.\n\nOutput Format\nFor each test case, output a single number — the minimum length of a continuous segment of cells that needs to be painted white in order for the entire strip to become white.\n\nExamples\nSample 1\nInput\n8\n6\nWBBWBW\n1\nB\n2\nWB\n3\nBBW\n4\nBWWB\n6\nBWBWWB\n6\nWWBBWB\n9\nWBWBWWWBW\nOutput\n4\n1\n1\n2\n4\n6\n4\n7\n\nNote\nIn the first test case of the example for the strip \"WBBWBW\", the minimum length of the segment to be repainted white is $ 4 $ . It is necessary to repaint to white the segment from the $ 2 $ -nd to the $ 5 $ -th cell (the cells are numbered from $ 1 $ from left to right)."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "from\ncollections\nimport\ndeque\ndef\nsolve\n():\nn\n=\nint\n(\ninput\n())\ns\n=\ndeque\n(\ninput\n())\nwhile\nlen\n(\ns\n)\n>\n0\nand\ns\n[\n0\n]\n==\n'W'\n:\ns\n.\npopleft\n()\nwhile\nlen\n(\ns\n)\n>\n0\nand\ns\n[-\n1\n]\n==\n'W'\n:\ns\n.\npop\n()\nprint\n(\nlen\n(\ns\n))\nfor\n_\nin\nrange\n(\nint\n(\ninput\n())):\nsolve\n()"
+        }
+    ]
+}

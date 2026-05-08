@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1910B - Security Guard\nIf the sequence is already plausible, we don't have to swap anything. To check that, you can iterate over the characters of the string, and maintain some sort of\nbalance\n— the number of plus signs minus the number of minus signs. Basically, keep track of how many people are currently inside. If all values are non-negative, the sequence is plausible. You can print \"\n1 1\n\", for example.\nOtherwise, there exist positions, where the balance is negative. We'd want to fix them all. Consider what happens to the balances when two characters get swapped. If the characters are the same, nothing happens. So, we'd have to swap a plus with a minus. Consider the case with $$$s_i = $$$ '\n-\n', $$$s_j = $$$ '\n+\n' and $$$i  \\lt  j$$$. Swapping them will increase all balances between $$$i$$$ and $$$j - 1$$$ by $$$2$$$. For $$$i  \\gt  j$$$, the balances between $$$j$$$ and $$$i - 1$$$ will decrease by $$$2$$$.\nThus, it only makes sense to swap a minus with a plus that is to the right of it. Moreover, of all options, why not swap the leftmost minus with the rightmost plus? A segment of increasing balances for any other swap is included in the segment for that swap. Check for plausibility again and print the answer.\nOverall complexity: $$$O(n)$$$ per testcase."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "fun main\n()\n=\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval s\n=\nreadLine\n()!!.\ntoCharArray\n()\nval x\n=\ns\n.\nindexOf\n(\n'-'\n).\ntakeIf\n{\nit\n>=\n0\n}\n?:\n0\nval y\n=\ns\n.\nlastIndexOf\n(\n'+'\n).\ntakeIf\n{\nit\n>=\nx\n}\n?:\nx\n  s\n[\nx\n]\n=\ns\n[\ny\n].\nalso\n{\ns\n[\ny\n]\n=\ns\n[\nx\n]\n}\nval bal\n=\ns\n.\nrunningFold\n(\n0\n)\n{\ncur\n,\nc\n->\ncur\n+\nif\n(\nc\n==\n'-'\n)\n-\n1\nelse\n1\n}\nprintln\n(\nif\n(\nbal\n.\nmin\n()\n==\n0\n)\n\"$$${x + 1} $$${y + 1}\"\nelse\n\"-1\"\n)\n}"
+        }
+    ]
+}

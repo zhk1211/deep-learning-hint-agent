@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet $ D(n) $ represent the sum of digits of $ n $ . For how many integers $ n $ where $ 10^{l} \\leq n < 10^{r} $ satisfy $ D(k \\cdot n) = k \\cdot D(n) $ ? Output the answer modulo $ 10^9+7 $ .\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) – the number of test cases.\n\nEach test case contains three integers $ l $ , $ r $ , and $ k $ ( $ 0 \\leq l < r \\leq 10^9 $ , $ 1 \\leq k \\leq 10^9 $ ).\n\nOutput Format\nFor each test case, output an integer, the answer, modulo $ 10^9 + 7 $ .\n\nExamples\nSample 1\nInput\n6\n0 1 4\n0 2 7\n1 2 1\n1 2 3\n582 74663 3\n0 3 1\nOutput\n2\n3\n90\n12\n974995667\n999\n\nNote\nFor the first test case, the only values of $ n $ that satisfy the condition are $ 1 $ and $ 2 $ .\n\nFor the second test case, the only values of $ n $ that satisfy the condition are $ 1 $ , $ 10 $ , and $ 11 $ .\n\nFor the third test case, all values of $ n $ between $ 10 $ inclusive and $ 100 $ exclusive satisfy the condition."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "To satisfy $$$D(k \\cdot n) = k \\cdot D(n)$$$, each digit $$$d$$$ in $$$n$$$ must become $$$k \\cdot d$$$ after multiplying $$$n$$$ by $$$k$$$. In other words, none of $$$n$$$'s digits can carry over to the next digit upon multiplication. From this, we can deduce that each digit in $$$n$$$ must be less than or equal to $$$\\lfloor \\frac{9}{k} \\rfloor$$$. Only thing left is to count all such numbers in the range of $$$10^l$$$ inclusive and $$$10^r$$$ exclusive.\nEvery number below $$${10}^r$$$ has $$$r$$$ or less digits. For numbers with less than $$$r$$$ digits, let's pad the beginning with zeroes until it becomes a $$$r$$$ digit number (for example, if $$$r = 5$$$, then $$$69$$$ becomes $$$00069$$$). This allows us to consider numbers with less than $$$r$$$ digits the same way as numbers with exactly $$$r$$$ digits. For each digit, we have $$$\\lfloor \\frac{9}{k} \\rfloor + 1$$$ choices (including zero), and there are $$$r$$$ digits, so the total number of numbers that satisfies the constraint below $$${10}^r$$$ is $$$(\\lfloor \\frac{9}{k} \\rfloor + 1)^r$$$.\nTo get the count of numbers in range, it suffices to subtract all valid numbers less than $$$10^l$$$. Therefore, the answer is $$$(\\lfloor \\frac{9}{k} \\rfloor + 1)^r - (\\lfloor \\frac{9}{k} \\rfloor + 1)^l$$$. To exponentiate fast, we can use\nmodular exponentiation\n."
+        }
+    ]
+}

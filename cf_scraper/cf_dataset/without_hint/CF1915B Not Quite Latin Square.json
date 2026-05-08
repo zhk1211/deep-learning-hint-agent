@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA Latin square is a $ 3 \\times 3 $ grid made up of the letters $ \\texttt{A} $ , $ \\texttt{B} $ , and $ \\texttt{C} $ such that:\n\n- in each row, the letters $ \\texttt{A} $ , $ \\texttt{B} $ , and $ \\texttt{C} $ each appear once, and\n- in each column, the letters $ \\texttt{A} $ , $ \\texttt{B} $ , and $ \\texttt{C} $ each appear once.\n\nFor example, one possible Latin square is shown below. $ $$$\\begin{bmatrix} \\texttt{A} & \\texttt{B} & \\texttt{C} \\\\ \\texttt{C} & \\texttt{A} & \\texttt{B} \\\\ \\texttt{B} & \\texttt{C} & \\texttt{A} \\\\ \\end{bmatrix} $ $ <p>You are given a Latin square, but one of the letters was replaced with a question mark $ \\texttt{?}$$$. Find the letter that was replaced.\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\leq t \\leq 108 $ ) — the number of testcases.\n\nEach test case contains three lines, each consisting of three characters, representing the Latin square. Each character is one of $ \\texttt{A} $ , $ \\texttt{B} $ , $ \\texttt{C} $ , or $ \\texttt{?} $ .\n\nEach test case is a Latin square with exactly one of the letters replaced with a question mark $ \\texttt{?} $ .\n\nOutput Format\nFor each test case, output the letter that was replaced.\n\nExamples\nSample 1\nInput\n3\nABC\nC?B\nBCA\nBCA\nCA?\nABC\n?AB\nBCA\nABC\nOutput\nA\nB\nC\n\nNote\nThe correct Latin squares for the three test cases are shown below:\n\n$ $$$\\begin{bmatrix} \\texttt{A} & \\texttt{B} & \\texttt{C} \\\\ \\texttt{C} & \\color{red}{\\texttt{A}} & \\texttt{B} \\\\ \\texttt{B} & \\texttt{C} & \\texttt{A} \\\\ \\end{bmatrix} \\quad \\begin{bmatrix} \\texttt{B} & \\texttt{C} & \\texttt{A} \\\\ \\texttt{C} & \\texttt{A} & \\color{red}{\\texttt{B}} \\\\ \\texttt{A} & \\texttt{B} & \\texttt{C} \\\\ \\end{bmatrix} \\quad \\begin{bmatrix} \\color{red}{\\texttt{C}} & \\texttt{A} & \\texttt{B} \\\\ \\texttt{B} & \\texttt{C} & \\texttt{A} \\\\ \\texttt{A} & \\texttt{B} & \\texttt{C} \\\\ \\end{bmatrix} $ $$$"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1915B - Not Quite Latin Square\nThere are many solutions. For example, look at the row with the question mark, and write some if statements to check the missing letter.\nA shorter solution: find the count of each letter. The one that appears only twice is the missing one."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200\n'007;\nconst int MOD = 1'\n000\n'000'\n007\n;\nvoid\nsolve\n()\n{\nint\ncnt\n[\n3\n]\n=\n{};\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n9\n;\ni\n++)\n{\nchar\nc\n;\ncin\n>>\nc\n;\nif\n(\nc\n!=\n'?'\n)\n{\ncnt\n[\nc\n-\n'A'\n]++;}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n3\n;\ni\n++)\n{\nif\n(\ncnt\n[\ni\n]\n<\n3\n)\n{\ncout\n<<\n(\nchar\n)(\n'A'\n+\ni\n)\n<<\n'\\n'\n;}\n}\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

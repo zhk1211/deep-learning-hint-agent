@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array of $ n $ non-negative integers.\n\nYou want to answer given $ q $ independent scenarios. In the $ i $ -th scenario, you are allowed to perform the following operation at most $ b_i $ times:\n\n- Choose an element of the array and increase it by $ 1 $ .\n\nYour goal is to maximize the number of bits that are equal to $ 1 $ in the [bitwise OR](https://en.wikipedia.org/wiki/Bitwise_operation#OR) of all numbers in the array. Find this number for each scenario.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^3 $ ). The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ q $ ( $ 1 \\leq n, q \\leq 10^{5} $ ) — the size of the array and the number of scenarios.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\leq a_i \\leq 10^{9} $ ) — the elements of the array.\n\nThe $ i $ -th of the next $ q $ lines contains a single integer $ b_i $ ( $ 0 \\leq b_i \\leq 10^{9} $ ) — the maximum number of operations allowed in the $ i $ -th scenario.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^{5} $ , and the sum of $ q $ over all test cases does not exceed $ 10^{5} $ .\n\nOutput Format\nFor each test case, output $ q $ lines, the $ i $ -th of them containing a single integer — the maximum possible number of bits equal to $ 1 $ in the bitwise OR in the $ i $ -th scenario.\n\nExamples\nSample 1\nInput\n3\n1 3\n0\n0\n2\n4\n2 2\n1 3\n0\n3\n2 1\n1000000000 1000000000\n1000000000\nOutput\n0\n1\n2\n2\n3\n31\n\nNote\n[Visualizer link](https://codeforces.com/assets/contests/2147/E_HLZmcINLu6bzC9EaTZrI.html)\n\nIn the first test case:\n\n- In the first scenario, we don't have any operations, and therefore the answer is equal to the number of $ 1 $ -bits in the bitwise OR of the original array, $ 0 $ , which has $ 0 $ bits set in its binary representation.\n- In the second scenario, one way of achieving $ 1 $ bit set in the bitwise OR is increasing $ a_1 $ by $ 1 $ twice, obtaining a bitwise OR of $ 2={(10)}_2 $ . It can be shown that it is the best possible value we can obtain by performing the operation at most twice.\n- In the third scenario, one way of achieving a result of $ 2 $ is adding $ 1 $ to $ a_1 $ three times, which can be shown to be optimal. Note that you don't have to apply the operation $ 4 $ times.\n\nIn the second test case:\n\n- In the first scenario, we don't have any operations, and therefore the answer is equal to the number of $ 1 $ -bits in the bitwise OR of the original array, which is $ 2 $ .\n- In the second scenario, one way of achieving a result of $ 3 $ is adding $ 1 $ to $ a_2 $ three times, which can be shown to be optimal."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "The answer is bounded by $$$31$$$."
+        },
+        {
+            "title": "Hint2",
+            "content": "We will precalculate the minimum operations for each answer."
+        },
+        {
+            "title": "Hint3",
+            "content": "How will the bitwise or look like if we want to increase the popcount from the original by increasing the number of $$$1$$$'s."
+        },
+        {
+            "title": "Hint4",
+            "content": "We can show that it is better to fill the least significant $$$0$$$'s first."
+        },
+        {
+            "title": "Hint5",
+            "content": "What is the best way to fill a certain bit."
+        },
+        {
+            "title": "Hint6",
+            "content": "The solution is a greedy algorithm."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "2147E - Maximum OR Popcount\nFirst of all, the answer is bounded by $$$31$$$ because the maximum number that can appear in the array is: $$$2 \\cdot 10^{9}$$$ and $$$2^{30} \\leq 2 \\cdot 10^{9}  \\lt  2^{31}$$$ so the only bits that can be set on are bits $$$0$$$ through $$$30$$$, giving a maximum of $$$31$$$ bits on.\nFollowing the idea given by the hints, we will show that the following greedy algorithm is optimal for obtaining $$$k$$$ more $$$1$$$s in the bitwise or.\nlet p be the position of the k-th least significant zero\nfor each bit from the p-th to the 0th:\nif it is not already set in the bitwise or:\nincrease any number which is the closest\nto having that bit on to turn that bit on\nWe will prove this is optimal by contradiction. Suppose there is a better sequence of operations that uses the minimum number of operations possible and that isn't the same as the one obtained via the greedy algorithm. We'll call it the good sequence. Let's consider the bitwise or.\nIt must have exactly the same number of bits on.\nSuppose not. The bitwise or can only increase by one with the operation, and therefore the good strategy must have passed through a state with fewer steps and the same number of bits on, which is impossible by the construction of the good strategy.\nIt must have exactly the same bits on.\nSuppose not. Take any bit $$$x$$$ which is set to $$$1$$$ by the good strategy and isn't set to $$$1$$$ via the greedy strategy. Since the greedy strategy keeps bits set to $$$1$$$ always set to $$$1$$$, and since it turns on all bits from the $$$p$$$-th to the $$$0$$$-th, then we obtain:\nThe good strategy sets a bit to $$$1$$$ that is left of the $$$k$$$-th one and that wasn't $$$1$$$ originally.\nTherefore, it must have increased some number to turn on that bit, but before turning on that bit, it must have passed through a state where all the lower bits than that $$$x$$$ are $$$1$$$ and all the upper ones are kept the same.\nConsider the strategy where we\nonly\nperform the increments on that number up to that point. It is better than the good strategy but gets enough bits, which is also a contradiction.\nWe can assume that the highest bit was obtained in the same way as the greedy solution.\nFirst of all, we can ignore all bits higher than the $$$p$$$-th one. Why is that?\nBecause we will never increase a number from $$$2^{p+1}-1 \\pmod{2^{p+1}}$$$ to $$$0 \\pmod{2^{p+1}}$$$. We can show this with the same argument as in the previous point.\nNow, suppose in the good strategy we increment $$$a_i$$$ to turn on the $$$p$$$-th bit, but in the greedy strategy we increment $$$a_j$$$ instead. Then, increasing $$$a_j$$$ to the final value of $$$a_i$$$ in the good strategy and $$$a_i$$$ to the final value of $$$a_j$$$ in the good strategy (we can do that because we know $$$a_i \\leq a_j$$$ thanks to the greedy algorithm) takes the same number of steps.\nFrom now on, we can assume that the good algorithm is the previous good algorithm after making that change.\nBy induction, we can extend the argument to the rest of the bits.\nThe full argument of the previous point applies.\nTherefore, it turns out that the good strategy is as good as the greedy strategy, so there's a contradiction and the greedy algorithm is optimal.\nLet $$$b = 31$$$, the number of bits we need to check.\nWe have to execute the greedy algorithm at most $$$b$$$ times, each time we iterate over $$$\\mathcal{O}(b)$$$ bits and find the best element via a trivial $$$\\mathcal{O}(n)$$$ search over the array.\nWhenever we need to calculate the bitwise or of all elements we can do it simply by iterating for all elements, the complexity won't increase.\nTo get the answer, we can iterate over all possible answers and see if we have enough operations. We can even do binary search in $$$\\mathcal{O}(q log (b))$$$.\nThe final time complexity is $$$\\mathcal{O}(n b^2 + q log (b))$$$."
+        }
+    ]
+}

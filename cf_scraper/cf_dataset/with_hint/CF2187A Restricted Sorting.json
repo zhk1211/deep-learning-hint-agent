@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ of length $ n $ . For an integer $ k $ , we call it piggy if and only if it is possible to sort $ a $ in non-descending order by performing the following operation an arbitrary number of times (possibly zero):\n\n- First, select two indices $ i $ and $ j $ ( $ 1 \\le i < j \\le n $ ) such that $ |a_i - a_j| \\ge k $ ;\n- Then, swap $ a_i $ and $ a_j $ .\n\nYou need to determine the largest piggy integer $ k $ . If such an integer does not exist, output $ -1 $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the length of $ a $ .\n\nThe second line contains $ n $ integers $ a_1,a_2,\\ldots,a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the elements of $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\\cdot10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the largest piggy integer $ k $ .\n\nIf such an integer does not exist, output $ -1 $ instead.\n\nExamples\nSample 1\nInput\n5\n1\n1\n5\n1 2 3 4 5\n3\n1 4 2\n5\n2 1 5 4 3\n6\n1 1 4 5 1 4\nOutput\n-1\n-1\n2\n2\n3\n\nNote\nIn the first and the second test case, no matter how large $ k $ is, you can always sort $ a $ in non-descending order by not performing any operations.\n\nIn the third test case, the largest piggy $ k $ is $ 2 $ . We can select $ i=2 $ and $ j=3 $ in the first operation, since $ |a_2-a_3|=|4-2|=2 \\ge k $ , and $ a $ is sorted in non-descending order. It can be proven that no piggy integers larger than $ 2 $ exist."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "For any array of elements, if you can somehow swap any pair of elements (maybe indirectly), you can always sort the array."
+        },
+        {
+            "title": "Hint 2",
+            "content": "For some $$$i,j$$$ such that $$$|a_i-a_j| \\lt k$$$, how to swap them with help from other elements?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "2187A - Restricted Sorting\nFirstly, if $$$a$$$ is already sorted, then any integer $$$k$$$ is piggy, we can simply output $$$-1$$$.\nLet $$$b$$$ be the array obtained by sorting $$$a$$$. For some $$$1 \\le i \\le n$$$, if $$$a_i=b_i$$$, we do not need to touch it. For $$$i$$$ with $$$a_i\\ne b_i$$$, we need to swap them to their correct places. Let $$$mx=\\max(a)$$$ and $$$mn=\\min(a)$$$. Consider for an integer $$$k$$$, how do we check if it is piggy:\nIf $$$mx-mn \\lt k$$$, we can swap none of the elements, so $$$k$$$ is not piggy.\nIf there exists some $$$i$$$ such that $$$a_i \\ne b_i$$$ and $$$mx-a_i  \\lt  k$$$ and $$$a_i - mn  \\lt  k$$$, we can never swap this element, so $$$k$$$ is not piggy.\nOtherwise, we claim that $$$k$$$ is piggy. This is because we can indirectly swap any pair of $$$a_i$$$ and $$$a_j$$$, with help from $$$mn$$$ and $$$mx$$$. Without loss of generality, consider two cases:\nIf $$$a_i-mn\\ge k$$$ and $$$a_j-mn \\ge k$$$, we can perform the following swaps (elements are shown by their relation positions):\n$$$a_i$$$, $$$a_j$$$, $$$mn$$$\n$$$a_i$$$, $$$mn$$$, $$$a_j$$$\n$$$mn$$$, $$$a_i$$$, $$$a_j$$$\n$$$a_j$$$, $$$a_i$$$, $$$mn$$$\nIf $$$a_i-mn \\ge k$$$ and $$$mx-a_j \\ge k$$$:\n$$$a_i$$$, $$$a_j$$$, $$$mn$$$, $$$mx$$$\n$$$mn$$$, $$$a_j$$$, $$$a_i$$$, $$$mx$$$\n$$$mx$$$, $$$a_j$$$, $$$a_i$$$, $$$mn$$$\n$$$a_j$$$, $$$mx$$$, $$$a_i$$$, $$$mn$$$\n$$$a_j$$$, $$$mn$$$, $$$a_i$$$, $$$mx$$$\n$$$a_j$$$, $$$a_i$$$, $$$mn$$$, $$$mx$$$\nAs shown in Hint 1, if we can swap any two elements, we can always sort the array.\nWith the above analysis, we can binary search for the largest piggy $$$k$$$, and check the answer in $$$O(n)$$$, with overall complexity $$$O(n \\log n)$$$. In fact, we do not even need to perform binary search. The answer can be shown to be:\n$$$$$$\\min_{a_i \\ne b_i}(\\max(a_i-mn, mx-a_i))$$$$$$"
+        }
+    ]
+}

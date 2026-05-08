@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven the time in 24-hour format, output the equivalent time in 12-hour format.\n\n- [24-hour format](https://en.wikipedia.org/wiki/24-hour_clock#Description) divides the day into 24 hours from $ 00 $ to $ 23 $ , each of which has 60 minutes from $ 00 $ to $ 59 $ .\n- [12-hour format](https://en.wikipedia.org/wiki/12-hour_clock#Description) divides the day into two halves: the first half is $ \\mathrm{AM} $ , and the second half is $ \\mathrm{PM} $ . In each half, the hours are numbered in the order $ 12, 01, 02, 03, \\dots, 11 $ . Each hour has 60 minutes numbered from $ 00 $ to $ 59 $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 1440 $ ) — the number of test cases.\n\nThe only line of each test case contains a string $ s $ of length $ 5 $ with format hh:mm representing a valid time in the 24-hour format. hh represents the hour from $ 00 $ to $ 23 $ , and mm represents the minute from $ 00 $ to $ 59 $ .\n\nThe input will always be a valid time in 24-hour format.\n\nOutput Format\nFor each test case, output two strings separated by a space (\"hh:mm AM\" or \"hh:mm PM\"), which are the 12-hour equivalent to the time provided in the test case (without quotes).\n\nYou should output the time exactly as indicated; in particular, you should not remove leading zeroes.\n\nExamples\nSample 1\nInput\n11\n09:41\n18:06\n12:14\n00:59\n00:00\n14:34\n01:01\n19:07\n11:59\n12:00\n21:37\nOutput\n09:41 AM\n06:06 PM\n12:14 PM\n12:59 AM\n12:00 AM\n02:34 PM\n01:01 AM\n07:07 PM\n11:59 AM\n12:00 PM\n09:37 PM"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nh\n,\nm\n;\nchar\nc\n;\ncin\n>>\nh\n>>\nc\n>>\nm\n;\nstring\nam\n=\n(\nh\n<\n12\n?\n\" AM\"\n:\n\" PM\"\n);\nh\n=\n(\nh\n%\n12\n?\nh\n%\n12\n:\n12\n);\ncout\n<<\n(\nh\n<\n10\n?\n\"0\"\n:\n\"\"\n)\n<<\nh\n<<\nc\n<<\n(\nm\n<\n10\n?\n\"0\"\n:\n\"\"\n)\n<<\nm\n<<\nam\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}
