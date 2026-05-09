@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ of $ n $ integers. Find the number of pairs $ (i, j) $ ( $ 1 \\le i < j \\le n $ ) where the sum of $ a_i + a_j $ is greater than or equal to $ l $ and less than or equal to $ r $ (that is, $ l \\le a_i + a_j \\le r $ ).\n\nFor example, if $ n = 3 $ , $ a = [5, 1, 2] $ , $ l = 4 $ and $ r = 7 $ , then two pairs are suitable:\n\n- $ i=1 $ and $ j=2 $ ( $ 4 \\le 5 + 1 \\le 7 $ );\n- $ i=1 $ and $ j=3 $ ( $ 4 \\le 5 + 2 \\le 7 $ ).\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ). Then $ t $ test cases follow.\n\nThe first line of each test case contains three integers $ n, l, r $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ , $ 1 \\le l \\le r \\le 10^9 $ ) — the length of the array and the limits on the sum in the pair.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ overall test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of index pairs $ (i, j) $ ( $ i < j $ ), such that $ l \\le a_i + a_j \\le r $ .\n\nExamples\nSample 1\nInput\n4\n3 4 7\n5 1 2\n5 5 8\n5 1 2 4 3\n4 100 1000\n1 1 1 1\n5 9 13\n2 5 5 1 1\nOutput\n2\n7\n0\n1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#include\n\"random\"\nusing\nnamespace\nstd\n;\nusing\nll\n=\nlong\nlong\n;\nusing\nld\n=\nlong\ndouble\n;\nusing\npii\n=\npair\n<\nint\n,\nint\n>;\nusing\ncd\n=\ncomplex\n<ld>\n;\nvoid\nsolve\n()\n{\nint\nn\n,\nl\n,\nr\n;\ncin\n>>\nn\n>>\nl\n>>\nr\n;\nvector\n<int>\nv\n(\nn\n);\nfor\n(\nint\n&\ne\n:\nv\n)\n{\ncin\n>>\ne\n;\n}\nsort\n(\nv\n.\nbegin\n(),\nv\n.\nend\n());\nll ans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nans\n+=\nupper_bound\n(\nv\n.\nbegin\n(),\nv\n.\nend\n(),\nr\n-\nv\n[\ni\n])\n-\nv\n.\nbegin\n();\nans\n-=\nlower_bound\n(\nv\n.\nbegin\n(),\nv\n.\nend\n(),\nl\n-\nv\n[\ni\n])\n-\nv\n.\nbegin\n();\nif\n(\nl\n<=\n2\n*\nv\n[\ni\n]\n&&\n2\n*\nv\n[\ni\n]\n<=\nr\n)\n{\nans\n--;\n}\n}\ncout\n<<\nans\n/\n2\n<<\n\"\\n\"\n;\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

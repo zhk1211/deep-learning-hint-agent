@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nFor a square matrix of integers of size $ n \\times n $ , let's define its beauty as follows: for each pair of side-adjacent elements $ x $ and $ y $ , write out the number $ |x-y| $ , and then find the number of different numbers among them.\n\nFor example, for the matrix $ \\begin{pmatrix} 1 & 3\\\\ 4 & 2 \\end{pmatrix} $ the numbers we consider are $ |1-3|=2 $ , $ |1-4|=3 $ , $ |3-2|=1 $ and $ |4-2|=2 $ ; there are $ 3 $ different numbers among them ( $ 2 $ , $ 3 $ and $ 1 $ ), which means that its beauty is equal to $ 3 $ .\n\nYou are given an integer $ n $ . You have to find a matrix of size $ n \\times n $ , where each integer from $ 1 $ to $ n^2 $ occurs exactly once, such that its beauty is the maximum possible among all such matrices.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 49 $ ) – the number of test cases.\n\nThe first (and only) line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 50 $ ).\n\nOutput Format\nFor each test case, print $ n $ rows of $ n $ integers — a matrix of integers of size $ n \\times n $ , where each number from $ 1 $ to $ n^2 $ occurs exactly once, such that its beauty is the maximum possible among all such matrices. If there are multiple answers, print any of them.\n\nExamples\nSample 1\nInput\n2\n2\n3\nOutput\n1 3\n4 2\n1 3 4\n9 2 7\n5 8 6"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\n++\ni\n)\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<\nvector\n<int>\n>\na\n(\nn\n,\nvector\n<int>\n(\nn\n));\nint\nl\n=\n1\n,\nr\n=\nn\n*\nn\n,\nt\n=\n0\n;\nforn\n(\ni\n,\nn\n)\n{\nforn\n(\nj\n,\nn\n)\n{\nif\n(\nt\n)\na\n[\ni\n][\nj\n]\n=\nl\n++;\nelse\na\n[\ni\n][\nj\n]\n=\nr\n--;\nt\n^=\n1\n;\n}\nif\n(\ni\n&\n1\n)\nreverse\n(\na\n[\ni\n].\nbegin\n(),\na\n[\ni\n].\nend\n());\n}\nforn\n(\ni\n,\nn\n)\nforn\n(\nj\n,\nn\n)\ncout\n<<\na\n[\ni\n][\nj\n]\n<<\n\" \\n\"\n[\nj\n==\nn\n-\n1\n];\n}\n}"
+        }
+    ]
+}

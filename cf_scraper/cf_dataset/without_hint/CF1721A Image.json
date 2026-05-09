@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have an image file of size $ 2 \\times 2 $ , consisting of $ 4 $ pixels. Each pixel can have one of $ 26 $ different colors, denoted by lowercase Latin letters.\n\nYou want to recolor some of the pixels of the image so that all $ 4 $ pixels have the same color. In one move, you can choose no more than two pixels of the same color and paint them into some other color (if you choose two pixels, both should be painted into the same color).\n\nWhat is the minimum number of moves you have to make in order to fulfill your goal?\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nEach test case consists of two lines. Each of these lines contains two lowercase letters of Latin alphabet without any separators, denoting a row of pixels in the image.\n\nOutput Format\nFor each test case, print one integer — the minimum number of moves you have to make so that all $ 4 $ pixels of the image have the same color.\n\nExamples\nSample 1\nInput\n5\nrb\nbr\ncc\nwb\naa\naa\nab\ncd\nyy\nxx\nOutput\n1\n2\n0\n3\n1\n\nNote\nLet's analyze the test cases of the example.\n\nIn the first test case, you can paint the bottom left pixel and the top right pixel (which share the same color) into the color r, so all pixels have this color.\n\nIn the second test case, two moves are enough:\n\n- paint both top pixels, which have the same color c, into the color b;\n- paint the bottom left pixel into the color b.\n\nIn the third test case, all pixels already have the same color.\n\nIn the fourth test case, you may leave any of the pixels unchanged, and paint all three other pixels into the color of that pixel in three moves.\n\nIn the fifth test case, you can paint both top pixels into the color x."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\ni\n++)\n{\nstring\ns1\n,\ns2\n;\ncin\n>>\ns1\n>>\ns2\n;\ns1\n+=\ns2\n;\ncout\n<<\nset\n<char>\n(\ns1\n.\nbegin\n(),\ns1\n.\nend\n()).\nsize\n()\n-\n1\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

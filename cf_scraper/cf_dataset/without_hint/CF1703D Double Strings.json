@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given $ n $ strings $ s_1, s_2, \\dots, s_n $ of length at most $ \\mathbf{8} $ .\n\nFor each string $ s_i $ , determine if there exist two strings $ s_j $ and $ s_k $ such that $ s_i = s_j + s_k $ . That is, $ s_i $ is the concatenation of $ s_j $ and $ s_k $ . Note that $ j $ can be equal to $ k $ .\n\nRecall that the concatenation of strings $ s $ and $ t $ is $ s + t = s_1 s_2 \\dots s_p t_1 t_2 \\dots t_q $ , where $ p $ and $ q $ are the lengths of strings $ s $ and $ t $ respectively. For example, concatenation of \"code\" and \"forces\" is \"codeforces\".\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq 10^5 $ ) — the number of strings.\n\nThen $ n $ lines follow, the $ i $ -th of which contains non-empty string $ s_i $ of length at most $ \\mathbf{8} $ , consisting of lowercase English letters. Among the given $ n $ strings, there may be equal (duplicates).\n\nThe sum of $ n $ over all test cases doesn't exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, output a binary string of length $ n $ . The $ i $ -th bit should be $ \\texttt{1} $ if there exist two strings $ s_j $ and $ s_k $ where $ s_i = s_j + s_k $ , and $ \\texttt{0} $ otherwise. Note that $ j $ can be equal to $ k $ .\n\nExamples\nSample 1\nInput\n3\n5\nabab\nab\nabc\nabacb\nc\n3\nx\nxx\nxxx\n8\ncodeforc\nes\ncodes\ncod\nforc\nforces\ne\ncode\nOutput\n10100\n011\n10100101\n\nNote\nIn the first test case, we have the following:\n\n- $ s_1 = s_2 + s_2 $ , since $ \\texttt{abab} = \\texttt{ab} + \\texttt{ab} $ . Remember that $ j $ can be equal to $ k $ .\n- $ s_2 $ is not the concatenation of any two strings in the list.\n- $ s_3 = s_2 + s_5 $ , since $ \\texttt{abc} = \\texttt{ab} + \\texttt{c} $ .\n- $ s_4 $ is not the concatenation of any two strings in the list.\n- $ s_5 $ is not the concatenation of any two strings in the list.\n\nSince only $ s_1 $ and $ s_3 $ satisfy the conditions, only the first and third bits in the answer should be $ \\texttt{1} $ , so the answer is $ \\texttt{10100} $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200007\n;\nconst\nint\nMOD\n=\n1000000007\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nstring\ns\n[\nn\n];\nmap\n<\nstring\n,\nbool\n>\nmp\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\ns\n[\ni\n];\nmp\n[\ns\n[\ni\n]]\n=\ntrue\n;\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nbool\nok\n=\nfalse\n;\nfor\n(\nint\nj\n=\n1\n;\nj\n<\ns\n[\ni\n].\nlength\n();\nj\n++)\n{\nstring\npref\n=\ns\n[\ni\n].\nsubstr\n(\n0\n,\nj\n),\nsuff\n=\ns\n[\ni\n].\nsubstr\n(\nj\n,\ns\n[\ni\n].\nlength\n()\n-\nj\n);\nif\n(\nmp\n[\npref\n]\n&&\nmp\n[\nsuff\n])\n{\nok\n=\ntrue\n;}\n}\ncout\n<<\nok\n;\n}\ncout\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

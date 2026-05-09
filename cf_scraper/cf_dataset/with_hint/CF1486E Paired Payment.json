@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ cities and $ m $ bidirectional roads in the country. The roads in the country form an undirected weighted graph. The graph is not guaranteed to be connected. Each road has it's own parameter $ w $ . You can travel through the roads, but the government made a new law: you can only go through two roads at a time (go from city $ a $ to city $ b $ and then from city $ b $ to city $ c $ ) and you will have to pay $ (w_{ab} + w_{bc})^2 $ money to go through those roads. Find out whether it is possible to travel from city $ 1 $ to every other city $ t $ and what's the minimum amount of money you need to get from $ 1 $ to $ t $ .\n\nInput Format\nFirst line contains two integers $ n $ , $ m $ ( $ 2 \\leq n \\leq 10^5 $ , $ 1 \\leq m \\leq min(\\frac{n \\cdot (n - 1)}{2}, 2 \\cdot 10^5) $ ).\n\nNext $ m $ lines each contain three integers $ v_i $ , $ u_i $ , $ w_i $ ( $ 1 \\leq v_i, u_i \\leq n $ , $ 1 \\leq w_i \\leq 50 $ , $ u_i \\neq v_i $ ). It's guaranteed that there are no multiple edges, i.e. for any edge $ (u_i, v_i) $ there are no other edges $ (u_i, v_i) $ or $ (v_i, u_i) $ .\n\nOutput Format\nFor every city $ t $ print one integer. If there is no correct path between $ 1 $ and $ t $ output $ -1 $ . Otherwise print out the minimum amount of money needed to travel from $ 1 $ to $ t $ .\n\nExamples\nSample 1\nInput\n5 6\n1 2 3\n2 3 4\n3 4 5\n4 5 6\n1 5 1\n2 4 2\nOutput\n0 98 49 25 114\n\nSample 2\nInput\n3 2\n1 2 1\n2 3 2\nOutput\n0 -1 9\n\nNote\nThe graph in the first example looks like this.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1486E/d05a9b1774a0eade44485bb99ef938693d1a95f9.png)\n\nIn the second example the path from $ 1 $ to $ 3 $ goes through $ 2 $ , so the resulting payment is $ (1 + 2)^2 = 9 $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1486E/9c27ff1803f812784d9dc5ba8f09e905e17b3714.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "Did you read that $$$w$$$ is at most $$$50$$$?"
+        },
+        {
+            "title": "Hint2",
+            "content": "How to change the graph for dijkstra algorithm to work with this rule?"
+        },
+        {
+            "title": "Hint3",
+            "content": "Add some fake vertices and edges to make things work."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's think about it this way. For a middle vertex we only care what are the weights of the edges that pass through it. Now for every vertex $$$v$$$ let's create some fake vertices $$$(v, w)$$$, where $$$w$$$ is the weight of the last edge. This would add at most $$$O(M)$$$ new vertices. Now for each starting edge $$$(u, v, w)$$$ let's make an edge $$$u \\rightarrow (v, w)$$$ of weight $$$0$$$ and for each vertex $$$(u, was)$$$ and edge $$$(u, v, w)$$$ let's create an edge $$$(u, was) \\rightarrow v$$$ with weight $$$(was + w)^2$$$. Now running Dijkstra's algorithm from vertex $$$1$$$ will result for correct answers for all vertices (as we've simulated the paired edge situation with fake vertices and edges). Also we wouldn't create more than $$$O(M \\cdot maxW)$$$ edges cause if some vertex has degree $$$t$$$ we would create no more than $$$t \\cdot maxW$$$ edges and sum of all $$$t$$$ is $$$2 \\cdot M$$$.\nCarefully implemented this would result in $$$O(M \\cdot maxW \\cdot logM)$$$ or $$$O(M \\cdot maxW + MlogM)$$$ time and $$$O(M \\cdot maxW)$$$ or $$$O(M)$$$ memory. All of those were fine."
+        }
+    ]
+}

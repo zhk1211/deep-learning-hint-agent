@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMKnez wants to construct an array $ s_1,s_2, \\ldots , s_n $ satisfying the following conditions:\n\n- Each element is an integer number different from $ 0 $ ;\n- For each pair of adjacent elements their sum is equal to the sum of the whole array.\n\nMore formally, $ s_i \\neq 0 $ must hold for each $ 1 \\leq i \\leq n $ . Moreover, it must hold that $ s_1 + s_2 + \\cdots + s_n = s_i + s_{i+1} $ for each $ 1 \\leq i < n $ .\n\nHelp MKnez to construct an array with these properties or determine that it does not exist.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\leq t \\leq 100 $ ). The description of the test cases follows.\n\nThe only line of each test case contains a single integer $ n $ ( $ 2 \\leq n \\leq 1000 $ ) — the length of the array.\n\nOutput Format\nFor each test case, print \"YES\" if an array of length $ n $ satisfying the conditions exists. Otherwise, print \"NO\". If the answer is \"YES\", on the next line print a sequence $ s_1,s_2, \\ldots, s_n $ satisfying the conditions. Each element should be a non-zero integer in the range $ [-5000,5000] $ , i. e. $ -5000 \\leq s_i \\leq 5000 $ and $ s_i \\neq 0 $ should hold for each $ 1 \\leq i \\leq n $ .\n\nIt can be proved that if a solution exists then there also exists one which satisfies the additional constraints on the range.\n\nIf there are several correct answers, print any of them.\n\nExamples\nSample 1\nInput\n2\n2\n3\nOutput\nYES\n9 5\nNO\n\nNote\nIn the first test case, $ [9,5] $ is a valid answer since $ 9+5 $ (the sum of the two adjacent elements $ s_1+s_2 $ ) is equal to $ 9+5 $ (the sum of all elements). Other solutions include $ [6,-9], [-1,-2], [-5000,5000], \\ldots $\n\nFor the second test case, let us show why some arrays do not satisfy the constraints:\n\n- $ [1,1,1] $ — $ s_1+s_2 = 1+1 = 2 $ and $ s_1+s_2+s_3=1+1+1 = 3 $ differ;\n- $ [1,-1,1] $ — $ s_1+s_2=1+(-1)=0 $ and $ s_1+s_2+s_3=1+(-1)+1 = 1 $ differ;\n- $ [0,0,0] $ — The array $ s $ cannot contain a $ 0 $ .\n\nThis is not a proof, but it can be shown that the answer is \"NO\"."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "There always exists an answer for\neven\n$$$n$$$. Can you find it?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "There always exists an answer for\nodd\n$$$n \\geq 5$$$. Can you find it?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "If $$$n$$$ is\neven\n, the array $$$[-1,1,-1,1, \\ldots ,-1,1]$$$ is a solution. The sum of any two adjacent elements is $$$0$$$, as well as the sum of the whole array.\nSuppose that $$$n$$$ is\nodd\nnow. Since $$$s_{i-1} + s_i$$$ and $$$s_i + s_{i+1}$$$ are both equal to the sum of the whole array for each $$$i=2,3,\\ldots n-1$$$, it must also hold that $$$s_{i-1} + s_i = s_i + s_{i+1}$$$, which is equivalent to $$$s_{i-1} = s_{i+1}$$$. Let's fix $$$s_1 = a$$$ and $$$s_2 = b$$$. The condition above produces the array $$$s = [a,b,a,b, \\ldots a,b,a]$$$ (remember that we consider an\nodd\n$$$n$$$).\nLet $$$k$$$ be a positive integer such that $$$n = 2k+1$$$. The sum of any two adjacent elements is $$$a+b$$$ and the sum of the whole array is $$$(k+1)a + kb$$$. Since the two values are equal, we can conclude that $$$ka + (k-1)b = 0$$$. $$$a=k-1$$$ and $$$b=-k$$$ produces an answer. But, we must be careful with $$$a=0$$$ and $$$b=0$$$ since that is not allowed. If $$$k=1$$$ then $$$ka+(k-1)b=0$$$ implies $$$ka=0$$$ and $$$a=0$$$, so for $$$n=2\\cdot 1 + 1 = 3$$$ an answer does not exist. Otherwise, one can see that $$$a=k-1$$$ and $$$b=-k$$$ will be non-zero, which produces a valid answer. So, the array $$$[k-1, -k, k-1, -k, \\ldots, k-1, -k, k-1]$$$ is an answer for $$$k \\geq 2$$$ ($$$n \\geq 5$$$)."
+        }
+    ]
+}

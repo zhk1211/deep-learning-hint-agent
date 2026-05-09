@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp wants to train before another programming competition. During the first day of his training he should solve exactly $ 1 $ problem, during the second day — exactly $ 2 $ problems, during the third day — exactly $ 3 $ problems, and so on. During the $ k $ -th day he should solve $ k $ problems.\n\nPolycarp has a list of $ n $ contests, the $ i $ -th contest consists of $ a_i $ problems. During each day Polycarp has to choose exactly one of the contests he didn't solve yet and solve it. He solves exactly $ k $ problems from this contest. Other problems are discarded from it. If there are no contests consisting of at least $ k $ problems that Polycarp didn't solve yet during the $ k $ -th day, then Polycarp stops his training.\n\nHow many days Polycarp can train if he chooses the contests optimally?\n\nInput Format\nThe first line of the input contains one integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the number of contests.\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 2 \\cdot 10^5 $ ) — the number of problems in the $ i $ -th contest.\n\nOutput Format\nPrint one integer — the maximum number of days Polycarp can train if he chooses the contests optimally.\n\nExamples\nSample 1\nInput\n4\n3 1 4 1\nOutput\n3\n\nSample 2\nInput\n3\n1 1 1\nOutput\n1\n\nSample 3\nInput\n5\n1 1 1 2 2\nOutput\n2"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nint\npos\n=\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\na\n[\ni\n]\n>=\npos\n)\n++\npos\n;\n}\ncout\n<<\npos\n-\n1\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

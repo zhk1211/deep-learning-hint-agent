@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ n $ integers. Each $ a_i $ is one of the six following numbers: $ 4, 8, 15, 16, 23, 42 $ .\n\nYour task is to remove the minimum number of elements to make this array good.\n\nAn array of length $ k $ is called good if $ k $ is divisible by $ 6 $ and it is possible to split it into $ \\frac{k}{6} $ subsequences $ 4, 8, 15, 16, 23, 42 $ .\n\nExamples of good arrays:\n\n- $ [4, 8, 15, 16, 23, 42] $ (the whole array is a required sequence);\n- $ [4, 8, 4, 15, 16, 8, 23, 15, 16, 42, 23, 42] $ (the first sequence is formed from first, second, fourth, fifth, seventh and tenth elements and the second one is formed from remaining elements);\n- $ [] $ (the empty array is good).\n\nExamples of bad arrays:\n\n- $ [4, 8, 15, 16, 42, 23] $ (the order of elements should be exactly $ 4, 8, 15, 16, 23, 42 $ );\n- $ [4, 8, 15, 16, 23, 42, 4] $ (the length of the array is not divisible by $ 6 $ );\n- $ [4, 8, 15, 16, 23, 42, 4, 8, 15, 16, 23, 23] $ (the first sequence can be formed from first six elements but the remaining array cannot form the required sequence).\n\nInput Format\nThe first line of the input contains one integer $ n $ ( $ 1 \\le n \\le 5 \\cdot 10^5 $ ) — the number of elements in $ a $ .\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ (each $ a_i $ is one of the following numbers: $ 4, 8, 15, 16, 23, 42 $ ), where $ a_i $ is the $ i $ -th element of $ a $ .\n\nOutput Format\nPrint one integer — the minimum number of elements you have to remove to obtain a good array.\n\nExamples\nSample 1\nInput\n5\n4 8 15 16 23\nOutput\n5\n\nSample 2\nInput\n12\n4 8 4 15 16 8 23 15 16 42 23 42\nOutput\n0\n\nSample 3\nInput\n15\n4 8 4 8 15 16 8 16 23 15 16 4 42 23 42\nOutput\n3"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nvector\n<int>\np\n({\n4\n,\n8\n,\n15\n,\n16\n,\n23\n,\n42\n});\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\na\n[\ni\n]\n=\nlower_bound\n(\np\n.\nbegin\n(),\np\n.\nend\n(),\na\n[\ni\n])\n-\np\n.\nbegin\n();\n}\nvector\n<int>\nseq\n(\n6\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\na\n[\ni\n]\n==\n0\n)\n{\n++\nseq\n[\n0\n];\n}\nelse\n{\nif\n(\nseq\n[\na\n[\ni\n]\n-\n1\n]\n>\n0\n)\n{\n--\nseq\n[\na\n[\ni\n]\n-\n1\n];\n++\nseq\n[\na\n[\ni\n]];\n}\n}\n}\ncout\n<<\nn\n-\nseq\n[\n5\n]\n*\n6\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

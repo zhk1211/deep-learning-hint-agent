@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp has an array $ a $ consisting of $ n $ integers.\n\nHe wants to play a game with this array. The game consists of several moves. On the first move he chooses any element and deletes it (after the first move the array contains $ n-1 $ elements). For each of the next moves he chooses any element with the only restriction: its parity should differ from the parity of the element deleted on the previous move. In other words, he alternates parities (even-odd-even-odd-... or odd-even-odd-even-...) of the removed elements. Polycarp stops if he can't make a move.\n\nFormally:\n\n- If it is the first move, he chooses any element and deletes it;\n- If it is the second or any next move:\n- if the last deleted element was odd, Polycarp chooses any even element and deletes it;\n- if the last deleted element was even, Polycarp chooses any odd element and deletes it.\n- If after some move Polycarp cannot make a move, the game ends.\n\nPolycarp's goal is to minimize the sum of non-deleted elements of the array after end of the game. If Polycarp can delete the whole array, then the sum of non-deleted elements is zero.\n\nHelp Polycarp find this value.\n\nInput Format\nThe first line of the input contains one integer $ n $ ( $ 1 \\le n \\le 2000 $ ) — the number of elements of $ a $ .\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i \\le 10^6 $ ), where $ a_i $ is the $ i $ -th element of $ a $ .\n\nOutput Format\nPrint one integer — the minimum possible sum of non-deleted elements of the array after end of the game.\n\nExamples\nSample 1\nInput\n5\n1 5 7 8 2\nOutput\n0\n\nSample 2\nInput\n6\n5 1 2 4 6 3\nOutput\n0\n\nSample 3\nInput\n2\n1000000 1000000\nOutput\n1000000"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n;\ncin\n>>\nn\n;\nint\nsum\n=\n0\n;\nvector\n<int>\neven\n,\nodd\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nint\nx\n;\ncin\n>>\nx\n;\nsum\n+=\nx\n;\nif\n(\nx\n&\n1\n)\nodd\n.\npush_back\n(\nx\n);\nelse\neven\n.\npush_back\n(\nx\n);\n}\nsort\n(\nodd\n.\nrbegin\n(),\nodd\n.\nrend\n());\nsort\n(\neven\n.\nrbegin\n(),\neven\n.\nrend\n());\nint\nk\n=\nmin\n(\nodd\n.\nsize\n(),\neven\n.\nsize\n());\nint\nrem\n=\nsum\n;\nrem\n-=\naccumulate\n(\nodd\n.\nbegin\n(),\nodd\n.\nbegin\n()\n+\nk\n,\n0\n);\nrem\n-=\naccumulate\n(\neven\n.\nbegin\n(),\neven\n.\nbegin\n()\n+\nk\n,\n0\n);\nif\n(\nint\n(\nodd\n.\nsize\n())\n>\nk\n)\n{\nrem\n-=\nodd\n[\nk\n];\n}\nif\n(\nint\n(\neven\n.\nsize\n())\n>\nk\n)\n{\nrem\n-=\neven\n[\nk\n];\n}\ncout\n<<\nrem\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

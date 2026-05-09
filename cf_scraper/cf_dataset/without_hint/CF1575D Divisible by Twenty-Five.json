@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMr. Chanek has an integer represented by a string $ s $ . Zero or more digits have been erased and are denoted by the character \\_. There are also zero or more digits marked by the character X, meaning they're the same digit.\n\nMr. Chanek wants to count the number of possible integer $ s $ , where $ s $ is divisible by $ 25 $ . Of course, $ s $ must not contain any leading zero. He can replace the character \\_ with any digit. He can also replace the character X with any digit, but it must be the same for every character X.\n\nAs a note, a leading zero is any 0 digit that comes before the first nonzero digit in a number string in positional notation. For example, 0025 has two leading zeroes. An exception is the integer zero, (0 has no leading zero, but 0000 has three leading zeroes).\n\nInput Format\nOne line containing the string $ s $ ( $ 1 \\leq |s| \\leq 8 $ ). The string $ s $ consists of the characters 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, \\_, and X.\n\nOutput Format\nOutput an integer denoting the number of possible integer $ s $ .\n\nExamples\nSample 1\nInput\n25\nOutput\n1\n\nSample 2\nInput\n_00\nOutput\n9\n\nSample 3\nInput\n_XX\nOutput\n9\n\nSample 4\nInput\n0\nOutput\n1\n\nSample 5\nInput\n0_25\nOutput\n0\n\nNote\nIn the first example, the only possible $ s $ is $ 25 $ .\n\nIn the second and third example, $ s \\in \\{100, 200,300,400,500,600,700,800,900\\} $ .\n\nIn the fifth example, all possible $ s $ will have at least one leading zero."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Short Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nsz\n(\nx\n)\n(\nint\n)(\nx\n).\nsize\n()\ntypedef\nlong\nlong\nLL\n;\nLL expo\n(\nLL a\n,\nLL b\n){\n// a %= MOD; // USE THIS WHEN N IS REALLY BIG!\nLL ret\n=\n1\n;\nwhile\n(\nb\n>\n0\n){\nif\n(\nb\n&\n1\n)\nret\n=\n(\nret\n*\na\n);\na\n=\n(\na\n*\na\n);\nb\n>>=\n1\n;\n}\nreturn\nret\n;\n}\nint\nmain\n(){\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nstring\ns\n;\ncin\n>>\ns\n;\nint\nlow\n=\nexpo\n(\n10\n,\nsz\n(\ns\n)\n-\n1\n);\nint\nhigh\n=\nexpo\n(\n10\n,\nsz\n(\ns\n))\n-\n1\n;\nif\n(\nlow\n==\n1\n)\nlow\n--;\nwhile\n(\nlow\n%\n25\n)\nlow\n++;\nint\nans\n=\n0\n;\nfor\n(;\nlow\n<=\nhigh\n;\nlow\n+=\n25\n){\nstring\ncurrent\n=\nto_string\n(\nlow\n);\nchar\nxval\n=\n'-'\n;\nbool\ncan\n=\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nsz\n(\ns\n);\ni\n++){\nif\n(\ns\n[\ni\n]\n==\n'_'\n)\ncontinue\n;\nif\n(\ns\n[\ni\n]\n==\n'X'\n){\nif\n(\nxval\n!=\n'-'\n&&\nxval\n!=\ncurrent\n[\ni\n]){\ncan\n=\n0\n;\nbreak\n;\n}\nxval\n=\ncurrent\n[\ni\n];\n}\nelse\nif\n(\ns\n[\ni\n]\n!=\ncurrent\n[\ni\n]){\ncan\n=\n0\n;\nbreak\n;\n}\n}\nans\n+=\ncan\n;\n}\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

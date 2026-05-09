@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "For various graphs, try and simulate the process. Determine a rule to figure out whether a noble survives or not."
+        },
+        {
+            "title": "Hint 2",
+            "content": "When you add or remove a single edge, how much can the answer change by? Try and recalculate the answer in $$$\\mathcal{O}(1)$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Due to the queries, actually simulating the process each time will be too expensive.\nProof that the Process will End: Assume after round $$$x$$$, $$$x_i$$$ nobles are killed. If $$$x_i=0$$$, then the state of the graph doesn't change, so the process will have ended. If $$$x_i \\gt 0$$$, then the number of nobles decreases. Thus, the maximum number of rounds the process can last is $$$N$$$, so it must end.\n$$$\\textbf{Lemma 1:}$$$ At the end of the process, no two nobles will still be friends.\nProof by Contradiction: Assume that nobles $$$u$$$ and $$$v$$$ (assume WLOG that $$$u \\lt v$$$) are still friends and the process is over. In order for $$$u$$$ to avoid being killed, there must be a noble $$$w$$$ weaker than $$$u$$$ that is also a friend of $$$u$$$. The same logic then applies to $$$w$$$, and we have an infinite descent argument. There are only a finite number of nobles weaker than $$$u$$$, so there will be a contradiction.\n$$$\\textbf{Lemma 2:}$$$ If all of a noble's friends are weaker than it, that noble cannot be killed.\nDirect Proof: Since none of the noble's friends are stronger than it, it is impossible for $$$\\textit{all}$$$ of them to be stronger at any point in the process.\n$$$\\textbf{Final Idea:}$$$ By combining Lemmas 1 and 2, we can prove that if ALL of a noble's friends are weaker than it, that noble survives, otherwise it will die. This leads to the solution.\nMaintain in an array the number of nobles weaker than noble $$$i$$$. Since the updates guarantee that the edge being removed/added does/doesn't exist respectively, we only need to keep track of the number of edges of each noble. Essentially, a noble survives if and only if\nweaker[i]==edges[i]\n. After linear precomputation, updates and queries take constant time.\nThe time complexity is $$$\\mathcal{O}(N+M+Q)$$$."
+        }
+    ]
+}

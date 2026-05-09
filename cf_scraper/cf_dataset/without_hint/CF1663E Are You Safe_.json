@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Perhaps you recognize the story of the minotaur? Less known is the hero who saved the kids from the minotaur: his name was Theseus [thee-see-us].\nThe problem is just a word search (horizontal, vertical, diagonal) for\ntheseus\n. You should only go in the forward direction when you search for a word."
+        },
+        {
+            "title": "Solution Code (C++)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\ngood\n()\n{\ncout\n<<\n\"YES\"\n;\nexit\n(\n0\n);\n}\nint\nmain\n()\n{\nint\nN\n;\ncin\n>>\nN\n;\nchar\ngrid\n[\nN\n][\nN\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nN\n;\ni\n++)\n{\nstring\nrow\n;\ncin\n>>\nrow\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nN\n;\nj\n++)\ngrid\n[\ni\n][\nj\n]\n=\nrow\n[\nj\n];\n}\nstring\nword\n=\n\"theseus\"\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nN\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nN\n;\nj\n++)\n{\nif\n(\ni\n<\nN\n-\n7\n)\n{\nstring\nw\n=\n\"\"\n;\nfor\n(\nint\nk\n=\n0\n;\nk\n<\n7\n;\nk\n++)\nw\n+=\ngrid\n[\ni\n+\nk\n][\nj\n];\nif\n(\nw\n==\nword\n)\ngood\n();\n}\nif\n(\nj\n<\nN\n-\n7\n)\n{\nstring\nw\n=\n\"\"\n;\nfor\n(\nint\nk\n=\n0\n;\nk\n<\n7\n;\nk\n++)\nw\n+=\ngrid\n[\ni\n][\nj\n+\nk\n];\nif\n(\nw\n==\nword\n)\ngood\n();\n}\nif\n(\ni\n<\nN\n-\n7\n&&\nj\n<\nN\n-\n7\n)\n{\nstring\nw\n=\n\"\"\n;\nfor\n(\nint\nk\n=\n0\n;\nk\n<\n7\n;\nk\n++)\nw\n+=\ngrid\n[\ni\n+\nk\n][\nj\n+\nk\n];\nif\n(\nw\n==\nword\n)\ngood\n();\n}\n}\n}\ncout\n<<\n\"NO\"\n;\n}"
+        }
+    ]
+}

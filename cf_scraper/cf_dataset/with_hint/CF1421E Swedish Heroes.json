@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWhile playing yet another strategy game, Mans has recruited $ n $ [Swedish heroes](https://www.youtube.com/watch?v=5sGOwFVUU0I), whose powers which can be represented as an array $ a $ .\n\nUnfortunately, not all of those mighty heroes were created as capable as he wanted, so that he decided to do something about it. In order to accomplish his goal, he can pick two consecutive heroes, with powers $ a_i $ and $ a_{i+1} $ , remove them and insert a hero with power $ -(a_i+a_{i+1}) $ back in the same position.\n\nFor example if the array contains the elements $ [5, 6, 7, 8] $ , he can pick $ 6 $ and $ 7 $ and get $ [5, -(6+7), 8] = [5, -13, 8] $ .\n\nAfter he will perform this operation $ n-1 $ times, Mans will end up having only one hero. He wants his power to be as big as possible. What's the largest possible power he can achieve?\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\le n \\le 200000 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ -10^9 \\le a_i \\le 10^9 $ ) — powers of the heroes.\n\nOutput Format\nPrint the largest possible power he can achieve after $ n-1 $ operations.\n\nExamples\nSample 1\nInput\n4\n5 6 7 8\nOutput\n26\n\nSample 2\nInput\n5\n4 -5 9 -2 1\nOutput\n15\n\nNote\nSuitable list of operations for the first sample:\n\n$ [5, 6, 7, 8] \\rightarrow [-11, 7, 8] \\rightarrow [-11, -15] \\rightarrow [26] $"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "The problem gives us an array and we have to come up with an achievable sequence of pluses and minuses such that summing the numbers after applying the signs we get the largest sum. Intuitively we can probably assign $$$+$$$ to most positive numbers and — to most negative numbers somehow, but we should investigate exactly which are possible."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "In order to explain the solution we will add some notations:\n$$$n$$$ = the length of the array.\n$$$m$$$ = the number of elements we multiply by $$$-1$$$ in the solution (put — in front of them).\n$$$p$$$ = the number of elements we do not multiply by $$$-1$$$ in the solution (put $$$+$$$ in front of them).\nThe mysterious pattern is as follows: ($$$n$$$ $$$+$$$ $$$m$$$) % $$$3$$$ = $$$1$$$\nSo yes, for $$$n$$$ = $$$7$$$ for example we can put $$$3$$$ minus signs anywhere, like $$$++--+-+$$$, or $$$6$$$ minus signs like $$$--+----$$$ or full plus signs $$$+++++++$$$. We can arrange the pluses and minuses however we want as long as there are $$$2$$$ consecutive equal signs and ($$$n$$$ $$$+$$$ $$$m$$$) % $$$3$$$ = $$$1$$$.\nThe solution now simply requires us to sort the array and multiply by $$$-1$$$ each number one by one and when ($$$n$$$ $$$+$$$ $$$m$$$) % $$$3$$$ = $$$1$$$ update the answer with the current sum. Of course there is one point where all the elements might form the forbidden $$$+-+-+-$$$ so you should check that in that case they do not, or if they do pick the next smallest number to turn into — instead of the last one. So for the sample $$$[4, -5, 9, -2, 1]$$$ you sort and get $$$[-5, -2, 1, 4, 9]$$$ and when you turn $$$-5$$$ into $$$5$$$ instead of turning $$$-2$$$ into $$$2$$$ you turn $$$1$$$ into $$$-1$$$ and the array will be $$$[5, -2, -1, 4, 9]$$$. After that undo your modification, turn $$$-2$$$ into $$$2$$$ and revert $$$-1$$$ to $$$1$$$."
+        }
+    ]
+}

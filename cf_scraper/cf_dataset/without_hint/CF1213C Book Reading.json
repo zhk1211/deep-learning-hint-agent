@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp is reading a book consisting of $ n $ pages numbered from $ 1 $ to $ n $ . Every time he finishes the page with the number divisible by $ m $ , he writes down the last digit of this page number. For example, if $ n=15 $ and $ m=5 $ , pages divisible by $ m $ are $ 5, 10, 15 $ . Their last digits are $ 5, 0, 5 $ correspondingly, their sum is $ 10 $ .\n\nYour task is to calculate the sum of all digits Polycarp has written down.\n\nYou have to answer $ q $ independent queries.\n\nInput Format\nThe first line of the input contains one integer $ q $ ( $ 1 \\le q \\le 1000 $ ) — the number of queries.\n\nThe following $ q $ lines contain queries, one per line. Each query is given as two integers $ n $ and $ m $ ( $ 1 \\le n, m \\le 10^{16} $ ) — the number of pages in the book and required divisor, respectively.\n\nOutput Format\nFor each query print the answer for it — the sum of digits written down by Polycarp.\n\nExamples\nSample 1\nInput\n7\n1 1\n10 1\n100 3\n1024 14\n998244353 1337\n123 144\n1234312817382646 13\nOutput\n1\n45\n153\n294\n3359835\n0\n427262129093995"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nmain\n()\n{\nint\nq\n;\ncin\n>>\nq\n;\nforn\n(\ni\n,\nq\n)\n{\nlong\nlong\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nn\n=\nn\n/\nm\n;\nvector\n<int>\ndigits\n(\n10\n);\nforn\n(\ni\n,\n10\n)\ndigits\n[\ni\n]\n=\n((\ni\n+\n1\n)\n*\nm\n)\n%\n10\n;\nlong\nlong\nsum\n=\n0\n;\nforn\n(\ni\n,\nn\n%\n10\n)\nsum\n+=\ndigits\n[\ni\n];\ncout\n<<\nsum\n+\nn\n/\n10\n*\naccumulate\n(\ndigits\n.\nbegin\n(),\ndigits\n.\nend\n(),\n0LL\n)\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

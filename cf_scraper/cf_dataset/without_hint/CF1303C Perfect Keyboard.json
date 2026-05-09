@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp wants to assemble his own keyboard. Layouts with multiple rows are too complicated for him — his keyboard will consist of only one row, where all $ 26 $ lowercase Latin letters will be arranged in some order.\n\nPolycarp uses the same password $ s $ on all websites where he is registered (it is bad, but he doesn't care). He wants to assemble a keyboard that will allow to type this password very easily. He doesn't like to move his fingers while typing the password, so, for each pair of adjacent characters in $ s $ , they should be adjacent on the keyboard. For example, if the password is abacaba, then the layout cabdefghi... is perfect, since characters a and c are adjacent on the keyboard, and a and b are adjacent on the keyboard. It is guaranteed that there are no two adjacent equal characters in $ s $ , so, for example, the password cannot be password (two characters s are adjacent).\n\nCan you help Polycarp with choosing the perfect layout of the keyboard, if it is possible?\n\nInput Format\nThe first line contains one integer $ T $ ( $ 1 \\le T \\le 1000 $ ) — the number of test cases.\n\nThen $ T $ lines follow, each containing one string $ s $ ( $ 1 \\le |s| \\le 200 $ ) representing the test case. $ s $ consists of lowercase Latin letters only. There are no two adjacent equal characters in $ s $ .\n\nOutput Format\nFor each test case, do the following:\n\n- if it is impossible to assemble a perfect keyboard, print NO (in upper case, it matters in this problem);\n- otherwise, print YES (in upper case), and then a string consisting of $ 26 $ lowercase Latin letters — the perfect layout. Each Latin letter should appear in this string exactly once. If there are multiple answers, print any of them.\n\nExamples\nSample 1\nInput\n5\nababa\ncodedoca\nabcda\nzxzytyz\nabcdefghijklmnopqrstuvwxyza\nOutput\nYES\nbacdefghijklmnopqrstuvwxyz\nYES\nedocabfghijklmnpqrstuvwxyz\nNO\nYES\nxzytabcdefghijklmnopqrsuvw\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Ne0n25)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nsz\n(\na\n)\nint\n((\na\n).\nsize\n())\n#define\nall\n(\na\n)\n(\na\n).\nbegin\n(),\n(\na\n).\nend\n()\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\n++\ni\n)\nvoid\nsolve\n()\n{\nstring\ns\n;\ncin\n>>\ns\n;\nvector\n<bool>\nused\n(\n26\n);\nused\n[\ns\n[\n0\n]\n-\n'a'\n]\n=\ntrue\n;\nstring\nt\n(\n1\n,\ns\n[\n0\n]);\nint\npos\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nsz\n(\ns\n);\ni\n++)\n{\nif\n(\nused\n[\ns\n[\ni\n]\n-\n'a'\n])\n{\nif\n(\npos\n>\n0\n&&\nt\n[\npos\n-\n1\n]\n==\ns\n[\ni\n])\n{\npos\n--;\n}\nelse\nif\n(\npos\n+\n1\n<\nsz\n(\nt\n)\n&&\nt\n[\npos\n+\n1\n]\n==\ns\n[\ni\n])\n{\npos\n++;\n}\nelse\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\nreturn\n;\n}\n}\nelse\n{\nif\n(\npos\n==\n0\n)\n{\nt\n=\ns\n[\ni\n]\n+\nt\n;\n}\nelse\nif\n(\npos\n==\nsz\n(\nt\n)\n-\n1\n)\n{\nt\n+=\ns\n[\ni\n];\npos\n++;\n}\nelse\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\nreturn\n;\n}\n}\nused\n[\ns\n[\ni\n]\n-\n'a'\n]\n=\ntrue\n;\n}\nforn\n(\ni\n,\n26\n)\nif\n(!\nused\n[\ni\n])\nt\n+=\nchar\n(\ni\n+\n'a'\n);\ncout\n<<\n\"YES\"\n<<\nendl\n<<\nt\n<<\nendl\n;\n}\nint\nmain\n()\n{\nint\ntc\n;\ncin\n>>\ntc\n;\nforn\n(\ni\n,\ntc\n)\nsolve\n();\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA sequence of $ n $ integers is called a permutation if it contains all integers from $ 1 $ to $ n $ exactly once.\n\nGiven two integers $ n $ and $ k $ , construct a permutation $ a $ of numbers from $ 1 $ to $ n $ which has exactly $ k $ peaks. An index $ i $ of an array $ a $ of size $ n $ is said to be a peak if $ 1 < i < n $ and $ a_i \\gt a_{i-1} $ and $ a_i \\gt a_{i+1} $ . If such permutation is not possible, then print $ -1 $ .\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 100 $ ) — the number of test cases.\n\nThen $ t $ lines follow, each containing two space-separated integers $ n $ ( $ 1 \\leq n \\leq 100 $ ) and $ k $ ( $ 0 \\leq k \\leq n $ ) — the length of an array and the required number of peaks.\n\nOutput Format\nOutput $ t $ lines. For each test case, if there is no permutation with given length and number of peaks, then print $ -1 $ . Otherwise print a line containing $ n $ space-separated integers which forms a permutation of numbers from $ 1 $ to $ n $ and contains exactly $ k $ peaks.\n\nIf there are multiple answers, print any.\n\nExamples\nSample 1\nInput\n5\n1 0\n5 2\n6 6\n2 1\n6 1\nOutput\n1\n2 4 1 5 3\n-1\n-1\n1 3 6 5 4 2\n\nNote\nIn the second test case of the example, we have array $ a = [2,4,1,5,3] $ . Here, indices $ i=2 $ and $ i=4 $ are the peaks of the array. This is because $ (a_{2} \\gt a_{1} $ , $ a_{2} \\gt a_{3}) $ and $ (a_{4} \\gt a_{3} $ , $ a_{4} \\gt a_{5}) $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation in C++",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\ntests\n;\ncin\n>>\ntests\n;\nwhile\n(\ntests\n--)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\nans\n(\nn\n+\n1\n);\nint\nnum\n=\nn\n;\nfor\n(\nint\ni\n=\n2\n;\ni\n<\nn\n;\ni\n+=\n2\n)\n{\nif\n(\nk\n==\n0\n)\nbreak\n;\nans\n[\ni\n]=\nnum\n--;\nk\n--;\n}\nif\n(\nk\n)\n{\ncout\n<<-\n1\n<<\nendl\n;\ncontinue\n;\n}\nint\ncur\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nif\n(!\nans\n[\ni\n])\nans\n[\ni\n]=\ncur\n++;\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ncout\n<<\nans\n[\ni\n]<<\n\" \"\n;\ncout\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

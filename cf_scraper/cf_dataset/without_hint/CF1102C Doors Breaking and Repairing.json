@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are policeman and you are playing a game with Slavik. The game is turn-based and each turn consists of two phases. During the first phase you make your move and during the second phase Slavik makes his move.\n\nThere are $ n $ doors, the $ i $ -th door initially has durability equal to $ a_i $ .\n\nDuring your move you can try to break one of the doors. If you choose door $ i $ and its current durability is $ b_i $ then you reduce its durability to $ max(0, b_i - x) $ (the value $ x $ is given).\n\nDuring Slavik's move he tries to repair one of the doors. If he chooses door $ i $ and its current durability is $ b_i $ then he increases its durability to $ b_i + y $ (the value $ y $ is given). Slavik cannot repair doors with current durability equal to $ 0 $ .\n\nThe game lasts $ 10^{100} $ turns. If some player cannot make his move then he has to skip it.\n\nYour goal is to maximize the number of doors with durability equal to $ 0 $ at the end of the game. You can assume that Slavik wants to minimize the number of such doors. What is the number of such doors in the end if you both play optimally?\n\nInput Format\nThe first line of the input contains three integers $ n $ , $ x $ and $ y $ ( $ 1 \\le n \\le 100 $ , $ 1 \\le x, y \\le 10^5 $ ) — the number of doors, value $ x $ and value $ y $ , respectively.\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^5 $ ), where $ a_i $ is the initial durability of the $ i $ -th door.\n\nOutput Format\nPrint one integer — the number of doors with durability equal to $ 0 $ at the end of the game, if you and Slavik both play optimally.\n\nExamples\nSample 1\nInput\n6 3 2\n2 3 1 3 4 2\nOutput\n6\n\nSample 2\nInput\n5 3 3\n1 2 4 2 3\nOutput\n2\n\nSample 3\nInput\n5 5 6\n1 2 6 10 3\nOutput\n2\n\nNote\nClarifications about the optimal strategy will be ignored."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n,\nx\n,\ny\n;\ncin\n>>\nn\n>>\nx\n>>\ny\n;\nint\ncnt\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nint\ncur\n;\ncin\n>>\ncur\n;\nif\n(\ncur\n<=\nx\n)\n{\n++\ncnt\n;\n}\n}\nif\n(\nx\n>\ny\n)\n{\ncout\n<<\nn\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\n(\ncnt\n+\n1\n)\n/\n2\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

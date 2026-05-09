@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMonocarp wants to watch $ n $ videos. Each video is only one minute long, but its size may be arbitrary. The $ i $ -th video has the size $ a_i $ megabytes. All videos are published on the Internet. A video should be downloaded before it can be watched. Monocarp has poor Internet connection — it takes exactly $ 1 $ minute to download $ 1 $ megabyte of data, so it will require $ a_i $ minutes to download the $ i $ -th video.\n\nMonocarp's computer has a hard disk of $ m $ megabytes. The disk is used to store the downloaded videos. Once Monocarp starts the download of a video of size $ s $ , the $ s $ megabytes are immediately reserved on a hard disk. If there are less than $ s $ megabytes left, the download cannot be started until the required space is freed. Each single video can be stored on the hard disk, since $ a_i \\le m $ for all $ i $ . Once the download is started, it cannot be interrupted. It is not allowed to run two or more downloads in parallel.\n\nOnce a video is fully downloaded to the hard disk, Monocarp can watch it. Watching each video takes exactly $ 1 $ minute and does not occupy the Internet connection, so Monocarp can start downloading another video while watching the current one.\n\nWhen Monocarp finishes watching a video, he doesn't need it on the hard disk anymore, so he can delete the video, instantly freeing the space it occupied on a hard disk. Deleting a video takes negligible time.\n\nMonocarp wants to watch all $ n $ videos as quickly as possible. The order of watching does not matter, since Monocarp needs to watch all of them anyway. Please calculate the minimum possible time required for that.\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ; $ 1 \\le m \\le 10^9 $ ) — the number of videos Monocarp wants to watch and the size of the hard disk, respectively.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le m $ ) — the sizes of the videos.\n\nOutput Format\nPrint one integer — the minimum time required to watch all $ n $ videos.\n\nExamples\nSample 1\nInput\n5 6\n1 2 3 4 5\nOutput\n16\n\nSample 2\nInput\n5 5\n1 2 3 4 5\nOutput\n17\n\nSample 3\nInput\n4 3\n1 3 2 3\nOutput\n12"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (DmitryKlenov)",
+            "content": "#include\n<iostream>\n#include\n<algorithm>\nusing\nnamespace\nstd\n;\n#define\nN\n200000\nint\na\n[\nN\n],\nn\n,\ns\n;\nbool\ncan\n(\nint\nx\n)\n{\nint\nl\n=\nx\n-\n1\n,\nr\n=\nn\n-\n1\n;\nwhile\n(\nl\n<\nr\n)\n{\nif\n(\na\n[\nr\n]\n>\ns\n-\na\n[\nl\n])\nreturn\nfalse\n;\n++\nl\n;\nif\n(\nl\n<\nr\n)\n{\nif\n(\na\n[\nl\n]\n>\ns\n-\na\n[\nr\n])\nreturn\nfalse\n;\n--\nr\n;\n}\n}\nreturn\ntrue\n;\n}\nint\nmain\n()\n{\nlong\nlong\nsum\n=\n0\n;\nscanf\n(\n\"%d %d\\n\"\n,\n&\nn\n,\n&\ns\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nscanf\n(\n\"%d\"\n,\n&\na\n[\ni\n]);\nsum\n+=\na\n[\ni\n];\n}\nsort\n(\na\n,\na\n+\nn\n,\ngreater\n<int>\n());\nint\nl\n=\n1\n,\nr\n=\nn\n;\nwhile\n(\nl\n<\nr\n)\n{\nint\nm\n=\n(\nl\n+\nr\n)\n>>\n1\n;\nif\n(\ncan\n(\nm\n))\nr\n=\nm\n;\nelse\nl\n=\nm\n+\n1\n;\n}\nlong\nlong\nans\n=\nsum\n+\nr\n;\ncout\n<<\nans\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

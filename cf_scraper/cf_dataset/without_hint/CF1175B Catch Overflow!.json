@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a function $ f $ written in some basic language. The function accepts an integer value, which is immediately written into some variable $ x $ . $ x $ is an integer variable and can be assigned values from $ 0 $ to $ 2^{32}-1 $ . The function contains three types of commands:\n\n- for $ n $ — for loop;\n- end — every command between \"for $ n $ \" and corresponding \"end\" is executed $ n $ times;\n- add — adds 1 to $ x $ .\n\nAfter the execution of these commands, value of $ x $ is returned.\n\nEvery \"for $ n $ \" is matched with \"end\", thus the function is guaranteed to be valid. \"for $ n $ \" can be immediately followed by \"end\".\"add\" command can be outside of any for loops.\n\nNotice that \"add\" commands might overflow the value of $ x $ ! It means that the value of $ x $ becomes greater than $ 2^{32}-1 $ after some \"add\" command.\n\nNow you run $ f(0) $ and wonder if the resulting value of $ x $ is correct or some overflow made it incorrect.\n\nIf overflow happened then output \"OVERFLOW!!!\", otherwise print the resulting value of $ x $ .\n\nInput Format\nThe first line contains a single integer $ l $ ( $ 1 \\le l \\le 10^5 $ ) — the number of lines in the function.\n\nEach of the next $ l $ lines contains a single command of one of three types:\n\n- for $ n $ ( $ 1 \\le n \\le 100 $ ) — for loop;\n- end — every command between \"for $ n $ \" and corresponding \"end\" is executed $ n $ times;\n- add — adds 1 to $ x $ .\n\nOutput Format\nIf overflow happened during execution of $ f(0) $ , then output \"OVERFLOW!!!\", otherwise print the resulting value of $ x $ .\n\nExamples\nSample 1\nInput\n9\nadd\nfor 43\nend\nfor 10\nfor 15\nadd\nend\nadd\nend\nOutput\n161\n\nSample 2\nInput\n2\nfor 62\nend\nOutput\n0\n\nSample 3\nInput\n11\nfor 100\nfor 100\nfor 100\nfor 100\nfor 100\nadd\nend\nend\nend\nend\nend\nOutput\nOVERFLOW!!!\n\nNote\nIn the first example the first \"add\" is executed 1 time, the second \"add\" is executed 150 times and the last \"add\" is executed 10 times. Note that \"for $ n $ \" can be immediately followed by \"end\" and that \"add\" can be outside of any for loops.\n\nIn the second example there are no commands \"add\", thus the returning value is 0.\n\nIn the third example \"add\" command is executed too many times, which causes $ x $ to go over $ 2^{32}-1 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (PikMike)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nconst\nlong\nlong\nINF\n=\n1ll\n<<\n32\n;\nint\nmain\n(){\nint\nl\n;\ncin\n>>\nl\n;\nstack\n<\nlong\nlong\n>\ncur\n;\ncur\n.\npush\n(\n1\n);\nlong\nlong\nres\n=\n0\n;\nforn\n(\n_\n,\nl\n){\nstring\nt\n;\ncin\n>>\nt\n;\nif\n(\nt\n==\n\"for\"\n){\nint\nx\n;\ncin\n>>\nx\n;\ncur\n.\npush\n(\nmin\n(\nINF\n,\ncur\n.\ntop\n()\n*\nx\n));\n}\nelse\nif\n(\nt\n==\n\"end\"\n){\ncur\n.\npop\n();\n}\nelse\n{\nres\n+=\ncur\n.\ntop\n();\n}\n}\nif\n(\nres\n>=\nINF\n)\ncout\n<<\n\"OVERFLOW!!!\"\n<<\nendl\n;\nelse\ncout\n<<\nres\n<<\nendl\n;\n}"
+        }
+    ]
+}

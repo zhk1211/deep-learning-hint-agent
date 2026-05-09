@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nChristmas is coming, Icy has just received a box of chocolates from her grandparents! The box contains $ n $ chocolates. The $ i $ -th chocolate has a non-negative integer type $ a_i $ .\n\nIcy believes that good things come in pairs. Unfortunately, all types of chocolates are distinct (all $ a_i $ are distinct). Icy wants to make at least one pair of chocolates the same type.\n\nAs a result, she asks her grandparents to perform some chocolate exchanges. Before performing any chocolate exchanges, Icy chooses two chocolates with indices $ x $ and $ y $ ( $ 1 \\le x, y \\le n $ , $ x \\ne y $ ).\n\nIn a chocolate exchange, Icy's grandparents choose a non-negative integer $ k $ , such that $ 2^k \\ge a_x $ , and change the type of the chocolate $ x $ from $ a_x $ to $ 2^k - a_x $ (that is, perform $ a_x := 2^k - a_x $ ).\n\nThe chocolate exchanges will be stopped only when $ a_x = a_y $ . Note that other pairs of equal chocolate types do not stop the procedure.\n\nIcy's grandparents are smart, so they would choose the sequence of chocolate exchanges that minimizes the number of exchanges needed. Since Icy likes causing trouble, she wants to maximize the minimum number of exchanges needed by choosing $ x $ and $ y $ appropriately. She wonders what is the optimal pair $ (x, y) $ such that the minimum number of exchanges needed is maximized across all possible choices of $ (x, y) $ .\n\nSince Icy is not good at math, she hopes that you can help her solve the problem.\n\nInput Format\nThe first line of the input contains a single integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ) — the number of chocolates.\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i \\le 10^9 $ ).\n\nIt is guaranteed that all $ a_i $ are distinct.\n\nOutput Format\nOutput three integers $ x $ , $ y $ , and $ m $ .\n\n$ x $ and $ y $ are indices of the optimal chocolates to perform exchanges on. Your output must satisfy $ 1 \\le x, y \\le n $ , $ x \\ne y $ .\n\n$ m $ is the number of exchanges needed to obtain $ a_x = a_y $ . We can show that $ m \\le 10^9 $ for any pair of chocolates.\n\nIf there are multiple solutions, output any.\n\nExamples\nSample 1\nInput\n5\n5 6 7 8 9\nOutput\n2 5 5\n\nSample 2\nInput\n2\n4 8\nOutput\n1 2 2\n\nNote\nIn the first test case, the minimum number of exchanges needed to exchange a chocolate of type $ 6 $ to a chocolate of type $ 9 $ is $ 5 $ . The sequence of exchanges is as follows: $ 6 \\rightarrow 2 \\rightarrow 0 \\rightarrow 1 \\rightarrow 7 \\rightarrow 9 $ .\n\nIn the second test case, the minimum number of exchanges needed to exchange a chocolate of type $ 4 $ to a chocolate of type $ 8 $ is $ 2 $ . The sequence of exchanges is as follows: $ 4 \\rightarrow 0 \\rightarrow 8 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Translate the problem into a graph problem. What feature of the graph is it asking about?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Draw out the graph, for $$$a_i \\le 10$$$. What special property does the graph have?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Any specific algorithm to solve the problem (in Hint 1)?"
+        },
+        {
+            "title": "Hint 4",
+            "content": "We can't build the entire tree as it has $$$10^9 + 1$$$ nodes. Try to notice something about the depth of the tree, then think of how this could help us solve the problem (by building the tree, or otherwise)."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution (Step 1)",
+            "content": "In graph terms, the problem is as follows: in a graph with infinite nodes, two nodes $$$x$$$ and $$$y$$$ are connected if $$$x + y = 2^k$$$ for some $$$k \\ge 0$$$. Among $$$n$$$ special nodes, find the pair of nodes ($$$i, j$$$) with maximum shortest distance.\nHere comes the key observation: For any $$$i \\ge 1$$$, there exists only one $$$j$$$ ($$$0 \\le j \\lt i$$$) such that $$$i + j = 2^k$$$ for some $$$k \\ge 0$$$.\nThe proof is as follows: let's say that $$$0 \\le j_1, j_2 \\lt i$$$, $$$j_1 \\ge j_2$$$, $$$i + j_1 = 2^{k_1}$$$, $$$i + j_2 = 2^{k_2}$$$. Then, $$$j_1 - j_2 = 2^{k_2} \\cdot (2^{k_1-k_2} - 1)$$$. So, $$$j_1 \\equiv j_2 \\pmod {2^{k_2}}$$$. Since $$$i \\le 2^{k_2}$$$, $$$j_1 = j_2$$$.\nThen, we realize we can build a graph as follows: add an edge between $$$x$$$ and $$$y$$$ ($$$x, y \\ge 0$$$) if $$$x + y = 2^k$$$ for some $$$k \\ge 0$$$. Because of the first key observation, the graph must be\na tree\n. We can root the tree at node $$$0$$$.\nOur problem is equivalent to finding the pair of nodes which have maximum distance in a tree, which can be solved using the diameter of tree algorithm."
+        },
+        {
+            "title": "Solution (Step 2)",
+            "content": "Since $$$0 \\le a_i \\le 10^9$$$, it is impossible to build the entire tree. A final observation is that: Consider any node $$$v$$$ with degree $$$\\ge 2$$$ in the tree, then $$$v \\gt p_v$$$ and $$$p_v \\gt p_{p_v}$$$, therefore $$$v + p_v \\gt p_v + p_{p_v}$$$ ($$$p_x$$$ denotes the parent of node $$$x$$$ in the tree).\nHence the depth of the tree is $$$\\lceil \\log(max(a_i)) \\rceil = 30$$$, since there are only $$$\\lceil \\log(max(a_i)) \\rceil$$$ possible $$$k$$$ ($$$0 \\le k \\lt 30$$$) for the sum of two nodes connected by an edge.\nSo, there are two ways to do it: the first way is to build parts of the tree: only the $$$n$$$ given nodes and the ancestors of the $$$n$$$ nodes. There will be at most $$$O(n \\log max(a_i))$$$ nodes, which should fit into the memory limit. The second way is to not build the tree at all, and calculate the LCA (Lowest Common Ancestor) of two nodes to find their distance. Since the depth of the tree is $$$30$$$, LCA of two nodes can be computed by simply checking every ancestor of both nodes.\nIn both ways, the time complexity is $$$O(n \\log max(a_i))$$$."
+        },
+        {
+            "title": "Implementation (C++, physics0523)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nf\n(\nint\nx\n){\nfor\n(\nint\ni\n=\n0\n;;\ni\n++){\nif\n((\n1\n<<\ni\n)>=\nx\n){\nreturn\n(\n1\n<<\ni\n)-\nx\n;\n}\n}\n}\nusing\npi\n=\npair\n<\nint\n,\nint\n>;\nint\nmain\n(){\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\nn\n;\ncin\n>>\nn\n;\nmap\n<\nint\n,\npair\n<\npi\n,\npi\n>>\nmp\n;\npriority_queue\n<int>\npq\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++){\nint\nv\n;\ncin\n>>\nv\n;\npq\n.\npush\n(\nv\n);\nmp\n[\nv\n].\nfirst\n=\nmake_pair\n(\n0\n,\ni\n+\n1\n);\n}\nwhile\n(!\npq\n.\nempty\n()){\nint\nod\n=\npq\n.\ntop\n();\npq\n.\npop\n();\nif\n((!\npq\n.\nempty\n())\n&&\nod\n==\npq\n.\ntop\n()){\ncontinue\n;}\nif\n(\nod\n!=\n1\n){\nint\nnx\n=\nf\n(\nod\n);\npq\n.\npush\n(\nnx\n);\npi send\n=\nmp\n[\nod\n].\nfirst\n;\nsend\n.\nfirst\n++;\nif\n(\nmp\n[\nnx\n].\nfirst\n<\nsend\n){\nmp\n[\nnx\n].\nsecond\n=\nmp\n[\nnx\n].\nfirst\n;\nmp\n[\nnx\n].\nfirst\n=\nsend\n;\n}\nelse\nif\n(\nmp\n[\nnx\n].\nsecond\n<\nsend\n){\nmp\n[\nnx\n].\nsecond\n=\nsend\n;}\n}\n}\nint\nra\n=\n0\n,\nrb\n=\n0\n,\nrc\n=-\n1\n;\nfor\n(\nauto\n&\nnx\n:\nmp\n){\npair\n<\npi\n,\npi\n>\ntg\n=\nnx\n.\nsecond\n;\nif\n(\ntg\n.\nfirst\n.\nsecond\n==\n0\n||\ntg\n.\nsecond\n.\nsecond\n==\n0\n){\ncontinue\n;}\nif\n(\nrc\n<\ntg\n.\nfirst\n.\nfirst\n+\ntg\n.\nsecond\n.\nfirst\n){\nrc\n=\ntg\n.\nfirst\n.\nfirst\n+\ntg\n.\nsecond\n.\nfirst\n;\nra\n=\ntg\n.\nfirst\n.\nsecond\n;\nrb\n=\ntg\n.\nsecond\n.\nsecond\n;\n}\n}\ncout\n<<\nra\n<<\n' '\n<<\nrb\n<<\n' '\n<<\nrc\n<<\n'\\n'\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

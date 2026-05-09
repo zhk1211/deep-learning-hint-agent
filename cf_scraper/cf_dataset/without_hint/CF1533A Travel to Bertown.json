@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "fun main\n()\n=\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval\n(\nn\n,\nk\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nvar\nans\n=\n0\nrepeat\n(\nn\n)\n{\nval\n(\nl\n,\nr\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nif\n(\nl\n<=\nk\n)\nans\n=\nmaxOf\n(\nans\n,\nr\n-\nk\n+\n1\n)\n}\nprintln\n(\nans\n)\n}"
+        }
+    ]
+}

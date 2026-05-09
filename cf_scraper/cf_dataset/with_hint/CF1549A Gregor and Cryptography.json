@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGregor is learning about RSA cryptography, and although he doesn't understand how RSA works, he is now fascinated with prime numbers and factoring them.\n\nGregor's favorite prime number is $ P $ . Gregor wants to find two bases of $ P $ . Formally, Gregor is looking for two integers $ a $ and $ b $ which satisfy both of the following properties.\n\n- $ P \\bmod a = P \\bmod b $ , where $ x \\bmod y $ denotes the remainder when $ x $ is divided by $ y $ , and\n- $ 2 \\le a < b \\le P $ .\n\nHelp Gregor find two bases of his favorite prime number!\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 1000 $ ).\n\nEach subsequent line contains the integer $ P $ ( $ 5 \\le P \\le {10}^9 $ ), with $ P $ guaranteed to be prime.\n\nOutput Format\nYour output should consist of $ t $ lines. Each line should consist of two integers $ a $ and $ b $ ( $ 2 \\le a < b \\le P $ ). If there are multiple possible solutions, print any.\n\nExamples\nSample 1\nInput\n2\n17\n5\nOutput\n3 5\n2 4\n\nNote\nThe first query is $ P=17 $ . $ a=3 $ and $ b=5 $ are valid bases in this case, because $ 17 \\bmod 3 = 17 \\bmod 5 = 2 $ . There are other pairs which work as well.\n\nIn the second query, with $ P=5 $ , the only solution is $ a=2 $ and $ b=4 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Fix $$$a$$$ into a convenient constant."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Since $$$P \\ge 5$$$ and is also a prime number, we know that $$$P-1$$$ is an even composite number. A even composite number is guaranteed to have at least 2 unique divisors greater than 1. Let two of these divisors be $$$a$$$ and $$$b$$$. It is guaranteed that $$$P\\mod{a} = P\\mod{b} = 1$$$, and thus this selection is valid.\nFor example, we can simply pick $$$a=2$$$ and $$$b=P-1$$$, and we will get a correct solution.\nThe time complexity is $$$\\mathcal{O}(Q)$$$."
+        }
+    ]
+}

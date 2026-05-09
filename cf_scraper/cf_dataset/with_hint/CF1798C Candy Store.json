@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe store sells $ n $ types of candies with numbers from $ 1 $ to $ n $ . One candy of type $ i $ costs $ b_i $ coins. In total, there are $ a_i $ candies of type $ i $ in the store.\n\nYou need to pack all available candies in packs, each pack should contain only one type of candies. Formally, for each type of candy $ i $ you need to choose the integer $ d_i $ , denoting the number of type $ i $ candies in one pack, so that $ a_i $ is divided without remainder by $ d_i $ .\n\nThen the cost of one pack of candies of type $ i $ will be equal to $ b_i \\cdot d_i $ . Let's denote this cost by $ c_i $ , that is, $ c_i = b_i \\cdot d_i $ .\n\nAfter packaging, packs will be placed on the shelf. Consider the cost of the packs placed on the shelf, in order $ c_1, c_2, \\ldots, c_n $ . Price tags will be used to describe costs of the packs. One price tag can describe the cost of all packs from $ l $ to $ r $ inclusive if $ c_l = c_{l+1} = \\ldots = c_r $ . Each of the packs from $ 1 $ to $ n $ must be described by at least one price tag. For example, if $ c_1, \\ldots, c_n = [4, 4, 2, 4, 4] $ , to describe all the packs, a $ 3 $ price tags will be enough, the first price tag describes the packs $ 1, 2 $ , the second: $ 3 $ , the third: $ 4, 5 $ .\n\nYou are given the integers $ a_1, b_1, a_2, b_2, \\ldots, a_n, b_n $ . Your task is to choose integers $ d_i $ so that $ a_i $ is divisible by $ d_i $ for all $ i $ , and the required number of price tags to describe the values of $ c_1, c_2, \\ldots, c_n $ is the minimum possible.\n\nFor a better understanding of the statement, look at the illustration of the first test case of the first test:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1798C/1160d0ae9da0a28139cfb8794bbbd0911d44c66f.png)Let's repeat the meaning of the notation used in the problem:\n\n$ a_i $ — the number of candies of type $ i $ available in the store.\n\n$ b_i $ — the cost of one candy of type $ i $ .\n\n$ d_i $ — the number of candies of type $ i $ in one pack.\n\n$ c_i $ — the cost of one pack of candies of type $ i $ is expressed by the formula $ c_i = b_i \\cdot d_i $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 100\\,000 $ ). Description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 200\\,000 $ ) — the number of types of candies.\n\nEach of the next $ n $ lines of each test case contains two integers $ a_i $ and $ b_i $ ( $ 1 \\le a_i \\le 10^9 $ , $ 1 \\le b_i \\le 10\\,000 $ ) — the number of candies and the cost of one candy of type $ i $ , respectively.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 200\\,000 $ .\n\nOutput Format\nFor each test case, output the minimum number of price tags required to describe the costs of all packs of candies in the store.\n\nExamples\nSample 1\nInput\n5\n4\n20 3\n6 2\n14 5\n20 7\n3\n444 5\n2002 10\n2020 2\n5\n7 7\n6 5\n15 2\n10 3\n7 7\n5\n10 1\n11 5\n5 1\n2 2\n8 2\n6\n7 12\n12 3\n5 3\n9 12\n9 3\n1000000000 10000\nOutput\n2\n1\n3\n2\n5\n\nNote\nIn the first test case, you can choose $ d_1 = 4 $ , $ d_2 = 6 $ , $ d_3 = 7 $ , $ d_4 = 5 $ . Then the cost of packs will be equal to $ [12, 12, 35, 35] $ . $ 2 $ price tags are enough to describe them, the first price tag for $ c_1, c_2 $ and the second price tag for $ c_3, c_4 $ . It can be shown that with any correct choice of $ d_i $ , at least $ 2 $ of the price tag will be needed to describe all the packs. Also note that this example is illustrated by a picture in the statement.\n\nIn the second test case, with $ d_1 = 4 $ , $ d_2 = 2 $ , $ d_3 = 10 $ , the costs of all packs will be equal to $ 20 $ . Thus, $ 1 $ price tag is enough to describe all the packs. Note that $ a_i $ is divisible by $ d_i $ for all $ i $ , which is necessary condition.\n\nIn the third test case, it is not difficult to understand that one price tag can be used to describe $ 2 $ nd, $ 3 $ rd and $ 4 $ th packs. And additionally a price tag for pack $ 1 $ and pack $ 5 $ . Total: $ 3 $ price tags."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "In which case 1 price tag is enough?"
+        },
+        {
+            "title": "Hint 1.1",
+            "content": "For any positive integers $$$x, y, z$$$, the statement ``$$$x$$$ is divisible by $$$y$$$'' equivalent to the statement ``$$$xz$$$ is divisible by $$$yz$$$'"
+        },
+        {
+            "title": "Hint 1.2",
+            "content": "Let's denote the total cost of all packs of candies for $$$cost$$$. Rewrite all the conditions given in the problem so that they become conditions only for the number $$$cost$$$. Hint1.1 will help in this."
+        },
+        {
+            "title": "Hint 2",
+            "content": "If one price tag is enough for a set of candies, then if you remove any type of candy from this set, one price tag will still be enough. This is a reason to think about greedy."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "from\nmath\nimport\ngcd\ndef\nlcm\n(\na\n,\nb\n):\nreturn\na\n*\nb\n// gcd(a, b)\nfor\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\na\n=\n[]\nb\n=\n[]\nfor\ni\nin\nrange\n(\nn\n):\nai\n,\nbi\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\na\n.\nappend\n(\nai\n)\nb\n.\nappend\n(\nbi\n)\ng\n=\n0\nl\n=\n1\nans\n=\n1\nfor\ni\nin\nrange\n(\nn\n):\ng\n=\ngcd\n(\ng\n,\na\n[\ni\n]\n*\nb\n[\ni\n])\nl\n=\nlcm\n(\nl\n,\nb\n[\ni\n])\nif\ng\n%\nl\n:\nans\n+=\n1\ng\n=\na\n[\ni\n]\n*\nb\n[\ni\n]\nl\n=\nb\n[\ni\n]\nprint\n(\nans\n)"
+        }
+    ]
+}

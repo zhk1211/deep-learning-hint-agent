@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nKavi has $ 2n $ points lying on the $ OX $ axis, $ i $ -th of which is located at $ x = i $ .\n\nKavi considers all ways to split these $ 2n $ points into $ n $ pairs. Among those, he is interested in good pairings, which are defined as follows:\n\nConsider $ n $ segments with ends at the points in correspondent pairs. The pairing is called good, if for every $ 2 $ different segments $ A $ and $ B $ among those, at least one of the following holds:\n\n- One of the segments $ A $ and $ B $ lies completely inside the other.\n- $ A $ and $ B $ have the same length.\n\nConsider the following example:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1528B/41a58a6a051949b924acfc162dd6465703f68210.png) $ A $ is a good pairing since the red segment lies completely inside the blue segment.\n\n$ B $ is a good pairing since the red and the blue segment have the same length.\n\n$ C $ is not a good pairing since none of the red or blue segments lies inside the other, neither do they have the same size.\n\nKavi is interested in the number of good pairings, so he wants you to find it for him. As the result can be large, find this number modulo $ 998244353 $ .\n\nTwo pairings are called different, if some two points are in one pair in some pairing and in different pairs in another.\n\nInput Format\nThe single line of the input contains a single integer $ n $ $ (1\\le n \\le 10^6) $ .\n\nOutput Format\nPrint the number of good pairings modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n1\nOutput\n1\n\nSample 2\nInput\n2\nOutput\n3\n\nSample 3\nInput\n3\nOutput\n6\n\nSample 4\nInput\n100\nOutput\n688750769\n\nNote\nThe good pairings for the second example are:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1528B/26cefe71c208095e0e610c498701d052b950b5a2.png)In the third example, the good pairings are:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1528B/4bfe3f3beac587d75fee5d30f6490c2823b90e1d.png)"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "official solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\npair\n<\nll\n,\nll\n>\npll\n;\ntypedef\npair\n<\nint\n,\nint\n>\npii\n;\n#define\nX first\n#define\nY second\n#define\nendl\n'\\n'\nconst\nint\nN\n=\n1e6\n+\n10\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nn\n,\ndp\n[\nN\n],\nS\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\ni\n+\ni\n;\nj\n<=\nn\n;\nj\n+=\ni\n)\n{\ndp\n[\nj\n]++;\n}\n}\ndp\n[\n0\n]\n=\nS\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\ndp\n[\ni\n]\n=\n(\ndp\n[\ni\n]\n+\nS\n)\n%\nMOD\n;\nS\n=\n(\nS\n+\ndp\n[\ni\n])\n%\nMOD\n;\n}\ncout\n<<\ndp\n[\nn\n]\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

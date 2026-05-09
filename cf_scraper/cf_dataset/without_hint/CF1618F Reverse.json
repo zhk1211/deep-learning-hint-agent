@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two positive integers $ x $ and $ y $ . You can perform the following operation with $ x $ : write it in its binary form without leading zeros, add $ 0 $ or $ 1 $ to the right of it, reverse the binary form and turn it into a decimal number which is assigned as the new value of $ x $ .\n\nFor example:\n\n- $ 34 $ can be turned into $ 81 $ via one operation: the binary form of $ 34 $ is $ 100010 $ , if you add $ 1 $ , reverse it and remove leading zeros, you will get $ 1010001 $ , which is the binary form of $ 81 $ .\n- $ 34 $ can be turned into $ 17 $ via one operation: the binary form of $ 34 $ is $ 100010 $ , if you add $ 0 $ , reverse it and remove leading zeros, you will get $ 10001 $ , which is the binary form of $ 17 $ .\n- $ 81 $ can be turned into $ 69 $ via one operation: the binary form of $ 81 $ is $ 1010001 $ , if you add $ 0 $ , reverse it and remove leading zeros, you will get $ 1000101 $ , which is the binary form of $ 69 $ .\n- $ 34 $ can be turned into $ 69 $ via two operations: first you turn $ 34 $ into $ 81 $ and then $ 81 $ into $ 69 $ .\n\nYour task is to find out whether $ x $ can be turned into $ y $ after a certain number of operations (possibly zero).\n\nInput Format\nThe only line of the input contains two integers $ x $ and $ y $ ( $ 1 \\le x, y \\le 10^{18} $ ).\n\nOutput Format\nPrint YES if you can make $ x $ equal to $ y $ and NO if you can't.\n\nExamples\nSample 1\nInput\n3 3\nOutput\nYES\n\nSample 2\nInput\n7 4\nOutput\nNO\n\nSample 3\nInput\n2 8\nOutput\nNO\n\nSample 4\nInput\n34 69\nOutput\nYES\n\nSample 5\nInput\n8935891487501725 71487131900013807\nOutput\nYES\n\nNote\nIn the first example, you don't even need to do anything.\n\nThe fourth example is described in the statement."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "a\n,\nb\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\ns\n=\nbin\n(\nb\n)[\n2\n:]\nt\n=\nbin\n(\na\n)[\n2\n:]\nif\ns\n==\nt\n:\nprint\n(\n\"YES\"\n)\nexit\n(\n0\n)\nfor\nq\nin\n[\nt\n+\n'1'\n,\nt\n.\nstrip\n(\n'0'\n)]:\nfor\nl\nin\nrange\n(\nlen\n(\ns\n)\n-\nlen\n(\nq\n)\n+\n1\n):\nr\n=\nlen\n(\ns\n)\n-\nlen\n(\nq\n)\n-\nl\nif\n'1'\n*\nl\n+\nq\n+\n'1'\n*\nr\n==\ns\nor\n'1'\n*\nl\n+\nq\n[::-\n1\n]\n+\n'1'\n*\nr\n==\ns\n:\nprint\n(\n\"YES\"\n)\nexit\n(\n0\n)\nprint\n(\n\"NO\"\n)"
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nstring\ngo\n(\nstring\nt\n)\n{\nwhile\n(\nt\n.\nback\n()\n==\n'0'\n)\nt\n.\npop_back\n();\nreverse\n(\nt\n.\nbegin\n(),\nt\n.\nend\n());\nreturn\nt\n;\n}\nstring\nto_bin\n(\nlong\nlong\nx\n)\n{\nif\n(\nx\n==\n0\n)\nreturn\n\"\"\n;\nelse\n{\nstring\ns\n=\nto_bin\n(\nx\n/\n2\n);\ns\n.\npush_back\n(\nchar\n(\n'0'\n+\nx\n%\n2\n));\nreturn\ns\n;\n}\n}\nint\nmain\n()\n{\nlong\nlong\nx\n,\ny\n;\ncin\n>>\nx\n>>\ny\n;\nset\n<string>\nused\n;\nqueue\n<string>\nq\n;\nq\n.\npush\n(\nto_bin\n(\nx\n));\nused\n.\ninsert\n(\nto_bin\n(\nx\n));\nwhile\n(!\nq\n.\nempty\n())\n{\nstring\nk\n=\nq\n.\nfront\n();\nq\n.\npop\n();\nif\n(\nk\n.\nsize\n()\n>\n100\n)\ncontinue\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n2\n;\ni\n++)\n{\nstring\nk2\n=\ngo\n(\nk\n+\nstring\n(\n1\n,\nchar\n(\n'0'\n+\ni\n)));\nif\n(!\nused\n.\ncount\n(\nk2\n))\n{\nused\n.\ninsert\n(\nk2\n);\nq\n.\npush\n(\nk2\n);\n}\n}\n}\nif\n(\nused\n.\ncount\n(\nto_bin\n(\ny\n)))\ncout\n<<\n\"YES\\n\"\n;\nelse\ncout\n<<\n\"NO\\n\"\n;\n}"
+        }
+    ]
+}

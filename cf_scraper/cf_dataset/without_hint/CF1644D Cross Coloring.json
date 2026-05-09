@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a sheet of paper that can be represented with a grid of size $ n \\times m $ : $ n $ rows and $ m $ columns of cells. All cells are colored in white initially.\n\n$ q $ operations have been applied to the sheet. The $ i $ -th of them can be described as follows:\n\n- $ x_i $ $ y_i $ — choose one of $ k $ non-white colors and color the entire row $ x_i $ and the entire column $ y_i $ in it. The new color is applied to each cell, regardless of whether the cell was colored before the operation.\n\nThe sheet after applying all $ q $ operations is called a coloring. Two colorings are different if there exists at least one cell that is colored in different colors.\n\nHow many different colorings are there? Print the number modulo $ 998\\,244\\,353 $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of testcases.\n\nThe first line of the testcase contains four integers $ n, m, k $ and $ q $ ( $ 1 \\le n, m, k, q \\le 2 \\cdot 10^5 $ ) — the size of the sheet, the number of non-white colors and the number of operations.\n\nThe $ i $ -th of the following $ q $ lines contains a description of the $ i $ -th operation — two integers $ x_i $ and $ y_i $ ( $ 1 \\le x_i \\le n $ ; $ 1 \\le y_i \\le m $ ) — the row and the column the operation is applied to.\n\nThe sum of $ q $ over all testcases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each testcase, print a single integer — the number of different colorings modulo $ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n2\n1 1 3 2\n1 1\n1 1\n2 2 2 3\n2 1\n1 1\n2 2\nOutput\n3\n4"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution 1 (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nmain\n()\n{\nint\nt\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nforn\n(\n_\n,\nt\n){\nint\nn\n,\nm\n,\nk\n,\nq\n;\nscanf\n(\n\"%d%d%d%d\"\n,\n&\nn\n,\n&\nm\n,\n&\nk\n,\n&\nq\n);\nvector\n<int>\nxs\n(\nq\n),\nys\n(\nq\n);\nforn\n(\ni\n,\nq\n)\nscanf\n(\n\"%d%d\"\n,\n&\nxs\n[\ni\n],\n&\nys\n[\ni\n]);\nint\nans\n=\n1\n;\nset\n<int>\nux\n,\nuy\n;\nfor\n(\nint\ni\n=\nq\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n){\nbool\nfl\n=\nfalse\n;\nif\n(!\nux\n.\ncount\n(\nxs\n[\ni\n])){\nux\n.\ninsert\n(\nxs\n[\ni\n]);\nfl\n=\ntrue\n;\n}\nif\n(!\nuy\n.\ncount\n(\nys\n[\ni\n])){\nuy\n.\ninsert\n(\nys\n[\ni\n]);\nfl\n=\ntrue\n;\n}\nif\n(\nfl\n){\nans\n=\nans\n*\n1ll\n*\nk\n%\nMOD\n;\n}\nif\n(\nint\n(\nux\n.\nsize\n())\n==\nn\n||\nint\n(\nuy\n.\nsize\n())\n==\nm\n){\nbreak\n;\n}\n}\nprintf\n(\n\"%d\\n\"\n,\nans\n);\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Solution 2 (awoo)",
+            "content": "from\nsys\nimport\nstdin\n,\nstdout\n\nMOD\n=\n998244353\nux\n=\n[]\nuy\n=\n[]\nfor\n_\nin\nrange\n(\nint\n(\nstdin\n.\nreadline\n())):\nn\n,\nm\n,\nk\n,\nq\n=\nmap\n(\nint\n,\nstdin\n.\nreadline\n().\nsplit\n())\nwhile\nlen\n(\nux\n)\n<\nn\n:\nux\n.\nappend\n(\nFalse\n)\nwhile\nlen\n(\nuy\n)\n<\nm\n:\nuy\n.\nappend\n(\nFalse\n)\nxs\n=\n[-\n1\nfor\ni\nin\nrange\n(\nq\n)]\nys\n=\n[-\n1\nfor\ni\nin\nrange\n(\nq\n)]\nfor\ni\nin\nrange\n(\nq\n):\nx\n,\ny\n=\nmap\n(\nint\n,\nstdin\n.\nreadline\n().\nsplit\n())\nxs\n[\ni\n]\n=\nx\n-\n1\nys\n[\ni\n]\n=\ny\n-\n1\ncx\n=\n0\ncy\n=\n0\nans\n=\n1\nfor\ni\nin\nrange\n(\nq\n-\n1\n,\n-\n1\n,\n-\n1\n):\nfl\n=\nFalse\nif\nnot\nux\n[\nxs\n[\ni\n]]:\nux\n[\nxs\n[\ni\n]]\n=\nTrue\ncx\n+=\n1\nfl\n=\nTrue\nif\nnot\nuy\n[\nys\n[\ni\n]]:\nuy\n[\nys\n[\ni\n]]\n=\nTrue\ncy\n+=\n1\nfl\n=\nTrue\nif\nfl\n:\nans\n=\nans\n*\nk\n%\nMOD\nif\ncx\n==\nn\nor\ncy\n==\nm\n:\nbreak\nfor\ni\nin\nrange\n(\nq\n):\nux\n[\nxs\n[\ni\n]]\n=\nFalse\nuy\n[\nys\n[\ni\n]]\n=\nFalse\nstdout\n.\nwrite\n(\nstr\n(\nans\n)\n+\n\"\\n\"\n)"
+        }
+    ]
+}

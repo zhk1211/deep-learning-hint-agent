@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ of even length $ n $ . String $ s $ is binary, in other words, consists only of 0's and 1's.\n\nString $ s $ has exactly $ \\frac{n}{2} $ zeroes and $ \\frac{n}{2} $ ones ( $ n $ is even).\n\nIn one operation you can reverse any substring of $ s $ . A substring of a string is a contiguous subsequence of that string.\n\nWhat is the minimum number of operations you need to make string $ s $ alternating? A string is alternating if $ s_i \\neq s_{i + 1} $ for all $ i $ . There are two types of alternating strings in general: 01010101... or 10101010...\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 10^5 $ ; $ n $ is even) — the length of string $ s $ .\n\nThe second line of each test case contains a binary string $ s $ of length $ n $ ( $ s_i \\in $ {0, 1}). String $ s $ has exactly $ \\frac{n}{2} $ zeroes and $ \\frac{n}{2} $ ones.\n\nIt's guaranteed that the total sum of $ n $ over test cases doesn't exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, print the minimum number of operations to make $ s $ alternating.\n\nExamples\nSample 1\nInput\n3\n2\n10\n4\n0110\n8\n11101000\nOutput\n0\n1\n2\n\nNote\nIn the first test case, string 10 is already alternating.\n\nIn the second test case, we can, for example, reverse the last two elements of $ s $ and get: 0110 $ \\rightarrow $ 0101.\n\nIn the third test case, we can, for example, make the following two operations:\n\n1. 11101000 $ \\rightarrow $ 10101100;\n2. 10101100 $ \\rightarrow $ 10101010."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nfore\n(\ni\n,\nl\n,\nr\n)\nfor\n(\nint\ni\n=\nint\n(\nl\n);\ni\n<\nint\n(\nr\n);\ni\n++)\n#define\nsz\n(\na\n)\nint\n((\na\n).\nsize\n())\nconst\nint\nINF\n=\nint\n(\n1e9\n);\nint\nn\n;\nstring\ns\n;\ninline\nbool\nread\n()\n{\nif\n(!(\ncin\n>>\nn\n>>\ns\n))\nreturn\nfalse\n;\nreturn\ntrue\n;\n}\nint\ncntSame\n(\nconst\nstring\n&\ns\n)\n{\nint\nans\n=\n0\n;\nfore\n(\ni\n,\n1\n,\nsz\n(\ns\n))\nans\n+=\n(\ns\n[\ni\n-\n1\n]\n==\ns\n[\ni\n]);\nassert\n(\nans\n%\n2\n==\n0\n);\nreturn\nans\n/\n2\n;\n}\ninline\nvoid\nsolve\n()\n{\nint\nans\n=\nINF\n;\nfore\n(\nk\n,\n0\n,\n2\n)\n{\nans\n=\nmin\n(\nans\n,\ncntSame\n(\nstring\n(\n1\n,\n'0'\n+\nk\n)\n+\ns\n+\nstring\n(\n1\n,\n'1'\n-\nk\n)));\n}\ncout\n<<\nans\n<<\nendl\n;\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n),\ncout\n.\ntie\n(\n0\n);\ncout\n<<\nfixed\n<<\nsetprecision\n(\n15\n);\nint\ntc\n;\ncin\n>>\ntc\n;\nwhile\n(\ntc\n--)\n{\nassert\n(\nread\n());\nsolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

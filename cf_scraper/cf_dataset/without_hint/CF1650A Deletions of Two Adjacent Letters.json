@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe string $ s $ is given, the string length is odd number. The string consists of lowercase letters of the Latin alphabet.\n\nAs long as the string length is greater than $ 1 $ , the following operation can be performed on it: select any two adjacent letters in the string $ s $ and delete them from the string. For example, from the string \"lemma\" in one operation, you can get any of the four strings: \"mma\", \"lma\", \"lea\" or \"lem\" In particular, in one operation, the length of the string reduces by $ 2 $ .\n\nFormally, let the string $ s $ have the form $ s=s_1s_2 \\dots s_n $ ( $ n>1 $ ). During one operation, you choose an arbitrary index $ i $ ( $ 1 \\le i < n $ ) and replace $ s=s_1s_2 \\dots s_{i-1}s_{i+2} \\dots s_n $ .\n\nFor the given string $ s $ and the letter $ c $ , determine whether it is possible to make such a sequence of operations that in the end the equality $ s=c $ will be true? In other words, is there such a sequence of operations that the process will end with a string of length $ 1 $ , which consists of the letter $ c $ ?\n\nInput Format\nThe first line of input data contains an integer $ t $ ( $ 1 \\le t \\le 10^3 $ ) — the number of input test cases.\n\nThe descriptions of the $ t $ cases follow. Each test case is represented by two lines:\n\n- string $ s $ , which has an odd length from $ 1 $ to $ 49 $ inclusive and consists of lowercase letters of the Latin alphabet;\n- is a string containing one letter $ c $ , where $ c $ is a lowercase letter of the Latin alphabet.\n\nOutput Format\nFor each test case in a separate line output:\n\n- YES, if the string $ s $ can be converted so that $ s=c $ is true;\n- NO otherwise.\n\nYou can output YES and NO in any case (for example, the strings yEs, yes, Yes and YES will be recognized as a positive response).\n\nExamples\nSample 1\nInput\n5\nabcde\nc\nabcde\nb\nx\ny\naaaaaaaaaaaaaaa\na\ncontest\nt\nOutput\nYES\nNO\nNO\nYES\nYES\n\nNote\nIn the first test case, $ s $ =\"abcde\". You need to get $ s $ =\"c\". For the first operation, delete the first two letters, we get $ s $ =\"cde\". In the second operation, we delete the last two letters, so we get the expected value of $ s $ =\"c\".\n\nIn the third test case, $ s $ =\"x\", it is required to get $ s $ =\"y\". Obviously, this cannot be done."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nforn\n(\ntt\n,\nt\n)\n{\nstring\ns\n,\nt\n;\ncin\n>>\ns\n>>\nt\n;\nbool\nyes\n=\nfalse\n;\nforn\n(\ni\n,\ns\n.\nlength\n())\nif\n(\ns\n[\ni\n]\n==\nt\n[\n0\n]\n&&\ni\n%\n2\n==\n0\n)\nyes\n=\ntrue\n;\ncout\n<<\n(\nyes\n?\n\"YES\"\n:\n\"NO\"\n)\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

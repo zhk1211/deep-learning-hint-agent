@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ n $ ( $ n \\ge 3 $ ) positive integers. It is known that in this array, all the numbers except one are the same (for example, in the array $ [4, 11, 4, 4] $ all numbers except one are equal to $ 4 $ ).\n\nPrint the index of the element that does not equal others. The numbers in the array are numbered from one.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ). Then $ t $ test cases follow.\n\nThe first line of each test case contains a single integer $ n $ ( $ 3 \\le n \\le 100 $ ) — the length of the array $ a $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 100 $ ).\n\nIt is guaranteed that all the numbers except one in the $ a $ array are the same.\n\nOutput Format\nFor each test case, output a single integer — the index of the element that is not equal to others.\n\nExamples\nSample 1\nInput\n4\n4\n11 13 11 11\n5\n1 4 4 4 4\n10\n3 3 3 3 10 3 3 3 3 3\n3\n20 20 10\nOutput\n2\n1\n5\n3"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\nv\n(\nn\n);\nfor\n(\nint\n&\ne\n:\nv\n)\n{\ncin\n>>\ne\n;\n}\nvector\n<int>\na\n=\nv\n;\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\nv\n[\ni\n]\n!=\na\n[\n1\n])\n{\ncout\n<<\ni\n+\n1\n<<\n\"\\n\"\n;\n}\n}\n}\nint\nmain\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nwhile\n(\nn\n--)\n{\nsolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

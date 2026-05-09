@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe only difference between easy and hard versions is the number of elements in the array.\n\nYou are given an array $ a $ consisting of $ n $ integers. In one move you can choose any $ a_i $ and divide it by $ 2 $ rounding down (in other words, in one move you can set $ a_i := \\lfloor\\frac{a_i}{2}\\rfloor $ ).\n\nYou can perform such an operation any (possibly, zero) number of times with any $ a_i $ .\n\nYour task is to calculate the minimum possible number of operations required to obtain at least $ k $ equal numbers in the array.\n\nDon't forget that it is possible to have $ a_i = 0 $ after some operations, thus the answer always exists.\n\nInput Format\nThe first line of the input contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 2 \\cdot 10^5 $ ) — the number of elements in the array and the number of equal numbers required.\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 2 \\cdot 10^5 $ ), where $ a_i $ is the $ i $ -th element of $ a $ .\n\nOutput Format\nPrint one integer — the minimum possible number of operations required to obtain at least $ k $ equal numbers in the array.\n\nExamples\nSample 1\nInput\n5 3\n1 2 2 4 5\nOutput\n1\n\nSample 2\nInput\n5 3\n1 2 3 4 5\nOutput\n2\n\nSample 3\nInput\n5 3\n1 2 3 3 3\nOutput\n0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nvector\n<\nvector\n<int>\n>\nvals\n(\n200\n*\n1000\n+\n11\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nint\nx\n=\na\n[\ni\n];\nint\ncur\n=\n0\n;\nwhile\n(\nx\n>\n0\n)\n{\nvals\n[\nx\n].\npush_back\n(\ncur\n);\nx\n/=\n2\n;\n++\ncur\n;\n}\n}\nint\nans\n=\n1e9\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\n200\n*\n1000\n;\n++\ni\n)\n{\nsort\n(\nvals\n[\ni\n].\nbegin\n(),\nvals\n[\ni\n].\nend\n());\nif\n(\nint\n(\nvals\n[\ni\n].\nsize\n())\n<\nk\n)\ncontinue\n;\nans\n=\nmin\n(\nans\n,\naccumulate\n(\nvals\n[\ni\n].\nbegin\n(),\nvals\n[\ni\n].\nbegin\n()\n+\nk\n,\n0\n));\n}\ncout\n<<\nans\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

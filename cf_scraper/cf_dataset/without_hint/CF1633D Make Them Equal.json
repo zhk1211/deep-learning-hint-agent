@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have an array of integers $ a $ of size $ n $ . Initially, all elements of the array are equal to $ 1 $ . You can perform the following operation: choose two integers $ i $ ( $ 1 \\le i \\le n $ ) and $ x $ ( $ x > 0 $ ), and then increase the value of $ a_i $ by $ \\left\\lfloor\\frac{a_i}{x}\\right\\rfloor $ (i.e. make $ a_i = a_i + \\left\\lfloor\\frac{a_i}{x}\\right\\rfloor $ ).\n\nAfter performing all operations, you will receive $ c_i $ coins for all such $ i $ that $ a_i = b_i $ .\n\nYour task is to determine the maximum number of coins that you can receive by performing no more than $ k $ operations.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 10^3; 0 \\le k \\le 10^6 $ ) — the size of the array and the maximum number of operations, respectively.\n\nThe second line contains $ n $ integers $ b_1, b_2, \\dots, b_n $ ( $ 1 \\le b_i \\le 10^3 $ ).\n\nThe third line contains $ n $ integers $ c_1, c_2, \\dots, c_n $ ( $ 1 \\le c_i \\le 10^6 $ ).\n\nThe sum of $ n $ over all test cases does not exceed $ 10^3 $ .\n\nOutput Format\nFor each test case, print one integer — the maximum number of coins that you can get by performing no more than $ k $ operations.\n\nExamples\nSample 1\nInput\n4\n4 4\n1 7 5 2\n2 6 5 2\n3 0\n3 5 2\n5 4 7\n5 9\n5 2 5 6 3\n5 9 1 9 7\n6 14\n11 4 6 2 8 16\n43 45 9 41 15 38\nOutput\n9\n0\n30\n167"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n1001\n;\nint\nmain\n()\n{\nvector\n<int>\nd\n(\nN\n,\nN\n);\nd\n[\n1\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nN\n;\n++\ni\n)\n{\nfor\n(\nint\nx\n=\n1\n;\nx\n<=\ni\n;\n++\nx\n)\n{\nint\nj\n=\ni\n+\ni\n/\nx\n;\nif\n(\nj\n<\nN\n)\nd\n[\nj\n]\n=\nmin\n(\nd\n[\nj\n],\nd\n[\ni\n]\n+\n1\n);\n}\n}\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\nb\n(\nn\n),\nc\n(\nn\n);\nfor\n(\nint\n&\nx\n:\nb\n)\ncin\n>>\nx\n;\nfor\n(\nint\n&\nx\n:\nc\n)\ncin\n>>\nx\n;\nint\nsum\n=\n0\n;\nfor\n(\nint\nx\n:\nb\n)\nsum\n+=\nd\n[\nx\n];\nk\n=\nmin\n(\nk\n,\nsum\n);\nvector\n<int>\ndp\n(\nk\n+\n1\n,\n0\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\nk\n-\nd\n[\nb\n[\ni\n]];\nj\n>=\n0\n;\nj\n--)\n{\ndp\n[\nj\n+\nd\n[\nb\n[\ni\n]]]\n=\nmax\n(\ndp\n[\nj\n+\nd\n[\nb\n[\ni\n]]],\ndp\n[\nj\n]\n+\nc\n[\ni\n]);\n}\n}\ncout\n<<\n*\nmax_element\n(\ndp\n.\nbegin\n(),\ndp\n.\nend\n())\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

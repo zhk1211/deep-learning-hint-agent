@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a bracket sequence $ s $ consisting of $ n $ opening '(' and closing ')' brackets.\n\nA regular bracket sequence is a bracket sequence that can be transformed into a correct arithmetic expression by inserting characters '1' and '+' between the original characters of the sequence. For example, bracket sequences \"()()\", \"(())\" are regular (the resulting expressions are: \"(1)+(1)\", \"((1+1)+1)\"), and \")(\" and \"(\" are not.\n\nYou can change the type of some bracket $ s_i $ . It means that if $ s_i = $ ')' then you can change it to '(' and vice versa.\n\nYour task is to calculate the number of positions $ i $ such that if you change the type of the $ i $ -th bracket, then the resulting bracket sequence becomes regular.\n\nInput Format\nThe first line of the input contains one integer $ n $ ( $ 1 \\le n \\le 10^6 $ ) — the length of the bracket sequence.\n\nThe second line of the input contains the string $ s $ consisting of $ n $ opening '(' and closing ')' brackets.\n\nOutput Format\nPrint one integer — the number of positions $ i $ such that if you change the type of the $ i $ -th bracket, then the resulting bracket sequence becomes regular.\n\nExamples\nSample 1\nInput\n6\n(((())\nOutput\n3\n\nSample 2\nInput\n6\n()()()\nOutput\n0\n\nSample 3\nInput\n1\n)\nOutput\n0\n\nSample 4\nInput\n8\n)))(((((\nOutput\n0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n;\nstring\ns\n;\ncin\n>>\nn\n>>\ns\n;\nstring\nrs\n(\ns\n.\nrbegin\n(),\ns\n.\nrend\n());\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\nrs\n[\ni\n]\n==\n'('\n)\n{\nrs\n[\ni\n]\n=\n')'\n;\n}\nelse\n{\nrs\n[\ni\n]\n=\n'('\n;\n}\n}\nvector\n<int>\npref\n(\nn\n+\n1\n),\nsuf\n(\nn\n+\n1\n);\nvector\n<bool>\nokp\n(\nn\n+\n1\n),\noks\n(\nn\n+\n1\n);\nokp\n[\n0\n]\n=\noks\n[\nn\n]\n=\ntrue\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\npref\n[\ni\n+\n1\n]\n=\npref\n[\ni\n]\n+\n(\ns\n[\ni\n]\n==\n'('\n?\n+\n1\n:\n-\n1\n);\nokp\n[\ni\n+\n1\n]\n=\nokp\n[\ni\n]\n&\n(\npref\n[\ni\n+\n1\n]\n>=\n0\n);\nsuf\n[\nn\n-\ni\n-\n1\n]\n=\nsuf\n[\nn\n-\ni\n]\n+\n(\nrs\n[\ni\n]\n==\n'('\n?\n+\n1\n:\n-\n1\n);\noks\n[\nn\n-\ni\n-\n1\n]\n=\noks\n[\nn\n-\ni\n]\n&\n(\nsuf\n[\nn\n-\ni\n-\n1\n]\n>=\n0\n);\n}\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(!\nokp\n[\ni\n]\n||\n!\noks\n[\ni\n+\n1\n])\n{\ncontinue\n;\n}\nif\n(\ns\n[\ni\n]\n==\n'('\n)\n{\nif\n(\npref\n[\ni\n]\n>\n0\n&&\npref\n[\ni\n]\n-\n1\n-\nsuf\n[\ni\n+\n1\n]\n==\n0\n)\n{\n++\nans\n;\n}\n}\nelse\n{\nif\n(\npref\n[\ni\n]\n+\n1\n-\nsuf\n[\ni\n+\n1\n]\n==\n0\n)\n{\n++\nans\n;\n}\n}\n}\ncout\n<<\nans\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

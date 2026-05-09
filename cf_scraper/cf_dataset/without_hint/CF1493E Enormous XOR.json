@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two integers $ l $ and $ r $ in binary representation. Let $ g(x, y) $ be equal to the [bitwise XOR](https://en.wikipedia.org/wiki/Bitwise_operation#XOR) of all integers from $ x $ to $ y $ inclusive (that is $ x \\oplus (x+1) \\oplus \\dots \\oplus (y-1) \\oplus y $ ). Let's define $ f(l, r) $ as the maximum of all values of $ g(x, y) $ satisfying $ l \\le x \\le y \\le r $ .\n\nOutput $ f(l, r) $ .\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\le n \\le 10^6 $ ) — the length of the binary representation of $ r $ .\n\nThe second line contains the binary representation of $ l $ — a string of length $ n $ consisting of digits $ 0 $ and $ 1 $ ( $ 0 \\le l < 2^n $ ).\n\nThe third line contains the binary representation of $ r $ — a string of length $ n $ consisting of digits $ 0 $ and $ 1 $ ( $ 0 \\le r < 2^n $ ).\n\nIt is guaranteed that $ l \\le r $ . The binary representation of $ r $ does not contain any extra leading zeros (if $ r=0 $ , the binary representation of it consists of a single zero). The binary representation of $ l $ is preceded with leading zeros so that its length is equal to $ n $ .\n\nOutput Format\nIn a single line output the value of $ f(l, r) $ for the given pair of $ l $ and $ r $ in binary representation without extra leading zeros.\n\nExamples\nSample 1\nInput\n7\n0010011\n1111010\nOutput\n1111111\n\nSample 2\nInput\n4\n1010\n1101\nOutput\n1101\n\nNote\nIn sample test case $ l=19 $ , $ r=122 $ . $ f(x,y) $ is maximal and is equal to $ 127 $ , with $ x=27 $ , $ y=100 $ , for example."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (74TrAkToR)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nstring\nadd\n(\nstring\ns\n)\n{\nint\ni\n=\n(\nint\n)\ns\n.\nsize\n()\n-\n1\n;\nwhile\n(\ns\n[\ni\n]\n==\n'1'\n)\n{\ns\n[\ni\n]\n=\n'0'\n;\ni\n--;\n}\ns\n[\ni\n]\n=\n'1'\n;\nreturn\ns\n;\n}\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\nint\nn\n;\ncin\n>>\nn\n;\nstring\nl\n,\nr\n;\ncin\n>>\nl\n>>\nr\n;\nif\n(\nl\n==\nr\n)\n{\ncout\n<<\nr\n<<\n'\\n'\n;\nreturn\n0\n;\n}\nif\n(\nl\n[\n0\n]\n!=\nr\n[\n0\n])\n{\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\ncout\n<<\n\"1\"\n;\nreturn\n0\n;\n}\nif\n(\nadd\n(\nl\n)\n==\nr\n||\nr\n.\nback\n()\n==\n'1'\n)\n{\ncout\n<<\nr\n<<\n'\\n'\n;\nreturn\n0\n;\n}\ncout\n<<\nadd\n(\nr\n)\n<<\n'\\n'\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

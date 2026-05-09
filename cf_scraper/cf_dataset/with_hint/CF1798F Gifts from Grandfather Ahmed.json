@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGrandfather Ahmed's School has $ n+1 $ students. The students are divided into $ k $ classes, and $ s_i $ students study in the $ i $ -th class. So, $ s_1 + s_2 + \\ldots + s_k = n+1 $ .\n\nDue to the upcoming April Fools' Day, all students will receive gifts!\n\nGrandfather Ahmed planned to order $ n+1 $ boxes of gifts. Each box can contain one or more gifts. He plans to distribute the boxes between classes so that the following conditions are satisfied:\n\n1. Class number $ i $ receives exactly $ s_i $ boxes (so that each student can open exactly one box).\n2. The total number of gifts in the boxes received by the $ i $ -th class should be a multiple of $ s_i $ (it should be possible to equally distribute the gifts among the $ s_i $ students of this class).\n\nUnfortunately, Grandfather Ahmed ordered only $ n $ boxes with gifts, the $ i $ -th of which contains $ a_i $ gifts.\n\nAhmed has to buy the missing gift box, and the number of gifts in the box should be an integer between $ 1 $ and $ 10^6 $ . Help Ahmed to determine, how many gifts should the missing box contain, and build a suitable distribution of boxes to classes, or report that this is impossible.\n\nInput Format\nThe first line of the input contains two integers $ n $ and $ k $ ( $ 1 \\le n, k \\le 200 $ , $ k \\le n + 1 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^6 $ ) — the number of gifts in the available boxes.\n\nThe third line contains $ k $ integers $ s_1, s_2, \\ldots, s_k $ ( $ 1 \\le s_i \\le n+1 $ ) — the number of students in classes. It is guaranteed that $ \\sum s_i = n+1 $ .\n\nOutput Format\nIf there is no way to buy the remaining box, output the integer $ -1 $ in a single line.\n\nOtherwise, in the first line, output a single integer $ s $ — the number of gifts in the box that Grandfather Ahmed should buy ( $ 1 \\le s \\le 10^6 $ ).\n\nNext, in $ k $ lines, print the distribution of boxes to classes. In the $ i $ -th line print $ s_i $ integers — the sizes of the boxes that should be sent to the $ i $ -th class.\n\nIf there are multiple solutions, print any of them.\n\nExamples\nSample 1\nInput\n4 2\n7 7 7 127\n2 3\nOutput\n1\n7 7\n7 127 1\n\nSample 2\nInput\n18 4\n1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9\n6 1 9 3\nOutput\n9\n7 1 7 6 5 4\n9\n1 2 3 8 3 2 9 8 9\n6 5 4\n\nNote\nIn the first test, Grandfather Ahmed can buy a box with just $ 1 $ gift. After that, two boxes with $ 7 $ gifts are sent to the first class. $ 7 + 7 = 14 $ is divisible by $ 2 $ . And the second class gets boxes with $ 1, 7, 127 $ gifts. $ 1 + 7 + 127 = 135 $ is evenly divisible by $ 3 $ .\n\nIn the second test, the classes have sizes $ 6 $ , $ 1 $ , $ 9 $ , and $ 3 $ . We show that the available boxes are enough to distribute into classes with sizes $ 6 $ , $ 9 $ , $ 3 $ , and in the class with size $ 1 $ , you can buy a box of any size. In class with size $ 6 $ we send boxes with sizes $ 7 $ , $ 1 $ , $ 7 $ , $ 6 $ , $ 5 $ , $ 4 $ . $ 7 + 1 + 7 + 6 + 5 + 4 = 30 $ is divisible by $ 6 $ . In class with size $ 9 $ we send boxes with sizes $ 1 $ , $ 2 $ , $ 3 $ , $ 8 $ , $ 3 $ , $ 2 $ , $ 9 $ , $ 8 $ , $ 9 $ . $ 1 + 2 + 3 + 8 + 3 + 2 + 9 + 8 + 9 = 45 $ is divisible by $ 9 $ . The remaining boxes ( $ 6 $ , $ 5 $ , $ 4 $ ) are sent to the class with size $ 3 $ . $ 6 + 5 + 4 = 15 $ is divisible by $ 3 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Let's say the box you selected will be sent to the largest class. Then if this class has a size of $$$s$$$, you can send any $$$s-1$$$ from the available boxes there. So you can not worry about this class, and pick boxes for the rest, always having as potential options $$$s-1$$$ additional boxes. Plenty of room for maneuver."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The solution exists for any valid input"
+        },
+        {
+            "title": "Hint 3",
+            "content": "After Hint2 think about some specific inputs. You know, they always have a solution. This should inspire you."
+        },
+        {
+            "title": "Hint 3.1",
+            "content": "$$$k = 2, s_1 = s_2$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Erdős--Ginzburg--Ziv theorem"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\npb push_back\n// #define int long long\n#define\nall\n(\nx\n)\nx\n.\nbegin\n(),\nx\n.\nend\n()\n#define\nld\nlong\ndouble\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n210\n;\nbool\ndp\n[\nN\n][\nN\n][\nN\n];\nbool\ntake\n[\nN\n][\nN\n][\nN\n];\nsigned\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\ncout\n.\ntie\n(\nnullptr\n);\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\na\n(\nn\n),\ns\n(\nk\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\ni\n++)\n{\ncin\n>>\ns\n[\ni\n];\n}\nvector\n<\npair\n<\nint\n,\nint\n>>\ns2\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\ni\n++)\n{\ns2\n.\npb\n({\ns\n[\ni\n],\ni\n});\n}\nsort\n(\nall\n(\ns2\n));\nvector\n<\nvector\n<int>\n>\nans\n(\nk\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n-\n1\n;\ni\n++)\n{\nint\nclass_size\n=\ns2\n[\ni\n].\nfirst\n;\nvector\n<int>\nboxes\n;\nfor\n(\nint\n_\n=\n0\n;\n_\n<\n2\n*\nclass_size\n-\n1\n;\n_\n++)\n{\nboxes\n.\npb\n(\na\n.\nback\n());\na\n.\npop_back\n();\n}\nfor\n(\nint\nsz\n=\n0\n;\nsz\n<=\nclass_size\n;\nsz\n++)\n{\nfor\n(\nint\nr\n=\n0\n;\nr\n<\nclass_size\n;\nr\n++)\n{\ndp\n[\n0\n][\nsz\n][\nr\n]\n=\nfalse\n;\ntake\n[\n0\n][\nsz\n][\nr\n]\n=\nfalse\n;\n}\n}\ndp\n[\n0\n][\n0\n][\n0\n]\n=\ntrue\n;\ndp\n[\n0\n][\n1\n][\nboxes\n[\n0\n]\n%\nclass_size\n]\n=\ntrue\n;\ntake\n[\n0\n][\n1\n][\nboxes\n[\n0\n]\n%\nclass_size\n]\n=\ntrue\n;\nfor\n(\nint\nj\n=\n1\n;\nj\n<\n(\nint\n)\nboxes\n.\nsize\n();\nj\n++)\n{\nfor\n(\nint\nsz\n=\n0\n;\nsz\n<=\nclass_size\n;\nsz\n++)\n{\nfor\n(\nint\nr\n=\n0\n;\nr\n<\nclass_size\n;\nr\n++)\n{\ndp\n[\nj\n][\nsz\n][\nr\n]\n=\ndp\n[\nj\n-\n1\n][\nsz\n][\nr\n];\nif\n(\nsz\n>\n0\n&&\ndp\n[\nj\n-\n1\n][\nsz\n-\n1\n][(\nclass_size\n+\nr\n-\nboxes\n[\nj\n]\n%\nclass_size\n)\n%\nclass_size\n])\n{\ndp\n[\nj\n][\nsz\n][\nr\n]\n=\ntrue\n;\ntake\n[\nj\n][\nsz\n][\nr\n]\n=\ntrue\n;\n}\nelse\n{\ntake\n[\nj\n][\nsz\n][\nr\n]\n=\nfalse\n;\n}\n}\n}\n}\nvector\n<bool>\nused\n(\n2\n*\nclass_size\n-\n1\n);\nint\nsz\n=\nclass_size\n,\nr\n=\n0\n;\nfor\n(\nint\nj\n=\n(\nint\n)\nboxes\n.\nsize\n()\n-\n1\n;\nj\n>=\n0\n;\nj\n--)\n{\nif\n(\ntake\n[\nj\n][\nsz\n][\nr\n])\n{\nused\n[\nj\n]\n=\ntrue\n;\nsz\n--;\nr\n+=\n(\nclass_size\n-\nboxes\n[\nj\n]\n%\nclass_size\n);\nr\n%=\nclass_size\n;\n}\nelse\n{\nused\n[\nj\n]\n=\nfalse\n;\n}\n}\nvector\n<int>\nto_class\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n(\nint\n)\nboxes\n.\nsize\n();\nj\n++)\n{\nif\n(!\nused\n[\nj\n])\n{\na\n.\npb\n(\nboxes\n[\nj\n]);\n}\nelse\n{\nto_class\n.\npb\n(\nboxes\n[\nj\n]);\n}\n}\nans\n[\ns2\n[\ni\n].\nsecond\n]\n=\nto_class\n;\n}\nint\nsum\n=\n0\n;\nfor\n(\nauto\nx\n:\na\n)\n{\nsum\n+=\nx\n;\nsum\n%=\n(\nint\n)\n(\na\n.\nsize\n()\n+\n1\n);\n}\nint\nadd\n=\n(\nint\n)\n(\na\n.\nsize\n()\n+\n1\n)\n-\nsum\n;\nans\n[\ns2\n[\nk\n-\n1\n].\nsecond\n]\n=\na\n;\nans\n[\ns2\n[\nk\n-\n1\n].\nsecond\n].\npb\n(\nadd\n);\ncout\n<<\nadd\n<<\n'\\n'\n;\nfor\n(\nauto\narr\n:\nans\n)\n{\nfor\n(\nauto\nx\n:\narr\n)\n{\ncout\n<<\nx\n<<\n' '\n;\n}\ncout\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

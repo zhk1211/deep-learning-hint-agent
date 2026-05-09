@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMaksim has $ n $ objects and $ m $ boxes, each box has size exactly $ k $ . Objects are numbered from $ 1 $ to $ n $ in order from left to right, the size of the $ i $ -th object is $ a_i $ .\n\nMaksim wants to pack his objects into the boxes and he will pack objects by the following algorithm: he takes one of the empty boxes he has, goes from left to right through the objects, and if the $ i $ -th object fits in the current box (the remaining size of the box is greater than or equal to $ a_i $ ), he puts it in the box, and the remaining size of the box decreases by $ a_i $ . Otherwise he takes the new empty box and continues the process above. If he has no empty boxes and there is at least one object not in some box then Maksim cannot pack the chosen set of objects.\n\nMaksim wants to know the maximum number of objects he can pack by the algorithm above. To reach this target, he will throw out the leftmost object from the set until the remaining set of objects can be packed in boxes he has. Your task is to say the maximum number of objects Maksim can pack in boxes he has.\n\nEach time when Maksim tries to pack the objects into the boxes, he will make empty all the boxes he has before do it (and the relative order of the remaining set of objects will not change).\n\nInput Format\nThe first line of the input contains three integers $ n $ , $ m $ , $ k $ ( $ 1 \\le n, m \\le 2 \\cdot 10^5 $ , $ 1 \\le k \\le 10^9 $ ) — the number of objects, the number of boxes and the size of each box.\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le k $ ), where $ a_i $ is the size of the $ i $ -th object.\n\nOutput Format\nPrint the maximum number of objects Maksim can pack using the algorithm described in the problem statement.\n\nExamples\nSample 1\nInput\n5 2 6\n5 2 1 4 2\nOutput\n4\n\nSample 2\nInput\n5 1 4\n4 2 3 4 1\nOutput\n1\n\nSample 3\nInput\n5 3 3\n1 2 3 1 1\nOutput\n5\n\nNote\nIn the first example Maksim can pack only $ 4 $ objects. Firstly, he tries to pack all the $ 5 $ objects. Distribution of objects will be $ [5], [2, 1] $ . Maxim cannot pack the next object in the second box and he has no more empty boxes at all. Next he will throw out the first object and the objects distribution will be $ [2, 1], [4, 2] $ . So the answer is $ 4 $ .\n\nIn the second example it is obvious that Maksim cannot pack all the objects starting from first, second, third and fourth (in all these cases the distribution of objects is $ [4] $ ), but he can pack the last object ( $ [1] $ ).\n\nIn the third example Maksim can pack all the objects he has. The distribution will be $ [1, 2], [3], [1, 1] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution 1",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n2e5\n+\n10\n;\nint\nar\n[\nMAX\n];\nint\nn\n,\nm\n,\nk\n;\nint\nfind\n(\nint\npos\n){\nint\nans\n=\nn\n-\npos\n+\n1\n;\nint\nused\n=\n0\n;\nwhile\n(\nused\n<\nm\n&&\npos\n<=\nn\n){\nint\nt\n=\nk\n;\nwhile\n(\npos\n<=\nn\n&&\nar\n[\npos\n]\n<=\nt\n){\nt\n-=\nar\n[\npos\n++];\n}\nused\n++;\n}\nreturn\npos\n==\nn\n+\n1\n?\nans\n:\n0\n;\n}\nint\nmain\n(){\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\ncin\n>>\nn\n>>\nm\n>>\nk\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++){\ncin\n>>\nar\n[\ni\n];\n}\nint\nans\n=\n0\n;\nint\nl\n=\n1\n,\nr\n=\nn\n;\nwhile\n(\nl\n<=\nr\n){\nint\nx\n=\n(\nl\n+\nr\n)\n>>\n1\n;\nif\n(\nfind\n(\nx\n)){\nans\n=\nmax\n(\nans\n,\nn\n-\nx\n+\n1\n);\nr\n=\nx\n-\n1\n;\n}\nelse\n{\nl\n=\nx\n+\n1\n;\n}\n}\ncout\n<<\nans\n<<\nendl\n;\n}"
+        },
+        {
+            "title": "Solution 2",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n,\nm\n,\nk\n;\ncin\n>>\nn\n>>\nm\n>>\nk\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nreverse\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nint\nrem\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\nrem\n-\na\n[\ni\n]\n<\n0\n)\n{\nif\n(\nm\n==\n0\n)\n{\ncout\n<<\ni\n<<\nendl\n;\nreturn\n0\n;\n}\nelse\n{\n--\nm\n;\nrem\n=\nk\n-\na\n[\ni\n];\n}\n}\nelse\n{\nrem\n-=\na\n[\ni\n];\n}\n}\ncout\n<<\nn\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

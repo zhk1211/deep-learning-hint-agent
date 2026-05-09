@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nTema decided to improve his ice cream making skills. He has already learned how to make ice cream in a cone using exactly two balls.\n\nBefore his ice cream obsession, Tema was interested in mathematics. Therefore, he is curious about the minimum number of balls he needs to have in order to make exactly $ n $ different types of ice cream.\n\nThere are plenty possible ice cream flavours: $ 1, 2, 3, \\dots $ . Tema can make two-balls ice cream with any flavours (probably the same).\n\nTwo ice creams are considered different if their sets of ball flavours are different. For example, $ \\{1, 2\\} = \\{2, 1\\} $ , but $ \\{1, 1\\} \\neq \\{1, 2\\} $ .\n\nFor example, having the following ice cream balls: $ \\{1, 1, 2\\} $ , Tema can make only two types of ice cream: $ \\{1, 1\\} $ and $ \\{1, 2\\} $ .\n\nNote, that Tema do not need to make all the ice cream cones at the same time. This means that he making ice cream cones independently. Also in order to make a following cone $ \\{x, x\\} $ for some $ x $ , Tema needs at least $ 2 $ balls of type $ x $ .\n\nHelp Tema answer this question. It can be shown that answer always exist.\n\nInput Format\nEach test consists of multiple test cases. The first line of input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Then follows the description of the test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^{18} $ ) — the number of ice cream types that Tema wants to make.\n\nOutput Format\nFor each test case, output a single integer — the minimum number of balls Tema needs to buy.\n\nExamples\nSample 1\nInput\n5\n1\n3\n6\n179\n1000000000000000000\nOutput\n2\n3\n4\n27\n2648956421\n\nNote\nIn the first sample, it is enough to have following balls types: $ \\{1, 1\\} $ . Note, that set $ \\{1\\} $ if not enough since we need at least $ 2 $ balls of a type $ 1 $ in order to make such cone $ \\{1, 1\\} $ .\n\nIn the second sample, it is not possible to make it with $ 2 $ balls, but it can be done with these balls: $ \\{1, 2, 3\\} $ .\n\nIn the third sample, $ \\{1, 2, 3, 4\\} $ is optimal answer, so we can get following ice cream cones: $ \\{1, 2\\} $ , $ \\{1, 3\\} $ , $ \\{1, 4\\} $ , $ \\{2, 3\\} $ , $ \\{2, 4\\} $ , $ \\{3, 4\\} $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nint\nlong\nlong\nint32_t\nmain\n()\n{\nint\nq\n;\ncin\n>>\nq\n;\nwhile\n(\nq\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nl\n=\n0\n,\nr\n=\nmin\n<int>\n(\n2e9\n,\n2\n*\nn\n);\nwhile\n(\nr\n-\nl\n>\n1\n)\n{\nint\nm\n=\n(\nl\n+\nr\n)\n>>\n1\n;\n// m = x + y, answer = x + 2 * y\nif\n(\nm\n*\n(\nm\n-\n1\n)\n/\n2\n+\nm\n<\nn\n)\n{\nl\n=\nm\n;\n}\nelse\n{\nr\n=\nm\n;\n}\n}\nint\ny\n=\nn\n-\nr\n*\n(\nr\n-\n1\n)\n/\n2\n;\nif\n((\nr\n+\n1\n)\n*\nr\n/\n2\n<=\nn\n)\n{\ncout\n<<\nmin\n(\nr\n+\ny\n,\nr\n+\n1\n+\nn\n-\n(\nr\n+\n1\n)\n*\nr\n/\n2\n)\n<<\n\"\\n\"\n;\n}\nelse\n{\ncout\n<<\nr\n+\ny\n<<\n\"\\n\"\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

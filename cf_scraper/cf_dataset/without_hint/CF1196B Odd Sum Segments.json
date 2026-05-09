@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ n $ integers $ a_1, a_2, \\dots, a_n $ . You want to split it into exactly $ k $ non-empty non-intersecting subsegments such that each subsegment has odd sum (i. e. for each subsegment, the sum of all elements that belong to this subsegment is odd). It is impossible to rearrange (shuffle) the elements of a given array. Each of the $ n $ elements of the array $ a $ must belong to exactly one of the $ k $ subsegments.\n\nLet's see some examples of dividing the array of length $ 5 $ into $ 3 $ subsegments (not necessarily with odd sums): $ [1, 2, 3, 4, 5] $ is the initial array, then all possible ways to divide it into $ 3 $ non-empty non-intersecting subsegments are described below:\n\n- $ [1], [2], [3, 4, 5] $ ;\n- $ [1], [2, 3], [4, 5] $ ;\n- $ [1], [2, 3, 4], [5] $ ;\n- $ [1, 2], [3], [4, 5] $ ;\n- $ [1, 2], [3, 4], [5] $ ;\n- $ [1, 2, 3], [4], [5] $ .\n\nOf course, it can be impossible to divide the initial array into exactly $ k $ subsegments in such a way that each of them will have odd sum of elements. In this case print \"NO\". Otherwise, print \"YES\" and any possible division of the array. See the output format for the detailed explanation.\n\nYou have to answer $ q $ independent queries.\n\nInput Format\nThe first line contains one integer $ q $ ( $ 1 \\le q \\le 2 \\cdot 10^5 $ ) — the number of queries. Then $ q $ queries follow.\n\nThe first line of the query contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 2 \\cdot 10^5 $ ) — the number of elements in the array and the number of subsegments, respectively.\n\nThe second line of the query contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ), where $ a_i $ is the $ i $ -th element of $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all queries does not exceed $ 2 \\cdot 10^5 $ ( $ \\sum n \\le 2 \\cdot 10^5 $ ).\n\nOutput Format\nFor each query, print the answer to it. If it is impossible to divide the initial array into exactly $ k $ subsegments in such a way that each of them will have odd sum of elements, print \"NO\" in the first line. Otherwise, print \"YES\" in the first line and any possible division of the array in the second line. The division can be represented as $ k $ integers $ r_1 $ , $ r_2 $ , ..., $ r_k $ such that $ 1 \\le r_1 < r_2 < \\dots < r_k = n $ , where $ r_j $ is the right border of the $ j $ -th segment (the index of the last element that belongs to the $ j $ -th segment), so the array is divided into subsegments $ [1; r_1], [r_1 + 1; r_2], [r_2 + 1, r_3], \\dots, [r_{k - 1} + 1, n] $ . Note that $ r_k $ is always $ n $ but you should print it anyway.\n\nExamples\nSample 1\nInput\n3\n5 3\n7 18 3 14 1\n5 4\n1 2 3 4 5\n6 2\n1 2 8 4 10 2\nOutput\nYES\n1 3 5\nNO\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nq\n;\ncin\n>>\nq\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nq\n;\n++\ni\n)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\na\n(\nn\n);\nint\ncntodd\n=\n0\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nn\n;\n++\nj\n)\n{\ncin\n>>\na\n[\nj\n];\ncntodd\n+=\na\n[\nj\n]\n%\n2\n;\n}\nif\n(\ncntodd\n<\nk\n||\ncntodd\n%\n2\n!=\nk\n%\n2\n)\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\ncontinue\n;\n}\ncout\n<<\n\"YES\"\n<<\nendl\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nn\n;\n++\nj\n)\n{\nif\n(\nk\n==\n1\n)\nbreak\n;\nif\n(\na\n[\nj\n]\n%\n2\n==\n1\n)\n{\ncout\n<<\nj\n+\n1\n<<\n\" \"\n;\n--\nk\n;\n}\n}\ncout\n<<\nn\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

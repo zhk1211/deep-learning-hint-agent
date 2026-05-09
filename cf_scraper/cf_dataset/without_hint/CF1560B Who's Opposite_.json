@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nSome number of people (this number is even) have stood in a circle. The people stand in the circle evenly. They are numbered clockwise starting from a person with the number $ 1 $ . Each person is looking through the circle's center at the opposite person.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1560B/a3a7851777ae33a1527beddaa8761afd1adfcbd6.png)A sample of a circle of $ 6 $ persons. The orange arrows indicate who is looking at whom.You don't know the exact number of people standing in the circle (but this number is even, no doubt). It is known that the person with the number $ a $ is looking at the person with the number $ b $ (and vice versa, of course). What is the number associated with a person being looked at by the person with the number $ c $ ? If, for the specified $ a $ , $ b $ , and $ c $ , no such circle exists, output -1.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case consists of one line containing three distinct integers $ a $ , $ b $ , $ c $ ( $ 1 \\le a,b,c \\le 10^8 $ ).\n\nOutput Format\nFor each test case output in a separate line a single integer $ d $ — the number of the person being looked at by the person with the number $ c $ in a circle such that the person with the number $ a $ is looking at the person with the number $ b $ . If there are multiple solutions, print any of them. Output $ -1 $ if there's no circle meeting the given conditions.\n\nExamples\nSample 1\nInput\n7\n6 2 4\n2 3 1\n2 4 10\n5 3 4\n1 3 2\n2 5 4\n4 3 2\nOutput\n8\n-1\n-1\n-1\n4\n1\n-1\n\nNote\nIn the first test case, there's a desired circle of $ 8 $ people. The person with the number $ 6 $ will look at the person with the number $ 2 $ and the person with the number $ 8 $ will look at the person with the number $ 4 $ .\n\nIn the second test case, there's no circle meeting the conditions. If the person with the number $ 2 $ is looking at the person with the number $ 3 $ , the circle consists of $ 2 $ people because these persons are neighbors. But, in this case, they must have the numbers $ 1 $ and $ 2 $ , but it doesn't meet the problem's conditions.\n\nIn the third test case, the only circle with the persons with the numbers $ 2 $ and $ 4 $ looking at each other consists of $ 4 $ people. Therefore, the person with the number $ 10 $ doesn't occur in the circle."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nll a\n,\nb\n,\nc\n;\ncin\n>>\na\n>>\nb\n>>\nc\n;\nll n\n=\n2\n*\nabs\n(\na\n-\nb\n);\nif\n(\na\n>\nn\n||\nb\n>\nn\n||\nc\n>\nn\n)\ncout\n<<\n-\n1\n<<\n'\\n'\n;\nelse\n{\nll d\n=\nn\n/\n2\n+\nc\n;\nwhile\n(\nd\n>\nn\n)\nd\n-=\nn\n;\ncout\n<<\nd\n<<\n'\\n'\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

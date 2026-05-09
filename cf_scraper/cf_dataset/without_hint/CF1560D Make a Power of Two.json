@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer $ n $ . In $ 1 $ move, you can do one of the following actions:\n\n- erase any digit of the number (it's acceptable that the number before the operation has exactly one digit and after the operation, it is \"empty\");\n- add one digit to the right.\n\nThe actions may be performed in any order any number of times.\n\nNote that if, after deleting some digit from a number, it will contain leading zeroes, they will not be deleted. E.g. if you delete from the number $ 301 $ the digit $ 3 $ , the result is the number $ 01 $ (not $ 1 $ ).\n\nYou need to perform the minimum number of actions to make the number any power of $ 2 $ (i.e. there's an integer $ k $ ( $ k \\ge 0 $ ) such that the resulting number is equal to $ 2^k $ ). The resulting number must not have leading zeroes.\n\nE.g. consider $ n=1052 $ . The answer is equal to $ 2 $ . First, let's add to the right one digit $ 4 $ (the result will be $ 10524 $ ). Then let's erase the digit $ 5 $ , so the result will be $ 1024 $ which is a power of $ 2 $ .\n\nE.g. consider $ n=8888 $ . The answer is equal to $ 3 $ . Let's erase any of the digits $ 8 $ three times. The result will be $ 8 $ which is a power of $ 2 $ .\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case consists of one line containing one integer $ n $ ( $ 1 \\le n \\le 10^9 $ ).\n\nOutput Format\nFor each test case, output in a separate line one integer $ m $ — the minimum number of moves to transform the number into any power of $ 2 $ .\n\nExamples\nSample 1\nInput\n12\n1052\n8888\n6\n75\n128\n1\n301\n12048\n1504\n6656\n1000000000\n687194767\nOutput\n2\n3\n1\n3\n0\n0\n2\n1\n3\n4\n9\n2\n\nNote\nThe answer for the first test case was considered above.\n\nThe answer for the second test case was considered above.\n\nIn the third test case, it's enough to add to the right the digit $ 4 $ — the number $ 6 $ will turn into $ 64 $ .\n\nIn the fourth test case, let's add to the right the digit $ 8 $ and then erase $ 7 $ and $ 5 $ — the taken number will turn into $ 8 $ .\n\nThe numbers of the fifth and the sixth test cases are already powers of two so there's no need to make any move.\n\nIn the seventh test case, you can delete first of all the digit $ 3 $ (the result is $ 01 $ ) and then the digit $ 0 $ (the result is $ 1 $ )."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nconst\nll P2LIM\n=\n(\nll\n)\n2e18\n;\nint\nsolve\n(\nstring\ns\n,\nstring\nt\n)\n{\nint\ntp\n=\n0\n;\nint\nsp\n=\n0\n;\nint\ntaken\n=\n0\n;\nwhile\n(\nsp\n<\ns\n.\nlength\n()\n&&\ntp\n<\nt\n.\nlength\n())\n{\nif\n(\ns\n[\nsp\n]\n==\nt\n[\ntp\n])\n{\ntaken\n++;\ntp\n++;\n}\nsp\n++;\n}\nreturn\n(\nint\n)\ns\n.\nlength\n()\n-\ntaken\n+\n(\nint\n)\nt\n.\nlength\n()\n-\ntaken\n;\n}\nvector\n<string>\nts\n;\nint\nmain\n()\n{\nfor\n(\nll p2\n=\n1\n;\np2\n<=\nP2LIM\n;\np2\n*=\n2\n)\nts\n.\npush_back\n(\nto_string\n(\np2\n));\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nstring\nn\n;\ncin\n>>\nn\n;\nint\nans\n=\nn\n.\nlength\n()\n+\n1\n;\nfor\n(\nauto\np2\n:\nts\n)\nans\n=\nmin\n(\nans\n,\nsolve\n(\nn\n,\np2\n));\ncout\n<<\nans\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

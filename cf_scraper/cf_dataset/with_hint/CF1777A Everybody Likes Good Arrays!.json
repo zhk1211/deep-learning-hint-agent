@@ -1,0 +1,44 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAn array $ a $ is good if for all pairs of adjacent elements, $ a_i $ and $ a_{i+1} $ ( $ 1\\le i \\lt n $ ) are of different parity. Note that an array of size $ 1 $ is trivially good.\n\nYou are given an array of size $ n $ .\n\nIn one operation you can select any pair of adjacent elements in which both elements are of the same parity, delete them, and insert their product in the same position.\n\nFind the minimum number of operations to form a good array.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 500 $ ). The description of the test cases follows.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\le n \\le 100 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1,a_2,\\ldots,a_n $ ( $ 1 \\le a_i \\le 10^{9} $ ).\n\nOutput Format\nFor each test case print an integer, the minimum number of operations required to form a good array.\n\nExamples\nSample 1\nInput\n3\n5\n1 7 11 2 13\n4\n1 2 3 4\n6\n1 1 1 2 2 3\nOutput\n2\n0\n3\n\nNote\nConsider the first test case. Select the $ 2 $ -nd and the $ 3 $ -rd integers and apply the operation on them. The array changes from $ [1, \\color{red}{7}, \\color{red}{11}, 2, 13] $ to $ [1, \\color{red}{77}, 2, 13] $ . Next, select the $ 1 $ -st and the $ 2 $ -nd integers, array changes from $ [\\color{red}{1}, \\color{red}{77}, 2, 13] $ to $ [\\color{red}{77}, 2, 13] $ . Thus we require $ 2 $ operations. It can be proved that this is the minimum number of operations.\n\nIn the second test case, the given array is already good. So we require $ 0 $ operations."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nTry to make the problem simpler.\nHint 2\nParity?\nHint 3\nTry replacing even numbers with $$$0$$$ and odd numbers with $$$1$$$ in other words consider all numbers modulo $$$2$$$.\nHint 4\nThink harder! It works!"
+        },
+        {
+            "title": "Hint 1",
+            "content": "Try to make the problem simpler."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Parity?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Try replacing even numbers with $$$0$$$ and odd numbers with $$$1$$$ in other words consider all numbers modulo $$$2$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Think harder! It works!"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation (C++)",
+            "content": "/* Enjoying CP as always!*/\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nint\nlong\nlong\nsigned\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\n//Take input\nint\nn\n;\ncin\n>>\nn\n;\nint\na\n[\nn\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\n}\n//initialize answer..\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n+\n1\n<\nn\n;\ni\n++)\n{\nans\n+=(!((\na\n[\ni\n]^\na\n[\ni\n+\n1\n])&\n1\n));\n/*XOR the two numbers and check 0th bit in the resultant, if it is 1\n            then, numbers are of different parity, otherwise both are of same parity*/\n}\ncout\n<<\nans\n<<\n\"\\n\"\n;\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Implementation (Python)",
+            "content": "def\nmain\n():\nT\n=\nint\n(\ninput\n())\nwhile\nT\n>\n0\n:\nT\n=\nT\n-\n1\nn\n=\nint\n(\ninput\n())\na\n=\n[\nint\n(\nx\n)\nfor\nx\nin\ninput\n().\nsplit\n()]\nans\n=\n0\nfor\ni\nin\nrange\n(\n1\n,\nn\n):\nans\n+=\n1\n-\n((\na\n[\ni\n]\n+\na\n[\ni\n-\n1\n])\n&\n1\n)\nprint\n(\nans\n)\nif\n__name__\n==\n'__main__'\n:\nmain\n()"
+        }
+    ]
+}

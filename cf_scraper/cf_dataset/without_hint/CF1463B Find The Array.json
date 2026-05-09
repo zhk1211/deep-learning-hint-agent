@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ [a_1, a_2, \\dots, a_n] $ such that $ 1 \\le a_i \\le 10^9 $ . Let $ S $ be the sum of all elements of the array $ a $ .\n\nLet's call an array $ b $ of $ n $ integers beautiful if:\n\n- $ 1 \\le b_i \\le 10^9 $ for each $ i $ from $ 1 $ to $ n $ ;\n- for every pair of adjacent integers from the array $ (b_i, b_{i + 1}) $ , either $ b_i $ divides $ b_{i + 1} $ , or $ b_{i + 1} $ divides $ b_i $ (or both);\n- $ 2 \\sum \\limits_{i = 1}^{n} |a_i - b_i| \\le S $ .\n\nYour task is to find any beautiful array. It can be shown that at least one beautiful array always exists.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nEach test case consists of two lines. The first line contains one integer $ n $ ( $ 2 \\le n \\le 50 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nOutput Format\nFor each test case, print the beautiful array $ b_1, b_2, \\dots, b_n $ ( $ 1 \\le b_i \\le 10^9 $ ) on a separate line. It can be shown that at least one beautiful array exists under these circumstances. If there are multiple answers, print any of them.\n\nExamples\nSample 1\nInput\n4\n5\n1 2 3 4 5\n2\n4 6\n2\n1 1000000000\n6\n3 4 8 1 2 3\nOutput\n3 3 3 3 3\n3 6\n1 1000000000\n4 4 8 1 3 3"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Ne0n25)",
+            "content": "for\nt\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\ns\n=\nsum\n(\na\n)\ncur\n=\n[\n0\n,\n0\n]\nfor\ni\nin\nrange\n(\nn\n):\ncur\n[\ni\n%\n2\n]\n+=\na\n[\ni\n]\n-\n1\nfor\nj\nin\nrange\n(\n2\n):\nif\n2\n*\ncur\n[\nj\n]\n>\ns\n:\ncontinue\nfor\ni\nin\nrange\n(\nn\n):\nif\ni\n%\n2\n==\nj\n:\na\n[\ni\n]\n=\n1\nbreak\nprint\n(*\na\n)"
+        }
+    ]
+}

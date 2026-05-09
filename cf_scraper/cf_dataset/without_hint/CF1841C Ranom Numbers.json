@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nNo, not \"random\" numbers.\n\nRanom digits are denoted by uppercase Latin letters from A to E. Moreover, the value of the letter A is $ 1 $ , B is $ 10 $ , C is $ 100 $ , D is $ 1000 $ , E is $ 10000 $ .\n\nA Ranom number is a sequence of Ranom digits. The value of the Ranom number is calculated as follows: the values of all digits are summed up, but some digits are taken with negative signs: a digit is taken with negative sign if there is a digit with a strictly greater value to the right of it (not necessarily immediately after it); otherwise, that digit is taken with a positive sign.\n\nFor example, the value of the Ranom number DAAABDCA is $ 1000 - 1 - 1 - 1 - 10 + 1000 + 100 + 1 = 2088 $ .\n\nYou are given a Ranom number. You can change no more than one digit in it. Calculate the maximum possible value of the resulting number.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe only line of each test case contains a string $ s $ ( $ 1 \\le |s| \\le 2 \\cdot 10^5 $ ) consisting of uppercase Latin letters from A to E — the Ranom number you are given.\n\nThe sum of the string lengths over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single integer — the maximum possible value of the number, if you can change no more than one digit in it.\n\nExamples\nSample 1\nInput\n4\nDAAABDCA\nAB\nABCDEEDCBA\nDDDDAAADDABECD\nOutput\n11088\n10010\n31000\n15886\n\nNote\nIn the first example, you can get EAAABDCA with the value $ 10000-1-1-1-10+1000+100+1=11088 $ .\n\nIn the second example, you can get EB with the value $ 10000+10=10010 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution 1 (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nval\n[]\n=\n{\n1\n,\n10\n,\n100\n,\n1000\n,\n10000\n};\nconst\nint\nINF\n=\n1e9\n;\nstring\ns\n;\nint\ndp\n[\n2\n][\n5\n][\n2\n];\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\ncin\n>>\ns\n;\nreverse\n(\ns\n.\nbegin\n(),\ns\n.\nend\n());\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n5\n;\n++\nj\n)\ndp\n[\n0\n][\nj\n][\n0\n]\n=\ndp\n[\n0\n][\nj\n][\n1\n]\n=\n-\nINF\n;\ndp\n[\n0\n][\n0\n][\n0\n]\n=\n0\n;\nfor\n(\nauto\nc\n:\ns\n)\n{\nint\nx\n=\nc\n-\n'A'\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n5\n;\n++\nj\n)\ndp\n[\n1\n][\nj\n][\n0\n]\n=\ndp\n[\n1\n][\nj\n][\n1\n]\n=\n-\nINF\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n5\n;\n++\nj\n)\n{\nfor\n(\nint\nt\n=\n0\n;\nt\n<\n2\n;\n++\nt\n)\n{\nfor\n(\nint\ny\n=\n0\n;\ny\n<\n5\n;\n++\ny\n)\n{\nint\nnj\n=\nmax\n(\nj\n,\ny\n);\nint\nnt\n=\nt\n+\n(\nx\n!=\ny\n);\nif\n(\nnt\n<\n2\n)\ndp\n[\n1\n][\nnj\n][\nnt\n]\n=\nmax\n(\ndp\n[\n1\n][\nnj\n][\nnt\n],\ndp\n[\n0\n][\nj\n][\nt\n]\n+\n(\ny\n<\nnj\n?\n-\nval\n[\ny\n]\n:\nval\n[\ny\n]));\n}\n}\n}\nswap\n(\ndp\n[\n0\n],\ndp\n[\n1\n]);\n}\nint\nans\n=\n-\nINF\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n5\n;\n++\nj\n)\nans\n=\nmax\n(\nans\n,\nmax\n(\ndp\n[\n0\n][\nj\n][\n0\n],\ndp\n[\n0\n][\nj\n][\n1\n]));\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        },
+        {
+            "title": "Solution 2 (BledDest)",
+            "content": "def\nreplace_char\n(\ns\n,\ni\n,\nc\n):\nreturn\ns\n[:\ni\n]\n+\nc\n+\ns\n[\ni\n+\n1\n:]\ndef\nid\n(\nc\n):\nreturn\nord\n(\nc\n)\n-\nord\n(\n'A'\n)\ndef\nevaluate\n(\ns\n):\nt\n=\ns\n[::-\n1\n]\nans\n=\n0\nmax_id\n=\n-\n1\nfor\nx\nin\nt\n:\ni\n=\nid\n(\nx\n)\nif\nmax_id\n>\ni\n:\nans\n-=\n10\n**\ni\nelse\n:\nans\n+=\n10\n**\ni\n        max_id\n=\nmax\n(\nmax_id\n,\ni\n)\nreturn\nans\n\nt\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\ns\n=\ninput\n()\ncandidates\n=\n[]\nfor\nx\nin\n[\n'A'\n,\n'B'\n,\n'C'\n,\n'D'\n,\n'E'\n]:\nfor\ny\nin\n[\n'A'\n,\n'B'\n,\n'C'\n,\n'D'\n,\n'E'\n]:\nif\nnot\n(\nx\nin\ns\n):\ncontinue\ncandidates\n.\nappend\n(\nreplace_char\n(\ns\n,\ns\n.\nfind\n(\nx\n),\ny\n))\ncandidates\n.\nappend\n(\nreplace_char\n(\ns\n,\ns\n.\nrfind\n(\nx\n),\ny\n))\nprint\n(\nmax\n(\nmap\n(\nevaluate\n,\ncandidates\n)))"
+        }
+    ]
+}

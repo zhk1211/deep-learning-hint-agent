@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nBerland State University has received a new update for the operating system. Initially it is installed only on the $ 1 $ -st computer.\n\nUpdate files should be copied to all $ n $ computers. The computers are not connected to the internet, so the only way to transfer update files from one computer to another is to copy them using a patch cable (a cable connecting two computers directly). Only one patch cable can be connected to a computer at a time. Thus, from any computer where the update files are installed, they can be copied to some other computer in exactly one hour.\n\nYour task is to find the minimum number of hours required to copy the update files to all $ n $ computers if there are only $ k $ patch cables in Berland State University.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^5 $ ) — the number of test cases.\n\nEach test case consists of a single line that contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 10^{18} $ ) — the number of computers and the number of patch cables.\n\nOutput Format\nFor each test case print one integer — the minimum number of hours required to copy the update files to all $ n $ computers.\n\nExamples\nSample 1\nInput\n4\n8 3\n6 6\n7 1\n1 1\nOutput\n4\n3\n6\n0\n\nNote\nLet's consider the test cases of the example:\n\n- $ n=8 $ , $ k=3 $ :\n1. during the first hour, we copy the update files from the computer $ 1 $ to the computer $ 2 $ ;\n2. during the second hour, we copy the update files from the computer $ 1 $ to the computer $ 3 $ , and from the computer $ 2 $ to the computer $ 4 $ ;\n3. during the third hour, we copy the update files from the computer $ 1 $ to the computer $ 5 $ , from the computer $ 2 $ to the computer $ 6 $ , and from the computer $ 3 $ to the computer $ 7 $ ;\n4. during the fourth hour, we copy the update files from the computer $ 2 $ to the computer $ 8 $ .\n- $ n=6 $ , $ k=6 $ :\n1. during the first hour, we copy the update files from the computer $ 1 $ to the computer $ 2 $ ;\n2. during the second hour, we copy the update files from the computer $ 1 $ to the computer $ 3 $ , and from the computer $ 2 $ to the computer $ 4 $ ;\n3. during the third hour, we copy the update files from the computer $ 1 $ to the computer $ 5 $ , and from the computer $ 2 $ to the computer $ 6 $ .\n- $ n=7 $ , $ k=1 $ :\n1. during the first hour, we copy the update files from the computer $ 1 $ to the computer $ 2 $ ;\n2. during the second hour, we copy the update files from the computer $ 1 $ to the computer $ 3 $ ;\n3. during the third hour, we copy the update files from the computer $ 1 $ to the computer $ 4 $ ;\n4. during the fourth hour, we copy the update files from the computer $ 4 $ to the computer $ 5 $ ;\n5. during the fifth hour, we copy the update files from the computer $ 4 $ to the computer $ 6 $ ;\n6. during the sixth hour, we copy the update files from the computer $ 3 $ to the computer $ 7 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nli\n=\nlong\nlong\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nli n\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nli ans\n=\n0\n,\ncur\n=\n1\n;\nwhile\n(\ncur\n<\nk\n)\n{\ncur\n*=\n2\n;\n++\nans\n;\n}\nif\n(\ncur\n<\nn\n)\nans\n+=\n(\nn\n-\ncur\n+\nk\n-\n1\n)\n/\nk\n;\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVlad, like everyone else, loves to sleep very much.\n\nEvery day Vlad has to do $ n $ things, each at a certain time. For each of these things, he has an alarm clock set, the $ i $ -th of them is triggered on $ h_i $ hours $ m_i $ minutes every day ( $ 0 \\le h_i < 24, 0 \\le m_i < 60 $ ). Vlad uses the $ 24 $ -hour time format, so after $ h=12, m=59 $ comes $ h=13, m=0 $ and after $ h=23, m=59 $ comes $ h=0, m=0 $ .\n\nThis time Vlad went to bed at $ H $ hours $ M $ minutes ( $ 0 \\le H < 24, 0 \\le M < 60 $ ) and asks you to answer: how much he will be able to sleep until the next alarm clock.\n\nIf any alarm clock rings at the time when he went to bed, then he will sleep for a period of time of length $ 0 $ .\n\nInput Format\nThe first line of input data contains an integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases in the test.\n\nThe first line of the case contains three integers $ n $ , $ H $ and $ M $ ( $ 1 \\le n \\le 10, 0 \\le H < 24, 0 \\le M < 60 $ ) — the number of alarms and the time Vlad went to bed.\n\nThe following $ n $ lines contain two numbers each $ h_i $ and $ m_i $ ( $ 0 \\le h_i < 24, 0 \\le m_i < 60 $ ) — the time of the $ i $ alarm. It is acceptable that two or more alarms will trigger at the same time.\n\nNumbers describing time do not contain leading zeros.\n\nOutput Format\nOutput $ t $ lines, each containing the answer to the corresponding test case. As an answer, output two numbers — the number of hours and minutes that Vlad will sleep, respectively. If any alarm clock rings at the time when he went to bed, the answer will be 0 0.\n\nExamples\nSample 1\nInput\n3\n1 6 13\n8 0\n3 6 0\n12 30\n14 45\n6 0\n2 23 35\n20 15\n10 30\nOutput\n1 47\n0 0\n10 55"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nint\nlong\nlong\n#define\npb emplace_back\n#define\nmp make_pair\n#define\nx first\n#define\ny second\n#define\nall\n(\na\n)\na\n.\nbegin\n(),\na\n.\nend\n()\n#define\nrall\n(\na\n)\na\n.\nrbegin\n(),\na\n.\nrend\n()\ntypedef\nlong\ndouble\nld\n;\ntypedef\nlong\nlong\nll\n;\nusing\nnamespace\nstd\n;\nmt19937 rnd\n(\n143\n);\nconst\nint\ninf\n=\n1e15\n;\nconst\nint\nM\n=\n1e9\n+\n7\n;\nconst\nld pi\n=\natan2\n(\n0\n,\n-\n1\n);\nconst\nld eps\n=\n1e-6\n;\nvoid\nsolve\n(){\nint\nn\n;\ncin\n>>\nn\n;\nint\ntime\n,\nh\n,\nm\n;\ncin\n>>\nh\n>>\nm\n;\ntime\n=\n60\n*\nh\n+\nm\n;\nint\nans\n=\n24\n*\n60\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n){\ncin\n>>\nh\n>>\nm\n;\nint\nt\n=\n60\n*\nh\n+\nm\n-\ntime\n;\nif\n(\nt\n<\n0\n)\nt\n+=\n24\n*\n60\n;\nans\n=\nmin\n(\nans\n,\nt\n);\n}\ncout\n<<\nans\n/\n60\n<<\n\" \"\n<<\nans\n%\n60\n;\n}\nbool\nmulti\n=\ntrue\n;\nsigned\nmain\n()\n{\nint\nt\n=\n1\n;\nif\n(\nmulti\n)\ncin\n>>\nt\n;\nfor\n(;\nt\n;\n--\nt\n)\n{\nsolve\n();\ncout\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ , consisting of lowercase English letters. In one operation, you are allowed to swap any two characters of the string $ s $ .\n\nA string $ s $ of length $ n $ is called an anti-palindrome, if $ s[i] \\ne s[n - i + 1] $ for every $ i $ ( $ 1 \\le i \\le n $ ). For example, the strings \"codeforces\", \"string\" are anti-palindromes, but the strings \"abacaba\", \"abc\", \"test\" are not.\n\nDetermine the minimum number of operations required to make the string $ s $ an anti-palindrome, or output $ -1 $ , if this is not possible.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nEach test case consists of two lines. The first line contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the string $ s $ .\n\nThe second line contains the string $ s $ , consisting of $ n $ lowercase English letters.\n\nThe sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum number of operations required to make the string $ s $ an anti-palindrome, or $ -1 $ if this is not possible.\n\nExamples\nSample 1\nInput\n10\n10\ncodeforces\n3\nabc\n10\ntaarrrataa\n10\ndcbdbdcccc\n4\nwwww\n12\ncabbaccabaac\n10\naadaaaaddc\n14\naacdaaaacadcdc\n6\nabccba\n12\ndcbcaebacccd\nOutput\n0\n-1\n1\n1\n-1\n3\n-1\n2\n2\n2\n\nNote\nIn the first test case, the string \"codeforces\" is already an anti-palindrome, so the answer is $ 0 $ .\n\nIn the second test case, it can be shown that the string \"abc\" cannot be transformed into an anti-palindrome by performing the allowed operations, so the answer is $ -1 $ .\n\nIn the third test case, it is enough to swap the second and the fifth characters of the string \"taarrrataa\", and the new string \"trararataa\" will be an anti-palindrome, so the answer is $ 1 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n(\nint\nn\n,\nstring\n&\ns\n)\n{\nif\n(\nn\n%\n2\n==\n1\n)\n{\ncout\n<<\n-\n1\n<<\nendl\n;\nreturn\n;\n}\nvector\n<int>\ncnt\n(\n26\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\n++\ncnt\n[\ns\n[\ni\n]\n-\n'a'\n];\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n26\n;\n++\ni\n)\n{\nif\n(\ncnt\n[\ni\n]\n*\n2\n>\nn\n)\n{\ncout\n<<\n-\n1\n<<\nendl\n;\nreturn\n;\n}\n}\nint\npairs\n=\n0\n;\nvector\n<int>\ncnt_pairs\n(\n26\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n*\n2\n<\nn\n;\n++\ni\n)\n{\nif\n(\ns\n[\ni\n]\n==\ns\n[\nn\n-\ni\n-\n1\n])\n{\n++\npairs\n;\n++\ncnt_pairs\n[\ns\n[\ni\n]\n-\n'a'\n];\n}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n26\n;\n++\ni\n)\n{\nif\n(\ncnt_pairs\n[\ni\n]\n*\n2\n>\npairs\n)\n{\ncout\n<<\ncnt_pairs\n[\ni\n]\n<<\nendl\n;\nreturn\n;\n}\n}\ncout\n<<\n(\npairs\n+\n1\n)\n/\n2\n<<\nendl\n;\n}\nint32_t\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\n_\n=\n0\n;\n_\n<\nt\n;\n++\n_\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nstring\ns\n;\ncin\n>>\ns\n;\nsolve\n(\nn\n,\ns\n);\n}\n}"
+        }
+    ]
+}

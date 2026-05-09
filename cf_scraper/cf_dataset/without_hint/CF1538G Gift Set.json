@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp has $ x $ of red and $ y $ of blue candies. Using them, he wants to make gift sets. Each gift set contains either $ a $ red candies and $ b $ blue candies, or $ a $ blue candies and $ b $ red candies. Any candy can belong to at most one gift set.\n\nHelp Polycarp to find the largest number of gift sets he can create.\n\nFor example, if $ x = 10 $ , $ y = 12 $ , $ a = 5 $ , and $ b = 2 $ , then Polycarp can make three gift sets:\n\n- In the first set there will be $ 5 $ red candies and $ 2 $ blue candies;\n- In the second set there will be $ 5 $ blue candies and $ 2 $ red candies;\n- In the third set will be $ 5 $ blue candies and $ 2 $ red candies.\n\nNote that in this example there is one red candy that Polycarp does not use in any gift set.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ). Then $ t $ test cases follow.\n\nEach test case consists of a single string containing four integers $ x $ , $ y $ , $ a $ , and $ b $ ( $ 1 \\le x, y, a, b \\le 10^9 $ ).\n\nOutput Format\nFor each test case, output one number — the maximum number of gift sets that Polycarp can make.\n\nExamples\nSample 1\nInput\n9\n10 12 2 5\n1 1 2 2\n52 311 13 27\n1000000000 1000000000 1 1\n1000000000 1 1 1000000000\n1 1000000000 1000000000 1\n1 2 1 1\n7 8 1 2\n4 1 2 3\nOutput\n3\n0\n4\n1000000000\n1\n1\n1\n5\n0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#include\n\"random\"\nusing\nnamespace\nstd\n;\nusing\nll\n=\nlong\nlong\n;\nusing\nld\n=\nlong\ndouble\n;\nusing\npii\n=\npair\n<\nint\n,\nint\n>;\nusing\ncd\n=\ncomplex\n<ld>\n;\nvoid\nsolve\n()\n{\nll x\n,\ny\n,\na\n,\nb\n;\ncin\n>>\nx\n>>\ny\n>>\na\n>>\nb\n;\nll l\n=\n0\n,\nr\n=\n1e9\n+\n100\n;\nif\n(\na\n==\nb\n)\n{\ncout\n<<\nmin\n(\nx\n,\ny\n)\n/\na\n<<\n\"\\n\"\n;\nreturn\n;\n}\nif\n(\na\n<\nb\n)\n{\nswap\n(\na\n,\nb\n);\n}\nwhile\n(\nr\n-\nl\n>\n1\n)\n{\nll m\n=\n(\nl\n+\nr\n)\n/\n2\n;\nll right\n=\nfloorl\n((\nx\n-\nm\n*\nb\n)\n*\n1.0l\n/\n(\na\n-\nb\n));\nll left\n=\nceill\n((\ny\n-\nm\n*\na\n)\n*\n1.0l\n/\n(\nb\n-\na\n));\nif\n(\nmax\n(\nleft\n,\n0ll\n)\n<=\nmin\n(\nright\n,\nm\n))\n{\nl\n=\nm\n;\n}\nelse\n{\nr\n=\nm\n;\n}\n}\ncout\n<<\nl\n<<\n\"\\n\"\n;\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

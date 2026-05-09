@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two arrays $ a $ and $ b $ , both of length $ n $ . All elements of both arrays are from $ 0 $ to $ n-1 $ .\n\nYou can reorder elements of the array $ b $ (if you want, you may leave the order of elements as it is). After that, let array $ c $ be the array of length $ n $ , the $ i $ -th element of this array is $ c_i = (a_i + b_i) \\% n $ , where $ x \\% y $ is $ x $ modulo $ y $ .\n\nYour task is to reorder elements of the array $ b $ to obtain the lexicographically minimum possible array $ c $ .\n\nArray $ x $ of length $ n $ is lexicographically less than array $ y $ of length $ n $ , if there exists such $ i $ ( $ 1 \\le i \\le n $ ), that $ x_i < y_i $ , and for any $ j $ ( $ 1 \\le j < i $ ) $ x_j = y_j $ .\n\nInput Format\nThe first line of the input contains one integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the number of elements in $ a $ , $ b $ and $ c $ .\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i < n $ ), where $ a_i $ is the $ i $ -th element of $ a $ .\n\nThe third line of the input contains $ n $ integers $ b_1, b_2, \\dots, b_n $ ( $ 0 \\le b_i < n $ ), where $ b_i $ is the $ i $ -th element of $ b $ .\n\nOutput Format\nPrint the lexicographically minimum possible array $ c $ . Recall that your task is to reorder elements of the array $ b $ and obtain the lexicographically minimum possible array $ c $ , where the $ i $ -th element of $ c $ is $ c_i = (a_i + b_i) \\% n $ .\n\nExamples\nSample 1\nInput\n4\n0 1 2 1\n3 2 1 1\nOutput\n1 0 0 2\n\nSample 2\nInput\n7\n2 5 1 5 3 4 3\n2 4 3 5 6 5 1\nOutput\n0 0 0 1 0 2 4"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nmultiset\n<int>\nb\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nint\nx\n;\ncin\n>>\nx\n;\nb\n.\ninsert\n(\nx\n);\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nauto\nit\n=\nb\n.\nlower_bound\n(\nn\n-\na\n[\ni\n]);\nif\n(\nit\n==\nb\n.\nend\n())\nit\n=\nb\n.\nbegin\n();\ncout\n<<\n(\na\n[\ni\n]\n+\n*\nit\n)\n%\nn\n<<\n\" \"\n;\nb\n.\nerase\n(\nit\n);\n}\ncout\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ of length $ n $ . We define the equality of the array as the number of indices $ 1 \\le i \\le n - 1 $ such that $ a_i = a_{i + 1} $ . We are allowed to do the following operation:\n\n- Select two integers $ i $ and $ x $ such that $ 1 \\le i \\le n - 1 $ and $ 1 \\le x \\le 10^9 $ . Then, set $ a_i $ and $ a_{i + 1} $ to be equal to $ x $ .\n\nFind the minimum number of operations needed such that the equality of the array is less than or equal to $ 1 $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains an integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10 ^ 5 $ ) — the length of array $ a $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — elements of the array.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10 ^ 5 $\n\nOutput Format\nFor each test case, print the minimum number of operations needed.\n\nExamples\nSample 1\nInput\n4\n5\n1 1 1 1 1\n5\n2 1 1 1 2\n6\n1 1 2 3 3 4\n6\n1 2 1 4 5 4\nOutput\n2\n1\n2\n0\n\nNote\nIn the first test case, we can select $ i=2 $ and $ x=2 $ to form $ [1, 2, 2, 1, 1] $ . Then, we can select $ i=3 $ and $ x=3 $ to form $ [1, 2, 3, 3, 1] $ .\n\nIn the second test case, we can select $ i=3 $ and $ x=100 $ to form $ [2, 1, 100, 100, 2] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nIf the array is $$$a=[1,1,\\ldots,1]$$$. We will need $$$0$$$ moves if $$$n \\leq 2$$$ and will need $$$\\max(n-3,1)$$$ moves.\nHint 2\nThe only way to reduce the number of $$$i$$$ such that $$$a_i = a_{i+1}$$$ is when $$$a_i = a_{i+1}$$$ and $$$a_{i+2} = a_{i+3}$$$, and you apply the operation on $$$a_{i+1}$$$ and $$$a_{i+2}$$$."
+        },
+        {
+            "title": "Hint 1",
+            "content": "If the array is $$$a=[1,1,\\ldots,1]$$$. We will need $$$0$$$ moves if $$$n \\leq 2$$$ and will need $$$\\max(n-3,1)$$$ moves."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The only way to reduce the number of $$$i$$$ such that $$$a_i = a_{i+1}$$$ is when $$$a_i = a_{i+1}$$$ and $$$a_{i+2} = a_{i+3}$$$, and you apply the operation on $$$a_{i+1}$$$ and $$$a_{i+2}$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Suppose $$$l$$$ is the smallest index where $$$a_l = a_{l+1}$$$ and r is the largest index where $$$a_r = a_{r+1}$$$. If $$$l=r$$$ or $$$l$$$ and $$$r$$$ does not exist, the condition is already satisfied and we can do 0 operations. Otherwise, the answer is $$$\\max(1, r - l - 1)$$$. The proof is as follows:\nSuppose $$$l+1=r$$$, then, there are 3 elements that are adjacent to each other. Hence, we can just do one operation with $$$i=l$$$ and $$$x=\\infty$$$ to make the equality of the array 1.\nSuppose otherwise, then the array will look something like $$$[..., X, X, ..., Y, Y, ...]$$$, with $$$r - l - 2$$$ elements between the second $$$X$$$ and the first $$$Y$$$. Then, we can do operations on $$$i={l+1, l+2, \\ldots, r-2, r-1}$$$ to make the equality of the array 1.\nTo see why we need at least $$$r - l - 1$$$ operations, observe that each operation will cause $$$r - l$$$ to decrease by at most 1. This is because if we do not do an operation on $$$i \\in \\{l-1,l+1,r-1,r+1\\}$$$, then both $$$a_l = a_{l+1}$$$ and $$$a_r = a_{r+1}$$$ will still hold. We see that $$$r-l$$$ only decreases when do we an operation on $$$i \\in {l+1,r-1}$$$ and it is not too hard to show that it only decreases by $$$1$$$ in those cases while $$$r-l \\gt 2$$$\nHence, we keep doing the operation until $$$r - l = 2$$$, which will only require 1 operation to change both pairs and make the equality 1."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntemplate\n<\nclass\nT\n>\ninline\nbool\nmnto\n(\nT\n&\na\n,\nT b\n)\n{\nreturn\na\n>\nb\n?\na\n=\nb\n,\n1\n:\n0\n;}\ntemplate\n<\nclass\nT\n>\ninline\nbool\nmxto\n(\nT\n&\na\n,\nT b\n)\n{\nreturn\na\n<\nb\n?\na\n=\nb\n,\n1\n:\n0\n;}\n#define\nREP\n(\ni\n,\ns\n,\ne\n)\nfor\n(\nint\ni\n=\ns\n;\ni\n<\ne\n;\ni\n++)\n#define\nRREP\n(\ni\n,\ns\n,\ne\n)\nfor\n(\nint\ni\n=\ns\n;\ni\n>=\ne\n;\ni\n--)\ntypedef\nlong\nlong\nll\n;\ntypedef\nlong\ndouble\nld\n;\n#define\nMP make_pair\n#define\nFI first\n#define\nSE second\ntypedef\npair\n<\nint\n,\nint\n>\nii\n;\ntypedef\npair\n<\nll\n,\nll\n>\npll\n;\n#define\nMT make_tuple\ntypedef\ntuple\n<\nint\n,\nint\n,\nint\n>\niii\n;\n#define\nALL\n(\n_a\n)\n_a\n.\nbegin\n(),\n_a\n.\nend\n()\n#define\npb push_back\ntypedef\nvector\n<int>\nvi\n;\ntypedef\nvector\n<ll>\nvll\n;\ntypedef\nvector\n<ii>\nvii\n;\n#ifndef\nDEBUG\n#define\ncerr\nif\n(\n0\n)\ncerr\n#endif\n#define\nINF\n1000000005\n#define\nLINF\n1000000000000000005ll\n#define\nMAXN\n200005\nint\nt\n;\nint\nn\n;\nint\na\n[\nMAXN\n];\nint\nmain\n()\n{\n#ifndef\nDEBUG\n    ios\n::\nsync_with_stdio\n(\n0\n),\ncin\n.\ntie\n(\n0\n);\n#endif\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\ncin\n>>\nn\n;\nREP\n(\ni\n,\n0\n,\nn\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nint\nmn\n=\n-\n1\n,\nmx\n=\n-\n1\n;\nREP\n(\ni\n,\n1\n,\nn\n)\n{\nif\n(\na\n[\ni\n]\n==\na\n[\ni\n-\n1\n])\n{\nif\n(\nmn\n==\n-\n1\n)\n{\nmn\n=\ni\n;\n}\nmx\n=\ni\n;\n}\n}\nif\n(\nmn\n==\nmx\n)\n{\ncout\n<<\n0\n<<\n'\\n'\n;\n}\nelse\n{\ncout\n<<\nmax\n(\n1\n,\nmx\n-\nmn\n-\n1\n)\n<<\n'\\n'\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

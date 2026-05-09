@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp has $ 26 $ tasks. Each task is designated by a capital letter of the Latin alphabet.\n\nThe teacher asked Polycarp to solve tasks in the following way: if Polycarp began to solve some task, then he must solve it to the end, without being distracted by another task. After switching to another task, Polycarp cannot return to the previous task.\n\nPolycarp can only solve one task during the day. Every day he wrote down what task he solved. Now the teacher wants to know if Polycarp followed his advice.\n\nFor example, if Polycarp solved tasks in the following order: \"DDBBCCCBBEZ\", then the teacher will see that on the third day Polycarp began to solve the task 'B', then on the fifth day he got distracted and began to solve the task 'C', on the eighth day Polycarp returned to the task 'B'. Other examples of when the teacher is suspicious: \"BAB\", \"AABBCCDDEEBZZ\" and \"AAAAZAAAAA\".\n\nIf Polycarp solved the tasks as follows: \"FFGZZZY\", then the teacher cannot have any suspicions. Please note that Polycarp is not obligated to solve all tasks. Other examples of when the teacher doesn't have any suspicious: \"BA\", \"AFFFCC\" and \"YYYYY\".\n\nHelp Polycarp find out if his teacher might be suspicious.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 1000 $ ). Then $ t $ test cases follow.\n\nThe first line of each test case contains one integer $ n $ ( $ 1 \\le n \\le 50 $ ) — the number of days during which Polycarp solved tasks.\n\nThe second line contains a string of length $ n $ , consisting of uppercase Latin letters, which is the order in which Polycarp solved the tasks.\n\nOutput Format\nFor each test case output:\n\n- \"YES\", if the teacher cannot be suspicious;\n- \"NO\", otherwise.\n\nYou may print every letter in any case you want (so, for example, the strings yEs, yes, Yes and YES are all recognized as positive answer).\n\nExamples\nSample 1\nInput\n5\n3\nABA\n11\nDDBBCCCBBEZ\n7\nFFGZZZY\n1\nZ\n2\nAB\nOutput\nNO\nNO\nYES\nYES\nYES"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nll\n=\nlong\nlong\n;\nusing\nld\n=\nlong\ndouble\n;\nusing\npii\n=\npair\n<\nint\n,\nint\n>;\nusing\ncd\n=\ncomplex\n<ld>\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nstring\ns\n;\ncin\n>>\ns\n;\nfor\n(\nchar\nc\n=\n'A'\n;\nc\n<=\n'Z'\n;\nc\n++)\n{\nint\nfirst\n=\nn\n;\nint\nlast\n=\n-\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\ns\n[\ni\n]\n==\nc\n)\n{\nfirst\n=\nmin\n(\nfirst\n,\ni\n);\nlast\n=\nmax\n(\nlast\n,\ni\n);\n}\n}\nfor\n(\nint\ni\n=\nfirst\n;\ni\n<=\nlast\n;\ni\n++)\n{\nif\n(\ns\n[\ni\n]\n!=\nc\n)\n{\ncout\n<<\n\"NO\\n\"\n;\nreturn\n;\n}\n}\n}\ncout\n<<\n\"YES\\n\"\n;\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

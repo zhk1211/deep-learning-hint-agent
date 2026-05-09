@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet $ F_k $ denote the $ k $ -th term of Fibonacci sequence, defined as below:\n\n- $ F_0 = F_1 = 1 $\n- for any integer $ n \\geq 0 $ , $ F_{n+2} = F_{n+1} + F_n $\n\nYou are given a tree with $ n $ vertices. Recall that a tree is a connected undirected graph without cycles.\n\nWe call a tree a Fib-tree, if its number of vertices equals $ F_k $ for some $ k $ , and at least one of the following conditions holds:\n\n- The tree consists of only $ 1 $ vertex;\n- You can divide it into two Fib-trees by removing some edge of the tree.\n\nDetermine whether the given tree is a Fib-tree or not.\n\nInput Format\nThe first line of the input contains a single integer $ n $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ ) — the number of vertices in the tree.\n\nThen $ n-1 $ lines follow, each of which contains two integers $ u $ and $ v $ ( $ 1\\leq u,v \\leq n $ , $ u \\neq v $ ), representing an edge between vertices $ u $ and $ v $ . It's guaranteed that given edges form a tree.\n\nOutput Format\nPrint \"YES\" if the given tree is a Fib-tree, or \"NO\" otherwise.\n\nYou can print your answer in any case. For example, if the answer is \"YES\", then the output \"Yes\" or \"yeS\" will also be considered as correct answer.\n\nExamples\nSample 1\nInput\n3\n1 2\n2 3\nOutput\nYES\n\nSample 2\nInput\n5\n1 2\n1 3\n1 4\n1 5\nOutput\nNO\n\nSample 3\nInput\n5\n1 3\n1 2\n4 5\n3 4\nOutput\nYES\n\nNote\nIn the first sample, we can cut the edge $ (1, 2) $ , and the tree will be split into $ 2 $ trees of sizes $ 1 $ and $ 2 $ correspondently. Any tree of size $ 2 $ is a Fib-tree, as it can be split into $ 2 $ trees of size $ 1 $ .\n\nIn the second sample, no matter what edge we cut, the tree will be split into $ 2 $ trees of sizes $ 1 $ and $ 4 $ . As $ 4 $ isn't $ F_k $ for any $ k $ , it's not Fib-tree.\n\nIn the third sample, here is one possible order of cutting the edges so that all the trees in the process are Fib-trees: $ (1, 3), (1, 2), (4, 5), (3, 4) $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "The only pair $$$(j,k)$$$ that satisfies $$$F_i=F_j+F_k$$$ is $$$(i-1,i-2)$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Firstly, we can discover that we can only cut a tree in the size of $$$f_{i}$$$ into one in size of $$$f_{i-1}$$$ and one in size of $$$f_{i-2}$$$.\nProof\nWe want to show that the only solution to $$$F_i=F_j+F_k$$$ is $$$(j,k)=(i-1,i-2)$$$ for $$$j \\geq k$$$.\nClearly, $$$i \\gt j$$$, otherwise, $$$F_i \\lt F_j+F_k$$$.\nFurthermore, $$$j \\gt i-2$$$ as $$$F_i \\gt 2 \\cdot F_{i-2}$$$.\nTherefore, we have shown the only solution is $$$(j,k)=(i-1,i-2)$$$.\nHowever, we will have 2 ways to partition the tree sometimes. But it turns out we can cut any edge!\nWe will prove that if some edge cuts Fib-tree of $$$F_n$$$ vertices into trees with sizes $$$F_{n-1}$$$ and $$$F_{n-2}$$$, we can cut it, and the resulting trees are also Fib-trees.\nProof\nBy induction. For $$$n = 2$$$ it's obvious.\nIf only edge cuts Fib-tree into trees with sizes $$$F_{n-1}$$$ and $$$F_{n-2}$$$, we have to cut it.\nIf there are two such edges: suppose that cutting the first edge results in making two Fib-trees. Then in the tree of size $$$F_{n-1}$$$ the second edge divides it into trees of sizes $$$F_{n-2}$$$ and $$$F_{n-3}$$$, so we can cut it as well in the next step. But then we could as well cut the second edge first: we will have one Fib-tree of size $$$F_{n-2}$$$, and one tree of size $$$F_{n-1}$$$ which is cut into Fib-trees of sizes $$$F_{n-2}$$$ and $$$F_{n-3}$$$ by the first edge, so it's also a Fib-tree!\nBecause the growth of Fibonacci sequence is approximately $$$O(\\phi^n)$$$, we only need to cut our tree $$$O(\\log_\\phi n)$$$ times: every time, if we find the splitting edge, we cut it, and recurse to the resulting trees, if at some point there was no splitting edge — tree isn't Fib-tree.\nFinally, we got an $$$O(n\\log_\\phi n)$$$ solution."
+        }
+    ]
+}

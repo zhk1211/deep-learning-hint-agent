@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou will be given a weighted directed graph of $ n $ nodes and $ m $ directed edges, where the $ i $ -th edge has a weight of $ w_i $ ( $ 1 \\le i \\le m $ ).\n\nYou need to reverse some edges of this graph so that there is at least one node in the graph from which every other node is reachable. The cost of these reversals is equal to the maximum weight of all reversed edges. If no edge reversal is required, assume the cost to be $ 0 $ .\n\nIt is guaranteed that no self-loop or duplicate edge exists.\n\nFind the minimum cost required for completing the task. If there is no solution, print a single integer $ -1 $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^5 $ ). The description of the test cases follows.\n\nEach test case begins with a line containing two integers $ n $ and $ m $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ , $ 1 \\le m \\le 2 \\cdot 10^5 $ ) — the number of nodes in the graph and the number of edges in the graph.\n\nThe next $ m $ lines of each test case contain $ 3 $ integers each — $ u $ , $ v $ , $ w $ ( $ 1 \\le u, v \\le n $ , $ 1 \\le w \\le 10^9 $ ), indicating an edge from $ u $ to $ v $ with a weight of $ w $ . It is guaranteed that no edge connects a vertex to itself, and no pair of edges share the same origin and destination simultaneously.\n\nIt is guaranteed that the sum of $ n $ and the sum of $ m $ over all test cases do not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output the minimum cost. If there is no solution, print $ -1 $ .\n\nExamples\nSample 1\nInput\n4\n2 1\n1 2 3\n5 4\n1 2 10\n2 3 10\n3 1 10\n4 5 10\n4 5\n1 2 10000\n2 3 20000\n1 3 30000\n4 2 500\n4 3 20\n4 5\n1 2 10000\n2 3 20000\n1 3 30000\n4 2 5\n4 3 20\nOutput\n0\n-1\n20\n5\n\nNote\nIn the first test case, an edge exists from $ 1 $ to $ 2 $ , so all nodes are reachable (from $ 1 $ ).\n\nIn the second test case, no nodes are reachable from any node no matter what edges we reverse, so the answer is $ -1 $ .\n\nIn the third test case, reversing the $ 4 $ -th or $ 5 $ -th edge allows all nodes to be reachable from $ 1 $ . We choose the $ 5 $ -th edge here because its weight is smaller."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nIf the cost is c, all edges with weight less than or equal to c are reversible.\nHint 2\nIf an edge can be reversed, can it be treated as bidirectional?\nHint 3\nLet there exist a set of possible starting nodes. If this set is non empty, the highest node h in the topological ordering of nodes will always be present in the set. Think why."
+        },
+        {
+            "title": "Hint 1",
+            "content": "If the cost is c, all edges with weight less than or equal to c are reversible."
+        },
+        {
+            "title": "Hint 2",
+            "content": "If an edge can be reversed, can it be treated as bidirectional?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Let there exist a set of possible starting nodes. If this set is non empty, the highest node h in the topological ordering of nodes will always be present in the set. Think why."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation (C++)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n// Using Kosa Raju, we guarantee the topmost element (indicated by root) of stack is from the root SCC\nvoid\nDFS\n(\nint\nv\n,\nbool\nvisited\n[],\nint\n&\nroot\n,\nvector\n<int>\nedges\n[])\n{\nvisited\n[\nv\n]\n=\ntrue\n;\nfor\n(\nauto\nit\n:\nedges\n[\nv\n])\nif\n(!\nvisited\n[\nit\n])\nDFS\n(\nit\n,\nvisited\n,\nroot\n,\nedges\n);\nroot\n=\nv\n;\n}\nint\ncnt\n(\nint\nv\n,\nbool\nvisited\n[],\nvector\n<int>\nedges\n[])\n{\nint\nans\n=\n1\n;\nvisited\n[\nv\n]\n=\ntrue\n;\nfor\n(\nauto\nit\n:\nedges\n[\nv\n])\nif\n(!\nvisited\n[\nit\n])\nans\n+=\ncnt\n(\nit\n,\nvisited\n,\nedges\n);\nreturn\nans\n;\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n--)\n{\nint\ni\n,\nj\n,\nn\n,\nm\n,\nu\n,\nv\n,\nw\n;\ncin\n>>\nn\n>>\nm\n;\nvector\n<\npair\n<\nint\n,\nint\n>>\nog_edges\n[\nn\n];\nfor\n(\ni\n=\n0\n;\ni\n<\nm\n;\ni\n++)\n{\ncin\n>>\nu\n>>\nv\n>>\nw\n;\nu\n--,\nv\n--;\nog_edges\n[\nu\n].\npush_back\n({\nv\n,\nw\n});\n}\nint\nl\n=\n-\n1\n,\nr\n=\n1e9\n+\n1\n,\nmid\n;\nwhile\n(\nr\n-\nl\n>\n1\n)\n{\nmid\n=\nl\n+\n(\nr\n-\nl\n)\n/\n2\n;\nvector\n<int>\nedges\n[\nn\n];\nfor\n(\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nfor\n(\nauto\nit\n:\nog_edges\n[\ni\n])\n{\nedges\n[\ni\n].\npush_back\n(\nit\n.\nfirst\n);\nif\n(\nit\n.\nsecond\n<=\nmid\n)\nedges\n[\nit\n.\nfirst\n].\npush_back\n(\ni\n);\n}\n}\nbool\nvisited\n[\nn\n]\n=\n{};\nint\nroot\n;\nfor\n(\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(!\nvisited\n[\ni\n])\nDFS\n(\ni\n,\nvisited\n,\nroot\n,\nedges\n);\n}\nmemset\n(\nvisited\n,\nfalse\n,\nsizeof\n(\nvisited\n));\nif\n(\ncnt\n(\nroot\n,\nvisited\n,\nedges\n)\n==\nn\n)\nr\n=\nmid\n;\nelse\nl\n=\nmid\n;\n}\nif\n(\nr\n==\n1e9\n+\n1\n)\nr\n=\n-\n1\n;\ncout\n<<\nr\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

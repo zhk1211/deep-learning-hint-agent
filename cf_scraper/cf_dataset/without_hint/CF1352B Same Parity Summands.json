@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two positive integers $ n $ ( $ 1 \\le n \\le 10^9 $ ) and $ k $ ( $ 1 \\le k \\le 100 $ ). Represent the number $ n $ as the sum of $ k $ positive integers of the same parity (have the same remainder when divided by $ 2 $ ).\n\nIn other words, find $ a_1, a_2, \\ldots, a_k $ such that all $ a_i>0 $ , $ n = a_1 + a_2 + \\ldots + a_k $ and either all $ a_i $ are even or all $ a_i $ are odd at the same time.\n\nIf such a representation does not exist, then report it.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases in the input. Next, $ t $ test cases are given, one per line.\n\nEach test case is two positive integers $ n $ ( $ 1 \\le n \\le 10^9 $ ) and $ k $ ( $ 1 \\le k \\le 100 $ ).\n\nOutput Format\nFor each test case print:\n\n- YES and the required values $ a_i $ , if the answer exists (if there are several answers, print any of them);\n- NO if the answer does not exist.\n\nThe letters in the words YES and NO can be printed in any case.\n\nExamples\nSample 1\nInput\n8\n10 3\n100 4\n8 7\n97 2\n8 8\n3 10\n5 3\n1000000000 9\nOutput\nYES\n4 2 4\nYES\n55 5 5 35\nNO\nNO\nYES\n1 1 1 1 1 1 1 1\nNO\nYES\n3 1 1\nYES\n111111110 111111110 111111110 111111110 111111110 111111110 111111110 111111110 111111120"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nint\nn1\n=\nn\n-\n(\nk\n-\n1\n);\nif\n(\nn1\n>\n0\n&&\nn1\n%\n2\n==\n1\n)\n{\ncout\n<<\n\"YES\"\n<<\nendl\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n-\n1\n;\n++\ni\n)\ncout\n<<\n\"1 \"\n;\ncout\n<<\nn1\n<<\nendl\n;\ncontinue\n;\n}\nint\nn2\n=\nn\n-\n2\n*\n(\nk\n-\n1\n);\nif\n(\nn2\n>\n0\n&&\nn2\n%\n2\n==\n0\n)\n{\ncout\n<<\n\"YES\"\n<<\nendl\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n-\n1\n;\n++\ni\n)\ncout\n<<\n\"2 \"\n;\ncout\n<<\nn2\n<<\nendl\n;\ncontinue\n;\n}\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

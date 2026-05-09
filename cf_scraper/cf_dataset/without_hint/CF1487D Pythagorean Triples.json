@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA Pythagorean triple is a triple of integer numbers $ (a, b, c) $ such that it is possible to form a right triangle with the lengths of the first cathetus, the second cathetus and the hypotenuse equal to $ a $ , $ b $ and $ c $ , respectively. An example of the Pythagorean triple is $ (3, 4, 5) $ .\n\nVasya studies the properties of right triangles, and he uses a formula that determines if some triple of integers is Pythagorean. Unfortunately, he has forgotten the exact formula; he remembers only that the formula was some equation with squares. So, he came up with the following formula: $ c = a^2 - b $ .\n\nObviously, this is not the right formula to check if a triple of numbers is Pythagorean. But, to Vasya's surprise, it actually worked on the triple $ (3, 4, 5) $ : $ 5 = 3^2 - 4 $ , so, according to Vasya's formula, it is a Pythagorean triple.\n\nWhen Vasya found the right formula (and understood that his formula is wrong), he wondered: how many are there triples of integers $ (a, b, c) $ with $ 1 \\le a \\le b \\le c \\le n $ such that they are Pythagorean both according to his formula and the real definition? He asked you to count these triples.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nEach test case consists of one line containing one integer $ n $ ( $ 1 \\le n \\le 10^9 $ ).\n\nOutput Format\nFor each test case, print one integer — the number of triples of integers $ (a, b, c) $ with $ 1 \\le a \\le b \\le c \\le n $ such that they are Pythagorean according both to the real definition and to the formula Vasya came up with.\n\nExamples\nSample 1\nInput\n3\n3\n6\n9\nOutput\n0\n1\n1\n\nNote\nThe only Pythagorean triple satisfying $ c = a^2 - b $ with $ 1 \\le a \\le b \\le c \\le 9 $ is $ (3, 4, 5) $ ; that's why the answer for $ n = 3 $ is $ 0 $ , and the answer for $ n = 6 $ (and for $ n = 9 $ ) is $ 1 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n3\n;\ni\n*\ni\n<=\n2\n*\nn\n-\n1\n;\ni\n+=\n2\n)\n++\nans\n;\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a tree consisting of $ n $ vertices. A number is written on each vertex; the number on vertex $ i $ is equal to $ a_i $ .\n\nRecall that a simple path is a path that visits each vertex at most once. Let the weight of the path be the bitwise XOR of the values written on vertices it consists of. Let's say that a tree is good if no simple path has weight $ 0 $ .\n\nYou can apply the following operation any number of times (possibly, zero): select a vertex of the tree and replace the value written on it with an arbitrary positive integer. What is the minimum number of times you have to apply this operation in order to make the tree good?\n\nInput Format\nThe first line contains one integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the number of vertices.\n\nThe second line contains $ n $ integers $ a_1 $ , $ a_2 $ , ..., $ a_n $ ( $ 1 \\le a_i < 2^{30} $ ) — the numbers written on vertices.\n\nThen $ n - 1 $ lines follow, each containing two integers $ x $ and $ y $ ( $ 1 \\le x, y \\le n; x \\ne y $ ) denoting an edge connecting vertex $ x $ with vertex $ y $ . It is guaranteed that these edges form a tree.\n\nOutput Format\nPrint a single integer — the minimum number of times you have to apply the operation in order to make the tree good.\n\nExamples\nSample 1\nInput\n6\n3 2 1 3 2 1\n4 5\n3 4\n1 4\n2 1\n6 1\nOutput\n2\n\nSample 2\nInput\n4\n2 1 1 1\n1 2\n1 3\n1 4\nOutput\n0\n\nSample 3\nInput\n5\n2 2 2 2 2\n1 2\n2 3\n3 4\n4 5\nOutput\n2\n\nNote\nIn the first example, it is enough to replace the value on the vertex $ 1 $ with $ 13 $ , and the value on the vertex $ 4 $ with $ 42 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n200\n*\n1000\n+\n13\n;\nint\nn\n;\nint\na\n[\nN\n],\nb\n[\nN\n];\nvector\n<int>\ng\n[\nN\n];\nset\n<int>\nvals\n[\nN\n];\nvoid\ninit\n(\nint\nv\n,\nint\np\n)\n{\nb\n[\nv\n]\n=\na\n[\nv\n];\nif\n(\np\n!=\n-\n1\n)\nb\n[\nv\n]\n^=\nb\n[\np\n];\nfor\n(\nint\nu\n:\ng\n[\nv\n])\nif\n(\nu\n!=\np\n)\ninit\n(\nu\n,\nv\n);\n}\nint\nans\n;\nvoid\ncalc\n(\nint\nv\n,\nint\np\n)\n{\nbool\nbad\n=\nfalse\n;\nvals\n[\nv\n].\ninsert\n(\nb\n[\nv\n]);\nfor\n(\nint\nu\n:\ng\n[\nv\n])\nif\n(\nu\n!=\np\n)\n{\ncalc\n(\nu\n,\nv\n);\nif\n(\nvals\n[\nv\n].\nsize\n()\n<\nvals\n[\nu\n].\nsize\n())\nvals\n[\nv\n].\nswap\n(\nvals\n[\nu\n]);\nfor\n(\nint\nx\n:\nvals\n[\nu\n])\nbad\n|=\nvals\n[\nv\n].\ncount\n(\nx\n^\na\n[\nv\n]);\nfor\n(\nint\nx\n:\nvals\n[\nu\n])\nvals\n[\nv\n].\ninsert\n(\nx\n);\nvals\n[\nu\n].\nclear\n();\n}\nif\n(\nbad\n)\n{\nans\n+=\n1\n;\nvals\n[\nv\n].\nclear\n();\n}\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\ncin\n>>\na\n[\ni\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\n++\ni\n)\n{\nint\nx\n,\ny\n;\ncin\n>>\nx\n>>\ny\n;\n--\nx\n;\n--\ny\n;\ng\n[\nx\n].\npush_back\n(\ny\n);\ng\n[\ny\n].\npush_back\n(\nx\n);\n}\ninit\n(\n0\n,\n-\n1\n);\ncalc\n(\n0\n,\n-\n1\n);\ncout\n<<\nans\n<<\n'\\n'\n;\n}"
+        }
+    ]
+}

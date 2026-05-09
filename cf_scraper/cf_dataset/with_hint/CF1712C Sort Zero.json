@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAn array is sorted if it has no inversions\n\nA Young Boy\n\nYou are given an array of $ n $ positive integers $ a_1,a_2,\\ldots,a_n $ .\n\nIn one operation you do the following:\n\n1. Choose any integer $ x $ .\n2. For all $ i $ such that $ a_i = x $ , do $ a_i := 0 $ (assign $ 0 $ to $ a_i $ ).\n\nFind the minimum number of operations required to sort the array in non-decreasing order.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). Description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^5 $ ).\n\nThe second line of each test case contains $ n $ positive integers $ a_1,a_2,\\ldots,a_n $ ( $ 1 \\le a_i \\le n $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case print one integer — the minimum number of operations required to sort the array in non-decreasing order.\n\nExamples\nSample 1\nInput\n5\n3\n3 3 2\n4\n1 3 1 3\n5\n4 1 5 3 2\n4\n2 4 1 2\n1\n1\nOutput\n1\n2\n4\n3\n0\n\nNote\nIn the first test case, you can choose $ x = 3 $ for the operation, the resulting array is $ [0, 0, 2] $ .\n\nIn the second test case, you can choose $ x = 1 $ for the first operation and $ x = 3 $ for the second operation, the resulting array is $ [0, 0, 0, 0] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nThe operation only decreases numbers.\nHint 2\nAn array is sorted if there is no index $$$i$$$ such that $$$a_i \\gt a_{i + 1}$$$.\nHint 3\nSuppose there is an index $$$i$$$ such that $$$a_i \\gt a_{i + 1}$$$. What operations do you need to perform to make $$$a_i \\le a_{i + 1}$$$?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "The operation only decreases numbers."
+        },
+        {
+            "title": "Hint 2",
+            "content": "An array is sorted if there is no index $$$i$$$ such that $$$a_i \\gt a_{i + 1}$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Suppose there is an index $$$i$$$ such that $$$a_i \\gt a_{i + 1}$$$. What operations do you need to perform to make $$$a_i \\le a_{i + 1}$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\n#define\nallr\n(\nx\n)\n(\nx\n).\nrbegin\n(),\n(\nx\n).\nrend\n()\n#define\ngsize\n(\nx\n)\n(\nint\n)((\nx\n).\nsize\n())\nconst\nchar\nnl\n=\n'\\n'\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\nlong\ndouble\nld\n;\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nmap\n<\nint\n,\nvector\n<int>\n>\np\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\np\n[\na\n[\ni\n]].\npush_back\n(\ni\n);\n}\nint\nans\n=\n0\n;\nset\n<int>\nts\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\ni\n++)\n{\nif\n(\na\n[\ni\n]\n>\na\n[\ni\n+\n1\n])\nts\n.\ninsert\n(\ni\n);\n}\nwhile\n(!\nts\n.\nempty\n())\n{\nint\ni\n=\n*\nts\n.\nbegin\n();\nint\nx\n;\nif\n(\na\n[\ni\n]\n>\n0\n)\n{\nx\n=\na\n[\ni\n];\n}\nelse\n{\nx\n=\na\n[\ni\n+\n1\n];\n}\nfor\n(\nint\nj\n:\np\n[\nx\n])\n{\na\n[\nj\n]\n=\n0\n;\nts\n.\nerase\n(\nj\n-\n1\n);\nts\n.\nerase\n(\nj\n);\nif\n(\nj\n>\n0\n&&\na\n[\nj\n-\n1\n]\n>\na\n[\nj\n])\nts\n.\ninsert\n(\nj\n-\n1\n);\nif\n(\nj\n+\n1\n<\nn\n&&\na\n[\nj\n]\n>\na\n[\nj\n+\n1\n])\nts\n.\ninsert\n(\nj\n);\n}\nans\n++;\n}\ncout\n<<\nans\n<<\nnl\n;\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ with $ n $ integers. You can perform the following operation at most $ k $ times:\n\n- Choose two indices $ i $ and $ j $ , in which $ i \\,\\bmod\\, k = j \\,\\bmod\\, k $ ( $ 1 \\le i < j \\le n $ ).\n- Swap $ a_i $ and $ a_j $ .\n\nAfter performing all operations, you have to select $ k $ consecutive elements, and the sum of the $ k $ elements becomes your score. Find the maximum score you can get.\n\nHere $ x \\bmod y $ denotes the remainder from dividing $ x $ by $ y $ .\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 600 $ ) — the number of test cases.\n\nEach test case consists of two lines.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 100 $ ) — the length of the array and the number in the statement above.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le 10^9 $ ) — the array itself.\n\nOutput Format\nFor each test case, print the maximum score you can get, one per line.\n\nExamples\nSample 1\nInput\n5\n3 2\n5 6 0\n1 1\n7\n5 3\n7 0 4 0 4\n4 2\n2 7 3 4\n3 3\n1000000000 1000000000 999999997\nOutput\n11\n7\n15\n10\n2999999997\n\nNote\nIn the first test case, we can get a score of $ 11 $ if we select $ a_1, a_2 $ without performing any operations.\n\nIn the third test case, we can get a score of $ 15 $ if we first swap $ a_1 $ with $ a_4 $ and then select $ a_3, a_4, a_5 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\n$$$i$$$-th element moves only to $$$(i + xk)$$$-th position ($$$x$$$ is integer).\nHint 2\nWe cannot select $$$a_i$$$ and $$$a_{i + xk}$$$ simultaneously. In other words, if we can swap $$$a_i$$$ and $$$a_j$$$, we cannot select $$$a_i$$$ and $$$a_j$$$ simultaneously.\nHint 3\nAmong all elements $$$a_{i + xk}$$$ for each $$$i$$$ ($$$1 \\le i \\le k$$$), only one element is selected."
+        },
+        {
+            "title": "Hint 1",
+            "content": "$$$i$$$-th element moves only to $$$(i + xk)$$$-th position ($$$x$$$ is integer)."
+        },
+        {
+            "title": "Hint 2",
+            "content": "We cannot select $$$a_i$$$ and $$$a_{i + xk}$$$ simultaneously. In other words, if we can swap $$$a_i$$$ and $$$a_j$$$, we cannot select $$$a_i$$$ and $$$a_j$$$ simultaneously."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Among all elements $$$a_{i + xk}$$$ for each $$$i$$$ ($$$1 \\le i \\le k$$$), only one element is selected."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "For each index $$$i$$$ ($$$k + 1 \\le i \\le n$$$), there is exactly one element among $$$a_1$$$ to $$$a_k$$$, which can swap with $$$a_i$$$. If $$$a_i$$$ is greater than that element, swap them. This process perform the operation at most $$$n - k$$$ times. After performing operations, select $$$a_1$$$ to $$$a_k$$$. This is the maximum score we can get."
+        },
+        {
+            "title": "Solution Code",
+            "content": "#172743256"
+        }
+    ]
+}

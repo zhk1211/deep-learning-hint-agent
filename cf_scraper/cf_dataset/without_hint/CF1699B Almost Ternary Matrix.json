@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two even integers $ n $ and $ m $ . Your task is to find any binary matrix $ a $ with $ n $ rows and $ m $ columns where every cell $ (i,j) $ has exactly two neighbours with a different value than $ a_{i,j} $ .\n\nTwo cells in the matrix are considered neighbours if and only if they share a side. More formally, the neighbours of cell $ (x,y) $ are: $ (x-1,y) $ , $ (x,y+1) $ , $ (x+1,y) $ and $ (x,y-1) $ .\n\nIt can be proven that under the given constraints, an answer always exists.\n\nInput Format\nEach test contains multiple test cases. The first line of input contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases. The following lines contain the descriptions of the test cases.\n\nThe only line of each test case contains two even integers $ n $ and $ m $ ( $ 2 \\le n,m \\le 50 $ ) — the height and width of the binary matrix, respectively.\n\nOutput Format\nFor each test case, print $ n $ lines, each of which contains $ m $ numbers, equal to $ 0 $ or $ 1 $ — any binary matrix which satisfies the constraints described in the statement.\n\nIt can be proven that under the given constraints, an answer always exists.\n\nExamples\nSample 1\nInput\n3\n2 4\n2 2\n4 4\nOutput\n1 0 0 1\n0 1 1 0\n1 0\n0 1\n1 0 1 0\n0 0 1 1\n1 1 0 0\n0 1 0 1\n\nNote\nWhite means $ 0 $ , black means $ 1 $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1699B/e45c6cba9610d92a23c09f683cadfcf138054d1b.png)![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1699B/7ff6e4e6c9a559b0e10cdc230a583d5a3442d4ca.png)![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1699B/f610d75a7858ba6a9ddde3ee97e9dc52eaa2c58a.png)The binary matrix from the first test caseThe binary matrix from the second test caseThe binary matrix from the third test case"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "The general construction consists of a $$$2 \\times 2$$$ checkerboard with a $$$1$$$-thick border. Here is the intended solution for $$$n=6$$$ and $$$m=8$$$:\nTime complexity per testcase: $$$O(nm)$$$."
+        }
+    ]
+}

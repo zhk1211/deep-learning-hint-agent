@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA portal of dark forces has opened at the border of worlds, and now the whole world is under a terrible threat. To close the portal and save the world, you need to defeat $ n $ monsters that emerge from the portal one after another.\n\nOnly the sorceress Vika can handle this. She possesses two magical powers — water magic and fire magic. In one second, Vika can generate $ w $ units of water mana and $ f $ units of fire mana. She will need mana to cast spells. Initially Vika have $ 0 $ units of water mana and $ 0 $ units of fire mana.\n\nEach of the $ n $ monsters that emerge from the portal has its own strength, expressed as a positive integer. To defeat the $ i $ -th monster with strength $ s_i $ , Vika needs to cast a water spell or a fire spell of at least the same strength. In other words, Vika can spend at least $ s_i $ units of water mana on a water spell, or at least $ s_i $ units of fire mana on a fire spell.\n\nVika can create and cast spells instantly. Vika can cast an unlimited number of spells every second as long she has enough mana for that.\n\nThe sorceress wants to save the world as quickly as possible, so tell her how much time she will need.\n\nInput Format\nEach test consists of several test cases. The first line of each test contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases. This is followed by a description of the test cases.\n\nThe first line of each test case contains two integers $ w $ , $ f $ ( $ 1 \\le w, f \\le 10^9 $ ) — the amount of water and fire mana that Vika can generate per second.\n\nThe second line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 100 $ ) — the number of monsters.\n\nThe third line of each test case contains $ n $ integers $ s_1, s_2, s_3, \\dots, s_n $ ( $ 1 \\le s_i \\le 10^4 $ ) — the strengths of the monsters.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 100 $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum time in seconds that Vika will need to defeat all the monsters.\n\nExamples\nSample 1\nInput\n4\n2 3\n3\n2 6 7\n37 58\n1\n93\n190 90\n2\n23 97\n13 4\n4\n10 10 2 45\nOutput\n3\n2\n1\n5\n\nNote\nIn the first sample, after the first second, Vika can spend $ 2 $ units of fire mana to kill the first monster. Then she has $ 2 $ units of water mana and $ 1 $ unit of fire mana. After the third second, she will have $ 6 $ units of water mana and $ 7 $ units of fire mana at her disposal. This will be enough to immediately kill the second and third monsters."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nint\nlong\nlong\nint32_t\nmain\n()\n{\nint\nq\n;\ncin\n>>\nq\n;\nwhile\n(\nq\n--)\n{\nint\nw\n,\nf\n,\nn\n;\ncin\n>>\nw\n>>\nf\n>>\nn\n;\nvector\n<int>\ns\n(\nn\n);\nint\nsum_s\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\ns\n[\ni\n];\nsum_s\n+=\ns\n[\ni\n];\n}\nvector\n<bool>\ndp\n(\nsum_s\n+\n1\n);\ndp\n[\n0\n]\n=\ntrue\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nw\n=\nsum_s\n;\nw\n-\ns\n[\ni\n]\n>=\n0\n;\n--\nw\n)\n{\ndp\n[\nw\n]\n=\ndp\n[\nw\n]\n||\ndp\n[\nw\n-\ns\n[\ni\n]];\n}\n}\nint\nans\n=\n2e9\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nsum_s\n;\n++\ni\n)\n{\nif\n(\ndp\n[\ni\n])\n{\nans\n=\nmin\n(\nans\n,\nmax\n((\ni\n+\nw\n-\n1\n)\n/\nw\n,\n(\nsum_s\n-\ni\n+\nf\n-\n1\n)\n/\nf\n));\n}\n}\ncout\n<<\nans\n<<\n\"\\n\"\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

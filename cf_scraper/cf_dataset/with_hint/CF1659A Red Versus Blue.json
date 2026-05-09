@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nTeam Red and Team Blue competed in a competitive FPS. Their match was streamed around the world. They played a series of $ n $ matches.\n\nIn the end, it turned out Team Red won $ r $ times and Team Blue won $ b $ times. Team Blue was less skilled than Team Red, so $ b $ was strictly less than $ r $ .\n\nYou missed the stream since you overslept, but you think that the match must have been neck and neck since so many people watched it. So you imagine a string of length $ n $ where the $ i $ -th character denotes who won the $ i $ -th match — it is R if Team Red won or B if Team Blue won. You imagine the string was such that the maximum number of times a team won in a row was as small as possible. For example, in the series of matches RBBRRRB, Team Red won $ 3 $ times in a row, which is the maximum.\n\nYou must find a string satisfying the above conditions. If there are multiple answers, print any.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nEach test case has a single line containing three integers $ n $ , $ r $ , and $ b $ ( $ 3 \\leq n \\leq 100 $ ; $ 1 \\leq b < r \\leq n $ , $ r+b=n $ ).\n\nOutput Format\nFor each test case, output a single line containing a string satisfying the given conditions. If there are multiple answers, print any.\n\nExamples\nSample 1\nInput\n3\n7 4 3\n6 5 1\n19 13 6\nOutput\nRBRBRBR\nRRRBRR\nRRBRRBRRBRRBRRBRRBR\n\nSample 2\nInput\n6\n3 2 1\n10 6 4\n11 6 5\n10 9 1\n10 8 2\n11 9 2\nOutput\nRBR\nRRBRBRBRBR\nRBRBRBRBRBR\nRRRRRBRRRR\nRRRBRRRBRR\nRRRBRRRBRRR\n\nNote\nThe first test case of the first example gives the optimal answer for the example in the statement. The maximum number of times a team wins in a row in RBRBRBR is $ 1 $ . We cannot minimize it any further.\n\nThe answer for the second test case of the second example is RRBRBRBRBR. The maximum number of times a team wins in a row is $ 2 $ , given by RR at the beginning. We cannot minimize the answer any further."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nIs it a good idea to have consecutive\nB\n's?\nHint 2\nIf you space out all the\nB\n's, how many regions do you have to place the\nR\n's into?\nHint 3\nWhat is the best way of placing the\nR\n's into $$$b+1$$$ regions such that the maximum number of\nR\n's in a region is minimum?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "Is it a good idea to have consecutive\nB\n's?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "If you space out all the\nB\n's, how many regions do you have to place the\nR\n's into?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "What is the best way of placing the\nR\n's into $$$b+1$$$ regions such that the maximum number of\nR\n's in a region is minimum?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation (C++)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nlol\n=\nlong\nlong\nint\n;\n#define\nendl\n\"\\n\"\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\n_\n=\n1\n;\ncin\n>>\n_\n;\nwhile\n(\n_\n--)\n{\nint\nn\n,\nr\n,\nb\n;\ncin\n>>\nn\n>>\nr\n>>\nb\n;\nint\np\n=\nr\n/(\nb\n+\n1\n),\nq\n=\nr\n%(\nb\n+\n1\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nq\n;\ni\n++)\ncout\n<<\nstring\n(\np\n+\n1\n,\n'R'\n)<<\n'B'\n;\nfor\n(\nint\ni\n=\nq\n;\ni\n<\nb\n;\ni\n++)\ncout\n<<\nstring\n(\np\n,\n'R'\n)<<\n'B'\n;\ncout\n<<\nstring\n(\np\n,\n'R'\n);\ncout\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Implementation (Python)",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\nn\n,\nr\n,\nb\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\np\n=\nr\n%\n(\nb\n+\n1\n)\ny\n=\n\"\"\nfor\nj\nin\nrange\n(\nint\n(\nr\n/\n(\nb\n+\n1\n))):\ny\n=\ny\n+\n\"R\"\nans\n=\n\"\"\nfor\ni\nin\nrange\n(\nb\n+\n1\n):\nif\ni\n>\n0\n:\nans\n=\nans\n+\n\"B\"\nans\n=\nans\n+\ny\nif\np\n>\n0\n:\nans\n=\nans\n+\n\"R\"\np\n=\np\n-\n1\nprint\n(\nans\n)"
+        }
+    ]
+}

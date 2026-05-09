@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a tree consisting exactly of $ n $ vertices. Tree is a connected undirected graph with $ n-1 $ edges. Each vertex $ v $ of this tree has a value $ a_v $ assigned to it.\n\nLet $ dist(x, y) $ be the distance between the vertices $ x $ and $ y $ . The distance between the vertices is the number of edges on the simple path between them.\n\nLet's define the cost of the tree as the following value: firstly, let's fix some vertex of the tree. Let it be $ v $ . Then the cost of the tree is $ \\sum\\limits_{i = 1}^{n} dist(i, v) \\cdot a_i $ .\n\nYour task is to calculate the maximum possible cost of the tree if you can choose $ v $ arbitrarily.\n\nInput Format\nThe first line contains one integer $ n $ , the number of vertices in the tree ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 2 \\cdot 10^5 $ ), where $ a_i $ is the value of the vertex $ i $ .\n\nEach of the next $ n - 1 $ lines describes an edge of the tree. Edge $ i $ is denoted by two integers $ u_i $ and $ v_i $ , the labels of vertices it connects ( $ 1 \\le u_i, v_i \\le n $ , $ u_i \\ne v_i $ ).\n\nIt is guaranteed that the given edges form a tree.\n\nOutput Format\nPrint one integer — the maximum possible cost of the tree if you can choose any vertex as $ v $ .\n\nExamples\nSample 1\nInput\n8\n9 4 1 7 10 1 6 5\n1 2\n2 3\n1 4\n1 5\n5 6\n5 7\n5 8\nOutput\n121\n\nSample 2\nInput\n1\n1337\nOutput\n0\n\nNote\nPicture corresponding to the first example: ![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1092F/fdd33998ce4716fa490f243f16a780e7d58d0e7e.png)\n\nYou can choose the vertex $ 3 $ as a root, then the answer will be $ 2 \\cdot 9 + 1 \\cdot 4 + 0 \\cdot 1 + 3 \\cdot 7 + 3 \\cdot 10 + 4 \\cdot 1 + 4 \\cdot 6 + 4 \\cdot 5 = 18 + 4 + 0 + 21 + 30 + 4 + 24 + 20 = 121 $ .\n\nIn the second example tree consists only of one vertex so the answer is always $ 0 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nlong\nlong\nres\n,\nans\n;\nvector\n<int>\na\n;\nvector\n<\nlong\nlong\n>\nsum\n;\nvector\n<\nvector\n<int>\n>\ng\n;\nvoid\ndfs\n(\nint\nv\n,\nint\np\n=\n-\n1\n,\nint\nh\n=\n0\n)\n{\nres\n+=\nh\n*\n1ll\n*\na\n[\nv\n];\nsum\n[\nv\n]\n=\na\n[\nv\n];\nfor\n(\nauto\nto\n:\ng\n[\nv\n])\n{\nif\n(\nto\n==\np\n)\n{\ncontinue\n;\n}\ndfs\n(\nto\n,\nv\n,\nh\n+\n1\n);\nsum\n[\nv\n]\n+=\nsum\n[\nto\n];\n}\n}\nvoid\ngo\n(\nint\nv\n,\nint\np\n=\n-\n1\n)\n{\nans\n=\nmax\n(\nans\n,\nres\n);\nfor\n(\nauto\nto\n:\ng\n[\nv\n])\n{\nif\n(\nto\n==\np\n)\n{\ncontinue\n;\n}\nres\n-=\nsum\n[\nto\n];\nsum\n[\nv\n]\n-=\nsum\n[\nto\n];\nres\n+=\nsum\n[\nv\n];\nsum\n[\nto\n]\n+=\nsum\n[\nv\n];\ngo\n(\nto\n,\nv\n);\nsum\n[\nto\n]\n-=\nsum\n[\nv\n];\nres\n-=\nsum\n[\nv\n];\nsum\n[\nv\n]\n+=\nsum\n[\nto\n];\nres\n+=\nsum\n[\nto\n];\n}\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n;\ncin\n>>\nn\n;\na\n=\nvector\n<int>\n(\nn\n);\nsum\n=\nvector\n<\nlong\nlong\n>(\nn\n);\ng\n=\nvector\n<\nvector\n<int>\n>(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\n++\ni\n)\n{\nint\nx\n,\ny\n;\ncin\n>>\nx\n>>\ny\n;\n--\nx\n,\n--\ny\n;\ng\n[\nx\n].\npush_back\n(\ny\n);\ng\n[\ny\n].\npush_back\n(\nx\n);\n}\ndfs\n(\n0\n);\ngo\n(\n0\n);\ncout\n<<\nans\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nRudolph drew a beautiful Christmas tree and decided to print the picture. However, the ink in the cartridge often runs out at the most inconvenient moment. Therefore, Rudolph wants to calculate in advance how much green ink he will need.\n\nThe tree is a vertical trunk with identical triangular branches at different heights. The thickness of the trunk is negligible.\n\nEach branch is an isosceles triangle with base $ d $ and height $ h $ , whose base is perpendicular to the trunk. The triangles are arranged upward at an angle, and the trunk passes exactly in the middle. The base of the $ i $ -th triangle is located at a height of $ y_i $ .\n\nThe figure below shows an example of a tree with $ d = 4, h = 2 $ and three branches with bases at heights $ [1, 4, 5] $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1846D/37fc4e66c82224ed8a6c688f81f74511a07dacd6.png)Help Rudolph calculate the total area of the tree branches.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThen follow the descriptions of the test cases.\n\nThe first line of each test case contains three integers $ n, d, h $ ( $ 1 \\le n, d, h \\le 2 \\cdot 10^5 $ ) — the number of branches, the length of the base, and the height of the branches, respectively.\n\nThe second line of each test case contains $ n $ integers $ y_i $ $ (1 \\le y_i \\le 10^9, y_1 < y_2 < ... < y_n) $ — the heights of the bases of the branches.\n\nThe sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single real number on a separate line — the total area of the tree branches. The answer will be considered correct if its absolute or relative error does not exceed $ 10^{-6} $ .\n\nExamples\nSample 1\nInput\n5\n3 4 2\n1 4 5\n1 5 1\n3\n4 6 6\n1 2 3 4\n2 1 200000\n1 200000\n2 4 3\n9 11\nOutput\n11\n2.5\n34.5\n199999.9999975\n11.333333"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider all the triangles in order from bottom to top."
+        },
+        {
+            "title": "Hint 2",
+            "content": "What if the current triangle intersects with the next one?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Trapezoid"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\ncout\n.\ntie\n(\nnullptr\n);\ncout\n.\nprecision\n(\n10\n);\ncout\n.\nsetf\n(\nios\n::\nfixed\n);\nint\nttt\n;\ncin\n>>\nttt\n;\nwhile\n(\nttt\n--)\n{\nint\nn\n,\nd\n,\nh\n;\ncin\n>>\nn\n>>\nd\n>>\nh\n;\nvector\n<int>\ny\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++){\ncin\n>>\ny\n[\ni\n];\n}\nlong\ndouble\nans\n=\n(\nlong\ndouble\n)\nd\n*\nh\n/\n2.0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n+\n1\n<\nn\n;\n++\ni\n)\n{\nif\n(\ny\n[\ni\n+\n1\n]\n>=\ny\n[\ni\n]\n+\nh\n)\nans\n+=\n(\nlong\ndouble\n)\nd\n*\nh\n/\n2.0\n;\nelse\n{\nlong\ndouble\nd2\n=\n(\nlong\ndouble\n)\nd\n*\n(\ny\n[\ni\n]\n+\nh\n-\ny\n[\ni\n+\n1\n])\n/\nh\n;\nlong\ndouble\nnh\n=\ny\n[\ni\n+\n1\n]\n-\ny\n[\ni\n];\nans\n+=\n(\nd\n+\nd2\n)\n/\n2.0\n*\nnh\n;\n}\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

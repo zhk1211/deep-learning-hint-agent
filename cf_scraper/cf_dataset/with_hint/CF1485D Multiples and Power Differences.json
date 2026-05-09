@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a matrix $ a $ consisting of positive integers. It has $ n $ rows and $ m $ columns.\n\nConstruct a matrix $ b $ consisting of positive integers. It should have the same size as $ a $ , and the following conditions should be met:\n\n- $ 1 \\le b_{i,j} \\le 10^6 $ ;\n- $ b_{i,j} $ is a multiple of $ a_{i,j} $ ;\n- the absolute value of the difference between numbers in any adjacent pair of cells (two cells that share the same side) in $ b $ is equal to $ k^4 $ for some integer $ k \\ge 1 $ ( $ k $ is not necessarily the same for all pairs, it is own for each pair).\n\nWe can show that the answer always exists.\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ ( $ 2 \\le n,m \\le 500 $ ).\n\nEach of the following $ n $ lines contains $ m $ integers. The $ j $ -th integer in the $ i $ -th line is $ a_{i,j} $ ( $ 1 \\le a_{i,j} \\le 16 $ ).\n\nOutput Format\nThe output should contain $ n $ lines each containing $ m $ integers. The $ j $ -th integer in the $ i $ -th line should be $ b_{i,j} $ .\n\nExamples\nSample 1\nInput\n2 2\n1 2\n2 3\nOutput\n1 2\n2 3\n\nSample 2\nInput\n2 3\n16 16 16\n16 16 16\nOutput\n16 32 48\n32 48 64\n\nSample 3\nInput\n2 2\n3 11\n12 8\nOutput\n327 583\n408 664\n\nNote\nIn the first example, the matrix $ a $ can be used as the matrix $ b $ , because the absolute value of the difference between numbers in any adjacent pair of cells is $ 1 = 1^4 $ .\n\nIn the third example:\n\n- $ 327 $ is a multiple of $ 3 $ , $ 583 $ is a multiple of $ 11 $ , $ 408 $ is a multiple of $ 12 $ , $ 664 $ is a multiple of $ 8 $ ;\n- $ |408 - 327| = 3^4 $ , $ |583 - 327| = 4^4 $ , $ |664 - 408| = 4^4 $ , $ |664 - 583| = 3^4 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Brute force doesn't work (even if you optimize it): there are relatively few solutions."
+        },
+        {
+            "title": "Hint 2",
+            "content": "There may be very few possible values of $$$b_{i,j}$$$, if $$$b_{i-1,j}$$$ is fixed. The problem arises when you have to find a value for a cell with, e.g., $$$4$$$ fixed neighbors. Try to find a possible property of the neighbors of $$$(i, j)$$$, such that at least a solution for $$$b_{i,j}$$$ exists."
+        },
+        {
+            "title": "Hint 3",
+            "content": "The least common multiple of all integers from $$$1$$$ to $$$16$$$ is less than $$$10^6$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Build a matrix with a checkerboard pattern: let $$$b_{i, j} = 720720$$$ if $$$i + j$$$ is even, and $$$720720+a_{i, j}^4$$$ otherwise. The difference between two adjacent cells is obviously a fourth power of an integer. We choose $$$720720$$$ because it is $$$\\operatorname{lcm}(1, 2, \\dots, 16)$$$. This ensures that $$$b_{i, j}$$$ is a multiple of $$$a_{i, j}$$$, because it is either $$$720720$$$ itself or the sum of two multiples of $$$a_{i, j}$$$.\nComplexity: $$$O(nm)$$$."
+        }
+    ]
+}

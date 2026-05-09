@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's define the value of the permutation $ p $ of $ n $ integers $ 1 $ , $ 2 $ , ..., $ n $ (a permutation is an array where each element from $ 1 $ to $ n $ occurs exactly once) as follows:\n\n- initially, an integer variable $ x $ is equal to $ 0 $ ;\n- if $ x < p_1 $ , then add $ p_1 $ to $ x $ (set $ x = x + p_1 $ ), otherwise assign $ 0 $ to $ x $ ;\n- if $ x < p_2 $ , then add $ p_2 $ to $ x $ (set $ x = x + p_2 $ ), otherwise assign $ 0 $ to $ x $ ;\n- ...\n- if $ x < p_n $ , then add $ p_n $ to $ x $ (set $ x = x + p_n $ ), otherwise assign $ 0 $ to $ x $ ;\n- the value of the permutation is $ x $ at the end of this process.\n\nFor example, for $ p = [4, 5, 1, 2, 3, 6] $ , the value of $ x $ changes as follows: $ 0, 4, 9, 0, 2, 5, 11 $ , so the value of the permutation is $ 11 $ .\n\nYou are given an integer $ n $ . Find a permutation $ p $ of size $ n $ with the maximum possible value among all permutations of size $ n $ . If there are several such permutations, you can print any of them.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 97 $ ) — the number of test cases.\n\nThe only line of each test case contains one integer $ n $ ( $ 4 \\le n \\le 100 $ ).\n\nOutput Format\nFor each test case, print $ n $ integers — the permutation $ p $ of size $ n $ with the maximum possible value among all permutations of size $ n $ .\n\nExamples\nSample 1\nInput\n3\n4\n5\n6\nOutput\n2 1 3 4\n1 2 3 4 5\n4 5 1 2 3 6"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\np\n(\nn\n);\niota\n(\np\n.\nbegin\n(),\np\n.\nend\n(),\n1\n);\nfor\n(\nint\ni\n=\nn\n&\n1\n;\ni\n<\nn\n-\n2\n;\ni\n+=\n2\n)\nswap\n(\np\n[\ni\n],\np\n[\ni\n+\n1\n]);\nfor\n(\nint\n&\nx\n:\np\n)\ncout\n<<\nx\n<<\n' '\n;\ncout\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

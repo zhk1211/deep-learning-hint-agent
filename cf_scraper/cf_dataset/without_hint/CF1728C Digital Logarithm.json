@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's define $ f(x) $ for a positive integer $ x $ as the length of the base-10 representation of $ x $ without leading zeros. I like to call it a digital logarithm. Similar to a digital root, if you are familiar with that.\n\nYou are given two arrays $ a $ and $ b $ , each containing $ n $ positive integers. In one operation, you do the following:\n\n1. pick some integer $ i $ from $ 1 $ to $ n $ ;\n2. assign either $ f(a_i) $ to $ a_i $ or $ f(b_i) $ to $ b_i $ .\n\nTwo arrays are considered similar to each other if you can rearrange the elements in both of them, so that they are equal (e. g. $ a_i = b_i $ for all $ i $ from $ 1 $ to $ n $ ).\n\nWhat's the smallest number of operations required to make $ a $ and $ b $ similar to each other?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of testcases.\n\nThe first line of the testcase contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the number of elements in each of the arrays.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i < 10^9 $ ).\n\nThe third line contains $ n $ integers $ b_1, b_2, \\dots, b_n $ ( $ 1 \\le b_j < 10^9 $ ).\n\nThe sum of $ n $ over all testcases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each testcase, print the smallest number of operations required to make $ a $ and $ b $ similar to each other.\n\nExamples\nSample 1\nInput\n4\n1\n1\n1000\n4\n1 2 3 4\n3 1 4 2\n3\n2 9 3\n1 100 9\n10\n75019 709259 5 611271314 9024533 81871864 9 3 6 4865\n9503 2 371245467 6 7 37376159 8 364036498 52295554 169\nOutput\n2\n0\n2\n18\n\nNote\nIn the first testcase, you can apply the digital logarithm to $ b_1 $ twice.\n\nIn the second testcase, the arrays are already similar to each other.\n\nIn the third testcase, you can first apply the digital logarithm to $ a_1 $ , then to $ b_2 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nforn\n(\n_\n,\nt\n){\nint\nn\n;\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nvector\n<int>\na\n(\nn\n),\nb\n(\nn\n);\nforn\n(\ni\n,\nn\n)\nscanf\n(\n\"%d\"\n,\n&\na\n[\ni\n]);\nforn\n(\ni\n,\nn\n)\nscanf\n(\n\"%d\"\n,\n&\nb\n[\ni\n]);\npriority_queue\n<int>\nqa\n(\na\n.\nbegin\n(),\na\n.\nend\n());\npriority_queue\n<int>\nqb\n(\nb\n.\nbegin\n(),\nb\n.\nend\n());\nint\nans\n=\n0\n;\nwhile\n(!\nqa\n.\nempty\n()){\nif\n(\nqa\n.\ntop\n()\n==\nqb\n.\ntop\n()){\nqa\n.\npop\n();\nqb\n.\npop\n();\ncontinue\n;\n}\n++\nans\n;\nif\n(\nqa\n.\ntop\n()\n>\nqb\n.\ntop\n()){\nqa\n.\npush\n(\nto_string\n(\nqa\n.\ntop\n()).\nsize\n());\nqa\n.\npop\n();\n}\nelse\n{\nqb\n.\npush\n(\nto_string\n(\nqb\n.\ntop\n()).\nsize\n());\nqb\n.\npop\n();\n}\n}\nprintf\n(\n\"%d\\n\"\n,\nans\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

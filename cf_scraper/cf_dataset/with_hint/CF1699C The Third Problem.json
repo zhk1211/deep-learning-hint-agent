@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a permutation $ a_1,a_2,\\ldots,a_n $ of integers from $ 0 $ to $ n - 1 $ . Your task is to find how many permutations $ b_1,b_2,\\ldots,b_n $ are similar to permutation $ a $ .\n\nTwo permutations $ a $ and $ b $ of size $ n $ are considered similar if for all intervals $ [l,r] $ ( $ 1 \\le l \\le r \\le n $ ), the following condition is satisfied: $ $$$\\operatorname{MEX}([a_l,a_{l+1},\\ldots,a_r])=\\operatorname{MEX}([b_l,b_{l+1},\\ldots,b_r]), $ $ where the $ \\\\operatorname{MEX} $ of a collection of integers $ c\\_1,c\\_2,\\\\ldots,c\\_k $ is defined as the smallest non-negative integer $ x $ which does not occur in collection $ c $ . For example, $ \\\\operatorname{MEX}(\\[1,2,3,4,5\\])=0 $ , and $ \\\\operatorname{MEX}(\\[0,1,2,4,5\\])=3 $ .</p><p>Since the total number of such permutations can be very large, you will have to print its remainder modulo $ 10^9+7 $ .</p><p>In this problem, a permutation of size $ n $ is an array consisting of $ n $ distinct integers from $ 0 $ to $ n-1 $ in arbitrary order. For example, $ \\[1,0,2,4,3\\] $ is a permutation, while $ \\[0,1,1\\] $ is not, since $ 1 $ appears twice in the array. $ \\[0,1,3\\] $ is also not a permutation, since $ n=3 $ and there is a $ 3$$$ in the array.\n\nInput Format\nEach test contains multiple test cases. The first line of input contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The following lines contain the descriptions of the test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^5 $ ) — the size of permutation $ a $ .\n\nThe second line of each test case contains $ n $ distinct integers $ a_1,a_2,\\ldots,a_n $ ( $ 0 \\le a_i \\lt n $ ) — the elements of permutation $ a $ .\n\nIt is guaranteed that the sum of $ n $ across all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, print a single integer, the number of permutations similar to permutation $ a $ , taken modulo $ 10^9+7 $ .\n\nExamples\nSample 1\nInput\n5\n5\n4 0 3 2 1\n1\n0\n4\n0 1 2 3\n6\n1 2 4 0 5 3\n8\n1 3 7 2 5 0 6 4\nOutput\n2\n1\n1\n4\n72\n\nNote\nFor the first test case, the only permutations similar to $ a=[4,0,3,2,1] $ are $ [4,0,3,2,1] $ and $ [4,0,2,3,1] $ .\n\nFor the second and third test cases, the given permutations are only similar to themselves.\n\nFor the fourth test case, there are $ 4 $ permutations similar to $ a=[1,2,4,0,5,3] $ :\n\n- $ [1,2,4,0,5,3] $ ;\n- $ [1,2,5,0,4,3] $ ;\n- $ [1,4,2,0,5,3] $ ;\n- $ [1,5,2,0,4,3] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nLet $$$p[x]$$$ be the position of $$$x$$$ in permutation $$$a$$$.\nSince $$$MEX([a_{p[0]}])=1$$$, the only possible position of $$$0$$$ in permutation $$$b$$$ is exactly $$$p[0]$$$.\nHint 2\nContinuing this line of thought, where can $$$1$$$ be placed in permutation $$$b$$$?\nHint 3\nWithout loss of generality, we will assume that $$$p[0] \\lt p[1]$$$.\nIf $$$p[2] \\lt p[0]$$$, then how many possible positions can $$$2$$$ have in permutation $$$b$$$?\nIf $$$p[0] \\lt p[2] \\lt p[1]$$$, then how many possible positions can $$$2$$$ have in permutation $$$b$$$?\nIf $$$p[2] \\gt p[1]$$$, then how many possible positions can $$$2$$$ have in permutation $$$b$$$?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "Let $$$p[x]$$$ be the position of $$$x$$$ in permutation $$$a$$$.\nSince $$$MEX([a_{p[0]}])=1$$$, the only possible position of $$$0$$$ in permutation $$$b$$$ is exactly $$$p[0]$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Continuing this line of thought, where can $$$1$$$ be placed in permutation $$$b$$$?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Without loss of generality, we will assume that $$$p[0] \\lt p[1]$$$.\nIf $$$p[2] \\lt p[0]$$$, then how many possible positions can $$$2$$$ have in permutation $$$b$$$?\nIf $$$p[0] \\lt p[2] \\lt p[1]$$$, then how many possible positions can $$$2$$$ have in permutation $$$b$$$?\nIf $$$p[2] \\gt p[1]$$$, then how many possible positions can $$$2$$$ have in permutation $$$b$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let $$$p[x]$$$ be the position of $$$x$$$ in permutation $$$a$$$.\nSince $$$MEX([a_{p[0]}])=1$$$, the only possible position of $$$0$$$ in permutation $$$b$$$ is exactly $$$p[0]$$$.\nWithout loss of generality, we will assume that $$$p[0] \\lt p[1]$$$. For every interval $$$[l,r]$$$ ($$$l \\le p[0] \\lt p[1]\\le r$$$), $$$MEX([b_l,\\ldots,b_r])$$$ must be at least $$$2$$$. For every other interval, $$$MEX([b_l,\\ldots,b_r])$$$ cannot exceed $$$2$$$. The only position for $$$1$$$ which satisfies both of these constraints is exactly $$$p[1]$$$.\nLet's consider the current interval  $$$[l,r]$$$ as being $$$[p[0],p[1]]$$$.\nIf $$$p[2] \\in [l,r]$$$, we can say that, for every interval $$$[x,y]$$$ ($$$x \\le l \\lt r \\le y$$$), $$$MEX([b_x,\\ldots,b_y])$$$ must be at least $$$3$$$. Similarly, for every other interval, $$$MEX([b_x,\\ldots,b_y])$$$ cannot exceed $$$3$$$. Both of these constraints are only met if $$$2$$$ occurs in permutation $$$b$$$ on some position $$$p \\in [l,r]$$$. Since only $$$2$$$ positions are currently occupied in $$$[l,r]$$$, the total number of similar permutations will be multiplied by $$$(r-l+1)-2$$$.\nOtherwise, $$$2$$$ can be placed in permutation $$$b$$$ only on $$$p[2]$$$. Additionally, the current interval will be \"extended\" to include $$$p[2]$$$, resuting in either $$$[p[2],r]$$$ or $$$[l,p[2]]$$$.\nAfter processing $$$0,1, \\ldots, k-2$$$ and $$$k-1$$$, the algorithm for processing $$$k$$$ is very similar to the one presented earlier. If $$$p[k] \\in [l,r]$$$, the answer gets multiplied by $$$(r-l+1)-k$$$. Otherwise, the current interval is extended to include $$$p[k]$$$.\nTime complexity per testcase: $$$O(n)$$$"
+        }
+    ]
+}

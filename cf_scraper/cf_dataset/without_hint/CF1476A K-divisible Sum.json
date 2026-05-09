@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two integers $ n $ and $ k $ .\n\nYou should create an array of $ n $ positive integers $ a_1, a_2, \\dots, a_n $ such that the sum $ (a_1 + a_2 + \\dots + a_n) $ is divisible by $ k $ and maximum element in $ a $ is minimum possible.\n\nWhat is the minimum possible maximum element in $ a $ ?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThe first and only line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 10^9 $ ; $ 1 \\le k \\le 10^9 $ ).\n\nOutput Format\nFor each test case, print one integer — the minimum possible maximum element in array $ a $ such that the sum $ (a_1 + \\dots + a_n) $ is divisible by $ k $ .\n\nExamples\nSample 1\nInput\n4\n1 5\n4 3\n8 8\n8 17\nOutput\n5\n2\n1\n3\n\nNote\nIn the first test case $ n = 1 $ , so the array consists of one element $ a_1 $ and if we make $ a_1 = 5 $ it will be divisible by $ k = 5 $ and the minimum possible.\n\nIn the second test case, we can create array $ a = [1, 2, 1, 2] $ . The sum is divisible by $ k = 3 $ and the maximum is equal to $ 2 $ .\n\nIn the third test case, we can create array $ a = [1, 1, 1, 1, 1, 1, 1, 1] $ . The sum is divisible by $ k = 8 $ and the maximum is equal to $ 1 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nlong\nlong\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nlong\nlong\ncf\n=\n(\nn\n+\nk\n-\n1\n)\n/\nk\n;\nk\n*=\ncf\n;\ncout\n<<\n(\nk\n+\nn\n-\n1\n)\n/\nn\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

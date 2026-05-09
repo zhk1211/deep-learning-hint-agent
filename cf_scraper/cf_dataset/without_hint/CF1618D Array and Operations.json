@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ of $ n $ integers, and another integer $ k $ such that $ 2k \\le n $ .\n\nYou have to perform exactly $ k $ operations with this array. In one operation, you have to choose two elements of the array (let them be $ a_i $ and $ a_j $ ; they can be equal or different, but their positions in the array must not be the same), remove them from the array, and add $ \\lfloor \\frac{a_i}{a_j} \\rfloor $ to your score, where $ \\lfloor \\frac{x}{y} \\rfloor $ is the maximum integer not exceeding $ \\frac{x}{y} $ .\n\nInitially, your score is $ 0 $ . After you perform exactly $ k $ operations, you add all the remaining elements of the array to the score.\n\nCalculate the minimum possible score you can get.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 500 $ ) — the number of test cases.\n\nEach test case consists of two lines. The first line contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 100 $ ; $ 0 \\le k \\le \\lfloor \\frac{n}{2} \\rfloor $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 2 \\cdot 10^5 $ ).\n\nOutput Format\nPrint one integer — the minimum possible score you can get.\n\nExamples\nSample 1\nInput\n5\n7 3\n1 1 1 2 1 3 1\n5 1\n5 5 5 5 5\n4 2\n1 3 3 7\n2 0\n4 2\n9 2\n1 10 10 1 10 2 7 10 3\nOutput\n2\n16\n0\n6\n16\n\nNote\nLet's consider the example test.\n\nIn the first test case, one way to obtain a score of $ 2 $ is the following one:\n\n1. choose $ a_7 = 1 $ and $ a_4 = 2 $ for the operation; the score becomes $ 0 + \\lfloor \\frac{1}{2} \\rfloor = 0 $ , the array becomes $ [1, 1, 1, 1, 3] $ ;\n2. choose $ a_1 = 1 $ and $ a_5 = 3 $ for the operation; the score becomes $ 0 + \\lfloor \\frac{1}{3} \\rfloor = 0 $ , the array becomes $ [1, 1, 1] $ ;\n3. choose $ a_1 = 1 $ and $ a_2 = 1 $ for the operation; the score becomes $ 0 + \\lfloor \\frac{1}{1} \\rfloor = 1 $ , the array becomes $ [1] $ ;\n4. add the remaining element $ 1 $ to the score, so the resulting score is $ 2 $ .\n\nIn the second test case, no matter which operations you choose, the resulting score is $ 16 $ .\n\nIn the third test case, one way to obtain a score of $ 0 $ is the following one:\n\n1. choose $ a_1 = 1 $ and $ a_2 = 3 $ for the operation; the score becomes $ 0 + \\lfloor \\frac{1}{3} \\rfloor = 0 $ , the array becomes $ [3, 7] $ ;\n2. choose $ a_1 = 3 $ and $ a_2 = 7 $ for the operation; the score becomes $ 0 + \\lfloor \\frac{3}{7} \\rfloor = 0 $ , the array becomes empty;\n3. the array is empty, so the score doesn't change anymore.\n\nIn the fourth test case, no operations can be performed, so the score is the sum of the elements of the array: $ 4 + 2 = 6 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "def\nsolve\n():\nn\n,\nk\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\na\n=\nsorted\n(\na\n)\ncost\n=\nsum\n(\na\n[\n0\n:\nn\n-\n2\n*\nk\n])\n+\nsum\n(\nmap\n(\nlambda\nx\n:\na\n[\nx\n+\nn\n-\n2\n*\nk\n]\n// a[x+n-k], range(0, k)))\nprint\n(\ncost\n)\nt\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\nsolve\n()"
+        }
+    ]
+}

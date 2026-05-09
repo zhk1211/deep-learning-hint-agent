@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "import\njava\n.\nutil\n.*\nfun main\n()\n{\nval m\n=\nreadLine\n()!!.\ntoInt\n()\nval b\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval n\n=\nb\n.\ncount\n{\nit\n==\n-\n1\n}\nval a\n=\nArray\n(\nn\n)\n{\nArrayList\n<\nInt\n>()\n}\nval ix\n=\nLinkedList\n<\nInt\n>((\n0\nuntil\nn\n).\ntoList\n())\nvar\niter\n=\nix\n.\niterator\n()\nfor\n(\nx\nin\nb\n)\n{\nif\n(!\niter\n.\nhasNext\n())\niter\n=\nix\n.\niterator\n()\nval i\n=\niter\n.\nnext\n()\nif\n(\nx\n==\n-\n1\n)\n{\niter\n.\nremove\n()\n}\nelse\n{\na\n[\ni\n].\nadd\n(\nx\n)\n}\n}\nprintln\n(\nn\n)\nprintln\n(\na\n.\njoinToString\n(\n\"\\n\"\n)\n{\n\"$$${it.size} $$${it.joinToString(\"\n\")}\"\n})\n}"
+        }
+    ]
+}

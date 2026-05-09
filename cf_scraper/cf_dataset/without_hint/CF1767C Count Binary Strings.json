@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer $ n $ . You have to calculate the number of binary (consisting of characters 0 and/or 1) strings $ s $ meeting the following constraints.\n\nFor every pair of integers $ (i, j) $ such that $ 1 \\le i \\le j \\le n $ , an integer $ a_{i,j} $ is given. It imposes the following constraint on the string $ s_i s_{i+1} s_{i+2} \\dots s_j $ :\n\n- if $ a_{i,j} = 1 $ , all characters in $ s_i s_{i+1} s_{i+2} \\dots s_j $ should be the same;\n- if $ a_{i,j} = 2 $ , there should be at least two different characters in $ s_i s_{i+1} s_{i+2} \\dots s_j $ ;\n- if $ a_{i,j} = 0 $ , there are no additional constraints on the string $ s_i s_{i+1} s_{i+2} \\dots s_j $ .\n\nCount the number of binary strings $ s $ of length $ n $ meeting the aforementioned constraints. Since the answer can be large, print it modulo $ 998244353 $ .\n\nInput Format\nThe first line contains one integer $ n $ ( $ 2 \\le n \\le 100 $ ).\n\nThen $ n $ lines follow. The $ i $ -th of them contains $ n-i+1 $ integers $ a_{i,i}, a_{i,i+1}, a_{i,i+2}, \\dots, a_{i,n} $ ( $ 0 \\le a_{i,j} \\le 2 $ ).\n\nOutput Format\nPrint one integer — the number of strings meeting the constraints, taken modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n3\n1 0 2\n1 0\n1\nOutput\n6\n\nSample 2\nInput\n3\n1 1 2\n1 0\n1\nOutput\n2\n\nSample 3\nInput\n3\n1 2 1\n1 0\n1\nOutput\n0\n\nSample 4\nInput\n3\n2 0 2\n0 1\n1\nOutput\n0\n\nNote\nIn the first example, the strings meeting the constraints are 001, 010, 011, 100, 101, 110.\n\nIn the second example, the strings meeting the constraints are 001, 110."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nadd\n(\nint\nx\n,\nint\ny\n)\n{\nx\n+=\ny\n;\nwhile\n(\nx\n>=\nMOD\n)\nx\n-=\nMOD\n;\nwhile\n(\nx\n<\n0\n)\nx\n+=\nMOD\n;\nreturn\nx\n;\n}\nint\nmul\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\n(\nx\n*\n1ll\n*\ny\n)\n%\nMOD\n;\n}\nconst\nint\nN\n=\n143\n;\nint\nn\n;\nint\na\n[\nN\n][\nN\n];\nint\ndp\n[\nN\n][\nN\n];\nbool\ncheck\n(\nint\ncnt\n,\nint\nlast\n)\n{\nfor\n(\nint\ni\n=\n0\n;\ni\n<\ncnt\n;\ni\n++)\n{\nif\n(\na\n[\ni\n][\ncnt\n-\n1\n]\n==\n0\n)\ncontinue\n;\nif\n(\na\n[\ni\n][\ncnt\n-\n1\n]\n==\n1\n&&\nlast\n>\ni\n)\nreturn\nfalse\n;\nif\n(\na\n[\ni\n][\ncnt\n-\n1\n]\n==\n2\n&&\nlast\n<=\ni\n)\nreturn\nfalse\n;\n}\nreturn\ntrue\n;\n}\nint\nmain\n()\n{\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\ni\n;\nj\n<\nn\n;\nj\n++)\ncin\n>>\na\n[\ni\n][\nj\n];\n}\nif\n(\na\n[\n0\n][\n0\n]\n!=\n2\n)\ndp\n[\n1\n][\n0\n]\n=\n2\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\nfor\n(\nint\nj\n=\n0\n;\nj\n<\ni\n;\nj\n++)\nfor\n(\nint\nk\n:\nvector\n<int>\n({\nj\n,\ni\n}))\nif\n(\ncheck\n(\ni\n+\n1\n,\nk\n))\ndp\n[\ni\n+\n1\n][\nk\n]\n=\nadd\n(\ndp\n[\ni\n+\n1\n][\nk\n],\ndp\n[\ni\n][\nj\n]);\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nans\n=\nadd\n(\nans\n,\ndp\n[\nn\n][\ni\n]);\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

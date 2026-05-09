@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\n#include\n<algorithm>\n#include\n<vector>\n#define\nint\nlong\nlong\nusing\nnamespace\nstd\n;\nsigned\nmain\n()\n{\nint\nn\n,\nlen\n;\ncin\n>>\nn\n>>\nlen\n;\nvector\n<int>\nA\n(\n2\n*\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\nA\n[\ni\n];\nA\n[\nn\n+\ni\n]\n=\nA\n[\ni\n];\n}\nn\n*=\n2\n;\nvector\n<int>\nB\n=\n{\n0\n},\nC\n=\n{\n0\n};\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nB\n.\npush_back\n(\nB\n.\nback\n()\n+\nA\n[\ni\n]);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nC\n.\npush_back\n(\nC\n.\nback\n()\n+\n(\nA\n[\ni\n]\n*\n(\nA\n[\ni\n]\n+\n1\n))\n/\n2\n);\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\nB\n[\ni\n+\n1\n]\n>=\nlen\n)\n{\nint\nz\n=\nupper_bound\n(\nB\n.\nbegin\n(),\nB\n.\nend\n(),\nB\n[\ni\n+\n1\n]\n-\nlen\n)\n-\nB\n.\nbegin\n();\nint\ncnt\n=\nC\n[\ni\n+\n1\n]\n-\nC\n[\nz\n];\nint\ndays\n=\nB\n[\ni\n+\n1\n]\n-\nB\n[\nz\n];\nint\ntoo\n=\nlen\n-\ndays\n;\ncnt\n+=\n((\nA\n[\nz\n-\n1\n]\n*\n(\nA\n[\nz\n-\n1\n]\n+\n1\n))\n/\n2\n);\ncnt\n-=\n(((\nA\n[\nz\n-\n1\n]\n-\ntoo\n)\n*\n(\nA\n[\nz\n-\n1\n]\n-\ntoo\n+\n1\n))\n/\n2\n);\nans\n=\nmax\n(\nans\n,\ncnt\n);\n}\n}\ncout\n<<\nans\n;\n}"
+        }
+    ]
+}

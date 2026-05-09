@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two integer numbers, $ n $ and $ x $ . You may perform several operations with the integer $ x $ .\n\nEach operation you perform is the following one: choose any digit $ y $ that occurs in the decimal representation of $ x $ at least once, and replace $ x $ by $ x \\cdot y $ .\n\nYou want to make the length of decimal representation of $ x $ (without leading zeroes) equal to $ n $ . What is the minimum number of operations required to do that?\n\nInput Format\nThe only line of the input contains two integers $ n $ and $ x $ ( $ 2 \\le n \\le 19 $ ; $ 1 \\le x < 10^{n-1} $ ).\n\nOutput Format\nPrint one integer — the minimum number of operations required to make the length of decimal representation of $ x $ (without leading zeroes) equal to $ n $ , or $ -1 $ if it is impossible.\n\nExamples\nSample 1\nInput\n2 1\nOutput\n-1\n\nSample 2\nInput\n3 2\nOutput\n4\n\nSample 3\nInput\n13 42\nOutput\n12\n\nNote\nIn the second example, the following sequence of operations achieves the goal:\n\n1. multiply $ x $ by $ 2 $ , so $ x = 2 \\cdot 2 = 4 $ ;\n2. multiply $ x $ by $ 4 $ , so $ x = 4 \\cdot 4 = 16 $ ;\n3. multiply $ x $ by $ 6 $ , so $ x = 16 \\cdot 6 = 96 $ ;\n4. multiply $ x $ by $ 9 $ , so $ x = 96 \\cdot 9 = 864 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nlong\nlong\nv\n;\ncin\n>>\nv\n;\nqueue\n<\nlong\nlong\n>\nq\n;\nmap\n<\nlong\nlong\n,\nint\n>\ndist\n;\ndist\n[\nv\n]\n=\n0\n;\nq\n.\npush\n(\nv\n);\nwhile\n(!\nq\n.\nempty\n())\n{\nlong\nlong\nk\n=\nq\n.\nfront\n();\nq\n.\npop\n();\nstring\ns\n=\nto_string\n(\nk\n);\nif\n(\ns\n.\nsize\n()\n==\nn\n)\n{\ncout\n<<\ndist\n[\nk\n]\n<<\nendl\n;\nreturn\n0\n;\n}\nfor\n(\nauto\nx\n:\ns\n)\n{\nif\n(\nx\n==\n'0'\n)\ncontinue\n;\nlong\nlong\nw\n=\nk\n*\nint\n(\nx\n-\n'0'\n);\nif\n(!\ndist\n.\ncount\n(\nw\n))\n{\ndist\n[\nw\n]\n=\ndist\n[\nk\n]\n+\n1\n;\nq\n.\npush\n(\nw\n);\n}\n}\n}\ncout\n<<\n-\n1\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nTimur likes his name. As a spelling of his name, he allows any permutation of the letters of the name. For example, the following strings are valid spellings of his name: Timur, miurT, Trumi, mriTu. Note that the correct spelling must have uppercased T and lowercased other letters.\n\nToday he wrote string $ s $ of length $ n $ consisting only of uppercase or lowercase Latin letters. He asks you to check if $ s $ is the correct spelling of his name.\n\nInput Format\nThe first line of the input contains an integer $ t $ ( $ 1 \\leq t \\leq 10^3 $ ) — the number of test cases.\n\nThe first line of each test case contains an integer $ n $ $ (1 \\leq n \\leq 10) $ — the length of string $ s $ .\n\nThe second line of each test case contains a string $ s $ consisting of only uppercase or lowercase Latin characters.\n\nOutput Format\nFor each test case, output \"YES\" (without quotes) if $ s $ satisfies the condition, and \"NO\" (without quotes) otherwise.\n\nYou can output the answer in any case (for example, the strings \"yEs\", \"yes\", \"Yes\" and \"YES\" will be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n10\n5\nTimur\n5\nmiurT\n5\nTrumi\n5\nmriTu\n5\ntimur\n4\nTimr\n6\nTimuur\n10\ncodeforces\n10\nTimurTimur\n5\nTIMUR\nOutput\nYES\nYES\nYES\nYES\nNO\nNO\nNO\nNO\nNO\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1722A - Spell Check\nCheck if the string has length 5 and if it has the characters $$$\\texttt{T}, \\texttt{i}, \\texttt{m}, \\texttt{u}, \\texttt{r}$$$. The complexity is $$$\\mathcal{O}(n)$$$.\nYou can also sort the string, and check if it is $$$\\texttt{Timur}$$$ when sorted (which is $$$\\texttt{Timru}$$$)."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nmain\n()\n{\nstring\nname\n=\n\"Timur\"\n;\nsort\n(\nname\n.\nbegin\n(),\nname\n.\nend\n());\nint\nn\n;\ncin\n>>\nn\n;\nforn\n(\ni\n,\nn\n)\n{\nint\nm\n;\ncin\n>>\nm\n;\nstring\ns\n;\ncin\n>>\ns\n;\nsort\n(\ns\n.\nbegin\n(),\ns\n.\nend\n());\ncout\n<<\n(\ns\n==\nname\n?\n\"YES\"\n:\n\"NO\"\n)\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

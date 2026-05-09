@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven an array $ a_1, a_2, \\dots, a_n $ , you need to handle a total of $ q $ updates and queries of two types:\n\n- $ 1 $ $ l $ $ r $ — for each index $ i $ with $ l \\leq i \\leq r $ , update the value of $ a_i $ to the sum of the digits of $ a_i $ .\n- $ 2 $ $ x $ — output $ a_x $ .\n\nInput Format\nThe first line of the input contains an integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of testcases.\n\nThe first line of each test case contains two integers $ n $ and $ q $ ( $ 1 \\le n, q \\le 2 \\cdot 10^5 $ ) — the size of the array and the number of queries, respectively.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nThe next $ q $ lines of each test case are of two forms:\n\n- $ 1 $ $ l $ $ r $ ( $ 1 \\leq l \\leq r \\leq n $ ) — it means, for each index $ i $ with $ l \\leq i \\leq r $ , you should update the value of $ a_i $ to the sum of its digits.\n- $ 2 $ $ x $ ( $ 1 \\leq x \\leq n $ ) — it means you should output $ a_x $ .\n\nThere is at least one query of the second type.\n\nThe sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nThe sum of $ q $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output the answers of queries of the second type, in the order they are given.\n\nExamples\nSample 1\nInput\n3\n5 8\n1 420 69 1434 2023\n1 2 3\n2 2\n2 3\n2 4\n1 2 5\n2 1\n2 3\n2 5\n2 3\n9999 1000\n1 1 2\n2 1\n2 2\n1 1\n1\n2 1\nOutput\n6\n15\n1434\n1\n6\n7\n36\n1\n1\n\nNote\nIn the first test case, the following process occurs:\n\n- Initially, $ a = [1, 420, 69, 1434, 2023] $ .\n- The operation is performed for $ l=2 $ , $ r=3 $ , yielding $ [1, \\textcolor{red}{6}, \\textcolor{red}{15}, 1434, 2023] $ .\n- We are queried for $ x=2 $ , $ x=3 $ , and $ x=4 $ , and output $ 6 $ , $ 15 $ , and $ 1434 $ .\n- The operation is performed for $ l=2 $ , $ r=5 $ , yielding $ [1, \\textcolor{red}{6}, \\textcolor{red}{6}, \\textcolor{red}{12}, \\textcolor{red}{7}] $ .\n- We are queried for $ x=1 $ , $ x=3 $ , and $ x=5 $ , and output $ 1 $ , $ 6 $ , and $ 7 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\ndigit_sum\n(\nint\nn\n)\n{\nint\nret\n=\n0\n;\nwhile\n(\nn\n)\n{\nret\n+=\nn\n%\n10\n;\nn\n/=\n10\n;\n}\nreturn\nret\n;\n}\nvoid\nsolve\n()\n{\nint\nn\n,\nq\n;\ncin\n>>\nn\n>>\nq\n;\nvector\n<int>\na\n(\nn\n);\nset\n<int>\ns\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\nif\n(\na\n[\ni\n]\n>\n9\n)\ns\n.\ninsert\n(\ni\n);\n}\nwhile\n(\nq\n--)\n{\nint\ntype\n;\ncin\n>>\ntype\n;\nif\n(\ntype\n==\n1\n)\n{\nint\nl\n,\nr\n;\ncin\n>>\nl\n>>\nr\n;\n--\nl\n,\n--\nr\n;\nint\nlst\n=\nl\n;\nwhile\n(!\ns\n.\nempty\n())\n{\nauto\nit\n=\ns\n.\nlower_bound\n(\nlst\n);\nif\n(\nit\n==\ns\n.\nend\n()\n||\n*\nit\n>\nr\n)\nbreak\n;\na\n[*\nit\n]\n=\ndigit_sum\n(\na\n[*\nit\n]);\nint\npaiu\n=\n*\nit\n;\ns\n.\nerase\n(\nit\n);\nif\n(\na\n[\npaiu\n]\n>\n9\n)\ns\n.\ninsert\n(\npaiu\n);\nlst\n=\npaiu\n+\n1\n;\n}\n}\nelse\n{\nint\nx\n;\ncin\n>>\nx\n;\n--\nx\n;\ncout\n<<\na\n[\nx\n]\n<<\n\"\\n\"\n;\n}\n}\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\ncout\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

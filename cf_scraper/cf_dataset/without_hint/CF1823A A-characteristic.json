@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nConsider an array $ a_1, a_2, \\dots, a_n $ consisting of numbers $ 1 $ and $ -1 $ . Define $ A $ -characteristic of this array as a number of pairs of indices $ 1 \\le i < j \\le n $ , such that $ a_i \\cdot a_j = 1 $ .\n\nFind any array $ a $ with given length $ n $ with $ A $ -characteristic equal to the given value $ k $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 100 $ ). The description of the test cases follows.\n\nThe only line of each test case contains two integers $ n $ and $ k $ ( $ 2 \\le n \\le 100 $ ; $ 0 \\le k \\le \\frac{(n-1) n}{2} $ ) — the length of required array and required $ A $ -characteristic.\n\nOutput Format\nFor each test case, if there is no array $ a $ with given $ A $ -characteristic $ k $ , print NO.\n\nOtherwise, print YES and $ n $ numbers $ 1 $ and $ -1 $ , which form the required array $ a $ . If there are multiple answers, print any of them.\n\nExamples\nSample 1\nInput\n7\n2 0\n2 1\n3 1\n3 2\n3 3\n5 4\n5 5\nOutput\nYES\n1 -1\nYES\n1 1\nYES\n1 -1 1\nNO\nYES\n1 1 1\nYES\n-1 1 -1 1 1\nNO\n\nNote\nIn the first test case, there is only one pair of different elements in the array, and their product is $ a_1 \\cdot a_2 = -1 \\neq 1 $ , hence its $ A $ -characteristic is $ 0 $ .\n\nIn the second test case, there is only one pair of different elements in the array, and their product is $ a_1 \\cdot a_2 = 1 $ , hence its $ A $ -characteristic is $ 1 $ .\n\nIn the third test case, there are three pairs of different elements in the array, and their product are: $ a_1 \\cdot a_2 = -1 $ , $ a_1 \\cdot a_3 = 1 $ , $ a_2 \\cdot a_3 = -1 $ , hence its $ A $ -characteristic is $ 1 $ .\n\nIn the fourth test case, we can show, that there is no array with length $ 3 $ , which $ A $ -characteristic is $ 2 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution Python",
+            "content": "for\ntt\nin\nrange\n(\nint\n(\ninput\n())):\nn\n,\nk\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nx\n=\n-\n1\nfor\ni\nin\nrange\n(\n0\n,\nn\n+\n1\n):\nif\ni\n*\n(\ni\n-\n1\n)\n/\n2\n+\n(\nn\n-\ni\n)\n*\n(\nn\n-\ni\n-\n1\n)\n/\n2\n==\nk\n:\nx\n=\ni\nif\nx\n==\n-\n1\n:\nprint\n(\n\"NO\"\n)\nelse\n:\nprint\n(\n\"YES\"\n)\nfor\ni\nin\nrange\n(\n0\n,\nn\n):\nif\ni\n<\nx\n:\nprint\n(\n\"1 \"\n,\nend\n=\n''\n)\nelse\n:\nprint\n(\n\"-1 \"\n,\nend\n=\n''\n)\nprint\n(\n\"\"\n)"
+        }
+    ]
+}

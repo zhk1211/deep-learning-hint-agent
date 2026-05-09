@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "When an edge is removed, the two neighbouring vertex have the same parity of edges. We say that an edge is odd, if the parity is odd, and the edge is even otherwise.\nOne can see, that a vertex with even degree will have the same amount of odd and even edges. For a vertex with odd degree, there will be one more odd edge.\nStarting from the leaves, we can decide the parity of each edge (an edge connected to a leaf is odd).\nIf there is a contradiction somewhere than the answer is\nNO\n.\nOtherwise, there is a construction.\nIn each vertex decide the removal order of the outgoing edges. Any order is good, when it always changes parity, and ends with an odd edge. Consider the directed graph with these conditions. One can see, that this graph is acyclic, so there is a topological order of that graph which will satisfy all the conditions.\nAlso, it is possible to solve it recursively."
+        },
+        {
+            "title": "Implementation (C++)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nc\n=\n200005\n;\nint\nt\n,\nn\n,\nup\n[\nc\n];\nbool\nparity\n[\nc\n],\nvis\n[\nc\n],\nno_sol\n;\nvector\n<int>\nedges\n[\nc\n];\nvoid\ndfs\n(\nint\na\n)\n{\nvis\n[\na\n]=\ntrue\n;\nint\ncnt\n[\n2\n]={\n0\n,\n0\n};\nfor\n(\nauto\nx\n:\nedges\n[\na\n])\n{\nif\n(!\nvis\n[\nx\n])\n{\nup\n[\nx\n]=\na\n;\ndfs\n(\nx\n);\ncnt\n[\nparity\n[\nx\n]]++;\n}\n}\nif\n(\na\n!=\n1\n)\n{\nif\n(\nparity\n[\na\n]=(\ncnt\n[\n0\n]>=\ncnt\n[\n1\n]));\ncnt\n[\nparity\n[\na\n]]++;\n}\nif\n(\ncnt\n[\n1\n]-\ncnt\n[\n0\n]<\n0\n||\ncnt\n[\n1\n]-\ncnt\n[\n0\n]>\n1\n)\n{\nno_sol\n=\n1\n;\n}\n}\nvoid\nsolve\n(\nint\na\n)\n{\nvector\n<int>\np\n[\n2\n];\nfor\n(\nauto\nx\n:\nedges\n[\na\n])\n{\nif\n(\nx\n!=\nup\n[\na\n])\n{\np\n[\nparity\n[\nx\n]].\npush_back\n(\nx\n);\n}\nelse\n{\np\n[\nparity\n[\na\n]].\npush_back\n(\na\n);\n}\n}\nint\nsi\n=\nedges\n[\na\n].\nsize\n(),\nid\n=\nsi\n%\n2\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nsi\n;\ni\n++)\n{\nint\nval\n=\np\n[\nid\n].\nback\n();\nif\n(\nval\n==\na\n)\n{\ncout\n<<\na\n<<\n\" \"\n<<\nup\n[\na\n]\n<<\n\"\\n\"\n;\n}\nelse\n{\nsolve\n(\nval\n);\n}\np\n[\nid\n].\npop_back\n();\nid\n=\n1\n-\nid\n;\n}\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n>>\nt\n;\nfor\n(\nint\ntest\n=\n0\n;\ntest\n<\nt\n;\ntest\n++)\n{\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\n{\nint\na\n,\nb\n;\ncin\n>>\na\n>>\nb\n;\nedges\n[\na\n].\npush_back\n(\nb\n),\nedges\n[\nb\n].\npush_back\n(\na\n);\n}\ndfs\n(\n1\n);\nif\n(\nno_sol\n)\n{\ncout\n<<\n\"NO\\n\"\n;\n}\nelse\n{\ncout\n<<\n\"YES\\n\"\n;\nsolve\n(\n1\n);\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nparity\n[\ni\n]=\n0\n,\nup\n[\ni\n]=\n0\n,\nvis\n[\ni\n]=\n0\n;\nedges\n[\ni\n].\nclear\n();\n}\nno_sol\n=\n0\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

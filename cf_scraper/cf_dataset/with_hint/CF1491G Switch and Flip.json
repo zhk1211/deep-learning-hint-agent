@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ coins labeled from $ 1 $ to $ n $ . Initially, coin $ c_i $ is on position $ i $ and is facing upwards (( $ c_1, c_2, \\dots, c_n) $ is a permutation of numbers from $ 1 $ to $ n $ ). You can do some operations on these coins.\n\nIn one operation, you can do the following:\n\n- Choose $ 2 $ distinct indices $ i $ and $ j $ .\n- Then, swap the coins on positions $ i $ and $ j $ .\n- Then, flip both coins on positions $ i $ and $ j $ . (If they are initially faced up, they will be faced down after the operation and vice versa)\n\nConstruct a sequence of at most $ n+1 $ operations such that after performing all these operations the coin $ i $ will be on position $ i $ at the end, facing up.\n\nNote that you do not need to minimize the number of operations.\n\nInput Format\nThe first line contains an integer $ n $ ( $ 3 \\leq n \\leq 2 \\cdot 10^5 $ ) — the number of coins.\n\nThe second line contains $ n $ integers $ c_1,c_2,\\dots,c_n $ ( $ 1 \\le c_i \\le n $ , $ c_i \\neq c_j $ for $ i\\neq j $ ).\n\nOutput Format\nIn the first line, output an integer $ q $ $ (0 \\leq q \\leq n+1) $ — the number of operations you used.\n\nIn the following $ q $ lines, output two integers $ i $ and $ j $ $ (1 \\leq i, j \\leq n, i \\ne j) $ — the positions you chose for the current operation.\n\nExamples\nSample 1\nInput\n3\n2 1 3\nOutput\n3\n1 3\n3 2\n3 1\n\nSample 2\nInput\n5\n1 2 3 4 5\nOutput\n0\n\nNote\nLet coin $ i $ facing upwards be denoted as $ i $ and coin $ i $ facing downwards be denoted as $ -i $ .\n\nThe series of moves performed in the first sample changes the coins as such:\n\n- $ [~~~2,~~~1,~~~3] $\n- $ [-3,~~~1,-2] $\n- $ [-3,~~~2,-1] $\n- $ [~~~1,~~~2,~~~3] $\n\nIn the second sample, the coins are already in their correct positions so there is no need to swap."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Visualize this problem as graph with directed edges $$$(i,c_i)$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Solve this problem where there is only $$$1$$$ big cycle."
+        },
+        {
+            "title": "Hint 3",
+            "content": "What if a cycle has $$$2$$$ coins that are upside down? How can we force a cycle into such state?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "We can visualize the problem as a graph with nodes of $$$2$$$ colors (face up — red and face down — blue). Initially, the graph has nodes with all red color and with a directed edge to $$$c_i$$$.\nFirstly, any $$$2$$$ cycles with all red nodes can be converted into a single cycle with $$$2$$$ blues nodes with $$$1$$$ swap.\nA cycle with $$$2$$$ blue nodes is very convenient here as swapping a blue node with a red node it is pointing to will decrease the cycle size and maintain that the cycle still has $$$2$$$ blue nodes. We can keep decreasing the cycle size until the cycle has only $$$2$$$ blue nodes and solve that in $$$1$$$ swap. Thus, solving $$$2$$$ cycles which have $$$X$$$ nodes in total uses only $$$X$$$ swaps.\nNow, we simply pair the cycles and do this.\nHowever, if there is an odd number of cycles, there are $$$2$$$ cases:\nIf the cycle does not cover the whole graph, we can solve the remaining cycle and a cycle of size $$$1$$$ together.\nOtherwise, we can force $$$2$$$ blue nodes into the cycle with $$$2$$$ swaps (does not work for $$$n = 2$$$ so be careful).\nBoth cases need $$$X+1$$$ moves where $$$X$$$ is the size of the remaining cycle.\nThus, at most $$$X+1$$$ swaps is needed in this algorithm."
+        }
+    ]
+}

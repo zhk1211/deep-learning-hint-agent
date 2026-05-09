@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's denote (yet again) the sequence of Fibonacci strings:\n\n$ F(0) = $ 0, $ F(1) = $ 1, $ F(i) = F(i - 2) + F(i - 1) $ , where the plus sign denotes the concatenation of two strings.\n\nLet's denote the lexicographically sorted sequence of suffixes of string $ F(i) $ as $ A(F(i)) $ . For example, $ F(4) $ is 01101, and $ A(F(4)) $ is the following sequence: 01, 01101, 1, 101, 1101. Elements in this sequence are numbered from $ 1 $ .\n\nYour task is to print $ m $ first characters of $ k $ -th element of $ A(F(n)) $ . If there are less than $ m $ characters in this suffix, then output the whole suffix.\n\nInput Format\nThe only line of the input contains three numbers $ n $ , $ k $ and $ m $ ( $ 1 \\le n, m \\le 200 $ , $ 1 \\le k \\le 10^{18} $ ) denoting the index of the Fibonacci string you have to consider, the index of the element of $ A(F(n)) $ and the number of characters you have to output, respectively.\n\nIt is guaranteed that $ k $ does not exceed the length of $ F(n) $ .\n\nOutput Format\nOutput $ m $ first characters of $ k $ -th element of $ A(F(n)) $ , or the whole element if its length is less than $ m $ .\n\nExamples\nSample 1\nInput\n4 5 3\nOutput\n110\n\nSample 2\nInput\n4 3 3\nOutput\n1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nli\n;\nconst\nli INF64\n=\nli\n(\n1e18\n);\nli\nadd\n(\nli x\n,\nli y\n)\n{\nreturn\nmin\n(\nx\n+\ny\n,\nINF64\n);\n}\nconst\nint\nN\n=\n243\n;\nint\nA1\n[\nN\n][\n2\n];\nli A2\n[\nN\n][\nN\n];\nint\nA3\n[\nN\n][\nN\n];\nint\nn\n,\nm\n;\nli k\n;\nint\nz\n;\nint\np\n[\nN\n];\nvoid\nbuild\n(\nconst\nstring\n&\ns\n)\n{\nz\n=\n(\nint\n)(\ns\n.\nsize\n());\np\n[\n0\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nz\n;\ni\n++)\n{\nint\nj\n=\np\n[\ni\n-\n1\n];\nwhile\n(\nj\n>\n0\n&&\ns\n[\nj\n]\n!=\ns\n[\ni\n])\nj\n=\np\n[\nj\n-\n1\n];\nif\n(\ns\n[\nj\n]\n==\ns\n[\ni\n])\nj\n++;\np\n[\ni\n]\n=\nj\n;\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nz\n;\ni\n++)\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n2\n;\nj\n++)\n{\nif\n(\ni\n<\nz\n&&\ns\n[\ni\n]\n==\nchar\n(\n'0'\n+\nj\n))\nA1\n[\ni\n][\nj\n]\n=\ni\n+\n1\n;\nelse\nif\n(\ni\n==\n0\n)\nA1\n[\ni\n][\nj\n]\n=\n0\n;\nelse\nA1\n[\ni\n][\nj\n]\n=\nA1\n[\np\n[\ni\n-\n1\n]][\nj\n];\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nz\n;\ni\n++)\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n2\n;\nj\n++)\n{\nA3\n[\ni\n][\nj\n]\n=\nA1\n[\ni\n][\nj\n];\nA2\n[\ni\n][\nj\n]\n=\n(\nA3\n[\ni\n][\nj\n]\n==\nz\n?\n1\n:\n0\n);\n}\nfor\n(\nint\ni\n=\n2\n;\ni\n<=\nn\n;\ni\n++)\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\nz\n;\nj\n++)\n{\nA3\n[\nj\n][\ni\n]\n=\nA3\n[\nA3\n[\nj\n][\ni\n-\n2\n]][\ni\n-\n1\n];\nA2\n[\nj\n][\ni\n]\n=\nadd\n(\nA2\n[\nj\n][\ni\n-\n2\n],\nA2\n[\nA3\n[\nj\n][\ni\n-\n2\n]][\ni\n-\n1\n]);\n}\n}\nint\nmain\n()\n{\ncin\n>>\nn\n>>\nk\n>>\nm\n;\nstring\ncur\n=\n\"\"\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nm\n;\ni\n++)\n{\nif\n(\ncur\n!=\n\"\"\n)\nbuild\n(\ncur\n);\nli x\n=\n0\n;\nif\n(\ncur\n!=\n\"\"\n&&\nA3\n[\n0\n][\nn\n]\n==\ni\n)\nx\n=\n1\n;\nif\n(\nk\n==\n1\n&&\nx\n==\n1\n)\nbreak\n;\nk\n-=\nx\n;\nbuild\n(\ncur\n+\n'0'\n);\nli x1\n=\nA2\n[\n0\n][\nn\n];\nif\n(\nk\n>\nx1\n)\n{\ncur\n+=\n'1'\n;\nk\n-=\nx1\n;\n}\nelse\ncur\n+=\n'0'\n;\n}\ncout\n<<\ncur\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

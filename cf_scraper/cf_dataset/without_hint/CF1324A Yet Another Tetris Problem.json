@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given some Tetris field consisting of $ n $ columns. The initial height of the $ i $ -th column of the field is $ a_i $ blocks. On top of these columns you can place only figures of size $ 2 \\times 1 $ (i.e. the height of this figure is $ 2 $ blocks and the width of this figure is $ 1 $ block). Note that you cannot rotate these figures.\n\nYour task is to say if you can clear the whole field by placing such figures.\n\nMore formally, the problem can be described like this:\n\nThe following process occurs while at least one $ a_i $ is greater than $ 0 $ :\n\n1. You place one figure $ 2 \\times 1 $ (choose some $ i $ from $ 1 $ to $ n $ and replace $ a_i $ with $ a_i + 2 $ );\n2. then, while all $ a_i $ are greater than zero, replace each $ a_i $ with $ a_i - 1 $ .\n\nAnd your task is to determine if it is possible to clear the whole field (i.e. finish the described process), choosing the places for new figures properly.\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThe next $ 2t $ lines describe test cases. The first line of the test case contains one integer $ n $ ( $ 1 \\le n \\le 100 $ ) — the number of columns in the Tetris field. The second line of the test case contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 100 $ ), where $ a_i $ is the initial height of the $ i $ -th column of the Tetris field.\n\nOutput Format\nFor each test case, print the answer — \"YES\" (without quotes) if you can clear the whole Tetris field and \"NO\" otherwise.\n\nExamples\nSample 1\nInput\n4\n3\n1 1 3\n4\n1 1 2 1\n2\n11 11\n1\n100\nOutput\nYES\nNO\nYES\nYES\n\nNote\nThe first test case of the example field is shown below:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1324A/2ecdd2a3b945fba43a635ca66c5bad0349190c6d.png)\n\nGray lines are bounds of the Tetris field. Note that the field has no upper bound.\n\nOne of the correct answers is to first place the figure in the first column. Then after the second step of the process, the field becomes $ [2, 0, 2] $ . Then place the figure in the second column and after the second step of the process, the field becomes $ [0, 0, 0] $ .\n\nAnd the second test case of the example field is shown below:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1324A/c37b4ffc9a98440045cf9a89fb956f7445051e41.png)\n\nIt can be shown that you cannot do anything to end the process.\n\nIn the third test case of the example, you first place the figure in the second column after the second step of the process, the field becomes $ [0, 2] $ . Then place the figure in the first column and after the second step of the process, the field becomes $ [0, 0] $ .\n\nIn the fourth test case of the example, place the figure in the first column, then the field becomes $ [102] $ after the first step of the process, and then the field becomes $ [0] $ after the second step of the process."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "for\ni\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\ncnto\n=\nsum\n(\nlist\n(\nmap\n(\nlambda\nx\n:\nint\n(\nx\n)\n%\n2\n,\ninput\n().\nsplit\n())))\nprint\n(\n'YES'\nif\ncnto\n==\n0\nor\ncnto\n==\nn\nelse\n'NO'\n)"
+        }
+    ]
+}

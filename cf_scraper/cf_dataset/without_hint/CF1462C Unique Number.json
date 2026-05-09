@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a positive number $ x $ . Find the smallest positive integer number that has the sum of digits equal to $ x $ and all digits are distinct (unique).\n\nInput Format\nThe first line contains a single positive integer $ t $ ( $ 1 \\le t \\le 50 $ ) — the number of test cases in the test. Then $ t $ test cases follow.\n\nEach test case consists of a single integer number $ x $ ( $ 1 \\le x \\le 50 $ ).\n\nOutput Format\nOutput $ t $ answers to the test cases:\n\n- if a positive integer number with the sum of digits equal to $ x $ and all digits are different exists, print the smallest such number;\n- otherwise print -1.\n\nExamples\nSample 1\nInput\n4\n1\n5\n15\n50\nOutput\n1\n5\n69\n-1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nx\n;\ncin\n>>\nx\n;\nvector\n<int>\nans\n;\nint\nsum\n=\n0\n,\nlast\n=\n9\n;\nwhile\n(\nsum\n<\nx\n&&\nlast\n>\n0\n)\n{\nans\n.\npush_back\n(\nmin\n(\nx\n-\nsum\n,\nlast\n));\nsum\n+=\nlast\n;\nlast\n--;\n}\nif\n(\nsum\n<\nx\n)\n{\ncout\n<<\n-\n1\n<<\n\"\\n\"\n;\n}\nelse\n{\nreverse\n(\nans\n.\nbegin\n(),\nans\n.\nend\n());\nfor\n(\nint\ni\n:\nans\n)\n{\ncout\n<<\ni\n;\n}\ncout\n<<\n\"\\n\"\n;\n}\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

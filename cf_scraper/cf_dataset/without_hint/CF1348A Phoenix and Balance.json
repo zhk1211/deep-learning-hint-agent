@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPhoenix has $ n $ coins with weights $ 2^1, 2^2, \\dots, 2^n $ . He knows that $ n $ is even.\n\nHe wants to split the coins into two piles such that each pile has exactly $ \\frac{n}{2} $ coins and the difference of weights between the two piles is minimized. Formally, let $ a $ denote the sum of weights in the first pile, and $ b $ denote the sum of weights in the second pile. Help Phoenix minimize $ |a-b| $ , the absolute value of $ a-b $ .\n\nInput Format\nThe input consists of multiple test cases. The first line contains an integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThe first line of each test case contains an integer $ n $ ( $ 2 \\le n \\le 30 $ ; $ n $ is even) — the number of coins that Phoenix has.\n\nOutput Format\nFor each test case, output one integer — the minimum possible difference of weights between the two piles.\n\nExamples\nSample 1\nInput\n2\n2\n4\nOutput\n2\n6\n\nNote\nIn the first test case, Phoenix has two coins with weights $ 2 $ and $ 4 $ . No matter how he divides the coins, the difference will be $ 4-2=2 $ .\n\nIn the second test case, Phoenix has four coins of weight $ 2 $ , $ 4 $ , $ 8 $ , and $ 16 $ . It is optimal for Phoenix to place coins with weights $ 2 $ and $ 16 $ in one pile, and coins with weights $ 4 $ and $ 8 $ in another pile. The difference is $ (2+16)-(4+8)=6 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n(){\nint\nN\n;\ncin\n>>\nN\n;\n//note: 1<<X means 2^X\n//we put largest coin in first pile\nint\nsum1\n=(\n1\n<<\nN\n),\nsum2\n=\n0\n;\n//we put n/2-1 smallest coins in first pile\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nN\n/\n2\n;\ni\n++)\nsum1\n+=(\n1\n<<\ni\n);\n//we put remaining n/2 coins in second pile\nfor\n(\nint\ni\n=\nN\n/\n2\n;\ni\n<\nN\n;\ni\n++)\nsum2\n+=(\n1\n<<\ni\n);\ncout\n<<\nsum1\n-\nsum2\n<<\nendl\n;\n}\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\nsolve\n();\n}"
+        }
+    ]
+}

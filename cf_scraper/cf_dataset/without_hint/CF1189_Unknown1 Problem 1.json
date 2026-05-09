@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution 1 (magic)",
+            "content": "Claim: $$$f([a_1, a_2, \\ldots, a_{2^k}]) = \\lfloor \\frac{a_1 + a_2 + \\ldots + a_{2^k}}{10} \\rfloor$$$. Clearly, using it we can answer queries in $$$O(1)$$$ if we create array $$$prefsum$$$, in which $$$prefsum[i] = a_1 + \\ldots + a_i$$$.\nProof of claim\nImagine, that candy is equal to number $$$10$$$. Then sum of all numbers doesn't change: when we replace $$$(a, b) \\to ((a + b) \\bmod 10)$$$ we take $$$10$$$ iff $$$a + b$$$ exceeds $$$(a + b) \\bmod 10$$$. Also note, that sum of numbers-candies is divisible by $$$10$$$ (because we take only tens). Then, in the end, the remaining digit is equal to the remainder of the division of the initial sum by $$$10$$$, so the number of candies is equal to the quotient.\ncode\nAsymptotics is $$$O(n + q)$$$."
+        },
+        {
+            "title": "Solution 2 (dp)",
+            "content": "It's possible to solve the problem using dynamic programming.\nFor each segment $$$[s_l, s_{l+1}, \\ldots, s_r]$$$, length of which is a power of two, we will save pair — digit, which will remain and the number of candies, which we get for this segment. For segment of length $$$1$$$ this pair is $$$(s_l, 0)$$$.\nNote that there are at most $$$\\log{n}$$$ different lengths of segments, and the number of segments with fixed length is at most $$$n$$$. It follows that there are at most $$$n\\log{n}$$$ segments.\nNow solution is similar to building sparse table. We will calculate needed pairs for segments in the order of increasing of their length: firstly for segments of length $$$2$$$, then for length $$$4$$$, etc. It turns out that the answer for segment of length $$$2^k$$$ can be calculated from smaller segments in constant time! Indeed, to get pair (last digit, number of candies) for $$$[s_l, s_{l+1}, \\ldots, s_{l + 2^k - 1}]$$$, it's sufficient to know, how many candies we got in segments $$$[s_l, s_{l+1}, \\ldots, s_{l + 2^{k-1} - 1}]$$$, $$$[s_{l+2^{k-1}}, s_{l+2^{k-1} + 1}, \\ldots, s_{l + 2^k - 1}]$$$, and also what digits $$$dig_1, dig_2$$$ were left last in this segments, then last digit on our segment is equal $$$(dig_1 + dig_2)\\bmod 10$$$, also if $$$dig_1 + dig_2 \\ge 10$$$, we get one more candy.\nSo, transition for one segment is made in $$$O(1)$$$, which gives asymptotics $$$O(n\\log{n})$$$.\ncode"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two strings $ s $ and $ t $ , both consisting of exactly $ k $ lowercase Latin letters, $ s $ is lexicographically less than $ t $ .\n\nLet's consider list of all strings consisting of exactly $ k $ lowercase Latin letters, lexicographically not less than $ s $ and not greater than $ t $ (including $ s $ and $ t $ ) in lexicographical order. For example, for $ k=2 $ , $ s= $ \"az\" and $ t= $ \"bf\" the list will be \\[\"az\", \"ba\", \"bb\", \"bc\", \"bd\", \"be\", \"bf\"\\].\n\nYour task is to print the median (the middle element) of this list. For the example above this will be \"bc\".\n\nIt is guaranteed that there is an odd number of strings lexicographically not less than $ s $ and not greater than $ t $ .\n\nInput Format\nThe first line of the input contains one integer $ k $ ( $ 1 \\le k \\le 2 \\cdot 10^5 $ ) — the length of strings.\n\nThe second line of the input contains one string $ s $ consisting of exactly $ k $ lowercase Latin letters.\n\nThe third line of the input contains one string $ t $ consisting of exactly $ k $ lowercase Latin letters.\n\nIt is guaranteed that $ s $ is lexicographically less than $ t $ .\n\nIt is guaranteed that there is an odd number of strings lexicographically not less than $ s $ and not greater than $ t $ .\n\nOutput Format\nPrint one string consisting exactly of $ k $ lowercase Latin letters — the median (the middle element) of list of strings of length $ k $ lexicographically not less than $ s $ and not greater than $ t $ .\n\nExamples\nSample 1\nInput\n2\naz\nbf\nOutput\nbc\n\nSample 2\nInput\n5\nafogk\nasdji\nOutput\nalvuw\n\nSample 3\nInput\n6\nnijfvj\ntvqhwp\nOutput\nqoztvz"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvector\n<int>\nget\n(\nconst\nstring\n&\ns\n)\n{\nvector\n<int>\nres\n(\ns\n.\nsize\n()\n+\n1\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\ns\n.\nsize\n());\n++\ni\n)\n{\nres\n[\ni\n+\n1\n]\n=\ns\n[\ni\n]\n-\n'a'\n;\n}\nreturn\nres\n;\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nk\n;\nstring\ns\n,\nt\n;\ncin\n>>\nk\n>>\ns\n>>\nt\n;\nvector\n<int>\na\n=\nget\n(\ns\n),\nb\n=\nget\n(\nt\n);\nfor\n(\nint\ni\n=\nk\n;\ni\n>=\n0\n;\n--\ni\n)\n{\na\n[\ni\n]\n+=\nb\n[\ni\n];\nif\n(\ni\n)\n{\na\n[\ni\n-\n1\n]\n+=\na\n[\ni\n]\n/\n26\n;\na\n[\ni\n]\n%=\n26\n;\n}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nk\n;\n++\ni\n)\n{\nint\nrem\n=\na\n[\ni\n]\n%\n2\n;\na\n[\ni\n]\n/=\n2\n;\nif\n(\ni\n+\n1\n<=\nk\n)\n{\na\n[\ni\n+\n1\n]\n+=\nrem\n*\n26\n;\n}\nelse\n{\nassert\n(\nrem\n==\n0\n);\n}\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nk\n;\n++\ni\n)\n{\ncout\n<<\nchar\n(\n'a'\n+\na\n[\ni\n]);\n}\ncout\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

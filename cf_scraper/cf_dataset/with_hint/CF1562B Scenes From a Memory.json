@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nDuring the hypnosis session, Nicholas suddenly remembered a positive integer $ n $ , which doesn't contain zeros in decimal notation.\n\nSoon, when he returned home, he got curious: what is the maximum number of digits that can be removed from the number so that the number becomes not prime, that is, either composite or equal to one?\n\nFor some numbers doing so is impossible: for example, for number $ 53 $ it's impossible to delete some of its digits to obtain a not prime integer. However, for all $ n $ in the test cases of this problem, it's guaranteed that it's possible to delete some of their digits to obtain a not prime number.\n\nNote that you cannot remove all the digits from the number.\n\nA prime number is a number that has no divisors except one and itself. A composite is a number that has more than two divisors. $ 1 $ is neither a prime nor a composite number.\n\nInput Format\nEach test contains multiple test cases.\n\nThe first line contains one positive integer $ t $ ( $ 1 \\le t \\le 10^3 $ ), denoting the number of test cases. Description of the test cases follows.\n\nThe first line of each test case contains one positive integer $ k $ ( $ 1 \\le k \\le 50 $ ) — the number of digits in the number.\n\nThe second line of each test case contains a positive integer $ n $ , which doesn't contain zeros in decimal notation ( $ 10^{k-1} \\le n < 10^{k} $ ). It is guaranteed that it is always possible to remove less than $ k $ digits to make the number not prime.\n\nIt is guaranteed that the sum of $ k $ over all test cases does not exceed $ 10^4 $ .\n\nOutput Format\nFor every test case, print two numbers in two lines. In the first line print the number of digits, that you have left in the number. In the second line print the digits left after all delitions.\n\nIf there are multiple solutions, print any.\n\nExamples\nSample 1\nInput\n7\n3\n237\n5\n44444\n3\n221\n2\n35\n3\n773\n1\n4\n30\n626221626221626221626221626221\nOutput\n2\n27\n1\n4\n1\n1\n2\n35\n2\n77\n1\n4\n1\n6\n\nNote\nIn the first test case, you can't delete $ 2 $ digits from the number $ 237 $ , as all the numbers $ 2 $ , $ 3 $ , and $ 7 $ are prime. However, you can delete $ 1 $ digit, obtaining a number $ 27 = 3^3 $ .\n\nIn the second test case, you can delete all digits except one, as $ 4 = 2^2 $ is a composite number."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Try to consider small numbers, such as those consisting of three digits."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Now think about what the maximum number of digits can be in the optimal answer."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution of Additional Problem 1",
+            "content": "Finding an answer consisting of one digit works in $$$O(k)$$$. Now let's see how long the loop takes to complete. Indeed, it is easy to see that once the pairs of indexes $$$(0,1)$$$, $$$(0,2)$$$, and $$$(1,2)$$$ are considered, an answer will always be found. This is so because in any number of three digits you can find an answer consisting of two digits (this was proved earlier). So this is equivalent to removing all but the first three digits, and then solving the problem for them (assuming that the length of the optimal answer is two)."
+        },
+        {
+            "title": "Solution of Additional Problem 2",
+            "content": "Let's take the string \\t{3737 \\ldots 37} as a string. We will search pairs of indices in the following way: first we will search all pairs of indices with different parities, and then all pairs of indices with the same parity. It is easy to see that such a search will work for $$$O(k^2)$$$ for one test case, because all pairs of indices with different parity will give numbers $$$37$$$ and $$$73$$$, which are prime, and there are $$$O(k^2)$$$ such pairs."
+        }
+    ]
+}

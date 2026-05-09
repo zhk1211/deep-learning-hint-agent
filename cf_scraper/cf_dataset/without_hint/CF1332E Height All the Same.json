@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlice has got addicted to a game called Sirtet recently.\n\nIn Sirtet, player is given an $ n \\times m $ grid. Initially $ a_{i,j} $ cubes are stacked up in the cell $ (i,j) $ . Two cells are called adjacent if they share a side. Player can perform the following operations:\n\n- stack up one cube in two adjacent cells;\n- stack up two cubes in one cell.\n\nCubes mentioned above are identical in height.\n\nHere is an illustration of the game. States on the right are obtained by performing one of the above operations on the state on the left, and grey cubes are added due to the operation.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1332E/b28d1e8feb96f79180d1281fb0ba495f60c5b884.png)Player's goal is to make the height of all cells the same (i.e. so that each cell has the same number of cubes in it) using above operations.\n\nAlice, however, has found out that on some starting grids she may never reach the goal no matter what strategy she uses. Thus, she is wondering the number of initial grids such that\n\n- $ L \\le a_{i,j} \\le R $ for all $ 1 \\le i \\le n $ , $ 1 \\le j \\le m $ ;\n- player can reach the goal using above operations.\n\nPlease help Alice with it. Notice that the answer might be large, please output the desired value modulo $ 998,244,353 $ .\n\nInput Format\nThe only line contains four integers $ n $ , $ m $ , $ L $ and $ R $ ( $ 1\\le n,m,L,R \\le 10^9 $ , $ L \\le R $ , $ n \\cdot m \\ge 2 $ ).\n\nOutput Format\nOutput one integer, representing the desired answer modulo $ 998,244,353 $ .\n\nExamples\nSample 1\nInput\n2 2 1 1\nOutput\n1\n\nSample 2\nInput\n1 2 1 2\nOutput\n2\n\nNote\nIn the first sample, the only initial grid that satisfies the requirements is $ a_{1,1}=a_{2,1}=a_{1,2}=a_{2,2}=1 $ . Thus the answer should be $ 1 $ .\n\nIn the second sample, initial grids that satisfy the requirements are $ a_{1,1}=a_{1,2}=1 $ and $ a_{1,1}=a_{1,2}=2 $ . Thus the answer should be $ 2 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution 1(python by pikmike)",
+            "content": "MOD\n=\n998244353\nn\n,\nm\n,\nl\n,\nr\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nif\nn\n*\nm\n%\n2\n==\n1\n:\nprint\n(\npow\n(\nr\n-\nl\n+\n1\n,\nn\n*\nm\n,\nMOD\n))\nelif\n(\nr\n-\nl\n+\n1\n)\n%\n2\n==\n0\n:\nprint\n(\npow\n(\nr\n-\nl\n+\n1\n,\nn\n*\nm\n,\nMOD\n)\n*\n(\nMOD\n+\n1\n)\n// 2 % MOD)\nelse\n:\nprint\n((\npow\n(\nr\n-\nl\n+\n1\n,\nn\n*\nm\n,\nMOD\n)\n+\n1\n)\n*\n(\nMOD\n+\n1\n)\n// 2 % MOD)"
+        },
+        {
+            "title": "Solution 2(python by pikmike)",
+            "content": "MOD\n=\n998244353\nn\n,\nm\n,\nl\n,\nr\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nif\nn\n*\nm\n%\n2\n==\n1\n:\nprint\n(\npow\n(\nr\n-\nl\n+\n1\n,\nn\n*\nm\n,\nMOD\n))\nelse\n:\ne\n=\nr\n// 2 - (l - 1) // 2\no\n=\n(\nr\n-\nl\n+\n1\n)\n-\ne\nprint\n((\npow\n(\ne\n+\no\n,\nn\n*\nm\n,\nMOD\n)\n+\npow\n(\ne\n-\no\n,\nn\n*\nm\n,\nMOD\n))\n*\n(\nMOD\n+\n1\n)\n// 2 % MOD)"
+        }
+    ]
+}

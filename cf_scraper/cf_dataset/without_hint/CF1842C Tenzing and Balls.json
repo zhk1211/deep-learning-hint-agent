@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nEnjoy erasing Tenzing, identified as Accepted!\n\nTenzing has $ n $ balls arranged in a line. The color of the $ i $ -th ball from the left is $ a_i $ .\n\nTenzing can do the following operation any number of times:\n\n- select $ i $ and $ j $ such that $ 1\\leq i < j \\leq |a| $ and $ a_i=a_j $ ,\n- remove $ a_i,a_{i+1},\\ldots,a_j $ from the array (and decrease the indices of all elements to the right of $ a_j $ by $ j-i+1 $ ).\n\nTenzing wants to know the maximum number of balls he can remove.\n\nInput Format\nEach test contains multiple test cases. The first line of input contains a single integer $ t $ ( $ 1\\leq t\\leq 10^3 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line contains a single integer $ n $ ( $ 1\\leq n\\leq 2\\cdot 10^5 $ ) — the number of balls.\n\nThe second line contains $ n $ integers $ a_1,a_2,\\ldots,a_n $ ( $ 1\\leq a_i \\leq n $ ) — the color of the balls.\n\nIt is guaranteed that sum of $ n $ of all test cases will not exceed $ 2\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output the maximum number of balls Tenzing can remove.\n\nExamples\nSample 1\nInput\n2\n5\n1 2 2 3 3\n4\n1 2 1 2\nOutput\n4\n3\n\nNote\nIn the first example, Tenzing will choose $ i=2 $ and $ j=3 $ in the first operation so that $ a=[1,3,3] $ . Then Tenzing will choose $ i=2 $ and $ j=3 $ again in the second operation so that $ a=[1] $ . So Tenzing can remove $ 4 $ balls in total.\n\nIn the second example, Tenzing will choose $ i=1 $ and $ j=3 $ in the first and only operation so that $ a=[2] $ . So Tenzing can remove $ 3 $ balls in total."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Let us write down the original index of each range we delete.\nFirstly, it is impossible to delete ranges $$$(a,c)$$$ and $$$(b,d)$$$ where $$$a \\lt b \\lt c \\lt d$$$.\nSecondly, if we delete ranges $$$(a,d)$$$ and $$$(b,c)$$$ where $$$a \\lt b \\lt c \\lt d$$$, we must have deleted range $$$(b,c)$$$ before deleting range $$$(a,d)$$$. Yet, the effect of deleting range $$$(b,c)$$$ and then $$$(a,d)$$$ is the same as only deleting $$$(a,d)$$$.\nTherefore, we can assume that in an optimal solution, the ranges we delete are all disjoint. Therefore, we want to find some disjoint range $$$[l_1,r_1],[l_2,r_2],...,[l_m,r_m]$$$ such that $$$a_{l_i}=a_{r_i}$$$ and $$$\\sum (r_i-l_i+1)$$$ is maximized.\nWe can write a DP. $$$dp_i$$$ denotes the minimum number of points we do not delete when considering the subarray $$$a[1\\ldots i]$$$. We have $$$dp_i=\\min(dp_{i-1}+1,\\min\\{dp_j|a_{j+1}=a_i,j+1 \\lt i\\})$$$.\nThis dp can be calculated in $$$O(n)$$$ since we can store for each $$$x$$$ what the minimum $$$dp_j$$$ which satisfy $$$a_{j+1}=x$$$."
+        }
+    ]
+}

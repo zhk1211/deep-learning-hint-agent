@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWord $ s $ of length $ n $ is called $ k $ -complete if\n\n- $ s $ is a palindrome, i.e. $ s_i=s_{n+1-i} $ for all $ 1 \\le i \\le n $ ;\n- $ s $ has a period of $ k $ , i.e. $ s_i=s_{k+i} $ for all $ 1 \\le i \\le n-k $ .\n\nFor example, \"abaaba\" is a $ 3 $ -complete word, while \"abccba\" is not.\n\nBob is given a word $ s $ of length $ n $ consisting of only lowercase Latin letters and an integer $ k $ , such that $ n $ is divisible by $ k $ . He wants to convert $ s $ to any $ k $ -complete word.\n\nTo do this Bob can choose some $ i $ ( $ 1 \\le i \\le n $ ) and replace the letter at position $ i $ with some other lowercase Latin letter.\n\nSo now Bob wants to know the minimum number of letters he has to replace to convert $ s $ to any $ k $ -complete word.\n\nNote that Bob can do zero changes if the word $ s $ is already $ k $ -complete.\n\nYou are required to answer $ t $ test cases independently.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t\\le 10^5 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le k < n \\le 2 \\cdot 10^5 $ , $ n $ is divisible by $ k $ ).\n\nThe second line of each test case contains a word $ s $ of length $ n $ .\n\nIt is guaranteed that word $ s $ only contains lowercase Latin letters. And it is guaranteed that the sum of $ n $ over all test cases will not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output one integer, representing the minimum number of characters he has to replace to convert $ s $ to any $ k $ -complete word.\n\nExamples\nSample 1\nInput\n4\n6 2\nabaaba\n6 3\nabaaba\n36 9\nhippopotomonstrosesquippedaliophobia\n21 7\nwudixiaoxingxingheclp\nOutput\n2\n0\n23\n16\n\nNote\nIn the first test case, one optimal solution is aaaaaa.\n\nIn the second test case, the given word itself is $ k $ -complete."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution(python by pikmike)",
+            "content": "from\nsys\nimport\nstdin\n\nt\n=\nint\n(\nstdin\n.\nreadline\n())\nfor\n_\nin\nrange\n(\nt\n):\nn\n,\nk\n=\nmap\n(\nint\n,\nstdin\n.\nreadline\n().\nsplit\n())\ns\n=\nstdin\n.\nreadline\n()\ncnt\n=\n[[\n0\nfor\ni\nin\nrange\n(\n26\n)]\nfor\nj\nin\nrange\n((\nk\n+\n1\n)\n// 2)]\nfor\ni\nin\nrange\n(\nn\n):\ncnt\n[\nmin\n(\ni\n%\nk\n,\nk\n-\ni\n%\nk\n-\n1\n)][\nord\n(\ns\n[\ni\n])\n-\nord\n(\n'a'\n)]\n+=\n1\nans\n=\n0\nfor\ni\nin\nrange\n(\nk\n// 2):\nans\n+=\n2\n*\nn\n// k - max(cnt[i])\nif\nk\n%\n2\n==\n1\n:\nans\n+=\nn\n// k - max(cnt[k // 2])\nprint\n(\nans\n)"
+        },
+        {
+            "title": "Solution(C++)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nmaxn\n=\n200007\n;\nint\nn\n,\nk\n,\nans\n=\n0\n;\nint\ncnt\n[\nmaxn\n][\n26\n];\nstring\ns\n;\nint\ndiffer\n(\nint\nu\n,\nint\nv\n){\nint\nret\n=\n0\n,\nmx\n=\n0\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n26\n;++\nj\n){\nret\n+=\ncnt\n[\nu\n][\nj\n]+\ncnt\n[\nv\n][\nj\n];\nmx\n=\nmax\n(\nmx\n,\ncnt\n[\nu\n][\nj\n]+\ncnt\n[\nv\n][\nj\n]);\n}\nreturn\nret\n-\nmx\n;\n}\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\ncin\n>>\nn\n>>\nk\n>>\ns\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;++\ni\n){\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n26\n;++\nj\n){\ncnt\n[\ni\n][\nj\n]=\n0\n;\n}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;++\ni\n){\ncnt\n[\ni\n%\nk\n][\ns\n[\ni\n]-\n'a'\n]++;\n}\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;++\ni\n){\nans\n+=\ndiffer\n(\ni\n,\nk\n-\n1\n-\ni\n);\n}\ncout\n<<\nans\n/\n2\n<<\n\"\\n\"\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

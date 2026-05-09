@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe only difference between easy and hard versions is constraints.\n\nYou are given a sequence $ a $ consisting of $ n $ positive integers.\n\nLet's define a three blocks palindrome as the sequence, consisting of at most two distinct elements (let these elements are $ a $ and $ b $ , $ a $ can be equal $ b $ ) and is as follows: $ [\\underbrace{a, a, \\dots, a}_{x}, \\underbrace{b, b, \\dots, b}_{y}, \\underbrace{a, a, \\dots, a}_{x}] $ . There $ x, y $ are integers greater than or equal to $ 0 $ . For example, sequences $ [] $ , $ [2] $ , $ [1, 1] $ , $ [1, 2, 1] $ , $ [1, 2, 2, 1] $ and $ [1, 1, 2, 1, 1] $ are three block palindromes but $ [1, 2, 3, 2, 1] $ , $ [1, 2, 1, 2, 1] $ and $ [1, 2] $ are not.\n\nYour task is to choose the maximum by length subsequence of $ a $ that is a three blocks palindrome.\n\nYou have to answer $ t $ independent test cases.\n\nRecall that the sequence $ t $ is a a subsequence of the sequence $ s $ if $ t $ can be derived from $ s $ by removing zero or more elements without changing the order of the remaining elements. For example, if $ s=[1, 2, 1, 3, 1, 2, 1] $ , then possible subsequences are: $ [1, 1, 1, 1] $ , $ [3] $ and $ [1, 2, 1, 3, 1, 2, 1] $ , but not $ [3, 2, 3] $ and $ [1, 1, 1, 1, 2] $ .\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 2000 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe first line of the test case contains one integer $ n $ ( $ 1 \\le n \\le 2000 $ ) — the length of $ a $ . The second line of the test case contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 26 $ ), where $ a_i $ is the $ i $ -th element of $ a $ . Note that the maximum value of $ a_i $ can be up to $ 26 $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2000 $ ( $ \\sum n \\le 2000 $ ).\n\nOutput Format\nFor each test case, print the answer — the maximum possible length of some subsequence of $ a $ that is a three blocks palindrome.\n\nExamples\nSample 1\nInput\n6\n8\n1 1 2 2 3 2 1 1\n3\n1 3 3\n4\n1 10 10 1\n1\n26\n2\n2 1\n3\n1 1 1\nOutput\n7\n2\n4\n1\n1\n3"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nsz\n(\na\n)\nint\n((\na\n).\nsize\n())\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\n++\ni\n)\n#define\nfore\n(\ni\n,\nl\n,\nr\n)\nfor\n(\nint\ni\n=\nint\n(\nl\n);\ni\n<\nint\n(\nr\n);\n++\ni\n)\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nauto\n&\nit\n:\na\n)\ncin\n>>\nit\n;\nvector\n<\nvector\n<int>\n>\ncnt\n(\n26\n,\nvector\n<int>\n(\nn\n+\n1\n));\nforn\n(\ni\n,\nn\n)\n{\nforn\n(\nj\n,\n26\n)\ncnt\n[\nj\n][\ni\n+\n1\n]\n=\ncnt\n[\nj\n][\ni\n];\n++\ncnt\n[\na\n[\ni\n]\n-\n1\n][\ni\n+\n1\n];\n}\nint\nans\n=\n0\n;\nforn\n(\ni\n,\n26\n)\nans\n=\nmax\n(\nans\n,\ncnt\n[\ni\n][\nn\n-\n1\n]);\nforn\n(\nl\n,\nn\n)\nfore\n(\nr\n,\nl\n,\nn\n)\n{\nint\ncntin\n=\n0\n,\ncntout\n=\n0\n;\nforn\n(\nel\n,\n26\n)\n{\ncntin\n=\nmax\n(\ncntin\n,\ncnt\n[\nel\n][\nr\n+\n1\n]\n-\ncnt\n[\nel\n][\nl\n]);\ncntout\n=\nmax\n(\ncntout\n,\nmin\n(\ncnt\n[\nel\n][\nl\n],\ncnt\n[\nel\n][\nn\n]\n-\ncnt\n[\nel\n][\nr\n+\n1\n])\n*\n2\n);\n}\nans\n=\nmax\n(\nans\n,\ncntin\n+\ncntout\n);\n}\ncout\n<<\nans\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

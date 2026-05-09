@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVlad decided to compose a melody on his guitar. Let's represent the melody as a sequence of notes corresponding to the characters 'a', 'b', 'c', 'd', 'e', 'f', and 'g'.\n\nHowever, Vlad is not very experienced in playing the guitar and can only record exactly two notes at a time. Vlad wants to obtain the melody $ s $ , and to do this, he can merge the recorded melodies together. In this case, the last sound of the first melody must match the first sound of the second melody.\n\nFor example, if Vlad recorded the melodies \"ab\" and \"ba\", he can merge them together and obtain the melody \"aba\", and then merge the result with \"ab\" to get \"abab\".\n\nHelp Vlad determine the minimum number of melodies consisting of two notes that he needs to record in order to obtain the melody $ s $ .\n\nInput Format\nThe first line of input contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nFollowing that are the descriptions of the test cases.\n\nThe first line of each test case contains an integer $ n $ ( $ 2 \\le n \\le 50 $ ) — the length of the melody $ s $ .\n\nThe second line of each test case contains a string $ s $ of length $ n $ , consisting of characters 'a', 'b', 'c', 'd', 'e', 'f', 'g'.\n\nOutput Format\nOutput $ t $ integers, each representing the answer for the corresponding test case. As the answer output minimum number of melodies consisting of two notes that Vlad needs to record.\n\nExamples\nSample 1\nInput\n5\n4\nabab\n7\nabacaba\n6\naaaaaa\n7\nabcdefg\n5\nbabdd\nOutput\n2\n4\n1\n6\n4\n\nNote\nIn the first sample, you need to record the melodies \"ab\" and \"ba\", as described in the problem statement.\n\nIn the second sample, you need to record the melodies \"ab\", \"ba\", \"ac\", and \"ca\".\n\nIn the third sample, the only necessary melody is \"aa\"."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "def\nsolve\n():\nn\n=\nint\n(\ninput\n())\ns\n=\ninput\n()\ncnt\n=\nset\n()\nfor\ni\nin\nrange\n(\n1\n,\nn\n):\ncnt\n.\nadd\n(\ns\n[\ni\n-\n1\n]\n+\ns\n[\ni\n])\nprint\n(\nlen\n(\ncnt\n))\nt\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\nsolve\n()"
+        }
+    ]
+}

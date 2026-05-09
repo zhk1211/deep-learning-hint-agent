@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMonocarp has an integer $ n $ .\n\nHe wants to represent his number as a sum of three distinct positive integers $ x $ , $ y $ , and $ z $ . Additionally, Monocarp wants none of the numbers $ x $ , $ y $ , and $ z $ to be divisible by $ 3 $ .\n\nYour task is to help Monocarp to find any valid triplet of distinct positive integers $ x $ , $ y $ , and $ z $ , or report that such a triplet does not exist.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of testcases.\n\nThe only line of each testcase contains a single integer $ n $ ( $ 1 \\le n \\le 10^{9} $ ).\n\nOutput Format\nFor each testcase, if there is no valid triplet $ x $ , $ y $ , and $ z $ , print NO on the first line.\n\nOtherwise, print YES on the first line. On the second line, print any valid triplet of distinct positive integers $ x $ , $ y $ , and $ z $ such that $ x + y + z = n $ , and none of the printed numbers are divisible by $ 3 $ . If there are multiple valid triplets, you can print any of them.\n\nExamples\nSample 1\nInput\n4\n10\n4\n15\n9\nOutput\nYES\n4 5 1\nNO\nYES\n2 8 5\nNO\n\nNote\nIn the first testcase, one of the valid triplets is $ x = 4 $ , $ y = 5 $ , $ z = 1 $ . None of these numbers are divisible by three, and $ 4 + 5 + 1 = 10 $ .\n\nIn the second testcase, there is no valid triplet.\n\nIn the third testcase, one of the valid triplets is $ x = 2 $ , $ y = 8 $ , $ z = 5 $ . None of these numbers are divisible by three, and $ 2 + 8 + 5 = 15 $ .\n\nIn the fourth testcase, there is no valid triplet."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (fcspartakm)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n;\ninline\nvoid\nread\n()\n{\ncin\n>>\nn\n;\n}\ninline\nvoid\nsolve\n()\n{\nfor\n(\nint\nx\n=\n1\n;\nx\n<=\n20\n;\nx\n++)\n{\nfor\n(\nint\ny\n=\n1\n;\ny\n<=\n20\n;\ny\n++)\n{\nif\n(\nx\n+\ny\n>=\nn\n||\nx\n==\ny\n)\ncontinue\n;\nint\nz\n=\nn\n-\nx\n-\ny\n;\nif\n(\nz\n==\nx\n||\nz\n==\ny\n)\ncontinue\n;\nif\n(\nx\n%\n3\n==\n0\n||\ny\n%\n3\n==\n0\n||\nz\n%\n3\n==\n0\n)\n{\ncontinue\n;\n}\nputs\n(\n\"YES\"\n);\ncout\n<<\nx\n<<\n' '\n<<\ny\n<<\n' '\n<<\nz\n<<\nendl\n;\nreturn\n;\n}\n}\nputs\n(\n\"NO\"\n);\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nread\n();\nsolve\n();\n}\n}"
+        }
+    ]
+}

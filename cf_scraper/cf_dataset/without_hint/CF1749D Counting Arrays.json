@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nConsider an array $ a $ of length $ n $ with elements numbered from $ 1 $ to $ n $ . It is possible to remove the $ i $ -th element of $ a $ if $ gcd(a_i, i) = 1 $ , where $ gcd $ denotes the greatest common divisor. After an element is removed, the elements to the right are shifted to the left by one position.\n\nAn array $ b $ with $ n $ integers such that $ 1 \\le b_i \\le n - i + 1 $ is a removal sequence for the array $ a $ if it is possible to remove all elements of $ a $ , if you remove the $ b_1 $ -th element, then the $ b_2 $ -th, ..., then the $ b_n $ -th element. For example, let $ a = [42, 314] $ :\n\n- $ [1, 1] $ is a removal sequence: when you remove the $ 1 $ -st element of the array, the condition $ gcd(42, 1) = 1 $ holds, and the array becomes $ [314] $ ; when you remove the $ 1 $ -st element again, the condition $ gcd(314, 1) = 1 $ holds, and the array becomes empty.\n- $ [2, 1] $ is not a removal sequence: when you try to remove the $ 2 $ -nd element, the condition $ gcd(314, 2) = 1 $ is false.\n\nAn array is ambiguous if it has at least two removal sequences. For example, the array $ [1, 2, 5] $ is ambiguous: it has removal sequences $ [3, 1, 1] $ and $ [1, 2, 1] $ . The array $ [42, 314] $ is not ambiguous: the only removal sequence it has is $ [1, 1] $ .\n\nYou are given two integers $ n $ and $ m $ . You have to calculate the number of ambiguous arrays $ a $ such that the length of $ a $ is from $ 1 $ to $ n $ and each $ a_i $ is an integer from $ 1 $ to $ m $ .\n\nInput Format\nThe only line of the input contains two integers $ n $ and $ m $ ( $ 2 \\le n \\le 3 \\cdot 10^5 $ ; $ 1 \\le m \\le 10^{12} $ ).\n\nOutput Format\nPrint one integer — the number of ambiguous arrays $ a $ such that the length of $ a $ is from $ 1 $ to $ n $ and each $ a_i $ is an integer from $ 1 $ to $ m $ . Since the answer can be very large, print it modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n2 3\nOutput\n6\n\nSample 2\nInput\n4 2\nOutput\n26\n\nSample 3\nInput\n4 6\nOutput\n1494\n\nSample 4\nInput\n1337 424242424242\nOutput\n119112628"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nadd\n(\nint\nx\n,\nint\ny\n)\n{\nx\n+=\ny\n;\nwhile\n(\nx\n>=\nMOD\n)\nx\n-=\nMOD\n;\nwhile\n(\nx\n<\n0\n)\nx\n+=\nMOD\n;\nreturn\nx\n;\n}\nint\nsub\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\nadd\n(\nx\n,\n-\ny\n);\n}\nint\nmul\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\n(\nx\n*\n1ll\n*\ny\n)\n%\nMOD\n;\n}\nint\nbinpow\n(\nint\nx\n,\nint\ny\n)\n{\nint\nz\n=\n1\n;\nwhile\n(\ny\n)\n{\nif\n(\ny\n&\n1\n)\nz\n=\nmul\n(\nz\n,\nx\n);\nx\n=\nmul\n(\nx\n,\nx\n);\ny\n>>=\n1\n;\n}\nreturn\nz\n;\n}\nbool\nprime\n(\nint\nx\n)\n{\nfor\n(\nint\ni\n=\n2\n;\ni\n*\n1ll\n*\ni\n<=\nx\n;\ni\n++)\nif\n(\nx\n%\ni\n==\n0\n)\nreturn\nfalse\n;\nreturn\ntrue\n;\n}\nint\nmain\n()\n{\nint\nn\n;\nlong\nlong\nm\n;\ncin\n>>\nn\n>>\nm\n;\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nans\n=\nadd\n(\nans\n,\nbinpow\n(\nm\n%\nMOD\n,\ni\n));\nlong\nlong\ncur\n=\n1\n;\nint\ncnt\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nif\n(\ncur\n>\nm\n)\ncontinue\n;\nif\n(\nprime\n(\ni\n))\ncur\n*=\ni\n;\ncnt\n=\nmul\n(\ncnt\n,\n(\nm\n/\ncur\n)\n%\nMOD\n);\nans\n=\nsub\n(\nans\n,\ncnt\n);\n}\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a sequence of $ n $ integers $ a_1, a_2, \\dots, a_n $ . You are also given $ x $ integers $ 1, 2, \\dots, x $ .\n\nYou are asked to insert each of the extra integers into the sequence $ a $ . Each integer can be inserted at the beginning of the sequence, at the end of the sequence, or between any elements of the sequence.\n\nThe score of the resulting sequence $ a' $ is the sum of absolute differences of adjacent elements in it $ \\left(\\sum \\limits_{i=1}^{n+x-1} |a'_i - a'_{i+1}|\\right) $ .\n\nWhat is the smallest possible score of the resulting sequence $ a' $ ?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of testcases.\n\nThe first line of each testcase contains two integers $ n $ and $ x $ ( $ 1 \\le n, x \\le 2 \\cdot 10^5 $ ) — the length of the sequence and the number of extra integers.\n\nThe second line of each testcase contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 2 \\cdot 10^5 $ ).\n\nThe sum of $ n $ over all testcases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each testcase, print a single integer — the smallest sum of absolute differences of adjacent elements of the sequence after you insert the extra integers into it.\n\nExamples\nSample 1\nInput\n4\n1 5\n10\n3 8\n7 2 10\n10 2\n6 1 5 7 3 3 9 10 10 1\n4 10\n1 3 1 2\nOutput\n9\n15\n31\n13\n\nNote\nHere are the sequences with the smallest scores for the example. The underlined elements are the extra integers. Note that there exist other sequences with this smallest score.\n\n- $ \\underline{1}, \\underline{2}, \\underline{3}, \\underline{4}, \\underline{5}, 10 $\n- $ \\underline{7}, 7, \\underline{6}, \\underline{4}, 2, \\underline{2}, \\underline{1}, \\underline{3}, \\underline{5}, \\underline{8}, 10 $\n- $ 6, \\underline{1}, 1, \\underline{2}, 5, 7, 3, 3, 9, 10, 10, 1 $\n- $ 1, 3, \\underline{1}, 1, 2, \\underline{2}, \\underline{3}, \\underline{4}, \\underline{5}, \\underline{6}, \\underline{7}, \\underline{8}, \\underline{9}, \\underline{10} $"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nforn\n(\n_\n,\nt\n){\nint\nn\n,\nx\n;\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nx\n);\nvector\n<int>\na\n(\nn\n);\nforn\n(\ni\n,\nn\n)\nscanf\n(\n\"%d\"\n,\n&\na\n[\ni\n]);\nlong\nlong\nans\n=\n1e18\n;\nlong\nlong\ncur\n=\n0\n;\nforn\n(\ni\n,\nn\n-\n1\n){\ncur\n+=\nabs\n(\na\n[\ni\n]\n-\na\n[\ni\n+\n1\n]);\n}\nforn\n(\n_\n,\n2\n){\nlong\nlong\nmn\n=\nabs\n(\na\n[\n0\n]\n-\n1\n);\nans\n=\nmin\n(\nans\n,\ncur\n+\nabs\n(\na\n[\n0\n]\n-\nx\n)\n+\n(\nx\n-\n1\n));\nforn\n(\ni\n,\nn\n-\n1\n){\nans\n=\nmin\n(\nans\n,\ncur\n+\nmn\n-\nabs\n(\na\n[\ni\n]\n-\na\n[\ni\n+\n1\n])\n+\nabs\n(\na\n[\ni\n]\n-\nx\n)\n+\nabs\n(\na\n[\ni\n+\n1\n]\n-\nx\n));\nans\n=\nmin\n(\nans\n,\ncur\n-\nabs\n(\na\n[\ni\n]\n-\na\n[\ni\n+\n1\n])\n+\nabs\n(\na\n[\ni\n]\n-\nx\n)\n+\nabs\n(\na\n[\ni\n+\n1\n]\n-\n1\n)\n+\n(\nx\n-\n1\n));\nmn\n=\nmin\n(\nmn\n,\n0ll\n-\nabs\n(\na\n[\ni\n]\n-\na\n[\ni\n+\n1\n])\n+\nabs\n(\na\n[\ni\n]\n-\n1\n)\n+\nabs\n(\na\n[\ni\n+\n1\n]\n-\n1\n));\n}\nans\n=\nmin\n(\nans\n,\ncur\n+\nmn\n+\nabs\n(\na\n.\nback\n()\n-\nx\n));\nreverse\n(\na\n.\nbegin\n(),\na\n.\nend\n());\n}\nprintf\n(\n\"%lld\\n\"\n,\nans\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

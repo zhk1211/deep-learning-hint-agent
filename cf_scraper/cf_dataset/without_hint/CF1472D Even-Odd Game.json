@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nDuring their New Year holidays, Alice and Bob play the following game using an array $ a $ of $ n $ integers:\n\n- Players take turns, Alice moves first.\n- Each turn a player chooses any element and removes it from the array.\n- If Alice chooses even value, then she adds it to her score. If the chosen value is odd, Alice's score does not change.\n- Similarly, if Bob chooses odd value, then he adds it to his score. If the chosen value is even, then Bob's score does not change.\n\nIf there are no numbers left in the array, then the game ends. The player with the highest score wins. If the scores of the players are equal, then a draw is declared.\n\nFor example, if $ n = 4 $ and $ a = [5, 2, 7, 3] $ , then the game could go as follows (there are other options):\n\n- On the first move, Alice chooses $ 2 $ and get two points. Her score is now $ 2 $ . The array $ a $ is now $ [5, 7, 3] $ .\n- On the second move, Bob chooses $ 5 $ and get five points. His score is now $ 5 $ . The array $ a $ is now $ [7, 3] $ .\n- On the third move, Alice chooses $ 7 $ and get no points. Her score is now $ 2 $ . The array $ a $ is now $ [3] $ .\n- On the last move, Bob chooses $ 3 $ and get three points. His score is now $ 8 $ . The array $ a $ is empty now.\n- Since Bob has more points at the end of the game, he is the winner.\n\nYou want to find out who will win if both players play optimally. Note that there may be duplicate numbers in the array.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the number of elements in the array $ a $ .\n\nThe next line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the array $ a $ used to play the game.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output on a separate line:\n\n- \"Alice\" if Alice wins with the optimal play;\n- \"Bob\" if Bob wins with the optimal play;\n- \"Tie\", if a tie is declared during the optimal play.\n\nExamples\nSample 1\nInput\n4\n4\n5 2 7 3\n3\n3 2 1\n4\n2 2 2 2\n2\n7 8\nOutput\nBob\nTie\nAlice\nAlice"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nll\n=\nlong\nlong\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\nv\n(\nn\n);\nfor\n(\nint\n&\ne\n:\nv\n)\n{\ncin\n>>\ne\n;\n}\nsort\n(\nv\n.\nrbegin\n(),\nv\n.\nrend\n());\nll ans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\ni\n%\n2\n==\n0\n)\n{\nif\n(\nv\n[\ni\n]\n%\n2\n==\n0\n)\n{\nans\n+=\nv\n[\ni\n];\n}\n}\nelse\n{\nif\n(\nv\n[\ni\n]\n%\n2\n==\n1\n)\n{\nans\n-=\nv\n[\ni\n];\n}\n}\n}\nif\n(\nans\n==\n0\n)\n{\ncout\n<<\n\"Tie\\n\"\n;\n}\nelse\nif\n(\nans\n>\n0\n)\n{\ncout\n<<\n\"Alice\\n\"\n;\n}\nelse\n{\ncout\n<<\n\"Bob\\n\"\n;\n}\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

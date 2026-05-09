@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n$ n $ people came to the festival and decided to dance a few round dances. There are at least $ 2 $ people in the round dance and each person has exactly two neighbors. If there are $ 2 $ people in the round dance then they have the same neighbor on each side.\n\nYou decided to find out exactly how many dances there were. But each participant of the holiday remembered exactly one neighbor. Your task is to determine what the minimum and maximum number of round dances could be.\n\nFor example, if there were $ 6 $ people at the holiday, and the numbers of the neighbors they remembered are equal $ [2, 1, 4, 3, 6, 5] $ , then the minimum number of round dances is $ 1 $ :\n\n- $ 1 - 2 - 3 - 4 - 5 - 6 - 1 $\n\nand the maximum is $ 3 $ : - $ 1 - 2 - 1 $\n- $ 3 - 4 - 3 $\n- $ 5 - 6 - 5 $\n\nInput Format\nThe first line contains a positive number $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The following is a description of the test cases.\n\nThe first line of the description of each test case contains a positive number $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ) — the number of people at the holiday.\n\nThe second line of the description of each test case contains $ n $ integers $ a_i $ ( $ 1 \\le a_i \\le n, a_i \\neq i $ ) — the number of the neighbor that the $ i $ th person remembered.\n\nIt is guaranteed that the test cases are correct and corresponds to at least one division of people into round dances.\n\nIt is guaranteed that the sum of $ n $ for all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output two integers — the minimum and maximum number of round dances that could be.\n\nExamples\nSample 1\nInput\n10\n6\n2 1 4 3 6 5\n6\n2 3 1 5 6 4\n9\n2 3 2 5 6 5 8 9 8\n2\n2 1\n4\n4 3 2 1\n5\n2 3 4 5 1\n6\n5 3 4 1 1 2\n5\n3 5 4 1 2\n6\n6 3 2 5 4 3\n6\n5 1 4 3 4 2\nOutput\n1 3\n2 2\n1 3\n1 1\n1 2\n1 1\n1 1\n2 2\n1 2\n1 1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\n#include\n<vector>\n#include\n<set>\n#include\n<queue>\n#include\n<algorithm>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nvector\n<\nset\n<int>\n>\ng\n(\nn\n);\nvector\n<\nset\n<int>\n>\nneighbours\n(\nn\n);\nvector\n<int>\nd\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\na\n[\ni\n]--;\ng\n[\ni\n].\ninsert\n(\na\n[\ni\n]);\ng\n[\na\n[\ni\n]].\ninsert\n(\ni\n);\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nd\n[\ni\n]\n=\ng\n[\ni\n].\nsize\n();\n}\nint\nbamboos\n=\n0\n,\ncycles\n=\n0\n;\nvector\n<bool>\nvis\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(!\nvis\n[\ni\n])\n{\nqueue\n<int>\nq\n;\nq\n.\npush\n(\ni\n);\nvis\n[\ni\n]\n=\ntrue\n;\nvector\n<int>\ncomponent\n=\n{\ni\n};\nwhile\n(!\nq\n.\nempty\n())\n{\nint\nu\n=\nq\n.\nfront\n();\nq\n.\npop\n();\nfor\n(\nint\nv\n:\ng\n[\nu\n])\n{\nif\n(!\nvis\n[\nv\n])\n{\nvis\n[\nv\n]\n=\ntrue\n;\nq\n.\npush\n(\nv\n);\ncomponent\n.\npush_back\n(\nv\n);\n}\n}\n}\nbool\nbamboo\n=\nfalse\n;\nfor\n(\nint\nj\n:\ncomponent\n)\n{\nif\n(\nd\n[\nj\n]\n==\n1\n)\n{\nbamboo\n=\ntrue\n;\nbreak\n;\n}\n}\nif\n(\nbamboo\n)\n{\nbamboos\n++;\n}\nelse\n{\ncycles\n++;\n}\n}\n}\ncout\n<<\ncycles\n+\nmin\n(\nbamboos\n,\n1\n)\n<<\n' '\n<<\ncycles\n+\nbamboos\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\n_\n=\n0\n;\n_\n<\nt\n;\n++\n_\n)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

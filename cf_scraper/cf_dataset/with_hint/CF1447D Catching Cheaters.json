@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "This is a dynamic programming problem. Recall the DP calculating the Longest Common Substring for two strings. What similarities are there in our setup, and what differs?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let $$$DP[i][j]$$$ be the maximum similarity score if we end the first substring with $$$A_i$$$ and the second substring with $$$B_j$$$. We will also allow the corresponding most similar string to be empty so that $$$DP[i][j]$$$ is always at least $$$0$$$.\nIt turns out that the fact we need to search for substrings of our words is not a big problem, because we can think of extending the previous ones. In fact, we have just two possibilities:\n$$$A_i$$$ and $$$B_j$$$ are the same letters. In this case, we say that $$$DP[i][j] = min(DP[i][j], DP[i-1][j-1] + 2)$$$ as the new letter will increase the LCS by $$$1$$$, but both of the strings increase by one in length, so the total gain is $$$4-1-1=2$$$.\nIn every case, we can refer to $$$DP[i][j-1]$$$ or $$$DP[i][j-1]$$$ to extend one of the previous substrings, but not the LCS, so: DP[i][j] = max(DP[i-1][j], DP[i][j-1]) — 1.\nAn inquisitive reader may wonder why it doesn't hurt to always apply case $$$2$$$ in calculations, so clearing the doubts, it's important to informally notice that we never get a greater $$$LCS$$$ this way so wrong calculations only lead to the worse score, and that our code will always find a sequence of transitions which finds the true $$$LCS$$$ as well.\nImplementing the formulas gives a really short $$$O(n\\cdot m)$$$ solution."
+        }
+    ]
+}

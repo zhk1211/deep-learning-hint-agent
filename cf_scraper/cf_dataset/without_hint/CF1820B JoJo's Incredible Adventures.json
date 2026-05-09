@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nDid you think there was going to be a JoJo legend here? But no, that was me, Dio!\n\nGiven a binary string $ s $ of length $ n $ , consisting of characters 0 and 1. Let's build a square table of size $ n \\times n $ , consisting of 0 and 1 characters as follows.\n\nIn the first row of the table write the original string $ s $ . In the second row of the table write cyclic shift of the string $ s $ by one to the right. In the third row of the table, write the cyclic shift of line $ s $ by two to the right. And so on. Thus, the row with number $ k $ will contain a cyclic shift of string $ s $ by $ k $ to the right. The rows are numbered from $ 0 $ to $ n - 1 $ top-to-bottom.\n\nIn the resulting table we need to find the rectangle consisting only of ones that has the largest area.\n\nWe call a rectangle the set of all cells $ (i, j) $ in the table, such that $ x_1 \\le i \\le x_2 $ and $ y_1 \\le j \\le y_2 $ for some integers $ 0 \\le x_1 \\le x_2 < n $ and $ 0 \\le y_1 \\le y_2 < n $ .\n\nRecall that the cyclic shift of string $ s $ by $ k $ to the right is the string $ s_{n-k+1} \\ldots s_n s_1 s_2 \\ldots s_{n-k} $ . For example, the cyclic shift of the string \"01011\" by $ 0 $ to the right is the string itself \"01011\", its cyclic shift by $ 3 $ to the right is the string \"01101\".\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 2 \\cdot 10^4 $ ) — the number of test cases. The description of test cases follows.\n\nThe first and the only line of each test case contains a single binary string $ s $ ( $ 1 \\le \\lvert s \\rvert \\le 2 \\cdot 10^5 $ ), consisting of characters 0 and 1.\n\nIt is guaranteed that the sum of string lengths $ |s| $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the maximum area of a rectangle consisting only of ones. If there is no such rectangle, output $ 0 $ .\n\nExamples\nSample 1\nInput\n5\n0\n1\n101\n011110\n101010\nOutput\n0\n1\n2\n6\n1\n\nNote\nIn the first test case, there is a table $ 1 \\times 1 $ consisting of a single character 0, so there are no rectangles consisting of ones, and the answer is $ 0 $ .\n\nIn the second test case, there is a table $ 1 \\times 1 $ , consisting of a single character 1, so the answer is $ 1 $ .\n\nIn the third test case, there is a table:\n\n101110011In the fourth test case, there is a table:\n\n011110001111100111110011111001111100In the fifth test case, there is a table:\n\n101010010101101010010101101010010101Rectangles with maximum area are shown in bold."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nll\n=\nlong\nlong\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n=\n1\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nstring\ns\n;\ncin\n>>\ns\n;\ns\n+=\ns\n;\nint\nk\n=\n0\n,\nz\n=\n0\n;\nfor\n(\nchar\nc\n:\ns\n)\n{\nz\n=\nc\n==\n'1'\n?\nz\n+\n1\n:\n0\n;\nk\n=\nmax\n(\nk\n,\nz\n);\n}\nconst\nint\nn\n=\ns\n.\nsize\n()\n/\n2\n;\nif\n(\nk\n>\nn\n)\n{\ncout\n<<\n(\nll\n)\nn\n*\nn\n<<\n'\\n'\n;\n}\nelse\n{\nconst\nll side_a\n=\n(\nk\n+\n1\n)/\n2\n;\nconst\nll side_b\n=\n(\nk\n+\n2\n)/\n2\n;\ncout\n<<\nside_a\n*\nside_b\n<<\n'\\n'\n;\n}\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,264 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are the organizer of the famous \"Zurich Music Festival\". There will be $ n $ singers who will perform at the festival, identified by the integers $ 1 $ , $ 2 $ , $ \\dots $ , $ n $ . You must choose in which order they are going to perform on stage.\n\nYou have $ m $ friends and each of them has a set of favourite singers. More precisely, for each $ 1\\le i\\le m $ , the $ i $ -th friend likes singers $ s_{i,1}, \\, s_{i, 2}, \\, \\dots, \\,s_{i, q_i} $ .\n\nA friend of yours is happy if the singers he likes perform consecutively (in an arbitrary order). An ordering of the singers is valid if it makes all your friends happy.\n\nCompute the number of valid orderings modulo $ 998\\,244\\,353 $ .\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ ( $ 1\\le n,\\,m\\le 100 $ ) — the number of singers and the number of friends correspondingly.\n\nThe $ i $ -th of the next $ m $ lines contains the integer $ q_i $ ( $ 1\\le q_i\\le n $ ) — the number of favorite singers of the $ i $ -th friend – followed by the $ q_i $ integers $ s_{i,1}, \\, s_{i, 2}, \\, \\dots, \\,s_{i, q_i} $ ( $ 1\\le s_{i,1}<s_{i,2}<\\cdots<s_{i,q_i}\\le n $ ) — the indexes of his favorite singers.\n\nOutput Format\nPrint the number of valid orderings of the singers modulo $ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n3 1\n2 1 3\nOutput\n4\n\nSample 2\nInput\n5 5\n2 1 2\n2 2 3\n2 3 4\n2 4 5\n2 1 5\nOutput\n0\n\nSample 3\nInput\n100 1\n1 50\nOutput\n35305197\n\nSample 4\nInput\n5 1\n5 1 2 3 4 5\nOutput\n120\n\nSample 5\nInput\n2 5\n1 2\n1 2\n1 2\n1 1\n1 1\nOutput\n2\n\nSample 6\nInput\n11 4\n5 4 5 7 9 11\n2 2 10\n2 9 11\n7 1 2 3 5 8 10 11\nOutput\n384\n\nNote\nExplanation of the first sample: There are $ 3 $ singers and only $ 1 $ friend. The friend likes the two singers $ 1 $ and $ 3 $ . Thus, the $ 4 $ valid orderings are:\n\n- 1 3 2\n- 2 1 3\n- 2 3 1\n- 3 1 2\n\nExplanation of the second sample: There are $ 5 $ singers and $ 5 $ friends. One can show that no ordering is valid.\n\nExplanation of the third sample: There are $ 100 $ singers and only $ 1 $ friend. The friend likes only singer $ 50 $ , hence all the $ 100! $ possible orderings are valid.\n\nExplanation of the fourth sample: There are $ 5 $ singers and only $ 1 $ friend. The friend likes all the singers, hence all the $ 5!=120 $ possible orderings are valid."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1.",
+            "content": "For sure, one must permute the $$$k$$$ characters by sorting them alphabetically."
+        },
+        {
+            "title": "Hint 2.",
+            "content": "If a character is not among the $$$k$$$ shuffled characters, then it must be already in the correct position."
+        },
+        {
+            "title": "Hint 3.",
+            "content": "If a character is not in the correct position, then it must belong to the $$$k$$$ shuffled characters."
+        },
+        {
+            "title": "Hints for Solution 1",
+            "content": "Hint 1.\nThe \"superiority\" relationship induces a complete directed graph with $$$n$$$ vertices and $$$\\binom{n}{2}$$$ edges.\nHint 2.\nThere can be at most one athlete who is superior to everyone else.\nHint 3.\nMorally, the problem is equivalent to finding the maximum of an array (performing not too many comparisons)."
+        },
+        {
+            "title": "Hint 1.",
+            "content": "The \"superiority\" relationship induces a complete directed graph with $$$n$$$ vertices and $$$\\binom{n}{2}$$$ edges."
+        },
+        {
+            "title": "Hint 2.",
+            "content": "There can be at most one athlete who is superior to everyone else."
+        },
+        {
+            "title": "Hint 3.",
+            "content": "Morally, the problem is equivalent to finding the maximum of an array (performing not too many comparisons)."
+        },
+        {
+            "title": "Hints for Solution 2",
+            "content": "Hint 1.\nTry to optimize the obvious quadratic solution.\nHint 2.\nMaybe put in some randomization?"
+        },
+        {
+            "title": "Hint 1.",
+            "content": "Try to optimize the obvious quadratic solution."
+        },
+        {
+            "title": "Hint 2.",
+            "content": "Maybe put in some randomization?"
+        },
+        {
+            "title": "Hint 1.",
+            "content": "If two chords do not intersect, \"swapping them\" so that they intersect strictly increases the number of intersections."
+        },
+        {
+            "title": "Hint 2.",
+            "content": "If we repeat the above-described strategy, we will end up with a configuration where all added chords intersect."
+        },
+        {
+            "title": "Hint 3.",
+            "content": "There is only one configuration so that all added chords intersect."
+        },
+        {
+            "title": "Hint 1.",
+            "content": "Consider the graph induced by the edges $$$(j, \\, k)$$$ so that $$$a_i = b_j - b_k$$$."
+        },
+        {
+            "title": "Hint 2.",
+            "content": "Such graph contains $$$n$$$ vertices and $$$n$$$ edges, so it has a cycle."
+        },
+        {
+            "title": "Hint 3.",
+            "content": "The sum, with the right signs, of the $$$a_i$$$ over the vertices of a cycle is $$$0$$$."
+        },
+        {
+            "title": "Hint 4.",
+            "content": "The above condition is necessary and sufficient."
+        },
+        {
+            "title": "Hints for Solution 1",
+            "content": "Hint 1.\nIt is always convenient to choose $$$a_i, \\, b_i$$$ so that the color $$$i$$$ does not appear in $$$a_i + 1, \\, a_i + 2, \\, \\dots, \\, b_i - 1$$$. So, for each color there are $$$k - 1$$$ \"candidate intervals\".\nHint 2.\n$$$(k - 1)\\left\\lceil \\frac{n}{k - 1} \\right\\rceil \\ge n$$$.\nHint 3.\nChoose the intervals in chunks of $$$\\left\\lceil \\frac{n}{k - 1} \\right\\rceil$$$. The intervals in the first chunk should be strictly to the left of the intervals in the second chunk, which should be strictly to the left of the intervals of the third chunk, and so on.\nHint 4.\nFor the $$$t$$$-th chunk, only consider (among the remaining colors) the candidate intervals whose left endpoint is the $$$t$$$-th occurrence of its color."
+        },
+        {
+            "title": "Hint 1.",
+            "content": "It is always convenient to choose $$$a_i, \\, b_i$$$ so that the color $$$i$$$ does not appear in $$$a_i + 1, \\, a_i + 2, \\, \\dots, \\, b_i - 1$$$. So, for each color there are $$$k - 1$$$ \"candidate intervals\"."
+        },
+        {
+            "title": "Hint 2.",
+            "content": "$$$(k - 1)\\left\\lceil \\frac{n}{k - 1} \\right\\rceil \\ge n$$$."
+        },
+        {
+            "title": "Hint 3.",
+            "content": "Choose the intervals in chunks of $$$\\left\\lceil \\frac{n}{k - 1} \\right\\rceil$$$. The intervals in the first chunk should be strictly to the left of the intervals in the second chunk, which should be strictly to the left of the intervals of the third chunk, and so on."
+        },
+        {
+            "title": "Hint 4.",
+            "content": "For the $$$t$$$-th chunk, only consider (among the remaining colors) the candidate intervals whose left endpoint is the $$$t$$$-th occurrence of its color."
+        },
+        {
+            "title": "Hints for Solution 2",
+            "content": "Hint 1.\nTry to come up with a greedy algorithm.\nHint 2.\nOrder the candidate intervals (defined as above) by second endpoint.\nHint 3.\nScan the sorted intervals and always select one if you are allowed to."
+        },
+        {
+            "title": "Hint 1.",
+            "content": "Try to come up with a greedy algorithm."
+        },
+        {
+            "title": "Hint 2.",
+            "content": "Order the candidate intervals (defined as above) by second endpoint."
+        },
+        {
+            "title": "Hint 3.",
+            "content": "Scan the sorted intervals and always select one if you are allowed to."
+        },
+        {
+            "title": "Hint 1.",
+            "content": "If you are at position $$$x$$$, what can you say on the state of portals with $$$x_i \\lt x$$$?"
+        },
+        {
+            "title": "Hint 2.",
+            "content": "All such portals must be active."
+        },
+        {
+            "title": "Hint 3.",
+            "content": "Try to solve the problem under the assumption that initially all portals are active."
+        },
+        {
+            "title": "Hint 4.",
+            "content": "You must compute the time necessary to go from $$$x_i$$$ to $$$x_i$$$ again assuming all portals are active."
+        },
+        {
+            "title": "Hint 1.",
+            "content": "Testing only arrays with $$$0$$$ and $$$1$$$ is sufficient (why?)."
+        },
+        {
+            "title": "Hint 2.",
+            "content": "A\nquantum array\nis a $$$0$$$-$$$1$$$ array so that some entries can be both $$$0$$$ and $$$1$$$. Start with a completely undetermined quantum array and apply the algorithm, fixing its values only when necessary."
+        },
+        {
+            "title": "Hint 3.",
+            "content": "How many quantum arrays will this algorithm have to deal with?"
+        },
+        {
+            "title": "Hint 1.",
+            "content": "The perimeter is twice the base plus twice the height. Figure out them both!"
+        },
+        {
+            "title": "Hint 2.",
+            "content": "Ask a query with all points. The result is a simple expression in terms of base and height."
+        },
+        {
+            "title": "Hint 3.",
+            "content": "Ask only queries of the form $$$(di, \\, j): 1 \\le i \\le \\lfloor \\frac{200}{d} \\rfloor, \\, 1 \\le j \\le 200$$$. Let the result be $$$f(d)$$$."
+        },
+        {
+            "title": "Hint 4.",
+            "content": "For which values of $$$d$$$ is $$$f(d)$$$ nicely related to $$$f(1)$$$?"
+        },
+        {
+            "title": "Hint 5.",
+            "content": "Binary search on the $$$2$$$-adic evaluation of the number of points on the base of the rectangle."
+        },
+        {
+            "title": "Hint 1.",
+            "content": "The valid orderings have a rigid structure."
+        },
+        {
+            "title": "Hint 2.",
+            "content": "Let $$$S_i$$$ be the singers liked by friend $$$i$$$. Consider the graph on the friends where there is an edge between $$$i$$$ and $$$j$$$ if and only if $$$S_i \\cap S_j \\ne \\varnothing, \\, S_i, \\, S_j$$$."
+        },
+        {
+            "title": "Hint 3.",
+            "content": "Distinct connected components are independent."
+        },
+        {
+            "title": "Hint 4.",
+            "content": "Up to obvious identifications, each connected component has exactly $$$0$$$ or $$$1$$$ or $$$2$$$ valid orderings."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "123770893"
+        },
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation of Solution 1",
+            "content": "123770963"
+        },
+        {
+            "title": "Implementation of Solution 2",
+            "content": "123770996"
+        },
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "123771028"
+        },
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "123771071"
+        },
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation of Solution 1",
+            "content": "123771120"
+        },
+        {
+            "title": "Implementation of Solution 2",
+            "content": "123771150"
+        },
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation of Solution 1",
+            "content": "123771214"
+        },
+        {
+            "title": "Implementation of Solution 2",
+            "content": "123775629"
+        },
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "123771322"
+        },
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "123771375"
+        },
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "123771467"
+        }
+    ]
+}

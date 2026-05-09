@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYour company was appointed to lay new asphalt on the highway of length $ n $ . You know that every day you can either repair one unit of the highway (lay new asphalt over one unit of the highway) or skip repairing.\n\nSkipping the repair is necessary because of the climate. The climate in your region is periodical: there are $ g $ days when the weather is good and if you lay new asphalt these days it becomes high-quality pavement; after that, the weather during the next $ b $ days is bad, and if you lay new asphalt these days it becomes low-quality pavement; again $ g $ good days, $ b $ bad days and so on.\n\nYou can be sure that you start repairing at the start of a good season, in other words, days $ 1, 2, \\dots, g $ are good.\n\nYou don't really care about the quality of the highway, you just want to make sure that at least half of the highway will have high-quality pavement. For example, if the $ n = 5 $ then at least $ 3 $ units of the highway should have high quality; if $ n = 4 $ then at least $ 2 $ units should have high quality.\n\nWhat is the minimum number of days is needed to finish the repair of the whole highway?\n\nInput Format\nThe first line contains a single integer $ T $ ( $ 1 \\le T \\le 10^4 $ ) — the number of test cases.\n\nNext $ T $ lines contain test cases — one per line. Each line contains three integers $ n $ , $ g $ and $ b $ ( $ 1 \\le n, g, b \\le 10^9 $ ) — the length of the highway and the number of good and bad days respectively.\n\nOutput Format\nPrint $ T $ integers — one per test case. For each test case, print the minimum number of days required to repair the whole highway if at least half of it should have high quality.\n\nExamples\nSample 1\nInput\n3\n5 1 1\n8 10 10\n1000000 1 1000000\nOutput\n5\n8\n499999500000\n\nNote\nIn the first test case, you can just lay new asphalt each day, since days $ 1, 3, 5 $ are good.\n\nIn the second test case, you can also lay new asphalt each day, since days $ 1 $ - $ 8 $ are good."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "fun main\n()\n{\nval t\n=\nreadLine\n()!!.\ntoInt\n()\nfor\n(\ntc\nin\n1.\n.\nt\n)\n{\nval\n(\nn\n,\ng\n,\nb\n)\n=\nreadLine\n()!!.\nsplit\n(\n' '\n).\nmap\n{\nit\n.\ntoLong\n()\n}\nval needG\n=\n(\nn\n+\n1\n)\n/\n2\nvar\ntotalG\n=\nneedG\n/\ng\n*\n(\nb\n+\ng\n)\ntotalG\n+=\nif\n(\nneedG\n%\ng\n==\n0L\n)\n-\nb\nelse\nneedG\n%\ng\n        println\n(\nmaxOf\n(\nn\n,\ntotalG\n))\n}\n}"
+        }
+    ]
+}

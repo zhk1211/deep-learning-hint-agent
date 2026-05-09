@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given three strings $ s $ , $ t $ and $ p $ consisting of lowercase Latin letters. You may perform any number (possibly, zero) operations on these strings.\n\nDuring each operation you choose any character from $ p $ , erase it from $ p $ and insert it into string $ s $ (you may insert this character anywhere you want: in the beginning of $ s $ , in the end or between any two consecutive characters).\n\nFor example, if $ p $ is aba, and $ s $ is de, then the following outcomes are possible (the character we erase from $ p $ and insert into $ s $ is highlighted):\n\n- aba $ \\rightarrow $ ba, de $ \\rightarrow $ ade;\n- aba $ \\rightarrow $ ba, de $ \\rightarrow $ dae;\n- aba $ \\rightarrow $ ba, de $ \\rightarrow $ dea;\n- aba $ \\rightarrow $ aa, de $ \\rightarrow $ bde;\n- aba $ \\rightarrow $ aa, de $ \\rightarrow $ dbe;\n- aba $ \\rightarrow $ aa, de $ \\rightarrow $ deb;\n- aba $ \\rightarrow $ ab, de $ \\rightarrow $ ade;\n- aba $ \\rightarrow $ ab, de $ \\rightarrow $ dae;\n- aba $ \\rightarrow $ ab, de $ \\rightarrow $ dea;\n\nYour goal is to perform several (maybe zero) operations so that $ s $ becomes equal to $ t $ . Please determine whether it is possible.\n\nNote that you have to answer $ q $ independent queries.\n\nInput Format\nThe first line contains one integer $ q $ ( $ 1 \\le q \\le 100 $ ) — the number of queries. Each query is represented by three consecutive lines.\n\nThe first line of each query contains the string $ s $ ( $ 1 \\le |s| \\le 100 $ ) consisting of lowercase Latin letters.\n\nThe second line of each query contains the string $ t $ ( $ 1 \\le |t| \\le 100 $ ) consisting of lowercase Latin letters.\n\nThe third line of each query contains the string $ p $ ( $ 1 \\le |p| \\le 100 $ ) consisting of lowercase Latin letters.\n\nOutput Format\nFor each query print YES if it is possible to make $ s $ equal to $ t $ , and NO otherwise.\n\nYou may print every letter in any case you want (so, for example, the strings yEs, yes, Yes and YES will all be recognized as positive answer).\n\nExamples\nSample 1\nInput\n4\nab\nacxb\ncax\na\naaaa\naaabbcc\na\naaaa\naabbcc\nab\nbaaa\naaaaa\nOutput\nYES\nYES\nNO\nNO\n\nNote\nIn the first test case there is the following sequence of operation:\n\n1. $ s = $ ab, $ t = $ acxb, $ p = $ cax;\n2. $ s = $ acb, $ t = $ acxb, $ p = $ ax;\n3. $ s = $ acxb, $ t = $ acxb, $ p = $ a.\n\nIn the second test case there is the following sequence of operation:\n\n1. $ s = $ a, $ t = $ aaaa, $ p = $ aaabbcc;\n2. $ s = $ aa, $ t = $ aaaa, $ p = $ aabbcc;\n3. $ s = $ aaa, $ t = $ aaaa, $ p = $ abbcc;\n4. $ s = $ aaaa, $ t = $ aaaa, $ p = $ bbcc."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nq\n;\nstring\ns\n,\nt\n,\np\n;\nint\ncnt\n[\n30\n];\nint\nmain\n()\n{\ncin\n>>\nq\n;\nfor\n(\nint\niq\n=\n0\n;\niq\n<\nq\n;\n++\niq\n){\ncin\n>>\ns\n>>\nt\n>>\np\n;\nmemset\n(\ncnt\n,\n0\n,\nsizeof\ncnt\n);\nfor\n(\nauto\nx\n:\np\n)\n++\ncnt\n[\nx\n-\n'a'\n];\nbool\nok\n=\ntrue\n;\nint\nis\n=\n0\n,\nit\n=\n0\n;\nwhile\n(\nis\n<\ns\n.\nsize\n()){\nif\n(\nit\n==\nt\n.\nsize\n()){\nok\n=\nfalse\n;\nbreak\n;\n}\nif\n(\ns\n[\nis\n]\n==\nt\n[\nit\n]){\n++\nis\n,\n++\nit\n;\ncontinue\n;\n}\n--\ncnt\n[\nt\n[\nit\n]\n-\n'a'\n];\n++\nit\n;\n}\nwhile\n(\nit\n<\nt\n.\nsize\n()){\n--\ncnt\n[\nt\n[\nit\n]\n-\n'a'\n];\n++\nit\n;\n}\nif\n(*\nmin_element\n(\ncnt\n,\ncnt\n+\n30\n)\n<\n0\n)\nok\n=\nfalse\n;\nif\n(\nok\n)\ncout\n<<\n\"YES\\n\"\n;\nelse\ncout\n<<\n\"NO\\n\"\n;\n}\nreturn\n0\n;\n}\n}"
+        }
+    ]
+}

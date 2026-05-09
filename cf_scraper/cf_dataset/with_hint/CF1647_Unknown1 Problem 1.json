@@ -1,0 +1,124 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "The optimal answer has the maximum number of digits, so you only need to use the digits $$$1,2$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Alternate these numbers so that there are no adjacent identical numbers."
+        },
+        {
+            "title": "Hint 1",
+            "content": "What is a picture if the answer to the problem is \"YES\"."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Think about a square of size $$$2\\times 2$$$."
+        },
+        {
+            "title": "Hint 1",
+            "content": "There is always an answer when the upper right cell is painted white."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Imagine that you have only rectangles of size $$$1\\times 2$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Paint over the cells from the \"end\"."
+        },
+        {
+            "title": "Hint 1.1",
+            "content": "Let's solve a more general problem: count the number of such partitions."
+        },
+        {
+            "title": "Hint 1.2",
+            "content": "This problem is solved by dynamic programming."
+        },
+        {
+            "title": "Hint 1.3",
+            "content": "Keep the remaining number in dynamics, as well as the last divisor."
+        },
+        {
+            "title": "Hint 2.1",
+            "content": "Consider the case"
+        },
+        {
+            "title": "Hint 1",
+            "content": "After each operation, the maximum number is always increased by a specific number."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Students with a number greater than $$$n$$$ are not interested in us."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Imagine that schoolchildren are not expelled, but at any given time we are just interested in a student with a minimum number. Obviously, the answer in this case will not change in any way."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Understand that every student will move to one particular desk after all the operations."
+        },
+        {
+            "title": "Hint 5",
+            "content": "Write a greedy"
+        },
+        {
+            "title": "Hint 1",
+            "content": "Realize that the maximum element is always an \"inflection\" of the first sequence."
+        },
+        {
+            "title": "Hint 2",
+            "content": "It can be assumed that the \"inflection\" of the second subsequence will always be to the left of the maximum element (if anything, you can then simply expand the array)."
+        },
+        {
+            "title": "Hint 3",
+            "content": "In total, we have $$$3$$$ points in time — both subsequences increase, the first decreases, and the second increases, or both subsequences decrease."
+        },
+        {
+            "title": "Hint 4",
+            "content": "The first and third cases are solved by obvious greed."
+        },
+        {
+            "title": "Hint 5",
+            "content": "For the second one, you can simply write the dynamics."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Since we want to maximize the number we need, we will first find the longest suitable number. Obviously, it is better to use only the numbers $$$1$$$ and $$$2$$$ for this. Therefore, the answer always looks like $$$2121\\ldots$$$ or $$$1212\\ldots$$$. The first option is optimal when $$$n$$$ has a remainder of $$$2$$$ or $$$0$$$ modulo $$$3$$$, otherwise the second option is optimal.\nBelow is an example of a neat implementation."
+        },
+        {
+            "title": "Solution",
+            "content": "Note that the answer to the problem is \"YES\" if and only if the picture is a certain number of disjoint rectangles. Now, in this case, let's look at all squares of size $$$2\\times 2$$$, note that there cannot be exactly $$$3$$$ filled cells in each of them.\nIt is also clear that if there are $$$3$$$ such cells, then there will be two intersecting rectangles. Therefore, you just need to check if there is a $$$2\\times 2$$$ square in which there are exactly $$$3$$$ colored cells."
+        },
+        {
+            "title": "Solution",
+            "content": "According to the condition, if the upper left cell is painted black, then we cannot paint it that way. Otherwise it is possible. Let's colour the cells in the following order: $$$(n,m), (n,m - 1), \\ldots, (n, 1), (n - 1, m), \\ldots (1, 1)$$$.\nLet the cell $$$(i, j)$$$ be colored black, then if $$$j \\gt 1$$$, then just paint the rectangle $$$(i, j - 1)$$$, $$$(i, j)$$$. Otherwise, if $$$j = 1$$$, then we will color the rectangle $$$(i - 1, j)$$$.\nAfter such an operation, no cells that we painted before will be repainted, since they have one coordinate larger than ours, and the cell itself will be painted black.\nThus, we are able to paint the table for a maximum of $$$n\\cdot m - 1$$$ operations."
+        },
+        {
+            "title": "Solution 1",
+            "content": "Let's solve a more complex problem: calculate the number of partitions into such multipliers.\nThis is easily solved by dynamic programming. Let $$$dp_{n, d}$$$ be the number of factorizations, if we have a number left to decompose the number $$$n$$$, and before that we divided by the number $$$d$$$. Let's go through all such beautiful numbers $$$i\\geq d$$$ that divide $$$n$$$, then $$$dp_{n /i, i} += dp_{n, d}$$$.\nNote that in this case, we took into account each option exactly once, since we count the divisors in the order of their increase.\nLet $$$C$$$ be the number of divisors of the number $$$x$$$, and $$$V$$$ be the number of beautiful divisors of the number $$$x$$$. Then it works for $$$O(C\\cdot V)$$$ or $$$O(C\\cdot V^2\\cdot log)$$$ depending on the implementation (since $$$n$$$ is always a divisor of the number $$$x$$$), but it all comes easily, since $$$V$$$ is no more $$$700$$$."
+        },
+        {
+            "title": "Solution 2 (which almost everyone wrote)",
+            "content": "Let $$$x = d^a\\cdot b$$$. Where $$$b$$$ is not a multiple of $$$d$$$.\nThen consider a few cases:\n$$$a = 1$$$. Then $$$a$$$ is a beautiful number, since any number multiple of $$$d^2$$$ can be decomposed into $$$d\\cdot(a/d)$$$, each of which is colored, and a number multiple of only $$$d$$$, obviously, cannot be decomposed. So in this case there is exactly one option.\n$$$b$$$ is composite, then obviously we can decompose in several ways if $$$a\\neq 1$$$.\n$$$d$$$ is simple. If $$$b$$$ is prime, then the statement — we have only one option to decompose the number. Since every beautiful multiplier of the form $$$d\\cdot k$$$. But since $$$d$$$ is simple, there are no other ways to decompose it, except to add a multiplier from $$$b$$$, and since $$$b$$$ is simple, then all these options will be equal before the permutation.\n$$$d$$$ is composite and is not a power of prime. If $$$a\\leq 2$$$, then this case is no different from the past, since we still have to get two beautiful multipliers and they will all just be equal to $$$d$$$. Otherwise, let $$$d = p\\cdot q$$$, where $$$gcd(p, q) = 1$$$. Then we can make the number $$$p\\cdot q^{b - 1}$$$ and $$$p^{b - 1}\\cdot q$$$. And also $$$q\\cdot p, q\\cdot p, \\ldots , q\\cdot p$$$, in this case we have a different number of divisors, so these options will be different, which means we have several options in this case.\n$$$d$$$ is the power of a prime number. Then $$$d = p^k$$$. The statement, if $$$d = p^2$$$, and $$$x =p^7$$$, then it cannot be decomposed in several ways, otherwise, if $$$a \\gt 2$$$ and $$$k \\gt 1$$$, then let's look at the partition of $$$p^{2k - 1}, p^{k+1}, p^k, \\ldots , p^k$$$, it is clear that if $$$k \\gt 2$$$, then even if $$$b = p$$$, then the multiplier of $$$p^{k+ 2}$$$ will still be beautiful, so it does not differ from the composite $$$d$$$ in last case. Otherwise, if $$$k = 2$$$, then if $$$a = 3$$$ and $$$b = p$$$, then nothing can be added, otherwise we will have the opportunity to choose $$$3$$$ of the multiplier $$$p^k$$$, and somehow decompose the rest (since in this case $$$a \\gt 3$$$, then at least one more multiplier will be) and add $$$b$$$ there. And we can decompose these 3 multipliers into $$$2$$$ or $$$3$$$ multipliers, as written above. Therefore, the only unique case when $$$d$$$ is the degree of a prime is $$$d = p^2, x = p^7$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "After each lesson, the person's number increases from the maximum number by the number of desks where no one goes. Therefore, it is easy to calculate how much time has passed since the very beginning, let it be the number $$$k$$$.\nThen let's imagine that schoolchildren are not expelled, but at any given time we are simply interested in a student with a minimum number. Obviously, the answer in this case will not change in any way.\nLet $$$to_i$$$ be the desk to which the student will move after $$$k$$$ transfers, who originally sat at $$$i$$$ desk. This is a standard problem that can be solved using binary lifts or not the most pleasant dfs with cycle allocation and the like. (but we do not recommend you to write the latter), we define the set $$$V_i$$$ as the set of all numbers $$$j$$$, where $$$to_j = i$$$.\nLet the starting placement of the student be a permutation of $$$b$$$, then we will understand that if someone is transferred to the $$$i$$$ desk after $$$k$$$ operations, then the value in it is the minimum value in $$$V_i$$$. And if no one changes seats for it, then a student with the same number will always sit in it, regardless of the initial seating arrangement. After that, it is not difficult to guess the optimal starting seating of schoolchildren.\nLet $$$s$$$ be a lot of schoolchildren for whom we have not yet chosen the desk at which they are sitting. We will iterate over $$$i$$$ from $$$1$$$ to $$$n$$$ in ascending order. Then you need to understand who should sit at the $$$i$$$ desk.\nIf we know that there is a desk for which $$$min(V_i) = i$$$ must be performed, then we must put a student with the minimum number of $$$V_i$$$ at $$$i$$$, and we can put the remaining people at any desks with a number greater than $$$i$$$, so we will add all the other students to the set $$$s$$$. Otherwise, we just need to take a person from $$$s$$$ with the minimum number and put him in a place under the number $$$i$$$, and then just remove him from the set of $$$s$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "The inflection of the sequence is the maximum number in the subsequence. Then note that in the first subsequence, the inflection will be the maximum number in our array, let its position in the array be $$$ind$$$.\nThen let's say for convenience that the inflection of the second subsequence will be to the right of the maximum element. (then expand the array and run the solution one more time).\nIn this case, we will have $$$3$$$ states: both subsequences increase, the first decreases, and the second increases, or both subsequences decrease.\nLet's solve the first case first:\nLet $$$dp1_i$$$ be the minimum possible maximum element in a subsequence that does not contain an $$$i$$$ element. It is considered not difficult. If $$$dp1_{i - 1} \\lt a_{i}$$$, then $$$dp1_{i} = min(dp1_{i}, a_{i - 1})$$$, since in this case we can add an $$$i$$$ element to a subsequence that does not contain an element of $$$i - 1$$$. Similarly, if $$$a_{i - 1} \\lt a_{i}$$$, then $$$dp1_{i} = min(dp1_{i}, dp1_{i - 1})$$$.\nThe third case is considered anologically, but only it needs to be counted from the end. (This array will be $$$dp3$$$)\nNow let's deal with the second case:\nLet $$$dp2_{i, 0}$$$ be the minimum possible last element in the second subsequence if the $$$i$$$ element belongs to the first subsequence. And $$$dp2_{i, 1}$$$ is the maximum possible last element in the first subsequence if the $$$i$$$ element belongs to the second subsequence. There are several options. If $$$i$$$ and $$$i - 1$$$ lie in the same and different subsequences. And we will count for $$$i\\leq ind$$$, since before this section both sub-sequences increase, and this is another calculated case. And then it is not difficult to get the conversion formulas:\n$$$dp2_{ind, 0} = dp1_{ind}$$$, by definition $$$dp2_{ind, 0}$$$\nIf $$$a_{i - 1} \\gt a_i$$$, then $$$dp2_{i, 0} = min(dp2_{i, 0}, dp2_{i - 1, 0})$$$.\nIf $$$dp2_{i - 1, 1} \\gt a_i$$$, then $$$dp2_{i, 0} = min(dp2_{i, 0}, a_{i - 1})$$$.\nIf $$$a_{i - 1} \\lt a_{i}$$$, then $$$dp2_{i, 1} = max(dp2_{i, 1}, dp3_{i - 1, 1})$$$.\nIf $$$dp2_{i - 1, 0} \\lt a_i$$$, then $$$dp2_{i, 1} = max(dp2_{i, 1}, a_{i - 1})$$$.\nNow let's understand that the element with the number $$$i$$$ can be an inflection of the second subsequence if $$$i \\gt ind$$$, as well as $$$dp2_{i, 1} \\gt dp3_{i}$$$. That is, we can move from the second state to the third."
+        }
+    ]
+}

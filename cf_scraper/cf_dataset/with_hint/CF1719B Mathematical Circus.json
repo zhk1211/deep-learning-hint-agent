@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA new entertainment has appeared in Buryatia — a mathematical circus! The magician shows two numbers to the audience — $ n $ and $ k $ , where $ n $ is even. Next, he takes all the integers from $ 1 $ to $ n $ , and splits them all into pairs $ (a, b) $ (each integer must be in exactly one pair) so that for each pair the integer $ (a + k) \\cdot b $ is divisible by $ 4 $ (note that the order of the numbers in the pair matters), or reports that, unfortunately for viewers, such a split is impossible.\n\nBurenka really likes such performances, so she asked her friend Tonya to be a magician, and also gave him the numbers $ n $ and $ k $ .\n\nTonya is a wolf, and as you know, wolves do not perform in the circus, even in a mathematical one. Therefore, he asks you to help him. Let him know if a suitable splitting into pairs is possible, and if possible, then tell it.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases. The following is a description of the input data sets.\n\nThe single line of each test case contains two integers $ n $ and $ k $ ( $ 2 \\leq n \\leq 2 \\cdot 10^5 $ , $ 0 \\leq k \\leq 10^9 $ , $ n $ is even) — the number of integers and the number being added $ k $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, first output the string \"YES\" if there is a split into pairs, and \"NO\" if there is none.\n\nIf there is a split, then in the following $ \\frac{n}{2} $ lines output pairs of the split, in each line print $ 2 $ numbers — first the integer $ a $ , then the integer $ b $ .\n\nExamples\nSample 1\nInput\n4\n4 1\n2 0\n12 10\n14 11\nOutput\nYES\n1 2\n3 4\nNO\nYES\n3 4\n7 8\n11 12\n2 1\n6 5\n10 9\nYES\n1 2\n3 4\n5 6\n7 8\n9 10\n11 12\n13 14\n\nNote\nIn the first test case, splitting into pairs $ (1, 2) $ and $ (3, 4) $ is suitable, same as splitting into $ (1, 4) $ and $ (3, 2) $ .\n\nIn the second test case, $ (1 + 0) \\cdot 2 = 1 \\cdot (2 + 0) = 2 $ is not divisible by $ 4 $ , so there is no partition."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Instead of $$$k$$$, we can consider the remainder of dividing $$$k$$$ by 4."
+        },
+        {
+            "title": "Hint 2",
+            "content": "There is no answer for the remainder 0."
+        },
+        {
+            "title": "Hint 3",
+            "content": "For all other remainders, there is an answer."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Note that from the number $$$k$$$ we only need the remainder modulo $$$4$$$, so we take $$$k$$$ modulo and assume that $$$0 \\leq k \\leq 3$$$.\nIf $$$k = 0$$$, then there is no answer, because the product of the numbers in each pair must be divisible by $$$4 = 2^2$$$, that is, the product of all numbers from $$$1$$$ to $$$n$$$ must be divisible by $$$2^{\\frac{n}{2} \\cdot 2} = 2^n$$$, but the degree of occurrence of $$$2$$$ in this sum is $$$\\lfloor\\frac{n}{2}\\rfloor +\\lfloor\\frac{n}{4}\\rfloor$$$, which is less than $$$n$$$.\nIf $$$k = 1$$$ or $$$k = 3$$$, then we will make all pairs of the form $$$(i, i + 1)$$$, where $$$i$$$ is odd. Then $$$a + k$$$ will be even in each pair, since $$$a$$$ and $$$k$$$ are odd, and since $$$b$$$ is also even, the product will be divisible by $$$4$$$. Если $$$k = 2$$$, then we will do the same splitting into pairs, but in all pairs where $$$i + 1$$$ is not divisible by $$$4$$$, we will swap the numbers (that is, we will make $$$a = i + 1$$$ and $$$b = i$$$). Then in pairs where $$$i + 1 \\operatorname{mod} 4 = 0$$$, $$$b$$$ is divisible by $$$4$$$ (therefore the product too), and in the rest $$$a + k$$$ is divisible by $$$4$$$ (since $$$a$$$ and $$$k$$$ have a remainder $$$2$$$ modulo $$$4$$$).\nThe complexity of the solution is $$$O(n)$$$."
+        }
+    ]
+}

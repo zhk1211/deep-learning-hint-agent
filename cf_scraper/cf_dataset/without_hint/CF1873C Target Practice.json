@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA $ 10 \\times 10 $ target is made out of five \"rings\" as shown. Each ring has a different point value: the outermost ring — 1 point, the next ring — 2 points, ..., the center ring — 5 points.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1873C/2f9c8641c1316f4582d956bd6c4a32dbbc0c7f6f.png)Vlad fired several arrows at the target. Help him determine how many points he got.\n\nInput Format\nThe input consists of multiple test cases. The first line of the input contains a single integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases.\n\nEach test case consists of 10 lines, each containing 10 characters. Each character in the grid is either $ \\texttt{X} $ (representing an arrow) or $ \\texttt{.} $ (representing no arrow).\n\nOutput Format\nFor each test case, output a single integer — the total number of points of the arrows.\n\nExamples\nSample 1\nInput\n4\nX.........\n..........\n.......X..\n.....X....\n......X...\n..........\n.........X\n..X.......\n..........\n.........X\n..........\n..........\n..........\n..........\n..........\n..........\n..........\n..........\n..........\n..........\n..........\n..........\n..........\n..........\n....X.....\n..........\n..........\n..........\n..........\n..........\nXXXXXXXXXX\nXXXXXXXXXX\nXXXXXXXXXX\nXXXXXXXXXX\nXXXXXXXXXX\nXXXXXXXXXX\nXXXXXXXXXX\nXXXXXXXXXX\nXXXXXXXXXX\nXXXXXXXXXX\nOutput\n17\n0\n5\n220\n\nNote\nIn the first test case, there are three arrows on the outer ring worth 1 point each, two arrows on the ring worth 3 points each, and two arrows on the ring worth 4 points each. The total score is $ 3 \\times 1 + 2 \\times 3 + 2 \\times 4 = 17 $ .\n\nIn the second test case, there aren't any arrows, so the score is $ 0 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200007\n;\nconst\nint\nMOD\n=\n1000000007\n;\nint\nscore\n[\n10\n][\n10\n]\n=\n{\n{\n1\n,\n1\n,\n1\n,\n1\n,\n1\n,\n1\n,\n1\n,\n1\n,\n1\n,\n1\n},\n{\n1\n,\n2\n,\n2\n,\n2\n,\n2\n,\n2\n,\n2\n,\n2\n,\n2\n,\n1\n},\n{\n1\n,\n2\n,\n3\n,\n3\n,\n3\n,\n3\n,\n3\n,\n3\n,\n2\n,\n1\n},\n{\n1\n,\n2\n,\n3\n,\n4\n,\n4\n,\n4\n,\n4\n,\n3\n,\n2\n,\n1\n},\n{\n1\n,\n2\n,\n3\n,\n4\n,\n5\n,\n5\n,\n4\n,\n3\n,\n2\n,\n1\n},\n{\n1\n,\n2\n,\n3\n,\n4\n,\n5\n,\n5\n,\n4\n,\n3\n,\n2\n,\n1\n},\n{\n1\n,\n2\n,\n3\n,\n4\n,\n4\n,\n4\n,\n4\n,\n3\n,\n2\n,\n1\n},\n{\n1\n,\n2\n,\n3\n,\n3\n,\n3\n,\n3\n,\n3\n,\n3\n,\n2\n,\n1\n},\n{\n1\n,\n2\n,\n2\n,\n2\n,\n2\n,\n2\n,\n2\n,\n2\n,\n2\n,\n1\n},\n{\n1\n,\n1\n,\n1\n,\n1\n,\n1\n,\n1\n,\n1\n,\n1\n,\n1\n,\n1\n}\n};\nvoid\nsolve\n()\n{\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n10\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n10\n;\nj\n++)\n{\nchar\nc\n;\ncin\n>>\nc\n;\nif\n(\nc\n==\n'X'\n)\n{\nans\n+=\nscore\n[\ni\n][\nj\n];}\n}\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

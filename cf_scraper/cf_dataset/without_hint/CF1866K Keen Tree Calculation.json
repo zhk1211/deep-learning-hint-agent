@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a tree of $ N $ vertices and $ N-1 $ edges. The $ i $ -th edge connects vertices $ U_i $ and $ V_i $ and has a length of $ W_i $ .\n\nChaneka, the owner of the tree, asks you $ Q $ times. For the $ j $ -th question, the following is the question format:\n\n- $ X_j $ $ K_j $ – If each edge that contains vertex $ X_j $ has its length multiplied by $ K_j $ , what is the diameter of the tree?\n\nNotes:\n\n- Each of Chaneka's question is independent, which means the changes in edge length do not influence the next questions.\n- The diameter of a tree is the maximum possible distance between two different vertices in the tree.\n\nInput Format\nThe first line contains a single integer $ N $ ( $ 2\\leq N\\leq10^5 $ ) — the number of vertices in the tree.\n\nThe $ i $ -th of the next $ N-1 $ lines contains three integers $ U_i $ , $ V_i $ , and $ W_i $ ( $ 1 \\leq U_i,V_i \\leq N $ ; $ 1\\leq W_i\\leq10^9 $ ) — an edge that connects vertices $ U_i $ and $ V_i $ with a length of $ W_i $ . The edges form a tree.\n\nThe $ (N+1) $ -th line contains a single integer $ Q $ ( $ 1\\leq Q\\leq10^5 $ ) — the number of questions.\n\nThe $ j $ -th of the next $ Q $ lines contains two integers $ X_j $ and $ K_j $ as described ( $ 1 \\leq X_j \\leq N $ ; $ 1 \\leq K_j \\leq 10^9 $ ).\n\nOutput Format\nOutput $ Q $ lines with an integer in each line. The integer in the $ j $ -th line represents the diameter of the tree on the $ j $ -th question.\n\nExamples\nSample 1\nInput\n7\n5 1 2\n1 4 2\n3 4 1\n2 5 3\n6 1 6\n4 7 2\n2\n4 3\n3 2\nOutput\n18\n11\n\nSample 2\nInput\n3\n1 2 1000000000\n2 3 1000000000\n1\n2 1000000000\nOutput\n2000000000000000000\n\nNote\nIn the first example, the following is the tree without any changes.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1866K/bb2f5cb5fbb04a79a738c60309eae1ba1c9bf449.png)\n\nThe following is the tree on the $ 1 $ -st question.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1866K/aebeb066c072532e8b30fd7bf978b11d0e9962b9.png)\n\nThe maximum distance is between vertices $ 6 $ and $ 7 $ , which is $ 6+6+6=18 $ , so the diameter is $ 18 $ .\n\nThe following is the tree on the $ 2 $ -nd question.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1866K/3060d68741ce2dec61036ecb98c67d32eba9b108.png)\n\nThe maximum distance is between vertices $ 2 $ and $ 6 $ , which is $ 3+2+6=11 $ , so the diameter is $ 11 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        }
+    ]
+}

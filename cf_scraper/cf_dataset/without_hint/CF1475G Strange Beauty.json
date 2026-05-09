@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp found on the street an array $ a $ of $ n $ elements.\n\nPolycarp invented his criterion for the beauty of an array. He calls an array $ a $ beautiful if at least one of the following conditions must be met for each different pair of indices $ i \\ne j $ :\n\n- $ a_i $ is divisible by $ a_j $ ;\n- or $ a_j $ is divisible by $ a_i $ .\n\nFor example, if:\n\n- $ n=5 $ and $ a=[7, 9, 3, 14, 63] $ , then the $ a $ array is not beautiful (for $ i=4 $ and $ j=2 $ , none of the conditions above is met);\n- $ n=3 $ and $ a=[2, 14, 42] $ , then the $ a $ array is beautiful;\n- $ n=4 $ and $ a=[45, 9, 3, 18] $ , then the $ a $ array is not beautiful (for $ i=1 $ and $ j=4 $ none of the conditions above is met);\n\nUgly arrays upset Polycarp, so he wants to remove some elements from the array $ a $ so that it becomes beautiful. Help Polycarp determine the smallest number of elements to remove to make the array $ a $ beautiful.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\leq t \\leq 10 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe first line of each test case contains one integer $ n $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ ) — the length of the array $ a $ .\n\nThe second line of each test case contains $ n $ numbers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 2 \\cdot 10^5 $ ) — elements of the array $ a $ .\n\nOutput Format\nFor each test case output one integer — the minimum number of elements that must be removed to make the array $ a $ beautiful.\n\nExamples\nSample 1\nInput\n4\n5\n7 9 3 14 63\n3\n2 14 42\n4\n45 9 3 18\n3\n2 2 8\nOutput\n2\n0\n1\n0\n\nNote\nIn the first test case, removing $ 7 $ and $ 14 $ will make array $ a $ beautiful.\n\nIn the second test case, the array $ a $ is already beautiful.\n\nIn the third test case, removing one of the elements $ 45 $ or $ 18 $ will make the array $ a $ beautiful.\n\nIn the fourth test case, the array $ a $ is beautiful."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n(\nint\n)\n2e5\n+\n100\n;\nint\ndp\n[\nN\n];\nint\ncnt\n[\nN\n];\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nfill\n(\ndp\n,\ndp\n+\nN\n,\n0\n);\nfill\n(\ncnt\n,\ncnt\n+\nN\n,\n0\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\nx\n;\ncin\n>>\nx\n;\ncnt\n[\nx\n]++;\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nN\n;\ni\n++)\n{\ndp\n[\ni\n]\n+=\ncnt\n[\ni\n];\nfor\n(\nint\nj\n=\n2\n*\ni\n;\nj\n<\nN\n;\nj\n+=\ni\n)\n{\ndp\n[\nj\n]\n=\nmax\n(\ndp\n[\nj\n],\ndp\n[\ni\n]);\n}\n}\ncout\n<<\n(\nn\n-\n*\nmax_element\n(\ndp\n,\ndp\n+\nN\n))\n<<\nendl\n;\n}\nint\nmain\n()\n{\nint\ntest\n;\ncin\n>>\ntest\n;\nwhile\n(\ntest\n--\n>\n0\n)\n{\nsolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

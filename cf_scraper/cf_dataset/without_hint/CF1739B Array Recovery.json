@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nFor an array of non-negative integers $ a $ of size $ n $ , we construct another array $ d $ as follows: $ d_1 = a_1 $ , $ d_i = |a_i - a_{i - 1}| $ for $ 2 \\le i \\le n $ .\n\nYour task is to restore the array $ a $ from a given array $ d $ , or to report that there are multiple possible arrays.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThe first line of each test case contains one integer $ n $ ( $ 1 \\le n \\le 100 $ ) — the size of the arrays $ a $ and $ d $ .\n\nThe second line contains $ n $ integers $ d_1, d_2, \\dots, d_n $ ( $ 0 \\le d_i \\le 100 $ ) — the elements of the array $ d $ .\n\nIt can be shown that there always exists at least one suitable array $ a $ under these constraints.\n\nOutput Format\nFor each test case, print the elements of the array $ a $ , if there is only one possible array $ a $ . Otherwise, print $ -1 $ .\n\nExamples\nSample 1\nInput\n3\n4\n1 0 2 5\n3\n2 6 3\n5\n0 0 0 0 0\nOutput\n1 1 3 8\n-1\n0 0 0 0 0\n\nNote\nIn the second example, there are two suitable arrays: $ [2, 8, 5] $ and $ [2, 8, 11] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\nans\n=\n[\n0\n]\nfor\nx\nin\nmap\n(\nint\n,\ninput\n().\nsplit\n()):\nif\nx\n!=\n0\nand\nans\n[-\n1\n]\n-\nx\n>=\n0\n:\nprint\n(-\n1\n)\nbreak\nelse\n:\nans\n.\nappend\n(\nans\n[-\n1\n]\n+\nx\n)\nelse\n:\nprint\n(*\nans\n[\n1\n:])"
+        }
+    ]
+}

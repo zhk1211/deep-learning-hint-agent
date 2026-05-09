@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a_1, a_2, \\dots a_n $ . Count the number of pairs of indices $ 1 \\leq i, j \\leq n $ such that $ a_i < i < a_j < j $ .\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases.\n\nThe first line of each test case contains an integer $ n $ ( $ 2 \\leq n \\leq 2 \\cdot 10^5 $ ) — the length of the array.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\leq a_i \\leq 10^9 $ ) — the elements of the array.\n\nIt is guaranteed that the sum of $ n $ across all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of pairs of indices satisfying the condition in the statement.\n\nPlease note, that the answer for some test cases won't fit into 32-bit integer type, so you should use at least 64-bit integer type in your programming language (like long long for C++).\n\nExamples\nSample 1\nInput\n5\n8\n1 1 2 3 8 2 1 4\n2\n1 2\n10\n0 2 1 6 3 4 1 2 8 3\n2\n1 1000000000\n3\n0 1000000000 2\nOutput\n3\n0\n10\n0\n1\n\nNote\nFor the first test cases the pairs are $ (i, j) $ = $ \\{(2, 4), (2, 8), (3, 8)\\} $ .\n\n- The pair $ (2, 4) $ is true because $ a_2 = 1 $ , $ a_4 = 3 $ and $ 1 < 2 < 3 < 4 $ .\n- The pair $ (2, 8) $ is true because $ a_2 = 1 $ , $ a_8 = 4 $ and $ 1 < 2 < 4 < 8 $ .\n- The pair $ (3, 8) $ is true because $ a_3 = 2 $ , $ a_8 = 4 $ and $ 2 < 3 < 4 < 8 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200007\n;\nconst\nint\nMOD\n=\n1000000007\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\na\n[\nn\n+\n1\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\n}\nlong\nlong\nres\n=\n0\n;\nvector\n<int>\nv\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nif\n(\na\n[\ni\n]\n>=\ni\n)\n{\ncontinue\n;}\nres\n+=\n(\nlong\nlong\n)(\nlower_bound\n(\nv\n.\nbegin\n(),\nv\n.\nend\n(),\na\n[\ni\n])\n-\nv\n.\nbegin\n());\nv\n.\npush_back\n(\ni\n);\n}\ncout\n<<\nres\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

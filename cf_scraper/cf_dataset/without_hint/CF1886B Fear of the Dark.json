@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMonocarp tries to get home from work. He is currently at the point $ O = (0, 0) $ of a two-dimensional plane; his house is at the point $ P = (P_x, P_y) $ .\n\nUnfortunately, it is late in the evening, so it is very dark. Monocarp is afraid of the darkness. He would like to go home along a path illuminated by something.\n\nThankfully, there are two lanterns, located in the points $ A = (A_x, A_y) $ and $ B = (B_x, B_y) $ . You can choose any non-negative number $ w $ and set the power of both lanterns to $ w $ . If a lantern's power is set to $ w $ , it illuminates a circle of radius $ w $ centered at the lantern location (including the borders of the circle).\n\nYou have to choose the minimum non-negative value $ w $ for the power of the lanterns in such a way that there is a path from the point $ O $ to the point $ P $ which is completely illuminated. You may assume that the lanterns don't interfere with Monocarp's movement.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1886B/e2035d6f1a8a294e1d7b18148024db80f9680a4a.png) The picture for the first two test cases\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nEach test case consists of three lines:\n\n- the first line contains two integers $ P_x $ and $ P_y $ ( $ -10^3 \\le P_x, P_y \\le 10^3 $ ) — the location of Monocarp's house;\n- the second line contains two integers $ A_x $ and $ A_y $ ( $ -10^3 \\le A_x, A_y \\le 10^3 $ ) — the location of the first lantern;\n- the third line contains two integers $ B_x $ and $ B_y $ ( $ -10^3 \\le B_x, B_y \\le 10^3 $ ) — the location of the second lantern.\n\nAdditional constraint on the input:\n\n- in each test case, the points $ O $ , $ P $ , $ A $ and $ B $ are different from each other.\n\nOutput Format\nFor each test case, print the answer on a separate line — one real number equal to the minimum value of $ w $ such that there is a completely illuminated path from the point $ O $ to the point $ P $ .\n\nYour answer will be considered correct if its absolute or relative error does not exceed $ 10^{-6} $ — formally, if your answer is $ a $ , and the jury's answer is $ b $ , your answer will be accepted if $ \\dfrac{|a - b|}{\\max(1, b)} \\le 10^{-6} $ .\n\nExamples\nSample 1\nInput\n2\n3 3\n1 0\n-1 6\n3 3\n-1 -1\n4 3\nOutput\n3.6055512755\n3.2015621187"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nauto\ndist\n=\n[](\nint\nx1\n,\nint\ny1\n,\nint\nx2\n,\nint\ny2\n)\n{\nreturn\nsqrt\n((\nx1\n-\nx2\n)\n*\n(\nx1\n-\nx2\n)\n+\n(\ny1\n-\ny2\n)\n*\n(\ny1\n-\ny2\n));\n};\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\npx\n,\npy\n,\nax\n,\nay\n,\nbx\n,\nby\n;\ncin\n>>\npx\n>>\npy\n>>\nax\n>>\nay\n>>\nbx\n>>\nby\n;\ndouble\npa\n=\ndist\n(\npx\n,\npy\n,\nax\n,\nay\n),\npb\n=\ndist\n(\npx\n,\npy\n,\nbx\n,\nby\n);\ndouble\noa\n=\ndist\n(\n0\n,\n0\n,\nax\n,\nay\n),\nob\n=\ndist\n(\n0\n,\n0\n,\nbx\n,\nby\n);\ndouble\nab\n=\ndist\n(\nax\n,\nay\n,\nbx\n,\nby\n);\ndouble\nans\n=\n1e9\n;\nans\n=\nmin\n(\nans\n,\nmax\n(\npa\n,\noa\n));\nans\n=\nmin\n(\nans\n,\nmax\n(\npb\n,\nob\n));\nans\n=\nmin\n(\nans\n,\nmax\n({\nab\n/\n2\n,\npa\n,\nob\n}));\nans\n=\nmin\n(\nans\n,\nmax\n({\nab\n/\n2\n,\npb\n,\noa\n}));\ncout\n<<\nsetprecision\n(\n10\n)\n<<\nfixed\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

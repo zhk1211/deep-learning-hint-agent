@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nNew Year is coming and you are excited to know how many minutes remain before the New Year. You know that currently the clock shows $ h $ hours and $ m $ minutes, where $ 0 \\le hh < 24 $ and $ 0 \\le mm < 60 $ . We use 24-hour time format!\n\nYour task is to find the number of minutes before the New Year. You know that New Year comes when the clock shows $ 0 $ hours and $ 0 $ minutes.\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 1439 $ ) — the number of test cases.\n\nThe following $ t $ lines describe test cases. The $ i $ -th line contains the time as two integers $ h $ and $ m $ ( $ 0 \\le h < 24 $ , $ 0 \\le m < 60 $ ). It is guaranteed that this time is not a midnight, i.e. the following two conditions can't be met at the same time: $ h=0 $ and $ m=0 $ . It is guaranteed that both $ h $ and $ m $ are given without leading zeros.\n\nOutput Format\nFor each test case, print the answer on it — the number of minutes before the New Year.\n\nExamples\nSample 1\nInput\n5\n23 55\n23 0\n0 1\n4 20\n23 59\nOutput\n5\n60\n1439\n1180\n1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nq\n;\nscanf\n(\n\"%d\"\n,\n&\nq\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nq\n;\n++\ni\n)\n{\nint\nh\n,\nm\n;\nscanf\n(\n\"%d %d\"\n,\n&\nh\n,\n&\nm\n);\nprintf\n(\n\"%d\\n\"\n,\n1440\n-\nh\n*\n60\n-\nm\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's call the set of positive integers $ S $ correct if the following two conditions are met:\n\n- $ S \\subseteq \\{1, 2, \\dots, n\\} $ ;\n- if $ a \\in S $ and $ b \\in S $ , then $ |a-b| \\neq x $ and $ |a-b| \\neq y $ .\n\nFor the given values $ n $ , $ x $ , and $ y $ , you have to find the maximum size of the correct set.\n\nInput Format\nA single line contains three integers $ n $ , $ x $ and $ y $ ( $ 1 \\le n \\le 10^9 $ ; $ 1 \\le x, y \\le 22 $ ).\n\nOutput Format\nPrint one integer — the maximum size of the correct set.\n\nExamples\nSample 1\nInput\n10 2 5\nOutput\n5\n\nSample 2\nInput\n21 4 6\nOutput\n9\n\nSample 3\nInput\n1337 7 7\nOutput\n672\n\nSample 4\nInput\n455678451 22 17\nOutput\n221997195"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Ne0n25)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nINF\n=\n1e9\n;\nconst\nint\nN\n=\n22\n;\nint\ndp\n[\n2\n][\n1\n<<\nN\n];\nint\nval\n[\n2\n*\nN\n];\nint\nmain\n()\n{\nint\nn\n,\nx\n,\ny\n;\nscanf\n(\n\"%d%d%d\"\n,\n&\nn\n,\n&\nx\n,\n&\ny\n);\nint\nk\n=\nx\n+\ny\n;\nint\nm\n=\nmax\n(\nx\n,\ny\n);\nint\nFULL\n=\n(\n1\n<<\nm\n)\n-\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\n++\ni\n)\nval\n[\ni\n]\n=\nn\n/\nk\n+\n(\ni\n<\nn\n%\nk\n);\nfor\n(\nint\nmask\n=\n0\n;\nmask\n<\n(\n1\n<<\nm\n);\n++\nmask\n)\ndp\n[\n0\n][\nmask\n]\n=\n-\nINF\n;\ndp\n[\n0\n][\n0\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\n++\ni\n)\n{\nfor\n(\nint\nmask\n=\n0\n;\nmask\n<\n(\n1\n<<\nm\n);\n++\nmask\n)\ndp\n[\n1\n][\nmask\n]\n=\n-\nINF\n;\nfor\n(\nint\nmask\n=\n0\n;\nmask\n<\n(\n1\n<<\nm\n);\n++\nmask\n)\n{\nif\n(\ndp\n[\n0\n][\nmask\n]\n==\n-\nINF\n)\ncontinue\n;\nint\nnmask\n=\n(\nmask\n<<\n1\n)\n&\nFULL\n;\ndp\n[\n1\n][\nnmask\n]\n=\nmax\n(\ndp\n[\n1\n][\nnmask\n],\ndp\n[\n0\n][\nmask\n]);\nif\n(((\nmask\n>>\n(\nx\n-\n1\n))\n&\n1\n)\n|\n((\nmask\n>>\n(\ny\n-\n1\n))\n&\n1\n))\ncontinue\n;\nnmask\n|=\n1\n;\ndp\n[\n1\n][\nnmask\n]\n=\nmax\n(\ndp\n[\n1\n][\nnmask\n],\ndp\n[\n0\n][\nmask\n]\n+\nval\n[\ni\n]);\n}\nswap\n(\ndp\n[\n0\n],\ndp\n[\n1\n]);\n}\nint\nans\n=\n0\n;\nfor\n(\nint\nmask\n=\n0\n;\nmask\n<\n(\n1\n<<\nm\n);\n++\nmask\n)\nans\n=\nmax\n(\nans\n,\ndp\n[\n0\n][\nmask\n]);\nprintf\n(\n\"%d\\n\"\n,\nans\n);\n}"
+        }
+    ]
+}

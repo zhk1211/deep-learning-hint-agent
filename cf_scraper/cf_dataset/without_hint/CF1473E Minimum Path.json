@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a weighted undirected connected graph consisting of $ n $ vertices and $ m $ edges. It is guaranteed that there are no self-loops or multiple edges in the given graph.\n\nLet's define the weight of the path consisting of $ k $ edges with indices $ e_1, e_2, \\dots, e_k $ as $ \\sum\\limits_{i=1}^{k}{w_{e_i}} - \\max\\limits_{i=1}^{k}{w_{e_i}} + \\min\\limits_{i=1}^{k}{w_{e_i}} $ , where $ w_i $ — weight of the $ i $ -th edge in the graph.\n\nYour task is to find the minimum weight of the path from the $ 1 $ -st vertex to the $ i $ -th vertex for each $ i $ ( $ 2 \\le i \\le n $ ).\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ; $ 1 \\le m \\le 2 \\cdot 10^5 $ ) — the number of vertices and the number of edges in the graph.\n\nFollowing $ m $ lines contains three integers $ v_i, u_i, w_i $ ( $ 1 \\le v_i, u_i \\le n $ ; $ 1 \\le w_i \\le 10^9 $ ; $ v_i \\neq u_i $ ) — endpoints of the $ i $ -th edge and its weight respectively.\n\nOutput Format\nPrint $ n-1 $ integers — the minimum weight of the path from $ 1 $ -st vertex to the $ i $ -th vertex for each $ i $ ( $ 2 \\le i \\le n $ ).\n\nExamples\nSample 1\nInput\n5 4\n5 3 4\n2 1 1\n3 2 2\n2 4 2\nOutput\n1 2 2 4\n\nSample 2\nInput\n6 8\n3 1 1\n3 6 2\n5 4 2\n4 2 2\n6 1 1\n5 2 1\n3 2 3\n1 5 4\nOutput\n2 1 4 3 1\n\nSample 3\nInput\n7 10\n7 5 5\n2 3 3\n4 7 1\n5 3 6\n2 7 6\n6 2 6\n3 7 6\n4 2 1\n3 1 4\n1 7 4\nOutput\n3 4 2 7 7 3"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n200\n*\n1000\n+\n13\n;\nint\nn\n,\nm\n;\nvector\n<\npair\n<\nint\n,\nint\n>>\ng\n[\nN\n];\nlong\nlong\nd\n[\nN\n][\n2\n][\n2\n];\nint\nmain\n()\n{\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nm\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nm\n;\ni\n++)\n{\nint\nv\n,\nu\n,\nw\n;\nscanf\n(\n\"%d%d%d\"\n,\n&\nv\n,\n&\nu\n,\n&\nw\n);\n--\nv\n;\n--\nu\n;\ng\n[\nv\n].\nemplace_back\n(\nu\n,\nw\n);\ng\n[\nu\n].\nemplace_back\n(\nv\n,\nw\n);\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n2\n;\nj\n++)\nfor\n(\nint\nk\n=\n0\n;\nk\n<\n2\n;\nk\n++)\nd\n[\ni\n][\nj\n][\nk\n]\n=\n(\nlong\nlong\n)\n1e18\n;\nd\n[\n0\n][\n0\n][\n0\n]\n=\n0\n;\nset\n<\npair\n<\nlong\nlong\n,\narray\n<\nint\n,\n3\n>>>\nq\n;\nq\n.\ninsert\n({\n0\n,\n{\n0\n,\n0\n,\n0\n}});\nwhile\n(!\nq\n.\nempty\n())\n{\nauto\n[\nv\n,\nmx\n,\nmn\n]\n=\nq\n.\nbegin\n()->\nsecond\n;\nq\n.\nerase\n(\nq\n.\nbegin\n());\nfor\n(\nauto\n[\nu\n,\nw\n]\n:\ng\n[\nv\n])\n{\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\n1\n-\nmx\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\n1\n-\nmn\n;\nj\n++)\n{\nif\n(\nd\n[\nu\n][\nmx\n|\ni\n][\nmn\n|\nj\n]\n>\nd\n[\nv\n][\nmx\n][\nmn\n]\n+\n(\n1\n-\ni\n+\nj\n)\n*\nw\n)\n{\nauto\nit\n=\nq\n.\nfind\n({\nd\n[\nu\n][\nmx\n|\ni\n][\nmn\n|\nj\n],\n{\nu\n,\nmx\n|\ni\n,\nmn\n|\nj\n}});\nif\n(\nit\n!=\nq\n.\nend\n())\nq\n.\nerase\n(\nit\n);\nd\n[\nu\n][\nmx\n|\ni\n][\nmn\n|\nj\n]\n=\nd\n[\nv\n][\nmx\n][\nmn\n]\n+\n(\n1\n-\ni\n+\nj\n)\n*\nw\n;\nq\n.\ninsert\n({\nd\n[\nu\n][\nmx\n|\ni\n][\nmn\n|\nj\n],\n{\nu\n,\nmx\n|\ni\n,\nmn\n|\nj\n}});\n}\n}\n}\n}\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\n{\nprintf\n(\n\"%lld \"\n,\nd\n[\ni\n][\n1\n][\n1\n]);\n}\nputs\n(\n\"\"\n);\n}"
+        }
+    ]
+}

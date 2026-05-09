@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWe define $ x \\bmod y $ as the remainder of division of $ x $ by $ y $ ( $ \\% $ operator in C++ or Java, mod operator in Pascal).\n\nLet's call an array of positive integers $ [a_1, a_2, \\dots, a_k] $ stable if for every permutation $ p $ of integers from $ 1 $ to $ k $ , and for every non-negative integer $ x $ , the following condition is met:\n\n$ (((x \\bmod a_1) \\bmod a_2) \\dots \\bmod a_{k - 1}) \\bmod a_k = (((x \\bmod a_{p_1}) \\bmod a_{p_2}) \\dots \\bmod a_{p_{k - 1}}) \\bmod a_{p_k} $ That is, for each non-negative integer $ x $ , the value of $ (((x \\bmod a_1) \\bmod a_2) \\dots \\bmod a_{k - 1}) \\bmod a_k $ does not change if we reorder the elements of the array $ a $ .\n\nFor two given integers $ n $ and $ k $ , calculate the number of stable arrays $ [a_1, a_2, \\dots, a_k] $ such that $ 1 \\le a_1 < a_2 < \\dots < a_k \\le n $ .\n\nInput Format\nThe only line contains two integers $ n $ and $ k $ ( $ 1 \\le n, k \\le 5 \\cdot 10^5 $ ).\n\nOutput Format\nPrint one integer — the number of stable arrays $ [a_1, a_2, \\dots, a_k] $ such that $ 1 \\le a_1 < a_2 < \\dots < a_k \\le n $ . Since the answer may be large, print it modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n7 3\nOutput\n16\n\nSample 2\nInput\n3 7\nOutput\n0\n\nSample 3\nInput\n1337 42\nOutput\n95147305\n\nSample 4\nInput\n1 1\nOutput\n1\n\nSample 5\nInput\n500000 1\nOutput\n500000"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n500043\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nfact\n[\nN\n];\nint\nadd\n(\nint\nx\n,\nint\ny\n)\n{\nx\n+=\ny\n;\nwhile\n(\nx\n>=\nMOD\n)\nx\n-=\nMOD\n;\nwhile\n(\nx\n<\n0\n)\nx\n+=\nMOD\n;\nreturn\nx\n;\n}\nint\nmul\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\n(\nx\n*\n1ll\n*\ny\n)\n%\nMOD\n;\n}\nint\nbinpow\n(\nint\nx\n,\nint\ny\n)\n{\nint\nz\n=\n1\n;\nwhile\n(\ny\n>\n0\n)\n{\nif\n(\ny\n%\n2\n==\n1\n)\nz\n=\nmul\n(\nz\n,\nx\n);\nx\n=\nmul\n(\nx\n,\nx\n);\ny\n/=\n2\n;\n}\nreturn\nz\n;\n}\nint\ninv\n(\nint\nx\n)\n{\nreturn\nbinpow\n(\nx\n,\nMOD\n-\n2\n);\n}\nint\ndivide\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\nmul\n(\nx\n,\ninv\n(\ny\n));\n}\nvoid\nprecalc\n()\n{\nfact\n[\n0\n]\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nN\n;\ni\n++)\nfact\n[\ni\n]\n=\nmul\n(\ni\n,\nfact\n[\ni\n-\n1\n]);\n}\nint\nC\n(\nint\nn\n,\nint\nk\n)\n{\nif\n(\nk\n>\nn\n)\nreturn\n0\n;\nreturn\ndivide\n(\nfact\n[\nn\n],\nmul\n(\nfact\n[\nn\n-\nk\n],\nfact\n[\nk\n]));\n}\nint\nmain\n()\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nint\nans\n=\n0\n;\nprecalc\n();\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nint\nd\n=\nn\n/\ni\n;\nans\n=\nadd\n(\nans\n,\nC\n(\nd\n-\n1\n,\nk\n-\n1\n));\n}\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ nails driven into the wall, the $ i $ -th nail is driven $ a_i $ meters above the ground, one end of the $ b_i $ meters long rope is tied to it. All nails hang at different heights one above the other. One candy is tied to all ropes at once. Candy is tied to end of a rope that is not tied to a nail.\n\nTo take the candy, you need to lower it to the ground. To do this, Rudolph can cut some ropes, one at a time. Help Rudolph find the minimum number of ropes that must be cut to get the candy.\n\nThe figure shows an example of the first test:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1846A/54cac1aeb30d2672930ad89c3b8ae78a182eb149.png)\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains one integer $ n $ ( $ 1 \\le n \\le 50 $ ) — the number of nails.\n\nThe $ i $ -th of the next $ n $ lines contains two integers $ a_i $ and $ b_i $ ( $ 1 \\le a_i, b_i \\le 200 $ ) — the height of the $ i $ -th nail and the length of the rope tied to it, all $ a_i $ are different.\n\nIt is guaranteed that the data is not contradictory, it is possible to build a configuration described in the statement.\n\nOutput Format\nFor each test case print one integer — the minimum number of ropes that need to be cut to make the candy fall to the ground.\n\nExamples\nSample 1\nInput\n4\n3\n4 3\n3 1\n1 2\n4\n9 2\n5 2\n7 7\n3 4\n5\n11 7\n5 10\n12 9\n3 2\n1 5\n3\n5 6\n4 5\n7 7\nOutput\n2\n2\n3\n0"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What if the nail with the rope is the only one?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "How long should be rope to reach the ground?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\ntest_cases\n;\ncin\n>>\ntest_cases\n;\nfor\n(\nint\ntest_case\n=\n0\n;\ntest_case\n<\ntest_cases\n;\ntest_case\n++)\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\na\n,\nb\n;\ncin\n>>\na\n>>\nb\n;\nif\n(\na\n>\nb\n)\nans\n++;\n}\ncout\n<<\nans\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

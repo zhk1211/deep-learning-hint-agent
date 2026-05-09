@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA telephone number is a sequence of exactly $ 11 $ digits such that its first digit is 8.\n\nVasya and Petya are playing a game. Initially they have a string $ s $ of length $ n $ ( $ n $ is odd) consisting of digits. Vasya makes the first move, then players alternate turns. In one move the player must choose a character and erase it from the current string. For example, if the current string 1121, after the player's move it may be 112, 111 or 121. The game ends when the length of string $ s $ becomes 11. If the resulting string is a telephone number, Vasya wins, otherwise Petya wins.\n\nYou have to determine if Vasya has a winning strategy (that is, if Vasya can win the game no matter which characters Petya chooses during his moves).\n\nInput Format\nThe first line contains one integer $ n $ ( $ 13 \\le n < 10^5 $ , $ n $ is odd) — the length of string $ s $ .\n\nThe second line contains the string $ s $ ( $ |s| = n $ ) consisting only of decimal digits.\n\nOutput Format\nIf Vasya has a strategy that guarantees him victory, print YES.\n\nOtherwise print NO.\n\nExamples\nSample 1\nInput\n13\n8380011223344\nOutput\nYES\n\nSample 2\nInput\n15\n807345619350641\nOutput\nNO\n\nNote\nIn the first example Vasya needs to erase the second character. Then Petya cannot erase a character from the remaining string 880011223344 so that it does not become a telephone number.\n\nIn the second example after Vasya's turn Petya can erase one character character 8. The resulting string can't be a telephone number, because there is no digit 8 at all."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n;\nstring\ns\n;\nint\nmain\n(){\ncin\n>>\nn\n>>\ns\n;\nint\ncnt1\n=\n(\nn\n-\n11\n)\n/\n2\n;\nint\ncnt2\n=\ncnt1\n;\nstring\nres\n=\n\"\"\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n){\nif\n(\ns\n[\ni\n]\n==\n'8'\n){\nif\n(\ncnt1\n>\n0\n)\n--\ncnt1\n;\nelse\nres\n+=\ns\n[\ni\n];\n}\nelse\n{\nif\n(\ncnt2\n>\n0\n)\n--\ncnt2\n;\nelse\nres\n+=\ns\n[\ni\n];\n}\n}\nif\n(\nres\n[\n0\n]\n==\n'8'\n)\ncout\n<<\n\"YES\\n\"\n;\nelse\ncout\n<<\n\"NO\\n\"\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

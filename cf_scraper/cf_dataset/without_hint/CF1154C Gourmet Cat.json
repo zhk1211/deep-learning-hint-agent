@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp has a cat and his cat is a real gourmet! Dependent on a day of the week he eats certain type of food:\n\n- on Mondays, Thursdays and Sundays he eats fish food;\n- on Tuesdays and Saturdays he eats rabbit stew;\n- on other days of week he eats chicken stake.\n\nPolycarp plans to go on a trip and already packed his backpack. His backpack contains:\n\n- $ a $ daily rations of fish food;\n- $ b $ daily rations of rabbit stew;\n- $ c $ daily rations of chicken stakes.\n\nPolycarp has to choose such day of the week to start his trip that his cat can eat without additional food purchases as long as possible. Print the maximum number of days the cat can eat in a trip without additional food purchases, if Polycarp chooses the day of the week to start his trip optimally.\n\nInput Format\nThe first line of the input contains three positive integers $ a $ , $ b $ and $ c $ ( $ 1 \\le a, b, c \\le 7\\cdot10^8 $ ) — the number of daily rations of fish food, rabbit stew and chicken stakes in Polycarps backpack correspondingly.\n\nOutput Format\nPrint the maximum number of days the cat can eat in a trip without additional food purchases, if Polycarp chooses the day of the week to start his trip optimally.\n\nExamples\nSample 1\nInput\n2 1 1\nOutput\n4\n\nSample 2\nInput\n3 2 2\nOutput\n7\n\nSample 3\nInput\n1 100 1\nOutput\n3\n\nSample 4\nInput\n30 20 10\nOutput\n39\n\nNote\nIn the first example the best day for start of the trip is Sunday. In this case, during Sunday and Monday the cat will eat fish food, during Tuesday — rabbit stew and during Wednesday — chicken stake. So, after four days of the trip all food will be eaten.\n\nIn the second example Polycarp can start his trip in any day of the week. In any case there are food supplies only for one week in Polycarps backpack.\n\nIn the third example Polycarp can start his trip in any day, excluding Wednesday, Saturday and Sunday. In this case, the cat will eat three different dishes in three days. Nevertheless that after three days of a trip there will be $ 99 $ portions of rabbit stew in a backpack, can cannot eat anything in fourth day of a trip."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nvector\n<int>\na\n(\n3\n);\ncin\n>>\na\n[\n0\n]\n>>\na\n[\n1\n]\n>>\na\n[\n2\n];\nvector\n<int>\nidx\n({\n0\n,\n1\n,\n2\n,\n0\n,\n2\n,\n1\n,\n0\n});\nint\nfull\n=\nmin\n({\na\n[\n0\n]\n/\n3\n,\na\n[\n1\n]\n/\n2\n,\na\n[\n2\n]\n/\n2\n});\na\n[\n0\n]\n-=\nfull\n*\n3\n;\na\n[\n1\n]\n-=\nfull\n*\n2\n;\na\n[\n2\n]\n-=\nfull\n*\n2\n;\nint\nans\n=\n0\n;\nfor\n(\nint\nstart\n=\n0\n;\nstart\n<\n7\n;\n++\nstart\n)\n{\nint\nday\n=\nstart\n;\nvector\n<int>\nb\n=\na\n;\nint\ncur\n=\n0\n;\nwhile\n(\nb\n[\nidx\n[\nday\n]]\n>\n0\n)\n{\n--\nb\n[\nidx\n[\nday\n]];\nday\n=\n(\nday\n+\n1\n)\n%\n7\n;\n++\ncur\n;\n}\nans\n=\nmax\n(\nans\n,\nfull\n*\n7\n+\ncur\n);\n}\ncout\n<<\nans\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

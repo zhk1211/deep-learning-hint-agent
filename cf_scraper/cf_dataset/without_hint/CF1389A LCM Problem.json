@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet $ LCM(x, y) $ be the minimum positive integer that is divisible by both $ x $ and $ y $ . For example, $ LCM(13, 37) = 481 $ , $ LCM(9, 6) = 18 $ .\n\nYou are given two integers $ l $ and $ r $ . Find two integers $ x $ and $ y $ such that $ l \\le x < y \\le r $ and $ l \\le LCM(x, y) \\le r $ .\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10000 $ ) — the number of test cases.\n\nEach test case is represented by one line containing two integers $ l $ and $ r $ ( $ 1 \\le l < r \\le 10^9 $ ).\n\nOutput Format\nFor each test case, print two integers:\n\n- if it is impossible to find integers $ x $ and $ y $ meeting the constraints in the statement, print two integers equal to $ -1 $ ;\n- otherwise, print the values of $ x $ and $ y $ (if there are multiple valid answers, you may print any of them).\n\nExamples\nSample 1\nInput\n4\n1 1337\n13 69\n2 4\n88 89\nOutput\n6 7\n14 21\n2 4\n-1 -1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\nl\n,\nr\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nif\nl\n*\n2\n>\nr\n:\nprint\n(-\n1\n,\n-\n1\n)\nelse\n:\nprint\n(\nl\n,\nl\n*\n2\n)"
+        }
+    ]
+}

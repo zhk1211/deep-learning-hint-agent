@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are standing on the $ \\mathit{OX} $ -axis at point $ 0 $ and you want to move to an integer point $ x > 0 $ .\n\nYou can make several jumps. Suppose you're currently at point $ y $ ( $ y $ may be negative) and jump for the $ k $ -th time. You can:\n\n- either jump to the point $ y + k $\n- or jump to the point $ y - 1 $ .\n\nWhat is the minimum number of jumps you need to reach the point $ x $ ?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThe first and only line of each test case contains the single integer $ x $ ( $ 1 \\le x \\le 10^6 $ ) — the destination point.\n\nOutput Format\nFor each test case, print the single integer — the minimum number of jumps to reach $ x $ . It can be proved that we can reach any integer point $ x $ .\n\nExamples\nSample 1\nInput\n5\n1\n2\n3\n4\n5\nOutput\n1\n3\n2\n3\n4\n\nNote\nIn the first test case $ x = 1 $ , so you need only one jump: the $ 1 $ -st jump from $ 0 $ to $ 0 + 1 = 1 $ .\n\nIn the second test case $ x = 2 $ . You need at least three jumps:\n\n- the $ 1 $ -st jump from $ 0 $ to $ 0 + 1 = 1 $ ;\n- the $ 2 $ -nd jump from $ 1 $ to $ 1 + 2 = 3 $ ;\n- the $ 3 $ -rd jump from $ 3 $ to $ 3 - 1 = 2 $ ;\n\nTwo jumps are not enough because these are the only possible variants:\n\n- the $ 1 $ -st jump as $ -1 $ and the $ 2 $ -nd one as $ -1 $ — you'll reach $ 0 -1 -1 =-2 $ ;\n- the $ 1 $ -st jump as $ -1 $ and the $ 2 $ -nd one as $ +2 $ — you'll reach $ 0 -1 +2 = 1 $ ;\n- the $ 1 $ -st jump as $ +1 $ and the $ 2 $ -nd one as $ -1 $ — you'll reach $ 0 +1 -1 = 0 $ ;\n- the $ 1 $ -st jump as $ +1 $ and the $ 2 $ -nd one as $ +2 $ — you'll reach $ 0 +1 +2 = 3 $ ;\n\nIn the third test case, you need two jumps: the $ 1 $ -st one as $ +1 $ and the $ 2 $ -nd one as $ +2 $ , so $ 0 + 1 + 2 = 3 $ .\n\nIn the fourth test case, you need three jumps: the $ 1 $ -st one as $ -1 $ , the $ 2 $ -nd one as $ +2 $ and the $ 3 $ -rd one as $ +3 $ , so $ 0 - 1 + 2 + 3 = 4 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nx\n;\ncin\n>>\nx\n;\nint\nsteps\n=\n0\n;\nwhile\n(\nsteps\n*\n(\nsteps\n+\n1\n)\n<\n2\n*\nx\n)\nsteps\n++;\nif\n(\nsteps\n*\n(\nsteps\n+\n1\n)\n/\n2\n==\nx\n+\n1\n)\nsteps\n++;\ncout\n<<\nsteps\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (vovuh)",
+            "content": "import\njava\n.\nutil\n.*\nfun main\n()\n{\nval\n(\nn\n,\nk\n,\nx\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval a\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nvar\nl\n=\n0L\nvar\nr\n=\n10L\n*\n1000\n*\n1000\n*\n1000\nvar\nres\n=\n-\n1L\nfun can\n(\nsum\n:\nLong\n)\n:\nBoolean\n{\nvar\ncursum\n=\n0L\nvar\nneed\n=\n0\nvar\ncur\n=\nPriorityQueue\n<\nInt\n>(\ncompareBy\n<\nInt\n>\n{\n-\nit\n})\nfor\n(\ni\nin\n0\nuntil\nn\n)\n{\ncursum\n+=\na\n[\ni\n]\ncur\n.\nadd\n(\na\n[\ni\n])\nwhile\n(\ncur\n.\nsize\n>\nx\n||\ncursum\n>\nsum\n)\n{\ncursum\n-=\ncur\n.\nfirst\n()\ncur\n.\nremove\n()\nneed\n+=\n1\n}\nif\n(\ncur\n.\nsize\n==\nx\n)\n{\ncursum\n=\n0L\ncur\n.\nclear\n()\n}\n}\nreturn\nneed\n<=\nk\n}\nwhile\n(\nl\n<=\nr\n)\n{\nval mid\n=\n(\nl\n+\nr\n)\n/\n2\nif\n(\ncan\n(\nmid\n))\n{\nres\n=\nmid\n            r\n=\nmid\n-\n1\n}\nelse\n{\nl\n=\nmid\n+\n1\n}\n}\nprintln\n(\nres\n)\n}"
+        }
+    ]
+}

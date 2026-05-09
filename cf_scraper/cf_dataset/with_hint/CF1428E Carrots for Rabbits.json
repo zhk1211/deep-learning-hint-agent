@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are some rabbits in Singapore Zoo. To feed them, Zookeeper bought $ n $ carrots with lengths $ a_1, a_2, a_3, \\ldots, a_n $ . However, rabbits are very fertile and multiply very quickly. Zookeeper now has $ k $ rabbits and does not have enough carrots to feed all of them. To solve this problem, Zookeeper decided to cut the carrots into $ k $ pieces. For some reason, all resulting carrot lengths must be positive integers.\n\nBig carrots are very difficult for rabbits to handle and eat, so the time needed to eat a carrot of size $ x $ is $ x^2 $ .\n\nHelp Zookeeper split his carrots while minimizing the sum of time taken for rabbits to eat the carrots.\n\nInput Format\nThe first line contains two integers $ n $ and $ k $ $ (1 \\leq n \\leq k \\leq 10^5) $ : the initial number of carrots and the number of rabbits.\n\nThe next line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ $ (1 \\leq a_i \\leq 10^6) $ : lengths of carrots.\n\nIt is guaranteed that the sum of $ a_i $ is at least $ k $ .\n\nOutput Format\nOutput one integer: the minimum sum of time taken for rabbits to eat carrots.\n\nExamples\nSample 1\nInput\n3 6\n5 3 1\nOutput\n15\n\nSample 2\nInput\n1 4\n19\nOutput\n91\n\nNote\nFor the first test, the optimal sizes of carrots are $ \\{1,1,1,2,2,2\\} $ . The time taken is $ 1^2+1^2+1^2+2^2+2^2+2^2=15 $\n\nFor the second test, the optimal sizes of carrots are $ \\{4,5,5,5\\} $ . The time taken is $ 4^2+5^2+5^2+5^2=91 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Greedy."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Let us define $$$f(l,p)$$$ as the sum of time needed when we have a single carrot of length $$$l$$$ and it is split into $$$p$$$ pieces.\nWe can show that $$$f(l,p−1)−f(l,p)≥f(l,p)−f(l,p+1)$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let us define $$$f(l,p)$$$ as the sum of time needed when we have a single carrot of length $$$l$$$ and it is split into $$$p$$$ pieces.\nMore details\nIn an optimal cutting for a single carrot, we will only cut it into pieces of length $$$w$$$ and $$$w+1$$$, for some $$$w$$$.\nSuch cutting is optimal as suppose we have $$$2$$$ pieces of length $$$\\alpha$$$ and $$$\\beta$$$, and $$$\\alpha+2 \\leq \\beta$$$. Then, it is better to replace those $$$2$$$ pieces of carrots with length $$$\\alpha+1$$$ and $$$\\beta-1$$$, since $$$(\\alpha+1)^2+(\\beta-1)^2 \\leq \\alpha^2+\\beta^2$$$.\nTo calculate $$$f(l,p)$$$, we need to find $$$p_1,p_2$$$ such that $$$p_1 (w) + p_2 (w+1)=l$$$ and $$$p_1+p_2=p$$$, minimizing $$$p_1(w)^2+p_2(w+1)^2$$$.\nClearly, $$$w=\\lfloor \\frac{l}{p} \\rfloor$$$ and $$$p_2=l\\mod p$$$. Thus, calculating $$$f(l,p)$$$ can be done in $$$O(1)$$$.\nWe can use the following greedy algorithm. We consider making zero cuts at first. We will make $$$k$$$ cuts one by one. When deciding where to make each cut, consider for all the carrots, which carrot gives us the largest decrease in cost when we add an extra cut. If a carrot of length $$$l$$$ currently is in $$$p$$$ pieces, then the decrease in cost by making one extra cut is $$$f(l,p) - f(l,p+1)$$$.\nThe important observation here is that $$$f(l,p-1)-f(l,p) \\geq f(l,p)-f(l,p+1)$$$.\nProof\nConsider $$$f(2l,2p)$$$.\nSince the length is even and we have an even number of pieces, we know that the will be one cut down the middle and each half will have $$$p$$$ pieces. As such, $$$f(2l,2p) = 2f(l,p)$$$ This is because there even number of $$$w$$$ length pieces and an even number of $$$w+1$$$ length pieces, hence the left half and the right half are the same.\nAlso, $$$f(l,p-1) + f(l,p+1) \\geq f(2l,2p)$$$, since $$$f(l,p-1) + f(l,p+1)$$$ is describing cutting a carrot of length $$$2l$$$ first into $$$2$$$ carrots of length $$$l$$$ and cutting it into $$$p-1$$$ and $$$p+1$$$ pieces respectively. The inequality must hold because this is a way to cut a carrot of length $$$2l$$$ into $$$2p$$$ pieces.\nSince we have $$$f(l,p-1) + f(l,p+1) \\geq f(2l,2p)$$$ and $$$f(2l,2p) = 2f(l,p)$$$.\nWe have $$$f(l,p-1) + f(l,p+1) \\geq f(l,p) + f(l,p)$$$.\nRearranging terms gives $$$f(l,p-1)-f(l,p) \\geq f(l,p)-f(l,p+1)$$$\nIn other words, the more cuts we make to a carrot, there is a diminishing returns in the decrease in cost per cut. As such, For any carrot, we don't need to think about making the $$$(p+1)$$$-th cut before making the $$$p$$$-th cut.\nHence, all we need to do is choose carrot with the largest decrease in cost, and add one extra cut for that. Which carrot has the largest decrease in cost can be maintained with a priority queue. Hence, we get a time complexity of $$$O(klog(n))$$$.\nBonus:\nsolve this problem for $$$k \\leq 10^{18}$$$."
+        }
+    ]
+}

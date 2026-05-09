@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ participants in a competition, participant $ i $ having a strength of $ s_i $ .\n\nEvery participant wonders how much of an advantage they have over the other best participant. In other words, each participant $ i $ wants to know the difference between $ s_i $ and $ s_j $ , where $ j $ is the strongest participant in the competition, not counting $ i $ (a difference can be negative).\n\nSo, they ask you for your help! For each $ i $ ( $ 1 \\leq i \\leq n $ ) output the difference between $ s_i $ and the maximum strength of any participant other than participant $ i $ .\n\nInput Format\nThe input consists of multiple test cases. The first line contains an integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases. The descriptions of the test cases follow.\n\nThe first line of each test case contains an integer $ n $ ( $ 2 \\leq n \\leq 2\\cdot10^5 $ ) — the length of the array.\n\nThe following line contains $ n $ space-separated positive integers $ s_1 $ , $ s_2 $ , ..., $ s_n $ ( $ 1 \\leq s_i \\leq 10^9 $ ) — the strengths of the participants.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\\cdot10^5 $ .\n\nOutput Format\nFor each test case, output $ n $ space-separated integers. For each $ i $ ( $ 1 \\leq i \\leq n $ ) output the difference between $ s_i $ and the maximum strength of any other participant.\n\nExamples\nSample 1\nInput\n5\n4\n4 7 3 5\n2\n1 2\n5\n1 2 3 4 5\n3\n4 9 4\n4\n4 4 4 4\nOutput\n-3 2 -4 -2\n-1 1\n-4 -3 -2 -1 1\n-5 5 -5\n0 0 0 0\n\nNote\nFor the first test case:\n\n- The first participant has a strength of $ 4 $ and the largest strength of a participant different from the first one is $ 7 $ , so the answer for the first participant is $ 4 - 7 = -3 $ .\n- The second participant has a strength of $ 7 $ and the largest strength of a participant different from the second one is $ 5 $ , so the answer for the second participant is $ 7 - 5 = 2 $ .\n- The third participant has a strength of $ 3 $ and the largest strength of a participant different from the third one is $ 7 $ , so the answer for the third participant is $ 3 - 7 = -4 $ .\n- The fourth participant has a strength of $ 5 $ and the largest strength of a participant different from the fourth one is $ 7 $ , so the answer for the fourth participant is $ 5 - 7 = -2 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nforn\n(\ntt\n,\nt\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nforn\n(\ni\n,\nn\n)\ncin\n>>\na\n[\ni\n];\nvector\n<int>\nb\n(\na\n);\nsort\n(\nb\n.\nbegin\n(),\nb\n.\nend\n());\nforn\n(\ni\n,\nn\n)\n{\nif\n(\na\n[\ni\n]\n==\nb\n[\nn\n-\n1\n])\ncout\n<<\na\n[\ni\n]\n-\nb\n[\nn\n-\n2\n]\n<<\n\" \"\n;\nelse\ncout\n<<\na\n[\ni\n]\n-\nb\n[\nn\n-\n1\n]\n<<\n\" \"\n;\n}\ncout\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

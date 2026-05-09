@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is a simple version of the problem. The only difference is that in this version $ n \\le 10^6 $ .\n\nOne winter morning, Rudolf was looking thoughtfully out the window, watching the falling snowflakes. He quickly noticed a certain symmetry in the configuration of the snowflakes. And like a true mathematician, Rudolf came up with a mathematical model of a snowflake.\n\nHe defined a snowflake as an undirected graph constructed according to the following rules:\n\n- Initially, the graph has only one vertex.\n- Then, more vertices are added to the graph. The initial vertex is connected by edges to $ k $ new vertices ( $ k > 1 $ ).\n- Each vertex that is connected to only one other vertex is connected by edges to $ k $ more new vertices. This step should be done at least once.\n\nThe smallest possible snowflake for $ k = 4 $ is shown in the figure.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1846E1/2fc3f5caf761ddee75c017a3deae10ee696f63d1.png)After some mathematical research, Rudolf realized that such snowflakes may not have any number of vertices. Help Rudolf check if a snowflake with $ n $ vertices can exist.\n\nInput Format\nThe first line of the input contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThen follow the descriptions of the test cases.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\le n \\le 10^6 $ ) — the number of vertices for which it is necessary to check the existence of a snowflake.\n\nOutput Format\nOutput $ t $ lines, each of which is the answer to the corresponding test case — \"YES\" if there exists such $ k > 1 $ for which a snowflake with the given number of vertices can be constructed; \"NO\" otherwise.\n\nExamples\nSample 1\nInput\n9\n1\n2\n3\n6\n13\n15\n255\n10101\n1000000\nOutput\nNO\nNO\nNO\nNO\nYES\nYES\nYES\nYES\nNO"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "1 + k + k\n2\n+ k\n3\n+ ... + k\np"
+        },
+        {
+            "title": "Hint 2",
+            "content": "What maximum value of k can be reached for the current constrains on n?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Can we precalculate for each n if there is appropriate k?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nLL\n=\nlong\nlong\n;\nset\n<\nlong\nlong\n>\nnums\n;\nint\nmain\n()\n{\nfor\n(\nlong\nlong\nk\n=\n2\n;\nk\n<=\n1000\n;\n++\nk\n)\n{\nlong\nlong\nval\n=\n1\n+\nk\n;\nlong\nlong\np\n=\nk\n*\nk\n;\nfor\n(\nint\ncnt\n=\n2\n;\ncnt\n<=\n20\n;\n++\ncnt\n)\n{\nval\n+=\np\n;\nif\n(\nval\n>\n1e6\n)\nbreak\n;\nnums\n.\ninsert\n(\nval\n);\np\n*=\nk\n;\n}\n}\nint\n_\n=\n0\n,\n__\n=\n1\n;\ncin\n>>\n__\n;\nfor\n(\nint\n_\n=\n0\n;\n_\n<\n__\n;\n++\n_\n)\n{\nlong\nlong\nn\n;\ncin\n>>\nn\n;\nif\n(\nnums\n.\ncount\n(\nn\n))\ncout\n<<\n\"YES\"\n<<\nendl\n;\nelse\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

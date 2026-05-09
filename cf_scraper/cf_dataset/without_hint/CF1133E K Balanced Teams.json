@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are a coach at your local university. There are $ n $ students under your supervision, the programming skill of the $ i $ -th student is $ a_i $ .\n\nYou have to form $ k $ teams for yet another new programming competition. As you know, the more students are involved in competition the more probable the victory of your university is! So you have to form no more than $ k $ (and at least one) non-empty teams so that the total number of students in them is maximized. But you also know that each team should be balanced. It means that the programming skill of each pair of students in each team should differ by no more than $ 5 $ . Teams are independent from one another (it means that the difference between programming skills of two students from two different teams does not matter).\n\nIt is possible that some students not be included in any team at all.\n\nYour task is to report the maximum possible total number of students in no more than $ k $ (and at least one) non-empty balanced teams.\n\nIf you are Python programmer, consider using PyPy instead of Python when you submit your code.\n\nInput Format\nThe first line of the input contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 5000 $ ) — the number of students and the maximum number of teams, correspondingly.\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ), where $ a_i $ is a programming skill of the $ i $ -th student.\n\nOutput Format\nPrint one integer — the maximum possible total number of students in no more than $ k $ (and at least one) non-empty balanced teams.\n\nExamples\nSample 1\nInput\n5 2\n1 2 15 15 15\nOutput\n5\n\nSample 2\nInput\n6 1\n36 4 1 25 9 16\nOutput\n2\n\nSample 3\nInput\n4 4\n1 10 100 1000\nOutput\n4"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nvector\n<int>\ncnt\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nwhile\n(\ni\n+\ncnt\n[\ni\n]\n<\nn\n&&\na\n[\ni\n+\ncnt\n[\ni\n]]\n-\na\n[\ni\n]\n<=\n5\n)\n{\n++\ncnt\n[\ni\n];\n}\n}\nvector\n<\nvector\n<int>\n>\ndp\n(\nn\n+\n1\n,\nvector\n<int>\n(\nk\n+\n1\n));\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\nk\n;\n++\nj\n)\n{\ndp\n[\ni\n+\n1\n][\nj\n]\n=\nmax\n(\ndp\n[\ni\n+\n1\n][\nj\n],\ndp\n[\ni\n][\nj\n]);\nif\n(\nj\n+\n1\n<=\nk\n)\n{\ndp\n[\ni\n+\ncnt\n[\ni\n]][\nj\n+\n1\n]\n=\nmax\n(\ndp\n[\ni\n+\ncnt\n[\ni\n]][\nj\n+\n1\n],\ndp\n[\ni\n][\nj\n]\n+\ncnt\n[\ni\n]);\n}\n}\n}\ncout\n<<\ndp\n[\nn\n][\nk\n]\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

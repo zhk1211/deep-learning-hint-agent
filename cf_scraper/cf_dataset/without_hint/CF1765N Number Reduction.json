@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a positive integer $ x $ .\n\nYou can apply the following operation to the number: remove one occurrence of any digit in such a way that the resulting number does not contain any leading zeroes and is still a positive integer. For example, $ 10142 $ can be converted to $ 1142 $ , $ 1042 $ , $ 1012 $ or $ 1014 $ (note that $ 0142 $ is not a valid outcome); $ 10 $ can be converted to $ 1 $ (but not to $ 0 $ since it is not positive).\n\nYour task is to find the minimum positive integer that you can obtain from $ x $ if you can apply the aforementioned operation exactly $ k $ times.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^5 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ x $ ( $ 1 \\le x < 10^{500000} $ ).\n\nThe second line contains a single integer $ k $ ( $ 0 \\le k < |x| $ ), where $ |x| $ is the length of the number $ x $ .\n\nThe sum of $ |x| $ over all test cases does not exceed $ 5 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print one integer — the minimum positive number that you can obtain from $ x $ if you can apply the operation exactly $ k $ times.\n\nExamples\nSample 1\nInput\n5\n10000\n4\n1337\n0\n987654321\n6\n66837494128\n5\n7808652\n3\nOutput\n1\n1337\n321\n344128\n7052"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nstring\nx\n;\ncin\n>>\nx\n;\nint\nk\n;\ncin\n>>\nk\n;\nint\nn\n=\nx\n.\nsize\n();\nvector\n<\nvector\n<int>\n>\npos\n(\n10\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\npos\n[\nx\n[\ni\n]\n-\n'0'\n].\npush_back\n(\ni\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n10\n;\n++\ni\n)\nreverse\n(\npos\n[\ni\n].\nbegin\n(),\npos\n[\ni\n].\nend\n());\nstring\nans\n;\nint\nlst\n=\n0\n,\nlen\n=\nn\n-\nk\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nlen\n;\n++\ni\n)\n{\nfor\n(\nint\nd\n=\n(\ni\n==\n0\n);\nd\n<=\n9\n;\n++\nd\n)\n{\nwhile\n(!\npos\n[\nd\n].\nempty\n()\n&&\npos\n[\nd\n].\nback\n()\n<\nlst\n)\npos\n[\nd\n].\npop_back\n();\nif\n(!\npos\n[\nd\n].\nempty\n()\n&&\npos\n[\nd\n].\nback\n()\n-\nlst\n<=\nk\n)\n{\nans\n+=\nd\n+\n'0'\n;\nk\n-=\npos\n[\nd\n].\nback\n()\n-\nlst\n;\nlst\n=\npos\n[\nd\n].\nback\n()\n+\n1\n;\nbreak\n;\n}\n}\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

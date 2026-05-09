@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer $ n $ and a string $ s $ consisting of $ 2^n $ lowercase letters of the English alphabet. The characters of the string $ s $ are $ s_0s_1s_2\\cdots s_{2^n-1} $ .\n\nA string $ t $ of length $ 2^n $ (whose characters are denoted by $ t_0t_1t_2\\cdots t_{2^n-1} $ ) is a xoration of $ s $ if there exists an integer $ j $ ( $ 0\\le j \\leq 2^n-1 $ ) such that, for each $ 0 \\leq i \\leq 2^n-1 $ , $ t_i = s_{i \\oplus j} $ (where $ \\oplus $ denotes the operation [bitwise XOR](https://en.wikipedia.org/wiki/Bitwise_operation#XOR)).\n\nFind the lexicographically minimal xoration of $ s $ .\n\nA string $ a $ is lexicographically smaller than a string $ b $ if and only if one of the following holds:\n\n- $ a $ is a prefix of $ b $ , but $ a \\ne b $ ;\n- in the first position where $ a $ and $ b $ differ, the string $ a $ has a letter that appears earlier in the alphabet than the corresponding letter in $ b $ .\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\le n \\le 18 $ ).\n\nThe second line contains a string $ s $ consisting of $ 2^n $ lowercase letters of the English alphabet.\n\nOutput Format\nPrint a single line containing the lexicographically minimal xoration of $ s $ .\n\nExamples\nSample 1\nInput\n2\nacba\nOutput\nabca\n\nSample 2\nInput\n3\nbcbaaabb\nOutput\naabbbcba\n\nSample 3\nInput\n4\nbdbcbccdbdbaaccd\nOutput\nabdbdccacbdbdccb\n\nSample 4\nInput\n5\nccfcffccccccffcfcfccfffffcccccff\nOutput\ncccccffffcccccffccfcffcccccfffff\n\nSample 5\nInput\n1\nzz\nOutput\nzz\n\nNote\nIn the first test, the lexicographically minimal xoration $ t $ of $ s = $ \"acba\" is \"abca\". It's a xoration because, for $ j = 3 $ ,\n\n- $ t_0 = s_{0 \\oplus j} = s_3 = $ \"a\";\n- $ t_1 = s_{1 \\oplus j} = s_2 = $ \"b\";\n- $ t_2 = s_{2 \\oplus j} = s_1 = $ \"c\";\n- $ t_3 = s_{3 \\oplus j} = s_0 = $ \"a\".\n\nThere isn't any xoration of $ s $ lexicographically smaller than \"abca\".In the second test, the minimal string xoration corresponds to choosing $ j = 4 $ in the definition of xoration.\n\nIn the third test, the minimal string xoration corresponds to choosing $ j = 11 $ in the definition of xoration.\n\nIn the fourth test, the minimal string xoration corresponds to choosing $ j = 10 $ in the definition of xoration.\n\nIn the fifth test, the minimal string xoration corresponds to choosing either $ j = 0 $ or $ j = 1 $ in the definition of xoration."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Let $$$f(s, x)$$$ be the string $$$t$$$ such that $$$t_i = s_{i\\oplus x}$$$. The intended solution not only finds the $$$x$$$ such that $$$f(s, x)$$$ is lexicographically minimized, but produces an array of all $$$0 \\leq x \\lt 2^n$$$ sorted according the comparator $$$f(s, i) \\lt f(s, j)$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The solution is similar to the standard method to construct a suffix array."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Let $$$a_k$$$ be an array of the integers $$$0$$$ through $$$2^n-1$$$, sorted according to the lexicographic ordering of the first $$$2^k$$$ characters of $$$f(s, x)$$$. The answer to the problem is $$$f(s, a_{n,0})$$$. Given the array $$$a_{k-1}$$$, can you compute $$$a_k$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let $$$f(s, x)$$$ be the string $$$t$$$ such that $$$t_i = s_{i\\oplus x}$$$.\nThe solution is inspired by the standard method to construct a suffix array. Let $$$a_k$$$ be an array containing the integers $$$0, 1, 2,\\dots, 2^n-1$$$, sorted according to the lexicographic ordering of the prefixes of length $$$2^k$$$ of the strings $$$f(s, 0), f(s, 1), \\dots, f(s, 2^n-1)$$$ (i.e., the prefix of length $$$2^k$$$ of $$$f(s, a_k[i])$$$ is lexicographically smaller or equal than the prefix of length $$$2^k$$$ of $$$f(s, a_k[i+1])$$$). We can construct $$$a_k$$$ using $$$a_{k-1}$$$, and $$$a_0$$$ is easy to construct as a base case.\nIn order to construct $$$a_k$$$ from $$$a_{k-1}$$$, we will first construct an auxiliary array of integers $$$v$$$ using $$$a_{k-1}$$$, where $$$v_i \\lt v_j$$$ iff $$$f(s, i)_{0..2^{k-1}} \\lt f(s, j)_{0..2^{k-1}}$$$. Then, we will sort the array $$$a_k$$$ according to the comparison of tuples $$$(v_i, v_{i\\oplus {2^{k-1}}}) \\lt (v_j, v_{j\\oplus {2^{k-1}}})$$$.\nOnce we have $$$a_n$$$, then we just print $$$f(s, a_{n,0})$$$. In total, the solution takes $$$O(2^n n^2)$$$ time, which can be optimized to $$$O(2^n n)$$$ using the fact that tuples of integers in the range $$$[0, m]$$$ can be sorted using radix sort in $$$O(m)$$$ time. This optimization was not required to get AC."
+        }
+    ]
+}

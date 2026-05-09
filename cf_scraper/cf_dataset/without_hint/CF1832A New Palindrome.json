@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA palindrome is a string that reads the same from left to right as from right to left. For example, abacaba, aaaa, abba, racecar are palindromes.\n\nYou are given a string $ s $ consisting of lowercase Latin letters. The string $ s $ is a palindrome.\n\nYou have to check whether it is possible to rearrange the letters in it to get another palindrome (not equal to the given string $ s $ ).\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThe only line of each test case contains a string $ s $ ( $ 2 \\le |s| \\le 50 $ ) consisting of lowercase Latin letters. This string is a palindrome.\n\nOutput Format\nFor each test case, print YES if it is possible to rearrange the letters in the given string to get another palindrome. Otherwise, print NO.\n\nYou may print each letter in any case (YES, yes, Yes will all be recognized as positive answer, NO, no and nO will all be recognized as negative answer).\n\nExamples\nSample 1\nInput\n3\ncodedoc\ngg\naabaa\nOutput\nYES\nNO\nNO\n\nNote\nIn the first test case, it is possible to rearrange the letters in the palindrome codedoc to obtain the string ocdedco, which is different from the given string, but also a palindrome."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nstring\ns\n;\ncin\n>>\ns\n;\ns\n=\ns\n.\nsubstr\n(\n0\n,\ns\n.\nsize\n()\n/\n2\n);\nint\nk\n=\nunique\n(\ns\n.\nbegin\n(),\ns\n.\nend\n())\n-\ns\n.\nbegin\n();\ncout\n<<\n(\nk\n==\n1\n?\n\"NO\"\n:\n\"YES\"\n)\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

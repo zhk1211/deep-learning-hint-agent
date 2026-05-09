@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have a tree with $ n $ vertices, some of which are marked. A tree is a connected undirected graph without cycles.\n\nLet $ f_i $ denote the maximum distance from vertex $ i $ to any of the marked vertices.\n\nYour task is to find the minimum value of $ f_i $ among all vertices.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1881F/d0163dde57a696d8d96936900f0fefe6ef32a7ae.png)For example, in the tree shown in the example, vertices $ 2 $ , $ 6 $ , and $ 7 $ are marked. Then the array $ f(i) = [2, 3, 2, 4, 4, 3, 3] $ . The minimum $ f_i $ is for vertices $ 1 $ and $ 3 $ .\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 2 \\cdot 10^5 $ ) — the number of vertices in the tree and the number of marked vertices, respectively.\n\nThe second line of each test case contains $ k $ integers $ a_i $ ( $ 1 \\le a_i \\le n, a_{i-1} < a_i $ ) — the indices of the marked vertices.\n\nThe next $ n - 1 $ lines contain two integers $ u_i $ and $ v_i $ — the indices of vertices connected by the $ i $ -th edge.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum value of $ f_i $ among all vertices.\n\nExamples\nSample 1\nInput\n6\n7 3\n2 6 7\n1 2\n1 3\n2 4\n2 5\n3 6\n3 7\n4 4\n1 2 3 4\n1 2\n2 3\n3 4\n5 1\n1\n1 2\n1 3\n1 4\n1 5\n5 2\n4 5\n1 2\n2 3\n1 4\n4 5\n10 8\n1 2 3 4 5 8 9 10\n2 10\n10 5\n5 3\n3 1\n1 7\n7 4\n4 9\n8 9\n6 1\n10 9\n1 2 4 5 6 7 8 9 10\n1 3\n3 9\n9 4\n4 10\n10 6\n6 7\n7 2\n2 5\n5 8\nOutput\n2\n2\n0\n1\n4\n5\n\nSample 2\nInput\n3\n6 1\n3\n1 2\n1 3\n3 4\n3 5\n2 6\n5 3\n1 2 5\n1 2\n1 3\n2 4\n3 5\n7 1\n2\n3 2\n2 6\n6 1\n5 6\n7 6\n4 5\nOutput\n0\n2\n0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n;\nvector\n<\nvector\n<int>\n>\ng\n;\nvoid\ndfs\n(\nint\nv\n,\nint\np\n,\nvector\n<int>\n&\nd\n){\nif\n(\np\n!=\n-\n1\n)\nd\n[\nv\n]\n=\nd\n[\np\n]\n+\n1\n;\nfor\n(\nint\nu\n:\ng\n[\nv\n]){\nif\n(\nu\n!=\np\n){\ndfs\n(\nu\n,\nv\n,\nd\n);\n}\n}\n}\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nint\nk\n;\ncin\n>>\nn\n>>\nk\n;\ng\n.\nassign\n(\nn\n,\nvector\n<int>\n(\n0\n));\nvector\n<int>\nmarked\n(\nk\n);\nfor\n(\nint\n&\ne\n:\nmarked\n)\ncin\n>>\ne\n,\n--\ne\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++){\nint\nu\n,\nv\n;\ncin\n>>\nu\n>>\nv\n;\n--\nu\n,\n--\nv\n;\ng\n[\nu\n].\npush_back\n(\nv\n);\ng\n[\nv\n].\npush_back\n(\nu\n);\n}\nif\n(\nk\n==\n1\n){\ncout\n<<\n0\n<<\n\"\\n\"\n;\ncontinue\n;\n}\nvector\n<int>\nd1\n(\nn\n);\ndfs\n(\nmarked\n[\n0\n],\n-\n1\n,\nd1\n);\nint\nmx\n=\nmarked\n[\n0\n];\nfor\n(\nint\ne\n:\nmarked\n){\nif\n(\nd1\n[\ne\n]\n>\nd1\n[\nmx\n])\nmx\n=\ne\n;\n}\nvector\n<int>\nd2\n(\nn\n);\ndfs\n(\nmx\n,\n-\n1\n,\nd2\n);\nmx\n=\nmarked\n[\n0\n];\nfor\n(\nint\ne\n:\nmarked\n){\nif\n(\nd2\n[\ne\n]\n>\nd2\n[\nmx\n])\nmx\n=\ne\n;\n}\ncout\n<<\n(\nd2\n[\nmx\n]\n+\n1\n)\n/\n2\n<<\n\"\\n\"\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

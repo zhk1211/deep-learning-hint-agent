@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis problem is interactive.\n\nWe decided to play a game with you and guess the number $ x $ ( $ 1 \\le x < n $ ), where you know the number $ n $ .\n\nYou can make queries like this:\n\n- + c: this command assigns $ x = x + c $ ( $ 1 \\le c < n $ ) and then returns you the value $ \\lfloor\\frac{x}{n}\\rfloor $ ( $ x $ divide by $ n $ and round down).\n\nYou win if you guess the current number with no more than $ 10 $ queries.\n\nOutput Format\nThe interaction begins by reading an integer $ n $ ( $ 2 < n \\le 1000 $ ), which is written in the input data on its own line.\n\nThen you can make no more than $ 10 $ queries. To make a query, print on a separate line:\n\n- + c: this command will assign $ x = x + c $ ( $ 1 \\le c < n $ ) and then print $ \\lfloor\\frac{x}{n}\\rfloor $ (divide $ x $ by $ n $ and round down) on a separate line.\n\nPrint the answer, like the queries, on a separate line. The answer doesn't count in number of queries. To output it, use the following format:\n\n- ! x: the current value of $ x $ .\n\nAfter that, your program should exit.\n\nYou have to use a flush operation right after printing each line. For example, in C++ you should use the function fflush(stdout), in Java — System.out.flush(), in Pascal — flush(output) and in Python — sys.stdout.flush().\n\nNote that the interactor is not responsive.\n\nTo make a hack, use the following format: a single line must contain two numbers $ x $ and $ n $ , separated by a space.\n\nExamples\nSample 1\nInput\n3\n\n1\nOutput\n+ 1\n\n! 3\n\nSample 2\nInput\n5\n\n0\n\n0\n\n1\nOutput\n+ 1\n\n+ 1\n\n+ 1\n\n! 5\n\nSample 3\nInput\n10\n\n0\n\n0\n\n1\n\n2\nOutput\n+ 2\n\n+ 2\n\n+ 3\n\n+ 8\n\n! 20\n\nNote\nIn the first sample initially $ x = 2 $ . After the first query $ x = 3 $ , $ \\lfloor\\frac{x}{n}\\rfloor = 1 $ .\n\nIn the second sample also initially $ x = 2 $ . After the first query $ x = 3 $ , $ \\lfloor\\frac{x}{n}\\rfloor = 0 $ . After the second query $ x = 4 $ , $ \\lfloor\\frac{x}{n}\\rfloor = 0 $ . After the third query $ x=5 $ , $ \\lfloor\\frac{x}{n}\\rfloor = 1 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nint\nlong\nlong\n#define\nmp make_pair\n#define\nx first\n#define\ny second\n#define\nall\n(\na\n)\n(\na\n).\nbegin\n(),\n(\na\n).\nend\n()\n#define\nrall\n(\na\n)\n(\na\n).\nrbegin\n(),\n(\na\n).\nrend\n()\ntypedef\nlong\ndouble\nld\n;\ntypedef\nlong\nlong\nll\n;\nusing\nnamespace\nstd\n;\nmt19937 rnd\n(\n143\n);\nconst\nint\ninf\n=\n1e10\n;\nconst\nint\nM\n=\n998244353\n;\nconst\nld pi\n=\natan2\n(\n0\n,\n-\n1\n);\nconst\nld eps\n=\n1e-4\n;\nsigned\nmain\n(){\nint\nn\n;\ncin\n>>\nn\n;\nint\nl\n=\n1\n,\nr\n=\nn\n;\nint\ndiv\n=\n0\n;\nwhile\n(\nr\n-\nl\n>\n1\n){\nint\nmid\n=\n(\nr\n+\nl\n)\n/\n2\n;\ncout\n<<\n\"+ \"\n<<\nn\n-\nmid\n<<\nendl\n;\nint\nd\n;\ncin\n>>\nd\n;\nif\n(\nd\n>\ndiv\n)\nl\n=\nmid\n;\nelse\nr\n=\nmid\n;\nl\n=\n(\nl\n+\nn\n-\nmid\n)\n%\nn\n;\nr\n=\n(\nr\n+\nn\n-\nmid\n)\n%\nn\n;\nif\n(\nr\n==\n0\n)\nr\n=\nn\n;\ndiv\n=\nd\n;\n}\ncout\n<<\n\"! \"\n<<\ndiv\n*\nn\n+\nl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

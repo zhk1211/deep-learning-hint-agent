@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a binary string of length $ n $ (i. e. a string consisting of $ n $ characters '0' and '1').\n\nIn one move you can swap two adjacent characters of the string. What is the lexicographically minimum possible string you can obtain from the given one if you can perform no more than $ k $ moves? It is possible that you do not perform any moves at all.\n\nNote that you can swap the same pair of adjacent characters with indices $ i $ and $ i+1 $ arbitrary (possibly, zero) number of times. Each such swap is considered a separate move.\n\nYou have to answer $ q $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ q $ ( $ 1 \\le q \\le 10^4 $ ) — the number of test cases.\n\nThe first line of the test case contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 10^6, 1 \\le k \\le n^2 $ ) — the length of the string and the number of moves you can perform.\n\nThe second line of the test case contains one string consisting of $ n $ characters '0' and '1'.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^6 $ ( $ \\sum n \\le 10^6 $ ).\n\nOutput Format\nFor each test case, print the answer on it: the lexicographically minimum possible string of length $ n $ you can obtain from the given one if you can perform no more than $ k $ moves.\n\nExamples\nSample 1\nInput\n3\n8 5\n11011010\n7 9\n1111100\n7 11\n1111100\nOutput\n01011110\n0101111\n0011111\n\nNote\nIn the first example, you can change the string as follows: $ 1\\underline{10}11010 \\rightarrow \\underline{10}111010 \\rightarrow 0111\\underline{10}10 \\rightarrow 011\\underline{10}110 \\rightarrow 01\\underline{10}1110 \\rightarrow 01011110 $ .\n\nIn the third example, there are enough operations to make the string sorted."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nq\n;\ncin\n>>\nq\n;\nwhile\n(\nq\n--)\n{\nint\nn\n;\nlong\nlong\nk\n;\nstring\ns\n;\ncin\n>>\nn\n>>\nk\n>>\ns\n;\nstring\nres\n;\nint\ncnt\n=\n0\n;\nbool\nprinted\n=\nfalse\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\ns\n[\ni\n]\n==\n'0'\n)\n{\nif\n(\ncnt\n<=\nk\n)\n{\nres\n+=\n'0'\n;\nk\n-=\ncnt\n;\n}\nelse\n{\nres\n+=\nstring\n(\ncnt\n-\nk\n,\n'1'\n);\nres\n+=\n'0'\n;\nres\n+=\nstring\n(\nk\n,\n'1'\n);\nres\n+=\ns\n.\nsubstr\n(\ni\n+\n1\n);\ncout\n<<\nres\n<<\nendl\n;\nprinted\n=\ntrue\n;\nbreak\n;\n}\n}\nelse\n{\n++\ncnt\n;\n}\n}\nif\n(!\nprinted\n)\n{\nres\n+=\nstring\n(\ncnt\n,\n'1'\n);\ncout\n<<\nres\n<<\nendl\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

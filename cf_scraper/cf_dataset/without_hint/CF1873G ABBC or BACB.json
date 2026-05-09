@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ made up of characters $ \\texttt{A} $ and $ \\texttt{B} $ . Initially you have no coins. You can perform two types of operations:\n\n- Pick a substring $ ^\\dagger $ $ \\texttt{AB} $ , change it to $ \\texttt{BC} $ , and get a coin.\n- Pick a substring $ ^\\dagger $ $ \\texttt{BA} $ , change it to $ \\texttt{CB} $ , and get a coin.\n\nWhat is the most number of coins you can obtain? $ ^\\dagger $ A substring of length $ 2 $ is a sequence of two adjacent characters of a string.\n\nInput Format\nThe input consists of multiple test cases. The first line of the input contains a single integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases.\n\nThe only line of each test case contains the string $ s $ ( $ 1 \\leq |s| \\leq 2 \\cdot 10^5 $ ). All characters of $ s $ are either $ \\texttt{A} $ or $ \\texttt{B} $ .\n\nThe sum of the lengths of $ s $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the maximum number of coins you can obtain.\n\nExamples\nSample 1\nInput\n8\nABBA\nABA\nBAABA\nABB\nAAAAAAB\nBABA\nB\nAAA\nOutput\n2\n1\n3\n1\n6\n2\n0\n0\n\nNote\nIn the first test case you can perform the following operations to get $ 2 $ coins: $ $$$\\color{red}{\\texttt{AB}}\\texttt{BA} \\to \\texttt{BC}\\color{red}{\\texttt{BA}} \\to \\texttt{BCCB} $ $ </p><p>In the second test case you can perform the following operation to get $ 1 $ coin: $ $ \\color{red}{\\texttt{AB}}\\texttt{A} \\to \\texttt{BCA} $ $ </p><p>In the third test case you can perform the following operations to get $ 3 $ coins: $ $ \\color{red}{\\texttt{BA}}\\texttt{ABA} \\to \\texttt{CBA}\\color{red}{\\texttt{BA}} \\to \\texttt{C}\\color{red}{\\texttt{BA}}\\texttt{CB} \\to \\texttt{CCBCB} $ $$$"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200\n'007;\nconst int MOD = 1'\n000\n'000'\n007\n;\nvoid\nsolve\n()\n{\nstring\ns\n;\ncin\n>>\ns\n;\nint\nn\n=\ns\n.\nlength\n(),\ncnt\n=\n0\n;\nbool\nall\n=\n(\ns\n[\n0\n]\n==\n'B'\n||\ns\n[\nn\n-\n1\n]\n==\n'B'\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\ni\n++)\n{\nif\n(\ns\n[\ni\n]\n==\ns\n[\ni\n+\n1\n]\n&&\ns\n[\ni\n]\n==\n'B'\n)\n{\nall\n=\ntrue\n;}\n}\nvector\n<int>\nlens\n;\nint\ncurr\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\ns\n[\ni\n]\n==\n'A'\n)\n{\ncurr\n++;}\nelse\n{\nif\n(\ncurr\n!=\n0\n)\n{\nlens\n.\npush_back\n(\ncurr\n);}\ncurr\n=\n0\n;\n}\n}\nif\n(\ncurr\n!=\n0\n)\n{\nlens\n.\npush_back\n(\ncurr\n);}\nsort\n(\nlens\n.\nbegin\n(),\nlens\n.\nend\n());\nif\n(\nlens\n.\nempty\n())\n{\ncout\n<<\n0\n<<\n'\\n'\n;\nreturn\n;}\nint\ntot\n=\n0\n;\nif\n(\nall\n)\n{\ntot\n+=\nlens\n[\n0\n];}\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nlens\n.\nsize\n();\ni\n++)\n{\ntot\n+=\nlens\n[\ni\n];\n}\ncout\n<<\ntot\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

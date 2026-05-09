@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nCall an array $ a $ of length $ n $ sorted if $ a_1 \\leq a_2 \\leq \\ldots \\leq a_{n-1} \\leq a_n $ .\n\nNtarsis has an array $ a $ of length $ n $ .\n\nHe is allowed to perform one type of operation on it (zero or more times):\n\n- Choose an index $ i $ ( $ 1 \\leq i \\leq n-1 $ ).\n- Add $ 1 $ to $ a_1, a_2, \\ldots, a_i $ .\n- Subtract $ 1 $ from $ a_{i+1}, a_{i+2}, \\ldots, a_n $ .\n\nThe values of $ a $ can be negative after an operation.\n\nDetermine the minimum operations needed to make $ a $ not sorted.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 100 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\leq n \\leq 500 $ ) — the length of the array $ a $ .\n\nThe next line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\leq a_i \\leq 10^9 $ ) — the values of array $ a $ .\n\nIt is guaranteed that the sum of $ n $ across all test cases does not exceed $ 500 $ .\n\nOutput Format\nOutput the minimum number of operations needed to make the array not sorted.\n\nExamples\nSample 1\nInput\n4\n2\n1 1\n4\n1 8 10 13\n3\n1 3 2\n3\n1 9 14\nOutput\n1\n2\n0\n3\n\nNote\nIn the first case, we can perform $ 1 $ operation to make the array not sorted:\n\n- Pick $ i = 1 $ . The array $ a $ then becomes $ [2, 0] $ , which is not sorted.\n\nIn the second case, we can perform $ 2 $ operations to make the array not sorted:\n\n- Pick $ i = 3 $ . The array $ a $ then becomes $ [2, 9, 11, 12] $ .\n- Pick $ i = 3 $ . The array $ a $ then becomes $ [3, 10, 12, 11] $ , which is not sorted.\n\nIt can be proven that $ 1 $ and $ 2 $ operations are the minimal numbers of operations in the first and second test cases, respectively.\n\nIn the third case, the array is already not sorted, so we perform $ 0 $ operations."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "To make $$$a$$$ not sorted, we just need to pick one index $$$i$$$ so $$$a_i \\gt a_{i + 1}$$$. How do we do this?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "To make $$$a$$$ not sorted, we just have to make $$$a_i \\gt a_{i + 1}$$$ for one $$$i$$$.\nIn one operation, we can reduce the gap between two adjacent elements $$$i, i + 1$$$ by $$$2$$$ by adding $$$1$$$ to $$$1 \\dots i$$$ and subtracting $$$1$$$ from $$${i + 1} \\dots n$$$.\nIt is clearly optimal to pick the smallest gap between a pair of adjacent elements to minimize the number of operations we have to do. If we have $$$a_i = x, a_{i + 1} = y$$$, we can make $$$x \\gt y$$$ within $$$\\lfloor \\frac{(y - x)}{2} \\rfloor + 1$$$ operations.\nThus, we can just go through $$$a$$$, find the minimum difference gap, and calculate the minimum operations using the above formula. Note that if $$$a$$$ is not sorted, we can just output $$$0$$$.\nThe time complexity is $$$O(n)$$$."
+        }
+    ]
+}

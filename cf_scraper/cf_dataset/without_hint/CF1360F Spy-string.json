@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given $ n $ strings $ a_1, a_2, \\ldots, a_n $ : all of them have the same length $ m $ . The strings consist of lowercase English letters.\n\nFind any string $ s $ of length $ m $ such that each of the given $ n $ strings differs from $ s $ in at most one position. Formally, for each given string $ a_i $ , there is no more than one position $ j $ such that $ a_i[j] \\ne s[j] $ .\n\nNote that the desired string $ s $ may be equal to one of the given strings $ a_i $ , or it may differ from all the given strings.\n\nFor example, if you have the strings abac and zbab, then the answer to the problem might be the string abab, which differs from the first only by the last character, and from the second only by the first.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case starts with a line containing two positive integers $ n $ ( $ 1 \\le n \\le 10 $ ) and $ m $ ( $ 1 \\le m \\le 10 $ ) — the number of strings and their length.\n\nThen follow $ n $ strings $ a_i $ , one per line. Each of them has length $ m $ and consists of lowercase English letters.\n\nOutput Format\nPrint $ t $ answers to the test cases. Each answer (if it exists) is a string of length $ m $ consisting of lowercase English letters. If there are several answers, print any of them. If the answer does not exist, print \"-1\" (\"minus one\", without quotes).\n\nExamples\nSample 1\nInput\n5\n2 4\nabac\nzbab\n2 4\naaaa\nbbbb\n3 3\nbaa\naaa\naab\n2 2\nab\nbb\n3 1\na\nb\nc\nOutput\nabab\n-1\naaa\nab\nz\n\nNote\nThe first test case was explained in the statement.\n\nIn the second test case, the answer does not exist."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nld\n=\nlong\ndouble\n;\nusing\nll\n=\nlong\nlong\n;\nvoid\nsolve\n()\n{\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nvector\n<string>\nv\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\nv\n[\ni\n];\n}\nstring\nans\n=\nv\n[\n0\n];\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nm\n;\nj\n++)\n{\nchar\nsave\n=\nans\n[\nj\n];\nfor\n(\nchar\nd\n=\n'a'\n;\nd\n<=\n'z'\n;\nd\n++)\n{\nans\n[\nj\n]\n=\nd\n;\nbool\nflag\n=\ntrue\n;\nfor\n(\nint\nz\n=\n0\n;\nz\n<\nn\n;\nz\n++)\n{\nint\ncntErrors\n=\n0\n;\nfor\n(\nint\nc\n=\n0\n;\nc\n<\nm\n;\nc\n++)\n{\nif\n(\nv\n[\nz\n][\nc\n]\n!=\nans\n[\nc\n])\n{\ncntErrors\n++;\n}\n}\nif\n(\ncntErrors\n>\n1\n)\n{\nflag\n=\nfalse\n;\nbreak\n;\n}\n}\nif\n(\nflag\n)\n{\ncout\n<<\nans\n<<\nendl\n;\nreturn\n;\n}\n}\nans\n[\nj\n]\n=\nsave\n;\n}\ncout\n<<\n\"-1\"\n<<\nendl\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

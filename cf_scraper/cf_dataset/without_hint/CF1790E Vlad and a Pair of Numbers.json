@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVlad found two positive numbers $ a $ and $ b $ ( $ a,b>0 $ ). He discovered that $ a \\oplus b = \\frac{a + b}{2} $ , where $ \\oplus $ means the [bitwise exclusive OR](http://tiny.cc/xor_wiki_eng) , and division is performed without rounding..\n\nSince it is easier to remember one number than two, Vlad remembered only $ a\\oplus b $ , let's denote this number as $ x $ . Help him find any suitable $ a $ and $ b $ or tell him that they do not exist.\n\nInput Format\nThe first line of the input data contains the single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases in the test.\n\nEach test case is described by a single integer $ x $ ( $ 1 \\le x \\le 2^{29} $ ) — the number that Vlad remembered.\n\nOutput Format\nOutput $ t $ lines, each of which is the answer to the corresponding test case. As the answer, output $ a $ and $ b $ ( $ 0 < a,b \\le 2^{32} $ ), such that $ x = a \\oplus b = \\frac{a + b}{2} $ . If there are several answers, output any of them. If there are no matching pairs, output -1.\n\nExamples\nSample 1\nInput\n6\n2\n5\n10\n6\n18\n36\nOutput\n3 1\n-1\n13 7\n-1\n25 11\n50 22"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\nx\n=\nint\n(\ninput\n())\na\n=\nx\n    b\n=\n0\nfor\ni\nin\nrange\n(\n32\n,\n-\n1\n,\n-\n1\n):\nif\nx\n&\n(\n1\n<<\ni\n)\n>\n0\n:\ncontinue\nif\n2\n*\nx\n-\na\n-\nb\n>=\n(\n2\n<<\ni\n):\na\n+=\n1\n<<\ni\n            b\n+=\n1\n<<\ni\nif\na\n+\nb\n==\n2\n*\nx\nand\na\n^\nb\n==\nx\n:\nprint\n(\na\n,\nb\n)\nelse\n:\nprint\n(-\n1\n)"
+        }
+    ]
+}

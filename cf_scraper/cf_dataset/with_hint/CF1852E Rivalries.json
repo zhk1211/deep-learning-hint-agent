@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nNtarsis has an array $ a $ of length $ n $ .\n\nThe power of a subarray $ a_l \\dots a_r $ ( $ 1 \\leq l \\leq r \\leq n $ ) is defined as:\n\n- The largest value $ x $ such that $ a_l \\dots a_r $ contains $ x $ and neither $ a_1 \\dots a_{l-1} $ nor $ a_{r+1} \\dots a_n $ contains $ x $ .\n- If no such $ x $ exists, the power is $ 0 $ .\n\nCall an array $ b $ a rival to $ a $ if the following holds:\n\n- The length of both $ a $ and $ b $ are equal to some $ n $ .\n- Over all $ l, r $ where $ 1 \\leq l \\leq r \\leq n $ , the power of $ a_l \\dots a_r $ equals the power of $ b_l \\dots b_r $ .\n- The elements of $ b $ are positive.\n\nNtarsis wants you to find a rival $ b $ to $ a $ such that the sum of $ b_i $ over $ 1 \\leq i \\leq n $ is maximized. Help him with this task!\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^5 $ ). The description of the test cases follows.\n\nThe first line of each test case has a single integer $ n $ ( $ 1 \\leq n \\leq 10^5 $ ).\n\nThe next line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\leq a_i \\leq 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ across all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output $ n $ integers $ b_1, b_2, \\ldots, b_n $ — a valid rival to $ a $ such that $ b_1 + b_2 + \\cdots + b_n $ is maximal.\n\nIf there exist multiple rivals with the maximum sum, output any of them.\n\nExamples\nSample 1\nInput\n7\n5\n1 4 1 3 3\n5\n1 4 1 8 8\n5\n2 1 1 1 2\n8\n3 2 3 5 2 2 5 3\n8\n1 1 1 1 4 3 3 3\n10\n1 9 5 9 8 1 5 8 9 1\n16\n1 1 1 1 5 5 5 5 9 9 9 9 7 7 7 7\nOutput\n2 4 2 3 3\n3 4 3 8 8\n2 1 2 1 2\n4 2 4 5 5 2 5 4\n1 2 2 1 4 3 2 3\n7 9 5 9 8 9 5 8 9 7\n1 8 8 1 5 8 8 5 9 9 9 9 7 8 8 7\n\nNote\nFor the first test case, one rival with the maximal sum is $ [2, 4, 2, 3, 3] $ .\n\n$ [2, 4, 2, 3, 3] $ can be shown to be a rival to $ [1, 4, 1, 3, 3] $ .\n\nAll possible subarrays of $ a $ and $ b $ and their corresponding powers are listed below:\n\n- The power of $ a[1:1] = [1] = 0 $ , the power of $ b[1:1] = [2] = 0 $ .\n- The power of $ a[1:2] = [1, 4] = 4 $ , the power of $ b[1:2] = [2, 4] = 4 $ .\n- The power of $ a[1:3] = [1, 4, 1] = 4 $ , the power of $ b[1:3] = [2, 4, 2] = 4 $ .\n- The power of $ a[1:4] = [1, 4, 1, 3] = 4 $ , the power of $ b[1:4] = [2, 4, 2, 3] = 4 $ .\n- The power of $ a[1:5] = [1, 4, 1, 3, 3] = 4 $ , the power of $ b[1:5] = [2, 4, 2, 3, 3] = 4 $ .\n- The power of $ a[2:2] = [4] = 4 $ , the power of $ b[2:2] = [4] = 4 $ .\n- The power of $ a[2:3] = [4, 1] = 4 $ , the power of $ b[2:3] = [4, 2] = 4 $ .\n- The power of $ a[2:4] = [4, 1, 3] = 4 $ , the power of $ b[2:4] = [4, 2, 3] = 4 $ .\n- The power of $ a[2:5] = [4, 1, 3, 3] = 4 $ , the power of $ b[2:5] = [4, 2, 3, 3] = 4 $ .\n- The power of $ a[3:3] = [1] = 0 $ , the power of $ b[3:3] = [2] = 0 $ .\n- The power of $ a[3:4] = [1, 3] = 0 $ , the power of $ b[3:4] = [2, 3] = 0 $ .\n- The power of $ a[3:5] = [1, 3, 3] = 3 $ , the power of $ b[3:5] = [2, 3, 3] = 3 $ .\n- The power of $ a[4:4] = [3] = 0 $ , the power of $ b[4:4] = [3] = 0 $ .\n- The power of $ a[4:5] = [3, 3] = 3 $ , the power of $ b[4:5] = [3, 3] = 3 $ .\n- The power of $ a[5:5] = [3] = 0 $ , the power of $ b[5:5] = [3] = 0 $ .\n\nIt can be shown there exists no rival with a greater sum than $ 2 + 4 + 2 + 3 + 3 = 14 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "For each distinct value, only the leftmost and rightmost positions actually have an effect on the power."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Think of each distinct value as an interval corresponding to its leftmost and rightmost positions, and let that distinct value be the value of its interval. If interval $$$x$$$ strictly contains an interval $$$y$$$ with greater value, then $$$x$$$ will not have an effect on the power and it can be discarded."
+        },
+        {
+            "title": "Hint 3",
+            "content": "In order to not change the power, we can only add intervals that strictly contain an interval with greater value. Afterwards, if $$$i$$$ is not the endpoint of an interval, $$$b_i$$$ equals the largest value of an interval containing $$$i$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "There will only be at most one interval that we have to add. Assume that there are multiple intervals that we can add without changing the answer. In this case it is easy to see that its more optimal to combine the interval with smaller value into the interval with larger value. Thus, it is never optimal to add multiple intervals."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Read the hints.\nWe can remove all intervals that will not affect the power by iterating over them in decreasing order of value and maintain a segment tree that stores for each left endpoint of any processed intervals, the right endpoint that corresponds to it. Checking if an interval is strictly contained then becomes a range minimum query.\nAssume that we know the value $$$x$$$ of the interval that we want to add. We can immediately fill the value for the interior of all intervals that correspond to a value greater than $$$x$$$. However, we also have to guarantee that $$$x$$$ is strictly contained by an interval with greater value, so we can try each interval to contain $$$x$$$. If are no unfilled indices the left or right side of the interval, then we want to replace the smallest filled on either side value with $$$x$$$. Otherwise, we can just fill in all the unfilled indices with $$$x$$$. Note that it is also possible for $$$x$$$ to not be able to be contained by any interval.\nThus, we can just try every possible $$$x$$$ in decreasing order and maintain the filled indices as we iterate. There are only at most $$$n$$$ values of $$$x$$$ to check, which is just the set of $$$a_i - 1$$$ that does not appear in $$$a$$$."
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ n $ positive integers. You can perform the following operation on it:\n\n1. Choose a pair of elements $ a_i $ and $ a_j $ ( $ 1 \\le i, j \\le n $ and $ i \\neq j $ );\n2. Choose one of the divisors of the integer $ a_i $ , i.e., an integer $ x $ such that $ a_i \\bmod x = 0 $ ;\n3. Replace $ a_i $ with $ \\frac{a_i}{x} $ and $ a_j $ with $ a_j \\cdot x $ .\n\nDetermine whether it is possible to make all elements in the array the same by applying the operation a certain number of times (possibly zero).For example, let's consider the array $ a $ = \\[ $ 100, 2, 50, 10, 1 $ \\] with $ 5 $ elements. Perform two operations on it:\n\n1. Choose $ a_3 = 50 $ and $ a_2 = 2 $ , $ x = 5 $ . Replace $ a_3 $ with $ \\frac{a_3}{x} = \\frac{50}{5} = 10 $ , and $ a_2 $ with $ a_2 \\cdot x = 2 \\cdot 5 = 10 $ . The resulting array is $ a $ = \\[ $ 100, 10, 10, 10, 1 $ \\];\n2. Choose $ a_1 = 100 $ and $ a_5 = 1 $ , $ x = 10 $ . Replace $ a_1 $ with $ \\frac{a_1}{x} = \\frac{100}{10} = 10 $ , and $ a_5 $ with $ a_5 \\cdot x = 1 \\cdot 10 = 10 $ . The resulting array is $ a $ = \\[ $ 10, 10, 10, 10, 10 $ \\].\n\nAfter performing these operations, all elements in the array $ a $ become equal to $ 10 $ .\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 2000 $ ) — the number of test cases.\n\nThen follows the description of each test case.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^4 $ ) — the number of elements in the array $ a $ .\n\nThe second line of each test case contains exactly $ n $ integers $ a_i $ ( $ 1 \\le a_i \\le 10^6 $ ) — the elements of the array $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^4 $ .\n\nOutput Format\nFor each test case, output a single line:\n\n- \"YES\" if it is possible to make all elements in the array equal by applying the operation a certain (possibly zero) number of times;\n- \"NO\" otherwise.\n\nYou can output the answer in any case (for example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will all be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n7\n5\n100 2 50 10 1\n3\n1 1 1\n4\n8 2 4 2\n4\n30 50 27 20\n2\n75 40\n2\n4 4\n3\n2 3 1\nOutput\nYES\nYES\nNO\nYES\nNO\nYES\nNO\n\nNote\nThe first test case is explained in the problem statement."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nmaxv\n=\n1000000\n;\nvoid\nadd_divs\n(\nint\nx\n,\nmap\n<\nint\n,\nint\n>&\ndivs\n){\nint\ni\n=\n2\n;\nwhile\n(\ni\n*\ni\n<=\nx\n){\nwhile\n(\nx\n%\ni\n==\n0\n){\ndivs\n[\ni\n]++;\nx\n/=\ni\n;\n}\ni\n++;\n}\nif\n(\nx\n>\n1\n)\ndivs\n[\nx\n]++;\n}\nbool\nsolve\n(){\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nmap\n<\nint\n,\nint\n>\ndivs\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\nadd_divs\n(\na\n[\ni\n],\ndivs\n);\n}\nfor\n(\nauto\ne\n:\ndivs\n){\nif\n(\ne\n.\nsecond\n%\nn\n!=\n0\n)\nreturn\nfalse\n;\n}\nreturn\ntrue\n;\n}\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\ncout\n<<\n(\nsolve\n()\n?\n\"YES\"\n:\n\"NO\"\n)\n<<\n\"\\n\"\n;\n}\n}"
+        }
+    ]
+}

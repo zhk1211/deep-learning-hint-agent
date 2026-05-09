@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ of length $ n $ .\n\nYou are also given a set of distinct positions $ p_1, p_2, \\dots, p_m $ , where $ 1 \\le p_i < n $ . The position $ p_i $ means that you can swap elements $ a[p_i] $ and $ a[p_i + 1] $ . You can apply this operation any number of times for each of the given positions.\n\nYour task is to determine if it is possible to sort the initial array in non-decreasing order ( $ a_1 \\le a_2 \\le \\dots \\le a_n $ ) using only allowed swaps.\n\nFor example, if $ a = [3, 2, 1] $ and $ p = [1, 2] $ , then we can first swap elements $ a[2] $ and $ a[3] $ (because position $ 2 $ is contained in the given set $ p $ ). We get the array $ a = [3, 1, 2] $ . Then we swap $ a[1] $ and $ a[2] $ (position $ 1 $ is also contained in $ p $ ). We get the array $ a = [1, 3, 2] $ . Finally, we swap $ a[2] $ and $ a[3] $ again and get the array $ a = [1, 2, 3] $ , sorted in non-decreasing order.\n\nYou can see that if $ a = [4, 1, 2, 3] $ and $ p = [3, 2] $ then you cannot sort the array.\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThen $ t $ test cases follow. The first line of each test case contains two integers $ n $ and $ m $ ( $ 1 \\le m < n \\le 100 $ ) — the number of elements in $ a $ and the number of elements in $ p $ . The second line of the test case contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 100 $ ). The third line of the test case contains $ m $ integers $ p_1, p_2, \\dots, p_m $ ( $ 1 \\le p_i < n $ , all $ p_i $ are distinct) — the set of positions described in the problem statement.\n\nOutput Format\nFor each test case, print the answer — \"YES\" (without quotes) if you can sort the initial array in non-decreasing order ( $ a_1 \\le a_2 \\le \\dots \\le a_n $ ) using only allowed swaps. Otherwise, print \"NO\".\n\nExamples\nSample 1\nInput\n6\n3 2\n3 2 1\n1 2\n4 2\n4 1 2 3\n3 2\n5 1\n1 2 3 4 5\n1\n4 2\n2 1 4 3\n1 3\n4 2\n4 3 2 1\n1 3\n5 2\n2 1 2 3 3\n1 4\nOutput\nYES\nNO\nYES\nYES\nNO\nYES"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (n^2)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nvector\n<int>\np\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nm\n;\n++\ni\n)\n{\nint\npos\n;\ncin\n>>\npos\n;\np\n[\npos\n-\n1\n]\n=\n1\n;\n}\nwhile\n(\ntrue\n)\n{\nbool\nok\n=\nfalse\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\np\n[\ni\n]\n&&\na\n[\ni\n]\n>\na\n[\ni\n+\n1\n])\n{\nok\n=\ntrue\n;\nswap\n(\na\n[\ni\n],\na\n[\ni\n+\n1\n]);\n}\n}\nif\n(!\nok\n)\nbreak\n;\n}\nbool\nok\n=\ntrue\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\n++\ni\n)\n{\nok\n&=\na\n[\ni\n]\n<=\na\n[\ni\n+\n1\n];\n}\nif\n(\nok\n)\ncout\n<<\n\"YES\"\n<<\nendl\n;\nelse\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Solution (n log n)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nvector\n<int>\np\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nm\n;\n++\ni\n)\n{\nint\npos\n;\ncin\n>>\npos\n;\np\n[\npos\n-\n1\n]\n=\n1\n;\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\np\n[\ni\n]\n==\n0\n)\ncontinue\n;\nint\nj\n=\ni\n;\nwhile\n(\nj\n<\nn\n&&\np\n[\nj\n])\n++\nj\n;\nsort\n(\na\n.\nbegin\n()\n+\ni\n,\na\n.\nbegin\n()\n+\nj\n+\n1\n);\ni\n=\nj\n;\n}\nbool\nok\n=\ntrue\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\n++\ni\n)\n{\nok\n&=\na\n[\ni\n]\n<=\na\n[\ni\n+\n1\n];\n}\nif\n(\nok\n)\ncout\n<<\n\"YES\"\n<<\nendl\n;\nelse\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

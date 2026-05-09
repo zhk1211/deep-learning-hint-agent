@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ , consisting only of Latin letters 'a', and a string $ t $ , consisting of lowercase Latin letters.\n\nIn one move, you can replace any letter 'a' in the string $ s $ with a string $ t $ . Note that after the replacement string $ s $ might contain letters other than 'a'.\n\nYou can perform an arbitrary number of moves (including zero). How many different strings can you obtain? Print the number, or report that it is infinitely large.\n\nTwo strings are considered different if they have different length, or they differ at some index.\n\nInput Format\nThe first line contains a single integer $ q $ ( $ 1 \\le q \\le 10^4 $ ) — the number of testcases.\n\nThe first line of each testcase contains a non-empty string $ s $ , consisting only of Latin letters 'a'. The length of $ s $ doesn't exceed $ 50 $ .\n\nThe second line contains a non-empty string $ t $ , consisting of lowercase Latin letters. The length of $ t $ doesn't exceed $ 50 $ .\n\nOutput Format\nFor each testcase, print the number of different strings $ s $ that can be obtained after an arbitrary amount of moves (including zero). If the number is infinitely large, print -1. Otherwise, print the number.\n\nExamples\nSample 1\nInput\n3\naaaa\na\naa\nabc\na\nb\nOutput\n1\n-1\n2\n\nNote\nIn the first example, you can replace any letter 'a' with the string \"a\", but that won't change the string. So no matter how many moves you make, you can't obtain a string other than the initial one.\n\nIn the second example, you can replace the second letter 'a' with \"abc\". String $ s $ becomes equal to \"aabc\". Then the second letter 'a' again. String $ s $ becomes equal to \"aabcbc\". And so on, generating infinitely many different strings.\n\nIn the third example, you can either leave string $ s $ as is, performing zero moves, or replace the only 'a' with \"b\". String $ s $ becomes equal to \"b\", so you can't perform more moves on it."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\ns\n=\ninput\n()\nt\n=\ninput\n()\nif\nt\n==\n\"a\"\n:\nprint\n(\n1\n)\nelif\nt\n.\ncount\n(\n'a'\n)\n!=\n0\n:\nprint\n(-\n1\n)\nelse\n:\nprint\n(\n2\n**\nlen\n(\ns\n))"
+        }
+    ]
+}

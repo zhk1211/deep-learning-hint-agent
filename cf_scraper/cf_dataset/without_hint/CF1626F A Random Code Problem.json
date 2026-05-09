@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer array $ a_0, a_1, \\dots, a_{n - 1} $ , and an integer $ k $ . You perform the following code with it:\n\n```\n<pre class=\"lstlisting\">```\nlong long ans = 0; // create a 64-bit signed variable which is initially equal to 0<br></br>for(int i = 1; i <= k; i++)<br></br>{<br></br> int idx = rnd.next(0, n - 1); // generate a random integer between 0 and n - 1, both inclusive<br></br> // each integer from 0 to n - 1 has the same probability of being chosen<br></br> ans += a[idx];<br></br> a[idx] -= (a[idx] % i);<br></br>}<br></br>\n```\n```\n\nYour task is to calculate the expected value of the variable ans after performing this code.\n\nNote that the input is generated according to special rules (see the input format section).\n\nInput Format\nThe only line contains six integers $ n $ , $ a_0 $ , $ x $ , $ y $ , $ k $ and $ M $ ( $ 1 \\le n \\le 10^7 $ ; $ 1 \\le a_0, x, y < M \\le 998244353 $ ; $ 1 \\le k \\le 17 $ ).\n\nThe array $ a $ in the input is constructed as follows:\n\n- $ a_0 $ is given in the input;\n- for every $ i $ from $ 1 $ to $ n - 1 $ , the value of $ a_i $ can be calculated as $ a_i = (a_{i - 1} \\cdot x + y) \\bmod M $ .\n\nOutput Format\nLet the expected value of the variable ans after performing the code be $ E $ . It can be shown that $ E \\cdot n^k $ is an integer. You have to output this integer modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n3 10 3 5 13 88\nOutput\n382842030\n\nSample 2\nInput\n2 15363 270880 34698 17 2357023\nOutput\n319392398\n\nNote\nThe array in the first example test is $ [10, 35, 22] $ . In the second example, it is $ [15363, 1418543] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\n998244353\n;\nconst\nint\nL\n=\n720720\n;\nint\nadd\n(\nint\nx\n,\nint\ny\n,\nint\nm\n=\nMOD\n)\n{\nx\n+=\ny\n;\nif\n(\nx\n>=\nm\n)\nx\n-=\nm\n;\nreturn\nx\n;\n}\nint\nmul\n(\nint\nx\n,\nint\ny\n,\nint\nm\n=\nMOD\n)\n{\nreturn\n(\nx\n*\n1ll\n*\ny\n)\n%\nm\n;\n}\nint\nbinpow\n(\nint\nx\n,\nint\ny\n)\n{\nint\nz\n=\n1\n;\nwhile\n(\ny\n>\n0\n)\n{\nif\n(\ny\n%\n2\n==\n1\n)\nz\n=\nmul\n(\nz\n,\nx\n);\nx\n=\nmul\n(\nx\n,\nx\n);\ny\n/=\n2\n;\n}\nreturn\nz\n;\n}\nint\ninv\n(\nint\nx\n)\n{\nreturn\nbinpow\n(\nx\n,\nMOD\n-\n2\n);\n}\nint\ndivide\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\nmul\n(\nx\n,\ninv\n(\ny\n));\n}\nint\nmain\n()\n{\nint\nn\n,\na0\n,\nx\n,\ny\n,\nk\n,\nM\n;\ncin\n>>\nn\n>>\na0\n>>\nx\n>>\ny\n>>\nk\n>>\nM\n;\nvector\n<int>\narr\n(\nn\n);\narr\n[\n0\n]\n=\na0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\narr\n[\ni\n]\n=\nadd\n(\nmul\n(\narr\n[\ni\n-\n1\n],\nx\n,\nM\n),\ny\n,\nM\n);\nint\nans\n=\n0\n;\nint\ntotal_ways\n=\nbinpow\n(\nn\n,\nk\n);\nint\ncoeff\n=\nmul\n(\ndivide\n(\ntotal_ways\n,\nn\n),\nk\n);\nvector\n<\nvector\n<int>\n>\ndp\n(\nk\n,\nvector\n<int>\n(\nL\n));\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\np\n=\narr\n[\ni\n]\n/\nL\n;\nint\nq\n=\narr\n[\ni\n]\n%\nL\n;\ndp\n[\n0\n][\nq\n]++;\nans\n=\nadd\n(\nans\n,\nmul\n(\np\n,\nmul\n(\nL\n,\ncoeff\n)));\n}\nint\ncur_coeff\n=\ndivide\n(\ntotal_ways\n,\nn\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nk\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nL\n;\nj\n++)\n{\nint\ncur\n=\ndp\n[\ni\n-\n1\n][\nj\n];\nif\n(\ni\n<\nk\n)\ndp\n[\ni\n][\nj\n]\n=\nadd\n(\ndp\n[\ni\n][\nj\n],\nmul\n(\nn\n-\n1\n,\ncur\n));\nans\n=\nadd\n(\nans\n,\nmul\n(\nj\n,\nmul\n(\ncur\n,\ncur_coeff\n)));\nif\n(\ni\n<\nk\n)\ndp\n[\ni\n][\nj\n-\n(\nj\n%\ni\n)]\n=\nadd\n(\ndp\n[\ni\n][\nj\n-\n(\nj\n%\ni\n)],\ncur\n);\n}\ncur_coeff\n=\ndivide\n(\ncur_coeff\n,\nn\n);\n}\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

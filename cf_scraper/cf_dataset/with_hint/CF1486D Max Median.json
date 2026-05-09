@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are a given an array $ a $ of length $ n $ . Find a subarray $ a[l..r] $ with length at least $ k $ with the largest median.\n\nA median in an array of length $ n $ is an element which occupies position number $ \\lfloor \\frac{n + 1}{2} \\rfloor $ after we sort the elements in non-decreasing order. For example: $ median([1, 2, 3, 4]) = 2 $ , $ median([3, 2, 1]) = 2 $ , $ median([2, 1, 2, 1]) = 1 $ .\n\nSubarray $ a[l..r] $ is a contiguous part of the array $ a $ , i. e. the array $ a_l,a_{l+1},\\ldots,a_r $ for some $ 1 \\leq l \\leq r \\leq n $ , its length is $ r - l + 1 $ .\n\nInput Format\nThe first line contains two integers $ n $ and $ k $ ( $ 1 \\leq k \\leq n \\leq 2 \\cdot 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\leq a_i \\leq n $ ).\n\nOutput Format\nOutput one integer $ m $ — the maximum median you can get.\n\nExamples\nSample 1\nInput\n5 3\n1 2 3 2 1\nOutput\n2\n\nSample 2\nInput\n4 2\n1 2 3 4\nOutput\n3\n\nNote\nIn the first example all the possible subarrays are $ [1..3] $ , $ [1..4] $ , $ [1..5] $ , $ [2..4] $ , $ [2..5] $ and $ [3..5] $ and the median for all of them is $ 2 $ , so the maximum possible median is $ 2 $ too.\n\nIn the second example $ median([3..4]) = 3 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "How to solve the problem if all the values are $$$-1$$$ and $$$1$$$?"
+        },
+        {
+            "title": "Hint2",
+            "content": "Binary search ONCE MORE?"
+        },
+        {
+            "title": "Hint3",
+            "content": "How to check if the answer is at least $$$x$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's binary search the answer. Now let's check if the answer is at least $$$x$$$. Replace all values that are at least $$$x$$$ with 1 and values that are less than $$$x$$$ with $$$-1$$$. Now if for some segment the median is at least $$$x$$$ if the sum on this subsegment is positive! Now we only need to check if the array consisting of $$$-1$$$ and $$$1$$$ has a subsegment of length at least $$$k$$$ with positive sum. So let's just calculate prefix sums of this array and for prefix sum at position $$$i$$$ choose the minimum prefix sum amongst positions $$$0, 1, ..., i - k$$$, which can be done using prefix minimum in linear time.\nSo the resulting complexity is $$$O(nlogn)$$$."
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ n $ integers.\n\nYou can remove at most one element from this array. Thus, the final length of the array is $ n-1 $ or $ n $ .\n\nYour task is to calculate the maximum possible length of the strictly increasing contiguous subarray of the remaining array.\n\nRecall that the contiguous subarray $ a $ with indices from $ l $ to $ r $ is $ a[l \\dots r] = a_l, a_{l + 1}, \\dots, a_r $ . The subarray $ a[l \\dots r] $ is called strictly increasing if $ a_l < a_{l+1} < \\dots < a_r $ .\n\nInput Format\nThe first line of the input contains one integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ) — the number of elements in $ a $ .\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ), where $ a_i $ is the $ i $ -th element of $ a $ .\n\nOutput Format\nPrint one integer — the maximum possible length of the strictly increasing contiguous subarray of the array $ a $ after removing at most one element.\n\nExamples\nSample 1\nInput\n5\n1 2 5 3 4\nOutput\n4\n\nSample 2\nInput\n2\n1 2\nOutput\n2\n\nSample 3\nInput\n7\n6 5 4 3 2 4 3\nOutput\n2\n\nNote\nIn the first example, you can delete $ a_3=5 $ . Then the resulting array will be equal to $ [1, 2, 3, 4] $ and the length of its largest increasing subarray will be equal to $ 4 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nint\nans\n=\n1\n;\nvector\n<int>\nrg\n(\nn\n,\n1\n);\nfor\n(\nint\ni\n=\nn\n-\n2\n;\ni\n>=\n0\n;\n--\ni\n)\n{\nif\n(\na\n[\ni\n+\n1\n]\n>\na\n[\ni\n])\nrg\n[\ni\n]\n=\nrg\n[\ni\n+\n1\n]\n+\n1\n;\nans\n=\nmax\n(\nans\n,\nrg\n[\ni\n]);\n}\nvector\n<int>\nlf\n(\nn\n,\n1\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\na\n[\ni\n-\n1\n]\n<\na\n[\ni\n])\nlf\n[\ni\n]\n=\nlf\n[\ni\n-\n1\n]\n+\n1\n;\nans\n=\nmax\n(\nans\n,\nlf\n[\ni\n]);\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n2\n;\n++\ni\n)\n{\nif\n(\na\n[\ni\n]\n<\na\n[\ni\n+\n2\n])\nans\n=\nmax\n(\nans\n,\nlf\n[\ni\n]\n+\nrg\n[\ni\n+\n2\n]);\n}\ncout\n<<\nans\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

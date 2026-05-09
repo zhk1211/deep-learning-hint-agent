@@ -1,0 +1,48 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVasilije is a smart student and his discrete mathematics teacher Sonja taught him number theory very well.\n\nHe gave Ognjen a positive integer $ n $ .\n\nDenote $ d(n) $ as the number of positive integer divisors of $ n $ , and denote $ gcd(a, b) $ as the largest integer $ g $ such that $ a $ is divisible by $ g $ and $ b $ is divisible by $ g $ .\n\nAfter that, he gave Ognjen $ q $ queries, and there are $ 2 $ types of queries.\n\n- $ 1 $ , $ x $ — set $ n $ to $ n \\cdot x $ , and then answer the following question: does there exist a positive integer $ a $ such that $ gcd(a, n) = 1 $ , and $ d(n \\cdot a) = n $ ?\n- $ 2 $ — reset $ n $ to its initial value (before any queries).\n\nNote that $ n $ does not get back to its initial value after the type 1 query.\n\nSince Ognjen is afraid of number theory, Vasilije promised him that after each query, $ d(n) \\le 10^9 $ , however, even with that constraint, he still needs your help with this problem.\n\nInput Format\nThe first line contains a positive integer $ t $ , ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThe first line of each test case contains $ 2 $ integers, $ n $ and $ q $ ( $ 1 \\le n \\le 10^{6} $ , $ 1\\le q \\le 1000 $ ) — the number $ n $ and the number of queries.\n\nThe following $ q $ lines contain an integer $ k $ ( $ 1 \\le k \\le 2 $ ), if $ k=1 $ then there is another integer in this line $ x $ ( $ 1 \\le x \\le 10^6 $ ) — the description of the queries.\n\nIt is guaranteed that, for the given input, $ d(n) $ does not exceed $ 10^9 $ at any point.\n\nIt is guaranteed that the sum of $ q $ over all test cases doesn't exceed $ 10^3 $ .\n\nOutput Format\nFor each type 1 query, you should output \"YES\" if there exist such positive integer $ a $ that $ gcd(a, n) = 1 $ and $ d(n \\cdot a)=n $ , and \"NO\" if he can't.\n\nYou can output the answer in any case (for example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n7\n1 5\n1 1\n1 2\n2\n1 8\n1 9\n20 4\n1 3\n2\n1 7\n1 12\n16 10\n1 6\n1 6\n1 10\n1 9\n1 1\n1 9\n1 7\n1 3\n1 2\n1 10\n9 1\n1 3\n8 1\n1 2\n8 3\n1 5\n1 8\n1 10\n11 5\n1 8\n1 2\n1 1\n1 3\n1 1\nOutput\nYES\nYES\nYES\nYES\n\nYES\nNO\nYES\n\nYES\nNO\nYES\nYES\nYES\nNO\nYES\nNO\nYES\nYES\n\nNO\n\nNO\n\nYES\nNO\nNO\n\nYES\nNO\nNO\nNO\nNO\n\nNote\nIn the first test case, we initially have $ n=1 $ .\n\nAfter the first query: $ n=1 $ , $ d(n)=1 $ , so by taking $ a = 1 $ , $ d(n \\cdot a) = n $ , and the answer to this query is \"YES\".\n\nAfter the second query: $ n=2 $ , $ d(n)=2 $ , we can, again, take $ a = 1 $ , $ d(n \\cdot a) = n $ , and the answer to this query is \"YES\".\n\nAfter the third query $ n=1 $ , and this is a type $ 2 $ query so we don't answer it.\n\nAfter the fourth query: $ n=8 $ , and by taking $ a=3 $ , $ d(n \\cdot a) = d(24) = 8 = n $ , so the answer is \"YES\".\n\nAfter the fifth query: $ n=72 $ , now we can take $ a=637 $ to get $ n \\cdot a = 45864 $ , and $ d(n \\cdot a) = 72 = n $ , so the answer is \"YES\".\n\nIn the second test case, we initially have $ n=20 $ .\n\nAfter the first query: $ n=60 $ , and the answer is \"YES\".\n\nAfter the second query: $ n=20 $ , this is a type $ 2 $ query, so we don't answer it.\n\nAfter the third query: $ n=140 $ , and it can be proven that no matter which positive integer $ a $ we take, $ d(n \\cdot a) $ will never be equal to $ n $ , so the answer to this query is \"NO\".\n\nAfter the fourth query: $ n=1680 $ . It can be proven that there exists a positive integer $ a $ , such that $ d(n \\cdot a) = n $ , so the answer is \"YES\"."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nWhat does the condition $$$gcd(a, n) = 1$$$ allow us to do?\nHint 2\nHow does any allowed operation affect $$$d(a \\cdot n)$$$?\nHint 3\nTry to prove that the answer is \"YES\" if $$$d(n)$$$ divides $$$n$$$.\nHint 4\nTry to prove that the answer is \"NO\" otherwise.\nHint 5\nHow can you find and maintain the number of divisors quickly?\nHint 6\nTo make the implementation easier, try using the condition $$$d(n) \\le 10^9$$$."
+        },
+        {
+            "title": "Hint 1",
+            "content": "What does the condition $$$gcd(a, n) = 1$$$ allow us to do?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "How does any allowed operation affect $$$d(a \\cdot n)$$$?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Try to prove that the answer is \"YES\" if $$$d(n)$$$ divides $$$n$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Try to prove that the answer is \"NO\" otherwise."
+        },
+        {
+            "title": "Hint 5",
+            "content": "How can you find and maintain the number of divisors quickly?"
+        },
+        {
+            "title": "Hint 6",
+            "content": "To make the implementation easier, try using the condition $$$d(n) \\le 10^9$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nll\n=\nlong\nlong\n;\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n1000003\n;\nmap\n<\nint\n,\nint\n>\npowers\n;\n//key is a prime number, value is te highest powert\nmap\n<\nint\n,\nint\n>\noriginal_divisors\n;\n//same as map powers but isn't updated during queries, it's used to reset the powers\nint\nsmallest_divisor\n[\nN\n];\n//precalculated smallest divisors to make factorization O(logx)\nbool\nmark\n[\nN\n];\n//marks numbers which aren't prime (used for sieve)\nll divisor_count\n=\n1\n;\n//the number of divisors (updated during queries)\nvoid\nprime\n(){\n//calculates the smallers divisor for each number from 1 to N (sieve of erathosetenes)\nsmallest_divisor\n[\n1\n]=\n1\n;\nsmallest_divisor\n[\n2\n]=\n2\n;\nfor\n(\nint\ni\n=\n4\n;\ni\n<\nN\n;\ni\n+=\n2\n){\nmark\n[\ni\n]=\ntrue\n;\nsmallest_divisor\n[\ni\n]=\n2\n;\n}\nfor\n(\nint\ni\n=\n3\n;\ni\n<\nN\n;\ni\n+=\n2\n){\nif\n(!\nmark\n[\ni\n]){\nsmallest_divisor\n[\ni\n]=\ni\n;\nfor\n(\nll j\n=\ni\n*\n1ll\n*\ni\n;\nj\n<\nN\n;\nj\n+=\n2\n*\ni\n){\nif\n(!\nmark\n[\nj\n]){\nsmallest_divisor\n[\nj\n]=\ni\n;\nmark\n[\nj\n]=\n1\n;\n}\n}\n}\n}\n}\n//a function for factorizing a number (used to process queries and factorize n in the beginning)\n//it also updates the highest prime which divides n (powers map), and the number of divisors of n (divisor_count)\nvoid\nfactorize\n(\nint\nx\n){\nint\np\n=\n0\n;\nint\ncurrent_divisor\n=\n1\n;\nwhile\n(\nx\n>\n1\n){\n//while x has non 1 divisors, divide it by it's smallest divisor which isn't 1(smallers divisor if always prime)\nif\n(\nsmallest_divisor\n[\nx\n]!=\ncurrent_divisor\n){\nif\n(\np\n>\n0\n){\ndivisor_count\n/=\npowers\n[\ncurrent_divisor\n]+\n1\n;\npowers\n[\ncurrent_divisor\n]+=\np\n;\ndivisor_count\n*=\npowers\n[\ncurrent_divisor\n]+\n1\n;\n}\np\n=\n1\n;\ncurrent_divisor\n=\nsmallest_divisor\n[\nx\n];\n}\nelse\n{\np\n++;\n}\nx\n/=\nsmallest_divisor\n[\nx\n];\n}\nif\n(\np\n>\n0\n){\ndivisor_count\n/=\npowers\n[\ncurrent_divisor\n]+\n1\n;\npowers\n[\ncurrent_divisor\n]+=\np\n;\ndivisor_count\n*=\npowers\n[\ncurrent_divisor\n]+\n1\n;\n}\nreturn\n;\n}\nint\nmain\n(){\nprime\n();\n//precalculate smallest divisors\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\n//read n and q\nint\nn\n;\nint\nq\n;\ncin\n>>\nn\n>>\nq\n;\n//factorize n\nfactorize\n(\nn\n);\n//since factorize updates the powers map, update the origional_divisors map too\nfor\n(\nauto\nprime\n:\npowers\n){\noriginal_divisors\n[\nprime\n.\nfirst\n]=\nprime\n.\nsecond\n;\n}\nint\noriginal_divisor_count\n=\ndivisor_count\n;\n//since factorize updates the divisor_count we update the original_divisor_count too\nvector\n<int>\nqueries\n;\n//storing previous queries\n//processing queries\nwhile\n(\nq\n--){\nint\nquery_type\n;\ncin\n>>\nquery_type\n;\nif\n(\nquery_type\n==\n1\n){\n//query of type 1 (multiply n by x)\nint\nx\n;\ncin\n>>\nx\n;\nfactorize\n(\nx\n);\n//factorize x, update the powers map, and the number of divisors\nqueries\n.\npush_back\n(\nx\n);\n//add x to the list of previous queries\nll num\n=\nn\n;\nfor\n(\nint\nquery\n:\nqueries\n){\n//check if the product of all previous queries and n is divisible by d(n)\nnum\n*=\nquery\n;\nnum\n%=\ndivisor_count\n;\n}\nif\n(\nnum\n==\n0\n){\n//if it is the answer is yes else the answer is no\ncout\n<<\n\"YES\\n\"\n;\n}\nelse\ncout\n<<\n\"NO\\n\"\n;\n}\nelse\n{\n//here we should reset everything related to the type 1 query\npowers\n.\nclear\n();\n//clear the powers map and set it to original divisors and powers\nfor\n(\nauto\noriginal_div\n:\noriginal_divisors\n){\npowers\n[\noriginal_div\n.\nfirst\n]=\noriginal_div\n.\nsecond\n;\n}\ndivisor_count\n=\noriginal_divisor_count\n;\n//restart the divisor_count\nqueries\n.\nclear\n();\n//clear the queries (since we only need the queries since the previous type 2 query)\n}\n}\noriginal_divisors\n.\nclear\n();\npowers\n.\nclear\n();\ndivisor_count\n=\n1\n;\noriginal_divisor_count\n=\n1\n;\nif\n(\nt\n)\ncout\n<<\n\"\\n\"\n;\n}\n}"
+        }
+    ]
+}

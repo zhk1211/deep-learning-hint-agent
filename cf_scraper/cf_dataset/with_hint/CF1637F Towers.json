@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a tree with $ n $ vertices numbered from $ 1 $ to $ n $ . The height of the $ i $ -th vertex is $ h_i $ . You can place any number of towers into vertices, for each tower you can choose which vertex to put it in, as well as choose its efficiency. Setting up a tower with efficiency $ e $ costs $ e $ coins, where $ e > 0 $ .\n\nIt is considered that a vertex $ x $ gets a signal if for some pair of towers at the vertices $ u $ and $ v $ ( $ u \\neq v $ , but it is allowed that $ x = u $ or $ x = v $ ) with efficiencies $ e_u $ and $ e_v $ , respectively, it is satisfied that $ \\min(e_u, e_v) \\geq h_x $ and $ x $ lies on the path between $ u $ and $ v $ .\n\nFind the minimum number of coins required to set up towers so that you can get a signal at all vertices.\n\nInput Format\nThe first line contains an integer $ n $ ( $ 2 \\le n \\le 200\\,000 $ ) — the number of vertices in the tree.\n\nThe second line contains $ n $ integers $ h_i $ ( $ 1 \\le h_i \\le 10^9 $ ) — the heights of the vertices.\n\nEach of the next $ n - 1 $ lines contain a pair of numbers $ v_i, u_i $ ( $ 1 \\le v_i, u_i \\le n $ ) — an edge of the tree. It is guaranteed that the given edges form a tree.\n\nOutput Format\nPrint one integer — the minimum required number of coins.\n\nExamples\nSample 1\nInput\n3\n1 2 1\n1 2\n2 3\nOutput\n4\n\nSample 2\nInput\n5\n1 3 3 1 3\n1 3\n5 4\n4 3\n2 3\nOutput\n7\n\nSample 3\nInput\n2\n6 1\n1 2\nOutput\n12\n\nNote\nIn the first test case it's optimal to install two towers with efficiencies $ 2 $ at vertices $ 1 $ and $ 3 $ .\n\nIn the second test case it's optimal to install a tower with efficiency $ 1 $ at vertex $ 1 $ and two towers with efficiencies $ 3 $ at vertices $ 2 $ and $ 5 $ .\n\nIn the third test case it's optimal to install two towers with efficiencies $ 6 $ at vertices $ 1 $ and $ 2 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Find the answer when heights of all vertices are equal to $$$1$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Consider tree where all heights are either $$$1$$$ or $$$0$$$. What is the answer in this case?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\n#include\n<vector>\n#include\n<algorithm>\n#include\n<set>\n#include\n<map>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\n#define\nfastInp cin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\nios_base\n::\nsync_with_stdio\n(\n0\n);\nll n\n;\nvector\n<\nvector\n<ll>\n>\ngr\n;\nvector\n<ll>\nvec\n;\nvoid\ninput\n()\n{\ncin\n>>\nn\n;\nvec\n.\nresize\n(\nn\n);\nfor\n(\nauto\n&\nc\n:\nvec\n)\ncin\n>>\nc\n;\ngr\n.\nresize\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\ni\n++)\n{\nll u\n,\nv\n;\ncin\n>>\nu\n>>\nv\n;\nu\n--;\nv\n--;\ngr\n[\nu\n].\npush_back\n(\nv\n);\ngr\n[\nv\n].\npush_back\n(\nu\n);\n}\n}\nll sol\n()\n{\nll ans\n=\n0\n;\nset\n<\npair\n<\nll\n,\nll\n>>\nleaves\n;\nvector\n<\npair\n<\nll\n,\nll\n>>\nsrt\n;\nvector\n<ll>\ndegree\n(\nn\n);\nsrt\n.\npush_back\n({\n0\n,\n-\n1\n});\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ndegree\n[\ni\n]\n=\ngr\n[\ni\n].\nsize\n();\nsrt\n.\npush_back\n({\nvec\n[\ni\n],\ni\n});\nif\n(\ngr\n[\ni\n].\nsize\n()\n==\n1\n)\n{\nleaves\n.\ninsert\n({\nvec\n[\ni\n],\ni\n});\n}\n}\nsort\n(\nsrt\n.\nbegin\n(),\nsrt\n.\nend\n());\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nwhile\n(\nleaves\n.\nsize\n()\n>\n0\n&&\n(*\nleaves\n.\nbegin\n()).\nfirst\n<\nsrt\n[\ni\n].\nfirst\n)\n{\nll v\n=\n(*\nleaves\n.\nbegin\n()).\nsecond\n;\ndegree\n[\nv\n]\n=\n-\n2\n;\nleaves\n.\nerase\n(\nleaves\n.\nbegin\n());\nfor\n(\nauto\nto\n:\ngr\n[\nv\n])\n{\ndegree\n[\nto\n]--;\nif\n(\ndegree\n[\nto\n]\n==\n1\n||\ndegree\n[\nto\n]\n==\n0\n)\nleaves\n.\ninsert\n({\nvec\n[\nto\n],\nto\n});\n}\n}\nans\n+=\nmax\n(\n2ll\n,\nll\n(\nleaves\n.\nsize\n()))\n*\n(\nsrt\n[\ni\n].\nfirst\n-\nsrt\n[\ni\n-\n1\n].\nfirst\n);\n}\nreturn\nans\n;\n}\nint\nmain\n()\n{\nfastInp\n;\ninput\n();\ncout\n<<\nsol\n();\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Alternative solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\nh\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\ncin\n>>\nh\n[\ni\n];\nvector\n<\nvector\n<int>\n>\ng\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n+\n1\n<\nn\n;\n++\ni\n)\n{\nint\nu\n,\nv\n;\ncin\n>>\nu\n>>\nv\n;\n--\nu\n,\n--\nv\n;\ng\n[\nu\n].\npush_back\n(\nv\n);\ng\n[\nv\n].\npush_back\n(\nu\n);\n}\nint\nrt\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\nh\n[\ni\n]\n>\nh\n[\nrt\n])\n{\nrt\n=\ni\n;\n}\n}\nll ans\n=\n0\n;\nfunction\n<\nint\n(\nint\n,\nint\n)>\ndfs\n=\n[&](\nint\nu\n,\nint\np\n)\n{\nint\nmx1\n=\n0\n,\nmx2\n=\n0\n;\nvector\n<int>\nhave\n;\nfor\n(\nauto\nv\n:\ng\n[\nu\n])\n{\nif\n(\nv\n!=\np\n)\n{\nint\ncur\n=\ndfs\n(\nv\n,\nu\n);\nif\n(\ncur\n>\nmx1\n)\nswap\n(\ncur\n,\nmx1\n);\nif\n(\ncur\n>\nmx2\n)\nswap\n(\ncur\n,\nmx2\n);\n}\n}\nif\n(\np\n!=\n-\n1\n)\n{\nint\ndelta\n=\nmax\n(\n0\n,\nh\n[\nu\n]\n-\nmx1\n);\nans\n+=\ndelta\n;\nmx1\n+=\ndelta\n;\n}\nelse\n{\nans\n+=\nmax\n(\n0\n,\nh\n[\nu\n]\n-\nmx1\n)\n+\nmax\n(\n0\n,\nh\n[\nu\n]\n-\nmx2\n);\n}\nreturn\nmx1\n;\n};\ndfs\n(\nrt\n,\n-\n1\n);\ncout\n<<\nans\n<<\n'\\n'\n;\n}"
+        }
+    ]
+}

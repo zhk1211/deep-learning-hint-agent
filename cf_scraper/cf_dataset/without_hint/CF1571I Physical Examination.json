@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "import\njava\n.\nutil\n.*\nfun main\n()\n=\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval n\n=\nreadLine\n()!!.\ntoInt\n()\nval L\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval R\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval ord\n=\nArray\n(\nn\n,\n{\ni\n->\ni\n})\nord\n.\nsortWith\n({\nx\n:\nInt\n,\ny\n:\nInt\n->\nL\n[\nx\n]\n-\nL\n[\ny\n]})\nval ans\n=\nIntArray\n(\nn\n)\nfun check\n(\nm\n:\nInt\n,\nfl\n:\nBoolean\n):\nInt\n{\nval cur\n=\nPriorityQueue\n<\nInt\n>(\ncompareBy\n{\nR\n[\nit\n]\n})\nvar\nj\n=\n0\nvar\nres\n=\n0\nfor\n(\nt\nin\nm\nuntil\nm\n+\nn\n)\n{\nwhile\n(\nj\n<\nn\n&&\nL\n[\nord\n[\nj\n]]\n<=\nt\n)\n{\ncur\n.\nadd\n(\nord\n[\nj\n])\n++\nj\n;\n}\nif\n(\ncur\n.\nisEmpty\n())\n{\nres\n=\n1\nbreak\n}\nif\n(\nR\n[\ncur\n.\npeek\n()]\n<\nt\n)\n{\nres\n=\n-\n1\nbreak\n}\nif\n(\nfl\n)\nans\n[\nt\n-\nm\n]\n=\ncur\n.\npeek\n()\n+\n1\ncur\n.\npoll\n()\n}\nreturn\nres\n;\n}\nvar\nl\n=\n1\nvar\nr\n=\n1e9\n.\ntoInt\n()\nvar\nres\n=\n-\n1\nwhile\n(\nl\n<=\nr\n)\n{\nval m\n=\n(\nl\n+\nr\n)\n/\n2\nval tmp\n=\ncheck\n(\nm\n,\nfalse\n)\nif\n(\ntmp\n==\n0\n)\n{\nres\n=\nm\nbreak\n}\nif\n(\ntmp\n==\n-\n1\n)\n{\nr\n=\nm\n-\n1\n}\nelse\n{\nl\n=\nm\n+\n1\n}\n}\nprintln\n(\nres\n)\nif\n(\nres\n!=\n-\n1\n)\n{\ncheck\n(\nres\n,\ntrue\n)\nprintln\n(\nans\n.\njoinToString\n(\n\" \"\n))\n}\n}"
+        }
+    ]
+}

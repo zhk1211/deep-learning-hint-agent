@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have a garland consisting of $ n $ lamps. Each lamp is colored red, green or blue. The color of the $ i $ -th lamp is $ s_i $ ('R', 'G' and 'B' — colors of lamps in the garland).\n\nYou have to recolor some lamps in this garland (recoloring a lamp means changing its initial color to another) in such a way that the obtained garland is nice.\n\nA garland is called nice if any two lamps of the same color have distance divisible by three between them. I.e. if the obtained garland is $ t $ , then for each $ i, j $ such that $ t_i = t_j $ should be satisfied $ |i-j|~ mod~ 3 = 0 $ . The value $ |x| $ means absolute value of $ x $ , the operation $ x~ mod~ y $ means remainder of $ x $ when divided by $ y $ .\n\nFor example, the following garlands are nice: \"RGBRGBRG\", \"GB\", \"R\", \"GRBGRBG\", \"BRGBRGB\". The following garlands are not nice: \"RR\", \"RGBG\".\n\nAmong all ways to recolor the initial garland to make it nice you have to choose one with the minimum number of recolored lamps. If there are multiple optimal solutions, print any of them.\n\nInput Format\nThe first line of the input contains one integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the number of lamps.\n\nThe second line of the input contains the string $ s $ consisting of $ n $ characters 'R', 'G' and 'B' — colors of lamps in the garland.\n\nOutput Format\nIn the first line of the output print one integer $ r $ — the minimum number of recolors needed to obtain a nice garland from the given one.\n\nIn the second line of the output print one string $ t $ of length $ n $ — a nice garland obtained from the initial one with minimum number of recolors. If there are multiple optimal solutions, print any of them.\n\nExamples\nSample 1\nInput\n3\nBRB\nOutput\n1\nGRB\n\nSample 2\nInput\n7\nRGBGRBB\nOutput\n3\nRGBRGBR"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n;\nstring\ns\n;\ncin\n>>\nn\n>>\ns\n;\nvector\n<int>\np\n(\n3\n);\niota\n(\np\n.\nbegin\n(),\np\n.\nend\n(),\n0\n);\nstring\ncolors\n=\n\"RGB\"\n;\nstring\nres\n=\n\"\"\n;\nint\nans\n=\n1e9\n;\ndo\n{\nstring\nt\n;\nint\ncnt\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nt\n+=\ncolors\n[\np\n[\ni\n%\n3\n]];\ncnt\n+=\nt\n[\ni\n]\n!=\ns\n[\ni\n];\n}\nif\n(\nans\n>\ncnt\n)\n{\nans\n=\ncnt\n;\nres\n=\nt\n;\n}\n}\nwhile\n(\nnext_permutation\n(\np\n.\nbegin\n(),\np\n.\nend\n()));\ncout\n<<\nans\n<<\nendl\n<<\nres\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

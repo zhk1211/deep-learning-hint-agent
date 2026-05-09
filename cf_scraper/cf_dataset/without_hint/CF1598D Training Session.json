@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMonocarp is the coach of the Berland State University programming teams. He decided to compose a problemset for a training session for his teams.\n\nMonocarp has $ n $ problems that none of his students have seen yet. The $ i $ -th problem has a topic $ a_i $ (an integer from $ 1 $ to $ n $ ) and a difficulty $ b_i $ (an integer from $ 1 $ to $ n $ ). All problems are different, that is, there are no two tasks that have the same topic and difficulty at the same time.\n\nMonocarp decided to select exactly $ 3 $ problems from $ n $ problems for the problemset. The problems should satisfy at least one of two conditions (possibly, both):\n\n- the topics of all three selected problems are different;\n- the difficulties of all three selected problems are different.\n\nYour task is to determine the number of ways to select three problems for the problemset.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 50000 $ ) — the number of testcases.\n\nThe first line of each testcase contains an integer $ n $ ( $ 3 \\le n \\le 2 \\cdot 10^5 $ ) — the number of problems that Monocarp have.\n\nIn the $ i $ -th of the following $ n $ lines, there are two integers $ a_i $ and $ b_i $ ( $ 1 \\le a_i, b_i \\le n $ ) — the topic and the difficulty of the $ i $ -th problem.\n\nIt is guaranteed that there are no two problems that have the same topic and difficulty at the same time.\n\nThe sum of $ n $ over all testcases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nPrint the number of ways to select three training problems that meet either of the requirements described in the statement.\n\nExamples\nSample 1\nInput\n2\n4\n2 4\n3 4\n2 1\n1 3\n5\n1 5\n2 4\n3 3\n4 2\n5 1\nOutput\n3\n10\n\nNote\nIn the first example, you can take the following sets of three problems:\n\n- problems $ 1 $ , $ 2 $ , $ 4 $ ;\n- problems $ 1 $ , $ 3 $ , $ 4 $ ;\n- problems $ 2 $ , $ 3 $ , $ 4 $ .\n\nThus, the number of ways is equal to three."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n),\nb\n(\nn\n),\nca\n(\nn\n+\n1\n),\ncb\n(\nn\n+\n1\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n]\n>>\nb\n[\ni\n];\nca\n[\na\n[\ni\n]]++;\ncb\n[\nb\n[\ni\n]]++;\n}\nlong\nlong\nans\n=\nn\n*\n1LL\n*\n(\nn\n-\n1\n)\n*\n(\nn\n-\n2\n)\n/\n6\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\nans\n-=\n(\nca\n[\na\n[\ni\n]]\n-\n1\n)\n*\n1LL\n*\n(\ncb\n[\nb\n[\ni\n]]\n-\n1\n);\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

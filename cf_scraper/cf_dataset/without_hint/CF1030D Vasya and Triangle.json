@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVasya has got three integers $ n $ , $ m $ and $ k $ . He'd like to find three integer points $ (x_1, y_1) $ , $ (x_2, y_2) $ , $ (x_3, y_3) $ , such that $ 0 \\le x_1, x_2, x_3 \\le n $ , $ 0 \\le y_1, y_2, y_3 \\le m $ and the area of the triangle formed by these points is equal to $ \\frac{nm}{k} $ .\n\nHelp Vasya! Find such points (if it's possible). If there are multiple solutions, print any of them.\n\nInput Format\nThe single line contains three integers $ n $ , $ m $ , $ k $ ( $ 1\\le n, m \\le 10^9 $ , $ 2 \\le k \\le 10^9 $ ).\n\nOutput Format\nIf there are no such points, print \"NO\".\n\nOtherwise print \"YES\" in the first line. The next three lines should contain integers $ x_i, y_i $ — coordinates of the points, one point per line. If there are multiple solutions, print any of them.\n\nYou can print each letter in any case (upper or lower).\n\nExamples\nSample 1\nInput\n4 3 3\nOutput\nYES\n1 0\n2 3\n4 1\n\nSample 2\nInput\n4 4 7\nOutput\nNO\n\nNote\nIn the first example area of the triangle should be equal to $ \\frac{nm}{k} = 4 $ . The triangle mentioned in the output is pictured below:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1030D/7ee3f0a3ce75449bbc8ed199a32a394763a46df2.png)In the second example there is no triangle with area $ \\frac{nm}{k} = \\frac{16}{7} $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nlong\nlong\ngcd\n(\nlong\nlong\na\n,\nlong\nlong\nb\n){\nreturn\na\n?\ngcd\n(\nb\n%\na\n,\na\n)\n:\nb\n;\n}\nint\nmain\n()\n{\n//freopen(\"input.txt\", \"r\", stdin);\nlong\nlong\nn\n,\nm\n,\nk\n;\ncin\n>>\nn\n>>\nm\n>>\nk\n;\nbool\nisEven\n=\nk\n%\n2\n==\n0\n;\nlong\nlong\np\n=\nn\n*\nm\n;\nif\n(\nisEven\n)\nk\n/=\n2\n;\nif\n(\np\n%\nk\n!=\n0\n){\ncout\n<<\n\"NO\"\n<<\nendl\n;\nreturn\n0\n;\n}\nlong\nlong\nx\n=\ngcd\n(\nn\n,\nk\n);\nk\n/=\nx\n;\nlong\nlong\na\n=\nn\n/\nx\n;\nx\n=\ngcd\n(\nm\n,\nk\n);\nk\n/=\nx\n;\nassert\n(\nk\n==\n1\n);\nlong\nlong\nb\n=\nm\n/\nx\n;\nif\n(!\nisEven\n){\nif\n(\na\n<\nn\n)\na\n+=\na\n;\nelse\n{\nassert\n(\nb\n<\nm\n);\nb\n+=\nb\n;\n}\n}\ncout\n<<\n\"YES\"\n<<\nendl\n;\ncout\n<<\n\"0 0\\n\"\n;\ncout\n<<\n0\n<<\n' '\n<<\nb\n<<\nendl\n;\ncout\n<<\na\n<<\n' '\n<<\n0\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou're given an array consisting of $ n $ integers. You have to perform $ n $ turns.\n\nInitially your score is $ 0 $ .\n\nOn the $ i $ -th turn, you are allowed to leave the array as it is or swap any one pair of $ 2 $ adjacent elements in the array and change exactly one of them to $ 0 $ (and leave the value of other element unchanged) after swapping. In either case(whether you swap or not), after this you add $ a_i $ to your score.\n\nWhat's the maximum possible score you can get?\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 2 \\le n \\le 500 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^6 $ ).\n\nOutput Format\nPrint a single integer — the maximum possible score.\n\nExamples\nSample 1\nInput\n2\n3 1\nOutput\n6\n\nSample 2\nInput\n5\n7 3 9 6 12\nOutput\n52\n\nNote\nIn the first example, to get the maximum score we do as follows. Do nothing on the first turn, add $ 3 $ to the score. Swap the first and the second elements and turn $ 1 $ to $ 0 $ on the second turn, and add $ 3 $ to the score. The final score is $ 6 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "As the constraints suggest, we should use dp to solve this problem.\nLet's write the original indices of the array that are added during this process — $$$p_1, p_2, \\ldots, p_n$$$. None of added numbers are zeroed in an optimal answer. It gives that $$$p_1 \\le p_2 \\le \\ldots \\le p_n$$$ and the answer is equal to the sum of $$$a[p_k]$$$ ($$$1 \\leq k \\leq n$$$).\nTo get the optimal answer we'll use $$$dp[t][last][m]$$$ = maximum score on $$$t$$$-th turn if $$$p_t = last$$$ and we have performed $$$m$$$ swapping moves (the first dimension can be omitted). Note that\n$$$m \\leq i$$$\n. It can be updated by considering the next index but it will take $$$O(n^4)$$$. The most straightforward way to improve it to $$$O(n^3)$$$ is to use prefix maximums.\nHere are some details.\nWe have only two cases:\n$$$p_t=p_{t-1}$$$ — In this case, our transition is just $$$dp[t][last][m]=dp[t-1][last][m-1]+a[last]$$$\n$$$p_t \\gt p_{t-1}$$$ — Let us make some observations. First of all, $$$p_t \\ge t$$$. So number of swaps to bring $$$p_t$$$ to index $$$t$$$ is fixed. It is $$$p_t-t$$$. So  $$$dp[t][last][m]=\\max_{j=1}^{last-1} (dp[t-1][j][m-(p_t-t)])+a[last]$$$. Note that we can find $$$\\max_{j=1}^{last-1} (dp[t-1][j][m-(p_t-t)])$$$ in $$$O(1)$$$.  Hint — use prefix maximum.\nTime complexity is $$$O(n^3)$$$."
+        }
+    ]
+}

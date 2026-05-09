@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Mike's sequence are the Codeforces rating thresholds: [1200,1400,1600,1900,2100,2300,2400,2600,3000]. Your task is simply to print the threshold immediately above the provided rating $$$r$$$."
+        },
+        {
+            "title": "Solution Code (Python)",
+            "content": "R\n=\nint\n(\ninput\n())\nratings\n=\n[\n1200\n,\n1400\n,\n1600\n,\n1900\n,\n2100\n,\n2300\n,\n2400\n,\n2600\n,\n3000\n]\nhigher\n=\n[\nr\nfor\nr\nin\nratings\nif\nr\n>\nR\n]\nprint\n(\nhigher\n[\n0\n])"
+        }
+    ]
+}

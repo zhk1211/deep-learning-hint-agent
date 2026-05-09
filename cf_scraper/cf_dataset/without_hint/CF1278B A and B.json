@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two integers $ a $ and $ b $ . You can perform a sequence of operations: during the first operation you choose one of these numbers and increase it by $ 1 $ ; during the second operation you choose one of these numbers and increase it by $ 2 $ , and so on. You choose the number of these operations yourself.\n\nFor example, if $ a = 1 $ and $ b = 3 $ , you can perform the following sequence of three operations:\n\n1. add $ 1 $ to $ a $ , then $ a = 2 $ and $ b = 3 $ ;\n2. add $ 2 $ to $ b $ , then $ a = 2 $ and $ b = 5 $ ;\n3. add $ 3 $ to $ a $ , then $ a = 5 $ and $ b = 5 $ .\n\nCalculate the minimum number of operations required to make $ a $ and $ b $ equal.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThe only line of each test case contains two integers $ a $ and $ b $ ( $ 1 \\le a, b \\le 10^9 $ ).\n\nOutput Format\nFor each test case print one integer — the minimum numbers of operations required to make $ a $ and $ b $ equal.\n\nExamples\nSample 1\nInput\n3\n1 3\n11 11\n30 20\nOutput\n3\n0\n4\n\nNote\nFirst test case considered in the statement.\n\nIn the second test case integers $ a $ and $ b $ are already equal, so you don't need to perform any operations.\n\nIn the third test case you have to apply the first, the second, the third and the fourth operation to $ b $ ( $ b $ turns into $ 20 + 1 + 2 + 3 + 4 = 30 $ )."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nt\n,\na\n,\nb\n;\nbool\nok\n(\nint\nres\n,\nint\nd\n){\nlong\nlong\nsum\n=\nres\n*\n1LL\n*\n(\nres\n+\n1\n)\n/\n2\n;\nif\n(\nsum\n<\nd\n)\nreturn\nfalse\n;\nreturn\nsum\n%\n2\n==\nd\n%\n2\n;\n}\nint\nmain\n()\n{\ncin\n>>\nt\n;\nfor\n(\nint\ntc\n=\n0\n;\ntc\n<\nt\n;\n++\ntc\n){\ncin\n>>\na\n>>\nb\n;\nint\nd\n=\nabs\n(\na\n-\nb\n);\nif\n(\nd\n==\n0\n){\ncout\n<<\n\"0\\n\"\n;\ncontinue\n;\n}\nint\nres\n=\n1\n;\nwhile\n(!\nok\n(\nres\n,\nd\n))\n++\nres\n;\ncout\n<<\nres\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

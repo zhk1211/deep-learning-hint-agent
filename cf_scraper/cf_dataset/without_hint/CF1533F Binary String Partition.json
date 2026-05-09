@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "fun main\n()\n{\nval s\n=\nreadLine\n()!!.\nmap\n{\n(\nit\n-\n'0'\n).\ntoInt\n()\n}.\ntoIntArray\n()\nval pos\n=\nArray\n(\n2\n)\n{\nc\n->\ns\n.\nindices\n.\nfilter\n{\ns\n[\nit\n]\n==\nc\n}.\ntoIntArray\n()\n}\nval sum\n=\nArray\n(\n2\n)\n{\nc\n->\ns\n.\nrunningFold\n(\n0\n)\n{\ncur\n,\nx\n->\ncur\n+\nif\n(\nx\n==\nc\n)\n1\nelse\n0\n}.\ntoIntArray\n()\n}\nprintln\n((\n1.\n.\ns\n.\nsize\n).\nmap\n{\nk\n->\ngenerateSequence\n(\n0\n)\n{\ni\n->\nIntArray\n(\n2\n)\n{\nc\n->\npos\n[\nc\n].\ngetOrElse\n(\nsum\n[\nc\n][\ni\n]\n+\nk\n)\n{\ns\n.\nsize\n}\n}.\nmaxOrNull\n()!!\n}.\nindexOf\n(\ns\n.\nsize\n)\n}.\njoinToString\n(\n\" \"\n))\n}"
+        }
+    ]
+}

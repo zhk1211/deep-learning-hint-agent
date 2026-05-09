@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ of length $ n $ . Let $ cnt_x $ be the number of elements from the array which are equal to $ x $ . Let's also define $ f(x, y) $ as $ (cnt_x + cnt_y) \\cdot (x + y) $ .\n\nAlso you are given $ m $ bad pairs $ (x_i, y_i) $ . Note that if $ (x, y) $ is a bad pair, then $ (y, x) $ is also bad.\n\nYour task is to find the maximum value of $ f(u, v) $ over all pairs $ (u, v) $ , such that $ u \\neq v $ , that this pair is not bad, and also that $ u $ and $ v $ each occur in the array $ a $ . It is guaranteed that such a pair exists.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10\\,000 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ m $ ( $ 2 \\le n \\le 3 \\cdot 10^5 $ , $ 0 \\le m \\le 3 \\cdot 10^5 $ ) — the length of the array and the number of bad pairs.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — elements of the array.\n\nThe $ i $ -th of the next $ m $ lines contains two integers $ x_i $ and $ y_i $ ( $ 1 \\le x_i < y_i \\le 10^9 $ ), which represent a bad pair. It is guaranteed that no bad pair occurs twice in the input. It is also guaranteed that $ cnt_{x_i} > 0 $ and $ cnt_{y_i} > 0 $ .\n\nIt is guaranteed that for each test case there is a pair of integers $ (u, v) $ , $ u \\ne v $ , that is not bad, and such that both of these numbers occur in $ a $ .\n\nIt is guaranteed that the total sum of $ n $ and the total sum of $ m $ don't exceed $ 3 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case print a single integer — the answer to the problem.\n\nExamples\nSample 1\nInput\n3\n6 1\n6 3 6 7 3 3\n3 6\n2 0\n3 4\n7 4\n1 2 2 3 1 5 1\n1 5\n3 5\n1 3\n2 5\nOutput\n40\n14\n15\n\nNote\nIn the first test case $ 3 $ , $ 6 $ , $ 7 $ occur in the array.\n\n- $ f(3, 6) = (cnt_3 + cnt_6) \\cdot (3 + 6) = (3 + 2) \\cdot (3 + 6) = 45 $ . But $ (3, 6) $ is bad so we ignore it.\n- $ f(3, 7) = (cnt_3 + cnt_7) \\cdot (3 + 7) = (3 + 1) \\cdot (3 + 7) = 40 $ .\n- $ f(6, 7) = (cnt_6 + cnt_7) \\cdot (6 + 7) = (2 + 1) \\cdot (6 + 7) = 39 $ .\n\nThe answer to the problem is $ \\max(40, 39) = 40 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Fix $$$x$$$ and iterate over all $$$cnt_y \\le cnt_x$$$. It works in $$$O(n)$$$ summary."
+        },
+        {
+            "title": "Hint 2",
+            "content": "When you fix $$$x$$$ and $$$cnt_y$$$, interate over all $$$y$$$ in the non increasing order while $$$x = y$$$ or the pair $$$(x, y)$$$ is bad."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nvector\n<int>\na\n(\nn\n);\nmap\n<\nint\n,\nint\n>\ncnt\n;\nfor\n(\nauto\n&\nx\n:\na\n)\n{\ncin\n>>\nx\n;\ncnt\n[\nx\n]++;\n}\nvector\n<\npair\n<\nint\n,\nint\n>>\nbad_pairs\n;\nbad_pairs\n.\nreserve\n(\n2\n*\nm\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nm\n;\ni\n++)\n{\nint\nx\n,\ny\n;\ncin\n>>\nx\n>>\ny\n;\nbad_pairs\n.\nemplace_back\n(\nx\n,\ny\n);\nbad_pairs\n.\nemplace_back\n(\ny\n,\nx\n);\n}\nsort\n(\nbad_pairs\n.\nbegin\n(),\nbad_pairs\n.\nend\n());\nvector\n<\nvector\n<int>\n>\nocc\n(\nn\n);\nfor\n(\nauto\n&[\nx\n,\nc\n]\n:\ncnt\n)\nocc\n[\nc\n].\npush_back\n(\nx\n);\nfor\n(\nauto\n&\nv\n:\nocc\n)\nreverse\n(\nv\n.\nbegin\n(),\nv\n.\nend\n());\nlong\nlong\nanswer\n=\n0\n;\nfor\n(\nint\ncnt_x\n=\n1\n;\ncnt_x\n<\nn\n;\ncnt_x\n++)\nfor\n(\nint\nx\n:\nocc\n[\ncnt_x\n])\nfor\n(\nint\ncnt_y\n=\n1\n;\ncnt_y\n<=\ncnt_x\n;\ncnt_y\n++)\nfor\n(\nauto\ny\n:\nocc\n[\ncnt_y\n])\nif\n(\nx\n!=\ny\n&&\n!\nbinary_search\n(\nbad_pairs\n.\nbegin\n(),\nbad_pairs\n.\nend\n(),\npair\n<\nint\n,\nint\n>{\nx\n,\ny\n}))\n{\nanswer\n=\nmax\n(\nanswer\n,\n1ll\n*\n(\ncnt_x\n+\ncnt_y\n)\n*\n(\nx\n+\ny\n));\nbreak\n;\n}\ncout\n<<\nanswer\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n),\ncin\n.\ntie\n(\nnullptr\n);\nint\ntests\n;\ncin\n>>\ntests\n;\nwhile\n(\ntests\n--)\nsolve\n();\n}"
+        }
+    ]
+}

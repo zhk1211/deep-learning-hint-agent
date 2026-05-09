@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe elections in which three candidates participated have recently ended. The first candidate received $ a $ votes, the second one received $ b $ votes, the third one received $ c $ votes. For each candidate, solve the following problem: how many votes should be added to this candidate so that he wins the election (i.e. the number of votes for this candidate was strictly greater than the number of votes for any other candidate)?\n\nPlease note that for each candidate it is necessary to solve this problem independently, i.e. the added votes for any candidate do not affect the calculations when getting the answer for the other two candidates.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case consists of one line containing three integers $ a $ , $ b $ , and $ c $ ( $ 0 \\le a,b,c \\le 10^9 $ ).\n\nOutput Format\nFor each test case, output in a separate line three integers $ A $ , $ B $ , and $ C $ ( $ A, B, C \\ge 0 $ ) separated by spaces — the answers to the problem for the first, second, and third candidate, respectively.\n\nExamples\nSample 1\nInput\n5\n0 0 0\n10 75 15\n13 13 17\n1000 0 0\n0 1000000000 0\nOutput\n1 1 1\n66 0 61\n5 5 0\n0 1001 1001\n1000000001 0 1000000001"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nsolveSingle\n(\nint\nbest\n,\nint\nother1\n,\nint\nother2\n)\n{\nreturn\nmax\n(\n0\n,\nmax\n(\nother1\n,\nother2\n)\n+\n1\n-\nbest\n);\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\na\n,\nb\n,\nc\n;\ncin\n>>\na\n>>\nb\n>>\nc\n;\ncout\n<<\nsolveSingle\n(\na\n,\nb\n,\nc\n)\n<<\n' '\n<<\nsolveSingle\n(\nb\n,\na\n,\nc\n)\n<<\n' '\n<<\nsolveSingle\n(\nc\n,\na\n,\nb\n)\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

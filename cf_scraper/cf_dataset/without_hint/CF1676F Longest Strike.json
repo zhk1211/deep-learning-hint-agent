@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven an array $ a $ of length $ n $ and an integer $ k $ , you are tasked to find any two numbers $ l $ and $ r $ ( $ l \\leq r $ ) such that:\n\n- For each $ x $ $ (l \\leq x \\leq r) $ , $ x $ appears in $ a $ at least $ k $ times (i.e. $ k $ or more array elements are equal to $ x $ ).\n- The value $ r-l $ is maximized.\n\nIf no numbers satisfy the conditions, output -1.\n\nFor example, if $ a=[11, 11, 12, 13, 13, 14, 14] $ and $ k=2 $ , then:\n\n- for $ l=12 $ , $ r=14 $ the first condition fails because $ 12 $ does not appear at least $ k=2 $ times.\n- for $ l=13 $ , $ r=14 $ the first condition holds, because $ 13 $ occurs at least $ k=2 $ times in $ a $ and $ 14 $ occurs at least $ k=2 $ times in $ a $ .\n- for $ l=11 $ , $ r=11 $ the first condition holds, because $ 11 $ occurs at least $ k=2 $ times in $ a $ .\n\nA pair of $ l $ and $ r $ for which the first condition holds and $ r-l $ is maximal is $ l = 13 $ , $ r = 14 $ .\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains the integers $ n $ and $ k $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ , $ 1 \\leq k \\leq n $ ) — the length of the array $ a $ and the minimum amount of times each number in the range $ [l, r] $ should appear respectively.\n\nThen a single line follows, containing $ n $ integers describing the array $ a $ ( $ 1 \\leq a_i \\leq 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case output $ 2 $ numbers, $ l $ and $ r $ that satisfy the conditions, or \"-1\" if no numbers satisfy the conditions.\n\nIf multiple answers exist, you can output any.\n\nExamples\nSample 1\nInput\n4\n7 2\n11 11 12 13 13 14 14\n5 1\n6 3 5 2 1\n6 4\n4 3 4 3 3 4\n14 2\n1 1 2 2 2 3 3 3 3 4 4 4 4 4\nOutput\n13 14\n1 3\n-1\n1 4"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nint\na\n[\nn\n];\nmap\n<\nint\n,\nint\n>\nmp\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\nmp\n[\na\n[\ni\n]]++;\n}\nvector\n<int>\nc\n;\nfor\n(\nauto\nx\n:\nmp\n)\n{\nif\n(\nx\n.\nsecond\n>=\nk\n)\n{\nc\n.\npush_back\n(\nx\n.\nfirst\n);\n}\n}\nif\n(\nc\n.\nsize\n()\n==\n0\n)\n{\ncout\n<<\n-\n1\n<<\nendl\n;\nreturn\n;\n}\nsort\n(\nc\n.\nbegin\n(),\nc\n.\nend\n());\nint\nmx\n=\n0\n;\nint\nlans\n=\nc\n[\n0\n],\nrans\n=\nc\n[\n0\n];\nint\nl\n=\nc\n[\n0\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nc\n.\nsize\n();\ni\n++)\n{\nif\n(\nc\n[\ni\n]-\n1\n==\nc\n[\ni\n-\n1\n])\n{\nif\n(\nc\n[\ni\n]-\nl\n>\nmx\n)\n{\nlans\n=\nl\n;\nrans\n=\nc\n[\ni\n];\nmx\n=\nc\n[\ni\n]-\nl\n;\n}\n}\nelse\n{\nl\n=\nc\n[\ni\n];\n}\n}\ncout\n<<\nlans\n<<\n\" \"\n<<\nrans\n<<\nendl\n;\n}\nint\nmain\n(\nint\nargc\n,\nchar\n*\nargv\n[])\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

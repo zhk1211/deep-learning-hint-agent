@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a_1, a_2, \\ldots, a_n $ consisting of $ n $ positive integers and a positive integer $ m $ .\n\nYou should divide elements of this array into some arrays. You can order the elements in the new arrays as you want.\n\nLet's call an array $ m $ -divisible if for each two adjacent numbers in the array (two numbers on the positions $ i $ and $ i+1 $ are called adjacent for each $ i $ ) their sum is divisible by $ m $ . An array of one element is $ m $ -divisible.\n\nFind the smallest number of $ m $ -divisible arrays that $ a_1, a_2, \\ldots, a_n $ is possible to divide into.\n\nInput Format\nThe first line contains a single integer $ t $ $ (1 \\le t \\le 1000) $ — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ , $ m $ $ (1 \\le n \\le 10^5, 1 \\le m \\le 10^5) $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ $ (1 \\le a_i \\le 10^9) $ .\n\nIt is guaranteed that the sum of $ n $ and the sum of $ m $ over all test cases do not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case print the answer to the problem.\n\nExamples\nSample 1\nInput\n4\n6 4\n2 2 8 6 9 4\n10 8\n1 1 1 5 2 4 4 8 6 7\n1 1\n666\n2 2\n2 4\nOutput\n3\n6\n1\n1\n\nNote\nIn the first test case we can divide the elements as follows:\n\n- $ [4, 8] $ . It is a $ 4 $ -divisible array because $ 4+8 $ is divisible by $ 4 $ .\n- $ [2, 6, 2] $ . It is a $ 4 $ -divisible array because $ 2+6 $ and $ 6+2 $ are divisible by $ 4 $ .\n- $ [9] $ . It is a $ 4 $ -divisible array because it consists of one element."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "//два манула\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nmap\n<\nint\n,\nint\n>\ncnt\n;\nwhile\n(\nn\n--)\n{\nint\nx\n;\ncin\n>>\nx\n;\ncnt\n[\nx\n%\nm\n]++;\n}\nint\nans\n=\n0\n;\nfor\n(\nauto\n&\nc\n:\ncnt\n)\n{\nif\n(\nc\n.\nfirst\n==\n0\n)\nans\n++;\nelse\nif\n(\n2\n*\nc\n.\nfirst\n==\nm\n)\n{\nans\n++;\n}\nelse\nif\n(\n2\n*\nc\n.\nfirst\n<\nm\n||\ncnt\n.\nfind\n(\nm\n-\nc\n.\nfirst\n)\n==\ncnt\n.\nend\n())\n{\nint\nx\n=\nc\n.\nsecond\n,\ny\n=\ncnt\n[\nm\n-\nc\n.\nfirst\n];\nans\n+=\n1\n+\nmax\n(\n0\n,\nabs\n(\nx\n-\ny\n)\n-\n1\n);\n}\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

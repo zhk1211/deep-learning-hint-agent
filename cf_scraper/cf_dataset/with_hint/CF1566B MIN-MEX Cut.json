@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA binary string is a string that consists of characters $ 0 $ and $ 1 $ .\n\nLet $ \\operatorname{MEX} $ of a binary string be the smallest digit among $ 0 $ , $ 1 $ , or $ 2 $ that does not occur in the string. For example, $ \\operatorname{MEX} $ of $ 001011 $ is $ 2 $ , because $ 0 $ and $ 1 $ occur in the string at least once, $ \\operatorname{MEX} $ of $ 1111 $ is $ 0 $ , because $ 0 $ and $ 2 $ do not occur in the string and $ 0 < 2 $ .\n\nA binary string $ s $ is given. You should cut it into any number of substrings such that each character is in exactly one substring. It is possible to cut the string into a single substring — the whole string.\n\nA string $ a $ is a substring of a string $ b $ if $ a $ can be obtained from $ b $ by deletion of several (possibly, zero or all) characters from the beginning and several (possibly, zero or all) characters from the end.\n\nWhat is the minimal sum of $ \\operatorname{MEX} $ of all substrings pieces can be?\n\nInput Format\nThe input consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Description of the test cases follows.\n\nEach test case contains a single binary string $ s $ ( $ 1 \\le |s| \\le 10^5 $ ).\n\nIt's guaranteed that the sum of lengths of $ s $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case print a single integer — the minimal sum of $ \\operatorname{MEX} $ of all substrings that it is possible to get by cutting $ s $ optimally.\n\nExamples\nSample 1\nInput\n6\n01\n1111\n01100\n101\n0000\n01010\nOutput\n1\n0\n2\n1\n1\n2\n\nNote\nIn the first test case the minimal sum is $ \\operatorname{MEX}(0) + \\operatorname{MEX}(1) = 1 + 0 = 1 $ .\n\nIn the second test case the minimal sum is $ \\operatorname{MEX}(1111) = 0 $ .\n\nIn the third test case the minimal sum is $ \\operatorname{MEX}(01100) = 2 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "The answer is never greater than $$$2$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "If a string consists only of $$$1$$$, then the answer is $$$0$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "If all zeroes are consequent, then the answer is $$$1$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "The answer is never greater than $$$2$$$, because $$$\\text{MEX}$$$ of the whole string is not greater than $$$2$$$.\nThe answer is $$$0$$$ only if there are no zeroes in the string.\nNow we need to understand, when the answer is $$$1$$$ or when it is $$$2$$$. The sum of $$$\\text{MEX}$$$ is $$$1$$$ only if all zeroes create a single segment without ones. Then we can cut this segment out, its $$$\\text{MEX}$$$ is $$$1$$$, everything else is ones, their total $$$\\text{MEX}$$$ is $$$0$$$.\nIf the zeroes do not create a single segment without ones, the there are two such zeroes that there is a $$$1$$$ between them. Then either these zeroes are in a single segment with the $$$1$$$, so total $$$\\text{MEX}$$$ is not less than $$$2$$$ or these zeroes are in different segments and the answer is still not less then $$$2$$$."
+        },
+        {
+            "title": "Implementation (C++, shishin)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n-->\n0\n)\n{\nstring\ns\n;\ncin\n>>\ns\n;\nint\nzeroes\n=\ncount\n(\ns\n.\nbegin\n(),\ns\n.\nend\n(),\n'0'\n);\nif\n(\nzeroes\n==\n0\n)\n{\ncout\n<<\n0\n<<\n'\\n'\n;\ncontinue\n;\n}\nint\nfirst\n=\ns\n.\nfind\n(\n'0'\n);\nint\nlast\n=\ns\n.\nrfind\n(\n'0'\n);\nif\n(\nlast\n-\nfirst\n+\n1\n==\nzeroes\n)\n{\ncout\n<<\n1\n<<\n'\\n'\n;\n}\nelse\n{\ncout\n<<\n2\n<<\n'\\n'\n;\n}\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Implementation (Python, shishin)",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\ntest\nin\nrange\n(\nt\n):\ns\n=\ninput\n()\nzeroes\n=\ns\n.\ncount\n(\n'0'\n)\nif\nzeroes\n==\n0\n:\nprint\n(\n0\n)\ncontinue\nfirst\n=\ns\n.\nfind\n(\n'0'\n)\nlast\n=\ns\n.\nrfind\n(\n'0'\n)\nif\nlast\n-\nfirst\n+\n1\n==\nzeroes\n:\nprint\n(\n1\n)\nelse\n:\nprint\n(\n2\n)"
+        }
+    ]
+}

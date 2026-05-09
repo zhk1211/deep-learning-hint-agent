@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYour task is to calculate the number of arrays such that:\n\n- each array contains $ n $ elements;\n- each element is an integer from $ 1 $ to $ m $ ;\n- for each array, there is exactly one pair of equal elements;\n- for each array $ a $ , there exists an index $ i $ such that the array is strictly ascending before the $ i $ -th element and strictly descending after it (formally, it means that $ a_j < a_{j + 1} $ , if $ j < i $ , and $ a_j > a_{j + 1} $ , if $ j \\ge i $ ).\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ ( $ 2 \\le n \\le m \\le 2 \\cdot 10^5 $ ).\n\nOutput Format\nPrint one integer — the number of arrays that meet all of the aforementioned conditions, taken modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n3 4\nOutput\n6\n\nSample 2\nInput\n3 5\nOutput\n10\n\nSample 3\nInput\n42 1337\nOutput\n806066790\n\nSample 4\nInput\n100000 200000\nOutput\n707899035\n\nNote\nThe arrays in the first example are:\n\n- $ [1, 2, 1] $ ;\n- $ [1, 3, 1] $ ;\n- $ [1, 4, 1] $ ;\n- $ [2, 3, 2] $ ;\n- $ [2, 4, 2] $ ;\n- $ [3, 4, 3] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n200043\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nadd\n(\nint\nx\n,\nint\ny\n)\n{\nx\n+=\ny\n;\nwhile\n(\nx\n>=\nMOD\n)\nx\n-=\nMOD\n;\nwhile\n(\nx\n<\n0\n)\nx\n+=\nMOD\n;\nreturn\nx\n;\n}\nint\nmul\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\n(\nx\n*\n1ll\n*\ny\n)\n%\nMOD\n;\n}\nint\nbinpow\n(\nint\nx\n,\nint\ny\n)\n{\nint\nz\n=\n1\n;\nwhile\n(\ny\n)\n{\nif\n(\ny\n&\n1\n)\nz\n=\nmul\n(\nz\n,\nx\n);\nx\n=\nmul\n(\nx\n,\nx\n);\ny\n>>=\n1\n;\n}\nreturn\nz\n;\n}\nint\ninv\n(\nint\nx\n)\n{\nreturn\nbinpow\n(\nx\n,\nMOD\n-\n2\n);\n}\nint\ndivide\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\nmul\n(\nx\n,\ninv\n(\ny\n));\n}\nint\nfact\n[\nN\n];\nvoid\nprecalc\n()\n{\nfact\n[\n0\n]\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nN\n;\ni\n++)\nfact\n[\ni\n]\n=\nmul\n(\nfact\n[\ni\n-\n1\n],\ni\n);\n}\nint\nC\n(\nint\nn\n,\nint\nk\n)\n{\nreturn\ndivide\n(\nfact\n[\nn\n],\nmul\n(\nfact\n[\nk\n],\nfact\n[\nn\n-\nk\n]));\n}\nint\nmain\n()\n{\nprecalc\n();\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nint\nans\n=\n0\n;\nif\n(\nn\n>\n2\n)\nans\n=\nmul\n(\nC\n(\nm\n,\nn\n-\n1\n),\nmul\n(\nn\n-\n2\n,\nbinpow\n(\n2\n,\nn\n-\n3\n)));\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

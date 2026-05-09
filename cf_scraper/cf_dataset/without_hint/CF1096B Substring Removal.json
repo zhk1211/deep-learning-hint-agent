@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ of length $ n $ consisting only of lowercase Latin letters.\n\nA substring of a string is a contiguous subsequence of that string. So, string \"forces\" is substring of string \"codeforces\", but string \"coder\" is not.\n\nYour task is to calculate the number of ways to remove exactly one substring from this string in such a way that all remaining characters are equal (the number of distinct characters either zero or one).\n\nIt is guaranteed that there is at least two different characters in $ s $ .\n\nNote that you can remove the whole string and it is correct. Also note that you should remove at least one character.\n\nSince the answer can be rather large (not very large though) print it modulo $ 998244353 $ .\n\nIf you are Python programmer, consider using PyPy instead of Python when you submit your code.\n\nInput Format\nThe first line of the input contains one integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the string $ s $ .\n\nThe second line of the input contains the string $ s $ of length $ n $ consisting only of lowercase Latin letters.\n\nIt is guaranteed that there is at least two different characters in $ s $ .\n\nOutput Format\nPrint one integer — the number of ways modulo $ 998244353 $ to remove exactly one substring from $ s $ in such way that all remaining characters are equal.\n\nExamples\nSample 1\nInput\n4\nabaa\nOutput\n6\n\nSample 2\nInput\n7\naacdeee\nOutput\n6\n\nSample 3\nInput\n2\naz\nOutput\n3\n\nNote\nLet $ s[l; r] $ be the substring of $ s $ from the position $ l $ to the position $ r $ inclusive.\n\nThen in the first example you can remove the following substrings:\n\n- $ s[1; 2] $ ;\n- $ s[1; 3] $ ;\n- $ s[1; 4] $ ;\n- $ s[2; 2] $ ;\n- $ s[2; 3] $ ;\n- $ s[2; 4] $ .\n\nIn the second example you can remove the following substrings:\n\n- $ s[1; 4] $ ;\n- $ s[1; 5] $ ;\n- $ s[1; 6] $ ;\n- $ s[1; 7] $ ;\n- $ s[2; 7] $ ;\n- $ s[3; 7] $ .\n\nIn the third example you can remove the following substrings:\n\n- $ s[1; 1] $ ;\n- $ s[1; 2] $ ;\n- $ s[2; 2] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Vovuh)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n;\nstring\ns\n;\ncin\n>>\nn\n>>\ns\n;\nint\ncntl\n=\n0\n,\ncntr\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\ns\n[\ni\n]\n==\ns\n[\n0\n])\n{\n++\ncntl\n;\n}\nelse\n{\nbreak\n;\n}\n}\nfor\n(\nint\ni\n=\nn\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n)\n{\nif\n(\ns\n[\ni\n]\n==\ns\n[\nn\n-\n1\n])\n{\n++\ncntr\n;\n}\nelse\n{\nbreak\n;\n}\n}\nif\n(\ns\n[\n0\n]\n==\ns\n[\nn\n-\n1\n])\n{\ncout\n<<\n((\ncntl\n+\n1\n)\n*\n1ll\n*\n(\ncntr\n+\n1\n))\n%\n998244353\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\n(\ncntl\n+\ncntr\n+\n1\n)\n%\n998244353\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

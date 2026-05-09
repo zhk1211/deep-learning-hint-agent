@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe red pandas are in town to meet their relatives, the blue pandas! The town is modeled by a number line.\n\nThe pandas have already planned their meetup, but the schedule keeps changing. You are given $ q $ updates of the form x t c.\n\n- If $ c < 0 $ , it means $ |c| $ more red pandas enter the number line at position $ x $ and time $ t $ . Then, each unit of time, they can each independently move one unit in either direction across the number line, or not move at all.\n- If $ c > 0 $ , it means that $ c $ more blue pandas check position $ x $ for red pandas at time $ t $ . If a blue panda does not meet a red panda at that specific location and time, they dejectedly leave the number line right away. If there is a red panda at a position at the same time a blue panda checks it, they form a friendship and leave the number line. Each red panda can form a friendship with at most one blue panda and vice versa.\n\nThe updates will be given in order of non-decreasing $ x $ values. After each update, please print the maximum number of friendships if the red pandas move in an optimal order based on all the updates given in the input above (and including) this update.\n\nThe order in which a red panda moves can change between updates.\n\nInput Format\nThe first line contains $ q $ ( $ 1 \\leq q \\leq 2 \\cdot 10^5 $ ) – the number of updates.\n\nThe $ i $ -th line of the next $ q $ lines consists of $ 3 $ integers $ x_i $ , $ t_i $ and $ c_i $ ( $ 0 \\leq x_i \\leq 10^9 $ , $ 0 \\leq t_i \\leq 10^9 $ , $ 0 < |c_i| \\leq 1000 $ ) – the description of the $ i $ -th update.\n\nIt is guaranteed that the $ x_i $ will be given in non-decreasing order.\n\nOutput Format\nAfter each update, print the maximum number of friendships that can be formed.\n\nExamples\nSample 1\nInput\n5\n0 6 3\n4 2 -5\n7 4 -6\n10 5 100\n10 8 7\nOutput\n0\n3\n3\n3\n10\n\nSample 2\nInput\n5\n0 6 3\n4 2 -5\n7 4 -6\n10 5 100\n11 8 7\nOutput\n0\n3\n3\n3\n9\n\nSample 3\nInput\n7\n0 8 6\n2 7 -2\n3 1 -6\n5 3 -8\n7 3 -3\n8 0 -2\n8 2 1\nOutput\n0\n0\n6\n6\n6\n6\n7\n\nSample 4\nInput\n4\n0 0 -3\n0 0 2\n0 0 4\n0 0 -10\nOutput\n0\n2\n3\n6\n\nNote\nIn the first example, the number of friendships after each update can be optimized as follows:\n\n1. $ 3 $ blue pandas now check for red pandas at position $ 0 $ at time $ 6 $ . There are no red pandas anywhere, so there are no friendships.\n2. $ 5 $ red pandas now appear at position $ 4 $ and time $ 2 $ . $ 4 $ of the red pandas can travel to position $ 0 $ at time $ 6 $ , where $ 3 $ of them can make friendships with the $ 3 $ existing blue pandas.\n3. $ 6 $ red pandas now appear at position $ 7 $ and time $ 4 $ . No new blue pandas are added, so the maximum number of friendships is still $ 3 $ .\n4. $ 100 $ blue pandas now appear at position $ 10 $ and time $ 5 $ . No red pandas can reach them at a time of $ 5 $ , so no new friendships are created.\n5. $ 7 $ blue pandas now appear at position $ 10 $ and time $ 8 $ . $ 6 $ of the red pandas at position $ 7 $ and time $ 4 $ , along with $ 1 $ red panda at position $ 4 $ and time $ 2 $ , can reach $ 7 $ of the blue pandas at position $ 10 $ at time $ 8 $ , adding $ 7 $ new friendships. This brings the total to $ 10 $ friendships."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "If we want to answer one of the questions (say, the question involving all the events) in polynomial time, how do we do it?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Construct a network with edges from the source to each of the red panda events with capacities equal to the number of red pandas, edges from red panda events to blue panda events with innite capacities if the red pandas can catch the corresponding blue pandas, and edges from each of the blue panda events to the sink with capacities equal to the number of blue pandas."
+        },
+        {
+            "title": "Hint 3",
+            "content": "The next step is to use the max-flow min-cut theorem: the maximum flow is equal to the minimum number of red pandas plus blue pandas we need to remove from the graph such that no remaining red panda can reach any remaining blue panda.\nHow do we go from here?"
+        },
+        {
+            "title": "Hint 4",
+            "content": "For any cut, consider the region of the $$$x$$$-$$$t$$$ plane reachable by the remaining red pandas. No remaining blue pandas can lie in this region, and its border is a polyline that intersects each vertical line in the $$$x$$$-$$$t$$$ plane exactly once. Furthermore, the slope of every segment in this polyline has slope plus or minus $$$1$$$. Conversely, we can associate every polyline satisfying this condition with a cut; we just need to remove every red panda lying below the polyline and every blue panda lying on or above the polyline.\nNow, figure out how to answer the queries online."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Read the hints to understand the solution better.\nWe can answer the queries online. For each $$$x$$$-coordinate $$$x$$$, maintain a treap that stores for every $$$x$$$-coordinate, the minimum cut $$$dp[x][t]$$$ associated with a polyline satisfying the condition above that starts at $$$x = -\\infty$$$ and ends at $$$(x, t)$$$ when only considering events with $$$x$$$-coordinate at most $$$x$$$. When transitioning from to $$$x$$$ to $$$x+1$$$, we need to set for every $$$dp[x+1][t] = min(dp[x][t-1], dp[x][t], dp[x][t+1])$$$ for every $$$t$$$. To do this quickly, we maintain the values of $$$t$$$ where $$$dp[x][t+1] - dp[x][t] \\neq 0$$$ in increasing order, of which there are at most $$$n$$$. When $$$x$$$ increases by one, each value of increases or decreases by one, depending on the sign of $$$dp[x][t+1]-dp[x][t]$$$, and some of the values of $$$t$$$ merge, decreasing the size of our treap. As long as we can process each merge in $$$\\log n$$$ time, our solution will run in $$$O(n\\log n)$$$ total time. When processing an event, we need to increase all $$$dp$$$ values in a suffix for red panda events, and all $$$dp$$$ values in a prefix for blue panda events. To answer a query, we just need to return the minimum prefix sum in our treap."
+        }
+    ]
+}

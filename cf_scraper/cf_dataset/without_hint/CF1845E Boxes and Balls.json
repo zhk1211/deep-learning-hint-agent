@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ boxes placed in a line. The boxes are numbered from $ 1 $ to $ n $ . Some boxes contain one ball inside of them, the rest are empty. At least one box contains a ball and at least one box is empty.\n\nIn one move, you have to choose a box with a ball inside and an adjacent empty box and move the ball from one box into another. Boxes $ i $ and $ i+1 $ for all $ i $ from $ 1 $ to $ n-1 $ are considered adjacent to each other. Boxes $ 1 $ and $ n $ are not adjacent.\n\nHow many different arrangements of balls exist after exactly $ k $ moves are performed? Two arrangements are considered different if there is at least one such box that it contains a ball in one of them and doesn't contain a ball in the other one.\n\nSince the answer might be pretty large, print its remainder modulo $ 10^9+7 $ .\n\nInput Format\nThe first line contains two integers $ n $ and $ k $ ( $ 2 \\le n \\le 1500 $ ; $ 1 \\le k \\le 1500 $ ) — the number of boxes and the number of moves.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ a_i \\in \\{0, 1\\} $ ) — $ 0 $ denotes an empty box and $ 1 $ denotes a box with a ball inside. There is at least one $ 0 $ and at least one $ 1 $ .\n\nOutput Format\nPrint a single integer — the number of different arrangements of balls that can exist after exactly $ k $ moves are performed, modulo $ 10^9+7 $ .\n\nExamples\nSample 1\nInput\n4 1\n1 0 1 0\nOutput\n3\n\nSample 2\nInput\n4 2\n1 0 1 0\nOutput\n2\n\nSample 3\nInput\n10 6\n1 0 0 1 0 0 0 1 1 1\nOutput\n69\n\nNote\nIn the first example, there are the following possible arrangements:\n\n- 0 1 1 0 — obtained after moving the ball from box $ 1 $ to box $ 2 $ ;\n- 1 0 0 1 — obtained after moving the ball from box $ 3 $ to box $ 4 $ ;\n- 1 1 0 0 — obtained after moving the ball from box $ 3 $ to box $ 2 $ .\n\nIn the second example, there are the following possible arrangements:\n\n- 1 0 1 0 — three ways to obtain that: just reverse the operation performed during the first move;\n- 0 1 0 1 — obtained from either of the first two arrangements after the first move."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\nint\n(\n1e9\n)\n+\n7\n;\nint\nadd\n(\nint\na\n,\nint\nb\n){\na\n+=\nb\n;\nif\n(\na\n>=\nMOD\n)\na\n-=\nMOD\n;\nreturn\na\n;\n}\nint\nmain\n()\n{\nint\nn\n,\nk\n;\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nk\n);\nvector\n<int>\na\n(\nn\n);\nforn\n(\ni\n,\nn\n)\nscanf\n(\n\"%d\"\n,\n&\na\n[\ni\n]);\nint\nlim\n=\n1\n;\nwhile\n(\nlim\n*\n(\nlim\n+\n1\n)\n<\nk\n*\n2\n)\n++\nlim\n;\nvector\n<\nvector\n<\nvector\n<int>\n>>\ndp\n(\n2\n,\nvector\n<\nvector\n<int>\n>(\n2\n*\nlim\n+\n1\n,\nvector\n<int>\n(\nk\n+\n1\n)));\ndp\n[\n0\n][\nlim\n][\n0\n]\n=\n1\n;\nforn\n(\nii\n,\nn\n){\nint\ni\n=\nii\n&\n1\n;\nint\nni\n=\ni\n^\n1\n;\ndp\n[\nni\n]\n=\nvector\n<\nvector\n<int>\n>(\n2\n*\nlim\n+\n1\n,\nvector\n<int>\n(\nk\n+\n1\n));\nforn\n(\nj\n,\n2\n*\nlim\n+\n1\n)\nforn\n(\nt\n,\nk\n+\n1\n)\nif\n(\ndp\n[\ni\n][\nj\n][\nt\n]){\nforn\n(\nz\n,\n2\n){\nint\nnj\n=\nj\n+\nz\n-\na\n[\nii\n];\nint\nnt\n=\nt\n+\nabs\n(\nnj\n-\nlim\n);\nif\n(\nnt\n<=\nk\n)\ndp\n[\nni\n][\nnj\n][\nnt\n]\n=\nadd\n(\ndp\n[\nni\n][\nnj\n][\nnt\n],\ndp\n[\ni\n][\nj\n][\nt\n]);\n}\n}\n}\nint\nans\n=\n0\n;\nfor\n(\nint\nt\n=\nk\n&\n1\n;\nt\n<=\nk\n;\nt\n+=\n2\n)\nans\n=\nadd\n(\nans\n,\ndp\n[\nn\n&\n1\n][\nlim\n][\nt\n]);\nprintf\n(\n\"%d\\n\"\n,\nans\n);\nreturn\n0\n;\n}"
+        }
+    ]
+}

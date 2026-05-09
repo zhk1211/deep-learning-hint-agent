@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the easy version of the problem. The only difference is maximum value of $ a_i $.\n\nOnce in Kostomuksha Divan found an array $ a $ consisting of positive integers. Now he wants to reorder the elements of $ a $ to maximize the value of the following function:\n$$\n\\sum_{i=1}^n \\operatorname{gcd}(a_1, \\, a_2, \\, \\dots, \\, a_i),\n$$\nwhere $\\operatorname{gcd}(x_1, x_2, \\ldots, x_k)$ denotes the [greatest common divisor](https://en.wikipedia.org/wiki/Greatest_common_divisor) of integers $ x_1, x_2, \\ldots, x_k $ , and $ \\operatorname{gcd}(x) = x $ for any integer $ x$.\n\nReordering elements of an array means changing the order of elements in the array arbitrary, or leaving the initial order.\n\nOf course, Divan can solve this problem. However, he found it interesting, so he decided to share it with you.\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\leq n \\leq 10^5 $ ) — the size of the array $ a $ .\n\nThe second line contains $ n $ integers $ a_{1}, \\, a_{2}, \\, \\dots, \\, a_{n} $ ( $ 1 \\le a_{i} \\le 5 \\cdot 10^6 $ ) — the array $ a $ .\n\nOutput Format\nOutput the maximum value of the function that you can get by reordering elements of the array $ a $ .\n\nExamples\nSample 1\nInput\n6\n2 3 1 2 6 2\nOutput\n14\n\nSample 2\nInput\n10\n5 7 10 3 1 10 100 3 42 54\nOutput\n131\n\nNote\nIn the first example, it's optimal to rearrange the elements of the given array in the following order: $ [6, \\, 2, \\, 2, \\, 2, \\, 3, \\, 1] $ :\n\n$$\n\\operatorname{gcd}(a_1) + \\operatorname{gcd}(a_1, \\, a_2) + \\operatorname{gcd}(a_1, \\, a_2, \\, a_3) + \\operatorname{gcd}(a_1, \\, a_2, \\, a_3, \\, a_4)\\\\ + \\operatorname{gcd}(a_1, \\, a_2, \\, a_3, \\, a_4, \\, a_5) + \\operatorname{gcd}(a_1, \\, a_2, \\, a_3, \\, a_4, \\, a_5, \\, a_6)\\\\= 6 + 2 + 2 + 2 + 1 + 1 = 14.\n$$\nIt can be shown that it is impossible to get a better answer.\n\nIn the second example, it's optimal to rearrange the elements of a given array in the following order: $[100, \\, 10, \\, 10, \\, 5, \\, 1, \\, 3, \\, 3, \\, 7, \\, 42, \\, 54]$."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's solve the dynamic programming problem. Let $$$dp_i$$$ be the maximum answer for all arrays, the last element of which is divisible by $$$i$$$. Let's calculate the dynamics from $$$C$$$ to $$$1$$$, where $$$C$$$ is the maximum value of $$$a_i$$$. Initially, $$$dp_i = cnt_i \\cdot i$$$, where $$$cnt_i$$$ is the amount of $$$a_i = i$$$. How do we recalculate our dynamic programming? $$$dp_i = max(dp_i, dp_j + i \\cdot (cnt_i - cnt_j))$$$, for all $$$j$$$ such that $$$j$$$ $$$mod$$$ $$$i = 0$$$ (i.e. $$$j$$$ is divisible by $$$i$$$). In this dynamic, we iterate over the past change of our $$$gcd$$$ on the prefix, and greedily add all possible elements.\nThe resulting asymptotics in time is $$$\\mathcal{O}(C\\log{}C)$$$."
+        }
+    ]
+}

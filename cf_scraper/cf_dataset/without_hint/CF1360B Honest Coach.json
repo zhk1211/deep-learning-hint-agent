@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ athletes in front of you. Athletes are numbered from $ 1 $ to $ n $ from left to right. You know the strength of each athlete — the athlete number $ i $ has the strength $ s_i $ .\n\nYou want to split all athletes into two teams. Each team must have at least one athlete, and each athlete must be exactly in one team.\n\nYou want the strongest athlete from the first team to differ as little as possible from the weakest athlete from the second team. Formally, you want to split the athletes into two teams $ A $ and $ B $ so that the value $ |\\max(A) - \\min(B)| $ is as small as possible, where $ \\max(A) $ is the maximum strength of an athlete from team $ A $ , and $ \\min(B) $ is the minimum strength of an athlete from team $ B $ .\n\nFor example, if $ n=5 $ and the strength of the athletes is $ s=[3, 1, 2, 6, 4] $ , then one of the possible split into teams is:\n\n- first team: $ A = [1, 2, 4] $ ,\n- second team: $ B = [3, 6] $ .\n\nIn this case, the value $ |\\max(A) - \\min(B)| $ will be equal to $ |4-3|=1 $ . This example illustrates one of the ways of optimal split into two teams.\n\nPrint the minimum value $ |\\max(A) - \\min(B)| $ .\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases in the input. Then $ t $ test cases follow.\n\nEach test case consists of two lines.\n\nThe first line contains positive integer $ n $ ( $ 2 \\le n \\le 50 $ ) — number of athletes.\n\nThe second line contains $ n $ positive integers $ s_1, s_2, \\ldots, s_n $ ( $ 1 \\le s_i \\le 1000 $ ), where $ s_i $ — is the strength of the $ i $ -th athlete. Please note that $ s $ values may not be distinct.\n\nOutput Format\nFor each test case print one integer — the minimum value of $ |\\max(A) - \\min(B)| $ with the optimal split of all athletes into two teams. Each of the athletes must be a member of exactly one of the two teams.\n\nExamples\nSample 1\nInput\n5\n5\n3 1 2 6 4\n6\n2 1 3 2 4 3\n4\n7 9 3 1\n2\n1 1000\n3\n100 150 200\nOutput\n1\n0\n2\n999\n50\n\nNote\nThe first test case was explained in the statement. In the second test case, one of the optimal splits is $ A=[2, 1] $ , $ B=[3, 2, 4, 3] $ , so the answer is $ |2-2|=0 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\ntest\n;\ncin\n>>\ntest\n;\nfor\n(\nint\ntt\n=\n0\n;\ntt\n<\ntest\n;\ntt\n++)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\n&\nx\n:\na\n)\n{\ncin\n>>\nx\n;\n}\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nint\nresult\n=\na\n[\nn\n-\n1\n]\n-\na\n[\n0\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\ni\n+\n1\n;\nj\n<\nn\n;\nj\n++)\n{\nresult\n=\nmin\n(\nresult\n,\na\n[\nj\n]\n-\na\n[\ni\n]);\n}\n}\ncout\n<<\nresult\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

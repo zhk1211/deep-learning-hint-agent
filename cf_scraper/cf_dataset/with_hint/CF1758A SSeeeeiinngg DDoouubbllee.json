@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA palindrome is a string that reads the same backward as forward. For example, the strings $ \\texttt{z} $ , $ \\texttt{aaa} $ , $ \\texttt{aba} $ , and $ \\texttt{abccba} $ are palindromes, but $ \\texttt{codeforces} $ and $ \\texttt{ab} $ are not.\n\nThe double of a string $ s $ is obtained by writing each character twice. For example, the double of $ \\texttt{seeing} $ is $ \\texttt{sseeeeiinngg} $ .\n\nGiven a string $ s $ , rearrange its double to form a palindrome. Output the rearranged string. It can be proven that such a rearrangement always exists.\n\nInput Format\nThe first line of input contains $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases.\n\nThe only line of each test case contains a single string $ s $ ( $ 1 \\leq |s| \\leq 100 $ ) consisting only of lowercase English letters.\n\nNote that the sum of $ |s| $ over all test cases is not bounded.\n\nOutput Format\nFor each test case, output a palindromic string of length $ 2 \\cdot |s| $ that is a rearrangement of the double of $ s $ .\n\nExamples\nSample 1\nInput\n4\na\nsururu\nerrorgorn\nanutforajaroftuna\nOutput\naa\nsuurruurruus\nrgnororerrerorongr\naannuuttffoorraajjaarrooffttuunnaa\n\nNote\nIn the first test case, the double of $ \\texttt{a} $ is $ \\texttt{aa} $ , which is already a palindrome.\n\nIn the second test case, the double of $ \\texttt{sururu} $ is $ \\texttt{ssuurruurruu} $ . If we move the first $ \\texttt{s} $ to the end, we get $ \\texttt{suurruurruus} $ , which is a palindrome.\n\nIn the third test case, the double of $ \\texttt{errorgorn} $ is $ \\texttt{eerrrroorrggoorrnn} $ . We can rearrange the characters to form $ \\texttt{rgnororerrerorongr} $ , which is a palindrome."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "In a palindrome, the first and last characters are equal, the second and second last characters are equal, ..."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation (C++)",
+            "content": "182556248"
+        },
+        {
+            "title": "Implementation (Java)",
+            "content": "182551321"
+        },
+        {
+            "title": "Implementation (Python)",
+            "content": "182551219"
+        }
+    ]
+}

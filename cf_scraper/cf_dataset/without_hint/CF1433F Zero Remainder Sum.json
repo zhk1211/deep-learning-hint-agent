@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a matrix $ a $ of size $ n \\times m $ consisting of integers.\n\nYou can choose no more than $ \\left\\lfloor\\frac{m}{2}\\right\\rfloor $ elements in each row. Your task is to choose these elements in such a way that their sum is divisible by $ k $ and this sum is the maximum.\n\nIn other words, you can choose no more than a half (rounded down) of elements in each row, you have to find the maximum sum of these elements divisible by $ k $ .\n\nNote that you can choose zero elements (and the sum of such set is $ 0 $ ).\n\nInput Format\nThe first line of the input contains three integers $ n $ , $ m $ and $ k $ ( $ 1 \\le n, m, k \\le 70 $ ) — the number of rows in the matrix, the number of columns in the matrix and the value of $ k $ . The next $ n $ lines contain $ m $ elements each, where the $ j $ -th element of the $ i $ -th row is $ a_{i, j} $ ( $ 1 \\le a_{i, j} \\le 70 $ ).\n\nOutput Format\nPrint one integer — the maximum sum divisible by $ k $ you can obtain.\n\nExamples\nSample 1\nInput\n3 4 3\n1 2 3 4\n5 2 2 2\n7 1 1 4\nOutput\n24\n\nSample 2\nInput\n5 5 4\n1 2 4 2 1\n3 5 1 2 4\n1 5 7 1 2\n3 8 7 1 2\n8 4 7 1 6\nOutput\n56\n\nNote\nIn the first example, the optimal answer is $ 2 $ and $ 4 $ in the first row, $ 5 $ and $ 2 $ in the second row and $ 7 $ and $ 4 $ in the third row. The total sum is $ 2 + 4 + 5 + 2 + 7 + 4 = 24 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\n++\ni\n)\nconst\nint\nN\n=\n75\n;\nconst\nint\nINF\n=\n1e9\n;\nint\na\n[\nN\n][\nN\n];\nint\ndp\n[\nN\n][\nN\n][\nN\n][\nN\n];\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n,\nm\n,\nk\n;\ncin\n>>\nn\n>>\nm\n>>\nk\n;\nforn\n(\ni\n,\nn\n)\nforn\n(\nj\n,\nm\n)\n{\ncin\n>>\na\n[\ni\n][\nj\n];\n}\nforn\n(\ni\n,\nN\n)\nforn\n(\nj\n,\nN\n)\nforn\n(\ncnt\n,\nN\n)\nforn\n(\nrem\n,\nN\n)\ndp\n[\ni\n][\nj\n][\ncnt\n][\nrem\n]\n=\n-\nINF\n;\ndp\n[\n0\n][\n0\n][\n0\n][\n0\n]\n=\n0\n;\nforn\n(\ni\n,\nn\n)\nforn\n(\nj\n,\nm\n)\nforn\n(\ncnt\n,\nm\n/\n2\n+\n1\n)\nforn\n(\nrem\n,\nk\n)\n{\nif\n(\ndp\n[\ni\n][\nj\n][\ncnt\n][\nrem\n]\n==\n-\nINF\n)\ncontinue\n;\nint\nni\n=\n(\nj\n==\nm\n-\n1\n?\ni\n+\n1\n:\ni\n);\nint\nnj\n=\n(\nj\n==\nm\n-\n1\n?\n0\n:\nj\n+\n1\n);\nif\n(\ni\n!=\nni\n)\n{\ndp\n[\nni\n][\nnj\n][\n0\n][\nrem\n]\n=\nmax\n(\ndp\n[\nni\n][\nnj\n][\n0\n][\nrem\n],\ndp\n[\ni\n][\nj\n][\ncnt\n][\nrem\n]);\n}\nelse\n{\ndp\n[\nni\n][\nnj\n][\ncnt\n][\nrem\n]\n=\nmax\n(\ndp\n[\nni\n][\nnj\n][\ncnt\n][\nrem\n],\ndp\n[\ni\n][\nj\n][\ncnt\n][\nrem\n]);\n}\nif\n(\ncnt\n+\n1\n<=\nm\n/\n2\n)\n{\nint\nnrem\n=\n(\nrem\n+\na\n[\ni\n][\nj\n])\n%\nk\n;\nif\n(\ni\n!=\nni\n)\n{\ndp\n[\nni\n][\nnj\n][\n0\n][\nnrem\n]\n=\nmax\n(\ndp\n[\nni\n][\nnj\n][\n0\n][\nnrem\n],\ndp\n[\ni\n][\nj\n][\ncnt\n][\nrem\n]\n+\na\n[\ni\n][\nj\n]);\n}\nelse\n{\ndp\n[\nni\n][\nnj\n][\ncnt\n+\n1\n][\nnrem\n]\n=\nmax\n(\ndp\n[\nni\n][\nnj\n][\ncnt\n+\n1\n][\nnrem\n],\ndp\n[\ni\n][\nj\n][\ncnt\n][\nrem\n]\n+\na\n[\ni\n][\nj\n]);\n}\n}\n}\ncout\n<<\nmax\n(\n0\n,\ndp\n[\nn\n][\n0\n][\n0\n][\n0\n])\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

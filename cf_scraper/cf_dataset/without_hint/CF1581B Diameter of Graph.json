@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nCQXYM wants to create a connected undirected graph with $ n $ nodes and $ m $ edges, and the diameter of the graph must be strictly less than $ k-1 $ . Also, CQXYM doesn't want a graph that contains self-loops or multiple edges (i.e. each edge connects two different vertices and between each pair of vertices there is at most one edge).\n\nThe diameter of a graph is the maximum distance between any two nodes.\n\nThe distance between two nodes is the minimum number of the edges on the path which endpoints are the two nodes.\n\nCQXYM wonders whether it is possible to create such a graph.\n\nInput Format\nThe input consists of multiple test cases.\n\nThe first line contains an integer $ t (1 \\leq t \\leq 10^5) $ — the number of test cases. The description of the test cases follows.\n\nOnly one line of each test case contains three integers $ n(1 \\leq n \\leq 10^9) $ , $ m $ , $ k $ $ (0 \\leq m,k \\leq 10^9) $ .\n\nOutput Format\nFor each test case, print YES if it is possible to create the graph, or print NO if it is impossible. You can print each letter in any case (upper or lower).\n\nExamples\nSample 1\nInput\n5\n1 0 3\n4 5 3\n4 6 3\n5 4 1\n2 1 1\nOutput\nYES\nNO\nYES\nNO\nNO\n\nNote\nIn the first test case, the graph's diameter equal to 0.\n\nIn the second test case, the graph's diameter can only be 2.\n\nIn the third test case, the graph's diameter can only be 1."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "solution",
+            "content": "#include\n<stdio.h>\ninline\nvoid\nSolve\n(){\nint\nn\n,\nm\n,\nk\n;\nscanf\n(\n\"%d%d%d\"\n,&\nn\n,&\nm\n,&\nk\n);\nif\n((\nn\n-\n1ll\n)*\nn\n>>\n1\n<\nm\n||\nm\n<\nn\n-\n1\n){\nputs\n(\n\"NO\"\n);\nreturn\n;\n}\nif\n(\nn\n==\n1\n){\nif\n(\nk\n>\n1\n){\nputs\n(\n\"YES\"\n);\n}\nelse\n{\nputs\n(\n\"NO\"\n);\n}\n}\nelse\nif\n(\nm\n<(\nn\n-\n1ll\n)*\nn\n>>\n1\n){\nif\n(\nk\n>\n3\n){\nputs\n(\n\"YES\"\n);\n}\nelse\n{\nputs\n(\n\"NO\"\n);\n}\n}\nelse\nif\n(\nk\n>\n2\n){\nputs\n(\n\"YES\"\n);\n}\nelse\n{\nputs\n(\n\"NO\"\n);\n}\n}\nint\nmain\n(){\nint\nt\n;\nscanf\n(\n\"%d\"\n,&\nt\n);\nfor\n(\nregister\nint\ni\n=\n0\n;\ni\n!=\nt\n;\ni\n++){\nSolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

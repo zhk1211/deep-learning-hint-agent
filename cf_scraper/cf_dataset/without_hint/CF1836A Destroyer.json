@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nJohn is a lead programmer on a destroyer belonging to the space navy of the Confederacy of Independent Operating Systems. One of his tasks is checking if the electronic brains of robots were damaged during battles.\n\nA standard test is to order the robots to form one or several lines, in each line the robots should stand one after another. After that, each robot reports the number of robots standing in front of it in its line.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1836A/4852f684dc3056e14effb6b67744c8fa8dbee24a.png) An example of robots' arrangement (the front of the lines is on the left). The robots report the numbers above.The $ i $ -th robot reported number $ l_i $ . Unfortunately, John does not know which line each robot stands in, and can't check the reported numbers. Please determine if it is possible to form the lines in such a way that all reported numbers are correct, or not.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 100 $ ), denoting the number of test cases.\n\nThe first line in each test case contains a single integer $ n $ ( $ 1 \\le n \\le 100 $ ) — the number of robots.\n\nThe second line in each test case contains $ n $ integers $ l_1, l_2, \\ldots, l_n $ ( $ 0 \\leq l_i < 100 $ ), $ l_i $ is equal to the number of robots in front of the $ i $ -th robot in its line.\n\nThe sum of $ n $ over all test cases won't exceed $ 200 $ .\n\nOutput Format\nFor each test case, output \"YES\", if there exists a robot arrangement consistent with robots' reports. Otherwise, output \"NO\".\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.\n\nExamples\nSample 1\nInput\n5\n6\n0 1 2 0 1 0\n9\n0 0 0 0 1 1 1 2 2\n3\n0 0 2\n1\n99\n5\n0 1 2 3 4\nOutput\nYES\nYES\nNO\nNO\nYES\n\nNote\nExample arrangement consistent with robot statements from the first example test case:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1836A/43b66909972c39c8c77ebbd5fb94cd377f6488da.png)Example arrangement consistent with robot statements from the second example is shown in the statement.\n\nIn the third test case, the third robot claims that there are two machines in front of it. In such a case, the robot directly in front of it would have one machine in front. No robot claims that, so there is no valid arrangement."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n1e6\n;\nint\nmain\n()\n{\nint\ncases\n;\nscanf\n(\n\"%d\"\n,\n&\ncases\n);\nwhile\n(\ncases\n--)\n{\nint\nn\n;\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nvector\n<int>\ncnt\n(\nn\n+\n1\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\nd\n;\nscanf\n(\n\"%d\"\n,\n&\nd\n);\nif\n(\nd\n<\nn\n)\n{\ncnt\n[\nd\n]++;\n}\nelse\n{\ncnt\n[\nn\n]\n=\nN\n;\n}\n}\nbool\ngood\n=\ntrue\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nif\n(\ncnt\n[\ni\n]\n>\ncnt\n[\ni\n-\n1\n])\n{\ngood\n=\nfalse\n;\nbreak\n;\n}\nputs\n(\ngood\n?\n\"YES\"\n:\n\"NO\"\n);\n}\n}"
+        }
+    ]
+}

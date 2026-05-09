@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere's a chip in the point $ (0, 0) $ of the coordinate plane. In one operation, you can move the chip from some point $ (x_1, y_1) $ to some point $ (x_2, y_2) $ if the Euclidean distance between these two points is an integer (i.e. $ \\sqrt{(x_1-x_2)^2+(y_1-y_2)^2} $ is integer).\n\nYour task is to determine the minimum number of operations required to move the chip from the point $ (0, 0) $ to the point $ (x, y) $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 3000 $ ) — number of test cases.\n\nThe single line of each test case contains two integers $ x $ and $ y $ ( $ 0 \\le x, y \\le 50 $ ) — the coordinates of the destination point.\n\nOutput Format\nFor each test case, print one integer — the minimum number of operations required to move the chip from the point $ (0, 0) $ to the point $ (x, y) $ .\n\nExamples\nSample 1\nInput\n3\n8 6\n0 0\n9 15\nOutput\n1\n0\n2\n\nNote\nIn the first example, one operation $ (0, 0) \\rightarrow (8, 6) $ is enough. $ \\sqrt{(0-8)^2+(0-6)^2}=\\sqrt{64+36}=\\sqrt{100}=10 $ is an integer.\n\nIn the second example, the chip is already at the destination point.\n\nIn the third example, the chip can be moved as follows: $ (0, 0) \\rightarrow (5, 12) \\rightarrow (9, 15) $ . $ \\sqrt{(0-5)^2+(0-12)^2}=\\sqrt{25+144}=\\sqrt{169}=13 $ and $ \\sqrt{(5-9)^2+(12-15)^2}=\\sqrt{16+9}=\\sqrt{25}=5 $ are integers."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nx\n,\ny\n;\ncin\n>>\nx\n>>\ny\n;\nint\nd\n=\nx\n*\nx\n+\ny\n*\ny\n;\nint\nr\n=\n0\n;\nwhile\n(\nr\n*\nr\n<\nd\n)\n++\nr\n;\nint\nans\n=\n2\n;\nif\n(\nr\n*\nr\n==\nd\n)\nans\n=\n1\n;\nif\n(\nx\n==\n0\n&&\ny\n==\n0\n)\nans\n=\n0\n;\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

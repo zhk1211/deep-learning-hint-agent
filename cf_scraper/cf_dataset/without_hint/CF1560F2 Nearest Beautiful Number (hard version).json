@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIt is a complicated version of problem F1. The difference between them is the constraints (F1: $ k \\le 2 $ , F2: $ k \\le 10 $ ).\n\nYou are given an integer $ n $ . Find the minimum integer $ x $ such that $ x \\ge n $ and the number $ x $ is $ k $ -beautiful.\n\nA number is called $ k $ -beautiful if its decimal representation having no leading zeroes contains no more than $ k $ different digits. E.g. if $ k = 2 $ , the numbers $ 3434443 $ , $ 55550 $ , $ 777 $ and $ 21 $ are $ k $ -beautiful whereas the numbers $ 120 $ , $ 445435 $ and $ 998244353 $ are not.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case consists of one line containing two integers $ n $ and $ k $ ( $ 1 \\le n \\le 10^9 $ , $ 1 \\le k \\le 10 $ ).\n\nOutput Format\nFor each test case output on a separate line $ x $ — the minimum $ k $ -beautiful integer such that $ x \\ge n $ .\n\nExamples\nSample 1\nInput\n6\n2021 3\n177890 2\n34512 3\n724533 4\n998244353 1\n12345678 10\nOutput\n2021\n181111\n34533\n724542\n999999999\n12345678"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Short solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nstring\nsolve\n()\n{\nstring\nn\n;\nint\nk\n;\ncin\n>>\nn\n>>\nk\n;\nwhile\n(\ntrue\n)\n{\nset\n<char>\ns\n;\nfor\n(\nauto\nc\n:\nn\n)\ns\n.\ninsert\n(\nc\n);\nif\n(\ns\n.\nsize\n()\n<=\nk\n)\nreturn\nn\n;\ns\n.\nclear\n();\nint\nptr\n=\n0\n;\nfor\n(;\n;\nptr\n++)\n{\ns\n.\ninsert\n(\nn\n[\nptr\n]);\nif\n(\ns\n.\nsize\n()\n>\nk\n)\n{\nwhile\n(\nn\n[\nptr\n]\n==\n'9'\n)\nptr\n--;\nn\n[\nptr\n]++;\nfor\n(\nint\ni\n=\nptr\n+\n1\n;\ni\n<\nn\n.\nsize\n();\ni\n++)\nn\n[\ni\n]\n=\n'0'\n;\nbreak\n;\n}\n}\n}\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\ncout\n<<\nsolve\n()\n<<\n'\\n'\n;\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Long solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nstring\nsolveFillingSuffix\n(\nstring\n&\nn\n,\nchar\nd\n,\nint\nfrom\n)\n{\nfor\n(\nint\ni\n=\nfrom\n;\ni\n<\nn\n.\nlength\n();\ni\n++)\nn\n[\ni\n]\n=\nd\n;\nreturn\nn\n;\n}\nvoid\ndecAt\n(\nmap\n<\nchar\n,\nint\n>&\nd\n,\nchar\nc\n)\n{\nif\n(\nd\n.\ncount\n(\nc\n))\n{\nd\n[\nc\n]--;\nif\n(\nd\n[\nc\n]\n==\n0\n)\nd\n.\nerase\n(\nc\n);\n}\n}\nstring\nsolve\n()\n{\nstring\nn\n;\nint\nk\n;\ncin\n>>\nn\n>>\nk\n;\nmap\n<\nchar\n,\nint\n>\nd\n;\nint\npref\n=\n0\n;\nwhile\n(\npref\n<\nn\n.\nlength\n())\n{\nif\n(\nd\n.\ncount\n(\nn\n[\npref\n]))\n{\nd\n[\nn\n[\npref\n++]]++;\ncontinue\n;\n}\nif\n(\nd\n.\nsize\n()\n==\nk\n)\nbreak\n;\nd\n[\nn\n[\npref\n++]]++;\n}\nif\n(\npref\n==\nn\n.\nlength\n())\nreturn\nn\n;\nwhile\n(\ntrue\n)\n{\nif\n(\nn\n[\npref\n]\n==\n'9'\n)\n{\ndecAt\n(\nd\n,\nn\n[--\npref\n]);\ncontinue\n;\n}\nif\n(\nd\n.\nsize\n()\n<\nk\n)\n{\nd\n[++\nn\n[\npref\n]]++;\nreturn\nsolveFillingSuffix\n(\nn\n,\nd\n.\nsize\n()\n<\nk\n?\n'0'\n:\nd\n.\nbegin\n()->\nfirst\n,\npref\n+\n1\n);\n}\nauto\nit\n=\nd\n.\nupper_bound\n(\nn\n[\npref\n]);\nif\n(\nit\n==\nd\n.\nend\n())\n{\ndecAt\n(\nd\n,\nn\n[--\npref\n]);\ncontinue\n;\n}\nn\n[\npref\n]\n=\nit\n->\nfirst\n;\nreturn\nsolveFillingSuffix\n(\nn\n,\nd\n.\nbegin\n()->\nfirst\n,\npref\n+\n1\n);\n}\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\ncout\n<<\nsolve\n()\n<<\n'\\n'\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

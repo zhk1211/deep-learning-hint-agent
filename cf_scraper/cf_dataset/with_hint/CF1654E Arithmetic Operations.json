@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array of integers $ a_1, a_2, \\ldots, a_n $ .\n\nYou can do the following operation any number of times (possibly zero):\n\n- Choose any index $ i $ and set $ a_i $ to any integer (positive, negative or $ 0 $ ).\n\nWhat is the minimum number of operations needed to turn $ a $ into an arithmetic progression? The array $ a $ is an arithmetic progression if $ a_{i+1}-a_i=a_i-a_{i-1} $ for any $ 2 \\leq i \\leq n-1 $ .\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\le n \\le 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\leq a_i \\leq 10^5 $ ).\n\nOutput Format\nPrint a single integer: the minimum number of operations needed to turn $ a $ into an arithmetic progression.\n\nExamples\nSample 1\nInput\n9\n3 2 7 8 6 9 5 4 1\nOutput\n6\n\nSample 2\nInput\n14\n19 2 15 8 9 14 17 13 4 14 4 11 15 7\nOutput\n10\n\nSample 3\nInput\n10\n100000 1 60000 2 20000 4 8 16 32 64\nOutput\n7\n\nSample 4\nInput\n4\n10000 20000 10000 1\nOutput\n2\n\nNote\nIn the first test, you can get the array $ a = [11, 10, 9, 8, 7, 6, 5, 4, 3] $ by performing $ 6 $ operations:\n\n- Set $ a_3 $ to $ 9 $ : the array becomes $ [3, 2, 9, 8, 6, 9, 5, 4, 1] $ ;\n- Set $ a_2 $ to $ 10 $ : the array becomes $ [3, 10, 9, 8, 6, 9, 5, 4, 1] $ ;\n- Set $ a_6 $ to $ 6 $ : the array becomes $ [3, 10, 9, 8, 6, 6, 5, 4, 1] $ ;\n- Set $ a_9 $ to $ 3 $ : the array becomes $ [3, 10, 9, 8, 6, 6, 5, 4, 3] $ ;\n- Set $ a_5 $ to $ 7 $ : the array becomes $ [3, 10, 9, 8, 7, 6, 5, 4, 3] $ ;\n- Set $ a_1 $ to $ 11 $ : the array becomes $ [11, 10, 9, 8, 7, 6, 5, 4, 3] $ .\n\n$ a $ is an arithmetic progression: in fact, $ a_{i+1}-a_i=a_i-a_{i-1}=-1 $ for any $ 2 \\leq i \\leq n-1 $ .\n\nThere is no sequence of less than $ 6 $ operations that makes $ a $ an arithmetic progression.\n\nIn the second test, you can get the array $ a = [-1, 2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38] $ by performing $ 10 $ operations.\n\nIn the third test, you can get the array $ a = [100000, 80000, 60000, 40000, 20000, 0, -20000, -40000, -60000, -80000] $ by performing $ 7 $ operations."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider each element of the array as being a point in the plane $$$(i, a_i)$$$. Then all of the elements that\ndon't\nget affected by an operation lie on a single line in the plane. Find a line that maximizes the number of points on it."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Let $$$m$$$ be the upper bound on $$$a_i$$$. The intended complexity is $$$O(n \\sqrt m)$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Let $$$m$$$ be the upper bound on $$$a_i$$$. Let $$$d$$$ be the difference between adjacent elements in the final array. Create a piecewise algorithm for the cases where $$$|d| \\lt \\sqrt m$$$ and $$$|d| \\geq \\sqrt m$$$"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "As explained in the hints, instead of computing the fewest number of operations, we will compute the largest number of elements that don't have an operation on them, and we will create a piecewise algorithm with final complexity $$$O(n\\sqrt m)$$$ , where $$$m$$$ is the upper bound on $$$a_i$$$.\nLet $$$d$$$ be the common difference between elements in our final sequence. First of all, I will assume that $$$d \\geq 0$$$, since solving the problem for negative $$$d$$$ is as simple as reversing the array and running the solution again. If $$$d$$$ is fixed beforehand, we can solve the problem in $$$O(n)$$$ by putting element $$$i$$$ into bucket $$$a_i-d\\cdot i$$$ and returning $$$n$$$ minus the size of the biggest bucket.\nFor $$$d \\lt \\sqrt m$$$, we can use the above algorithm to handle all of these $$$d$$$ in $$$O(n \\sqrt m)$$$ time. We can keep a hashmap from bucket index $$$\\to$$$ number of elements in the bucket, or we can just keep an array since the bucket indices have a range of at most $$$O(n \\sqrt m)$$$ which is not enough to exceed the memory limit.\nFor $$$d \\geq \\sqrt m$$$, we observe that if we have two indices $$$i, j$$$ such that $$$j \\gt i+\\sqrt m$$$, then at least one of them definitely has to have an operation performed on it, because the difference between them would have to be $$$a_j-a_i \\geq \\sqrt m \\cdot d \\gt m$$$ which is not possible. In other words, if we consider the set of elements which are not edited, that set will have gaps between pairs of elements of size at most $$$\\sqrt m$$$.\nSo, we can build a graph between indices with an edge $$$i \\to j$$$ with label $$$x$$$ if $$$i \\lt j \\leq i+\\sqrt m$$$ and $$$\\frac{a_j-a_i}{j-i} = x$$$. This graph has at most $$$n\\sqrt m$$$ edges. Then we just have to find the longest path in the graph where all edges have the same label. You can do this with dynamic programming -- let $$$dp_{i,d}$$$ be the length of the longest path ending at index $$$i$$$, where all edges have label $$$d$$$. For each $$$i$$$, we only need to check edges to $$$j$$$ where $$$i - \\sqrt m \\lt j \\lt i$$$. This means the time complexity is $$$O(n\\sqrt m)$$$. To store the values $$$dp_{i,d}$$$ sparsely, we can use either a hash map or a rotating buffer (where we only store $$$dp_{i,d}$$$ for $$$i$$$ in a sliding window of width $$$\\sqrt m$$$).\nComplexity: $$$O(n \\sqrt m)$$$"
+        }
+    ]
+}

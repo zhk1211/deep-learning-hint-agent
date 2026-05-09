@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMisha had been banned from playing chess for good since he was accused of cheating with an engine. Therefore, he retired and decided to become a xorcerer.\n\nOne day, while taking a walk in a park, Misha came across a rooted tree with nodes numbered from $ 1 $ to $ n $ . The root of the tree is node $ 1 $ .\n\nFor each $ 1\\le i\\le n $ , node $ i $ contains $ a_i $ stones in it. Misha has recently learned a new spell in his xorcery class and wants to test it out. A spell consists of:\n\n- Choose some node $ i $ ( $ 1 \\leq i \\leq n $ ).\n- Calculate the [bitwise XOR](https://en.wikipedia.org/wiki/Bitwise_operation#XOR) $ x $ of all $ a_j $ such that node $ j $ is in the subtree of $ i $ ( $ i $ belongs to its own subtree).\n- Set $ a_j $ equal to $ x $ for all nodes $ j $ in the subtree of $ i $ .\n\nMisha can perform at most $ 2n $ spells and he wants to remove all stones from the tree. More formally, he wants $ a_i=0 $ to hold for each $ 1\\leq i \\leq n $ . Can you help him perform the spells?\n\nA tree with $ n $ nodes is a connected acyclic graph which contains $ n-1 $ edges. The subtree of node $ i $ is the set of all nodes $ j $ such that $ i $ lies on the simple path from $ 1 $ (the root) to $ j $ . We consider $ i $ to be contained in its own subtree.\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 2 \\leq n \\leq 2\\cdot 10^5 $ ) — the size of the tree\n\nThe second line contains an array of integers $ a_1,a_2,\\ldots, a_n $ ( $ 0 \\leq a_i \\leq 31 $ ), describing the number of stones in each node initially.\n\nThe third line contains an array of integers $ p_2,p_3,\\ldots, p_n $ ( $ 1 \\leq p_i \\leq i-1 $ ), where $ p_i $ means that there is an edge connecting $ p_i $ and $ i $ .\n\nOutput Format\nIf there is not a valid sequence of spells, output $ -1 $ .\n\nOtherwise, output a single integer $ q $ ( $ 0 \\leq q \\leq 2n $ ) in the first line — the number of performed spells.\n\nIn the second line output a sequence of integers $ v_1,v_2,\\ldots,v_q $ ( $ 1 \\leq v_i \\leq n $ ) — the $ i $ -th spell will be performed on the subtree of node $ v_i $ . Please note that order matters.\n\nIf multiple solutions exist, output any. You don't have to minimize the number of operations.\n\nExamples\nSample 1\nInput\n2\n13 13\n1\nOutput\n1\n1\n\nSample 2\nInput\n7\n5 2 8 3 4 1 31\n1 1 2 2 3 3\nOutput\n-1\n\nSample 3\nInput\n9\n3 31 1 2 7 30 7 3 1\n1 1 1 2 5 5 3 4\nOutput\n6\n3 2 3 1 2 2\n\nNote\nPlease refer to the following pictures for an explanation of the third test. Only the first $ 4 $ spells are shown since the last $ 2 $ do nothing. The first picture represents the tree initially with the number of stones for each node written above it in green. Changes applied by the current spell are highlighted in red.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1779F/87049d0f1cff376d7b36c99b33f175c4877519fa.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1.1",
+            "content": "If\nXOR\nof all stones equals $$$0$$$, then by performing one spell to the root we obtain an answer."
+        },
+        {
+            "title": "Hint 1.2",
+            "content": "Solve the task for\neven\n$$$n$$$."
+        },
+        {
+            "title": "Hint 1.3",
+            "content": "If $$$n$$$ is\neven\n, performing a spell to the root guarantees that all nodes will have the same number of stones, meaning that the total\nXOR\nof the tree is $$$0$$$, thus performing the same spell again makes all nodes have $$$0$$$ stones."
+        },
+        {
+            "title": "Hint 2.1",
+            "content": "Consider\neven\nand\nodd\nsubtrees. What does a spell do to them?"
+        },
+        {
+            "title": "Hint 2.2",
+            "content": "A spell performed to the\nodd\nsubtree does nothing. It does not change the total\nXOR\n, and it also makes performing a spell to some node in its subtree useless as their\nXOR\ns would be $$$0$$$ anyway. Thus, we are only interested in\neven\nsubtrees."
+        },
+        {
+            "title": "Bonus Problem Hint",
+            "content": "The number of them is $$$\\leq 6$$$ (in an optimal case)."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Please refer to the hints as steps. Let's finish the casework:\nLet nodes $$$u$$$ and $$$v$$$ have\neven\nsubtrees. And let the spell be performed on $$$u$$$, and then on $$$v$$$ slightly later. Consider the following $$$3$$$ cases:\n$$$u$$$ is an ancestor of $$$v$$$; performing a spell on $$$v$$$ does not make sense as its subtree's\nXOR\nis already $$$0$$$.\n$$$v$$$ is an ancestor of $$$u$$$; performing a spell on $$$u$$$ does not make sense either as it will be \"eaten\" by $$$v$$$ later. More formally, let $$$s_u$$$ be the current\nXOR\nof $$$u$$$'s subtree. We define $$$s_v$$$ and $$$s_1$$$ analogously. A spell performed on $$$u$$$ sets $$$s_v := s_v \\oplus s_u$$$ and $$$s_1 := s_1 \\oplus s_u$$$. Later, the spell performed on $$$v$$$ sets $$$s_1 := s_1 \\oplus s_v$$$. Notice that the final state of $$$s_1$$$ is the same as if only the spell on $$$v$$$ was performed (since $$$s_u \\oplus s_u = 0$$$). This means that the total\nXOR\nstays the same independent of whether we perform a spell on $$$u$$$ or not.\nNeither $$$u$$$ or $$$v$$$ is a parent of the other; this is the only case we are interested in and we will use this as a fact.\nWe only need to choose some subtrees such that their total\nXOR\nis equal to the\nXOR\nof the root. Why? Because after applying the spells to them the total\nXOR\nbecomes $$$0$$$, and that problem has been solved in \"Hint 1.1\". Of course, each pair of subtrees must satisfy the condition in case $$$3$$$, thus finding the subtrees is possible with dynamic programming and reconstruction. In each node we keep an array of size $$$32$$$ which tells us the possible\nXOR\nvalues obtained by performing spells on nodes in its subtree. Transitions are done for each edge, from child to parent, in similar fashion to the knapsack problem, but with\nXOR\ninstead of sums.\nTime complexity is $$$O(n A^2)$$$ and memory complexity is $$$O(nA)$$$. It is possible to optimize this, but not necessary."
+        }
+    ]
+}

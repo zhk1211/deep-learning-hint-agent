@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n— Do you have a wish?\n\n— I want people to stop gifting each other arrays.\n\nO_o and Another Young Boy\n\nAn array of $ n $ positive integers $ a_1,a_2,\\ldots,a_n $ fell down on you from the skies, along with a positive integer $ k \\le n $ .\n\nYou can apply the following operation at most $ k $ times:\n\n- Choose an index $ 1 \\le i \\le n $ and an integer $ 1 \\le x \\le 10^9 $ . Then do $ a_i := x $ (assign $ x $ to $ a_i $ ).\n\nThen build a [complete](https://en.wikipedia.org/wiki/Complete_graph) undirected weighted graph with $ n $ vertices numbered with integers from $ 1 $ to $ n $ , where edge $ (l, r) $ ( $ 1 \\le l < r \\le n $ ) has weight $ \\min(a_{l},a_{l+1},\\ldots,a_{r}) $ .\n\nYou have to find the maximum possible diameter of the resulting graph after performing at most $ k $ operations.\n\nThe diameter of a graph is equal to $ \\max\\limits_{1 \\le u < v \\le n}{\\operatorname{d}(u, v)} $ , where $ \\operatorname{d}(u, v) $ is the length of the shortest path between vertex $ u $ and vertex $ v $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). Description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 2 \\le n \\le 10^5 $ , $ 1 \\le k \\le n $ ).\n\nThe second line of each test case contains $ n $ positive integers $ a_1,a_2,\\ldots,a_n $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case print one integer — the maximum possible diameter of the graph after performing at most $ k $ operations.\n\nExamples\nSample 1\nInput\n6\n3 1\n2 4 1\n3 2\n1 9 84\n3 1\n10 2 6\n3 2\n179 17 1000000000\n2 1\n5 9\n2 2\n4 2\nOutput\n4\n168\n10\n1000000000\n9\n1000000000\n\nNote\nIn the first test case, one of the optimal arrays is $ [2,4,5] $ .\n\nThe graph built on this array:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1712D/6f5937a14546fd0344ab2a7ad56768b75a98a230.png) $ \\operatorname{d}(1, 2) = \\operatorname{d}(1, 3) = 2 $ and $ \\operatorname{d}(2, 3) = 4 $ , so the diameter is equal to $ \\max(2,2,4) = 4 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\n$$$\\operatorname{d}(u; v) \\le 2 \\cdot \\min(a_1 \\ldots a_n)$$$\nHint 2\ndiameter\n$$$\\le 2 \\cdot \\min(a_1 \\ldots a_n)$$$\nHint 3\ndiameter\n$$$\\le \\max\\limits_{1 \\le i \\le n - 1}{\\min(a_i,a_{i+1})}$$$\nHint 4\nBinary search on the answer or do a clever greedy."
+        },
+        {
+            "title": "Hint 1",
+            "content": "$$$\\operatorname{d}(u; v) \\le 2 \\cdot \\min(a_1 \\ldots a_n)$$$"
+        },
+        {
+            "title": "Hint 2",
+            "content": "diameter\n$$$\\le 2 \\cdot \\min(a_1 \\ldots a_n)$$$"
+        },
+        {
+            "title": "Hint 3",
+            "content": "diameter\n$$$\\le \\max\\limits_{1 \\le i \\le n - 1}{\\min(a_i,a_{i+1})}$$$"
+        },
+        {
+            "title": "Hint 4",
+            "content": "Binary search on the answer or do a clever greedy."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\n#define\nallr\n(\nx\n)\n(\nx\n).\nrbegin\n(),\n(\nx\n).\nrend\n()\n#define\ngsize\n(\nx\n)\n(\nint\n)((\nx\n).\nsize\n())\nconst\nchar\nnl\n=\n'\\n'\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\nlong\ndouble\nld\n;\nusing\nnamespace\nstd\n;\nconst\nint\ninf\n=\n1000000000\n;\nbool\nf\n(\nvector\n<int>\na\n,\nint\nk\n,\nint\nans\n)\n{\nint\nn\n=\ngsize\n(\na\n);\nint\ndk\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\na\n[\ni\n]\n*\n2\n<\nans\n)\n{\na\n[\ni\n]\n=\ninf\n;\nk\n--;\ndk\n++;\n}\n}\nif\n(\nk\n<\n0\n)\nreturn\nfalse\n;\nif\n((\nk\n>\n0\n&&\ndk\n>\n0\n)\n||\nk\n>=\n2\n)\nreturn\ntrue\n;\nif\n(\nk\n==\n1\n&&\ndk\n==\n0\n)\n{\nreturn\n*\nmax_element\n(\nall\n(\na\n))\n>=\nans\n;\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\ni\n++)\n{\nif\n(\nmin\n(\na\n[\ni\n],\na\n[\ni\n+\n1\n])\n>=\nans\n)\nreturn\ntrue\n;\n}\nreturn\nfalse\n;\n}\nvoid\nsolve\n()\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nint\nlb\n=\n0\n,\nub\n=\ninf\n,\ntans\n=\n0\n;\nwhile\n(\nlb\n<=\nub\n)\n{\nint\ntm\n=\n(\nlb\n+\nub\n)\n/\n2\n;\nif\n(\nf\n(\na\n,\nk\n,\ntm\n))\n{\ntans\n=\ntm\n;\nlb\n=\ntm\n+\n1\n;\n}\nelse\n{\nub\n=\ntm\n-\n1\n;\n}\n}\ncout\n<<\ntans\n<<\nnl\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n--)\nsolve\n();\n}"
+        }
+    ]
+}

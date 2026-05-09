@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a positive (greater than zero) integer $ n $ .\n\nYou have to represent $ n $ as the sum of integers (possibly negative) consisting only of ones (digits '1'). For example, $ 24 = 11 + 11 + 1 + 1 $ and $ 102 = 111 - 11 + 1 + 1 $ .\n\nAmong all possible representations, you have to find the one that uses the minimum number of ones in total.\n\nInput Format\nThe single line contains one integer $ n $ ( $ 1 \\le n < 10^{50} $ ).\n\nOutput Format\nPrint one integer $ x $ — the minimum number of ones, such that there exist a representation of $ n $ as the sum of integers (possibly negative) that uses $ x $ ones in total.\n\nExamples\nSample 1\nInput\n24\nOutput\n6\n\nSample 2\nInput\n102\nOutput\n7"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nsz\n(\na\n)\nint\n((\na\n).\nsize\n())\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\n++\ni\n)\nconst\nint\nN\n=\n250\n;\nconst\nint\nM\n=\n28\n;\nconst\nint\nINF\n=\n1e9\n;\nint\ndp\n[\n2\n][\nM\n*\n2\n+\n1\n][\nN\n][\nN\n];\nint\nmain\n()\n{\nstring\ns\n;\ncin\n>>\ns\n;\nreverse\n(\ns\n.\nbegin\n(),\ns\n.\nend\n());\ns\n+=\n\"0\"\n;\nforn\n(\ncarry\n,\nM\n*\n2\n+\n1\n)\nforn\n(\ncp\n,\nN\n)\nforn\n(\ncn\n,\nN\n)\ndp\n[\n0\n][\ncarry\n][\ncp\n][\ncn\n]\n=\nINF\n;\ndp\n[\n0\n][\nM\n][\nN\n-\n1\n][\nN\n-\n1\n]\n=\n0\n;\nforn\n(\ni\n,\nsz\n(\ns\n))\n{\nforn\n(\ncarry\n,\nM\n*\n2\n+\n1\n)\nforn\n(\ncp\n,\nN\n)\nforn\n(\ncn\n,\nN\n)\ndp\n[\n1\n][\ncarry\n][\ncp\n][\ncn\n]\n=\nINF\n;\nforn\n(\ncarry\n,\nM\n*\n2\n+\n1\n)\nfor\n(\nint\ncp\n=\nN\n-\n1\n;\ncp\n>=\n0\n;\n--\ncp\n)\nfor\n(\nint\ncn\n=\nN\n-\n1\n;\ncn\n>=\n0\n;\n--\ncn\n)\nif\n(\ndp\n[\n0\n][\ncarry\n][\ncp\n][\ncn\n]\n!=\nINF\n)\n{\nif\n(\ncp\n>\n0\n)\ndp\n[\n0\n][\ncarry\n][\ncp\n-\n1\n][\ncn\n]\n=\nmin\n(\ndp\n[\n0\n][\ncarry\n][\ncp\n-\n1\n][\ncn\n],\ndp\n[\n0\n][\ncarry\n][\ncp\n][\ncn\n]);\nif\n(\ncn\n>\n0\n)\ndp\n[\n0\n][\ncarry\n][\ncp\n][\ncn\n-\n1\n]\n=\nmin\n(\ndp\n[\n0\n][\ncarry\n][\ncp\n][\ncn\n-\n1\n],\ndp\n[\n0\n][\ncarry\n][\ncp\n][\ncn\n]);\nint\nrcarry\n=\ncarry\n-\nM\n;\nint\nval\n=\nrcarry\n+\ncp\n-\ncn\n;\nint\ndigit\n=\nval\n%\n10\n;\nif\n(\ndigit\n<\n0\n)\ndigit\n+=\n10\n;\nint\nncarry\n=\nval\n/\n10\n;\nif\n(\nval\n<\n0\n&&\ndigit\n!=\n0\n)\n--\nncarry\n;\nif\n(\ndigit\n==\ns\n[\ni\n]\n-\n'0'\n)\ndp\n[\n1\n][\nncarry\n+\nM\n][\ncp\n][\ncn\n]\n=\nmin\n(\ndp\n[\n1\n][\nncarry\n+\nM\n][\ncp\n][\ncn\n],\ndp\n[\n0\n][\ncarry\n][\ncp\n][\ncn\n]\n+\ncp\n+\ncn\n);\n}\nswap\n(\ndp\n[\n0\n],\ndp\n[\n1\n]);\n}\nint\nans\n=\nINF\n;\nforn\n(\ni\n,\nN\n)\nforn\n(\nj\n,\nN\n)\nans\n=\nmin\n(\nans\n,\ndp\n[\n0\n][\nM\n][\ni\n][\nj\n]);\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

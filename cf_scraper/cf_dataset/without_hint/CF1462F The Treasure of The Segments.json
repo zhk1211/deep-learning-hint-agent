@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp found $ n $ segments on the street. A segment with the index $ i $ is described by two integers $ l_i $ and $ r_i $ — coordinates of the beginning and end of the segment, respectively. Polycarp realized that he didn't need all the segments, so he wanted to delete some of them.\n\nPolycarp believes that a set of $ k $ segments is good if there is a segment $ [l_i, r_i] $ ( $ 1 \\leq i \\leq k $ ) from the set, such that it intersects every segment from the set (the intersection must be a point or segment). For example, a set of $ 3 $ segments $ [[1, 4], [2, 3], [3, 6]] $ is good, since the segment $ [2, 3] $ intersects each segment from the set. Set of $ 4 $ segments $ [[1, 2], [2, 3], [3, 5], [4, 5]] $ is not good.\n\nPolycarp wonders, what is the minimum number of segments he has to delete so that the remaining segments form a good set?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 2 \\cdot 10^5 $ ) — number of test cases. Then $ t $ test cases follow.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ ) — the number of segments. This is followed by $ n $ lines describing the segments.\n\nEach segment is described by two integers $ l $ and $ r $ ( $ 1 \\leq l \\leq r \\leq 10^9 $ ) — coordinates of the beginning and end of the segment, respectively.\n\nIt is guaranteed that the sum of $ n $ for all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum number of segments that need to be deleted in order for the set of remaining segments to become good.\n\nExamples\nSample 1\nInput\n4\n3\n1 4\n2 3\n3 6\n4\n1 2\n2 3\n3 5\n4 5\n5\n1 2\n3 8\n4 5\n6 7\n9 10\n5\n1 5\n2 4\n3 5\n3 8\n4 8\nOutput\n0\n1\n2\n0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nll\n=\nlong\nlong\n;\nvoid\nsolve\n()\n{\nvector\n<int>\nL\n;\nvector\n<int>\nR\n;\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<\npair\n<\nint\n,\nint\n>>\nv\n(\nn\n);\nfor\n(\nauto\n&[\nl\n,\nr\n]\n:\nv\n)\n{\ncin\n>>\nl\n>>\nr\n;\nL\n.\npush_back\n(\nl\n);\nR\n.\npush_back\n(\nr\n);\n}\nsort\n(\nL\n.\nbegin\n(),\nL\n.\nend\n());\nsort\n(\nR\n.\nbegin\n(),\nR\n.\nend\n());\nint\nans\n=\nn\n-\n1\n;\nfor\n(\nauto\n[\nl\n,\nr\n]\n:\nv\n)\n{\nint\nleft\n=\nlower_bound\n(\nR\n.\nbegin\n(),\nR\n.\nend\n(),\nl\n)\n-\nR\n.\nbegin\n();\nint\nright\n=\nmax\n(\n0\n,\nn\n-\n(\nint\n)(\nupper_bound\n(\nL\n.\nbegin\n(),\nL\n.\nend\n(),\nr\n)\n-\nL\n.\nbegin\n()));\nans\n=\nmin\n(\nans\n,\nleft\n+\nright\n);\n}\ncout\n<<\nans\n<<\n\"\\n\"\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

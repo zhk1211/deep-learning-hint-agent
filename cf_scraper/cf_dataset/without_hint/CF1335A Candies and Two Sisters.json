@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are two sisters Alice and Betty. You have $ n $ candies. You want to distribute these $ n $ candies between two sisters in such a way that:\n\n- Alice will get $ a $ ( $ a > 0 $ ) candies;\n- Betty will get $ b $ ( $ b > 0 $ ) candies;\n- each sister will get some integer number of candies;\n- Alice will get a greater amount of candies than Betty (i.e. $ a > b $ );\n- all the candies will be given to one of two sisters (i.e. $ a+b=n $ ).\n\nYour task is to calculate the number of ways to distribute exactly $ n $ candies between sisters in a way described above. Candies are indistinguishable.\n\nFormally, find the number of ways to represent $ n $ as the sum of $ n=a+b $ , where $ a $ and $ b $ are positive integers and $ a>b $ .\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe only line of a test case contains one integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^9 $ ) — the number of candies you have.\n\nOutput Format\nFor each test case, print the answer — the number of ways to distribute exactly $ n $ candies between two sisters in a way described in the problem statement. If there is no way to satisfy all the conditions, print $ 0 $ .\n\nExamples\nSample 1\nInput\n6\n7\n1\n2\n3\n2000000000\n763243547\nOutput\n3\n0\n0\n1\n999999999\n381621773\n\nNote\nFor the test case of the example, the $ 3 $ possible ways to distribute candies are:\n\n- $ a=6 $ , $ b=1 $ ;\n- $ a=5 $ , $ b=2 $ ;\n- $ a=4 $ , $ b=3 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\ncout\n<<\n(\nn\n-\n1\n)\n/\n2\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

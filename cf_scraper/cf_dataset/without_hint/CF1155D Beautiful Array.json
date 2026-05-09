@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ n $ integers. Beauty of array is the maximum sum of some consecutive subarray of this array (this subarray may be empty). For example, the beauty of the array \\[10, -5, 10, -4, 1\\] is 15, and the beauty of the array \\[-3, -5, -1\\] is 0.\n\nYou may choose at most one consecutive subarray of $ a $ and multiply all values contained in this subarray by $ x $ . You want to maximize the beauty of array after applying at most one such operation.\n\nInput Format\nThe first line contains two integers $ n $ and $ x $ ( $ 1 \\le n \\le 3 \\cdot 10^5, -100 \\le x \\le 100 $ ) — the length of array $ a $ and the integer $ x $ respectively.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ -10^9 \\le a_i \\le 10^9 $ ) — the array $ a $ .\n\nOutput Format\nPrint one integer — the maximum possible beauty of array $ a $ after multiplying all values belonging to some consecutive subarray $ x $ .\n\nExamples\nSample 1\nInput\n5 -2\n-3 8 -2 1 -6\nOutput\n22\n\nSample 2\nInput\n12 -3\n1 3 3 7 1 3 3 7 1 3 3 7\nOutput\n42\n\nSample 3\nInput\n5 10\n-1 -2 -3 -4 -5\nOutput\n0\n\nNote\nIn the first test case we need to multiply the subarray \\[-2, 1, -6\\], and the array becomes \\[-3, 8, 4, -2, 12\\] with beauty 22 (\\[-3, 8, 4, -2, 12\\]).\n\nIn the second test case we don't need to multiply any subarray at all.\n\nIn the third test case no matter which subarray we multiply, the beauty of array will be equal to 0."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (PikMike)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\ntypedef\nlong\nlong\nli\n;\nconst\nint\nN\n=\n300\n*\n1000\n+\n13\n;\nconst\nli INF64\n=\n1e18\n;\nint\nn\n,\nx\n;\nint\na\n[\nN\n];\nli dp\n[\nN\n][\n3\n][\n3\n];\nint\nmain\n()\n{\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nx\n);\nforn\n(\ni\n,\nn\n)\nscanf\n(\n\"%d\"\n,\n&\na\n[\ni\n]);\nforn\n(\ni\n,\nn\n+\n1\n)\nforn\n(\nj\n,\n3\n)\nforn\n(\nk\n,\n3\n)\ndp\n[\ni\n][\nj\n][\nk\n]\n=\n-\nINF64\n;\ndp\n[\n0\n][\n0\n][\n0\n]\n=\n0\n;\nforn\n(\ni\n,\nn\n+\n1\n)\nforn\n(\nj\n,\n3\n)\nforn\n(\nk\n,\n3\n){\nif\n(\nk\n<\n2\n)\ndp\n[\ni\n][\nj\n][\nk\n+\n1\n]\n=\nmax\n(\ndp\n[\ni\n][\nj\n][\nk\n+\n1\n],\ndp\n[\ni\n][\nj\n][\nk\n]);\nif\n(\nj\n<\n2\n)\ndp\n[\ni\n][\nj\n+\n1\n][\nk\n]\n=\nmax\n(\ndp\n[\ni\n][\nj\n+\n1\n][\nk\n],\ndp\n[\ni\n][\nj\n][\nk\n]);\nif\n(\ni\n<\nn\n)\ndp\n[\ni\n+\n1\n][\nj\n][\nk\n]\n=\nmax\n(\ndp\n[\ni\n+\n1\n][\nj\n][\nk\n],\ndp\n[\ni\n][\nj\n][\nk\n]\n+\n(\nj\n==\n1\n?\na\n[\ni\n]\n:\n0\n)\n*\nli\n(\nk\n==\n1\n?\nx\n:\n1\n));\n}\nprintf\n(\n\"%lld\\n\"\n,\ndp\n[\nn\n][\n2\n][\n2\n]);\n}"
+        }
+    ]
+}

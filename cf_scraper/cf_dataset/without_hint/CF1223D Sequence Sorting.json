@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a sequence $ a_1, a_2, \\dots, a_n $ , consisting of integers.\n\nYou can apply the following operation to this sequence: choose some integer $ x $ and move all elements equal to $ x $ either to the beginning, or to the end of $ a $ . Note that you have to move all these elements in one direction in one operation.\n\nFor example, if $ a = [2, 1, 3, 1, 1, 3, 2] $ , you can get the following sequences in one operation (for convenience, denote elements equal to $ x $ as $ x $ -elements):\n\n- $ [1, 1, 1, 2, 3, 3, 2] $ if you move all $ 1 $ -elements to the beginning;\n- $ [2, 3, 3, 2, 1, 1, 1] $ if you move all $ 1 $ -elements to the end;\n- $ [2, 2, 1, 3, 1, 1, 3] $ if you move all $ 2 $ -elements to the beginning;\n- $ [1, 3, 1, 1, 3, 2, 2] $ if you move all $ 2 $ -elements to the end;\n- $ [3, 3, 2, 1, 1, 1, 2] $ if you move all $ 3 $ -elements to the beginning;\n- $ [2, 1, 1, 1, 2, 3, 3] $ if you move all $ 3 $ -elements to the end;\n\nYou have to determine the minimum number of such operations so that the sequence $ a $ becomes sorted in non-descending order. Non-descending order means that for all $ i $ from $ 2 $ to $ n $ , the condition $ a_{i-1} \\le a_i $ is satisfied.\n\nNote that you have to answer $ q $ independent queries.\n\nInput Format\nThe first line contains one integer $ q $ ( $ 1 \\le q \\le 3 \\cdot 10^5 $ ) — the number of the queries. Each query is represented by two consecutive lines.\n\nThe first line of each query contains one integer $ n $ ( $ 1 \\le n \\le 3 \\cdot 10^5 $ ) — the number of elements.\n\nThe second line of each query contains $ n $ integers $ a_1, a_2, \\dots , a_n $ ( $ 1 \\le a_i \\le n $ ) — the elements.\n\nIt is guaranteed that the sum of all $ n $ does not exceed $ 3 \\cdot 10^5 $ .\n\nOutput Format\nFor each query print one integer — the minimum number of operation for sorting sequence $ a $ in non-descending order.\n\nExamples\nSample 1\nInput\n3\n7\n3 1 6 6 3 1 1\n8\n1 1 4 4 4 7 8 8\n7\n4 2 5 2 6 2 7\nOutput\n2\n0\n1\n\nNote\nIn the first query, you can move all $ 1 $ -elements to the beginning (after that sequence turn into $ [1, 1, 1, 3, 6, 6, 3] $ ) and then move all $ 6 $ -elements to the end.\n\nIn the second query, the sequence is sorted initially, so the answer is zero.\n\nIn the third query, you have to move all $ 2 $ -elements to the beginning."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\nint\n(\n3e5\n)\n+\n99\n;\nconst\nint\nINF\n=\nint\n(\n1e9\n)\n+\n99\n;\nint\nt\n,\nn\n;\nint\na\n[\nN\n];\nint\nl\n[\nN\n],\nr\n[\nN\n];\nint\ndp\n[\nN\n];\nint\nmain\n()\n{\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nfor\n(\nint\ntc\n=\n0\n;\ntc\n<\nt\n;\n++\ntc\n){\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n){\nl\n[\ni\n]\n=\nINF\n;\nr\n[\ni\n]\n=\n-\nINF\n;\ndp\n[\ni\n]\n=\n0\n;\n}\nvector\n<int>\nv\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n){\nscanf\n(\n\"%d\"\n,\na\n+\ni\n);\n--\na\n[\ni\n];\nv\n.\npush_back\n(\na\n[\ni\n]);\nl\n[\na\n[\ni\n]]\n=\nmin\n(\nl\n[\na\n[\ni\n]],\ni\n);\nr\n[\na\n[\ni\n]]\n=\nmax\n(\nr\n[\na\n[\ni\n]],\ni\n);\n}\nsort\n(\nv\n.\nbegin\n(),\nv\n.\nend\n());\nv\n.\nerase\n(\nunique\n(\nv\n.\nbegin\n(),\nv\n.\nend\n()),\nv\n.\nend\n());\nint\nres\n=\nn\n;\nfor\n(\nint\ni\n=\nv\n.\nsize\n()\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n){\nif\n(\ni\n+\n1\n==\nv\n.\nsize\n()\n||\nr\n[\nv\n[\ni\n]]\n>=\nl\n[\nv\n[\ni\n+\n1\n]])\ndp\n[\ni\n]\n=\n1\n;\nelse\ndp\n[\ni\n]\n=\n1\n+\ndp\n[\ni\n+\n1\n];\nres\n=\nmin\n(\nres\n,\nint\n(\nv\n.\nsize\n())-\ndp\n[\ni\n]);\n}\nprintf\n(\n\"%d\\n\"\n,\nres\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

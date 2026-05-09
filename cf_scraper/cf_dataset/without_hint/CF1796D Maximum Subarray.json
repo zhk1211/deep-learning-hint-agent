@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a_1, a_2, \\dots, a_n $ , consisting of $ n $ integers. You are also given two integers $ k $ and $ x $ .\n\nYou have to perform the following operation exactly once: add $ x $ to the elements on exactly $ k $ distinct positions, and subtract $ x $ from all the others.\n\nFor example, if $ a = [2, -1, 2, 3] $ , $ k = 1 $ , $ x = 2 $ , and we have picked the first element, then after the operation the array $ a = [4, -3, 0, 1] $ .\n\nLet $ f(a) $ be the maximum possible sum of a subarray of $ a $ . The subarray of $ a $ is a contiguous part of the array $ a $ , i. e. the array $ a_i, a_{i + 1}, \\dots, a_j $ for some $ 1 \\le i \\le j \\le n $ . An empty subarray should also be considered, it has sum $ 0 $ .\n\nLet the array $ a' $ be the array $ a $ after applying the aforementioned operation. Apply the operation in such a way that $ f(a') $ is the maximum possible, and print the maximum possible value of $ f(a') $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains three integers $ n $ , $ k $ and $ x $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ; $ 0 \\le k \\le \\min(20, n) $ ; $ -10^9 \\le x \\le 10^9 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ -10^9 \\le a_i \\le 10^9 $ ).\n\nThe sum of $ n $ over all test cases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print one integer — the maximum possible value of $ f(a') $ .\n\nExamples\nSample 1\nInput\n4\n4 1 2\n2 -1 2 3\n2 2 3\n-1 2\n3 0 5\n3 2 4\n6 2 -8\n4 -1 9 -3 7 -8\nOutput\n5\n7\n0\n44"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nli\n=\nlong\nlong\n;\nconst\nint\nN\n=\n222222\n;\nconst\nint\nK\n=\n22\n;\nconst\nli INF\n=\n1e18\n;\nint\nn\n,\nk\n,\nx\n;\nint\na\n[\nN\n];\nli dp\n[\nN\n][\nK\n][\n3\n];\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\ntc\n;\ncin\n>>\ntc\n;\nwhile\n(\ntc\n--)\n{\ncin\n>>\nn\n>>\nk\n>>\nx\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\ncin\n>>\na\n[\ni\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\nk\n;\n++\nj\n)\n{\nfor\n(\nint\nt\n=\n0\n;\nt\n<\n3\n;\n++\nt\n)\n{\ndp\n[\ni\n][\nj\n][\nt\n]\n=\n-\nINF\n;\n}\n}\n}\ndp\n[\n0\n][\n0\n][\n0\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\nk\n;\n++\nj\n)\n{\nfor\n(\nint\nt\n=\n0\n;\nt\n<\n3\n;\n++\nt\n)\n{\nif\n(\ndp\n[\ni\n][\nj\n][\nt\n]\n==\n-\nINF\n)\ncontinue\n;\nfor\n(\nint\njj\n=\nj\n;\njj\n<=\nmin\n(\nk\n,\nj\n+\n1\n);\n++\njj\n)\n{\nli\nadd\n=\na\n[\ni\n]\n+\n(\nj\n==\njj\n?\n-\nx\n:\nx\n);\nfor\n(\nint\ntt\n=\nt\n;\ntt\n<\n3\n;\n++\ntt\n)\n{\ndp\n[\ni\n+\n1\n][\njj\n][\ntt\n]\n=\nmax\n(\ndp\n[\ni\n+\n1\n][\njj\n][\ntt\n],\ndp\n[\ni\n][\nj\n][\nt\n]\n+\n(\ntt\n==\n1\n?\nadd\n:\n0\n));\n}\n}\n}\n}\n}\ncout\n<<\nmax\n(\ndp\n[\nn\n][\nk\n][\n1\n],\ndp\n[\nn\n][\nk\n][\n2\n])\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

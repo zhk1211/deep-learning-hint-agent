@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's call a list of positive integers $ a_0, a_1, ..., a_{n-1} $ a power sequence if there is a positive integer $ c $ , so that for every $ 0 \\le i \\le n-1 $ then $ a_i = c^i $ .\n\nGiven a list of $ n $ positive integers $ a_0, a_1, ..., a_{n-1} $ , you are allowed to:\n\n- Reorder the list (i.e. pick a permutation $ p $ of $ \\{0,1,...,n - 1\\} $ and change $ a_i $ to $ a_{p_i} $ ), then\n- Do the following operation any number of times: pick an index $ i $ and change $ a_i $ to $ a_i - 1 $ or $ a_i + 1 $ (i.e. increment or decrement $ a_i $ by $ 1 $ ) with a cost of $ 1 $ .\n\nFind the minimum cost to transform $ a_0, a_1, ..., a_{n-1} $ into a power sequence.\n\nInput Format\nThe first line contains an integer $ n $ ( $ 3 \\le n \\le 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_0, a_1, ..., a_{n-1} $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nOutput Format\nPrint the minimum cost to transform $ a_0, a_1, ..., a_{n-1} $ into a power sequence.\n\nExamples\nSample 1\nInput\n3\n1 3 2\nOutput\n1\n\nSample 2\nInput\n3\n1000000000 1000000000 1000000000\nOutput\n1999982505\n\nNote\nIn the first example, we first reorder $ \\{1, 3, 2\\} $ into $ \\{1, 2, 3\\} $ , then increment $ a_2 $ to $ 4 $ with cost $ 1 $ to get a power sequence $ \\{1, 2, 4\\} $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "C++ solution",
+            "content": "#include\n<iostream>\n#include\n<vector>\n#include\n<algorithm>\n#include\n<numeric>\nusing\nnamespace\nstd\n;\nconst\nint64_t\nINF\n=\n1e17\n;\ninline\nint64_t\nmul\n(\nint64_t\na\n,\nint64_t\nb\n)\n{\nreturn\n(\nINF\n/\na\n>\nb\n?\na\n*\nb\n:\nINF\n);\n}\ninline\nint64_t\nadd\n(\nint64_t\na\n,\nint64_t\nb\n)\n{\nreturn\n(\na\n+\nb\n>=\nINF\n?\nINF\n:\na\n+\nb\n);\n}\nint\nmain\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\n&\nx\n:\na\n)\ncin\n>>\nx\n;\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nif\n(\nn\n<=\n2\n)\n{\ncout\n<<\na\n[\n0\n]\n-\n1\n<<\nendl\n;\n}\nelse\n{\nint64_t\nans\n=\naccumulate\n(\na\n.\nbegin\n(),\na\n.\nend\n(),\n0ll\n)\n-\nn\n;\nfor\n(\nint\nx\n=\n1\n;\n;\n++\nx\n)\n{\nint64_t\ncurPow\n=\n1\n,\ncurCost\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncurCost\n=\nadd\n(\ncurCost\n,\nabs\n(\na\n[\ni\n]\n-\ncurPow\n));\ncurPow\n=\nmul\n(\ncurPow\n,\nx\n);\n}\nif\n(\ncurPow\n==\nINF\n||\ncurPow\n/\nx\n>\nans\n+\na\n[\nn\n-\n1\n])\nbreak\n;\nans\n=\nmin\n(\nans\n,\ncurCost\n);\n}\ncout\n<<\nans\n<<\nendl\n;\n}\n}"
+        },
+        {
+            "title": "Python solution",
+            "content": "n\n=\nint\n(\ninput\n())\na\n=\n[\nint\n(\nx\n)\nfor\nx\nin\ninput\n().\nsplit\n()]\na\n.\nsort\n()\ninf\n=\n10\n**\n18\nif\nn\n<=\n2\n:\nprint\n(\na\n[\n0\n]\n-\n1\n)\nelse\n:\nans\n=\nsum\n(\na\n)\n-\nn\nfor\nx\nin\nrange\n(\n1\n,\n10\n**\n9\n):\ncurPow\n=\n1\ncurCost\n=\n0\nfor\ni\nin\nrange\n(\nn\n):\ncurCost\n+=\nabs\n(\na\n[\ni\n]\n-\ncurPow\n)\ncurPow\n*=\nx\nif\ncurPow\n>\ninf\n:\nbreak\nif\ncurPow\n>\ninf\n:\nbreak\nif\ncurPow\n/\nx\n>\nans\n+\na\n[\nn\n-\n1\n]:\nbreak\nans\n=\nmin\n(\nans\n,\ncurCost\n)\nprint\n(\nans\n)"
+        }
+    ]
+}

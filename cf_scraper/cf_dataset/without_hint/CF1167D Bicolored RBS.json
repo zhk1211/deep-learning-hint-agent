@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA string is called bracket sequence if it does not contain any characters other than \"(\" and \")\". A bracket sequence is called regular (shortly, RBS) if it is possible to obtain correct arithmetic expression by inserting characters \"+\" and \"1\" into this sequence. For example, \"\", \"(())\" and \"()()\" are RBS and \")(\" and \"(()\" are not.\n\nWe can see that each opening bracket in RBS is paired with some closing bracket, and, using this fact, we can define nesting depth of the RBS as maximum number of bracket pairs, such that the $ 2 $ -nd pair lies inside the $ 1 $ -st one, the $ 3 $ -rd one — inside the $ 2 $ -nd one and so on. For example, nesting depth of \"\" is $ 0 $ , \"()()()\" is $ 1 $ and \"()((())())\" is $ 3 $ .\n\nNow, you are given RBS $ s $ of even length $ n $ . You should color each bracket of $ s $ into one of two colors: red or blue. Bracket sequence $ r $ , consisting only of red brackets, should be RBS, and bracket sequence, consisting only of blue brackets $ b $ , should be RBS. Any of them can be empty. You are not allowed to reorder characters in $ s $ , $ r $ or $ b $ . No brackets can be left uncolored.\n\nAmong all possible variants you should choose one that minimizes maximum of $ r $ 's and $ b $ 's nesting depth. If there are multiple solutions you can print any of them.\n\nInput Format\nThe first line contains an even integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ) — the length of RBS $ s $ .\n\nThe second line contains regular bracket sequence $ s $ ( $ |s| = n $ , $ s_i \\in \\{ $ \"(\", \")\" $ \\} $ ).\n\nOutput Format\nPrint single string $ t $ of length $ n $ consisting of \"0\"-s and \"1\"-s. If $ t_i $ is equal to 0 then character $ s_i $ belongs to RBS $ r $ , otherwise $ s_i $ belongs to $ b $ .\n\nExamples\nSample 1\nInput\n2\n()\nOutput\n11\n\nSample 2\nInput\n4\n(())\nOutput\n0101\n\nSample 3\nInput\n10\n((()())())\nOutput\n0110001111\n\nNote\nIn the first example one of optimal solutions is $ s = $ \" $ \\color{blue}{()} $ \". $ r $ is empty and $ b = $ \" $ () $ \". The answer is $ \\max(0, 1) = 1 $ .\n\nIn the second example it's optimal to make $ s = $ \" $ \\color{red}{(}\\color{blue}{(}\\color{red}{)}\\color{blue}{)} $ \". $ r = b = $ \" $ () $ \" and the answer is $ 1 $ .\n\nIn the third example we can make $ s = $ \" $ \\color{red}{(}\\color{blue}{((}\\color{red}{)()}\\color{blue}{)())} $ \". $ r = $ \" $ ()() $ \" and $ b = $ \" $ (()()) $ \" and the answer is $ 2 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nfore\n(\ni\n,\nl\n,\nr\n)\nfor\n(\nint\ni\n=\nint\n(\nl\n);\ni\n<\nint\n(\nr\n);\ni\n++)\n#define\nsz\n(\na\n)\nint\n((\na\n).\nsize\n())\nint\nn\n;\nstring\ns\n;\ninline\nbool\nread\n()\n{\nif\n(!(\ncin\n>>\nn\n))\nreturn\nfalse\n;\ncin\n>>\ns\n;\nreturn\ntrue\n;\n}\ninline\nvoid\nsolve\n()\n{\nstring\nt\n(\nn\n,\n'0'\n);\nint\nbal\n=\n0\n;\nfore\n(\ni\n,\n0\n,\nn\n)\n{\nif\n(\ns\n[\ni\n]\n==\n')'\n)\nbal\n--;\nt\n[\ni\n]\n=\nchar\n(\n'0'\n+\n(\nbal\n&\n1\n));\nif\n(\ns\n[\ni\n]\n==\n'('\n)\nbal\n++;\n}\ncout\n<<\nt\n<<\nendl\n;\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\nint\ntt\n=\nclock\n();\n#endif\nif\n(\nread\n())\n{\nsolve\n();\n#ifdef\n_DEBUG\n\t\tcerr\n<<\n\"TIME = \"\n<<\nclock\n()\n-\ntt\n<<\nendl\n;\ntt\n=\nclock\n();\n#endif\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

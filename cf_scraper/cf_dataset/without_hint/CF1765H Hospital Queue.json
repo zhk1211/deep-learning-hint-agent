@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ people (numbered from $ 1 $ to $ n $ ) signed up for a doctor's appointment. The doctor has to choose in which order he will appoint these people. The $ i $ -th patient should be appointed among the first $ p_i $ people. There are also $ m $ restrictions of the following format: the $ i $ -th restriction is denoted by two integers $ (a_i, b_i) $ and means that the patient with the index $ a_i $ should be appointed earlier than the patient with the index $ b_i $ .\n\nFor example, if $ n = 4 $ , $ p = [2, 3, 2, 4] $ , $ m = 1 $ , $ a = [3] $ and $ b = [1] $ , then the only order of appointment of patients that does not violate the restrictions is $ [3, 1, 2, 4] $ . For $ n =3 $ , $ p = [3, 3, 3] $ , $ m = 0 $ , $ a = [] $ and $ b = [] $ , any order of appointment is valid.\n\nFor each patient, calculate the minimum position in the order that they can have among all possible orderings that don't violate the restrictions.\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ ( $ 1 \\le n \\le 2000 $ ; $ 0 \\le m \\le 2000 $ ).\n\nThe second line contains $ n $ integers $ p_1, p_2, \\dots, p_n $ ( $ 1 \\le p_i \\le n $ ).\n\nThen $ m $ lines follow. The $ i $ -th of them contains two integers $ a_i $ and $ b_i $ ( $ 1 \\le a_i, b_i \\le n $ ; $ a_i \\ne b_i $ ). All pairs of $ (a_i, b_i) $ are distinct (i. e. if $ i \\ne j $ , then either $ a_i \\ne a_j $ , $ b_i \\ne b_j $ , or both).\n\nAdditional constraint on the input: there is at least one valid order of patients.\n\nOutput Format\nPrint $ n $ integers, where $ i $ -th integer is equal to the minimum position of $ i $ -th patient in the order, among all valid orders. Positions in the order are numbered from $ 1 $ to $ n $ .\n\nExamples\nSample 1\nInput\n4 1\n2 3 2 4\n3 1\nOutput\n2 3 1 4\n\nSample 2\nInput\n3 0\n3 3 3\nOutput\n1 1 1\n\nSample 3\nInput\n5 3\n4 3 3 2 5\n3 1\n1 5\n4 2\nOutput\n4 2 1 1 5\n\nNote\nIn the first example, $ [3, 1, 2, 4] $ the only one valid order, so the minimum position of each patient is equal to their position in this order.\n\nIn the second example, any order is valid, so any patient can be appointed first.\n\nIn the third example, there are three valid orders: $ [4, 2, 3, 1, 5] $ , $ [3, 4, 2, 1, 5] $ and $ [4, 3, 2, 1, 5] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nauto\n&\nx\n:\na\n)\ncin\n>>\nx\n;\nvector\n<\nvector\n<int>\n>\ng\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nm\n;\n++\ni\n)\n{\nint\nx\n,\ny\n;\ncin\n>>\nx\n>>\ny\n;\ng\n[\ny\n-\n1\n].\npush_back\n(\nx\n-\n1\n);\n}\nvector\n<int>\nans\n(\nn\n,\n-\n1\n);\nfor\n(\nint\ns\n=\n0\n;\ns\n<\nn\n;\n++\ns\n)\n{\nvector\n<int>\ndeg\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\nfor\n(\nint\nj\n:\ng\n[\ni\n])\n++\ndeg\n[\nj\n];\npriority_queue\n<\npair\n<\nint\n,\nint\n>>\nq\n;\nfor\n(\nint\nv\n=\n0\n;\nv\n<\nn\n;\n++\nv\n)\nif\n(\ndeg\n[\nv\n]\n==\n0\n&&\nv\n!=\ns\n)\nq\n.\npush\n({\na\n[\nv\n],\nv\n});\nfor\n(\nint\ni\n=\nn\n;\ni\n>\n0\n;\n--\ni\n)\n{\nif\n(\nq\n.\nempty\n()\n||\nq\n.\ntop\n().\nfirst\n<\ni\n)\n{\nif\n(\ndeg\n[\ns\n]\n==\n0\n&&\ni\n<=\na\n[\ns\n])\nans\n[\ns\n]\n=\ni\n;\nbreak\n;\n}\nint\nv\n=\nq\n.\ntop\n().\nsecond\n;\nq\n.\npop\n();\nfor\n(\nint\nu\n:\ng\n[\nv\n])\n{\n--\ndeg\n[\nu\n];\nif\n(\ndeg\n[\nu\n]\n==\n0\n&&\nu\n!=\ns\n)\nq\n.\npush\n({\na\n[\nu\n],\nu\n});\n}\n}\n}\nfor\n(\nint\n&\nx\n:\nans\n)\ncout\n<<\nx\n<<\n' '\n;\n}"
+        }
+    ]
+}

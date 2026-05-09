@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp was recently given a set of $ n $ (number $ n $ — even) dominoes. Each domino contains two integers from $ 1 $ to $ n $ .\n\nCan he divide all the dominoes into two sets so that all the numbers on the dominoes of each set are different? Each domino must go into exactly one of the two sets.\n\nFor example, if he has $ 4 $ dominoes: $ \\{1, 4\\} $ , $ \\{1, 3\\} $ , $ \\{3, 2\\} $ and $ \\{4, 2\\} $ , then Polycarp will be able to divide them into two sets in the required way. The first set can include the first and third dominoes ( $ \\{1, 4\\} $ and $ \\{3, 2\\} $ ), and the second set — the second and fourth ones ( $ \\{1, 3\\} $ and $ \\{4, 2\\} $ ).\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe descriptions of the test cases follow.\n\nThe first line of each test case contains a single even integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ) — the number of dominoes.\n\nThe next $ n $ lines contain pairs of numbers $ a_i $ and $ b_i $ ( $ 1 \\le a_i, b_i \\le n $ ) describing the numbers on the $ i $ -th domino.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case print:\n\n- YES, if it is possible to divide $ n $ dominoes into two sets so that the numbers on the dominoes of each set are different;\n- NO if this is not possible.\n\nYou can print YES and NO in any case (for example, the strings yEs, yes, Yes and YES will be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n6\n4\n1 2\n4 3\n2 1\n3 4\n6\n1 2\n4 5\n1 3\n4 6\n2 3\n5 6\n2\n1 1\n2 2\n2\n1 2\n2 1\n8\n2 1\n1 2\n4 3\n4 3\n5 6\n5 7\n8 6\n7 8\n8\n1 2\n2 1\n4 3\n5 3\n5 4\n6 7\n8 6\n7 8\nOutput\nYES\nNO\nNO\nYES\nYES\nNO\n\nNote\nIn the first test case, the dominoes can be divided as follows:\n\n- First set of dominoes: $ [\\{1, 2\\}, \\{4, 3\\}] $\n- Second set of dominoes: $ [\\{2, 1\\}, \\{3, 4\\}] $\n\nIn other words, in the first set we take dominoes with numbers $ 1 $ and $ 2 $ , and in the second set we take dominoes with numbers $ 3 $ and $ 4 $ .In the second test case, there's no way to divide dominoes into $ 2 $ sets, at least one of them will contain repeated number."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nmap\n<\nint\n,\nvector\n<int>\n>\nm\n;\nvector\n<bool>\nused\n;\nint\ngo\n(\nint\nv\n)\n{\nused\n[\nv\n]\n=\ntrue\n;\nfor\n(\nauto\nnow\n:\nm\n[\nv\n])\n{\nif\n(!\nused\n[\nnow\n])\n{\nreturn\ngo\n(\nnow\n)\n+\n1\n;\n}\n}\nreturn\n1\n;\n}\nvoid\nsolve\n()\n{\nint\nn\n,\nx\n,\ny\n;\ncin\n>>\nn\n;\nm\n.\nclear\n();\nused\n.\nclear\n();\nused\n.\nresize\n(\nn\n+\n1\n,\nfalse\n);\nbool\nfault\n=\nfalse\n;\nforn\n(\ni\n,\nn\n)\n{\ncin\n>>\nx\n>>\ny\n;\nm\n[\nx\n].\npush_back\n(\ny\n);\nm\n[\ny\n].\npush_back\n(\nx\n);\nif\n(\nx\n==\ny\n||\nm\n[\nx\n].\nsize\n()\n>\n2\n||\nm\n[\ny\n].\nsize\n()\n>\n2\n)\nfault\n=\ntrue\n;\n}\nif\n(\nfault\n)\n{\ncout\n<<\n\"NO\\n\"\n;\nreturn\n;\n}\nforn\n(\ni\n,\nn\n)\n{\nif\n(!\nused\n[\ni\n+\n1\n])\n{\nif\n(\ngo\n(\ni\n+\n1\n)\n%\n2\n)\n{\ncout\n<<\n\"NO\\n\"\n;\nreturn\n;\n}\n}\n}\ncout\n<<\n\"YES\\n\"\n;\n}\nint\nmain\n()\n{\nint\ntests\n;\ncin\n>>\ntests\n;\nforn\n(\ntt\n,\ntests\n)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

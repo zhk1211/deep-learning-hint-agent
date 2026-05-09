@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA tree is a connected undirected graph without cycles. Note that in this problem, we are talking about not rooted trees.\n\nYou are given four positive integers $ n, d_{12}, d_{23} $ and $ d_{31} $ . Construct a tree such that:\n\n- it contains $ n $ vertices numbered from $ 1 $ to $ n $ ,\n- the distance (length of the shortest path) from vertex $ 1 $ to vertex $ 2 $ is $ d_{12} $ ,\n- distance from vertex $ 2 $ to vertex $ 3 $ is $ d_{23} $ ,\n- the distance from vertex $ 3 $ to vertex $ 1 $ is $ d_{31} $ .\n\nOutput any tree that satisfies all the requirements above, or determine that no such tree exists.\n\nInput Format\nThe first line of the input contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) —the number of test cases in the test.\n\nThis is followed by $ t $ test cases, each written on a separate line.\n\nEach test case consists of four positive integers $ n, d_{12}, d_{23} $ and $ d_{31} $ ( $ 3 \\le n \\le 2\\cdot10^5; 1 \\le d_{12}, d_{23}, d_{31} \\le n-1 $ ).\n\nIt is guaranteed that the sum of $ n $ values for all test cases does not exceed $ 2\\cdot10^5 $ .\n\nOutput Format\nFor each test case, print YES if the suitable tree exists, and NO otherwise.\n\nIf the answer is positive, print another $ n-1 $ line each containing a description of an edge of the tree — a pair of positive integers $ x_i, y_i $ , which means that the $ i $ th edge connects vertices $ x_i $ and $ y_i $ .\n\nThe edges and vertices of the edges can be printed in any order. If there are several suitable trees, output any of them.\n\nExamples\nSample 1\nInput\n9\n5 1 2 1\n5 2 2 2\n5 2 2 3\n5 2 2 4\n5 3 2 3\n4 2 1 1\n4 3 1 1\n4 1 2 3\n7 1 4 1\nOutput\nYES\n1 2\n4 1\n3 1\n2 5\nYES\n4 3\n2 5\n1 5\n5 3\nNO\nYES\n2 4\n4 1\n2 5\n5 3\nYES\n5 4\n4 1\n2 5\n3 5\nYES\n2 3\n3 4\n1 3\nNO\nYES\n4 3\n1 2\n2 4\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nforn\n(\ntt\n,\nt\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\nd\n(\n3\n);\nforn\n(\ni\n,\n3\n)\ncin\n>>\nd\n[\ni\n];\nint\nsum\n=\nd\n[\n0\n]\n+\nd\n[\n1\n]\n+\nd\n[\n2\n];\nif\n(\nsum\n%\n2\n==\n0\n)\n{\nvector\n<int>\nw\n(\n3\n);\nforn\n(\ni\n,\n3\n)\nw\n[\ni\n]\n=\nsum\n/\n2\n-\nd\n[(\ni\n+\n1\n)\n%\n3\n];\nvector\n<int>\nsw\n(\nw\n.\nbegin\n(),\nw\n.\nend\n());\nsort\n(\nsw\n.\nbegin\n(),\nsw\n.\nend\n());\nif\n(\nsw\n[\n0\n]\n>=\n0\n&&\nsw\n[\n1\n]\n>=\n1\n)\n{\nvector\n<\npair\n<\nint\n,\nint\n>>\nedges\n;\nint\nnum\n=\n3\n;\nint\ncenter\n;\nif\n(\nsw\n[\n0\n]\n==\n0\n)\ncenter\n=\nmin_element\n(\nw\n.\nbegin\n(),\nw\n.\nend\n())\n-\nw\n.\nbegin\n();\nelse\ncenter\n=\nnum\n++;\nforn\n(\ni\n,\n3\n)\n{\nint\nbefore\n=\ncenter\n;\nforn\n(\nj\n,\nw\n[\ni\n]\n-\n1\n)\n{\nedges\n.\npush_back\n({\nbefore\n,\nnum\n});\nbefore\n=\nnum\n++;\n}\nif\n(\nw\n[\ni\n]\n>\n0\n)\nedges\n.\npush_back\n({\nbefore\n,\ni\n});\n}\nif\n(\nnum\n<=\nn\n)\n{\nwhile\n(\nnum\n<\nn\n)\nedges\n.\npush_back\n({\ncenter\n,\nnum\n++});\ncout\n<<\n\"YES\"\n<<\nendl\n;\nfor\n(\nauto\n&\n[\nu\n,\nv\n]:\nedges\n)\ncout\n<<\nu\n+\n1\n<<\n\" \"\n<<\nv\n+\n1\n<<\nendl\n;\ncontinue\n;\n}\n}\n}\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

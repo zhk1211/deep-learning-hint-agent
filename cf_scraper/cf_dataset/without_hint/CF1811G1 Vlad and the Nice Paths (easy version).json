@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is an easy version of the problem, it differs from the hard one only by constraints on $ n $ and $ k $ .\n\nVlad found a row of $ n $ tiles and the integer $ k $ . The tiles are indexed from left to right and the $ i $ -th tile has the color $ c_i $ . After a little thought, he decided what to do with it.\n\nYou can start from any tile and jump to any number of tiles right, forming the path $ p $ . Let's call the path $ p $ of length $ m $ nice if:\n\n- $ p $ can be divided into blocks of length exactly $ k $ , that is, $ m $ is divisible by $ k $ ;\n- $ c_{p_1} = c_{p_2} = \\ldots = c_{p_k} $ ;\n- $ c_{p_{k+1}} = c_{p_{k+2}} = \\ldots = c_{p_{2k}} $ ;\n- $ \\ldots $\n- $ c_{p_{m-k+1}} = c_{p_{m-k+2}} = \\ldots = c_{p_{m}} $ ;\n\nYour task is to find the number of nice paths of maximum length. Since this number may be too large, print it modulo $ 10^9 + 7 $ .\n\nInput Format\nThe first line of each test contains the integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases in the test.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 100 $ ) — the number of tiles in a row and the length of the block.\n\nThe second line of each test case contains $ n $ integers $ c_1, c_2, c_3, \\dots, c_n $ ( $ 1 \\le c_i \\le n $ ) — tile colors.\n\nIt is guaranteed that the sum of $ n^3 $ over all test cases does not exceed $ 5 \\cdot 10^6 $ .\n\nOutput Format\nPrint $ t $ numbers, each of which is the answer to the corresponding test case — the number of nice paths of maximum length modulo $ 10^9 + 7 $ .\n\nExamples\nSample 1\nInput\n5\n5 2\n1 2 3 4 5\n7 2\n1 3 1 3 3 1 3\n11 4\n1 1 1 1 1 1 1 1 1 1 1\n5 2\n1 1 2 2 2\n5 1\n1 2 3 4 5\nOutput\n1\n4\n165\n3\n1\n\nNote\nIn the first sample, it is impossible to make a nice path with a length greater than $ 0 $ .\n\nIn the second sample, we are interested in the following paths:\n\n- $ 1 \\rightarrow 3 \\rightarrow 4 \\rightarrow 5 $\n- $ 2 \\rightarrow 4 \\rightarrow 5 \\rightarrow 7 $\n- $ 1 \\rightarrow 3 \\rightarrow 5 \\rightarrow 7 $\n- $ 1 \\rightarrow 3 \\rightarrow 4 \\rightarrow 7 $\n\nIn the third example, any path of length $ 8 $ is nice."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "M\n=\n10\n**\n9\n+\n7\ndef\npw\n(\na\n,\nn\n):\nif\nn\n==\n0\n:\nreturn\n1\nb\n=\npw\n(\na\n,\nn\n// 2)\nreturn\nb\n*\nb\n%\nM\n*\n(\na\nif\nn\n%\n2\n==\n1\nelse\n1\n)\n%\nM\ndef\nobr\n(\nx\n):\nreturn\npw\n(\nx\n,\nM\n-\n2\n)\ndef\ncnk\n(\nn\n,\nk\n):\nreturn\nfact\n[\nn\n]\n*\nobr\n(\nfact\n[\nk\n])\n%\nM\n*\nobr\n(\nfact\n[\nn\n-\nk\n])\n%\nM\ndef\nsolve\n():\nn\n,\nk\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nc\n=\n[-\n1\n]\n+\n[\nint\n(\nx\n)\nfor\nx\nin\ninput\n().\nsplit\n()]\nif\nk\n==\n1\n:\nprint\n(\n1\n)\nreturn\ndp\n=\n[[\n0\n]\n*\n(\nn\n// k + 1) for i in range(n + 1)]  # dp[i][j] = number for i prefix with j blocks\ndp\n[\n0\n][\n0\n]\n=\n1\nfor\ni\nin\nrange\n(\n1\n,\nn\n+\n1\n):\nfor\nj\nin\nrange\n(\n0\n,\nn\n// k + 1):\nif\nj\n>\n0\n:\nsz\n=\n1\nfor\ns\nin\nrange\n(\ni\n-\n1\n,\n-\n1\n,\n-\n1\n):\nif\nc\n[\ns\n]\n==\nc\n[\ni\n]:\nsz\n+=\n1\nif\nsz\n>=\nk\n:\ndp\n[\ni\n][\nj\n]\n+=\ndp\n[\ns\n-\n1\n][\nj\n-\n1\n]\n*\ncnk\n(\nsz\n-\n2\n,\nk\n-\n2\n)\n%\nM\n                            dp\n[\ni\n][\nj\n]\n%=\nM\n            dp\n[\ni\n][\nj\n]\n+=\ndp\n[\ni\n-\n1\n][\nj\n]\ndp\n[\ni\n][\nj\n]\n%=\nM\nfor\nj\nin\nrange\n(\nn\n// k, -1, -1):\nif\ndp\n[\nn\n][\nj\n]\n>\n0\n:\nprint\n(\ndp\n[\nn\n][\nj\n])\nreturn\nt\n=\nint\n(\ninput\n())\nfact\n=\n[\n1\n]\n*\n101\nfor\ni\nin\nrange\n(\n1\n,\n101\n):\nfact\n[\ni\n]\n=\nfact\n[\ni\n-\n1\n]\n*\ni\n%\nM\nfor\n_\nin\nrange\n(\nt\n):\nsolve\n()"
+        }
+    ]
+}

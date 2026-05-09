@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe only difference between the easy and the hard versions is the maximum value of $ k $ .\n\nYou are given an infinite sequence of form \"112123123412345 $ \\dots $ \" which consist of blocks of all consecutive positive integers written one after another. The first block consists of all numbers from $ 1 $ to $ 1 $ , the second one — from $ 1 $ to $ 2 $ , the third one — from $ 1 $ to $ 3 $ , $ \\dots $ , the $ i $ -th block consists of all numbers from $ 1 $ to $ i $ .\n\nSo the first $ 56 $ elements of the sequence are \"11212312341234512345612345671234567812345678912345678910\". Elements of the sequence are numbered from one. For example, the $ 1 $ -st element of the sequence is $ 1 $ , the $ 3 $ -rd element of the sequence is $ 2 $ , the $ 20 $ -th element of the sequence is $ 5 $ , the $ 38 $ -th element is $ 2 $ , the $ 56 $ -th element of the sequence is $ 0 $ .\n\nYour task is to answer $ q $ independent queries. In the $ i $ -th query you are given one integer $ k_i $ . Calculate the digit at the position $ k_i $ of the sequence.\n\nInput Format\nThe first line of the input contains one integer $ q $ ( $ 1 \\le q \\le 500 $ ) — the number of queries.\n\nThe $ i $ -th of the following $ q $ lines contains one integer $ k_i $ $ (1 \\le k_i \\le 10^{18}) $ — the description of the corresponding query.\n\nOutput Format\nPrint $ q $ lines. In the $ i $ -th line print one digit $ x_i $ $ (0 \\le x_i \\le 9) $ — the answer to the query $ i $ , i.e. $ x_i $ should be equal to the element at the position $ k_i $ of the sequence.\n\nExamples\nSample 1\nInput\n5\n1\n3\n20\n38\n56\nOutput\n1\n2\n5\n2\n0\n\nSample 2\nInput\n4\n2132\n506\n999999999999999999\n1000000000000000000\nOutput\n8\n2\n4\n1\n\nNote\nAnswers on queries from the first example are described in the problem statement."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nlong\nlong\nget\n(\nlong\nlong\nr\n)\n{\nreturn\n(\nr\n+\n1\n)\n*\nr\n/\n2\n;\n}\nlong\nlong\nsumto\n(\nlong\nlong\nr\n,\nint\nneed\n)\n{\nlong\nlong\npw\n=\n1\n;\nlong\nlong\nsum\n=\n0\n;\nlong\nlong\nadd\n=\n0\n;\nfor\n(\nint\nlen\n=\n1\n;\n;\n++\nlen\n)\n{\nif\n(\npw\n*\n10\n-\n1\n<\nr\n)\n{\nlong\nlong\ncnt\n=\npw\n*\n10\n-\npw\n;\nif\n(\nneed\n)\n{\nsum\n+=\nadd\n*\ncnt\n+\nget\n(\ncnt\n)\n*\nlen\n;\nadd\n+=\ncnt\n*\nlen\n;\n}\nelse\n{\nsum\n+=\ncnt\n*\nlen\n;\n}\n}\nelse\n{\nlong\nlong\ncnt\n=\nr\n-\npw\n+\n1\n;\nif\n(\nneed\n)\n{\nsum\n+=\nadd\n*\ncnt\n+\nget\n(\ncnt\n)\n*\nlen\n;\n}\nelse\n{\nsum\n+=\ncnt\n*\nlen\n;\n}\nbreak\n;\n}\npw\n*=\n10\n;\n}\nreturn\nsum\n;\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nq\n;\ncin\n>>\nq\n;\nwhile\n(\nq\n--)\n{\nlong\nlong\nk\n;\ncin\n>>\nk\n;\n--\nk\n;\nlong\nlong\nl\n=\n1\n,\nr\n=\n1e9\n;\nlong\nlong\nres\n=\n-\n1\n;\nwhile\n(\nr\n-\nl\n>=\n0\n)\n{\nlong\nlong\nmid\n=\n(\nl\n+\nr\n)\n>>\n1\n;\nif\n(\nsumto\n(\nmid\n,\n1\n)\n>\nk\n)\n{\nres\n=\nmid\n;\nr\n=\nmid\n-\n1\n;\n}\nelse\n{\nl\n=\nmid\n+\n1\n;\n}\n}\nk\n-=\nsumto\n(\nres\n-\n1\n,\n1\n);\nl\n=\n1\n,\nr\n=\nres\n;\nlong\nlong\nnum\n=\n-\n1\n;\nwhile\n(\nr\n-\nl\n>=\n0\n)\n{\nint\nmid\n=\n(\nl\n+\nr\n)\n>>\n1\n;\nif\n(\nsumto\n(\nmid\n,\n0\n)\n>\nk\n)\n{\nnum\n=\nmid\n;\nr\n=\nmid\n-\n1\n;\n}\nelse\n{\nl\n=\nmid\n+\n1\n;\n}\n}\ncout\n<<\nto_string\n(\nnum\n)[\nk\n-\nsumto\n(\nnum\n-\n1\n,\n0\n)]\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

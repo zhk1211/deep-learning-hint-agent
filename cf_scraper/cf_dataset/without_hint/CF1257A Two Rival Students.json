@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are the gym teacher in the school.\n\nThere are $ n $ students in the row. And there are two rivalling students among them. The first one is in position $ a $ , the second in position $ b $ . Positions are numbered from $ 1 $ to $ n $ from left to right.\n\nSince they are rivals, you want to maximize the distance between them. If students are in positions $ p $ and $ s $ respectively, then distance between them is $ |p - s| $ .\n\nYou can do the following operation at most $ x $ times: choose two adjacent (neighbouring) students and swap them.\n\nCalculate the maximum distance between two rivalling students after at most $ x $ swaps.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThe only line of each test case contains four integers $ n $ , $ x $ , $ a $ and $ b $ ( $ 2 \\le n \\le 100 $ , $ 0 \\le x \\le 100 $ , $ 1 \\le a, b \\le n $ , $ a \\neq b $ ) — the number of students in the row, the number of swaps which you can do, and positions of first and second rivaling students respectively.\n\nOutput Format\nFor each test case print one integer — the maximum distance between two rivaling students which you can obtain.\n\nExamples\nSample 1\nInput\n3\n5 1 3 2\n100 33 100 1\n6 0 2 3\nOutput\n2\n99\n1\n\nNote\nIn the first test case you can swap students in positions $ 3 $ and $ 4 $ . And then the distance between the rivals is equal to $ |4 - 2| = 2 $ .\n\nIn the second test case you don't have to swap students.\n\nIn the third test case you can't swap students."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "import\nkotlin\n.\nmath\n.\nabs\nfun main\n()\n{\nval q\n=\nreadLine\n()!!.\ntoInt\n()\nfor\n(\nct\nin\n1.\n.\nq\n)\n{\nval\n(\nn\n,\nx\n,\na\n,\nb\n)\n=\nreadLine\n()!!.\nsplit\n(\n' '\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nprintln\n(\nminOf\n(\nn\n-\n1\n,\nabs\n(\na\n-\nb\n)\n+\nx\n))\n}\n}"
+        }
+    ]
+}

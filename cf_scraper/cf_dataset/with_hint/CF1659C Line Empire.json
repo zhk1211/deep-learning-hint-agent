@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are an ambitious king who wants to be the Emperor of The Reals. But to do that, you must first become Emperor of The Integers.\n\nConsider a number axis. The capital of your empire is initially at $ 0 $ . There are $ n $ unconquered kingdoms at positions $ 0<x_1<x_2<\\ldots<x_n $ . You want to conquer all other kingdoms.\n\nThere are two actions available to you:\n\n- You can change the location of your capital (let its current position be $ c_1 $ ) to any other conquered kingdom (let its position be $ c_2 $ ) at a cost of $ a\\cdot |c_1-c_2| $ .\n- From the current capital (let its current position be $ c_1 $ ) you can conquer an unconquered kingdom (let its position be $ c_2 $ ) at a cost of $ b\\cdot |c_1-c_2| $ . You cannot conquer a kingdom if there is an unconquered kingdom between the target and your capital.\n\nNote that you cannot place the capital at a point without a kingdom. In other words, at any point, your capital can only be at $ 0 $ or one of $ x_1,x_2,\\ldots,x_n $ . Also note that conquering a kingdom does not change the position of your capital.\n\nFind the minimum total cost to conquer all kingdoms. Your capital can be anywhere at the end.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases. The description of each test case follows.\n\nThe first line of each test case contains $ 3 $ integers $ n $ , $ a $ , and $ b $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ ; $ 1 \\leq a,b \\leq 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ x_1, x_2, \\ldots, x_n $ ( $ 1 \\leq x_1 < x_2 < \\ldots < x_n \\leq 10^8 $ ).\n\nThe sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the minimum cost to conquer all kingdoms.\n\nExamples\nSample 1\nInput\n4\n5 2 7\n3 5 12 13 21\n5 6 3\n1 5 6 21 30\n2 9 3\n10 15\n11 27182 31415\n16 18 33 98 874 989 4848 20458 34365 38117 72030\nOutput\n173\n171\n75\n3298918744\n\nNote\nHere is an optimal sequence of moves for the second test case:\n\n1. Conquer the kingdom at position $ 1 $ with cost $ 3\\cdot(1-0)=3 $ .\n2. Move the capital to the kingdom at position $ 1 $ with cost $ 6\\cdot(1-0)=6 $ .\n3. Conquer the kingdom at position $ 5 $ with cost $ 3\\cdot(5-1)=12 $ .\n4. Move the capital to the kingdom at position $ 5 $ with cost $ 6\\cdot(5-1)=24 $ .\n5. Conquer the kingdom at position $ 6 $ with cost $ 3\\cdot(6-5)=3 $ .\n6. Conquer the kingdom at position $ 21 $ with cost $ 3\\cdot(21-5)=48 $ .\n7. Conquer the kingdom at position $ 30 $ with cost $ 3\\cdot(30-5)=75 $ .\n\nThe total cost is $ 3+6+12+24+3+48+75=171 $ . You cannot get a lower cost than this."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nTry to analyze the cost of each operation separately. Is there some linearity you can exploit?\nHint 2\nTry to make greedy decisions. Can we say that it is always better to move right whenever possible?\nHint 3\nLet's say you fix the final position of your capital. Now think about Hint 2."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Try to analyze the cost of each operation separately. Is there some linearity you can exploit?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Try to make greedy decisions. Can we say that it is always better to move right whenever possible?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Let's say you fix the final position of your capital. Now think about Hint 2."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation (C++)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nlol\n=\nlong\nlong\nint\n;\n#define\nendl\n\"\\n\"\nconst\nlol inf\n=\n1e18\n+\n8\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\n_\n=\n1\n;\ncin\n>>\n_\n;\nwhile\n(\n_\n--)\n{\nint\nn\n;\nlol a\n,\nb\n;\ncin\n>>\nn\n>>\na\n>>\nb\n;\nvector\n<lol>\nx\n(\nn\n+\n1\n),\np\n(\nn\n+\n1\n);\nx\n[\n0\n]=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ncin\n>>\nx\n[\ni\n];\npartial_sum\n(\nx\n.\nbegin\n(),\nx\n.\nend\n(),\np\n.\nbegin\n());\nlol ans\n=\ninf\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nn\n;\ni\n++)\n{\nans\n=\nmin\n(\nans\n,(\na\n+\nb\n)*(\nx\n[\ni\n]-\nx\n[\n0\n])+\nb\n*(\np\n[\nn\n]-\np\n[\ni\n]-(\nn\n-\ni\n)*\nx\n[\ni\n]));\n}\ncout\n<<\nans\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

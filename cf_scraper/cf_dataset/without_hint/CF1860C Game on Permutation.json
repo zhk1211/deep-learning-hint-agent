@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlice and Bob are playing a game. They have a permutation $ p $ of size $ n $ (a permutation of size $ n $ is an array of size $ n $ where each element from $ 1 $ to $ n $ occurs exactly once). They also have a chip, which can be placed on any element of the permutation.\n\nAlice and Bob make alternating moves: Alice makes the first move, then Bob makes the second move, then Alice makes the third move, and so on. During the first move, Alice chooses any element of the permutation and places the chip on that element. During each of the next moves, the current player has to move the chip to any element that is simultaneously to the left and strictly less than the current element (i. e. if the chip is on the $ i $ -th element, it can be moved to the $ j $ -th element if $ j < i $ and $ p_j < p_i $ ). If a player cannot make a move (it is impossible to move the chip according to the rules of the game), that player wins the game.\n\nLet's say that the $ i $ -th element of the permutation is lucky if the following condition holds:\n\n- if Alice places the chip on the $ i $ -th element during her first move, she can win the game no matter how Bob plays (i. e. she has a winning strategy).\n\nYou have to calculate the number of lucky elements in the permutation.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 3 \\cdot 10^5 $ ) – the number of elements in the permutation.\n\nThe second line contains $ n $ integers $ p_1, p_2, \\dots, p_n $ ( $ 1 \\le p_i \\le n $ ). All $ p_i $ are distinct.\n\nThe sum of $ n $ over all test cases doesn't exceed $ 3 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single integer — the number of lucky elements in the permutation.\n\nExamples\nSample 1\nInput\n4\n3\n2 1 3\n2\n2 1\n3\n1 2 3\n4\n2 1 4 3\nOutput\n1\n0\n1\n2\n\nNote\nIn the first test case of the example, the $ 3 $ -rd element of the permutation is lucky.\n\nIn the second test case of the example, there are no lucky elements.\n\nIn the third test case of the example, the $ 2 $ -nd element of the permutation is lucky.\n\nIn the fourth test case of the example, the $ 3 $ -rd and the $ 4 $ -th element of the permutation are lucky."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nans\n=\n0\n;\nint\nmn\n=\nn\n+\n1\n,\nmnWin\n=\nn\n+\n1\n;\nwhile\n(\nn\n--)\n{\nint\nx\n;\ncin\n>>\nx\n;\nif\n(\nmn\n<\nx\n&&\nx\n<\nmnWin\n)\n{\nans\n+=\n1\n;\nmnWin\n=\nx\n;\n}\nmn\n=\nmin\n(\nmn\n,\nx\n);\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

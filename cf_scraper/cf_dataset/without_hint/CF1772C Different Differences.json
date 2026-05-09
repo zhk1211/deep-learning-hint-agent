@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAn array $ a $ consisting of $ k $ integers is strictly increasing if $ a_1 < a_2 < \\dots < a_k $ . For example, the arrays $ [1, 3, 5] $ , $ [1, 2, 3, 4] $ , $ [3, 5, 6] $ are strictly increasing; the arrays $ [2, 2] $ , $ [3, 7, 5] $ , $ [7, 4, 3] $ , $ [1, 2, 2, 3] $ are not.\n\nFor a strictly increasing array $ a $ of $ k $ elements, let's denote the characteristic as the number of different elements in the array $ [a_2 - a_1, a_3 - a_2, \\dots, a_k - a_{k-1}] $ . For example, the characteristic of the array $ [1, 3, 4, 7, 8] $ is $ 3 $ since the array $ [2, 1, 3, 1] $ contains $ 3 $ different elements: $ 2 $ , $ 1 $ and $ 3 $ .\n\nYou are given two integers $ k $ and $ n $ ( $ k \\le n $ ). Construct an increasing array of $ k $ integers from $ 1 $ to $ n $ with maximum possible characteristic.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 819 $ ) — the number of test cases.\n\nEach test case consists of one line containing two integers $ k $ and $ n $ ( $ 2 \\le k \\le n \\le 40 $ ).\n\nOutput Format\nFor each test case, print $ k $ integers — the elements of the strictly increasing array $ a $ with the maximum possible characteristic. If there are multiple answers, print any of them.\n\nExamples\nSample 1\nInput\n7\n5 9\n4 12\n3 3\n3 4\n4 4\n4 6\n8 11\nOutput\n1 3 4 7 8\n2 4 7 12\n1 2 3\n1 3 4\n1 2 3 4\n2 4 5 6\n1 2 3 5 6 7 8 11"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "def\nconstruct\n(\nf\n,\nk\n):\nreturn\n[(\ni\n+\n2\nif\ni\n<\nf\n-\n1\nelse\n1\n)\nfor\ni\nin\nrange\n(\nk\n)]\nt\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\nk\n,\nn\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nans\n=\n1\nfor\nf\nin\nrange\n(\n1\n,\nk\n):\nd\n=\nconstruct\n(\nf\n,\nk\n-\n1\n)\nif\nsum\n(\nd\n)\n<=\nn\n-\n1\n:\nans\n=\nf\n    res\n=\n[\n1\n]\nd\n=\nconstruct\n(\nans\n,\nk\n-\n1\n)\nfor\nx\nin\nd\n:\nres\n.\nappend\n(\nres\n[-\n1\n]\n+\nx\n)\nprint\n(*\nres\n)"
+        }
+    ]
+}

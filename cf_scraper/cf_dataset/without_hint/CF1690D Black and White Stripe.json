@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have a stripe of checkered paper of length $ n $ . Each cell is either white or black.\n\nWhat is the minimum number of cells that must be recolored from white to black in order to have a segment of $ k $ consecutive black cells on the stripe?\n\nIf the input data is such that a segment of $ k $ consecutive black cells already exists, then print 0.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nNext, descriptions of $ t $ test cases follow.\n\nThe first line of the input contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 2\\cdot10^5 $ ). The second line consists of the letters 'W' (white) and 'B' (black). The line length is $ n $ .\n\nIt is guaranteed that the sum of values $ n $ does not exceed $ 2\\cdot10^5 $ .\n\nOutput Format\nFor each of $ t $ test cases print an integer — the minimum number of cells that need to be repainted from white to black in order to have a segment of $ k $ consecutive black cells.\n\nExamples\nSample 1\nInput\n4\n5 3\nBBWBW\n5 5\nBBWBW\n5 1\nBBWBW\n1 1\nW\nOutput\n1\n2\n0\n1\n\nNote\nIn the first test case, $ s $ =\"BBWBW\" and $ k=3 $ . It is enough to recolor $ s_3 $ and get $ s $ =\"BBBBW\". This string contains a segment of length $ k=3 $ consisting of the letters 'B'.\n\nIn the second test case of the example $ s $ =\"BBWBW\" and $ k=5 $ . It is enough to recolor $ s_3 $ and $ s_5 $ and get $ s $ =\"BBBBB\". This string contains a segment of length $ k=5 $ consisting of the letters 'B'.\n\nIn the third test case of the example $ s $ =\"BBWBW\" and $ k=1 $ . The string $ s $ already contains a segment of length $ k=1 $ consisting of the letters 'B'."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nforn\n(\ntt\n,\nt\n)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nstring\ns\n;\ncin\n>>\ns\n;\nvector\n<int>\nw\n(\nn\n+\n1\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nw\n[\ni\n]\n=\nw\n[\ni\n-\n1\n]\n+\nint\n(\ns\n[\ni\n-\n1\n]\n==\n'W'\n);\nint\nresult\n=\nINT_MAX\n;\nfor\n(\nint\ni\n=\nk\n;\ni\n<=\nn\n;\ni\n++)\nresult\n=\nmin\n(\nresult\n,\nw\n[\ni\n]\n-\nw\n[\ni\n-\nk\n]);\ncout\n<<\nresult\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

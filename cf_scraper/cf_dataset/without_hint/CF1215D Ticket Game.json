@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMonocarp and Bicarp live in Berland, where every bus ticket consists of $ n $ digits ( $ n $ is an even number). During the evening walk Monocarp and Bicarp found a ticket where some of the digits have been erased. The number of digits that have been erased is even.\n\nMonocarp and Bicarp have decided to play a game with this ticket. Monocarp hates happy tickets, while Bicarp collects them. A ticket is considered happy if the sum of the first $ \\frac{n}{2} $ digits of this ticket is equal to the sum of the last $ \\frac{n}{2} $ digits.\n\nMonocarp and Bicarp take turns (and Monocarp performs the first of them). During each turn, the current player must replace any erased digit with any digit from $ 0 $ to $ 9 $ . The game ends when there are no erased digits in the ticket.\n\nIf the ticket is happy after all erased digits are replaced with decimal digits, then Bicarp wins. Otherwise, Monocarp wins. You have to determine who will win if both players play optimally.\n\nInput Format\nThe first line contains one even integer $ n $ $ (2 \\le n \\le 2 \\cdot 10^{5}) $ — the number of digits in the ticket.\n\nThe second line contains a string of $ n $ digits and \"?\" characters — the ticket which Monocarp and Bicarp have found. If the $ i $ -th character is \"?\", then the $ i $ -th digit is erased. Note that there may be leading zeroes. The number of \"?\" characters is even.\n\nOutput Format\nIf Monocarp wins, print \"Monocarp\" (without quotes). Otherwise print \"Bicarp\" (without quotes).\n\nExamples\nSample 1\nInput\n4\n0523\nOutput\nBicarp\n\nSample 2\nInput\n2\n??\nOutput\nBicarp\n\nSample 3\nInput\n8\n?054??0?\nOutput\nBicarp\n\nSample 4\nInput\n6\n???00?\nOutput\nMonocarp\n\nNote\nSince there is no question mark in the ticket in the first example, the winner is determined before the game even starts, and it is Bicarp.\n\nIn the second example, Bicarp also wins. After Monocarp chooses an erased digit and replaces it with a new one, Bicap can choose another position with an erased digit and replace it with the same digit, so the ticket is happy."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (fcspartakm)",
+            "content": "#include\n<iostream>\n#include\n<set>\n#include\n<string>\n#include\n<vector>\n#include\n<algorithm>\n#include\n<cmath>\nusing\nnamespace\nstd\n;\nint\nn\n;\nint\nmain\n()\n{\ncin\n>>\nn\n;\nlong\ndouble\nsum1\n=\n0\n,\nsum2\n=\n0\n;\nstring\ns\n;\ncin\n>>\ns\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\ns\n[\ni\n]\n!=\n'?'\n)\n{\nif\n(\ni\n<\nn\n/\n2\n)\n{\nsum1\n+=\n(\nlong\ndouble\n)(\ns\n[\ni\n]\n-\n'0'\n);\n}\nelse\n{\nsum2\n+=\n(\nlong\ndouble\n)(\ns\n[\ni\n]\n-\n'0'\n);\n}\n}\nelse\n{\nif\n(\ni\n<\nn\n/\n2\n)\n{\nsum1\n+=\n(\nlong\ndouble\n)\n4.5\n;\n}\nelse\n{\nsum2\n+=\n(\nlong\ndouble\n)\n4.5\n;\n}\n}\n}\nif\n(\nfabsl\n(\nsum1\n-\nsum2\n)\n<\n1e-9\n)\n{\ncout\n<<\n\"Bicarp\"\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\n\"Monocarp\"\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

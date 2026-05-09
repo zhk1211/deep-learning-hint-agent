@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nFor a given positive integer $ m $ , a positive number is called a $ m $ -number if the product of its digits is $ m $ . For example, the beginning of a series of $ 24 $ -numbers are as follows: $ 38 $ , $ 46 $ , $ 64 $ , $ 83 $ , $ 138 $ , $ 146 $ , $ 164 $ , $ 183 $ , $ 226 $ ...\n\nYou are given a positive integer $ m $ and $ k $ . Print $ k $ -th among $ m $ -numbers if all $ m $ -numbers are sorted in ascending order.\n\nInput Format\nA single line of input contains two integers $ m $ and $ k $ ( $ 2 \\le m \\le 10^9 $ , $ 1 \\le k \\le 10^9 $ ).\n\nOutput Format\nPrint the desired number — $ k $ -th among all $ m $ -numbers if $ m $ -numbers are sorted in ascending order. If the answer does not exist, print -1.\n\nExamples\nSample 1\nInput\n24 9\nOutput\n226\n\nSample 2\nInput\n24 1\nOutput\n38\n\nSample 3\nInput\n5040 1000000000\nOutput\n111121111315213227111\n\nSample 4\nInput\n2020 2020\nOutput\n-1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (elizarov)",
+            "content": "fun main\n()\n{\nval\n(\nm\n,\nk\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval f\n=\nfactor\n(\nm\n)\n?:\nrun\n{\nprintln\n(-\n1\n)\nreturn\n}\nval dp\n=\nHashMap\n<\nLong\n,\nLong\n>()\nval dig\n=\nIntArray\n(\n100\n_000\n)\nfun count\n(\nnd\n:\nInt\n,\np\n:\nLong\n=\n-\n1\n):\nLong\n{\nval e\n=\nf\n[\n0\n]\n+\n(\nf\n[\n1\n]\nshl\n5\n)\n+\n(\nf\n[\n2\n]\nshl\n10\n)\n+\n(\nf\n[\n3\n]\nshl\n15\n)\n+\n(\nnd\n.\ntoLong\n()\nshl\n20\n)\nif\n(\nnd\n==\n0\n)\nreturn\nif\n(\ne\n==\n0L\n)\n1\nelse\n0\nif\n(\np\n==\n-\n1L\n)\ndp\n[\ne\n]?.\nlet\n{\nreturn\nit\n}\nvar\ncnt\n=\n0L\nfor\n(\nd\nin\n1.\n.\n9\n)\n{\ndig\n[\nnd\n-\n1\n]\n=\nd\n            val df\n=\nfactors\n[\nd\n]\nfor\n(\ni\nin\n0.\n.\n3\n)\nf\n[\ni\n]\n-=\ndf\n[\ni\n]\nif\n(\nf\n.\nall\n{\nit\n>=\n0\n})\n{\nval nc\n=\ncount\n(\nnd\n-\n1\n)\nif\n(\np\n>=\n0\n&&\ncnt\n+\nnc\n>\np\n)\nreturn\ncount\n(\nnd\n-\n1\n,\np\n-\ncnt\n)\ncnt\n+=\nnc\n}\nfor\n(\ni\nin\n0.\n.\n3\n)\nf\n[\ni\n]\n+=\ndf\n[\ni\n]\n}\ndp\n[\ne\n]\n=\ncnt\nreturn\ncnt\n}\nvar\nnum\n=\n1L\nvar\nnd\n=\n1\nwhile\n(\ncount\n(\nnd\n)\n<=\nk\n-\nnum\n)\nnum\n+=\ncount\n(\nnd\n++)\ncheck\n(\ncount\n(\nnd\n,\nk\n-\nnum\n)\n==\n1L\n)\nprintln\n(\ndig\n.\ntake\n(\nnd\n).\nreversed\n().\njoinToString\n(\n\"\"\n))\n}\nprivate\nval pr\n=\nlistOf\n(\n2\n,\n3\n,\n5\n,\n7\n)\nprivate\nval factors\n=\nArray\n(\n10\n)\n{\nfactor\n(\nit\n)!!\n}\nprivate\nfun factor\n(\nm\n:\nInt\n):\nIntArray\n?\n{\nval f\n=\nIntArray\n(\n4\n)\nif\n(\nm\n<=\n1\n)\nreturn\nf\nvar\nrem\n=\nm\nfor\n((\ni\n,\np\n)\nin\npr\n.\nwithIndex\n())\n{\nwhile\n(\nrem\n%\np\n==\n0\n)\n{\nrem\n/=\np\n            f\n[\ni\n]++\n}\n}\nreturn\nf\n.\ntakeIf\n{\nrem\n==\n1\n}\n}"
+        }
+    ]
+}

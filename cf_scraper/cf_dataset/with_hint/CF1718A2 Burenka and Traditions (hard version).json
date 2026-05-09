@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the hard version of this problem. The difference between easy and hard versions is only the constraints on $ a_i $ and on $ n $ . You can make hacks only if both versions of the problem are solved.\n\nBurenka is the crown princess of Buryatia, and soon she will become the $ n $ -th queen of the country. There is an ancient tradition in Buryatia — before the coronation, the ruler must show their strength to the inhabitants. To determine the strength of the $ n $ -th ruler, the inhabitants of the country give them an array of $ a $ of exactly $ n $ numbers, after which the ruler must turn all the elements of the array into zeros in the shortest time. The ruler can do the following two-step operation any number of times:\n\n- select two indices $ l $ and $ r $ , so that $ 1 \\le l \\le r \\le n $ and a non-negative integer $ x $ , then\n- for all $ l \\leq i \\leq r $ assign $ a_i := a_i \\oplus x $ , where $ \\oplus $ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR). It takes $ \\left\\lceil \\frac{r-l+1}{2} \\right\\rceil $ seconds to do this operation, where $ \\lceil y \\rceil $ denotes $ y $ rounded up to the nearest integer.\n\nHelp Burenka calculate how much time she will need.\n\nInput Format\nThe first line contains a single integer $ t $ $ (1 \\le t \\le 500) $ — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ $ (1 \\le n \\le 10^5) $ - the size of the array\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\cdots , a_n $ $ (0 \\le a_i < 2^{30}) $ — elements of the array.\n\nIt is guaranteed that the sum of $ n $ in all tests does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, output a single number — the minimum time that Burenka will need.\n\nExamples\nSample 1\nInput\n7\n4\n5 5 5 5\n3\n1 3 2\n2\n0 0\n3\n2 5 7\n6\n1 2 3 3 2 1\n10\n27 27 34 32 2 31 23 56 52 4\n5\n1822 1799 57 23 55\nOutput\n2\n2\n0\n2\n4\n7\n4\n\nNote\nIn the first test case, Burenka can choose segment $ l = 1 $ , $ r = 4 $ , and $ x=5 $ . so it will fill the array with zeros in $ 2 $ seconds.\n\nIn the second test case, Burenka first selects segment $ l = 1 $ , $ r = 2 $ , and $ x = 1 $ , after which $ a = [0, 2, 2] $ , and then the segment $ l = 2 $ , $ r = 3 $ , and $ x=2 $ , which fills the array with zeros. In total, Burenka will spend $ 2 $ seconds."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Segments of length greater than 2 are not needed."
+        },
+        {
+            "title": "Hint for A1 1",
+            "content": "For A1 you can use dynamic programming"
+        },
+        {
+            "title": "Hint for A1 2",
+            "content": "Dynamic programming where dp[i][v] means the minimum time to make $$$a_j = 0$$$ for $$$j \\lt i$$$ and $$$a_i = v$$$. (Notice that v can be any number from 0 to 8191)"
+        },
+        {
+            "title": "Hint 2",
+            "content": "There is an answer in which segments of length $$$2$$$ does not intersect with segments of length $$$1$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "If $$$a_l\\oplus a_{l + 1} \\oplus \\ldots \\oplus a_{r} = 0$$$ is executed for $$$l, r$$$, then we can fill this segment with zeros in $$$r-l$$$ seconds using only segments of length 2."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "There is an answer where the time spent is minimal and the lengths of all the segments taken are 1 and 2. because of the segment $$$l, r, x$$$ can be replaced to $$$\\lceil\\frac{r-l+1}{2}\\rceil$$$ of segments of length 2 and 1, or rather $$$[l, l + 1, x], [l+ 2, l + 3, x], \\ldots, [r, r, x]$$$(or $$$[r-1, r, x]$$$ if $$$(l - r + 1)$$$ even).\nNote that if $$$a_l\\oplus a_{l + 1} \\oplus \\ldots \\oplus a_{r} = 0$$$ is executed for $$$l, r$$$, then we can fill the $$$l, r$$$ subsections with zeros for $$$r-l$$$ seconds with queries $$$[l, l+1, a_l], [l+1, l+2, a_l \\oplus a_{l+1}], ... [r-1, r, a_l\\oplus a_{l+1} \\oplus \\ldots \\oplus a_r]$$$.\nNote that if a segment of length 2 intersects with a segment of length 1, they can be changed to 2 segments of length 1.\nIt follows from all this that the answer consists of segments of length 1 and cover with segments of length 2. Then it is easy to see that the answer is ($$$n$$$ minus (the maximum number of disjoint sub-segments with a xor of 0)), because in every sub-segments with a xor of 0 we can spend 1 second less as I waited before. this amount can be calculated by dynamic programming or greedily. Our solution goes greedy with a set and if it finds two equal prefix xors($$$prefix_l = prefix_r$$$ means that $$$a_{l + 1} \\oplus a_{l+2} \\oplus \\ldots \\oplus a_{r} = 0$$$), it clears the set.\n168724728\nThe complexity of the solution is $$$O(n \\operatorname{log}(n))$$$."
+        }
+    ]
+}

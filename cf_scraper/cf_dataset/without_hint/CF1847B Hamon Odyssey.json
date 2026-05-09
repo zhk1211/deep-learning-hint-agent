@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nJonathan is fighting against DIO's Vampire minions. There are $ n $ of them with strengths $ a_1, a_2, \\dots, a_n $ . $ \\def\\and {{\\,\\texttt{&}\\,}} $\n\nDenote $ (l, r) $ as the group consisting of the vampires with indices from $ l $ to $ r $ . Jonathan realizes that the strength of any such group is in its weakest link, that is, the bitwise AND. More formally, the strength level of the group $ (l, r) $ is defined as $ $$$f(l,r) = a_l \\and a_{l+1} \\and a_{l+2} \\and \\ldots \\and a_r. $ $ Here, $ \\\\and $ denotes the <a href=\"https://en.wikipedia.org/wiki/Bitwise_operation#AND\">bitwise AND operation</a>. </p><p>Because Jonathan would like to defeat the vampire minions fast, he will divide the vampires into contiguous groups, such that each vampire is in <span class=\"tex-font-style-bf\">exactly</span> one group, and the <span class=\"tex-font-style-bf\">sum</span> of <span class=\"tex-font-style-it\">strengths</span> of the groups is <span class=\"tex-font-style-bf\">minimized</span>. Among all ways to divide the vampires, he would like to find the way with the <span class=\"tex-font-style-bf\">maximum</span> number of groups.</p><p>Given the strengths of each of the $ n$$$ vampires, find the maximum number of groups among all possible ways to divide the vampires with the smallest sum of strengths.\n\nInput Format\nThe first line contains a single integer $ t $ $ (1 \\leq t \\leq 10^4) $ — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ ) — the number of vampires.\n\nThe second line of each test case contains $ n $ integers $ a_1,a_2,\\ldots,a_n $ ( $ 0 \\leq a_i \\leq 10^9 $ ) — the individual strength of each vampire.\n\nThe sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the maximum number of groups among all possible ways to divide the vampires with the smallest sum of strengths.\n\nExamples\nSample 1\nInput\n3\n3\n1 2 3\n5\n2 3 1 5 2\n4\n5 7 12 6\nOutput\n1\n2\n1\n\nNote\nIn the first test case, the optimal way is to take all the $ n $ vampires as a group. So, $ f(1,3) = 1 \\and 2 \\and 3 = 0 $ .\n\nIn the second test case, the optimal way is to make $ 2 $ groups, $ (2,3,1) $ and $ (5,2) $ . So, $ f(1,3) + f(4,5) = (2 \\and 3 \\and 1) + (5 \\and 2) = 0 + 0 = 0 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "solution",
+            "content": "#include\n<iostream>\n#include\n<vector>\nusing\nnamespace\nstd\n;\n#define\nll\nlong\nlong\n#define\null\nunsigned\nlong\nlong\n#define\npb\n(\ne\n)\npush_back\n(\ne\n)\n#define\nsv\n(\na\n)\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n())\n#define\nsa\n(\na\n,\nn\n)\nsort\n(\na\n,\na\n+\nn\n)\n#define\nmp\n(\na\n,\nb\n)\nmake_pair\n(\na\n,\nb\n)\n#define\nall\n(\nx\n)\nx\n.\nbegin\n(),\nx\n.\nend\n()\nvoid\nsolve\n(){\nint\nn\n;\ncin\n>>\nn\n;\nint\narr\n[\nn\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\narr\n[\ni\n];\nint\ncur\n=\narr\n[\n0\n];\nint\npart\n=\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++){\ncur\n&=\narr\n[\ni\n];\nif\n(\ncur\n==\n0\n){\nif\n(\ni\n==\nn\n-\n1\n)\nbreak\n;\npart\n++;\ncur\n=\narr\n[\ni\n+\n1\n];\n}\n}\nif\n(\ncur\n!=\n0\n)\npart\n--;\npart\n=\nmax\n(\npart\n,\n1\n);\ncout\n<<\npart\n<<\n'\\n'\n;\n}\nint\nmain\n(){\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\nsolve\n();\nreturn\n0\n;\n}"
+        }
+    ]
+}

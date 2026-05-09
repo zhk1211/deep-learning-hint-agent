@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIn some social network, there are $ n $ users communicating with each other in $ m $ groups of friends. Let's analyze the process of distributing some news between users.\n\nInitially, some user $ x $ receives the news from some source. Then he or she sends the news to his or her friends (two users are friends if there is at least one group such that both of them belong to this group). Friends continue sending the news to their friends, and so on. The process ends when there is no pair of friends such that one of them knows the news, and another one doesn't know.\n\nFor each user $ x $ you have to determine what is the number of users that will know the news if initially only user $ x $ starts distributing it.\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ ( $ 1 \\le n, m \\le 5 \\cdot 10^5 $ ) — the number of users and the number of groups of friends, respectively.\n\nThen $ m $ lines follow, each describing a group of friends. The $ i $ -th line begins with integer $ k_i $ ( $ 0 \\le k_i \\le n $ ) — the number of users in the $ i $ -th group. Then $ k_i $ distinct integers follow, denoting the users belonging to the $ i $ -th group.\n\nIt is guaranteed that $ \\sum \\limits_{i = 1}^{m} k_i \\le 5 \\cdot 10^5 $ .\n\nOutput Format\nPrint $ n $ integers. The $ i $ -th integer should be equal to the number of users that will know the news if user $ i $ starts distributing it.\n\nExamples\nSample 1\nInput\n7 5\n3 2 5 4\n0\n2 1 2\n1 1\n2 6 7\nOutput\n4 4 1 4 4 2 2"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n1000043\n;\nvector\n<int>\ng\n[\nN\n];\nint\ncolor\n[\nN\n];\nint\nsiz\n[\nN\n];\nint\nn\n,\nm\n;\nint\ncc\n=\n0\n;\nint\ndfs\n(\nint\nx\n)\n{\nif\n(\ncolor\n[\nx\n])\nreturn\n0\n;\ncolor\n[\nx\n]\n=\ncc\n;\nint\nans\n=\n(\nx\n<\nn\n?\n1\n:\n0\n);\nfor\n(\nauto\ny\n:\ng\n[\nx\n])\nans\n+=\ndfs\n(\ny\n);\nreturn\nans\n;\n}\nint\nmain\n()\n{\nscanf\n(\n\"%d %d\"\n,\n&\nn\n,\n&\nm\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nm\n;\ni\n++)\n{\nint\nk\n;\nscanf\n(\n\"%d\"\n,\n&\nk\n);\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nk\n;\nj\n++)\n{\nint\nx\n;\nscanf\n(\n\"%d\"\n,\n&\nx\n);\n--\nx\n;\ng\n[\nx\n].\npush_back\n(\ni\n+\nn\n);\ng\n[\ni\n+\nn\n].\npush_back\n(\nx\n);\n}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(!\ncolor\n[\ni\n])\n{\ncc\n++;\nsiz\n[\ncc\n]\n=\ndfs\n(\ni\n);\n}\nprintf\n(\n\"%d \"\n,\nsiz\n[\ncolor\n[\ni\n]]);\n}\n}"
+        },
+        {
+            "title": "Solution (PikMike)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nconst\nint\nN\n=\n500\n*\n1000\n+\n13\n;\nint\nn\n,\nm\n;\nint\nrk\n[\nN\n],\np\n[\nN\n];\nint\ngetP\n(\nint\na\n){\nreturn\n(\na\n==\np\n[\na\n]\n?\na\n:\np\n[\na\n]\n=\ngetP\n(\np\n[\na\n]));\n}\nvoid\nunite\n(\nint\na\n,\nint\nb\n){\na\n=\ngetP\n(\na\n),\nb\n=\ngetP\n(\nb\n);\nif\n(\na\n==\nb\n)\nreturn\n;\nif\n(\nrk\n[\na\n]\n<\nrk\n[\nb\n])\nswap\n(\na\n,\nb\n);\np\n[\nb\n]\n=\na\n;\nrk\n[\na\n]\n+=\nrk\n[\nb\n];\n}\nint\nmain\n(){\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nm\n);\nforn\n(\ni\n,\nn\n)\np\n[\ni\n]\n=\ni\n,\nrk\n[\ni\n]\n=\n1\n;\nforn\n(\ni\n,\nm\n){\nint\nk\n;\nscanf\n(\n\"%d\"\n,\n&\nk\n);\nint\nlst\n=\n-\n1\n;\nforn\n(\nj\n,\nk\n){\nint\nx\n;\nscanf\n(\n\"%d\"\n,\n&\nx\n);\n--\nx\n;\nif\n(\nlst\n!=\n-\n1\n)\nunite\n(\nx\n,\nlst\n);\nlst\n=\nx\n;\n}\n}\nforn\n(\ni\n,\nn\n)\nprintf\n(\n\"%d \"\n,\nrk\n[\ngetP\n(\ni\n)]);\nputs\n(\n\"\"\n);\n}"
+        }
+    ]
+}

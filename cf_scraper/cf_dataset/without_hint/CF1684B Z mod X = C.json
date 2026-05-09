@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given three positive integers $ a $ , $ b $ , $ c $ ( $ a < b < c $ ). You have to find three positive integers $ x $ , $ y $ , $ z $ such that:\n\n$ $$$x \\bmod y = a, $ $ $ $ y \\bmod z = b, $ $ $ $ z \\bmod x = c. $ $ </p><p>Here $ p \\\\bmod q $ denotes the remainder from dividing $ p $ by $ q$$$. It is possible to show that for such constraints the answer always exists.\n\nInput Format\nThe input consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10\\,000 $ ) — the number of test cases. Description of the test cases follows.\n\nEach test case contains a single line with three integers $ a $ , $ b $ , $ c $ ( $ 1 \\le a < b < c \\le 10^8 $ ).\n\nOutput Format\nFor each test case output three positive integers $ x $ , $ y $ , $ z $ ( $ 1 \\le x, y, z \\le 10^{18} $ ) such that $ x \\bmod y = a $ , $ y \\bmod z = b $ , $ z \\bmod x = c $ .\n\nYou can output any correct answer.\n\nExamples\nSample 1\nInput\n4\n1 3 4\n127 234 421\n2 7 8\n59 94 388\nOutput\n12 11 4\n1063 234 1484\n25 23 8\n2221 94 2609\n\nNote\nIn the first test case:\n\n$ $$$x \\bmod y = 12 \\bmod 11 = 1; $ $ </p><p> $ $ y \\bmod z = 11 \\bmod 4 = 3; $ $ </p><p> $ $ z \\bmod x = 4 \\bmod 12 = 4. $ $$$"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\na\n,\nb\n,\nc\n;\ncin\n>>\na\n>>\nb\n>>\nc\n;\ncout\n<<\na\n+\nb\n+\nc\n<<\n\" \"\n<<\nb\n+\nc\n<<\n\" \"\n<<\nc\n<<\n\"\\n\"\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\nsolve\n();\nreturn\n0\n;\n}"
+        }
+    ]
+}

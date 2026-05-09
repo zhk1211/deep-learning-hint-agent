@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "import\njava\n.\nutil\n.*\nfun\nnext\n()\n=\nreadLine\n()!!\nfun nextInt\n()\n=\nnext\n().\ntoInt\n()\nfun nextInts\n()\n=\nnext\n().\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nfun nextLongs\n()\n=\nnext\n().\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoLong\n()\n}\nfun solve\n()\n{\nval\n(\nn\n,\nm\n,\nk\n)\n=\nnextInts\n()\nvar\nA\n=\nnextLongs\n()\nvar\na\n=\narrayListOf\n<\nLong\n>()\na\n.\naddAll\n(\nA\n)\na\n.\nsort\n()\nvar\nans\n=\n(\n1e18\n).\ntoLong\n()\nvar\nind\n=\n0\nvar\nabove\n:\nLong\n=\n0\nvar\nbelow\n:\nLong\n=\n0\nfor\n(\ni\nin\n0.\n.\nm\n-\n1\n)\nabove\n+=\na\n[\ni\n]-\na\n[\n0\n]\nfor\n(\ni\nin\n0.\n.\nn\n-\nm\n)\n{\nval des\n=\ni\n+(\nm\n-\n1\n)/\n2\nwhile\n(\nind\n<\ndes\n)\n{\n// try to get closer to median if possible\nif\n(\nbelow\n+(\na\n[\nind\n+\n1\n]-\na\n[\nind\n])*(\nind\n+\n1\n-\ni\n)\n<=\nk\n)\n{\nbelow\n+=\n(\na\n[\nind\n+\n1\n]-\na\n[\nind\n])*(\nind\n+\n1\n-\ni\n)\nabove\n-=\n(\na\n[\nind\n+\n1\n]-\na\n[\nind\n])*(\ni\n+\nm\n-\n1\n-\nind\n)\n// ind+1 to i+m-1\nind\n++\n}\nelse\nbreak\n}\nassert\n(\nk\n>=\nbelow\n)\nif\n(\nind\n<\ndes\n)\n{\nvar\noops\n:\nLong\n=\n(\nk\n-\nbelow\n)/(\nind\n+\n1\n-\ni\n)\nans\n=\nminOf\n(\nans\n,\nbelow\n+\nabove\n-(\ni\n+\nm\n-\n1\n-\nind\n)*\noops\n+(\nind\n+\n1\n-\ni\n)*\noops\n)\nassert\n(\ni\n+\nm\n-\n1\n-\nind\n>=\nind\n+\n1\n-\ni\n)\n}\nelse\nans\n=\nminOf\n(\nans\n,\nabove\n+\nbelow\n)\nif\n(\ni\n<\nn\n-\nm\n)\n{\nbelow\n-=\na\n[\nind\n]-\na\n[\ni\n]\nabove\n+=\na\n[\ni\n+\nm\n]-\na\n[\nind\n]\n}\n}\nprint\n(\nans\n)\n}\nfun main\n(\nargs\n:\nArray\n<\nString\n>)\n{\nval t\n=\n1\nfor\n(\ni\nin\n0.\n.\nt\n-\n1\n)\nsolve\n()\n}"
+        }
+    ]
+}

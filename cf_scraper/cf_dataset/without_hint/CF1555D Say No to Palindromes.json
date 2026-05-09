@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's call the string beautiful if it does not contain a substring of length at least $ 2 $ , which is a palindrome. Recall that a palindrome is a string that reads the same way from the first character to the last and from the last character to the first. For example, the strings a, bab, acca, bcabcbacb are palindromes, but the strings ab, abbbaa, cccb are not.\n\nLet's define cost of a string as the minimum number of operations so that the string becomes beautiful, if in one operation it is allowed to change any character of the string to one of the first $ 3 $ letters of the Latin alphabet (in lowercase).\n\nYou are given a string $ s $ of length $ n $ , each character of the string is one of the first $ 3 $ letters of the Latin alphabet (in lowercase).\n\nYou have to answer $ m $ queries — calculate the cost of the substring of the string $ s $ from $ l_i $ -th to $ r_i $ -th position, inclusive.\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ ( $ 1 \\le n, m \\le 2 \\cdot 10^5 $ ) — the length of the string $ s $ and the number of queries.\n\nThe second line contains the string $ s $ , it consists of $ n $ characters, each character one of the first $ 3 $ Latin letters.\n\nThe following $ m $ lines contain two integers $ l_i $ and $ r_i $ ( $ 1 \\le l_i \\le r_i \\le n $ ) — parameters of the $ i $ -th query.\n\nOutput Format\nFor each query, print a single integer — the cost of the substring of the string $ s $ from $ l_i $ -th to $ r_i $ -th position, inclusive.\n\nExamples\nSample 1\nInput\n5 4\nbaacb\n1 3\n1 5\n4 5\n2 3\nOutput\n1\n2\n0\n1\n\nNote\nConsider the queries of the example test.\n\n- in the first query, the substring is baa, which can be changed to bac in one operation;\n- in the second query, the substring is baacb, which can be changed to cbacb in two operations;\n- in the third query, the substring is cb, which can be left unchanged;\n- in the fourth query, the substring is aa, which can be changed to ba in one operation."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nstring\ns\n;\ncin\n>>\ns\n;\nvector\n<\nvector\n<int>\n>\npr\n(\n6\n,\nvector\n<int>\n(\nn\n+\n1\n));\nstring\nt\n=\n\"abc\"\n;\nint\ncur\n=\n0\n;\ndo\n{\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\npr\n[\ncur\n][\ni\n+\n1\n]\n=\npr\n[\ncur\n][\ni\n]\n+\n(\ns\n[\ni\n]\n!=\nt\n[\ni\n%\n3\n]);\n++\ncur\n;\n}\nwhile\n(\nnext_permutation\n(\nt\n.\nbegin\n(),\nt\n.\nend\n()));\nwhile\n(\nm\n--)\n{\nint\nl\n,\nr\n;\ncin\n>>\nl\n>>\nr\n;\nint\nans\n=\nn\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n6\n;\n++\ni\n)\nans\n=\nmin\n(\nans\n,\npr\n[\ni\n][\nr\n]\n-\npr\n[\ni\n][\nl\n-\n1\n]);\ncout\n<<\nans\n<<\n\"\\n\"\n;\n}\n}"
+        }
+    ]
+}

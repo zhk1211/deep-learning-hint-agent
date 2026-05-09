@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA bracket sequence is called regular if it is possible to obtain correct arithmetic expression by inserting characters + and 1 into this sequence. For example, sequences (())(), () and (()(())) are regular, while )(, (() and (()))( are not. Let's call a regular bracket sequence \"RBS\".\n\nYou are given a sequence $ s $ of $ n $ characters (, ), and/or ?. There is exactly one character ( and exactly one character ) in this sequence.\n\nYou have to replace every character ? with either ) or ( (different characters ? can be replaced with different brackets). You cannot reorder the characters, remove them, insert other characters, and each ? must be replaced.\n\nDetermine if it is possible to obtain an RBS after these replacements.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nEach test case consists of one line containing $ s $ ( $ 2 \\le |s| \\le 100 $ ) — a sequence of characters (, ), and/or ?. There is exactly one character ( and exactly one character ) in this sequence.\n\nOutput Format\nFor each test case, print YES if it is possible to obtain a regular bracket sequence, or NO otherwise}.\n\nYou may print each letter in any case (for example, YES, Yes, yes, yEs will all be recognized as positive answer).\n\nExamples\nSample 1\nInput\n5\n()\n(?)\n(??)\n??()\n)?(?\nOutput\nYES\nNO\nYES\nYES\nNO\n\nNote\nIn the first test case, the sequence is already an RBS.\n\nIn the third test case, you can obtain an RBS as follows: ()() or (()).\n\nIn the fourth test case, you can obtain an RBS as follows: ()()."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution 1 (BledDest)",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\ns\n=\ninput\n()\nif\nlen\n(\ns\n)\n%\n2\n==\n0\nand\ns\n[\n0\n]\n!=\n')'\nand\ns\n[-\n1\n]\n!=\n'('\n:\nprint\n(\n'YES'\n)\nelse\n:\nprint\n(\n'NO'\n)"
+        },
+        {
+            "title": "Solution 2 (BledDest)",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\ns\n=\ninput\n()\nn\n=\nlen\n(\ns\n)\na\n=\n[\ns\n[\ni\n]\nfor\ni\nin\nrange\n(\nn\n)]\ncnt\n=\nn\n// 2 - 1\nfor\nj\nin\nrange\n(\nn\n):\nif\na\n[\nj\n]\n==\n'?'\n:\nif\ncnt\n>\n0\n:\ncnt\n-=\n1\na\n[\nj\n]\n=\n'('\nelse\n:\na\n[\nj\n]\n=\n')'\nbal\n=\n0\nminbal\n=\n0\nfor\nj\nin\nrange\n(\nn\n):\nif\na\n[\nj\n]\n==\n'('\n:\nbal\n+=\n1\nelse\n:\nbal\n-=\n1\nminbal\n=\nmin\n(\nbal\n,\nminbal\n)\nprint\n(\n'YES'\nif\nbal\n==\n0\nand\nminbal\n>=\n0\nelse\n'NO'\n)"
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a chess board of size $ n \\times m $ . The rows are numbered from $ 1 $ to $ n $ , the columns are numbered from $ 1 $ to $ m $ .\n\nLet's call a cell isolated if a knight placed in that cell can't move to any other cell on the board. Recall that a chess knight moves two cells in one direction and one cell in a perpendicular direction:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1739A/a0d7d8c62ba0d8d73d58490b8d2222f35ced96b2.png)Find any isolated cell on the board. If there are no such cells, print any cell on the board.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 64 $ ) — the number of testcases.\n\nThe only line of each testcase contains two integers $ n $ and $ m $ ( $ 1 \\le n, m \\le 8 $ ) — the number of rows and columns of the board.\n\nOutput Format\nFor each testcase, print two integers — the row and the column of any isolated cell on the board. If there are no such cells, print any cell on the board.\n\nExamples\nSample 1\nInput\n3\n1 7\n8 8\n3 3\nOutput\n1 7\n7 2\n2 2\n\nNote\nIn the first testcase, all cells are isolated. A knight can't move from any cell of the board to any other one. Thus, any cell on board is a correct answer.\n\nIn the second testcase, there are no isolated cells. On a normal chess board, a knight has at least two moves from any cell. Thus, again, any cell is a correct answer.\n\nIn the third testcase, only the middle cell of the board is isolated. The knight can move freely around the border of the board, but can't escape the middle."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution 1 (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n,\nm\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nprint\n(\nn\n// 2 + 1, m // 2 + 1)"
+        },
+        {
+            "title": "Solution 2 (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nforn\n(\n_\n,\nt\n){\nint\nn\n,\nm\n;\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nm\n);\nint\nsvx\n=\n1\n,\nsvy\n=\n1\n;\nfor\n(\nint\nx\n=\n1\n;\nx\n<=\nn\n;\n++\nx\n){\nfor\n(\nint\ny\n=\n1\n;\ny\n<=\nm\n;\n++\ny\n){\nbool\nok\n=\ntrue\n;\nfor\n(\nint\ndx\n:\n{-\n2\n,\n-\n1\n,\n1\n,\n2\n}){\nfor\n(\nint\ndy\n:\n{-\n2\n,\n-\n1\n,\n1\n,\n2\n}){\nif\n(\nabs\n(\ndx\n*\ndy\n)\n!=\n2\n)\ncontinue\n;\nif\n(\n1\n<=\nx\n+\ndx\n&&\nx\n+\ndx\n<=\nn\n&&\n1\n<=\ny\n+\ndy\n&&\ny\n+\ndy\n<=\nm\n)\nok\n=\nfalse\n;\n}\n}\nif\n(\nok\n){\nsvx\n=\nx\n;\nsvy\n=\ny\n;\n}\n}\n}\nprintf\n(\n\"%d %d\\n\"\n,\nsvx\n,\nsvy\n);\n}\n}"
+        }
+    ]
+}

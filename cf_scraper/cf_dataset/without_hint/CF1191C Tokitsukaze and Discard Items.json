@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "The order of discarding is given, so we can simulate the process of discarding.\nIn each time, we can calculate the page that contains the first special item that has not been discarded, and then locate all the special items that need to be discarded at one time. Repeat this process until all special items are discarded.\nEach time at least one item would be discarded, so the time complexity is $$$\\mathcal{O}(m)$$$."
+        },
+        {
+            "title": "Solution (by tokitsukaze)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nconst\nint\nMAX\n=\n1e5\n+\n10\n;\nll p\n[\nMAX\n];\nint\nmain\n()\n{\nll n\n,\nm\n,\nk\n;\nscanf\n(\n\"%lld%lld%lld\"\n,&\nn\n,&\nm\n,&\nk\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nm\n;\ni\n++)\nscanf\n(\n\"%lld\"\n,&\np\n[\ni\n]);\nint\nans\n=\n0\n;\nint\nsum\n=\n0\n;\nint\nnow\n=\n1\n;\nwhile\n(\nnow\n<=\nm\n)\n{\nll r\n=((\np\n[\nnow\n]-\nsum\n-\n1\n)/\nk\n+\n1\n)*\nk\n+\nsum\n;\n//\tcout<<\"r:\"<<r<<endl;\nwhile\n(\nnow\n<=\nm\n&&\np\n[\nnow\n]<=\nr\n)\n{\nsum\n++;\nnow\n++;\n}\nans\n++;\n}\nprintf\n(\n\"%d\\n\"\n,\nans\n);\nreturn\n0\n;\n}"
+        }
+    ]
+}

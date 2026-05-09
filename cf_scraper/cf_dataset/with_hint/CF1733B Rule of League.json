@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a badminton championship in which $ n $ players take part. The players are numbered from $ 1 $ to $ n $ .\n\nThe championship proceeds as follows: player $ 1 $ and player $ 2 $ play a game, then the winner and player $ 3 $ play a game, and then the winner and player $ 4 $ play a game, and so on. So, $ n-1 $ games are played, and the winner of the last game becomes the champion. There are no draws in the games.\n\nYou want to find out the result of championship. Currently, you only know the following information:\n\n- Each player has either won $ x $ games or $ y $ games in the championship.\n\nGiven $ n $ , $ x $ , and $ y $ , find out if there is a result that matches this information.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^5 $ ) — the number of test cases.\n\nThe only line of each test case contains three integers $ n $ , $ x $ , $ y $ ( $ 2 \\le n \\le 10^5 $ , $ 0 \\le x, y < n $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nPrint the answer for each test case, one per line. If there is no result that matches the given information about $ n $ , $ x $ , $ y $ , print $ -1 $ . Otherwise, print $ n-1 $ space separated integers, where the $ i $ -th integer is the player number of the winner of the $ i $ -th game.\n\nIf there are multiple valid results, print any.\n\nExamples\nSample 1\nInput\n5\n5 2 0\n8 1 2\n3 0 0\n2 0 1\n6 3 0\nOutput\n1 1 4 4\n-1\n-1\n2\n-1\n\nNote\nIn the first test case, player $ 1 $ and player $ 4 $ won $ x $ times, player $ 2 $ and player $ 3 $ won $ y $ times.\n\nIn the second, third, and fifth test cases, no valid result exists."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nBecause one of player $$$1$$$ and player $$$2$$$ win $$$0$$$ games and the other win at least $$$1$$$ game, $$$\\min(x, y) = 0$$$ and $$$\\max(x, y) \\gt 0$$$ must be true in order to generate a valid result.\nHint 2\nThere are one winner and one loser for every match. So the sum of winning count and the sum of losing count are same.\nHint 3\nThe sum of winning count is a multiple of $$$\\max(x, y)$$$. Therefore, the sum of losing count is also a multiple of $$$\\max(x, y)$$$.\nHint 4\n(The sum of losing count) equals to $$$n - 1$$$. So $$$n - 1$$$ is a multiple of $$$\\max(x, y)$$$ if there is a valid result."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Because one of player $$$1$$$ and player $$$2$$$ win $$$0$$$ games and the other win at least $$$1$$$ game, $$$\\min(x, y) = 0$$$ and $$$\\max(x, y) \\gt 0$$$ must be true in order to generate a valid result."
+        },
+        {
+            "title": "Hint 2",
+            "content": "There are one winner and one loser for every match. So the sum of winning count and the sum of losing count are same."
+        },
+        {
+            "title": "Hint 3",
+            "content": "The sum of winning count is a multiple of $$$\\max(x, y)$$$. Therefore, the sum of losing count is also a multiple of $$$\\max(x, y)$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "(The sum of losing count) equals to $$$n - 1$$$. So $$$n - 1$$$ is a multiple of $$$\\max(x, y)$$$ if there is a valid result."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "According to hints, $$$\\min(x, y) = 0$$$ and $$$\\max(x, y) \\gt 0$$$ and $$$(n - 1) \\,\\bmod\\, \\max(x, y) = 0$$$ holds in order to generate a valid result. If so, player $$$1$$$ and player $$$2$$$ would play first. Let's consider player $$$2$$$ wins. Then player $$$2$$$ should win $$$\\max(x, y)$$$ games, and loses to player $$$\\max(x, y) + 2$$$. Likewise, player $$$\\max(x, y) + 2$$$ wins $$$\\max(x, y)$$$ games and loses to player $$$2 \\cdot \\max(x, y) + 2$$$. Construct the remaining result in the same way."
+        },
+        {
+            "title": "Solution Code",
+            "content": "#172746518"
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMari has three integers $ n $ , $ x $ , and $ y $ .\n\nCall an array $ a $ of $ n $ non-negative integers good if it satisfies the following conditions:\n\n- $ a_1+a_2+\\ldots+a_n=x $ , and\n- $ a_1 \\, | \\, a_2 \\, | \\, \\ldots \\, | \\, a_n=y $ , where $ | $ denotes the [bitwise OR operation](https://en.wikipedia.org/wiki/Bitwise_operation#OR).\n\nThe score of a good array is the value of $ a_1 \\oplus a_2 \\oplus \\ldots \\oplus a_n $ , where $ \\oplus $ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).\n\nKoxia wants you to find the total bitwise XOR of the scores of all good arrays. If there are no good arrays, output $ 0 $ instead.\n\nInput Format\nThe first line of input contains three integers $ n $ , $ x $ and $ y $ ( $ 1 \\leq n < 2^{40} $ , $ 0 \\leq x < 2^{60} $ , $ 0 \\leq y < 2^{20} $ ).\n\nOutput Format\nOutput a single integer — the total bitwise XOR of the scores of all good arrays.\n\nExamples\nSample 1\nInput\n3 5 3\nOutput\n2\n\nSample 2\nInput\n100 0 100\nOutput\n0\n\nSample 3\nInput\n79877974817 749875791743978 982783\nOutput\n64\n\nNote\nIn the first test case, there are $ 12 $ good arrays totally as follows.\n\n- $ [0,2,3] $ , $ [0,3,2] $ , $ [2,0,3] $ , $ [2,3,0] $ , $ [3,0,2] $ and $ [3,2,0] $ — the score is $ 0 \\oplus 2 \\oplus 3 = 1 $ ;\n- $ [1, 2, 2] $ , $ [2, 1, 2] $ and $ [2, 2, 1] $ — the score is $ 1 \\oplus 2 \\oplus 2 = 1 $ ;\n- $ [1, 1, 3] $ , $ [1, 3, 1] $ and $ [3, 1, 1] $ — the score is $ 1 \\oplus 1 \\oplus 3 = 3 $ .\n\nTherefore, the total bitwise xor of the scores is $ \\underbrace{1 \\oplus \\ldots \\oplus 1}_{9\\text{ times}} \\oplus 3 \\oplus 3 \\oplus 3 = 2 $ .\n\nIn the second test case, there are no good sequences. The output should be $ 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "From symmetry, for any non-negative integer $$$t$$$, the number of good sequences with $$$a_1=t$$$, the number of good sequences with $$$a_2=t$$$, ... are equal."
+        },
+        {
+            "title": "Hint 2",
+            "content": "It is useful to consider the contribution of each bit to the answer independently."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Since XOR is undone twice, considering the contribution to the answer can be regarded as counting up over mod $$$2$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "It is difficult to count those for which total or is $$$y$$$, but it is relatively easy to count those for which total or is a subset of $$$y$$$. Then, we can consider a way using the inclusion-exclusion principle."
+        },
+        {
+            "title": "Hint 5",
+            "content": "Lucas's theorem and Kummer's theorem are useful. In particular, you can derive equivalence conditions on or."
+        },
+        {
+            "title": "Hint 6",
+            "content": "\"There are $$$a+b$$$ white balls. For every pair $$$(c,d)$$$ of nonnegative integers satisfying $$$c+d=n$$$, find the sum of the ways to choose $$$c$$$ balls from the first $$$a$$$ balls and $$$d$$$ balls from the remaining $$$b$$$ balls.\" The answer to this problem is $$$_{a+b} C_{n}$$$. This is because considering how to choose for every pair $$$(c,d)$$$ of non-negative integers satisfying $$$c+d=n$$$ merely consider the case of choosing $$$n$$$ balls as how many balls to choose from $$$a$$$ balls and $$$b$$$ balls. This result is called Vandermonde's identity."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let $$$f(i,t)$$$ is the number of good sequence such that $$$a_i=t$$$. $$$f(1,t)=f(2,t)=...=f(n,t)$$$, so if $$$n$$$ is even, the answer is $$$0$$$. Otherwise, the answer is total xor of $$$t$$$ such that number of good sequences such that $$$a_1=t$$$ is odd. We can consider each bit independently, so we can rewrite the problem \"for each $$$i$$$, find the number of good sequences such that $$$a_1$$$'s $$$i$$$-th bit is $$$1$$$, modulo $$$2$$$\".\nLet $$$g(y')$$$ is the answer if $$$y$$$ is a subset of $$$y'$$$(means $$$y \\mid y'=y'$$$). We can prove with induction the answer of the original problem is total xor of $$$g(y')$$$ such that $$$y'$$$ is a subset of given $$$y$$$. So, the goal is for each $$$i$$$, find the number of $$$y'$$$ such that $$$y'$$$ is a subset of $$$y$$$ and $$$g(y')$$$'s $$$i$$$-th bit is $$$1$$$, modulo $$$2$$$.\nWe can prove with Lucas's theorem or Kummer's theorem ($$$p=2$$$), \"$$$\\binom{a}{b} \\bmod 2$$$ is $$$1$$$\" is equivalent to \"$$$b$$$ is a subset of $$$a$$$\". The number of sequences such that the length is $$$n$$$ and total sum is $$$x$$$ and total or is a subset of $$$y$$$, modulo $$$2$$$ is equal to $$$\\sum_{t_1+\\ldots+t_n=x} \\prod{} \\binom{y}{t_i}$$$, because if there is $$$t_i$$$ which is not a subset of $$$y$$$, $$$\\binom{y}{t_i}$$$ is $$$0$$$ and the product is also $$$0$$$, modulo $$$2$$$. Consider Vandermonde's identity, the value is equal to $$$\\binom{ny}{x}$$$. In a similar way, we can rewrite the problem to \"for each $$$i$$$, find the number of $$$y'$$$ such that $$$y'$$$ is a subset of $$$y$$$ and $$$y'$$$'s $$$i$$$-th bit is $$$1$$$ and $$$x-2^i$$$ is a subset of $$$ny'-2^i$$$($$$\\binom{ny'-2^i}{x-2^i} \\bmod 2 = 1$$$), modulo $$$2$$$\".\nFrom the above, we can solve this problem in $$$O(y \\log y)$$$ by performing the calculation in $$$O(1)$$$ for all $$$i$$$ and all $$$y'$$$."
+        }
+    ]
+}

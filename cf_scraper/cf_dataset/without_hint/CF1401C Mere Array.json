@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a_1, a_2, \\dots, a_n $ where all $ a_i $ are integers and greater than $ 0 $ .\n\nIn one operation, you can choose two different indices $ i $ and $ j $ ( $ 1 \\le i, j \\le n $ ). If $ gcd(a_i, a_j) $ is equal to the minimum element of the whole array $ a $ , you can swap $ a_i $ and $ a_j $ . $ gcd(x, y) $ denotes the [greatest common divisor (GCD)](https://en.wikipedia.org/wiki/Greatest_common_divisor) of integers $ x $ and $ y $ .\n\nNow you'd like to make $ a $ non-decreasing using the operation any number of times (possibly zero). Determine if you can do this.\n\nAn array $ a $ is non-decreasing if and only if $ a_1 \\le a_2 \\le \\ldots \\le a_n $ .\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains one integer $ n $ ( $ 1 \\le n \\le 10^5 $ ) — the length of array $ a $ .\n\nThe second line of each test case contains $ n $ positive integers $ a_1, a_2, \\ldots a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the array itself.\n\nIt is guaranteed that the sum of $ n $ over all test cases doesn't exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, output \"YES\" if it is possible to make the array $ a $ non-decreasing using the described operation, or \"NO\" if it is impossible to do so.\n\nExamples\nSample 1\nInput\n4\n1\n8\n6\n4 3 6 6 2 9\n4\n4 5 6 7\n5\n7 5 2 2 4\nOutput\nYES\nYES\nYES\nNO\n\nNote\nIn the first and third sample, the array is already non-decreasing.\n\nIn the second sample, we can swap $ a_1 $ and $ a_3 $ first, and swap $ a_1 $ and $ a_5 $ second to make the array non-decreasing.\n\nIn the forth sample, we cannot the array non-decreasing using the operation."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution Code",
+            "content": "#import<bits/stdc++.h>\n#define\nendl\n'\\n'\nusing\nnamespace\nstd\n;\nint\na\n[\n100005\n],\nb\n[\n100005\n];\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(;\nt\n--;)\n{\nint\nk\n=\n0\n,\nm\n=\n1000000000\n,\nn\n;\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\nb\n[\ni\n]\n=\na\n[\ni\n];\nm\n=\nmin\n(\nm\n,\na\n[\ni\n]);\n}\nsort\n(\nb\n,\nb\n+\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nif\n(\na\n[\ni\n]\n!=\nb\n[\ni\n]\n&&\na\n[\ni\n]\n%\nm\n>\n0\n)\nk\n=\n1\n;\nif\n(\nk\n)\ncout\n<<\n\"NO\"\n<<\nendl\n;\nelse\ncout\n<<\n\"YES\"\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

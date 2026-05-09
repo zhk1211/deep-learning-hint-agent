@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nOnce upon a time, Toma found himself in a binary cafe. It is a very popular and unusual place.\n\nThe cafe offers visitors $ k $ different delicious desserts. The desserts are numbered from $ 0 $ to $ k-1 $ . The cost of the $ i $ -th dessert is $ 2^i $ coins, because it is a binary cafe! Toma is willing to spend no more than $ n $ coins on tasting desserts. At the same time, he is not interested in buying any dessert more than once, because one is enough to evaluate the taste.\n\nIn how many different ways can he buy several desserts (possibly zero) for tasting?\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThen follows $ t $ lines, each of which describes one test case.\n\nEach test case is given on a single line and consists of two integers $ n $ and $ k $ ( $ 1 \\le n, k \\le 10^9 $ ) — the number of coins Toma is willing to spend and the number of desserts in the binary cafe.\n\nOutput Format\nOutput $ t $ integers, the $ i $ -th of which should be equal to the answer for the $ i $ -th test case — the number of ways to buy desserts for tasting.\n\nExamples\nSample 1\nInput\n5\n1 2\n2 1\n2 2\n10 2\n179 100\nOutput\n2\n2\n3\n4\n180\n\nNote\nVariants for 1st sample: {}, {1}\n\nVariants for 2nd sample: {}, {1}\n\nVariants for 3rd sample: {}, {1}, {2}\n\nVariants for 4th sample: {}, {1}, {2}, {1, 2}"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint32_t\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nk\n=\nmin\n(\nk\n,\n30\n);\ncout\n<<\nmin\n(\nn\n,\n(\n1\n<<\nk\n)\n-\n1\n)\n+\n1\n<<\n\"\\n\"\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nFind the minimum number with the given sum of digits $ s $ such that all digits in it are distinct (i.e. all digits are unique).\n\nFor example, if $ s=20 $ , then the answer is $ 389 $ . This is the minimum number in which all digits are different and the sum of the digits is $ 20 $ ( $ 3+8+9=20 $ ).\n\nFor the given $ s $ print the required number.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 45 $ ) — the number of test cases.\n\nEach test case is specified by a line that contains the only integer $ s $ ( $ 1 \\le s \\le 45 $ ).\n\nOutput Format\nPrint $ t $ integers — the answers to the given test cases.\n\nExamples\nSample 1\nInput\n4\n20\n8\n45\n10\nOutput\n389\n8\n123456789\n19"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nforn\n(\ntt\n,\nt\n)\n{\nint\ns\n;\ncin\n>>\ns\n;\nstring\nresult\n;\nfor\n(\nint\nd\n=\n9\n;\nd\n>=\n1\n;\nd\n--)\nif\n(\ns\n>=\nd\n)\n{\nresult\n=\nchar\n(\n'0'\n+\nd\n)\n+\nresult\n;\ns\n-=\nd\n;\n}\ncout\n<<\nresult\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

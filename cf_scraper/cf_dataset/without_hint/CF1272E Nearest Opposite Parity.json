@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ n $ integers. In one move, you can jump from the position $ i $ to the position $ i - a_i $ (if $ 1 \\le i - a_i $ ) or to the position $ i + a_i $ (if $ i + a_i \\le n $ ).\n\nFor each position $ i $ from $ 1 $ to $ n $ you want to know the minimum the number of moves required to reach any position $ j $ such that $ a_j $ has the opposite parity from $ a_i $ (i.e. if $ a_i $ is odd then $ a_j $ has to be even and vice versa).\n\nInput Format\nThe first line of the input contains one integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the number of elements in $ a $ .\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le n $ ), where $ a_i $ is the $ i $ -th element of $ a $ .\n\nOutput Format\nPrint $ n $ integers $ d_1, d_2, \\dots, d_n $ , where $ d_i $ is the minimum the number of moves required to reach any position $ j $ such that $ a_j $ has the opposite parity from $ a_i $ (i.e. if $ a_i $ is odd then $ a_j $ has to be even and vice versa) or -1 if it is impossible to reach such a position.\n\nExamples\nSample 1\nInput\n10\n4 5 7 6 7 5 4 4 6 4\nOutput\n1 1 1 2 -1 1 1 3 1 1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nINF\n=\n1e9\n;\nint\nn\n;\nvector\n<int>\na\n;\nvector\n<int>\nans\n;\nvector\n<\nvector\n<int>\n>\ng\n;\nvoid\nbfs\n(\nconst\nvector\n<int>\n&\nstart\n,\nconst\nvector\n<int>\n&\nend\n)\n{\nvector\n<int>\nd\n(\nn\n,\nINF\n);\nqueue\n<int>\nq\n;\nfor\n(\nauto\nv\n:\nstart\n)\n{\nd\n[\nv\n]\n=\n0\n;\nq\n.\npush\n(\nv\n);\n}\nwhile\n(!\nq\n.\nempty\n())\n{\nint\nv\n=\nq\n.\nfront\n();\nq\n.\npop\n();\nfor\n(\nauto\nto\n:\ng\n[\nv\n])\n{\nif\n(\nd\n[\nto\n]\n==\nINF\n)\n{\nd\n[\nto\n]\n=\nd\n[\nv\n]\n+\n1\n;\nq\n.\npush\n(\nto\n);\n}\n}\n}\nfor\n(\nauto\nv\n:\nend\n)\n{\nif\n(\nd\n[\nv\n]\n!=\nINF\n)\n{\nans\n[\nv\n]\n=\nd\n[\nv\n];\n}\n}\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\ncin\n>>\nn\n;\na\n=\nvector\n<int>\n(\nn\n);\ng\n=\nvector\n<\nvector\n<int>\n>(\nn\n);\nvector\n<int>\neven\n,\nodd\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\nif\n(\na\n[\ni\n]\n&\n1\n)\nodd\n.\npush_back\n(\ni\n);\nelse\neven\n.\npush_back\n(\ni\n);\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nint\nlf\n=\ni\n-\na\n[\ni\n];\nint\nrg\n=\ni\n+\na\n[\ni\n];\nif\n(\n0\n<=\nlf\n)\ng\n[\nlf\n].\npush_back\n(\ni\n);\nif\n(\nrg\n<\nn\n)\ng\n[\nrg\n].\npush_back\n(\ni\n);\n}\nans\n=\nvector\n<int>\n(\nn\n,\n-\n1\n);\nbfs\n(\nodd\n,\neven\n);\nbfs\n(\neven\n,\nodd\n);\nfor\n(\nauto\nit\n:\nans\n)\ncout\n<<\nit\n<<\n\" \"\n;\ncout\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

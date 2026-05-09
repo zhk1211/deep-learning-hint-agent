@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a permutation $ p $ of length $ n $ — an array, consisting of integers from $ 1 $ to $ n $ , all distinct.\n\nLet $ p_{l,r} $ denote a subarray — an array formed by writing down elements from index $ l $ to index $ r $ , inclusive.\n\nLet $ \\mathit{maxpos}_{l,r} $ denote the index of the maximum element on $ p_{l,r} $ . Similarly, let $ \\mathit{minpos}_{l,r} $ denote the index of the minimum element on it.\n\nCalculate the number of subarrays $ p_{l,r} $ such that $ \\mathit{maxpos}_{l,r} > \\mathit{minpos}_{l,r} $ .\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\le n \\le 10^6 $ ) — the number of elements in the permutation.\n\nThe second line contains $ n $ integers $ p_1, p_2, \\dots, p_n $ ( $ 1 \\le p_i \\le n $ ). All $ p_i $ are distinct.\n\nOutput Format\nPrint a single integer — the number of subarrays $ p_{l,r} $ such that $ \\mathit{maxpos}_{l,r} > \\mathit{minpos}_{l,r} $ .\n\nExamples\nSample 1\nInput\n3\n1 2 3\nOutput\n3\n\nSample 2\nInput\n6\n5 3 6 1 4 2\nOutput\n4\n\nSample 3\nInput\n10\n5 1 6 2 8 3 4 10 9 7\nOutput\n38"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nbool\ncomp\n(\nconst\npair\n<\nint\n,\nint\n>\n&\na\n,\nconst\npair\n<\nint\n,\nint\n>\n&\nb\n){\nreturn\na\n.\nsecond\n<\nb\n.\nsecond\n;\n}\nint\nmain\n(){\nint\nn\n;\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nvector\n<\npair\n<\nint\n,\nint\n>>\nstmn\n,\nstmx\n;\nstmn\n.\npush_back\n({-\n1\n,\n-\n1\n});\nstmx\n.\npush_back\n({\nn\n,\n-\n1\n});\nlong\nlong\nans\n=\n0\n;\nint\nlen\n=\n0\n;\nset\n<\npair\n<\nint\n,\nint\n>>\ncur\n;\ncur\n.\ninsert\n({-\n1\n,\n0\n});\ncur\n.\ninsert\n({-\n1\n,\n1\n});\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n){\nint\nx\n;\nscanf\n(\n\"%d\"\n,\n&\nx\n);\n--\nx\n;\nwhile\n(\nstmn\n.\nback\n().\nfirst\n>\nx\n){\nauto\nit\n=\ncur\n.\nlower_bound\n({\nstmn\n.\nback\n().\nsecond\n,\n0\n});\nauto\nme\n=\nit\n;\nauto\nprv\n=\nit\n;\n--\nprv\n;\n++\nit\n;\nlen\n-=\nme\n->\nfirst\n-\nprv\n->\nfirst\n;\nif\n(\nit\n!=\ncur\n.\nend\n()\n&&\nit\n->\nsecond\n==\n0\n)\nlen\n+=\nit\n->\nfirst\n-\nprv\n->\nfirst\n;\ncur\n.\nerase\n(\nme\n);\nstmn\n.\npop_back\n();\n}\nlen\n+=\ni\n-\ncur\n.\nrbegin\n()->\nfirst\n;\ncur\n.\ninsert\n({\ni\n,\n0\n});\nstmn\n.\npush_back\n({\nx\n,\ni\n});\nwhile\n(\nstmx\n.\nback\n().\nfirst\n<\nx\n){\nauto\nit\n=\ncur\n.\nlower_bound\n({\nstmx\n.\nback\n().\nsecond\n,\n1\n});\nauto\nme\n=\nit\n;\nauto\nprv\n=\nit\n;\n--\nprv\n;\n++\nit\n;\nif\n(\nit\n!=\ncur\n.\nend\n()\n&&\nit\n->\nsecond\n==\n0\n)\nlen\n+=\nme\n->\nfirst\n-\nprv\n->\nfirst\n;\ncur\n.\nerase\n(\nme\n);\nstmx\n.\npop_back\n();\n}\ncur\n.\ninsert\n({\ni\n,\n1\n});\nstmx\n.\npush_back\n({\nx\n,\ni\n});\nans\n+=\nlen\n;\n}\nprintf\n(\n\"%lld\\n\"\n,\nans\n-\nn\n);\n}"
+        }
+    ]
+}

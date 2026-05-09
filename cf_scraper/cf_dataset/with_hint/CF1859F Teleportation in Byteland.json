@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ cities in Byteland, some of which are connected by roads, which can be traversed in any direction. The $ i $ -th road has its own hardness parameter $ w_i $ . Time spent on traversing a road with its hardness equal to $ w_i $ is $ \\lceil\\frac{w_i}{c}\\rceil $ , where $ c $ is the current driving skill.\n\nThe travel network of Byteland is a tree. In other words, between any pair of cities, there is exactly one path that passes through each city at most once.\n\nIn some cities you can visit driving courses. A single course takes $ T $ time to complete, and after completing the course the driver's skill $ c $ is increased by $ 2 $ times. Notice that the time $ T $ required to complete a course is the same in all cities, and courses can be completed in the same city more than once.\n\nYou need to answer the $ q $ queries: what is the minimum time it takes to get from the city $ a $ to city $ b $ if you start the travelling with driving skill $ c = 1 $ ?\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ T $ ( $ 1 \\le n \\le 10^5, 1 \\le T \\le 10^6 $ ) - the number of cities and time required to complete a single driving course.\n\nThe following $ n - 1 $ lines each contain three integers $ u_i $ , $ v_i $ and $ w_i $ ( $ 1 \\le u_i, v_i \\le n, 1 \\le w_i \\le 10^6, u_i \\neq v_i $ ), which mean that there exists a road connecting towns $ u_i $ and $ v_i $ with hardness equal to $ w_i $ .\n\nThe next line contains a binary string $ s $ of length $ n $ , consisting only of symbols $ 0 $ and $ 1 $ . If $ s_i = 1 $ ( $ 1 \\le i \\le n $ ), then you can visit driving courses in the $ i $ -th city. If $ s_i = 0 $ ( $ 1 \\le i \\le n $ ), then you cannot visit driving courses in the $ i $ -th city.\n\nThe next line contains a single integer $ q $ ( $ 1 \\le q \\le 10^5 $ ) — the number of queries you are required to answer.\n\nThe next $ q $ lines contain two integers $ a_j $ , $ b_j $ ( $ 1 \\le a_j, b_j \\le n, 1 \\le j \\le q $ ) — the cities you are required to process in the $ j $ -th query.\n\nIt is guaranteed that the given graph is a tree. It is guaranteed that the sum of $ n $ and the sum of $ q $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each query, print one integer in a separate line — the minimum time it takes to get in the corresponding query.\n\nExamples\nSample 1\nInput\n2\n2 3\n1 2 1\n11\n1\n1 2\n5 3\n1 4 5\n1 3 8\n2 3 8\n4 5 10\n11001\n5\n1 5\n2 5\n5 1\n3 4\n4 2\nOutput\n1\n11\n14\n11\n13\n15\n\nNote\nIn the only query of the first test case, it is optimal to ignore the driving courses. Then the minimum time required is equal to the distance between vertexes $ 1 $ and $ 2 $ , which is $ 1 $ .\n\nIn the first query of the second test case, we can spend $ 3 $ time in city number $ 1 $ visiting the driving courses, then go to vertex $ 5 $ . Then the minimum time required is $ 3 + \\lceil\\frac{5}{2}\\rceil + \\lceil\\frac{10}{2}\\rceil = 11 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nHow many times do we really need to take driving courses?\nHint 2\nCan you think how would an optimal answer path look like?\nHint 3\nCan you recalculate the distances required to get to a city from every vertex?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "How many times do we really need to take driving courses?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Can you think how would an optimal answer path look like?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Can you recalculate the distances required to get to a city from every vertex?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Root the tree arbitrarily.\nFirst, we can notice that there is no need to take driving courses more than $$$log{maxW}$$$ times.\nNow, let's iterate for the number of driving courses we take from $$$0$$$ to $$$20$$$ ($$$2^{20} \\gt 1000000$$$). For each number we solve separately.\nLet us fix the number of taken as $$$q$$$. Now the path looks like the following: we go over the simple path, then we veer off to take courses in some town, then we come back to the path and finish it. Let's call $$$d[x]$$$ the minimum distance required to get from $$$x$$$ to a town which offers driving courses and then come back to the same town. We can recalculate $$$d[x]$$$ with multi-source BFS.\nNow, let's look at the vertex $$$v1$$$ on the path, from which we will start going off the path. Then, the cost of the path is $$$d[v1]$$$ + distance from $$$a$$$ to $$$v1$$$ on the original edges (with $$$c = 1$$$) + distance from $$$v1$$$ to $$$b$$$ on the modified edges(with $$$c = 2^{q}$$$).\nNow let's look at some cases, let $$$LCA$$$ be the LCA of $$$a$$$ and $$$b$$$, $$$h1[x]$$$ — the sum of all original edges from the root downwards to $$$x$$$, $$$h2[x]$$$ — the sum of all modified edges from the root downwards to $$$x$$$.\nIf $$$v1$$$ is between $$$LCA$$$ and $$$a$$$, the cost is $$$h1[a] - h1[v1] + d1[v1] - h2[LCA] + h2[v1] + h2[b] - h2[LCA]$$$. If $$$v1$$$ is between $$$LCA$$$ and $$$a$$$, the cost is $$$h1[a] - h1[LCA] + h1[v1] - h1[LCA] + d1[v1] + h2[b] - h2[v1]$$$. Now we simply need to consider the terms which depend only on $$$v1$$$, and then we need to take the maximum value on a path. For that we can use binary lifting, and for LCA as well."
+        }
+    ]
+}

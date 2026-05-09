@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (elizarov)",
+            "content": "fun main\n()\n{\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval\n(\nn\n,\nk\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval n1\n=\nn\n/\n(\n1\n+\nk\n+\nk\n*\nk\n+\nk\n*\nk\n*\nk\n)\nval n2\n=\nn1\n*\nk\n        val n3\n=\nn2\n*\nk\n        val n4\n=\nn3\n*\nk\n        println\n(\n\"$n1 $n2 $n3 $n4\"\n)\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nNote that the memory limit is unusual.\n\nYou are given a multiset consisting of $ n $ integers. You have to process queries of two types:\n\n- add integer $ k $ into the multiset;\n- find the $ k $ -th order statistics in the multiset and remove it.\n\n$ k $ -th order statistics in the multiset is the $ k $ -th element in the sorted list of all elements of the multiset. For example, if the multiset contains elements $ 1 $ , $ 4 $ , $ 2 $ , $ 1 $ , $ 4 $ , $ 5 $ , $ 7 $ , and $ k = 3 $ , then you have to find the $ 3 $ -rd element in $ [1, 1, 2, 4, 4, 5, 7] $ , which is $ 2 $ . If you try to delete an element which occurs multiple times in the multiset, only one occurence is removed.\n\nAfter processing all queries, print any number belonging to the multiset, or say that it is empty.\n\nInput Format\nThe first line contains two integers $ n $ and $ q $ ( $ 1 \\le n, q \\le 10^6 $ ) — the number of elements in the initial multiset and the number of queries, respectively.\n\nThe second line contains $ n $ integers $ a_1 $ , $ a_2 $ , ..., $ a_n $ ( $ 1 \\le a_1 \\le a_2 \\le \\dots \\le a_n \\le n $ ) — the elements of the multiset.\n\nThe third line contains $ q $ integers $ k_1 $ , $ k_2 $ , ..., $ k_q $ , each representing a query:\n\n- if $ 1 \\le k_i \\le n $ , then the $ i $ -th query is \"insert $ k_i $ into the multiset\";\n- if $ k_i < 0 $ , then the $ i $ -th query is \"remove the $ |k_i| $ -th order statistics from the multiset\". For this query, it is guaranteed that $ |k_i| $ is not greater than the size of the multiset.\n\nOutput Format\nIf the multiset is empty after all queries, print $ 0 $ .\n\nOtherwise, print any integer that belongs to the resulting multiset.\n\nExamples\nSample 1\nInput\n5 5\n1 2 3 4 5\n-1 -1 -1 -1 -1\nOutput\n0\n\nSample 2\nInput\n5 4\n1 2 3 4 5\n-5 -1 -3 -1\nOutput\n3\n\nSample 3\nInput\n6 2\n1 1 1 2 3 4\n5 6\nOutput\n6\n\nNote\nIn the first example, all elements of the multiset are deleted.\n\nIn the second example, the elements $ 5 $ , $ 1 $ , $ 4 $ , $ 2 $ are deleted (they are listed in chronological order of their removal).\n\nIn the third example, $ 6 $ is not the only answer."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n,\nq\n;\nvector\n<int>\na\n,\nk\n;\nint\ncount_le\n(\nint\nx\n)\n{\nint\ncnt\n=\n0\n;\nfor\n(\nauto\ny\n:\na\n)\nif\n(\ny\n<=\nx\n)\ncnt\n++;\nfor\n(\nauto\ny\n:\nk\n)\n{\nif\n(\ny\n>\n0\n&&\ny\n<=\nx\n)\ncnt\n++;\nif\n(\ny\n<\n0\n&&\nabs\n(\ny\n)\n<=\ncnt\n)\ncnt\n--;\n}\nreturn\ncnt\n;\n}\nint\nmain\n()\n{\nscanf\n(\n\"%d %d\"\n,\n&\nn\n,\n&\nq\n);\na\n.\nresize\n(\nn\n);\nk\n.\nresize\n(\nq\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nscanf\n(\n\"%d\"\n,\n&\na\n[\ni\n]);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nq\n;\ni\n++)\nscanf\n(\n\"%d\"\n,\n&\nk\n[\ni\n]);\nif\n(\ncount_le\n(\nint\n(\n1e9\n))\n==\n0\n)\n{\nputs\n(\n\"0\"\n);\nreturn\n0\n;\n}\nint\nlf\n=\n0\n;\nint\nrg\n=\nint\n(\n1e6\n)\n+\n1\n;\nwhile\n(\nrg\n-\nlf\n>\n1\n)\n{\nint\nmid\n=\n(\nlf\n+\nrg\n)\n/\n2\n;\nif\n(\ncount_le\n(\nmid\n)\n>\n0\n)\nrg\n=\nmid\n;\nelse\nlf\n=\nmid\n;\n}\nprintf\n(\n\"%d\\n\"\n,\nrg\n);\nreturn\n0\n;\n}"
+        }
+    ]
+}

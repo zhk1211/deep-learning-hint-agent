@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "import\njava\n.\nutil\n.\nQueue\nimport\njava\n.\nutil\n.\nLinkedList\nfun main\n()\n{\nval\n(\nn1\n,\nn2\n,\nm\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval S\n=\nn1\n+\nn2\n  val T\n=\nS\n+\n1\nval V\n=\nT\n+\n1\ndata\nclass\nEdge\n(\nval y\n:\nInt\n,\nval c\n:\nInt\n,\nvar\nf\n:\nInt\n,\nval cost\n:\nInt\n)\nval e\n=\nArrayList\n<\nEdge\n>()\nval g\n=\nArray\n(\nV\n)\n{\nArrayList\n<\nInt\n>()\n}\nfun addEdge\n(\nx\n:\nInt\n,\ny\n:\nInt\n,\nc\n:\nInt\n,\ncost\n:\nInt\n)\n{\ng\n[\nx\n].\nadd\n(\ne\n.\nsize\n)\ne\n.\nadd\n(\nEdge\n(\ny\n,\nc\n,\n0\n,\ncost\n))\ng\n[\ny\n].\nadd\n(\ne\n.\nsize\n)\ne\n.\nadd\n(\nEdge\n(\nx\n,\n0\n,\n0\n,\n-\ncost\n))\n}\nvar\nsum\n=\n0\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmapIndexed\n{\ni\n,\nvalue\n->\nval k\n=\nvalue\n.\ntoInt\n()\naddEdge\n(\ni\n,\nT\n,\n1\n,\n-\nk\n)\nsum\n+=\nk\n}\nval deg\n=\nIntArray\n(\nn2\n)\n{\n0\n}\nrepeat\n(\nm\n)\n{\nval\n(\nx\n,\ny\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n-\n1\n}\naddEdge\n(\ny\n+\nn1\n,\nx\n,\n1\n,\n0\n)\ndeg\n[\ny\n]\n+=\n1\n}\nfor\n(\ni\nin\n0\nuntil\nn2\n)\n{\naddEdge\n(\nS\n,\ni\n+\nn1\n,\ndeg\n[\ni\n]\n-\n1\n,\n0\n)\n}\nvar\nmincost\n=\n0\nfun enlarge\n()\n:\nBoolean\n{\nval q\n:\nQueue\n<\nInt\n>\n=\nLinkedList\n<\nInt\n>()\nval inq\n=\nIntArray\n(\nV\n)\n{\n0\n}\nval d\n=\nIntArray\n(\nV\n)\n{\n1e9\n.\ntoInt\n()\n}\nval p\n=\nIntArray\n(\nV\n)\n{\n-\n1\n}\nval pe\n=\nIntArray\n(\nV\n)\n{\n-\n1\n}\nq\n.\nadd\n(\nS\n)\ninq\n[\nS\n]\n=\n1\nd\n[\nS\n]\n=\n0\nwhile\n(!\nq\n.\nisEmpty\n())\n{\nval k\n=\nq\n.\npoll\n()\ng\n[\nk\n].\nforEach\n{\na\n->\nval\n(\nto\n,\nc\n,\nf\n,\nw\n)\n=\ne\n[\na\n]\nif\n(\nc\n-\nf\n!=\n0\n&&\nd\n[\nto\n]\n>\nd\n[\nk\n]\n+\nw\n)\n{\nd\n[\nto\n]\n=\nd\n[\nk\n]\n+\nw\n          p\n[\nto\n]\n=\nk\n          pe\n[\nto\n]\n=\na\nif\n(\ninq\n[\nto\n]\n==\n0\n)\n{\nq\n.\nadd\n(\nto\n)\ninq\n[\nto\n]\n=\n1\n}\n}\n}\n}\nif\n(\np\n[\nT\n]\n==\n-\n1\n)\nreturn\nfalse\nvar\ncur\n=\nT\nwhile\n(\ncur\n!=\nS\n)\n{\nmincost\n+=\ne\n[\npe\n[\ncur\n]].\ncost\n      e\n[\npe\n[\ncur\n]].\nf\n+=\n1\ne\n[\npe\n[\ncur\n]\nxor\n1\n].\nf\n-=\n1\ncur\n=\np\n[\ncur\n]\n}\nreturn\ntrue\n}\nwhile\n(\nenlarge\n());\nprintln\n(\nsum\n+\nmincost\n)\n}"
+        }
+    ]
+}

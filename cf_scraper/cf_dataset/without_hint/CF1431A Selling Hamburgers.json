@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (elizarov)",
+            "content": "fun main\n()\n{\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval n\n=\nreadLine\n()!!.\ntoInt\n()\nval a\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoLong\n()\n}\nval answer\n=\na\n.\nsortedDescending\n().\nwithIndex\n().\nmaxOf\n{\n(\nit\n.\nindex\n+\n1\n)\n*\nit\n.\nvalue\n}\nprintln\n(\nanswer\n)\n}\n}"
+        }
+    ]
+}

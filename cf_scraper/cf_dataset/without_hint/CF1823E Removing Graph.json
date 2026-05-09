@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlice and Bob are playing a game on a graph. They have an undirected graph without self-loops and multiple edges. All vertices of the graph have degree equal to $ 2 $ . The graph may consist of several components. Note that if such graph has $ n $ vertices, it will have exactly $ n $ edges.\n\nAlice and Bob take turn. Alice goes first. In each turn, the player can choose $ k $ ( $ l \\le k \\le r $ ; $ l < r $ ) vertices that form a connected subgraph and erase these vertices from the graph, including all incident edges.\n\nThe player who can't make a step loses.\n\nFor example, suppose they are playing on the given graph with given $ l = 2 $ and $ r = 3 $ :\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1823E/9583c48ed07ed156db67a86c4c0f07d06f492c6b.png)A valid vertex set for Alice to choose at the first move is one of the following:\n\n- $ \\{1, 2\\} $\n- $ \\{1, 3\\} $\n- $ \\{2, 3\\} $\n- $ \\{4, 5\\} $\n- $ \\{4, 6\\} $\n- $ \\{5, 6\\} $\n- $ \\{1, 2, 3\\} $\n- $ \\{4, 5, 6\\} $\n\nSuppose, Alice chooses subgraph $ \\{4, 6\\} $ .Then a valid vertex set for Bob to choose at the first move is one of the following:\n\n- $ \\{1, 2\\} $\n- $ \\{1, 3\\} $\n- $ \\{2, 3\\} $\n- $ \\{1, 2, 3\\} $\n\nSuppose, Bob chooses subgraph $ \\{1, 2, 3\\} $ .Alice can't make a move, so she loses.\n\nYou are given a graph of size $ n $ and integers $ l $ and $ r $ . Who will win if both Alice and Bob play optimally.\n\nInput Format\nThe first line contains three integers $ n $ , $ l $ and $ r $ ( $ 3 \\le n \\le 2 \\cdot 10^5 $ ; $ 1 \\le l < r \\le n $ ) — the number of vertices in the graph, and the constraints on the number of vertices Alice or Bob can choose in one move.\n\nNext $ n $ lines contains edges of the graph: one edge per line. The $ i $ -th line contains two integers $ u_i $ and $ v_i $ ( $ 1 \\le u_i, v_i \\le n $ ; $ u_i \\neq v_i $ ) — description of the $ i $ -th edge.\n\nIt's guaranteed that the degree of each vertex of the given graph is equal to $ 2 $ .\n\nOutput Format\nPrint Alice (case-insensitive) if Alice wins, or Bob otherwise.\n\nExamples\nSample 1\nInput\n6 2 3\n1 2\n2 3\n3 1\n4 5\n5 6\n6 4\nOutput\nBob\n\nSample 2\nInput\n6 1 2\n1 2\n2 3\n3 1\n4 5\n5 6\n6 4\nOutput\nBob\n\nSample 3\nInput\n12 1 3\n1 2\n2 3\n3 1\n4 5\n5 6\n6 7\n7 4\n8 9\n9 10\n10 11\n11 12\n12 8\nOutput\nAlice\n\nNote\nIn the first test the same input as in legend is shown.\n\nIn the second test the same graph as in legend is shown, but with $ l = 1 $ and $ r = 2 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution Python",
+            "content": "from\nsys\nimport\nsetrecursionlimit\nimport\nthreading\ndef\nmain\n():\nn\n,\nl\n,\nr\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\ng\n=\n[[]\nfor\ni\nin\nrange\n(\n0\n,\nn\n)]\nfor\ni\nin\nrange\n(\n0\n,\nn\n):\na\n,\nb\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\na\n-=\n1\nb\n-=\n1\ng\n[\na\n].\nappend\n(\nb\n)\ng\n[\nb\n].\nappend\n(\na\n)\nres\n=\n0\nused\n=\n[\nFalse\nfor\ni\nin\nrange\n(\n0\n,\nn\n)]\ndef\ndfs\n(\nv\n):\nused\n[\nv\n]\n=\nTrue\nsize\n=\n1\nfor\nto\nin\ng\n[\nv\n]:\nif\nnot\nused\n[\nto\n]:\nsize\n+=\ndfs\n(\nto\n)\nreturn\nsize\nfor\ni\nin\nrange\n(\n0\n,\nn\n):\nif\nnot\nused\n[\ni\n]:\nsize\n=\ndfs\n(\ni\n)\nif\nsize\n<=\nl\n+\nr\n-\n1\n:\nres\n^=\nsize\n// l\nif\nres\n:\nprint\n(\n\"Alice\"\n)\nelse\n:\nprint\n(\n\"Bob\"\n)\nsetrecursionlimit\n(\n10\n**\n9\n)\nthreading\n.\nstack_size\n(\n2\n**\n27\n)\nthread\n=\nthreading\n.\nThread\n(\ntarget\n=\nmain\n)\nthread\n.\nstart\n()"
+        }
+    ]
+}

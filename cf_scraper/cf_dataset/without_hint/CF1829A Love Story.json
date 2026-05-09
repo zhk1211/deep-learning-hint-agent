@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nTimur loves codeforces. That's why he has a string $ s $ having length $ 10 $ made containing only lowercase Latin letters. Timur wants to know how many indices string $ s $ differs from the string \"codeforces\".\n\nFor example string $ s = $ \"coolforsez\" differs from \"codeforces\" in $ 4 $ indices, shown in bold.\n\nHelp Timur by finding the number of indices where string $ s $ differs from \"codeforces\".\n\nNote that you can't reorder the characters in the string $ s $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases.\n\nEach test case is one line and contains the string $ s $ , consisting of exactly $ 10 $ lowercase Latin characters.\n\nOutput Format\nFor each test case, output a single integer — the number of indices where string $ s $ differs.\n\nExamples\nSample 1\nInput\n5\ncoolforsez\ncadafurcie\ncodeforces\npaiuforces\nforcescode\nOutput\n4\n5\n0\n4\n9"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nstring\ns\n,\nc\n=\n\"codeforces\"\n;\ncin\n>>\ns\n;\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n10\n;\ni\n++)\n{\nif\n(\ns\n[\ni\n]\n!=\nc\n[\ni\n])\n{\nans\n++;\n}\n}\ncout\n<<\nans\n<<\nendl\n;\n}\nint32_t\nmain\n(){\nint\nt\n=\n1\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

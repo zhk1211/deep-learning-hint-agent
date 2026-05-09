@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two arrays $ a $ and $ b $ of $ n $ positive integers each. You can apply the following operation to them any number of times:\n\n- Select an index $ i $ ( $ 1\\leq i\\leq n $ ) and swap $ a_i $ with $ b_i $ (i. e. $ a_i $ becomes $ b_i $ and vice versa).\n\nFind the minimum possible value of $ \\max(a_1, a_2, \\ldots, a_n) \\cdot \\max(b_1, b_2, \\ldots, b_n) $ you can get after applying such operation any number of times (possibly zero).\n\nInput Format\nThe input consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 100 $ ) — the number of test cases. Description of the test cases follows.\n\nThe first line of each test case contains an integer $ n $ ( $ 1\\le n\\le 100 $ ) — the length of the arrays.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10\\,000 $ ) where $ a_i $ is the $ i $ -th element of the array $ a $ .\n\nThe third line of each test case contains $ n $ integers $ b_1, b_2, \\ldots, b_n $ ( $ 1 \\le b_i \\le 10\\,000 $ ) where $ b_i $ is the $ i $ -th element of the array $ b $ .\n\nOutput Format\nFor each test case, print a single integer, the minimum possible value of $ \\max(a_1, a_2, \\ldots, a_n) \\cdot \\max(b_1, b_2, \\ldots, b_n) $ you can get after applying such operation any number of times.\n\nExamples\nSample 1\nInput\n3\n6\n1 2 6 5 1 2\n3 4 3 2 2 5\n3\n3 3 3\n3 3 3\n2\n1 2\n2 1\nOutput\n18\n9\n2\n\nNote\nIn the first test, you can apply the operations at indices $ 2 $ and $ 6 $ , then $ a = [1, 4, 6, 5, 1, 5] $ and $ b = [3, 2, 3, 2, 2, 2] $ , $ \\max(1, 4, 6, 5, 1, 5) \\cdot \\max(3, 2, 3, 2, 2, 2) = 6 \\cdot 3 = 18 $ .\n\nIn the second test, no matter how you apply the operations, $ a = [3, 3, 3] $ and $ b = [3, 3, 3] $ will always hold, so the answer is $ \\max(3, 3, 3) \\cdot \\max(3, 3, 3) = 3 \\cdot 3 = 9 $ .\n\nIn the third test, you can apply the operation at index $ 1 $ , then $ a = [2, 2] $ , $ b = [1, 1] $ , so the answer is $ \\max(2, 2) \\cdot \\max(1, 1) = 2 \\cdot 1 = 2 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Think about how $$$max(a_1, a_2, ..., a_n, b_1, b_2, ..., b_n)$$$ will contribute to the answer."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The maximum of one array is always $$$max(a_1, a_2, ..., a_n, b_1, b_2, ..., b_n)$$$. How should you minimize then?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let $$$m_1 = \\max(a_1, a_2, ..., a_n, b_1, b_2, ..., b_n)$$$. The answer will always be $$$m_1 \\cdot m_2$$$ where $$$m_2$$$ is the maximum of the array that does not contain $$$m_1$$$.\nSince $$$m_1$$$ is fixed, the problem can be reduced to minimize $$$m_2$$$, that is, minimize the maximum of the array that does not contain the global maximum.\nWLOG assume that the global maximum will be in the array $$$b$$$, we can swap elements at each index $$$x$$$ such that $$$a_x \\gt b_x$$$, ending with $$$a_i \\leq b_i$$$ for all $$$i$$$. It can be shown that the maximum of array $$$a$$$ is minimized in this way.\nTime complexity: $$$O(n)$$$\nCode\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\ncalc_max\n(\nvector\n<int>\na\n){\nint\nres\n=\n0\n;\nfor\n(\nauto\ni\n:\na\n)\nres\n=\nmax\n(\nres\n,\ni\n);\nreturn\nres\n;\n}\nint\nmain\n(){\nint\ntc\n;\ncin\n>>\ntc\n;\nwhile\n(\ntc\n--\n){\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n),\nb\n(\nn\n);\nfor\n(\nauto\n&\ni\n:\na\n)\ncin\n>>\ni\n;\nfor\n(\nauto\n&\ni\n:\nb\n)\ncin\n>>\ni\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nif\n(\na\n[\ni\n]\n>\nb\n[\ni\n]\n)\nswap\n(\na\n[\ni\n]\n,\nb\n[\ni\n]\n);\ncout\n<<\ncalc_max\n(\na\n)\n*\ncalc_max\n(\nb\n)\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

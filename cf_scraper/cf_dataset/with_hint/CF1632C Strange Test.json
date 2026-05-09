@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIgor is in 11th grade. Tomorrow he will have to write an informatics test by the strictest teacher in the school, Pavel Denisovich.\n\nIgor knows how the test will be conducted: first of all, the teacher will give each student two positive integers $ a $ and $ b $ ( $ a < b $ ). After that, the student can apply any of the following operations any number of times:\n\n- $ a := a + 1 $ (increase $ a $ by $ 1 $ ),\n- $ b := b + 1 $ (increase $ b $ by $ 1 $ ),\n- $ a := a \\ | \\ b $ (replace $ a $ with the [bitwise OR](https://en.wikipedia.org/wiki/Bitwise_operation#OR) of $ a $ and $ b $ ).\n\nTo get full marks on the test, the student has to tell the teacher the minimum required number of operations to make $ a $ and $ b $ equal.\n\nIgor already knows which numbers the teacher will give him. Help him figure out what is the minimum number of operations needed to make $ a $ equal to $ b $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). Description of the test cases follows.\n\nThe only line for each test case contains two integers $ a $ and $ b $ ( $ 1 \\le a < b \\le 10^6 $ ).\n\nIt is guaranteed that the sum of $ b $ over all test cases does not exceed $ 10^6 $ .\n\nOutput Format\nFor each test case print one integer — the minimum required number of operations to make $ a $ and $ b $ equal.\n\nExamples\nSample 1\nInput\n5\n1 3\n5 8\n2 5\n3 19\n56678 164422\nOutput\n1\n3\n2\n1\n23329\n\nNote\nIn the first test case, it is optimal to apply the third operation.\n\nIn the second test case, it is optimal to apply the first operation three times.\n\nIn the third test case, it is optimal to apply the second operation and then the third operation."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "It is optimal to apply the third operation at most once."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "It is optimal to apply the third operation at most once, because is does not decrease $$$a$$$ and always makes $$$b \\le a$$$. This means that after we use it, we can only apply the second operation.\nIf we don't apply the third operation, the answer is $$$b - a$$$.\nSuppose we do apply it. Before that, we used the first and second operations some number of times, let the resulting values of $$$a$$$ and $$$b$$$ be $$$a'$$$ and $$$b'$$$ respectively $$$(a \\le a', b \\le b')$$$. The answer in this case will be $$$(a' - a) + (b' - b) + ((a' \\ | \\ b') - b') + 1$$$ $$$=$$$ $$$a' + (a' \\ | \\ b') + (1 - a - b)$$$. This is equivalent to minimizing $$$a' + (a' \\ | \\ b')$$$, since $$$(1 - a - b)$$$ is constant.\nTo do that, we can iterate $$$a'$$$ from $$$a$$$ to $$$b$$$. For a fixed $$$a'$$$, we have to minimize $$$a' \\ | \\ b'$$$, the optimal $$$b'$$$ can be constructed like this:\nSet $$$b'$$$ to zero and iterate over bits from highest to lowest. There are 4 cases:\nIf current bit of $$$a'$$$ is $$$0$$$ and $$$b$$$ is $$$1$$$, set the current bit of $$$b'$$$ to $$$1$$$.\nIf current bit of $$$a'$$$ is $$$0$$$ and $$$b$$$ is $$$0$$$, set the current bit of $$$b'$$$ to $$$0$$$.\nIf current bit of $$$a'$$$ is $$$1$$$ and $$$b$$$ is $$$1$$$, set the current bit of $$$b'$$$ to $$$1$$$.\nIf current bit of $$$a'$$$ is $$$1$$$ and $$$b$$$ is $$$0$$$, set the current bit of $$$b'$$$ to $$$1$$$ and stop.\nThis works in $$$O(\\log b)$$$ and can also be sped up to $$$O(1)$$$ using bit manipulation.\nTime complexity: $$$O(b)$$$ or $$$O(b \\log b)$$$\nBonus 1: solve the problem in $$$O(\\log b)$$$ or faster.\nBonus 2: prove that is optimal to have either $$$a' = a$$$ or $$$b' = b$$$."
+        },
+        {
+            "title": "Solution codes",
+            "content": "C++ code\nwith complexity $$$O(b \\log b)$$$.\nC++ code\nwith complexity $$$O(b)$$$.\nPython code\nwith complexity $$$O(b \\log b)$$$."
+        }
+    ]
+}

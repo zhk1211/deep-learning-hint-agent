@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA permutation is an array consisting of $ n $ distinct integers from $ 1 $ to $ n $ in arbitrary order. For example, $ [2,3,1,5,4] $ is a permutation, but $ [1,2,2] $ is not a permutation ( $ 2 $ appears twice in the array) and $ [1,3,4] $ is also not a permutation ( $ n=3 $ but there is $ 4 $ in the array).\n\nYou are given a permutation of $ 1,2,\\dots,n $ , $ [a_1,a_2,\\dots,a_n] $ . For integers $ i $ , $ j $ such that $ 1\\le i<j\\le n $ , define $ \\operatorname{mn}(i,j) $ as $ \\min\\limits_{k=i}^j a_k $ , and define $ \\operatorname{mx}(i,j) $ as $ \\max\\limits_{k=i}^j a_k $ .\n\nLet us build an undirected graph of $ n $ vertices, numbered $ 1 $ to $ n $ . For every pair of integers $ 1\\le i<j\\le n $ , if $ \\operatorname{mn}(i,j)=a_i $ and $ \\operatorname{mx}(i,j)=a_j $ both holds, or $ \\operatorname{mn}(i,j)=a_j $ and $ \\operatorname{mx}(i,j)=a_i $ both holds, add an undirected edge of length $ 1 $ between vertices $ i $ and $ j $ .\n\nIn this graph, find the length of the shortest path from vertex $ 1 $ to vertex $ n $ . We can prove that $ 1 $ and $ n $ will always be connected via some path, so a shortest path always exists.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 5\\cdot 10^4 $ ). Description of the test cases follows.\n\nThe first line of each test case contains one integer $ n $ ( $ 1\\le n\\le 2.5\\cdot 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1 $ , $ a_2 $ , $ \\ldots $ , $ a_n $ ( $ 1\\le a_i\\le n $ ). It's guaranteed that $ a $ is a permutation of $ 1 $ , $ 2 $ , $ \\dots $ , $ n $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 5\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single line containing one integer — the length of the shortest path from $ 1 $ to $ n $ .\n\nExamples\nSample 1\nInput\n5\n1\n1\n2\n1 2\n5\n1 4 2 3 5\n5\n2 1 5 3 4\n10\n7 4 8 1 6 10 3 5 2 9\nOutput\n0\n1\n1\n4\n6\n\nNote\nThe following are illustrations of constructed graphs in example test cases.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1696D/499923614a1221dcc93bdcfc77b4137be717b76a.png)the constructed graph in test case 1 ![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1696D/1be3eeb3725090897a7064b72d0594cec0c08b9a.png)the constructed graph in test case 2 ![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1696D/552988d4dc4cc04a7c293749cfd86b3a73f06c6a.png)the constructed graph in test case 3 ![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1696D/c0651ba92ecaaac8525543767e0ed7a52a6da874.png)the constructed graph in test case 4 ![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1696D/c798ddfca037b13f900816190aae46f65e45a5dd.png)the constructed graph in test case 5"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1 for solution 1",
+            "content": "The solution is $$$O(n)$$$. We don't need any data structures."
+        },
+        {
+            "title": "Hint 2 for solution 1",
+            "content": "Instead of trying to construct the shortest path from $$$1$$$ to $$$n$$$, find a \"transfer vertex\" that we must pass through.\nAnswer\nWe will always pass through the position of the maximum element in the array."
+        },
+        {
+            "title": "Hint 3 for solution 1",
+            "content": "Suppose the maximum element is $$$a_k$$$. Solve recursively for $$$dis(1,k)$$$ and $$$dis(k,n)$$$."
+        },
+        {
+            "title": "Hint 1 for solution 2",
+            "content": "Look at the last sample test case. Think of a simple greedy.\nAnswer\nKeep going to the rightmost vertex (the vertex with the largest id) works."
+        },
+        {
+            "title": "Hint 2 for solution 2",
+            "content": "Use data structures to simulate the process. How?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution 1",
+            "content": "Denote $$$dis(x,y)$$$ as the length of the shortest path between $$$x$$$ and $$$y$$$.\nConsider a position $$$i$$$ that $$$a_i=n$$$. Assume $$$i\\ne 1$$$ and $$$i\\ne n$$$. For a segment that passes $$$i$$$, its maximum element is always $$$a_i$$$. Thus, for $$$x \\lt i \\lt y$$$, $$$x$$$ and $$$y$$$ will never be directly connected by an edge. This means that when going from $$$1$$$ to $$$n$$$, we have to pass $$$i$$$. Let us solve recursively for $$$dis(1,i)$$$ and $$$dis(i,n)$$$. For example, we solve for $$$dis(1,i)$$$.\nWe already know that $$$a_i=n$$$, so $$$i$$$ is the maximum element in $$$[1,i]$$$. Consider the minimum element in $$$[1,i]$$$, suppose it is $$$a_j\\ (j \\lt i)$$$. From similar arguments, we can solve recursively for $$$dis(1,j)$$$ and $$$dis(j,i)$$$. However, note that $$$dis(j,i)$$$ equals to $$$1$$$: since $$$j$$$ and $$$i$$$ are respectively minimum and maximum in $$$[1,i]$$$, they have to be minimum and maximum in $$$[j,i]$$$ as well. So $$$i,j$$$ must be directly connected. Thus, we only need to solve recursively for $$$dis(1,j)$$$.\nThe process with $$$dis(i,n)$$$ is similar. Note that we will only call $$$dis(l,r)$$$ for $$$l=1$$$ or $$$r=n$$$ (if not, the return value is always 1), so it suffices to pre-compute prefix and suffix minimums and maximums.\nThe time complexity is $$$O(n)$$$."
+        },
+        {
+            "title": "Solution 2",
+            "content": "We can prove that keep going to the vertex with the largest index is a correct strategy. The proof is left as an exercise :) Hint: try to prove that the path we will visit is the same as the path we visited in solution 1.\nSuppose we are at $$$i$$$. We want to find the largest $$$j \\gt i$$$ such that $$$i$$$ and $$$j$$$ are directly connected. WLOG, assume $$$a_{i+1} \\lt a_i$$$. Then, it cannot be the case that $$$a_j \\gt a_i$$$, since none of $$$a_i,a_j$$$ will be $$$mn(i,j)$$$. Thus $$$a_j \\lt a_i$$$. It follows that all $$$i \\lt k \\lt j$$$ satisfies $$$a_k \\lt a_i$$$, otherwise none of $$$a_i,a_j$$$ will be $$$mx(i,j)$$$.\nLet $$$r_i$$$ be the largest $$$p$$$, such that for all $$$t\\in [i+1,p]$$$, $$$a_t \\lt a_i$$$. From the arguments above we know $$$j\\in [i+1,r_i]$$$. $$$r_i$$$ can be pre-computed with a stack, or binary search + some data structures.\nLet $$$j_0$$$ be the position of the minimum element in $$$[i+1,r_i]$$$. Obviously $$$j_0$$$ is directly connected with $$$i$$$. For any $$$j_0 \\lt k\\le r_i$$$, $$$mn(i,k)$$$ will be $$$a_{j_0}$$$, showing that all such $$$k$$$ is not directly connected with $$$i$$$. Thus, $$$j_0$$$ is the desired $$$j$$$.\nIf we use data structures for range minimum, we get a $$$O(n\\log n)$$$ solution, which can easily pass (not sure whether $$$O(n\\log^2 n)$$$ ones will pass though, the large constraints were intended to cut those).\nHowever, by building the cartesian tree of the array and doing proper pre-computations, we can optimize this solution to $$$O(n)$$$."
+        }
+    ]
+}

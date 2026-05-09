@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp got an array of integers $ a[1 \\dots n] $ as a gift. Now he wants to perform a certain number of operations (possibly zero) so that all elements of the array become the same (that is, to become $ a_1=a_2=\\dots=a_n $ ).\n\n- In one operation, he can take some indices in the array and increase the elements of the array at those indices by $ 1 $ .\n\nFor example, let $ a=[4,2,1,6,2] $ . He can perform the following operation: select indices 1, 2, and 4 and increase elements of the array in those indices by $ 1 $ . As a result, in one operation, he can get a new state of the array $ a=[5,3,1,7,2] $ .\n\nWhat is the minimum number of operations it can take so that all elements of the array become equal to each other (that is, to become $ a_1=a_2=\\dots=a_n $ )?\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases in the test.\n\nThe following are descriptions of the input test cases.\n\nThe first line of the description of each test case contains one integer $ n $ ( $ 1 \\le n \\le 50 $ ) — the array $ a $ .\n\nThe second line of the description of each test case contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — elements of the array $ a $ .\n\nOutput Format\nFor each test case, print one integer — the minimum number of operations to make all elements of the array $ a $ equal.\n\nExamples\nSample 1\nInput\n3\n6\n3 4 2 4 1 2\n3\n1000 1002 998\n2\n12 11\nOutput\n3\n4\n1\n\nNote\nFirst test case:\n\n- $ a=[3,4,2,4,1,2] $ take $ a_3, a_5 $ and perform an operation plus one on them, as a result we get $ a=[3,4,3,4,2,2] $ .\n- $ a=[3,4,3,4,2,2] $ we take $ a_1, a_5, a_6 $ and perform an operation on them plus one, as a result we get $ a=[4,4,3,4,3,3] $ .\n- $ a=[4,4,3,4,3,3] $ we take $ a_3, a_5, a_6 $ and perform an operation on them plus one, as a result we get $ a=[4,4,4,4,4,4] $ .\n\nThere are other sequences of $ 3 $ operations, after the application of which all elements become equal.\n\nSecond test case:\n\n- $ a=[1000,1002,998] $ 2 times we take $ a_1, a_3 $ and perform an operation plus one on them, as a result we get $ a=[1002,1002,1000] $ .\n- $ a=[1002,1002,1000] $ also take $ a_3 $ 2 times and perform an operation plus one on it, as a result we get $ a=[1002,1002,1002] $ .\n\nThird test case:\n\n- $ a=[12,11] $ take $ a_2 $ and perform an operation plus one on it, as a result we get $ a=[12,12] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\na\n[\nn\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nint\nMIN\n=\nINT_MAX\n;\nint\nMAX\n=\nINT_MIN\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nMIN\n=\nmin\n(\nMIN\n,\na\n[\ni\n]);\nMAX\n=\nmax\n(\nMAX\n,\na\n[\ni\n]);\n}\ncout\n<<\nMAX\n-\nMIN\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nint\ntests\n;\ncin\n>>\ntests\n;\nforn\n(\ntt\n,\ntests\n)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

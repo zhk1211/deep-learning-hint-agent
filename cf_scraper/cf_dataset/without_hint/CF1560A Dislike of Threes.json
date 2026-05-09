@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp doesn't like integers that are divisible by $ 3 $ or end with the digit $ 3 $ in their decimal representation. Integers that meet both conditions are disliked by Polycarp, too.\n\nPolycarp starts to write out the positive (greater than $ 0 $ ) integers which he likes: $ 1, 2, 4, 5, 7, 8, 10, 11, 14, 16, \\dots $ . Output the $ k $ -th element of this sequence (the elements are numbered from $ 1 $ ).\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case consists of one line containing one integer $ k $ ( $ 1 \\le k \\le 1000 $ ).\n\nOutput Format\nFor each test case, output in a separate line one integer $ x $ — the $ k $ -th element of the sequence that was written out by Polycarp.\n\nExamples\nSample 1\nInput\n10\n1\n2\n3\n4\n5\n6\n7\n8\n9\n1000\nOutput\n1\n2\n4\n5\n7\n8\n10\n11\n14\n1666"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nk\n;\ncin\n>>\nk\n;\nfor\n(\nint\ni\n=\n1\n;\n;\ni\n++)\n{\nif\n(\ni\n%\n3\n==\n0\n||\ni\n%\n10\n==\n3\n)\ncontinue\n;\nif\n(--\nk\n==\n0\n)\n{\ncout\n<<\ni\n<<\n'\\n'\n;\nbreak\n;\n}\n}\n}\n}"
+        }
+    ]
+}

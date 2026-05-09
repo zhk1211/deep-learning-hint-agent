@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nBit Lightyear, to the ANDfinity and beyond!\n\nAfter graduating from computer sciences, Vlad has been awarded an array $ a_1,a_2,\\ldots,a_n $ of $ n $ non-negative integers. As it is natural, he wanted to construct a graph consisting of $ n $ vertices, numbered $ 1, 2,\\ldots, n $ . He decided to add an edge between $ i $ and $ j $ if and only if $ a_i \\& a_j > 0 $ , where $ \\& $ denotes the [bitwise AND operation](https://en.wikipedia.org/wiki/Bitwise_operation#AND).\n\nVlad also wants the graph to be connected, which might not be the case initially. In order to satisfy that, he can do the following two types of operations on the array:\n\n1. Choose some element $ a_i $ and increment it by $ 1 $ .\n2. Choose some element $ a_i $ and decrement it by $ 1 $ (possible only if $ a_i > 0 $ ).\n\nIt can be proven that there exists a finite sequence of operations such that the graph will be connected. So, can you please help Vlad find the minimum possible number of operations to do that and also provide the way how to do that?\n\nInput Format\nThere are several test cases in the input data. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases. This is followed by the test cases description.\n\nThe first line of each test case contains an integer $ n $ ( $ 2\\leq n \\leq 2000 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0\\leq a_i < 2^{30} $ ) — the elements of the array.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2000 $ .\n\nOutput Format\nFor each test case, print a single integer $ m $ in the first line — the minimum number of operations. In the second line print the array after a valid sequence of operations that have been done such that the graph from the task becomes connected.\n\nIf there are multiple solutions, output any.\n\nExamples\nSample 1\nInput\n4\n5\n1 2 3 4 5\n2\n0 2\n2\n3 12\n4\n3 0 0 0\nOutput\n0\n1 2 3 4 5\n2\n2 2\n1\n3 11\n3\n3 1 1 1\n\nNote\nIn the first test case, the graph is already connected.\n\nIn the second test case, we can increment $ 0 $ twice and end up with the array $ [2,2] $ . Since $ 2 \\& 2 = 2 > 0 $ , the graph is connected. It can be shown that one operation is not enough.\n\nIn the third test case, we can decrement $ 12 $ once and we end up with an array $ [3,11] $ . $ 3 \\& 11 = 3 > 0 $ hence the graph is connected. One operation has to be done since the graph is not connected at the beginning."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Stupid Hint",
+            "content": "Increase every $$$0$$$ by $$$1$$$ initially."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Check if the answer is $$$0$$$: check whether the graph is already connected."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Check if the answer is $$$1$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "If the answer is not $$$0$$$ or $$$1$$$, then it is $$$2$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Firslty, let's understand how to check whether the graph induced by some array $$$b$$$ is connected in $$$O(n \\ log \\ max \\ b_i)$$$. We create a graph over bits. Let's take all elements $$$b_i$$$ and add an edge between their adjacent bits (all bits of a single $$$b_i$$$ will be connected). To quickly access the lowest bit we will use $$$b_i \\ \\& \\ -b_i$$$ in code. Now we just check whether the graph over bits is connected.\nWe check whether the graph for initial array $$$a$$$ is connected. If it is, the answer is 0.\nThen, we wonder if the answer is $$$1$$$. Check if at least one of the graphs for arrays $$$a_1,...,a_{i-1},a_i-1,a_{i+1},...,a_n$$$ for every $$$1\\leq i \\leq n$$$ is connected. Do the same for arrays $$$a_1,...,a_{i-1},a_i+1,a_{i+1},...,a_n$$$. If none of the graphs is connected, the answer is $$$2$$$ and otherwise $$$1$$$.\nNow let's see how the answer will be at most $$$2$$$. Let $$$i_1,i_2,...,i_k$$$ be the sequence of indices denoting that $$$a_{i_j}$$$ has the highest lowest bit (the highest value of $$$a_i \\ \\& \\ -a_i$$$). if $$$k=1$$$ then we can just decrease $$$a_{i_1}$$$ by $$$1$$$ and connect everything. If $$$k\\geq 2$$$ and we do the same we might disconnect that number from other numbers having the highest lowest bit, thus an additional operation of adding $$$1$$$ to $$$a_{i_2}$$$ is needed to keep everything connected. The answer is $$$2$$$ in this case.\nComplexity of this solution is $$$O(n^2 \\ log \\ max \\ a_i)$$$."
+        }
+    ]
+}

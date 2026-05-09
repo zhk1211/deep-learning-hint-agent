@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIn an ICPC contest, balloons are distributed as follows:\n\n- Whenever a team solves a problem, that team gets a balloon.\n- The first team to solve a problem gets an additional balloon.\n\nA contest has 26 problems, labelled $ \\textsf{A} $ , $ \\textsf{B} $ , $ \\textsf{C} $ , ..., $ \\textsf{Z} $ . You are given the order of solved problems in the contest, denoted as a string $ s $ , where the $ i $ -th character indicates that the problem $ s_i $ has been solved by some team. No team will solve the same problem twice.Determine the total number of balloons that the teams received. Note that some problems may be solved by none of the teams.\n\nInput Format\nThe first line of the input contains an integer $ t $ ( $ 1 \\leq t \\leq 100 $ ) — the number of testcases.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\leq n \\leq 50 $ ) — the length of the string.\n\nThe second line of each test case contains a string $ s $ of length $ n $ consisting of uppercase English letters, denoting the order of solved problems.\n\nOutput Format\nFor each test case, output a single integer — the total number of balloons that the teams received.\n\nExamples\nSample 1\nInput\n6\n3\nABA\n1\nA\n3\nORZ\n5\nBAAAA\n4\nBKPT\n10\nCODEFORCES\nOutput\n5\n2\n6\n7\n8\n17\n\nNote\nIn the first test case, $ 5 $ balloons are given out:\n\n- Problem $ \\textsf{A} $ is solved. That team receives $ 2 $ balloons: one because they solved the problem, an an additional one because they are the first team to solve problem $ \\textsf{A} $ .\n- Problem $ \\textsf{B} $ is solved. That team receives $ 2 $ balloons: one because they solved the problem, an an additional one because they are the first team to solve problem $ \\textsf{B} $ .\n- Problem $ \\textsf{A} $ is solved. That team receives only $ 1 $ balloon, because they solved the problem. Note that they don't get an additional balloon because they are not the first team to solve problem $ \\textsf{A} $ .\n\nThe total number of balloons given out is $ 2+2+1=5 $ .In the second test case, there is only one problem solved. The team who solved it receives $ 2 $ balloons: one because they solved the problem, an an additional one because they are the first team to solve problem $ \\textsf{A} $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200007\n;\nconst\nint\nMOD\n=\n1000000007\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nstring\ns\n;\ncin\n>>\ns\n;\nbool\nvis\n[\n26\n]\n=\n{};\nint\nres\n=\n0\n;\nfor\n(\nchar\nc\n:\ns\n)\n{\nif\n(!\nvis\n[\nc\n-\n'A'\n])\n{\nres\n+=\n2\n;\nvis\n[\nc\n-\n'A'\n]\n=\ntrue\n;}\nelse\n{\nres\n++;}\n}\ncout\n<<\nres\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

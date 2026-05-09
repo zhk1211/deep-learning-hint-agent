@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp was presented with some sequence of integers $ a $ of length $ n $ ( $ 1 \\le a_i \\le n $ ). A sequence can make Polycarp happy only if it consists of different numbers (i.e. distinct numbers).\n\nIn order to make his sequence like this, Polycarp is going to make some (possibly zero) number of moves.\n\nIn one move, he can:\n\n- remove the first (leftmost) element of the sequence.\n\nFor example, in one move, the sequence $ [3, 1, 4, 3] $ will produce the sequence $ [1, 4, 3] $ , which consists of different numbers.\n\nDetermine the minimum number of moves he needs to make so that in the remaining sequence all elements are different. In other words, find the length of the smallest prefix of the given sequence $ a $ , after removing which all values in the sequence will be unique.\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nEach test case consists of two lines.\n\nThe first line contains an integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the given sequence $ a $ .\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le n $ ) — elements of the given sequence $ a $ .\n\nIt is guaranteed that the sum of $ n $ values over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case print your answer on a separate line — the minimum number of elements that must be removed from the beginning of the sequence so that all remaining elements are different.\n\nExamples\nSample 1\nInput\n5\n4\n3 1 4 3\n5\n1 1 1 1 1\n1\n1\n6\n6 5 4 3 2 1\n7\n1 2 1 7 1 2 1\nOutput\n1\n4\n0\n0\n5\n\nNote\nThe following are the sequences that will remain after the removal of prefixes:\n\n- $ [1, 4, 3] $ ;\n- $ [1] $ ;\n- $ [1] $ ;\n- $ [6, 5, 4, 3, 2, 1] $ ;\n- $ [2, 1] $ .\n\nIt is easy to see that all the remaining sequences contain only distinct elements. In each test case, the shortest matching prefix was removed."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nforn\n(\ntt\n,\nt\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nforn\n(\ni\n,\nn\n)\ncin\n>>\na\n[\ni\n];\nbool\nyes\n=\nfalse\n;\nset\n<int>\nc\n;\nfor\n(\nint\ni\n=\nn\n-\n1\n;\ni\n>=\n0\n;\ni\n--)\n{\nif\n(\nc\n.\ncount\n(\na\n[\ni\n]))\n{\ncout\n<<\ni\n+\n1\n<<\nendl\n;\nyes\n=\ntrue\n;\nbreak\n;\n}\nc\n.\ninsert\n(\na\n[\ni\n]);\n}\nif\n(!\nyes\n)\ncout\n<<\n0\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

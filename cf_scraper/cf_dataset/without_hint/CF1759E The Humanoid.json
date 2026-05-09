@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ astronauts working on some space station. An astronaut with the number $ i $ ( $ 1 \\le i \\le n $ ) has power $ a_i $ .\n\nAn evil humanoid has made his way to this space station. The power of this humanoid is equal to $ h $ . Also, the humanoid took with him two green serums and one blue serum.\n\nIn one second , a humanoid can do any of three actions:\n\n1. to absorb an astronaut with power strictly less humanoid power;\n2. to use green serum, if there is still one left;\n3. to use blue serum, if there is still one left.\n\nWhen an astronaut with power $ a_i $ is absorbed, this astronaut disappears, and power of the humanoid increases by $ \\lfloor \\frac{a_i}{2} \\rfloor $ , that is, an integer part of $ \\frac{a_i}{2} $ . For example, if a humanoid absorbs an astronaut with power $ 4 $ , its power increases by $ 2 $ , and if a humanoid absorbs an astronaut with power $ 7 $ , its power increases by $ 3 $ .\n\nAfter using the green serum, this serum disappears, and the power of the humanoid doubles, so it increases by $ 2 $ times.\n\nAfter using the blue serum, this serum disappears, and the power of the humanoid triples, so it increases by $ 3 $ times.\n\nThe humanoid is wondering what the maximum number of astronauts he will be able to absorb if he acts optimally.\n\nInput Format\nThe first line of each test contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — number of test cases.\n\nThe first line of each test case contains integers $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — number of astronauts and $ h $ ( $ 1 \\le h \\le 10^6 $ ) — the initial power of the humanoid.\n\nThe second line of each test case contains $ n $ integers $ a_i $ ( $ 1 \\le a_i \\le 10^8 $ ) — powers of astronauts.\n\nIt is guaranteed that the sum of $ n $ for all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, in a separate line, print the maximum number of astronauts that a humanoid can absorb.\n\nExamples\nSample 1\nInput\n8\n4 1\n2 1 8 9\n3 3\n6 2 60\n4 5\n5 1 100 5\n3 2\n38 6 3\n1 1\n12\n4 6\n12 12 36 100\n4 1\n2 1 1 15\n3 5\n15 1 13\nOutput\n4\n3\n3\n3\n0\n4\n4\n3\n\nNote\nIn the first case, you can proceed as follows:\n\n1. use green serum. $ h = 1 \\cdot 2 = 2 $\n2. absorb the cosmonaut $ 2 $ . $ h = 2 + \\lfloor \\frac{1}{2} \\rfloor = 2 $\n3. use green serum. $ h = 2 \\cdot 2 = 4 $\n4. absorb the spaceman $ 1 $ . $ h = 4 + \\lfloor \\frac{2}{2} \\rfloor = 5 $\n5. use blue serum. $ h = 5 \\cdot 3 = 15 $\n6. absorb the spaceman $ 3 $ . $ h = 15 + \\lfloor \\frac{8}{2} \\rfloor = 19 $\n7. absorb the cosmonaut $ 4 $ . $ h = 19 + \\lfloor \\frac{9}{2} \\rfloor = 23 $"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAXN\n=\n200200\n;\nint\nn\n;\nint\narr\n[\nMAXN\n];\nint\nsolve\n(\nint\ni\n,\nlong\nlong\nh\n,\nint\ns2\n,\nint\ns3\n)\n{\nif\n(\ni\n==\nn\n)\nreturn\n0\n;\nif\n(\narr\n[\ni\n]\n<\nh\n)\nreturn\nsolve\n(\ni\n+\n1\n,\nh\n+\n(\narr\n[\ni\n]\n/\n2\n),\ns2\n,\ns3\n)\n+\n1\n;\nint\nans1\n=\n(\ns2\n?\nsolve\n(\ni\n,\nh\n*\n2\n,\ns2\n-\n1\n,\ns3\n)\n:\n0\n);\nint\nans2\n=\n(\ns3\n?\nsolve\n(\ni\n,\nh\n*\n3\n,\ns2\n,\ns3\n-\n1\n)\n:\n0\n);\nreturn\nmax\n(\nans1\n,\nans2\n);\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nlong\nlong\nh\n;\ncin\n>>\nn\n>>\nh\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\ncin\n>>\narr\n[\ni\n];\nsort\n(\narr\n,\narr\n+\nn\n);\ncout\n<<\nsolve\n(\n0\n,\nh\n,\n2\n,\n1\n)\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

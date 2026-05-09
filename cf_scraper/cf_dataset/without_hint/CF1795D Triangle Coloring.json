@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an undirected graph consisting of $ n $ vertices and $ n $ edges, where $ n $ is divisible by $ 6 $ . Each edge has a weight, which is a positive (greater than zero) integer.\n\nThe graph has the following structure: it is split into $ \\frac{n}{3} $ triples of vertices, the first triple consisting of vertices $ 1, 2, 3 $ , the second triple consisting of vertices $ 4, 5, 6 $ , and so on. Every pair of vertices from the same triple is connected by an edge. There are no edges between vertices from different triples.\n\nYou have to paint the vertices of this graph into two colors, red and blue. Each vertex should have exactly one color, there should be exactly $ \\frac{n}{2} $ red vertices and $ \\frac{n}{2} $ blue vertices. The coloring is called valid if it meets these constraints.\n\nThe weight of the coloring is the sum of weights of edges connecting two vertices with different colors.\n\nLet $ W $ be the maximum possible weight of a valid coloring. Calculate the number of valid colorings with weight $ W $ , and print it modulo $ 998244353 $ .\n\nInput Format\nThe first line contains one integer $ n $ ( $ 6 \\le n \\le 3 \\cdot 10^5 $ , $ n $ is divisible by $ 6 $ ).\n\nThe second line contains $ n $ integers $ w_1, w_2, \\dots, w_n $ ( $ 1 \\le w_i \\le 1000 $ ) — the weights of the edges. Edge $ 1 $ connects vertices $ 1 $ and $ 2 $ , edge $ 2 $ connects vertices $ 1 $ and $ 3 $ , edge $ 3 $ connects vertices $ 2 $ and $ 3 $ , edge $ 4 $ connects vertices $ 4 $ and $ 5 $ , edge $ 5 $ connects vertices $ 4 $ and $ 6 $ , edge $ 6 $ connects vertices $ 5 $ and $ 6 $ , and so on.\n\nOutput Format\nPrint one integer — the number of valid colorings with maximum possible weight, taken modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n12\n1 3 3 7 8 5 2 2 2 2 4 2\nOutput\n36\n\nSample 2\nInput\n6\n4 2 6 6 6 4\nOutput\n2\n\nNote\nThe following picture describes the graph from the first example test.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1795D/4ae4faa6e7106558b0f38fa8feb77e73227352e2.png)The maximum possible weight of a valid coloring of this graph is $ 31 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nadd\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\n((\nx\n+\ny\n)\n%\nMOD\n+\nMOD\n)\n%\nMOD\n;\n}\nint\nmul\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\nx\n*\n1ll\n*\ny\n%\nMOD\n;\n}\nint\nbinpow\n(\nint\nx\n,\nint\ny\n)\n{\nint\nz\n=\n1\n;\nwhile\n(\ny\n)\n{\nif\n(\ny\n%\n2\n==\n1\n)\nz\n=\nmul\n(\nz\n,\nx\n);\nx\n=\nmul\n(\nx\n,\nx\n);\ny\n/=\n2\n;\n}\nreturn\nz\n;\n}\nint\ninv\n(\nint\nx\n)\n{\nreturn\nbinpow\n(\nx\n,\nMOD\n-\n2\n);\n}\nint\ndivide\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\nmul\n(\nx\n,\ninv\n(\ny\n));\n}\nint\nmain\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nans\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n/\n6\n;\ni\n++)\nans\n=\nmul\n(\nans\n,\ndivide\n(\ni\n+\nn\n/\n6\n,\ni\n));\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n/\n3\n;\ni\n++)\n{\nvector\n<int>\na\n(\n3\n);\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n3\n;\nj\n++)\ncin\n>>\na\n[\nj\n];\nint\nmn\n=\n*\nmin_element\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nint\ncnt_min\n=\ncount\n(\na\n.\nbegin\n(),\na\n.\nend\n(),\nmn\n);\nans\n=\nmul\n(\nans\n,\ncnt_min\n);\n}\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

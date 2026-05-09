@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAuthors have come up with the string $ s $ consisting of $ n $ lowercase Latin letters.\n\nYou are given two permutations of its indices (not necessary equal) $ p $ and $ q $ (both of length $ n $ ). Recall that the permutation is the array of length $ n $ which contains each integer from $ 1 $ to $ n $ exactly once.\n\nFor all $ i $ from $ 1 $ to $ n-1 $ the following properties hold: $ s[p_i] \\le s[p_{i + 1}] $ and $ s[q_i] \\le s[q_{i + 1}] $ . It means that if you will write down all characters of $ s $ in order of permutation indices, the resulting string will be sorted in the non-decreasing order.\n\nYour task is to restore any such string $ s $ of length $ n $ consisting of at least $ k $ distinct lowercase Latin letters which suits the given permutations.\n\nIf there are multiple answers, you can print any of them.\n\nInput Format\nThe first line of the input contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 2 \\cdot 10^5, 1 \\le k \\le 26 $ ) — the length of the string and the number of distinct characters required.\n\nThe second line of the input contains $ n $ integers $ p_1, p_2, \\dots, p_n $ ( $ 1 \\le p_i \\le n $ , all $ p_i $ are distinct integers from $ 1 $ to $ n $ ) — the permutation $ p $ .\n\nThe third line of the input contains $ n $ integers $ q_1, q_2, \\dots, q_n $ ( $ 1 \\le q_i \\le n $ , all $ q_i $ are distinct integers from $ 1 $ to $ n $ ) — the permutation $ q $ .\n\nOutput Format\nIf it is impossible to find the suitable string, print \"NO\" on the first line.\n\nOtherwise print \"YES\" on the first line and string $ s $ on the second line. It should consist of $ n $ lowercase Latin letters, contain at least $ k $ distinct characters and suit the given permutations.\n\nIf there are multiple answers, you can print any of them.\n\nExamples\nSample 1\nInput\n3 2\n1 2 3\n1 3 2\nOutput\nYES\nabb"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\np1\n(\nn\n),\np2\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\np1\n[\ni\n];\n--\np1\n[\ni\n];\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\np2\n[\ni\n];\n--\np2\n[\ni\n];\n}\nset\n<int>\nvals1\n,\nvals2\n;\nvector\n<int>\nrb\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\nvals2\n.\ncount\n(\np1\n[\ni\n]))\n{\nvals2\n.\nerase\n(\np1\n[\ni\n]);\n}\nelse\n{\nvals1\n.\ninsert\n(\np1\n[\ni\n]);\n}\nif\n(\nvals1\n.\ncount\n(\np2\n[\ni\n]))\n{\nvals1\n.\nerase\n(\np2\n[\ni\n]);\n}\nelse\n{\nvals2\n.\ninsert\n(\np2\n[\ni\n]);\n}\nif\n(\nvals1\n.\nempty\n()\n&&\nvals2\n.\nempty\n())\n{\nrb\n.\npush_back\n(\ni\n);\n}\n}\nif\n(\nint\n(\nrb\n.\nsize\n())\n<\nk\n)\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\nelse\n{\nstring\ns\n(\nn\n,\n' '\n);\nint\nl\n=\n0\n;\nfor\n(\nint\nit\n=\n0\n;\nit\n<\nint\n(\nrb\n.\nsize\n());\n++\nit\n)\n{\nint\nr\n=\nrb\n[\nit\n];\nchar\nc\n=\n'a'\n+\nmin\n(\nit\n,\n25\n);\nfor\n(\nint\ni\n=\nl\n;\ni\n<=\nr\n;\n++\ni\n)\n{\ns\n[\np1\n[\ni\n]]\n=\nc\n;\n}\nl\n=\nr\n+\n1\n;\n}\ncout\n<<\n\"YES\"\n<<\nendl\n<<\ns\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nZookeeper is buying a carton of fruit to feed his pet wabbit. The fruits are a sequence of apples and oranges, which is represented by a binary string $ s_1s_2\\ldots s_n $ of length $ n $ . $ 1 $ represents an apple and $ 0 $ represents an orange.\n\nSince wabbit is allergic to eating oranges, Zookeeper would like to find the longest contiguous sequence of apples. Let $ f(l,r) $ be the longest contiguous sequence of apples in the substring $ s_{l}s_{l+1}\\ldots s_{r} $ .\n\nHelp Zookeeper find $ \\sum_{l=1}^{n} \\sum_{r=l}^{n} f(l,r) $ , or the sum of $ f $ across all substrings.\n\nInput Format\nThe first line contains a single integer $ n $ $ (1 \\leq n \\leq 5 \\cdot 10^5) $ .\n\nThe next line contains a binary string $ s $ of length $ n $ $ (s_i \\in \\{0,1\\}) $\n\nOutput Format\nPrint a single integer: $ \\sum_{l=1}^{n} \\sum_{r=l}^{n} f(l,r) $ .\n\nExamples\nSample 1\nInput\n4\n0110\nOutput\n12\n\nSample 2\nInput\n7\n1101001\nOutput\n30\n\nSample 3\nInput\n12\n011100011100\nOutput\n156\n\nNote\nIn the first test, there are ten substrings. The list of them (we let $ [l,r] $ be the substring $ s_l s_{l+1} \\ldots s_r $ ):\n\n- $ [1,1] $ : 0\n- $ [1,2] $ : 01\n- $ [1,3] $ : 011\n- $ [1,4] $ : 0110\n- $ [2,2] $ : 1\n- $ [2,3] $ : 11\n- $ [2,4] $ : 110\n- $ [3,3] $ : 1\n- $ [3,4] $ : 10\n- $ [4,4] $ : 0\n\nThe lengths of the longest contiguous sequence of ones in each of these ten substrings are $ 0,1,2,2,1,2,2,1,1,0 $ respectively. Hence, the answer is $ 0+1+2+2+1+2+2+1+1+0 = 12 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Line sweep."
+        },
+        {
+            "title": "Hint 2",
+            "content": "How does $$$f(l,r)$$$ change when we increase r?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "For a fixed $$$r$$$, let us graph $$$f(l,r)$$$ in a histogram with $$$l$$$ as the $$$x$$$-axis. We notice that this histogram is non-increasing from left to right. Shown below is the histogram for the string $$$11101011$$$ with $$$r = 6$$$, where $$$1$$$ box represents $$$1$$$ unit.\nThe area under this histogram is the sum of all $$$f(l,r)$$$ for a fixed $$$r$$$. Consider what happens to the histogram when we move from $$$r$$$ to $$$r+1$$$. If $$$s_{r+1} = 0$$$, then the histogram does not change at all. If $$$s_{r+1} = 1$$$, then we may need to update the histogram accordingly.\nAbove is the histogram for $$$11101011$$$ when $$$r=7$$$.\nAnd this is the histogram for $$$11101011$$$ when $$$r=8$$$.\nWhen adding a new segment of $$$k$$$ $$$1$$$s, we essentially fill up the bottom $$$k$$$ rows of the histogram. Thus, we let $$$L_x$$$ be the largest $$$l$$$ such that $$$f(l,r) = x$$$. We maintain these $$$L_x$$$ values in an array. When we process a group of $$$k$$$ 1s, we update the values for $$$L_1, L_2, \\cdots, L_k$$$, change the area of the histogram and update the cumulative sum accordingly.\nWith proper processing of the segments of 1s, this can be done in $$$O(n)$$$ time."
+        }
+    ]
+}

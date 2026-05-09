@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWe guessed some integer number $ x $ . You are given a list of almost all its divisors. Almost all means that there are all divisors except $ 1 $ and $ x $ in the list.\n\nYour task is to find the minimum possible integer $ x $ that can be the guessed number, or say that the input data is contradictory and it is impossible to find such number.\n\nYou have to answer $ t $ independent queries.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 25 $ ) — the number of queries. Then $ t $ queries follow.\n\nThe first line of the query contains one integer $ n $ ( $ 1 \\le n \\le 300 $ ) — the number of divisors in the list.\n\nThe second line of the query contains $ n $ integers $ d_1, d_2, \\dots, d_n $ ( $ 2 \\le d_i \\le 10^6 $ ), where $ d_i $ is the $ i $ -th divisor of the guessed number. It is guaranteed that all values $ d_i $ are distinct.\n\nOutput Format\nFor each query print the answer to it.\n\nIf the input data in the query is contradictory and it is impossible to find such number $ x $ that the given list of divisors is the list of almost all its divisors, print -1. Otherwise print the minimum possible $ x $ .\n\nExamples\nSample 1\nInput\n2\n8\n8 2 12 6 4 24 16 3\n1\n2\nOutput\n48\n4"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\n++\ni\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<\nlong\nlong\n>\nd\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\nd\n[\ni\n];\n}\nsort\n(\nd\n.\nbegin\n(),\nd\n.\nend\n());\nlong\nlong\nx\n=\nd\n[\n0\n]\n*\nd\n[\nn\n-\n1\n];\nvector\n<\nlong\nlong\n>\ndd\n;\nfor\n(\nint\ni\n=\n2\n;\ni\n*\n1ll\n*\ni\n<=\nx\n;\n++\ni\n)\n{\nif\n(\nx\n%\ni\n==\n0\n)\n{\ndd\n.\npush_back\n(\ni\n);\nif\n(\ni\n!=\nx\n/\ni\n)\n{\ndd\n.\npush_back\n(\nx\n/\ni\n);\n}\n}\n}\nsort\n(\ndd\n.\nbegin\n(),\ndd\n.\nend\n());\nif\n(\ndd\n==\nd\n)\n{\ncout\n<<\nx\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\n-\n1\n<<\nendl\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

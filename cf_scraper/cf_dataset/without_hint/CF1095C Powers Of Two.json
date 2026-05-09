@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA positive integer $ x $ is called a power of two if it can be represented as $ x = 2^y $ , where $ y $ is a non-negative integer. So, the powers of two are $ 1, 2, 4, 8, 16, \\dots $ .\n\nYou are given two positive integers $ n $ and $ k $ . Your task is to represent $ n $ as the sum of exactly $ k $ powers of two.\n\nInput Format\nThe only line of the input contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 10^9 $ , $ 1 \\le k \\le 2 \\cdot 10^5 $ ).\n\nOutput Format\nIf it is impossible to represent $ n $ as the sum of $ k $ powers of two, print NO.\n\nOtherwise, print YES, and then print $ k $ positive integers $ b_1, b_2, \\dots, b_k $ such that each of $ b_i $ is a power of two, and $ \\sum \\limits_{i = 1}^{k} b_i = n $ . If there are multiple answers, you may print any of them.\n\nExamples\nSample 1\nInput\n9 4\nOutput\nYES\n1 2 2 4\n\nSample 2\nInput\n8 1\nOutput\nYES\n8\n\nSample 3\nInput\n5 1\nOutput\nNO\n\nSample 4\nInput\n3 7\nOutput\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nmap\n<\nint\n,\nint\n>\nans\n;\nqueue\n<int>\nq\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\n30\n;\ni\n++)\nif\n(\nn\n&\n(\n1\n<<\ni\n))\n{\nif\n(\ni\n>\n0\n)\nq\n.\npush\n(\n1\n<<\ni\n);\nans\n[\n1\n<<\ni\n]++;\n}\nif\n(\nint\n(\nans\n.\nsize\n())\n>\nk\n)\n{\nputs\n(\n\"NO\"\n);\nreturn\n0\n;\n}\nint\ncnt\n=\nans\n.\nsize\n();\nwhile\n(\ncnt\n<\nk\n&&\n!\nq\n.\nempty\n())\n{\nint\nz\n=\nq\n.\nfront\n();\nq\n.\npop\n();\nans\n[\nz\n]--;\nans\n[\nz\n/\n2\n]\n+=\n2\n;\nif\n(\nz\n/\n2\n>\n1\n)\n{\nq\n.\npush\n(\nz\n/\n2\n);\nq\n.\npush\n(\nz\n/\n2\n);\n}\ncnt\n++;\n}\nif\n(\ncnt\n<\nk\n)\n{\nputs\n(\n\"NO\"\n);\nreturn\n0\n;\n}\nputs\n(\n\"YES\"\n);\nfor\n(\nauto\nx\n:\nans\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nx\n.\nsecond\n;\ni\n++)\nprintf\n(\n\"%d \"\n,\nx\n.\nfirst\n);\nputs\n(\n\"\"\n);\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ , consisting of lowercase Latin letters.\n\nIn one operation, you can select several (one or more) positions in it such that no two selected positions are adjacent to each other. Then you remove the letters on the selected positions from the string. The resulting parts are concatenated without changing their order.\n\nWhat is the smallest number of operations required to make all the letters in $ s $ the same?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of testcases.\n\nThe only line of each testcase contains a string $ s $ , consisting of lowercase Latin letters. Its length is from $ 1 $ to $ 2 \\cdot 10^5 $ .\n\nThe total length of the strings over all testcases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each testcase, print a single integer — the smallest number of operations required to make all the letters in the given string $ s $ the same.\n\nExamples\nSample 1\nInput\n5\nabacaba\ncodeforces\noooooooo\nabcdef\nmewheniseearulhiiarul\nOutput\n1\n3\n0\n2\n4\n\nNote\nIn the first testcase, you can select positions $ 2, 4 $ and $ 6 $ and remove the corresponding letters 'b', 'c' and 'b'.\n\nIn the third testcase, the letters in the string are already the same, so you don't have to make any operations.\n\nIn the fourth testcase, one of the possible solutions in $ 2 $ operations is the following. You can select positions $ 1, 4, 6 $ first. The string becomes \"bce\". Then select positions $ 1 $ and $ 3 $ . The string becomes \"c\". All letters in it are the same, since it's just one letter."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\ns\n=\ninput\n()\nn\n=\nlen\n(\ns\n)\nans\n=\nn\nfor\nx\nin\nrange\n(\n26\n):\nc\n=\nchr\n(\nx\n+\nord\n(\n'a'\n))\ni\n=\n0\ncur\n=\n0\nwhile\ni\n<\nn\n:\nj\n=\ni\nwhile\nj\n<\nn\nand\n(\ns\n[\nj\n]\n==\nc\n)\n==\n(\ns\n[\ni\n]\n==\nc\n):\nj\n+=\n1\nif\ns\n[\ni\n]\n!=\nc\n:\ncur\n=\nmax\n(\ncur\n,\nj\n-\ni\n)\ni\n=\nj\nif\ncur\n==\n0\n:\nans\n=\n0\nbreak\npw\n=\n0\nwhile\n(\n1\n<<\npw\n)\n<=\ncur\n:\npw\n+=\n1\nans\n=\nmin\n(\nans\n,\npw\n)\nprint\n(\nans\n)"
+        }
+    ]
+}

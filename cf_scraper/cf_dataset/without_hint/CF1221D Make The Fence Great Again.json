@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have a fence consisting of $ n $ vertical boards. The width of each board is $ 1 $ . The height of the $ i $ -th board is $ a_i $ . You think that the fence is great if there is no pair of adjacent boards having the same height. More formally, the fence is great if and only if for all indices from $ 2 $ to $ n $ , the condition $ a_{i-1} \\neq a_i $ holds.\n\nUnfortunately, it is possible that now your fence is not great. But you can change it! You can increase the length of the $ i $ -th board by $ 1 $ , but you have to pay $ b_i $ rubles for it. The length of each board can be increased any number of times (possibly, zero).\n\nCalculate the minimum number of rubles you have to spend to make the fence great again!\n\nYou have to answer $ q $ independent queries.\n\nInput Format\nThe first line contains one integer $ q $ ( $ 1 \\le q \\le 3 \\cdot 10^5 $ ) — the number of queries.\n\nThe first line of each query contains one integers $ n $ ( $ 1 \\le n \\le 3 \\cdot 10^5 $ ) — the number of boards in the fence.\n\nThe following $ n $ lines of each query contain the descriptions of the boards. The $ i $ -th line contains two integers $ a_i $ and $ b_i $ ( $ 1 \\le a_i, b_i \\le 10^9 $ ) — the length of the $ i $ -th board and the price for increasing it by $ 1 $ , respectively.\n\nIt is guaranteed that sum of all $ n $ over all queries not exceed $ 3 \\cdot 10^5 $ .\n\nIt is guaranteed that answer to each query will not exceed $ 10^{18} $ .\n\nOutput Format\nFor each query print one integer — the minimum number of rubles you have to spend to make the fence great.\n\nExamples\nSample 1\nInput\n3\n3\n2 4\n2 1\n3 5\n3\n2 3\n2 10\n2 6\n4\n1 7\n3 3\n2 6\n1000000000 2\nOutput\n2\n9\n0\n\nNote\nIn the first query you have to increase the length of second board by $ 2 $ . So your total costs if $ 2 \\cdot b_2 = 2 $ .\n\nIn the second query you have to increase the length of first board by $ 1 $ and the length of third board by $ 1 $ . So your total costs if $ 1 \\cdot b_1 + 1 \\cdot b_3 = 9 $ .\n\nIn the third query the fence is great initially, so you don't need to spend rubles."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\nint\n(\n3e5\n)\n+\n99\n;\nconst\nlong\nlong\nINF64\n=\n(\nlong\nlong\n)(\n1e18\n)\n+\n100\n;\nint\nt\n;\nint\nn\n;\nint\na\n[\nN\n];\nint\nb\n[\nN\n];\nlong\nlong\ndp\n[\n3\n][\nN\n];\nlong\nlong\ncalc\n(\nint\nadd\n,\nint\npos\n){\nlong\nlong\n&\nres\n=\ndp\n[\nadd\n][\npos\n];\nif\n(\nres\n!=\n-\n1\n)\nreturn\nres\n;\nres\n=\nINF64\n;\nif\n(\npos\n==\nn\n)\nreturn\nres\n=\n0\n;\nfor\n(\nlong\nlong\nx\n=\n0\n;\nx\n<=\n2\n;\n++\nx\n)\nif\n(\npos\n==\n0\n||\na\n[\npos\n]\n+\nx\n!=\na\n[\npos\n-\n1\n]\n+\nadd\n)\nres\n=\nmin\n(\nres\n,\ncalc\n(\nx\n,\npos\n+\n1\n)\n+\nx\n*\nb\n[\npos\n]);\nreturn\nres\n;\n}\nint\nmain\n()\n{\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nfor\n(\nint\ntc\n=\n0\n;\ntc\n<\nt\n;\n++\ntc\n){\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n){\nscanf\n(\n\"%d\"\n,\na\n+\ni\n);\nscanf\n(\n\"%d\"\n,\nb\n+\ni\n);\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nn\n;\n++\ni\n)\ndp\n[\n0\n][\ni\n]\n=\ndp\n[\n1\n][\ni\n]\n=\ndp\n[\n2\n][\ni\n]\n=\n-\n1\n;\nprintf\n(\n\"%lld\\n\"\n,\ncalc\n(\n0\n,\n0\n));\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

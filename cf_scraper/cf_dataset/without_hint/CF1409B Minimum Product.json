@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given four integers $ a $ , $ b $ , $ x $ and $ y $ . Initially, $ a \\ge x $ and $ b \\ge y $ . You can do the following operation no more than $ n $ times:\n\n- Choose either $ a $ or $ b $ and decrease it by one. However, as a result of this operation, value of $ a $ cannot become less than $ x $ , and value of $ b $ cannot become less than $ y $ .\n\nYour task is to find the minimum possible product of $ a $ and $ b $ ( $ a \\cdot b $ ) you can achieve by applying the given operation no more than $ n $ times.\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 2 \\cdot 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe only line of the test case contains five integers $ a $ , $ b $ , $ x $ , $ y $ and $ n $ ( $ 1 \\le a, b, x, y, n \\le 10^9 $ ). Additional constraint on the input: $ a \\ge x $ and $ b \\ge y $ always holds.\n\nOutput Format\nFor each test case, print one integer: the minimum possible product of $ a $ and $ b $ ( $ a \\cdot b $ ) you can achieve by applying the given operation no more than $ n $ times.\n\nExamples\nSample 1\nInput\n7\n10 10 8 5 3\n12 8 8 7 2\n12343 43 4543 39 123212\n1000000000 1000000000 1 1 1\n1000000000 1000000000 1 1 1000000000\n10 11 2 1 5\n10 11 9 1 10\nOutput\n70\n77\n177177\n999999999000000000\n999999999\n55\n10\n\nNote\nIn the first test case of the example, you need to decrease $ b $ three times and obtain $ 10 \\cdot 7 = 70 $ .\n\nIn the second test case of the example, you need to decrease $ a $ one time, $ b $ one time and obtain $ 11 \\cdot 7 = 77 $ .\n\nIn the sixth test case of the example, you need to decrease $ a $ five times and obtain $ 5 \\cdot 11 = 55 $ .\n\nIn the seventh test case of the example, you need to decrease $ b $ ten times and obtain $ 10 \\cdot 1 = 10 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\na\n,\nb\n,\nx\n,\ny\n,\nn\n;\ncin\n>>\na\n>>\nb\n>>\nx\n>>\ny\n>>\nn\n;\nlong\nlong\nans\n=\n1e18\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n2\n;\n++\ni\n)\n{\nint\nda\n=\nmin\n(\nn\n,\na\n-\nx\n);\nint\ndb\n=\nmin\n(\nn\n-\nda\n,\nb\n-\ny\n);\nans\n=\nmin\n(\nans\n,\n(\na\n-\nda\n)\n*\n1ll\n*\n(\nb\n-\ndb\n));\nswap\n(\na\n,\nb\n);\nswap\n(\nx\n,\ny\n);\n}\ncout\n<<\nans\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

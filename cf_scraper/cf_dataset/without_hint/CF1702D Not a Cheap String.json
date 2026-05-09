@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet $ s $ be a string of lowercase Latin letters. Its price is the sum of the indices of letters (an integer between 1 and 26) that are included in it. For example, the price of the string abca is $ 1+2+3+1=7 $ .\n\nThe string $ w $ and the integer $ p $ are given. Remove the minimal number of letters from $ w $ so that its price becomes less than or equal to $ p $ and print the resulting string. Note that the resulting string may be empty. You can delete arbitrary letters, they do not have to go in a row. If the price of a given string $ w $ is less than or equal to $ p $ , then nothing needs to be deleted and $ w $ must be output.\n\nNote that when you delete a letter from $ w $ , the order of the remaining letters is preserved. For example, if you delete the letter e from the string test, you get tst.\n\nInput Format\nThe first line of input contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases in the test. The following are descriptions of $ t $ test cases.\n\nEach case consists of two lines.\n\nThe first of them is the string $ w $ , it is non-empty and consists of lowercase Latin letters. Its length does not exceed $ 2\\cdot10^5 $ .\n\nThe second line contains an integer $ p $ ( $ 1 \\le p \\le 5\\,200\\,000 $ ).\n\nIt is guaranteed that the sum of string lengths $ w $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nOutput exactly $ t $ rows, the $ i $ -th of them should contain the answer to the $ i $ -th set of input data. Print the longest string that is obtained from $ w $ by deleting letters such that its price is less or equal to $ p $ . If there are several answers, then output any of them.\n\nNote that the empty string — is one of the possible answers. In this case, just output an empty string.\n\nExamples\nSample 1\nInput\n5\nabca\n2\nabca\n6\ncodeforces\n1\ncodeforces\n10\ncodeforces\n100\nOutput\naa\nabc\n\ncdc\ncodeforces"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nforn\n(\ntt\n,\nt\n)\n{\nstring\ns\n;\ncin\n>>\ns\n;\nint\np\n;\ncin\n>>\np\n;\nstring\nw\n(\ns\n);\nsort\n(\nw\n.\nrbegin\n(),\nw\n.\nrend\n());\nint\ncost\n=\n0\n;\nforn\n(\ni\n,\ns\n.\nlength\n())\ncost\n+=\ns\n[\ni\n]\n-\n'a'\n+\n1\n;\nmap\n<\nchar\n,\nint\n>\ndel\n;\nforn\n(\ni\n,\nw\n.\nlength\n())\nif\n(\ncost\n>\np\n)\n{\ndel\n[\nw\n[\ni\n]]++;\ncost\n-=\nw\n[\ni\n]\n-\n'a'\n+\n1\n;\n}\nforn\n(\ni\n,\ns\n.\nlength\n())\n{\nif\n(\ndel\n[\ns\n[\ni\n]]\n>\n0\n)\n{\ndel\n[\ns\n[\ni\n]]--;\ncontinue\n;\n}\ncout\n<<\ns\n[\ni\n];\n}\ncout\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

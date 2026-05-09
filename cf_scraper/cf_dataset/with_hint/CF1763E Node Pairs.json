@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's call an ordered pair of nodes $ (u, v) $ in a directed graph unidirectional if $ u \\neq v $ , there exists a path from $ u $ to $ v $ , and there are no paths from $ v $ to $ u $ .\n\nA directed graph is called $ p $ -reachable if it contains exactly $ p $ ordered pairs of nodes $ (u, v) $ such that $ u < v $ and $ u $ and $ v $ are reachable from each other. Find the minimum number of nodes required to create a $ p $ -reachable directed graph.\n\nAlso, among all such $ p $ -reachable directed graphs with the minimum number of nodes, let $ G $ denote a graph which maximizes the number of unidirectional pairs of nodes. Find this number.\n\nInput Format\nThe first and only line contains a single integer $ p $ ( $ 0 \\le p \\le 2 \\cdot 10^5 $ ) — the number of ordered pairs of nodes.\n\nOutput Format\nPrint a single line containing two integers — the minimum number of nodes required to create a $ p $ -reachable directed graph, and the maximum number of unidirectional pairs of nodes among all such $ p $ -reachable directed graphs with the minimum number of nodes.\n\nExamples\nSample 1\nInput\n3\nOutput\n3 0\n\nSample 2\nInput\n4\nOutput\n5 6\n\nSample 3\nInput\n0\nOutput\n0 0\n\nNote\nIn the first test case, the minimum number of nodes required to create a $ 3 $ -reachable directed graph is $ 3 $ . Among all $ 3 $ -reachable directed graphs with $ 3 $ nodes, the following graph $ G $ is one of the graphs with the maximum number of unidirectional pairs of nodes, which is $ 0 $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1763E/056ef4fb4b6b27a5f901099fab6d214793a2d54c.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "In a directed graph, which nodes are reachable from each other? How many such pairs of nodes exist?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Think about a sequence of SCCs."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "For two nodes $$$u$$$ and $$$v$$$ to be reachable from each other, they must lie in the same strongly connected component (SCC). Let's define $$$f(i)$$$ as the minimum number of nodes required to construct an $$$i$$$-reachable graph. We can use dynamic programming and calculate $$$f(i)$$$ as $$$f(i) = \\min(f(i — \\frac{s (s — 1)}{2}) + s)$$$ over all the valid SCC sizes $$$s$$$ for which $$$\\frac{s (s — 1)}{2} \\leq i$$$, i.e., over those $$$s$$$ which have less pairs of the required type than $$$i$$$. Thus, $$$f(p)$$$ gives us the minimum number of nodes required to create a $$$p$$$-reachable graph.\nIn all $$$p$$$-reachable graphs with $$$f(p)$$$ nodes, the upper bound on the number of unidirectional pairs of nodes is $$$\\binom{f(p)}{2} - p$$$, because we have exactly $$$p$$$ pairs of nodes which are reachable from each other. It is possible to achieve this upper bound using the following construction: let $$$s_1, s_2, \\ldots, s_k$$$ be any sequence of SCC sizes which agrees with the dp values we calculated earlier. Let the first SCC contain the nodes $$$[1, s_1]$$$, the second one contain $$$[s_1 + 1, s_1 + s_2]$$$, and so on. We add a directed edge from $$$u$$$ to $$$v$$$ if $$$u \\lt v$$$.\nTime Complexity: $$$\\mathcal{O}(p\\sqrt{p})$$$"
+        }
+    ]
+}

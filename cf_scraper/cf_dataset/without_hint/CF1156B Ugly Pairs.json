@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string, consisting of lowercase Latin letters.\n\nA pair of neighbouring letters in a string is considered ugly if these letters are also neighbouring in a alphabet. For example, string \"abaca\" contains ugly pairs at positions $ (1, 2) $ — \"ab\" and $ (2, 3) $ — \"ba\". Letters 'a' and 'z' aren't considered neighbouring in a alphabet.\n\nCan you rearrange the letters of a given string so that there are no ugly pairs? You can choose any order of the letters of the given string but you can't add any new letters or remove the existing ones. You can also leave the order the same.\n\nIf there are multiple answers, print any of them.\n\nYou also have to answer $ T $ separate queries.\n\nInput Format\nThe first line contains a single integer $ T $ ( $ 1 \\le T \\le 100 $ ) — the number of queries.\n\nEach of the next $ T $ lines contains string $ s $ $ (1 \\le |s| \\le 100) $ — the string for the next query. It is guaranteed that it contains only lowercase Latin letters.\n\nNote that in hacks you have to set $ T = 1 $ .\n\nOutput Format\nPrint $ T $ lines. The $ i $ -th line should contain the answer to the $ i $ -th query.\n\nIf the answer for the $ i $ -th query exists, then print such a rearrangment of letters of the given string that it contains no ugly pairs. You can choose any order of the letters of the given string but you can't add any new letters or remove the existing ones. You can also leave the order the same.\n\nIf there are multiple answers, print any of them.\n\nOtherwise print \"No answer\" for that query.\n\nExamples\nSample 1\nInput\n4\nabcd\ngg\ncodeforces\nabaca\nOutput\ncadb\ngg\ncodfoerces\nNo answer\n\nNote\nIn the first example answer \"bdac\" is also correct.\n\nThe second example showcases the fact that only neighbouring in alphabet letters are not allowed. The same letter is ok.\n\nThere are lots of valid answers for the third example."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (PikMike)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nbool\ncheck\n(\nstring\ns\n){\nbool\nok\n=\ntrue\n;\nforn\n(\ni\n,\nint\n(\ns\n.\nsize\n())\n-\n1\n)\nok\n&=\n(\nabs\n(\ns\n[\ni\n]\n-\ns\n[\ni\n+\n1\n])\n!=\n1\n);\nreturn\nok\n;\n}\nint\nmain\n()\n{\nint\nT\n;\nscanf\n(\n\"%d\"\n,\n&\nT\n);\nstatic\nchar\nbuf\n[\n120\n];\nforn\n(\n_\n,\nT\n){\nscanf\n(\n\"%s\"\n,\nbuf\n);\nstring\ns\n=\nbuf\n;\nstring\nodd\n=\n\"\"\n,\neven\n=\n\"\"\n;\nforn\n(\ni\n,\ns\n.\nsize\n()){\nif\n(\ns\n[\ni\n]\n%\n2\n==\n0\n)\nodd\n+=\ns\n[\ni\n];\nelse\neven\n+=\ns\n[\ni\n];\n}\nsort\n(\nodd\n.\nbegin\n(),\nodd\n.\nend\n());\nsort\n(\neven\n.\nbegin\n(),\neven\n.\nend\n());\nif\n(\ncheck\n(\nodd\n+\neven\n))\nprintf\n(\n\"%s\\n\"\n,\n(\nodd\n+\neven\n).\nc_str\n());\nelse\nif\n(\ncheck\n(\neven\n+\nodd\n))\nprintf\n(\n\"%s\\n\"\n,\n(\neven\n+\nodd\n).\nc_str\n());\nelse\nputs\n(\n\"No answer\"\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

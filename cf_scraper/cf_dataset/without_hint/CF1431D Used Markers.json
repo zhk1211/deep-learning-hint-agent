@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (elizarov)",
+            "content": "fun main\n()\n{\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval n\n=\nreadLine\n()!!.\ntoInt\n()\nval a\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\n.\nwithIndex\n().\nsortedBy\n{\nit\n.\nvalue\n}\nvar\ni\n=\n0\nvar\nj\n=\nn\n-\n1\nval answer\n=\nArrayList\n<\nInt\n>(\nn\n)\nvar\nbc\n=\n0\nwhile\n(\ni\n<=\nj\n)\n{\nif\n(\nbc\n>=\na\n[\ni\n].\nvalue\n)\n{\nanswer\n+=\na\n[\ni\n++].\nindex\n                bc\n=\n1\n}\nelse\n{\nanswer\n+=\na\n[\nj\n--].\nindex\n                bc\n++\n}\n}\nprintln\n(\nanswer\n.\njoinToString\n(\n\" \"\n)\n{\n(\nit\n+\n1\n).\ntoString\n()\n})\n}\n}"
+        }
+    ]
+}

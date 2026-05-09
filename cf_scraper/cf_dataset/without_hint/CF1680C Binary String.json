@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ consisting of characters 0 and/or 1.\n\nYou have to remove several (possibly zero) characters from the beginning of the string, and then several (possibly zero) characters from the end of the string. The string may become empty after the removals. The cost of the removal is the maximum of the following two values:\n\n- the number of characters 0 left in the string;\n- the number of characters 1 removed from the string.\n\nWhat is the minimum cost of removal you can achieve?\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nEach test case consists of one line containing the string $ s $ ( $ 1 \\le |s| \\le 2 \\cdot 10^5 $ ), consisting of characters 0 and/or 1.\n\nThe total length of strings $ s $ in all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print one integer — the minimum cost of removal you can achieve.\n\nExamples\nSample 1\nInput\n5\n101110110\n1001001001001\n0000111111\n00000\n1111\nOutput\n1\n3\n0\n0\n0\n\nNote\nConsider the test cases of the example:\n\n1. in the first test case, it's possible to remove two characters from the beginning and one character from the end. Only one 1 is deleted, only one 0 remains, so the cost is $ 1 $ ;\n2. in the second test case, it's possible to remove three characters from the beginning and six characters from the end. Two characters 0 remain, three characters 1 are deleted, so the cost is $ 3 $ ;\n3. in the third test case, it's optimal to remove four characters from the beginning;\n4. in the fourth test case, it's optimal to remove the whole string;\n5. in the fifth test case, it's optimal to leave the string as it is."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "def\ncan\n(\npos\n,\nm\n):\nk\n=\nlen\n(\npos\n)\nx\n=\nk\n-\nm\nfor\ni\nin\nrange\n(\nm\n+\n1\n):\nl\n=\npos\n[\ni\n]\nr\n=\npos\n[\ni\n+\nx\n-\n1\n]\nif\nr\n-\nl\n+\n1\n-\nx\n<=\nm\n:\nreturn\nTrue\nreturn\nFalse\nt\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\ns\n=\ninput\n()\npos\n=\n[]\nn\n=\nlen\n(\ns\n)\nfor\ni\nin\nrange\n(\nn\n):\nif\ns\n[\ni\n]\n==\n'1'\n:\npos\n.\nappend\n(\ni\n)\nlf\n=\n0\nrg\n=\nlen\n(\npos\n)\nwhile\nrg\n-\nlf\n>\n1\n:\nmid\n=\n(\nlf\n+\nrg\n)\n// 2\nif\ncan\n(\npos\n,\nmid\n):\nrg\n=\nmid\nelse\n:\nlf\n=\nmid\nif\nlen\n(\npos\n)\n==\n0\nor\npos\n[-\n1\n]\n-\npos\n[\n0\n]\n==\nlen\n(\npos\n)\n-\n1\n:\nprint\n(\n0\n)\nelse\n:\nprint\n(\nrg\n)"
+        }
+    ]
+}
