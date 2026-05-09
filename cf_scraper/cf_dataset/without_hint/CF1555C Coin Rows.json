@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlice and Bob are playing a game on a matrix, consisting of $ 2 $ rows and $ m $ columns. The cell in the $ i $ -th row in the $ j $ -th column contains $ a_{i, j} $ coins in it.\n\nInitially, both Alice and Bob are standing in a cell $ (1, 1) $ . They are going to perform a sequence of moves to reach a cell $ (2, m) $ .\n\nThe possible moves are:\n\n- Move right — from some cell $ (x, y) $ to $ (x, y + 1) $ ;\n- Move down — from some cell $ (x, y) $ to $ (x + 1, y) $ .\n\nFirst, Alice makes all her moves until she reaches $ (2, m) $ . She collects the coins in all cells she visit (including the starting cell).\n\nWhen Alice finishes, Bob starts his journey. He also performs the moves to reach $ (2, m) $ and collects the coins in all cells that he visited, but Alice didn't.\n\nThe score of the game is the total number of coins Bob collects.\n\nAlice wants to minimize the score. Bob wants to maximize the score. What will the score of the game be if both players play optimally?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of testcases.\n\nThen the descriptions of $ t $ testcases follow.\n\nThe first line of the testcase contains a single integer $ m $ ( $ 1 \\le m \\le 10^5 $ ) — the number of columns of the matrix.\n\nThe $ i $ -th of the next $ 2 $ lines contain $ m $ integers $ a_{i,1}, a_{i,2}, \\dots, a_{i,m} $ ( $ 1 \\le a_{i,j} \\le 10^4 $ ) — the number of coins in the cell in the $ i $ -th row in the $ j $ -th column of the matrix.\n\nThe sum of $ m $ over all testcases doesn't exceed $ 10^5 $ .\n\nOutput Format\nFor each testcase print a single integer — the score of the game if both players play optimally.\n\nExamples\nSample 1\nInput\n3\n3\n1 3 7\n3 5 1\n3\n1 3 9\n3 5 1\n1\n4\n7\nOutput\n7\n8\n0\n\nNote\nThe paths for the testcases are shown on the following pictures. Alice's path is depicted in red and Bob's path is depicted in blue.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1555C/252b3575ef3aca0ba0371198bcb73812484716e5.png)"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nconst\nint\nINF\n=\n2e9\n+\n10\n;\nint\nmain\n()\n{\nint\nt\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nforn\n(\n_\n,\nt\n){\nint\nn\n;\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nvector\n<\nvector\n<int>\n>\na\n(\n2\n,\nvector\n<int>\n(\nn\n));\nforn\n(\ni\n,\n2\n)\nforn\n(\nj\n,\nn\n)\nscanf\n(\n\"%d\"\n,\n&\na\n[\ni\n][\nj\n]);\nint\nans\n=\nINF\n;\nint\nsum1\n=\n0\n,\nsum2\n=\n0\n;\nforn\n(\ni\n,\nn\n)\nsum1\n+=\na\n[\n0\n][\ni\n];\nforn\n(\ni\n,\nn\n){\nsum1\n-=\na\n[\n0\n][\ni\n];\nans\n=\nmin\n(\nans\n,\nmax\n(\nsum1\n,\nsum2\n));\nsum2\n+=\na\n[\n1\n][\ni\n];\n}\nprintf\n(\n\"%d\\n\"\n,\nans\n);\n}\n}"
+        }
+    ]
+}

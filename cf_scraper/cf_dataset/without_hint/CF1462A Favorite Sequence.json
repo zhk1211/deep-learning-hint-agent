@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp has a favorite sequence $ a[1 \\dots n] $ consisting of $ n $ integers. He wrote it out on the whiteboard as follows:\n\n- he wrote the number $ a_1 $ to the left side (at the beginning of the whiteboard);\n- he wrote the number $ a_2 $ to the right side (at the end of the whiteboard);\n- then as far to the left as possible (but to the right from $ a_1 $ ), he wrote the number $ a_3 $ ;\n- then as far to the right as possible (but to the left from $ a_2 $ ), he wrote the number $ a_4 $ ;\n- Polycarp continued to act as well, until he wrote out the entire sequence on the whiteboard.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1462A/7e19e012703d1d50cdf1aa56b8379b549d74c5c4.png)The beginning of the result looks like this (of course, if $ n \\ge 4 $ ).For example, if $ n=7 $ and $ a=[3, 1, 4, 1, 5, 9, 2] $ , then Polycarp will write a sequence on the whiteboard $ [3, 4, 5, 2, 9, 1, 1] $ .\n\nYou saw the sequence written on the whiteboard and now you want to restore Polycarp's favorite sequence.\n\nInput Format\nThe first line contains a single positive integer $ t $ ( $ 1 \\le t \\le 300 $ ) — the number of test cases in the test. Then $ t $ test cases follow.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\le n \\le 300 $ ) — the length of the sequence written on the whiteboard.\n\nThe next line contains $ n $ integers $ b_1, b_2,\\ldots, b_n $ ( $ 1 \\le b_i \\le 10^9 $ ) — the sequence written on the whiteboard.\n\nOutput Format\nOutput $ t $ answers to the test cases. Each answer — is a sequence $ a $ that Polycarp wrote out on the whiteboard.\n\nExamples\nSample 1\nInput\n6\n7\n3 4 5 2 9 1 1\n4\n9 2 7 1\n11\n8 4 3 1 2 7 8 7 9 4 2\n1\n42\n2\n11 7\n8\n1 1 1 1 1 1 1 1\nOutput\n3 1 4 1 5 9 2\n9 1 2 7\n8 2 4 4 3 9 1 7 2 8 7\n42\n11 7\n1 1 1 1 1 1 1 1\n\nNote\nIn the first test case, the sequence $ a $ matches the sequence from the statement. The whiteboard states after each step look like this:\n\n$ [3] \\Rightarrow [3, 1] \\Rightarrow [3, 4, 1] \\Rightarrow [3, 4, 1, 1] \\Rightarrow [3, 4, 5, 1, 1] \\Rightarrow [3, 4, 5, 9, 1, 1] \\Rightarrow [3, 4, 5, 2, 9, 1, 1] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\nv\n(\nn\n);\nfor\n(\nint\n&\ne\n:\nv\n)\n{\ncin\n>>\ne\n;\n}\nint\nleft\n=\n0\n,\nright\n=\nn\n-\n1\n;\nvector\n<int>\nans\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\ni\n%\n2\n==\n0\n)\n{\nans\n[\ni\n]\n=\nv\n[\nleft\n++];\n}\nelse\n{\nans\n[\ni\n]\n=\nv\n[\nright\n--];\n}\n}\nfor\n(\nint\ni\n:\nans\n)\n{\ncout\n<<\ni\n<<\n\" \"\n;\n}\ncout\n<<\n\"\\n\"\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

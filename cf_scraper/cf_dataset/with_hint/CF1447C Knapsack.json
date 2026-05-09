@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Are there any items which you can put in the knapsack to fulfill the goal with one item? What happens if there are none?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "If there is an item of size $$$C$$$ satisfying: $$$\\lceil \\frac{W}{2}\\rceil \\le C \\le W$$$, it is enough to output only that item. Otherwise, we should exclude items which are larger than the size of the knapsack and take a closer look at the situation. Consider greedily adding items in any order until we find a valid solution or run out of items.\nThis is correct because all items have sizes less than $$$\\frac{W}{2}$$$, so it is not possible to exceed knapsack size by adding one item in a situation where the sum of items $$$C$$$ doesn't satisfy constraint $$$\\lceil \\frac{W}{2}\\rceil \\le C \\le W$$$.\nThis gives us a solution in $$$O(n)$$$."
+        },
+        {
+            "title": "Alternative solution",
+            "content": "From the analysis above, we can also conclude that greedily adding the items from largest to smallest if they still fit in the knapsack will always find a solution if one exists.\nThis gives us a solution in $$$O(n log n)$$$."
+        }
+    ]
+}

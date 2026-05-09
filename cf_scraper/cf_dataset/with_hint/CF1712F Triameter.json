@@ -1,0 +1,52 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n— What is my mission?\n\n— To count graph diameters.\n\nYou and Your Submission\n\nA tree is a connected undirected graph without cycles. A weighted tree has a weight assigned to each edge. The degree of a vertex is the number of edges connected to this vertex.\n\nYou are given a weighted tree with $ n $ vertices, each edge has a weight of $ 1 $ . Let $ L $ be the set of vertices with degree equal to $ 1 $ .\n\nYou have to answer $ q $ independent queries. In the $ i $ -th query:\n\n1. You are given a positive integer $ x_i $ .\n2. For all $ u,v \\in L $ such that $ u < v $ , add edge $ (u, v) $ with weight $ x_i $ to the graph (initially the given tree).\n3. Find the diameter of the resulting graph.\n\nThe diameter of a graph is equal to $ \\max\\limits_{1 \\le u < v \\le n}{\\operatorname{d}(u, v)} $ , where $ \\operatorname{d}(u, v) $ is the length of the shortest path between vertex $ u $ and vertex $ v $ .\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 3 \\le n \\le 10^6 $ ).\n\nThe second line contains $ n - 1 $ integers $ p_2,p_3,\\ldots,p_n $ ( $ 1 \\le p_i < i $ ) indicating that there is an edge between vertices $ i $ and $ p_i $ . It is guaranteed that the given edges form a tree.\n\nThe third line contains a single integer $ q $ ( $ 1 \\le q \\le 10 $ ).\n\nThe fourth line contains $ q $ integers $ x_1,x_2,\\ldots,x_q $ ( $ 1 \\le x_i \\le n $ ). All $ x_i $ are distinct.\n\nOutput Format\nPrint $ q $ integers in a single line — the answers to the queries.\n\nExamples\nSample 1\nInput\n4\n1 2 2\n4\n1 2 3 4\nOutput\n1 2 2 2\n\nSample 2\nInput\n7\n1 2 3 4 2 1\n7\n2 1 3 7 5 6 4\nOutput\n3 3 4 5 5 5 4\n\nSample 3\nInput\n3\n1 2\n1\n1\nOutput\n1\n\nNote\nThe graph in the first test after adding the edges:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1712F/073bc9fccf88906297f38e8169cf663f6db33c12.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nLet $$$f_v$$$ be the distance to the closest vertex $$$\\in L$$$ to $$$v$$$. You can calculate it for every vertex in $$$O(n)$$$.\nHint 2\nThe distance in the new graph $$$\\operatorname{d'}(u, v)$$$ is equal to $$$\\min(\\operatorname{d}(u, v), f_u + f_v + x)$$$\nHint 3\nSuppose there is a vertex $$$v$$$ with $$$f_v \\gt 0$$$. Then there is always a vertex $$$u$$$ in the subtree of $$$v$$$ such that $$$f_u \\lt f_v$$$ and $$$depth_u$$$ > $$$depth_v$$$.\nHint 4\nThink small-to-large merging.\nHint 5\nMaintain the largest value of $$$depth_v$$$ over all $$$v$$$ with $$$f_v = i$$$ for all needed $$$i$$$.\nHint 6\nIn this problem, small-to-large merging works in $$$O(n)$$$.\nHint 7\nThe diameter is $$$\\le n$$$. So you can increase it by $$$1$$$ at most $$$n$$$ times."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Let $$$f_v$$$ be the distance to the closest vertex $$$\\in L$$$ to $$$v$$$. You can calculate it for every vertex in $$$O(n)$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The distance in the new graph $$$\\operatorname{d'}(u, v)$$$ is equal to $$$\\min(\\operatorname{d}(u, v), f_u + f_v + x)$$$"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Suppose there is a vertex $$$v$$$ with $$$f_v \\gt 0$$$. Then there is always a vertex $$$u$$$ in the subtree of $$$v$$$ such that $$$f_u \\lt f_v$$$ and $$$depth_u$$$ > $$$depth_v$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Think small-to-large merging."
+        },
+        {
+            "title": "Hint 5",
+            "content": "Maintain the largest value of $$$depth_v$$$ over all $$$v$$$ with $$$f_v = i$$$ for all needed $$$i$$$."
+        },
+        {
+            "title": "Hint 6",
+            "content": "In this problem, small-to-large merging works in $$$O(n)$$$."
+        },
+        {
+            "title": "Hint 7",
+            "content": "The diameter is $$$\\le n$$$. So you can increase it by $$$1$$$ at most $$$n$$$ times."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\n#define\nallr\n(\nx\n)\n(\nx\n).\nrbegin\n(),\n(\nx\n).\nrend\n()\n#define\ngsize\n(\nx\n)\n(\nint\n)((\nx\n).\nsize\n())\nconst\nchar\nnl\n=\n'\\n'\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\nlong\ndouble\nld\n;\nusing\nnamespace\nstd\n;\nconst\nint\nmaxn\n=\n1000000\n;\nint\nf\n[\nmaxn\n],\nd\n[\nmaxn\n];\nvector\n<int>\ng\n[\nmaxn\n],\ng2\n[\nmaxn\n],\nval\n[\nmaxn\n];\nint\nn\n,\nq\n;\nvector\n<int>\nans\n,\nx\n;\nvoid\nsolve\n()\n{\nfor\n(\nint\nv\n=\nn\n-\n1\n;\nv\n>=\n0\n;\nv\n--)\n{\nfor\n(\nint\nu\n:\ng\n[\nv\n])\n{\nif\n(\ngsize\n(\nval\n[\nu\n])\n>\ngsize\n(\nval\n[\nv\n]))\nswap\n(\nval\n[\nu\n],\nval\n[\nv\n]);\nfor\n(\nint\nfu\n=\n0\n;\nfu\n<\ngsize\n(\nval\n[\nu\n]);\nfu\n++)\n{\nfor\n(\nint\nqi\n=\n0\n;\nqi\n<\nq\n;\nqi\n++)\n{\nwhile\n(\ntrue\n)\n{\nint\nfv\n=\nmax\n(\n0\n,\nans\n[\nqi\n]\n-\nfu\n-\nx\n[\nqi\n]);\nif\n(\nfv\n<\ngsize\n(\nval\n[\nv\n])\n&&\nval\n[\nv\n][\nfv\n]\n+\nval\n[\nu\n][\nfu\n]\n-\n2\n*\nd\n[\nv\n]\n>=\nans\n[\nqi\n])\nans\n[\nqi\n]++;\nelse\nbreak\n;\n}\n}\n}\nfor\n(\nint\nfu\n=\n0\n;\nfu\n<\ngsize\n(\nval\n[\nu\n]);\nfu\n++)\n{\nval\n[\nv\n][\nfu\n]\n=\nmax\n(\nval\n[\nv\n][\nfu\n],\nval\n[\nu\n][\nfu\n]);\n}\nval\n[\nu\n].\nclear\n();\nval\n[\nu\n].\nshrink_to_fit\n();\n}\n{\nint\nfu\n=\nf\n[\nv\n];\nfor\n(\nint\nqi\n=\n0\n;\nqi\n<\nq\n;\nqi\n++)\n{\nwhile\n(\ntrue\n)\n{\nint\nfv\n=\nmax\n(\n0\n,\nans\n[\nqi\n]\n-\nfu\n-\nx\n[\nqi\n]);\nif\n(\nfv\n<\ngsize\n(\nval\n[\nv\n])\n&&\nval\n[\nv\n][\nfv\n]\n-\nd\n[\nv\n]\n>=\nans\n[\nqi\n])\nans\n[\nqi\n]++;\nelse\nbreak\n;\n}\n}\nif\n(\nfu\n==\ngsize\n(\nval\n[\nv\n]))\n{\nval\n[\nv\n].\npush_back\n(\nd\n[\nv\n]);\n}\n}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nq\n;\ni\n++)\n{\nans\n[\ni\n]--;\n}\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncin\n>>\nn\n;\nvector\n<int>\ndeg\n(\nn\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\n{\nint\np\n;\ncin\n>>\np\n;\nd\n[\ni\n]\n=\nd\n[\np\n-\n1\n]\n+\n1\n;\ng\n[\np\n-\n1\n].\npush_back\n(\ni\n);\ng2\n[\ni\n].\npush_back\n(\np\n-\n1\n);\n}\n{\nqueue\n<int>\nqe\n;\nvector\n<bool>\nused\n(\nn\n,\nfalse\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\ngsize\n(\ng2\n[\ni\n])\n+\ngsize\n(\ng\n[\ni\n])\n==\n1\n)\n{\nqe\n.\npush\n(\ni\n);\nused\n[\ni\n]\n=\ntrue\n;\n}\n}\nwhile\n(!\nqe\n.\nempty\n())\n{\nint\nv\n=\nqe\n.\nfront\n();\nqe\n.\npop\n();\nfor\n(\nint\nu\n:\ng\n[\nv\n])\n{\nif\n(\nused\n[\nu\n])\ncontinue\n;\nf\n[\nu\n]\n=\nf\n[\nv\n]\n+\n1\n;\nqe\n.\npush\n(\nu\n);\nused\n[\nu\n]\n=\ntrue\n;\n}\nfor\n(\nint\nu\n:\ng2\n[\nv\n])\n{\nif\n(\nused\n[\nu\n])\ncontinue\n;\nf\n[\nu\n]\n=\nf\n[\nv\n]\n+\n1\n;\nqe\n.\npush\n(\nu\n);\nused\n[\nu\n]\n=\ntrue\n;\n}\n}\n}\ncin\n>>\nq\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nq\n;\ni\n++)\n{\nint\ntx\n;\ncin\n>>\ntx\n;\nx\n.\npush_back\n(\ntx\n);\nans\n.\npush_back\n(\n0\n);\n}\nsolve\n();\nfor\n(\nint\ntans\n:\nans\n)\ncout\n<<\ntans\n<<\n' '\n;\ncout\n<<\nnl\n;\n}"
+        }
+    ]
+}

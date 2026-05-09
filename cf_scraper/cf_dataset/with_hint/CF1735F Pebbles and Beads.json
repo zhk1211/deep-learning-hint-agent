@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are two currencies: pebbles and beads. Initially you have $ a $ pebbles, $ b $ beads.\n\nThere are $ n $ days, each day you can exchange one currency for another at some exchange rate.\n\nOn day $ i $ , you can exchange $ -p_i \\leq x \\leq p_i $ pebbles for $ -q_i \\leq y \\leq q_i $ beads or vice versa. It's allowed not to perform an exchange at all. Meanwhile, if you perform an exchange, the proportion $ x \\cdot q_i = -y \\cdot p_i $ must be fulfilled. Fractional exchanges are allowed.\n\nYou can perform no more than one such exchange in one day. The numbers of pebbles and beads you have must always remain non-negative.\n\nPlease solve the following $ n $ problems independently: for each day $ i $ , output the maximum number of pebbles that you can have at the end of day $ i $ if you perform exchanges optimally.\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 10^3 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains three integers $ n $ , $ a $ and $ b $ ( $ 1 \\le n \\le 300\\,000 $ , $ 0 \\le a, b \\le 10^9 $ ) — the number of days and the initial number of pebbles and beads respectively.\n\nThe second line of each test case contains $ n $ integers: $ p_1, p_2, \\ldots, p_n $ ( $ 1 \\le p_i \\le 10^9 $ ).\n\nThe third line of each test case contains $ n $ integers: $ q_1, q_2, \\ldots, q_n $ ( $ 1 \\le q_i \\le 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases doesn't exceed $ 300\\,000 $ .\n\nOutput Format\nOutput $ n $ numbers — the maximum number of pebbles at the end of each day.\n\nYour answer is considered correct if its absolute or relative error does not exceed $ 10^{-6} $ .\n\nFormally, let your answer be $ a $ , and the jury's answer be $ b $ . Your answer is accepted if and only if $ \\frac{\\left|a - b\\right|}{\\max(1, \\left|b\\right|)} \\le 10^{-6} $ .\n\nExamples\nSample 1\nInput\n3\n2 6 0\n2 3\n4 2\n3 0 6\n4 2 10\n2 3 10\n1 10 10\n33\n1000\nOutput\n6\n8\n4\n6\n9.000000\n10.33\n\nNote\nIn the image below you can see the solutions for the first two test cases. In each line there is an optimal sequence of actions for each day.\n\nIn the first test case, the optimal strategy for the first day is to do no action at all, as we can only decrease the number of pebbles. The optimal strategy for the second day is at first to exchange $ 1 $ pebble for $ 2 $ beads, which is a correct exchange, since $ 1 \\cdot 4 = 2 \\cdot 2 $ , and then to exchange $ 2 $ beads for $ 3 $ pebbles.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1735F/b39065acebbcc970390f5cd64e48697e083bee20.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "Draw currencies on 2D plane.\nAssume that you can throw out any amount of money at any moment.\nWhat will an area of possible points look like?"
+        },
+        {
+            "title": "Hint2",
+            "content": "It will look like a convex polygon in the upper-right quarter.\nKeep its edges.\nHow does the structure change when a new day comes?"
+        },
+        {
+            "title": "Hint3",
+            "content": "A new segment is added. A prefix of old segments is shifted by vector, the remaining suffix of old segments is shifted by opposite vector,"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's draw currencies on 2D plane. Having $$$x$$$ pebbles and $$$y$$$ beads is described as point $$$(x, y)$$$.\nLet's assume that we can throw out any amount of money at any moment. In this case, an area of possible points can be described as a convex polygon in the upper-right quarter. Initially it is the rectangle $$$[(0, 0), (0, b), (a, b), (a, 0)]$$$.\nAt any moment, this polygon can be described as a list of segments starting at point $$$(0, y_0)$$$ and finishing at point $$$(x_k, 0)$$$. In the rectangle described above, there are $$$2$$$ segments.\nLet's keep those segments sorted by angle.\nWhen a new day comes, each point can be shifted by the vector $$$c\\cdot(p_i, -q_i)\\ \\forall c \\in [-1, 1]$$$ if the new point has non-negative coordinates.\nIf we forget about new points to be non-negative, how new segments look like?\nWe just have to add new segment $$$(2 \\cdot p_i, -2 \\cdot q_i)$$$ and shift a prefix of old segments by $$$(-p_i, q_i)$$$ and remaining suffix of segments by $$$(p_i, -q_i)$$$.\nThen the only thing left to do is to cut segments to keep our polygon non-negative.\nSounds great, but sounds like $$$\\mathcal{O}(n^2)$$$.\nDo we need to maintain segments explicitly?\nNo!\nLet's just keep the set of their lengths and angles. Knowledge of extreme points $$$(0, y_0)$$$ and $$$(x_k, 0)$$$ is enough.\nSo we need to:\nInsert a new segment to the set. (You need just length and angle).\nShift extreme points $$$(0, y_0)$$$ and $$$(x_k, 0)$$$ by $$$(-p_i, q_i)$$$ and $$$(p_i, -q_i)$$$ correspondingly.\nDelete or cut the last and first segments while they are out of the non-negative area.\nComplexity $$$\\mathcal{O}(nlog(n))$$$.\nThere is another simple $$$\\mathcal{O}(n^2log(n))$$$ approach:\nWe can keep the area as a polygon. At each step, create two copies shifted by corresponding vectors. Build a convex hull of them. Cut this convex hull to be in the non-negative area.\nIt won't fit. Mentioned just for fun."
+        }
+    ]
+}

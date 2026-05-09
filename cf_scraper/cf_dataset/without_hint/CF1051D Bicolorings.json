@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a grid, consisting of $ 2 $ rows and $ n $ columns. Each cell of this grid should be colored either black or white.\n\nTwo cells are considered neighbours if they have a common border and share the same color. Two cells $ A $ and $ B $ belong to the same component if they are neighbours, or if there is a neighbour of $ A $ that belongs to the same component with $ B $ .\n\nLet's call some bicoloring beautiful if it has exactly $ k $ components.\n\nCount the number of beautiful bicolorings. The number can be big enough, so print the answer modulo $ 998244353 $ .\n\nInput Format\nThe only line contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 1000 $ , $ 1 \\le k \\le 2n $ ) — the number of columns in a grid and the number of components required.\n\nOutput Format\nPrint a single integer — the number of beautiful bicolorings modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n3 4\nOutput\n12\n\nSample 2\nInput\n4 1\nOutput\n2\n\nSample 3\nInput\n1 2\nOutput\n2\n\nNote\nOne of possible bicolorings in sample $ 1 $ :\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1051D/d268eb0019831b2d0215a1af53fa8a6c76918b67.png)"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (PikMike)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nconst\nint\nN\n=\n1000\n+\n7\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\ndp\n[\nN\n][\n2\n*\nN\n][\n4\n];\nint\nadd\n(\nint\na\n,\nint\nb\n){\nreturn\n(\na\n+\nb\n)\n%\nMOD\n;\n}\nbool\nfull\n(\nint\nmask\n){\nreturn\n(\nmask\n==\n0\n||\nmask\n==\n3\n);\n}\nint\nget\n(\nint\nmask\n,\nint\nnmask\n){\nint\ncnt\n=\n__builtin_popcount\n(\nmask\n^\nnmask\n);\nif\n(\ncnt\n==\n0\n)\nreturn\n0\n;\nif\n(\ncnt\n==\n2\n)\nreturn\n(\nfull\n(\nmask\n)\n?\n1\n:\n2\n);\nreturn\n(\nfull\n(\nmask\n)\n?\n0\n:\n1\n);\n}\nint\nmain\n()\n{\nint\nn\n,\nk\n;\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nk\n);\nforn\n(\ni\n,\n4\n)\ndp\n[\n1\n][\n0\n][\ni\n]\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\n++\ni\n){\nforn\n(\nj\n,\nk\n+\n1\n){\nforn\n(\nmask\n,\n4\n){\nforn\n(\nnmask\n,\n4\n){\ndp\n[\ni\n+\n1\n][\nj\n+\nget\n(\nmask\n,\nnmask\n)][\nnmask\n]\n=\nadd\n(\ndp\n[\ni\n+\n1\n][\nj\n+\nget\n(\nmask\n,\nnmask\n)][\nnmask\n],\ndp\n[\ni\n][\nj\n][\nmask\n]);\n}\n}\n}\n}\nint\nans\n=\n0\n;\nforn\n(\nmask\n,\n4\n){\nint\nnw\n=\nget\n(\nmask\n,\nmask\n^\n3\n);\nif\n(\nk\n>=\nnw\n)\nans\n=\nadd\n(\nans\n,\ndp\n[\nn\n][\nk\n-\nnw\n][\nmask\n]);\n}\nprintf\n(\n\"%d\\n\"\n,\nans\n);\n}"
+        }
+    ]
+}

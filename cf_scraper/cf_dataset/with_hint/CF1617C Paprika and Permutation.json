@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPaprika loves permutations. She has an array $ a_1, a_2, \\dots, a_n $ . She wants to make the array a permutation of integers $ 1 $ to $ n $ .\n\nIn order to achieve this goal, she can perform operations on the array. In each operation she can choose two integers $ i $ ( $ 1 \\le i \\le n $ ) and $ x $ ( $ x > 0 $ ), then perform $ a_i := a_i \\bmod x $ (that is, replace $ a_i $ by the remainder of $ a_i $ divided by $ x $ ). In different operations, the chosen $ i $ and $ x $ can be different.\n\nDetermine the minimum number of operations needed to make the array a permutation of integers $ 1 $ to $ n $ . If it is impossible, output $ -1 $ .\n\nA permutation is an array consisting of $ n $ distinct integers from $ 1 $ to $ n $ in arbitrary order. For example, $ [2,3,1,5,4] $ is a permutation, but $ [1,2,2] $ is not a permutation ( $ 2 $ appears twice in the array) and $ [1,3,4] $ is also not a permutation ( $ n=3 $ but there is $ 4 $ in the array).\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Description of the test cases follows.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\le n \\le 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\dots, a_n $ . ( $ 1 \\le a_i \\le 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output the minimum number of operations needed to make the array a permutation of integers $ 1 $ to $ n $ , or $ -1 $ if it is impossible.\n\nExamples\nSample 1\nInput\n4\n2\n1 7\n3\n1 5 4\n4\n12345678 87654321 20211218 23571113\n9\n1 2 3 4 18 19 5 6 7\nOutput\n1\n-1\n4\n2\n\nNote\nFor the first test, the only possible sequence of operations which minimizes the number of operations is:\n\n- Choose $ i=2 $ , $ x=5 $ . Perform $ a_2 := a_2 \\bmod 5 = 2 $ .\n\nFor the second test, it is impossible to obtain a permutation of integers from $ 1 $ to $ n $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "For any two positive integers $$$x$$$, $$$y$$$ that satisfy $$$x \\ge y$$$, what is the maximum value of $$$x \\bmod y$$$?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Consider the following input: $$$n = 4$$$, $$$a = [3, 3, 10, 10]$$$. Sometimes, we don't need to do anything to some $$$a_i$$$. When do we have to make operations, and when do we not have to?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Key observation: $$$x \\bmod y \\lt \\frac{x}{2}$$$ if $$$x \\ge y$$$, and $$$x \\bmod y = x$$$ if $$$x \\lt y$$$.\nNotice that the bigger the $$$x$$$, the bigger the range of values that can be obtained after one $$$\\bmod$$$ operation. So, intuitively, we want to assign smaller $$$a_i$$$ to smaller numbers in the resulting permutation.\nHowever, if $$$a_i$$$ satisfies $$$1 \\le a_i \\le n$$$, we can just leave it there and use it in the resulting permutation (if multiple $$$a_i$$$ satisfy $$$1 \\le a_i \\le n$$$ and have the same value, just choose one). Let's suppose in the optimal solution, we change $$$x$$$ to $$$y$$$ and change $$$z$$$ to $$$x$$$ for some $$$z \\gt x \\gt y$$$ ($$$x$$$, $$$y$$$, $$$z$$$ are values, not indices). Then changing $$$x$$$ to $$$x$$$ (i.e. doing nothing) and changing $$$z$$$ to $$$y$$$ uses $$$1$$$ less operation. And, if it is possible to change $$$z$$$ to $$$x$$$, then it must be possible to change $$$z$$$ to $$$y$$$. However, if it is not possible to change $$$z$$$ to $$$x$$$, it might still be possible to change $$$z$$$ to $$$y$$$.\nTherefore, the solution is as follows: Sort the array. For each element $$$i$$$ in the sorted array:\nIf $$$1 \\le a_i \\le n$$$ and it is the first occurrence of element with value $$$a_i$$$, leave it there.\nElse, let the current least unassigned value in the resulting permutation be $$$m$$$, if $$$m \\lt \\frac{a_i}{2}$$$, we can assign the current element to value $$$m$$$ and add the number of operations by $$$1$$$. Else, output $$$-1$$$ directly.\nThe solution works in $$$O(n \\log n)$$$."
+        },
+        {
+            "title": "Implementation (C++, physics0523)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n>\n0\n){\nt\n--;\nint\nn\n;\ncin\n>>\nn\n;\nset\n<int>\nst\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++){\nst\n.\ninsert\n(\ni\n);}\nvector\n<int>\nrem\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++){\nint\nv\n;\ncin\n>>\nv\n;\nif\n(\nst\n.\nfind\n(\nv\n)!=\nst\n.\nend\n()){\nst\n.\nerase\n(\nv\n);}\nelse\n{\nrem\n.\npush_back\n(\nv\n);}\n}\nsort\n(\nrem\n.\nbegin\n(),\nrem\n.\nend\n());\nreverse\n(\nrem\n.\nbegin\n(),\nrem\n.\nend\n());\nint\npt\n=\n0\n;\nbool\nerr\n=\nfalse\n;\nfor\n(\nauto\n&\nnx\n:\nrem\n){\nauto\nit\n=\nst\n.\nend\n();\nit\n--;\nint\nctg\n=(*\nit\n);\nif\n(\nctg\n>(\nnx\n-\n1\n)/\n2\n){\nerr\n=\ntrue\n;\nbreak\n;}\nst\n.\nerase\n(\nit\n);\n}\nif\n(\nerr\n){\ncout\n<<\n\"-1\\n\"\n;}\nelse\n{\ncout\n<<\nrem\n.\nsize\n()\n<<\n'\\n'\n;}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

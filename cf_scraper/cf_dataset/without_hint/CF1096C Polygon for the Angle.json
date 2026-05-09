@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an angle $ \\text{ang} $ .\n\nThe Jury asks You to find such regular $ n $ -gon (regular polygon with $ n $ vertices) that it has three vertices $ a $ , $ b $ and $ c $ (they can be non-consecutive) with $ \\angle{abc} = \\text{ang} $ or report that there is no such $ n $ -gon.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1096C/a07369ed7e451bdcca3873a15baacc5b09a55799.png)If there are several answers, print the minimal one. It is guarantied that if answer exists then it doesn't exceed $ 998244353 $ .\n\nInput Format\nThe first line contains single integer $ T $ ( $ 1 \\le T \\le 180 $ ) — the number of queries.\n\nEach of the next $ T $ lines contains one integer $ \\text{ang} $ ( $ 1 \\le \\text{ang} < 180 $ ) — the angle measured in degrees.\n\nOutput Format\nFor each query print single integer $ n $ ( $ 3 \\le n \\le 998244353 $ ) — minimal possible number of vertices in the regular $ n $ -gon or $ -1 $ if there is no such $ n $ .\n\nExamples\nSample 1\nInput\n4\n54\n50\n2\n178\nOutput\n10\n18\n90\n180\n\nNote\nThe answer for the first query is on the picture above.\n\nThe answer for the second query is reached on a regular $ 18 $ -gon. For example, $ \\angle{v_2 v_1 v_6} = 50^{\\circ} $ .\n\nThe example angle for the third query is $ \\angle{v_{11} v_{10} v_{12}} = 2^{\\circ} $ .\n\nIn the fourth query, minimal possible $ n $ is $ 180 $ (not $ 90 $ )."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nang\n;\ninline\nbool\nread\n()\n{\nif\n(!(\ncin\n>>\nang\n))\nreturn\nfalse\n;\nreturn\ntrue\n;\n}\ninline\nvoid\nsolve\n()\n{\nint\ng\n=\n__gcd\n(\nang\n,\n180\n);\nint\nk\n=\nang\n/\ng\n;\nint\nn\n=\n180\n/\ng\n;\nif\n(\nk\n+\n1\n==\nn\n)\nk\n*=\n2\n,\nn\n*=\n2\n;\ncout\n<<\nn\n<<\nendl\n;\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\nint\ntt\n=\nclock\n();\n#endif\ncout\n<<\nfixed\n<<\nsetprecision\n(\n15\n);\nint\ntc\n;\ncin\n>>\ntc\n;\nwhile\n(\ntc\n--)\n{\nassert\n(\nread\n());\nsolve\n();\n#ifdef\n_DEBUG\n\t\tcerr\n<<\n\"TIME = \"\n<<\nclock\n()\n-\ntt\n<<\nendl\n;\ntt\n=\nclock\n();\n#endif\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

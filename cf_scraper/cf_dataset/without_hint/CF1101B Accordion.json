@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAn accordion is a string (yes, in the real world accordions are musical instruments, but let's forget about it for a while) which can be represented as a concatenation of: an opening bracket (ASCII code $ 091 $ ), a colon (ASCII code $ 058 $ ), some (possibly zero) vertical line characters (ASCII code $ 124 $ ), another colon, and a closing bracket (ASCII code $ 093 $ ). The length of the accordion is the number of characters in it.\n\nFor example, \\[::\\], \\[:||:\\] and \\[:|||:\\] are accordions having length $ 4 $ , $ 6 $ and $ 7 $ . (:|:), {:||:}, \\[:\\], \\]:||:\\[ are not accordions.\n\nYou are given a string $ s $ . You want to transform it into an accordion by removing some (possibly zero) characters from it. Note that you may not insert new characters or reorder existing ones. Is it possible to obtain an accordion by removing characters from $ s $ , and if so, what is the maximum possible length of the result?\n\nInput Format\nThe only line contains one string $ s $ ( $ 1 \\le |s| \\le 500000 $ ). It consists of lowercase Latin letters and characters \\[, \\], : and |.\n\nOutput Format\nIf it is not possible to obtain an accordion by removing some characters from $ s $ , print $ -1 $ . Otherwise print maximum possible length of the resulting accordion.\n\nExamples\nSample 1\nInput\n|[a:b:|]\nOutput\n4\n\nSample 2\nInput\n|]:[|:]\nOutput\n-1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Vovuh)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nrem\n(\nstring\n&\ns\n,\nconst\nstring\n&\nc\n)\n{\nauto\npos\n=\ns\n.\nfind\n(\nc\n);\nif\n(\npos\n==\nstring\n::\nnpos\n)\n{\ncout\n<<\n-\n1\n<<\nendl\n;\nexit\n(\n0\n);\n}\ns\n.\nerase\n(\n0\n,\npos\n+\n1\n);\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nstring\ns\n;\ncin\n>>\ns\n;\nrem\n(\ns\n,\n\"[\"\n);\nrem\n(\ns\n,\n\":\"\n);\nreverse\n(\ns\n.\nbegin\n(),\ns\n.\nend\n());\nrem\n(\ns\n,\n\"]\"\n);\nrem\n(\ns\n,\n\":\"\n);\ncout\n<<\ncount\n(\ns\n.\nbegin\n(),\ns\n.\nend\n(),\n'|'\n)\n+\n4\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

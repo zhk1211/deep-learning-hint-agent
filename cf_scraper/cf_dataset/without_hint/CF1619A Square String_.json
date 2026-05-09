@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA string is called square if it is some string written twice in a row. For example, the strings \"aa\", \"abcabc\", \"abab\" and \"baabaa\" are square. But the strings \"aaa\", \"abaaab\" and \"abcdabc\" are not square.\n\nFor a given string $ s $ determine if it is square.\n\nInput Format\nThe first line of input data contains an integer $ t $ ( $ 1 \\le t \\le 100 $ ) —the number of test cases.\n\nThis is followed by $ t $ lines, each containing a description of one test case. The given strings consist only of lowercase Latin letters and have lengths between $ 1 $ and $ 100 $ inclusive.\n\nOutput Format\nFor each test case, output on a separate line:\n\n- YES if the string in the corresponding test case is square,\n- NO otherwise.\n\nYou can output YES and NO in any case (for example, strings yEs, yes, Yes and YES will be recognized as a positive response).\n\nExamples\nSample 1\nInput\n10\na\naa\naaa\naaaa\nabab\nabcabc\nabacaba\nxxyy\nxyyx\nxyxy\nOutput\nNO\nYES\nNO\nYES\nYES\nYES\nNO\nNO\nNO\nYES"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nforn\n(\ntt\n,\nt\n)\n{\nstring\ns\n;\ncin\n>>\ns\n;\nbool\nok\n=\ntrue\n;\nif\n(\ns\n.\nlength\n()\n%\n2\n==\n0\n)\n{\nforn\n(\ni\n,\ns\n.\nlength\n()\n/\n2\n)\nif\n(\ns\n[\ni\n]\n!=\ns\n[\ni\n+\ns\n.\nlength\n()\n/\n2\n])\nok\n=\nfalse\n;\n}\nelse\nok\n=\nfalse\n;\ncout\n<<\n(\nok\n?\n\"YES\"\n:\n\"NO\"\n)\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

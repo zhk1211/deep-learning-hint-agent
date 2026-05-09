@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array of integers $ a $ of length $ n $ .\n\nIn one operation you:\n\n- Choose an index $ i $ such that $ 1 \\le i \\le n - 1 $ and $ a_i \\le a_{i + 1} $ .\n- Increase $ a_i $ by $ 1 $ .\n\nFind the maximum possible value of $ \\max(a_1, a_2, \\ldots a_n) $ that you can get after performing this operation at most $ k $ times.\n\nInput Format\nEach test contains multiple test cases. The first line of input contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 2 \\le n \\le 1000 $ , $ 1 \\le k \\le 10^{8} $ ) — the length of the array $ a $ and the maximum number of operations that can be performed.\n\nThe second line of each test case contains $ n $ integers $ a_1,a_2,\\ldots,a_n $ ( $ 1 \\le a_i \\le 10^{8} $ ) — the elements of the array $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 1000 $ .\n\nOutput Format\nFor each test case output a single integer — the maximum possible maximum of the array after performing at most $ k $ operations.\n\nExamples\nSample 1\nInput\n6\n3 4\n1 3 3\n5 6\n1 3 4 5 1\n4 13\n1 1 3 179\n5 3\n4 3 2 2 2\n5 6\n6 5 4 1 5\n2 17\n3 5\nOutput\n4\n7\n179\n5\n7\n6\n\nNote\nIn the first test case, one possible optimal sequence of operations is: $[\\textcolor{red}{1}, 3, 3] \\rightarrow [2, \\textcolor{red}{3}, 3] \\rightarrow [\\textcolor{red}{2}, 4, 3] \\rightarrow [\\textcolor{red}{3}, 4, 3] \\rightarrow [4, 4, 3]$.\n\nIn the second test case, one possible optimal sequence of operations is: $[1, \\textcolor{red}{3}, 4, 5, 1] \\rightarrow [1, \\textcolor{red}{4}, 4, 5, 1] \\rightarrow [1, 5, \\textcolor{red}{4}, 5, 1] \\rightarrow [1, 5, \\textcolor{red}{5}, 5, 1] \\rightarrow [1, \\textcolor{red}{5}, 6, 5, 1] \\rightarrow [1, \\textcolor{red}{6}, 6, 5, 1] \\rightarrow [1, 7, 6, 5, 1]$."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nBinary search on the answer.\nHint 1.1\nCheck if it is possible to have $$$\\max(a_1,\\ldots, a_n) \\ge x$$$ for some $$$x$$$.\nHint 2\nFix some possible index that will be the position of the maximum in the final array."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Binary search on the answer.\nHint 1.1\nCheck if it is possible to have $$$\\max(a_1,\\ldots, a_n) \\ge x$$$ for some $$$x$$$."
+        },
+        {
+            "title": "Hint 1.1",
+            "content": "Check if it is possible to have $$$\\max(a_1,\\ldots, a_n) \\ge x$$$ for some $$$x$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Fix some possible index that will be the position of the maximum in the final array."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\n#define\nallr\n(\nx\n)\n(\nx\n).\nrbegin\n(),\n(\nx\n).\nrend\n()\n#define\ngsize\n(\nx\n)\n(\nint\n)((\nx\n).\nsize\n())\nconst\nchar\nnl\n=\n'\\n'\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\nlong\ndouble\nld\n;\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nll n\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<ll>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nll lb\n=\n0\n,\nub\n=\n*\nmax_element\n(\nall\n(\na\n))\n+\nk\n,\nans\n=\n0\n;\nwhile\n(\nlb\n<=\nub\n)\n{\nll tm\n=\n(\nlb\n+\nub\n)\n/\n2\n;\nbool\ngood\n=\nfalse\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nvector\n<ll>\nmin_needed\n(\nn\n);\nmin_needed\n[\ni\n]\n=\ntm\n;\nll c_used\n=\n0\n;\nfor\n(\nint\nj\n=\ni\n;\nj\n<\nn\n;\nj\n++)\n{\nif\n(\nmin_needed\n[\nj\n]\n<=\na\n[\nj\n])\nbreak\n;\nif\n(\nj\n+\n1\n>=\nn\n)\n{\nc_used\n=\nk\n+\n1\n;\nbreak\n;\n}\nc_used\n+=\nmin_needed\n[\nj\n]\n-\na\n[\nj\n];\nmin_needed\n[\nj\n+\n1\n]\n=\nmax\n(\n0LL\n,\nmin_needed\n[\nj\n]\n-\n1\n);\n}\nif\n(\nc_used\n<=\nk\n)\ngood\n=\ntrue\n;\n}\nif\n(\ngood\n)\n{\nans\n=\ntm\n;\nlb\n=\ntm\n+\n1\n;\n}\nelse\n{\nub\n=\ntm\n-\n1\n;\n}\n}\ncout\n<<\nans\n<<\nnl\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n--)\nsolve\n();\n}"
+        }
+    ]
+}

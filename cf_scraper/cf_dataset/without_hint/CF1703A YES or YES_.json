@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a string $ s $ of length $ 3 $ , consisting of uppercase and lowercase English letters. Check if it is equal to \"YES\" (without quotes), where each letter can be in any case. For example, \"yES\", \"Yes\", \"yes\" are all allowable.\n\nInput Format\nThe first line of the input contains an integer $ t $ ( $ 1 \\leq t \\leq 10^3 $ ) — the number of testcases.\n\nThe description of each test consists of one line containing one string $ s $ consisting of three characters. Each character of $ s $ is either an uppercase or lowercase English letter.\n\nOutput Format\nFor each test case, output \"YES\" (without quotes) if $ s $ satisfies the condition, and \"NO\" (without quotes) otherwise.\n\nYou can output \"YES\" and \"NO\" in any case (for example, strings \"yES\", \"yes\" and \"Yes\" will be recognized as a positive response).\n\nExamples\nSample 1\nInput\n10\nYES\nyES\nyes\nYes\nYeS\nNoo\norZ\nyEz\nYas\nXES\nOutput\nYES\nYES\nYES\nYES\nYES\nNO\nNO\nNO\nNO\nNO\n\nNote\nThe first five test cases contain the strings \"YES\", \"yES\", \"yes\", \"Yes\", \"YeS\". All of these are equal to \"YES\", where each character is either uppercase or lowercase."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200007\n;\nconst\nint\nMOD\n=\n1000000007\n;\nvoid\nsolve\n()\n{\nstring\ns\n;\ncin\n>>\ns\n;\nif\n(\ns\n[\n0\n]\n!=\n'y'\n&&\ns\n[\n0\n]\n!=\n'Y'\n)\n{\ncout\n<<\n\"NO\\n\"\n;}\nelse\nif\n(\ns\n[\n1\n]\n!=\n'e'\n&&\ns\n[\n1\n]\n!=\n'E'\n)\n{\ncout\n<<\n\"NO\\n\"\n;}\nelse\nif\n(\ns\n[\n2\n]\n!=\n's'\n&&\ns\n[\n2\n]\n!=\n'S'\n)\n{\ncout\n<<\n\"NO\\n\"\n;}\nelse\n{\ncout\n<<\n\"YES\\n\"\n;}\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

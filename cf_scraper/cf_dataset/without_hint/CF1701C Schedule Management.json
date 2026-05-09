@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ workers and $ m $ tasks. The workers are numbered from $ 1 $ to $ n $ . Each task $ i $ has a value $ a_i $ — the index of worker who is proficient in this task.\n\nEvery task should have a worker assigned to it. If a worker is proficient in the task, they complete it in $ 1 $ hour. Otherwise, it takes them $ 2 $ hours.\n\nThe workers work in parallel, independently of each other. Each worker can only work on one task at once.\n\nAssign the workers to all tasks in such a way that the tasks are completed as early as possible. The work starts at time $ 0 $ . What's the minimum time all tasks can be completed by?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of testcases.\n\nThe first line of each testcase contains two integers $ n $ and $ m $ ( $ 1 \\le n \\le m \\le 2 \\cdot 10^5 $ ) — the number of workers and the number of tasks.\n\nThe second line contains $ m $ integers $ a_1, a_2, \\dots, a_m $ ( $ 1 \\le a_i \\le n $ ) — the index of the worker proficient in the $ i $ -th task.\n\nThe sum of $ m $ over all testcases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each testcase, print a single integer — the minimum time all tasks can be completed by.\n\nExamples\nSample 1\nInput\n4\n2 4\n1 2 1 2\n2 4\n1 1 1 1\n5 5\n5 1 3 2 4\n1 1\n1\nOutput\n2\n3\n1\n1\n\nNote\nIn the first testcase, the first worker works on tasks $ 1 $ and $ 3 $ , and the second worker works on tasks $ 2 $ and $ 4 $ . Since they both are proficient in the corresponding tasks, they take $ 1 $ hour on each. Both of them complete $ 2 $ tasks in $ 2 $ hours. Thus, all tasks are completed by $ 2 $ hours.\n\nIn the second testcase, it's optimal to assign the first worker to tasks $ 1, 2 $ and $ 3 $ and the second worker to task $ 4 $ . The first worker spends $ 3 $ hours, the second worker spends $ 2 $ hours (since they are not proficient in the taken task).\n\nIn the third example, each worker can be assigned to the task they are proficient at. Thus, each of them complete their task in $ 1 $ hour."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nwhile\n(\nt\n--){\nint\nn\n,\nm\n;\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nm\n);\nvector\n<int>\na\n(\nm\n);\nforn\n(\ni\n,\nm\n){\nscanf\n(\n\"%d\"\n,\n&\na\n[\ni\n]);\n--\na\n[\ni\n];\n}\nvector\n<int>\ncnt\n(\nn\n);\nforn\n(\ni\n,\nm\n)\n++\ncnt\n[\na\n[\ni\n]];\nauto\ncheck\n=\n[&](\nint\nt\n){\nlong\nlong\nfr\n=\n0\n,\nneed\n=\n0\n;\nforn\n(\ni\n,\nn\n){\nif\n(\nt\n>=\ncnt\n[\ni\n])\nfr\n+=\n(\nt\n-\ncnt\n[\ni\n])\n/\n2\n;\nelse\nneed\n+=\ncnt\n[\ni\n]\n-\nt\n;\n}\nreturn\nneed\n<=\nfr\n;\n};\nint\nl\n=\n0\n,\nr\n=\n2\n*\nm\n;\nint\nres\n=\n-\n1\n;\nwhile\n(\nl\n<=\nr\n){\nint\nm\n=\n(\nl\n+\nr\n)\n/\n2\n;\nif\n(\ncheck\n(\nm\n)){\nres\n=\nm\n;\nr\n=\nm\n-\n1\n;\n}\nelse\n{\nl\n=\nm\n+\n1\n;\n}\n}\nprintf\n(\n\"%d\\n\"\n,\nres\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

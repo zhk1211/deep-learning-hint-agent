@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIn Japan, the number $ 4 $ reads like death, so Bob decided to build a live sequence. Living sequence $ a $ contains all natural numbers that do not contain the digit $ 4 $ . $ a = [1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, \\ldots] $ .\n\nFor example, the number $ 1235 $ is part of the sequence $ a $ , but the numbers $ 4321 $ , $ 443 $ are not part of the sequence $ a $ .\n\nBob realized that he does not know how to quickly search for a particular number by the position $ k $ in the sequence, so he asks for your help.\n\nFor example, if Bob wants to find the number at position $ k = 4 $ (indexing from $ 1 $ ), you need to answer $ a_k = 5 $ .\n\nInput Format\nThe first line of input data contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nIn the only line of each test case, there is a single integer $ k $ ( $ 1 \\le k \\le 10^{12} $ ) — the position Bob is interested in.\n\nOutput Format\nFor each test case, print on a separate line the number $ a_k $ in indexing with $ 1 $ .\n\nExamples\nSample 1\nInput\n7\n3\n5\n22\n10\n100\n12345\n827264634912\nOutput\n3\n6\n25\n11\n121\n18937\n2932285320890"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\n#include\n<cmath>\n#include\n<cctype>\n#include\n<vector>\n#include\n<algorithm>\n#include\n<set>\n#include\n<map>\n#include\n<deque>\n#include\n<stack>\n#include\n<unordered_set>\n#include\n<sstream>\n#include\n<cstring>\n#include\n<iomanip>\n#include\n<queue>\n#include\n<unordered_map>\n#include\n<random>\n#include\n<cfloat>\n#include\n<chrono>\n#include\n<bitset>\n#include\n<complex>\n#include\n<immintrin.h>\nint\nmain\n()\n{\nstd\n::\nios\n::\nsync_with_stdio\n(\nfalse\n);\nstd\n::\ncin\n.\ntie\n(\n0\n);\nint32_t\nnum_tests\n;\nstd\n::\ncin\n>>\nnum_tests\n;\nfor\n(\nint32_t\nt\n=\n0\n;\nt\n<\nnum_tests\n;\nt\n++)\n{\nint64_t\nk\n;\nstd\n::\ncin\n>>\nk\n;\nstd\n::\nvector\n<int32_t>\ndigits\n;\nwhile\n(\nk\n>\n0\n)\n{\ndigits\n.\npush_back\n(\nk\n%\n9\n);\nk\n/=\n9\n;\n}\nstd\n::\nreverse\n(\ndigits\n.\nbegin\n(),\ndigits\n.\nend\n());\nfor\n(\nint32_t\ni\n=\n0\n;\ni\n<\ndigits\n.\nsize\n();\ni\n++)\nstd\n::\ncout\n<<\n(\nchar\n)(\ndigits\n[\ni\n]\n<\n4\n?\n(\ndigits\n[\ni\n]\n+\n'0'\n)\n:\n(\ndigits\n[\ni\n]\n+\n'1'\n));\nstd\n::\ncout\n<<\n\"\\n\"\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

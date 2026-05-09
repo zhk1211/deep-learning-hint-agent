@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given three positive (i.e. strictly greater than zero) integers $ x $ , $ y $ and $ z $ .\n\nYour task is to find positive integers $ a $ , $ b $ and $ c $ such that $ x = \\max(a, b) $ , $ y = \\max(a, c) $ and $ z = \\max(b, c) $ , or determine that it is impossible to find such $ a $ , $ b $ and $ c $ .\n\nYou have to answer $ t $ independent test cases. Print required $ a $ , $ b $ and $ c $ in any (arbitrary) order.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 2 \\cdot 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe only line of the test case contains three integers $ x $ , $ y $ , and $ z $ ( $ 1 \\le x, y, z \\le 10^9 $ ).\n\nOutput Format\nFor each test case, print the answer:\n\n- \"NO\" in the only line of the output if a solution doesn't exist;\n- or \"YES\" in the first line and any valid triple of positive integers $ a $ , $ b $ and $ c $ ( $ 1 \\le a, b, c \\le 10^9 $ ) in the second line. You can print $ a $ , $ b $ and $ c $ in any order.\n\nExamples\nSample 1\nInput\n5\n3 2 3\n100 100 100\n50 49 49\n10 30 20\n1 1000000000 1000000000\nOutput\nYES\n3 2 1\nYES\n100 100 100\nNO\nNO\nYES\n1 1 1000000000"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nvector\n<int>\na\n(\n3\n);\nfor\n(\nauto\n&\nit\n:\na\n)\ncin\n>>\nit\n;\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nif\n(\na\n[\n1\n]\n!=\na\n[\n2\n])\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\n\"YES\"\n<<\nendl\n<<\na\n[\n0\n]\n<<\n\" \"\n<<\na\n[\n0\n]\n<<\n\" \"\n<<\na\n[\n2\n]\n<<\nendl\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven a positive integer $ n $ . Find three distinct positive integers $ a $ , $ b $ , $ c $ such that $ a + b + c = n $ and $ \\operatorname{gcd}(a, b) = c $ , where $ \\operatorname{gcd}(x, y) $ denotes the [greatest common divisor (GCD)](https://en.wikipedia.org/wiki/Greatest_common_divisor) of integers $ x $ and $ y $ .\n\nInput Format\nThe input consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^5 $ ) — the number of test cases. Description of the test cases follows.\n\nThe first and only line of each test case contains a single integer $ n $ ( $ 10 \\le n \\le 10^9 $ ).\n\nOutput Format\nFor each test case, output three distinct positive integers $ a $ , $ b $ , $ c $ satisfying the requirements. If there are multiple solutions, you can print any. We can show that an answer always exists.\n\nExamples\nSample 1\nInput\n6\n18\n63\n73\n91\n438\n122690412\nOutput\n6 9 3\n21 39 3\n29 43 1\n49 35 7\n146 219 73\n28622 122661788 2\n\nNote\nIn the first test case, $ 6 + 9 + 3 = 18 $ and $ \\operatorname{gcd}(6, 9) = 3 $ .\n\nIn the second test case, $ 21 + 39 + 3 = 63 $ and $ \\operatorname{gcd}(21, 39) = 3 $ .\n\nIn the third test case, $ 29 + 43 + 1 = 73 $ and $ \\operatorname{gcd}(29, 43) = 1 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "There must exist a solution for $$$c=1$$$ under the given constraints."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Key observation: there always exists a solution with $$$c = 1$$$ under the given constraints. We set $$$n \\ge 10$$$ because there is no solution when $$$1 \\le n \\le 5$$$ or $$$n = 7$$$.\nSolution 1: Brute force from $$$a = 2, 3, 4, \\dots$$$ and calculate the value of $$$b$$$ ($$$b = n - a - 1$$$), then check whether $$$gcd(a, b) = 1$$$. It works, because you will find a prime number $$$p \\le 29$$$ such that $$$n-1$$$ does not divide $$$p$$$.\nSolution 2: Randomly choose $$$a$$$ and calculate $$$b$$$ ($$$b = n - a - 1$$$). Repeating that for enough times will eventually get you a pair of ($$$a, b$$$) such that $$$gcd(a, b) = 1$$$.\nSolution 3: Constructive solution.\nWhen $$$n \\equiv 0 \\pmod 2$$$, output ($$$n-3, 2, 1$$$).\nWhen $$$n \\equiv 1 \\pmod 4$$$, output ($$$\\left \\lfloor \\frac{n}{2} \\right \\rfloor -1, \\left \\lfloor \\frac{n}{2} \\right \\rfloor +1, 1$$$).\nWhen $$$n \\equiv 3 \\pmod 4$$$, output ($$$\\left \\lfloor \\frac{n}{2} \\right \\rfloor -2, \\left \\lfloor \\frac{n}{2} \\right \\rfloor +2, 1$$$)."
+        },
+        {
+            "title": "Implementation (Solution 1, Java, SecondThread)",
+            "content": "import\njava\n.\nio\n.\nBufferedReader\n;\nimport\njava\n.\nio\n.\nIOException\n;\nimport\njava\n.\nio\n.\nInputStreamReader\n;\nimport\njava\n.\nutil\n.\nArrayList\n;\nimport\njava\n.\nutil\n.\nCollections\n;\nimport\njava\n.\nutil\n.\nStringTokenizer\n;\nimport\njava\n.\nutil\n.\nScanner\n;\npublic\nclass\nB\n{\npublic\nstatic\nvoid\nmain\n(\nString\n[]\nargs\n)\n{\nScanner\nfs\n=\nnew\nScanner\n(\nSystem\n.\nin\n);\nint\nT\n=\nfs\n.\nnextInt\n();\nfor\n(\nint\ntt\n=\n0\n;\ntt\n<\nT\n;\ntt\n++)\n{\nint\nn\n=\nfs\n.\nnextInt\n();\nfor\n(\nint\ntarget\n=\n2\n;\ntrue\n;\ntarget\n++)\n{\nif\n(\ngcd\n(\nn\n-\n1\n-\ntarget\n,\ntarget\n)!=\n1\n)\ncontinue\n;\nSystem\n.\nout\n.\nprintln\n(\nn\n-\n1\n-\ntarget\n+\n\" \"\n+\ntarget\n+\n\" \"\n+\n1\n);\nif\n(\nn\n-\n1\n-\ntarget\n<=\n1\n)\nthrow\nnull\n;\nbreak\n;\n}\n}\n}\nstatic\nint\ngcd\n(\nint\na\n,\nint\nb\n)\n{\nreturn\nb\n==\n0\n?\na\n:\ngcd\n(\nb\n,\na\n%\nb\n);\n}\nstatic\nvoid\nsort\n(\nint\n[]\na\n)\n{\nArrayList\n<\nInteger\n>\nl\n=\nnew\nArrayList\n<>();\nfor\n(\nint\ni\n:\na\n)\nl\n.\nadd\n(\ni\n);\nCollections\n.\nsort\n(\nl\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\na\n.\nlength\n;\ni\n++)\na\n[\ni\n]=\nl\n.\nget\n(\ni\n);\n}\n}"
+        },
+        {
+            "title": "Implementation (Solution 2, C++, dbsic211)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nmt19937 rng\n((\nint\n)\nstd\n::\nchrono\n::\nsteady_clock\n::\nnow\n().\ntime_since_epoch\n().\ncount\n());\nvoid\nsolve\n(\nint\ntc\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nwhile\n(\n1\n)\n{\nint\nk\n=\nuniform_int_distribution\n<int>\n(\n2\n,\nn\n-\n2\n)(\nrng\n);\nint\nl\n=\nn\n-\nk\n-\n1\n;\nif\n(\nk\n!=\nl\n&&\nk\n!=\n1\n&&\nl\n!=\n1\n&&\ngcd\n(\nk\n,\nl\n)\n==\n1\n)\n{\ncout\n<<\nk\n<<\n' '\n<<\nl\n<<\n' '\n<<\n1\n<<\nendl\n;\nbreak\n;\n}\n}\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nt\n;\ni\n++)\n{\nsolve\n(\ni\n);\n}\n}"
+        },
+        {
+            "title": "Implementation (Solution 3, C++, anthony123)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n(){\nint\nn\n;\ncin\n>>\nn\n;\nif\n(\nn\n%\n2\n==\n0\n)\ncout\n<<\n\"2 \"\n<<(\nn\n-\n1\n)-\n2\n<<\n\" 1\\n\"\n;\nelse\n{\nint\ncur\n=(\nn\n-\n1\n)/\n2\n;\nif\n(\ncur\n%\n2\n==\n0\n)\ncout\n<<\ncur\n-\n1\n<<\n\" \"\n<<\ncur\n+\n1\n<<\n\" \"\n<<\n1\n<<\nendl\n;\nelse\ncout\n<<\ncur\n-\n2\n<<\n\" \"\n<<\ncur\n+\n2\n<<\n\" \"\n<<\n1\n<<\nendl\n;\n}\n}\nsigned\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\nsolve\n();\n}"
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nDefine a set $ A $ as a child of set $ B $ if and only if for each element of value $ x $ that is in $ A $ , there exists an element of value $ x+1 $ that is in $ B $ .\n\nGiven integers $ N $ and $ K $ . In order to make Chaneka happy, you must find the number of different arrays containing $ N $ sets $ [S_1, S_2, S_3, \\ldots, S_N] $ such that: - Each set can only contain zero or more different integers from $ 1 $ to $ K $ . - There exists a way to rearrange the order of the array of sets into $ [S'_1, S'_2, S'_3, \\ldots, S'_N] $ such that $ S'_i $ is a child of $ S'_{i+1} $ for each $ 1\\leq i\\leq N-1 $ .\n\nPrint the answer modulo $ 998\\,244\\,353 $ .\n\nTwo sets are considered different if and only if there is at least one value that only occurs in one of the two sets.\n\nTwo arrays of sets are considered different if and only if there is at least one index $ i $ such that the sets at index $ i $ in the two arrays are different.\n\nInput Format\nThe only line contains two integers $ N $ and $ K $ ( $ 1 \\leq N,K \\leq 2\\cdot10^5 $ ) — the number of sets in the array and the maximum limit for the values in the sets.\n\nOutput Format\nAn integer representing the number of different arrays of sets that satisfy the problem condition, modulo $ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n2 2\nOutput\n11\n\nSample 2\nInput\n1 3\nOutput\n8\n\nSample 3\nInput\n3 1\nOutput\n4\n\nNote\nIn the first example, there are $ 11 $ different arrays of sets possible, which are:\n\n- $ [\\{\\}, \\{\\}] $\n- $ [\\{\\}, \\{1\\}] $\n- $ [\\{\\}, \\{1, 2\\}] $\n- $ [\\{\\}, \\{2\\}] $\n- $ [\\{1\\}, \\{\\}] $\n- $ [\\{1\\}, \\{1, 2\\}] $\n- $ [\\{1\\}, \\{2\\}] $\n- $ [\\{1, 2\\}, \\{\\}] $\n- $ [\\{1, 2\\}, \\{1\\}] $\n- $ [\\{2\\}, \\{\\}] $\n- $ [\\{2\\}, \\{1\\}] $"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        }
+    ]
+}

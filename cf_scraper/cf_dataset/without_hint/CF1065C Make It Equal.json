@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a toy building consisting of $ n $ towers. Each tower consists of several cubes standing on each other. The $ i $ -th tower consists of $ h_i $ cubes, so it has height $ h_i $ .\n\nLet's define operation slice on some height $ H $ as following: for each tower $ i $ , if its height is greater than $ H $ , then remove some top cubes to make tower's height equal to $ H $ . Cost of one \"slice\" equals to the total number of removed cubes from all towers.\n\nLet's name slice as good one if its cost is lower or equal to $ k $ ( $ k \\ge n $ ).\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1065C/658a593f32bf5073d4f1a1a7bd7987feaeb4f838.png)Calculate the minimum number of good slices you have to do to make all towers have the same height. Of course, it is always possible to make it so.\n\nInput Format\nThe first line contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ , $ n \\le k \\le 10^9 $ ) — the number of towers and the restriction on slices, respectively.\n\nThe second line contains $ n $ space separated integers $ h_1, h_2, \\dots, h_n $ ( $ 1 \\le h_i \\le 2 \\cdot 10^5 $ ) — the initial heights of towers.\n\nOutput Format\nPrint one integer — the minimum number of good slices you have to do to make all towers have the same heigth.\n\nExamples\nSample 1\nInput\n5 5\n3 1 2 2 4\nOutput\n2\n\nSample 2\nInput\n4 5\n2 3 4 5\nOutput\n2\n\nNote\nIn the first example it's optimal to make $ 2 $ slices. The first slice is on height $ 2 $ (its cost is $ 3 $ ), and the second one is on height $ 1 $ (its cost is $ 4 $ )."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Ajosteen)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\nint\n(\n2e5\n)\n+\n9\n;\nint\nn\n,\nk\n,\nh\n;\nint\nneed\n=\nint\n(\n1e9\n);\nint\ncnt\n[\nN\n];\nint\nmain\n()\n{\nscanf\n(\n\"%d %d\"\n,\n&\nn\n,\n&\nk\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n){\nint\nx\n;\nscanf\n(\n\"%d\"\n,\n&\nx\n);\nh\n=\nmax\n(\nh\n,\nx\n);\nneed\n=\nmin\n(\nneed\n,\nx\n);\n++\ncnt\n[\nx\n];\n}\nint\npos\n=\nN\n-\n1\n;\nint\nres\n=\n0\n;\nlong\nlong\nsum\n=\n0\n;\nint\nc\n=\n0\n;\nwhile\n(\ntrue\n){\nlong\nlong\nx\n=\nsum\n-\nc\n*\n1LL\n*\n(\npos\n-\n1\n);\nif\n(\nx\n>\nk\n){\n++\nres\n;\nh\n=\npos\n;\nsum\n=\npos\n*\n1LL\n*\nc\n;\n}\n--\npos\n;\nif\n(\npos\n==\nneed\n)\nbreak\n;\nc\n+=\ncnt\n[\npos\n];\nsum\n+=\ncnt\n[\npos\n]\n*\n1LL\n*\npos\n;\n}\nif\n(\nh\n!=\nneed\n)\n++\nres\n;\ncout\n<<\nres\n<<\nendl\n;\n}"
+        }
+    ]
+}

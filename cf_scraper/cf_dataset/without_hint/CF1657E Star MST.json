@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIn this problem, we will consider complete undirected graphs consisting of $ n $ vertices with weighted edges. The weight of each edge is an integer from $ 1 $ to $ k $ .\n\nAn undirected graph is considered beautiful if the sum of weights of all edges incident to vertex $ 1 $ is equal to the weight of MST in the graph. MST is the minimum spanning tree — a tree consisting of $ n-1 $ edges of the graph, which connects all $ n $ vertices and has the minimum sum of weights among all such trees; the weight of MST is the sum of weights of all edges in it.\n\nCalculate the number of complete beautiful graphs having exactly $ n $ vertices and the weights of edges from $ 1 $ to $ k $ . Since the answer might be large, print it modulo $ 998244353 $ .\n\nInput Format\nThe only line contains two integers $ n $ and $ k $ ( $ 2 \\le n \\le 250 $ ; $ 1 \\le k \\le 250 $ ).\n\nOutput Format\nPrint one integer — the number of complete beautiful graphs having exactly $ n $ vertices and the weights of edges from $ 1 $ to $ k $ . Since the answer might be large, print it modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n3 2\nOutput\n5\n\nSample 2\nInput\n4 4\nOutput\n571\n\nSample 3\nInput\n6 9\nOutput\n310640163\n\nSample 4\nInput\n42 13\nOutput\n136246935"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\n++\ni\n)\nconst\nint\nMOD\n=\n998244353\n;\nint\nadd\n(\nint\na\n,\nint\nb\n){\na\n+=\nb\n;\nif\n(\na\n>=\nMOD\n)\na\n-=\nMOD\n;\nreturn\na\n;\n}\nint\nmul\n(\nint\na\n,\nint\nb\n){\nreturn\na\n*\n1ll\n*\nb\n%\nMOD\n;\n}\nint\nbinpow\n(\nint\na\n,\nint\nb\n){\nint\nres\n=\n1\n;\nwhile\n(\nb\n){\nif\n(\nb\n&\n1\n)\nres\n=\nmul\n(\nres\n,\na\n);\na\n=\nmul\n(\na\n,\na\n);\nb\n>>=\n1\n;\n}\nreturn\nres\n;\n}\nint\nmain\n(){\nint\nn\n,\nk\n;\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nk\n);\n--\nn\n;\nvector\n<\nvector\n<int>\n>\ndp\n(\nk\n+\n1\n,\nvector\n<int>\n(\nn\n+\n1\n,\n0\n));\nvector\n<\nvector\n<int>\n>\nC\n(\nn\n+\n1\n);\nforn\n(\ni\n,\nn\n+\n1\n){\nC\n[\ni\n].\nresize\n(\ni\n+\n1\n);\nC\n[\ni\n][\n0\n]\n=\nC\n[\ni\n][\ni\n]\n=\n1\n;\nfor\n(\nint\nj\n=\n1\n;\nj\n<\ni\n;\n++\nj\n)\nC\n[\ni\n][\nj\n]\n=\nadd\n(\nC\n[\ni\n-\n1\n][\nj\n],\nC\n[\ni\n-\n1\n][\nj\n-\n1\n]);\n}\ndp\n[\n0\n][\n0\n]\n=\n1\n;\nforn\n(\ni\n,\nk\n)\nforn\n(\nt\n,\nn\n+\n1\n)\n{\nint\npw\n=\nbinpow\n(\nk\n-\ni\n,\nt\n*\n(\nt\n-\n1\n)\n/\n2\n);\nint\nstep\n=\nbinpow\n(\nk\n-\ni\n,\nt\n);\nforn\n(\nj\n,\nn\n-\nt\n+\n1\n){\ndp\n[\ni\n+\n1\n][\nj\n+\nt\n]\n=\nadd\n(\ndp\n[\ni\n+\n1\n][\nj\n+\nt\n],\nmul\n(\ndp\n[\ni\n][\nj\n],\nmul\n(\nC\n[\nn\n-\nj\n][\nt\n],\npw\n)));\npw\n=\nmul\n(\npw\n,\nstep\n);\n}\n}\nprintf\n(\n\"%d\\n\"\n,\ndp\n[\nk\n][\nn\n]);\n}"
+        }
+    ]
+}

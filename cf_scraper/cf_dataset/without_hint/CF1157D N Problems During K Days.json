@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp has to solve exactly $ n $ problems to improve his programming skill before an important programming competition. But this competition will be held very soon, most precisely, it will start in $ k $ days. It means that Polycarp has exactly $ k $ days for training!\n\nPolycarp doesn't want to procrastinate, so he wants to solve at least one problem during each of $ k $ days. He also doesn't want to overwork, so if he solves $ x $ problems during some day, he should solve no more than $ 2x $ problems during the next day. And, at last, he wants to improve his skill, so if he solves $ x $ problems during some day, he should solve at least $ x+1 $ problem during the next day.\n\nMore formally: let $ [a_1, a_2, \\dots, a_k] $ be the array of numbers of problems solved by Polycarp. The $ i $ -th element of this array is the number of problems Polycarp solves during the $ i $ -th day of his training. Then the following conditions must be satisfied:\n\n- sum of all $ a_i $ for $ i $ from $ 1 $ to $ k $ should be $ n $ ;\n- $ a_i $ should be greater than zero for each $ i $ from $ 1 $ to $ k $ ;\n- the condition $ a_i < a_{i + 1} \\le 2 a_i $ should be satisfied for each $ i $ from $ 1 $ to $ k-1 $ .\n\nYour problem is to find any array $ a $ of length $ k $ satisfying the conditions above or say that it is impossible to do it.\n\nInput Format\nThe first line of the input contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 10^9, 1 \\le k \\le 10^5 $ ) — the number of problems Polycarp wants to solve and the number of days Polycarp wants to train.\n\nOutput Format\nIf it is impossible to find any array $ a $ of length $ k $ satisfying Polycarp's rules of training, print \"NO\" in the first line.\n\nOtherwise print \"YES\" in the first line, then print $ k $ integers $ a_1, a_2, \\dots, a_k $ in the second line, where $ a_i $ should be the number of problems Polycarp should solve during the $ i $ -th day. If there are multiple answers, you can print any.\n\nExamples\nSample 1\nInput\n26 6\nOutput\nYES\n1 2 4 5 6 8\n\nSample 2\nInput\n8 3\nOutput\nNO\n\nSample 3\nInput\n1 1\nOutput\nYES\n1\n\nSample 4\nInput\n9 4\nOutput\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nif\n(\nn\n<\nk\n*\n1ll\n*\n(\nk\n+\n1\n)\n/\n2\n)\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\nreturn\n0\n;\n}\nint\nnn\n=\nn\n-\nk\n*\n(\nk\n+\n1\n)\n/\n2\n;\nvector\n<int>\na\n(\nk\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\n++\ni\n)\n{\na\n[\ni\n]\n=\ni\n+\n1\n+\n(\nnn\n/\nk\n)\n+\n(\ni\n>=\nk\n-\nnn\n%\nk\n);\n}\nif\n(\nnn\n!=\nk\n-\n1\n)\n{\ncout\n<<\n\"YES\"\n<<\nendl\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\n++\ni\n)\ncout\n<<\na\n[\ni\n]\n<<\n\" \"\n;\ncout\n<<\nendl\n;\n}\nelse\n{\nif\n(\nk\n>\n3\n)\n{\n--\na\n[\n1\n];\n++\na\n[\nk\n-\n1\n];\n}\nif\n(\nk\n==\n2\n||\nk\n==\n3\n)\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\n\"YES\"\n<<\nendl\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\n++\ni\n)\ncout\n<<\na\n[\ni\n]\n<<\n\" \"\n;\ncout\n<<\nendl\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

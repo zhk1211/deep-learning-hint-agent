@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "fun main\n()\n=\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval s\n=\nreadLine\n()!!\nval l\n=\ns\n.\ncount\n({\nit\n==\n'<'\n})\nval g\n=\ns\n.\ncount\n({\nit\n==\n'>'\n})\nif\n(\nl\n>\n0\n&&\ng\n>\n0\n)\nprintln\n(\n\"?\"\n)\nelse\nif\n(\nl\n>\n0\n)\nprintln\n(\n\"<\"\n);\nelse\nif\n(\ng\n>\n0\n)\nprintln\n(\n\">\"\n);\nelse\nprintln\n(\n\"=\"\n);\n}"
+        }
+    ]
+}

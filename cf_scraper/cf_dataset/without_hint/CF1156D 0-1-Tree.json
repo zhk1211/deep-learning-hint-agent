@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a tree (an undirected connected acyclic graph) consisting of $ n $ vertices and $ n - 1 $ edges. A number is written on each edge, each number is either $ 0 $ (let's call such edges $ 0 $ -edges) or $ 1 $ (those are $ 1 $ -edges).\n\nLet's call an ordered pair of vertices $ (x, y) $ ( $ x \\ne y $ ) valid if, while traversing the simple path from $ x $ to $ y $ , we never go through a $ 0 $ -edge after going through a $ 1 $ -edge. Your task is to calculate the number of valid pairs in the tree.\n\nInput Format\nThe first line contains one integer $ n $ ( $ 2 \\le n \\le 200000 $ ) — the number of vertices in the tree.\n\nThen $ n - 1 $ lines follow, each denoting an edge of the tree. Each edge is represented by three integers $ x_i $ , $ y_i $ and $ c_i $ ( $ 1 \\le x_i, y_i \\le n $ , $ 0 \\le c_i \\le 1 $ , $ x_i \\ne y_i $ ) — the vertices connected by this edge and the number written on it, respectively.\n\nIt is guaranteed that the given edges form a tree.\n\nOutput Format\nPrint one integer — the number of valid pairs of vertices.\n\nExamples\nSample 1\nInput\n7\n2 1 1\n3 2 0\n4 2 1\n5 2 0\n6 7 1\n7 2 1\nOutput\n34\n\nNote\nThe picture corresponding to the first example:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1156D/638afcedfa6d4eecb5e63ed4a099a832b54e2fbc.png)"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n200043\n;\nint\np\n[\n2\n][\nN\n];\nint\nsiz\n[\n2\n][\nN\n];\nint\nget\n(\nint\nx\n,\nint\nc\n)\n{\nif\n(\np\n[\nc\n][\nx\n]\n==\nx\n)\nreturn\nx\n;\nreturn\np\n[\nc\n][\nx\n]\n=\nget\n(\np\n[\nc\n][\nx\n],\nc\n);\n}\nvoid\nmerge\n(\nint\nx\n,\nint\ny\n,\nint\nc\n)\n{\nx\n=\nget\n(\nx\n,\nc\n);\ny\n=\nget\n(\ny\n,\nc\n);\nif\n(\nsiz\n[\nc\n][\nx\n]\n<\nsiz\n[\nc\n][\ny\n])\nswap\n(\nx\n,\ny\n);\np\n[\nc\n][\ny\n]\n=\nx\n;\nsiz\n[\nc\n][\nx\n]\n+=\nsiz\n[\nc\n][\ny\n];\n}\nint\nmain\n()\n{\nint\nn\n;\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\np\n[\n0\n][\ni\n]\n=\np\n[\n1\n][\ni\n]\n=\ni\n;\nsiz\n[\n0\n][\ni\n]\n=\nsiz\n[\n1\n][\ni\n]\n=\n1\n;\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\ni\n++)\n{\nint\nx\n,\ny\n,\nc\n;\nscanf\n(\n\"%d %d %d\"\n,\n&\nx\n,\n&\ny\n,\n&\nc\n);\n--\nx\n;\n--\ny\n;\nmerge\n(\nx\n,\ny\n,\nc\n);\n}\nlong\nlong\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\np\n[\n0\n][\ni\n]\n==\ni\n)\nans\n+=\nsiz\n[\n0\n][\ni\n]\n*\n1ll\n*\n(\nsiz\n[\n0\n][\ni\n]\n-\n1\n);\nif\n(\np\n[\n1\n][\ni\n]\n==\ni\n)\nans\n+=\nsiz\n[\n1\n][\ni\n]\n*\n1ll\n*\n(\nsiz\n[\n1\n][\ni\n]\n-\n1\n);\nans\n+=\n(\nsiz\n[\n0\n][\nget\n(\ni\n,\n0\n)]\n-\n1\n)\n*\n1ll\n*\n(\nsiz\n[\n1\n][\nget\n(\ni\n,\n1\n)]\n-\n1\n);\n}\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

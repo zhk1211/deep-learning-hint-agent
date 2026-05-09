@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPhoenix loves beautiful arrays. An array is beautiful if all its subarrays of length $ k $ have the same sum. A subarray of an array is any sequence of consecutive elements.\n\nPhoenix currently has an array $ a $ of length $ n $ . He wants to insert some number of integers, possibly zero, into his array such that it becomes beautiful. The inserted integers must be between $ 1 $ and $ n $ inclusive. Integers may be inserted anywhere (even before the first or after the last element), and he is not trying to minimize the number of inserted integers.\n\nInput Format\nThe input consists of multiple test cases. The first line contains an integer $ t $ ( $ 1 \\le t \\le 50 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 100 $ ).\n\nThe second line of each test case contains $ n $ space-separated integers ( $ 1 \\le a_i \\le n $ ) — the array that Phoenix currently has. This array may or may not be already beautiful.\n\nOutput Format\nFor each test case, if it is impossible to create a beautiful array, print -1. Otherwise, print two lines.\n\nThe first line should contain the length of the beautiful array $ m $ ( $ n \\le m \\le 10^4 $ ). You don't need to minimize $ m $ .\n\nThe second line should contain $ m $ space-separated integers ( $ 1 \\le b_i \\le n $ ) — a beautiful array that Phoenix can obtain after inserting some, possibly zero, integers into his array $ a $ . You may print integers that weren't originally in array $ a $ .\n\nIf there are multiple solutions, print any. It's guaranteed that if we can make array $ a $ beautiful, we can always make it with resulting length no more than $ 10^4 $ .\n\nExamples\nSample 1\nInput\n4\n4 2\n1 2 2 1\n4 3\n1 2 2 1\n3 2\n1 2 3\n4 4\n4 3 4 2\nOutput\n5\n1 2 1 2 1\n4\n1 2 2 1\n-1\n7\n4 3 2 1 4 3 2\n\nNote\nIn the first test case, we can make array $ a $ beautiful by inserting the integer $ 1 $ at index $ 3 $ (in between the two existing $ 2 $ s). Now, all subarrays of length $ k=2 $ have the same sum $ 3 $ . There exists many other possible solutions, for example:\n\n- $ 2, 1, 2, 1, 2, 1 $\n- $ 1, 2, 1, 2, 1, 2 $\n\nIn the second test case, the array is already beautiful: all subarrays of length $ k=3 $ have the same sum $ 5 $ .\n\nIn the third test case, it can be shown that we cannot insert numbers to make array $ a $ beautiful.\n\nIn the fourth test case, the array $ b $ shown is beautiful and all subarrays of length $ k=4 $ have the same sum $ 10 $ . There exist other solutions also."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n(){\nint\nN\n,\nK\n;\ncin\n>>\nN\n>>\nK\n;\nset\n<int>\ns\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nN\n;\ni\n++){\nint\na\n;\ncin\n>>\na\n;\ns\n.\ninsert\n(\na\n);\n}\n//if more than K distinct numbers, print -1\nif\n(\ns\n.\nsize\n()>\nK\n){\ncout\n<<-\n1\n<<\nendl\n;\nreturn\n;\n}\ncout\n<<\nN\n*\nK\n<<\nendl\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nN\n;\ni\n++){\n//print the distinct numbers\nfor\n(\nint\nb\n:\ns\n)\ncout\n<<\nb\n<<\n' '\n;\n//print the extra 1s\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nK\n-(\nint\n)\ns\n.\nsize\n();\nj\n++)\ncout\n<<\n1\n<<\n' '\n;\n}\ncout\n<<\nendl\n;\n}\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\nsolve\n();\n}"
+        }
+    ]
+}

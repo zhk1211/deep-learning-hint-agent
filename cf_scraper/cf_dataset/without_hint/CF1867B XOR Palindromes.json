@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a binary string $ s $ of length $ n $ (a string that consists only of $ 0 $ and $ 1 $ ). A number $ x $ is good if there exists a binary string $ l $ of length $ n $ , containing $ x $ ones, such that if each symbol $ s_i $ is replaced by $ s_i \\oplus l_i $ (where $ \\oplus $ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR)), then the string $ s $ becomes a palindrome.\n\nYou need to output a binary string $ t $ of length $ n+1 $ , where $ t_i $ ( $ 0 \\leq i \\leq n $ ) is equal to $ 1 $ if number $ i $ is good, and $ 0 $ otherwise.\n\nA palindrome is a string that reads the same from left to right as from right to left. For example, 01010, 1111, 0110 are palindromes.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^5 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^5 $ ).\n\nThe second line of each test case contains a binary string $ s $ of length $ n $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, output a single line containing a binary string $ t $ of length $ n+1 $ - the answer to the problem.\n\nExamples\nSample 1\nInput\n5\n6\n101011\n5\n00000\n9\n100100011\n3\n100\n1\n1\nOutput\n0010100\n111111\n0011111100\n0110\n11\n\nNote\nConsider the first example.\n\n- $ t_2 = 1 $ because we can choose $ l = $ 010100, then the string $ s $ becomes 111111, which is a palindrome.\n- $ t_4 = 1 $ because we can choose $ l = $ 101011.\n- It can be shown that for all other $ i $ , there is no answer, so the remaining symbols are $ 0 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Firstly, a string is a palindrome if and only if for any $$$i$$$ ($$$1 \\leq i \\leq n$$$) $$$s_i = s_{n-i+1}$$$ (because when reversed, $$$s_i$$$ becomes $$$s_{n-i+1}$$$).\nWe can divide the characters into pairs, where each pair consists of $$$s_i$$$ and $$$s_{n-i+1}$$$. If $$$s_i = s_{n-i+1}$$$, then we need to have $$$l_i = l_{n-i+1}$$$ in order to obtain equal elements after XOR. Therefore, either $$$l_i = l_{n-i+1} = 0$$$ (with $$$0$$$ ones) or $$$l_i = l_{n-i+1} = 1$$$ (with $$$2$$$ ones). If $$$s_i \\neq s_{n-i+1}$$$, then $$$l_i \\neq l_{n-i+1}$$$ must hold ($$$1$$$ one in any case). Additionally, if $$$n$$$ is odd, then $$$l_{n/2+1}$$$ can be either $$$0$$$ or $$$1$$$ (with $$$0$$$ or $$$1$$$ ones).\nWe can iterate over the number of pairs where $$$l_i = l_{n-i+1}$$$ will have two ones, as well as whether there will be a one in the center or not. This way, we can obtain all possible numbers of ones in $$$l$$$, i.e., all good $$$i$$$.\nTime Complexity: $$$O(n)$$$ per test case."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nstring\ns\n;\ncin\n>>\ns\n;\nstring\nt\n(\nn\n+\n1\n,\n'0'\n);\nint\nans\n=\n0\n;\nint\nmax_1\n=\n0\n;\nint\nmax_2\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nn\n/\n2\n-\n1\n;++\ni\n)\n{\nif\n(\ns\n[\ni\n]\n==\ns\n[\nn\n-\ni\n-\n1\n])\nmax_2\n++;\nelse\nans\n++;\n}\nif\n(\nn\n%\n2\n==\n1\n)\nmax_1\n++;\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\nmax_2\n;++\nj\n)\n{\nfor\n(\nint\nk\n=\n0\n;\nk\n<=\nmax_1\n;++\nk\n)\n{\nt\n[\nans\n+\nj\n*\n2\n+\nk\n]\n=\n'1'\n;\n}\n}\ncout\n<<\nt\n<<\n\"\\n\"\n;\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nTenzing has an undirected tree of $ n $ vertices.\n\nDefine the value of a tree with black and white vertices in the following way. The value of an edge is the absolute difference between the number of black nodes in the two components of the tree after deleting the edge. The value of the tree is the sum of values over all edges.\n\nFor all $ k $ such that $ 0 \\leq k \\leq n $ , Tenzing wants to know the maximum value of the tree when $ k $ vertices are painted black and $ n-k $ vertices are painted white.\n\nInput Format\nThe first line of the input contains a single integer $ n $ ( $ 1\\leq n\\leq 5000 $ ) — the number of vertices.\n\nThe following $ n-1 $ lines of the input contains $ 2 $ integers $ u_i $ and $ v_i $ ( $ 1 \\leq u_i, v_i \\leq n, u_i \\neq v_i $ ) — indicating an edge between vertices $ u_i $ and $ v_i $ . It is guaranteed that the given edges form a tree.\n\nOutput Format\nOutput $ n+1 $ numbers. The $ i $ -th number is the answer of $ k=i-1 $ .\n\nExamples\nSample 1\nInput\n4\n1 2\n3 2\n2 4\nOutput\n0 3 4 5 6\n\nSample 2\nInput\n1\nOutput\n0 0\n\nNote\nConsider the first example. When $ k=2 $ , Tenzing can paint vertices $ 1 $ and $ 2 $ black then the value of edge $ (1,2) $ is 0, and the values of other edges are all equal to $ 2 $ . So the value of that tree is $ 4 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Let $$$root$$$ be the centroid of all black vertices and $$$size_i$$$ be the number of black vertices in the subtree of node $$$i$$$.\nThen the value is $$$\\sum_{i\\neq root} k-2\\cdot size_i=(n-1)\\cdot k-2\\cdot\\sum_{i\\neq root} size_i$$$.\nConsider painting node $$$i$$$ black, the total contributio to all of its ancestors is $$$2\\cdot depth_i$$$, where $$$depth_i$$$ is the distance from $$$root$$$ to $$$i$$$.\nSince we want to maximize the value, we can greedily select the node with the smallest $$$depth_i$$$.\nBut how do we ensure that $$$root$$$ is the centroid after selecting other black vertices? We can simply take the maximum of all possible $$$root$$$ because if a node is not the centroid, some edges will have a negative weight, making it worse than the optimal answer.\nEnumerate all possible $$$root$$$ and use BFS to add vertices based on their distance to $$$root$$$. The complexity is $$$O(n^2)$$$."
+        }
+    ]
+}

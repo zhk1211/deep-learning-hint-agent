@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlice and Bob play a game. There is a paper strip which is divided into $ n+1 $ cells numbered from left to right starting from $ 0 $ . There is a chip placed in the $ n $ -th cell (the last one).\n\nPlayers take turns, Alice is first. Each player during his or her turn has to move the chip $ 1 $ , $ 2 $ or $ k $ cells to the left (so, if the chip is currently in the cell $ i $ , the player can move it into cell $ i-1 $ , $ i-2 $ or $ i-k $ ). The chip should not leave the borders of the paper strip: it is impossible, for example, to move it $ k $ cells to the left if the current cell has number $ i<k $ . The player who can't make a move loses the game.\n\nWho wins if both participants play optimally?\n\nAlice and Bob would like to play several games, so you should determine the winner in each game.\n\nInput Format\nThe first line contains the single integer $ T $ ( $ 1<=T<=100 $ ) — the number of games. Next $ T $ lines contain one game per line. All games are independent.\n\nEach of the next $ T $ lines contains two integers $ n $ and $ k $ ( $ 0<=n<=10^{9} $ , $ 3<=k<=10^{9} $ ) — the length of the strip and the constant denoting the third move, respectively.\n\nOutput Format\nFor each game, print Alice if Alice wins this game and Bob otherwise.\n\nExamples\nSample 1\nInput\n4\n0 3\n3 3\n3 4\n4 4\nOutput\nBob\nAlice\nBob\nAlice"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n,\nk\n;\ninline\nbool\nread\n()\n{\nif\n(!(\ncin\n>>\nn\n>>\nk\n))\nreturn\nfalse\n;\nreturn\ntrue\n;\n}\nvoid\nsolve\n()\n{\nbool\nwin\n=\ntrue\n;\nif\n(\nk\n%\n3\n==\n0\n)\n{\nint\nnp\n=\nn\n%\n(\nk\n+\n1\n);\nif\n(\nnp\n%\n3\n==\n0\n&&\nnp\n!=\nk\n)\nwin\n=\nfalse\n;\n}\nelse\n{\nint\nnp\n=\nn\n%\n3\n;\nif\n(\nnp\n==\n0\n)\nwin\n=\nfalse\n;\n}\nputs\n(\nwin\n?\n\"Alice\"\n:\n\"Bob\"\n);\n}\nint\nmain\n(){\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n--)\n{\nread\n();\nsolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

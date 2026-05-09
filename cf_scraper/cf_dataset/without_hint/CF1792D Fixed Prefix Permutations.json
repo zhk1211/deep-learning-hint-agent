@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given $ n $ permutations $ a_1, a_2, \\dots, a_n $ , each of length $ m $ . Recall that a permutation of length $ m $ is a sequence of $ m $ distinct integers from $ 1 $ to $ m $ .\n\nLet the beauty of a permutation $ p_1, p_2, \\dots, p_m $ be the largest $ k $ such that $ p_1 = 1, p_2 = 2, \\dots, p_k = k $ . If $ p_1 \\neq 1 $ , then the beauty is $ 0 $ .\n\nThe product of two permutations $ p \\cdot q $ is a permutation $ r $ such that $ r_j = q_{p_j} $ .\n\nFor each $ i $ from $ 1 $ to $ n $ , print the largest beauty of a permutation $ a_i \\cdot a_j $ over all $ j $ from $ 1 $ to $ n $ (possibly, $ i = j $ ).\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of testcases.\n\nThe first line of each testcase contains two integers $ n $ and $ m $ ( $ 1 \\le n \\le 5 \\cdot 10^4 $ ; $ 1 \\le m \\le 10 $ ) — the number of permutations and the length of each permutation.\n\nThe $ i $ -th of the next $ n $ lines contains a permutation $ a_i $ — $ m $ distinct integers from $ 1 $ to $ m $ .\n\nThe sum of $ n $ doesn't exceed $ 5 \\cdot 10^4 $ over all testcases.\n\nOutput Format\nFor each testcase, print $ n $ integers. The $ i $ -th value should be equal to the largest beauty of a permutation $ a_i \\cdot a_j $ over all $ j $ ( $ 1 \\le j \\le n $ ).\n\nExamples\nSample 1\nInput\n3\n3 4\n2 4 1 3\n1 2 4 3\n2 1 3 4\n2 2\n1 2\n2 1\n8 10\n3 4 9 6 10 2 7 8 1 5\n3 9 1 8 5 7 4 10 2 6\n3 10 1 7 5 9 6 4 2 8\n1 2 3 4 8 6 10 7 9 5\n1 2 3 4 10 6 8 5 7 9\n9 6 1 2 10 4 7 8 3 5\n7 9 3 2 5 6 4 8 1 10\n9 4 3 7 5 6 1 10 8 2\nOutput\n1 4 4\n2 2\n10 8 1 6 8 10 1 7"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nget\n(\nconst\nvector\n<int>\n&\na\n,\nconst\nvector\n<int>\n&\nb\n){\nint\nres\n=\n0\n;\nwhile\n(\nres\n<\nint\n(\na\n.\nsize\n())\n&&\na\n[\nres\n]\n==\nb\n[\nres\n])\n++\nres\n;\nreturn\nres\n;\n}\nint\nmain\n(){\nint\nt\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nwhile\n(\nt\n--){\nint\nn\n,\nm\n;\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nm\n);\nvector\n<\nvector\n<int>\n>\na\n(\nn\n,\nvector\n<int>\n(\nm\n));\nforn\n(\ni\n,\nn\n)\nforn\n(\nj\n,\nm\n){\nscanf\n(\n\"%d\"\n,\n&\na\n[\ni\n][\nj\n]);\n--\na\n[\ni\n][\nj\n];\n}\nvector\n<\nvector\n<int>\n>\nb\n(\nn\n,\nvector\n<int>\n(\nm\n));\nforn\n(\ni\n,\nn\n)\nforn\n(\nj\n,\nm\n)\nb\n[\ni\n][\na\n[\ni\n][\nj\n]]\n=\nj\n;\nsort\n(\nb\n.\nbegin\n(),\nb\n.\nend\n());\nforn\n(\ni\n,\nn\n){\nint\nj\n=\nlower_bound\n(\nb\n.\nbegin\n(),\nb\n.\nend\n(),\na\n[\ni\n])\n-\nb\n.\nbegin\n();\nint\nans\n=\n0\n;\nif\n(\nj\n>\n0\n)\nans\n=\nmax\n(\nans\n,\nget\n(\na\n[\ni\n],\nb\n[\nj\n-\n1\n]));\nif\n(\nj\n<\nn\n)\nans\n=\nmax\n(\nans\n,\nget\n(\na\n[\ni\n],\nb\n[\nj\n]));\nprintf\n(\n\"%d \"\n,\nans\n);\n}\nputs\n(\n\"\"\n);\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nSuppose you have an integer $ v $ . In one operation, you can:\n\n- either set $ v = (v + 1) \\bmod 32768 $\n- or set $ v = (2 \\cdot v) \\bmod 32768 $ .\n\nYou are given $ n $ integers $ a_1, a_2, \\dots, a_n $ . What is the minimum number of operations you need to make each $ a_i $ equal to $ 0 $ ?\n\nInput Format\nThe first line contains the single integer $ n $ ( $ 1 \\le n \\le 32768 $ ) — the number of integers.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i < 32768 $ ).\n\nOutput Format\nPrint $ n $ integers. The $ i $ -th integer should be equal to the minimum number of operations required to make $ a_i $ equal to $ 0 $ .\n\nExamples\nSample 1\nInput\n4\n19 32764 10240 49\nOutput\n14 4 4 15\n\nNote\nLet's consider each $ a_i $ :\n\n- $ a_1 = 19 $ . You can, firstly, increase it by one to get $ 20 $ and then multiply it by two $ 13 $ times. You'll get $ 0 $ in $ 1 + 13 = 14 $ steps.\n- $ a_2 = 32764 $ . You can increase it by one $ 4 $ times: $ 32764 \\rightarrow 32765 \\rightarrow 32766 \\rightarrow 32767 \\rightarrow 0 $ .\n- $ a_3 = 10240 $ . You can multiply it by two $ 4 $ times: $ 10240 \\rightarrow 20480 \\rightarrow 8192 \\rightarrow 16384 \\rightarrow 0 $ .\n- $ a_4 = 49 $ . You can multiply it by two $ 15 $ times."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "fun main\n()\n{\nval n\n=\nreadLine\n()!!.\ntoInt\n()\nval a\n=\nreadLine\n()!!.\nsplit\n(\n' '\n).\nmap\n{\nit\n.\ntoInt\n()\n}.\ntoIntArray\n()\nfor\n(\nv\nin\na\n)\n{\nvar\nans\n=\n20\nfor\n(\ncntAdd\nin\n0.\n.\n15\n)\n{\nfor\n(\ncntMul\nin\n0.\n.\n15\n)\n{\nif\n(((\nv\n+\ncntAdd\n)\nshl cntMul\n)\n%\n32768\n==\n0\n)\nans\n=\nminOf\n(\nans\n,\ncntAdd\n+\ncntMul\n)\n}\n}\nprint\n(\n\"$ans \"\n)\n}\n}"
+        }
+    ]
+}

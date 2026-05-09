@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe math faculty of Berland State University has suffered the sudden drop in the math skills of enrolling students. This year the highest grade on the entrance math test was 8. Out of 100! Thus, the decision was made to make the test easier.\n\nFuture students will be asked just a single question. They are given a sequence of integer numbers $ a_1, a_2, \\dots, a_n $ , each number is from $ 1 $ to $ 3 $ and $ a_i \\ne a_{i + 1} $ for each valid $ i $ . The $ i $ -th number represents a type of the $ i $ -th figure:\n\n1. circle;\n2. isosceles triangle with the length of height equal to the length of base;\n3. square.\n\nThe figures of the given sequence are placed somewhere on a Cartesian plane in such a way that:\n\n- $ (i + 1) $ -th figure is inscribed into the $ i $ -th one;\n- each triangle base is parallel to OX;\n- the triangle is oriented in such a way that the vertex opposite to its base is at the top;\n- each square sides are parallel to the axes;\n- for each $ i $ from $ 2 $ to $ n $ figure $ i $ has the maximum possible length of side for triangle and square and maximum radius for circle.\n\nNote that the construction is unique for some fixed position and size of just the first figure.\n\nThe task is to calculate the number of distinct points (not necessarily with integer coordinates) where figures touch. The trick is, however, that the number is sometimes infinite. But that won't make the task difficult for you, will it?\n\nSo can you pass the math test and enroll into Berland State University?\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 2 \\le n \\le 100 $ ) — the number of figures.\n\nThe second line contains $ n $ integer numbers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 3 $ , $ a_i \\ne a_{i + 1} $ ) — types of the figures.\n\nOutput Format\nThe first line should contain either the word \"Infinite\" if the number of distinct points where figures touch is infinite or \"Finite\" otherwise.\n\nIf the number is finite than print it in the second line. It's guaranteed that the number fits into 32-bit integer type.\n\nExamples\nSample 1\nInput\n3\n2 1 3\nOutput\nFinite\n7\n\nSample 2\nInput\n3\n1 2 3\nOutput\nInfinite\n\nNote\nHere are the glorious pictures for the examples. Note that the triangle is not equilateral but just isosceles with the length of height equal to the length of base. Thus it fits into a square in a unique way.\n\nThe distinct points where figures touch are marked red.\n\nIn the second example the triangle and the square touch each other for the whole segment, it contains infinite number of points.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1156A/ecd8055b09d857a1401e35aa45bd638bb2a049f0.png)"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (PikMike)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\nn\n;\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nint\nsum\n=\n0\n;\nint\nlst\n=\n1\n;\nvector\n<int>\nfigs\n;\nforn\n(\ni\n,\nn\n){\nint\nx\n;\nscanf\n(\n\"%d\"\n,\n&\nx\n);\nif\n(\nlst\n!=\n1\n&&\nx\n!=\n1\n){\nputs\n(\n\"Infinite\"\n);\nreturn\n0\n;\n}\nif\n(\nx\n!=\n1\n){\nfigs\n.\npush_back\n(\nx\n);\nsum\n+=\nx\n+\n1\n;\nif\n(\ni\n!=\n0\n&&\ni\n!=\nn\n-\n1\n)\nsum\n+=\nx\n+\n1\n;\n}\nlst\n=\nx\n;\n}\nforn\n(\ni\n,\nint\n(\nfigs\n.\nsize\n())\n-\n1\n)\nif\n(\nfigs\n[\ni\n]\n==\n3\n&&\nfigs\n[\ni\n+\n1\n]\n==\n2\n)\n--\nsum\n;\nprintf\n(\n\"Finite\\n%d\\n\"\n,\nsum\n);\n}"
+        }
+    ]
+}

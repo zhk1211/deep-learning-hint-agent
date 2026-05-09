@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given three integers $ a $ , $ b $ , and $ c $ such that exactly one of these two equations is true:\n\n- $ a+b=c $\n- $ a-b=c $\n\nOutput + if the first equation is true, and - otherwise.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 162 $ ) — the number of test cases.\n\nThe description of each test case consists of three integers $ a $ , $ b $ , $ c $ ( $ 1 \\leq a, b \\leq 9 $ , $ -8 \\leq c \\leq 18 $ ). The additional constraint on the input: it will be generated so that exactly one of the two equations will be true.\n\nOutput Format\nFor each test case, output either + or - on a new line, representing the correct equation.\n\nExamples\nSample 1\nInput\n11\n1 2 3\n3 2 1\n2 9 -7\n3 4 7\n1 1 2\n1 1 0\n3 3 6\n9 9 18\n9 9 0\n1 9 -8\n1 9 10\nOutput\n+\n-\n-\n+\n+\n-\n+\n+\n-\n-\n+\n\nNote\nIn the first test case, $ 1+2=3 $ .\n\nIn the second test case, $ 3-2=1 $ .\n\nIn the third test case, $ 2-9=-7 $ . Note that $ c $ can be negative."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200007\n;\nconst\nint\nMOD\n=\n1000000007\n;\nvoid\nsolve\n()\n{\nint\na\n,\nb\n,\nc\n;\ncin\n>>\na\n>>\nb\n>>\nc\n;\nif\n(\na\n+\nb\n==\nc\n)\n{\ncout\n<<\n\"+\\n\"\n;}\nelse\n{\ncout\n<<\n\"-\\n\"\n;}\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

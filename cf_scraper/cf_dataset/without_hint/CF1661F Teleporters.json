@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n+1 $ teleporters on a straight line, located in points $ 0 $ , $ a_1 $ , $ a_2 $ , $ a_3 $ , ..., $ a_n $ . It's possible to teleport from point $ x $ to point $ y $ if there are teleporters in both of those points, and it costs $ (x-y)^2 $ energy.\n\nYou want to install some additional teleporters so that it is possible to get from the point $ 0 $ to the point $ a_n $ (possibly through some other teleporters) spending no more than $ m $ energy in total. Each teleporter you install must be located in an integer point.\n\nWhat is the minimum number of teleporters you have to install?\n\nInput Format\nThe first line contains one integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_1 < a_2 < a_3 < \\dots < a_n \\le 10^9 $ ).\n\nThe third line contains one integer $ m $ ( $ a_n \\le m \\le 10^{18} $ ).\n\nOutput Format\nPrint one integer — the minimum number of teleporters you have to install so that it is possible to get from $ 0 $ to $ a_n $ spending at most $ m $ energy. It can be shown that it's always possible under the constraints from the input format.\n\nExamples\nSample 1\nInput\n2\n1 5\n7\nOutput\n2\n\nSample 2\nInput\n2\n1 5\n6\nOutput\n3\n\nSample 3\nInput\n1\n5\n5\nOutput\n4\n\nSample 4\nInput\n1\n1000000000\n1000000043\nOutput\n999999978"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n;\nvector\n<int>\nlens\n;\nlong\nlong\nsqr\n(\nint\nx\n)\n{\nreturn\nx\n*\n1ll\n*\nx\n;\n}\nlong\nlong\neval_split\n(\nint\nlen\n,\nint\nk\n)\n{\nreturn\nsqr\n(\nlen\n/\nk\n)\n*\n(\nk\n-\nlen\n%\nk\n)\n+\nsqr\n(\nlen\n/\nk\n+\n1\n)\n*\n(\nlen\n%\nk\n);\n}\npair\n<\nint\n,\nlong\nlong\n>\neval_segment\n(\nint\nlen\n,\nlong\nlong\nbound\n)\n{\n// only take options with value >= bound\nif\n(\nbound\n<=\n2\n||\nlen\n==\n1\n)\nreturn\nmake_pair\n(\nlen\n-\n1\n,\nlen\n);\nint\nlf\n=\n0\n;\nint\nrg\n=\nlen\n-\n1\n;\nwhile\n(\nrg\n-\nlf\n>\n1\n)\n{\nint\nmid\n=\n(\nlf\n+\nrg\n)\n/\n2\n;\nif\n(\neval_split\n(\nlen\n,\nmid\n)\n-\neval_split\n(\nlen\n,\nmid\n+\n1\n)\n>=\nbound\n)\nlf\n=\nmid\n;\nelse\nrg\n=\nmid\n;\n}\nreturn\nmake_pair\n(\nlf\n,\neval_split\n(\nlen\n,\nlf\n+\n1\n));\n}\npair\n<\nint\n,\nlong\nlong\n>\neval_full\n(\nlong\nlong\nbound\n)\n{\npair\n<\nint\n,\nlong\nlong\n>\nans\n;\nfor\n(\nauto\nx\n:\nlens\n)\n{\npair\n<\nint\n,\nlong\nlong\n>\ncur\n=\neval_segment\n(\nx\n,\nbound\n);\nans\n.\nfirst\n+=\ncur\n.\nfirst\n;\nans\n.\nsecond\n+=\ncur\n.\nsecond\n;\n}\nreturn\nans\n;\n}\nint\nmain\n()\n{\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nint\npr\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\nx\n;\nscanf\n(\n\"%d\"\n,\n&\nx\n);\nlens\n.\npush_back\n(\nx\n-\npr\n);\npr\n=\nx\n;\n}\nlong\nlong\nw\n;\nscanf\n(\n\"%lld\"\n,\n&\nw\n);\nlong\nlong\nlf\n=\n0ll\n;\nlong\nlong\nrg\n=\n(\nlong\nlong\n)(\n1e18\n)\n+\n43\n;\nif\n(\neval_full\n(\nrg\n).\nsecond\n<=\nw\n)\n{\ncout\n<<\n0\n<<\nendl\n;\nreturn\n0\n;\n}\nwhile\n(\nrg\n-\nlf\n>\n1\n)\n{\nlong\nlong\nmid\n=\n(\nlf\n+\nrg\n)\n/\n2\n;\npair\n<\nint\n,\nlong\nlong\n>\nres\n=\neval_full\n(\nmid\n);\nif\n(\nres\n.\nsecond\n<=\nw\n)\nlf\n=\nmid\n;\nelse\nrg\n=\nmid\n;\n}\npair\n<\nint\n,\nlong\nlong\n>\nresL\n=\neval_full\n(\nlf\n);\npair\n<\nint\n,\nlong\nlong\n>\nresR\n=\neval_full\n(\nrg\n);\nassert\n(\nresL\n.\nsecond\n<=\nw\n&&\nresR\n.\nsecond\n>\nw\n);\nlong\nlong\nchange\n=\n(\nresR\n.\nsecond\n-\nresL\n.\nsecond\n)\n/\n(\nresR\n.\nfirst\n-\nresL\n.\nfirst\n);\ncout\n<<\nresL\n.\nfirst\n+\n(\nw\n-\nresL\n.\nsecond\n)\n/\nchange\n<<\nendl\n;\n}"
+        }
+    ]
+}

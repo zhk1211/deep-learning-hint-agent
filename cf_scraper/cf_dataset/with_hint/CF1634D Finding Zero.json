@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1634D/74895b22455b2b459cd8609f4caa3df7273f47e6.png)This is an interactive problem.\n\nWe picked an array of whole numbers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le 10^9 $ ) and concealed exactly one zero in it! Your goal is to find the location of this zero, that is, to find $ i $ such that $ a_i = 0 $ .\n\nYou are allowed to make several queries to guess the answer. For each query, you can think up three distinct indices $ i, j, k $ , and we will tell you the value of $ \\max(a_i, a_j, a_k) - \\min(a_i, a_j, a_k) $ . In other words, we will tell you the difference between the maximum and the minimum number among $ a_i $ , $ a_j $ and $ a_k $ .\n\nYou are allowed to make no more than $ 2 \\cdot n - 2 $ queries, and after that you have two tries to guess where the zero is. That is, you have to tell us two numbers $ i $ and $ j $ and you win if $ a_i = 0 $ or $ a_j = 0 $ .\n\nCan you guess where we hid the zero?\n\nNote that the array in each test case is fixed beforehand and will not change during the game. In other words, the interactor is not adaptive.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 500 $ ). Description of the test cases follows.\n\nThe first and only line of each test case contains an integer $ n $ ( $ 4 \\le n \\le 1000 $ ) — the length of the array that we picked.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 3000 $ .\n\nOutput Format\nFor each test case, the interaction starts with reading $ n $ .\n\nTo make a query, print \"? $ i $ $ j $ $ k $ \" (without quotes, $ 1 \\le i, j, k \\le n $ , indices must be distinct). Then you should read our response from standard input, that is, $ \\max(a_i, a_j, a_k) - \\min(a_i, a_j, a_k) $ .\n\nIf the response is $ -1 $ , it means your program has made an invalid query or has run out of tries. Your program must terminate immediately after reading $ -1 $ , and you will get a verdict Wrong answer. Otherwise you may get any verdict, because the program will continue reading from the closed stream. Note that if the query is correct, the answer will never be $ -1 $ because $ \\max(a_i, a_j, a_k) - \\min(a_i, a_j, a_k) \\geq 0 $ .\n\nTo give the final answer, print \"! $ i $ $ j $ \" (without the quotes). Printing the same number twice (that is, $ i = j $ ) is allowed. Note that giving this answer is not counted towards the limit of $ 2 \\cdot n - 2 $ queries. After that, your program must continue to solve the remaining test cases, or exit if all test cases have been solved.\n\nAfter printing a query, don't forget to output line feed and flush the output buffer. Otherwise you will get the verdict Idleness limit exceeded. To flush the buffer, use:\n\n- fflush(stdout) or cout.flush() in C++;\n- System.out.flush() in Java;\n- flush(output) in Pascal;\n- stdout.flush() in Python;\n- Read documentation for other languages.\n\nHacks\n\nThe first line must contain an integer $ t $ ( $ 1 \\le t \\le 500 $ ) — the count of test cases.\n\nThe first line of each test case must contain an integer $ n $ ( $ 4 \\le n \\le 1000 $ ) — the length of the hidden array.\n\nThe second line of each test case must contain $ n $ integers separated by spaces — $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le 10^9 $ ). There must also be exactly one zero in this array.\n\nThe sum of $ n $ over all test cases must not exceed $ 3000 $ .\n\nExamples\nSample 1\nInput\n1\n\n4\n\n2\n\n3\n\n3\n\n2\nOutput\n? 1 2 3\n\n? 2 3 4\n\n? 3 4 1\n\n? 4 1 2\n\n! 2 3\n\nNote\nArray from sample: $ [1, 2, 0, 3] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "The problem can be reworded as follows: find $$$n - 2$$$ indices that definitely can't contain a zero."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Solve the problem for $$$n = 4$$$."
+        },
+        {
+            "title": "Hint 2.1",
+            "content": "For $$$n = 4$$$, denote by $$$\\bar{i}$$$ the answer to the query for the three indices except $$$i$$$. Knowing $$$\\bar{1}$$$, $$$\\bar{2}$$$, $$$\\bar{3}$$$, and $$$\\bar{4}$$$, can you find two indexes that don't contain zero for certain? Use the fact that there is exactly one zero in the array."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Solve the problem for even $$$n$$$ using the solution for $$$n = 4$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "145469065\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\n#define\nlen\n(\nx\n)\n(\nint\n)\n(\nx\n).\nsize\n()\nusing\nnamespace\nstd\n;\nint\nget\n(\nconst\nvector\n<int>\n&\nx\n)\n{\ncout\n<<\n\"? \"\n<<\nx\n[\n0\n]\n+\n1\n<<\n\" \"\n<<\nx\n[\n1\n]\n+\n1\n<<\n\" \"\n<<\nx\n[\n2\n]\n+\n1\n<<\nendl\n;\nint\nans\n;\ncin\n>>\nans\n;\nreturn\nans\n;\n}\nsigned\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n();\ncin\n.\ntie\n(\nnullptr\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n-->\n0\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\npair\n<\nint\n,\nint\n>\npossible\n=\n{\n0\n,\n1\n};\nfor\n(\nint\ni\n=\n2\n;\ni\n<\nn\n-\n1\n;\ni\n+=\n2\n)\n{\nvector\n<\npair\n<\nint\n,\nint\n>>\nch\n(\n4\n);\nvector\n<int>\nnow\n=\n{\npossible\n.\nfirst\n,\npossible\n.\nsecond\n,\ni\n,\ni\n+\n1\n};\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n4\n;\nj\n++)\n{\nvector\n<int>\nx\n=\nnow\n;\nx\n.\nerase\n(\nx\n.\nbegin\n()\n+\nj\n);\nch\n[\nj\n]\n=\n{\nget\n(\nx\n),\nnow\n[\nj\n]};\n}\nsort\n(\nall\n(\nch\n));\npossible\n=\n{\nch\n[\n0\n].\nsecond\n,\nch\n[\n1\n].\nsecond\n};\n}\nif\n(\nn\n%\n2\n==\n1\n)\n{\nint\nother\n=\n0\n;\nwhile\n(\npossible\n.\nfirst\n==\nother\n||\npossible\n.\nsecond\n==\nother\n)\n{\nother\n++;\n}\nvector\n<\npair\n<\nint\n,\nint\n>>\nch\n(\n4\n);\nvector\n<int>\nnow\n=\n{\npossible\n.\nfirst\n,\npossible\n.\nsecond\n,\nn\n-\n1\n,\nother\n};\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n4\n;\nj\n++)\n{\nvector\n<int>\nx\n=\nnow\n;\nx\n.\nerase\n(\nx\n.\nbegin\n()\n+\nj\n);\nch\n[\nj\n]\n=\n{\nget\n(\nx\n),\nnow\n[\nj\n]};\n}\nsort\n(\nall\n(\nch\n));\npossible\n=\n{\nch\n[\n0\n].\nsecond\n,\nch\n[\n1\n].\nsecond\n};\n}\ncout\n<<\n\"! \"\n<<\npossible\n.\nfirst\n+\n1\n<<\n\" \"\n<<\npossible\n.\nsecond\n+\n1\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

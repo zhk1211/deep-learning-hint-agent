@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe Berland language consists of words having exactly two letters. Moreover, the first letter of a word is different from the second letter. Any combination of two different Berland letters (which, by the way, are the same as the lowercase letters of Latin alphabet) is a correct word in Berland language.\n\nThe Berland dictionary contains all words of this language. The words are listed in a way they are usually ordered in dictionaries. Formally, word $ a $ comes earlier than word $ b $ in the dictionary if one of the following conditions hold:\n\n- the first letter of $ a $ is less than the first letter of $ b $ ;\n- the first letters of $ a $ and $ b $ are the same, and the second letter of $ a $ is less than the second letter of $ b $ .\n\nSo, the dictionary looks like that:\n\n- Word $ 1 $ : ab\n- Word $ 2 $ : ac\n- ...\n- Word $ 25 $ : az\n- Word $ 26 $ : ba\n- Word $ 27 $ : bc\n- ...\n- Word $ 649 $ : zx\n- Word $ 650 $ : zy\n\nYou are given a word $ s $ from the Berland language. Your task is to find its index in the dictionary.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 650 $ ) — the number of test cases.\n\nEach test case consists of one line containing $ s $ — a string consisting of exactly two different lowercase Latin letters (i. e. a correct word of the Berland language).\n\nOutput Format\nFor each test case, print one integer — the index of the word $ s $ in the dictionary.\n\nExamples\nSample 1\nInput\n7\nab\nac\naz\nba\nbc\nzx\nzy\nOutput\n1\n2\n25\n26\n27\n649\n650"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nstring\nw\n=\n\"aa\"\n;\nmap\n<\nstring\n,\nint\n>\nidx\n;\nint\ni\n=\n1\n;\nfor\n(\nw\n[\n0\n]\n=\n'a'\n;\nw\n[\n0\n]\n<=\n'z'\n;\nw\n[\n0\n]++)\nfor\n(\nw\n[\n1\n]\n=\n'a'\n;\nw\n[\n1\n]\n<=\n'z'\n;\nw\n[\n1\n]++)\nif\n(\nw\n[\n0\n]\n!=\nw\n[\n1\n])\nidx\n[\nw\n]\n=\ni\n++;\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\ni\n++)\n{\nstring\ns\n;\ncin\n>>\ns\n;\ncout\n<<\nidx\n[\ns\n]\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

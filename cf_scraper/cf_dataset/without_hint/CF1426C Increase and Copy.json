@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nInitially, you have the array $ a $ consisting of one element $ 1 $ ( $ a = [1] $ ).\n\nIn one move, you can do one of the following things:\n\n- Increase some (single) element of $ a $ by $ 1 $ (choose some $ i $ from $ 1 $ to the current length of $ a $ and increase $ a_i $ by one);\n- Append the copy of some (single) element of $ a $ to the end of the array (choose some $ i $ from $ 1 $ to the current length of $ a $ and append $ a_i $ to the end of the array).\n\nFor example, consider the sequence of five moves:\n\n1. You take the first element $ a_1 $ , append its copy to the end of the array and get $ a = [1, 1] $ .\n2. You take the first element $ a_1 $ , increase it by $ 1 $ and get $ a = [2, 1] $ .\n3. You take the second element $ a_2 $ , append its copy to the end of the array and get $ a = [2, 1, 1] $ .\n4. You take the first element $ a_1 $ , append its copy to the end of the array and get $ a = [2, 1, 1, 2] $ .\n5. You take the fourth element $ a_4 $ , increase it by $ 1 $ and get $ a = [2, 1, 1, 3] $ .\n\nYour task is to find the minimum number of moves required to obtain the array with the sum at least $ n $ .\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe only line of the test case contains one integer $ n $ ( $ 1 \\le n \\le 10^9 $ ) — the lower bound on the sum of the array.\n\nOutput Format\nFor each test case, print the answer: the minimum number of moves required to obtain the array with the sum at least $ n $ .\n\nExamples\nSample 1\nInput\n5\n1\n5\n42\n1337\n1000000000\nOutput\n0\n3\n11\n72\n63244"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nans\n=\n1e9\n;\nfor\n(\nint\nx\n=\n1\n;\nx\n*\nx\n<=\nn\n;\n++\nx\n)\n{\nans\n=\nmin\n(\nans\n,\nx\n-\n1\n+\n((\nn\n-\nx\n)\n+\nx\n-\n1\n)\n/\nx\n);\n}\ncout\n<<\nans\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Solution 2",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nlong\ndouble\nEPS\n=\n1e-9\n;\nlong\nlong\nf\n(\nlong\nlong\nx\n)\n{\nlong\nlong\nz\n=\nsqrtl\n(\nx\n);\nlong\nlong\nans\n=\n1e18\n;\nfor\n(\nint\ni\n=\n-\n5\n;\ni\n<=\n5\n;\ni\n++)\n{\nlong\nlong\nz2\n=\nz\n-\ni\n;\nif\n(\nz2\n>\nx\n||\nz2\n<\n1\n)\ncontinue\n;\nans\n=\nmin\n(\nans\n,\nz2\n-\n2\n+\n(\nx\n+\nz2\n-\n1\n)\n/\nz2\n);\n}\nreturn\nans\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\ni\n++)\n{\nlong\nlong\nx\n;\ncin\n>>\nx\n;\ncout\n<<\nf\n(\nx\n)\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Ne0n25)",
+            "content": "fun main\n()\n{\nval\n(\nn\n,\nm\n,\nk\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval a\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoLong\n()\n}\nval b\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoLong\n()\n}\nval c\n=\nArray\n(\nn\n)\n{\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoLong\n()\n}\n}\nval ev\n=\nArray\n(\nn\n+\nm\n)\n{\nif\n(\nit\n<\nn\n)\nlongArrayOf\n(\na\n[\nit\n],\n1L\n,\nit\n.\ntoLong\n())\nelse\nlongArrayOf\n(\nb\n[\nit\n-\nn\n],\n0L\n,\n(\nit\n-\nn\n).\ntoLong\n())\n}\nev\n.\nsortWith\n(\ncompareBy\n({\nit\n[\n0\n]\n}))\nval vals\n=\nLongArray\n(\nn\n+\nm\n)\n{\n0\n}\nfor\n(\ne\nin\n0\nuntil\nn\n+\nm\n)\n{\nif\n(\nev\n[\ne\n][\n1\n]\n==\n1L\n)\n{\nval i\n=\nev\n[\ne\n][\n2\n].\ntoInt\n()\nvals\n[\ne\n]\n=\nb\n.\nindices\n.\nfilter\n{\nb\n[\nit\n]\n<=\nev\n[\ne\n][\n0\n]\n}.\nmap\n{\nc\n[\ni\n][\nit\n]\n}.\nmax\n()!!\n}\nelse\n{\nval j\n=\nev\n[\ne\n][\n2\n].\ntoInt\n()\nvals\n[\ne\n]\n=\na\n.\nindices\n.\nfilter\n{\na\n[\nit\n]\n<=\nev\n[\ne\n][\n0\n]\n}.\nmap\n{\nc\n[\nit\n][\nj\n]\n}.\nmax\n()!!\n}\n}\nvar\nans\n=\n1e18\n.\ntoLong\n()\nfor\n(\nbonus\nin\n1\nuntil\nn\n+\nm\n)\n{\nvals\n[\nbonus\n]\n+=\nk\n.\ntoLong\n()\nvar\n(\nres\n,\ncur\n,\nmx\n)\n=\nLongArray\n(\n3\n)\n{\n0\n}\nvar\ni\n=\n0\nwhile\n(\ntrue\n)\n{\nwhile\n(\ni\n<\nn\n+\nm\n&&\nev\n[\ni\n][\n0\n]\n<=\ncur\n)\n{\nmx\n=\nMath\n.\nmax\n(\nmx\n,\nvals\n[\ni\n])\n++\ni\n;\n}\nif\n(\ni\n==\nn\n+\nm\n)\nbreak\nval need\n=\n(\nev\n[\ni\n][\n0\n]\n-\ncur\n+\nmx\n-\n1\n)\n/\nmx\n\t\t\tres\n+=\nneed\n\t\t\tcur\n+=\nneed\n*\nmx\n}\nans\n=\nMath\n.\nmin\n(\nans\n,\nres\n)\nvals\n[\nbonus\n]\n-=\nk\n.\ntoLong\n()\n}\nprintln\n(\nans\n)\n}"
+        }
+    ]
+}

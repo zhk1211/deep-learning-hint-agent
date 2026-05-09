@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "fun main\n()\n{\nval N\n=\n500043\nval n\n=\nreadLine\n()!!.\ntoInt\n()\nval pts\n=\nArray\n(\nN\n)\n{\nArrayList\n<\nInt\n>()\n}\nrepeat\n(\nn\n)\n{\nval\n(\nx\n,\ny\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\npts\n[\ny\n].\nadd\n(\nx\n)\n}\npts\n.\nforEach\n{\nit\n.\nsort\n()\n}\ndata\nclass\nEvent\n(\nval y\n:\nInt\n,\nval t\n:\nInt\n,\nval\nvalue\n:\nInt\n)\nfun recalc\n(\nv1\n:\nArrayList\n<\nPair\n<\nInt\n,\nInt\n>>,\nv2\n:\nArrayList\n<\nInt\n>,\nflag\n:\nBoolean\n)\n:\nArrayList\n<\nPair\n<\nInt\n,\nInt\n>>\n{\nval events\n=\nArrayList\n<\nEvent\n>()\nif\n(\nflag\n)\n{\nv1\n.\nforEach\n{\nevents\n.\nadd\n(\nEvent\n(\nit\n.\nfirst\n,\n0\n,\nit\n.\nsecond\n))\n}\nv2\n.\nforEachIndexed\n{\ni\n,\nvalue\n->\nevents\n.\nadd\n(\nEvent\n(\nvalue\n,\n1\n,\ni\n+\n1\n))\n}\nevents\n.\nadd\n(\nEvent\n(\n0\n,\n1\n,\n0\n))\nevents\n.\nsortWith\n(\ncompareBy\n({\n-\nit\n.\ny\n},\n{\nit\n.\nt\n},\n{\nit\n.\nvalue\n}))\n}\nelse\n{\nv1\n.\nforEach\n{\nevents\n.\nadd\n(\nEvent\n(\nit\n.\nfirst\n,\n0\n,\nit\n.\nsecond\n))\n}\nv2\n.\nforEachIndexed\n{\ni\n,\nvalue\n->\nevents\n.\nadd\n(\nEvent\n(\nvalue\n,\n1\n,\nv2\n.\nsize\n-\ni\n))\n}\nevents\n.\nadd\n(\nEvent\n(\nN\n+\n43\n,\n1\n,\n0\n))\nevents\n.\nsortWith\n(\ncompareBy\n({\nit\n.\ny\n},\n{\nit\n.\nt\n},\n{\nit\n.\nvalue\n}))\n}\nvar\ncur\n=\n0\nval res\n=\nArrayList\n<\nPair\n<\nInt\n,\nInt\n>>()\nevents\n.\nforEach\n{\nif\n(\nit\n.\nt\n==\n0\n)\n{\ncur\n=\nmaxOf\n(\ncur\n,\nit\n.\nvalue\n)\n}\nelse\n{\nres\n.\nadd\n(\nPair\n(\nit\n.\ny\n,\nit\n.\nvalue\n+\ncur\n))\n}\n}\nreturn\nres\n}\nfun calc\n(\nflag\n:\nInt\n)\n:\nInt\n{\nvar\ncur\n=\nArrayList\n<\nPair\n<\nInt\n,\nInt\n>>()\npts\n.\nforEachIndexed\n{\ni\n,\nvalue\n->\ncur\n=\nrecalc\n(\ncur\n,\nvalue\n,\nflag\n!=\ni\n%\n2\n)\n}\nvar\nres\n=\n0\ncur\n.\nforEach\n{\nres\n=\nmaxOf\n(\nres\n,\nit\n.\nsecond\n)\n}\nreturn\nres\n}\nprintln\n(\ncalc\n(\n0\n)\n+\ncalc\n(\n1\n)\n-\nn\n)\n}"
+        }
+    ]
+}

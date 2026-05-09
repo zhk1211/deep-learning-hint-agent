@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer $ x $ . Can you make $ x $ by summing up some number of $ 11, 111, 1111, 11111, \\ldots $ ? (You can use any number among them any number of times).\n\nFor instance,\n\n- $ 33=11+11+11 $\n- $ 144=111+11+11+11 $\n\nInput Format\nThe first line of input contains a single integer $ t $ $ (1 \\leq t \\leq 10000) $ — the number of testcases.\n\nThe first and only line of each testcase contains a single integer $ x $ $ (1 \\leq x \\leq 10^9) $ — the number you have to make.\n\nOutput Format\nFor each testcase, you should output a single string. If you can make $ x $ , output \"YES\" (without quotes). Otherwise, output \"NO\".\n\nYou can print each letter of \"YES\" and \"NO\" in any case (upper or lower).\n\nExamples\nSample 1\nInput\n3\n33\n144\n69\nOutput\nYES\nYES\nNO\n\nNote\nWays to make $ 33 $ and $ 144 $ were presented in the statement. It can be proved that we can't present $ 69 $ this way."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 0",
+            "content": "Read the name of the problem ;)"
+        },
+        {
+            "title": "Hint 1",
+            "content": "$$$1111=11 \\cdot 101$$$"
+        },
+        {
+            "title": "Hint 2",
+            "content": "All numbers other than $$$11$$$ and $$$111$$$ are useless."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Method 1\nNotice that $$$1111=11 \\cdot 100+11$$$ and similarly $$$11111=111 \\cdot 100 + 11$$$. This implies that we can construct $$$1111$$$ and all bigger numbers using only $$$11$$$ and $$$111$$$. So it suffices to check whether we can construct $$$X$$$ from $$$11$$$ and $$$111$$$ only.\nSuppose $$$X=A \\cdot 11 + B \\cdot 111$$$, where $$$A,B \\geq 0$$$. Suppose $$$B=C \\cdot 11 + D$$$, where $$$D \\lt 11$$$. Then $$$X=(A+C \\cdot 111) \\cdot 11 + D \\cdot 111$$$. So we can just brute force all $$$11$$$ value of $$$D$$$ to check whether $$$X$$$ can be made.\nMethod 2\nSince $$$\\gcd(11,111)=1$$$, by the\nChicken McNugget Theorem\n, all numbers greater than $$$1099$$$ can be written as a sum of $$$11$$$ and $$$111$$$. We can use brute force to find the answer to all values less than or equal to $$$1099$$$ and answer yes for all other numbers."
+        }
+    ]
+}

@@ -1,0 +1,48 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a tree of $ n $ vertices and a permutation $ p $ of size $ n $ . A token is present on vertex $ x $ of the tree.\n\nAlice and Bob are playing a game. Alice is in control of the permutation $ p $ , and Bob is in control of the token on the tree. In Alice's turn, she must pick two distinct numbers $ u $ and $ v $ (not positions; $ u \\neq v $ ), such that the token is neither at vertex $ u $ nor vertex $ v $ on the tree, and swap their positions in the permutation $ p $ . In Bob's turn, he must move the token to an adjacent vertex from the one it is currently on.\n\nAlice wants to sort the permutation in increasing order. Bob wants to prevent that. Alice wins if the permutation is sorted in increasing order at the beginning or end of her turn. Bob wins if he can make the game go on for an infinite number of moves (which means that Alice is never able to get a sorted permutation). Both players play optimally. Alice makes the first move.\n\nGiven the tree, the permutation $ p $ , and the vertex $ x $ on which the token initially is, find the winner of the game.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases. The description of each test case follows.\n\nThe first line of each test case has two integers $ n $ and $ x $ ( $ 3 \\leq n \\leq 2 \\cdot 10^5 $ ; $ 1 \\leq x \\leq n $ ).\n\nEach of the next $ n-1 $ lines contains two integers $ a $ and $ b $ ( $ 1 \\le a, b \\le n $ , $ a \\neq b $ ) indicating an undirected edge between vertex $ a $ and vertex $ b $ . It is guaranteed that the given edges form a tree.\n\nThe next line contains $ n $ integers $ p_1, p_2, \\ldots, p_n $ ( $ 1 \\le p_i \\le n $ ) — the permutation $ p $ .\n\nThe sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output one line containing Alice or Bob — the winner of the game. The output is case-sensitive.\n\nExamples\nSample 1\nInput\n3\n6 3\n1 3\n3 2\n4 3\n3 6\n5 3\n2 1 3 6 4 5\n3 2\n1 2\n3 2\n1 3 2\n3 2\n1 2\n3 2\n1 2 3\nOutput\nAlice\nBob\nAlice\n\nSample 2\nInput\n1\n11 4\n3 11\n5 9\n10 3\n4 8\n2 4\n1 8\n6 8\n8 7\n4 5\n5 11\n7 4 9 8 6 5 11 10 2 3 1\nOutput\nAlice\n\nNote\nHere is the explanation for the first example:\n\nIn the first test case, there is a way for Alice to win. Here is a possible sequence of moves:\n\n1. Alice swaps $ 5 $ and $ 6 $ , resulting in $ [2,1,3,5,4,6] $ .\n2. Bob moves the token to vertex $ 5 $ .\n3. Alice swaps $ 1 $ and $ 2 $ , resulting in $ [1,2,3,5,4,6] $ .\n4. Bob moves the token to vertex $ 3 $ .\n5. Alice swaps $ 4 $ and $ 5 $ , resulting in $ [1,2,3,4,5,6] $ , and wins.\n\nIn the second test case, Alice cannot win since Bob can make the game go on forever. Here is the sequence of moves:\n\n1. Alice can only swap $ 1 $ and $ 3 $ , resulting in $ [3,1,2] $ .\n2. Bob moves the token to vertex $ 1 $ .\n3. Alice can only swap $ 2 $ and $ 3 $ , resulting in $ [2,1,3] $ .\n4. Bob moves the token to vertex $ 2 $ .\n5. Alice can only swap $ 1 $ and $ 3 $ , resulting in $ [2,3,1] $ .\n6. Bob moves the token to vertex $ 3 $ .\n7. Alice can only swap $ 1 $ and $ 2 $ , resulting in $ [1,3,2] $ .\n8. Bob moves the token to vertex $ 2 $ .\n\nAnd then the sequence repeats forever.In the third test case, Alice wins immediately since the permutation is already sorted."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nNotice that as long as there are $$$\\geq 3$$$ elements not in their correct place, Alice can always put at least $$$1$$$ element into the correct place.\nHint 2\nIntuitively, Alice should win if the tree is \"big enough\", because Bob won't be able to reach some places quickly enough. How to define this sense of \"big enough\"?\nHint 3\nTry to solve this problem on a line graph.\nHint 4\nIt is actually possible to force a sequence of moves to get the $$$2$$$ remaining elements onto the diameter of the tree. Given this, use the answer to Hint 3.\nHint 5\nProve that Alice always wins on trees with diameter $$$\\geq 3$$$.\nHint 6\nA tree of diameter $$$2$$$ is a star graph. This case has a number of edge cases. This time, try to look at permutation cycles. Can you define some kind of invariant?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "Notice that as long as there are $$$\\geq 3$$$ elements not in their correct place, Alice can always put at least $$$1$$$ element into the correct place."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Intuitively, Alice should win if the tree is \"big enough\", because Bob won't be able to reach some places quickly enough. How to define this sense of \"big enough\"?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Try to solve this problem on a line graph."
+        },
+        {
+            "title": "Hint 4",
+            "content": "It is actually possible to force a sequence of moves to get the $$$2$$$ remaining elements onto the diameter of the tree. Given this, use the answer to Hint 3."
+        },
+        {
+            "title": "Hint 5",
+            "content": "Prove that Alice always wins on trees with diameter $$$\\geq 3$$$."
+        },
+        {
+            "title": "Hint 6",
+            "content": "A tree of diameter $$$2$$$ is a star graph. This case has a number of edge cases. This time, try to look at permutation cycles. Can you define some kind of invariant?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation (C++)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nlol\n=\nlong\nlong\nint\n;\n#define\nendl\n\"\\n\"\npair\n<\nint\n,\nint\n>\ndfs\n(\nint\nu\n,\nconst\nvector\n<\nvector\n<int>\n>&\ng\n,\nint\np\n=-\n1\n)\n//returns {node with max dist,max dist}\n{\npair\n<\nint\n,\nint\n>\nres\n{\nu\n,\n0\n};\nint\nmx\n=\n0\n;\nfor\n(\nauto\nv\n:\ng\n[\nu\n])\n{\nif\n(\nv\n==\np\n)\ncontinue\n;\npair\n<\nint\n,\nint\n>\ncur\n=\ndfs\n(\nv\n,\ng\n,\nu\n);\ncur\n.\nsecond\n++;\nif\n(\nmx\n<\ncur\n.\nsecond\n)\n{\nres\n=\ncur\n;\nmx\n=\ncur\n.\nsecond\n;\n}\n}\nreturn\nres\n;\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\n_\n=\n1\n;\ncin\n>>\n_\n;\nwhile\n(\n_\n--)\n{\nint\nn\n,\nx\n;\ncin\n>>\nn\n>>\nx\n;\nvector\n<\nvector\n<int>\n>\ng\n(\nn\n+\n1\n);\nvector\n<int>\np\n(\nn\n+\n1\n),\ndeg\n(\nn\n+\n1\n,\n0\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\n{\nint\nu\n,\nv\n;\ncin\n>>\nu\n>>\nv\n;\ng\n[\nu\n].\npush_back\n(\nv\n);\ng\n[\nv\n].\npush_back\n(\nu\n);\ndeg\n[\nu\n]++,\ndeg\n[\nv\n]++;\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\ncin\n>>\np\n[\ni\n];\n}\n//find diameter of tree with 2 DFSes\nint\ndiam\n=\ndfs\n(\ndfs\n(\n1\n,\ng\n).\nfirst\n,\ng\n).\nsecond\n;\n//if diam>=3, Alice always wins\n//if diam=1, n=2, have to check if p=[1,2]\n//otherwise we have a star graph and cases follow\nif\n(\ndiam\n>=\n3\n)\ncout\n<<\n\"Alice\"\n;\nelse\nif\n(\ndiam\n==\n1\n)\ncout\n<<((\np\n[\n1\n]==\n1\n)?\n\"Alice\"\n:\n\"Bob\"\n);\nelse\n{\n//we need to check if we have already won or can win in the first move\n//this is possible if the permutation is already sorted\n//or if there are two marked elements and the chip is on neither of them\nvector\n<int>\nmarked\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nif\n(\np\n[\ni\n]!=\ni\n)\nmarked\n.\npush_back\n(\ni\n);\n}\nif\n((\nint\n)\nmarked\n.\nsize\n()==\n0\n)\n{\ncout\n<<\n\"Alice\"\n;\n}\nelse\nif\n((\nint\n)\nmarked\n.\nsize\n()==\n2\n&&\n(\nx\n!=\nmarked\n[\n0\n]\n&&\nx\n!=\nmarked\n[\n1\n]))\n{\ncout\n<<\n\"Alice\"\n;\n}\nelse\n{\n//we haven't won yet and it is not possible to win in one move\n//cases follow\n//first find center, it will have deg>1\nint\ncenter\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nif\n(\ndeg\n[\ni\n]>\n1\n)\n{\ncenter\n=\ni\n;\nbreak\n;\n}\n}\n//is chip on center?\nbool\nchiponcenter\n=(\nx\n==\ncenter\n);\n//is center marked?\nbool\ncenterismarked\n=(\nfind\n(\nmarked\n.\nbegin\n(),\nmarked\n.\nend\n(),\nx\n)!=\nmarked\n.\nend\n());\n//list the cycles\nvector\n<int>\nvis\n(\nn\n+\n1\n,\nfalse\n);\nvector\n<\nvector\n<int>\n>\ncycles\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nif\n(\nvis\n[\ni\n])\ncontinue\n;\nint\nj\n=\ni\n;\ncycles\n.\npush_back\n({\nj\n});\nvis\n[\nj\n]=\ntrue\n;\nwhile\n(!\nvis\n[\np\n[\nj\n]])\n{\ncycles\n.\nback\n().\npush_back\n(\np\n[\nj\n]);\nvis\n[\np\n[\nj\n]]=\ntrue\n;\nj\n=\np\n[\nj\n];\n}\n}\n//min number of swaps\nint\nswapcnt\n=\n0\n;\nfor\n(\nauto\n&\ncycle\n:\ncycles\n)\nswapcnt\n+=(\nint\n)\ncycle\n.\nsize\n()-\n1\n;\n//parity\nint\nparity\n=(\nswapcnt\n+!\nchiponcenter\n)%\n2\n;\n//cases\nif\n(!\ncenterismarked\n)\ncout\n<<(\nparity\n?\n\"Alice\"\n:\n\"Bob\"\n);\nelse\nif\n(\nchiponcenter\n&&\ncenterismarked\n)\ncout\n<<\n\"Bob\"\n;\nelse\n//chip not on center and center is marked\n{\n//need to check if we can unmark center on first move\n//it is impossible if x is on p[center] (since we need to move p[center] to get center\n//to the right place, but p[center] is blocked)\nbool\ncannotunmarkcenter\n=(\np\n[\ncenter\n]==\nx\n);\nif\n(\ncannotunmarkcenter\n)\ncout\n<<\n\"Bob\"\n;\nelse\ncout\n<<(\nparity\n?\n\"Alice\"\n:\n\"Bob\"\n);\n}\n}\n}\ncout\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

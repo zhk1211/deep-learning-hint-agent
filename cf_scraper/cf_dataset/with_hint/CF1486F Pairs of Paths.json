@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a tree consisting of $ n $ vertices, and $ m $ simple vertex paths. Your task is to find how many pairs of those paths intersect at exactly one vertex. More formally you have to find the number of pairs $ (i, j) $ $ (1 \\leq i < j \\leq m) $ such that $ path_i $ and $ path_j $ have exactly one vertex in common.\n\nInput Format\nFirst line contains a single integer $ n $ $ (1 \\leq n \\leq 3 \\cdot 10^5) $ .\n\nNext $ n - 1 $ lines describe the tree. Each line contains two integers $ u $ and $ v $ $ (1 \\leq u, v \\leq n) $ describing an edge between vertices $ u $ and $ v $ .\n\nNext line contains a single integer $ m $ $ (1 \\leq m \\leq 3 \\cdot 10^5) $ .\n\nNext $ m $ lines describe paths. Each line describes a path by it's two endpoints $ u $ and $ v $ $ (1 \\leq u, v \\leq n) $ . The given path is all the vertices on the shortest path from $ u $ to $ v $ (including $ u $ and $ v $ ).\n\nOutput Format\nOutput a single integer — the number of pairs of paths that intersect at exactly one vertex.\n\nExamples\nSample 1\nInput\n5\n1 2\n1 3\n1 4\n3 5\n4\n2 3\n2 4\n3 4\n3 5\nOutput\n2\n\nSample 2\nInput\n1\n3\n1 1\n1 1\n1 1\nOutput\n3\n\nSample 3\nInput\n5\n1 2\n1 3\n1 4\n3 5\n6\n2 3\n2 4\n3 4\n3 5\n1 1\n1 2\nOutput\n7\n\nNote\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1486F/a19cd21d095785ac889753153b27201ab276d741.png)\n\nThe tree in the first example and paths look like this. Pairs $ (1,4) $ and $ (3,4) $ intersect at one vertex.\n\nIn the second example all three paths contain the same single vertex, so all pairs $ (1, 2) $ , $ (1, 3) $ and $ (2, 3) $ intersect at one vertex.\n\nThe third example is the same as the first example with two additional paths. Pairs $ (1,4) $ , $ (1,5) $ , $ (2,5) $ , $ (3,4) $ , $ (3,5) $ , $ (3,6) $ and $ (5,6) $ intersect at one vertex."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "Root the tree."
+        },
+        {
+            "title": "Hint2",
+            "content": "After rooting the tree, how does the intersection of two paths look?"
+        },
+        {
+            "title": "Hint3",
+            "content": "After rooting the tree, what are the two types of intersection?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's root the tree at some vertex. Now the intersection vertex is lca for at least one path.\nProof\nIf the vertex wasn't lca for both paths it would mean that there are either two edges going up (which is impossible in a rooted tree) or they are going up by the same edge, but this would mean that this vertex parent is also an intersection point, so the paths are intersecting in at least $$$2$$$ points, so this is impossible too.\nNow there are two types of intersections: with the same lca and different lca. Let's count them independently.\nFor each path and it's lca let's find the subtrees that path goes to from lca. This would result in a triplet $$$(lca, subtree1, subtree2)$$$ (replace subtree with $$$-1$$$ if there is none) with $$$subtree1 \\lt subtree2$$$ or both of them are $$$-1$$$.\nNow to count the intersections of the first type let's use inclusion-exclusion principle. Remember all paths that have same lca. Now we need to calculate the number of pairs so that they have different $$$subtree1$$$ and $$$subtree2$$$ (or $$$-1$$$). The formula is going to be $$$cntpath \\cdot (cntpath - 1) / 2 - \\sum \\left(cnt(subtree1, x) + cnt(x, subtree2) - (cnt(subtree1, subtree2) + 1) \\right) / 2$$$ (from inclusion-exclusion principle) where cntpath is the number of paths with this lca and $$$cnt(x, y)$$$ is the number of paths with triplet $$$(lca, x, y)$$$. The situation with $$$-1$$$ is pretty similar, left as an exercise to the reader.\nFinding the number of intersections of second type is a bit easier. We just need to calculate the number of all intersections between a path with fixed lca and a vertical path which crosses this lca (the path is not neccessarily vertical, but it contains both lca and it's parent) and then subtract $$$cnt(subtree1)$$$ and $$$cnt(subtree2)$$$, where $$$cnt(x)$$$ is the number of vertical paths that go into subtree $$$x$$$.\nAfter that we just have to print out the sum of this two numbers. Counting all the needed functions can be done using some data structure (small-to-large for example) or some subtree dynamic programming.\nThe resulting complexity is $$$O(Mlog^2M)$$$ or $$$O(MlogM)$$$ or even $$$O(M)$$$ if you're strong enough."
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPetya is a math teacher. $ n $ of his students has written a test consisting of $ m $ questions. For each student, it is known which questions he has answered correctly and which he has not.\n\nIf the student answers the $ j $ -th question correctly, he gets $ p_j $ points (otherwise, he gets $ 0 $ points). Moreover, the points for the questions are distributed in such a way that the array $ p $ is a permutation of numbers from $ 1 $ to $ m $ .\n\nFor the $ i $ -th student, Petya knows that he expects to get $ x_i $ points for the test. Petya wonders how unexpected the results could be. Petya believes that the surprise value of the results for students is equal to $ \\sum\\limits_{i=1}^{n} |x_i - r_i| $ , where $ r_i $ is the number of points that the $ i $ -th student has got for the test.\n\nYour task is to help Petya find such a permutation $ p $ for which the surprise value of the results is maximum possible. If there are multiple answers, print any of them.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ m $ ( $ 1 \\le n \\le 10 $ ; $ 1 \\le m \\le 10^4 $ ) — the number of students and the number of questions, respectively.\n\nThe second line contains $ n $ integers $ x_1, x_2, \\dots, x_n $ ( $ 0 \\le x_i \\le \\frac{m(m+1)}{2} $ ), where $ x_i $ is the number of points that the $ i $ -th student expects to get.\n\nThis is followed by $ n $ lines, the $ i $ -th line contains the string $ s_i $ ( $ |s_i| = m; s_{i, j} \\in \\{0, 1\\} $ ), where $ s_{i, j} $ is $ 1 $ if the $ i $ -th student has answered the $ j $ -th question correctly, and $ 0 $ otherwise.\n\nThe sum of $ m $ for all test cases does not exceed $ 10^4 $ .\n\nOutput Format\nFor each test case, print $ m $ integers — a permutation $ p $ for which the surprise value of the results is maximum possible. If there are multiple answers, print any of them.\n\nExamples\nSample 1\nInput\n3\n4 3\n5 1 2 2\n110\n100\n101\n100\n4 4\n6 2 0 10\n1001\n0010\n0110\n0101\n3 6\n20 3 15\n010110\n000101\n111111\nOutput\n3 1 2\n2 3 4 1\n3 1 4 5 2 6"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\n++\ni\n)\nint\nmain\n()\n{\nint\nt\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nwhile\n(\nt\n--)\n{\nint\nn\n,\nm\n;\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nm\n);\nvector\n<int>\nx\n(\nn\n);\nforn\n(\ni\n,\nn\n)\nscanf\n(\n\"%d\"\n,\n&\nx\n[\ni\n]);\nvector\n<\nvector\n<int>\n>\na\n(\nn\n,\nvector\n<int>\n(\nm\n));\nforn\n(\ni\n,\nn\n)\nforn\n(\nj\n,\nm\n)\nscanf\n(\n\"%1d\"\n,\n&\na\n[\ni\n][\nj\n]);\nint\nans\n=\n-\n1\n;\nvector\n<int>\nbest\n;\nforn\n(\nmask\n,\n1\n<<\nn\n)\n{\nvector\n<int>\nval\n(\nm\n);\nforn\n(\ni\n,\nn\n)\nforn\n(\nj\n,\nm\n)\nif\n(\na\n[\ni\n][\nj\n])\nval\n[\nj\n]\n+=\n((\nmask\n>>\ni\n)\n&\n1\n)\n?\n+\n1\n:\n-\n1\n;\nint\nres\n=\n0\n;\nforn\n(\ni\n,\nn\n)\nres\n+=\n((\nmask\n>>\ni\n)\n&\n1\n)\n?\n-\nx\n[\ni\n]\n:\nx\n[\ni\n];\nvector\n<int>\np\n(\nm\n);\niota\n(\np\n.\nbegin\n(),\np\n.\nend\n(),\n0\n);\nsort\n(\np\n.\nbegin\n(),\np\n.\nend\n(),\n[&](\nint\nx\n,\nint\ny\n)\n{\nreturn\nval\n[\nx\n]\n<\nval\n[\ny\n];\n});\nforn\n(\ni\n,\nm\n)\nres\n+=\nval\n[\np\n[\ni\n]]\n*\n(\ni\n+\n1\n);\nif\n(\nres\n>\nans\n)\nans\n=\nres\n,\nbest\n=\np\n;\n}\nvector\n<int>\nansPerm\n(\nm\n);\nforn\n(\ni\n,\nm\n)\nansPerm\n[\nbest\n[\ni\n]]\n=\ni\n;\nforn\n(\ni\n,\nm\n)\nprintf\n(\n\"%d \"\n,\nansPerm\n[\ni\n]\n+\n1\n);\nputs\n(\n\"\"\n);\n}\n}"
+        }
+    ]
+}

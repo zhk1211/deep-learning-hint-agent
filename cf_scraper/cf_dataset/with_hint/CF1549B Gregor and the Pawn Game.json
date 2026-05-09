@@ -1,0 +1,44 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a chessboard of size $ n $ by $ n $ . The square in the $ i $ -th row from top and $ j $ -th column from the left is labelled $ (i,j) $ .\n\nCurrently, Gregor has some pawns in the $ n $ -th row. There are also enemy pawns in the $ 1 $ -st row. On one turn, Gregor moves one of his pawns. A pawn can move one square up (from $ (i,j) $ to $ (i-1,j) $ ) if there is no pawn in the destination square. Additionally, a pawn can move one square diagonally up (from $ (i,j) $ to either $ (i-1,j-1) $ or $ (i-1,j+1) $ ) if and only if there is an enemy pawn in that square. The enemy pawn is also removed.\n\nGregor wants to know what is the maximum number of his pawns that can reach row $ 1 $ ?\n\nNote that only Gregor takes turns in this game, and the enemy pawns never move. Also, when Gregor's pawn reaches row $ 1 $ , it is stuck and cannot make any further moves.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1\\le t\\le 2\\cdot 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case consists of three lines. The first line contains a single integer $ n $ ( $ 2\\le n\\le 2\\cdot{10}^{5} $ ) — the size of the chessboard.\n\nThe second line consists of a string of binary digits of length $ n $ , where a $ 1 $ in the $ i $ -th position corresponds to an enemy pawn in the $ i $ -th cell from the left, and $ 0 $ corresponds to an empty cell.\n\nThe third line consists of a string of binary digits of length $ n $ , where a $ 1 $ in the $ i $ -th position corresponds to a Gregor's pawn in the $ i $ -th cell from the left, and $ 0 $ corresponds to an empty cell.\n\nIt is guaranteed that the sum of $ n $ across all test cases is less than $ 2\\cdot{10}^{5} $ .\n\nOutput Format\nFor each test case, print one integer: the maximum number of Gregor's pawns which can reach the $ 1 $ -st row.\n\nExamples\nSample 1\nInput\n4\n3\n000\n111\n4\n1111\n1111\n3\n010\n010\n5\n11001\n00000\nOutput\n3\n4\n0\n0\n\nNote\nIn the first example, Gregor can simply advance all $ 3 $ of his pawns forward. Thus, the answer is $ 3 $ .\n\nIn the second example, Gregor can guarantee that all $ 4 $ of his pawns reach the enemy row, by following the colored paths as demonstrated in the diagram below. Remember, only Gregor takes turns in this \"game\"!\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1549B/eb2df5f00e8c7d1290d3251e314fd1200ad28d29.png)In the third example, Gregor's only pawn is stuck behind the enemy pawn, and cannot reach the end.\n\nIn the fourth example, Gregor has no pawns, so the answer is clearly $ 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "There a very limited number of squares where each of Gregor's pawns could end up."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Identify a greedy strategy to maximize the answer."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Write the problem as a graph problem."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Valid captures or valid forward moves represent edges in the graph."
+        },
+        {
+            "title": "Hint 3",
+            "content": "We have two sets: Gregor's pawns, and destination squares. We also have some edges between these two sets."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Maximum Matching."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "The key insight is that due to the fact that there is only one row of enemy pawns, and those pawns never move, there are only $$$3$$$ possible columns where one of Gregor's pawns can end up in.\nWe can solve this problem greedily, going from column $$$1$$$ to column $$$N$$$. At the current column $$$j$$$, if Gregor has a pawn in this column, then we greedily consider 3 cases.\nIf there is an uncaptured enemy pawn in column $$$j-1$$$, mark that pawn as captured and increment the answer. Column $$$j-1$$$ will never be looked at again, so this decision is optimal.\nIf there is no pawn in column $$$j$$$, just move Gregor's pawn forward, and increment the answer.\nIf there is an uncaptured enemy pawn in column $$$j+1$$$, mark that pawn as captured and increment the answer.\nOtherwise, this pawn will not reach the first row.\nThis greedy solution is guaranteed to produce the maximum possible answer.\nThe time complexity is $$$\\mathcal{O}(N)$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "Each of Gregor's pawns can end up in one of 3 possible squares. If Gregor has a pawn in column $$$i$$$, it can end up in column $$$i-1$$$ or $$$i+1$$$ if there is an enemy pawn in those columns. Furthermore, it can remain in column $$$i$$$ if there is no enemy pawn in that column.\nLet's build a graph $$$G$$$, where each edge connects one of Gregor's pawns to a valid destination cell. Since every edge goes from a cell in the bottom row to a cell in the top row, $$$G$$$ is clearly bipartite. It's now clear that moving as many pawns to the end is equivalent to finding a maximum matching in $$$G$$$.\nThe time complexity is $$$\\mathcal{O}(N\\sqrt{N})$$$ using the HKK algorithm for maximum matching. ($$$G$$$ has at most $$$2N$$$ vertices, and $$$6N$$$ edges)"
+        }
+    ]
+}

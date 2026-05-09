@@ -1,0 +1,48 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Convert the word problem into a combinatorics equation."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Write the equation for some $$$x$$$. Write the equation for $$$x+1$$$. How can we easily transition from the first to the second equation?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "For a given $$$x$$$, we want to calculate every third term in the sequence $$$\\binom{i}{x}$$$ for $$$i \\in [1,3N]$$$. Think about how computing the entire summation $$$\\sum_{i=1}^{3N}{\\binom{i}{x}}$$$ will help."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Convert the word problem into a combinatorics equation."
+        },
+        {
+            "title": "Hint 2",
+            "content": "How will the Binomial Theorem be helpful?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Try and construct a polynomial $$$P(k)$$$ such as the coefficient $$$k^x$$$ in that polynomial represents the number of attack plans if the wolf wants to eat $$$x$$$ pigs."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Notice that $$$P(k)$$$ is a geometric series, so FFT is unnecessary."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "For a given $$$x$$$, we want to compute $$$\\sum_{i=1}^{N}{\\binom{3i}{x}}$$$, which can be solved with a combinatorial dynamic programming.\nDefine the array\ndp[x][m]\n(dimensions: $$$N+1\\times 3$$$), which computes the sum $$$\\sum_{i=0}^{N-1}{\\binom{3i+m}{x}}$$$. Under this definition, $$$ans[x]=dp[x][0]+\\binom{3N}{x}$$$, where\nans\nis what we want to find.\nUnder the definition of the dp, we can make the following mathematical observations.\n$$$dp[x][0]+dp[x][1]+dp[x][2]=\\sum_{i=0}^{3N-1}{\\binom{i}{x}}$$$, since term $$$i$$$ belongs to the array with $$$m=i\\mod{3}$$$. This summation can be condensed with the Hockey Stick Identity into $$$\\binom{3N}{x+1}$$$.\nBy repeated uses of Pascal's Identity, we get equations (2) and (3), giving us a system of 3 equations with 3 new unknowns, which can easily be solved.\n$$$\\sum_{m=0}^{2}{dp[x][m]}=\\binom{3N}{x+1}$$$.\n$$$dp[x][1] = dp[x][0]+dp[x-1][0]$$$\n$$$dp[x][2] = dp[x][1]+dp[x-1][1]$$$\nThe base case is that $$$dp[0][0]=dp[0][1]=dp[0][2]=N$$$. Each query can now be answered trivially.\nThe time complexity is $$$\\mathcal{O}(N+Q)$$$ with combinatorial precomputation."
+        },
+        {
+            "title": "Solution",
+            "content": "Define the polynomial $$$P(k)=(1+k)^3+(1+k)^6+\\cdot + (1+k)^{3N}$$$.\nThe coefficient of $$$k^x$$$ in $$$P(k)$$$ is, by the Binomial theorem on each term of the polynomial, equal to $$$\\binom{3}{x}+\\binom{6}{x}+\\dots + \\binom{3N}{x}$$$. This is equal to\nans[x]\nfrom the previous solution.\nThe only thing left to do is quickly calculate $$$P(k)$$$. Due to the tight time limit, calculating the polynomial using FFT in $$$\\mathcal{O}{(N\\log{N})}$$$ is probably too slow.\nInstead, we notice that $$$P(k)$$$ is a geometric series. Using the geometric series formula, we get that $$$P(k)=\\frac{(1+k)^{3N+3}-(1+k)^3}{(1+k)^3-1}$$$.\nThe numerator and denominator of this fraction can be expanded in linear time. Then all we have to do is a polynomial long division. Once we have $$$P(k)$$$, we can answer all the queries trivially.\nThe time complexity is $$$\\mathcal{O}(N)$$$ with combinatorial precomputation."
+        }
+    ]
+}

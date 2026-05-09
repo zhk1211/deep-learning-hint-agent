@@ -1,0 +1,52 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array of positive integers $ a_1,a_2,\\ldots,a_n $ of length $ n $ .\n\nIn one operation you can jump from index $ i $ to index $ j $ ( $ 1 \\le i \\le j \\le n $ ) by paying $ \\min(a_i, a_{i + 1}, \\ldots, a_j) \\cdot (j - i)^2 $ eris.\n\nFor all $ k $ from $ 1 $ to $ n $ , find the minimum number of eris needed to get from index $ 1 $ to index $ k $ .\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 2 \\le n \\le 4 \\cdot 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1,a_2,\\ldots a_n $ ( $ 1 \\le a_i \\le n $ ).\n\nOutput Format\nOutput $ n $ integers — the $ k $ -th integer is the minimum number of eris needed to reach index $ k $ if you start from index $ 1 $ .\n\nExamples\nSample 1\nInput\n3\n2 1 3\nOutput\n0 1 2\n\nSample 2\nInput\n6\n1 4 1 6 3 2\nOutput\n0 1 2 3 6 8\n\nSample 3\nInput\n2\n1 2\nOutput\n0 1\n\nSample 4\nInput\n4\n1 4 4 4\nOutput\n0 1 4 8\n\nNote\nIn the first example:\n\n- From $ 1 $ to $ 1 $ : the cost is $ 0 $ ,\n- From $ 1 $ to $ 2 $ : $ 1 \\rightarrow 2 $ — the cost is $ \\min(2, 1) \\cdot (2 - 1) ^ 2=1 $ ,\n- From $ 1 $ to $ 3 $ : $ 1 \\rightarrow 2 \\rightarrow 3 $ — the cost is $ \\min(2, 1) \\cdot (2 - 1) ^ 2 + \\min(1, 3) \\cdot (3 - 2) ^ 2 = 1 + 1 = 2 $ .\n\nIn the fourth example from $ 1 $ to $ 4 $ : $ 1 \\rightarrow 3 \\rightarrow 4 $ — the cost is $ \\min(1, 4, 4) \\cdot (3 - 1) ^ 2 + \\min(4, 4) \\cdot (4 - 3) ^ 2 = 4 + 4 = 8 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 0\nUse dynamic programming.\nHint 1\n$$$a_i \\le n$$$\nHint 2\nCompare $$$\\min(a_i \\ldots a_j) \\cdot (j - i)^2$$$ with $$$n \\cdot (j - i)$$$.\nHint 3\nCompare $$$\\min(a_i \\ldots a_j) \\cdot (j - i)^2$$$ with $$$\\min(a_i \\ldots a_k) \\cdot (k - i)^2 + \\min(a_k \\ldots a_j) \\cdot (j - k)^2$$$ for some $$$i \\lt k \\lt j$$$.\nHint 4\nTwo cases: $$$\\min(a_i \\ldots a_j) \\ge \\sqrt{n}$$$ and $$$\\min(a_i \\ldots a_j) \\lt \\sqrt{n}$$$.\nHint 5\nSplit $$$\\min(a_i \\ldots a_j) \\lt \\sqrt{n}$$$ into two more cases: $$$\\min(a_i \\ldots a_j) = a_i$$$ and $$$\\min(a_i \\ldots a_j) = a_j$$$."
+        },
+        {
+            "title": "Hint 0",
+            "content": "Use dynamic programming."
+        },
+        {
+            "title": "Hint 1",
+            "content": "$$$a_i \\le n$$$"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Compare $$$\\min(a_i \\ldots a_j) \\cdot (j - i)^2$$$ with $$$n \\cdot (j - i)$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Compare $$$\\min(a_i \\ldots a_j) \\cdot (j - i)^2$$$ with $$$\\min(a_i \\ldots a_k) \\cdot (k - i)^2 + \\min(a_k \\ldots a_j) \\cdot (j - k)^2$$$ for some $$$i \\lt k \\lt j$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Two cases: $$$\\min(a_i \\ldots a_j) \\ge \\sqrt{n}$$$ and $$$\\min(a_i \\ldots a_j) \\lt \\sqrt{n}$$$."
+        },
+        {
+            "title": "Hint 5",
+            "content": "Split $$$\\min(a_i \\ldots a_j) \\lt \\sqrt{n}$$$ into two more cases: $$$\\min(a_i \\ldots a_j) = a_i$$$ and $$$\\min(a_i \\ldots a_j) = a_j$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\n#define\nallr\n(\nx\n)\n(\nx\n).\nrbegin\n(),\n(\nx\n).\nrend\n()\n#define\ngsize\n(\nx\n)\n(\nint\n)((\nx\n).\nsize\n())\nconst\nchar\nnl\n=\n'\\n'\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\nlong\ndouble\nld\n;\nusing\nnamespace\nstd\n;\nconst\nint\nK\n=\n650\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<ll>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nvector\n<ll>\ndp\n(\nn\n,\n1e18\n);\ndp\n[\n0\n]\n=\n0\n;\nvector\n<int>\nst\n=\n{\n0\n};\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\n{\n// Case 1\n{\nll mi\n=\na\n[\ni\n];\nfor\n(\nint\nj\n=\ni\n-\n1\n;\nj\n>=\nmax\n(\n0\n,\ni\n-\nK\n);\nj\n--)\n{\nmi\n=\nmin\n(\nmi\n,\na\n[\nj\n]);\ndp\n[\ni\n]\n=\nmin\n(\ndp\n[\ni\n],\ndp\n[\nj\n]\n+\nmi\n*\n(\ni\n-\nj\n)\n*\n(\ni\n-\nj\n));\n}\n}\n// Case 2\nif\n(\na\n[\ni\n]\n<=\nK\n)\n{\nfor\n(\nint\nj\n=\ni\n-\n1\n;\nj\n>=\n0\n;\nj\n--)\n{\ndp\n[\ni\n]\n=\nmin\n(\ndp\n[\ni\n],\ndp\n[\nj\n]\n+\na\n[\ni\n]\n*\n(\ni\n-\nj\n)\n*\n(\ni\n-\nj\n));\nif\n(\na\n[\nj\n]\n<=\na\n[\ni\n])\nbreak\n;\n}\n}\n// Case 3\n{\nfor\n(\nint\nj\n:\nst\n)\n{\ndp\n[\ni\n]\n=\nmin\n(\ndp\n[\ni\n],\ndp\n[\nj\n]\n+\na\n[\nj\n]\n*\n(\ni\n-\nj\n)\n*\n(\ni\n-\nj\n));\n}\nif\n(\na\n[\ni\n]\n<=\nK\n)\n{\nwhile\n(!\nst\n.\nempty\n()\n&&\na\n[\nst\n.\nback\n()]\n>=\na\n[\ni\n])\n{\nst\n.\npop_back\n();\n}\nst\n.\npush_back\n(\ni\n);\n}\n}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncout\n<<\ndp\n[\ni\n]\n<<\n' '\n;\ncout\n<<\nendl\n;\n}"
+        },
+        {
+            "title": "Shorter solution (tfg)",
+            "content": "#include\n<iostream>\n#include\n<vector>\n#include\n<chrono>\n#include\n<random>\n#include\n<cassert>\nstd\n::\nmt19937 rng\n((\nint\n)\nstd\n::\nchrono\n::\nsteady_clock\n::\nnow\n().\ntime_since_epoch\n().\ncount\n());\nint\nmain\n()\n{\nstd\n::\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\nstd\n::\ncin\n.\ntie\n(\nNULL\n);\nint\nn\n;\nstd\n::\ncin\n>>\nn\n;\nstd\n::\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nstd\n::\ncin\n>>\na\n[\ni\n];\n}\nstd\n::\nvector\n<\nlong\nlong\n>\ndp\n(\nn\n,\n1e18\n);\ndp\n[\n0\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\ndist\n=\nn\n/\na\n[\ni\n]\n+\n1\n;\n// take from behind\nfor\n(\nint\nj\n=\ni\n-\n1\n;\nj\n>=\n0\n&&\ni\n-\nj\n<=\ndist\n;\nj\n--)\n{\ndp\n[\ni\n]\n=\nstd\n::\nmin\n(\ndp\n[\ni\n],\ndp\n[\nj\n]\n+\n(\nlong\nlong\n)\na\n[\ni\n]\n*\n(\ni\n-\nj\n)\n*\n(\ni\n-\nj\n));\nif\n(\na\n[\nj\n]\n<=\na\n[\ni\n])\nbreak\n;\n}\n// propagate forward\nfor\n(\nint\nj\n=\ni\n+\n1\n;\nj\n<\nn\n&&\nj\n-\ni\n<=\ndist\n;\nj\n++)\n{\ndp\n[\nj\n]\n=\nstd\n::\nmin\n(\ndp\n[\nj\n],\ndp\n[\ni\n]\n+\n(\nlong\nlong\n)\na\n[\ni\n]\n*\n(\ni\n-\nj\n)\n*\n(\ni\n-\nj\n));\nif\n(\na\n[\nj\n]\n<=\na\n[\ni\n])\nbreak\n;\n}\nstd\n::\ncout\n<<\ndp\n[\ni\n]\n<<\n(\ni\n+\n1\n==\nn\n?\n'\\n'\n:\n' '\n);\n}\n}"
+        }
+    ]
+}

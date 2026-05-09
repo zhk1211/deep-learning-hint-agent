@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ of length $ n $ consisting of non-negative integers.\n\nYou have to calculate the value of $ \\sum_{l=1}^{n} \\sum_{r=l}^{n} f(l, r) \\cdot (r - l + 1) $ , where $ f(l, r) $ is $ a_l \\oplus a_{l+1} \\oplus \\dots \\oplus a_{r-1} \\oplus a_r $ (the character $ \\oplus $ denotes bitwise XOR).\n\nSince the answer can be very large, print it modulo $ 998244353 $ .\n\nInput Format\nThe first line contains one integer $ n $ ( $ 1 \\le n \\le 3 \\cdot 10^5 $ ) — the length of the array $ a $ .\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i \\le 10^9) $ .\n\nOutput Format\nPrint the one integer — the value of $ \\sum_{l=1}^{n} \\sum_{r=l}^{n} f(l, r) \\cdot (r - l + 1) $ , taken modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n3\n1 3 2\nOutput\n12\n\nSample 2\nInput\n4\n39 68 31 80\nOutput\n1337\n\nSample 3\nInput\n7\n313539461 779847196 221612534 488613315 633203958 394620685 761188160\nOutput\n257421502\n\nNote\nIn the first example, the answer is equal to $ f(1, 1) + 2 \\cdot f(1, 2) + 3 \\cdot f(1, 3) + f(2, 2) + 2 \\cdot f(2, 3) + f(3, 3) = $ $ = 1 + 2 \\cdot 2 + 3 \\cdot 0 + 3 + 2 \\cdot 1 + 2 = 12 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n300005\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nn\n;\nint\na\n[\nN\n];\nvoid\nadd\n(\nint\n&\na\n,\nint\nb\n)\n{\na\n+=\nb\n;\nif\n(\na\n>=\nMOD\n)\na\n-=\nMOD\n;\n}\nint\nsum\n(\nint\na\n,\nint\nb\n)\n{\na\n+=\nb\n;\nif\n(\na\n>=\nMOD\n)\na\n-=\nMOD\n;\nif\n(\na\n<\n0\n)\na\n+=\nMOD\n;\nreturn\na\n;\n}\nint\nmul\n(\nint\na\n,\nint\nb\n)\n{\nreturn\n(\na\n*\n1LL\n*\nb\n)\n%\nMOD\n;\n}\nint\nmain\n()\n{\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\ncin\n>>\na\n[\ni\n];\nint\nres\n=\n0\n;\nfor\n(\nint\nb\n=\n0\n;\nb\n<\n30\n;\n++\nb\n)\n{\nint\ncur\n=\n0\n;\nvector\n<int>\ncnt\n(\n2\n);\nvector\n<int>\nsumOfL\n(\n2\n);\ncnt\n[\n0\n]\n=\n1\n;\nint\nx\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nx\n^=\n((\na\n[\ni\n]\n>>\nb\n)\n&\n1\n);\nint\nsumOfR\n=\nmul\n(\ncnt\n[\nx\n^\n1\n],\ni\n+\n1\n);\nadd\n(\ncur\n,\nsum\n(\nsumOfR\n,\n-\nsumOfL\n[\nx\n^\n1\n]));\n++\ncnt\n[\nx\n];\nadd\n(\nsumOfL\n[\nx\n],\ni\n+\n1\n);\n}\nadd\n(\nres\n,\nmul\n(\n1\n<<\nb\n,\ncur\n));\n}\ncout\n<<\nres\n<<\nendl\n;\n}"
+        }
+    ]
+}

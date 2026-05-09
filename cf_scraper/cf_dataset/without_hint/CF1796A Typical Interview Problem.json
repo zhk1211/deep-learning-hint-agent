@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe FB-string is formed as follows. Initially, it is empty. We go through all positive integers, starting from $ 1 $ , in ascending order, and do the following for each integer:\n\n- if the current integer is divisible by $ 3 $ , append F to the end of the FB-string;\n- if the current integer is divisible by $ 5 $ , append B to the end of the FB-string.\n\nNote that if an integer is divisible by both $ 3 $ and $ 5 $ , we append F, and then B, not in the opposite order.\n\nThe first $ 10 $ characters of the FB-string are FBFFBFFBFB: the first F comes from the integer $ 3 $ , the next character (B) comes from $ 5 $ , the next F comes from the integer $ 6 $ , and so on. It's easy to see that this string is infinitely long. Let $ f_i $ be the $ i $ -th character of FB-string; so, $ f_1 $ is F, $ f_2 $ is B, $ f_3 $ is F, $ f_4 $ is F, and so on.\n\nYou are given a string $ s $ , consisting of characters F and/or B. You have to determine whether it is a substring (contiguous subsequence) of the FB-string. In other words, determine if it is possible to choose two integers $ l $ and $ r $ ( $ 1 \\le l \\le r $ ) so that the string $ f_l f_{l+1} f_{l+2} \\dots f_r $ is exactly $ s $ .\n\nFor example:\n\n- FFB is a substring of the FB-string: if we pick $ l = 3 $ and $ r = 5 $ , the string $ f_3 f_4 f_5 $ is exactly FFB;\n- BFFBFFBF is a substring of the FB-string: if we pick $ l = 2 $ and $ r = 9 $ , the string $ f_2 f_3 f_4 \\dots f_9 $ is exactly BFFBFFBF;\n- BBB is not a substring of the FB-string.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 2046 $ ) — the number of test cases.\n\nEach test case consists of two lines. The first line contains one integer $ k $ ( $ 1 \\le k \\le 10 $ ) — the number of characters in $ s $ . The second line contains $ s $ , which is a string of exactly $ k $ characters. Each character of $ s $ is either F or B.\n\nOutput Format\nFor each test case, print YES if $ s $ is a substring of the FB-string, or NO otherwise.\n\nYou may print each letter in any case (YES, yes, Yes will all be recognized as positive answer, NO, no and nO will all be recognized as negative answer).\n\nExamples\nSample 1\nInput\n3\n3\nFFB\n8\nBFFBFFBF\n3\nBBB\nOutput\nYES\nYES\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nstring\nfb\n;\nint\ncur\n=\n1\n;\nwhile\n(\nfb\n.\nsize\n()\n<\n100\n)\n{\nif\n(\ncur\n%\n3\n==\n0\n)\nfb\n+=\n\"F\"\n;\nif\n(\ncur\n%\n5\n==\n0\n)\nfb\n+=\n\"B\"\n;\ncur\n++;\n}\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\ni\n++)\n{\nint\nk\n;\ncin\n>>\nk\n;\nstring\ns\n;\ncin\n>>\ns\n;\ncout\n<<\n(\nfb\n.\nfind\n(\ns\n)\n!=\nstring\n::\nnpos\n?\n\"YES\"\n:\n\"NO\"\n)\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

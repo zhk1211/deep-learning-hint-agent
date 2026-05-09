@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ computers in a row, all originally off, and Phoenix wants to turn all of them on. He will manually turn on computers one at a time. At any point, if computer $ i-1 $ and computer $ i+1 $ are both on, computer $ i $ $ (2 \\le i \\le n-1) $ will turn on automatically if it is not already on. Note that Phoenix cannot manually turn on a computer that already turned on automatically.\n\nIf we only consider the sequence of computers that Phoenix turns on manually, how many ways can he turn on all the computers? Two sequences are distinct if either the set of computers turned on manually is distinct, or the order of computers turned on manually is distinct. Since this number may be large, please print it modulo $ M $ .\n\nInput Format\nThe first line contains two integers $ n $ and $ M $ ( $ 3 \\le n \\le 400 $ ; $ 10^8 \\le M \\le 10^9 $ ) — the number of computers and the modulo. It is guaranteed that $ M $ is prime.\n\nOutput Format\nPrint one integer — the number of ways to turn on the computers modulo $ M $ .\n\nExamples\nSample 1\nInput\n3 100000007\nOutput\n6\n\nSample 2\nInput\n4 100000007\nOutput\n20\n\nSample 3\nInput\n400 234567899\nOutput\n20914007\n\nNote\nIn the first example, these are the $ 6 $ orders in which Phoenix can turn on all computers:\n\n- $ [1,3] $ . Turn on computer $ 1 $ , then $ 3 $ . Note that computer $ 2 $ turns on automatically after computer $ 3 $ is turned on manually, but we only consider the sequence of computers that are turned on manually.\n- $ [3,1] $ . Turn on computer $ 3 $ , then $ 1 $ .\n- $ [1,2,3] $ . Turn on computer $ 1 $ , $ 2 $ , then $ 3 $ .\n- $ [2,1,3] $\n- $ [2,3,1] $\n- $ [3,2,1] $"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nll MOD\n;\nint\nN\n;\nll dp\n[\n405\n][\n405\n];\nll fastexp\n(\nll b\n,\nll exp\n){\nif\n(\nexp\n==\n0\n)\nreturn\n1\n;\nll temp\n=\nfastexp\n(\nb\n,\nexp\n/\n2\n);\ntemp\n=(\ntemp\n*\ntemp\n)%\nMOD\n;\nif\n(\nexp\n%\n2\n==\n1\n)\ntemp\n*=\nb\n;\nreturn\ntemp\n%\nMOD\n;\n}\nll fact\n[\n405\n],\ninv\n[\n405\n],\nchoose\n[\n405\n][\n405\n],\npow2\n[\n405\n];\nvoid\nprecompute\n(){\nfact\n[\n0\n]=\n1\n;\ninv\n[\n0\n]=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nN\n;\ni\n++){\nfact\n[\ni\n]=(\nfact\n[\ni\n-\n1\n]*\ni\n)%\nMOD\n;\ninv\n[\ni\n]=\nfastexp\n(\nfact\n[\ni\n],\nMOD\n-\n2\n);\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nN\n;\ni\n++)\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\ni\n;\nj\n++)\nchoose\n[\ni\n][\nj\n]=((\nfact\n[\ni\n]*\ninv\n[\nj\n])%\nMOD\n*\ninv\n[\ni\n-\nj\n])%\nMOD\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nN\n;\ni\n++)\npow2\n[\ni\n]=\nfastexp\n(\n2\n,\ni\n);\n}\nint\nmain\n()\n{\ncin\n>>\nN\n>>\nMOD\n;\nprecompute\n();\ndp\n[\n0\n][\n0\n]=\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nN\n;\ni\n++){\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\ni\n;\nj\n++){\nfor\n(\nint\nk\n=\n1\n;\ni\n+\nk\n<=\nN\n;\nk\n++){\ndp\n[\ni\n+\nk\n+\n1\n][\nj\n+\nk\n]+=((\ndp\n[\ni\n][\nj\n]*\npow2\n[\nk\n-\n1\n])%\nMOD\n*\nchoose\n[\nj\n+\nk\n][\nk\n]);\ndp\n[\ni\n+\nk\n+\n1\n][\nj\n+\nk\n]%=\nMOD\n;\n}\n}\n}\nll ans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nN\n;\ni\n++)\nans\n=(\nans\n+\ndp\n[\nN\n+\n1\n][\ni\n])%\nMOD\n;\ncout\n<<\nans\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

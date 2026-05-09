@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have an array $ a_1,a_2, \\dots, a_n $ . Each element initially has value $ 0 $ and color $ 1 $ . You are also given $ q $ queries to perform:\n\n- Color $ l $ $ r $ $ c $ : Change the color of elements $ a_l,a_{l+1},\\cdots,a_r $ to $ c $ ( $ 1 \\le l \\le r \\le n $ , $ 1 \\le c \\le n $ ).\n- Add $ c $ $ x $ : Add $ x $ to values of all elements $ a_i $ ( $ 1 \\le i \\le n $ ) of color $ c $ ( $ 1 \\le c \\le n $ , $ -10^9 \\le x \\le 10^9 $ ).\n- Query $ i $ : Print $ a_i $ ( $ 1 \\le i \\le n $ ).\n\nInput Format\nThe first line of input contains two integers $ n $ and $ q $ ( $ 1 \\le n,q \\le 10^6 $ ) — the length of array $ a $ and the number of queries you have to perform.\n\nEach of the next $ q $ lines contains the query given in the form described in the problem statement.\n\nOutput Format\nPrint the answers to the queries of the third type on separate lines.\n\nExamples\nSample 1\nInput\n5 8\nColor 2 4 2\nAdd 2 2\nQuery 3\nColor 4 5 3\nColor 2 2 3\nAdd 3 3\nQuery 2\nQuery 5\nOutput\n2\n5\n3\n\nSample 2\nInput\n2 7\nAdd 1 7\nQuery 1\nAdd 2 4\nQuery 2\nColor 1 1 1\nAdd 1 1\nQuery 2\nOutput\n7\n7\n8\n\nNote\nThe first sample test is explained below. Blue, red and green represent colors $ 1 $ , $ 2 $ and $ 3 $ respectively.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1638E/fca750ad681aed552c7980359d7170f22a91379c.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "First, solve the problem for single-element updates."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Don't actually add to all elements of some color in an update. Instead, just set a reminder that you have to do so. When do you have to be careful?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "When you change color, remember to do the addition. Also, don't forget about the already set reminder on the new color. This is currently wrong because you are up to date. How do you fix it?"
+        },
+        {
+            "title": "Hint 4",
+            "content": "Moving to the range update problem, use a data structure to maintain maximal ranges colored in a single color. How do these color intervals change during a color operation? What's the actual time complexity?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        }
+    ]
+}

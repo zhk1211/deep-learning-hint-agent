@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nEven a cat has things it can do that AI cannot.\n\n— Fei-Fei Li\n\nYou are given $ m $ arrays of positive integers. Each array is of even length.\n\nYou need to split all these integers into two equal multisets $ L $ and $ R $ , that is, each element of each array should go into one of two multisets (but not both). Additionally, for each of the $ m $ arrays, exactly half of its elements should go into $ L $ , and the rest should go into $ R $ .\n\nGive an example of such a division or determine that no such division exists.\n\nInput Format\nThe first line contains an integer $ m $ ( $ 1 \\le m \\le 10 ^ 5 $ ) — the number of arrays.\n\nThe next $ 2 \\cdot m $ lines contain descriptions of the arrays.\n\nFor each array, the first line contains an even integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10 ^ 5 $ ) — the length of the array. The second line consists of $ n $ space-separated integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10 ^ 9 $ ) — array elements.\n\nIt is guaranteed that the sum of $ n $ over all arrays does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nIf the answer exists, print \"YES\", and then print $ m $ lines.\n\nOn each line, for each element, print the letter \"L\" or \"R\" (capitalized, without spaces), depending on which multiset the element should go into.\n\nIf there is no answer, print \"NO\" on the only line.\n\nExamples\nSample 1\nInput\n3\n2\n1 2\n4\n1 2 3 3\n6\n1 1 2 2 3 3\nOutput\nYES\nRL\nLRLR\nRLLRRL\n\nNote\nIn the first array, we add the first element to $ R $ and the second to $ L $ . Now $ L = \\{2\\} $ , and $ R = \\{1\\} $ .\n\nIn the second array, we add the first and third elements to $ L $ and the rest to $ R $ . Now $ L = \\{1, 2, 3\\} $ and $ R = \\{1, 2, 3\\} $ .\n\nIn the third array, we add elements 2, 3, and 6 to $ L $ , and others — to $ R $ . As a result, $ L = R = \\{1, 1, 2, 2, 3, 3\\} $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "In what cases is the answer definitely NO?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "The lengths of all arrays are even numbers, and each number appears an even number of times in total. There are suspiciously many even numbers..."
+        },
+        {
+            "title": "Hint 3",
+            "content": "An Euler circuit is a circuit that passes through all edges of a graph exactly once (or a union of several circuits if the graph is disconnected). It turns out that an Euler circuit exists if and only if the degree of each vertex is even."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Construct some graph such that the degree of each of its vertices is even, find a directed Eulerian circuit in it, and reconstruct the answer to the problem using this circuit. What do the edges of such graph correspond to?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "145468656\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nlen\n(\nx\n)\n(\nint\n)\n(\nx\n).\nsize\n()\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\n#define\nendl\n\"\\n\"\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n4e5\n+\n100\n,\nH\n=\n2e5\n+\n50\n;\nvector\n<\npair\n<\nint\n,\nint\n>>\ng\n[\nN\n];\nstring\nans\n[\nN\n];\nint\npos\n[\nN\n];\nvoid\ndfs\n(\nint\nv\n)\n{\nif\n(\npos\n[\nv\n]\n==\n0\n)\n{\nans\n[\nv\n]\n=\nstring\n(\nlen\n(\ng\n[\nv\n]),\n'L'\n);\n}\nwhile\n(\npos\n[\nv\n]\n<\nlen\n(\ng\n[\nv\n]))\n{\nauto\n[\ni\n,\nind\n]\n=\ng\n[\nv\n][\npos\n[\nv\n]];\nif\n(\ni\n==\n-\n1\n)\n{\npos\n[\nv\n]++;\ncontinue\n;\n}\ng\n[\ni\n][\nind\n].\nfirst\n=\n-\n1\n,\ng\n[\nv\n][\npos\n[\nv\n]].\nfirst\n=\n-\n1\n;\nif\n(\nv\n<\nH\n)\n{\nans\n[\nv\n][\npos\n[\nv\n]]\n=\n'R'\n;\n}\npos\n[\nv\n]++;\ndfs\n(\ni\n);\n}\n}\nsigned\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\nm\n;\ncin\n>>\nm\n;\nmap\n<\nint\n,\nint\n>\nind\n,\ncnt\n;\nint\nfre_ind\n=\n0\n;\nvector\n<\nvector\n<int>\n>\nnums\n(\nm\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nm\n;\ni\n++)\n{\nint\nn\n;\ncin\n>>\nn\n;\nfor\n(\nint\n_\n=\n0\n;\n_\n<\nn\n;\n_\n++)\n{\nint\nx\n;\ncin\n>>\nx\n;\nif\n(!\nind\n.\ncount\n(\nx\n))\n{\nind\n[\nx\n]\n=\nfre_ind\n++;\n}\nx\n=\nind\n[\nx\n];\ncnt\n[\nx\n]++;\nnums\n[\ni\n].\npush_back\n(\nx\n);\ng\n[\ni\n].\nemplace_back\n(\nx\n+\nH\n,\nlen\n(\ng\n[\nx\n+\nH\n]));\ng\n[\nx\n+\nH\n].\nemplace_back\n(\ni\n,\nlen\n(\ng\n[\ni\n])\n-\n1\n);\n}\n}\nfor\n(\nauto\n[\nnum\n,\ncn\n]\n:\ncnt\n)\n{\nif\n(\ncn\n%\n2\n==\n1\n)\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\nreturn\n0\n;\n}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nN\n;\ni\n++)\n{\ndfs\n(\ni\n);\n}\ncout\n<<\n\"YES\"\n<<\nendl\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nm\n;\ni\n++)\n{\ncout\n<<\nans\n[\ni\n]\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

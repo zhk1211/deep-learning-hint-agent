@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a permutation $ p_1, p_2, \\ldots, p_n $ of length $ n $ . You have to choose two integers $ l,r $ ( $ 1 \\le l \\le r \\le n $ ) and reverse the subsegment $ [l,r] $ of the permutation. The permutation will become $ p_1,p_2, \\dots, p_{l-1},p_r,p_{r-1}, \\dots, p_l,p_{r+1},p_{r+2}, \\dots ,p_n $ .\n\nFind the lexicographically smallest permutation that can be obtained by performing exactly one reverse operation on the initial permutation.\n\nNote that for two distinct permutations of equal length $ a $ and $ b $ , $ a $ is lexicographically smaller than $ b $ if at the first position they differ, $ a $ has the smaller element.\n\nA permutation is an array consisting of $ n $ distinct integers from $ 1 $ to $ n $ in arbitrary order. For example, $ [2,3,1,5,4] $ is a permutation, but $ [1,2,2] $ is not a permutation ( $ 2 $ appears twice in the array) and $ [1,3,4] $ is also not a permutation ( $ n=3 $ but there is $ 4 $ in the array).\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 500 $ ) — the number of test cases. Description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 500 $ ) — the length of the permutation.\n\nThe second line of each test case contains $ n $ integers $ p_1, p_2, \\dots, p_n $ ( $ 1 \\le p_i \\le n $ ) — the elements of the permutation.\n\nOutput Format\nFor each test case print the lexicographically smallest permutation you can obtain.\n\nExamples\nSample 1\nInput\n4\n1\n1\n3\n2 1 3\n4\n1 4 2 3\n5\n1 2 3 4 5\nOutput\n1\n1 2 3\n1 2 4 3\n1 2 3 4 5\n\nNote\nIn the first test case, the permutation has length $ 1 $ , so the only possible segment is $ [1,1] $ . The resulting permutation is $ [1] $ .\n\nIn the second test case, we can obtain the identity permutation by reversing the segment $ [1,2] $ . The resulting permutation is $ [1,2,3] $ .\n\nIn the third test case, the best possible segment is $ [2,3] $ . The resulting permutation is $ [1,2,4,3] $ .\n\nIn the fourth test case, there is no lexicographically smaller permutation, so we can leave it unchanged by choosing the segment $ [1,1] $ . The resulting permutation is $ [1,2,3,4,5] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "When is it best for the permutation to remain unchanged?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "What elements are obviously optimal and should remain as they are?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Find the first non-optimal element. What's the best way to fix it?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Let $$$p_i$$$ be the first element such that $$$p_i \\neq i$$$. For the prefix of elements $$$p_1=1,p_2=2, \\dots ,p_{i-1}=i-1$$$ we do not need to change anything because it is already the minimum lexicographic, but we would like to have $$$i$$$ instead of $$$p_i$$$ on that position. The solution is to reverse segment $$$[i,j]$$$, where $$$p_j=i$$$.\nNotice that $$$i \\lt j$$$ since $$$p_k=k$$$ for every $$$k \\lt i$$$, so $$$p_k \\lt p_j=i$$$ for every $$$k \\lt i$$$.\nTime complexity: $$$O(n)$$$."
+        }
+    ]
+}

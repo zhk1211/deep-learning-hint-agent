@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYuezheng Ling gives Luo Tianyi a tree which has $ n $ nodes, rooted at $ 1 $ .\n\nLuo Tianyi will tell you that the parent of the $ i $ -th node is $ a_i $ ( $ 1 \\leq a_i<i $ for $ 2 \\le i \\le n $ ), and she will ask you to perform $ q $ queries of $ 2 $ types:\n\n1. She'll give you three integers $ l $ , $ r $ and $ x $ ( $ 2 \\le l \\le r \\le n $ , $ 1 \\le x \\le 10^5 $ ). You need to replace $ a_i $ with $ \\max(a_i-x,1) $ for all $ i $ with $ l \\leq i \\leq r $ .\n2. She'll give you two integers $ u $ , $ v $ ( $ 1 \\le u, v \\le n $ ). You need to find the [LCA](https://en.wikipedia.org/wiki/Lowest_common_ancestor) of nodes $ u $ and $ v $ (their lowest common ancestor).\n\nInput Format\nThe first line contains two integers $ n $ and $ q $ ( $ 2\\leq n,q \\leq 10^5 $ ) — the number of nodes and the number of queries, respectively.\n\nThe second line contains $ n-1 $ integers $ a_2, a_3,\\dots, a_n $ ( $ 1 \\le a_i < i $ ), where $ a_i $ is the parent of the node $ i $ .\n\nNext $ q $ lines contain queries. For each query, the first integer of each line is $ t $ ( $ t = 1 $ or $ 2 $ ) — the type of the query.\n\nIf $ t = 1 $ , this represents the query of the first type. Then, three integers will follow: $ l $ , $ r $ , $ x $ ( $ 2 \\le l \\le r \\le n $ , $ 1 \\le x \\le 10^5 $ ), meaning that you have to replace $ a_i $ with $ \\max(a_i-x,1) $ for all $ i $ with $ l \\leq i \\leq r $ .\n\nIf $ t = 2 $ , this represents the query of the second type. Then, two integers will follow: $ u $ and $ v $ ( $ 1 \\le u, v \\le n $ ), and you have to find the LCA of $ u $ and $ v $ .\n\nIt's guaranteed that there is at least one query of the second type.\n\nOutput Format\nFor each query of the second type output answer on a new line.\n\nExamples\nSample 1\nInput\n6 4\n1 2 3 3 4\n2 3 4\n1 2 3 1\n2 5 6\n2 2 3\nOutput\n3\n3\n1\n\nNote\nThe tree in example is shown below.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1491H/818163092787871fe6b5fd7889d250d0fa5e8087.png)After the query of the first type, the tree changes and is looking as shown below.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1491H/c2a6cdaaa81fc0062a546706c09a18121fedd155.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "The complexity is $$$\\mathcal O(n\\sqrt{n})$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Divide the nodes into $$$\\sqrt{n}$$$ blocks. The $$$i$$$-th block will contain the nodes in $$$[(i-1) \\sqrt{n}+1,i \\sqrt{n}]$$$.\nLet's define $$$f_x$$$ as an ancestor of $$$x$$$ such that $$$f_x$$$ is in the same block as $$$x$$$ and $$$a_{f_x}$$$ is not in the same block as $$$x$$$.\nNotice that for a given block, if all $$$a_x$$$ is not in the same block as $$$x$$$, then $$$f_x=x$$$.\nSo, we do not have to re-compute all values of $$$f_x$$$ for a certain block if $$$\\forall x, x-a_x \\geq \\sqrt n$$$ in this block.\nWhen we update a range, we will update some ranges fully and update at most $$$2$$$ ranges partially. Let's show that only $$$O(n+q)$$$ re-computations will happen.\nFor a certain block, if it is completely contained in an update, the value of $$$x-a_x$$$ will increase by $$$1$$$, a single block will be re-computed by at most $$$O(\\sqrt n)$$$ of such updates, which will contribute $$$O(\\sqrt n \\cdot \\sqrt n)=O(n)$$$ re-computations.\nFor blocks that are partially updated by an update, such things will only happen at most $$$2q$$$ times, therefore we have a bound of $$$O(q)$$$ re-computations from such updates.\nMaintaining $$$f_x$$$, querying can be easily done in $$$O(\\sqrt n)$$$."
+        }
+    ]
+}

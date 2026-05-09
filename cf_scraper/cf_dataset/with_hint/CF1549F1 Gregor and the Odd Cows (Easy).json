@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "\"Enclosed cows\" are just interior points. It's clear that Pick's Theorem will be useful."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Manipulate Pick's Theorem into a modular equation."
+        },
+        {
+            "title": "Hint 3",
+            "content": "The number of boundary points between $$$(x_1,y_1)$$$ and $$$(x_2,y_2)$$$ is $$$\\gcd{(x_1-x_2,y_1-y_2)}$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Working with relevant formulas, find a simple condition between two points, such that they can be treated as equivalent."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Every set of 3 fenceposts forms a lattice triangle We want to find the number of such lattice triangles that have an odd number of interior points. Since all the coordinates are even, the area is automatically even as well. By Pick's Theorem, $$$area=I+\\frac{B}{2}-1$$$, so $$$2\\cdot area=2I+B-2$$$. $$$I$$$ is the number of interior points, and $$$B$$$ is the number of boundary points, for an arbitrary triangle formed by 3 fenceposts.\nLet $$$A=2\\cdot area$$$, so $$$A=2I+B-2$$$. Since $$$I$$$ is odd, taking both sides modulo 4 we get that $$$A \\equiv B\\mod{4}$$$. Since the area is an even integer, $$$A$$$ is a multiple of 4, so we get that $$$A\\equiv B\\equiv 0\\mod{4}$$$.\nLet's define the $$$\\textbf{boundary count}$$$ of a segment to be the number of lattice points on it, minus 1. It can be proven that the boundary count of the segment connecting $$$(x_1,y_1)$$$ and $$$(x_2,y_2)$$$ is $$$\\gcd{(|x_2-x_1|,|y_2-y_1|)}$$$.\nIn this problem, we only care about what the boundary count is modulo 4. Since all the coordinates are even, the GCD is guaranteed to be even, so the boundary count is either 0 or 2 mod 4. For the segment connecting $$$(x_1,y_1)$$$ and $$$(x_2,y_2)$$$ call its boundary count $$$b$$$.\n$$$b\\equiv 0\\mod{4}$$$ IFF $$$x_1\\equiv x_2 \\mod{4}$$$ AND $$$y_1\\equiv y_2 \\mod{4}$$$.\n$$$b\\equiv 2\\mod{4}$$$ in all other situations.\n$$$\\textbf{Key Idea:}$$$ Turn fence post $$$(x,y)$$$ into $$$(x\\mod{4},y\\mod{4})$$$.\nWriting the area of a triangle via the shoelace formula, it becomes obvious that the area mod 4 won't change when the coordinates are modded by 4. Additionally, by our work above, $$$B$$$ (the sum of the boundary counts for the 3 sides of the triangle) is entirely dependent on the coordinates mod 4.\nLet\ncnt[x][y]\nbe an array counting the number of points that fall into each category based on the key idea above. Since all coordinates are even, only 4 elements in the $$$cnt$$$ array will be nonzero. We can fix each point of the triangle into one of the categories, quickly calculuate $$$A$$$ and $$$B$$$, and solve the problem. Be careful not to overcount triangles.\nThe time complexity is $$$\\mathcal{O}(N)$$$, with a small constant for the counting."
+        }
+    ]
+}

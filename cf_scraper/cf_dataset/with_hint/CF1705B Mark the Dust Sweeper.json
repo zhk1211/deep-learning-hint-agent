@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMark is cleaning a row of $ n $ rooms. The $ i $ -th room has a nonnegative dust level $ a_i $ . He has a magical cleaning machine that can do the following three-step operation.\n\n- Select two indices $ i<j $ such that the dust levels $ a_i $ , $ a_{i+1} $ , $ \\dots $ , $ a_{j-1} $ are all strictly greater than $ 0 $ .\n- Set $ a_i $ to $ a_i-1 $ .\n- Set $ a_j $ to $ a_j+1 $ .\n\nMark's goal is to make $ a_1 = a_2 = \\ldots = a_{n-1} = 0 $ so that he can nicely sweep the $ n $ -th room. Determine the minimum number of operations needed to reach his goal.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1\\leq t\\leq 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2\\leq n\\leq 2\\cdot 10^5 $ ) — the number of rooms.\n\nThe second line of each test case contains $ n $ integers $ a_1 $ , $ a_2 $ , ..., $ a_n $ ( $ 0\\leq a_i\\leq 10^9 $ ) — the dust level of each room.\n\nIt is guaranteed that the sum of $ n $ across all test cases does not exceed $ 2\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a line containing a single integer — the minimum number of operations. It can be proven that there is a sequence of operations that meets the goal.\n\nExamples\nSample 1\nInput\n4\n3\n2 0 0\n5\n0 2 0 2 0\n6\n2 0 3 0 4 6\n4\n0 0 0 10\nOutput\n3\n5\n11\n0\n\nNote\nIn the first case, one possible sequence of operations is as follows.\n\n- Choose $ i=1 $ and $ j=2 $ , yielding the array $ [1,1,0] $ .\n- Choose $ i=1 $ and $ j=3 $ , yielding the array $ [0,1,1] $ .\n- Choose $ i=2 $ and $ j=3 $ , yielding the array $ [0,0,2] $ .\n\nAt this point, $ a_1=a_2=0 $ , completing the process.In the second case, one possible sequence of operations is as follows.\n\n- Choose $ i=4 $ and $ j=5 $ , yielding the array $ [0,2,0,1,1] $ .\n- Choose $ i=2 $ and $ j=3 $ , yielding the array $ [0,1,1,1,1] $ .\n- Choose $ i=2 $ and $ j=5 $ , yielding the array $ [0,0,1,1,2] $ .\n- Choose $ i=3 $ and $ j=5 $ , yielding the array $ [0,0,0,1,3] $ .\n- Choose $ i=4 $ and $ j=5 $ , yielding the array $ [0,0,0,0,4] $ .\n\nIn the last case, the array already satisfies the condition."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "The optimal way is to fill all the zero entries first."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Delete the leading zeroes in the array $$$a$$$ (i.e., the first $$$t$$$ numbers of $$$a$$$ that are zero) so that now $$$a_1\\ne 0$$$. Let $$$k$$$ be the number of $$$0$$$'s in $$$a_1,a_2,\\dots,a_{n-1}$$$. The answer is\n$$$(a_1+a_2+\\dots + a_{n-1}) + k.$$$\nTo see why, let Mark keep filling the\nholes\n(rooms with dust level $$$0$$$) first by subtracting the first nonzero index and changing the first zero index to $$$1$$$. This takes $$$k$$$ moves to fill all zeroes in $$$a_1,a_2,\\dots,a_{n-1}$$$. Then, we can start moving, from left to right, all dust to the $$$n$$$-th room, taking $$$a_1+a_2+\\dots+a_{n-1}$$$ moves.\nFinally, we argue that this is the minimum number of moves. To that end, we prove that each move decreases the answer by at most $$$1$$$. We consider two cases.\nIf a move has $$$j=n$$$, then it decreases $$$a_1+a_2+\\dots+a_{n-1}$$$ by $$$1$$$ but does not decrease $$$k$$$.\nIf $$$j\\ne n$$$, then the move doesn't decrease $$$a_1+a_2+\\dots+a_{n-1}$$$ and decreases $$$k$$$ by at most $$$1$$$.\nThus, we are done. The time complexity is $$$O(n)$$$."
+        }
+    ]
+}

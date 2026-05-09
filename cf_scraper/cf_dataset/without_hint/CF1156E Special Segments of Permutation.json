@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a permutation $ p $ of $ n $ integers $ 1 $ , $ 2 $ , ..., $ n $ (a permutation is an array where each element from $ 1 $ to $ n $ occurs exactly once).\n\nLet's call some subsegment $ p[l, r] $ of this permutation special if $ p_l + p_r = \\max \\limits_{i = l}^{r} p_i $ . Please calculate the number of special subsegments.\n\nInput Format\nThe first line contains one integer $ n $ ( $ 3 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line contains $ n $ integers $ p_1 $ , $ p_2 $ , ..., $ p_n $ ( $ 1 \\le p_i \\le n $ ). All these integers are pairwise distinct.\n\nOutput Format\nPrint the number of special subsegments of the given permutation.\n\nExamples\nSample 1\nInput\n5\n3 4 1 5 2\nOutput\n2\n\nSample 2\nInput\n3\n1 3 2\nOutput\n1\n\nNote\nSpecial subsegments in the first example are $ [1, 5] $ and $ [1, 3] $ .\n\nThe only special subsegment in the second example is $ [1, 3] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n200043\n;\nint\nlf\n[\nN\n];\nint\nrg\n[\nN\n];\nint\nn\n;\nint\nans\n=\n0\n;\nint\np\n[\nN\n];\nint\nq\n[\nN\n];\nvoid\nupdate\n(\nint\nl\n,\nint\nr\n,\nint\nl2\n,\nint\nr2\n,\nint\nsum\n)\n{\nfor\n(\nint\ni\n=\nl\n;\ni\n<=\nr\n;\ni\n++)\n{\nint\no\n=\nsum\n-\np\n[\ni\n];\nif\n(\no\n>=\n1\n&&\no\n<=\nn\n&&\nl2\n<=\nq\n[\no\n]\n&&\nq\n[\no\n]\n<=\nr2\n)\nans\n++;\n}\n}\nint\nmain\n()\n{\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nscanf\n(\n\"%d\"\n,\n&\np\n[\ni\n]);\nq\n[\np\n[\ni\n]]\n=\ni\n;\n}\nstack\n<\npair\n<\nint\n,\nint\n>\n>\ns\n;\ns\n.\npush\n(\nmake_pair\n(\nn\n+\n1\n,\n-\n1\n));\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nwhile\n(\ns\n.\ntop\n().\nfirst\n<\np\n[\ni\n])\ns\n.\npop\n();\nlf\n[\ni\n]\n=\ns\n.\ntop\n().\nsecond\n;\ns\n.\npush\n(\nmake_pair\n(\np\n[\ni\n],\ni\n));\n}\nwhile\n(!\ns\n.\nempty\n())\ns\n.\npop\n();\ns\n.\npush\n(\nmake_pair\n(\nn\n+\n1\n,\nn\n));\nfor\n(\nint\ni\n=\nn\n-\n1\n;\ni\n>=\n0\n;\ni\n--)\n{\nwhile\n(\ns\n.\ntop\n().\nfirst\n<\np\n[\ni\n])\ns\n.\npop\n();\nrg\n[\ni\n]\n=\ns\n.\ntop\n().\nsecond\n;\ns\n.\npush\n(\nmake_pair\n(\np\n[\ni\n],\ni\n));\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\n//\tcerr << i << \" \" << lf[i] << \" \" << rg[i] << endl;\nint\nlenl\n=\ni\n-\nlf\n[\ni\n]\n-\n1\n;\nint\nlenr\n=\nrg\n[\ni\n]\n-\ni\n-\n1\n;\nif\n(\nlenl\n==\n0\n||\nlenr\n==\n0\n)\ncontinue\n;\nif\n(\nlenl\n<\nlenr\n)\nupdate\n(\nlf\n[\ni\n]\n+\n1\n,\ni\n-\n1\n,\ni\n+\n1\n,\nrg\n[\ni\n]\n-\n1\n,\np\n[\ni\n]);\nelse\nupdate\n(\ni\n+\n1\n,\nrg\n[\ni\n]\n-\n1\n,\nlf\n[\ni\n]\n+\n1\n,\ni\n-\n1\n,\np\n[\ni\n]);\n}\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

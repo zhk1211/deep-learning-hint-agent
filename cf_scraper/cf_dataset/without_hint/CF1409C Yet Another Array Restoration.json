@@ -1,0 +1,27 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWe have a secret array. You don't know this array and you have to restore it. However, you know some facts about this array:\n\n- The array consists of $ n $ distinct positive (greater than $ 0 $ ) integers.\n- The array contains two elements $ x $ and $ y $ (these elements are known for you) such that $ x < y $ .\n- If you sort the array in increasing order (such that $ a_1 < a_2 < \\ldots < a_n $ ), differences between all adjacent (consecutive) elements are equal (i.e. $ a_2 - a_1 = a_3 - a_2 = \\ldots = a_n - a_{n-1}) $ .\n\nIt can be proven that such an array always exists under the constraints given below.\n\nAmong all possible arrays that satisfy the given conditions, we ask you to restore one which has the minimum possible maximum element. In other words, you have to minimize $ \\max(a_1, a_2, \\dots, a_n) $ .\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe only line of the test case contains three integers $ n $ , $ x $ and $ y $ ( $ 2 \\le n \\le 50 $ ; $ 1 \\le x < y \\le 50 $ ) — the length of the array and two elements that are present in the array, respectively.\n\nOutput Format\nFor each test case, print the answer: $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ), where $ a_i $ is the $ i $ -th element of the required array. If there are several answers, you can print any (it also means that the order of elements doesn't matter).\n\nIt can be proven that such an array always exists under the given constraints.\n\nExamples\nSample 1\nInput\n5\n2 1 49\n5 20 50\n6 20 50\n5 3 8\n9 13 22\nOutput\n1 49\n20 40 30 50 10\n26 32 20 38 44 50\n8 23 18 13 3\n1 10 13 4 19 22 25 16 7"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Gassa)",
+            "content": "// Author: Ivan Kazmenko (\ngassa@mail.ru\n)\nmodule\nsolution\n;\nimport\nstd\n.\nalgorithm\n;\nimport\nstd\n.\nconv\n;\nimport\nstd\n.\nrange\n;\nimport\nstd\n.\nstdio\n;\nimport\nstd\n.\nstring\n;\nvoid\nmain\n()\n{\nauto\ntests\n=\nreadln\n.\nstrip\n.\nto\n!(\nint\n);\nforeach\n(\ntest\n;\n0.\n.\ntests\n)\n{\nint\nn\n,\nx\n,\ny\n;\nreadf\n!(\n\" %s %s %s\"\n)\n(\nn\n,\nx\n,\ny\n);\nauto\nanswer\n=\nint\n.\nmax\n.\nrepeat\n(\nn\n).\narray\n;\nforeach\n(\nstart\n;\n1.\n.\n51\n)\n{\nforeach\n(\nd\n;\n1.\n.\n51\n)\n{\nauto\na\n=\niota\n(\nstart\n,\nstart\n+\nd\n*\nn\n,\nd\n).\narray\n;\nif\n(\na\n.\ncanFind\n(\nx\n)\n&&\na\n.\ncanFind\n(\ny\n))\n{\nif\n(\nanswer\n.\nback\n>\na\n.\nback\n)\n{\nanswer\n=\na\n;\n}\n}\n}\n}\nwritefln\n!(\n\"%(%s %)\"\n)\n(\nanswer\n);\n}\n}"
+        },
+        {
+            "title": "Solution (vovuh)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nx\n,\ny\n;\ncin\n>>\nn\n>>\nx\n>>\ny\n;\nvector\n<int>\nans\n;\nfor\n(\nint\nd\n=\n1\n;\nd\n<=\ny\n-\nx\n;\n++\nd\n)\n{\nif\n((\ny\n-\nx\n)\n%\nd\n!=\n0\n)\ncontinue\n;\nvector\n<int>\nres\n;\nbool\nfoundx\n=\nfalse\n;\nint\ncur\n=\ny\n;\nint\nneed\n=\nn\n;\nwhile\n(\ncur\n>=\n1\n&&\nneed\n>\n0\n)\n{\nres\n.\npush_back\n(\ncur\n);\nfoundx\n|=\ncur\n==\nx\n;\n--\nneed\n;\ncur\n-=\nd\n;\n}\ncur\n=\ny\n;\nwhile\n(\nneed\n>\n0\n)\n{\ncur\n+=\nd\n;\nres\n.\npush_back\n(\ncur\n);\n--\nneed\n;\n}\nsort\n(\nres\n.\nbegin\n(),\nres\n.\nend\n());\nif\n(\nneed\n==\n0\n&&\nfoundx\n)\n{\nif\n(\nans\n.\nempty\n()\n||\nans\n.\nback\n()\n>\nres\n.\nback\n())\n{\nans\n=\nres\n;\n}\n}\n}\nassert\n(!\nans\n.\nempty\n());\nfor\n(\nauto\nit\n:\nans\n)\ncout\n<<\nit\n<<\n\" \"\n;\ncout\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Solution (Rox)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\ntcs\n;\ncin\n>>\ntcs\n;\nwhile\n(\ntcs\n--)\n{\nint\nn\n,\nx\n,\ny\n;\ncin\n>>\nn\n>>\nx\n>>\ny\n;\nint\ndiff\n=\ny\n-\nx\n;\nfor\n(\nint\ndelta\n=\n1\n;\ndelta\n<=\ndiff\n;\n++\ndelta\n)\n{\nif\n(\ndiff\n%\ndelta\n)\ncontinue\n;\nif\n(\ndiff\n/\ndelta\n+\n1\n>\nn\n)\ncontinue\n;\nint\nk\n=\nmin\n((\ny\n-\n1\n)\n/\ndelta\n,\nn\n-\n1\n);\nint\na0\n=\ny\n-\nk\n*\ndelta\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncout\n<<\n(\na0\n+\ni\n*\ndelta\n)\n<<\n' '\n;\n}\ncout\n<<\nendl\n;\nbreak\n;\n}\n}\n}"
+        }
+    ]
+}

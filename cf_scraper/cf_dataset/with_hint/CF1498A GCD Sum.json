@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe $ \\text{ $ gcdSum $ } $ of a positive integer is the $ gcd $ of that integer with its sum of digits. Formally, $ \\text{ $ gcdSum $ }(x) = gcd(x, \\text{ sum of digits of } x) $ for a positive integer $ x $ . $ gcd(a, b) $ denotes the greatest common divisor of $ a $ and $ b $ — the largest integer $ d $ such that both integers $ a $ and $ b $ are divisible by $ d $ .\n\nFor example: $ \\text{ $ gcdSum $ }(762) = gcd(762, 7 + 6 + 2)=gcd(762,15) = 3 $ .\n\nGiven an integer $ n $ , find the smallest integer $ x \\ge n $ such that $ \\text{ $ gcdSum $ }(x) > 1 $ .\n\nInput Format\nThe first line of input contains one integer $ t $ $ (1 \\le t \\le 10^4) $ — the number of test cases.\n\nThen $ t $ lines follow, each containing a single integer $ n $ $ (1 \\le n \\le 10^{18}) $ .\n\nAll test cases in one test are different.\n\nOutput Format\nOutput $ t $ lines, where the $ i $ -th line is a single integer containing the answer to the $ i $ -th test case.\n\nExamples\nSample 1\nInput\n3\n11\n31\n75\nOutput\n12\n33\n75\n\nNote\nLet us explain the three test cases in the sample.\n\nTest case 1: $ n = 11 $ :\n\n$ \\text{ $ gcdSum $ }(11) = gcd(11, 1 + 1) = gcd(11,\\ 2) = 1 $ .\n\n$ \\text{ $ gcdSum $ }(12) = gcd(12, 1 + 2) = gcd(12,\\ 3) = 3 $ .\n\nSo the smallest number $ \\ge 11 $ whose $ gcdSum $ $ > 1 $ is $ 12 $ .\n\nTest case 2: $ n = 31 $ :\n\n$ \\text{ $ gcdSum $ }(31) = gcd(31, 3 + 1) = gcd(31,\\ 4) = 1 $ .\n\n$ \\text{ $ gcdSum $ }(32) = gcd(32, 3 + 2) = gcd(32,\\ 5) = 1 $ .\n\n$ \\text{ $ gcdSum $ }(33) = gcd(33, 3 + 3) = gcd(33,\\ 6) = 3 $ .\n\nSo the smallest number $ \\ge 31 $ whose $ gcdSum $ $ > 1 $ is $ 33 $ .\n\nTest case 3: $ \\ n = 75 $ :\n\n$ \\text{ $ gcdSum $ }(75) = gcd(75, 7 + 5) = gcd(75,\\ 12) = 3 $ .\n\nThe $ \\text{ $ gcdSum $ } $ of $ 75 $ is already $ > 1 $ . Hence, it is the answer."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Can you think of the simplest properties that relate a number and its sum of digits?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Note that if $$$X$$$ is a multiple of 3, then\nboth\n$$$X$$$ as well as the sum of digits of $$$X$$$ are a multiple of 3! Can you put this property to use here?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "If $$$X$$$ is a multiple of 3, then $$$\\texttt{gcd-sum}(X) \\ge 3$$$. Therefore, we are guaranteed that at least every third number will satisfy the constraints required by our problem $$$(\\texttt{gcd-sum}(X) \\gt 1)$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Therefore, for the input $$$n$$$, we can simply check which one of $$$n$$$, $$$n+1$$$, and $$$n+2$$$ has its gcd-sum $$$ \\gt 1$$$, and print the lowest of them."
+        },
+        {
+            "title": "C++ solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nlong\nlong\nint\ngcd_sum\n(\nlong\nlong\nint\nnum\n)\n{\n// returns gcd-sum\nlong\nlong\nint\ntmp\n=\nnum\n,\ndigitsum\n=\n0\n;\nwhile\n(\ntmp\n>\n0\n)\n{\ndigitsum\n+=\ntmp\n%\n10\n;\ntmp\n/=\n10\n;\n}\nlong\nlong\nint\ngcd\n=\n__gcd\n(\nnum\n,\ndigitsum\n);\nreturn\ngcd\n;\n}\nint\nmain\n(\nvoid\n)\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nlong\nlong\nint\nn\n;\ncin\n>>\nn\n;\nif\n(\ngcd_sum\n(\nn\n)\n!=\n1\n)\n{\ncout\n<<\nn\n<<\nendl\n;\n}\nelse\nif\n(\ngcd_sum\n(\nn\n+\n1\n)\n!=\n1\n)\n{\ncout\n<<\nn\n+\n1\n<<\nendl\n;\n}\nelse\nif\n(\ngcd_sum\n(\nn\n+\n2\n)\n!=\n1\n)\n{\ncout\n<<\nn\n+\n2\n<<\nendl\n;\n}\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Python solution",
+            "content": "from\nmath\nimport\ngcd\ndef\nvalid\n(\nx\n):\nreturn\ngcd\n(\nx\n,\nsum\n([\nord\n(\nc\n)\n-\nord\n(\n'0'\n)\nfor\nc\nin\nstr\n(\nx\n)]))\n!=\n1\nt\n=\nint\n(\ninput\n())\nwhile\nt\n>\n0\n:\nt\n-=\n1\nn\n=\nint\n(\ninput\n())\nwhile\nnot\nvalid\n(\nn\n):\nn\n+=\n1\nprint\n(\nn\n)"
+        }
+    ]
+}

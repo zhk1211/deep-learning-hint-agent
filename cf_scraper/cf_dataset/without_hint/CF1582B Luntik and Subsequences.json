@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLuntik came out for a morning stroll and found an array $ a $ of length $ n $ . He calculated the sum $ s $ of the elements of the array ( $ s= \\sum_{i=1}^{n} a_i $ ). Luntik calls a subsequence of the array $ a $ nearly full if the sum of the numbers in that subsequence is equal to $ s-1 $ .\n\nLuntik really wants to know the number of nearly full subsequences of the array $ a $ . But he needs to come home so he asks you to solve that problem!\n\nA sequence $ x $ is a subsequence of a sequence $ y $ if $ x $ can be obtained from $ y $ by deletion of several (possibly, zero or all) elements.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases. The next $ 2 \\cdot t $ lines contain descriptions of test cases. The description of each test case consists of two lines.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 60 $ ) — the length of the array.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le 10^9 $ ) — the elements of the array $ a $ .\n\nOutput Format\nFor each test case print the number of nearly full subsequences of the array.\n\nExamples\nSample 1\nInput\n5\n5\n1 2 3 4 5\n2\n1000 1000\n2\n1 0\n5\n3 0 2 1 1\n5\n2 1 0 3 0\nOutput\n1\n0\n2\n4\n4\n\nNote\nIn the first test case, $ s=1+2+3+4+5=15 $ , only $ (2,3,4,5) $ is a nearly full subsequence among all subsequences, the sum in it is equal to $ 2+3+4+5=14=15-1 $ .\n\nIn the second test case, there are no nearly full subsequences.\n\nIn the third test case, $ s=1+0=1 $ , the nearly full subsequences are $ (0) $ and $ () $ (the sum of an empty subsequence is $ 0 $ )."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (74TrAkToR)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\nint\nt\n,\nn\n,\nx\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\ncin\n>>\nn\n;\nint\ncnt0\n=\n0\n,\ncnt1\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\n{\ncin\n>>\nx\n;\nif\n(\nx\n==\n0\n)\ncnt0\n++;\nif\n(\nx\n==\n1\n)\ncnt1\n++;\n}\ncout\n<<\n(\n1ll\n<<\ncnt0\n)\n*\n(\nll\n)\ncnt1\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

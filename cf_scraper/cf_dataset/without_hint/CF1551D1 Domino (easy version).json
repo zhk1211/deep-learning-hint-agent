@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe only difference between this problem and D2 is that you don't have to provide the way to construct the answer in this problem, but you have to do it in D2.\n\nThere's a table of $ n \\times m $ cells ( $ n $ rows and $ m $ columns). The value of $ n \\cdot m $ is even.\n\nA domino is a figure that consists of two cells having a common side. It may be horizontal (one of the cells is to the right of the other) or vertical (one of the cells is above the other).\n\nYou need to find out whether it is possible to place $ \\frac{nm}{2} $ dominoes on the table so that exactly $ k $ of them are horizontal and all the other dominoes are vertical. The dominoes cannot overlap and must fill the whole table.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case consists of a single line. The line contains three integers $ n $ , $ m $ , $ k $ ( $ 1 \\le n,m \\le 100 $ , $ 0 \\le k \\le \\frac{nm}{2} $ , $ n \\cdot m $ is even) — the number of rows, columns and horizontal dominoes, respectively.\n\nOutput Format\nFor each test case output \"YES\", if it is possible to place dominoes in the desired way, or \"NO\" otherwise.\n\nYou may print each letter in any case (YES, yes, Yes will all be recognized as positive answer, NO, no and nO will all be recognized as negative answer).\n\nExamples\nSample 1\nInput\n8\n4 4 2\n2 3 0\n3 2 3\n1 2 0\n2 4 2\n5 2 2\n2 17 16\n2 1 1\nOutput\nYES\nYES\nYES\nNO\nYES\nNO\nYES\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nm\n,\nkh\n;\ncin\n>>\nn\n>>\nm\n>>\nkh\n;\nint\nkv\n=\nn\n*\nm\n/\n2\n-\nkh\n;\nif\n(\nn\n&\n1\n)\n{\nkh\n-=\nm\n/\n2\n;\nif\n(\nkh\n<\n0\n)\n{\ncout\n<<\n\"NO\\n\"\n;\ncontinue\n;\n}\n}\nelse\nif\n(\nm\n&\n1\n)\n{\nkv\n-=\nn\n/\n2\n;\nif\n(\nkv\n<\n0\n)\n{\ncout\n<<\n\"NO\\n\"\n;\ncontinue\n;\n}\n}\nif\n((\nkh\n&\n1\n)\n||\n(\nkv\n&\n1\n))\n{\ncout\n<<\n\"NO\\n\"\n;\ncontinue\n;\n}\ncout\n<<\n\"YES\\n\"\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

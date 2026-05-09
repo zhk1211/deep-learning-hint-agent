@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ , consisting of brackets of two types: '(', ')', '\\[' and '\\]'.\n\nA string is called a regular bracket sequence (RBS) if it's of one of the following types:\n\n- empty string;\n- '(' + RBS + ')';\n- '\\[' + RBS + '\\]';\n- RBS + RBS.\n\nwhere plus is a concatenation of two strings.\n\nIn one move you can choose a non-empty subsequence of the string $ s $ (not necessarily consecutive) that is an RBS, remove it from the string and concatenate the remaining parts without changing the order.\n\nWhat is the maximum number of moves you can perform?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of testcases.\n\nEach of the next $ t $ lines contains a non-empty string, consisting only of characters '(', ')', '\\[' and '\\]'. The total length of the strings over all testcases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each testcase print a single integer — the maximum number of moves you can perform on a given string $ s $ .\n\nExamples\nSample 1\nInput\n5\n()\n[]()\n([)]\n)]([\n)[(]\nOutput\n1\n2\n2\n0\n1\n\nNote\nIn the first example you can just erase the whole string.\n\nIn the second example you can first erase the brackets on positions $ 1 $ and $ 2 $ : \"\\[\\]()\", then \"()\" is left. After that you can erase it whole. You could erase the whole string from the beginning but you would get one move instead of two.\n\nIn the third example you can first erase the brackets on positions $ 1 $ and $ 3 $ : \"(\\[)\\]\". They form an RBS \"()\". Then \"\\[\\]\" is left, so you can erase it whole.\n\nIn the fourth example there is no subsequence that is an RBS, so you can't perform a move at all.\n\nIn the fifth example you can erase the brackets on positions $ 2 $ and $ 4 $ : \")\\[(\\]\" and get \")(\" as a result. You can erase nothing from it."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (pikmike)",
+            "content": "def\ncalc\n(\ns\n,\nx\n,\ny\n):\nbal\n,\ncnt\n=\n0\n,\n0\nfor\nc\nin\ns\n:\nif\nc\n==\ny\n:\nif\nbal\n>\n0\n:\nbal\n-=\n1\ncnt\n+=\n1\nelif\nc\n==\nx\n:\nbal\n+=\n1\nreturn\ncnt\nfor\n_\nin\nrange\n(\nint\n(\ninput\n())):\ns\n=\ninput\n()\nprint\n(\ncalc\n(\ns\n,\n'('\n,\n')'\n)\n+\ncalc\n(\ns\n,\n'['\n,\n']'\n))"
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nRudolph invented the game of tic-tac-toe for three players. It has classic rules, except for the third player who plays with pluses. Rudolf has a $ 3 \\times 3 $ field — the result of the completed game. Each field cell contains either a cross, or a nought, or a plus sign, or nothing. The game is won by the player who makes a horizontal, vertical or diagonal row of $ 3 $ 's of their symbols.\n\nRudolph wants to find the result of the game. Either exactly one of the three players won or it ended in a draw. It is guaranteed that multiple players cannot win at the same time.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nEach test case consists of three lines, each of which consists of three characters. The symbol can be one of four: \"X\" means a cross, \"O\" means a nought, \"+\" means a plus, \".\" means an empty cell.\n\nOutput Format\nFor each test case, print the string \"X\" if the crosses won, \"O\" if the noughts won, \"+\" if the pluses won, \"DRAW\" if there was a draw.\n\nExamples\nSample 1\nInput\n5\n+X+\nOXO\nOX.\nO+.\n+OX\nX+O\n.XO\nOX.\n+++\nO.+\nX.O\n+..\n.++\nX.O\n+..\nOutput\nX\nO\n+\nDRAW\nDRAW"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What is the win condition to be checked?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\n#include\n<vector>\n#include\n<string>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\ntest_cases\n;\ncin\n>>\ntest_cases\n;\nfor\n(\nint\ntest_case\n=\n0\n;\ntest_case\n<\ntest_cases\n;\ntest_case\n++)\n{\nvector\n<string>\nv\n(\n3\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n3\n;\ni\n++)\ncin\n>>\nv\n[\ni\n];\nstring\nans\n=\n\"DRAW\"\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n3\n;\ni\n++)\n{\nif\n(\nv\n[\ni\n][\n0\n]\n==\nv\n[\ni\n][\n1\n]\n&&\nv\n[\ni\n][\n1\n]\n==\nv\n[\ni\n][\n2\n]\n&&\nv\n[\ni\n][\n0\n]\n!=\n'.'\n)\nans\n=\nv\n[\ni\n][\n0\n];\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n3\n;\ni\n++)\n{\nif\n(\nv\n[\n0\n][\ni\n]\n==\nv\n[\n1\n][\ni\n]\n&&\nv\n[\n1\n][\ni\n]\n==\nv\n[\n2\n][\ni\n]\n&&\nv\n[\n0\n][\ni\n]\n!=\n'.'\n)\nans\n=\nv\n[\n0\n][\ni\n];\n}\nif\n(\nv\n[\n0\n][\n0\n]\n==\nv\n[\n1\n][\n1\n]\n&&\nv\n[\n1\n][\n1\n]\n==\nv\n[\n2\n][\n2\n]\n&&\nv\n[\n0\n][\n0\n]\n!=\n'.'\n)\nans\n=\nv\n[\n0\n][\n0\n];\nif\n(\nv\n[\n0\n][\n2\n]\n==\nv\n[\n1\n][\n1\n]\n&&\nv\n[\n1\n][\n1\n]\n==\nv\n[\n2\n][\n0\n]\n&&\nv\n[\n0\n][\n2\n]\n!=\n'.'\n)\nans\n=\nv\n[\n0\n][\n2\n];\ncout\n<<\nans\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have a garland consisting of $ n $ lamps. Each lamp is colored red, green or blue. The color of the $ i $ -th lamp is $ s_i $ ('R', 'G' and 'B' — colors of lamps in the garland).\n\nYou have to recolor some lamps in this garland (recoloring a lamp means changing its initial color to another) in such a way that the obtained garland is diverse.\n\nA garland is called diverse if any two adjacent (consecutive) lamps (i. e. such lamps that the distance between their positions is $ 1 $ ) have distinct colors.\n\nIn other words, if the obtained garland is $ t $ then for each $ i $ from $ 1 $ to $ n-1 $ the condition $ t_i \\ne t_{i + 1} $ should be satisfied.\n\nAmong all ways to recolor the initial garland to make it diverse you have to choose one with the minimum number of recolored lamps. If there are multiple optimal solutions, print any of them.\n\nInput Format\nThe first line of the input contains one integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the number of lamps.\n\nThe second line of the input contains the string $ s $ consisting of $ n $ characters 'R', 'G' and 'B' — colors of lamps in the garland.\n\nOutput Format\nIn the first line of the output print one integer $ r $ — the minimum number of recolors needed to obtain a diverse garland from the given one.\n\nIn the second line of the output print one string $ t $ of length $ n $ — a diverse garland obtained from the initial one with minimum number of recolors. If there are multiple optimal solutions, print any of them.\n\nExamples\nSample 1\nInput\n9\nRBGRRBRGG\nOutput\n2\nRBGRGBRGR\n\nSample 2\nInput\n8\nBBBGBRRR\nOutput\n2\nBRBGBRGR\n\nSample 3\nInput\n13\nBBRRRRGGGGGRR\nOutput\n6\nBGRBRBGBGBGRG"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n;\nstring\ns\n;\ncin\n>>\nn\n>>\ns\n;\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nint\nj\n=\ni\n;\nwhile\n(\nj\n<\nn\n&&\ns\n[\ni\n]\n==\ns\n[\nj\n])\n{\n++\nj\n;\n}\nstring\nq\n=\n\"RGB\"\n;\nq\n.\nerase\n(\nq\n.\nfind\n(\ns\n[\ni\n]),\n1\n);\nif\n(\nj\n<\nn\n)\nq\n.\nerase\n(\nq\n.\nfind\n(\ns\n[\nj\n]),\n1\n);\nfor\n(\nint\nk\n=\ni\n+\n1\n;\nk\n<\nj\n;\nk\n+=\n2\n)\n{\n++\nans\n;\ns\n[\nk\n]\n=\nq\n[\n0\n];\n}\ni\n=\nj\n-\n1\n;\n}\ncout\n<<\nans\n<<\nendl\n<<\ns\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

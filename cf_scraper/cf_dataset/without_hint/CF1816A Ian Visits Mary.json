@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIan and Mary are frogs living on lattice points of the Cartesian coordinate plane, with Ian living on $ (0,0) $ and Mary living on $ (a,b) $ .\n\nIan would like to visit Mary by jumping around the Cartesian coordinate plane. Every second, he jumps from his current position $ (x_p, y_p) $ to another lattice point $ (x_q, y_q) $ , such that no lattice point other than $ (x_p, y_p) $ and $ (x_q, y_q) $ lies on the segment between point $ (x_p, y_p) $ and point $ (x_q, y_q) $ .\n\nAs Ian wants to meet Mary as soon as possible, he wants to jump towards point $ (a,b) $ using at most $ 2 $ jumps. Unfortunately, Ian is not good at maths. Can you help him?\n\nA lattice point is defined as a point with both the $ x $ -coordinate and $ y $ -coordinate being integers.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 500 $ ) — the number of test cases. The description of test cases follows.\n\nThe first and only line of each test case contains two integers $ a $ and $ b $ ( $ 1\\le a,b\\le 10^9 $ ) — the coordinates of the lattice point where Mary lives.\n\nOutput Format\nFor each test case, print an integer $ n $ ( $ 1 \\le n \\le 2 $ ) on the first line, denoting the number of jumps Ian uses in order to meet Mary. Note that you do not need to minimize the number of jumps.\n\nOn the $ i $ -th line of the next $ n $ lines, print two integers $ 0 \\le x_i,y_i \\le 10^9 $ separated by a space, denoting Ian's location $ (x_i,y_i) $ after the $ i $ -th jump. $ x_n = a $ , $ y_n = b $ must hold.\n\nIan's initial location and his locations after each of the $ n $ jumps need not be distinct.\n\nIf there are multiple solutions, output any.\n\nExamples\nSample 1\nInput\n8\n3 4\n4 4\n3 6\n2 2\n1 1\n7 3\n2022 2023\n1000000000 1000000000\nOutput\n1\n3 4\n2\n3 2\n4 4\n2\n5 3\n3 6\n2\n1 0\n2 2\n1\n1 1\n1\n7 3\n1\n2022 2023\n2\n69420420 469696969\n1000000000 1000000000\n\nNote\nIn the first test case:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1816A/7f33abd00d526ffaeea8e4d3c101d5177c138947.png)\n\n$ (0,0) \\to (3,4) $\n\nIn the second test case:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1816A/577a06cfefe0531c32a45b390d77d0693528c842.png)\n\n$ (0,0) \\to (3,2) \\to (4,4) $\n\nIn the third test case:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1816A/657d3f3136c48035420c8d1a7eecdfe06cc7f59d.png)\n\n$ (0,0) \\to (5,3) \\to (3,6) $"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Let us show that Ian can get to Mary within two moves. Indeed, consider $$$(x_1,y_1)$$$ and $$$(x_2,y_2)$$$ where $$$x_2-x_1=1$$$, since the value of the $$$x$$$-coordinates of a point lying on the segment joining $$$(x_1,y_1)$$$ and $$$(x_2,y_2)$$$, and is not at the endpoints, is strictly between $$$x_1$$$ and $$$x_2$$$, but there are no integers strictly between $$$x_1$$$ and $$$x_2$$$, the point must not be a lattice point. Similarly, no lattice points lie on the segment joining $$$(x_1,y_1)$$$ and $$$(x_2,y_2)$$$ with $$$y_2-y_1=1$$$ except for the endpoints. Therefore, Ian can jump from $$$(0,0)$$$ to $$$(x-1,1)$$$ to $$$(x,y)$$$."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n(){\nint\na\n,\nb\n;\ncin\n>>\na\n>>\nb\n;\ncout\n<<\n2\n<<\n\"\\n\"\n<<\na\n-\n1\n<<\n' '\n<<\n1\n<<\n\"\\n\"\n<<\na\n<<\n' '\n<<\nb\n<<\n\"\\n\"\n;\n}\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nsolve\n();\n}\n}"
+        }
+    ]
+}

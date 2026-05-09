@@ -1,0 +1,52 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWe are sum for we are many\n\nSome Number\n\nThis version of the problem differs from the previous one only in the constraint on $ t $ . You can make hacks only if both versions of the problem are solved.\n\nYou are given two positive integers $ l $ and $ r $ .\n\nCount the number of distinct triplets of integers $ (i, j, k) $ such that $ l \\le i < j < k \\le r $ and $ \\operatorname{lcm}(i,j,k) \\ge i + j + k $ .\n\nHere $ \\operatorname{lcm}(i, j, k) $ denotes the [least common multiple (LCM)](https://en.wikipedia.org/wiki/Least_common_multiple) of integers $ i $ , $ j $ , and $ k $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ \\bf{1 \\le t \\le 10^5} $ ). Description of the test cases follows.\n\nThe only line for each test case contains two integers $ l $ and $ r $ ( $ 1 \\le l \\le r \\le 2 \\cdot 10^5 $ , $ l + 2 \\le r $ ).\n\nOutput Format\nFor each test case print one integer — the number of suitable triplets.\n\nExamples\nSample 1\nInput\n5\n1 4\n3 5\n8 86\n68 86\n6 86868\nOutput\n3\n1\n78975\n969\n109229059713337\n\nNote\nIn the first test case, there are $ 3 $ suitable triplets:\n\n- $ (1,2,3) $ ,\n- $ (1,3,4) $ ,\n- $ (2,3,4) $ .\n\nIn the second test case, there is $ 1 $ suitable triplet:\n\n- $ (3,4,5) $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nCount the number of \"bad\" triplets such that $$$\\operatorname{lcm}(i, j, k) \\lt i + j + k$$$.\nHint 2\n$$$\\operatorname{lcm}(i, j, k) \\le 2 \\cdot k$$$ in a bad triplet.\nHint 3\nA triplet is bad iff $$$\\operatorname{lcm}(i, j, k) = k$$$ or ($$$\\operatorname{lcm}(i, j, k) = 2 \\cdot k$$$ and $$$i + j \\gt k$$$).\nHint 4\n$$$\\operatorname{lcm}(i, j, k) = x$$$ implies $$$i$$$, $$$j$$$, and $$$k$$$ are all divisors of $$$x$$$.\nHint 5\nFor every $$$k$$$, iterate over all pairs of divisors of $$$2 \\cdot k$$$.\nHint 6\nThink of the \"bad\" triplets as of segments $$$[i; k]$$$ with some weight.\nHint 7\nSolve in offline."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Count the number of \"bad\" triplets such that $$$\\operatorname{lcm}(i, j, k) \\lt i + j + k$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "$$$\\operatorname{lcm}(i, j, k) \\le 2 \\cdot k$$$ in a bad triplet."
+        },
+        {
+            "title": "Hint 3",
+            "content": "A triplet is bad iff $$$\\operatorname{lcm}(i, j, k) = k$$$ or ($$$\\operatorname{lcm}(i, j, k) = 2 \\cdot k$$$ and $$$i + j \\gt k$$$)."
+        },
+        {
+            "title": "Hint 4",
+            "content": "$$$\\operatorname{lcm}(i, j, k) = x$$$ implies $$$i$$$, $$$j$$$, and $$$k$$$ are all divisors of $$$x$$$."
+        },
+        {
+            "title": "Hint 5",
+            "content": "For every $$$k$$$, iterate over all pairs of divisors of $$$2 \\cdot k$$$."
+        },
+        {
+            "title": "Hint 6",
+            "content": "Think of the \"bad\" triplets as of segments $$$[i; k]$$$ with some weight."
+        },
+        {
+            "title": "Hint 7",
+            "content": "Solve in offline."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),\n(\nx\n).\nend\n()\n#define\nallr\n(\nx\n)\n(\nx\n).\nrbegin\n(),\n(\nx\n).\nrend\n()\n#define\ngsize\n(\nx\n)\n(\nint\n)((\nx\n).\nsize\n())\nconst\nchar\nnl\n=\n'\\n'\n;\ntypedef\nlong\nlong\nll\n;\ntypedef\nlong\ndouble\nld\n;\nusing\nnamespace\nstd\n;\nconst\nint\nmaxn\n=\n200000\n;\nint\nt\n[(\nmaxn\n+\n1\n)\n*\n4\n];\nvoid\nupdate\n(\nint\nv\n,\nint\ntl\n,\nint\ntr\n,\nint\ni\n,\nint\nx\n)\n{\nt\n[\nv\n]\n+=\nx\n;\nif\n(\ntl\n!=\ntr\n-\n1\n)\n{\nint\ntm\n=\n(\ntl\n+\ntr\n)\n/\n2\n;\nif\n(\ni\n<\ntm\n)\nupdate\n(\n2\n*\nv\n+\n1\n,\ntl\n,\ntm\n,\ni\n,\nx\n);\nelse\nupdate\n(\n2\n*\nv\n+\n2\n,\ntm\n,\ntr\n,\ni\n,\nx\n);\n}\n}\nint\nquery\n(\nint\nv\n,\nint\ntl\n,\nint\ntr\n,\nint\nl\n,\nint\nr\n)\n{\nif\n(\nl\n>=\nr\n)\nreturn\n0\n;\nif\n(\ntl\n==\nl\n&&\ntr\n==\nr\n)\nreturn\nt\n[\nv\n];\nelse\n{\nint\ntm\n=\n(\ntl\n+\ntr\n)\n/\n2\n;\nint\nr1\n=\nquery\n(\n2\n*\nv\n+\n1\n,\ntl\n,\ntm\n,\nl\n,\nmin\n(\nr\n,\ntm\n));\nint\nr2\n=\nquery\n(\n2\n*\nv\n+\n2\n,\ntm\n,\ntr\n,\nmax\n(\nl\n,\ntm\n),\nr\n);\nreturn\nr1\n+\nr2\n;\n}\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nvector\n<\nvector\n<int>\n>\nd\n(\n2\n*\nmaxn\n+\n1\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nmaxn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\ni\n;\nj\n<=\n2\n*\nmaxn\n;\nj\n+=\ni\n)\n{\nd\n[\nj\n].\npush_back\n(\ni\n);\n}\n}\nvector\n<\nvector\n<\npair\n<\nint\n,\nint\n>>>\nsegs\n(\nmaxn\n+\n1\n);\nfor\n(\nint\nk\n=\n1\n;\nk\n<=\nmaxn\n;\nk\n++)\n{\nfor\n(\nint\nti\n=\n0\n;\nti\n<\ngsize\n(\nd\n[\n2\n*\nk\n]);\nti\n++)\n{\nint\ni\n=\nd\n[\n2\n*\nk\n][\nti\n],\nct\n=\n0\n;\nfor\n(\nint\ntj\n=\nti\n+\n1\n;\ntj\n<\ngsize\n(\nd\n[\n2\n*\nk\n]);\ntj\n++)\n{\nint\nj\n=\nd\n[\n2\n*\nk\n][\ntj\n];\nif\n(\nj\n>=\nk\n)\nbreak\n;\nif\n(\ni\n+\nj\n>\nk\n||\n(\nk\n%\ni\n==\n0\n&&\nk\n%\nj\n==\n0\n))\nct\n++;\n}\nif\n(\nct\n>\n0\n)\n{\nsegs\n[\ni\n].\nemplace_back\n(\nk\n,\nct\n);\n}\n}\n}\nint\nT\n;\ncin\n>>\nT\n;\nvector\n<ll>\nans\n(\nT\n);\nvector\n<\narray\n<\nint\n,\n3\n>>\nqueries\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nT\n;\ni\n++)\n{\nll l\n,\nr\n;\ncin\n>>\nl\n>>\nr\n;\nqueries\n.\npush_back\n({\nl\n,\nr\n,\ni\n});\nans\n[\ni\n]\n=\n(\nr\n-\nl\n+\n1\n)\n*\n(\nr\n-\nl\n)\n*\n(\nr\n-\nl\n-\n1\n)\n/\n6\n;\n}\nsort\n(\nall\n(\nqueries\n));\nint\nti\n=\nT\n-\n1\n;\nfor\n(\nint\ni\n=\nmaxn\n;\ni\n>=\n1\n;\ni\n--)\n{\n// Update ST\nfor\n(\nauto\n[\nr\n,\nct\n]:\nsegs\n[\ni\n])\n{\nupdate\n(\n0\n,\n0\n,\nmaxn\n+\n1\n,\nr\n,\nct\n);\n}\n// Get Answers\nwhile\n(\nti\n>=\n0\n&&\nqueries\n[\nti\n][\n0\n]\n==\ni\n)\n{\nans\n[\nqueries\n[\nti\n][\n2\n]]\n-=\nquery\n(\n0\n,\n0\n,\nmaxn\n+\n1\n,\ni\n,\nqueries\n[\nti\n][\n1\n]\n+\n1\n);\nti\n--;\n}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nT\n;\ni\n++)\ncout\n<<\nans\n[\ni\n]\n<<\nnl\n;\n}"
+        }
+    ]
+}

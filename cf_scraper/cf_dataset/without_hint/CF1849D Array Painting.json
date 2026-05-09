@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array of $ n $ integers, where each integer is either $ 0 $ , $ 1 $ , or $ 2 $ . Initially, each element of the array is blue.\n\nYour goal is to paint each element of the array red. In order to do so, you can perform operations of two types:\n\n- pay one coin to choose a blue element and paint it red;\n- choose a red element which is not equal to $ 0 $ and a blue element adjacent to it, decrease the chosen red element by $ 1 $ , and paint the chosen blue element red.\n\nWhat is the minimum number of coins you have to spend to achieve your goal?\n\nInput Format\nThe first line contains one integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i \\le 2 $ ).\n\nOutput Format\nPrint one integer — the minimum number of coins you have to spend in order to paint all elements red.\n\nExamples\nSample 1\nInput\n3\n0 2 0\nOutput\n1\n\nSample 2\nInput\n4\n0 0 1 1\nOutput\n2\n\nSample 3\nInput\n7\n0 1 0 0 1 0 2\nOutput\n4\n\nNote\nIn the first example, you can paint all elements red with having to spend only one coin as follows:\n\n1. paint the $ 2 $ -nd element red by spending one coin;\n2. decrease the $ 2 $ -nd element by $ 1 $ and paint the $ 1 $ -st element red;\n3. decrease the $ 2 $ -nd element by $ 1 $ and paint the $ 3 $ -rd element red.\n\nIn the second example, you can paint all elements red spending only two coins as follows:\n\n1. paint the $ 4 $ -th element red by spending one coin;\n2. decrease the $ 4 $ -th element by $ 1 $ and paint the $ 3 $ -rd element red;\n3. paint the $ 1 $ -st element red by spending one coin;\n4. decrease the $ 3 $ -rd element by $ 1 $ and paint the $ 2 $ -nd element red."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "n\n=\nint\n(\ninput\n())\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nans\n=\n0\nl\n=\n0\nwhile\nl\n<\nn\n:\nr\n=\nl\n+\n1\nhasTwo\n=\n(\na\n[\nl\n]\n==\n2\n)\nhasMiddleZero\n=\nFalse\nwhile\nr\n<\nn\n:\nif\nr\n-\n1\n>\nl\nand\na\n[\nr\n-\n1\n]\n==\n0\n:\nhasMiddleZero\n=\nTrue\nif\na\n[\nr\n]\n==\n2\n:\nhasTwo\n=\nTrue\ngood\n=\n(\nnot\nhasMiddleZero\n)\nand\n(\nhasTwo\nor\na\n[\nl\n]\n!=\n0\nor\na\n[\nr\n]\n!=\n0\n)\nif\nnot\ngood\n:\nbreak\nr\n+=\n1\nl\n=\nr\n    ans\n+=\n1\nprint\n(\nans\n)"
+        }
+    ]
+}

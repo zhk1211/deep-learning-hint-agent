@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\n#include\n<vector>\nusing\nnamespace\nstd\n;\n#define\nint\nlong\nlong\nsigned\nmain\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nN\n=\n(\nn\n+\n1\n)\n/\n2\n;\nvector\n<int>\na\n(\nN\n);\nfor\n(\nint\n&\nel\n:\na\n)\ncin\n>>\nel\n;\nint\nAx\n;\ncin\n>>\nAx\n;\nvector\n<int>\nm\n(\nN\n+\n1\n,\n0\n);\nint\nPprefsm\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nN\n+\n1\n;\n++\ni\n)\n{\nPprefsm\n+=\nAx\n-\na\n[\ni\n-\n1\n];\nm\n[\ni\n]\n=\nmin\n(\nm\n[\ni\n-\n1\n],\nPprefsm\n);\n}\nint\nAprefsm\n=\n0\n;\nfor\n(\nint\nk\n=\n1\n;\nk\n<=\nN\n;\n++\nk\n)\nAprefsm\n+=\na\n[\nk\n-\n1\n];\nfor\n(\nint\nk\n=\nN\n;\nk\n<=\nn\n;\n++\nk\n)\n{\nif\n(\nAprefsm\n+\nm\n[\nn\n-\nk\n]\n>\n0\n)\nreturn\ncout\n<<\nk\n,\n0\n;\nAprefsm\n+=\nAx\n;\n}\ncout\n<<\n-\n1\n;\n}"
+        }
+    ]
+}

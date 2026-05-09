@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nRSJ has a sequence $ a $ of $ n $ integers $ a_1,a_2, \\ldots, a_n $ and an integer $ s $ . For each of $ a_2,a_3, \\ldots, a_{n-1} $ , he chose a pair of non-negative integers $ x_i $ and $ y_i $ such that $ x_i+y_i=a_i $ and $ (x_i-s) \\cdot (y_i-s) \\geq 0 $ .\n\nNow he is interested in the value\n$$F = a_1 \\cdot x_2+y_2 \\cdot x_3+y_3 \\cdot x_4 + \\ldots + y_{n - 2} \\cdot x_{n-1}+y_{n-1} \\cdot a_n. $$\nPlease help him find the minimum possible value $ F $ he can get by choosing $ x_i $ and $ y_i$ optimally. It can be shown that there is always at least one valid way to choose them.\n\nInput Format\nEach test contains multiple test cases. The first line contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ , $ s $ ( $ 3 \\le n \\le 2 \\cdot 10^5 $ ; $ 0 \\le s \\le 2 \\cdot 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1,a_2,\\ldots,a_n $ ( $ 0 \\le a_i \\le 2 \\cdot 10^5 $ ).\n\nIt is guaranteed that the sum of $ n $ does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print the minimum possible value of $ F $ .\n\nExamples\nSample 1\nInput\n10\n5 0\n2 0 1 3 4\n5 1\n5 3 4 3 5\n7 2\n7 6 5 4 3 2 1\n5 1\n1 2 3 4 5\n5 2\n1 2 3 4 5\n4 0\n0 1 1 1\n5 5\n4 3 5 6 4\n4 1\n0 2 1 0\n3 99999\n200000 200000 200000\n6 8139\n7976 129785 12984 78561 173685 15480\nOutput\n0\n18\n32\n11\n14\n0\n16\n0\n40000000000\n2700826806\n\nNote\nIn the first test case, $ 2\\cdot 0+0\\cdot 1+0\\cdot 3+0\\cdot 4 = 0 $ .\n\nIn the second test case, $ 5\\cdot 1+2\\cdot 2+2\\cdot 2+1\\cdot 5 = 18 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n200005\n;\nlong\nlong\nf\n[\nN\n][\n2\n],\nx\n[\nN\n],\ny\n[\nN\n];\nvoid\nget\n()\n{\nint\ni\n,\nn\n,\ns\n,\nj\n;\ncin\n>>\nn\n>>\ns\n;\nfor\n(\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\ncin\n>>\nj\n;\nif\n(\ni\n==\n1\n||\ni\n==\nn\n)\nx\n[\ni\n]=\ny\n[\ni\n]=\nj\n;\nelse\nif\n(\nj\n<=\ns\n)\nx\n[\ni\n]=\n0\n,\ny\n[\ni\n]=\nj\n;\nelse\nx\n[\ni\n]=\ns\n,\ny\n[\ni\n]=\nj\n-\ns\n;\n}\nf\n[\n1\n][\n0\n]=\nf\n[\n1\n][\n1\n]=\n0\n;\nfor\n(\ni\n=\n2\n;\ni\n<=\nn\n;\ni\n++)\n{\nf\n[\ni\n][\n0\n]=\nmin\n(\nf\n[\ni\n-\n1\n][\n0\n]+\ny\n[\ni\n-\n1\n]*\nx\n[\ni\n],\nf\n[\ni\n-\n1\n][\n1\n]+\nx\n[\ni\n-\n1\n]*\nx\n[\ni\n]);\nf\n[\ni\n][\n1\n]=\nmin\n(\nf\n[\ni\n-\n1\n][\n0\n]+\ny\n[\ni\n-\n1\n]*\ny\n[\ni\n],\nf\n[\ni\n-\n1\n][\n1\n]+\nx\n[\ni\n-\n1\n]*\ny\n[\ni\n]);\n}\ncout\n<<\nf\n[\nn\n][\n0\n]<<\nendl\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n--)\nget\n();\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIt is a simplified version of problem F2. The difference between them is the constraints (F1: $ k \\le 2 $ , F2: $ k \\le 10 $ ).\n\nYou are given an integer $ n $ . Find the minimum integer $ x $ such that $ x \\ge n $ and the number $ x $ is $ k $ -beautiful.\n\nA number is called $ k $ -beautiful if its decimal representation having no leading zeroes contains no more than $ k $ different digits. E.g. if $ k = 2 $ , the numbers $ 3434443 $ , $ 55550 $ , $ 777 $ and $ 21 $ are $ k $ -beautiful whereas the numbers $ 120 $ , $ 445435 $ and $ 998244353 $ are not.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case consists of one line containing two integers $ n $ and $ k $ ( $ 1 \\le n \\le 10^9 $ , $ 1 \\le k \\le 2 $ ).\n\nOutput Format\nFor each test case output on a separate line $ x $ — the minimum $ k $ -beautiful integer such that $ x \\ge n $ .\n\nExamples\nSample 1\nInput\n4\n1 1\n221 2\n177890 2\n998244353 1\nOutput\n1\n221\n181111\n999999999"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nstring\nsolve1\n(\nstring\nn\n)\n{\nstring\nres\n(\nn\n.\nlength\n(),\n'9'\n);\nfor\n(\nchar\nc\n=\n'8'\n;\nc\n>=\n'0'\n;\nc\n--)\n{\nstring\nt\n(\nn\n.\nlength\n(),\nc\n);\nif\n(\nt\n>=\nn\n)\nres\n=\nt\n;\n}\nreturn\nres\n;\n}\nstring\nsolve2\n(\nstring\nn\n)\n{\nstring\nres\n=\nsolve1\n(\nn\n);\nfor\n(\nchar\na\n=\n'0'\n;\na\n<=\n'9'\n;\na\n++)\nfor\n(\nchar\nb\n=\na\n+\n1\n;\nb\n<=\n'9'\n;\nb\n++)\n{\nbool\nn_ok\n=\ntrue\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n.\nlength\n();\ni\n++)\n{\nif\n(\nn\n[\ni\n]\n<\nb\n)\n{\nstring\nt\n=\nn\n;\nif\n(\nt\n[\ni\n]\n<\na\n)\nt\n[\ni\n]\n=\na\n;\nelse\nt\n[\ni\n]\n=\nb\n;\nfor\n(\nint\nj\n=\ni\n+\n1\n;\nj\n<\nn\n.\nlength\n();\nj\n++)\nt\n[\nj\n]\n=\na\n;\nif\n(\nres\n>\nt\n)\nres\n=\nt\n;\n}\nif\n(\nn\n[\ni\n]\n!=\na\n&&\nn\n[\ni\n]\n!=\nb\n)\n{\nn_ok\n=\nfalse\n;\nbreak\n;\n}\n}\nif\n(\nn_ok\n)\nreturn\nn\n;\n}\nreturn\nres\n;\n}\nstring\nsolve\n()\n{\nstring\nn\n;\nint\nk\n;\ncin\n>>\nn\n>>\nk\n;\nif\n(\nk\n==\n1\n)\nreturn\nsolve1\n(\nn\n);\nelse\nreturn\nsolve2\n(\nn\n);\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\ncout\n<<\nsolve\n()\n<<\n'\\n'\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

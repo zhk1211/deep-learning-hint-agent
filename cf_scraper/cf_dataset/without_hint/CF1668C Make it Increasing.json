@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "If the final array, is $$$b_1$$$, $$$b_2$$$ ... $$$b_n$$$, than the solution is surely unoptimal if there is an $$$2≤i≤n$$$, when $$$b_i \\gt 0$$$, and $$$b_i-a_i \\gt b_{i-1}$$$, or $$$b_1 \\gt 0$$$. Because there was one unnecessary move on $$$b_i$$$ or on $$$b_1$$$.\nSimilarly it is unoptimal, if $$$b_i \\lt 0$$$ and $$$b_i+a_i \\lt b_{i+1}$$$ or $$$b_n \\lt 0$$$.\nWe can see, that there will be a $$$0$$$ in the final array. If we fix the position of the $$$0$$$ element, than we can set the other values greadily: find the smallest value for each element, which is bigger than the previous one, and similarly before that element.\nWe can fix each element, and calculate the answer for that in $$$O(n)$$$ time. The minimum of these values will be the final answer. So the final complexity is $$$O(n^2)$$$."
+        },
+        {
+            "title": "Implementation (C++)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nlong\nlong\nn\n,\na\n[\n5005\n],\nans\n=\n1e18\n;\nint\nmain\n()\n{\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\n}\nfor\n(\nint\npos\n=\n1\n;\npos\n<=\nn\n;\npos\n++)\n{\nlong\nlong\nprev\n=\n0\n,\nsum\n=\n0\n;\nfor\n(\nint\ni\n=\npos\n-\n1\n;\ni\n>=\n1\n;\ni\n--)\n{\nprev\n+=\na\n[\ni\n]-\nprev\n%\na\n[\ni\n];\nsum\n+=\nprev\n/\na\n[\ni\n];\n}\nprev\n=\n0\n;\nfor\n(\nint\ni\n=\npos\n+\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nprev\n+=\na\n[\ni\n]-\nprev\n%\na\n[\ni\n];\nsum\n+=\nprev\n/\na\n[\ni\n];\n}\nans\n=\nmin\n(\nans\n,\nsum\n);\n}\ncout\n<<\nans\n<<\n\"\\n\"\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

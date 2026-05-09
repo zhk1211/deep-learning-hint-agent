@@ -1,0 +1,27 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nTo become the king of Codeforces, Kuroni has to solve the following problem.\n\nHe is given $ n $ numbers $ a_1, a_2, \\dots, a_n $ . Help Kuroni to calculate $ \\prod_{1\\le i<j\\le n} |a_i - a_j| $ . As result can be very big, output it modulo $ m $ .\n\nIf you are not familiar with short notation, $ \\prod_{1\\le i<j\\le n} |a_i - a_j| $ is equal to $ |a_1 - a_2|\\cdot|a_1 - a_3|\\cdot $ $ \\dots $ $ \\cdot|a_1 - a_n|\\cdot|a_2 - a_3|\\cdot|a_2 - a_4|\\cdot $ $ \\dots $ $ \\cdot|a_2 - a_n| \\cdot $ $ \\dots $ $ \\cdot |a_{n-1} - a_n| $ . In other words, this is the product of $ |a_i - a_j| $ for all $ 1\\le i < j \\le n $ .\n\nInput Format\nThe first line contains two integers $ n $ , $ m $ ( $ 2\\le n \\le 2\\cdot 10^5 $ , $ 1\\le m \\le 1000 $ ) — number of numbers and modulo.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i \\le 10^9 $ ).\n\nOutput Format\nOutput the single number — $ \\prod_{1\\le i<j\\le n} |a_i - a_j| \\bmod m $ .\n\nExamples\nSample 1\nInput\n2 10\n8 5\nOutput\n3\n\nSample 2\nInput\n3 12\n1 4 5\nOutput\n0\n\nSample 3\nInput\n3 7\n1 4 9\nOutput\n1\n\nNote\nIn the first sample, $ |8 - 5| = 3 \\equiv 3 \\bmod 10 $ .\n\nIn the second sample, $ |1 - 4|\\cdot|1 - 5|\\cdot|4 - 5| = 3\\cdot 4 \\cdot 1 = 12 \\equiv 0 \\bmod 12 $ .\n\nIn the third sample, $ |1 - 4|\\cdot|1 - 9|\\cdot|4 - 9| = 3 \\cdot 8 \\cdot 5 = 120 \\equiv 1 \\bmod 7 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (antontrygubO_o, C++)",
+            "content": "Submission link:\n72364777\nSource code in plain text\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\np\n;\nint\nmul\n(\nint\na\n,\nint\nb\n)\n{\nreturn\n(\n1LL\n*\na\n*\nb\n)\n%\np\n;\n}\nint\nsub\n(\nint\na\n,\nint\nb\n)\n{\nint\ns\n=\n(\na\n+\np\n-\nb\n);\nif\n(\ns\n>=\np\n)\ns\n-=\np\n;\nreturn\ns\n;\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\nn\n;\ncin\n>>\nn\n>>\np\n;\nif\n(\nn\n>\np\n)\n{\ncout\n<<\n0\n;\nreturn\n0\n;}\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nint\nres\n=\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nfor\n(\nint\nj\n=\ni\n+\n1\n;\nj\n<\nn\n;\nj\n++)\nres\n=\nmul\n(\nres\n,\nabs\n(\na\n[\ni\n]\n-\na\n[\nj\n])%\np\n);\ncout\n<<\nres\n;\n}"
+        },
+        {
+            "title": "Solution (Akikaze, Java 8)",
+            "content": "Submission link:\n72364959\nSource code in plain text\nimport\njava\n.\nio\n.*;\nimport\njava\n.\nutil\n.*;\npublic\nclass\nJavAki\n{\npublic\nstatic\nScanner\nsc\n=\nnew\nScanner\n(\nSystem\n.\nin\n);\npublic\nstatic\nint\nn\n,\nm\n;\npublic\nstatic\nint\n[]\na\n;\npublic\nstatic\nvoid\nInput\n()\n{\nn\n=\nsc\n.\nnextInt\n();\nm\n=\nsc\n.\nnextInt\n();\na\n=\nnew\nint\n[\nn\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\na\n[\ni\n]\n=\nsc\n.\nnextInt\n();\n}\npublic\nstatic\nvoid\nSolve\n()\n{\nif\n(\nn\n>\nm\n)\n{\nSystem\n.\nout\n.\nprintln\n(\n0\n);\nreturn\n;}\nint\nans\n=\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\ni\n+\n1\n;\nj\n<\nn\n;\nj\n++)\n{\nans\n=\n(\nint\n)(((\nlong\n)\nans\n*\nMath\n.\nabs\n(\na\n[\ni\n]\n-\na\n[\nj\n]))\n%\nm\n);\n}\n}\nSystem\n.\nout\n.\nprintln\n(\nans\n);\n}\npublic\nstatic\nvoid\nmain\n(\nString\n[]\nargs\n)\n{\nInput\n();\nSolve\n();\n}\n}"
+        },
+        {
+            "title": "Solution (Akikaze, Python 3)",
+            "content": "Submission link:\n72365002\nSource code in plain text\nn\n,\nm\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nif\nn\n>\nm\n:\nexit\n(\nprint\n(\n0\n))\nans\n=\n1\nfor\ni\nin\nrange\n(\nn\n):\nfor\nj\nin\nrange\n(\ni\n+\n1\n,\nn\n):\nans\n*=\nabs\n(\na\n[\ni\n]\n-\na\n[\nj\n])\nans\n%=\nm\nprint\n(\nans\n)"
+        }
+    ]
+}

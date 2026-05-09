@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nKiyora has $ n $ whiteboards numbered from $ 1 $ to $ n $ . Initially, the $ i $ -th whiteboard has the integer $ a_i $ written on it.\n\nKoxia performs $ m $ operations. The $ j $ -th operation is to choose one of the whiteboards and change the integer written on it to $ b_j $ .\n\nFind the maximum possible sum of integers written on the whiteboards after performing all $ m $ operations.\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ m $ ( $ 1 \\le n,m \\le 100 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nThe third line of each test case contains $ m $ integers $ b_1, b_2, \\ldots, b_m $ ( $ 1 \\le b_i \\le 10^9 $ ).\n\nOutput Format\nFor each test case, output a single integer — the maximum possible sum of integers written on whiteboards after performing all $ m $ operations.\n\nExamples\nSample 1\nInput\n4\n3 2\n1 2 3\n4 5\n2 3\n1 2\n3 4 5\n1 1\n100\n1\n5 3\n1 1 1 1 1\n1000000000 1000000000 1000000000\nOutput\n12\n9\n1\n3000000002\n\nNote\nIn the first test case, Koxia can perform the operations as follows:\n\n1. Choose the $ 1 $ -st whiteboard and rewrite the integer written on it to $ b_1=4 $ .\n2. Choose the $ 2 $ -nd whiteboard and rewrite to $ b_2=5 $ .\n\nAfter performing all operations, the numbers on the three whiteboards are $ 4 $ , $ 5 $ and $ 3 $ respectively, and their sum is $ 12 $ . It can be proven that this is the maximum possible sum achievable.\n\nIn the second test case, Koxia can perform the operations as follows:\n\n1. Choose the $ 2 $ -nd whiteboard and rewrite to $ b_1=3 $ .\n2. Choose the $ 1 $ -st whiteboard and rewrite to $ b_2=4 $ .\n3. Choose the $ 2 $ -nd whiteboard and rewrite to $ b_3=5 $ .\n\nThe sum is $ 4 + 5 = 9 $ . It can be proven that this is the maximum possible sum achievable."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Exactly $$$n$$$ items out of of $$$a_1,\\ldots,a_n,b_1,\\ldots,b_m$$$ will remain on the whiteboard at the end."
+        },
+        {
+            "title": "Hint 2",
+            "content": "$$$b_m$$$ will always remain on the board at the end."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Consider the case where $$$n=2$$$ and $$$m=2$$$. As we mentioned in hint 2, $$$b_2$$$ will always be written, but what about $$$b_1$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "This problem can be solved naturally with a greedy algorithm — for $$$i = 1, 2, \\dots, m$$$, we use $$$b_i$$$ to replace the minimal value among the current $$$a_1, a_2, \\dots, a_n$$$. The time complexity is $$$O(nm)$$$ for each test case.\nAlternatively, we can first add $$$b_m$$$ to our final sum. For the remaining $$$(n+m-1)$$$ integers, we can freely pick $$$(n - 1)$$$ out of them and add it to our final sum. This is because if we want a certain $$$a_i$$$ to remain on the board at the end, we simply do not touch it in the process. If we want a certain $$$b_i$$$ to remain on the board at the end, then on the $$$i^{th}$$$ operation we replace some $$$a_j$$$ that we do not want at the end by $$$b_i$$$.\nUsing an efficient sorting algorithm gives us a $$$O((n + m) \\log (n + m))$$$ solution, which is our intended solution."
+        }
+    ]
+}

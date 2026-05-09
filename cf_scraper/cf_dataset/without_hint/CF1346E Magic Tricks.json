@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMasha is going to participate in a talent show conducted by the university she studies at. She wants to impress the audience with lots of different magic tricks!\n\nFor one of her tricks, she uses $ n $ sponge balls, one of which is a special one. First, she arranges the balls in a row in such a way that the special ball is put on position $ k $ (positions are numbered from $ 1 $ to $ n $ from left to right). After that, she performs $ m $ swaps: during the $ i $ -th swap, she chooses the ball on position $ x_i $ and the ball on position $ y_i $ , and swaps them.\n\nSince Masha is a magician, she fakes some of her actions to trick the audience — when she starts performing a swap, she may fake it, so it is not performed (but it looks like it is performed for the audience). There are no constraints on which swaps Masha should fake or should actually perform — for example, she may fake all of the swaps, or even not fake anything at all.\n\nFor the trick to work perfectly, the special ball should end up on a specific position — Masha has not decided yet, which position is perfect. Since faking swaps is difficult, for each position she wants to know the minimum number of swaps she has to fake so that the special ball ends up there.\n\nUnfortunately, Masha is a magician, neither a mathematician nor a programmer. So she needs your help in calculating what she wants!\n\nInput Format\nThe first line contains three integers $ n $ , $ m $ and $ k $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ; $ 1 \\le m \\le 2 \\cdot 10^5 $ ; $ 1 \\le k \\le n $ ) — the number of balls, the number of swaps and the initial position of the special ball, respectively.\n\nThen $ m $ lines follow, the $ i $ -th line contains two integers $ x_i $ and $ y_i $ ( $ 1 \\le x_i, y_i \\le n $ ; $ x_i \\ne y_i $ ) denoting the $ i $ -th swap.\n\nOutput Format\nPrint $ n $ integers. The $ i $ -th integer should be the minimum number of swaps Masha has to fake so the special ball ends up on position $ i $ (or $ -1 $ , if Masha cannot put the special ball there).\n\nExamples\nSample 1\nInput\n4 5 1\n3 4\n2 1\n4 1\n3 1\n3 1\nOutput\n2 0 3 1\n\nSample 2\nInput\n5 7 4\n3 2\n3 2\n4 2\n3 4\n4 1\n3 2\n5 2\nOutput\n2 2 0 3 1\n\nSample 3\nInput\n7 15 5\n5 3\n4 2\n6 1\n2 4\n1 6\n3 7\n5 6\n4 2\n6 4\n2 6\n6 3\n6 3\n7 6\n2 6\n7 2\nOutput\n-1 1 1 1 2 1 0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (elizarov)",
+            "content": "fun main\n()\n{\nval\n(\nn\n,\nm\n,\nk\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval inf\n=\nInt\n.\nMAX_VALUE\n-\n1\nval s\n=\nIntArray\n(\nn\n)\n{\ninf\n}\ns\n[\nk\n-\n1\n]\n=\n0\nrepeat\n(\nm\n)\n{\nval\n(\nx\n,\ny\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n-\n1\n}\nval sx\n=\ns\n[\nx\n]\nval sy\n=\ns\n[\ny\n]\ns\n[\nx\n]\n=\nminOf\n(\nsx\n+\n1\n,\nsy\n)\ns\n[\ny\n]\n=\nminOf\n(\nsy\n+\n1\n,\nsx\n)\n}\nprintln\n(\ns\n.\njoinToString\n(\n\" \"\n)\n{\n(\nif\n(\nit\n==\ninf\n)\n-\n1\nelse\nit\n).\ntoString\n()\n})\n}"
+        }
+    ]
+}

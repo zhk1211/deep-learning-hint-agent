@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA binary string is a string consisting only of the characters 0 and 1. You are given a binary string $ s $ .\n\nFor some non-empty substring $ ^\\dagger $ $ t $ of string $ s $ containing $ x $ characters 0 and $ y $ characters 1, define its cost as:\n\n- $ x \\cdot y $ , if $ x > 0 $ and $ y > 0 $ ;\n- $ x^2 $ , if $ x > 0 $ and $ y = 0 $ ;\n- $ y^2 $ , if $ x = 0 $ and $ y > 0 $ .\n\nGiven a binary string $ s $ of length $ n $ , find the maximum cost across all its non-empty substrings.\n\n$ ^\\dagger $ A string $ a $ is a substring of a string $ b $ if $ a $ can be obtained from $ b $ by deletion of several (possibly, zero or all) characters from the beginning and several (possibly, zero or all) characters from the end.\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^5 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the string $ s $ .\n\nThe second line of each test case contains a binary string $ s $ of length $ n $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single integer — the maximum cost across all substrings.\n\nExamples\nSample 1\nInput\n6\n5\n11100\n7\n1100110\n6\n011110\n7\n1001010\n4\n1000\n1\n0\nOutput\n9\n12\n16\n12\n9\n1\n\nNote\nIn the first test case, we can take a substring $ 111 $ . It contains $ 3 $ characters 1 and $ 0 $ characters 0. So $ a = 3 $ , $ b = 0 $ and its cost is $ 3^2 = 9 $ .\n\nIn the second test case, we can take the whole string. It contains $ 4 $ characters 1 and $ 3 $ characters 0. So $ a = 4 $ , $ b = 3 $ and its cost is $ 4 \\cdot 3 = 12 $ .\n\nIn the third test case, we can can take a substring $ 1111 $ and its cost is $ 4^2 = 16 $ .\n\nIn the fourth test case, we can take the whole string and cost is $ 4 \\cdot 3 = 12 $ .\n\nIn the fifth test case, we can take a substring $ 000 $ and its cost is $ 3 \\cdot 3 = 9 $ .\n\nIn the sixth test case, we can only take the substring $ 0 $ and its cost is $ 1 \\cdot 1 = 1 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Considering that if we want to find the max value of $$$x \\cdot y$$$, then the whole string is the best to calculate, for it $$$0$$$ s and $$$1$$$ s are the max.\nThen considering $$$x \\cdot x$$$ and $$$y \\cdot y$$$ : what we need to do is to calculate the max continuous number of $$$0$$$ or $$$1$$$, compare its square to the first condition, then take the bigger one as the answer."
+        }
+    ]
+}

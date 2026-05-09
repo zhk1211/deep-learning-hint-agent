@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAca and Milovan, two fellow competitive programmers, decided to give Vasilije a problem to test his skills.\n\nVasilije is given three positive integers: $ n $ , $ k $ , and $ x $ , and he has to determine if he can choose $ k $ distinct integers between $ 1 $ and $ n $ , such that their sum is equal to $ x $ .\n\nSince Vasilije is now in the weirdest city in Serbia where Aca and Milovan live, Cacak, the problem seems weird to him. So he needs your help with this problem.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe only line of each test case contains three integers $ n $ , $ k $ and $ x $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ , $ 1 \\le k \\le n $ , $ 1 \\le x \\le 4 \\cdot 10^{10} $ ) — the maximum element he can choose, the number of elements he can choose and the sum he has to reach.\n\nNote that the sum of $ n $ over all test cases may exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case output one line: \"YES\", if it is possible to choose $ k $ distinct integers between $ 1 $ and $ n $ , such that their sum is equal to $ x $ , and \"NO\", if it isn't.\n\nYou can output the answer in any case (for example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n12\n5 3 10\n5 3 3\n10 10 55\n6 5 20\n2 1 26\n187856 87856 2609202300\n200000 190000 19000000000\n28 5 2004\n2 2 2006\n9 6 40\n47202 32455 613407217\n185977 145541 15770805980\nOutput\nYES\nNO\nYES\nYES\nNO\nNO\nYES\nNO\nNO\nNO\nYES\nYES\n\nNote\nIn the first test case $ n = 5,\\ k=3,\\ x=10 $ , so we can choose the numbers: $ 2 $ , $ 3 $ , $ 5 $ , whose sum is $ 10 $ , so the answer is \"YES\".\n\nIn the second test case $ n = 5, \\ k=3, \\ x=3 $ , there is no three numbers which satisfies the condition, so the answer is \"NO\". It can be shown that there are no three numbers whose sum is $ 3 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nProve that the answer for the second test case is \"NO\".\nHint 2\n$$$ 1 + 2 + 3 \\gt 5$$$\nHint 3\nDetermine the minimum and maximum sum achievable.\nHint 4\nProve that it's possible to construct the desired sequence for any requested sum between the minimum and maximum possible sum."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Prove that the answer for the second test case is \"NO\"."
+        },
+        {
+            "title": "Hint 2",
+            "content": "$$$ 1 + 2 + 3 \\gt 5$$$"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Determine the minimum and maximum sum achievable."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Prove that it's possible to construct the desired sequence for any requested sum between the minimum and maximum possible sum."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\nt\n;\n//read the number of test cases\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nlong\nlong\nn\n,\nx\n,\nk\n;\n//read n, x, k for each test case\ncin\n>>\nn\n>>\nx\n>>\nk\n;\nif\n(\n2\n*\nk\n>=\nx\n*(\nx\n+\n1\n)\n&&\n2\n*\nk\n<=\nn\n*(\nn\n+\n1\n)-(\nn\n-\nx\n)*(\nn\n-\nx\n+\n1\n)){\n//check if k is between the minimum and maximum sum\ncout\n<<\n\"YES\\n\"\n;\n}\nelse\ncout\n<<\n\"NO\\n\"\n;\n}\n}"
+        }
+    ]
+}

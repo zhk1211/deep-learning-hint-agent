@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ consisting of exactly $ n $ characters, and each character is either '0', '1' or '2'. Such strings are called ternary strings.\n\nYour task is to replace minimum number of characters in this string with other characters to obtain a balanced ternary string (balanced ternary string is a ternary string such that the number of characters '0' in this string is equal to the number of characters '1', and the number of characters '1' (and '0' obviously) is equal to the number of characters '2').\n\nAmong all possible balanced ternary strings you have to obtain the lexicographically (alphabetically) smallest.\n\nNote that you can neither remove characters from the string nor add characters to the string. Also note that you can replace the given characters only with characters '0', '1' and '2'.\n\nIt is guaranteed that the answer exists.\n\nInput Format\nThe first line of the input contains one integer $ n $ ( $ 3 \\le n \\le 3 \\cdot 10^5 $ , $ n $ is divisible by $ 3 $ ) — the number of characters in $ s $ .\n\nThe second line contains the string $ s $ consisting of exactly $ n $ characters '0', '1' and '2'.\n\nOutput Format\nPrint one string — the lexicographically (alphabetically) smallest balanced ternary string which can be obtained from the given one with minimum number of replacements.\n\nBecause $ n $ is divisible by $ 3 $ it is obvious that the answer exists. And it is obvious that there is only one possible answer.\n\nExamples\nSample 1\nInput\n3\n121\nOutput\n021\n\nSample 2\nInput\n6\n000000\nOutput\n001122\n\nSample 3\nInput\n6\n211200\nOutput\n211200\n\nSample 4\nInput\n6\n120110\nOutput\n120120"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Vovuh)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n;\nint\nneedRep\n(\nconst\nvector\n<int>\n&\ncnt\n,\nconst\nvector\n<int>\n&\nneed\n)\n{\nint\nres\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n3\n;\n++\ni\n)\n{\nres\n+=\nabs\n(\ncnt\n[\ni\n]\n-\nneed\n[\ni\n]);\n}\nassert\n(\nres\n%\n2\n==\n0\n);\nreturn\nres\n/\n2\n;\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nstring\ns\n;\ncin\n>>\nn\n>>\ns\n;\nvector\n<int>\ncnt\n(\n3\n),\ncur\n(\n3\n,\nn\n/\n3\n);\nfor\n(\nauto\nc\n:\ns\n)\n{\n++\ncnt\n[\nc\n-\n'0'\n];\n}\nint\nneed\n=\nneedRep\n(\ncnt\n,\ncur\n);\nint\ncurRep\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\n--\ncnt\n[\ns\n[\ni\n]\n-\n'0'\n];\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n3\n;\n++\nj\n)\n{\nif\n(\ncur\n[\nj\n]\n==\n0\n)\ncontinue\n;\nint\nrep\n=\nj\n!=\ns\n[\ni\n]\n-\n'0'\n;\n--\ncur\n[\nj\n];\nif\n(\ncurRep\n+\nrep\n+\nneedRep\n(\ncnt\n,\ncur\n)\n==\nneed\n)\n{\ns\n[\ni\n]\n=\nj\n+\n'0'\n;\ncurRep\n+=\nrep\n;\nbreak\n;\n}\n++\ncur\n[\nj\n];\n}\n}\ncout\n<<\ns\n<<\nendl\n;\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Solution (PikMike)",
+            "content": "n\n=\nint\n(\ninput\n())\ns\n=\n[\nord\n(\nx\n)\n-\nord\n(\n'0'\n)\nfor\nx\nin\ninput\n()]\ncnt\n=\n[\ns\n.\ncount\n(\nx\n)\nfor\nx\nin\n[\n0\n,\n1\n,\n2\n]]\ndef\nforw\n(\nx\n):\nfor\ni\nin\nrange\n(\nn\n):\nif\n(\ncnt\n[\nx\n]\n<\nn\n// 3 and s[i] > x and cnt[s[i]] > n // 3):\ncnt\n[\nx\n]\n+=\n1\ncnt\n[\ns\n[\ni\n]]\n-=\n1\ns\n[\ni\n]\n=\nx\ndef\nback\n(\nx\n):\nfor\ni\nin\nrange\n(\nn\n-\n1\n,\n-\n1\n,\n-\n1\n):\nif\n(\ncnt\n[\nx\n]\n<\nn\n// 3 and s[i] < x and cnt[s[i]] > n // 3):\ncnt\n[\nx\n]\n+=\n1\ncnt\n[\ns\n[\ni\n]]\n-=\n1\ns\n[\ni\n]\n=\nx\nforw\n(\n0\n)\nforw\n(\n1\n)\nback\n(\n2\n)\nback\n(\n1\n)\nprint\n(\n''\n.\njoin\n([\nstr\n(\nx\n)\nfor\nx\nin\ns\n]))"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIn order to write a string, Atilla needs to first learn all letters that are contained in the string.\n\nAtilla needs to write a message which can be represented as a string $ s $ . He asks you what is the minimum alphabet size required so that one can write this message.\n\nThe alphabet of size $ x $ ( $ 1 \\leq x \\leq 26 $ ) contains only the first $ x $ Latin letters. For example an alphabet of size $ 4 $ contains only the characters $ \\texttt{a} $ , $ \\texttt{b} $ , $ \\texttt{c} $ and $ \\texttt{d} $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq 100 $ ) — the length of the string.\n\nThe second line of each test case contains a string $ s $ of length $ n $ , consisting of lowercase Latin letters.\n\nOutput Format\nFor each test case, output a single integer — the minimum alphabet size required to so that Atilla can write his message $ s $ .\n\nExamples\nSample 1\nInput\n5\n1\na\n4\ndown\n10\ncodeforces\n3\nbcf\n5\nzzzzz\nOutput\n1\n23\n19\n6\n26\n\nNote\nFor the first test case, Atilla needs to know only the character $ \\texttt{a} $ , so the alphabet of size $ 1 $ which only contains $ \\texttt{a} $ is enough.\n\nFor the second test case, Atilla needs to know the characters $ \\texttt{d} $ , $ \\texttt{o} $ , $ \\texttt{w} $ , $ \\texttt{n} $ . The smallest alphabet size that contains all of them is $ 23 $ (such alphabet can be represented as the string $ \\texttt{abcdefghijklmnopqrstuvw} $ )."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n\"bits/stdc++.h\"\nusing\nnamespace\nstd\n;\nusing\nll\n=\nlong\nlong\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n#define\nall\n(\nv\n)\nv\n.\nbegin\n(),\nv\n.\nend\n()\n#define\nrall\n(\nv\n)\nv\n.\nrbegin\n(),\nv\n.\nrend\n()\n#define\npb                push_back\n#define\nsz\n(\na\n)\n(\nint\n)\na\n.\nsize\n()\nvoid\nsolve\n()\n{\nint\nn\n;\nstring\ns\n;\ncin\n>>\nn\n>>\ns\n;\nsort\n(\nall\n(\ns\n));\ncout\n<<\ns\n.\nback\n()\n-\n'a'\n+\n1\n<<\n\"\\n\"\n;\n}\nint32_t\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\nint\nt\n=\n1\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

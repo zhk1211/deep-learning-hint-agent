@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a tree with $ n $ vertices labeled from $ 1 $ to $ n $ . An integer $ a_{i} $ is written on vertex $ i $ for $ i = 1, 2, \\ldots, n $ . You want to make all $ a_{i} $ equal by performing some (possibly, zero) spells.\n\nSuppose you root the tree at some vertex. On each spell, you can select any vertex $ v $ and any non-negative integer $ c $ . Then for all vertices $ i $ in the subtree $ ^{\\dagger} $ of $ v $ , replace $ a_{i} $ with $ a_{i} \\oplus c $ . The cost of this spell is $ s \\cdot c $ , where $ s $ is the number of vertices in the subtree. Here $ \\oplus $ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).\n\nLet $ m_r $ be the minimum possible total cost required to make all $ a_i $ equal, if vertex $ r $ is chosen as the root of the tree. Find $ m_{1}, m_{2}, \\ldots, m_{n} $ .\n\n$ ^{\\dagger} $ Suppose vertex $ r $ is chosen as the root of the tree. Then vertex $ i $ belongs to the subtree of $ v $ if the simple path from $ i $ to $ r $ contains $ v $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^{4} $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^{5} $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i < 2^{20} $ ).\n\nEach of the next $ n-1 $ lines contains two integers $ u $ and $ v $ ( $ 1 \\le u, v \\le n $ ), denoting that there is an edge connecting two vertices $ u $ and $ v $ .\n\nIt is guaranteed that the given edges form a tree.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^{5} $ .\n\nOutput Format\nFor each test case, print $ m_1, m_2, \\ldots, m_n $ on a new line.\n\nExamples\nSample 1\nInput\n2\n4\n3 2 1 0\n1 2\n2 3\n2 4\n1\n100\nOutput\n8 6 12 10\n0\n\nNote\nIn the first test case, to find $ m_1 $ we root the tree at vertex $ 1 $ .\n\n1. In the first spell, choose $ v=2 $ and $ c=1 $ . After performing the spell, $ a $ will become $ [3, 3, 0, 1] $ . The cost of this spell is $ 3 $ .\n2. In the second spell, choose $ v=3 $ and $ c=3 $ . After performing the spell, $ a $ will become $ [3, 3, 3, 1] $ . The cost of this spell is $ 3 $ .\n3. In the third spell, choose $ v=4 $ and $ c=2 $ . After performing the spell, $ a $ will become $ [3, 3, 3, 3] $ . The cost of this spell is $ 2 $ .\n\nNow all the values in array $ a $ are equal, and the total cost is $ 3 + 3 + 2 = 8 $ .\n\nThe values $ m_2 $ , $ m_3 $ , $ m_4 $ can be found analogously.\n\nIn the second test case, the goal is already achieved because there is only one vertex."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Try to solve the problem for single root."
+        },
+        {
+            "title": "Hint 2",
+            "content": "For any vertex $$$v$$$ which isn't the root, denote $$$par_{v}$$$ as the parent of $$$v$$$. Then value of $$$a_{v} \\oplus a_{par_{v}}$$$ only changes if we perform the operation on $$$v$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Since $$$x_{1} \\oplus x_{2} \\oplus \\cdots \\oplus x_{m} \\le x_{1} + x_{2} + \\cdots + x_{m}$$$ for any numbers $$$x_{1}, x_{2}, \\cdots, x_{m}$$$, we can assume that there is at most operation performed in same vertex."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Let's solve the problem for single root first.\nDenote the operation in the statement as $$$op(v, c)$$$, and size of $$$v$$$'s subtree as $$$s_{v}$$$.\nThe goal is to make $$$a_{v} \\oplus a_{par_{v}} = 0$$$ for every non-root vertex $$$v$$$. This value is changed only when we select $$$v$$$. To make $$$a_{v} \\oplus a_{par_{v}}$$$ to $$$0$$$, we should perform $$$op \\left( v, a_{v} \\oplus a_{par_{v}} \\right)$$$ (Look Hint 3).\nTherefore, the answer sill be $$$\\sum_{i != root} s_{i} \\times (a_{i} \\oplus a_{par_{i}})$$$. Now our task is to calculate this for all roots. This can be done by lots of ways, and the following algorithm is one way.\nCalculate the answer for $$$1$$$ as root first in $$$\\mathcal{O}(n)$$$. Now, we will traverse the tree starting at vertex $$$1$$$ and keep updating the answer. If root changes from $$$q$$$ to $$$r$$$ ($$$q$$$ and $$$r$$$ are adjacent), every vertex except $$$q$$$ and $$$r$$$ will have same parents and subtree size, so will contribute same to the answer, so we only need to consider $$$q$$$ and $$$r$$$ to calculate the change. Edge connecting $$$q$$$ and $$$r$$$ will divide the tree into parts: each of size $$$X$$$ and $$$Y$$$. If root changes $$$q$$$ to $$$r$$$, $$$Y \\times (a_{q} \\oplus a_{r})$$$ will be subtracted, and $$$X \\times (a_{q} \\oplus a_{r})$$$ will be added to the answer. $$$X$$$ and $$$Y$$$ can be pre-calculated in $$$\\mathcal{O}(n)$$$, so this update costs $$$\\mathcal{O}(1)$$$.\nSince changing root into the adjacent vertex costs $$$\\mathcal{O}(1)$$$, answer for all roots can be calculated in $$$\\mathcal{O}(n)$$$."
+        }
+    ]
+}

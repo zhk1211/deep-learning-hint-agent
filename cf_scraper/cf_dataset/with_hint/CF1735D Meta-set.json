@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou like the card board game \"Set\". Each card contains $ k $ features, each of which is equal to a value from the set $ \\{0, 1, 2\\} $ . The deck contains all possible variants of cards, that is, there are $ 3^k $ different cards in total.\n\nA feature for three cards is called good if it is the same for these cards or pairwise distinct. Three cards are called a set if all $ k $ features are good for them.\n\nFor example, the cards $ (0, 0, 0) $ , $ (0, 2, 1) $ , and $ (0, 1, 2) $ form a set, but the cards $ (0, 2, 2) $ , $ (2, 1, 2) $ , and $ (1, 2, 0) $ do not, as, for example, the last feature is not good.\n\nA group of five cards is called a meta-set, if there is strictly more than one set among them. How many meta-sets there are among given $ n $ distinct cards?\n\nInput Format\nThe first line of the input contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 10^3 $ , $ 1 \\le k \\le 20 $ ) — the number of cards on a table and the number of card features. The description of the cards follows in the next $ n $ lines.\n\nEach line describing a card contains $ k $ integers $ c_{i, 1}, c_{i, 2}, \\ldots, c_{i, k} $ ( $ 0 \\le c_{i, j} \\le 2 $ ) — card features. It is guaranteed that all cards are distinct.\n\nOutput Format\nOutput one integer — the number of meta-sets.\n\nExamples\nSample 1\nInput\n8 4\n0 0 0 0\n0 0 0 1\n0 0 0 2\n0 0 1 0\n0 0 2 0\n0 1 0 0\n1 0 0 0\n2 2 0 0\nOutput\n1\n\nSample 2\nInput\n7 4\n0 0 0 0\n0 0 0 1\n0 0 0 2\n0 0 1 0\n0 0 2 0\n0 1 0 0\n0 2 0 0\nOutput\n3\n\nSample 3\nInput\n9 2\n0 0\n0 1\n0 2\n1 0\n1 1\n1 2\n2 0\n2 1\n2 2\nOutput\n54\n\nSample 4\nInput\n20 4\n0 2 0 0\n0 2 2 2\n0 2 2 1\n0 2 0 1\n1 2 2 0\n1 2 1 0\n1 2 2 1\n1 2 0 1\n1 1 2 2\n1 1 0 2\n1 1 2 1\n1 1 1 1\n2 1 2 0\n2 1 1 2\n2 1 2 1\n2 1 1 1\n0 1 1 2\n0 0 1 0\n2 2 0 0\n2 0 0 2\nOutput\n0\n\nNote\nLet's draw the cards indicating the first four features. The first feature will indicate the number of objects on a card: $ 1 $ , $ 2 $ , $ 3 $ . The second one is the color: red, green, purple. The third is the shape: oval, diamond, squiggle. The fourth is filling: open, striped, solid.\n\nYou can see the first three tests below. For the first two tests, the meta-sets are highlighted.\n\nIn the first test, the only meta-set is the five cards $ (0000,\\ 0001,\\ 0002,\\ 0010,\\ 0020) $ . The sets in it are the triples $ (0000,\\ 0001,\\ 0002) $ and $ (0000,\\ 0010,\\ 0020) $ . Also, a set is the triple $ (0100,\\ 1000,\\ 2200) $ which does not belong to any meta-set.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1735D/adb263e3f15768ca70792b960343e54fee8b0c78.png)In the second test, the following groups of five cards are meta-sets: $ (0000,\\ 0001,\\ 0002,\\ 0010,\\ 0020) $ , $ (0000,\\ 0001,\\ 0002,\\ 0100,\\ 0200) $ , $ (0000,\\ 0010,\\ 0020,\\ 0100,\\ 0200) $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1735D/7f81eb3d35cef293521d964ff02412675be99fde.png)In there third test, there are $ 54 $ meta-sets.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1735D/957a184e2fe2747160054a27284e651f264ae25a.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "How many sets can fit in $$$5$$$ cards?"
+        },
+        {
+            "title": "Answer to Hint1",
+            "content": "At most two.\nIf there are two sets among $$$5$$$ cards, there will be a central card.\nConsider each card as a central card."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "For every two cards, there is always a single card that forms a set with them.\n[1] That means that two sets can share at most one card.\nLet's prove that there are no more than $$$2$$$ sets in a meta-set.\nLet's define $$$5$$$ cards as $$$c_1, c_2, c_3, c_4, c_5$$$. Let's guess that $$$(c_1, c_2, c_3)$$$ is a set.\nAll other sets can have at most one card among $$$(c_1, c_2, c_3)$$$ (according to [1]), so they must include $$$c_4$$$ and $$$c_5$$$. So we have at most one other set, otherwise they would have two same cards, which is prohibited according to [1].\nSo, every meta-set looks like $$$2$$$ sets with one common card. Let's call this card a central card.\nNow there is just a simple combinatorics. For each card, we want to know the number of sets that include it. If this number is $$$s$$$, then we should add $$$\\frac{s(s-1)}{2}$$$ to the answer — it is the number of meta-sets with this card as a central card.\nTo get the number of sets for each card, we can iterate over all pairs of cards $$$(i, j)$$$, generate the complement to the set, and add $$$1$$$ to that card in a map/hashmap.\nComplexity is $$$\\mathcal{O}(kn^2\\log(n))$$$ or $$$\\mathcal{O}(kn^2)$$$."
+        }
+    ]
+}

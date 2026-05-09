@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the hard version of the problem. The difference in the constraints between both versions are colored below in red. You can make hacks only if all versions of the problem are solved.\n\nMarin and Gojou are playing hide-and-seek with an array.\n\nGojou initially perform the following steps:\n\n- First, Gojou chooses $ 2 $ integers $ l $ and $ r $ such that $ l \\leq r $ .\n- Then, Gojou will make an array $ a $ of length $ r-l+1 $ which is a permutation of the array $ [l,l+1,\\ldots,r] $ .\n- Finally, Gojou chooses a secret integer $ x $ and sets $ a_i $ to $ a_i \\oplus x $ for all $ i $ (where $ \\oplus $ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR)).\n\nMarin is then given the values of $ l,r $ and the final array $ a $ . She needs to find the secret integer $ x $ to win. Can you help her?\n\nNote that there may be multiple possible $ x $ that Gojou could have chosen. Marin can find any possible $ x $ that could have resulted in the final value of $ a $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^5 $ ) — the number of test cases.\n\nIn the first line of each test case contains two integers $ l $ and $ r $ ( $ \\color{red}{\\boldsymbol{0} \\boldsymbol{\\le} \\boldsymbol{l}} \\le r < 2^{17} $ ).\n\nThe second line contains $ r - l + 1 $ space-seperated integers of $ a_1,a_2,\\ldots,a_{r-l+1} $ ( $ 0 \\le a_i < 2^{17} $ ). It is guaranteed that array $ a $ is valid.\n\nIt is guaranteed that the sum of $ r - l + 1 $ over all test cases does not exceed $ 2^{17} $ .\n\nOutput Format\nFor each test case print an integer $ x $ . If there are multiple answers, print any.\n\nExamples\nSample 1\nInput\n3\n4 7\n3 2 1 0\n4 7\n4 7 6 5\n1 3\n0 2 1\nOutput\n4\n0\n3\n\nNote\nIn the first test case, the original array is $ [7, 6, 5, 4] $ .\n\nIn the second test case, the original array is $ [4, 7, 6, 5] $ .\n\nIn the third test case, the original array is $ [3, 1, 2] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "If $$$a \\oplus b = 1$$$, then $$$(a \\oplus x) \\oplus (b \\oplus x) = 1$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "if $$$l$$$ is even and $$$r$$$ is odd, the last bit of $$$x$$$ can be either $$$0$$$ or $$$1$$$ (we can pair $$$a_i$$$ with $$$a_i \\oplus 1$$$)."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "There are two solutions to this problem.\nIf $$$l$$$ is even and $$$r$$$ is odd, we can skip the last bit and divide the range by two, then recursively solve it. Otherwise, we will pair $$$a_i$$$ with $$$a_i \\oplus 1$$$, and we will left with at most $$$2$$$ candidates for $$$x$$$ to check.\nThere is also another solution: we can iterate all possibilities of $$$x$$$ (by assuming $$$a_i$$$ is $$$l \\oplus x$$$ for all $$$1 \\leq i \\leq n$$$). If $$$x$$$ is the hidden number, $$$l \\leq a_i \\oplus x \\leq r$$$ for all $$$1 \\leq i \\leq n$$$, so the problem reduce to \"count the number of $$$a_i$$$ that $$$l \\leq a_i \\oplus x \\leq r$$$\", which can be solved with binary trie."
+        },
+        {
+            "title": "Solution",
+            "content": "C++\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n2e5\n+\n5\n;\nint\na\n[\nN\n],\nl\n,\nr\n;\nset\n<int>\ns\n,\ns2\n;\nvoid\nsolve\n()\n{\nint\nmul\n=\n1\n;\ns\n.\nclear\n();\ncin\n>>\nl\n>>\nr\n;\nfor\n(\nint\ni\n=\nl\n;\ni\n<=\nr\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\ns\n.\ninsert\n(\na\n[\ni\n]);\n}\nfor\n(;\nl\n%\n2\n==\n0\n&&\nr\n%\n2\n==\n1\n;\nl\n>>=\n1\n,\nr\n>>=\n1\n,\nmul\n<<=\n1\n)\n{\ns2\n.\nclear\n();\nfor\n(\nint\ni\n:\ns\n)\ns2\n.\ninsert\n(\ni\n>>\n1\n);\nswap\n(\ns\n,\ns2\n);\n}\nint\nans\n;\nif\n(\nl\n%\n2\n==\n0\n)\nans\n=\nr\n;\nelse\nans\n=\nl\n;\nfor\n(\nint\ni\n:\ns\n)\n{\nif\n(\ns\n.\nfind\n(\ni\n^\n1\n)\n==\ns\n.\nend\n())\n{\nint\ncur\n=\ni\n^\nans\n;\nbool\nf\n=\ntrue\n;\nfor\n(\nint\nj\n:\ns\n)\nf\n&=\n((\ncur\n^\nj\n)\n>=\nl\n&&\n(\ncur\n^\nj\n)\n<=\nr\n);\nif\n(\nf\n)\n{\nans\n=\ncur\n;\nbreak\n;\n}\n}\n}\ncout\n<<\nans\n*\nmul\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\nsolve\n();\nreturn\n0\n;\n}\nPython\nimport\nsys\ninput\n=\nsys\n.\nstdin\n.\nreadline\ndef\nsolve\n(\nl\n:\nint\n,\nr\n:\nint\n,\ns\n:\nset\n):\nif\nl\n%\n2\n==\n0\nand\nr\n%\n2\n==\n1\n:\nt\n=\nset\n()\nfor\nv\nin\ns\n:\nt\n.\nadd\n(\nv\n>>\n1\n)\nreturn\nsolve\n(\nl\n>>\n1\n,\nr\n>>\n1\n,\nt\n)\n<<\n1\nelse\n:\nfor\nv\nin\ns\n:\nif\n(\nv\n^\n1\n)\nnot\nin\ns\n:\nok\n=\nTrue\nans\n=\nv\nif\nl\n%\n2\n==\n0\n:\nans\n^=\nr\nelse\n:\nans\n^=\nl\nfor\nx\nin\ns\n:\nif\n(\nx\n^\nans\n)\n<\nl\nor\n(\nx\n^\nans\n)\n>\nr\n:\nok\n=\nFalse\nbreak\nif\nok\n:\nreturn\nans\n            \n \nt\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\nl\n,\nr\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\ns\n=\nset\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nprint\n(\nsolve\n(\nl\n,\nr\n,\ns\n))"
+        }
+    ]
+}

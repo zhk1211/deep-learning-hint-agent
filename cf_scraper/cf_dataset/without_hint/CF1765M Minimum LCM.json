@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer $ n $ .\n\nYour task is to find two positive (greater than $ 0 $ ) integers $ a $ and $ b $ such that $ a+b=n $ and the least common multiple (LCM) of $ a $ and $ b $ is the minimum among all possible values of $ a $ and $ b $ . If there are multiple answers, you can print any of them.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 10^9 $ ).\n\nOutput Format\nFor each test case, print two positive integers $ a $ and $ b $ — the answer to the problem. If there are multiple answers, you can print any of them.\n\nExamples\nSample 1\nInput\n4\n2\n9\n5\n10\nOutput\n1 1\n3 6\n1 4\n5 5\n\nNote\nIn the second example, there are $ 8 $ possible pairs of $ a $ and $ b $ :\n\n- $ a = 1 $ , $ b = 8 $ , $ LCM(1, 8) = 8 $ ;\n- $ a = 2 $ , $ b = 7 $ , $ LCM(2, 7) = 14 $ ;\n- $ a = 3 $ , $ b = 6 $ , $ LCM(3, 6) = 6 $ ;\n- $ a = 4 $ , $ b = 5 $ , $ LCM(4, 5) = 20 $ ;\n- $ a = 5 $ , $ b = 4 $ , $ LCM(5, 4) = 20 $ ;\n- $ a = 6 $ , $ b = 3 $ , $ LCM(6, 3) = 6 $ ;\n- $ a = 7 $ , $ b = 2 $ , $ LCM(7, 2) = 14 $ ;\n- $ a = 8 $ , $ b = 1 $ , $ LCM(8, 1) = 8 $ .\n\nIn the third example, there are $ 5 $ possible pairs of $ a $ and $ b $ :\n\n- $ a = 1 $ , $ b = 4 $ , $ LCM(1, 4) = 4 $ ;\n- $ a = 2 $ , $ b = 3 $ , $ LCM(2, 3) = 6 $ ;\n- $ a = 3 $ , $ b = 2 $ , $ LCM(3, 2) = 6 $ ;\n- $ a = 4 $ , $ b = 1 $ , $ LCM(4, 1) = 4 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\na\n=\n1\n;\nfor\n(\nint\ng\n=\n2\n;\ng\n*\ng\n<=\nn\n;\n++\ng\n)\n{\nif\n(\nn\n%\ng\n==\n0\n)\n{\na\n=\nn\n/\ng\n;\nbreak\n;\n}\n}\ncout\n<<\na\n<<\n' '\n<<\nn\n-\na\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

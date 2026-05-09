@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ heroes fighting in the arena. Initially, the $ i $ -th hero has $ a_i $ health points.\n\nThe fight in the arena takes place in several rounds. At the beginning of each round, each alive hero deals $ 1 $ damage to all other heroes. Hits of all heroes occur simultaneously. Heroes whose health is less than $ 1 $ at the end of the round are considered killed.\n\nIf exactly $ 1 $ hero remains alive after a certain round, then he is declared the winner. Otherwise, there is no winner.\n\nYour task is to calculate the number of ways to choose the initial health points for each hero $ a_i $ , where $ 1 \\le a_i \\le x $ , so that there is no winner of the fight. The number of ways can be very large, so print it modulo $ 998244353 $ . Two ways are considered different if at least one hero has a different amount of health. For example, $ [1, 2, 1] $ and $ [2, 1, 1] $ are different.\n\nInput Format\nThe only line contains two integers $ n $ and $ x $ ( $ 2 \\le n \\le 500; 1 \\le x \\le 500 $ ).\n\nOutput Format\nPrint one integer — the number of ways to choose the initial health points for each hero $ a_i $ , where $ 1 \\le a_i \\le x $ , so that there is no winner of the fight, taken modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n2 5\nOutput\n5\n\nSample 2\nInput\n3 3\nOutput\n15\n\nSample 3\nInput\n5 4\nOutput\n1024\n\nSample 4\nInput\n13 37\nOutput\n976890680"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n505\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nn\n,\nx\n;\nint\nc\n[\nN\n][\nN\n],\ndp\n[\nN\n][\nN\n];\nint\nadd\n(\nint\nx\n,\nint\ny\n)\n{\nx\n+=\ny\n;\nif\n(\nx\n>=\nMOD\n)\nx\n-=\nMOD\n;\nreturn\nx\n;\n}\nint\nmul\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\nx\n*\n1ll\n*\ny\n%\nMOD\n;\n}\nint\nmain\n()\n{\ncin\n>>\nn\n>>\nx\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nn\n;\n++\ni\n)\n{\nc\n[\ni\n][\n0\n]\n=\nc\n[\ni\n][\ni\n]\n=\n1\n;\nfor\n(\nint\nj\n=\n1\n;\nj\n<\ni\n;\n++\nj\n)\nc\n[\ni\n][\nj\n]\n=\nadd\n(\nc\n[\ni\n-\n1\n][\nj\n],\nc\n[\ni\n-\n1\n][\nj\n-\n1\n]);\n}\ndp\n[\nn\n][\n0\n]\n=\n1\n;\nfor\n(\nint\ni\n=\nn\n;\ni\n>\n1\n;\ni\n--)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nx\n;\n++\nj\n)\n{\nif\n(!\ndp\n[\ni\n][\nj\n])\ncontinue\n;\nint\npw\n=\n1\n,\nnj\n=\nmin\n(\nx\n,\nj\n+\ni\n-\n1\n);\nfor\n(\nint\nk\n=\ni\n;\nk\n>=\n0\n;\nk\n--)\n{\ndp\n[\nk\n][\nnj\n]\n=\nadd\n(\ndp\n[\nk\n][\nnj\n],\nmul\n(\ndp\n[\ni\n][\nj\n],\nmul\n(\nc\n[\ni\n][\nk\n],\npw\n)));\npw\n=\nmul\n(\npw\n,\nnj\n-\nj\n);\n}\n}\n}\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nx\n;\n++\ni\n)\nans\n=\nadd\n(\nans\n,\ndp\n[\n0\n][\ni\n]);\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

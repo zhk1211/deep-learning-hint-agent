@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "fun main\n()\n=\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval\n(\nn\n,\nk\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval s\n=\nreadLine\n()!!\nval used\n=\nBooleanArray\n(\nn\n)\n{\nfalse\n}\nvar\ncnt\n=\ns\n.\ncount\n({\nit\n==\n'1'\n})\nvar\npos\n=\n0\nwhile\n(\ncnt\n>\n0\n)\n{\nused\n[\npos\n]\n=\ntrue\nif\n(\ns\n[\npos\n]\n==\n'1'\n)\n--\ncnt\nif\n(\ncnt\n==\n0\n)\nbreak\nvar\nlft\n=\nk\nwhile\n(\nlft\n>\n0\n)\n{\npos\n=\n(\npos\n+\n1\n)\n%\nn\nif\n(!\nused\n[\npos\n])\n--\nlft\n;\n}\n}\nprintln\n(\nused\n.\ncount\n({\nit\n}))\n}"
+        }
+    ]
+}

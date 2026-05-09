@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ houses in your city arranged on an axis at points $ h_1, h_2, \\ldots, h_n $ . You want to build a new house for yourself and consider two options where to place it: points $ p_1 $ and $ p_2 $ .\n\nAs you like visiting friends, you have calculated in advance the distances from both options to all existing houses. More formally, you have calculated two arrays $ d_1 $ , $ d_2 $ : $ d_{i, j} = \\left|p_i - h_j\\right| $ , where $ |x| $ defines the absolute value of $ x $ .\n\nAfter a long time of inactivity you have forgotten the locations of the houses $ h $ and the options $ p_1 $ , $ p_2 $ . But your diary still keeps two arrays — $ d_1 $ , $ d_2 $ , whose authenticity you doubt. Also, the values inside each array could be shuffled, so values at the same positions of $ d_1 $ and $ d_2 $ may correspond to different houses. Pay attention, that values from one array could not get to another, in other words, all values in the array $ d_1 $ correspond the distances from $ p_1 $ to the houses, and in the array $ d_2 $ — from $ p_2 $ to the houses.\n\nAlso pay attention, that the locations of the houses $ h_i $ and the considered options $ p_j $ could match. For example, the next locations are correct: $ h = \\{1, 0, 3, 3\\} $ , $ p = \\{1, 1\\} $ , that could correspond to already shuffled $ d_1 = \\{0, 2, 1, 2\\} $ , $ d_2 = \\{2, 2, 1, 0\\} $ .\n\nCheck whether there are locations of houses $ h $ and considered points $ p_1 $ , $ p_2 $ , for which the founded arrays of distances would be correct. If it is possible, find appropriate locations of houses and considered options.\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 10^3 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains one integer $ n $ ( $ 1 \\le n \\le 10^3 $ ) — the length of arrays $ d_1 $ , $ d_2 $ .\n\nThe next two lines contain $ n $ integers each: arrays $ d_1 $ and $ d_2 $ ( $ 0 \\le d_{i, j} \\le 10^9 $ ) respectively.\n\nIt is guaranteed that the sum of $ n $ over all test cases doesn't exceed $ 2 \\cdot 10^3 $ .\n\nOutput Format\nFor each test case, output a single line \"NO\" if there is no answer.\n\nOtherwise output three lines. The first line must contain \"YES\". In the second line, print $ n $ integers $ h_1, h_2, \\ldots, h_n $ . In the third line print two integers $ p_1 $ , $ p_2 $ .\n\nIt must be satisfied that $ 0 \\le h_i, p_1, p_2 \\le 2 \\cdot 10^9 $ . We can show that if there is an answer, then there is one satisfying these constraints.\n\nIf there are several answers, output any of them.\n\nExamples\nSample 1\nInput\n4\n1\n5\n5\n2\n10 12\n5 20\n2\n10 33\n26 69\n4\n0 2 1 2\n2 2 1 0\nOutput\nYES\n5\n0 10\nNO\nYES\n0 43\n33 69\nYES\n1 0 3 3\n1 1\n\nNote\nIn the image below you can see the sample solutions. Planned houses are shown in bright colours: pink and purple. Existing houses are dim.\n\nIn test case $ 1 $ , the first planned house is located at point $ 0 $ , the second at point $ 10 $ . The existing house is located at point $ 5 $ and is at a distance of $ 5 $ from both planned houses.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1735E/24be6c6140dba3b9e3765dad2410e59b0e469172.png)It can be shown that there is no answer for test case $ 2 $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1735E/44e0ac4869d2d36fece9962d8edb1180f1261843.png)In test case $ 3 $ , the planned houses are located at points $ 33 $ and $ 69 $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1735E/e229a09a9182f5afb38575bceecc77c5c2d947c2.png)Note that in test case $ 4 $ , both plans are located at point $ 1 $ , where one of the existing houses is located at the same time. It is a correct placement.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1735E/06ab87496238d1bfcf3ef836bec5400ed16bc958.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "How many possible options are there for the distance between $$$p_1$$$ and $$$p_2$$$."
+        },
+        {
+            "title": "Answer to Hint1",
+            "content": "We can limit it with $$$2 \\cdot n$$$ options.\nConsider options $$$d_1[1] + d_2[i]$$$, $$$|d_1[1] - d_2[i]|$$$. Solve each one in linear(almost) time."
+        },
+        {
+            "title": "Hint2",
+            "content": "Consider the biggest distance among $$$d_1$$$ and $$$d_2$$$.\nCan we match it with something?"
+        },
+        {
+            "title": "Hint3",
+            "content": "Remove them one by one while they exceed the distance between $$$p_1$$$ and $$$p_2$$$. Then the problem is trivial."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's assume that considered point $$$p_1$$$ was to the left of considered point $$$p_2$$$.\nLet's assume that we know the distance $$$l$$$ between considered points $$$p_1$$$ and $$$p_2$$$. Let's show how to solve this problem in linear time(almost linear).\nAs long as there is a value greater than $$$l$$$, let's get the largest among them(let's call it $$$x$$$). Let's assume that this value is from $$$d_1$$$.\nIt's easy to see that this point is to the right of the considered point $$$p_2$$$ (because the largest distances is to the point $$$p_1$$$). It means that we can match distance $$$x$$$ from $$$d_1$$$ to the distance $$$x - l$$$ from $$$d_2$$$.\nWhen there is no value greater than $$$l$$$, all other houses are located between considered points. We can match them by sorting.\nThat is the $$$\\mathcal{O}(n log(n))$$$ solution.\nLet's limit possible options of $$$l$$$ with $$$\\mathcal{O}(n)$$$ options.\nIf we know that some house has distances $$$x$$$ and $$$y$$$ to considered options, then there are $$$2$$$ options of $$$l$$$: $$$x + y$$$ and $$$|x - y|$$$.\nLet's consider $$$2 \\cdot n$$$ options $$$d_1[1] + d_2[i]$$$, $$$|d_1[1] - d_2[i]|$$$.\nComplexity is $$$\\mathcal{O}(n^2 log(n))$$$."
+        }
+    ]
+}

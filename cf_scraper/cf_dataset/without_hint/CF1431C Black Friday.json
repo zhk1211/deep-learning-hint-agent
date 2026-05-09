@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (elizarov)",
+            "content": "fun main\n()\n{\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval\n(\nn\n,\nk\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval p\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval answer\n=\n(\n1.\n.\nn\n/\nk\n).\nmaxOf\n{\nd\n->\nval m\n=\nd\n*\nk\n            p\n.\nsubList\n(\nn\n-\nm\n,\nn\n-\nm\n+\nd\n).\nsum\n()\n}\nprintln\n(\nanswer\n)\n}\n}"
+        }
+    ]
+}

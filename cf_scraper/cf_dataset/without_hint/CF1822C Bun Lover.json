@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nTema loves cinnabon rolls — buns with cinnabon and chocolate in the shape of a \"snail\".\n\nCinnabon rolls come in different sizes and are square when viewed from above. The most delicious part of a roll is the chocolate, which is poured in a thin layer over the cinnabon roll in the form of a spiral and around the bun, as in the following picture:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1822C/ffc1c1654f069b6dc40f3daa75316ce608e668a4.png) Cinnabon rolls of sizes 4, 5, 6\n\nFor a cinnabon roll of size $ n $ , the length of the outer side of the square is $ n $ , and the length of the shortest vertical chocolate segment in the central part is one.\n\nFormally, the bun consists of two dough spirals separated by chocolate. A cinnabon roll of size $ n + 1 $ is obtained from a cinnabon roll of size $ n $ by wrapping each of the dough spirals around the cinnabon roll for another layer.\n\nIt is important that a cinnabon roll of size $ n $ is defined in a unique way.\n\nTema is interested in how much chocolate is in his cinnabon roll of size $ n $ . Since Tema has long stopped buying small cinnabon rolls, it is guaranteed that $ n \\ge 4 $ .\n\nAnswer this non-obvious question by calculating the total length of the chocolate layer.\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 10^5 $ ) — the number of test cases.\n\nThe following $ t $ lines describe the test cases.\n\nEach test case is described by a single integer $ n $ ( $ 4 \\le n \\le 10^9 $ ) — the size of the cinnabon roll.\n\nOutput Format\nOutput $ t $ integers. The $ i $ -th of them should be equal to the total length of the chocolate layer in the $ i $ -th test case.\n\nExamples\nSample 1\nInput\n4\n4\n5\n6\n179179179\nOutput\n26\n37\n50\n32105178545472401"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nint\nlong\nlong\nint32_t\nmain\n()\n{\nint\nq\n;\ncin\n>>\nq\n;\nwhile\n(\nq\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\ncout\n<<\n((\nn\n+\n1\n)\n*\nn\n)\n+\nn\n+\n2\n<<\n\"\\n\"\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

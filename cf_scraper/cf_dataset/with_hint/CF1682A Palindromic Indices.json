@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a palindromic string $ s $ of length $ n $ .\n\nYou have to count the number of indices $ i $ $ (1 \\le i \\le n) $ such that the string after removing $ s_i $ from $ s $ still remains a palindrome.\n\nFor example, consider $ s $ = \"aba\"\n\n1. If we remove $ s_1 $ from $ s $ , the string becomes \"ba\" which is not a palindrome.\n2. If we remove $ s_2 $ from $ s $ , the string becomes \"aa\" which is a palindrome.\n3. If we remove $ s_3 $ from $ s $ , the string becomes \"ab\" which is not a palindrome.\n\nA palindrome is a string that reads the same backward as forward. For example, \"abba\", \"a\", \"fef\" are palindromes whereas \"codeforces\", \"acd\", \"xy\" are not.\n\nInput Format\nThe input consists of multiple test cases. The first line of the input contains a single integer $ t $ $ (1 \\leq t \\leq 10^3) $ — the number of test cases. Description of the test cases follows.\n\nThe first line of each testcase contains a single integer $ n $ $ (2 \\leq n \\leq 10^5) $ — the length of string $ s $ .\n\nThe second line of each test case contains a string $ s $ consisting of lowercase English letters. It is guaranteed that $ s $ is a palindrome.\n\nIt is guaranteed that sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of indices $ i $ $ (1 \\le i \\le n) $ such that the string after removing $ s_i $ from $ s $ still remains a palindrome.\n\nExamples\nSample 1\nInput\n3\n3\naba\n8\nacaaaaca\n2\ndd\nOutput\n1\n4\n2\n\nNote\nThe first test case is described in the statement.\n\nIn the second test case, the indices $ i $ that result in palindrome after removing $ s_i $ are $ 3, 4, 5, 6 $ . Hence the answer is $ 4 $ .\n\nIn the third test case, removal of any of the indices results in \"d\" which is a palindrome. Hence the answer is $ 2 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Read the statement carefully!! The given string is a\npalindrome\n."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Let's remove some index $$$i$$$ from the first half of $$$s$$$ and check whether the resulting string is a palindrome or not, the other half has the same approach. The prefix of length $$$i-1$$$ already matches with the suffix of the same length because the initial string was a palindrome, so we just need to check if $$$t = s[i + 1 \\ldots n - i + 1]$$$ is a palindrome.\nFor $$$t$$$ to be a palindrome, $$$s_{n - i + 1}$$$ should be equal to $$$s_{i + 1}$$$ which was initially equal to $$$s_{n - i}$$$, again which should be equal to $$$s_{i + 2}$$$ and this goes on. Here we can see that $$$s_i = s_{i + 1} \\ldots = s_{n - i + 1}$$$. So the answer is simply equal to the number of contiguous same characters in the center of the string which can be calculated in $$$\\mathcal{O(n)}$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nll\nlong\nlong\n#define\npb              push_back\n#define\nall\n(\nv\n)\nv\n.\nbegin\n(),\nv\n.\nend\n()\n#define\nsz\n(\na\n)\n(\nll\n)\na\n.\nsize\n()\n#define\nF               first\n#define\nS               second\n#define\nINF\n2000000000000000000\n#define\npopcount\n(\nx\n)\n__builtin_popcountll\n(\nx\n)\n#define\npll             pair\n<\nll\n,\nll\n>\n#define\npii             pair\n<\nint\n,\nint\n>\n#define\nld\nlong\ndouble\ntemplate\n<\ntypename\nT\n,\ntypename\nU\n>\nstatic\ninline\nvoid\namin\n(\nT\n&\nx\n,\nU y\n){\nif\n(\ny\n<\nx\n)\nx\n=\ny\n;\n}\ntemplate\n<\ntypename\nT\n,\ntypename\nU\n>\nstatic\ninline\nvoid\namax\n(\nT\n&\nx\n,\nU y\n){\nif\n(\nx\n<\ny\n)\nx\n=\ny\n;\n}\n#ifdef\nLOCAL\n#define\ndebug\n(...)\ndebug_out\n(#\n__VA_ARGS__\n,\n__VA_ARGS__\n)\n#else\n#define\ndebug\n(...)\n2401\n#endif\nint\n_runtimeTerror_\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nstring\ns\n;\ncin\n>>\ns\n;\nint\ncnt\n=\n0\n;\nfor\n(\nint\ni\n=(\nn\n-\n1\n)/\n2\n;\ni\n>=\n0\n;--\ni\n)\n{\nif\n(\ns\n[\ni\n]\n==\ns\n[(\nn\n-\n1\n)\n/\n2\n])\n{\n++\ncnt\n;\n}\nelse\n{\nbreak\n;\n}\n}\ncout\n<<\n2\n*\ncnt\n-\n(\nn\n&\n1\n)\n<<\n\"\\n\"\n;\nreturn\n0\n;\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\n#ifdef\nrunSieve\n        sieve\n();\n#endif\n#ifdef\nNCR\n        initncr\n();\n#endif\nint\nTESTS\n=\n1\n;\ncin\n>>\nTESTS\n;\nwhile\n(\nTESTS\n--)\n{\n_runtimeTerror_\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

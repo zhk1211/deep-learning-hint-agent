@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a board of size $ 2 \\times n $ ( $ 2 $ rows, $ n $ columns). Some cells of the board contain chips. The chip is represented as '\\*', and an empty space is represented as '.'. It is guaranteed that there is at least one chip on the board.\n\nIn one move, you can choose any chip and move it to any adjacent (by side) cell of the board (if this cell is inside the board). It means that if the chip is in the first row, you can move it left, right or down (but it shouldn't leave the board). Same, if the chip is in the second row, you can move it left, right or up.\n\nIf the chip moves to the cell with another chip, the chip in the destination cell disappears (i. e. our chip captures it).\n\nYour task is to calculate the minimum number of moves required to leave exactly one chip on the board.\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 2 \\cdot 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe first line of the test case contains one integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the board. The second line of the test case contains the string $ s_1 $ consisting of $ n $ characters '\\*' (chip) and/or '.' (empty cell). The third line of the test case contains the string $ s_2 $ consisting of $ n $ characters '\\*' (chip) and/or '.' (empty cell).\n\nAdditional constraints on the input:\n\n- in each test case, there is at least one chip on a board;\n- the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ ( $ \\sum n \\le 2 \\cdot 10^5 $ ).\n\nOutput Format\nFor each test case, print one integer — the minimum number of moves required to leave exactly one chip on the board.\n\nExamples\nSample 1\nInput\n5\n1\n*\n.\n2\n.*\n**\n3\n*.*\n.*.\n4\n**.*\n**..\n5\n**...\n...**\nOutput\n0\n2\n3\n5\n5"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (vovuh)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nINF\n=\n1e9\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n    freopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//  freopen(\"output.txt\", \"w\", stdout);\n#endif\nint\ntc\n;\ncin\n>>\ntc\n;\nwhile\n(\ntc\n--)\n{\nint\nn\n;\nstring\ns\n[\n2\n];\ncin\n>>\nn\n>>\ns\n[\n0\n]\n>>\ns\n[\n1\n];\nfor\n(\nint\nit\n=\n0\n;\nit\n<\n2\n;\n++\nit\n)\n{\nwhile\n(\ns\n[\n0\n].\nback\n()\n==\n'.'\n&&\ns\n[\n1\n].\nback\n()\n==\n'.'\n)\n{\ns\n[\n0\n].\npop_back\n();\ns\n[\n1\n].\npop_back\n();\n}\nreverse\n(\ns\n[\n0\n].\nbegin\n(),\ns\n[\n0\n].\nend\n());\nreverse\n(\ns\n[\n1\n].\nbegin\n(),\ns\n[\n1\n].\nend\n());\n}\nn\n=\ns\n[\n0\n].\nsize\n();\nvector\n<\nvector\n<int>\n>\ncost\n(\nn\n,\nvector\n<int>\n(\n2\n));\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n2\n;\n++\nj\n)\n{\ncost\n[\ni\n][\nj\n]\n=\n(\ns\n[\nj\n][\ni\n]\n==\n'*'\n);\n}\n}\nvector\n<\nvector\n<int>\n>\ndp\n(\nn\n,\nvector\n<int>\n(\n2\n,\nINF\n));\ndp\n[\n0\n][\n0\n]\n=\ncost\n[\n0\n][\n1\n];\ndp\n[\n0\n][\n1\n]\n=\ncost\n[\n0\n][\n0\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n+\n1\n<\nn\n;\n++\ni\n)\n{\ndp\n[\ni\n+\n1\n][\n0\n]\n=\nmin\n(\ndp\n[\ni\n+\n1\n][\n0\n],\ndp\n[\ni\n][\n0\n]\n+\n1\n+\ncost\n[\ni\n+\n1\n][\n1\n]);\ndp\n[\ni\n+\n1\n][\n0\n]\n=\nmin\n(\ndp\n[\ni\n+\n1\n][\n0\n],\ndp\n[\ni\n][\n1\n]\n+\n2\n);\ndp\n[\ni\n+\n1\n][\n1\n]\n=\nmin\n(\ndp\n[\ni\n+\n1\n][\n1\n],\ndp\n[\ni\n][\n1\n]\n+\n1\n+\ncost\n[\ni\n+\n1\n][\n0\n]);\ndp\n[\ni\n+\n1\n][\n1\n]\n=\nmin\n(\ndp\n[\ni\n+\n1\n][\n1\n],\ndp\n[\ni\n][\n0\n]\n+\n2\n);\n}\ncout\n<<\nmin\n(\ndp\n[\nn\n-\n1\n][\n0\n],\ndp\n[\nn\n-\n1\n][\n1\n])\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

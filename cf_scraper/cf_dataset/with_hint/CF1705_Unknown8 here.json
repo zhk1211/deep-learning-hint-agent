@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 0",
+            "content": "It's possible to solve this problem without any randomization. See the subsequent hints for how to do so."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Observe that we can take differences between two very close queries to get the number of $$$\\texttt{T}$$$'s in a small subsequence."
+        },
+        {
+            "title": "Hint 2",
+            "content": "You can take the difference against a pre-computed query. Applying this with a group of two questions."
+        },
+        {
+            "title": "Hint 3",
+            "content": "You have three possibilities: either $$$\\texttt{TT}$$$, $$$\\texttt{FF}$$$, and $$${\\texttt{TF}, \\texttt{FT}}$$$. If the third possibility happens, simultaneously figure out whether is $$$\\texttt{TF}$$$ or $$$\\texttt{FT}$$$ and answer one question within one query."
+        },
+        {
+            "title": "Hint 4",
+            "content": "You will need to precompute the query $$$\\texttt{TFTF}\\dots\\texttt{TF}$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "There are many possible approaches, including using randomized algorithms. However, I will present the solution that takes about $$$\\tfrac{2n}{3}$$$ queries deterministically.\nWe pre-query $$$\\texttt{TTT...T}$$$ and $$$\\texttt{TFTF...TF}$$$. Then, for $$$i=1,2,\\dots,\\left\\lfloor\\frac n3\\right\\rfloor$$$, we take the difference when both the $$$(2i-1)$$$-th and the $$$2i$$$-th question in $$$\\texttt{TTT...T}$$$ is changed to $$$\\texttt{F}$$$.\nIf the difference is $$$+2$$$, then both answers must be $$$\\texttt F$$$.\nIf the difference is $$$-2$$$, then both answers must be $$$\\texttt T$$$.\nElse, the answers must be $$$\\texttt{TF}$$$ or $$$\\texttt{FT}$$$ in some order.\nNow, here is the key idea: if the last case happens, then we can figure out if it's $$$\\texttt{TF}$$$ or $$$\\texttt{FT}$$$\nas well as\nthe answer to one more question in one query. To do so, compare the previous $$$\\texttt{TFTF...TF}$$$ with a new query that has $$$3$$$ differences:\n$$$\\begin{align*} \\\\ \\texttt{TFTF} \\dots \\texttt{TF} \\dots \\texttt{T} \\dots \\texttt{TF} \\\\ \\texttt{TFTF} \\dots \\color{red}{\\texttt{FT}} \\dots \\color{red}{\\texttt F} \\dots \\texttt{TF} \\end{align*}$$$\n(Note: we assume that the third question corresponds to $$$\\texttt T$$$ in the query. If it's $$$\\texttt F$$$, just change to $$$\\texttt T$$$ and proceed analogously.)\nThere are four possible scenarios.\nIf the answers are $$$\\texttt{TF}$$$ and $$$\\texttt{T}$$$, then the difference is $$$-3$$$.\nIf the answers are $$$\\texttt{TF}$$$ and $$$\\texttt{F}$$$, then the difference is $$$-1$$$.\nIf the answers are $$$\\texttt{FT}$$$ and $$$\\texttt{T}$$$, then the difference is $$$+1$$$.\nIf the answers are $$$\\texttt{FT}$$$ and $$$\\texttt{F}$$$, then the difference is $$$+3$$$.\nTherefore, we can distinguish these four scenarios in one go.\nFinally, if the first two cases happen, we can easily figure out the answer to one more question in one query (say, by changing that question to $$$\\texttt F$$$ and compare with the $$$\\texttt{TT...T}$$$ query). Either way, we can deduce the answer to $$$3$$$ questions in $$$2$$$ queries, leading to a solution with $$$\\tfrac{2n}{3}$$$ queries.\nNote that this solution can be easily improved to $$$\\frac {3n}{5}$$$ on average by randomly shuffling the questions."
+        }
+    ]
+}

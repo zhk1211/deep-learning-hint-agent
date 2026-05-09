@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is a harder version of the problem with bigger constraints.\n\nKorney Korneevich dag up an array $ a $ of length $ n $ . Korney Korneevich has recently read about the operation [bitwise XOR](https://en.wikipedia.org/wiki/Bitwise_operation#XOR), so he wished to experiment with it. For this purpose, he decided to find all integers $ x \\ge 0 $ such that there exists an increasing subsequence of the array $ a $ , in which the bitwise XOR of numbers is equal to $ x $ .\n\nIt didn't take a long time for Korney Korneevich to find all such $ x $ , and he wants to check his result. That's why he asked you to solve this problem!\n\nA sequence $ s $ is a subsequence of a sequence $ b $ if $ s $ can be obtained from $ b $ by deletion of several (possibly, zero or all) elements.\n\nA sequence $ s_1, s_2, \\ldots , s_m $ is called increasing if $ s_1 < s_2 < \\ldots < s_m $ .\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\le n \\le 10^6 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le 5000 $ ) — the elements of the array $ a $ .\n\nOutput Format\nIn the first line print a single integer $ k $ — the number of found $ x $ values.\n\nIn the second line print $ k $ integers in increasing order $ x_1, x_2, \\ldots x_k $ ( $ 0 \\le x_1 < \\ldots < x_k $ ) — found $ x $ values.\n\nExamples\nSample 1\nInput\n4\n4 2 2 4\nOutput\n4\n0 2 4 6\n\nSample 2\nInput\n8\n1 0 1 7 12 5 3 2\nOutput\n12\n0 1 2 3 4 5 6 7 10 11 12 13\n\nNote\nIn the first test case:\n\n- To get value $ x = 0 $ it is possible to choose and empty subsequence\n- To get value $ x = 2 $ it is possible to choose a subsequence $ [2] $\n- To get value $ x = 4 $ it is possible to choose a subsequence $ [4] $\n- To get value $ x = 6 $ it is possible to choose a subsequence $ [2, 4] $"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (74TrAkToR)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nconst\nmax_value\n=\n(\n1\n<<\n13\n);\nvector\n<\nint\n>\ng\n[\nmax_value\n];\nint\nans\n[\nmax_value\n],\nr\n[\nmax_value\n];\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\nint\nn\n,\nx\n;\ncin\n>>\nn\n;\nans\n[\n0\n]\n=\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nmax_value\n;\n++\ni\n)\n{\ng\n[\ni\n].\npush_back\n(\n0\n);\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nmax_value\n;\n++\ni\n)\n{\nr\n[\ni\n]\n=\nmax_value\n;\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\n{\ncin\n>>\nx\n;\nfor\n(\nauto\nkey\n:\ng\n[\nx\n])\n{\nint\nto\n=\n(\nkey\n^\nx\n);\nans\n[\nto\n]\n=\n1\n;\nwhile\n(\nr\n[\nto\n]\n>\nx\n)\n{\nr\n[\nto\n]--;\nif\n(\nr\n[\nto\n]\n!=\nx\n)\ng\n[\nr\n[\nto\n]].\npush_back\n(\nto\n);\n}\n}\ng\n[\nx\n]\n=\n{};\n}\nint\nk\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nmax_value\n;\n++\ni\n)\n{\nk\n+=\nans\n[\ni\n];\n}\ncout\n<<\nk\n<<\n'\\n'\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nmax_value\n;\n++\ni\n)\n{\nif\n(\nans\n[\ni\n])\ncout\n<<\ni\n<<\n\" \"\n;\n}\ncout\n<<\n'\\n'\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ such that each its character is either 1, 2, or 3. You have to choose the shortest contiguous substring of $ s $ such that it contains each of these three characters at least once.\n\nA contiguous substring of string $ s $ is a string that can be obtained from $ s $ by removing some (possibly zero) characters from the beginning of $ s $ and some (possibly zero) characters from the end of $ s $ .\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 20000 $ ) — the number of test cases.\n\nEach test case consists of one line containing the string $ s $ ( $ 1 \\le |s| \\le 200000 $ ). It is guaranteed that each character of $ s $ is either 1, 2, or 3.\n\nThe sum of lengths of all strings in all test cases does not exceed $ 200000 $ .\n\nOutput Format\nFor each test case, print one integer — the length of the shortest contiguous substring of $ s $ containing all three types of characters at least once. If there is no such substring, print $ 0 $ instead.\n\nExamples\nSample 1\nInput\n7\n123\n12222133333332\n112233\n332211\n12121212\n333333\n31121\nOutput\n3\n3\n4\n4\n0\n0\n4\n\nNote\nConsider the example test:\n\nIn the first test case, the substring 123 can be used.\n\nIn the second test case, the substring 213 can be used.\n\nIn the third test case, the substring 1223 can be used.\n\nIn the fourth test case, the substring 3221 can be used.\n\nIn the fifth test case, there is no character 3 in $ s $ .\n\nIn the sixth test case, there is no character 1 in $ s $ .\n\nIn the seventh test case, the substring 3112 can be used."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nchar\nbuf\n[\n200043\n];\nint\nmain\n()\n{\nint\nt\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\ni\n++)\n{\nscanf\n(\n\"%s\"\n,\nbuf\n);\nstring\ns\n=\nbuf\n;\nint\nans\n=\nint\n(\n1e9\n);\nint\nn\n=\ns\n.\nsize\n();\nvector\n<\npair\n<\nchar\n,\nint\n>\n>\nc\n;\nfor\n(\nauto\nx\n:\ns\n)\n{\nif\n(\nc\n.\nempty\n()\n||\nc\n.\nback\n().\nfirst\n!=\nx\n)\nc\n.\npush_back\n(\nmake_pair\n(\nx\n,\n1\n));\nelse\nc\n.\nback\n().\nsecond\n++;\n}\nint\nm\n=\nc\n.\nsize\n();\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nm\n-\n1\n;\ni\n++)\nif\n(\nc\n[\ni\n-\n1\n].\nfirst\n!=\nc\n[\ni\n+\n1\n].\nfirst\n)\nans\n=\nmin\n(\nans\n,\nc\n[\ni\n].\nsecond\n+\n2\n);\nif\n(\nans\n>\nn\n)\nans\n=\n0\n;\nprintf\n(\n\"%d\\n\"\n,\nans\n);\n}\n}"
+        }
+    ]
+}

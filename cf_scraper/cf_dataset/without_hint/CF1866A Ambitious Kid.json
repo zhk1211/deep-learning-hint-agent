@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nChaneka, Pak Chanek's child, is an ambitious kid, so Pak Chanek gives her the following problem to test her ambition.\n\nGiven an array of integers $ [A_1, A_2, A_3, \\ldots, A_N] $ . In one operation, Chaneka can choose one element, then increase or decrease the element's value by $ 1 $ . Chaneka can do that operation multiple times, even for different elements.\n\nWhat is the minimum number of operations that must be done to make it such that $ A_1 \\times A_2 \\times A_3 \\times \\ldots \\times A_N = 0 $ ?\n\nInput Format\nThe first line contains a single integer $ N $ ( $ 1 \\leq N \\leq 10^5 $ ).\n\nThe second line contains $ N $ integers $ A_1, A_2, A_3, \\ldots, A_N $ ( $ -10^5 \\leq A_i \\leq 10^5 $ ).\n\nOutput Format\nAn integer representing the minimum number of operations that must be done to make it such that $ A_1 \\times A_2 \\times A_3 \\times \\ldots \\times A_N = 0 $ .\n\nExamples\nSample 1\nInput\n3\n2 -6 5\nOutput\n2\n\nSample 2\nInput\n1\n-3\nOutput\n3\n\nSample 3\nInput\n5\n0 -1 0 1 0\nOutput\n0\n\nNote\nIn the first example, initially, $ A_1\\times A_2\\times A_3=2\\times(-6)\\times5=-60 $ . Chaneka can do the following sequence of operations:\n\n1. Decrease the value of $ A_1 $ by $ 1 $ . Then, $ A_1\\times A_2\\times A_3=1\\times(-6)\\times5=-30 $\n2. Decrease the value of $ A_1 $ by $ 1 $ . Then, $ A_1\\times A_2\\times A_3=0\\times(-6)\\times5=0 $\n\nIn the third example, Chaneka does not have to do any operations, because from the start, it already holds that $ A_1\\times A_2\\times A_3\\times A_4\\times A_5=0\\times(-1)\\times0\\times1\\times0=0 $"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        }
+    ]
+}

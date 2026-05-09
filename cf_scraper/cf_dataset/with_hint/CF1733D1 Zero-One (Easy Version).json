@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the easy version of the problem. In this version, $ n \\le 3000 $ , $ x \\ge y $ holds. You can make hacks only if both versions of the problem are solved.\n\nYou are given two binary strings $ a $ and $ b $ , both of length $ n $ . You can do the following operation any number of times (possibly zero).\n\n- Select two indices $ l $ and $ r $ ( $ l < r $ ).\n- Change $ a_l $ to $ (1 - a_l) $ , and $ a_r $ to $ (1 - a_r) $ .\n- If $ l + 1 = r $ , the cost of the operation is $ x $ . Otherwise, the cost is $ y $ .\n\nYou have to find the minimum cost needed to make $ a $ equal to $ b $ or say there is no way to do so.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 600 $ ) — the number of test cases.\n\nEach test case consists of three lines. The first line of each test case contains three integers $ n $ , $ x $ , and $ y $ ( $ 5 \\le n \\le 3000 $ , $ 1 \\le y \\le x \\le 10^9 $ ) — the length of the strings, and the costs per operation.\n\nThe second line of each test case contains the string $ a $ of length $ n $ . The string only consists of digits $ 0 $ and $ 1 $ .\n\nThe third line of each test case contains the string $ b $ of length $ n $ . The string only consists of digits $ 0 $ and $ 1 $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases doesn't exceed $ 3000 $ .\n\nOutput Format\nFor each test case, if there is no way to make $ a $ equal to $ b $ , print $ -1 $ . Otherwise, print the minimum cost needed to make $ a $ equal to $ b $ .\n\nExamples\nSample 1\nInput\n4\n5 8 7\n01001\n00101\n5 7 2\n01000\n11011\n7 8 3\n0111001\n0100001\n5 10 1\n01100\n01100\nOutput\n8\n-1\n6\n0\n\nNote\nIn the first test case, selecting indices $ 2 $ and $ 3 $ costs $ 8 $ , which is the minimum possible cost.\n\nIn the second test case, we cannot make $ a $ equal to $ b $ using any number of operations.\n\nIn the third test case, we can perform the following operations:\n\n- Select indices $ 3 $ and $ 6 $ . It costs $ 3 $ , and $ a $ is 0101011 now.\n- Select indices $ 4 $ and $ 6 $ . It costs $ 3 $ , and $ a $ is 0100001 now.\n\nThe total cost is $ 6 $ .\n\nIn the fourth test case, we don't have to perform any operations."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nConsider $$$c$$$ is another binary string, in which $$$c_i = a_i \\oplus b_i$$$. We have to make $$$c$$$ equal to $$$000 \\ldots 000$$$ using the operation.\nHint 2\nBecause the operation does not change the parity of the number of $$$1$$$ in $$$c$$$, the answer is $$$-1$$$ if $$$c$$$ has odd number of $$$1$$$.\nHint 3\nIf the number of $$$1$$$ in $$$c$$$ is $$$d$$$ (now assume that $$$d$$$ is even), at least $$$\\frac{d}{2}$$$ operations are needed. So total cost would be at least $$$\\frac{d}{2} \\times y$$$.\nHint 4\nOne $$$x$$$-cost operation can be replaced with two $$$y$$$-cost operations."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Consider $$$c$$$ is another binary string, in which $$$c_i = a_i \\oplus b_i$$$. We have to make $$$c$$$ equal to $$$000 \\ldots 000$$$ using the operation."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Because the operation does not change the parity of the number of $$$1$$$ in $$$c$$$, the answer is $$$-1$$$ if $$$c$$$ has odd number of $$$1$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "If the number of $$$1$$$ in $$$c$$$ is $$$d$$$ (now assume that $$$d$$$ is even), at least $$$\\frac{d}{2}$$$ operations are needed. So total cost would be at least $$$\\frac{d}{2} \\times y$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "One $$$x$$$-cost operation can be replaced with two $$$y$$$-cost operations."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Consider another binary string $$$c$$$, in which $$$c_i = a_i \\oplus b_i$$$ ($$$1 \\le i \\le n$$$). So doing an operation means selecting two indices of $$$c$$$ and flipping them. Also, let's define $$$d$$$ is the number of $$$1$$$ in $$$c$$$. Because the parity of $$$d$$$ never changes, the answer is $$$-1$$$ if $$$d$$$ is odd.\nIf $$$d$$$ is even, classify the cases:\n$$$[1]$$$ If $$$d = 2$$$ and two $$$1$$$-s are adjacent, the answer is $$$\\min(x, 2y)$$$. Because $$$n \\ge 5$$$ holds, we can always replace one $$$x$$$-cost operation with two $$$y$$$-cost operations.\n$$$[2]$$$ If $$$d = 2$$$ and two $$$1$$$-s are not adjacent, the answer is $$$y$$$.\n$$$[3]$$$ If $$$d \\ne 2$$$, select $$$i$$$-th $$$1$$$ and $$$(i + \\frac{d}{2})$$$-th $$$1$$$ each ($$$1 \\le i \\le \\frac{d}{2}$$$). This costs $$$\\frac{d}{2} \\times y$$$, and we showed the cost cannot be reduced more in hint 3."
+        },
+        {
+            "title": "Solution Code",
+            "content": "#172746684"
+        }
+    ]
+}

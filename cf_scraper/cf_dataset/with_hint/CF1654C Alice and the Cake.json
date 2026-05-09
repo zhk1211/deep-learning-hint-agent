@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlice has a cake, and she is going to cut it. She will perform the following operation $ n-1 $ times: choose a piece of the cake (initially, the cake is all one piece) with weight $ w\\ge 2 $ and cut it into two smaller pieces of weight $ \\lfloor\\frac{w}{2}\\rfloor $ and $ \\lceil\\frac{w}{2}\\rceil $ ( $ \\lfloor x \\rfloor $ and $ \\lceil x \\rceil $ denote [floor and ceiling functions](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions), respectively).\n\nAfter cutting the cake in $ n $ pieces, she will line up these $ n $ pieces on a table in an arbitrary order. Let $ a_i $ be the weight of the $ i $ -th piece in the line.\n\nYou are given the array $ a $ . Determine whether there exists an initial weight and sequence of operations which results in $ a $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ for all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single line: print YES if the array $ a $ could have resulted from Alice's operations, otherwise print NO.\n\nYou may print each letter in any case (for example, YES, Yes, yes, yEs will all be recognized as positive answer).\n\nExamples\nSample 1\nInput\n14\n1\n327\n2\n869 541\n2\n985214736 985214737\n3\n2 3 1\n3\n2 3 3\n6\n1 1 1 1 1 1\n6\n100 100 100 100 100 100\n8\n100 100 100 100 100 100 100 100\n8\n2 16 1 8 64 1 4 32\n10\n1 2 4 7 1 1 1 1 7 2\n10\n7 1 1 1 3 1 3 3 2 3\n10\n1 4 4 1 1 1 3 3 3 1\n10\n2 3 2 2 1 2 2 2 2 2\n4\n999999999 999999999 999999999 999999999\nOutput\nYES\nNO\nYES\nYES\nNO\nYES\nNO\nYES\nYES\nYES\nYES\nNO\nNO\nYES\n\nNote\nIn the first test case, it's possible to get the array $ a $ by performing $ 0 $ operations on a cake with weight $ 327 $ .\n\nIn the second test case, it's not possible to get the array $ a $ .\n\nIn the third test case, it's possible to get the array $ a $ by performing $ 1 $ operation on a cake with weight $ 1\\,970\\,429\\,473 $ :\n\n- Cut it in half, so that the weights are $ [985\\,214\\,736, 985\\,214\\,737] $ .\n\nNote that the starting weight can be greater than $ 10^9 $ .In the fourth test case, it's possible to get the array $ a $ by performing $ 2 $ operations on a cake with weight $ 6 $ :\n\n- Cut it in half, so that the weights are $ [3,3] $ .\n- Cut one of the two pieces with weight $ 3 $ , so that the new weights are $ [1, 2, 3] $ which is equivalent to $ [2, 3, 1] $ up to reordering."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Can you find the initial weight which results in $$$a$$$?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "The initial weight is the sum of the final weights. Let's simulate the division, starting from a new cake. How to choose fast which splits to do?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "If the largest piece is not in $$$a$$$, you have to split it. How to find the largest piece efficiently?"
+        },
+        {
+            "title": "Hint 4",
+            "content": "Keep $$$a$$$ and the new cake in two multisets or priority queues."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "First, let's find the initial weight. When a piece of cake is split, the sum of weights is $$$\\lfloor\\frac{w}{2}\\rfloor + \\lceil\\frac{w}{2}\\rceil$$$:\nif $$$w$$$ is even, $$$\\lfloor\\frac{w}{2}\\rfloor + \\lceil\\frac{w}{2}\\rceil = \\frac{w}{2} + \\frac{w}{2} = w$$$;\nif $$$w$$$ is odd, $$$\\lfloor\\frac{w}{2}\\rfloor + \\lceil\\frac{w}{2}\\rceil = \\frac{w-1}{2} + \\frac{w+1}{2} = w$$$.\nTherefore, the sum of weights is constant, and the initial weight is the sum of the final weights.\nNow let's start from a cake $$$b$$$ of weight $$$b_1 = \\sum_{i=1}^n a_i$$$, split it (into pieces of weight $$$b_i$$$) and try to make it equal to $$$a$$$. At any moment, it's convenient to consider the largest $$$b_i$$$, because you can determine if you can split it or not.\nMore specifically,\nif $$$b_i$$$ is not in $$$a$$$, you have to split it;\nif $$$b_i = a_j$$$ for some $$$j$$$, you can only match $$$a_j$$$ with $$$b_i$$$ or with a $$$b_k$$$ such that $$$b_k = a_j = b_i$$$ (because there doesn't exist any larger $$$b_k$$$): that's equivalent to removing $$$a_j$$$ and $$$b_i$$$ from $$$a$$$, $$$b$$$, respectively.\nNotice that, if at any moment the maximum element of $$$b$$$ is smaller than the maximum element of $$$a$$$, the answer is\nNO\n.\nIf can keep $$$a$$$ and $$$b$$$ in any data structure that supports inserting an integer, asking for the maximum and removing the maximum (e.g., multiset or priority queue), the following algorithm works.\nWhile either $$$a$$$ or $$$b$$$ is not empty,\nif the maximum element of $$$b$$$ is smaller than the maximum element of $$$a$$$, print\nNO\nand break;\nif the maximum element of $$$b$$$ is equal to the maximum element of $$$a$$$, remove it from both $$$a$$$ and $$$b$$$;\nif the maximum element $$$m$$$ of $$$b$$$ is larger than the maximum element of $$$a$$$, remove it from $$$b$$$ and split the piece of cake (i.e., insert $$$\\lfloor\\frac{w}{2}\\rfloor$$$ and $$$\\lceil\\frac{w}{2}\\rceil$$$ into $$$b$$$).\nIf $$$a$$$ or $$$b$$$ are both empty at the end, the answer is\nYES\n.\nComplexity: $$$O(n \\log n)$$$"
+        }
+    ]
+}

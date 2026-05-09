@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven a lowercase Latin character (letter), check if it appears in the string $ \\texttt{codeforces} $ .\n\nInput Format\nThe first line of the input contains an integer $ t $ ( $ 1 \\leq t \\leq 26 $ ) — the number of test cases.\n\nThe only line of each test case contains a character $ c $ — a single lowercase Latin character (letter).\n\nOutput Format\nFor each test case, output \"YES\" (without quotes) if $ c $ satisfies the condition, and \"NO\" (without quotes) otherwise.\n\nYou can output the answer in any case (for example, the strings \"yEs\", \"yes\", \"Yes\" and \"YES\" will be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n10\na\nb\nc\nd\ne\nf\ng\nh\ni\nj\nOutput\nNO\nNO\nYES\nYES\nYES\nYES\nNO\nNO\nNO\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nstring\ns\n=\n\"codeforces\"\n;\nvoid\nsolve\n()\n{\nchar\nc\n;\ncin\n>>\nc\n;\nfor\n(\nchar\ni\n:\ns\n)\n{\nif\n(\ni\n==\nc\n)\n{\ncout\n<<\n\"YES\\n\"\n;\nreturn\n;}\n}\ncout\n<<\n\"NO\\n\"\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

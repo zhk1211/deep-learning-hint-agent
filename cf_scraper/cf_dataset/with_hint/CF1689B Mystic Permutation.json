@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMonocarp is a little boy who lives in Byteland and he loves programming.\n\nRecently, he found a permutation of length $ n $ . He has to come up with a mystic permutation. It has to be a new permutation such that it differs from the old one in each position.\n\nMore formally, if the old permutation is $ p_1,p_2,\\ldots,p_n $ and the new one is $ q_1,q_2,\\ldots,q_n $ it must hold that $ $$$p_1\\neq q_1, p_2\\neq q_2, \\ldots ,p_n\\neq q_n. $ $$$\n\nMonocarp is afraid of lexicographically large permutations. Can you please help him to find the lexicographically minimal mystic permutation?\n\nInput Format\nThere are several test cases in the input data. The first line contains a single integer $ t $ ( $ 1\\leq t\\leq 200 $ ) — the number of test cases. This is followed by the test cases description.\n\nThe first line of each test case contains a positive integer $ n $ ( $ 1\\leq n\\leq 1000 $ ) — the length of the permutation.\n\nThe second line of each test case contains $ n $ distinct positive integers $ p_1, p_2, \\ldots, p_n $ ( $ 1 \\leq p_i \\leq n $ ). It's guaranteed that $ p $ is a permutation, i. e. $ p_i \\neq p_j $ for all $ i \\neq j $ .\n\nIt is guaranteed that the sum of $ n $ does not exceed $ 1000 $ over all test cases.\n\nOutput Format\nFor each test case, output $ n $ positive integers — the lexicographically minimal mystic permutations. If such a permutation does not exist, output $ -1 $ instead.\n\nExamples\nSample 1\nInput\n4\n3\n1 2 3\n5\n2 3 4 5 1\n4\n2 3 1 4\n1\n1\nOutput\n2 3 1\n1 2 3 4 5\n1 2 4 3\n-1\n\nNote\nIn the first test case possible permutations that are mystic are $ [2,3,1] $ and $ [3,1,2] $ . Lexicographically smaller of the two is $ [2,3,1] $ .\n\nIn the second test case, $ [1,2,3,4,5] $ is the lexicographically minimal permutation and it is also mystic.\n\nIn third test case possible mystic permutations are $ [1,2,4,3] $ , $ [1,4,2,3] $ , $ [1,4,3,2] $ , $ [3,1,4,2] $ , $ [3,2,4,1] $ , $ [3,4,2,1] $ , $ [4,1,2,3] $ , $ [4,1,3,2] $ and $ [4,3,2,1] $ . The smallest one is $ [1,2,4,3] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "When is it impossible to find such permutation?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "It is impossible only for $$$n=1$$$. In every other case, iterate over each position in order from $$$1$$$ to $$$n$$$ and take the smallest available number. What's the exception to this?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "The exception is the last two elements. We can always take the smallest available number for each $$$q_i$$$ satisfying $$$i \\lt n-1$$$. To do this we maintain an array of bools of already taken numbers, and then iterate over it to find the smallest available number satisfying $$$p_i\\neq q_i$$$ which is also not checked in the array, and then check it (we took it).\nNow consider $$$(p_{n-1},p_{n})$$$ and we want $$$(q_{n-1},q_{n})$$$ to be lexicographically minimal while satisfying $$$p_{n-1}\\neq q_{n-1}$$$ and $$$p_{n}\\neq q_{n}$$$. Let $$$a$$$ and $$$b$$$ be the last two unused numbers in the array of bools with $$$a \\lt b$$$. We try to take $$$(q_{n-1},q_{n}) = (a,b)$$$. If $$$a=p_{n-1}$$$ or $$$b=p_{n}$$$, then we take $$$(q_{n-1},q_{n}) = (b,a)$$$. If $$$(a,b)$$$ isn't valid, then $$$(b,a)$$$ is. The proof is left as an exercise to the reader.\nThis solution runs in $$$O(n^2)$$$ and can be optimized to $$$O(n \\ log \\ n)$$$."
+        },
+        {
+            "title": "C++ Code (Main solution)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nbool\ntook\n[\n1005\n];\nint\np\n[\n1005\n];\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n),\ncout\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ncin\n>>\np\n[\ni\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ntook\n[\ni\n]=\n0\n;\nif\n(\nn\n==\n1\n)\n{\ncout\n<<\n\"-1\\n\"\n;\ncontinue\n;\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n-\n2\n;\ni\n++)\n{\nint\nk\n=\n1\n;\nwhile\n(\ntook\n[\nk\n]\n||\nk\n==\np\n[\ni\n])\n++\nk\n;\ncout\n<<\nk\n<<\n\" \"\n;\ntook\n[\nk\n]=\n1\n;\n}\nint\na\n=-\n1\n,\nb\n=-\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nif\n(!\ntook\n[\ni\n])\n{\nif\n(\na\n==-\n1\n)\na\n=\ni\n;\nelse\nb\n=\ni\n;\n}\nif\n(\na\n!=\np\n[\nn\n-\n1\n]\n&&\nb\n!=\np\n[\nn\n])\ncout\n<<\na\n<<\n\" \"\n<<\nb\n<<\n\"\\n\"\n;\nelse\ncout\n<<\nb\n<<\n\" \"\n<<\na\n<<\n\"\\n\"\n;\n}\n}"
+        },
+        {
+            "title": "C++ Code (O(n) solution)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nt\n,\nn\n,\nA\n[\n1010\n],\nB\n[\n1010\n];\nint\nmain\n()\n{\nscanf\n(\n\"%d\"\n,&\nt\n);\nwhile\n(\nt\n--)\n{\nscanf\n(\n\"%d\"\n,&\nn\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nscanf\n(\n\"%d\"\n,&\nA\n[\ni\n]);\nB\n[\ni\n]\n=\ni\n;\n}\nif\n(\nn\n==\n1\n)\n{\nprintf\n(\n\"-1\\n\"\n);\ncontinue\n;\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\nA\n[\ni\n]==\nB\n[\ni\n])\nswap\n(\nB\n[\ni\n],\nB\n[\ni\n+\n1\n]);\n}\nif\n(\nA\n[\nn\n]==\nB\n[\nn\n])\nswap\n(\nB\n[\nn\n-\n1\n],\nB\n[\nn\n]);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nprintf\n(\n\"%d \"\n,\nB\n[\ni\n]);\nprintf\n(\n\"\\n\"\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

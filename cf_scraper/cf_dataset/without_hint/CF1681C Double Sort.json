@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two arrays $ a $ and $ b $ , both consisting of $ n $ integers.\n\nIn one move, you can choose two indices $ i $ and $ j $ ( $ 1 \\le i, j \\le n $ ; $ i \\neq j $ ) and swap $ a_i $ with $ a_j $ and $ b_i $ with $ b_j $ . You have to perform the swap in both arrays.\n\nYou are allowed to perform at most $ 10^4 $ moves (possibly, zero). Can you make both arrays sorted in a non-decreasing order at the end? If you can, print any sequence of moves that makes both arrays sorted.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of testcases.\n\nThe first line of each testcase contains a single integer $ n $ ( $ 2 \\le n \\le 100 $ ) — the number of elements in both arrays.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le n $ ) — the first array.\n\nThe third line contains $ n $ integers $ b_1, b_2, \\dots, b_n $ ( $ 1 \\le b_i \\le n $ ) — the second array.\n\nOutput Format\nFor each testcase, print the answer. If it's impossible to make both arrays sorted in a non-decreasing order in at most $ 10^4 $ moves, print -1. Otherwise, first, print the number of moves $ k $ $ (0 \\le k \\le 10^4) $ . Then print $ i $ and $ j $ for each move $ (1 \\le i, j \\le n $ ; $ i \\neq j) $ .\n\nIf there are multiple answers, then print any of them. You don't have to minimize the number of moves.\n\nExamples\nSample 1\nInput\n3\n2\n1 2\n1 2\n2\n2 1\n1 2\n4\n2 3 1 2\n2 3 2 3\nOutput\n0\n-1\n3\n3 1\n3 2\n4 3"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nb\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\ntmp\n=\n[\ni\nfor\ni\nin\nrange\n(\nn\n)]\ntmp\n.\nsort\n(\nkey\n=\nlambda\ni\n:\n[\na\n[\ni\n],\nb\n[\ni\n]])\nfor\ni\nin\nrange\n(\nn\n-\n1\n):\nif\na\n[\ntmp\n[\ni\n]]\n>\na\n[\ntmp\n[\ni\n+\n1\n]]\nor\nb\n[\ntmp\n[\ni\n]]\n>\nb\n[\ntmp\n[\ni\n+\n1\n]]:\nprint\n(\n\"-1\"\n)\nbreak\nelse\n:\nans\n=\n[]\nfor\ni\nin\nrange\n(\nn\n-\n1\n):\nfor\nj\nin\nrange\n(\nn\n-\n1\n):\nif\na\n[\nj\n]\n>\na\n[\nj\n+\n1\n]\nor\nb\n[\nj\n]\n>\nb\n[\nj\n+\n1\n]:\na\n[\nj\n],\na\n[\nj\n+\n1\n]\n=\na\n[\nj\n+\n1\n],\na\n[\nj\n]\nb\n[\nj\n],\nb\n[\nj\n+\n1\n]\n=\nb\n[\nj\n+\n1\n],\nb\n[\nj\n]\nans\n.\nappend\n([\nj\n+\n1\n,\nj\n+\n2\n])\nprint\n(\nlen\n(\nans\n))\nfor\nit\nin\nans\n:\nprint\n(*\nit\n)"
+        }
+    ]
+}

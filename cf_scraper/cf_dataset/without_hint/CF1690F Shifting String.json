@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp found the string $ s $ and the permutation $ p $ . Their lengths turned out to be the same and equal to $ n $ .\n\nA permutation of $ n $ elements — is an array of length $ n $ , in which every integer from $ 1 $ to $ n $ occurs exactly once. For example, $ [1, 2, 3] $ and $ [4, 3, 5, 1, 2] $ are permutations, but $ [1, 2, 4] $ , $ [4, 3, 2, 1, 2] $ and $ [0, 1, 2] $ are not.\n\nIn one operation he can multiply $ s $ by $ p $ , so he replaces $ s $ with string $ new $ , in which for any $ i $ from $ 1 $ to $ n $ it is true that $ new_i = s_{p_i} $ . For example, with $ s=wmbe $ and $ p = [3, 1, 4, 2] $ , after operation the string will turn to $ s=s_3 s_1 s_4 s_2=bwem $ .\n\nPolycarp wondered after how many operations the string would become equal to its initial value for the first time. Since it may take too long, he asks for your help in this matter.\n\nIt can be proved that the required number of operations always exists. It can be very large, so use a 64-bit integer type.\n\nInput Format\nThe first line of input contains one integer $ t $ ( $ 1 \\le t \\le 5000 $ ) — the number of test cases in input.\n\nThe first line of each case contains single integer $ n $ ( $ 1 \\le n \\le 200 $ ) — the length of string and permutation.\n\nThe second line of each case contains a string $ s $ of length $ n $ , containing lowercase Latin letters.\n\nThe third line of each case contains $ n $ integers — permutation $ p $ ( $ 1 \\le p_i \\le n $ ), all $ p_i $ are different.\n\nOutput Format\nOutput $ t $ lines, each of which contains the answer to the corresponding test case of input. As an answer output single integer — the minimum number of operations, after which the string $ s $ will become the same as it was before operations.\n\nExamples\nSample 1\nInput\n3\n5\nababa\n3 4 5 2 1\n5\nababa\n2 1 4 5 3\n10\ncodeforces\n8 6 1 7 5 2 9 3 10 4\nOutput\n1\n6\n12\n\nNote\nIn the first sample operation doesn't change the string, so it will become the same as it was after $ 1 $ operations.\n\nIn the second sample the string will change as follows:\n\n- $ s $ = babaa\n- $ s $ = abaab\n- $ s $ = baaba\n- $ s $ = abbaa\n- $ s $ = baaab\n- $ s $ = ababa"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "def\ngcd\n(\na\n,\nb\n):\nif\nb\n==\n0\n:\nreturn\na\n;\nreturn\ngcd\n(\nb\n,\na\n%\nb\n)\ndef\nshift\n(\ns\n):\nfor\ni\nin\nrange\n(\n1\n,\nlen\n(\ns\n)\n+\n1\n):\nif\ns\n==\ns\n[\ni\n:]\n+\ns\n[:\ni\n]:\nreturn\ni\ndef\nsolve\n():\nn\n=\nint\n(\ninput\n())\ns\n=\ninput\n()\np\n=\n[\nint\n(\nx\n)-\n1\nfor\nx\nin\ninput\n().\nsplit\n()]\nused\n=\n[\nFalse\n]\n*\nn\n    ans\n=\n1\ni\n=\n0\nwhile\ni\n<\nn\n:\nss\n=\n''\nwhile\nnot\nused\n[\ni\n]:\nss\n+=\ns\n[\ni\n]\nused\n[\ni\n]\n=\nTrue\ni\n=\np\n[\ni\n];\ni\n+=\n1\nif\nlen\n(\nss\n)\n==\n0\n:\ncontinue\nln\n=\nshift\n(\nss\n)\nans\n=\nans\n*\nln\n// gcd(ans, ln)\nprint\n(\nans\n)\nt\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\nsolve\n()"
+        }
+    ]
+}

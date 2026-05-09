@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ of length $ n $ , where each character is either &lt; or &gt;.\n\nAn array $ a $ consisting of $ n+1 $ elements is compatible with the string $ s $ if, for every $ i $ from $ 1 $ to $ n $ , the character $ s_i $ represents the result of comparing $ a_i $ and $ a_{i+1} $ , i. e.:\n\n- $ s_i $ is &lt; if and only if $ a_i < a_{i+1} $ ;\n- $ s_i $ is &gt; if and only if $ a_i > a_{i+1} $ .\n\nFor example, the array $ [1, 2, 5, 4, 2] $ is compatible with the string &lt;&lt;&gt;&gt;. There are other arrays with are compatible with that string, for example, $ [13, 37, 42, 37, 13] $ .\n\nThe cost of the array is the number of different elements in it. For example, the cost of $ [1, 2, 5, 4, 2] $ is $ 4 $ ; the cost of $ [13, 37, 42, 37, 13] $ is $ 3 $ .\n\nYou have to calculate the minimum cost among all arrays which are compatible with the given string $ s $ .\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 500 $ ) — the number of test cases.\n\nEach test case consists of two lines:\n\n- the first line contains one integer $ n $ ( $ 1 \\le n \\le 100 $ );\n- the second line contains the string $ s $ , consisting of $ n $ characters. Each character of $ s $ is either &lt; or &gt;.\n\nOutput Format\nFor each test case, print one integer — the minimum cost among all arrays which are compatible with the given string $ s $ .\n\nExamples\nSample 1\nInput\n4\n4\n<<>>\n4\n>><<\n5\n>>>>>\n7\n<><><><\nOutput\n3\n3\n6\n2\n\nNote\nIn the first test case of the example, the array can be $ [13, 37, 42, 37, 13] $ .\n\nIn the second test case of the example, the array can be $ [42, 37, 13, 37, 42] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\ni\n++)\n{\nint\nn\n;\ncin\n>>\nn\n;\nstring\ns\n;\ncin\n>>\ns\n;\nint\nans\n=\n1\n,\ncur\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\ns\n[\ni\n]\n!=\ns\n[\ni\n-\n1\n])\ncur\n=\n1\n;\nelse\ncur\n++;\nans\n=\nmax\n(\nans\n,\ncur\n);\n}\ncout\n<<\nans\n+\n1\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

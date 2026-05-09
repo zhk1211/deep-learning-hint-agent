@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAfter the Serbian Informatics Olympiad, Aleksa was very sad, because he didn't win a medal (he didn't know stack), so Vasilije came to give him an easy problem, just to make his day better.\n\nVasilije gave Aleksa a positive integer $ n $ ( $ n \\ge 3 $ ) and asked him to construct a strictly increasing array of size $ n $ of positive integers, such that\n\n- $ 3\\cdot a_{i+2} $ is not divisible by $ a_i+a_{i+1} $ for each $ i $ ( $ 1\\le i \\le n-2 $ ).\n\nNote that a strictly increasing array $ a $ of size $ n $ is an array where $ a_i < a_{i+1} $ for each $ i $ ( $ 1 \\le i \\le n-1 $ ).Since Aleksa thinks he is a bad programmer now, he asked you to help him find such an array.\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 3 \\le n \\le 2 \\cdot 10^5 $ ) — the number of elements in array.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output $ n $ integers $ a_1, a_2, a_3, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nIt can be proved that the solution exists for any $ n $ . If there are multiple solutions, output any of them.\n\nExamples\nSample 1\nInput\n3\n3\n6\n7\nOutput\n6 8 12\n7 11 14 20 22 100\n9 15 18 27 36 90 120\n\nNote\nIn the first test case, $ a_1=6 $ , $ a_2=8 $ , $ a_3=12 $ , so $ a_1+a_2=14 $ and $ 3 \\cdot a_3=36 $ , so $ 3 \\cdot a_3 $ is not divisible by $ a_1+a_2 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nWatch parity.\nHint 2\nWhat does the parity of $$$3 \\cdot x$$$ depend on?\nHint 3\nWhat parity are numbers which divide odd numbers?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "Watch parity."
+        },
+        {
+            "title": "Hint 2",
+            "content": "What does the parity of $$$3 \\cdot x$$$ depend on?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "What parity are numbers which divide odd numbers?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\nt\n;\n//read the number of test cases\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nint\nn\n;\n//read n\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncout\n<<\ni\n*\n2\n+\n1\n<<\n\" \"\n;\n//write the first n odd numbers in order\ncout\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

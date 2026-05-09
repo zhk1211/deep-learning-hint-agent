@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven an array $ a $ consisting of $ n $ elements, find the maximum possible sum the array can have after performing the following operation any number of times:\n\n- Choose $ 2 $ adjacent elements and flip both of their signs. In other words choose an index $ i $ such that $ 1 \\leq i \\leq n - 1 $ and assign $ a_i = -a_i $ and $ a_{i+1} = -a_{i+1} $ .\n\nInput Format\nThe input consists of multiple test cases. The first line contains an integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases. The descriptions of the test cases follow.\n\nThe first line of each test case contains an integer $ n $ ( $ 2 \\leq n \\leq 2\\cdot10^5 $ ) — the length of the array.\n\nThe following line contains $ n $ space-separated integers $ a_1,a_2,\\dots,a_n $ ( $ -10^9 \\leq a_i \\leq 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\\cdot10^5 $ .\n\nOutput Format\nFor each test case, output the maximum possible sum the array can have after performing the described operation any number of times.\n\nExamples\nSample 1\nInput\n5\n3\n-1 -1 -1\n5\n1 5 -5 0 2\n3\n1 2 3\n6\n-1 10 9 8 7 6\n2\n-1 -1\nOutput\n1\n13\n6\n39\n2\n\nNote\nFor the first test case, by performing the operation on the first two elements, we can change the array from $ [-1, -1, -1] $ to $ [1, 1, -1] $ , and it can be proven this array obtains the maximum possible sum which is $ 1 + 1 + (-1) = 1 $ .\n\nFor the second test case, by performing the operation on $ -5 $ and $ 0 $ , we change the array from $ [1, 5, -5, 0, 2] $ to $ [1, 5, -(-5), -0, 2] = [1, 5, 5, 0, 2] $ , which has the maximum sum since all elements are non-negative. So, the answer is $ 1 + 5 + 5 + 0 + 2 = 13 $ .\n\nFor the third test case, the array already contains only positive numbers, so performing operations is unnecessary. The answer is just the sum of the whole array, which is $ 1 + 2 + 3 = 6 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nlong\nlong\nsum\n=\n0\n;\nint\nnegs\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\nif\n(\na\n[\ni\n]\n<\n0\n)\n{\n++\nnegs\n;\na\n[\ni\n]\n=\n-\na\n[\ni\n];\n}\nsum\n+=\na\n[\ni\n];\n}\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nif\n(\nnegs\n&\n1\n)\nsum\n-=\n2\n*\na\n[\n0\n];\ncout\n<<\nsum\n<<\n\"\\n\"\n;\n}\n}"
+        }
+    ]
+}

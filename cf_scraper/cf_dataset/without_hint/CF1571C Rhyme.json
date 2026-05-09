@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "fun main\n()\n{\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval n\n=\nreadLine\n()!!.\ntoInt\n()\nvar\nl\n=\n0\nvar\nr\n=\n4e5\n.\ntoInt\n()\nfor\n(\ni\nin\n1.\n.\nn\n)\n{\nval pairs\n=\nreadLine\n()!!.\nsplit\n(\n' '\n)\nval limit\n=\npairs\n[\n0\n].\ncommonSuffixWith\n(\npairs\n[\n1\n]).\nlength\nif\n(\npairs\n[\n2\n]\n==\n\"0\"\n)\nl\n=\nmaxOf\n(\nl\n,\nlimit\n+\n1\n)\nelse\nr\n=\nminOf\n(\nr\n,\nlimit\n)\n}\nprintln\n(\nmaxOf\n(\n0\n,\nr\n-\nl\n+\n1\n))\nif\n(\nr\n-\nl\n+\n1\n>\n0\n)\nprintln\n((\nl\n..\nr\n).\njoinToString\n(\n\" \"\n))\n}\n}"
+        }
+    ]
+}

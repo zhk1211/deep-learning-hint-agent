@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer $ n $ . In one move, you can either multiply $ n $ by two or divide $ n $ by $ 6 $ (if it is divisible by $ 6 $ without the remainder).\n\nYour task is to find the minimum number of moves needed to obtain $ 1 $ from $ n $ or determine if it's impossible to do that.\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 2 \\cdot 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe only line of the test case contains one integer $ n $ ( $ 1 \\le n \\le 10^9 $ ).\n\nOutput Format\nFor each test case, print the answer — the minimum number of moves needed to obtain $ 1 $ from $ n $ if it's possible to do that or -1 if it's impossible to obtain $ 1 $ from $ n $ .\n\nExamples\nSample 1\nInput\n7\n1\n2\n3\n12\n12345\n15116544\n387420489\nOutput\n0\n-1\n2\n-1\n-1\n12\n36\n\nNote\nConsider the sixth test case of the example. The answer can be obtained by the following sequence of moves from the given integer $ 15116544 $ :\n\n1. Divide by $ 6 $ and get $ 2519424 $ ;\n2. divide by $ 6 $ and get $ 419904 $ ;\n3. divide by $ 6 $ and get $ 69984 $ ;\n4. divide by $ 6 $ and get $ 11664 $ ;\n5. multiply by $ 2 $ and get $ 23328 $ ;\n6. divide by $ 6 $ and get $ 3888 $ ;\n7. divide by $ 6 $ and get $ 648 $ ;\n8. divide by $ 6 $ and get $ 108 $ ;\n9. multiply by $ 2 $ and get $ 216 $ ;\n10. divide by $ 6 $ and get $ 36 $ ;\n11. divide by $ 6 $ and get $ 6 $ ;\n12. divide by $ 6 $ and get $ 1 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\ncnt2\n=\n0\n,\ncnt3\n=\n0\n;\nwhile\n(\nn\n%\n2\n==\n0\n)\n{\nn\n/=\n2\n;\n++\ncnt2\n;\n}\nwhile\n(\nn\n%\n3\n==\n0\n)\n{\nn\n/=\n3\n;\n++\ncnt3\n;\n}\nif\n(\nn\n==\n1\n&&\ncnt2\n<=\ncnt3\n)\n{\ncout\n<<\n2\n*\ncnt3\n-\ncnt2\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\n-\n1\n<<\nendl\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

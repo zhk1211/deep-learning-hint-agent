@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a binary string $ s $ (a binary string is a string consisting of characters 0 and/or 1).\n\nLet's call a binary string balanced if the number of subsequences 01 (the number of indices $ i $ and $ j $ such that $ 1 \\le i < j \\le n $ , $ s_i=0 $ and $ s_j=1 $ ) equals to the number of subsequences 10 (the number of indices $ k $ and $ l $ such that $ 1 \\le k < l \\le n $ , $ s_k=1 $ and $ s_l=0 $ ) in it.\n\nFor example, the string 1000110 is balanced, because both the number of subsequences 01 and the number of subsequences 10 are equal to $ 6 $ . On the other hand, 11010 is not balanced, because the number of subsequences 01 is $ 1 $ , but the number of subsequences 10 is $ 5 $ .\n\nYou can perform the following operation any number of times: choose two characters in $ s $ and swap them. Your task is to calculate the minimum number of operations to make the string $ s $ balanced.\n\nInput Format\nThe only line contains the string $ s $ ( $ 3 \\le |s| \\le 100 $ ) consisting of characters 0 and/or 1.\n\nAdditional constraint on the input: the string $ s $ can be made balanced.\n\nOutput Format\nPrint a single integer — the minimum number of swap operations to make the string $ s $ balanced.\n\nExamples\nSample 1\nInput\n101\nOutput\n0\n\nSample 2\nInput\n1000110\nOutput\n0\n\nSample 3\nInput\n11010\nOutput\n1\n\nSample 4\nInput\n11001100\nOutput\n2\n\nNote\nIn the first example, the string is already balanced, the number of both 01 and 10 is equal to $ 1 $ .\n\nIn the second example, the string is already balanced, the number of both 01 and 10 is equal to $ 6 $ .\n\nIn the third example, one of the possible answers is the following one: 11010 $ \\rightarrow $ 01110. After that, the number of both 01 and 10 is equal to $ 3 $ .\n\nIn the fourth example, one of the possible answers is the following one: 11001100 $ \\rightarrow $ 11001010 $ \\rightarrow $ 11000011. After that, the number of both 01 and 10 is equal to $ 8 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nli\n=\nlong\nlong\n;\nconst\nint\nN\n=\n111\n;\nint\nn\n;\nstring\ns\n;\nint\ndp\n[\n2\n][\nN\n][\nN\n*\nN\n];\nint\nmain\n()\n{\ncin\n>>\ns\n;\nn\n=\ns\n.\nsize\n();\ndp\n[\n0\n][\n0\n][\n0\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\ni\n+\n1\n;\n++\nj\n)\n{\nfor\n(\nint\ncnt\n=\n0\n;\ncnt\n<=\nj\n*\n(\ni\n+\n1\n-\nj\n);\n++\ncnt\n)\n{\ndp\n[\n1\n][\nj\n][\ncnt\n]\n=\nn\n;\n}\n}\nfor\n(\nint\nj\n=\n0\n;\nj\n<=\ni\n;\n++\nj\n)\n{\nfor\n(\nint\ncnt\n=\n0\n;\ncnt\n<=\nj\n*\n(\ni\n-\nj\n);\n++\ncnt\n)\n{\ndp\n[\n1\n][\nj\n+\n1\n][\ncnt\n]\n=\nmin\n(\ndp\n[\n1\n][\nj\n+\n1\n][\ncnt\n],\ndp\n[\n0\n][\nj\n][\ncnt\n]\n+\n(\ns\n[\ni\n]\n!=\n'0'\n));\ndp\n[\n1\n][\nj\n][\ncnt\n+\nj\n]\n=\nmin\n(\ndp\n[\n1\n][\nj\n][\ncnt\n+\nj\n],\ndp\n[\n0\n][\nj\n][\ncnt\n]\n+\n(\ns\n[\ni\n]\n!=\n'1'\n));\n}\n}\nswap\n(\ndp\n[\n0\n],\ndp\n[\n1\n]);\n}\nint\ncnt0\n=\ncount\n(\ns\n.\nbegin\n(),\ns\n.\nend\n(),\n'0'\n);\ncout\n<<\ndp\n[\n0\n][\ncnt0\n][\ncnt0\n*\n(\nn\n-\ncnt0\n)\n/\n2\n]\n/\n2\n<<\n'\\n'\n;\n}"
+        }
+    ]
+}

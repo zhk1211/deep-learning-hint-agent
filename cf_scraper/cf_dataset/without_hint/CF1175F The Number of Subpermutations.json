@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have an array $ a_1, a_2, \\dots, a_n $ .\n\nLet's call some subarray $ a_l, a_{l + 1}, \\dots , a_r $ of this array a subpermutation if it contains all integers from $ 1 $ to $ r-l+1 $ exactly once. For example, array $ a = [2, 2, 1, 3, 2, 3, 1] $ contains $ 6 $ subarrays which are subpermutations: $ [a_2 \\dots a_3] $ , $ [a_2 \\dots a_4] $ , $ [a_3 \\dots a_3] $ , $ [a_3 \\dots a_5] $ , $ [a_5 \\dots a_7] $ , $ [a_7 \\dots a_7] $ .\n\nYou are asked to calculate the number of subpermutations.\n\nInput Format\nThe first line contains one integer $ n $ ( $ 1 \\le n \\le 3 \\cdot 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots , a_n $ ( $ 1 \\le a_i \\le n $ ).\n\nThis array can contain the same integers.\n\nOutput Format\nPrint the number of subpermutations of the array $ a $ .\n\nExamples\nSample 1\nInput\n8\n2 4 1 3 4 2 1 2\nOutput\n7\n\nSample 2\nInput\n5\n1 1 2 1 2\nOutput\n6\n\nNote\nThere are $ 7 $ subpermutations in the first test case. Their segments of indices are $ [1, 4] $ , $ [3, 3] $ , $ [3, 6] $ , $ [4, 7] $ , $ [6, 7] $ , $ [7, 7] $ and $ [7, 8] $ .\n\nIn the second test case $ 6 $ subpermutations exist: $ [1, 1] $ , $ [2, 2] $ , $ [2, 3] $ , $ [3, 4] $ , $ [4, 4] $ and $ [4, 5] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\npair\n<\nlong\nlong\n,\nlong\nlong\n>\npt\n;\nconst\nint\nN\n=\nint\n(\n3e5\n)\n+\n99\n;\nconst\npt zero\n=\nmake_pair\n(\n0\n,\n0\n);\nint\nn\n;\nint\na\n[\nN\n];\npt hsh\n[\nN\n],\nsumHsh\n[\nN\n];\nvoid\nupd\n(\npt\n&\na\n,\npt b\n){\na\n.\nfirst\n^=\nb\n.\nfirst\n;\na\n.\nsecond\n^=\nb\n.\nsecond\n;\n}\nint\ncalc\n(\nint\npos\n){\nset\n<int>\nsl\n,\nsr\n;\nset\n<pt>\ns\n;\nint\nr\n=\npos\n+\n1\n,\nl\n=\npos\n-\n1\n;\npt curr\n=\nhsh\n[\n0\n],\ncurl\n=\nzero\n;\ns\n.\ninsert\n(\nzero\n);\nsr\n.\ninsert\n(\n0\n),\nsl\n.\ninsert\n(\n0\n);\nint\nres\n=\n0\n;\nwhile\n(\nr\n<\nn\n&&\n!\nsr\n.\ncount\n(\na\n[\nr\n])){\nsr\n.\ninsert\n(\na\n[\nr\n]);\nupd\n(\ncurr\n,\nhsh\n[\na\n[\nr\n]]);\n++\nr\n;\nwhile\n(\nl\n>=\n0\n&&\n!\nsl\n.\ncount\n(\na\n[\nl\n])\n&&\na\n[\nl\n]\n<\n*\nsr\n.\nrbegin\n()){\nsl\n.\ninsert\n(\na\n[\nl\n]);\nupd\n(\ncurl\n,\nhsh\n[\na\n[\nl\n]]);\ns\n.\ninsert\n(\ncurl\n);\n--\nl\n;\n}\npt need\n=\nsumHsh\n[*\nsr\n.\nrbegin\n()];\nupd\n(\nneed\n,\ncurr\n);\nif\n(\ns\n.\ncount\n(\nneed\n))\n++\nres\n;\n}\nreturn\nres\n;\n}\nint\nmain\n()\n{\nlong\nlong\nx\n=\n0\n;\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n){\ncin\n>>\na\n[\ni\n];\n--\na\n[\ni\n];\nx\n^=\na\n[\ni\n];\n}\nmt19937_64 rnd\n(\ntime\n(\nNULL\n));\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nN\n;\n++\ni\n){\nhsh\n[\ni\n].\nfirst\n=\nrnd\n()\n^\nx\n;\nhsh\n[\ni\n].\nsecond\n=\nrnd\n()\n^\nx\n;\nsumHsh\n[\ni\n]\n=\nhsh\n[\ni\n];\nif\n(\ni\n>\n0\n)\nupd\n(\nsumHsh\n[\ni\n],\nsumHsh\n[\ni\n-\n1\n]);\n}\nint\nres\n=\n0\n;\nfor\n(\nint\ntc\n=\n0\n;\ntc\n<\n2\n;\n++\ntc\n){\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\nif\n(\na\n[\ni\n]\n==\n0\n)\nres\n+=\ncalc\n(\ni\n)\n+\n(\ntc\n==\n0\n);\nreverse\n(\na\n,\na\n+\nn\n);\n}\ncout\n<<\nres\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two arrays $ a_1, a_2, \\dots , a_n $ and $ b_1, b_2, \\dots , b_m $ . Array $ b $ is sorted in ascending order ( $ b_i < b_{i + 1} $ for each $ i $ from $ 1 $ to $ m - 1 $ ).\n\nYou have to divide the array $ a $ into $ m $ consecutive subarrays so that, for each $ i $ from $ 1 $ to $ m $ , the minimum on the $ i $ -th subarray is equal to $ b_i $ . Note that each element belongs to exactly one subarray, and they are formed in such a way: the first several elements of $ a $ compose the first subarray, the next several elements of $ a $ compose the second subarray, and so on.\n\nFor example, if $ a = [12, 10, 20, 20, 25, 30] $ and $ b = [10, 20, 30] $ then there are two good partitions of array $ a $ :\n\n1. $ [12, 10, 20], [20, 25], [30] $ ;\n2. $ [12, 10], [20, 20, 25], [30] $ .\n\nYou have to calculate the number of ways to divide the array $ a $ . Since the number can be pretty large print it modulo 998244353.\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ ( $ 1 \\le n, m \\le 2 \\cdot 10^5 $ ) — the length of arrays $ a $ and $ b $ respectively.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots , a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the array $ a $ .\n\nThe third line contains $ m $ integers $ b_1, b_2, \\dots , b_m $ ( $ 1 \\le b_i \\le 10^9; b_i < b_{i+1} $ ) — the array $ b $ .\n\nOutput Format\nIn only line print one integer — the number of ways to divide the array $ a $ modulo 998244353.\n\nExamples\nSample 1\nInput\n6 3\n12 10 20 20 25 30\n10 20 30\nOutput\n2\n\nSample 2\nInput\n4 2\n1 3 3 7\n3 7\nOutput\n0\n\nSample 3\nInput\n8 2\n1 2 2 2 2 2 2 2\n1 2\nOutput\n7"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n200005\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nmul\n(\nint\na\n,\nint\nb\n)\n{\nreturn\n(\na\n*\n1LL\n*\nb\n)\n%\nMOD\n;\n}\nint\nn\n,\nm\n;\nint\na\n[\nN\n],\nb\n[\nN\n];\nint\nmain\n()\n{\nscanf\n(\n\"%d %d\"\n,\n&\nn\n,\n&\nm\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\nscanf\n(\n\"%d\"\n,\na\n+\ni\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nm\n;\n++\ni\n)\nscanf\n(\n\"%d\"\n,\nb\n+\ni\n);\nreverse\n(\na\n,\na\n+\nn\n);\nreverse\n(\nb\n,\nb\n+\nm\n);\na\n[\nn\n]\n=\n-\n1\n;\nint\nmn\n=\na\n[\n0\n];\nint\npos\n=\n0\n;\nwhile\n(\npos\n<\nn\n&&\nmn\n>\nb\n[\n0\n])\n{\n++\npos\n;\nmn\n=\nmin\n(\nmn\n,\na\n[\npos\n]);\n}\nif\n(\npos\n==\nn\n||\nmn\n<\nb\n[\n0\n])\n{\nputs\n(\n\"0\"\n);\nreturn\n0\n;\n}\nassert\n(\nmn\n==\nb\n[\n0\n]);\nint\nres\n=\n1\n;\nint\nib\n=\n0\n;\nwhile\n(\ntrue\n)\n{\nassert\n(\nmn\n==\nb\n[\nib\n]);\nif\n(\nib\n==\nm\n-\n1\n){\nif\n(*\nmin_element\n(\na\n+\npos\n,\na\n+\nn\n)\n!=\nb\n[\nib\n])\n{\nputs\n(\n\"0\"\n);\nreturn\n0\n;\n}\nbreak\n;\n}\nbool\nf\n=\ntrue\n;\nint\nnpos\n=\npos\n;\nwhile\n(\nnpos\n<\nn\n&&\nmn\n!=\nb\n[\nib\n+\n1\n])\n{\n++\nnpos\n;\nmn\n=\nmin\n(\nmn\n,\na\n[\nnpos\n]);\nif\n(\nf\n&&\nmn\n<\nb\n[\nib\n]){\nf\n=\nfalse\n;\nres\n=\nmul\n(\nres\n,\nnpos\n-\npos\n);\n}\n}\nif\n(\nnpos\n==\nn\n||\nmn\n!=\nb\n[\nib\n+\n1\n])\n{\nputs\n(\n\"0\"\n);\nreturn\n0\n;\n}\n++\nib\n;\npos\n=\nnpos\n;\n}\nprintf\n(\n\"%d\\n\"\n,\nres\n);\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array of integers $ b_1, b_2, \\ldots, b_n $ .\n\nAn array $ a_1, a_2, \\ldots, a_n $ of integers is hybrid if for each $ i $ ( $ 1 \\leq i \\leq n $ ) at least one of these conditions is true:\n\n- $ b_i = a_i $ , or\n- $ b_i = \\sum_{j=1}^{i} a_j $ .\n\nFind the number of hybrid arrays $ a_1, a_2, \\ldots, a_n $ . As the result can be very large, you should print the answer modulo $ 10^9 + 7 $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ b_1, b_2, \\ldots, b_n $ ( $ -10^9 \\le b_i \\le 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ for all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single integer: the number of hybrid arrays $ a_1, a_2, \\ldots, a_n $ modulo $ 10^9 + 7 $ .\n\nExamples\nSample 1\nInput\n4\n3\n1 -1 1\n4\n1 2 3 4\n10\n2 -1 1 -2 2 3 -5 0 2 -1\n4\n0 0 0 1\nOutput\n3\n8\n223\n1\n\nNote\nIn the first test case, the hybrid arrays are $ [1, -2, 1] $ , $ [1, -2, 2] $ , $ [1, -1, 1] $ .\n\nIn the second test case, the hybrid arrays are $ [1, 1, 1, 1] $ , $ [1, 1, 1, 4] $ , $ [1, 1, 3, -1] $ , $ [1, 1, 3, 4] $ , $ [1, 2, 0, 1] $ , $ [1, 2, 0, 4] $ , $ [1, 2, 3, -2] $ , $ [1, 2, 3, 4] $ .\n\nIn the fourth test case, the only hybrid array is $ [0, 0, 0, 1] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Why isn't the answer $$$2^{n-1}$$$? What would you overcount?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Find a dp with time complexity $$$O(n^2\\log n)$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Let $$$dp_{i, j}$$$ be the number of hybrid prefixes of length $$$i$$$ and sum $$$j$$$. The transitions are $$$dp_{i, j} \\rightarrow dp_{i+1, j+b_i}$$$ and $$$dp_{i,j} \\rightarrow dp_{i+1,b_i}$$$. Can you optimize it to $$$O(n\\log n)$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "For each $$$i$$$, you can choose either $$$a_i = b_i$$$ or $$$a_i = b_i - \\sum_{k=1}^{i-1} a_k$$$. If $$$\\sum_{k=1}^{i-1} a_k = 0$$$, the two options coincide and you have to avoid overcounting them.\nThis leads to an $$$O(n^2\\log n)$$$ solution: let $$$dp_i$$$ be a map such that $$$dp_{i, j}$$$ corresponds to the number of ways to create a hybrid prefix $$$[1, i]$$$ with sum $$$j$$$. The transitions are $$$dp_{i, j} \\rightarrow dp_{i+1, j+b_i}$$$ (if you choose $$$b_i = a_i$$$, and $$$j \\neq 0$$$), $$$dp_{i,j} \\rightarrow dp_{i+1,b_i}$$$ (if you choose $$$b_i = \\sum_{k=1}^{i} a_k$$$).\nLet's try to get rid of the first layer of the dp. It turns out that the operations required are\nmove all $$$dp_j$$$ to $$$dp_{j+b_i}$$$\ncalculate the sum of all $$$dp_j$$$ in some moment\nchange the value of a $$$dp_j$$$\nand they can be handled in $$$O(n\\log n)$$$ with\n\"Venice technique\"\n.\n$$$dp$$$ is now a map such that $$$dp_j$$$ corresponds to the number of ways to create a hybrid prefix $$$[1, i]$$$ such that $$$\\sum_{k=1}^{i} a_k - b_k = j$$$. Calculate the dp for all prefixes from left to right. if $$$b_i = a_i$$$, you don't need to change any value of the dp; if $$$b_i = \\sum_{k=1}^{i} a_k$$$, you have to set $$$dp_{\\sum_{k=1}^{i} -b_k}$$$ to the total number of hybrid arrays of length $$$i-1$$$.\nComplexity: $$$O(n\\log n)$$$."
+        }
+    ]
+}

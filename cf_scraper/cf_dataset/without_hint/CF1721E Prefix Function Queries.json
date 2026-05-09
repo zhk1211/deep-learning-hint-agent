@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ , consisting of lowercase Latin letters.\n\nYou are asked $ q $ queries about it: given another string $ t $ , consisting of lowercase Latin letters, perform the following steps:\n\n1. concatenate $ s $ and $ t $ ;\n2. calculate the prefix function of the resulting string $ s+t $ ;\n3. print the values of the prefix function on positions $ |s|+1, |s|+2, \\dots, |s|+|t| $ ( $ |s| $ and $ |t| $ denote the lengths of strings $ s $ and $ t $ , respectively);\n4. revert the string back to $ s $ .\n\nThe prefix function of a string $ a $ is a sequence $ p_1, p_2, \\dots, p_{|a|} $ , where $ p_i $ is the maximum value of $ k $ such that $ k < i $ and $ a[1..k]=a[i-k+1..i] $ ( $ a[l..r] $ denotes a contiguous substring of a string $ a $ from a position $ l $ to a position $ r $ , inclusive). In other words, it's the longest proper prefix of the string $ a[1..i] $ that is equal to its suffix of the same length.\n\nInput Format\nThe first line contains a non-empty string $ s $ ( $ 1 \\le |s| \\le 10^6 $ ), consisting of lowercase Latin letters.\n\nThe second line contains a single integer $ q $ ( $ 1 \\le q \\le 10^5 $ ) — the number of queries.\n\nEach of the next $ q $ lines contains a query: a non-empty string $ t $ ( $ 1 \\le |t| \\le 10 $ ), consisting of lowercase Latin letters.\n\nOutput Format\nFor each query, print the values of the prefix function of a string $ s+t $ on positions $ |s|+1, |s|+2, \\dots, |s|+|t| $ .\n\nExamples\nSample 1\nInput\naba\n6\ncaba\naba\nbababa\naaaa\nb\nforces\nOutput\n0 1 2 3\n1 2 3\n2 3 4 5 6 7\n1 1 1 1\n2\n0 0 0 0 0 0\n\nSample 2\nInput\naacba\n4\naaca\ncbbb\naab\nccaca\nOutput\n2 2 3 1\n0 0 0 0\n2 2 0\n0 0 1 0 1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nconst\nint\nAL\n=\n26\n;\nvector\n<int>\nprefix_function\n(\nconst\nstring\n&\ns\n){\nint\nn\n=\ns\n.\nsize\n();\nvector\n<int>\np\n(\nn\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\n++\ni\n){\nint\nk\n=\np\n[\ni\n-\n1\n];\nwhile\n(\nk\n>\n0\n&&\ns\n[\ni\n]\n!=\ns\n[\nk\n])\nk\n=\np\n[\nk\n-\n1\n];\nk\n+=\n(\ns\n[\ni\n]\n==\ns\n[\nk\n]);\np\n[\ni\n]\n=\nk\n;\n}\nreturn\np\n;\n}\nint\nmain\n()\n{\ncin\n.\ntie\n(\n0\n);\niostream\n::\nsync_with_stdio\n(\nfalse\n);\nstring\ns\n;\ncin\n>>\ns\n;\nint\nn\n=\ns\n.\nsize\n();\nauto\np\n=\nprefix_function\n(\ns\n);\nvector\n<\nvector\n<int>\n>\nA\n(\nn\n,\nvector\n<int>\n(\nAL\n));\nforn\n(\ni\n,\nn\n)\nforn\n(\nj\n,\nAL\n){\nif\n(\ni\n>\n0\n&&\nj\n!=\ns\n[\ni\n]\n-\n'a'\n)\nA\n[\ni\n][\nj\n]\n=\nA\n[\np\n[\ni\n-\n1\n]][\nj\n];\nelse\nA\n[\ni\n][\nj\n]\n=\ni\n+\n(\nj\n==\ns\n[\ni\n]\n-\n'a'\n);\n}\nint\nq\n;\ncin\n>>\nq\n;\nvector\n<\nvector\n<int>\n>\nans\n(\nq\n);\nforn\n(\nz\n,\nq\n){\nstring\nt\n;\ncin\n>>\nt\n;\nint\nm\n=\nt\n.\nsize\n();\ns\n+=\nt\n;\nfor\n(\nint\ni\n=\nn\n;\ni\n<\nn\n+\nm\n;\n++\ni\n){\nA\n.\npush_back\n(\nvector\n<int>\n(\nAL\n));\nforn\n(\nj\n,\nAL\n){\nif\n(\nj\n!=\ns\n[\ni\n]\n-\n'a'\n)\nA\n[\ni\n][\nj\n]\n=\nA\n[\np\n[\ni\n-\n1\n]][\nj\n];\nelse\nA\n[\ni\n][\nj\n]\n=\ni\n+\n(\nj\n==\ns\n[\ni\n]\n-\n'a'\n);\n}\np\n.\npush_back\n(\nA\n[\np\n[\ni\n-\n1\n]][\ns\n[\ni\n]\n-\n'a'\n]);\nans\n[\nz\n].\npush_back\n(\np\n[\ni\n]);\n}\nforn\n(\n_\n,\nm\n){\np\n.\npop_back\n();\ns\n.\npop_back\n();\nA\n.\npop_back\n();\n}\n}\nfor\n(\nauto\n&\nit\n:\nans\n){\nfor\n(\nint\nx\n:\nit\n)\ncout\n<<\nx\n<<\n' '\n;\ncout\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

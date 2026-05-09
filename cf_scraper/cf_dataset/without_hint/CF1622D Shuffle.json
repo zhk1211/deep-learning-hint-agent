@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a binary string (i. e. a string consisting of characters 0 and/or 1) $ s $ of length $ n $ . You can perform the following operation with the string $ s $ at most once: choose a substring (a contiguous subsequence) of $ s $ having exactly $ k $ characters 1 in it, and shuffle it (reorder the characters in the substring as you wish).\n\nCalculate the number of different strings which can be obtained from $ s $ by performing this operation at most once.\n\nInput Format\nThe first line contains two integers $ n $ and $ k $ ( $ 2 \\le n \\le 5000 $ ; $ 0 \\le k \\le n $ ).\n\nThe second line contains the string $ s $ of length $ n $ , consisting of characters 0 and/or 1.\n\nOutput Format\nPrint one integer — the number of different strings which can be obtained from $ s $ by performing the described operation at most once. Since the answer can be large, output it modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n7 2\n1100110\nOutput\n16\n\nSample 2\nInput\n5 0\n10010\nOutput\n1\n\nSample 3\nInput\n8 1\n10001000\nOutput\n10\n\nSample 4\nInput\n10 8\n0010011000\nOutput\n1\n\nNote\nSome strings you can obtain in the first example:\n\n- to obtain 0110110, you can take the substring from the $ 1 $ -st character to the $ 4 $ -th character, which is 1100, and reorder its characters to get 0110;\n- to obtain 1111000, you can take the substring from the $ 3 $ -rd character to the $ 7 $ -th character, which is 00110, and reorder its characters to get 11000;\n- to obtain 1100101, you can take the substring from the $ 5 $ -th character to the $ 7 $ -th character, which is 110, and reorder its characters to get 101.\n\nIn the second example, $ k = 0 $ so you can only choose the substrings consisting only of 0 characters. Reordering them doesn't change the string at all, so the only string you can obtain is 10010."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nadd\n(\nint\nx\n,\nint\ny\n)\n{\nx\n+=\ny\n;\nwhile\n(\nx\n>=\nMOD\n)\nx\n-=\nMOD\n;\nwhile\n(\nx\n<\n0\n)\nx\n+=\nMOD\n;\nreturn\nx\n;\n}\nint\nmain\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nk\n;\ncin\n>>\nk\n;\nstring\ns\n;\ncin\n>>\ns\n;\nvector\n<int>\np\n(\nn\n+\n1\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\np\n[\ni\n+\n1\n]\n=\np\n[\ni\n]\n+\n(\ns\n[\ni\n]\n-\n'0'\n);\nvector\n<\nvector\n<int>\n>\nC\n(\nn\n+\n1\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nn\n;\ni\n++)\n{\nC\n[\ni\n].\nresize\n(\ni\n+\n1\n);\nC\n[\ni\n][\n0\n]\n=\nC\n[\ni\n][\ni\n]\n=\n1\n;\nfor\n(\nint\nj\n=\n1\n;\nj\n<\ni\n;\nj\n++)\nC\n[\ni\n][\nj\n]\n=\nadd\n(\nC\n[\ni\n-\n1\n][\nj\n],\nC\n[\ni\n-\n1\n][\nj\n-\n1\n]);\n}\nint\nans\n=\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nfor\n(\nint\nj\n=\ni\n+\n1\n;\nj\n<\nn\n;\nj\n++)\n{\nint\ncnt\n=\nj\n+\n1\n-\ni\n;\nint\ncnt1\n=\np\n[\nj\n+\n1\n]\n-\np\n[\ni\n];\nif\n(\ncnt1\n>\nk\n||\np\n[\nn\n]\n<\nk\n)\ncontinue\n;\ncnt\n-=\n2\n;\nif\n(\ns\n[\ni\n]\n==\n'0'\n)\ncnt1\n--;\nif\n(\ns\n[\nj\n]\n==\n'0'\n)\ncnt1\n--;\nif\n(\ncnt1\n<=\ncnt\n&&\ncnt1\n>=\n0\n&&\ncnt\n>=\n0\n)\nans\n=\nadd\n(\nans\n,\nC\n[\ncnt\n][\ncnt1\n]);\n}\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA sequence of $ n $ non-negative integers ( $ n \\ge 2 $ ) $ a_1, a_2, \\dots, a_n $ is called good if for all $ i $ from $ 1 $ to $ n-1 $ the following condition holds true: $ $$$a_1 \\: \\& \\: a_2 \\: \\& \\: \\dots \\: \\& \\: a_i = a_{i+1} \\: \\& \\: a_{i+2} \\: \\& \\: \\dots \\: \\& \\: a_n, $ $ where $ \\\\&amp; $ denotes the <a href=\"https://en.wikipedia.org/wiki/Bitwise_operation#AND\">bitwise AND operation</a>.</p><p>You are given an array $ a $ of size $ n $ ( $ n \\\\geq 2 $ ). Find the number of permutations $ p $ of numbers ranging from $ 1 $ to $ n $ , for which the sequence $ a\\_{p\\_1} $ , $ a\\_{p\\_2} $ , ... , $ a\\_{p\\_n} $ is good. Since this number can be large, output it modulo $ 10^9+7$$$.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ), denoting the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ) — the size of the array.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\le a_i \\le 10^9 $ ) — the elements of the array.\n\nIt is guaranteed that the sum of $ n $ over all test cases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nOutput $ t $ lines, where the $ i $ -th line contains the number of good permutations in the $ i $ -th test case modulo $ 10^9 + 7 $ .\n\nExamples\nSample 1\nInput\n4\n3\n1 1 1\n5\n1 2 3 4 5\n5\n0 2 0 3 0\n4\n1 3 5 1\nOutput\n6\n0\n36\n4\n\nNote\nIn the first test case, since all the numbers are equal, whatever permutation we take, the sequence is good. There are a total of $ 6 $ permutations possible with numbers from $ 1 $ to $ 3 $ : $ [1,2,3] $ , $ [1,3,2] $ , $ [2,1,3] $ , $ [2,3,1] $ , $ [3,1,2] $ , $ [3,2,1] $ .\n\nIn the second test case, it can be proved that no permutation exists for which the sequence is good.\n\nIn the third test case, there are a total of $ 36 $ permutations for which the sequence is good. One of them is the permutation $ [1,5,4,2,3] $ which results in the sequence $ s=[0,0,3,2,0] $ . This is a good sequence because\n\n- $ s_1 = s_2 \\: \\& \\: s_3 \\: \\& \\: s_4 \\: \\& \\: s_5 = 0 $ ,\n- $ s_1 \\: \\& \\: s_2 = s_3 \\: \\& \\: s_4 \\: \\& \\: s_5 = 0 $ ,\n- $ s_1 \\: \\& \\: s_2 \\: \\& \\: s_3 = s_4 \\: \\& \\: s_5 = 0 $ ,\n- $ s_1 \\: \\& \\: s_2 \\: \\& \\: s_3 \\: \\& \\: s_4 = s_5 = 0 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation in C++",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolveTestCase\n()\n{\nint\nMOD\n=\n1e9\n+\n7\n;\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nint\nmin1\n=*\nmin_element\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nint\ncnt\n=\n0\n;\nfor\n(\nint\nx\n:\na\n)\n{\nif\n(\nmin1\n==\nx\n)\ncnt\n++;\nif\n((\nmin1\n&\nx\n)!=\nmin1\n)\n{\nprintf\n(\n\"0\\n\"\n);\nreturn\n;\n}\n}\nint\nfact\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n-\n2\n;\ni\n++)\nfact\n=(\n1LL\n*\nfact\n*\ni\n)%\nMOD\n;\nint\nans\n=(\n1LL\n*\ncnt\n*\n(\ncnt\n-\n1\n))%\nMOD\n;\nans\n=\n(\n1LL\n*\nans\n*\nfact\n)\n%\nMOD\n;\nprintf\n(\n\"%d\\n\"\n,\nans\n);\n}\nint\nmain\n()\n{\nint\ntests\n;\ncin\n>>\ntests\n;\nwhile\n(\ntests\n--)\nsolveTestCase\n();\nreturn\n0\n;\n}"
+        }
+    ]
+}

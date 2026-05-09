@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA bracket sequence is a string consisting of characters '(' and/or ')'. A regular bracket sequence is a bracket sequence that can be transformed into a correct arithmetic expression by inserting characters '1' and '+' between the original characters of the sequence. For example:\n\n- bracket sequences \"()()\" and \"(())\" are regular (they can be transformed into \"(1)+(1)\" and \"((1+1)+1)\", respectively);\n- bracket sequences \")(\", \"(\" and \")\" are not regular.\n\nYou are given a bracket sequence $ s $ ; let's define its length as $ n $ . Your task is to find a regular bracket sequence $ t $ of length $ 2n $ such that $ s $ does not occur in $ t $ as a contiguous substring, or report that there is no such sequence.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThe only line of each test case contains a string $ s $ ( $ 2 \\le |s| \\le 50 $ ), consisting of characters \"(\" and/or \")\".\n\nOutput Format\nFor each test case, print the answer to it. If there is no required regular bracket sequence, print NO in a separate line. Otherwise, print YES in the first line, and the required regular bracket sequence $ t $ itself in the second line. If there are multiple answers — you may print any of them.\n\nExamples\nSample 1\nInput\n4\n)(\n(()\n()\n))()\nOutput\nYES\n(())\nYES\n()()()\nNO\nYES\n()(()())"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nstring\ns\n;\ncin\n>>\ns\n;\nint\nn\n=\ns\n.\nsize\n();\nstring\na\n,\nb\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n2\n*\nn\n;\n++\ni\n)\n{\na\n+=\n\"()\"\n[\ni\n&\n1\n];\nb\n+=\n\")(\"\n[\ni\n<\nn\n];\n}\nif\n(\na\n.\nfind\n(\ns\n)\n==\nstring\n::\nnpos\n)\n{\ncout\n<<\n\"YES\\n\"\n<<\na\n<<\n'\\n'\n;\n}\nelse\nif\n(\nb\n.\nfind\n(\ns\n)\n==\nstring\n::\nnpos\n)\n{\ncout\n<<\n\"YES\\n\"\n<<\nb\n<<\n'\\n'\n;\n}\nelse\n{\ncout\n<<\n\"NO\\n\"\n;\n}\n}\n}"
+        }
+    ]
+}

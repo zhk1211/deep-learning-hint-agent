@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is an integer $ n $ without zeros in its decimal representation. Alice and Bob are playing a game with this integer. Alice starts first. They play the game in turns.\n\nOn her turn, Alice must swap any two digits of the integer that are on different positions. Bob on his turn always removes the last digit of the integer. The game ends when there is only one digit left.\n\nYou have to find the smallest integer Alice can get in the end, if she plays optimally.\n\nInput Format\nThe input consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Description of the test cases follows.\n\nThe first and the only line of each test case contains the integer $ n $ ( $ 10 \\le n \\le 10^9 $ ) — the integer for the game. $ n $ does not have zeros in its decimal representation.\n\nOutput Format\nFor each test case output a single integer — the smallest integer Alice can get in the end of the game.\n\nExamples\nSample 1\nInput\n3\n12\n132\n487456398\nOutput\n2\n1\n3\n\nNote\nIn the first test case Alice has to swap $ 1 $ and $ 2 $ . After that Bob removes the last digit, $ 1 $ , so the answer is $ 2 $ .\n\nIn the second test case Alice can swap $ 3 $ and $ 1 $ : $ 312 $ . After that Bob deletes the last digit: $ 31 $ . Then Alice swaps $ 3 $ and $ 1 $ : $ 13 $ and Bob deletes $ 3 $ , so the answer is $ 1 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n-->\n0\n)\n{\nstring\nn\n;\ncin\n>>\nn\n;\nif\n(\nn\n.\nsize\n()\n==\n2\n)\n{\ncout\n<<\nn\n[\n1\n]\n<<\n'\\n'\n;\n}\nelse\n{\ncout\n<<\n*\nmin_element\n(\nn\n.\nbegin\n(),\nn\n.\nend\n())\n<<\n'\\n'\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVitaly gave Maxim $ n $ numbers $ 1, 2, \\ldots, n $ for his $ 16 $ -th birthday. Maxim was tired of playing board games during the celebration, so he decided to play with these numbers. In one step Maxim can choose two numbers $ x $ and $ y $ from the numbers he has, throw them away, and add two numbers $ x + y $ and $ |x - y| $ instead. He wants all his numbers to be equal after several steps and the sum of the numbers to be minimal.\n\nHelp Maxim to find a solution. Maxim's friends don't want to wait long, so the number of steps in the solution should not exceed $ 20n $ . It is guaranteed that under the given constraints, if a solution exists, then there exists a solution that makes all numbers equal, minimizes their sum, and spends no more than $ 20n $ moves.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 25\\,000 $ ) — the number of test cases.\n\nEach test case contains a single integer $ n $ ( $ 2 \\le n \\le 5 \\cdot 10^4 $ ) — the number of integers given to Maxim.\n\nIt is guaranteed that the total sum of $ n $ doesn't exceed $ 5 \\cdot 10^4 $ .\n\nOutput Format\nFor each test case print $ -1 $ if it's impossible to make all numbers equal.\n\nOtherwise print a single integer $ s $ ( $ 0 \\le s \\le 20n $ ) — the number of steps. Then print $ s $ lines. The $ i $ -th line must contain two integers $ x_i $ and $ y_i $ — numbers that Maxim chooses on the $ i $ -th step. The numbers must become equal after all operations.\n\nDon't forget that you not only need to make all numbers equal, but also minimize their sum. It is guaranteed that under the given constraints, if a solution exists, then there exists a solution that makes all numbers equal, minimizes their sum, and spends no more than $ 20n $ moves.\n\nExamples\nSample 1\nInput\n2\n2\n3\nOutput\n-1\n3\n1 3\n2 2\n4 0"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "It's impossible to construct a sequence of operations only when $$$n = 2$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Answer is the smallest power of two which is at least $$$n$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Try to transform all numbers into the powers of two (maybe different)."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvector\n<\npair\n<\nint\n,\nint\n>>\nops\n;\nvector\n<int>\na\n;\nvoid\nrec\n(\nint\nn\n,\nint\ncoeff\n)\n{\nif\n(\nn\n<=\n2\n)\n{\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\na\n.\npush_back\n(\ni\n*\ncoeff\n);\nreturn\n;\n}\nint\np\n=\n1\n;\nwhile\n(\np\n*\n2\n<=\nn\n)\np\n*=\n2\n;\nif\n(\np\n==\nn\n)\n{\na\n.\npush_back\n(\nn\n*\ncoeff\n);\nn\n--,\np\n/=\n2\n;\n}\na\n.\npush_back\n(\np\n*\ncoeff\n);\nfor\n(\nint\ni\n=\np\n+\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\na\n.\npush_back\n(\n2\n*\np\n*\ncoeff\n);\nops\n.\nemplace_back\n(\ni\n*\ncoeff\n,\n(\n2\n*\np\n-\ni\n)\n*\ncoeff\n);\n}\nrec\n(\n2\n*\np\n-\nn\n-\n1\n,\ncoeff\n);\nrec\n(\nn\n-\np\n,\ncoeff\n*\n2\n);\n}\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nif\n(\nn\n==\n2\n)\n{\ncout\n<<\n\"-1\\n\"\n;\nreturn\n;\n}\nops\n.\nclear\n();\na\n.\nclear\n();\nrec\n(\nn\n,\n1\n);\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nint\nanswer\n=\n1\n;\nwhile\n(\nanswer\n<\nn\n)\nanswer\n*=\n2\n;\nfor\n(\nint\ni\n=\n0\n;;\ni\n++)\nif\n(\na\n[\ni\n]\n==\na\n[\ni\n+\n1\n])\n{\nassert\n(\na\n[\ni\n]\n!=\nanswer\n);\nops\n.\nemplace_back\n(\na\n[\ni\n],\na\n[\ni\n]);\na\n[\ni\n+\n1\n]\n*=\n2\n;\na\n.\nerase\n(\na\n.\nbegin\n()\n+\ni\n);\nbreak\n;\n}\nfor\n(\nauto\nx\n:\na\n)\nwhile\n(\nx\n!=\nanswer\n)\n{\nops\n.\nemplace_back\n(\n0\n,\nx\n);\nops\n.\nemplace_back\n(\nx\n,\nx\n);\nx\n*=\n2\n;\n}\nops\n.\nemplace_back\n(\n0\n,\nanswer\n);\ncout\n<<\nops\n.\nsize\n()\n<<\n'\\n'\n;\nfor\n(\nauto\n&[\nx\n,\ny\n]\n:\nops\n)\ncout\n<<\nx\n<<\n' '\n<<\ny\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nint\ntests\n;\ncin\n>>\ntests\n;\nwhile\n(\ntests\n--)\nsolve\n();\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a grid with $ n $ rows and $ m $ columns, and three types of cells:\n\n- An empty cell, denoted with '.'.\n- A stone, denoted with '\\*'.\n- An obstacle, denoted with the lowercase Latin letter 'o'.\n\nAll stones fall down until they meet the floor (the bottom row), an obstacle, or other stone which is already immovable. (In other words, all the stones just fall down as long as they can fall.)\n\nSimulate the process. What does the resulting grid look like?\n\nInput Format\nThe input consists of multiple test cases. The first line contains an integer $ t $ ( $ 1 \\leq t \\leq 100 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ m $ ( $ 1 \\leq n, m \\leq 50 $ ) — the number of rows and the number of columns in the grid, respectively.\n\nThen $ n $ lines follow, each containing $ m $ characters. Each of these characters is either '.', '\\*', or 'o' — an empty cell, a stone, or an obstacle, respectively.\n\nOutput Format\nFor each test case, output a grid with $ n $ rows and $ m $ columns, showing the result of the process.\n\nYou don't need to output a new line after each test, it is in the samples just for clarity.\n\nExamples\nSample 1\nInput\n3\n6 10\n.*.*....*.\n.*.......*\n...o....o.\n.*.*....*.\n..........\n.o......o*\n2 9\n...***ooo\n.*o.*o.*o\n5 5\n*****\n*....\n*****\n....*\n*****\nOutput\n..........\n...*....*.\n.*.o....o.\n.*........\n.*......**\n.o.*....o*\n\n....**ooo\n.*o**o.*o\n\n.....\n*...*\n*****\n*****\n*****"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200007\n;\nconst\nint\nMOD\n=\n1000000007\n;\nvoid\nsolve\n()\n{\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nchar\ng\n[\nn\n+\n7\n][\nm\n+\n7\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nm\n;\nj\n++)\n{\ncin\n>>\ng\n[\ni\n][\nj\n];\n}\n}\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nm\n;\nj\n++)\n{\nint\nlast\n=\nn\n-\n1\n;\nfor\n(\nint\ni\n=\nn\n-\n1\n;\ni\n>=\n0\n;\ni\n--)\n{\nif\n(\ng\n[\ni\n][\nj\n]\n==\n'o'\n)\n{\nlast\n=\ni\n-\n1\n;}\nelse\nif\n(\ng\n[\ni\n][\nj\n]\n==\n'*'\n)\n{\nswap\n(\ng\n[\ni\n][\nj\n],\ng\n[\nlast\n][\nj\n]);\nlast\n--;}\n}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nm\n;\nj\n++)\n{\ncout\n<<\ng\n[\ni\n][\nj\n];\n}\ncout\n<<\n'\\n'\n;\n}\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

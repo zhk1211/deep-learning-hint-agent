@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWhat is the largest prime factor of $ n $ ?\n\nInput Format\nThe only line contains an integer $ n $ ( $ n = 4167792762229302596005813 $ or $ n = $ $ 5023266485352224530541666346579718188045725802556947855902702063768930526665237598287495728 $ $ 2186920039740245544313021979167491414627648054421626450903732301970386214502290904360792618 $ $ 5591029614599889902115472391135622402044979347133959392884686037208893694733655782993294168 $ $ 1679738555852317096830120847236770822731988661111203691013036774095229665675217827154840019 $ $ 9277276899311984129170278649605877582438144407974816241674549565633361834348720814779487433 $ $ 7933873576016717726298883519261055062303842274145012056670644839715140659887936321934474824 $ $ 687778512706909988484451300384818197143498259061041 $ ).\n\n$(function () {\nCodeforces.addMathJaxListener(function () {\nlet $problem = $(\"div[problemindex=F]\");\nlet uuid = $problem.attr(\"data-uuid\");\nlet statementText = convertStatementToText($problem.find(\".ttypography\").get(0));\n\nlet previousStatementText = Codeforces.getFromStorage(uuid);\nif (previousStatementText) {\nif (previousStatementText !== statementText) {\n$problem.find(\".diff-notifier\").show();\n\n$problem.find(\".diff-notifier-close\").click(function() {\nCodeforces.putToStorageTtl(uuid, statementText, 6 * 60 * 60);\n$problem.find(\".diff-notifier\").hide();\n});\n\n$problem.find(\"a.view-changes\").click(function() {\n$.post(\"/data/diff\", {action: \"getDiff\", a: previousStatementText, b: statementText}, function (result) {\nif (result[\"success\"] === \"true\") {\nCodeforces.facebox(\".diff-popup\", \"https://codeforces.org/s/15363\");\n$(\"#facebox .diff-popup\").html(result[\"diff\"]);\n}\n}, \"json\");\n});\n}\n} else {\nCodeforces.putToStorageTtl(uuid, statementText, 6 * 60 * 60);\n}\n});\n});\n\n$(document).ready(function () {\nwindow.changedTests = new Set();\n\nfunction endsWith(string, suffix) {\nreturn string.indexOf(suffix, string.length - suffix.length) !== -1;\n}\n\nconst inputFileDiv = $(\"div.input-file\");\nconst inputFile = inputFileDiv.text();\nconst outputFileDiv = $(\"div.output-file\");\nconst outputFile = outputFileDiv.text();\n\nif (!endsWith(inputFile, \"standard input\")\n&& !endsWith(inputFile, \"standard input\")) {\ninputFileDiv.attr(\"style\", \"font-weight: bold\");\n}\n\nif (!endsWith(outputFile, \"standard output\")\n&& !endsWith(outputFile, \"standard output\")) {\noutputFileDiv.attr(\"style\", \"font-weight: bold\");\n}\n\nconst titleDiv = $(\"div.header div.title\");\n\nString.prototype.replaceAll = function (search, replace) {\nreturn this.split(search).join(replace);\n};\n\n$(\".sample-test .title\").each(function () {\nconst preId = (\"id\" + Math.random()).replaceAll(\".\", \"0\");\nconst cpyId = (\"id\" + Math.random()).replaceAll(\".\", \"0\");\n\n$(this).parent().find(\"pre\").attr(\"id\", preId);\nconst $copy = $(\""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Factor the first number. What do you notice?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        }
+    ]
+}

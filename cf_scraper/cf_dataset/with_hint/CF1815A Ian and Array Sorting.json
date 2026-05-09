@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nTo thank Ian, Mary gifted an array $ a $ of length $ n $ to Ian. To make himself look smart, he wants to make the array in non-decreasing order by doing the following finitely many times: he chooses two adjacent elements $ a_i $ and $ a_{i+1} $ ( $ 1\\le i\\le n-1 $ ), and increases both of them by $ 1 $ or decreases both of them by $ 1 $ . Note that, the elements of the array can become negative.\n\nAs a smart person, you notice that, there are some arrays such that Ian cannot make it become non-decreasing order! Therefore, you decide to write a program to determine if it is possible to make the array in non-decreasing order.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case consists of a single integer $ n $ ( $ 2\\le n\\le 3\\cdot10^5 $ ) — the number of elements in the array.\n\nThe second line of each test case contains $ n $ integers $ a_1,a_2,\\ldots,a_n $ ( $ 1\\le a_i\\le 10^9 $ ) — the elements of the array $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 3\\cdot10^5 $ .\n\nOutput Format\nFor each test case, output \"YES\" if there exists a sequence of operations which make the array non-decreasing, else output \"NO\".\n\nYou may print each letter in any case (for example, \"YES\", \"Yes\", \"yes\", \"yEs\" will all be recognized as positive answer).\n\nExamples\nSample 1\nInput\n5\n3\n1 3 2\n2\n2 1\n4\n1 3 5 7\n4\n2 1 4 3\n5\n5 4 3 2 1\nOutput\nYES\nNO\nYES\nNO\nYES\n\nNote\nFor the first test case, we can increase $ a_2 $ and $ a_3 $ both by $ 1 $ . The array is now $ [1, 4, 3] $ .\n\nThen we can decrease $ a_1 $ and $ a_2 $ both by $ 1 $ . The array is now $ [0, 3, 3] $ , which is sorted in non-decreasing order. So the answer is \"YES\".\n\nFor the second test case, no matter how Ian perform the operations, $ a_1 $ will always be larger than $ a_2 $ . So the answer is \"NO\" and Ian cannot pretend to be smart.\n\nFor the third test case, the array is already in non-decreasing order, so Ian does not need to do anything."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider difference array $$$[a_2-a_1,a_3-a_2,...,a_n-a_{n-1}]$$$. If the original array is non-decreasing, what properties does the difference array have?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Operations to the original array correspond to what operations in the difference array?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "We consider the difference array $$$b_i=a_{i+1}-a_i$$$ ($$$1\\le i\\le n-1$$$). Then the original array is non-decreasing if and only if all elements of the difference array is non-negative. We can see that either $$$b_i$$$ is increased by $$$1$$$ and $$$b_{i+2}$$$ is decreased by $$$1$$$ or vice versa for $$$1\\le i\\le n-3$$$, $$$b_2$$$ is increased or decreased by $$$1$$$ or $$$b_{n-2}$$$ is increased or decreased by $$$1$$$.\nIf $$$n$$$ is odd, then $$$n-2$$$ is odd. What we can do is to increase $$$b_2$$$ and $$$b_{n-2}$$$ enough number of times, and then do $$$b_i$$$ increase by $$$1$$$ and $$$b_{i+2}$$$ decrease by $$$1$$$ or vice versa enough times to distribute the values to other elements of $$$b$$$. Doing this, we can make all of the elements of $$$b$$$ non-negative, which is what we want. So we output 'YES' no matter what for odd $$$n$$$.\nFor even $$$n$$$, $$$n-2$$$ is even. So by increasing $$$b_2$$$ and $$$b_{n-2}$$$ enough number of times, then distributing, we can only ensure that the elements of $$$b$$$ with even indices are non-negative. Since the only operation that affects odd indices is increasing $$$b_i$$$ by $$$1$$$ and decreasing $$$b_{i+2}$$$ by $$$1$$$ or vice versa, we can see that the sum of the elements of $$$b$$$ with odd indices will not change. If the sum of the elements of $$$b$$$ with odd indices is at least $$$0$$$, we can distribute the values such that in the end, all of them are non-negative, so we should output 'YES'. But if the sum of elements of $$$b$$$ with odd indices is negative, there must exist a negative $$$b_i$$$ in the end, and we should output 'NO'."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n(){\nint\nn\n;\ncin\n>>\nn\n;\nint\narr\n[\nn\n];\nlong\nlong\nint\naltsum\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++){\ncin\n>>\narr\n[\ni\n];\nif\n(\ni\n%\n2\n==\n0\n){\naltsum\n-=\narr\n[\ni\n];\n}\nelse\n{\naltsum\n+=\narr\n[\ni\n];\n}\n}\nif\n(\nn\n%\n2\n==\n1\n||\naltsum\n>=\n0\n){\ncout\n<<\n\"YES\\n\"\n;\n}\nelse\n{\ncout\n<<\n\"NO\\n\"\n;\n}\nreturn\n;\n}\nint\nmain\n(){\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\ncout\n.\ntie\n(\nNULL\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nsolve\n();\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's call an array $ a $ of $ m $ integers $ a_1, a_2, \\ldots, a_m $ Decinc if $ a $ can be made increasing by removing a decreasing subsequence (possibly empty) from it.\n\n- For example, if $ a = [3, 2, 4, 1, 5] $ , we can remove the decreasing subsequence $ [a_1, a_4] $ from $ a $ and obtain $ a = [2, 4, 5] $ , which is increasing.\n\nYou are given a permutation $ p $ of numbers from $ 1 $ to $ n $ . Find the number of pairs of integers $ (l, r) $ with $ 1 \\le l \\le r \\le n $ such that $ p[l \\ldots r] $ (the subarray of $ p $ from $ l $ to $ r $ ) is a Decinc array.\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the size of $ p $ .\n\nThe second line contains $ n $ integers $ p_1, p_2, \\ldots, p_n $ ( $ 1 \\le p_i \\le n $ , all $ p_i $ are distinct) — elements of the permutation.\n\nOutput Format\nOutput the number of pairs of integers $ (l, r) $ such that $ p[l \\ldots r] $ (the subarray of $ p $ from $ l $ to $ r $ ) is a Decinc array. $ (1 \\le l \\le r \\le n) $\n\nExamples\nSample 1\nInput\n3\n2 3 1\nOutput\n6\n\nSample 2\nInput\n6\n4 5 2 6 1 3\nOutput\n19\n\nSample 3\nInput\n10\n7 10 1 8 3 9 2 4 6 5\nOutput\n39\n\nNote\nIn the first sample, all subarrays are Decinc.\n\nIn the second sample, all subarrays except $ p[1 \\ldots 6] $ and $ p[2 \\ldots 6] $ are Decinc."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution 1",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution 2",
+            "content": "It can be proven that a permutation is\nDecinc\nif and only if it's $$$3412$$$-avoiding and $$$2143$$$-avoiding."
+        },
+        {
+            "title": "Implementation 1",
+            "content": "# include <bits/stdc++.h>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n2e5\n+\n10\n;\nint\nn\n,\na\n[\nN\n],\ndp\n[\nN\n],\npd\n[\nN\n],\nf\n[\nN\n];\nlong\nlong\nans\n;\ninline\nvoid\nupd\n(\nint\ni\n){\nif\n(\nn\n<\ni\n)\nreturn\n;\nint\ninc\n=\n0\n,\ndec\n=\nn\n+\n1\n;\nif\n(\npd\n[\ni\n-\n1\n]\n<\na\n[\ni\n])\ninc\n=\nmax\n(\ninc\n,\na\n[\ni\n-\n1\n]);\nif\n(\na\n[\ni\n-\n1\n]\n<\na\n[\ni\n])\ninc\n=\nmax\n(\ninc\n,\ndp\n[\ni\n-\n1\n]);\nif\n(\na\n[\ni\n]\n<\ndp\n[\ni\n-\n1\n])\ndec\n=\nmin\n(\ndec\n,\na\n[\ni\n-\n1\n]);\nif\n(\na\n[\ni\n]\n<\na\n[\ni\n-\n1\n])\ndec\n=\nmin\n(\ndec\n,\npd\n[\ni\n-\n1\n]);\nif\n(\ninc\n==\ndp\n[\ni\n]\n&&\ndec\n==\npd\n[\ni\n])\nreturn\n;\ndp\n[\ni\n]\n=\ninc\n,\npd\n[\ni\n]\n=\ndec\n;\nf\n[\ni\n]\n=\n0\n;\nif\n(\ndec\n<=\nn\n||\ninc\n){\nupd\n(\ni\n+\n1\n);\nf\n[\ni\n]\n=\nf\n[\ni\n+\n1\n]\n+\n1\n;\n}\nreturn\n;\n}\nint\nmain\n(){\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\ncin\n>>\na\n[\ni\n];\nfor\n(\nint\ni\n=\nn\n;\n1\n<=\ni\n;\n--\ni\n){\ndp\n[\ni\n]\n=\nn\n+\n1\n;\npd\n[\ni\n]\n=\n0\n;\nupd\n(\ni\n+\n1\n);\nf\n[\ni\n]\n=\nf\n[\ni\n+\n1\n]\n+\n1\n;\nans\n+=\nf\n[\ni\n];\n}\ncout\n<<\nans\n<<\n'\\n'\n;\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Implementation 2",
+            "content": "# include <bits/stdc++.h>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n2e5\n+\n10\n;\nint\nn\n,\na\n[\nN\n],\nmin_r\n[\nN\n],\nfen\n[\nN\n];\nlong\nlong\nans\n;\nstack\n<int>\nsk\n;\nvector\n<int>\nvec\n[\n2\n][\nN\n];\nvoid\nmofen\n(\nint\npos\n,\nint\nval\n){\nfor\n(\npos\n+=\n5\n;\npos\n<\nN\n;\npos\n+=\npos\n&\n-\npos\n)\nfen\n[\npos\n]\n=\nmin\n(\nfen\n[\npos\n],\nval\n);\n}\nint\ngefen\n(\nint\npos\n){\nint\nres\n=\nn\n+\n1\n;\nfor\n(\npos\n+=\n5\n;\n0\n<\npos\n;\npos\n-=\npos\n&\n-\npos\n)\nres\n=\nmin\n(\nres\n,\nfen\n[\npos\n]);\nreturn\nres\n;\n}\nvoid\nfind_3412\n(){\nfill\n(\nfen\n,\nfen\n+\nn\n+\n10\n,\nn\n+\n1\n);\nwhile\n(!\nsk\n.\nempty\n())\nsk\n.\npop\n();\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n){\nwhile\n(!\nsk\n.\nempty\n()\n&&\na\n[\ni\n]\n<\na\n[\nsk\n.\ntop\n()])\nsk\n.\npop\n();\nif\n(!\nsk\n.\nempty\n())\nvec\n[\n0\n][\nsk\n.\ntop\n()].\npush_back\n(\ni\n);\nsk\n.\npush\n(\ni\n);\n}\nwhile\n(!\nsk\n.\nempty\n())\nsk\n.\npop\n();\nfor\n(\nint\ni\n=\nn\n;\n1\n<=\ni\n;\n--\ni\n){\nwhile\n(!\nsk\n.\nempty\n()\n&&\na\n[\nsk\n.\ntop\n()]\n<\na\n[\ni\n])\nsk\n.\npop\n();\nif\n(!\nsk\n.\nempty\n())\nvec\n[\n1\n][\nsk\n.\ntop\n()].\npush_back\n(\ni\n);\nsk\n.\npush\n(\ni\n);\n}\nfor\n(\nint\ni\n=\nn\n;\n1\n<=\ni\n;\n--\ni\n){\nfor\n(\nint\nind\n:\nvec\n[\n0\n][\ni\n])\nmofen\n(\na\n[\nind\n],\nind\n);\nfor\n(\nint\nind\n:\nvec\n[\n1\n][\ni\n])\nmin_r\n[\nind\n]\n=\nmin\n(\nmin_r\n[\nind\n],\ngefen\n(\na\n[\nind\n]\n-\n1\n));\nvec\n[\n0\n][\ni\n].\nclear\n(),\nvec\n[\n1\n][\ni\n].\nclear\n();\n}\n}\nint\nmain\n(){\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\ncin\n>>\na\n[\ni\n];\nfill\n(\nmin_r\n,\nmin_r\n+\nn\n+\n2\n,\nn\n+\n1\n);\nfind_3412\n();\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\na\n[\ni\n]\n=\nn\n+\n1\n-\na\n[\ni\n];\nfind_3412\n();\nfor\n(\nint\ni\n=\nn\n;\n1\n<=\ni\n;\n--\ni\n){\nmin_r\n[\ni\n]\n=\nmin\n(\nmin_r\n[\ni\n],\nmin_r\n[\ni\n+\n1\n]);\nans\n+=\nmin_r\n[\ni\n]\n-\ni\n;\n}\ncout\n<<\nans\n<<\n'\\n'\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

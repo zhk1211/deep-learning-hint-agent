@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou love fish, that's why you have decided to build an aquarium. You have a piece of coral made of $ n $ columns, the $ i $ -th of which is $ a_i $ units tall. Afterwards, you will build a tank around the coral as follows:\n\n- Pick an integer $ h \\geq 1 $ — the height of the tank. Build walls of height $ h $ on either side of the tank.\n- Then, fill the tank up with water so that the height of each column is $ h $ , unless the coral is taller than $ h $ ; then no water should be added to this column.\n\nFor example, with $ a=[3,1,2,4,6,2,5] $ and a height of $ h=4 $ , you will end up using a total of $ w=8 $ units of water, as shown. ![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1873E/7c1e58fc4d1641ece42f30c898039b9158eaffda.png) You can use at most $ x $ units of water to fill up the tank, but you want to build the biggest tank possible. What is the largest value of $ h $ you can select?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains two positive integers $ n $ and $ x $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ ; $ 1 \\leq x \\leq 10^9 $ ) — the number of columns of the coral and the maximum amount of water you can use.\n\nThe second line of each test case contains $ n $ space-separated integers $ a_i $ ( $ 1 \\leq a_i \\leq 10^9 $ ) — the heights of the coral.\n\nThe sum of $ n $ over all test cases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single positive integer $ h $ ( $ h \\geq 1 $ ) — the maximum height the tank can have, so you need at most $ x $ units of water to fill up the tank.\n\nWe have a proof that under these constraints, such a value of $ h $ always exists.\n\nExamples\nSample 1\nInput\n5\n7 9\n3 1 2 4 6 2 5\n3 10\n1 1 1\n4 1\n1 4 3 4\n6 1984\n2 6 5 9 1 8\n1 1000000000\n1\nOutput\n4\n4\n2\n335\n1000000001\n\nNote\nThe first test case is pictured in the statement. With $ h=4 $ we need $ 8 $ units of water, but if $ h $ is increased to $ 5 $ we need $ 13 $ units of water, which is more than $ x=9 $ . So $ h=4 $ is optimal.\n\nIn the second test case, we can pick $ h=4 $ and add $ 3 $ units to each column, using a total of $ 9 $ units of water. It can be shown that this is optimal.\n\nIn the third test case, we can pick $ h=2 $ and use all of our water, so it is optimal."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200\n'007;\nconst int MOD = 1'\n000\n'000'\n007\n;\nvoid\nsolve\n()\n{\nint\nn\n;\nlong\nlong\nx\n;\ncin\n>>\nn\n>>\nx\n;\nlong\nlong\na\n[\nn\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\n}\nlong\nlong\nlo\n=\n0\n,\nhi\n=\n2\n'000'\n000\n'007;\n\twhile (lo < hi) {\n\t\tlong long mid = lo + (hi - lo + 1) / 2;\n\t\tlong long tot = 0;\n\t\tfor (int i = 0; i < n; i++) {\n\t\t\ttot += max(mid - a[i], 0LL);\n\t\t}\n\t\tif (tot <= x) {lo = mid;} \n\t\telse {hi = mid - 1;}\n\t}\n\tcout << lo << endl;\n}\n \nint main() {\n\tios::sync_with_stdio(false);\n\tcin.tie(nullptr);\n\tint tt; cin >> tt; for (int i = 1; i <= tt; i++) {solve();}\n\t// solve();\n}"
+        }
+    ]
+}

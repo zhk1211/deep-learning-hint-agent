@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given $ n $ segments on a number line, numbered from $ 1 $ to $ n $ . The $ i $ -th segments covers all integer points from $ l_i $ to $ r_i $ and has a value $ w_i $ .\n\nYou are asked to select a subset of these segments (possibly, all of them). Once the subset is selected, it's possible to travel between two integer points if there exists a selected segment that covers both of them. A subset is good if it's possible to reach point $ m $ starting from point $ 1 $ in arbitrary number of moves.\n\nThe cost of the subset is the difference between the maximum and the minimum values of segments in it. Find the minimum cost of a good subset.\n\nIn every test there exists at least one good subset.\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ ( $ 1 \\le n \\le 3 \\cdot 10^5 $ ; $ 2 \\le m \\le 10^6 $ ) — the number of segments and the number of integer points.\n\nEach of the next $ n $ lines contains three integers $ l_i $ , $ r_i $ and $ w_i $ ( $ 1 \\le l_i < r_i \\le m $ ; $ 1 \\le w_i \\le 10^6 $ ) — the description of the $ i $ -th segment.\n\nIn every test there exists at least one good subset.\n\nOutput Format\nPrint a single integer — the minimum cost of a good subset.\n\nExamples\nSample 1\nInput\n5 12\n1 5 5\n3 4 10\n4 10 6\n11 12 5\n10 12 3\nOutput\n3\n\nSample 2\nInput\n1 10\n1 10 23\nOutput\n0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nconst\nint\nINF\n=\n1e9\n;\nvector\n<int>\nt\n,\nps\n;\nvoid\npush\n(\nint\nv\n){\nif\n(\nv\n*\n2\n+\n1\n<\nint\n(\nps\n.\nsize\n())){\nps\n[\nv\n*\n2\n]\n+=\nps\n[\nv\n];\nps\n[\nv\n*\n2\n+\n1\n]\n+=\nps\n[\nv\n];\n}\nt\n[\nv\n]\n+=\nps\n[\nv\n];\nps\n[\nv\n]\n=\n0\n;\n}\nvoid\nupd\n(\nint\nv\n,\nint\nl\n,\nint\nr\n,\nint\nL\n,\nint\nR\n,\nint\nval\n){\npush\n(\nv\n);\nif\n(\nL\n>=\nR\n)\nreturn\n;\nif\n(\nl\n==\nL\n&&\nr\n==\nR\n){\nps\n[\nv\n]\n+=\nval\n;\npush\n(\nv\n);\nreturn\n;\n}\nint\nm\n=\n(\nl\n+\nr\n)\n/\n2\n;\nupd\n(\nv\n*\n2\n,\nl\n,\nm\n,\nL\n,\nmin\n(\nm\n,\nR\n),\nval\n);\nupd\n(\nv\n*\n2\n+\n1\n,\nm\n,\nr\n,\nmax\n(\nm\n,\nL\n),\nR\n,\nval\n);\nt\n[\nv\n]\n=\nmin\n(\nt\n[\nv\n*\n2\n],\nt\n[\nv\n*\n2\n+\n1\n]);\n}\nint\nget\n(){\nreturn\nt\n[\n1\n]\n+\nps\n[\n1\n];\n}\nstruct\nseg\n{\nint\nl\n,\nr\n,\nw\n;\n};\nint\nmain\n()\n{\nint\nn\n,\nm\n;\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nm\n);\nvector\n<seg>\na\n(\nn\n);\nforn\n(\ni\n,\nn\n){\nscanf\n(\n\"%d%d%d\"\n,\n&\na\n[\ni\n].\nl\n,\n&\na\n[\ni\n].\nr\n,\n&\na\n[\ni\n].\nw\n);\n--\na\n[\ni\n].\nl\n,\n--\na\n[\ni\n].\nr\n;\n}\n--\nm\n;\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n(),\n[](\nconst\nseg\n&\na\n,\nconst\nseg\n&\nb\n){\nreturn\na\n.\nw\n<\nb\n.\nw\n;\n});\nt\n.\nresize\n(\n4\n*\nm\n);\nps\n.\nresize\n(\n4\n*\nm\n);\nint\nans\n=\nINF\n;\nint\nj\n=\n0\n;\nforn\n(\ni\n,\nn\n){\nwhile\n(\nj\n<\nn\n&&\nget\n()\n==\n0\n){\nupd\n(\n1\n,\n0\n,\nm\n,\na\n[\nj\n].\nl\n,\na\n[\nj\n].\nr\n,\n1\n);\n++\nj\n;\n}\nif\n(\nget\n()\n==\n0\n){\nbreak\n;\n}\nans\n=\nmin\n(\nans\n,\na\n[\nj\n-\n1\n].\nw\n-\na\n[\ni\n].\nw\n);\nupd\n(\n1\n,\n0\n,\nm\n,\na\n[\ni\n].\nl\n,\na\n[\ni\n].\nr\n,\n-\n1\n);\n}\nprintf\n(\n\"%d\\n\"\n,\nans\n);\nreturn\n0\n;\n}"
+        }
+    ]
+}

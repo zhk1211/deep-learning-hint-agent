@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "fun main\n()\n{\nval k\n=\nreadLine\n()!!.\ntoInt\n()\nrepeat\n(\nk\n)\n{\nval s\n=\nreadLine\n()!!\nval t\n=\nreadLine\n()!!\nprintln\n(\nif\n(\nsolve\n(\ns\n,\nt\n))\n\"YES\"\nelse\n\"NO\"\n)\n}\n}\nprivate\nfun solve\n(\ns\n:\nString\n,\nt\n:\nString\n):\nBoolean\n{\nvar\ni\n=\n0\nvar\nj\n=\n0\nwhile\n(\ni\n<\ns\n.\nlength\n&&\nj\n<\nt\n.\nlength\n)\n{\nwhen\n(\ns\n[\ni\n])\n{\nt\n[\nj\n]\n->\n{}\n'+'\n->\nreturn\nfalse\nelse\n->\n{\n// '-' -> '+'\ni\n++\nif\n(\ni\n>=\ns\n.\nlength\n||\ns\n[\ni\n]\n!=\n'-'\n)\nreturn\nfalse\n}\n}\ni\n++\nj\n++\n}\nreturn\ni\n==\ns\n.\nlength\n&&\nj\n==\nt\n.\nlength\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nOne important contest will take place on the most famous programming platform (Topforces) very soon!\n\nThe authors have a pool of $ n $ problems and should choose at most three of them into this contest. The prettiness of the $ i $ -th problem is $ a_i $ . The authors have to compose the most pretty contest (in other words, the cumulative prettinesses of chosen problems should be maximum possible).\n\nBut there is one important thing in the contest preparation: because of some superstitions of authors, the prettinesses of problems cannot divide each other. In other words, if the prettinesses of chosen problems are $ x, y, z $ , then $ x $ should be divisible by neither $ y $ , nor $ z $ , $ y $ should be divisible by neither $ x $ , nor $ z $ and $ z $ should be divisible by neither $ x $ , nor $ y $ . If the prettinesses of chosen problems are $ x $ and $ y $ then neither $ x $ should be divisible by $ y $ nor $ y $ should be divisible by $ x $ . Any contest composed from one problem is considered good.\n\nYour task is to find out the maximum possible total prettiness of the contest composed of at most three problems from the given pool.\n\nYou have to answer $ q $ independent queries.\n\nIf you are Python programmer, consider using PyPy instead of Python when you submit your code.\n\nInput Format\nThe first line of the input contains one integer $ q $ ( $ 1 \\le q \\le 2 \\cdot 10^5 $ ) — the number of queries.\n\nThe first line of the query contains one integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the number of problems.\n\nThe second line of the query contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 2 \\le a_i \\le 2 \\cdot 10^5 $ ), where $ a_i $ is the prettiness of the $ i $ -th problem.\n\nIt is guaranteed that the sum of $ n $ over all queries does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each query print one integer — the maximum possible cumulative prettiness of the contest composed of at most three problems from the given pool of problems in the query.\n\nExamples\nSample 1\nInput\n3\n4\n5 6 15 30\n4\n10 6 30 15\n3\n3 4 6\nOutput\n30\n31\n10"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nq\n;\ncin\n>>\nq\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nq\n;\n++\ni\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nset\n<int>\nst\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nn\n;\n++\nj\n)\n{\nint\nx\n;\ncin\n>>\nx\n;\nst\n.\ninsert\n(\nx\n);\n}\nint\nans\n=\n0\n;\nint\nmx\n=\n*\nst\n.\nrbegin\n();\nif\n(\nmx\n%\n2\n==\n0\n&&\nmx\n%\n3\n==\n0\n&&\nmx\n%\n5\n==\n0\n)\n{\nif\n(\nst\n.\ncount\n(\nmx\n/\n2\n)\n&&\nst\n.\ncount\n(\nmx\n/\n3\n)\n&&\nst\n.\ncount\n(\nmx\n/\n5\n))\n{\nans\n=\nmax\n(\nans\n,\nmx\n/\n2\n+\nmx\n/\n3\n+\nmx\n/\n5\n);\n}\n}\nvector\n<int>\nres\n;\nwhile\n(!\nst\n.\nempty\n()\n&&\nint\n(\nres\n.\nsize\n())\n<\n3\n)\n{\nint\nx\n=\n*\nst\n.\nrbegin\n();\nst\n.\nerase\n(\nprev\n(\nst\n.\nend\n()));\nbool\nok\n=\ntrue\n;\nfor\n(\nauto\nit\n:\nres\n)\nok\n&=\n(\nit\n%\nx\n!=\n0\n);\nif\n(\nok\n)\nres\n.\npush_back\n(\nx\n);\n}\nans\n=\nmax\n(\nans\n,\naccumulate\n(\nres\n.\nbegin\n(),\nres\n.\nend\n(),\n0\n));\ncout\n<<\nans\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

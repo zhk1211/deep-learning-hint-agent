@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given array $ a_1, a_2, \\dots, a_n $ . Find the subsegment $ a_l, a_{l+1}, \\dots, a_r $ ( $ 1 \\le l \\le r \\le n $ ) with maximum arithmetic mean $ \\frac{1}{r - l + 1}\\sum\\limits_{i=l}^{r}{a_i} $ (in floating-point numbers, i.e. without any rounding).\n\nIf there are many such subsegments find the longest one.\n\nInput Format\nThe first line contains single integer $ n $ ( $ 1 \\le n \\le 10^5 $ ) — length of the array $ a $ .\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i \\le 10^9 $ ) — the array $ a $ .\n\nOutput Format\nPrint the single integer — the length of the longest subsegment with maximum possible arithmetic mean.\n\nExamples\nSample 1\nInput\n5\n6 1 6 6 0\nOutput\n2\n\nNote\nThe subsegment $ [3, 4] $ is the longest among all subsegments with maximum arithmetic mean."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "#include\n<iostream>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nmx\n=\n-\n1\n,\nlenMx\n=\n0\n;\nint\ncurEl\n=\n-\n1\n,\ncurLen\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\na\n;\ncin\n>>\na\n;\nif\n(\ncurEl\n!=\na\n)\ncurEl\n=\na\n,\ncurLen\n=\n0\n;\ncurLen\n++;\nif\n(\nmx\n<\ncurEl\n)\nmx\n=\ncurEl\n,\nlenMx\n=\n0\n;\nif\n(\nmx\n==\ncurEl\n)\nlenMx\n=\nmax\n(\nlenMx\n,\ncurLen\n);\n}\ncout\n<<\nlenMx\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

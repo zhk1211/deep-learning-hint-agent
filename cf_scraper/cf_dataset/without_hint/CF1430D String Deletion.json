@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have a string $ s $ consisting of $ n $ characters. Each character is either 0 or 1.\n\nYou can perform operations on the string. Each operation consists of two steps:\n\n1. select an integer $ i $ from $ 1 $ to the length of the string $ s $ , then delete the character $ s_i $ (the string length gets reduced by $ 1 $ , the indices of characters to the right of the deleted one also get reduced by $ 1 $ );\n2. if the string $ s $ is not empty, delete the maximum length prefix consisting of the same characters (the indices of the remaining characters and the string length get reduced by the length of the deleted prefix).\n\nNote that both steps are mandatory in each operation, and their order cannot be changed.\n\nFor example, if you have a string $ s = $ 111010, the first operation can be one of the following:\n\n1. select $ i = 1 $ : we'll get 111010 $ \\rightarrow $ 11010 $ \\rightarrow $ 010;\n2. select $ i = 2 $ : we'll get 111010 $ \\rightarrow $ 11010 $ \\rightarrow $ 010;\n3. select $ i = 3 $ : we'll get 111010 $ \\rightarrow $ 11010 $ \\rightarrow $ 010;\n4. select $ i = 4 $ : we'll get 111010 $ \\rightarrow $ 11110 $ \\rightarrow $ 0;\n5. select $ i = 5 $ : we'll get 111010 $ \\rightarrow $ 11100 $ \\rightarrow $ 00;\n6. select $ i = 6 $ : we'll get 111010 $ \\rightarrow $ 11101 $ \\rightarrow $ 01.\n\nYou finish performing operations when the string $ s $ becomes empty. What is the maximum number of operations you can perform?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the string $ s $ .\n\nThe second line contains string $ s $ of $ n $ characters. Each character is either 0 or 1.\n\nIt's guaranteed that the total sum of $ n $ over test cases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single integer — the maximum number of operations you can perform.\n\nExamples\nSample 1\nInput\n5\n6\n111010\n1\n0\n1\n1\n2\n11\n6\n101010\nOutput\n3\n1\n1\n1\n3\n\nNote\nIn the first test case, you can, for example, select $ i = 2 $ and get string 010 after the first operation. After that, you can select $ i = 3 $ and get string 1. Finally, you can only select $ i = 1 $ and get empty string."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nchar\nbuf\n[\n200043\n];\nint\nmain\n()\n{\nint\nt\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nfor\n(\nint\ntc\n=\n1\n;\ntc\n<=\nt\n;\ntc\n++)\n{\nint\nn\n;\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nscanf\n(\n\"%s\"\n,\nbuf\n);\nstring\ns\n=\nbuf\n;\nqueue\n<int>\nq\n;\nint\ncur\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\ni\n>\n0\n&&\ns\n[\ni\n]\n!=\ns\n[\ni\n-\n1\n])\ncur\n++;\nif\n(\ni\n>\n0\n&&\ns\n[\ni\n]\n==\ns\n[\ni\n-\n1\n])\nq\n.\npush\n(\ncur\n);\n}\nint\ndeleted\n=\n0\n;\nint\nscore\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\nq\n.\nempty\n())\nbreak\n;\nq\n.\npop\n();\ndeleted\n++;\nscore\n++;\nwhile\n(!\nq\n.\nempty\n()\n&&\nq\n.\nfront\n()\n==\ni\n)\n{\nq\n.\npop\n();\ndeleted\n++;\n}\ndeleted\n++;\n//cerr << deleted << endl;\n}\nscore\n+=\n(\nn\n-\ndeleted\n+\n1\n)\n/\n2\n;\nprintf\n(\n\"%d\\n\"\n,\nscore\n);\n}\n}"
+        }
+    ]
+}

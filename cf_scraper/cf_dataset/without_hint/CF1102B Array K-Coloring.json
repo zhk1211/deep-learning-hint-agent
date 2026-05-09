@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ n $ integer numbers.\n\nYou have to color this array in $ k $ colors in such a way that:\n\n- Each element of the array should be colored in some color;\n- For each $ i $ from $ 1 $ to $ k $ there should be at least one element colored in the $ i $ -th color in the array;\n- For each $ i $ from $ 1 $ to $ k $ all elements colored in the $ i $ -th color should be distinct.\n\nObviously, such coloring might be impossible. In this case, print \"NO\". Otherwise print \"YES\" and any coloring (i.e. numbers $ c_1, c_2, \\dots c_n $ , where $ 1 \\le c_i \\le k $ and $ c_i $ is the color of the $ i $ -th element of the given array) satisfying the conditions above. If there are multiple answers, you can print any.\n\nInput Format\nThe first line of the input contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 5000 $ ) — the length of the array $ a $ and the number of colors, respectively.\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 5000 $ ) — elements of the array $ a $ .\n\nOutput Format\nIf there is no answer, print \"NO\". Otherwise print \"YES\" and any coloring (i.e. numbers $ c_1, c_2, \\dots c_n $ , where $ 1 \\le c_i \\le k $ and $ c_i $ is the color of the $ i $ -th element of the given array) satisfying the conditions described in the problem statement. If there are multiple answers, you can print any.\n\nExamples\nSample 1\nInput\n4 2\n1 2 2 3\nOutput\nYES\n1 1 2 2\n\nSample 2\nInput\n5 2\n3 2 1 2 3\nOutput\nYES\n2 1 1 2 1\n\nSample 3\nInput\n5 2\n2 1 1 2 1\nOutput\nNO\n\nNote\nIn the first example the answer $ 2~ 1~ 2~ 1 $ is also acceptable.\n\nIn the second example the answer $ 1~ 1~ 1~ 2~ 2 $ is also acceptable.\n\nThere exist other acceptable answers for both examples."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<\npair\n<\nint\n,\nint\n>>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n].\nfirst\n;\na\n[\ni\n].\nsecond\n=\ni\n;\n}\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nvector\n<\nvector\n<int>\n>\nbuckets\n(\nk\n);\nvector\n<int>\nres\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nbuckets\n[\ni\n%\nk\n].\npush_back\n(\na\n[\ni\n].\nfirst\n);\nres\n[\na\n[\ni\n].\nsecond\n]\n=\ni\n%\nk\n;\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nint\n(\nbuckets\n[\ni\n].\nsize\n())\n-\n1\n;\n++\nj\n)\n{\nif\n(\nbuckets\n[\ni\n][\nj\n]\n==\nbuckets\n[\ni\n][\nj\n+\n1\n])\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\nreturn\n0\n;\n}\n}\n}\ncout\n<<\n\"YES\"\n<<\nendl\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncout\n<<\nres\n[\ni\n]\n+\n1\n<<\n\" \"\n;\n}\ncout\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

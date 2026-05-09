@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have two positive integers $ a $ and $ b $ .\n\nYou can perform two kinds of operations:\n\n- $ a = \\lfloor \\frac{a}{b} \\rfloor $ (replace $ a $ with the integer part of the division between $ a $ and $ b $ )\n- $ b=b+1 $ (increase $ b $ by $ 1 $ )\n\nFind the minimum number of operations required to make $ a=0 $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThe only line of the description of each test case contains two integers $ a $ , $ b $ ( $ 1 \\le a,b \\le 10^9 $ ).\n\nOutput Format\nFor each test case, print a single integer: the minimum number of operations required to make $ a=0 $ .\n\nExamples\nSample 1\nInput\n6\n9 2\n1337 1\n1 1\n50000000 4\n991026972 997\n1234 5678\nOutput\n4\n9\n2\n12\n3\n1\n\nNote\nIn the first test case, one of the optimal solutions is:\n\n1. Divide $ a $ by $ b $ . After this operation $ a = 4 $ and $ b = 2 $ .\n2. Divide $ a $ by $ b $ . After this operation $ a = 2 $ and $ b = 2 $ .\n3. Increase $ b $ . After this operation $ a = 2 $ and $ b = 3 $ .\n4. Divide $ a $ by $ b $ . After this operation $ a = 0 $ and $ b = 3 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Suppose that you can use $$$x$$$ operations of type $$$1$$$ and $$$y$$$ operations of type $$$2$$$. Try to reorder the operations in such a way that $$$a$$$ becomes the minimum possible."
+        },
+        {
+            "title": "Hint 2",
+            "content": "You should use operations of type $$$2$$$ first, then moves of type $$$1$$$. How many operations do you need in the worst case? ($$$a = 10^9$$$, $$$b = 1$$$)"
+        },
+        {
+            "title": "Hint 3",
+            "content": "You need at most $$$30$$$ operations. Iterate over the number of operations of type $$$2$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Notice how it is never better to increase $$$b$$$ after dividing ($$$\\lfloor \\frac{a}{b+1} \\rfloor \\le \\lfloor \\frac{a}{b} \\rfloor$$$).\nSo we can try to increase $$$b$$$ to a certain value and then divide $$$a$$$ by $$$b$$$ until it is $$$0$$$. Being careful as not to do this with $$$b \\lt 2$$$, the number of times we divide is going to be $$$O(\\log a)$$$. In particular, if you reach $$$b \\geq 2$$$ (this requires at most $$$1$$$ move), you need at most $$$\\lfloor \\log_2(10^9) \\rfloor = 29$$$ moves to finish.\nLet $$$y$$$ be the number of moves of type $$$2$$$; we can try all values of $$$y$$$ ($$$0 \\leq y \\leq 30$$$) and, for each $$$y$$$, check how many moves of type $$$1$$$ are necessary.\nComplexity: $$$O(\\log^2 a)$$$.\nIf we notice that it is never convenient to increase $$$b$$$ over $$$6$$$, we can also achieve a solution with better complexity."
+        }
+    ]
+}

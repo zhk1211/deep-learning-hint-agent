@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "import\njava\n.\nio\n.\nBufferedReader\nimport\njava\n.\nio\n.\nIOException\nimport\njava\n.\nio\n.\nInputStreamReader\nimport\njava\n.\nio\n.\nPrintWriter\nimport\njava\n.\nutil\n.*\n/**\n * @author: pashka\n */\nfun solve\n(\na\n:\nIntArray\n):\nIntArray\n{\nval n\n=\na\n.\nsize\nvar\nl\n=\n0\nvar\nr\n=\na\n.\nsize\n+\n1\nvar\nbest\n=\nIntArray\n(\n0\n)\nwhile\n(\nr\n>\nl\n+\n1\n)\n{\nvar\nm\n=\n(\nl\n+\nr\n)\n/\n2\nval c\n=\nIntArray\n(\nm\n)\nfor\n(\ni\nin\n0\nuntil\nm\n)\n{\nif\n(\ni\n%\n2\n==\n0\n)\n{\nc\n[\ni\n]\n=\na\n[\ni\n/\n2\n]\n}\nelse\n{\nc\n[\ni\n]\n=\na\n[\nn\n-\nm\n/\n2\n+\ni\n/\n2\n]\n}\n}\nvar\nok\n=\ntrue\nfor\n(\ni\nin\n0\nuntil\nm\n-\n1\n)\n{\nif\n(\nc\n[\ni\n]\n==\nc\n[\ni\n+\n1\n])\n{\nok\n=\nfalse\n}\n}\nif\n(!\nok\n&&\nm\n%\n2\n==\n0\n)\n{\nfor\n(\ni\nin\n0\nuntil\nm step\n2\n)\n{\nval t\n=\nc\n[\ni\n]\nc\n[\ni\n]\n=\nc\n[\ni\n+\n1\n]\nc\n[\ni\n+\n1\n]\n=\nt\n}\nok\n=\ntrue\nfor\n(\ni\nin\n0\nuntil\nm\n-\n1\n)\n{\nif\n(\nc\n[\ni\n]\n==\nc\n[\ni\n+\n1\n])\n{\nok\n=\nfalse\n}\n}\n}\nif\n(\nok\n)\n{\nl\n=\nm\n            best\n=\nc\n}\nelse\n{\nr\n=\nm\n}\n}\nreturn\nbest\n}\nprivate\nfun solveTest\n()\n{\nval n\n=\nreadLine\n()!!.\ntoInt\n()\nval a\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}.\ntoIntArray\n()\na\n.\nsort\n()\nval best1\n=\nsolve\n(\na\n)\na\n.\nreverse\n()\nval best2\n=\nsolve\n(\na\n)\nval best\n=\nif\n(\nbest1\n.\nsize\n>\nbest2\n.\nsize\n)\nbest1\nelse\nbest2\n    println\n(\nbest\n.\nsize\n)\nprintln\n(\nbest\n.\njoinToString\n(\n\" \"\n))\n}\nfun main\n()\n{\nval n\n=\nreadLine\n()!!.\ntoInt\n()\nfor\n(\ni\nin\n0\nuntil\nn\n)\n{\nsolveTest\n()\n}\n}"
+        }
+    ]
+}

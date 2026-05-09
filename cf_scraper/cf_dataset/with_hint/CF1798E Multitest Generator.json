@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's call an array $ b_1, b_2, \\ldots, b_m $ a test if $ b_1 = m - 1 $ .\n\nLet's call an array $ b_1, b_2, \\ldots, b_m $ a multitest if the array $ b_2, b_3, \\ldots, b_m $ can be split into $ b_1 $ non-empty subarrays so that each of these subarrays is a test. Note that each element of the array must be included in exactly one subarray, and the subarrays must consist of consecutive elements.\n\nLet's define the function $ f $ from the array $ b_1, b_2, \\ldots, b_m $ as the minimum number of operations of the form \"Replace any $ b_i $ with any non-negative integer $ x $ \", which needs to be done so that the array $ b_1, b_2, \\ldots, b_m $ becomes a multitest.\n\nYou are given an array of positive integers $ a_1, a_2, \\ldots, a_n $ . For each $ i $ from $ 1 $ to $ n - 1 $ , find $ f([a_i, a_{i+1}, \\ldots, a_n]) $ .\n\nBelow are some examples of tests and multitests.\n\n- Tests: $ [\\underline{1}, 5] $ , $ [\\underline{2}, 2, 2] $ , $ [\\underline{3}, 4, 1, 1] $ , $ [\\underline{5}, 0, 0, 0, 0, 0] $ , $ [\\underline{7}, 1, 2, 3, 4, 5, 6, 7] $ , $ [\\underline{0}] $ . These arrays are tests since their first element (underlined) is equal to the length of the array minus one.\n- Multitests: $ [1, \\underline{\\underline{1}, 1}] $ , $ [2, \\underline{\\underline{3}, 0, 0, 1}, \\underline{\\underline{1}, 12}] $ , $ [3, \\underline{\\underline{2}, 2, 7}, \\underline{\\underline{1}, 1}, \\underline{\\underline{3}, 4, 4, 4}] $ , $ [4, \\underline{\\underline{0}}, \\underline{\\underline{3}, 1, 7, 9}, \\underline{\\underline{4}, 2, 0, 0, 9}, \\underline{\\underline{1}, 777}] $ . Underlined are the subarrays after the split, and double underlined are the first elements of each subarray.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 300\\,000 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 300\\,000 $ ) — the length of the array $ a $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 300\\,000 $ ) — elements of the array $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 300\\,000 $ .\n\nOutput Format\nFor each test case print $ n - 1 $ numbers — $ f([a_i, a_{i+1}, \\ldots, a_n]) $ for each $ i $ from $ 1 $ to $ n - 1 $ .\n\nExamples\nSample 1\nInput\n3\n4\n1 2 1 7\n7\n3 1 3 1 2 1 1\n4\n2 7 1 1\nOutput\n0 1 1\n0 1 1 0 1 1\n1 1 1\n\nSample 2\nInput\n1\n19\n3 4 1 2 1 7 7 3 1 3 1 2 1 1 4 2 7 1 1\nOutput\n0 0 1 1 1 1 1 1 1 0 1 0 1 0 2 1 1 1\n\nNote\nIn the first test case of the first test the array $ [1, 2, 1, 7] $ is a multitest since the array $ [2, 1, 7] $ is a test. The array $ [2, 1, 7] $ is not a multitest, but after replacing the first number with $ 1 $ , an array $ [1, 1, 7] $ is obtained, which is a multitest. The array $ [1, 7] $ is also not a multitest, but the array $ [1, 0] $ is, so $ f([1, 7]) = 1 $ .\n\nIn the second test case of first test, for $ i = 2 $ , $ f([a_i, a_{i+1}, \\ldots, a_n]) = f([1, 3, 1, 2, 1, 1]) = 1 $ , since the array itself is not a multitest, but after replacing the second element with $ 4 $ you get multitest.\n\nIn the third test case of first test, for $ i = 1 $ , $ f([a_i, a_{i+1}, \\ldots, a_n]) = f([2, 7, 1, 1]) = 1 $ , since the array itself is not a multitest, but after replacing the second element with $ 0 $ you get multitest.\n\nThe second test is an array composed of all the numbers of the first test. Therefore $ f([a_1, a_2, \\ldots, a_n]) $ naturally equals to $ 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Estimate from above the number of changes for which you can make a multitest from an arbitrary array."
+        },
+        {
+            "title": "Hint 2",
+            "content": "How to check for each suffix whether it is a multitest by itself (without changes)?"
+        },
+        {
+            "title": "Hint 2.1",
+            "content": "This is done using one-dimensional dynamic programming by suffixes."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Let's say you want to check if an array can turn into a multitest for $$$1$$$ change. Find all the elements that could potentially be changed (all the elements are such that changing them could lead to the array becoming a multitest without being it initially). For each of them, you need to determine whether it is possible to make a change that turns array into multitest. One-dimensional dynamic programming by suffixes will help to take into account all these variants of change."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "N\n=\n300777\na\n=\n[\n0\n]\n*\nN\ngo\n=\n[\n0\n]\n*\nN\ngood_chain\n=\n[\n0\n]\n*\nN\nchain_depth\n=\n[\n0\n]\n*\nN\nsuf_max_chain_depth\n=\n[\n0\n]\n*\nN\n\nans\n=\n\"\"\nfor\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\na\n=\n[\n0\n]\n+\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nchain_depth\n[\nn\n+\n1\n]\n=\n0\nsuf_max_chain_depth\n[\nn\n+\n1\n]\n=\n0\ncurr_max_chain_depth\n=\n0\nfor\ni\nin\nrange\n(\nn\n,\n0\n,\n-\n1\n):\ngo\n[\ni\n]\n=\ni\n+\na\n[\ni\n]\n+\n1\nif\ngo\n[\ni\n]\n==\nn\n+\n1\nor\n(\ngo\n[\ni\n]\n<=\nn\nand\ngood_chain\n[\ngo\n[\ni\n]]):\ngood_chain\n[\ni\n]\n=\nTrue\nelse\n:\ngood_chain\n[\ni\n]\n=\nFalse\nchain_depth\n[\ni\n]\n=\n1\n+\nchain_depth\n[\nmin\n(\ngo\n[\ni\n],\nn\n+\n1\n)]\nsuf_max_chain_depth\n[\ni\n]\n=\n1\n+\ncurr_max_chain_depth\nif\ngo\n[\ni\n]\n<=\nn\n+\n1\n:\nsuf_max_chain_depth\n[\ni\n]\n=\nmax\n(\nsuf_max_chain_depth\n[\ni\n],\n1\n+\nsuf_max_chain_depth\n[\ngo\n[\ni\n]])\nif\ngood_chain\n[\ni\n]:\ncurr_max_chain_depth\n=\nmax\n(\ncurr_max_chain_depth\n,\nchain_depth\n[\ni\n])\nfor\ni\nin\nrange\n(\n1\n,\nn\n):\nif\ngood_chain\n[\ni\n+\n1\n]\nand\nchain_depth\n[\ni\n+\n1\n]\n==\na\n[\ni\n]:\nans\n+=\n\"0 \"\nelif\ngood_chain\n[\ni\n+\n1\n]\nor\nsuf_max_chain_depth\n[\ni\n+\n1\n]\n>=\na\n[\ni\n]:\nans\n+=\n\"1 \"\nelse\n:\nans\n+=\n\"2 \"\nans\n+=\n'\\n'\nprint\n(\nans\n)"
+        }
+    ]
+}

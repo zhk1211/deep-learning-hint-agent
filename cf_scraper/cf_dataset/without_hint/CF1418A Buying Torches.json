@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are playing a very popular game called Cubecraft. Initially, you have one stick and want to craft $ k $ torches. One torch can be crafted using one stick and one coal.\n\nHopefully, you've met a very handsome wandering trader who has two trade offers:\n\n- exchange $ 1 $ stick for $ x $ sticks (you lose $ 1 $ stick and gain $ x $ sticks).\n- exchange $ y $ sticks for $ 1 $ coal (you lose $ y $ sticks and gain $ 1 $ coal).\n\nDuring one trade, you can use only one of these two trade offers. You can use each trade offer any number of times you want to, in any order.\n\nYour task is to find the minimum number of trades you need to craft at least $ k $ torches. The answer always exists under the given constraints.\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 2 \\cdot 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe only line of the test case contains three integers $ x $ , $ y $ and $ k $ ( $ 2 \\le x \\le 10^9 $ ; $ 1 \\le y, k \\le 10^9 $ ) — the number of sticks you can buy with one stick, the number of sticks required to buy one coal and the number of torches you need, respectively.\n\nOutput Format\nFor each test case, print the answer: the minimum number of trades you need to craft at least $ k $ torches. The answer always exists under the given constraints.\n\nExamples\nSample 1\nInput\n5\n2 1 5\n42 13 24\n12 11 12\n1000000000 1000000000 1000000000\n2 1000000000 1000000000\nOutput\n14\n33\n25\n2000000003\n1000000001999999999"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (vovuh)",
+            "content": "for\ni\nin\nrange\n(\nint\n(\ninput\n())):\nx\n,\ny\n,\nk\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nprint\n(((\ny\n+\n1\n)\n*\nk\n-\n1\n+\nx\n-\n2\n)\n// (x - 1) + k)"
+        }
+    ]
+}

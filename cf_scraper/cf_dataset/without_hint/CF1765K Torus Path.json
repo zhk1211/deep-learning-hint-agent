@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a square grid with $ n $ rows and $ n $ columns, where each cell has a non-negative integer written in it. There is a chip initially placed at the top left cell (the cell with coordinates $ (1, 1) $ ). You need to move the chip to the bottom right cell (the cell with coordinates $ (n, n) $ ).\n\nIn one step, you can move the chip to the neighboring cell, but:\n\n1. you can move only right or down. In other words, if the current cell is $ (x, y) $ , you can move either to $ (x, y + 1) $ or to $ (x + 1, y) $ . There are two special cases:\n- if the chip is in the last column (cell $ (x, n) $ ) and you're moving right, you'll teleport to the first column (to the cell $ (x, 1) $ );\n- if the chip is in the last row (cell $ (n, y) $ ) and you're moving down, you'll teleport to the first row (to the cell $ (1, y) $ ).\n2. you cannot visit the same cell twice. The starting cell is counted visited from the beginning (so you cannot enter it again), and you can't leave the finishing cell once you visit it.\n\nYour total score is counted as the sum of numbers in all cells you have visited. What is the maximum possible score you can achieve?\n\nInput Format\nThe first line contains the single integer $ n $ ( $ 2 \\le n \\le 200 $ ) — the number of rows and columns in the grid.\n\nNext $ n $ lines contains the description of each row of the grid. The $ i $ -th line contains $ n $ integers $ a_{i, 1}, a_{i, 2}, \\dots, a_{i, n} $ ( $ 0 \\le a_{i, j} \\le 10^9 $ ) where $ a_{i, j} $ is the number written in the cell $ (i, j) $ .\n\nOutput Format\nPrint one integer — the maximum possible score you can achieve.\n\nExamples\nSample 1\nInput\n2\n1 2\n3 4\nOutput\n8\n\nSample 2\nInput\n3\n10 10 10\n10 0 10\n10 10 10\nOutput\n80"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n;\nvector\n<\nvector\n<int>\n>\na\n;\nbool\nread\n()\n{\nif\n(!(\ncin\n>>\nn\n))\nreturn\nfalse\n;\na\n.\nresize\n(\nn\n,\nvector\n<int>\n(\nn\n));\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nn\n;\nj\n++)\ncin\n>>\na\n[\ni\n][\nj\n];\n}\nreturn\ntrue\n;\n}\nvoid\nsolve\n()\n{\nlong\nlong\nsum\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nsum\n+=\naccumulate\n(\na\n[\ni\n].\nbegin\n(),\na\n[\ni\n].\nend\n(),\n0LL\n);\nint\nmn\n=\na\n[\n0\n][\nn\n-\n1\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nmn\n=\nmin\n(\nmn\n,\na\n[\ni\n][\nn\n-\n1\n-\ni\n]);\ncout\n<<\nsum\n-\nmn\n<<\nendl\n;\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n    freopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\nint\ntt\n=\nclock\n();\n#endif\nif\n(\nread\n())\n{\nsolve\n();\n#ifdef\n_DEBUG\n        cerr\n<<\n\"TIME = \"\n<<\nclock\n()\n-\ntt\n<<\nendl\n;\ntt\n=\nclock\n();\n#endif\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

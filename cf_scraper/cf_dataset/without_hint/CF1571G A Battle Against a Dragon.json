@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "class\nAttack\n(\nval a\n:\nInt\n,\nval b\n:\nInt\n,\nval i\n:\nInt\n)\nfun main\n()\n{\nval\n(\nn\n,\nm\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval ev\n=\nArrayList\n<\nAttack\n>()\nfor\n(\ni\nin\n0\nuntil\nn\n)\n{\nval k\n=\nreadLine\n()!!.\ntoInt\n()\nval a\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval b\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nfor\n(\nj\nin\n0\nuntil\nk\n)\n{\nev\n.\nadd\n(\nAttack\n(\na\n[\nj\n],\nb\n[\nj\n],\ni\n))\n}\n}\nev\n.\nsortWith\n(\ncompareBy\n({\n-\nit\n.\nb\n},\n{\nit\n.\ni\n}))\nval INF\n=\n1e18\n.\ntoLong\n()\nval mx\n=\nm\n+\nn\n+\n1\nval f\n=\nLongArray\n(\nmx\n)\n{\n-\nINF\n}\nfun update\n(\npos\n:\nInt\n,\nx\n:\nLong\n)\n{\nvar\ni\n=\npos\nwhile\n(\ni\n<\nmx\n)\n{\nf\n[\ni\n]\n=\nmaxOf\n(\nf\n[\ni\n],\nx\n)\ni\n=\ni\nor\n(\ni\n+\n1\n)\n}\n}\nfun query\n(\npos\n:\nInt\n)\n:\nLong\n{\nvar\nres\n=\n-\nINF\nvar\ni\n=\npos\nwhile\n(\ni\n>=\n0\n)\n{\nres\n=\nmaxOf\n(\nres\n,\nf\n[\ni\n])\ni\n=\n(\ni\nand\n(\ni\n+\n1\n))\n-\n1\n}\nreturn\nres\n}\nupdate\n(\nm\n-\n1\n,\n0L\n)\nfor\n(\nit\nin\nev\n)\n{\nval dp\n=\nquery\n(\nit\n.\ni\n+\nit\n.\nb\n-\n1\n)\n+\nit\n.\na\n\t\tupdate\n(\nit\n.\ni\n+\nit\n.\nb\n,\ndp\n)\n}\nprintln\n(\nquery\n(\nmx\n-\n1\n))\n}"
+        }
+    ]
+}

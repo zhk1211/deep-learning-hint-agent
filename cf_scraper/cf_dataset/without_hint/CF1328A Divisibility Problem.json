@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two positive integers $ a $ and $ b $ . In one move you can increase $ a $ by $ 1 $ (replace $ a $ with $ a+1 $ ). Your task is to find the minimum number of moves you need to do in order to make $ a $ divisible by $ b $ . It is possible, that you have to make $ 0 $ moves, as $ a $ is already divisible by $ b $ . You have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe only line of the test case contains two integers $ a $ and $ b $ ( $ 1 \\le a, b \\le 10^9 $ ).\n\nOutput Format\nFor each test case print the answer — the minimum number of moves you need to do in order to make $ a $ divisible by $ b $ .\n\nExamples\nSample 1\nInput\n5\n10 4\n13 9\n100 13\n123 456\n92 46\nOutput\n2\n5\n4\n333\n0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\na\n,\nb\n;\ncin\n>>\na\n>>\nb\n;\nif\n(\na\n%\nb\n==\n0\n)\ncout\n<<\n0\n<<\nendl\n;\nelse\ncout\n<<\nb\n-\na\n%\nb\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

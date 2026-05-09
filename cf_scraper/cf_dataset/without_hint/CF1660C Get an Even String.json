@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA string $ a=a_1a_2\\dots a_n $ is called even if it consists of a concatenation (joining) of strings of length $ 2 $ consisting of the same characters. In other words, a string $ a $ is even if two conditions are satisfied at the same time:\n\n- its length $ n $ is even;\n- for all odd $ i $ ( $ 1 \\le i \\le n - 1 $ ), $ a_i = a_{i+1} $ is satisfied.\n\nFor example, the following strings are even: \"\" (empty string), \"tt\", \"aabb\", \"oooo\", and \"ttrrrroouuuuuuuukk\". The following strings are not even: \"aaa\", \"abab\" and \"abba\".\n\nGiven a string $ s $ consisting of lowercase Latin letters. Find the minimum number of characters to remove from the string $ s $ to make it even. The deleted characters do not have to be consecutive.\n\nInput Format\nThe first line of input data contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) —the number of test cases in the test.\n\nThe descriptions of the test cases follow.\n\nEach test case consists of one string $ s $ ( $ 1 \\le |s| \\le 2 \\cdot 10^5 $ ), where $ |s| $ — the length of the string $ s $ . The string consists of lowercase Latin letters.\n\nIt is guaranteed that the sum of $ |s| $ on all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single number — the minimum number of characters that must be removed to make $ s $ even.\n\nExamples\nSample 1\nInput\n6\naabbdabdccc\nzyx\naaababbb\naabbcc\noaoaaaoo\nbmefbmuyw\nOutput\n3\n3\n2\n0\n2\n7\n\nNote\nIn the first test case you can remove the characters with indices $ 6 $ , $ 7 $ , and $ 9 $ to get an even string \"aabbddcc\".\n\nIn the second test case, each character occurs exactly once, so in order to get an even string, you must remove all characters from the string.\n\nIn the third test case, you can get an even string \"aaaabb\" by removing, for example, $ 4 $ -th and $ 6 $ -th characters, or a string \"aabbbb\" by removing the $ 5 $ -th character and any of the first three."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nsz\n=\n26\n;\nvoid\nsolve\n(){\nstring\ns\n;\ncin\n>>\ns\n;\nint\nm\n=\n0\n,\nn\n=\n(\nint\n)\ns\n.\nsize\n();\nvector\n<bool>\nprev\n(\nsz\n,\nfalse\n);\nfor\n(\nauto\n&\ni\n:\ns\n){\nif\n(\nprev\n[\ni\n-\n'a'\n]){\nm\n+=\n2\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nsz\n;\nj\n++)\nprev\n[\nj\n]\n=\nfalse\n;\n}\nelse\nprev\n[\ni\n-\n'a'\n]\n=\ntrue\n;\n}\ncout\n<<\nn\n-\nm\n<<\nendl\n;\n}\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nsolve\n();\n}\n}"
+        }
+    ]
+}

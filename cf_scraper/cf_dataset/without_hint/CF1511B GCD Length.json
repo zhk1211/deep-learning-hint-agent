@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given three integers $ a $ , $ b $ and $ c $ .\n\nFind two positive integers $ x $ and $ y $ ( $ x > 0 $ , $ y > 0 $ ) such that:\n\n- the decimal representation of $ x $ without leading zeroes consists of $ a $ digits;\n- the decimal representation of $ y $ without leading zeroes consists of $ b $ digits;\n- the decimal representation of $ gcd(x, y) $ without leading zeroes consists of $ c $ digits.\n\n$ gcd(x, y) $ denotes the [greatest common divisor (GCD)](https://en.wikipedia.org/wiki/Greatest_common_divisor) of integers $ x $ and $ y $ .\n\nOutput $ x $ and $ y $ . If there are multiple answers, output any of them.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 285 $ ) — the number of testcases.\n\nEach of the next $ t $ lines contains three integers $ a $ , $ b $ and $ c $ ( $ 1 \\le a, b \\le 9 $ , $ 1 \\le c \\le min(a, b) $ ) — the required lengths of the numbers.\n\nIt can be shown that the answer exists for all testcases under the given constraints.\n\nAdditional constraint on the input: all testcases are different.\n\nOutput Format\nFor each testcase print two positive integers — $ x $ and $ y $ ( $ x > 0 $ , $ y > 0 $ ) such that\n\n- the decimal representation of $ x $ without leading zeroes consists of $ a $ digits;\n- the decimal representation of $ y $ without leading zeroes consists of $ b $ digits;\n- the decimal representation of $ gcd(x, y) $ without leading zeroes consists of $ c $ digits.\n\nExamples\nSample 1\nInput\n4\n2 3 1\n2 2 2\n6 6 2\n1 1 1\nOutput\n11 492\n13 26\n140133 160776\n1 1\n\nNote\nIn the example:\n\n1. $ gcd(11, 492) = 1 $\n2. $ gcd(13, 26) = 13 $\n3. $ gcd(140133, 160776) = 21 $\n4. $ gcd(1, 1) = 1 $"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\nt\nin\nrange\n(\nint\n(\ninput\n())):\na\n,\nb\n,\nc\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nprint\n(\n\"1\"\n+\n\"0\"\n*\n(\na\n-\n1\n),\n\"1\"\n*\n(\nb\n-\nc\n+\n1\n)\n+\n\"0\"\n*\n(\nc\n-\n1\n))"
+        }
+    ]
+}

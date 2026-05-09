@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMoamen and Ezzat are playing a game. They create an array $ a $ of $ n $ non-negative integers where every element is less than $ 2^k $ .\n\nMoamen wins if $ a_1 \\,\\&\\, a_2 \\,\\&\\, a_3 \\,\\&\\, \\ldots \\,\\&\\, a_n \\ge a_1 \\oplus a_2 \\oplus a_3 \\oplus \\ldots \\oplus a_n $ .\n\nHere $ \\& $ denotes the [bitwise AND operation](https://en.wikipedia.org/wiki/Bitwise_operation#AND), and $ \\oplus $ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).\n\nPlease calculate the number of winning for Moamen arrays $ a $ .\n\nAs the result may be very large, print the value modulo $ 1\\,000\\,000\\,007 $ ( $ 10^9 + 7 $ ).\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 5 $ )— the number of test cases.\n\nEach test case consists of one line containing two integers $ n $ and $ k $ ( $ 1 \\le n\\le 2\\cdot 10^5 $ , $ 0 \\le k \\le 2\\cdot 10^5 $ ).\n\nOutput Format\nFor each test case, print a single value — the number of different arrays that Moamen wins with.\n\nPrint the result modulo $ 1\\,000\\,000\\,007 $ ( $ 10^9 + 7 $ ).\n\nExamples\nSample 1\nInput\n3\n3 1\n2 1\n4 0\nOutput\n5\n2\n1\n\nNote\nIn the first example, $ n = 3 $ , $ k = 1 $ . As a result, all the possible arrays are $ [0,0,0] $ , $ [0,0,1] $ , $ [0,1,0] $ , $ [1,0,0] $ , $ [1,1,0] $ , $ [0,1,1] $ , $ [1,0,1] $ , and $ [1,1,1] $ .\n\nMoamen wins in only $ 5 $ of them: $ [0,0,0] $ , $ [1,1,0] $ , $ [0,1,1] $ , $ [1,0,1] $ , and $ [1,1,1] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "We don't care about the values in the array to know it's valid or not, we just need to know for every bit how many numbers have this bit on or off."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Try to build the array from the most significant bit ($$$k-1$$$) to the least significant bit $$$0$$$ using dynamic programming."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Can you optimize dynamic programming code with some combinatorics?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "From now on, I will use $$$And$$$ to describe the result of the bitwise AND operation over all the elements in the array, and $$$Xor$$$ to describe the result of the bitwise XOR operation over all the elements in the array.\nLet's call the array is valid if the value of $$$And$$$ $$$\\ge$$$ $$$Xor$$$.\nWe don't care about the values in the array. We just need to know, for every bit, the number of indices at which this bit is on or off.\nSo let's build the array from the most significant bit ($$$k-1$$$) to the least significant bit ($$$0$$$) using dynamic programming and combinatorics optimization.\nDefine an array $$$dp$$$ where $$$dp_{i, equal}$$$ $$$=$$$ the number of ways to build the array from the $$$i$$$-th bit to $$$0$$$-th bit. $$$equal$$$ is $$$true$$$ if $$$And$$$ $$$=$$$ $$$Xor$$$ in the previous bits, and $$$false$$$ if $$$And$$$ $$$ \\gt $$$ $$$Xor$$$ ($$$And$$$ $$$ \\lt $$$ $$$Xor$$$ is not a valid state).\nOur base case is $$$dp_{-1,0}$$$ $$$=$$$ $$$1$$$, and $$$dp_{-1,1}$$$ $$$=$$$ $$$1$$$.\nIf $$$equal$$$ is $$$false$$$ at any moment, then you can choose any subset of indices to contain $$$1$$$ in the $$$i$$$-th bit.\nTherefore, $$$dp_{i,0}$$$ $$$=$$$ $$$2^n$$$ $$$\\cdot$$$ $$$dp_{i-1,0}$$$.\nNow if $$$n$$$ is odd there are $$$2$$$ possible choices:\nYou can make $$$i$$$-th bit $$$=$$$ $$$1$$$ in an even number of indices, then $$$And_i$$$ will be $$$0$$$ and $$$Xor_i$$$ will be $$$0$$$ too.\nYou can make $$$i$$$-th bit $$$=$$$ $$$1$$$ in all indices, then $$$And_i$$$ will be $$$1$$$ and $$$Xor_i$$$ will be $$$1$$$ too.\nYou Don't have any other valid choices. So $$$dp_{i,1}$$$ $$$=$$$ $$$dp_{i-1,1}$$$ $$$\\cdot$$$ ({number of ways to choose number of indices from $$$n$$$} $$$+$$$ $$$1$$$). ($$$+1$$$ for the second choice).\nIf $$$n$$$ is even there are $$$2$$$ possible choices:\nYou can make $$$i$$$-th bit $$$=$$$ $$$1$$$ in an even number (less than $$$n$$$) of indices, then $$$And_i$$$ will be $$$0$$$ and $$$Xor_i$$$ will be $$$0$$$ also.\nYou can make $$$i$$$-th bit $$$=$$$ $$$1$$$ in all indices, then $$$And_i$$$ will be $$$1$$$ and $$$Xor_i$$$ will be $$$0$$$. and now $$$equal$$$ will be $$$false$$$.\nYou Don't have any other valid choices. So $$$dp_{i,1}$$$ $$$=$$$ $$$dp_{i-1,1}$$$ $$$\\cdot$$$ (number of ways to choose number of indices from $$$n$$$ ) + $$$dp_{i-1,0}$$$.\nWe can precalculate the factorial, to get $$$nCr$$$ in $$$\\mathcal{O}(1)$$$, and then calculate the number of ways to choose an even number from $$$n$$$ before starting the $$$dp$$$. The total complexity will be $$$\\mathcal{O}(k + n)$$$."
+        }
+    ]
+}

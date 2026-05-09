@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMonocarp is going to make a purchase with cost of exactly $ m $ burles.\n\nHe has two types of coins, in the following quantities:\n\n- coins worth $ 1 $ burle: $ a_1 $ regular coins and infinitely many fancy coins;\n- coins worth $ k $ burles: $ a_k $ regular coins and infinitely many fancy coins.\n\nMonocarp wants to make his purchase in such a way that there's no change — the total worth of provided coins is exactly $ m $ . He can use both regular and fancy coins. However, he wants to spend as little fancy coins as possible.\n\nWhat's the smallest total number of fancy coins he can use to make a purchase?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 3 \\cdot 10^4 $ ) — the number of testcases.\n\nThe only line of each testcase contains four integers $ m, k, a_1 $ and $ a_k $ ( $ 1 \\le m \\le 10^8 $ ; $ 2 \\le k \\le 10^8 $ ; $ 0 \\le a_1, a_k \\le 10^8 $ ) — the cost of the purchase, the worth of the second type of coin and the amounts of regular coins of both types, respectively.\n\nOutput Format\nFor each testcase, print a single integer — the smallest total number of fancy coins Monocarp can use to make a purchase.\n\nExamples\nSample 1\nInput\n4\n11 3 0 0\n11 3 20 20\n11 3 6 1\n100000000 2 0 0\nOutput\n5\n0\n1\n50000000\n\nNote\nIn the first testcase, there are no regular coins of either type. Monocarp can use $ 2 $ fancy coins worth $ 1 $ burle and $ 3 $ fancy coins worth $ 3 $ (since $ k=3 $ ) burles to get $ 11 $ total burles with $ 5 $ total fancy coins.\n\nIn the second testcase, Monocarp has a lot of regular coins of both types. He can use $ 11 $ regular coins worth $ 1 $ burle, for example. Notice that Monocarp doesn't have to minimize the total number of used coins. That way he uses $ 0 $ fancy coins.\n\nIn the third testcase, Monocarp can use $ 5 $ regular coins worth $ 1 $ burle and $ 1 $ regular coin worth $ 3 $ burles. That will get him to $ 8 $ total burles when he needs $ 11 $ . So, $ 1 $ fancy coin worth $ 3 $ burles is enough."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution 1 (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\ni\n++)\n{\nint\nm\n,\nk\n,\na1\n,\nak\n;\ncin\n>>\nm\n>>\nk\n>>\na1\n>>\nak\n;\nint\ntaken_k\n=\nm\n/\nk\n;\nint\ntaken_1\n=\nm\n%\nk\n;\nint\ntaken_fancy_1\n=\nmax\n(\n0\n,\ntaken_1\n-\na1\n);\nint\nleft_regular_1\n=\nmax\n(\n0\n,\na1\n-\ntaken_1\n);\nint\ntaken_fancy_k\n=\nmax\n(\n0\n,\ntaken_k\n-\nak\n);\nint\nto_replace\n=\nmin\n(\nleft_regular_1\n/\nk\n,\ntaken_fancy_k\n);\nint\nans\n=\ntaken_fancy_1\n+\ntaken_fancy_k\n-\nto_replace\n;\ncout\n<<\nans\n<<\nendl\n;\n}\n}"
+        },
+        {
+            "title": "Solution 2 (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\ni\n++)\n{\nint\nm\n,\nk\n,\na1\n,\nak\n;\ncin\n>>\nm\n>>\nk\n>>\na1\n>>\nak\n;\n// function which calculates the number of fancy coins taken\n// if we take exactly x coins of value k\nauto\nf\n=\n[\nm\n,\nk\n,\na1\n,\nak\n](\nint\nx\n)\n{\nint\ntaken_1\n=\nm\n-\nk\n*\nx\n;\nreturn\nmax\n(\n0\n,\ntaken_1\n-\na1\n)\n+\nmax\n(\n0\n,\nx\n-\nak\n);\n};\nint\nlf\n=\n0\n;\nint\nrg\n=\nm\n/\nk\n;\nwhile\n(\nrg\n-\nlf\n>\n2\n)\n{\nint\nmid\n=\n(\nlf\n+\nrg\n)\n/\n2\n;\nif\n(\nf\n(\nmid\n)\n<\nf\n(\nmid\n+\n1\n))\nrg\n=\nmid\n+\n1\n;\nelse\nlf\n=\nmid\n;\n}\nint\nans\n=\n1e9\n;\nfor\n(\nint\ni\n=\nlf\n;\ni\n<=\nrg\n;\ni\n++)\nans\n=\nmin\n(\nans\n,\nf\n(\ni\n));\ncout\n<<\nans\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

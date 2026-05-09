@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "What can you say about the values which are the most frequent ones in the optimal solution?"
+        },
+        {
+            "title": "Hint for the subproblem",
+            "content": "A bit of thinking may lead you to the observation that solving the task in $$$O(n log n)$$$ or even $$$O(n log^2 n)$$$ isn't pleasant. The constraints are low enough to allow an $$$O(n \\sqrt n)$$$ solution, how about giving it a try?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution for the easy version",
+            "content": "For the easy version, it's sufficient to consider all pairs ($$$D$$$, $$$V$$$) in linear time, by using the standard algorithm which computes the longest interval with sum $$$0$$$. Thus, we get a solution with complexity $$$O(100\\cdot n$$$)."
+        },
+        {
+            "title": "Solution of the subproblem",
+            "content": "If an element $$$V$$$ appears more than $$$\\sqrt n$$$ times, we can simply brute-force this pair with partial sums $$$(D,V)$$$ in $$$O(n)$$$.\nFor the other elements, for all the appearances of $$$V$$$ we'll consider only at most $$$|V|+1$$$ neighboring occurrences of $$$D$$$ to search for the optimal interval. We can generalize the brute-force solution to work for this case too, by writing a function that solves just for a vector of interesting positions. Don't forget to take into account extending intervals with zeroes as well.\nWith proper preprocessing, this gives a solution in $$$O(|V|^2)$$$ per value $$$V$$$. Therefore, total runtime is bounded by $$$O(n \\sqrt n)$$$."
+        }
+    ]
+}

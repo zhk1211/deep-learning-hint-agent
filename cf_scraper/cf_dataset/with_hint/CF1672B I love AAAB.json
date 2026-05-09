@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's call a string good if its length is at least $ 2 $ and all of its characters are $ \\texttt{A} $ except for the last character which is $ \\texttt{B} $ . The good strings are $ \\texttt{AB},\\texttt{AAB},\\texttt{AAAB},\\ldots $ . Note that $ \\texttt{B} $ is not a good string.\n\nYou are given an initially empty string $ s_1 $ .\n\nYou can perform the following operation any number of times:\n\n- Choose any position of $ s_1 $ and insert some good string in that position.\n\nGiven a string $ s_2 $ , can we turn $ s_1 $ into $ s_2 $ after some number of operations?\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single string $ s_2 $ ( $ 1 \\leq |s_2| \\leq 2 \\cdot 10^5 $ ).\n\nIt is guaranteed that $ s_2 $ consists of only the characters $ \\texttt{A} $ and $ \\texttt{B} $ .\n\nIt is guaranteed that the sum of $ |s_2| $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print \"YES\" (without quotes) if we can turn $ s_1 $ into $ s_2 $ after some number of operations, and \"NO\" (without quotes) otherwise.\n\nYou can output \"YES\" and \"NO\" in any case (for example, strings \"yEs\", \"yes\" and \"Yes\" will be recognized as a positive response).\n\nExamples\nSample 1\nInput\n4\nAABAB\nABB\nAAAAAAAAB\nA\nOutput\nYES\nNO\nYES\nNO\n\nNote\nIn the first test case, we transform $ s_1 $ as such: $ \\varnothing \\to \\color{red}{\\texttt{AAB}} \\to \\texttt{A}\\color{red}{\\texttt{AB}}\\texttt{AB} $ .\n\nIn the third test case, we transform $ s_1 $ as such: $ \\varnothing \\to \\color{red}{\\texttt{AAAAAAAAB}} $ .\n\nIn the second and fourth test case, it can be shown that it is impossible to turn $ s_1 $ into $ s_2 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nPretend that we can only insert $$$\\texttt{AB}$$$.\nHint 2\nWhat if we replaced $$$\\texttt{A}$$$ and $$$\\texttt{B}$$$ with $$$\\texttt{(}$$$ and $$$\\texttt{)}$$$?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "Pretend that we can only insert $$$\\texttt{AB}$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "What if we replaced $$$\\texttt{A}$$$ and $$$\\texttt{B}$$$ with $$$\\texttt{(}$$$ and $$$\\texttt{)}$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Claim: The string is obtainable if it ends in $$$\\texttt{B}$$$ and every prefix of the string has at least as many $$$\\texttt{A}$$$ as $$$\\texttt{B}$$$.\nAn alternative way to think about the second condition is to assign $$$\\texttt{A}$$$ to have a value of $$$1$$$ and $$$\\texttt{B}$$$ to have a value of $$$-1$$$. Then, we are just saying that each prefix must have a non-negative sum. This is pretty similar to bracket sequences.\nNow, both conditions are clearly necessary, let us show that they are sufficient too.\nWe will explicitly construct the string (in the reverse direction). While there are more than $$$1$$$ occurrences of $$$\\texttt{B}$$$ in the string, remove the first occurrence of $$$\\texttt{AB}$$$. After doing this process, you will eventually end up with the string $$$\\texttt{AAA...AAB}$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "// Super Idol的笑容\n//    都没你的甜\n//  八月正午的阳光\n//    都没你耀眼\n//  热爱105°C的你\n// 滴滴清纯的蒸馏水\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#include\n<ext/pb_ds/assoc_container.hpp>\n#include\n<ext/pb_ds/tree_policy.hpp>\n#include\n<\next\n/\nrope\n>\nusing\nnamespace\nstd\n;\nusing\nnamespace\n__gnu_pbds\n;\nusing\nnamespace\n__gnu_cxx\n;\n#define\nint\nlong\nlong\n#define\nll\nlong\nlong\n#define\nii pair\n<\nll\n,\nll\n>\n#define\niii pair\n<\nii\n,\nll\n>\n#define\nfi\nfirst\n#define\nse second\n#define\nendl\n'\\n'\n#define\ndebug\n(\nx\n)\ncout\n<<\n#x << \": \" << x << endl\n#define\npub push_back\n#define\npob pop_back\n#define\npuf push_front\n#define\npof pop_front\n#define\nlb lower_bound\n#define\nub upper_bound\n#define\nrep\n(\nx\n,\nstart\n,\nend\n)\nfor\n(\nauto\nx\n=(\nstart\n)-((\nstart\n)>(\nend\n));\nx\n!=(\nend\n)-((\nstart\n)>(\nend\n));((\nstart\n)<(\nend\n)?\nx\n++:\nx\n--))\n#define\nall\n(\nx\n)\n(\nx\n).\nbegin\n(),(\nx\n).\nend\n()\n#define\nsz\n(\nx\n)\n(\nint\n)(\nx\n).\nsize\n()\n#define\nindexed_set tree\n<\nll\n,\nnull_type\n,\nless\n<ll>\n,\nrb_tree_tag\n,\ntree_order_statistics_node_update\n>\n//change less to less_equal for non distinct pbds, but erase will bug\nmt19937 rng\n(\nchrono\n::\nsystem_clock\n::\nnow\n().\ntime_since_epoch\n().\ncount\n());\nsigned\nmain\n(){\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\ncin\n.\nexceptions\n(\nios\n::\nbadbit\n|\nios\n::\nfailbit\n);\nint\nTC\n;\ncin\n>>\nTC\n;\nwhile\n(\nTC\n--){\nstring\ns\n;\ncin\n>>\ns\n;\nbool\nok\n=(\ns\n.\nback\n()==\n'B'\n);\nint\nsum\n=\n0\n;\nfor\n(\nauto\nit\n:\ns\n){\nif\n(\nit\n==\n'A'\n)\nsum\n++;\nelse\nsum\n--;\nif\n(\nsum\n<\n0\n)\nok\n=\nfalse\n;\n}\nif\n(\nok\n)\ncout\n<<\n\"YES\"\n<<\nendl\n;\nelse\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

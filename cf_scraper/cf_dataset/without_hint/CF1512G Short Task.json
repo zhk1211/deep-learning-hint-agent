@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet us denote by $ d(n) $ the sum of all divisors of the number $ n $ , i.e. $ d(n) = \\sum\\limits_{k | n} k $ .\n\nFor example, $ d(1) = 1 $ , $ d(4) = 1+2+4=7 $ , $ d(6) = 1+2+3+6=12 $ .\n\nFor a given number $ c $ , find the minimum $ n $ such that $ d(n) = c $ .\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ). Then $ t $ test cases follow.\n\nEach test case is characterized by one integer $ c $ ( $ 1 \\le c \\le 10^7 $ ).\n\nOutput Format\nFor each test case, output:\n\n- \"-1\" if there is no such $ n $ that $ d(n) = c $ ;\n- $ n $ , otherwise.\n\nExamples\nSample 1\nInput\n12\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n39\n691\nOutput\n1\n-1\n2\n3\n-1\n5\n4\n7\n-1\n-1\n18\n-1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n(\nint\n)\n1e7\n+\n100\n;\nlong\nlong\ns\n[\nN\n];\nint\nd\n[\nN\n];\nint\nans\n[\nN\n];\nint\nmain\n()\n{\nfill\n(\nd\n,\nd\n+\nN\n,\n-\n1\n);\nd\n[\n1\n]\n=\n1\n;\nfor\n(\nint\ni\n=\n2\n;\ni\n*\ni\n<\nN\n;\ni\n++)\n{\nif\n(\nd\n[\ni\n]\n==\n-\n1\n)\n{\nd\n[\ni\n]\n=\ni\n;\nfor\n(\nint\nj\n=\ni\n*\ni\n;\nj\n<\nN\n;\nj\n+=\ni\n)\n{\nif\n(\nd\n[\nj\n]\n==\n-\n1\n)\n{\nd\n[\nj\n]\n=\ni\n;\n}\n}\n}\n}\ns\n[\n1\n]\n=\n1\n;\nfor\n(\nint\ni\n=\n2\n;\ni\n<\nN\n;\ni\n++)\n{\nif\n(\nd\n[\ni\n]\n==\n-\n1\n)\n{\nd\n[\ni\n]\n=\ni\n;\ns\n[\ni\n]\n=\ni\n+\n1\n;\n}\nelse\n{\nint\nj\n=\ni\n;\ns\n[\ni\n]\n=\n1\n;\nwhile\n(\nj\n%\nd\n[\ni\n]\n==\n0\n)\n{\nj\n/=\nd\n[\ni\n];\ns\n[\ni\n]\n=\ns\n[\ni\n]\n*\nd\n[\ni\n]\n+\n1\n;\n}\ns\n[\ni\n]\n*=\ns\n[\nj\n];\n}\n}\nfill\n(\nans\n,\nans\n+\nN\n,\n-\n1\n);\nfor\n(\nint\ni\n=\nN\n-\n1\n;\ni\n>\n0\n;\ni\n--)\n{\nif\n(\ns\n[\ni\n]\n<\nN\n)\n{\nans\n[\ns\n[\ni\n]]\n=\ni\n;\n}\n}\nint\ntests\n;\ncin\n>>\ntests\n;\nwhile\n(\ntests\n--\n>\n0\n)\n{\nint\nc\n;\ncin\n>>\nc\n;\ncout\n<<\nans\n[\nc\n]\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

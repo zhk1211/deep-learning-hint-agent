@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n$ n $ fishermen have just returned from a fishing vacation. The $ i $ -th fisherman has caught a fish of weight $ a_i $ .\n\nFishermen are going to show off the fish they caught to each other. To do so, they firstly choose an order in which they show their fish (each fisherman shows his fish exactly once, so, formally, the order of showing fish is a permutation of integers from $ 1 $ to $ n $ ). Then they show the fish they caught according to the chosen order. When a fisherman shows his fish, he might either become happy, become sad, or stay content.\n\nSuppose a fisherman shows a fish of weight $ x $ , and the maximum weight of a previously shown fish is $ y $ ( $ y = 0 $ if that fisherman is the first to show his fish). Then:\n\n- if $ x \\ge 2y $ , the fisherman becomes happy;\n- if $ 2x \\le y $ , the fisherman becomes sad;\n- if none of these two conditions is met, the fisherman stays content.\n\nLet's call an order in which the fishermen show their fish emotional if, after all fishermen show their fish according to this order, each fisherman becomes either happy or sad. Calculate the number of emotional orders modulo $ 998244353 $ .\n\nInput Format\nThe first line contains one integer $ n $ ( $ 2 \\le n \\le 5000 $ ).\n\nThe second line contains $ n $ integers $ a_1 $ , $ a_2 $ , ..., $ a_n $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nOutput Format\nPrint one integer — the number of emotional orders, taken modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n4\n1 1 4 9\nOutput\n20\n\nSample 2\nInput\n4\n4 3 2 1\nOutput\n0\n\nSample 3\nInput\n3\n4 2 1\nOutput\n6\n\nSample 4\nInput\n8\n42 1337 13 37 420 666 616 97\nOutput\n19200"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n5043\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\ndp\n[\nN\n][\nN\n];\nint\npdp\n[\nN\n][\nN\n];\nint\ncntLess\n[\nN\n];\nint\nlastLess\n[\nN\n];\nint\na\n[\nN\n];\nint\nn\n;\nint\nadd\n(\nint\nx\n,\nint\ny\n)\n{\nx\n+=\ny\n;\nwhile\n(\nx\n>=\nMOD\n)\nx\n-=\nMOD\n;\nwhile\n(\nx\n<\n0\n)\nx\n+=\nMOD\n;\nreturn\nx\n;\n}\nint\nsub\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\nadd\n(\nx\n,\nMOD\n-\ny\n);\n}\nint\nmul\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\n(\nx\n*\n1ll\n*\ny\n)\n%\nMOD\n;\n}\nint\nmain\n()\n{\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nsort\n(\na\n,\na\n+\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncntLess\n[\ni\n]\n=\n0\n;\nlastLess\n[\ni\n]\n=\n-\n1\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nn\n;\nj\n++)\nif\n(\na\n[\nj\n]\n*\n2\n<=\na\n[\ni\n])\n{\nlastLess\n[\ni\n]\n=\nj\n;\ncntLess\n[\ni\n]++;\n}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ndp\n[\ni\n][\n1\n]\n=\n1\n;\npdp\n[\ni\n+\n1\n][\n1\n]\n=\nadd\n(\npdp\n[\ni\n][\n1\n],\ndp\n[\ni\n][\n1\n]);\n}\nfor\n(\nint\nk\n=\n2\n;\nk\n<=\nn\n;\nk\n++)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\ncntLess\n[\ni\n]\n+\n1\n>=\nk\n)\ndp\n[\ni\n][\nk\n]\n=\nadd\n(\nmul\n(\ndp\n[\ni\n][\nk\n-\n1\n],\nadd\n(\ncntLess\n[\ni\n],\nsub\n(\n2\n,\nk\n))),\npdp\n[\nlastLess\n[\ni\n]\n+\n1\n][\nk\n-\n1\n]);\nelse\ndp\n[\ni\n][\nk\n]\n=\n0\n;\n//cerr << i << \" \" << k << \" \" << dp[i][k] << endl;\npdp\n[\ni\n+\n1\n][\nk\n]\n=\nadd\n(\npdp\n[\ni\n][\nk\n],\ndp\n[\ni\n][\nk\n]);\n}\ncout\n<<\ndp\n[\nn\n-\n1\n][\nn\n]\n<<\nendl\n;\n}"
+        }
+    ]
+}

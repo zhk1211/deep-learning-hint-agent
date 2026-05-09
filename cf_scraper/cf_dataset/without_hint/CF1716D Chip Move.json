@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a chip on the coordinate line. Initially, the chip is located at the point $ 0 $ . You can perform any number of moves; each move increases the coordinate of the chip by some positive integer (which is called the length of the move). The length of the first move you make should be divisible by $ k $ , the length of the second move — by $ k+1 $ , the third — by $ k+2 $ , and so on.\n\nFor example, if $ k=2 $ , then the sequence of moves may look like this: $ 0 \\rightarrow 4 \\rightarrow 7 \\rightarrow 19 \\rightarrow 44 $ , because $ 4 - 0 = 4 $ is divisible by $ 2 = k $ , $ 7 - 4 = 3 $ is divisible by $ 3 = k + 1 $ , $ 19 - 7 = 12 $ is divisible by $ 4 = k + 2 $ , $ 44 - 19 = 25 $ is divisible by $ 5 = k + 3 $ .\n\nYou are given two positive integers $ n $ and $ k $ . Your task is to count the number of ways to reach the point $ x $ , starting from $ 0 $ , for every $ x \\in [1, n] $ . The number of ways can be very large, so print it modulo $ 998244353 $ . Two ways are considered different if they differ as sets of visited positions.\n\nInput Format\nThe first (and only) line of the input contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 2 \\cdot 10^5 $ ).\n\nOutput Format\nPrint $ n $ integers — the number of ways to reach the point $ x $ , starting from $ 0 $ , for every $ x \\in [1, n] $ , taken modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n8 1\nOutput\n1 1 2 2 3 4 5 6\n\nSample 2\nInput\n10 2\nOutput\n0 1 0 1 1 1 1 2 2 2\n\nNote\nLet's look at the first example:\n\nWays to reach the point $ 1 $ : $ [0, 1] $ ;\n\nWays to reach the point $ 2 $ : $ [0, 2] $ ;\n\nWays to reach the point $ 3 $ : $ [0, 1, 3] $ , $ [0, 3] $ ;\n\nWays to reach the point $ 4 $ : $ [0, 2, 4] $ , $ [0, 4] $ ;\n\nWays to reach the point $ 5 $ : $ [0, 1, 5] $ , $ [0, 3, 5] $ , $ [0, 5] $ ;\n\nWays to reach the point $ 6 $ : $ [0, 1, 3, 6] $ , $ [0, 2, 6] $ , $ [0, 4, 6] $ , $ [0, 6] $ ;\n\nWays to reach the point $ 7 $ : $ [0, 2, 4, 7] $ , $ [0, 1, 7] $ , $ [0, 3, 7] $ , $ [0, 5, 7] $ , $ [0, 7] $ ;\n\nWays to reach the point $ 8 $ : $ [0, 3, 5, 8] $ , $ [0, 1, 5, 8] $ , $ [0, 2, 8] $ , $ [0, 4, 8] $ , $ [0, 6, 8] $ , $ [0, 8] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nmain\n()\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nvector\n<int>\ndp\n(\nn\n+\n1\n),\nans\n(\nn\n+\n1\n);\ndp\n[\n0\n]\n=\n1\n;\nfor\n(\nint\nmn\n=\n0\n;\nmn\n+\nk\n<=\nn\n;\nmn\n+=\nk\n++)\n{\nvector\n<int>\nsum\n(\nk\n);\nfor\n(\nint\ni\n=\nmn\n;\ni\n<=\nn\n;\n++\ni\n)\n{\nint\ncur\n=\ndp\n[\ni\n];\ndp\n[\ni\n]\n=\nsum\n[\ni\n%\nk\n];\n(\nsum\n[\ni\n%\nk\n]\n+=\ncur\n)\n%=\nMOD\n;\n(\nans\n[\ni\n]\n+=\ndp\n[\ni\n])\n%=\nMOD\n;\n}\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\ncout\n<<\nans\n[\ni\n]\n<<\n' '\n;\n}"
+        }
+    ]
+}

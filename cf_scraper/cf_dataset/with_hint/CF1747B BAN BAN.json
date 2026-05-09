@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an integer $ n $ .\n\nLet's define $ s(n) $ as the string \"BAN\" concatenated $ n $ times. For example, $ s(1) $ = \"BAN\", $ s(3) $ = \"BANBANBAN\". Note that the length of the string $ s(n) $ is equal to $ 3n $ .\n\nConsider $ s(n) $ . You can perform the following operation on $ s(n) $ any number of times (possibly zero):\n\n- Select any two distinct indices $ i $ and $ j $ $ (1 \\leq i, j \\leq 3n, i \\ne j) $ .\n- Then, swap $ s(n)_i $ and $ s(n)_j $ .\n\nYou want the string \"BAN\" to not appear in $ s(n) $ as a subsequence. What's the smallest number of operations you have to do to achieve this? Also, find one such shortest sequence of operations.\n\nA string $ a $ is a subsequence of a string $ b $ if $ a $ can be obtained from $ b $ by deletion of several (possibly, zero or all) characters.\n\nInput Format\nThe input consists of multiple test cases. The first line contains a single integer $ t $ $ (1 \\leq t \\leq 100) $ — the number of test cases. The description of the test cases follows.\n\nThe only line of each test case contains a single integer $ n $ $ (1 \\leq n \\leq 100) $ .\n\nOutput Format\nFor each test case, in the first line output $ m $ ( $ 0 \\le m \\le 10^5 $ ) — the minimum number of operations required. It's guaranteed that the objective is always achievable in at most $ 10^5 $ operations under the constraints of the problem.\n\nThen, output $ m $ lines. The $ k $ -th of these lines should contain two integers $ i_k $ , $ j_k $ $ (1\\leq i_k, j_k \\leq 3n, i_k \\ne j_k) $ denoting that you want to swap characters at indices $ i_k $ and $ j_k $ at the $ k $ -th operation.\n\nAfter all $ m $ operations, \"BAN\" must not appear in $ s(n) $ as a subsequence.\n\nIf there are multiple possible answers, output any.\n\nExamples\nSample 1\nInput\n2\n1\n2\nOutput\n1\n1 2\n1\n2 6\n\nNote\nIn the first testcase, $ s(1) = $ \"BAN\", we can swap $ s(1)_1 $ and $ s(1)_2 $ , converting $ s(1) $ to \"ABN\", which does not contain \"BAN\" as a subsequence.\n\nIn the second testcase, $ s(2) = $ \"BANBAN\", we can swap $ s(2)_2 $ and $ s(2)_6 $ , converting $ s(2) $ to \"BNNBAA\", which does not contain \"BAN\" as a subsequence."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Instead of subsequences solve for substrings. That is there should not be any substring $$$\\texttt{BAN}$$$ after performing operations."
+        },
+        {
+            "title": "Hint 2",
+            "content": "In one operation you can destroy atmost $$$2$$$ substrings. Find minimum operations to destroy $$$n$$$ substrings.\nAnswer\n$$$\\left \\lceil\\frac{n}{2}\\right \\rceil $$$"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Congrats, you have solved for subsequences also!"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "No subsequences of string $$$\\texttt{BAN}$$$ would also mean no substrings of $$$\\texttt{BAN}$$$ in original string. Let minimum number of operations to have no substrings of $$$\\texttt{BAN}$$$ be $$$x$$$, it would be also be the lower bound for having no subsequences of string $$$\\texttt{BAN}$$$.\nClaim\n: $$$x = \\left \\lceil\\frac{n}{2}\\right \\rceil$$$.\nProof\n: Swap $$$i$$$-th $$$\\texttt{B}$$$ from start with $$$i$$$-th $$$\\texttt{N}$$$ from end for $$$1 \\leq i \\leq \\left \\lceil\\frac{n}{2}\\right \\rceil$$$. We can see that, no substrings of $$$\\texttt{BAN}$$$ exists after performing $$$ \\left \\lceil\\frac{n}{2}\\right \\rceil$$$ operations. Since we can only destroy atmost $$$2$$$ substrings in one operations, $$$\\left \\lceil\\frac{n}{2}\\right \\rceil$$$ is minimum possible.\nNow if you see clearly, after performing above operations, there does not exist any subsequence of string $$$\\texttt{BAN}$$$ in original string. Hence $$$\\left \\lceil\\frac{n}{2}\\right \\rceil$$$ is also the answer for the original problem."
+        },
+        {
+            "title": "Solution",
+            "content": "// Jai Shree Ram\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nrep\n(\ni\n,\na\n,\nn\n)\nfor\n(\nint\ni\n=\na\n;\ni\n<\nn\n;\ni\n++)\n#define\nll\nlong\nlong\n#define\nint\nlong\nlong\n#define\npb             push_back\n#define\nall\n(\nv\n)\nv\n.\nbegin\n(),\nv\n.\nend\n()\n#define\nendl\n\"\\n\"\n#define\nx              first\n#define\ny              second\n#define\ngcd\n(\na\n,\nb\n)\n__gcd\n(\na\n,\nb\n)\n#define\nmem1\n(\na\n)\nmemset\n(\na\n,-\n1\n,\nsizeof\n(\na\n))\n#define\nmem0\n(\na\n)\nmemset\n(\na\n,\n0\n,\nsizeof\n(\na\n))\n#define\nsz\n(\na\n)\n(\nint\n)\na\n.\nsize\n()\n#define\npii            pair\n<\nint\n,\nint\n>\n#define\nhell\n1000000007\n#define\nelasped_time\n1.0\n*\nclock\n()\n/\nCLOCKS_PER_SEC\ntemplate\n<\ntypename\nT1\n,\ntypename\nT2\n>\nistream\n&\noperator\n>>(\nistream\n&\nin\n,\npair\n<\nT1\n,\nT2\n>\n&\na\n){\nin\n>>\na\n.\nx\n>>\na\n.\ny\n;\nreturn\nin\n;}\ntemplate\n<\ntypename\nT1\n,\ntypename\nT2\n>\nostream\n&\noperator\n<<(\nostream\n&\nout\n,\npair\n<\nT1\n,\nT2\n>\na\n){\nout\n<<\na\n.\nx\n<<\n\" \"\n<<\na\n.\ny\n;\nreturn\nout\n;}\ntemplate\n<\ntypename\nT\n,\ntypename\nT1\n>\nT maxs\n(\nT\n&\na\n,\nT1 b\n){\nif\n(\nb\n>\na\n)\na\n=\nb\n;\nreturn\na\n;}\ntemplate\n<\ntypename\nT\n,\ntypename\nT1\n>\nT mins\n(\nT\n&\na\n,\nT1 b\n){\nif\n(\nb\n<\na\n)\na\n=\nb\n;\nreturn\na\n;}\nint\nsolve\n(){\nint\nn\n;\ncin\n>>\nn\n;\ncout\n<<\nn\n/\n2\n+\nn\n%\n2\n<<\nendl\n;\nint\nl\n=\n1\n,\nr\n=\n3\n*\nn\n;\nwhile\n(\nl\n<\nr\n){\ncout\n<<\nl\n<<\n\" \"\n<<\nr\n<<\nendl\n;\nl\n+=\n3\n;\nr\n-=\n3\n;\n}\nreturn\n0\n;\n}\nsigned\nmain\n(){\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\n//freopen(\"input.txt\", \"r\", stdin);\n//freopen(\"output.txt\", \"w\", stdout);\n#ifdef\nSIEVE\n    sieve\n();\n#endif\n#ifdef\nNCR\n    init\n();\n#endif\nint\nt\n=\n1\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nsolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

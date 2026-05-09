@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's define the cost of a string $ s $ as the number of index pairs $ i $ and $ j $ ( $ 1 \\le i < j < |s| $ ) such that $ s_i = s_j $ and $ s_{i+1} = s_{j+1} $ .\n\nYou are given two positive integers $ n $ and $ k $ . Among all strings with length $ n $ that contain only the first $ k $ characters of the Latin alphabet, find a string with minimum possible cost. If there are multiple such strings with minimum cost — find any of them.\n\nInput Format\nThe only line contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 2 \\cdot 10^5; 1 \\le k \\le 26 $ ).\n\nOutput Format\nPrint the string $ s $ such that it consists of $ n $ characters, each its character is one of the $ k $ first Latin letters, and it has the minimum possible cost among all these strings. If there are multiple such strings — print any of them.\n\nExamples\nSample 1\nInput\n9 4\nOutput\naabacadbb\n\nSample 2\nInput\n5 1\nOutput\naaaaa\n\nSample 3\nInput\n10 26\nOutput\ncodeforces"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n,\nk\n;\nint\ncur\n[\n26\n];\nvector\n<int>\npath\n;\nvoid\ndfs\n(\nint\nv\n)\n{\nwhile\n(\ncur\n[\nv\n]\n<\nk\n)\n{\nint\nu\n=\ncur\n[\nv\n]++;\ndfs\n(\nu\n);\npath\n.\npush_back\n(\nu\n);\n}\n}\nint\nmain\n()\n{\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nk\n);\ndfs\n(\n0\n);\nprintf\n(\n\"a\"\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\n++\ni\n)\nprintf\n(\n\"%c\"\n,\npath\n[\ni\n%\npath\n.\nsize\n()]\n+\n'a'\n);\n}"
+        }
+    ]
+}

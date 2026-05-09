@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a special offer in Vasya's favourite supermarket: if the customer buys $ a $ chocolate bars, he or she may take $ b $ additional bars for free. This special offer can be used any number of times.\n\nVasya currently has $ s $ roubles, and he wants to get as many chocolate bars for free. Each chocolate bar costs $ c $ roubles. Help Vasya to calculate the maximum possible number of chocolate bars he can get!\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of testcases.\n\nEach of the next $ t $ lines contains four integers $ s, a, b, c~(1 \\le s, a, b, c \\le 10^9) $ — the number of roubles Vasya has, the number of chocolate bars you have to buy to use the special offer, the number of bars you get for free, and the cost of one bar, respectively.\n\nOutput Format\nPrint $ t $ lines. $ i $ -th line should contain the maximum possible number of chocolate bars Vasya can get in $ i $ -th test.\n\nExamples\nSample 1\nInput\n2\n10 3 1 1\n1000000000 1 1000000000 1\nOutput\n13\n1000000001000000000\n\nNote\nIn the first test of the example Vasya can buy $ 9 $ bars, get $ 3 $ for free, buy another bar, and so he will get $ 13 $ bars.\n\nIn the second test Vasya buys $ 1000000000 $ bars and gets $ 1000000000000000000 $ for free. So he has $ 1000000001000000000 $ bars."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Ajosteen)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\ns\n,\na\n,\nb\n,\nc\n;\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\n++\ni\n){\ncin\n>>\ns\n>>\na\n>>\nb\n>>\nc\n;\ns\n/=\nc\n;\nint\nx\n=\ns\n/\na\n;\ns\n%=\na\n;\nlong\nlong\nres\n=\nx\n*\n1LL\n*\n(\na\n+\nb\n);\nres\n+=\ns\n;\ncout\n<<\nres\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

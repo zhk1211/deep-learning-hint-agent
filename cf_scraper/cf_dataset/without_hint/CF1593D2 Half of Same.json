@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis problem is a complicated version of D1, but it has significant differences, so read the whole statement.\n\nPolycarp has an array of $ n $ ( $ n $ is even) integers $ a_1, a_2, \\dots, a_n $ . Polycarp conceived of a positive integer $ k $ . After that, Polycarp began performing the following operations on the array: take an index $ i $ ( $ 1 \\le i \\le n $ ) and reduce the number $ a_i $ by $ k $ .\n\nAfter Polycarp performed some (possibly zero) number of such operations, it turned out that at least half of the numbers in the array became the same. Find the maximum $ k $ at which such a situation is possible, or print $ -1 $ if such a number can be arbitrarily large.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case consists of two lines. The first line contains an even integer $ n $ ( $ 4 \\le n \\le 40 $ ) ( $ n $ is even). The second line contains $ n $ integers $ a_1, a_2, \\dots a_n $ ( $ -10^6 \\le a_i \\le 10^6 $ ).\n\nIt is guaranteed that the sum of all $ n $ specified in the given test cases does not exceed $ 100 $ .\n\nOutput Format\nFor each test case output on a separate line an integer $ k $ ( $ k \\ge 1 $ ) — the maximum possible number that Polycarp used in operations on the array, or $ -1 $ , if such a number can be arbitrarily large.\n\nExamples\nSample 1\nInput\n4\n6\n48 13 22 -15 16 35\n8\n-1 0 1 -1 0 1 -1 0\n4\n100 -1000 -1000 -1000\n4\n1 1 1 1\nOutput\n13\n2\n-1\n-1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nset\n<int>\ndivs\n(\nint\nn\n)\n{\nset\n<int>\nd\n;\nfor\n(\nint\ndd\n=\n1\n;\ndd\n*\ndd\n<=\nn\n;\ndd\n++)\nif\n(\nn\n%\ndd\n==\n0\n)\n{\nd\n.\ninsert\n(\nn\n/\ndd\n);\nd\n.\ninsert\n(\ndd\n);\n}\nreturn\nd\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nforn\n(\ntt\n,\nt\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nforn\n(\ni\n,\nn\n)\ncin\n>>\na\n[\ni\n];\nint\nk\n=\n-\n1\n;\nforn\n(\ni\n,\nn\n)\n{\nint\nminv\n=\na\n[\ni\n];\nint\nsame\n=\n0\n;\nvector\n<int>\nd\n;\nforn\n(\nj\n,\nn\n)\n{\nif\n(\na\n[\nj\n]\n==\nminv\n)\nsame\n++;\nelse\nif\n(\na\n[\nj\n]\n>\nminv\n)\nd\n.\npush_back\n(\na\n[\nj\n]\n-\nminv\n);\n}\nif\n(\nsame\n>=\nn\n/\n2\n)\n{\nk\n=\nINT_MAX\n;\ncontinue\n;\n}\nmap\n<\nint\n,\nint\n>\ndiv_counts\n;\nfor\n(\nint\ndi\n:\nd\n)\nfor\n(\nint\ndd\n:\ndivs\n(\ndi\n))\ndiv_counts\n[\ndd\n]++;\nfor\n(\nauto\np\n:\ndiv_counts\n)\nif\n(\np\n.\nsecond\n>=\nn\n/\n2\n-\nsame\n)\nk\n=\nmax\n(\nk\n,\np\n.\nfirst\n);\n}\ncout\n<<\n(\nk\n==\nINT_MAX\n?\n-\n1\n:\nk\n)\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

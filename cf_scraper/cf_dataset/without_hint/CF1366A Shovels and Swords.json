@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp plays a well-known computer game (we won't mention its name). In this game, he can craft tools of two types — shovels and swords. To craft a shovel, Polycarp spends two sticks and one diamond; to craft a sword, Polycarp spends two diamonds and one stick.\n\nEach tool can be sold for exactly one emerald. How many emeralds can Polycarp earn, if he has $ a $ sticks and $ b $ diamonds?\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThe only line of each test case contains two integers $ a $ and $ b $ ( $ 0 \\le a, b \\le 10^9 $ ) — the number of sticks and the number of diamonds, respectively.\n\nOutput Format\nFor each test case print one integer — the maximum number of emeralds Polycarp can earn.\n\nExamples\nSample 1\nInput\n4\n4 4\n1000000000 0\n7 15\n8 7\nOutput\n2\n0\n7\n5\n\nNote\nIn the first test case Polycarp can earn two emeralds as follows: craft one sword and one shovel.\n\nIn the second test case Polycarp does not have any diamonds, so he cannot craft anything."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nl\n,\nr\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nprint\n(\nmin\n(\nl\n,\nr\n,\n(\nl\n+\nr\n)\n// 3))"
+        }
+    ]
+}

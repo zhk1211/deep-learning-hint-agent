@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven an integer $ n $ , find the maximum value of integer $ k $ such that the following condition holds:\n\n$ n $ &amp; ( $ n-1 $ ) &amp; ( $ n-2 $ ) &amp; ( $ n-3 $ ) &amp; ... ( $ k $ ) = $ 0 $ where &amp; denotes the [bitwise AND operation.](https://en.wikipedia.org/wiki/Bitwise_operation#AND)\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 3 \\cdot 10^4 $ ). Then $ t $ test cases follow.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^9 $ ).\n\nOutput Format\nFor each test case, output a single integer — the required integer $ k $ .\n\nExamples\nSample 1\nInput\n3\n2\n5\n17\nOutput\n1\n3\n15\n\nNote\nIn the first testcase, the maximum value for which the continuous &amp; operation gives 0 value, is 1.\n\nIn the second testcase, the maximum value for which the continuous &amp; operation gives 0 value, is 3. No value greater then 3, say for example 4, will give the &amp; sum 0.\n\n- $ 5 \\, \\& \\, 4 \\neq 0 $ ,\n- $ 5 \\, \\& \\, 4 \\, \\& \\, 3 = 0 $ .\n\nHence, 3 is the answer."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Loud_mouth)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nll\nlong\nlong\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nlast\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n30\n;\n++\ni\n)\n{\nif\n(((\nn\n>>\ni\n)&\n1\n)\n==\n1\n)\n{\nlast\n=\ni\n;\n}\n}\ncout\n<<(\n1\n<<\nlast\n)-\n1\n<<\n\"\\n\"\n;\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Solution (the_nightmare)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#include\n<ext/pb_ds/assoc_container.hpp>\n#include\n<ext/pb_ds/tree_policy.hpp>\n#define\nll\nlong\nlong\n#define\npb          push_back\n#define\nppb         pop_back\n#define\nendl\n'\\n'\n#define\nmii         map\n<\nll\n,\nll\n>\n#define\nmsi         map\n<\nstring\n,\nll\n>\n#define\nmis         map\n<\nll\n,\nstring\n>\n#define\nrep\n(\ni\n,\na\n,\nb\n)\nfor\n(\nll i\n=\na\n;\ni\n<\nb\n;\ni\n++)\n#define\nrepr\n(\ni\n,\na\n,\nb\n)\nfor\n(\nll i\n=\nb\n-\n1\n;\ni\n>=\na\n;\ni\n--)\n#define\ntrav\n(\na\n,\nx\n)\nfor\n(\nauto\n&\na\n:\nx\n)\n#define\npii         pair\n<\nll\n,\nll\n>\n#define\nvi          vector\n<ll>\n#define\nvii         vector\n<\npair\n<\nll\n,\nll\n>>\n#define\nvs          vector\n<string>\n#define\nall\n(\na\n)\n(\na\n).\nbegin\n(),(\na\n).\nend\n()\n#define\nF           first\n#define\nS           second\n#define\nsz\n(\nx\n)\n(\nll\n)\nx\n.\nsize\n()\n#define\nhell\n1000000007\n#define\nlbnd        lower_bound\n#define\nubnd        upper_bound\n#define\nDEBUG       cerr\n<<\n\"/n>>>I'm Here<<</n\"\n<<\nendl\n;\n#define\ndisplay\n(\nx\n)\ntrav\n(\na\n,\nx\n)\ncout\n<<\na\n<<\n\" \"\n;\ncout\n<<\nendl\n;\n#define\nwhat_is\n(\nx\n)\ncerr\n<<\n#x << \" is \" << x << endl;\n#define\nordered_set tree\n<\nll\n,\nnull_type\n,\nless\n<ll>\n,\nrb_tree_tag\n,\ntree_order_statistics_node_update\n>\n#define\nFAST ios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\nusing\nnamespace\n__gnu_pbds\n;\nusing\nnamespace\nstd\n;\n#define\nPI\n3.141592653589793\n#define\nN\n200005\nvoid\nsolve\n()\n{\nll n\n;\ncin\n>>\nn\n;\nll cnt\n=\n0\n;\nwhile\n(\nn\n!=\n0\n){\ncnt\n++;\nn\n=\nn\n/\n2\n;\n}\ncout\n<<\n(\n1\n<<(\ncnt\n-\n1\n))-\n1\n<<\nendl\n;\n}\nint\nmain\n()\n{\n#ifndef\nONLINE_JUDGE\n    freopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n#endif\nll\nint\nTEST\n=\n1\n;\ncin\n>>\nTEST\n;\n//init();\nwhile\n(\nTEST\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

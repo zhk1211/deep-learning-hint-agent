@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ of $ n $ integers. You are allowed to perform the following operation on it as many times as you want (0 or more times):\n\n- Choose $ 2 $ indices $ i $ , $ j $ where $ 1 \\le i < j \\le n $ and replace $ a_k $ for all $ i \\leq k \\leq j $ with $ |a_i - a_j| $\n\nPrint the maximum sum of all the elements of the final array that you can obtain in such a way.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^5 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the array $ a $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the elements of array $ a $ .\n\nIt's guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print the sum of the final array.\n\nExamples\nSample 1\nInput\n3\n3\n1 1 1\n2\n9 1\n3\n4 9 5\nOutput\n3\n16\n18\n\nNote\nIn the first test case, it is not possible to achieve a sum $ > 3 $ by using these operations, therefore the maximum sum is $ 3 $ .\n\nIn the second test case, it can be shown that the maximum sum achievable is $ 16 $ . By using operation $ (1,2) $ we transform the array from $ [9,1] $ into $ [8,8] $ , thus the sum of the final array is $ 16 $ .\n\nIn the third test case, it can be shown that it is not possible to achieve a sum $ > 18 $ by using these operations, therefore the maximum sum is $ 18 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What happens when we apply the same operation twice?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "What about n = 3 ?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let’s first consider the case for $$$n \\geq 4$$$. The key observation to make here is that we can make all the elements of a subarray $$$a_l,...a_r$$$ zero by applying the operation on range $$$[l,r]$$$ twice. Then let’s assume the maximum element $$$mx$$$ of the array is at an index $$$m \\gt r$$$. We can apply the operation on the range $$$[l,m]$$$ and turn all its elements into $$$mx$$$.\nUsing the above information we can see that to achieve the final array with maximum sum we need to make all the elements in it equal to the maximum element in the array. Regardless of the given array this can be achieved by making the last two elements (n-1,n) zero. Then applying the operation on subarray $$$[m,n]$$$ to make all its elements equal to $$$mx$$$. Then making the first two elements (1,2) zero and applying the operation on the whole array making all the elements equal to $$$mx$$$. Thus the maximum sum for the final array will always be $$$n*mx$$$. (In case $$$m = n-1$$$ or $$$n$$$, we can operate on the left side first to reach the same solution).\nFor $$$n = 2$$$ the maximum final sum would be $$$\\max(a_1+a_2, 2*(|a_1-a_2|))$$$.\nFor $$$n=3$$$, when the maximum element is present at index $$$1$$$ or $$$3$$$ we can make all the elements of the array into $$$mx$$$. When the maximum element is at index $$$2$$$, we have the following options.\nCase 1: We can apply the operation on (1,2), then we can convert all the elements of the array into $$$ \\max(a_3,|a_2-a_1|)$$$.\nCase 2: We can apply the operation on (2,3), then we can convert all the elements of the array into $$$ \\max(a_1,|a_2-a_3|)$$$.\nCase 3: We can apply the operation on (1,3) making all the elements in the array $$$|a_1-a_3|$$$. This is redundant since $$$a_2 \\gt a_1,a_3$$$ either case 1 or case 2 will give a larger sum as $$$a_2 - \\min(a_1,a_3) \\gt \\max(a_1,a_3) - \\min(a_1,a_3)$$$.\nNow considering case 1, if $$$ 3* \\max(a_3,|a_2-a_1|) \\leq a_1+a_2+a_3 $$$ the maximum sum possible would be the current sum of the array (see sample 1 and 3). Therefore no operations are required. Similar case for case 2.\nSo the maximum possible sum for $$$n=3$$$ will be $$$\\max(3*a_1, 3*a_3, 3*|a_1-a_2|, 3*|a_3-a_2|,a_1+a_2+a_3)$$$.\nTo avoid doing this casework for $$$n = 3$$$, we can see that there are only 3 possible operations -> (1,2) , (2,3), (1,3). We will be required to perform operations (1,2) and (2,3) at most two times. So we can brute force all possible combinations of operations [(1,2),(1,2),(2,3),(2,3),(1,3)] to find the maximum sum."
+        },
+        {
+            "title": "Brute force solution",
+            "content": "186019483\nAuthor:\nsatyam343"
+        },
+        {
+            "title": "Case work solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nint\nlong\nlong\n#define\nll\nlong\nlong\n#define\npii pair\n<\nll\n,\nll\n>\nint32_t\nmod\n=\n1e9\n+\n7\n;\nvoid\nsolve\n()\n{\nll n\n;\ncin\n>>\nn\n;\nvector\n<ll>\na\n(\nn\n);\nfor\n(\nauto\n&\ni\n:\na\n)\ncin\n>>\ni\n;\nif\n(\nn\n==\n2\n)\ncout\n<<\nmax\n({\n2\n*\nabs\n(\na\n[\n0\n]\n-\na\n[\n1\n]),\na\n[\n0\n]\n+\na\n[\n1\n]});\nelse\nif\n(\nn\n==\n3\n)\ncout\n<<\nmax\n({\n3\n*\n(\nabs\n(\na\n[\n0\n]\n-\na\n[\n1\n])),\n3\n*\n(\nabs\n(\na\n[\n2\n]\n-\na\n[\n1\n])),\n3\n*\na\n[\n0\n],\n3\n*\na\n[\n2\n],\na\n[\n0\n]\n+\na\n[\n1\n]\n+\na\n[\n2\n]});\nelse\n{\nll mx\n=\n0\n;\nfor\n(\nauto\ni\n:\na\n)\nmx\n=\nmax\n(\ni\n,\nmx\n);\ncout\n<<\nn\n*\nmx\n;\n}\ncout\n<<\n'\\n'\n;\n}\nint32_t\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n),\ncin\n.\ntie\n(\nNULL\n);\nll t\n=\n0\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\nsolve\n();\n}\nAuthor:\n.utk."
+        }
+    ]
+}

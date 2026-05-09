@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "The capital variable letters and the \"constraints\" section are designed to mimic how\natcoder.jp\nformats their problem statements.\nThe problem is asking whether the\nAtcoder contest\n(ABC,ARC,AGC) is rated for a rating $$$X$$$. (Note that the judge ignores Atcoder heuristic contests for simplicity).\nABC's are rated for $$$[0,1999]$$$\nARC's are rated for $$$[0,2799]$$$\nAGC's are rated for $$$[1200,\\infty]$$$"
+        },
+        {
+            "title": "Solution Code (Python)",
+            "content": "s\n=\ninput\n().\nstrip\n()\nx\n=\nint\n(\ninput\n().\nstrip\n())\nif\n(\ns\n==\n\"ABC\"\nand\nx\n<\n2000\n)\nor\n(\ns\n==\n\"ARC\"\nand\nx\n<\n2800\n)\nor\n(\ns\n==\n\"AGC\"\nand\nx\n>=\n1200\n):\nprint\n(\n'yes'\n)\nelse\n:\nprint\n(\n'no'\n)"
+        }
+    ]
+}

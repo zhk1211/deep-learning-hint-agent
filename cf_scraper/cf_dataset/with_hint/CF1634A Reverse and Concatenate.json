@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nReal stupidity beats artificial intelligence every time.\n\n— Terry Pratchett, Hogfather, Discworld\n\nYou are given a string $ s $ of length $ n $ and a number $ k $ . Let's denote by $ rev(s) $ the reversed string $ s $ (i.e. $ rev(s) = s_n s_{n-1} ... s_1 $ ). You can apply one of the two kinds of operations to the string:\n\n- replace the string $ s $ with $ s + rev(s) $\n- replace the string $ s $ with $ rev(s) + s $\n\nHow many different strings can you get as a result of performing exactly $ k $ operations (possibly of different kinds) on the original string $ s $ ?\n\nIn this statement we denoted the concatenation of strings $ s $ and $ t $ as $ s + t $ . In other words, $ s + t = s_1 s_2 ... s_n t_1 t_2 ... t_m $ , where $ n $ and $ m $ are the lengths of strings $ s $ and $ t $ respectively.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 100 $ ) — number of test cases. Next $ 2 \\cdot t $ lines contain $ t $ test cases:\n\nThe first line of a test case contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 100 $ , $ 0 \\le k \\le 1000 $ ) — the length of the string and the number of operations respectively.\n\nThe second string of a test case contains one string $ s $ of length $ n $ consisting of lowercase Latin letters.\n\nOutput Format\nFor each test case, print the answer (that is, the number of different strings that you can get after exactly $ k $ operations) on a separate line.\n\nIt can be shown that the answer does not exceed $ 10^9 $ under the given constraints.\n\nExamples\nSample 1\nInput\n4\n3 2\naab\n3 3\naab\n7 1\nabacaba\n2 0\nab\nOutput\n2\n2\n1\n1\n\nNote\nIn the first test case of the example:\n\nAfter the first operation the string $ s $ can become either aabbaa or baaaab. After the second operation there are 2 possibilities for $ s $ : aabbaaaabbaa and baaaabbaaaab."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What property will the string have after the first operation (regardless of the type of operation)?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "What happens if you apply an operation to a palindrome?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "145468383\nq\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nq\n):\nn\n,\nk\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\ns\n=\ninput\n()\nif\ns\n==\ns\n[::-\n1\n]\nor\nk\n==\n0\n:\nprint\n(\n1\n)\nelse\n:\nprint\n(\n2\n)"
+        }
+    ]
+}

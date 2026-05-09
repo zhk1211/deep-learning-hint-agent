@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have discovered $ n $ mysterious particles on a line with integer charges of $ c_1,\\dots,c_n $ . You have a device that allows you to perform the following operation:\n\n- Choose a particle and remove it from the line. The remaining particles will shift to fill in the gap that is created. If there were particles with charges $ x $ and $ y $ directly to the left and right of the removed particle, they combine into a single particle of charge $ x+y $ .\n\nFor example, if the line of particles had charges of $ [-3,1,4,-1,5,-9] $ , performing the operation on the $ 4 $ th particle will transform the line into $ [-3,1,9,-9] $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1844C/e6e0f8b89386e2413f8854df6b39484bae0098bc.png)If we then use the device on the $ 1 $ st particle in this new line, the line will turn into $ [1,9,-9] $ .\n\nYou will perform operations until there is only one particle left. What is the maximum charge of this remaining particle that you can obtain?\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ c_1,\\dots,c_n $ ( $ -10^9 \\le c_i \\le 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output one integer, the maximum charge of the remaining particle.\n\nExamples\nSample 1\nInput\n3\n6\n-3 1 4 -1 5 -9\n5\n998244353 998244353 998244353 998244353 998244353\n1\n-2718\nOutput\n9\n2994733059\n-2718\n\nNote\nIn the first test case, the best strategy is to use the device on the $ 4 $ th particle, then on the $ 1 $ st particle (as described in the statement), and finally use the device on the new $ 3 $ rd particle followed by the $ 1 $ st particle.\n\nIn the second test case, the best strategy is to use the device on the $ 4 $ th particle to transform the line into $ [998244353,998244353,1996488706] $ , then on the $ 2 $ nd particle to transform the line into $ [2994733059] $ . Be wary of integer overflow.\n\nIn the third test case, there is only one particle, so no operations can be performed."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "The answer is the sum of some subset of $$$c_1,\\dots,c_n$$$. Think about which subsets are obtainable."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Consider the set of even-indexed particles and the set of odd-indexed particles."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nint\nLLI\n;\nint\nc\n[\n200000\n];\nint\nmain\n()\n{\nint\ni\n;\nint\nt\n,\nn\n;\nscanf\n(\n\"%d\"\n,&\nt\n);\nwhile\n(\nt\n--)\n{\nscanf\n(\n\"%d\"\n,&\nn\n);\nfor\n(\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nscanf\n(\n\"%d\"\n,&\nc\n[\ni\n]);\nint\nallneg\n=\n1\n;\nfor\n(\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nallneg\n&=\n(\nc\n[\ni\n]\n<\n0\n);\nif\n(\nallneg\n)\nprintf\n(\n\"%d\\n\"\n,*\nmax_element\n(\nc\n,\nc\n+\nn\n));\nelse\n{\nLLI ans1\n=\n0\n,\nans2\n=\n0\n;\nfor\n(\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\ni\n&\n1\n)\nans1\n+=\nmax\n(\nc\n[\ni\n],\n0\n);\nelse\nans2\n+=\nmax\n(\nc\n[\ni\n],\n0\n);\n}\nprintf\n(\n\"%lld\\n\"\n,\nmax\n(\nans1\n,\nans2\n));\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "fun main\n()\n{\nval AL\n=\n5\nval\n(\nn\n,\nm\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval s\n=\nArray\n(\nn\n)\n{\nreadLine\n()!!\n}\nval res\n=\nLongArray\n(\n1\nshl AL\n)\n{\nmask\n->\nval d\n=\nIntArray\n(\nm\n)\n{\n0\n}\nvar\nsum\n=\n0L\nfor\n(\ni\nin\n0\nuntil\nn\n)\n{\nfor\n(\nj\nin\n0\nuntil\nm\n)\n{\nval cur\n=\n(\nmask shr\n(\ns\n[\ni\n][\nj\n]\n-\n'A'\n))\nand\n1\nd\n[\nj\n]\n=\nif\n(\ncur\n==\n1\n)\nd\n[\nj\n]\n+\n1\nelse\n0\n}\nval l\n=\nIntArray\n(\nm\n)\n{\n-\n1\n}\nval q\n=\nIntArray\n(\nm\n)\n{\n0\n}\nvar\nptr\n=\n-\n1\nfor\n(\nj\nin\n0\nuntil\nm\n)\n{\nwhile\n(\nptr\n>=\n0\n&&\nd\n[\nq\n[\nptr\n]]\n>=\nd\n[\nj\n])\nptr\n-=\n1\nif\n(\nptr\n>=\n0\n)\nl\n[\nj\n]\n=\nq\n[\nptr\n]\nptr\n+=\n1\nq\n[\nptr\n]\n=\nj\n}\nval r\n=\nIntArray\n(\nm\n)\n{\nm\n}\nptr\n=\n-\n1\nfor\n(\nj\nin\nm\n-\n1\ndownTo\n0\n)\n{\nwhile\n(\nptr\n>=\n0\n&&\nd\n[\nq\n[\nptr\n]]\n>\nd\n[\nj\n])\nptr\n-=\n1\nif\n(\nptr\n>=\n0\n)\nr\n[\nj\n]\n=\nq\n[\nptr\n]\nptr\n+=\n1\nq\n[\nptr\n]\n=\nj\n}\nfor\n(\nj\nin\n0\nuntil\nm\n)\nsum\n+=\n(\nj\n-\nl\n[\nj\n])\n*\n(\nr\n[\nj\n]\n-\nj\n)\n*\nd\n[\nj\n].\ntoLong\n()\n}\nsum\n}\nfor\n(\ni\nin\n0\nuntil\nAL\n)\n{\nfor\n(\nmask\nin\n1\nuntil\n(\n1\nshl AL\n))\n{\nif\n(((\nmask shr i\n)\nand\n1\n)\n==\n0\n)\nres\n[\nmask\nor\n(\n1\nshl i\n)]\n-=\nres\n[\nmask\n]\n}\n}\nval ans\n=\nLongArray\n(\nAL\n+\n1\n)\n{\n0\n}\nfor\n(\nmask\nin\n1\nuntil\n(\n1\nshl AL\n))\nans\n[\nmask\n.\ncountOneBits\n()]\n+=\nres\n[\nmask\n]\nprintln\n(\nans\n.\ndrop\n(\n1\n).\njoinToString\n(\n\" \"\n))\n}"
+        }
+    ]
+}

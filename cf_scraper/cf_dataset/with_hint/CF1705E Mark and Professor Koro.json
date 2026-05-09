@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAfter watching a certain anime before going to sleep, Mark dreams of standing in an old classroom with a blackboard that has a sequence of $ n $ positive integers $ a_1, a_2,\\dots,a_n $ on it.\n\nThen, professor Koro comes in. He can perform the following operation:\n\n- select an integer $ x $ that appears at least $ 2 $ times on the board,\n- erase those $ 2 $ appearances, and\n- write $ x+1 $ on the board.\n\nProfessor Koro then asks Mark the question, \"what is the maximum possible number that could appear on the board after some operations?\"\n\nMark quickly solves this question, but he is still slower than professor Koro. Thus, professor Koro decides to give Mark additional challenges. He will update the initial sequence of integers $ q $ times. Each time, he will choose positive integers $ k $ and $ l $ , then change $ a_k $ to $ l $ . After each update, he will ask Mark the same question again.\n\nHelp Mark answer these questions faster than Professor Koro!\n\nNote that the updates are persistent. Changes made to the sequence $ a $ will apply when processing future updates.\n\nInput Format\nThe first line of the input contains two integers $ n $ and $ q $ ( $ 2\\leq n\\leq 2\\cdot 10^5 $ , $ 1\\leq q\\leq 2\\cdot 10^5 $ ) — the length of the sequence $ a $ and the number of updates, respectively.\n\nThe second line contains $ n $ integers $ a_1,a_2,\\dots,a_n $ ( $ 1\\leq a_i\\leq 2\\cdot 10^5 $ )\n\nThen, $ q $ lines follow, each consisting of two integers $ k $ and $ l $ ( $ 1\\leq k\\leq n $ , $ 1\\leq l\\leq 2\\cdot 10^5 $ ), telling to update $ a_k $ to $ l $ .\n\nOutput Format\nPrint $ q $ lines. The $ i $ -th line should consist of a single integer — the answer after the $ i $ -th update.\n\nExamples\nSample 1\nInput\n5 4\n2 2 2 4 5\n2 3\n5 3\n4 1\n1 4\nOutput\n6\n5\n4\n5\n\nSample 2\nInput\n2 1\n200000 1\n2 200000\nOutput\n200001\n\nNote\nIn the first example test, the program must proceed through $ 4 $ updates.\n\nThe sequence after the first update is $ [2,3,2,4,5] $ . One sequence of operations that achieves the number $ 6 $ the following.\n\n- Initially, the blackboard has numbers $ [2,3,2,4,5] $ .\n- Erase two copies of $ 2 $ and write $ 3 $ , yielding $ [3,4,5,\\color{red}{3}] $ .\n- Erase two copies of $ 3 $ and write $ 4 $ , yielding $ [4,5,\\color{red}{4}] $ .\n- Erase two copies of $ 4 $ and write $ 5 $ , yielding $ [5,\\color{red}{5}] $ .\n- Erase two copies of $ 5 $ and write $ 6 $ , yielding $ [\\color{red}{6}] $ .\n\nThen, in the second update, the array is changed to $ [2,3,2,4,3] $ . This time, Mark cannot achieve $ 6 $ . However, one sequence that Mark can use to achieve $ 5 $ is shown below.\n\n- Initially, the blackboard has $ [2,3,2,4,3] $ .\n- Erase two copies of $ 2 $ and write $ 3 $ , yielding $ [3,4,3,\\color{red}{3}] $ .\n- Erase two copies of $ 3 $ and write $ 4 $ , yielding $ [3,4,\\color{red}{4}] $ .\n- Erase two copies of $ 4 $ and write $ 5 $ , yielding $ [3,\\color{red}{5}] $ .\n\nIn the third update, the array is changed to $ [2,3,2,1,3] $ . One way to achieve $ 4 $ is shown below.\n\n- Initially, the blackboard has $ [2,3,2,1,3] $ .\n- Erase two copies of $ 3 $ and write $ 4 $ , yielding $ [2,2,1,\\color{red}{4}] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Find a concise description of the answer first."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Think about power of two."
+        },
+        {
+            "title": "Hint 3",
+            "content": "The sum $$$2^{a_1}+2^{a_2}+\\dots+2^{a_n}$$$ is constant. Show that the answer must be the most significant bit of that."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Use either bitset or lazy segment tree to simulate the addition/subtraction."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "The key observation is the following.\nClaim:\nThe answer is $$$\\lfloor\\log_2(2^{a_1}+2^{a_2}+\\dots+2^{a_n})\\rfloor.$$$\nProof:\nThe upper bound is pretty clear, as the operation doesn't change the $$$\\sum 2^{a_i}$$$. Moreover, the sum must be at least $$$2^{\\text{ans}}$$$, giving the result.\nFor the construction, let Mark keep performing the operation until he cannot. At this point, all numbers must be distinct, and the $$$\\sum 2^{a_i}$$$ is unchanged. Let the current numbers on the board be $$$b_1 \\lt b_2 \\lt \\dots \\lt b_k$$$. Then,\n$$$\\sum_{i=1}^n 2^{a_i} = 2^{b_1}+2^{b_2}+\\dots + 2^{b_k} \\leq 2^1+2^2+\\dots+2^{b_k}  \\lt  2^{b_k+1}.$$$\nThus, Mark can make the final number be $$$b_k = \\lfloor\\log_2(2^{a_1}+2^{a_2}+\\dots+2^{a_n})\\rfloor$$$ as desired. $$$\\blacksquare$$$\nFinally, we need a data structure to maintain the $$$\\sum 2^{a_i}$$$ and simulate base 2 addition. There are many ways to proceed, including the following:\nUsing bitsets, partition the bits into many chunks of $$$w$$$ bits ($$$w$$$ between $$$50$$$ and $$$64$$$ is fine). This gives $$$O(n^2/w)$$$ complexity, but its low constant factor makes it enough to pass comfortably.\nUse lazy segment augmented with $$$O(\\log n)$$$ binary search. For each bit added, find where the longest streak of $$$1$$$'s to the left of that bit ends, and update accordingly. Similarly, for each bit subtracted, find where the longest streak of $$$0$$$'s to the left of that bit ends, and update accordingly. The total complexity is $$$O(n\\log n)$$$."
+        }
+    ]
+}

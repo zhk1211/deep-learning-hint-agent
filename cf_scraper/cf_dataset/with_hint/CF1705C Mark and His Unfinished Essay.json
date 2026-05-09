@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nOne night, Mark realized that there is an essay due tomorrow. He hasn't written anything yet, so Mark decided to randomly copy-paste substrings from the prompt to make the essay.\n\nMore formally, the prompt is a string $ s $ of initial length $ n $ . Mark will perform the copy-pasting operation $ c $ times. Each operation is described by two integers $ l $ and $ r $ , which means that Mark will append letters $ s_l s_{l+1} \\ldots s_r $ to the end of string $ s $ . Note that the length of $ s $ increases after this operation.\n\nOf course, Mark needs to be able to see what has been written. After copying, Mark will ask $ q $ queries: given an integer $ k $ , determine the $ k $ -th letter of the final string $ s $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1\\leq t\\leq 1000 $ ) — the number of test cases.\n\nThe first line of each test case contains three integers $ n $ , $ c $ , and $ q $ ( $ 1\\leq n\\leq 2\\cdot 10^5 $ , $ 1\\leq c\\leq 40 $ , and $ 1\\leq q\\leq 10^4 $ ) — the length of the initial string $ s $ , the number of copy-pasting operations, and the number of queries, respectively.\n\nThe second line of each test case contains a single string $ s $ of length $ n $ . It is guaranteed that $ s $ only contains lowercase English letters.\n\nThe following $ c $ lines describe the copy-pasting operation. Each line contains two integers $ l $ and $ r $ ( $ 1\\leq l\\leq r\\leq 10^{18} $ ). It is also guaranteed that $ r $ does not exceed the current length of $ s $ .\n\nThe last $ q $ lines of each test case describe the queries. Each line contains a single integer $ k $ ( $ 1\\leq k\\leq 10^{18} $ ). It is also guaranteed that $ k $ does not exceed the final length of $ s $ .\n\nIt is guaranteed that the sum of $ n $ and $ q $ across all test cases does not exceed $ 2\\cdot 10^5 $ and $ 10^4 $ , respectively.\n\nOutput Format\nFor each query, print the $ k $ -th letter of the final string $ s $ .\n\nExamples\nSample 1\nInput\n2\n4 3 3\nmark\n1 4\n5 7\n3 8\n1\n10\n12\n7 3 3\ncreamii\n2 3\n3 4\n2 9\n9\n11\n12\nOutput\nm\na\nr\ne\na\nr\n\nNote\nIn the first test case, the copy-paste process is as follows.\n\n- The first step is pasting string $ \\texttt{mark} $ at the end, yielding the string $ \\texttt{mark}\\color{red}{\\texttt{mark}} $ .\n- The second step is pasting string $ \\texttt{mar} $ at the end, yielding the string $ \\texttt{markmark}\\color{red}{\\texttt{mar}} $ .\n- The third step is pasting string $ \\texttt{rkmark} $ at the end, yielding the string $ \\texttt{markmarkmar}\\color{red}{\\texttt{rkmark}} $ .\n\nIn the second test case, the copy-paste process is as follows.\n\n- The first step is pasting string $ \\texttt{re} $ at the end, yielding the string $ \\texttt{creamii}\\color{red}{\\texttt{re}} $ .\n- The second step is pasting string $ \\texttt{ea} $ at the end, yielding the string $ \\texttt{creamiire}\\color{red}{\\texttt{ea}} $ .\n- The third step is pasting string $ \\texttt{reamiire} $ at the end, yielding the string $ \\texttt{creamiireea}\\color{red}{\\texttt{reamiire}} $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What's in common between all letters that were copied at the same time?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "The answer is the difference between the current position and the position where it came from. That's what you need to store."
+        },
+        {
+            "title": "Hint 3",
+            "content": "By tracking the difference, you can recurse to the previously-copied substring."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "This is an implementation problem. What you need to do is after the $$$i$$$-th copying operation, we need to keep track of the beginning point $$$a_i$$$ and the ending point $$$b_i$$$ of the appended string. Moreover, we also keep track the\nsubtraction distance\n$$$t_i = a_i-l_i$$$ so that for $$$k\\in [a_i, b_i]$$$, the $$$k$$$-th letter is the same as the $$$(k-t_i)$$$-th letter. Thus, we have recursed the position to the smaller position $$$k-t_i$$$, so we keep doing that until we reach the initial string.\nTherefore, to solve this problem, we iterate from $$$i=c,c-1,\\dots,1$$$. If $$$k$$$ is in $$$[a_i,b_i]$$$, subtract $$$k$$$ by $$$t_i$$$. After all operations, $$$k$$$ should be at the inital string, and we output the $$$k$$$-th letter.\nThe time complexity of this solution is $$$O(cq)$$$. However, less efficient solutions of $$$O((c\\log c) q)$$$ (using binary search each time) or $$$O(c^2q)$$$ (by going through all intervals in each iteration) pass as well."
+        }
+    ]
+}

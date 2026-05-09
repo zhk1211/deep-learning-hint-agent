@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's call two numbers similar if their binary representations contain the same number of digits equal to $ 1 $ . For example:\n\n- $ 2 $ and $ 4 $ are similar (binary representations are $ 10 $ and $ 100 $ );\n- $ 1337 $ and $ 4213 $ are similar (binary representations are $ 10100111001 $ and $ 1000001110101 $ );\n- $ 3 $ and $ 2 $ are not similar (binary representations are $ 11 $ and $ 10 $ );\n- $ 42 $ and $ 13 $ are similar (binary representations are $ 101010 $ and $ 1101 $ ).\n\nYou are given an array of $ n $ integers $ a_1 $ , $ a_2 $ , ..., $ a_n $ . You may choose a non-negative integer $ x $ , and then get another array of $ n $ integers $ b_1 $ , $ b_2 $ , ..., $ b_n $ , where $ b_i = a_i \\oplus x $ ( $ \\oplus $ denotes bitwise XOR).\n\nIs it possible to obtain an array $ b $ where all numbers are similar to each other?\n\nInput Format\nThe first line contains one integer $ n $ ( $ 2 \\le n \\le 100 $ ).\n\nThe second line contains $ n $ integers $ a_1 $ , $ a_2 $ , ..., $ a_n $ ( $ 0 \\le a_i \\le 2^{30} - 1 $ ).\n\nOutput Format\nIf it is impossible to choose $ x $ so that all elements in the resulting array are similar to each other, print one integer $ -1 $ .\n\nOtherwise, print any non-negative integer not exceeding $ 2^{30} - 1 $ that can be used as $ x $ so that all elements in the resulting array are similar.\n\nExamples\nSample 1\nInput\n2\n7 2\nOutput\n1\n\nSample 2\nInput\n4\n3 17 6 0\nOutput\n5\n\nSample 3\nInput\n3\n1 2 3\nOutput\n-1\n\nSample 4\nInput\n3\n43 12 12\nOutput\n1073709057"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nli\n;\nconst\nint\nN\n=\n143\n;\nconst\nint\nK\n=\n15\n;\nconst\nint\nV\n=\n5000000\n;\nint\nn\n;\nli a\n[\nN\n];\nint\nlst\n[\nV\n];\nmap\n<\nint\n,\nint\n>\nnxt\n[\nV\n];\nint\nt\n=\n1\n;\nli a1\n[\nN\n];\nli a2\n[\nN\n];\nint\nget_nxt\n(\nint\nv\n,\nint\nx\n)\n{\nif\n(!\nnxt\n[\nv\n].\ncount\n(\nx\n))\nnxt\n[\nv\n][\nx\n]\n=\nt\n++;\nreturn\nnxt\n[\nv\n][\nx\n];\n}\nvoid\nadd\n(\nvector\n<int>\ndiff\n,\nint\nx\n)\n{\nint\nv\n=\n0\n;\nfor\n(\nauto\ni\n:\ndiff\n)\nv\n=\nget_nxt\n(\nv\n,\ni\n);\nlst\n[\nv\n]\n=\nx\n;\n}\nint\ntry_find\n(\nvector\n<int>\ndiff\n)\n{\nint\nv\n=\n0\n;\nfor\n(\nauto\ni\n:\ndiff\n)\n{\nif\n(!\nnxt\n[\nv\n].\ncount\n(\ni\n))\nreturn\n-\n1\n;\nv\n=\nnxt\n[\nv\n][\ni\n];\n}\nreturn\nlst\n[\nv\n];\n}\nvector\n<int>\nget_diff\n(\nli arr\n[\nN\n],\nint\nx\n)\n{\nvector\n<int>\ncnt\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncnt\n[\ni\n]\n=\n__builtin_popcountll\n(\narr\n[\ni\n]\n^\nx\n);\nvector\n<int>\ndiff\n(\nn\n-\n1\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n+\n1\n<\nn\n;\ni\n++)\ndiff\n[\ni\n]\n=\ncnt\n[\ni\n+\n1\n]\n-\ncnt\n[\n0\n];\nreturn\ndiff\n;\n}\nint\nmain\n()\n{\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\na1\n[\ni\n]\n=\n(\na\n[\ni\n]\n>>\nK\n);\na2\n[\ni\n]\n=\na\n[\ni\n]\n^\n(\na1\n[\ni\n]\n<<\nK\n);\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n(\n1\n<<\nK\n);\ni\n++)\n{\nvector\n<int>\nd\n=\nget_diff\n(\na1\n,\ni\n);\nadd\n(\nd\n,\ni\n);\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n(\n1\n<<\nK\n);\ni\n++)\n{\nvector\n<int>\nd\n=\nget_diff\n(\na2\n,\ni\n);\nfor\n(\nint\nj\n=\n0\n;\nj\n+\n1\n<\nn\n;\nj\n++)\nd\n[\nj\n]\n*=\n-\n1\n;\nint\nx\n=\ntry_find\n(\nd\n);\nif\n(\nx\n!=\n-\n1\n)\n{\nli res\n=\n(\nli\n(\nx\n)\n<<\nK\n)\n^\ni\n;\ncout\n<<\nres\n<<\nendl\n;\nreturn\n0\n;\n}\n}\ncout\n<<\n-\n1\n<<\nendl\n;\nreturn\n0\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "fun main\n()\n{\nval q\n=\nreadLine\n()!!.\ntoInt\n()\nrepeat\n(\nq\n)\n{\nval\n(\nx\n,\ny\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}.\nsorted\n()\nprintln\n(\n\"1 $$${x - 1} $$${y - x + 1}\"\n)\n}\n}"
+        }
+    ]
+}

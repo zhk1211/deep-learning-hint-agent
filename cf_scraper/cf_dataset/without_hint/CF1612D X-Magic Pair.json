@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a pair of integers $ (a, b) $ and an integer $ x $ .\n\nYou can change the pair in two different ways:\n\n- set (assign) $ a := |a - b| $ ;\n- set (assign) $ b := |a - b| $ ,\n\nwhere $ |a - b| $ is the absolute difference between $ a $ and $ b $ .The pair $ (a, b) $ is called $ x $ -magic if $ x $ is obtainable either as $ a $ or as $ b $ using only the given operations (i.e. the pair $ (a, b) $ is $ x $ -magic if $ a = x $ or $ b = x $ after some number of operations applied). You can apply the operations any number of times (even zero).\n\nYour task is to find out if the pair $ (a, b) $ is $ x $ -magic or not.\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The next $ t $ lines describe test cases.\n\nThe only line of the test case contains three integers $ a $ , $ b $ and $ x $ ( $ 1 \\le a, b, x \\le 10^{18} $ ).\n\nOutput Format\nFor the $ i $ -th test case, print YES if the corresponding pair $ (a, b) $ is $ x $ -magic and NO otherwise.\n\nExamples\nSample 1\nInput\n8\n6 9 3\n15 38 7\n18 8 8\n30 30 30\n40 50 90\n24 28 20\n365 216 52\n537037812705867558 338887693834423551 3199921013340\nOutput\nYES\nYES\nYES\nYES\nNO\nYES\nYES\nYES"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (vovuh)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nbool\nget\n(\nlong\nlong\na\n,\nlong\nlong\nb\n,\nlong\nlong\nx\n)\n{\nif\n(\na\n==\nx\n||\nb\n==\nx\n)\nreturn\ntrue\n;\nif\n(\na\n<\nb\n)\nswap\n(\na\n,\nb\n);\nif\n(\nb\n>\na\n-\nb\n)\nb\n=\na\n-\nb\n;\nif\n(\nx\n>\nmax\n(\na\n,\nb\n)\n||\na\n==\n0\n||\nb\n==\n0\n)\nreturn\nfalse\n;\nlong\nlong\ncnt\n=\nmax\n(\n1ll\n,\n(\na\n-\nmax\n(\nx\n,\nb\n))\n/\n(\n2\n*\nb\n));\nreturn\nget\n(\na\n-\nb\n*\ncnt\n,\nb\n,\nx\n);\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n    freopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//  freopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nlong\nlong\na\n,\nb\n,\nx\n;\ncin\n>>\na\n>>\nb\n>>\nx\n;\nif\n(\nget\n(\na\n,\nb\n,\nx\n))\n{\ncout\n<<\n\"YES\"\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

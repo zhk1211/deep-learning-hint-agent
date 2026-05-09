@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (vovuh)",
+            "content": "fun main\n()\n{\nval t\n=\nreadLine\n()!!.\ntoInt\n()\nrepeat\n(\nt\n)\n{\nval n\n=\nreadLine\n()!!.\ntoInt\n()\nval x\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nvar\nans\n=\nfalse\nfor\n(\ni\nin\n1\nuntil\nn\n)\n{\nif\n((\nx\n[\ni\n]\n-\nx\n[\ni\n-\n1\n])\n%\n2\n==\n0\n)\n{\nans\n=\ntrue\n}\n}\nprintln\n(\nif\n(\nans\n)\n\"YES\"\nelse\n\"NO\"\n)\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two integers $ x $ and $ y $ . You can perform two types of operations:\n\n1. Pay $ a $ dollars and increase or decrease any of these integers by $ 1 $ . For example, if $ x = 0 $ and $ y = 7 $ there are four possible outcomes after this operation:\n- $ x = 0 $ , $ y = 6 $ ;\n- $ x = 0 $ , $ y = 8 $ ;\n- $ x = -1 $ , $ y = 7 $ ;\n- $ x = 1 $ , $ y = 7 $ .\n2. Pay $ b $ dollars and increase or decrease both integers by $ 1 $ . For example, if $ x = 0 $ and $ y = 7 $ there are two possible outcomes after this operation:\n- $ x = -1 $ , $ y = 6 $ ;\n- $ x = 1 $ , $ y = 8 $ .\n\nYour goal is to make both given integers equal zero simultaneously, i.e. $ x = y = 0 $ . There are no other requirements. In particular, it is possible to move from $ x=1 $ , $ y=0 $ to $ x=y=0 $ .\n\nCalculate the minimum amount of dollars you have to spend on it.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of testcases.\n\nThe first line of each test case contains two integers $ x $ and $ y $ ( $ 0 \\le x, y \\le 10^9 $ ).\n\nThe second line of each test case contains two integers $ a $ and $ b $ ( $ 1 \\le a, b \\le 10^9 $ ).\n\nOutput Format\nFor each test case print one integer — the minimum amount of dollars you have to spend.\n\nExamples\nSample 1\nInput\n2\n1 3\n391 555\n0 0\n9 4\nOutput\n1337\n0\n\nNote\nIn the first test case you can perform the following sequence of operations: first, second, first. This way you spend $ 391 + 555 + 391 = 1337 $ dollars.\n\nIn the second test case both integers are equal to zero initially, so you dont' have to spend money."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nx\n,\ny\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\na\n,\nb\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nb\n=\nmin\n(\nb\n,\na\n+\na\n)\nif\nx\n<\ny\n:\nx\n,\ny\n=\ny\n,\nx\nprint\n(\ny\n*\nb\n+\n(\nx\n-\ny\n)\n*\na\n)"
+        }
+    ]
+}

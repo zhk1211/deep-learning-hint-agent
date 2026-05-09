@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are a coach at your local university. There are $ n $ students under your supervision, the programming skill of the $ i $ -th student is $ a_i $ .\n\nYou have to create a team for a new programming competition. As you know, the more students some team has the more probable its victory is! So you have to create a team with the maximum number of students. But you also know that a team should be balanced. It means that the programming skill of each pair of students in a created team should differ by no more than $ 5 $ .\n\nYour task is to report the maximum possible number of students in a balanced team.\n\nInput Format\nThe first line of the input contains one integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the number of students.\n\nThe second line of the input contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ), where $ a_i $ is a programming skill of the $ i $ -th student.\n\nOutput Format\nPrint one integer — the maximum possible number of students in a balanced team.\n\nExamples\nSample 1\nInput\n6\n1 10 17 12 15 2\nOutput\n3\n\nSample 2\nInput\n10\n1337 1337 1337 1337 1337 1337 1337 1337 1337 1337\nOutput\n10\n\nSample 3\nInput\n6\n1 1000 10000 10 100 1000000000\nOutput\n1\n\nNote\nIn the first example you can create a team with skills $ [12, 17, 15] $ .\n\nIn the second example you can take all students in a team because their programming skills are equal.\n\nIn the third example you can create a team consisting of a single student (and you cannot create a team consisting of at least two students)."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nint\nans\n=\n0\n;\nint\nj\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nwhile\n(\nj\n<\nn\n&&\na\n[\nj\n]\n-\na\n[\ni\n]\n<=\n5\n)\n{\n++\nj\n;\nans\n=\nmax\n(\nans\n,\nj\n-\ni\n);\n}\n}\ncout\n<<\nans\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

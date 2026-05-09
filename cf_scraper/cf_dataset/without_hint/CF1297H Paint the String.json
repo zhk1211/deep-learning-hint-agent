@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ of lowercase Latin letters. It is required to paint each letter of the string in one of two colors (red or blue) so that if you write all the red letters from left to right and write all the blue letters from left to right, then the lexicographically maximum of the two written strings is lexicographically minimal. For each index, in the string $ s $ you can choose either of two colors.\n\nFormally, we write out:\n\n- the string $ r $ (can be empty) — all red letters in the order from left to right (red subsequence),\n- the string $ b $ (can be empty) — all blue letters in the order from left to right (blue subsequence).\n\nYour task is to paint the string such that $ \\max(r, b) $ is minimal. Small reminder: the empty string is the lexicographically smallest string.\n\nInput Format\nThe first line contains an integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases in the test. Next, the test cases are given, one per line.\n\nEach test case is a non-empty string $ s $ of length between $ 2 $ to $ 100 $ characters, inclusive, which consists of lowercase Latin letters.\n\nOutput Format\nPrint $ t $ lines, the $ i $ -th of them should contain the answer to the $ i $ -th test case of the input. Print a string of length $ n $ , where $ n $ is the length of the given string $ s $ : the $ j $ -th character of the string should be either 'R'or 'B' depending on the color of the $ j $ -th character in the answer (painted in red or blue). If there are several possible answers, print any of them.\n\nExamples\nSample 1\nInput\n5\nkotlin\ncodeforces\nabacaba\nffccgc\nyz\nOutput\nRRRRBB\nRRRRRRRBBB\nRRRRBBB\nRBBBBR\nRR"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (elizarov)",
+            "content": "fun main\n()\n{\nclass\nAns\n(\nval a\n:\nString\n,\nval m\n:\nString\n)\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval s\n=\nreadLine\n()!!\nval n\n=\ns\n.\nlength\n        val dp\n=\nArray\n(\nn\n)\n{\ni\n->\narrayOfNulls\n<\nAns\n>(\ni\n+\n1\n)\n}\ndp\n[\n0\n][\n0\n]\n=\nAns\n(\ns\n.\nsubstring\n(\n0\n,\n1\n),\n\"R\"\n)\nvar\nbest\n=\nAns\n(\ns\n,\n\"\"\n)\nfun updateBest\n(\np\n:\nAns\n)\n{\nif\n(\np\n.\na\n<=\nbest\n.\na\n)\nbest\n=\np\n}\nfun updateDP\n(\ni\n:\nInt\n,\nj\n:\nInt\n,\np\n:\nAns\n)\n{\nval cur\n=\ndp\n[\ni\n][\nj\n]\nif\n(\ncur\n==\nnull\n||\np\n.\na\n<\ncur\n.\na\n)\ndp\n[\ni\n][\nj\n]\n=\np\n}\nfor\n(\ni\nin\n1\nuntil\nn\n)\n{\nfor\n(\nj\nin\n0\nuntil\ni\n)\n{\nval p\n=\ndp\n[\ni\n-\n1\n][\nj\n]\n?:\ncontinue\nupdateDP\n(\ni\n,\nj\n,\nAns\n(\np\n.\na\n+\ns\n[\ni\n],\np\n.\nm\n+\n\"R\"\n))\nif\n(\nj\n>=\ni\n-\nj\n)\ncontinue\nif\n(\ns\n[\ni\n]\n==\np\n.\na\n[\nj\n])\nupdateDP\n(\ni\n,\nj\n+\n1\n,\nAns\n(\np\n.\na\n,\np\n.\nm\n+\n\"B\"\n))\nif\n(\ns\n[\ni\n]\n<\np\n.\na\n[\nj\n])\nupdateBest\n(\nAns\n(\np\n.\na\n,\np\n.\nm\n+\n\"B\"\n.\nrepeat\n(\nn\n-\ni\n)))\n}\n}\nfor\n(\np\nin\ndp\n[\nn\n-\n1\n])\nif\n(\np\n!=\nnull\n)\nupdateBest\n(\np\n)\nprintln\n(\nbest\n.\nm\n)\n}\n}"
+        }
+    ]
+}

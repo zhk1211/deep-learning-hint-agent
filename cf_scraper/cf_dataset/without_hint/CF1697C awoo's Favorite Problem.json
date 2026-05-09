@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two strings $ s $ and $ t $ , both of length $ n $ . Each character in both string is 'a', 'b' or 'c'.\n\nIn one move, you can perform one of the following actions:\n\n- choose an occurrence of \"ab\" in $ s $ and replace it with \"ba\";\n- choose an occurrence of \"bc\" in $ s $ and replace it with \"cb\".\n\nYou are allowed to perform an arbitrary amount of moves (possibly, zero). Can you change string $ s $ to make it equal to string $ t $ ?\n\nInput Format\nThe first line contains a single integer $ q $ ( $ 1 \\le q \\le 10^4 $ ) — the number of testcases.\n\nThe first line of each testcase contains a single integer $ n $ ( $ 1 \\le n \\le 10^5 $ ) — the length of strings $ s $ and $ t $ .\n\nThe second line contains string $ s $ of length $ n $ . Each character is 'a', 'b' or 'c'.\n\nThe third line contains string $ t $ of length $ n $ . Each character is 'a', 'b' or 'c'.\n\nThe sum of $ n $ over all testcases doesn't exceed $ 10^5 $ .\n\nOutput Format\nFor each testcase, print \"YES\" if you can change string $ s $ to make it equal to string $ t $ by performing an arbitrary amount of moves (possibly, zero). Otherwise, print \"NO\".\n\nExamples\nSample 1\nInput\n5\n3\ncab\ncab\n1\na\nb\n6\nabbabc\nbbaacb\n10\nbcaabababc\ncbbababaac\n2\nba\nab\nOutput\nYES\nNO\nYES\nYES\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\ns\n=\ninput\n()\nt\n=\ninput\n()\nif\ns\n.\ncount\n(\n'b'\n)\n!=\nt\n.\ncount\n(\n'b'\n):\nprint\n(\n\"NO\"\n)\ncontinue\nj\n=\n0\nfor\ni\nin\nrange\n(\nn\n):\nif\ns\n[\ni\n]\n==\n'b'\n:\ncontinue\nwhile\nt\n[\nj\n]\n==\n'b'\n:\nj\n+=\n1\nif\ns\n[\ni\n]\n!=\nt\n[\nj\n]\nor\n(\ns\n[\ni\n]\n==\n'a'\nand\ni\n>\nj\n)\nor\n(\ns\n[\ni\n]\n==\n'c'\nand\ni\n<\nj\n):\nprint\n(\n\"NO\"\n)\nbreak\nj\n+=\n1\nelse\n:\nprint\n(\n\"YES\"\n)"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nSadly, the problem setter couldn't think of an interesting story, thus he just asks you to solve the following problem.\n\nGiven an array $ a $ consisting of $ n $ positive integers, count the number of non-empty subsequences for which the bitwise $ \\mathsf{AND} $ of the elements in the subsequence has exactly $ k $ set bits in its binary representation. The answer may be large, so output it modulo $ 10^9+7 $ .\n\nRecall that the subsequence of an array $ a $ is a sequence that can be obtained from $ a $ by removing some (possibly, zero) elements. For example, $ [1, 2, 3] $ , $ [3] $ , $ [1, 3] $ are subsequences of $ [1, 2, 3] $ , but $ [3, 2] $ and $ [4, 5, 6] $ are not.\n\nNote that $ \\mathsf{AND} $ represents the [bitwise AND operation](https://en.wikipedia.org/wiki/Bitwise_operation#AND).\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case consists of two integers $ n $ and $ k $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ , $ 0 \\le k \\le 6 $ ) — the length of the array and the number of set bits that the bitwise $ \\mathsf{AND} $ the counted subsequences should have in their binary representation.\n\nThe second line of each test case consists of $ n $ integers $ a_i $ ( $ 0 \\leq a_i \\leq 63 $ ) — the array $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of subsequences that have exactly $ k $ set bits in their bitwise $ \\mathsf{AND} $ value's binary representation. The answer may be large, so output it modulo $ 10^9+7 $ .\n\nExamples\nSample 1\nInput\n6\n5 1\n1 1 1 1 1\n4 0\n0 1 2 3\n5 1\n5 5 7 4 2\n1 2\n3\n12 0\n0 2 0 2 0 2 0 2 0 2 0 2\n10 6\n63 0 63 5 5 63 63 4 12 13\nOutput\n31\n10\n10\n1\n4032\n15"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n\"bits/stdc++.h\"\nusing\nnamespace\nstd\n;\n#define\nll\nlong\nlong\n#define\nall\n(\nv\n)\nv\n.\nbegin\n(),\nv\n.\nend\n()\n#define\nrall\n(\nv\n)\nv\n.\nrbegin\n(),\nv\n.\nrend\n()\n#define\npb                push_back\n#define\nsz\n(\na\n)\n(\nint\n)\na\n.\nsize\n()\nconst\nint\nmod\n=\n1e9\n+\n7\n;\nvoid\nsolve\n()\n{\nint\nn\n,\nx\n;\ncin\n>>\nn\n>>\nx\n;\nvector\n<int>\na\n(\nn\n+\n1\n);\nvector\n<\nvector\n<int>\n>\ndp\n(\nn\n+\n1\n,\nvector\n<int>\n(\n1\n<<\n6\n,\n0\n));\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\nfor\n(\nint\nmask\n=\n0\n;\nmask\n<\n(\n1\n<<\n6\n);\n++\nmask\n)\n{\ndp\n[\ni\n][\nmask\n]\n+=\ndp\n[\ni\n-\n1\n][\nmask\n];\nif\n(\ndp\n[\ni\n][\nmask\n]\n>=\nmod\n)\ndp\n[\ni\n][\nmask\n]\n-=\nmod\n;\ndp\n[\ni\n][\nmask\n&\na\n[\ni\n]]\n+=\ndp\n[\ni\n-\n1\n][\nmask\n];\nif\n(\ndp\n[\ni\n][\nmask\n&\na\n[\ni\n]]\n>=\nmod\n)\ndp\n[\ni\n][\nmask\n&\na\n[\ni\n]]\n-=\nmod\n;\n}\ndp\n[\ni\n][\na\n[\ni\n]]\n=\n(\ndp\n[\ni\n][\na\n[\ni\n]]\n+\n1\n)\n%\nmod\n;\n}\nint\nans\n=\n0\n;\nfor\n(\nint\nmask\n=\n0\n;\nmask\n<\n(\n1\n<<\n6\n);\n++\nmask\n)\n{\nif\n(\n__builtin_popcount\n(\nmask\n)\n==\nx\n)\n{\nans\n=\n(\nans\n+\ndp\n[\nn\n][\nmask\n])\n%\nmod\n;\n}\n}\ncout\n<<\nans\n<<\n\"\\n\"\n;\n}\nint32_t\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\nint\nt\n=\n1\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

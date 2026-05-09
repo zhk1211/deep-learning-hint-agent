@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ n $ non-negative integers.\n\nThe numbness of a subarray $ a_l, a_{l+1}, \\ldots, a_r $ (for arbitrary $ l \\leq r $ ) is defined as $\\max(a_l, a_{l+1}, \\ldots, a_r) \\oplus (a_l \\oplus a_{l+1} \\oplus \\ldots \\oplus a_r)$, where $\\oplus$ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).\n\nFind the maximum numbness over all subarrays.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 1000 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\leq a_i \\leq 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print one integer — the maximum numbness over all subarrays of the given array.\n\nExamples\nSample 1\nInput\n2\n5\n1 2 3 4 5\n3\n10 47 52\nOutput\n7\n47\n\nNote\nFor the first test case, for the subarray $ [3, 4, 5] $ , its maximum value is $ 5 $ . Hence, its numbness is $ 3 \\oplus 4 \\oplus 5 \\oplus 5 $ = $ 7 $ . This is the maximum possible numbness in this array.\n\nIn the second test case the subarray $ [47, 52] $ provides the maximum numbness."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nCan we somehow fix the maximum element ?\nHint 2\nTo calculate the answer over all subarrays with the same maximum element, can we use the trie trick for calculating the maximum xor."
+        },
+        {
+            "title": "Hint 1",
+            "content": "Can we somehow fix the maximum element ?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "To calculate the answer over all subarrays with the same maximum element, can we use the trie trick for calculating the maximum xor."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation (C++)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nstruct\nTrie\n{\nstruct\nTrie\n*\nchild\n[\n2\n]={\n0\n};\n};\ntypedef\nstruct\nTrie\ntrie\n;\nvoid\ninsert\n(\ntrie\n*\ndic\n,\nint\nx\n)\n{\ntrie\n*\ntemp\n=\ndic\n;\nfor\n(\nint\ni\n=\n30\n;\ni\n>=\n0\n;\ni\n--)\n{\nint\ncurr\n=\nx\n>>\ni\n&\n1\n;\nif\n(\ntemp\n->\nchild\n[\ncurr\n])\ntemp\n=\ntemp\n->\nchild\n[\ncurr\n];\nelse\n{\ntemp\n->\nchild\n[\ncurr\n]\n=\nnew\ntrie\n;\ntemp\n=\ntemp\n->\nchild\n[\ncurr\n];\n}\n}\n}\nint\nfind_greatest\n(\ntrie\n*\ndic\n,\nint\nx\n)\n{\nint\nres\n=\n0\n;\ntrie\n*\ntemp\n=\ndic\n;\nfor\n(\nint\ni\n=\n30\n;\ni\n>=\n0\n;\ni\n--)\n{\nint\ncurr\n=\nx\n>>\ni\n&\n1\n;\nif\n(\ntemp\n->\nchild\n[\ncurr\n^\n1\n])\n{\nres\n^=\n1\n<<\ni\n;\ntemp\n=\ntemp\n->\nchild\n[\ncurr\n^\n1\n];\n}\nelse\n{\ntemp\n=\ntemp\n->\nchild\n[\ncurr\n];\n}\n}\nreturn\nres\n;\n}\nint\nmain\n()\n{\nint\ntest_cases\n;\ncin\n>>\ntest_cases\n;\nwhile\n(\ntest_cases\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\na\n[\nn\n+\n1\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\n}\ntrie\n*\nt\n[\nn\n+\n2\n];\nint\nprexor\n[\nn\n+\n1\n];\nprexor\n[\n0\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nt\n[\ni\n]\n=\nnew\ntrie\n;\ninsert\n(\nt\n[\ni\n],\nprexor\n[\ni\n-\n1\n]);\nprexor\n[\ni\n]\n=\nprexor\n[\ni\n-\n1\n]^\na\n[\ni\n];\n}\nt\n[\nn\n+\n1\n]\n=\nnew\ntrie\n;\ninsert\n(\nt\n[\nn\n+\n1\n],\nprexor\n[\nn\n]);\npair\n<\nint\n,\nint\n>\nasc\n[\nn\n+\n1\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nasc\n[\ni\n]\n=\nmake_pair\n(\na\n[\ni\n],\ni\n);\n}\nsort\n(\nasc\n+\n1\n,\nasc\n+\nn\n+\n1\n);\nint\nleft\n[\nn\n+\n1\n],\nright\n[\nn\n+\n1\n];\nstack\n<int>\ns\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nwhile\n(!\ns\n.\nempty\n()\n&&\na\n[\ni\n]>=\na\n[\ns\n.\ntop\n()])\ns\n.\npop\n();\nif\n(\ns\n.\nempty\n())\nleft\n[\ni\n]\n=\n0\n;\nelse\nleft\n[\ni\n]\n=\ns\n.\ntop\n();\ns\n.\npush\n(\ni\n);\n}\nwhile\n(!\ns\n.\nempty\n())\ns\n.\npop\n();\nfor\n(\nint\ni\n=\nn\n;\ni\n>\n0\n;\ni\n--)\n{\nwhile\n(!\ns\n.\nempty\n()\n&&\na\n[\ni\n]>\na\n[\ns\n.\ntop\n()])\ns\n.\npop\n();\nif\n(\ns\n.\nempty\n())\nright\n[\ni\n]\n=\nn\n+\n1\n;\nelse\nright\n[\ni\n]\n=\ns\n.\ntop\n();\ns\n.\npush\n(\ni\n);\n}\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nint\nx\n=\nasc\n[\ni\n].\nsecond\n;\nint\nr\n=\nright\n[\nx\n]-\n1\n;\nint\nl\n=\nleft\n[\nx\n]+\n1\n;\nif\n(\nx\n-\nl\n<\nr\n-\nx\n)\n{\nfor\n(\nint\nj\n=\nl\n-\n1\n;\nj\n<\nx\n;\nj\n++)\n{\nans\n=\nmax\n(\nans\n,\nfind_greatest\n(\nt\n[\nx\n+\n1\n],\nprexor\n[\nj\n]^\na\n[\nx\n]));\n}\nt\n[\nl\n]\n=\nt\n[\nx\n+\n1\n];\nfor\n(\nint\nj\n=\nl\n-\n1\n;\nj\n<\nx\n;\nj\n++)\n{\ninsert\n(\nt\n[\nl\n],\nprexor\n[\nj\n]);\n}\n}\nelse\n{\nfor\n(\nint\nj\n=\nx\n;\nj\n<=\nr\n;\nj\n++)\n{\nans\n=\nmax\n(\nans\n,\nfind_greatest\n(\nt\n[\nl\n],\nprexor\n[\nj\n]^\na\n[\nx\n]));\n}\nfor\n(\nint\nj\n=\nx\n;\nj\n<=\nr\n;\nj\n++)\n{\ninsert\n(\nt\n[\nl\n],\nprexor\n[\nj\n]);\n}\n}\n}\ncout\n<<\nans\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

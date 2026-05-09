@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "fun main\n()\n{\nval\n(\nn\n,\nm\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval used\n=\nArray\n(\nn\n)\n{\nreadLine\n()!!\n}.\ntoSet\n()\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval t\n=\nreadLine\n()!!\nval s\n=\n(\n0.\n.\nm\n).\nmap\n{\ni\n->\nt\n.\nremoveRange\n(\ni\n..\ni\n)\n}.\ntoSet\n()\nprintln\n(\ns\n.\ncount\n{\nused\n.\ncontains\n(\nit\n)\n}\n)\n}\n}"
+        }
+    ]
+}

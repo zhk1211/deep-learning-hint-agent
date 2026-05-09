@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nChouti is working on a strange math problem.\n\nThere was a sequence of $ n $ positive integers $ x_1, x_2, \\ldots, x_n $ , where $ n $ is even. The sequence was very special, namely for every integer $ t $ from $ 1 $ to $ n $ , $ x_1+x_2+...+x_t $ is a square of some integer number (that is, a [perfect square](https://en.wikipedia.org/wiki/Square_number)).\n\nSomehow, the numbers with odd indexes turned to be missing, so he is only aware of numbers on even positions, i.e. $ x_2, x_4, x_6, \\ldots, x_n $ . The task for him is to restore the original sequence. Again, it's your turn to help him.\n\nThe problem setter might make mistakes, so there can be no possible sequence at all. If there are several possible sequences, you can output any.\n\nInput Format\nThe first line contains an even number $ n $ ( $ 2 \\le n \\le 10^5 $ ).\n\nThe second line contains $ \\frac{n}{2} $ positive integers $ x_2, x_4, \\ldots, x_n $ ( $ 1 \\le x_i \\le 2 \\cdot 10^5 $ ).\n\nOutput Format\nIf there are no possible sequence, print \"No\".\n\nOtherwise, print \"Yes\" and then $ n $ positive integers $ x_1, x_2, \\ldots, x_n $ ( $ 1 \\le x_i \\le 10^{13} $ ), where $ x_2, x_4, \\ldots, x_n $ should be same as in input data. If there are multiple answers, print any.\n\nNote, that the limit for $ x_i $ is larger than for input data. It can be proved that in case there is an answer, there must be a possible sequence satisfying $ 1 \\le x_i \\le 10^{13} $ .\n\nExamples\nSample 1\nInput\n6\n5 11 44\nOutput\nYes\n4 5 16 11 64 44\n\nSample 2\nInput\n2\n9900\nOutput\nYes\n100 9900\n\nSample 3\nInput\n6\n314 1592 6535\nOutput\nNo\n\nNote\nIn the first example\n\n- $ x_1=4 $\n- $ x_1+x_2=9 $\n- $ x_1+x_2+x_3=25 $\n- $ x_1+x_2+x_3+x_4=36 $\n- $ x_1+x_2+x_3+x_4+x_5=100 $\n- $ x_1+x_2+x_3+x_4+x_5+x_6=144 $\n\nAll these numbers are perfect squares.In the second example, $ x_1=100 $ , $ x_1+x_2=10000 $ . They are all perfect squares. There're other answers possible. For example, $ x_1=22500 $ is another answer.\n\nIn the third example, it is possible to show, that no such sequence exists."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "How to solve\nn\n= 2\n?"
+        },
+        {
+            "title": "Bonus Hint",
+            "content": "t\n2\ni\n2\n-\nt\n2\ni\n- 1\n2\n= (\nt\n2\ni\n-\nt\n2\ni\n- 1\n)(\nt\n2\ni\n+\nt\n2\ni\n+ 1\n)\n. Factor\nx\n2\ni\n."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let\n,\nx\nmax\n= 2 × 10\n5\n.\nSince\nx\n2\ni\n=\ns\n2\ni\n-\ns\n2\ni\n- 1\n=\nt\n2\ni\n2\n-\nt\n2\ni\n- 1\n2\n≥ (\nt\n2\ni\n- 1\n+ 1)\n2\n-\nt\n2\ni\n- 1\n2\n= 2\nt\n2\ni\n- 1\n+ 1\n, so\n2\nt\n2\ni\n- 1\n+ 1 ≤\nx\nmax\n,\nt\n2\ni\n- 1\n<\nx\nmax\n.\nFor every\n, we can precalculate all possible\n(\na\n,\nb\n)\ns so that\nx\n=\nb\n2\n-\na\n2\n: enumerate all possible\na\n, then for every\na\nenumerate\nb\nfrom small to large starting from\na\n+ 1\nand stop when\nb\n2\n-\na\n2\n>\nx\nmax\n, record this\n(\na\n,\nb\n)\nfor\nx\n=\nb\n2\n-\na\n2\n. Since\n, then\n, its complexity is\n.\nNow, we can try to find a possible\ns\nfrom left to right. Since\nx\n2\ni\n- 1\nis positive, we need to ensure\nt\n2\ni\n- 2\n<\nt\n2\ni\n- 1\n. Becuase\nx\n2\ni\n=\nt\n2\ni\n2\n-\nt\n2\ni\n- 1\n2\n, we can try all precalculated\n(\na\n,\nb\n)\ns such that\nx\n2\ni\n=\nb\n2\n-\na\n2\n. If we have several choices, we should choose the one that\na\nis minimum possible, because if the current sum is bigger, it will be harder for the remaining number to keep positive.\nBonus:\nSolve\nn\n≤ 10\n3\n,\nx\n2\ni\n≤ 10\n9\n.\nBonus Hint\nt\n2\ni\n2\n-\nt\n2\ni\n- 1\n2\n= (\nt\n2\ni\n-\nt\n2\ni\n- 1\n)(\nt\n2\ni\n+\nt\n2\ni\n+ 1\n)\n. Factor\nx\n2\ni\n."
+        }
+    ]
+}

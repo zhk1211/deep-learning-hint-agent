@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a positive integer $ n $ . In one move, you can increase $ n $ by one (i.e. make $ n := n + 1 $ ). Your task is to find the minimum number of moves you need to perform in order to make the sum of digits of $ n $ be less than or equal to $ s $ .\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 2 \\cdot 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe only line of the test case contains two integers $ n $ and $ s $ ( $ 1 \\le n \\le 10^{18} $ ; $ 1 \\le s \\le 162 $ ).\n\nOutput Format\nFor each test case, print the answer: the minimum number of moves you need to perform in order to make the sum of digits of $ n $ be less than or equal to $ s $ .\n\nExamples\nSample 1\nInput\n5\n2 1\n1 1\n500 4\n217871987498122 10\n100000000000000001 1\nOutput\n8\n0\n500\n2128012501878\n899999999999999999"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nsum\n(\nlong\nlong\nn\n)\n{\nint\nres\n=\n0\n;\nwhile\n(\nn\n>\n0\n)\n{\nres\n+=\nn\n%\n10\n;\nn\n/=\n10\n;\n}\nreturn\nres\n;\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nlong\nlong\nn\n;\nint\ns\n;\ncin\n>>\nn\n>>\ns\n;\nlong\nlong\nans\n=\n0\n;\nif\n(\nsum\n(\nn\n)\n<=\ns\n)\n{\ncout\n<<\n0\n<<\nendl\n;\ncontinue\n;\n}\nlong\nlong\npw\n=\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n18\n;\n++\ni\n)\n{\nint\ndigit\n=\n(\nn\n/\npw\n)\n%\n10\n;\nlong\nlong\nadd\n=\npw\n*\n((\n10\n-\ndigit\n)\n%\n10\n);\nn\n+=\nadd\n;\nans\n+=\nadd\n;\nif\n(\nsum\n(\nn\n)\n<=\ns\n)\n{\nbreak\n;\n}\npw\n*=\n10\n;\n}\ncout\n<<\nans\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

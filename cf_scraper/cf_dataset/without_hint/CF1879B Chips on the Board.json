@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a board of size $ n \\times n $ ( $ n $ rows and $ n $ colums) and two arrays of positive integers $ a $ and $ b $ of size $ n $ .\n\nYour task is to place the chips on this board so that the following condition is satisfied for every cell $ (i, j) $ :\n\n- there exists at least one chip in the same column or in the same row as the cell $ (i, j) $ . I. e. there exists a cell $ (x, y) $ such that there is a chip in that cell, and either $ x = i $ or $ y = j $ (or both).\n\nThe cost of putting a chip in the cell $ (i, j) $ is equal to $ a_i + b_j $ .\n\nFor example, for $ n=3 $ , $ a=[1, 4, 1] $ and $ b=[3, 2, 2] $ . One of the possible chip placements is as follows:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1879B/41f651e9026b79c2105cacdfb396235f2e97b44b.png) White squares are emptyThe total cost of that placement is $ (1+3) + (1+2) + (1+2) = 10 $ .\n\nCalculate the minimum possible total cost of putting chips according to the rules above.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 3 \\cdot 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nThe third line contains $ n $ integers $ b_1, b_2, \\dots, b_n $ ( $ 1 \\le b_i \\le 10^9 $ ).\n\nThe sum of $ n $ over all test cases doesn't exceed $ 3 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print a single integer — the minimum possible total cost of putting chips according to the rules.\n\nExamples\nSample 1\nInput\n4\n3\n1 4 1\n3 2 2\n1\n4\n5\n2\n4 5\n2 3\n5\n5 2 4 5 3\n3 4 2 1 5\nOutput\n10\n9\n13\n24\n\nNote\nThe first test case of the example is described in the statement."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nli\n=\nlong\nlong\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<li>\na\n(\nn\n),\nb\n(\nn\n);\nfor\n(\nauto\n&\nx\n:\na\n)\ncin\n>>\nx\n;\nfor\n(\nauto\n&\nx\n:\nb\n)\ncin\n>>\nx\n;\nli mnA\n=\n*\nmin_element\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nli sA\n=\naccumulate\n(\na\n.\nbegin\n(),\na\n.\nend\n(),\n0LL\n);\nli mnB\n=\n*\nmin_element\n(\nb\n.\nbegin\n(),\nb\n.\nend\n());\nli sB\n=\naccumulate\n(\nb\n.\nbegin\n(),\nb\n.\nend\n(),\n0LL\n);\nli ans\n=\nmin\n(\nmnA\n*\nn\n+\nsB\n,\nmnB\n*\nn\n+\nsA\n);\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

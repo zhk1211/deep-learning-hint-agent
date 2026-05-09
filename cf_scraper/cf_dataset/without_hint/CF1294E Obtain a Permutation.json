@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a rectangular matrix of size $ n \\times m $ consisting of integers from $ 1 $ to $ 2 \\cdot 10^5 $ .\n\nIn one move, you can:\n\n- choose any element of the matrix and change its value to any integer between $ 1 $ and $ n \\cdot m $ , inclusive;\n- take any column and shift it one cell up cyclically (see the example of such cyclic shift below).\n\nA cyclic shift is an operation such that you choose some $ j $ ( $ 1 \\le j \\le m $ ) and set $ a_{1, j} := a_{2, j}, a_{2, j} := a_{3, j}, \\dots, a_{n, j} := a_{1, j} $ simultaneously.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1294E/8565157bd76bb2dbe391e7f12ac2946eff0ed96a.png) Example of cyclic shift of the first column You want to perform the minimum number of moves to make this matrix look like this:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1294E/f0a34fa55590e79e2f0e0af3c39b0d9ee30b43c2.png)In other words, the goal is to obtain the matrix, where $ a_{1, 1} = 1, a_{1, 2} = 2, \\dots, a_{1, m} = m, a_{2, 1} = m + 1, a_{2, 2} = m + 2, \\dots, a_{n, m} = n \\cdot m $ (i.e. $ a_{i, j} = (i - 1) \\cdot m + j $ ) with the minimum number of moves performed.\n\nInput Format\nThe first line of the input contains two integers $ n $ and $ m $ ( $ 1 \\le n, m \\le 2 \\cdot 10^5, n \\cdot m \\le 2 \\cdot 10^5 $ ) — the size of the matrix.\n\nThe next $ n $ lines contain $ m $ integers each. The number at the line $ i $ and position $ j $ is $ a_{i, j} $ ( $ 1 \\le a_{i, j} \\le 2 \\cdot 10^5 $ ).\n\nOutput Format\nPrint one integer — the minimum number of moves required to obtain the matrix, where $ a_{1, 1} = 1, a_{1, 2} = 2, \\dots, a_{1, m} = m, a_{2, 1} = m + 1, a_{2, 2} = m + 2, \\dots, a_{n, m} = n \\cdot m $ ( $ a_{i, j} = (i - 1)m + j $ ).\n\nExamples\nSample 1\nInput\n3 3\n3 2 1\n1 2 3\n4 5 6\nOutput\n6\n\nSample 2\nInput\n4 3\n1 2 3\n4 5 6\n7 8 9\n10 11 12\nOutput\n0\n\nSample 3\nInput\n3 4\n1 6 3 4\n5 10 7 8\n9 2 11 12\nOutput\n2\n\nNote\nIn the first example, you can set $ a_{1, 1} := 7, a_{1, 2} := 8 $ and $ a_{1, 3} := 9 $ then shift the first, the second and the third columns cyclically, so the answer is $ 6 $ . It can be shown that you cannot achieve a better answer.\n\nIn the second example, the matrix is already good so the answer is $ 0 $ .\n\nIn the third example, it is enough to shift the second column cyclically twice to obtain a good matrix, so the answer is $ 2 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nn\n,\nm\n;\ncin\n>>\nn\n>>\nm\n;\nvector\n<\nvector\n<int>\n>\na\n(\nn\n,\nvector\n<int>\n(\nm\n));\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nm\n;\n++\nj\n)\n{\ncin\n>>\na\n[\ni\n][\nj\n];\n--\na\n[\ni\n][\nj\n];\n}\n}\nlong\nlong\nans\n=\n0\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nm\n;\n++\nj\n)\n{\nvector\n<int>\ncnt\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nif\n(\na\n[\ni\n][\nj\n]\n%\nm\n==\nj\n)\n{\nint\npos\n=\na\n[\ni\n][\nj\n]\n/\nm\n;\nif\n(\npos\n<\nn\n)\n{\n++\ncnt\n[(\ni\n-\npos\n+\nn\n)\n%\nn\n];\n}\n}\n}\nint\ncur\n=\nn\n-\ncnt\n[\n0\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\n++\ni\n)\n{\ncur\n=\nmin\n(\ncur\n,\nn\n-\ncnt\n[\ni\n]\n+\ni\n);\n}\nans\n+=\ncur\n;\n}\ncout\n<<\nans\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPhoenix is playing with a new puzzle, which consists of $ n $ identical puzzle pieces. Each puzzle piece is a right isosceles triangle as shown below.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1515B/49a24f982b19e9535d6f30d4c91e443065d9fee9.png)A puzzle pieceThe goal of the puzzle is to create a square using the $ n $ pieces. He is allowed to rotate and move the pieces around, but none of them can overlap and all $ n $ pieces must be used (of course, the square shouldn't contain any holes as well). Can he do it?\n\nInput Format\nThe input consists of multiple test cases. The first line contains an integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\le n \\le 10^9 $ ) — the number of puzzle pieces.\n\nOutput Format\nFor each test case, if Phoenix can create a square with the $ n $ puzzle pieces, print YES. Otherwise, print NO.\n\nExamples\nSample 1\nInput\n3\n2\n4\n6\nOutput\nYES\nYES\nNO\n\nNote\nFor $ n=2 $ , Phoenix can create a square like this:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1515B/0fdfe011cd52355d3ad3123ce3848f97d63a78aa.png)For $ n=4 $ , Phoenix can create a square like this:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1515B/79f4dda31da05d0a22081f6d24d2a99d26f679bc.png)For $ n=6 $ , it is impossible for Phoenix to create a square."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nbool\nisSquare\n(\nint\nx\n){\nint\ny\n=\nsqrt\n(\nx\n);\nreturn\ny\n*\ny\n==\nx\n;\n}\nvoid\nsolve\n(){\nint\nn\n;\ncin\n>>\nn\n;\nif\n(\nn\n%\n2\n==\n0\n&&\nisSquare\n(\nn\n/\n2\n))\ncout\n<<\n\"YES\"\n<<\nendl\n;\nelse\nif\n(\nn\n%\n4\n==\n0\n&&\nisSquare\n(\nn\n/\n4\n))\ncout\n<<\n\"YES\"\n<<\nendl\n;\nelse\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\nint\nmain\n(){\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\nsolve\n();\n}"
+        }
+    ]
+}

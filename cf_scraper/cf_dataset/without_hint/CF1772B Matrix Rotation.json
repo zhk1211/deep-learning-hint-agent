@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have a matrix $ 2 \\times 2 $ filled with distinct integers. You want your matrix to become beautiful. The matrix is beautiful if the following two conditions are satisfied:\n\n- in each row, the first element is smaller than the second element;\n- in each column, the first element is smaller than the second element.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1772B/3883cb5d5c3c3237649026ca712db7066e7d51ae.png)You can perform the following operation on the matrix any number of times: rotate it clockwise by $ 90 $ degrees, so the top left element shifts to the top right cell, the top right element shifts to the bottom right cell, and so on:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1772B/a844c7395726cf76b3147efc79ccce4d8f167fbf.png)Determine if it is possible to make the matrix beautiful by applying zero or more operations.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nEach test case consists of two lines. Each of those lines contains two integers — the elements of the corresponding row of the matrix. In each matrix, all four elements are distinct integers from $ 1 $ to $ 100 $ .\n\nOutput Format\nFor each test case, print YES if the matrix can become beautiful, or NO otherwise. You may print each letter in any case (YES, yes, Yes will all be recognized as positive answer, NO, no and nO will all be recognized as negative answer).\n\nExamples\nSample 1\nInput\n6\n1 3\n5 7\n8 10\n3 4\n8 10\n4 3\n6 1\n9 2\n7 5\n4 2\n1 2\n4 3\nOutput\nYES\nYES\nNO\nYES\nYES\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\n_\n=\n0\n;\n_\n<\nt\n;\n_\n++)\n{\nvector\n<int>\na\n(\n4\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n4\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\nint\nmaxpos\n=\nmax_element\n(\na\n.\nbegin\n(),\na\n.\nend\n())\n-\na\n.\nbegin\n();\nint\nminpos\n=\nmin_element\n(\na\n.\nbegin\n(),\na\n.\nend\n())\n-\na\n.\nbegin\n();\nif\n(\nmaxpos\n+\nminpos\n==\n3\n)\nputs\n(\n\"YES\"\n);\nelse\nputs\n(\n\"NO\"\n);\n}\n}"
+        }
+    ]
+}

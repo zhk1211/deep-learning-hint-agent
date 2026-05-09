@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIn order to celebrate Twice's 5th anniversary, Tzuyu and Sana decided to play a game.\n\nTzuyu gave Sana two integers $ a $ and $ b $ and a really important quest.\n\nIn order to complete the quest, Sana has to output the smallest possible value of ( $ a \\oplus x $ ) + ( $ b \\oplus x $ ) for any given $ x $ , where $ \\oplus $ denotes the [bitwise XOR operation](http://en.wikipedia.org/wiki/Bitwise_operation#XOR).\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^{4} $ ). Description of the test cases follows.\n\nThe only line of each test case contains two integers $ a $ and $ b $ ( $ 1 \\le a, b \\le 10^{9} $ ).\n\nOutput Format\nFor each testcase, output the smallest possible value of the given expression.\n\nExamples\nSample 1\nInput\n6\n6 12\n4 9\n59 832\n28 14\n4925 2912\n1 1\nOutput\n10\n13\n891\n18\n6237\n0\n\nNote\nFor the first test case Sana can choose $ x=4 $ and the value will be ( $ 6 \\oplus 4 $ ) + ( $ 12 \\oplus 4 $ ) = $ 2 + 8 $ = $ 10 $ . It can be shown that this is the smallest possible value."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Think about addition in base two. Say $$$a$$$ = $$$10101$$$ and $$$b$$$ = $$$1001$$$. What your operation does is it modifies the bits in your numbers, so if the first bit in $$$a$$$ is $$$1$$$ and the first bit in $$$b$$$ is $$$1$$$ (as is the case above) you can make both $$$0$$$ by making that bit $$$1$$$ in $$$x$$$. This is actually the only way you can decrease the resulting sum, so $$$x$$$ = $$$1$$$ is an answer above."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Noticing the hint above we now deduce $$$x$$$ = $$$a$$$ & $$$b$$$ where & is bitwise $$$AND$$$. So just printing ($$$a$$$ $$$\\oplus$$$ ($$$a$$$ & $$$b$$$)) + ($$$b$$$ $$$\\oplus$$$ ($$$a$$$ & $$$b$$$)) works, but there's an even nicer formula. We'll leave it up to you to prove that ($$$a$$$ $$$\\oplus$$$ ($$$a$$$ & $$$b$$$)) + ($$$b$$$ $$$\\oplus$$$ ($$$a$$$ & $$$b$$$)) = $$$a$$$ $$$\\oplus$$$ $$$b$$$, where $$$\\oplus$$$ is the bitwise $$$XOR$$$ :)"
+        }
+    ]
+}

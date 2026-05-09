@@ -15,23 +15,76 @@ WITHOUT_HINT_DIR = os.path.join(SAVE_DIR, "without_hint")
 LUOGU_BASE_URL = "https://www.luogu.com.cn/problem"
 
 
-def launch_browser_offscreen(p):
-	"""
-	启动可见 Chromium，但把窗口放到屏幕外，避免在 macOS 上反复闪烁。
 
-	说明：
-	- 不使用 headless=True，因为 Codeforces/Cloudflare 对 headless 更敏感；
-	- 不使用 AppleScript 反复 hide，因为会导致窗口闪来闪去；
-	- 用 --window-position 把窗口创建到屏幕外。
+def launch_system_chromium(p):
 	"""
-	return p.chromium.launch(
-		headless=False,
-		args=[
-			"--window-position=-32000,-32000",
-			"--window-size=800,600",
-			"--disable-features=CalculateNativeWinOcclusion",
-		],
-	)
+	使用本机已经安装的 Google Chrome / Chromium，而不是 Playwright 自带 Chromium。
+
+	macOS 优先使用：
+	  /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+
+	Ubuntu / Linux 优先使用：
+	  /snap/bin/chromium
+	  /usr/bin/google-chrome
+
+	注意：
+	- 如果你在 macOS 终端运行脚本，可以调用 Mac 本机 Google Chrome；
+	- 如果你在 Parallels Ubuntu 虚拟机里运行脚本，不能直接调用 Mac 宿主机的 Chrome，
+	  只能调用 Ubuntu 虚拟机里安装的 Chromium / Chrome。
+	"""
+	browser_path_candidates = [
+		# macOS: Google Chrome / Chromium
+		"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+		# "/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
+		# "/Applications/Chromium.app/Contents/MacOS/Chromium",
+
+		# Linux / Ubuntu
+		"/snap/bin/chromium",
+		"/usr/bin/chromium",
+		"/usr/bin/chromium-browser",
+		"/usr/bin/google-chrome",
+		"/usr/bin/google-chrome-stable",
+	]
+
+	executable_path = None
+	for path in browser_path_candidates:
+		if os.path.exists(path):
+			executable_path = path
+			break
+
+	launch_args = [
+		"--no-sandbox",
+		"--disable-dev-shm-usage",
+		"--disable-features=CalculateNativeWinOcclusion",
+	]
+
+	if executable_path:
+		print(f"🌐 使用本机浏览器: {executable_path}")
+		return p.chromium.launch(
+			headless=False,
+			executable_path=executable_path,
+			args=launch_args,
+		)
+
+	# 如果是 macOS 且装了 Chrome，但路径检测失败，尝试 Playwright 的 channel=chrome。
+	# 这个也会调用系统 Chrome，不需要 playwright install chromium。
+	try:
+		print("🌐 未找到固定路径，尝试使用 channel='chrome' 调用系统 Google Chrome")
+		return p.chromium.launch(
+			headless=False,
+			channel="chrome",
+			args=launch_args,
+		)
+	except Exception as e:
+		raise RuntimeError(
+			"没有找到可用的系统 Google Chrome / Chromium。\n"
+			"macOS 请确认已经安装 Google Chrome：\n"
+			"  /Applications/Google Chrome.app/Contents/MacOS/Google Chrome\n"
+			"Ubuntu 请安装 Chromium：\n"
+			"  sudo snap install chromium\n"
+			f"原始错误：{e}"
+		)
+
 
 def polite_sleep(min_seconds=6, max_seconds=15, reason=""):
 	wait_time = random.uniform(min_seconds, max_seconds)
@@ -685,7 +738,7 @@ def process_contest(contest_url, processed_tutorial_urls):
 	每个 contest 单独启动 browser/new_context。
 	"""
 	with sync_playwright() as p:
-		browser = launch_browser_offscreen(p)
+		browser = launch_system_chromium(p)
 		context = browser.new_context()
 
 		context.route("**/*mathjax*", lambda route: route.abort())
@@ -802,7 +855,7 @@ def process_contest(contest_url, processed_tutorial_urls):
 if __name__ == "__main__":
 	contests_to_scrape = [
 		f"https://codeforces.com/contest/{i}"
-		for i in range(1895, 999, -1)
+		for i in range(1893, 999, -1)
 	]
 
 	processed_tutorial_urls = set()

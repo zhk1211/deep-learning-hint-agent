@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nKoxia and Mahiru are playing a game with three arrays $ a $ , $ b $ , and $ c $ of length $ n $ . Each element of $ a $ , $ b $ and $ c $ is an integer between $ 1 $ and $ n $ inclusive.\n\nThe game consists of $ n $ rounds. In the $ i $ -th round, they perform the following moves:\n\n- Let $ S $ be the multiset $ \\{a_i, b_i, c_i\\} $ .\n- Koxia removes one element from the multiset $ S $ by her choice.\n- Mahiru chooses one integer from the two remaining in the multiset $ S $ .\n\nLet $ d_i $ be the integer Mahiru chose in the $ i $ -th round. If $ d $ is a permutation $ ^\\dagger $ , Koxia wins. Otherwise, Mahiru wins.\n\nCurrently, only the arrays $ a $ and $ b $ have been chosen. As an avid supporter of Koxia, you want to choose an array $ c $ such that Koxia will win. Count the number of such $ c $ , modulo $ 998\\,244\\,353 $ .\n\nNote that Koxia and Mahiru both play optimally.\n\n$ ^\\dagger $ A permutation of length $ n $ is an array consisting of $ n $ distinct integers from $ 1 $ to $ n $ in arbitrary order. For example, $ [2,3,1,5,4] $ is a permutation, but $ [1,2,2] $ is not a permutation ( $ 2 $ appears twice in the array), and $ [1,3,4] $ is also not a permutation ( $ n=3 $ but there is $ 4 $ in the array).\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 2 \\cdot 10^4 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq {10}^5 $ ) — the size of the arrays.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\leq a_i \\leq n $ ).\n\nThe third line of each test case contains $ n $ integers $ b_1, b_2, \\dots, b_n $ ( $ 1 \\leq b_i \\leq n $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ {10}^5 $ .\n\nOutput Format\nOutput a single integer — the number of $ c $ makes Koxia win, modulo $ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n2\n3\n1 2 2\n1 3 3\n5\n3 3 1 3 4\n4 5 2 5 5\nOutput\n6\n0\n\nNote\nIn the first test case, there are $ 6 $ possible arrays $ c $ that make Koxia win — $ [1, 2, 3] $ , $ [1, 3, 2] $ , $ [2, 2, 3] $ , $ [2, 3, 2] $ , $ [3, 2, 3] $ , $ [3, 3, 2] $ .\n\nIn the second test case, it can be proved that no array $ c $ makes Koxia win."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "If all of $$$a$$$, $$$b$$$ and $$$c$$$ are fixed, how to determine who will win?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "If $$$a$$$ and $$$b$$$ are fixed, design an algorithm to check if there is an array $$$c$$$ that makes Koxia wins."
+        },
+        {
+            "title": "Hint 2.5",
+            "content": "If you can't solve the problem in Hint 2, try to think about how it's related to graph theory."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Try to discuss the structure of components in the graph to count up the number of $$$c$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Firstly, let's consider how an array $$$c$$$ could make Koxia wins.\nLemma 1.\nIn each round, Koxia should remove an element in $$$S$$$ to make the remaining $$$2$$$ elements in $$$S$$$ the same (i.e. Mahiru's choice determined nothing actually).\nIn round $$$n$$$, if Koxia leaves two choices for Mahiru then Mahiru will be able to prevent $$$d$$$ from being a permutation.\nThis means if Koxia wins, there is only one choice for $$$d_n$$$.\nNow $$$(d_1, d_2, \\dots, d_{n-1})$$$ have to be a permutation of a specific $$$n-1$$$ numbers. Apply the same argument on $$$d_{n-1}$$$ and so on, we can conclude that every $$$d_i$$$ only has one choice if Koxia wins.\nLemma 2.\nLet $$$p$$$ be array of length $$$n$$$ where we can set $$$p_i$$$ to either $$$a_i$$$ or $$$b_i$$$. Koxia wins iff there exists a way to make $$$p$$$ a permutation.\nAccording to Lemma 1, if there is a way to make $$$p$$$ a permutation, we can just set $$$c_i = p_i$$$. Koxia can then force Mahiru to set $$$d_i = p_i$$$ every round and Koxia will win.\nIf it is impossible to make $$$p$$$ a permutation, Mahiru can pick either $$$a_i$$$ or $$$b_i$$$ (at least one of them is available) every round. The resulting array $$$d$$$ is guaranteed to not be a permutation.\nFirst, we need an algorithm to determine if there is a way to make $$$p$$$ a permutation.\nWe can transform this into a graph problem where $$$(a_i, b_i)$$$ are edges in a graph with $$$n$$$ vertices. Then there is a way to make $$$p$$$ a permutation iff there is a way to assign a direction for every edge such that every vertex has one edge leading into it. It is not hard to see that this is equivalent to the condition that for every connected component, the number of edges equals the number of vertices. We can verify this by a Disjoint-Set Union or a graph traversal in $$$O(n \\alpha(n))$$$ or $$$O(n)$$$ time complexity.\nTo solve the counting problem, we consider the structure of the connected components one by one. A component with $$$|V| = |E|$$$ can be viewed as a tree with an additional edge. This additional edge can be categorized into two cases:\nThe additional edge forms a cycle together with some of the other edges. There are $$$2$$$ choices for the cycle (clockwise and counterclockwise), and the choices of other edges are fixed then (point away from the cycle).\nThe additional edge forms a self-loop. Then the value of $$$c_i$$$ determines nothing in this situation so it can be any integers in $$$[1, n]$$$, and the choices of all other edges are fixed.\nTherefore, if exists at least one $$$c$$$ to make Koxia wins, then the answer is $$$2^{\\textrm{cycle component cnt}} \\cdot n^{\\textrm{self-loop component cnt}}$$$. The time complexity is $$$O(n \\alpha(n))$$$ or $$$O(n)$$$."
+        }
+    ]
+}

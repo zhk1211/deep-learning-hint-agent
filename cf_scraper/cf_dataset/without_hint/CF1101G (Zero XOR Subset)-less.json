@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a_1, a_2, \\dots, a_n $ of integer numbers.\n\nYour task is to divide the array into the maximum number of segments in such a way that:\n\n- each element is contained in exactly one segment;\n- each segment contains at least one element;\n- there doesn't exist a non-empty subset of segments such that bitwise XOR of the numbers from them is equal to $ 0 $ .\n\nPrint the maximum number of segments the array can be divided into. Print -1 if no suitable division exists.\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the size of the array.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i \\le 10^9 $ ).\n\nOutput Format\nPrint the maximum number of segments the array can be divided into while following the given constraints. Print -1 if no suitable division exists.\n\nExamples\nSample 1\nInput\n4\n5 5 7 2\nOutput\n2\n\nSample 2\nInput\n3\n1 2 3\nOutput\n-1\n\nSample 3\nInput\n3\n3 1 10\nOutput\n3\n\nNote\nIn the first example $ 2 $ is the maximum number. If you divide the array into $ \\{[5], [5, 7, 2]\\} $ , the XOR value of the subset of only the second segment is $ 5 \\oplus 7 \\oplus 2 = 0 $ . $ \\{[5, 5], [7, 2]\\} $ has the value of the subset of only the first segment being $ 5 \\oplus 5 = 0 $ . However, $ \\{[5, 5, 7], [2]\\} $ will lead to subsets $ \\{[5, 5, 7]\\} $ of XOR $ 7 $ , $ \\{[2]\\} $ of XOR $ 2 $ and $ \\{[5, 5, 7], [2]\\} $ of XOR $ 5 \\oplus 5 \\oplus 7 \\oplus 2 = 5 $ .\n\nLet's take a look at some division on $ 3 $ segments — $ \\{[5], [5, 7], [2]\\} $ . It will produce subsets:\n\n- $ \\{[5]\\} $ , XOR $ 5 $ ;\n- $ \\{[5, 7]\\} $ , XOR $ 2 $ ;\n- $ \\{[5], [5, 7]\\} $ , XOR $ 7 $ ;\n- $ \\{[2]\\} $ , XOR $ 2 $ ;\n- $ \\{[5], [2]\\} $ , XOR $ 7 $ ;\n- $ \\{[5, 7], [2]\\} $ , XOR $ 0 $ ;\n- $ \\{[5], [5, 7], [2]\\} $ , XOR $ 5 $ ;\n\nAs you can see, subset $ \\{[5, 7], [2]\\} $ has its XOR equal to $ 0 $ , which is unacceptable. You can check that for other divisions of size $ 3 $ or $ 4 $ , non-empty subset with $ 0 $ XOR always exists.\n\nThe second example has no suitable divisions.\n\nThe third example array can be divided into $ \\{[3], [1], [10]\\} $ . No subset of these segments has its XOR equal to $ 0 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (PikMike)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n200\n*\n1000\n+\n13\n;\nconst\nint\nLOGN\n=\n30\n;\nint\nn\n;\nint\na\n[\nN\n],\npr\n[\nN\n];\nint\nbase\n[\nLOGN\n];\nvoid\ntry_gauss\n(\nint\nv\n){\nfor\n(\nint\ni\n=\nLOGN\n-\n1\n;\ni\n>=\n0\n;\ni\n--)\nif\n(\nbase\n[\ni\n]\n!=\n-\n1\n&&\n(\nv\n&\n(\n1\n<<\ni\n)))\nv\n^=\nbase\n[\ni\n];\nif\n(\nv\n==\n0\n)\nreturn\n;\nfor\n(\nint\ni\n=\nLOGN\n-\n1\n;\ni\n>=\n0\n;\ni\n--)\nif\n(\nv\n&\n(\n1\n<<\ni\n)){\nbase\n[\ni\n]\n=\nv\n;\nreturn\n;\n}\n}\nint\nmain\n()\n{\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nforn\n(\ni\n,\nn\n)\nscanf\n(\n\"%d\"\n,\n&\na\n[\ni\n]);\nmemset\n(\nbase\n,\n-\n1\n,\nsizeof\n(\nbase\n));\nforn\n(\ni\n,\nn\n){\npr\n[\ni\n+\n1\n]\n=\npr\n[\ni\n]\n^\na\n[\ni\n];\ntry_gauss\n(\npr\n[\ni\n+\n1\n]);\n}\nif\n(\npr\n[\nn\n]\n==\n0\n){\nputs\n(\n\"-1\"\n);\nreturn\n0\n;\n}\nint\nsiz\n=\n0\n;\nforn\n(\ni\n,\nLOGN\n)\nsiz\n+=\n(\nbase\n[\ni\n]\n!=\n-\n1\n);\nprintf\n(\n\"%d\\n\"\n,\nsiz\n);\n}"
+        }
+    ]
+}

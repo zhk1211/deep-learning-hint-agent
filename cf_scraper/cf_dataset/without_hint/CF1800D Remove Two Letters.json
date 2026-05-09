@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nDmitry has a string $ s $ , consisting of lowercase Latin letters.\n\nDmitry decided to remove two consecutive characters from the string $ s $ and you are wondering how many different strings can be obtained after such an operation.\n\nFor example, Dmitry has a string \"aaabcc\". You can get the following different strings: \"abcc\"(by deleting the first two or second and third characters), \"aacc\"(by deleting the third and fourth characters),\"aaac\"(by deleting the fourth and the fifth character) and \"aaab\" (by deleting the last two).\n\nInput Format\nThe first line of input data contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — number of test cases.\n\nThe descriptions of the test cases follow.\n\nThe first line of the description of each test case contains an integer $ n $ ( $ 3 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line of the description of each test case contains a string $ s $ of length $ n $ consisting of lowercase Latin letters.\n\nIt is guaranteed that the sum of $ n $ for all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case print one integer — the number of distinct strings that can be obtained by removing two consecutive letters.\n\nExamples\nSample 1\nInput\n7\n6\naaabcc\n10\naaaaaaaaaa\n6\nabcdef\n7\nabacaba\n6\ncccfff\n4\nabba\n5\nababa\nOutput\n4\n1\n5\n3\n3\n3\n1\n\nNote\nThe first example is explained in the statement.\n\nIn the third example, the following strings are obtained: \"cdef\", \"adef\", \"abef\", \"abcf\", \"abcd\".\n\nIn the seventh example, any deletion will result in the string \"aba\"."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<iostream>\n#include\n<vector>\n#include\n<queue>\n#include\n<map>\n#include\n<set>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nstring\ns\n;\ncin\n>>\ns\n;\nint\nres\n=\nn\n-\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n+\n1\n<\nn\n;\n++\ni\n)\n{\nif\n(\ns\n[\ni\n-\n1\n]\n==\ns\n[\ni\n+\n1\n])\n{\nres\n--;\n}\n}\ncout\n<<\nres\n<<\n'\\n'\n;\n}\nint\nmain\n(\nint\nargc\n,\nchar\n*\nargv\n[])\n{\nint\nt\n;\ncin\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n;\n++\ni\n)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

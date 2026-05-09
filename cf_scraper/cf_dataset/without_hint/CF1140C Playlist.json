@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have a playlist consisting of $ n $ songs. The $ i $ -th song is characterized by two numbers $ t_i $ and $ b_i $ — its length and beauty respectively. The pleasure of listening to set of songs is equal to the total length of the songs in the set multiplied by the minimum beauty among them. For example, the pleasure of listening to a set of $ 3 $ songs having lengths $ [5, 7, 4] $ and beauty values $ [11, 14, 6] $ is equal to $ (5 + 7 + 4) \\cdot 6 = 96 $ .\n\nYou need to choose at most $ k $ songs from your playlist, so the pleasure of listening to the set of these songs them is maximum possible.\n\nInput Format\nThe first line contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 3 \\cdot 10^5 $ ) – the number of songs in the playlist and the maximum number of songs you can choose, respectively.\n\nEach of the next $ n $ lines contains two integers $ t_i $ and $ b_i $ ( $ 1 \\le t_i, b_i \\le 10^6 $ ) — the length and beauty of $ i $ -th song.\n\nOutput Format\nPrint one integer — the maximum pleasure you can get.\n\nExamples\nSample 1\nInput\n4 3\n4 7\n15 1\n3 6\n6 8\nOutput\n78\n\nSample 2\nInput\n5 3\n12 31\n112 4\n100 100\n13 55\n55 50\nOutput\n10000\n\nNote\nIn the first test case we can choose songs $ {1, 3, 4} $ , so the total pleasure is $ (4 + 3 + 6) \\cdot 6 = 78 $ .\n\nIn the second test case we can choose song $ 3 $ . The total pleasure will be equal to $ 100 \\cdot 100 = 10000 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n300009\n;\nint\nn\n,\nk\n;\npair\n<\nint\n,\nint\n>\na\n[\nN\n];\nint\nmain\n()\n{\ncin\n>>\nn\n>>\nk\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\ncin\n>>\na\n[\ni\n].\nsecond\n>>\na\n[\ni\n].\nfirst\n;\nsort\n(\na\n,\na\n+\nn\n);\nlong\nlong\nres\n=\n0\n;\nlong\nlong\nsum\n=\n0\n;\nset\n<\npair\n<\nint\n,\nint\n>\n>\ns\n;\nfor\n(\nint\ni\n=\nn\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n){\ns\n.\ninsert\n(\nmake_pair\n(\na\n[\ni\n].\nsecond\n,\ni\n));\nsum\n+=\na\n[\ni\n].\nsecond\n;\nwhile\n(\ns\n.\nsize\n()\n>\nk\n){\nauto\nit\n=\ns\n.\nbegin\n();\nsum\n-=\nit\n->\nfirst\n;\ns\n.\nerase\n(\nit\n);\n}\nres\n=\nmax\n(\nres\n,\nsum\n*\na\n[\ni\n].\nfirst\n);\n}\ncout\n<<\nres\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

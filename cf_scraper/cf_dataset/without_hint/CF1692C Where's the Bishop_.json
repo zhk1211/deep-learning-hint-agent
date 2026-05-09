@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMihai has an $ 8 \\times 8 $ chessboard whose rows are numbered from $ 1 $ to $ 8 $ from top to bottom and whose columns are numbered from $ 1 $ to $ 8 $ from left to right.\n\nMihai has placed exactly one bishop on the chessboard. The bishop is not placed on the edges of the board. (In other words, the row and column of the bishop are between $ 2 $ and $ 7 $ , inclusive.)\n\nThe bishop attacks in all directions diagonally, and there is no limit to the distance which the bishop can attack. Note that the cell on which the bishop is placed is also considered attacked.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1692C/a628ab5b17df485b146f85dc0b0977dd4288932f.png)An example of a bishop on a chessboard. The squares it attacks are marked in red.Mihai has marked all squares the bishop attacks, but forgot where the bishop was! Help Mihai find the position of the bishop.\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\leq t \\leq 36 $ ) — the number of test cases. The description of test cases follows. There is an empty line before each test case.\n\nEach test case consists of $ 8 $ lines, each containing $ 8 $ characters. Each of these characters is either '\\#' or '.', denoting a square under attack and a square not under attack, respectively.\n\nOutput Format\nFor each test case, output two integers $ r $ and $ c $ ( $ 2 \\leq r, c \\leq 7 $ ) — the row and column of the bishop.\n\nThe input is generated in such a way that there is always exactly one possible location of the bishop that is not on the edge of the board.\n\nExamples\nSample 1\nInput\n3\n\n.....#..\n#...#...\n.#.#....\n..#.....\n.#.#....\n#...#...\n.....#..\n......#.\n\n#.#.....\n.#......\n#.#.....\n...#....\n....#...\n.....#..\n......#.\n.......#\n\n.#.....#\n..#...#.\n...#.#..\n....#...\n...#.#..\n..#...#.\n.#.....#\n#.......\nOutput\n4 3\n2 2\n4 5\n\nNote\nThe first test case is pictured in the statement. Since the bishop lies in the intersection row $ 4 $ and column $ 3 $ , the correct output is 4 3."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nchar\ng\n[\n9\n][\n9\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\n8\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n1\n;\nj\n<=\n8\n;\nj\n++)\n{\ncin\n>>\ng\n[\ni\n][\nj\n];\n}\n}\nfor\n(\nint\ni\n=\n2\n;\ni\n<=\n7\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n2\n;\nj\n<=\n7\n;\nj\n++)\n{\nif\n(\ng\n[\ni\n][\nj\n]\n==\n'#'\n&&\ng\n[\ni\n-\n1\n][\nj\n-\n1\n]\n==\n'#'\n&&\ng\n[\ni\n-\n1\n][\nj\n+\n1\n]\n==\n'#'\n&&\ng\n[\ni\n+\n1\n][\nj\n-\n1\n]\n==\n'#'\n&&\ng\n[\ni\n+\n1\n][\nj\n+\n1\n]\n==\n'#'\n)\n{\ncout\n<<\ni\n<<\n' '\n<<\nj\n<<\n'\\n'\n;\nreturn\n;\n}\n}\n}\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

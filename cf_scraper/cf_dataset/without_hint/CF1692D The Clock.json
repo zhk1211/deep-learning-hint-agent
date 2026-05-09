@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVictor has a [24-hour clock](https://en.wikipedia.org/wiki/24-hour_clock) that shows the time in the format \"HH:MM\" (00 $ \\le $ HH $ \\le $ 23, 00 $ \\le $ MM $ \\le $ 59). He looks at the clock every $ x $ minutes, and the clock is currently showing time $ s $ .\n\nHow many different palindromes will Victor see in total after looking at the clock every $ x $ minutes, the first time being at time $ s $ ?\n\nFor example, if the clock starts out as 03:12 and Victor looks at the clock every $ 360 $ minutes (i.e. every $ 6 $ hours), then he will see the times 03:12, 09:12, 15:12, 21:12, 03:12, and the times will continue to repeat. Here the time 21:12 is the only palindrome he will ever see, so the answer is $ 1 $ .\n\nA palindrome is a string that reads the same backward as forward. For example, the times 12:21, 05:50, 11:11 are palindromes but 13:13, 22:10, 02:22 are not.\n\nInput Format\nThe first line of the input contains an integer $ t $ ( $ 1 \\leq t \\leq 100 $ ) — the number of test cases. The description of each test case follows.\n\nThe only line of each test case contains a string $ s $ of length $ 5 $ with the format \"HH:MM\" where \"HH\" is from \"00\" to \"23\" and \"MM\" is from \"00\" to \"59\" (both \"HH\" and \"MM\" have exactly two digits) and an integer $ x $ ( $ 1 \\leq x \\leq 1440 $ ) — the number of minutes Victor takes to look again at the clock.\n\nOutput Format\nFor each test case, output a single integer — the number of different palindromes Victor will see if he looks at the clock every $ x $ minutes starting from time $ s $ .\n\nExamples\nSample 1\nInput\n6\n03:12 360\n00:00 1\n13:22 2\n15:15 10\n11:11 1440\n22:30 27\nOutput\n1\n16\n10\n0\n1\n1\n\nNote\nThe first test case is explained in the statement."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\na\n[\n5\n]\n=\n{\n600\n,\n60\n,\n0\n,\n10\n,\n1\n};\nint\ngood\n[\n16\n]\n=\n{\n0\n,\n70\n,\n140\n,\n210\n,\n280\n,\n350\n,\n601\n,\n671\n,\n741\n,\n811\n,\n881\n,\n951\n,\n1202\n,\n1272\n,\n1342\n,\n1412\n};\nvoid\nsolve\n()\n{\nstring\ns\n;\ncin\n>>\ns\n;\nint\nx\n;\ncin\n>>\nx\n;\nint\ntot\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n5\n;\ni\n++)\n{\ntot\n+=\n(\nint\n)(\ns\n[\ni\n]\n-\n'0'\n)\n*\na\n[\ni\n];\n}\nset\n<int>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n2022\n;\ni\n++)\n{\nt\n.\ninsert\n(\ntot\n);\ntot\n+=\nx\n;\ntot\n%=\n1440\n;\n}\nint\nres\n=\n0\n;\nfor\n(\nint\ni\n:\nt\n)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n16\n;\nj\n++)\n{\nif\n(\ngood\n[\nj\n]\n==\ni\n)\n{\nres\n++;}\n}\n}\ncout\n<<\nres\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

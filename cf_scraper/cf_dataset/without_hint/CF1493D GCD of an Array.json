@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ of length $ n $ . You are asked to process $ q $ queries of the following format: given integers $ i $ and $ x $ , multiply $ a_i $ by $ x $ .\n\nAfter processing each query you need to output the [greatest common divisor (GCD)](https://en.wikipedia.org/wiki/Greatest_common_divisor) of all elements of the array $ a $ .\n\nSince the answer can be too large, you are asked to output it modulo $ 10^9+7 $ .\n\nInput Format\nThe first line contains two integers — $ n $ and $ q $ ( $ 1 \\le n, q \\le 2 \\cdot 10^5 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 2 \\cdot 10^5 $ ) — the elements of the array $ a $ before the changes.\n\nThe next $ q $ lines contain queries in the following format: each line contains two integers $ i $ and $ x $ ( $ 1 \\le i \\le n $ , $ 1 \\le x \\le 2 \\cdot 10^5 $ ).\n\nOutput Format\nPrint $ q $ lines: after processing each query output the GCD of all elements modulo $ 10^9+7 $ on a separate line.\n\nExamples\nSample 1\nInput\n4 3\n1 6 8 12\n1 12\n2 3\n3 3\nOutput\n2\n2\n6\n\nNote\nAfter the first query the array is $ [12, 6, 8, 12] $ , $ \\operatorname{gcd}(12, 6, 8, 12) = 2 $ .\n\nAfter the second query — $ [12, 18, 8, 12] $ , $ \\operatorname{gcd}(12, 18, 8, 12) = 2 $ .\n\nAfter the third query — $ [12, 18, 24, 12] $ , $ \\operatorname{gcd}(12, 18, 24, 12) = 6 $ .\n\nHere the $ \\operatorname{gcd} $ function denotes the greatest common divisor."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (74TrAkToR)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nint\nconst\nmaxn\n=\n2e5\n+\n5\n,\nmax_val\n=\n2e5\n+\n5\n;\nll mod\n=\n1e9\n+\n7\n,\nans\n=\n1\n;\nint\nnxt\n[\nmax_val\n],\nn\n;\nmultiset\n<int>\ncnt\n[\nmax_val\n];\nmap\n<\nint\n,\nint\n>\ncnt_divisor\n[\nmaxn\n];\nvoid\nadd\n(\nint\ni\n,\nint\nx\n)\n{\nwhile\n(\nx\n!=\n1\n)\n{\nint\ndiv\n=\nnxt\n[\nx\n],\nadd\n=\n0\n;\nwhile\n(\nnxt\n[\nx\n]\n==\ndiv\n)\nadd\n++,\nx\n=\nx\n/\nnxt\n[\nx\n];\nint\nlst\n=\ncnt_divisor\n[\ni\n][\ndiv\n];\ncnt_divisor\n[\ni\n][\ndiv\n]\n+=\nadd\n;\nint\nlst_min\n=\n0\n;\nif\n((\nint\n)\ncnt\n[\ndiv\n].\nsize\n()\n==\nn\n)\n{\nlst_min\n=\n(*\ncnt\n[\ndiv\n].\nbegin\n());\n}\nif\n(\nlst\n!=\n0\n)\n{\ncnt\n[\ndiv\n].\nerase\n(\ncnt\n[\ndiv\n].\nfind\n(\nlst\n));\n}\ncnt\n[\ndiv\n].\ninsert\n(\nlst\n+\nadd\n);\nif\n((\nint\n)\ncnt\n[\ndiv\n].\nsize\n()\n==\nn\n)\n{\nfor\n(\nint\nj\n=\nlst_min\n+\n1\n;\nj\n<=\n(*\ncnt\n[\ndiv\n].\nbegin\n());\n++\nj\n)\n{\nans\n=\nans\n*\n(\nll\n)\ndiv\n%\nmod\n;\n}\n}\n}\n}\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nq\n,\nl\n,\nx\n;\ncin\n>>\nn\n>>\nq\n;\nfor\n(\nint\ni\n=\n2\n;\ni\n<\nmaxn\n;\n++\ni\n)\n{\nif\n(\nnxt\n[\ni\n]\n==\n0\n)\n{\nnxt\n[\ni\n]\n=\ni\n;\nif\n(\ni\n>\n10000\n)\ncontinue\n;\nfor\n(\nint\nj\n=\ni\n*\ni\n;\nj\n<\nmaxn\n;\nj\n+=\ni\n)\n{\nif\n(\nnxt\n[\nj\n]\n==\n0\n)\nnxt\n[\nj\n]\n=\ni\n;\n}\n}\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\n{\ncin\n>>\nx\n;\nadd\n(\ni\n,\nx\n);\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nq\n;\n++\ni\n)\n{\ncin\n>>\nl\n>>\nx\n;\nadd\n(\nl\n,\nx\n);\ncout\n<<\nans\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

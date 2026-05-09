@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIchihime is the current priestess of the Mahjong Soul Temple. She claims to be human, despite her cat ears.\n\nThese days the temple is holding a math contest. Usually, Ichihime lacks interest in these things, but this time the prize for the winner is her favorite — cookies. Ichihime decides to attend the contest. Now she is solving the following problem.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1337A/bad2678e993488b99e385b25367de54e5d69583f.png)You are given four positive integers $ a $ , $ b $ , $ c $ , $ d $ , such that $ a \\leq b \\leq c \\leq d $ .\n\nYour task is to find three integers $ x $ , $ y $ , $ z $ , satisfying the following conditions:\n\n- $ a \\leq x \\leq b $ .\n- $ b \\leq y \\leq c $ .\n- $ c \\leq z \\leq d $ .\n- There exists a triangle with a positive non-zero area and the lengths of its three sides are $ x $ , $ y $ , and $ z $ .\n\nIchihime desires to get the cookie, but the problem seems too hard for her. Can you help her?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases.\n\nThe next $ t $ lines describe test cases. Each test case is given as four space-separated integers $ a $ , $ b $ , $ c $ , $ d $ ( $ 1 \\leq a \\leq b \\leq c \\leq d \\leq 10^9 $ ).\n\nOutput Format\nFor each test case, print three integers $ x $ , $ y $ , $ z $ — the integers you found satisfying the conditions given in the statement.\n\nIt is guaranteed that the answer always exists. If there are multiple answers, print any.\n\nExamples\nSample 1\nInput\n4\n1 3 5 7\n1 5 5 7\n100000 200000 300000 400000\n1 1 977539810 977539810\nOutput\n3 4 5\n5 5 5\n182690 214748 300999\n1 977539810 977539810\n\nNote\nOne of the possible solutions to the first test case:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1337A/49528ea2d26d24e7f32d5d00819a25495e02f95c.png)\n\nOne of the possible solutions to the second test case:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1337A/8e967d59d86c6aa1a42fe9df5eb35c845cfbc8ac.png)"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution by Sooke",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nt\n,\na\n,\nb\n,\nc\n,\nd\n;\nint\nmain\n()\n{\nfor\n(\ncin\n>>\nt\n;\nt\n;\nt\n--)\n{\ncin\n>>\na\n>>\nb\n>>\nc\n>>\nd\n;\ncout\n<<\nb\n<<\n\" \"\n<<\nc\n<<\n\" \"\n<<\nc\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

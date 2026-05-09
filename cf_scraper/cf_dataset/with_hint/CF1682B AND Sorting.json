@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a permutation $ p $ of integers from $ 0 $ to $ n-1 $ (each of them occurs exactly once). Initially, the permutation is not sorted (that is, $ p_i>p_{i+1} $ for at least one $ 1 \\le i \\le n - 1 $ ).\n\nThe permutation is called $ X $ -sortable for some non-negative integer $ X $ if it is possible to sort the permutation by performing the operation below some finite number of times:\n\n- Choose two indices $ i $ and $ j $ $ (1 \\le i \\lt j \\le n) $ such that $ p_i \\& p_j = X $ .\n- Swap $ p_i $ and $ p_j $ .\n\nHere $ \\& $ denotes the [bitwise AND operation](https://en.wikipedia.org/wiki/Bitwise_operation#AND).\n\nFind the maximum value of $ X $ such that $ p $ is $ X $ -sortable. It can be shown that there always exists some value of $ X $ such that $ p $ is $ X $ -sortable.\n\nInput Format\nThe input consists of multiple test cases. The first line contains a single integer $ t $ $ (1 \\le t \\le 10^4) $ — the number of test cases. Description of test cases follows.\n\nThe first line of each test case contains a single integer $ n $ $ (2 \\le n \\le 2 \\cdot 10^5) $ — the length of the permutation.\n\nThe second line of each test case contains $ n $ integers $ p_1, p_2, ..., p_n $ ( $ 0 \\le p_i \\le n-1 $ , all $ p_i $ are distinct) — the elements of $ p $ . It is guaranteed that $ p $ is not sorted.\n\nIt is guaranteed that the sum of $ n $ over all cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case output a single integer — the maximum value of $ X $ such that $ p $ is $ X $ -sortable.\n\nExamples\nSample 1\nInput\n4\n4\n0 1 3 2\n2\n1 0\n7\n0 1 2 3 5 6 4\n5\n0 3 2 1 4\nOutput\n2\n0\n4\n1\n\nNote\nIn the first test case, the only $ X $ for which the permutation is $ X $ -sortable are $ X = 0 $ and $ X = 2 $ , maximum of which is $ 2 $ .\n\nSorting using $ X = 0 $ :\n\n- Swap $ p_1 $ and $ p_4 $ , $ p = [2, 1, 3, 0] $ .\n- Swap $ p_3 $ and $ p_4 $ , $ p = [2, 1, 0, 3] $ .\n- Swap $ p_1 $ and $ p_3 $ , $ p = [0, 1, 2, 3] $ .\n\nSorting using $ X = 2 $ :\n\n- Swap $ p_3 $ and $ p_4 $ , $ p = [0, 1, 2, 3] $ .\n\nIn the second test case, we must swap $ p_1 $ and $ p_2 $ which is possible only with $ X = 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nYou must have to make at least one swap on the elements which are not at their correct positions initially. So $$$X$$$ must be a submask of all elements which are not at their correct positions.\nHint 2\nWhat is the maximum possible value of $$$X$$$ from Hint $$$1$$$? It is the bitwise AND of all elements which are not at their correct positions. It turns out that this value is achievable too."
+        },
+        {
+            "title": "Hint 1",
+            "content": "You must have to make at least one swap on the elements which are not at their correct positions initially. So $$$X$$$ must be a submask of all elements which are not at their correct positions."
+        },
+        {
+            "title": "Hint 2",
+            "content": "What is the maximum possible value of $$$X$$$ from Hint $$$1$$$? It is the bitwise AND of all elements which are not at their correct positions. It turns out that this value is achievable too."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "We always have to make at least one swap for the elements which are not at their correct positions. Hence an upper bound of answer would be the bitwise AND of those elements. Let the value be $$$X$$$. It turns out that the given permutation is $$$X$$$-sortable.\nProof\n:\nFirst, notice that $$$X$$$ would always be present in $$$p$$$. Let $$$pos_x$$$ be the position of $$$X$$$ in $$$p$$$ initially. Let's say at some point we want to swap two values $$$p_i$$$ and $$$p_j$$$, then $$$p_i$$$ and $$$p_j$$$ would always be a supermask of $$$X$$$ i.e. $$$p_i$$$ & $$$X = X$$$ and $$$p_j$$$ & $$$X = X$$$. We can make the following moves to swap $$$p_i$$$ and $$$p_j$$$ without disturbing any other element.\nSwap values at indices $$$i$$$ and $$$pos_x$$$.\nSwap values at indices $$$i$$$ and $$$j$$$.\nSwap values at indices $$$j$$$ and $$$pos_x$$$.\nIt can be seen that in every swap the bitwise AND of two values which we are swapping is always $$$X$$$. Hence we can swap any two values which were not at their correct positions, therefore we can sort the permutation $$$p$$$.\nOverall Complexity: $$$\\mathcal{O(n)}$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nll\nlong\nlong\n#define\npb              push_back\n#define\nall\n(\nv\n)\nv\n.\nbegin\n(),\nv\n.\nend\n()\n#define\nsz\n(\na\n)\n(\nll\n)\na\n.\nsize\n()\n#define\nF               first\n#define\nS               second\n#define\nINF\n2000000000000000000\n#define\npopcount\n(\nx\n)\n__builtin_popcountll\n(\nx\n)\n#define\npll             pair\n<\nll\n,\nll\n>\n#define\npii             pair\n<\nint\n,\nint\n>\n#define\nld\nlong\ndouble\ntemplate\n<\ntypename\nT\n,\ntypename\nU\n>\nstatic\ninline\nvoid\namin\n(\nT\n&\nx\n,\nU y\n){\nif\n(\ny\n<\nx\n)\nx\n=\ny\n;\n}\ntemplate\n<\ntypename\nT\n,\ntypename\nU\n>\nstatic\ninline\nvoid\namax\n(\nT\n&\nx\n,\nU y\n){\nif\n(\nx\n<\ny\n)\nx\n=\ny\n;\n}\n#ifdef\nLOCAL\n#define\ndebug\n(...)\ndebug_out\n(#\n__VA_ARGS__\n,\n__VA_ARGS__\n)\n#else\n#define\ndebug\n(...)\n2401\n#endif\nint\n_runtimeTerror_\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nans\n=\n(\n1\n<<\n30\n)\n-\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;++\ni\n)\n{\nint\nx\n;\ncin\n>>\nx\n;\nif\n(\nx\n!=\ni\n)\n{\nans\n&=\nx\n;\n}\n}\ncout\n<<\nans\n<<\n\"\\n\"\n;\nreturn\n0\n;\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\n#ifdef\nrunSieve\n        sieve\n();\n#endif\n#ifdef\nNCR\n        initncr\n();\n#endif\nint\nTESTS\n=\n1\n;\ncin\n>>\nTESTS\n;\nwhile\n(\nTESTS\n--)\n{\n_runtimeTerror_\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

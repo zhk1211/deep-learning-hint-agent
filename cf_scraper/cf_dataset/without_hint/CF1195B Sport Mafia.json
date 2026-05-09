@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nEach evening after the dinner the SIS's students gather together to play the game of Sport Mafia.\n\nFor the tournament, Alya puts candies into the box, which will serve as a prize for a winner. To do that, she performs $ n $ actions. The first action performed is to put a single candy into the box. For each of the remaining moves she can choose from two options:\n\n- the first option, in case the box contains at least one candy, is to take exactly one candy out and eat it. This way the number of candies in the box decreased by $ 1 $ ;\n- the second option is to put candies in the box. In this case, Alya will put $ 1 $ more candy, than she put in the previous time.\n\nThus, if the box is empty, then it can only use the second option.\n\nFor example, one possible sequence of Alya's actions look as follows:\n\n- put one candy into the box;\n- put two candies into the box;\n- eat one candy from the box;\n- eat one candy from the box;\n- put three candies into the box;\n- eat one candy from the box;\n- put four candies into the box;\n- eat one candy from the box;\n- put five candies into the box;\n\nThis way she will perform $ 9 $ actions, the number of candies at the end will be $ 11 $ , while Alya will eat $ 4 $ candies in total.\n\nYou know the total number of actions $ n $ and the number of candies at the end $ k $ . You need to find the total number of sweets Alya ate. That is the number of moves of the first option. It's guaranteed, that for the given $ n $ and $ k $ the answer always exists.\n\nPlease note, that during an action of the first option, Alya takes out and eats exactly one candy.\n\nInput Format\nThe first line contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 10^9 $ ; $ 0 \\le k \\le 10^9 $ ) — the total number of moves and the number of candies in the box at the end.\n\nIt's guaranteed, that for the given $ n $ and $ k $ the answer exists.\n\nOutput Format\nPrint a single integer — the number of candies, which Alya ate. Please note, that in this problem there aren't multiple possible answers — the answer is unique for any input data.\n\nExamples\nSample 1\nInput\n1 1\nOutput\n0\n\nSample 2\nInput\n9 11\nOutput\n4\n\nSample 3\nInput\n5 0\nOutput\n3\n\nSample 4\nInput\n3 2\nOutput\n1\n\nNote\nIn the first example, Alya has made one move only. According to the statement, the first move is always putting one candy in the box. Hence Alya ate $ 0 $ candies.\n\nIn the second example the possible sequence of Alya's actions looks as follows:\n\n- put $ 1 $ candy,\n- put $ 2 $ candies,\n- eat a candy,\n- eat a candy,\n- put $ 3 $ candies,\n- eat a candy,\n- put $ 4 $ candies,\n- eat a candy,\n- put $ 5 $ candies.\n\nThis way, she will make exactly $ n=9 $ actions and in the end the box will contain $ 1+2-1-1+3-1+4-1+5=11 $ candies. The answer is $ 4 $ , since she ate $ 4 $ candies in total."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (binary search)",
+            "content": "#include\n<iostream>\n#include\n<cmath>\nint\nmain\n()\n{\nlong\nlong\nn\n,\nk\n;\nstd\n::\ncin\n>>\nn\n>>\nk\n;\nlong\nlong\nl\n=\n-\n1\n,\nr\n=\nn\n+\n1\n;\nwhile\n(\nr\n-\nl\n>\n1\n)\n{\nlong\nlong\nm\n=\n(\nl\n+\nr\n)\n/\n2\n;\nif\n((\nn\n-\nm\n)\n*\n(\nn\n-\nm\n+\n1\n)\n/\n2\n-\nm\n>\nk\n)\nl\n=\nm\n;\nelse\nr\n=\nm\n;\n}\nstd\n::\ncout\n<<\nr\n;\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "Solution (formula)",
+            "content": "#include\n<iostream>\n#include\n<cmath>\nint\nmain\n()\n{\nlong\nlong\nn\n,\nk\n;\nstd\n::\ncin\n>>\nn\n>>\nk\n;\nstd\n::\ncout\n<<\nstatic_cast\n<\nlong\nlong\n>(\nround\n(\nn\n+\n1.5\n-\nsqrt\n(\n2\n*\n(\nn\n+\nk\n)\n+\n2.75\n)));\nreturn\n0\n;\n}"
+        }
+    ]
+}

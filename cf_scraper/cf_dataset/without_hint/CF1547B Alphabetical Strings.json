@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA string $ s $ of length $ n $ ( $ 1 \\le n \\le 26 $ ) is called alphabetical if it can be obtained using the following algorithm:\n\n- first, write an empty string to $ s $ (i.e. perform the assignment $ s $ := \"\");\n- then perform the next step $ n $ times;\n- at the $ i $ -th step take $ i $ -th lowercase letter of the Latin alphabet and write it either to the left of the string $ s $ or to the right of the string $ s $ (i.e. perform the assignment $ s $ := $ c+s $ or $ s $ := $ s+c $ , where $ c $ is the $ i $ -th letter of the Latin alphabet).\n\nIn other words, iterate over the $ n $ first letters of the Latin alphabet starting from 'a' and etc. Each time we prepend a letter to the left of the string $ s $ or append a letter to the right of the string $ s $ . Strings that can be obtained in that way are alphabetical.\n\nFor example, the following strings are alphabetical: \"a\", \"ba\", \"ab\", \"bac\" and \"ihfcbadeg\". The following strings are not alphabetical: \"z\", \"aa\", \"ca\", \"acb\", \"xyz\" and \"ddcba\".\n\nFrom the given string, determine if it is alphabetical.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case is written on a separate line that contains one string $ s $ . String $ s $ consists of lowercase letters of the Latin alphabet and has a length between $ 1 $ and $ 26 $ , inclusive.\n\nOutput Format\nOutput $ t $ lines, each of them must contain the answer to the corresponding test case. Output YES if the given string $ s $ is alphabetical and NO otherwise.\n\nYou can output YES and NO in any case (for example, strings yEs, yes, Yes and YES will be recognized as a positive answer).\n\nExamples\nSample 1\nInput\n11\na\nba\nab\nbac\nihfcbadeg\nz\naa\nca\nacb\nxyz\nddcba\nOutput\nYES\nYES\nYES\nYES\nYES\nNO\nNO\nNO\nNO\nNO\nNO\n\nNote\nThe example contains test cases from the main part of the condition."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nforn\n(\ntt\n,\nt\n)\n{\nstring\ns\n;\ncin\n>>\ns\n;\nsize_t\nL\n=\ns\n.\nfind\n(\n'a'\n);\nif\n(\nL\n==\nstring\n::\nnpos\n)\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\ncontinue\n;\n}\nsize_t\nn\n=\ns\n.\nlength\n(),\nR\n=\nL\n;\nbool\nyes\n=\ntrue\n;\nfor\n(\nsize_t\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\n{\nsize_t\npos\n=\ns\n.\nfind\n(\nchar\n(\n'a'\n+\ni\n));\nif\n(\npos\n==\nstring\n::\nnpos\n||\n(\npos\n!=\nL\n-\n1\n&&\npos\n!=\nR\n+\n1\n))\n{\nyes\n=\nfalse\n;\nbreak\n;\n}\nelse\n{\nL\n=\nmin\n(\nL\n,\npos\n);\nR\n=\nmax\n(\nR\n,\npos\n);\n}\n}\ncout\n<<\n(\nyes\n?\n\"YES\"\n:\n\"NO\"\n)\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ , consisting of $ n $ lowercase Latin letters.\n\nA substring of string $ s $ is a continuous segment of letters from $ s $ . For example, \"defor\" is a substring of \"codeforces\" and \"fors\" is not.\n\nThe length of the substring is the number of letters in it.\n\nLet's call some string of length $ n $ diverse if and only if there is no letter to appear strictly more than $ \\frac n 2 $ times. For example, strings \"abc\" and \"iltlml\" are diverse and strings \"aab\" and \"zz\" are not.\n\nYour task is to find any diverse substring of string $ s $ or report that there is none. Note that it is not required to maximize or minimize the length of the resulting substring.\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\le n \\le 1000 $ ) — the length of string $ s $ .\n\nThe second line is the string $ s $ , consisting of exactly $ n $ lowercase Latin letters.\n\nOutput Format\nPrint \"NO\" if there is no diverse substring in the string $ s $ .\n\nOtherwise the first line should contain \"YES\". The second line should contain any diverse substring of string $ s $ .\n\nExamples\nSample 1\nInput\n10\ncodeforces\nOutput\nYES\ncode\n\nSample 2\nInput\n5\naaaaa\nOutput\nNO\n\nNote\nThe first example has lots of correct answers.\n\nPlease, restrain yourself from asking if some specific answer is correct for some specific test or not, these questions always lead to \"No comments\" answer."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (PikMike)",
+            "content": "n\n=\nint\n(\ninput\n())\ns\n=\ninput\n()\nfor\ni\nin\nrange\n(\nn\n-\n1\n):\nif\n(\ns\n[\ni\n]\n!=\ns\n[\ni\n+\n1\n]):\nprint\n(\n\"YES\"\n)\nprint\n(\ns\n[\ni\n],\ns\n[\ni\n+\n1\n],\nsep\n=\n\"\"\n)\nexit\n(\n0\n)\nprint\n(\n\"NO\"\n)"
+        }
+    ]
+}

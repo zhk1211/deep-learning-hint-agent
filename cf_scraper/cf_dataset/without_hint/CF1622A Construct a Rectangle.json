@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are three sticks with integer lengths $ l_1, l_2 $ and $ l_3 $ .\n\nYou are asked to break exactly one of them into two pieces in such a way that:\n\n- both pieces have positive (strictly greater than $ 0 $ ) integer length;\n- the total length of the pieces is equal to the original length of the stick;\n- it's possible to construct a rectangle from the resulting four sticks such that each stick is used as exactly one of its sides.\n\nA square is also considered a rectangle.\n\nDetermine if it's possible to do that.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of testcases.\n\nThe only line of each testcase contains three integers $ l_1, l_2, l_3 $ ( $ 1 \\le l_i \\le 10^8 $ ) — the lengths of the sticks.\n\nOutput Format\nFor each testcase, print \"YES\" if it's possible to break one of the sticks into two pieces with positive integer length in such a way that it's possible to construct a rectangle from the resulting four sticks. Otherwise, print \"NO\".\n\nYou may print every letter in any case you want (so, for example, the strings yEs, yes, Yes and YES are all recognized as a positive answer).\n\nExamples\nSample 1\nInput\n4\n6 1 5\n2 5 2\n2 4 2\n5 5 4\nOutput\nYES\nNO\nYES\nYES\n\nNote\nIn the first testcase, the first stick can be broken into parts of length $ 1 $ and $ 5 $ . We can construct a rectangle with opposite sides of length $ 1 $ and $ 5 $ .\n\nIn the second testcase, breaking the stick of length $ 2 $ can only result in sticks of lengths $ 1, 1, 2, 5 $ , which can't be made into a rectangle. Breaking the stick of length $ 5 $ can produce results $ 2, 3 $ or $ 1, 4 $ but neither of them can't be put into a rectangle.\n\nIn the third testcase, the second stick can be broken into parts of length $ 2 $ and $ 2 $ . The resulting rectangle has opposite sides $ 2 $ and $ 2 $ (which is a square).\n\nIn the fourth testcase, the third stick can be broken into parts of length $ 2 $ and $ 2 $ . The resulting rectangle has opposite sides $ 2 $ and $ 5 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nvector\n<int>\nl\n(\n3\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n3\n;\n++\ni\n)\ncin\n>>\nl\n[\ni\n];\nbool\nok\n=\nfalse\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n3\n;\n++\ni\n)\nok\n|=\nl\n[\ni\n]\n==\nl\n[(\ni\n+\n1\n)\n%\n3\n]\n+\nl\n[(\ni\n+\n2\n)\n%\n3\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n3\n;\n++\ni\n)\nif\n(\nl\n[\ni\n]\n%\n2\n==\n0\n)\nok\n|=\nl\n[(\ni\n+\n1\n)\n%\n3\n]\n==\nl\n[(\ni\n+\n2\n)\n%\n3\n];\ncout\n<<\n(\nok\n?\n\"YES\\n\"\n:\n\"NO\\n\"\n);\n}\n}"
+        }
+    ]
+}

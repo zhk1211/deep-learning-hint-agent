@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nFor a collection of integers $ S $ , define $ \\operatorname{mex}(S) $ as the smallest non-negative integer that does not appear in $ S $ .\n\nNIT, the cleaver, decides to destroy the universe. He is not so powerful as Thanos, so he can only destroy the universe by snapping his fingers several times.\n\nThe universe can be represented as a 1-indexed array $ a $ of length $ n $ . When NIT snaps his fingers, he does the following operation on the array:\n\n- He selects positive integers $ l $ and $ r $ such that $ 1\\le l\\le r\\le n $ . Let $ w=\\operatorname{mex}(\\{a_l,a_{l+1},\\dots,a_r\\}) $ . Then, for all $ l\\le i\\le r $ , set $ a_i $ to $ w $ .\n\nWe say the universe is destroyed if and only if for all $ 1\\le i\\le n $ , $ a_i=0 $ holds.\n\nFind the minimum number of times NIT needs to snap his fingers to destroy the universe. That is, find the minimum number of operations NIT needs to perform to make all elements in the array equal to $ 0 $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). Description of the test cases follows.\n\nThe first line of each test case contains one integer $ n $ ( $ 1\\le n\\le 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1 $ , $ a_2 $ , $ \\ldots $ , $ a_n $ ( $ 0\\le a_i\\le 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print one integer — the answer to the problem.\n\nExamples\nSample 1\nInput\n4\n4\n0 0 0 0\n5\n0 1 2 3 4\n7\n0 2 3 0 1 2 0\n1\n1000000000\nOutput\n0\n1\n2\n1\n\nNote\nIn the first test case, we do $ 0 $ operations and all elements in the array are already equal to $ 0 $ .\n\nIn the second test case, one optimal way is doing the operation with $ l=2 $ , $ r=5 $ .\n\nIn the third test case, one optimal way is doing the operation twice, respectively with $ l=4 $ , $ r=4 $ and $ l=2 $ , $ r=6 $ .\n\nIn the fourth test case, one optimal way is doing the operation with $ l=1 $ , $ r=1 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "How many operations will we perform?\nAnswer\nAt most two. Why?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "How to check if the array can be destroyed in $$$0$$$ or $$$1$$$ operations?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "The answer is at most $$$2$$$, because doing the operation on $$$[1,n]$$$ at most twice will always work. (If the array contains at least one zero, we need $$$2$$$ operations. Otherwise we need $$$1$$$ operation.)\nIf the array consists of zeroes, the answer is $$$0$$$.\nIf all non-zero elements form a contiguous segment in the array, the answer is $1$​. To check this, you can find the leftmost and rightmost occurrence of non-zero elements and check if elements in the middle of them are also non-zero.\nOtherwise the answer is $$$2$$$.\nTime complexity is $$$O(n)$$$."
+        }
+    ]
+}

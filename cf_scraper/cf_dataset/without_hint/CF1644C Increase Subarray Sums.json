@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a_1, a_2, \\dots, a_n $ , consisting of $ n $ integers. You are also given an integer value $ x $ .\n\nLet $ f(k) $ be the maximum sum of a contiguous subarray of $ a $ after applying the following operation: add $ x $ to the elements on exactly $ k $ distinct positions. An empty subarray should also be considered, it has sum $ 0 $ .\n\nNote that the subarray doesn't have to include all of the increased elements.\n\nCalculate the maximum value of $ f(k) $ for all $ k $ from $ 0 $ to $ n $ independently.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 5000 $ ) — the number of testcases.\n\nThe first line of the testcase contains two integers $ n $ and $ x $ ( $ 1 \\le n \\le 5000 $ ; $ 0 \\le x \\le 10^5 $ ) — the number of elements in the array and the value to add.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ -10^5 \\le a_i \\le 10^5 $ ).\n\nThe sum of $ n $ over all testcases doesn't exceed $ 5000 $ .\n\nOutput Format\nFor each testcase, print $ n + 1 $ integers — the maximum value of $ f(k) $ for all $ k $ from $ 0 $ to $ n $ independently.\n\nExamples\nSample 1\nInput\n3\n4 2\n4 1 3 2\n3 5\n-2 -7 -1\n10 2\n-6 -1 -2 4 -6 -1 -4 4 -5 -4\nOutput\n10 12 14 16 18\n0 4 4 5\n4 6 6 7 7 7 7 8 8 8 8\n\nNote\nIn the first testcase, it doesn't matter which elements you add $ x $ to. The subarray with the maximum sum will always be the entire array. If you increase $ k $ elements by $ x $ , $ k \\cdot x $ will be added to the sum.\n\nIn the second testcase:\n\n- For $ k = 0 $ , the empty subarray is the best option.\n- For $ k = 1 $ , it's optimal to increase the element at position $ 3 $ . The best sum becomes $ -1 + 5 = 4 $ for a subarray $ [3, 3] $ .\n- For $ k = 2 $ , it's optimal to increase the element at position $ 3 $ and any other element. The best sum is still $ 4 $ for a subarray $ [3, 3] $ .\n- For $ k = 3 $ , you have to increase all elements. The best sum becomes $ (-2 + 5) + (-7 + 5) + (-1 + 5) = 5 $ for a subarray $ [1, 3] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "INF\n=\n10\n**\n9\nfor\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n,\nx\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nmx\n=\n[-\nINF\nfor\ni\nin\nrange\n(\nn\n+\n1\n)]\nmx\n[\n0\n]\n=\n0\nfor\nl\nin\nrange\n(\nn\n):\ns\n=\n0\nfor\nr\nin\nrange\n(\nl\n,\nn\n):\ns\n+=\na\n[\nr\n]\nmx\n[\nr\n-\nl\n+\n1\n]\n=\nmax\n(\nmx\n[\nr\n-\nl\n+\n1\n],\ns\n)\nans\n=\n[\n0\nfor\ni\nin\nrange\n(\nn\n+\n1\n)]\nfor\nk\nin\nrange\n(\nn\n+\n1\n):\nbst\n=\n0\nfor\ni\nin\nrange\n(\nn\n+\n1\n):\nbst\n=\nmax\n(\nbst\n,\nmx\n[\ni\n]\n+\nmin\n(\nk\n,\ni\n)\n*\nx\n)\nans\n[\nk\n]\n=\nbst\nprint\n(\n\" \"\n.\njoin\n([\nstr\n(\nx\n)\nfor\nx\nin\nans\n]))"
+        }
+    ]
+}

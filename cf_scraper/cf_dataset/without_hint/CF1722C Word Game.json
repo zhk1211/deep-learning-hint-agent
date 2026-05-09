@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThree guys play a game: first, each person writes down $ n $ distinct words of length $ 3 $ . Then, they total up the number of points as follows:\n\n- if a word was written by one person — that person gets 3 points,\n- if a word was written by two people — each of the two gets 1 point,\n- if a word was written by all — nobody gets any points.\n\nIn the end, how many points does each player have?\n\nInput Format\nThe input consists of multiple test cases. The first line contains an integer $ t $ ( $ 1 \\leq t \\leq 100 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\leq n \\leq 1000 $ ) — the number of words written by each person.\n\nThe following three lines each contain $ n $ distinct strings — the words written by each person. Each string consists of $ 3 $ lowercase English characters.\n\nOutput Format\nFor each test case, output three space-separated integers — the number of points each of the three guys earned. You should output the answers in the same order as the input; the $ i $ -th integer should be the number of points earned by the $ i $ -th guy.\n\nExamples\nSample 1\nInput\n3\n1\nabc\ndef\nabc\n3\norz for qaq\nqaq orz for\ncod for ces\n5\niat roc hem ica lly\nbac ter iol ogi sts\nbac roc lly iol iat\nOutput\n1 3 1\n2 2 6\n9 11 5\n\nNote\nIn the first test case:\n\n- The word $ \\texttt{abc} $ was written by the first and third guys — they each get $ 1 $ point.\n- The word $ \\texttt{def} $ was written by the second guy only — he gets $ 3 $ points."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200007\n;\nconst\nint\nMOD\n=\n1000000007\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nmap\n<\nstring\n,\nint\n>\nmp\n;\nstring\na\n[\n3\n][\nn\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n3\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nn\n;\nj\n++)\n{\ncin\n>>\na\n[\ni\n][\nj\n];\nmp\n[\na\n[\ni\n][\nj\n]]++;\n}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n3\n;\ni\n++)\n{\nint\ntot\n=\n0\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nn\n;\nj\n++)\n{\nif\n(\nmp\n[\na\n[\ni\n][\nj\n]]\n==\n1\n)\n{\ntot\n+=\n3\n;}\nelse\nif\n(\nmp\n[\na\n[\ni\n][\nj\n]]\n==\n2\n)\n{\ntot\n++;}\n}\ncout\n<<\ntot\n<<\n' '\n;\n}\ncout\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

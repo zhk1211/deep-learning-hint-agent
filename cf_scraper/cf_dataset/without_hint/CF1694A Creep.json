@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nDefine the score of some binary string $ T $ as the absolute difference between the number of zeroes and ones in it. (for example, $ T= $ 010001 contains $ 4 $ zeroes and $ 2 $ ones, so the score of $ T $ is $ |4-2| = 2 $ ).\n\nDefine the creepiness of some binary string $ S $ as the maximum score among all of its prefixes (for example, the creepiness of $ S= $ 01001 is equal to $ 2 $ because the score of the prefix $ S[1 \\ldots 4] $ is $ 2 $ and the rest of the prefixes have a score of $ 2 $ or less).\n\nGiven two integers $ a $ and $ b $ , construct a binary string consisting of $ a $ zeroes and $ b $ ones with the minimum possible creepiness.\n\nInput Format\nThe first line contains a single integer $ t $ $ (1\\le t\\le 1000) $ — the number of test cases. The description of the test cases follows.\n\nThe only line of each test case contains two integers $ a $ and $ b $ ( $ 1 \\le a, b \\le 100 $ ) — the numbers of zeroes and ones correspondingly.\n\nOutput Format\nFor each test case, print a binary string consisting of $ a $ zeroes and $ b $ ones with the minimum possible creepiness. If there are multiple answers, print any of them.\n\nExamples\nSample 1\nInput\n5\n1 1\n1 2\n5 2\n4 5\n3 7\nOutput\n10\n011\n0011000\n101010101\n0001111111\n\nNote\nIn the first test case, the score of $ S[1 \\ldots 1] $ is $ 1 $ , and the score of $ S[1 \\ldots 2] $ is $ 0 $ .\n\nIn the second test case, the minimum possible creepiness is $ 1 $ and one of the other answers is 101.\n\nIn the third test case, the minimum possible creepiness is $ 3 $ and one of the other answers is 0001100."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "# include <bits/stdc++.h>\nusing\nnamespace\nstd\n;\nint\nt\n,\nA\n,\nB\n;\nint\nmain\n(){\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\ncin\n>>\nA\n>>\nB\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nmin\n(\nA\n,\nB\n);\n++\ni\n)\ncout\n<<\n\"01\"\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nabs\n(\nA\n-\nB\n);\n++\ni\n)\ncout\n<<\n(\nA\n<\nB\n?\n1\n:\n0\n);\ncout\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

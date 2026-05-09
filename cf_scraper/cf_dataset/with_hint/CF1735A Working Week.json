@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYour working week consists of $ n $ days numbered from $ 1 $ to $ n $ , after day $ n $ goes day $ 1 $ again. And $ 3 $ of them are days off. One of the days off is the last day, day $ n $ . You have to decide when the other two are.\n\nChoosing days off, you pursue two goals:\n\n- No two days should go one after the other. Note that you can't make day $ 1 $ a day off because it follows day $ n $ .\n- Working segments framed by days off should be as dissimilar as possible in duration. More specifically, if the segments are of size $ l_1 $ , $ l_2 $ , and $ l_3 $ days long, you want to maximize $ \\min(|l_1 - l_2|, |l_2 - l_3|, |l_3 - l_1|) $ .\n\nOutput the maximum value of $ \\min(|l_1 - l_2|, |l_2 - l_3|, |l_3 - l_1|) $ that can be obtained.\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases. The description of test cases follows.\n\nThe only line of each test case contains the integer $ n $ ( $ 6 \\le n \\le 10^9 $ ).\n\nOutput Format\nFor each test case, output one integer — the maximum possible obtained value.\n\nExamples\nSample 1\nInput\n3\n6\n10\n1033\nOutput\n0\n1\n342\n\nNote\nIn the image below you can see the example solutions for the first two test cases. Chosen days off are shown in purple. Working segments are underlined in green.\n\nIn test case $ 1 $ , the only options for days off are days $ 2 $ , $ 3 $ , and $ 4 $ (because $ 1 $ and $ 5 $ are next to day $ n $ ). So the only way to place them without selecting neighboring days is to choose days $ 2 $ and $ 4 $ . Thus, $ l_1 = l_2 = l_3 = 1 $ , and the answer $ \\min(|l_1 - l_2|, |l_2 - l_3|, |l_3 - l_1|) = 0 $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1735A/dfed8ea3572e1cfecf8344e85d82669346a02118.png)For test case $ 2 $ , one possible way to choose days off is shown. The working segments have the lengths of $ 2 $ , $ 1 $ , and $ 4 $ days. So the minimum difference is $ 1 = \\min(1, 3, 2) = \\min(|2 - 1|, |1 - 4|, |4 - 2|) $ . It can be shown that there is no way to make it larger.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1735A/9237d7201ef863017ca99b182ec61519de1dc66c.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "Let's consider that $$$l_1$$$, $$$l_2$$$, and $$$l_3$$$ are sorted working segments. Can we explicitly say something about one of them?"
+        },
+        {
+            "title": "Answer to Hint1",
+            "content": "$$$l_1$$$ must be equal to $$$1$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's consider that $$$l_1$$$, $$$l_2$$$, and $$$l_3$$$ are sorted working segments.\nIf $$$l_1$$$ is not equal to $$$1$$$ then we can decrease $$$l_1$$$ by $$$1$$$ and increase $$$l_3$$$ by $$$1$$$. So we'll increase the answer.\nWe've got that $$$l_1 = 1$$$ and we have to work just with $$$l_2$$$ and $$$l_3$$$.\nNow, our problem can be rewritten as:\n$$$l_2 + l_3 = n - 4$$$, maximize $$$min(l_2 - 1, l_3 - l_2)$$$.\nAnd as we know that $$$l_3 = n - 4 - l_2$$$, just:\nmaximize $$$min(l_2 - 1, n - 4 - 2 \\cdot l_2)$$$.\nIf we increase both values under the minimum scope by one, solutions don't change:\nmaximize $$$min(l_2, (n - 3) - 2 \\cdot l_2)$$$.\nIf we choose $$$l_2 = \\left\\lfloor\\frac{n-3}{3}\\right\\rfloor$$$, then $$$min(l_2, (n - 3) - 2 \\cdot l_2) = \\left\\lfloor\\frac{n-3}{3}\\right\\rfloor$$$.\nIf the answer is greater, then $$$l_2 \\gt \\frac{n - 3}{3}$$$ and $$$(n - 3) - 2 \\cdot l_2 \\gt \\frac{n - 3}{3}$$$, and it means that $$$2 \\cdot (l_2) + ((n - 3) - 2 \\cdot l_2) \\gt n - 3$$$ but $$$2 \\cdot (l_2) + ((n - 3) - 2 \\cdot l_2) = n - 3$$$.\nThe only thing is left to do is to calculate final answer. And it is $$$\\left\\lfloor\\frac{n-3}{3}\\right\\rfloor - 1$$$ or just $$$\\left\\lfloor\\frac{n}{3}\\right\\rfloor - 2$$$.\nIt was a mathematician way of solving. As it's pretty obvious that $$$l_2$$$ is approximately $$$\\frac{n}{3}$$$, you could check $$$l_2 = \\frac{n}{3} \\pm 5$$$ and choose the best among them."
+        }
+    ]
+}

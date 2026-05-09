@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIt is the easy version of the problem. The only difference is that in this version $ a_i \\le 200 $ .\n\nYou are given an array of $ n $ integers $ a_0, a_1, a_2, \\ldots a_{n - 1} $ . Bryap wants to find the longest beautiful subsequence in the array.\n\nAn array $ b = [b_0, b_1, \\ldots, b_{m-1}] $ , where $ 0 \\le b_0 < b_1 < \\ldots < b_{m - 1} < n $ , is a subsequence of length $ m $ of the array $ a $ .\n\nSubsequence $ b = [b_0, b_1, \\ldots, b_{m-1}] $ of length $ m $ is called beautiful, if the following condition holds:\n\n- For any $ p $ ( $ 0 \\le p < m - 1 $ ) holds: $ a_{b_p} \\oplus b_{p+1} < a_{b_{p+1}} \\oplus b_p $ .\n\nHere $ a \\oplus b $ denotes the [bitwise XOR](https://en.wikipedia.org/wiki/Bitwise_operation#XOR) of $ a $ and $ b $ . For example, $ 2 \\oplus 4 = 6 $ and $ 3 \\oplus 1=2 $ .\n\nBryap is a simple person so he only wants to know the length of the longest such subsequence. Help Bryap and find the answer to his question.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^5 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\leq n \\leq 3 \\cdot 10^5 $ ) — the length of the array.\n\nThe second line of each test case contains $ n $ integers $ a_0,a_1,...,a_{n-1} $ ( $ 0 \\leq a_i \\leq 200 $ ) — the elements of the array.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 3 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case print a single integer — the length of the longest beautiful subsequence.\n\nExamples\nSample 1\nInput\n3\n2\n1 2\n5\n5 2 4 3 1\n10\n3 8 8 2 9 1 6 2 8 3\nOutput\n2\n3\n6\n\nNote\nIn the first test case, we can pick the whole array as a beautiful subsequence because $ 1 \\oplus 1 < 2 \\oplus 0 $ .\n\nIn the second test case, we can pick elements with indexes $ 1 $ , $ 2 $ and $ 4 $ (in $ 0 $ -indexation). For this elements holds: $ 2 \\oplus 2 < 4 \\oplus 1 $ and $ 4 \\oplus 4 < 1 \\oplus 2 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's use dynamic programming to solve this task. $$$dp_i$$$ -- maximum length of good subsequence, that ends int $$$i$$$-th element of $$$a$$$, than naive solution is\n$$$ dp_i = \\max_{\\substack{j = 0 \\\\ a_j \\oplus i  \\lt  a_i \\oplus j}}^i dp_j + 1 $$$\nLet's observe that $$$a_j \\oplus i$$$ changes $$$i$$$ not more than by $$$200$$$.\nThis way we can relax $$$dp_i$$$ not from $$$j = 0$$$, but $$$j = i - 512$$$, because xor operation changes only last 8 bits, so for $$$j' \\lt i - 512$$$, definitely $$$a_{j'} \\oplus j \\gt a_{j} \\oplus j'$$$.\nAdditional idea:\nIt not so hard to proove that we can try $$$j$$$ from $$$i - 256$$$ to $$$i - 1$$$."
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Unless the first player must lose after the first move, the numbers of stones in these piles should form a permutation obtained from $$$0$$$ to $$$(n - 1)$$$ in the end, in order to ensure that there are no two piles include the same number of stones.\nLet's use $$$cnt[x]$$$ to represent the number of piles which have exactly $$$x$$$ stones in the beginning. There are four cases that Tokitsukaze will lose after the first move:\n$$$cnt[0] \\gt 1$$$;\n$$$cnt[x] \\gt 2$$$ for some $$$x$$$;\n$$$cnt[x] \\gt 1$$$ and $$$cnt[y] \\gt 1$$$ for some $$$x$$$, $$$y$$$ ($$$x \\neq y$$$);\n$$$cnt[x] \\gt 1$$$ and $$$cnt[x - 1] \\gt 0$$$ for some $$$x$$$.\nIf Tokitsukaze won't lose after the first move, then we only need to check the parity of the total number of stones that can be taken.\nBy the way, if you don't want to discuss the above four cases, you can just enumerate her first move."
+        },
+        {
+            "title": "Solution (by tokitsukaze)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nll\n;\nconst\nint\nMAX\n=\n1e5\n+\n10\n;\nint\na\n[\nMAX\n];\nint\nmain\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nmap\n<\nint\n,\nint\n>\nmp\n;\nint\nok\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\nmp\n[\na\n[\ni\n]]++;\nok\n&=(\nmp\n[\na\n[\ni\n]]<\n3\n);\n//situation 1: one >=3\n}\nint\ncnt\n=\n0\n;\nfor\n(\nauto\nit\n:\nmp\n)\n{\nif\n(\nit\n.\nsecond\n>=\n2\n)\ncnt\n++;\n}\nok\n&=(\ncnt\n<=\n1\n);\n// situation 2: more than two >=2\nfor\n(\nauto\nit\n:\nmp\n)\n{\nif\n(\nit\n.\nsecond\n==\n2\n)\n{\nok\n&=(\nmp\n.\ncount\n(\nit\n.\nfirst\n-\n1\n)==\n0\n);\n// situation 3: reduce one but add another\nif\n(\nit\n.\nfirst\n==\n0\n)\nok\n=\n0\n;\n// situation 4: two pile is zero\n}\n}\nif\n(!\nok\n)\nreturn\n0\n*\nputs\n(\n\"cslnb\"\n);\n// normal situation\nsort\n(\na\n+\n1\n,\na\n+\n1\n+\nn\n);\nll s\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nassert\n(\na\n[\ni\n]>=\ni\n-\n1\n);\ns\n+=\na\n[\ni\n]-(\ni\n-\n1\n);\n}\ns\n%=\n2\n;\nreturn\n0\n*\nputs\n(\ns\n?\n\"sjfnb\"\n:\n\"cslnb\"\n);\n}"
+        },
+        {
+            "title": "Solution (by skywalkert)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nmaxn\n=\n(\nint\n)\n1e5\n+\n1\n;\nint\nn\n,\na\n[\nmaxn\n],\nc\n[\n3\n];\nvoid\nupdate\n(\nint\nx\n,\nint\nd\n)\n{\nstatic\nmap\n<\nint\n,\nint\n>\nctr\n;\nint\n&\nv\n=\nctr\n[\nx\n];\n--\nc\n[\nmin\n(\nv\n,\n2\n)];\nv\n+=\nd\n;\n++\nc\n[\nmin\n(\nv\n,\n2\n)];\n}\nint\nmain\n()\n{\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nscanf\n(\n\"%d\"\n,\na\n+\ni\n);\nupdate\n(\na\n[\ni\n],\n1\n);\n}\nbool\nchk\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\n!\nchk\n&&\ni\n<\nn\n;\n++\ni\n)\nif\n(\na\n[\ni\n])\n{\nupdate\n(\na\n[\ni\n],\n-\n1\n);\nupdate\n(\na\n[\ni\n]\n-\n1\n,\n1\n);\nchk\n|=\n!\nc\n[\n2\n];\nupdate\n(\na\n[\ni\n]\n-\n1\n,\n-\n1\n);\nupdate\n(\na\n[\ni\n],\n1\n);\n}\nif\n(\nchk\n)\n{\nchk\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\nchk\n^=\n(\na\n[\ni\n]\n+\ni\n)\n&\n1\n;\n}\nputs\n(\nchk\n?\n\"sjfnb\"\n:\n\"cslnb\"\n);\nreturn\n0\n;\n}"
+        }
+    ]
+}

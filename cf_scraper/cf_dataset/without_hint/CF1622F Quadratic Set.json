@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's call a set of positive integers $ a_1, a_2, \\dots, a_k $ quadratic if the product of the factorials of its elements is a square of an integer, i. e. $ \\prod\\limits_{i=1}^{k} a_i! = m^2 $ , for some integer $ m $ .\n\nYou are given a positive integer $ n $ .\n\nYour task is to find a quadratic subset of a set $ 1, 2, \\dots, n $ of maximum size. If there are multiple answers, print any of them.\n\nInput Format\nA single line contains a single integer $ n $ ( $ 1 \\le n \\le 10^6 $ ).\n\nOutput Format\nIn the first line, print a single integer — the size of the maximum subset. In the second line, print the subset itself in an arbitrary order.\n\nExamples\nSample 1\nInput\n1\nOutput\n1\n1\n\nSample 2\nInput\n4\nOutput\n3\n1 3 4\n\nSample 3\nInput\n7\nOutput\n4\n1 4 5 6\n\nSample 4\nInput\n9\nOutput\n7\n1 2 4 5 6 7 9"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n1000\n*\n1000\n+\n13\n;\nusing\nli\n=\nunsigned\nlong\nlong\n;\nint\npr\n[\nN\n];\nli hs\n[\nN\n],\nf\n[\nN\n];\nunordered_map\n<\nli\n,\nint\n>\nrf\n;\nint\nmain\n()\n{\nint\nn\n;\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nmt19937_64 rnd\n(\nchrono\n::\nsteady_clock\n::\nnow\n().\ntime_since_epoch\n().\ncount\n());\niota\n(\npr\n,\npr\n+\nN\n,\n0\n);\nfor\n(\nint\ni\n=\n2\n;\ni\n<=\nn\n;\n++\ni\n)\nif\n(\npr\n[\ni\n]\n==\ni\n)\n{\nfor\n(\nint\nj\n=\ni\n;\nj\n<=\nn\n;\nj\n+=\ni\n)\npr\n[\nj\n]\n=\nmin\n(\npr\n[\nj\n],\ni\n);\nhs\n[\ni\n]\n=\nrnd\n();\n}\nfor\n(\nint\ni\n=\n2\n;\ni\n<=\nn\n;\n++\ni\n)\n{\nf\n[\ni\n]\n=\nf\n[\ni\n-\n1\n];\nint\nx\n=\ni\n;\nwhile\n(\nx\n!=\n1\n)\n{\nf\n[\ni\n]\n^=\nhs\n[\npr\n[\nx\n]];\nx\n/=\npr\n[\nx\n];\n}\nrf\n[\nf\n[\ni\n]]\n=\ni\n;\n}\nauto\nsolve\n=\n[&]\n(\nint\nn\n)\n->\nvector\n<int>\n{\nli fp\n=\n0\n;\nfor\n(\nint\ni\n=\n2\n;\ni\n<=\nn\n;\n++\ni\n)\nfp\n^=\nf\n[\ni\n];\nif\n(\nfp\n==\n0\n)\nreturn\n{};\nif\n(\nrf\n.\ncount\n(\nfp\n))\nreturn\n{\nrf\n[\nfp\n]};\nfor\n(\nint\ni\n=\n2\n;\ni\n<=\nn\n;\n++\ni\n)\n{\nli x\n=\nf\n[\ni\n]\n^\nfp\n;\nif\n(\nrf\n.\ncount\n(\nx\n)\n&&\nrf\n[\nx\n]\n!=\ni\n)\nreturn\n{\nrf\n[\nx\n],\ni\n};\n}\nreturn\n{\n2\n,\nn\n/\n2\n,\nn\n};\n};\nauto\nans\n=\nsolve\n(\nn\n);\nprintf\n(\n\"%d\\n\"\n,\nn\n-\n(\nint\n)\nans\n.\nsize\n());\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\nif\n(\nfind\n(\nans\n.\nbegin\n(),\nans\n.\nend\n(),\ni\n)\n==\nans\n.\nend\n())\nprintf\n(\n\"%d \"\n,\ni\n);\nputs\n(\n\"\"\n);\n}"
+        }
+    ]
+}

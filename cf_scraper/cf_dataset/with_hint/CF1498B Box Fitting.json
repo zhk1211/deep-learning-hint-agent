@@ -1,0 +1,56 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given $ n $ rectangles, each of height $ 1 $ . Each rectangle's width is a power of $ 2 $ (i. e. it can be represented as $ 2^x $ for some non-negative integer $ x $ ).\n\nYou are also given a two-dimensional box of width $ W $ . Note that $ W $ may or may not be a power of $ 2 $ . Moreover, $ W $ is at least as large as the width of the largest rectangle.\n\nYou have to find the smallest height of this box, such that it is able to fit all the given rectangles. It is allowed to have some empty space left in this box after fitting all the rectangles.\n\nYou cannot rotate the given rectangles to make them fit into the box. Moreover, any two distinct rectangles must not overlap, i. e., any two distinct rectangles must have zero intersection area.\n\nSee notes for visual explanation of sample input.\n\nInput Format\nThe first line of input contains one integer $ t $ ( $ 1 \\le t \\le 5 \\cdot 10^3 $ ) — the number of test cases. Each test case consists of two lines.\n\nFor each test case:\n\n- the first line contains two integers $ n $ ( $ 1 \\le n \\le 10^5 $ ) and $ W $ ( $ 1 \\le W \\le 10^9 $ );\n- the second line contains $ n $ integers $ w_1, w_2, \\dots, w_n $ ( $ 1 \\le w_i \\le 10^6 $ ), where $ w_i $ is the width of the $ i $ -th rectangle. Each $ w_i $ is a power of $ 2 $ ;\n- additionally, $ \\max\\limits_{i=1}^{n} w_i \\le W $ .\n\nThe sum of $ n $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nOutput $ t $ integers. The $ i $ -th integer should be equal to the answer to the $ i $ -th test case — the smallest height of the box.\n\nExamples\nSample 1\nInput\n2\n5 16\n1 2 8 4 8\n6 10\n2 8 8 2 2 8\nOutput\n2\n3\n\nNote\nFor the first test case in the sample input, the following figure shows one way to fit the given five rectangles into the 2D box with minimum height:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1498B/c4bb98ad37834f3e833cc55e38d3b77b700a7197.png)In the figure above, the number inside each rectangle is its width. The width of the 2D box is $ 16 $ (indicated with arrow below). The minimum height required for the 2D box in this case is $ 2 $ (indicated on the left).\n\nIn the second test case, you can have a minimum height of three by keeping two blocks (one each of widths eight and two) on each of the three levels."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "There can exist multiple optimal packings for a given set of rectangles. However, all of them can always be rearranged to follow a specific pattern, based on the rectangles' sizes."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Can you show that it is always possible to replace a set of consecutive small blocks with a single large block? (of same or larger size)"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution summary",
+            "content": "We follow a greedy strategy:\nInitialize height of box as 1.\nInitialize current layer size as $$$W$$$.\nPick the largest available rectangle that can fit into the current layer, and place it there. Repeat until this layer cannot fit any more rectangles.\nIf more rectangles remain, increment height by 1 and now repeat the last three steps. Else, output the current value of height."
+        },
+        {
+            "title": "Solution implementation",
+            "content": "First count sort the given rectangles based on their widths. There can only be 20 distinct rectangle widths in the range $$$[1, 10^9]$$$, so the following works:\ncounts\n=\n[\n0\nfor\nw\nin\nrange\n(\n0\n,\n20\n)]\nfor\nw\nin\nwidths\n:\ncounts\n[\nlog2\n(\nw\n)]\n+=\n1\nThe solution can be implemented by iterating $$$N$$$ times.\nAt each iteration, step through the\ncounts\narray and take the largest available rectangle that can fit into the current space. If no rectangle was able to fit, increment height by 1 and reset box width to $$$W$$$.\nThis has complexity $$$\\mathcal{O}(n\\log(w_\\text{max}))$$$."
+        },
+        {
+            "title": "Another implementation",
+            "content": "It is also possible to implement the solution with a\nmultiset\nand\nupper_bound\n, for a complexity of $$$\\mathcal{O}(n\\log(n))$$$.\nStore all rectangle sizes in a multiset. At each iteration, find using\nupper_bound\nthe largest rectangle that can fit into the current space we have, and fit it in. If no rectangle can fit in this space, reset the space to maximum, increment height, and repeat."
+        },
+        {
+            "title": "Alternate implementation with easier proof",
+            "content": "There is a binary search method to solve this problem. We binary search for the minimum height required. Given a height $$$h$$$ — how to check if it can fit all rectangles?\nWe first preprocess the given array to construct a new array $$$c_i$$$ = number of rectangles of width $$$1 « i$$$. The size of this array is < 20.\nWe iterate from largest width to smallest width. Let its width is $$$w_i$$$. Then, we know that it fits only $$$W / w_i$$$ times in one layer. Therefore, with height $$$h$$$, the box can only fit in $$$f_i = h \\times (W / w_i)$$$. So, we can say that if $$$f_i \\lt c_i$$$, then this height is insufficient.\nTherefore, we now know that for any $$$i$$$, if $$$f_i \\lt c_i$$$, then the height is insufficient. Do we need more conditions to provably state that the given height is sufficient?\nYes! We also need to check if we can fit in the $$$i$$$-th block\nin combination with\ntthe $$$i+1$$$-th block. That is, when checking if the $$$i$$$-th block has enough space, we need to account for the space that\nhas already been used\nby the $$$i + 1$$$-th block. So, we need to update $$$c_i = c_i + 2\\times c_{i+1} + 4\\times c_{i+2} \\ldots$$$.\nTherefore, we only need to compute the suffix sum $$$c_i$$$ like so and then check the above conditions. Complexity is $$$\\mathcal{O}(n+\\log(w_{max})\\log(n))$$$."
+        },
+        {
+            "title": "Does this solution work when block widths are not a power of two?",
+            "content": "As we understood in the proof, this solution only works when it's guaranteed that smaller blocks will always exactly sum to any larger block. Therefore, if the blocks are not powers of two, this guarantee does not hold.\nThe following counterexample suffices:\n6\n13\n6\n6\n4\n4\n3\n3\nAs you can see here the smaller blocks are not guaranteed to sum to the larger block (no prefix of $$$4,3,3$$$ sums to $$$6$$$). Our greedy solution gives minimum height 3, but best possible minimum height is $$$2$$$ (first layer: $$$6,4,3$$$, second layer: $$$6,4,3$$$)"
+        },
+        {
+            "title": "C++ solution",
+            "content": "#include\n<cmath>\n#include\n<iostream>\n#include\n<vector>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nbox_width\n,\nw\n;\ncin\n>>\nn\n>>\nbox_width\n;\nvector\n<int>\ncounts\n(\n20\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\nw\n;\ncounts\n[\nlog2\n(\nw\n)]++;\n}\nint\nheight\n=\n1\n,\nspace_left\n=\nbox_width\n;\nfor\n(\nint\niter\n=\n0\n;\niter\n<\nn\n;\niter\n++)\n{\nint\nlargest\n=\n-\n1\n;\nfor\n(\nint\nsize\n=\n19\n;\nsize\n>=\n0\n;\nsize\n--)\n{\nif\n(\ncounts\n[\nsize\n]\nand\n(\n1\n<<\nsize\n)\n<=\nspace_left\n)\n{\nlargest\n=\nsize\n;\nbreak\n;\n}\n}\nif\n(\nlargest\n==\n-\n1\n)\n{\nspace_left\n=\nbox_width\n;\nheight\n++;\nfor\n(\nint\nsize\n=\n19\n;\nsize\n>=\n0\n;\nsize\n--)\n{\nif\n(\ncounts\n[\nsize\n]\nand\n(\n1\n<<\nsize\n)\n<=\nspace_left\n)\n{\nlargest\n=\nsize\n;\nbreak\n;\n}\n}\n}\ncounts\n[\nlargest\n]\n-=\n1\n;\nspace_left\n-=\n1\n<<\nlargest\n;\n}\ncout\n<<\nheight\n<<\nendl\n;\n}\n}"
+        },
+        {
+            "title": "Python solution",
+            "content": "from\nmath\nimport\nlog2\ndef\nsolve_tc\n():\nn\n,\nw\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nwidths\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\ncounts\n=\n[\n0\nfor\n_\nin\nrange\n(\n20\n)]\nfor\nwidth\nin\nwidths\n:\ncounts\n[\nint\n(\nlog2\n(\nwidth\n))]\n+=\n1\nspace\n=\nw\n    height\n=\n1\nfor\nit\nin\nrange\n(\nn\n):\nlargest\n=\n-\n1\nfor\nsize\n,\ncount_width\nin\nlist\n(\nenumerate\n(\ncounts\n))[::-\n1\n]:\nif\ncounts\n[\nsize\n]\n>\n0\nand\n(\n2\n**\nsize\n)\n<=\nspace\n:\nlargest\n=\nsize\nbreak\nif\nlargest\n==\n-\n1\n:\nspace\n=\nw\n            height\n+=\n1\nfor\nsize\n,\ncount_width\nin\nlist\n(\nenumerate\n(\ncounts\n))[::-\n1\n]:\nif\ncounts\n[\nsize\n]\n>\n0\nand\n(\n2\n**\nsize\n)\n<=\nspace\n:\nlargest\n=\nsize\nbreak\nassert\n(\nlargest\n!=\n-\n1\n)\ncounts\n[\nlargest\n]\n-=\n1\nspace\n-=\n2\n**\nlargest\nprint\n(\nheight\n)\nt\n=\nint\n(\ninput\n())\nwhile\nt\n>\n0\n:\nt\n-=\n1\nsolve_tc\n()"
+        },
+        {
+            "title": "C++ solution - multiset",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n,\nw\n;\nint\nbox_width\n;\ncin\n>>\nn\n>>\nbox_width\n;\nmultiset\n<int>\nst\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\nw\n;\nst\n.\ninsert\n(\nw\n);\n}\nint\nheight\n=\n1\n,\nspace_left\n=\nbox_width\n;\nwhile\n(!\nst\n.\nempty\n())\n{\nauto\nit\n=\nst\n.\nupper_bound\n(\nspace_left\n);\nif\n(\nit\n!=\nst\n.\nbegin\n())\n{\nit\n--;\nint\nval\n=\n*\nit\n;\nspace_left\n-=\nval\n;\nst\n.\nerase\n(\nit\n);\n}\nelse\n{\nspace_left\n=\nbox_width\n;\nheight\n++;\n}\n}\ncout\n<<\nheight\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        },
+        {
+            "title": "C++ solution for easier proof",
+            "content": "#include\n<array>\n#include\n<cassert>\n#include\n<cmath>\n#include\n<iostream>\nusing\nnamespace\nstd\n;\n#define\nPW\n20\narray\n<\nint\n,\nPW\n>\narr\n;\nint\nn\n,\nw\n;\nbool\nvalid\n(\nint\nheight\n)\n{\nfor\n(\nint\npw\n=\n0\n;\npw\n<\nPW\n;\npw\n++)\n{\nlong\nlong\nunits_i_have\n=\n1ll\n*\nheight\n*\n(\nw\n/\n(\n1\n<<\npw\n));\nif\n(\nunits_i_have\n<\narr\n[\npw\n])\nreturn\nfalse\n;\n}\nreturn\ntrue\n;\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\ncin\n>>\nn\n>>\nw\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nPW\n;\ni\n++)\narr\n[\ni\n]\n=\n0\n;\nfor\n(\nint\n_\n=\n0\n;\n_\n<\nn\n;\n_\n++)\n{\nint\nw\n;\ncin\n>>\nw\n;\narr\n[\nlog2\n(\nw\n)]\n+=\n1\n;\n}\n// suffix cumulative count\nfor\n(\nint\ni\n=\nPW\n-\n2\n;\ni\n>=\n0\n;\ni\n--)\narr\n[\ni\n]\n+=\n2\n*\narr\n[\ni\n+\n1\n];\nint\nbeg\n=\n1\n,\nend\n=\nn\n,\nans\n=\n-\n1\n;\nwhile\n(\nbeg\n<=\nend\n)\n{\nint\nmid\n=\n(\nbeg\n+\nend\n)\n/\n2\n;\nif\n(\nvalid\n(\nmid\n))\n{\nend\n=\nmid\n-\n1\n;\nans\n=\nmid\n;\n}\nelse\n{\nbeg\n=\nmid\n+\n1\n;\n}\n}\nassert\n(\nans\n!=\n-\n1\n);\ncout\n<<\nans\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

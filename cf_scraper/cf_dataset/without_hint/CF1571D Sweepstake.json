@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "fun main\n()\n{\nval\n(\nn\n,\nm\n)\n=\nreadLine\n()!!.\nsplit\n(\n' '\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval cntPairs\n=\nArray\n(\nn\n)\n{\nIntArray\n(\nn\n)\n{\n0\n}\n}\nval cntFirst\n=\nIntArray\n(\nn\n)\n{\n0\n}\nval cntLast\n=\nIntArray\n(\nn\n)\n{\n0\n}\nval firstPair\n=\nreadLine\n()!!.\nsplit\n(\n' '\n).\nmap\n{\nit\n.\ntoInt\n()\n-\n1\n}\nfor\n(\ni\nin\n2.\n.\nm\n)\n{\nval\n(\nf\n,\nl\n)\n=\nreadLine\n()!!.\nsplit\n(\n' '\n).\nmap\n{\nit\n.\ntoInt\n()\n-\n1\n}\ncntPairs\n[\nf\n][\nl\n]++\ncntFirst\n[\nf\n]++\ncntLast\n[\nl\n]++\n}\nfun I\n(\na\n:\nBoolean\n)\n=\nif\n(\na\n)\n1\nelse\n0\nvar\nworstPlace\n=\n0\nfor\n(\nw\nin\n0\nuntil\nn\n)\n{\nfor\n(\nl\nin\n0\nuntil\nn\n)\n{\nif\n(\nw\n==\nl\n)\ncontinue\nval yourScore\n=\nI\n(\nw\n==\nfirstPair\n[\n0\n])\n+\nI\n(\nl\n==\nfirstPair\n[\n1\n])\nvar\nplace\n=\n1\nif\n(\nyourScore\n<\n2\n)\nplace\n+=\ncntPairs\n[\nw\n][\nl\n]\nif\n(\nyourScore\n<\n1\n)\nplace\n+=\ncntFirst\n[\nw\n]\n+\ncntLast\n[\nl\n]\n-\n2\n*\ncntPairs\n[\nw\n][\nl\n]\nworstPlace\n=\nmaxOf\n(\nworstPlace\n,\nplace\n)\n}\n}\nprintln\n(\nworstPlace\n)\n}"
+        }
+    ]
+}

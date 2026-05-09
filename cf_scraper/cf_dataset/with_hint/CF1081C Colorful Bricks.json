@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nOn his free time, Chouti likes doing some housework. He has got one new task, paint some bricks in the yard.\n\nThere are $ n $ bricks lined in a row on the ground. Chouti has got $ m $ paint buckets of different colors at hand, so he painted each brick in one of those $ m $ colors.\n\nHaving finished painting all bricks, Chouti was satisfied. He stood back and decided to find something fun with these bricks. After some counting, he found there are $ k $ bricks with a color different from the color of the brick on its left (the first brick is not counted, for sure).\n\nSo as usual, he needs your help in counting how many ways could he paint the bricks. Two ways of painting bricks are different if there is at least one brick painted in different colors in these two ways. Because the answer might be quite big, you only need to output the number of ways modulo $ 998\\,244\\,353 $ .\n\nInput Format\nThe first and only line contains three integers $ n $ , $ m $ and $ k $ ( $ 1 \\leq n,m \\leq 2000, 0 \\leq k \\leq n-1 $ ) — the number of bricks, the number of colors, and the number of bricks, such that its color differs from the color of brick to the left of it.\n\nOutput Format\nPrint one integer — the number of ways to color bricks modulo $ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n3 3 0\nOutput\n3\n\nSample 2\nInput\n3 2 1\nOutput\n4\n\nNote\nIn the first example, since $ k=0 $ , the color of every brick should be the same, so there will be exactly $ m=3 $ ways to color the bricks.\n\nIn the second example, suppose the two colors in the buckets are yellow and lime, the following image shows all $ 4 $ possible colorings.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1081C/4fa7a2f23ff4f46a8191eb0b20c44295510018b7.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "No hint here :)"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let\nf\n[\ni\n][\nj\n]\nbe the ways that there're\nj\nbricks of a different color from its left-adjacent brick among bricks numbered\n1\nto\ni\n. Considering whether the\ni\n-th brick is of the same color of\ni\n- 1\n-th, we have\nf\n[\ni\n][\nj\n] =\nf\n[\ni\n- 1][\nj\n] +\nf\n[\ni\n- 1][\nj\n- 1](\nm\n- 1)\n.\nf\n[1][0] =\nm\nand the answer is\nf\n[\nn\n][\nk\n]\n.\nAlso, there is a possibly easier solution. We can first choose the bricks of a different color from its left and then choose a different color to color them, so the answer can be found to be simply\n."
+        }
+    ]
+}

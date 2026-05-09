@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWe say an infinite sequence $ a_{0}, a_{1}, a_2, \\ldots $ is non-increasing if and only if for all $ i\\ge 0 $ , $ a_i \\ge a_{i+1} $ .\n\nThere is an infinite right and down grid. The upper-left cell has coordinates $ (0,0) $ . Rows are numbered $ 0 $ to infinity from top to bottom, columns are numbered from $ 0 $ to infinity from left to right.\n\nThere is also a non-increasing infinite sequence $ a_{0}, a_{1}, a_2, \\ldots $ . You are given $ a_0 $ , $ a_1 $ , $ \\ldots $ , $ a_n $ ; for all $ i>n $ , $ a_i=0 $ . For every pair of $ x $ , $ y $ , the cell with coordinates $ (x,y) $ (which is located at the intersection of $ x $ -th row and $ y $ -th column) is white if $ y<a_x $ and black otherwise.\n\nInitially there is one doll named Jina on $ (0,0) $ . You can do the following operation.\n\n- Select one doll on $ (x,y) $ . Remove it and place a doll on $ (x,y+1) $ and place a doll on $ (x+1,y) $ .\n\nNote that multiple dolls can be present at a cell at the same time; in one operation, you remove only one. Your goal is to make all white cells contain $ 0 $ dolls.\n\nWhat's the minimum number of operations needed to achieve the goal? Print the answer modulo $ 10^9+7 $ .\n\nInput Format\nThe first line of input contains one integer $ n $ ( $ 1\\le n\\le 2\\cdot 10^5 $ ).\n\nThe second line of input contains $ n+1 $ integers $ a_0,a_1,\\ldots,a_n $ ( $ 0\\le a_i\\le 2\\cdot 10^5 $ ).\n\nIt is guaranteed that the sequence $ a $ is non-increasing.\n\nOutput Format\nPrint one integer — the answer to the problem, modulo $ 10^9+7 $ .\n\nExamples\nSample 1\nInput\n2\n2 2 0\nOutput\n5\n\nSample 2\nInput\n10\n12 11 8 8 6 6 6 5 3 2 1\nOutput\n2596\n\nNote\nConsider the first example. In the given grid, cells $ (0,0),(0,1),(1,0),(1,1) $ are white, and all other cells are black. Let us use triples to describe the grid: triple $ (x,y,z) $ means that there are $ z $ dolls placed on cell $ (x,y) $ . Initially the state of the grid is $ (0,0,1) $ .\n\nOne of the optimal sequence of operations is as follows:\n\n- Do the operation with $ (0,0) $ . Now the state of the grid is $ (1,0,1),(0,1,1) $ .\n- Do the operation with $ (0,1) $ . Now the state of the grid is $ (1,0,1),(1,1,1),(0,2,1) $ .\n- Do the operation with $ (1,0) $ . Now the state of the grid is $ (1,1,2),(0,2,1),(2,0,1) $ .\n- Do the operation with $ (1,1) $ . Now the state of the grid is $ (1,1,1),(0,2,1),(2,0,1),(1,2,1),(2,1,1) $ .\n- Do the operation with $ (1,1) $ . Now the state of the grid is $ (0,2,1),(2,0,1),(1,2,2),(2,1,2) $ .\n\nNow all white cells contain $ 0 $ dolls, so we have achieved the goal with $ 5 $ operations."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Try to find out the number of operations we do on a specific cell $$$(i,j)$$$, call it $$$f(i,j)$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Write the recurrence formula for $$$f(i,j)$$$. What is $$$f(i,j)$$$?\nAnswer\n$$$f(i,j)=\\binom{i+j}j$$$"
+        },
+        {
+            "title": "Hint 3",
+            "content": "The answer is the sum of $$$f(i,j)$$$ over all white cells $$$(i,j)$$$. Use some combinatorics formula to speed it up."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let us find out the number of operations we do on a specific cell $$$(i,j)$$$, call it $$$f(i,j)$$$.\nEvery operation done on $$$(i-1,j)$$$ will lead to one doll on $$$(i,j)$$$, thus consuming one operation on $$$(i,j)$$$. Similar observation holds for $$$(i,j-1)$$$.\nThus, $$$f(i,j)=f(i,j-1)+f(i-1,j)$$$ (given that $$$(i,j),(i-1,j),(i,j-1)$$$ are all white cells). Note that $$$a$$$ is non-increasing: this means that if $$$(i,j)$$$ is white, $$$(i-1,j),(i,j-1)$$$ will both be white. So we can conclude that $$$f(i,j)=f(i,j-1)+f(i-1,j)$$$ always holds as long as $$$(i,j)$$$ is white.\nAnother way to see the formula is $$$f(i,j)$$$ is the number of ways to go from $$$(0,0)$$$ to $$$(i,j)$$$, only going down or right by 1 step. This implies that $$$f(i,j)=\\binom{i+j}j$$$.\nFrom this, we know that the answer is $$$\\sum_{i=0}^n\\sum_{j=0}^{a_i-1} \\binom{i+j}{i}$$$. With the equation $$$\\sum_{i=0}^k\\binom{n+i}n=\\binom{n+k+1}{n+1}$$$, we know that the answer is $$$\\sum_{i=0}^n\\binom{i+a_i}{i+1}$$$.\nThe time complexity is $$$O(n+V)$$$, where $$$V=\\max a_i$$$."
+        }
+    ]
+}

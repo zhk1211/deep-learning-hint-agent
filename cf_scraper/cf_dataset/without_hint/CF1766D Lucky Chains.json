@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nLet's name a pair of positive integers $ (x, y) $ lucky if the greatest common divisor of them is equal to $ 1 $ ( $ \\gcd(x, y) = 1 $ ).\n\nLet's define a chain induced by $ (x, y) $ as a sequence of pairs $ (x, y) $ , $ (x + 1, y + 1) $ , $ (x + 2, y + 2) $ , $ \\dots $ , $ (x + k, y + k) $ for some integer $ k \\ge 0 $ . The length of the chain is the number of pairs it consists of, or $ (k + 1) $ .\n\nLet's name such chain lucky if all pairs in the chain are lucky.\n\nYou are given $ n $ pairs $ (x_i, y_i) $ . Calculate for each pair the length of the longest lucky chain induced by this pair. Note that if $ (x_i, y_i) $ is not lucky itself, the chain will have the length $ 0 $ .\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\le n \\le 10^6 $ ) — the number of pairs.\n\nNext $ n $ lines contains $ n $ pairs — one per line. The $ i $ -th line contains two integers $ x_i $ and $ y_i $ ( $ 1 \\le x_i < y_i \\le 10^7 $ ) — the corresponding pair.\n\nOutput Format\nPrint $ n $ integers, where the $ i $ -th integer is the length of the longest lucky chain induced by $ (x_i, y_i) $ or $ -1 $ if the chain can be infinitely long.\n\nExamples\nSample 1\nInput\n4\n5 15\n13 37\n8 9\n10009 20000\nOutput\n0\n1\n-1\n79\n\nNote\nIn the first test case, $ \\gcd(5, 15) = 5 > 1 $ , so it's already not lucky, so the length of the lucky chain is $ 0 $ .\n\nIn the second test case, $ \\gcd(13 + 1, 37 + 1) = \\gcd(14, 38) = 2 $ . So, the lucky chain consists of the single pair $ (13, 37) $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nfore\n(\ni\n,\nl\n,\nr\n)\nfor\n(\nint\ni\n=\nint\n(\nl\n);\ni\n<\nint\n(\nr\n);\ni\n++)\n#define\nsz\n(\na\n)\nint\n((\na\n).\nsize\n())\ntypedef\nlong\nlong\nli\n;\nconst\nint\nINF\n=\nint\n(\n1e9\n);\nconst\nint\nN\n=\nint\n(\n1e7\n)\n+\n5\n;\nint\nmind\n[\nN\n];\nvoid\nprecalc\n()\n{\nfore\n(\ni\n,\n0\n,\nN\n)\nmind\n[\ni\n]\n=\ni\n;\nfor\n(\nint\np\n=\n2\n;\np\n<\nN\n;\np\n++)\n{\nif\n(\nmind\n[\np\n]\n!=\np\n)\ncontinue\n;\nfor\n(\nint\nd\n=\n2\n*\np\n;\nd\n<\nN\n;\nd\n+=\np\n)\nmind\n[\nd\n]\n=\nmin\n(\nmind\n[\nd\n],\np\n);\n}\n}\nint\nx\n,\ny\n;\ninline\nbool\nread\n()\n{\nif\n(!(\ncin\n>>\nx\n>>\ny\n))\nreturn\nfalse\n;\nreturn\ntrue\n;\n}\nvector\n<int>\ngetPrimes\n(\nint\nv\n)\n{\nvector\n<int>\nps\n;\nwhile\n(\nv\n>\n1\n)\n{\nif\n(\nps\n.\nempty\n()\n||\nps\n.\nback\n()\n!=\nmind\n[\nv\n])\nps\n.\npush_back\n(\nmind\n[\nv\n]);\nv\n/=\nmind\n[\nv\n];\n}\nreturn\nps\n;\n}\ninline\nvoid\nsolve\n()\n{\nint\nd\n=\ny\n-\nx\n;\nif\n(\nd\n==\n1\n)\n{\ncout\n<<\n-\n1\n<<\n'\\n'\n;\nreturn\n;\n}\nint\nr\n=\nINF\n;\nfor\n(\nint\np\n:\ngetPrimes\n(\nd\n))\nr\n=\nmin\n(\nr\n,\n((\nx\n+\np\n-\n1\n)\n/\np\n)\n*\np\n);\ncout\n<<\nr\n-\nx\n<<\n'\\n'\n;\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\nint\ntt\n=\nclock\n();\n#endif\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n),\ncout\n.\ntie\n(\n0\n);\ncout\n<<\nfixed\n<<\nsetprecision\n(\n15\n);\nprecalc\n();\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nread\n();\nsolve\n();\n#ifdef\n_DEBUG\n\t\tcerr\n<<\n\"TIME = \"\n<<\nclock\n()\n-\ntt\n<<\nendl\n;\ntt\n=\nclock\n();\n#endif\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

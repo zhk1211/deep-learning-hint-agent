@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ n $ integers.\n\nYou have to perform the sequence of $ n-2 $ operations on this array:\n\n- during the first operation, you either add $ a_2 $ to $ a_1 $ and subtract $ a_2 $ from $ a_3 $ , or add $ a_2 $ to $ a_3 $ and subtract $ a_2 $ from $ a_1 $ ;\n- during the second operation, you either add $ a_3 $ to $ a_2 $ and subtract $ a_3 $ from $ a_4 $ , or add $ a_3 $ to $ a_4 $ and subtract $ a_3 $ from $ a_2 $ ;\n- ...\n- during the last operation, you either add $ a_{n-1} $ to $ a_{n-2} $ and subtract $ a_{n-1} $ from $ a_n $ , or add $ a_{n-1} $ to $ a_n $ and subtract $ a_{n-1} $ from $ a_{n-2} $ .\n\nSo, during the $ i $ -th operation, you add the value of $ a_{i+1} $ to one of its neighbors, and subtract it from the other neighbor.\n\nFor example, if you have the array $ [1, 2, 3, 4, 5] $ , one of the possible sequences of operations is:\n\n- subtract $ 2 $ from $ a_3 $ and add it to $ a_1 $ , so the array becomes $ [3, 2, 1, 4, 5] $ ;\n- subtract $ 1 $ from $ a_2 $ and add it to $ a_4 $ , so the array becomes $ [3, 1, 1, 5, 5] $ ;\n- subtract $ 5 $ from $ a_3 $ and add it to $ a_5 $ , so the array becomes $ [3, 1, -4, 5, 10] $ .\n\nSo, the resulting array is $ [3, 1, -4, 5, 10] $ .\n\nAn array is reachable if it can be obtained by performing the aforementioned sequence of operations on $ a $ . You have to calculate the number of reachable arrays, and print it modulo $ 998244353 $ .\n\nInput Format\nThe first line contains one integer $ n $ ( $ 3 \\le n \\le 300 $ ).\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i \\le 300 $ ).\n\nOutput Format\nPrint one integer — the number of reachable arrays. Since the answer can be very large, print its remainder modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n4\n1 1 1 1\nOutput\n3\n\nSample 2\nInput\n5\n1 2 3 5 0\nOutput\n7"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nadd\n(\nint\nx\n,\nint\ny\n)\n{\nx\n+=\ny\n;\nwhile\n(\nx\n>=\nMOD\n)\nx\n-=\nMOD\n;\nwhile\n(\nx\n<\n0\n)\nx\n+=\nMOD\n;\nreturn\nx\n;\n}\nconst\nint\nZERO\n=\n100000\n;\nint\ndp\n[\n2\n][\nZERO\n*\n2\n];\nvoid\nrecalc\n(\nint\nx\n)\n{\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nZERO\n*\n2\n;\ni\n++)\ndp\n[\n1\n][\ni\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nZERO\n*\n2\n;\ni\n++)\n{\nif\n(\ndp\n[\n0\n][\ni\n]\n==\n0\n)\ncontinue\n;\nint\nnx\n=\nx\n+\ni\n;\ndp\n[\n1\n][\nnx\n]\n=\nadd\n(\ndp\n[\n1\n][\nnx\n],\ndp\n[\n0\n][\ni\n]);\nif\n(\nnx\n!=\nZERO\n)\ndp\n[\n1\n][\n2\n*\nZERO\n-\nnx\n]\n=\nadd\n(\ndp\n[\n1\n][\n2\n*\nZERO\n-\nnx\n],\ndp\n[\n0\n][\ni\n]);\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nZERO\n*\n2\n;\ni\n++)\ndp\n[\n0\n][\ni\n]\n=\ndp\n[\n1\n][\ni\n];\n}\nint\nmain\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\na\n[\ni\n];\ndp\n[\n0\n][\nZERO\n]\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n+\n1\n<\nn\n;\ni\n++)\nrecalc\n(\na\n[\ni\n]);\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nZERO\n*\n2\n;\ni\n++)\nans\n=\nadd\n(\nans\n,\ndp\n[\n0\n][\ni\n]);\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

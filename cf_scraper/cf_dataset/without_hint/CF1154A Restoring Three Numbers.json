@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp has guessed three positive integers $ a $ , $ b $ and $ c $ . He keeps these numbers in secret, but he writes down four numbers on a board in arbitrary order — their pairwise sums (three numbers) and sum of all three numbers (one number). So, there are four numbers on a board in random order: $ a+b $ , $ a+c $ , $ b+c $ and $ a+b+c $ .\n\nYou have to guess three numbers $ a $ , $ b $ and $ c $ using given numbers. Print three guessed integers in any order.\n\nPay attention that some given numbers $ a $ , $ b $ and $ c $ can be equal (it is also possible that $ a=b=c $ ).\n\nInput Format\nThe only line of the input contains four positive integers $ x_1, x_2, x_3, x_4 $ ( $ 2 \\le x_i \\le 10^9 $ ) — numbers written on a board in random order. It is guaranteed that the answer exists for the given number $ x_1, x_2, x_3, x_4 $ .\n\nOutput Format\nPrint such positive integers $ a $ , $ b $ and $ c $ that four numbers written on a board are values $ a+b $ , $ a+c $ , $ b+c $ and $ a+b+c $ written in some order. Print $ a $ , $ b $ and $ c $ in any order. If there are several answers, you can print any. It is guaranteed that the answer exists.\n\nExamples\nSample 1\nInput\n3 6 5 4\nOutput\n2 1 3\n\nSample 2\nInput\n40 40 40 60\nOutput\n20 20 20\n\nSample 3\nInput\n201 101 101 200\nOutput\n1 100 100"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nvector\n<int>\na\n(\n4\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n4\n;\n++\ni\n)\n{\ncin\n>>\na\n[\ni\n];\n}\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\ncout\n<<\na\n[\n3\n]\n-\na\n[\n0\n]\n<<\n\" \"\n<<\na\n[\n3\n]\n-\na\n[\n1\n]\n<<\n\" \"\n<<\na\n[\n3\n]\n-\na\n[\n2\n]\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

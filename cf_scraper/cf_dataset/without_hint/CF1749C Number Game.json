@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlice and Bob are playing a game. They have an array of positive integers $ a $ of size $ n $ .\n\nBefore starting the game, Alice chooses an integer $ k \\ge 0 $ . The game lasts for $ k $ stages, the stages are numbered from $ 1 $ to $ k $ . During the $ i $ -th stage, Alice must remove an element from the array that is less than or equal to $ k - i + 1 $ . After that, if the array is not empty, Bob must add $ k - i + 1 $ to an arbitrary element of the array. Note that both Alice's move and Bob's move are two parts of the same stage of the game. If Alice can't delete an element during some stage, she loses. If the $ k $ -th stage ends and Alice hasn't lost yet, she wins.\n\nYour task is to determine the maximum value of $ k $ such that Alice can win if both players play optimally. Bob plays against Alice, so he tries to make her lose the game, if it's possible.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 100 $ ) — the size of the array $ a $ .\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le n $ ).\n\nOutput Format\nFor each test case, print one integer — the maximum value of $ k $ such that Alice can win if both players play optimally.\n\nExamples\nSample 1\nInput\n4\n3\n1 1 2\n4\n4 4 4 4\n1\n1\n5\n1 3 2 1 1\nOutput\n2\n0\n1\n3"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\n&\nx\n:\na\n)\ncin\n>>\nx\n;\nint\nans\n=\n0\n;\nfor\n(\nint\nk\n=\n1\n;\nk\n<=\nn\n;\n++\nk\n)\n{\nmultiset\n<int>\ns\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\n++\ni\n)\n{\nauto\nit\n=\ns\n.\nupper_bound\n(\nk\n-\ni\n);\nif\n(\nit\n==\ns\n.\nbegin\n())\nbreak\n;\ns\n.\nerase\n(--\nit\n);\nif\n(!\ns\n.\nempty\n())\n{\nint\nx\n=\n*\ns\n.\nbegin\n();\ns\n.\nerase\n(\ns\n.\nbegin\n());\ns\n.\ninsert\n(\nx\n+\nk\n-\ni\n);\n}\n}\nif\n(\ns\n.\nsize\n()\n+\nk\n==\nn\n)\nans\n=\nk\n;\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nEven if it's a really easy question, she won't be able to answer it\n\n— Perfect Memento in Strict Sense\n\nCirno's perfect bitmasks classroom has just started!\n\nCirno gave her students a positive integer $ x $ . As an assignment, her students need to find the minimum positive integer $ y $ , which satisfies the following two conditions:\n\n$$x\\ \\texttt{and}\\ y > 0 $$\n\n$$x\\ \\texttt{xor}\\ y > 0 $$\n\nWhere $\\texttt{and}$ is the [bitwise AND operation](https://en.wikipedia.org/wiki/Bitwise_operation#AND), and $\\texttt{xor}$ is the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).\n\nAmong the students was Mystia, who was truly baffled by all these new operators. Please help her!\n\nInput Format\nThe first line of input contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^3 $ ) — the number of input test cases.\n\nFor each test case, the only line of input contains one integer $ x $ ( $ 1 \\leq x \\leq 2^{30} $ ).\n\nOutput Format\nFor each test case, print a single integer — the minimum number of $ y $ .\n\nExamples\nSample 1\nInput\n7\n1\n2\n5\n9\n16\n114514\n1000000\nOutput\n3\n3\n1\n1\n17\n2\n64\n\nNote\nTest case 1:\n\n$ 1\\; \\texttt{and}\\; 3=1>0 $ , $ 1\\; \\texttt{xor}\\; 3=2>0 $ .\n\nTest case 2:\n\n$ 2\\; \\texttt{and}\\; 3=2>0 $ , $ 2\\; \\texttt{xor}\\; 3=1>0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint",
+            "content": "Consider $$$x=2^k$$$ and $$$x\\ne 2^k$$$ separately."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let $$$p_i$$$ be the $$$i$$$-th bit of $$$x$$$, $$$q_i$$$ be the $$$i$$$-th bit of $$$y$$$ (both indexed from $$$0$$$).\n$$$x\\ \\texttt{and}\\ y \\gt 0\\Leftrightarrow \\exists i,\\ p_i= q_i = 1$$$.\n$$$x\\ \\texttt{xor}\\ y \\gt 0\\Leftrightarrow \\exists i,\\ p_i\\ne q_i$$$.\nTo satisfy the first condition, find the minimum integer $$$k$$$ satisfying $$$p_k=1$$$, and assign $$$1$$$ to $$$q_k$$$.\nIf $$$x\\ne 2^k$$$, the second condition is satisfied now. Otherwise, find the minimum integer $$$j$$$ satisfying $$$p_j=0$$$, and assign $$$1$$$ to $$$q_j$$$.\nThe time complexity is $$$O(1)$$$."
+        }
+    ]
+}

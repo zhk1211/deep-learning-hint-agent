@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ pieces of tangerine peel, the $ i $ -th of them has size $ a_i $ . In one step it is possible to divide one piece of size $ x $ into two pieces of positive integer sizes $ y $ and $ z $ so that $ y + z = x $ .\n\nYou want that for each pair of pieces, their sizes differ strictly less than twice. In other words, there should not be two pieces of size $ x $ and $ y $ , such that $ 2x \\le y $ . What is the minimum possible number of steps needed to satisfy the condition?\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains the integer $ n $ ( $ 1 \\le n \\le 100 $ ).\n\nThen one line follows, containing $ n $ integers $ a_1 \\le a_2 \\le \\ldots \\le a_n $ ( $ 1 \\le a_i \\le 10^7 $ ).\n\nOutput Format\nFor each test case, output a single line containing the minimum number of steps.\n\nExamples\nSample 1\nInput\n3\n5\n1 2 3 4 5\n1\n1033\n5\n600 900 1300 2000 2550\nOutput\n10\n0\n4\n\nNote\nIn the first test case, we initially have a piece of size $ 1 $ , so all final pieces must have size $ 1 $ . The total number of steps is: $ 0 + 1 + 2 + 3 + 4 = 10 $ .\n\nIn the second test case, we have just one piece, so we don't need to do anything, and the answer is $ 0 $ steps.\n\nIn the third test case, one of the possible cut options is: $ 600,\\ 900,\\ (600 | 700),\\ (1000 | 1000),\\ (1000 | 1000 | 550) $ . You can see this option in the picture below. The maximum piece has size $ 1000 $ , and it is less than $ 2 $ times bigger than the minimum piece of size $ 550 $ . $ 4 $ steps are done. We can show that it is the minimum possible number of steps.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1735B/28837ca57e9f20f873e71a5d21feab7da5248146.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "Is there a way to cut pieces to save the minimum value and satisfy required conditions?"
+        },
+        {
+            "title": "Hint2",
+            "content": "What is the minimum possible number of operations to perform it?\nIs there any better solution?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's start with a simple solution.\nLet's choose the minimum piece from $$$a$$$ and assume that it will remain the minimum until the end.\nAs the array is sorted, let's define the minimum piece as $$$a_1$$$.\nIt means that in the end, all pieces must be smaller or equal to $$$2 \\cdot a_1 - 1$$$.\nThe lower bound of the answer for this solution is $$$\\displaystyle{\\sum\\limits_{i=1}^{n}\\left\\lceil\\frac{a_i}{2 \\cdot a_1 - 1}\\right\\rceil}$$$.\nLet's show that this is achievable.\nFor each piece, while its size greater than $$$2 \\cdot a_1 - 1$$$, let's cut off a piece of size $$$2 \\cdot a_1 - 1$$$.\nThe only problem is that we could get a piece smaller than $$$a_1$$$ in the end.\nBut it means that before the last cut we had a piece in the range $$$[2 \\cdot a_1, 3 \\cdot a_1 - 2]$$$. All pieces in this range can be easily cut into pieces of the right size in one move.\nThe only left question is why the minimum piece in the end should have size $$$a_1$$$. Actually, it shouldn't, but it gives the best answer anyway.\nAs was described above, the lower bound of the solution with the minimal piece of size $$$x$$$ in the end is $$$\\displaystyle{\\sum\\limits_{i=1}^{n}\\left\\lceil\\frac{a_i}{2 \\cdot x - 1}\\right\\rceil}$$$.\nHaving a minimal piece with a smaller size, we can't get anything better, because the lower bound will be equal or greater for all $$$x \\lt a_1$$$."
+        }
+    ]
+}

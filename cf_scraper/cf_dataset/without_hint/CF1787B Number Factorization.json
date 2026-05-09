@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nGiven an integer $ n $ .\n\nConsider all pairs of integer arrays $ a $ and $ p $ of the same length such that $ n = \\prod a_i^{p_i} $ (i.e. $ a_1^{p_1}\\cdot a_2^{p_2}\\cdot\\ldots $ ) ( $ a_i>1;p_i>0 $ ) and $ a_i $ is the product of some (possibly one) distinct prime numbers.\n\nFor example, for $ n = 28 = 2^2\\cdot 7^1 = 4^1 \\cdot 7^1 $ the array pair $ a = [2, 7] $ , $ p = [2, 1] $ is correct, but the pair of arrays $ a = [4, 7] $ , $ p = [1, 1] $ is not, because $ 4=2^2 $ is a product of non-distinct prime numbers.\n\nYour task is to find the maximum value of $ \\sum a_i \\cdot p_i $ (i.e. $ a_1\\cdot p_1 + a_2\\cdot p_2 + \\ldots $ ) over all possible pairs of arrays $ a $ and $ p $ . Note that you do not need to minimize or maximize the length of the arrays.\n\nInput Format\nEach test contains multiple test cases. The first line contains an integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nEach test case contains only one integer $ n $ ( $ 2 \\le n \\le 10^9 $ ).\n\nOutput Format\nFor each test case, print the maximum value of $ \\sum a_i \\cdot p_i $ .\n\nExamples\nSample 1\nInput\n7\n100\n10\n864\n130056192\n1000000000\n2\n999999018\nOutput\n20\n10\n22\n118\n90\n2\n333333009\n\nNote\nIn the first test case, $ 100 = 10^2 $ so that $ a = [10] $ , $ p = [2] $ when $ \\sum a_i \\cdot p_i $ hits the maximum value $ 10\\cdot 2 = 20 $ . Also, $ a = [100] $ , $ p = [1] $ does not work since $ 100 $ is not made of distinct prime factors.\n\nIn the second test case, we can consider $ 10 $ as $ 10^1 $ , so $ a = [10] $ , $ p = [1] $ . Notice that when $ 10 = 2^1\\cdot 5^1 $ , $ \\sum a_i \\cdot p_i = 7 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nmp make_pair\npair\n<\nint\n,\nint\n>\ns\n[\n110\n];\nint\nd\n[\n110\n];\nvoid\nget\n()\n{\nint\nn\n,\nl\n=\n0\n,\ni\n,\nc\n;\ncin\n>>\nn\n;\nfor\n(\ni\n=\n2\n;\ni\n*\ni\n<=\nn\n;\ni\n++)\n{\nif\n(\nn\n%\ni\n==\n0\n)\n{\nc\n=\n0\n;\nwhile\n(\nn\n%\ni\n==\n0\n)\nc\n++,\nn\n/=\ni\n;\ns\n[++\nl\n]\n=\nmake_pair\n(\nc\n,\ni\n);\n}\n}\nif\n(\nn\n!=\n1\n)\ns\n[++\nl\n]\n=\nmake_pair\n(\n1\n,\nn\n);\nsort\n(\ns\n+\n1\n,\ns\n+\nl\n+\n1\n),\nd\n[\nl\n+\n1\n]\n=\n1\n;\nfor\n(\ni\n=\nl\n;\ni\n>=\n1\n;\ni\n--)\nd\n[\ni\n]\n=\nd\n[\ni\n+\n1\n]\n*\ns\n[\ni\n].\nsecond\n;\nint\nans\n=\n0\n;\nfor\n(\ni\n=\n1\n;\ni\n<=\nl\n;\ni\n++)\nif\n(\ns\n[\ni\n].\nfirst\n!=\ns\n[\ni\n-\n1\n].\nfirst\n)\nans\n+=\nd\n[\ni\n]\n*\n(\ns\n[\ni\n].\nfirst\n-\ns\n[\ni\n-\n1\n].\nfirst\n);\ncout\n<<\nans\n<<\nendl\n;\n}\nsigned\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n--)\nget\n();\nreturn\n0\n;\n}"
+        }
+    ]
+}

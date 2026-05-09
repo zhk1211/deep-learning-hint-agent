@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\n**The only difference between this problem and the hard version is the constraints on $t$ and $n$.**\n\nYou are given an array of $n$ positive integers $a_1,\\dots,a_n$, and a (possibly negative) integer $c$.\n\nAcross all permutations $b_1,\\dots,b_n$ of the array $a_1,\\dots,a_n$, consider the minimum possible value of\n\n$$\n\\sum_{i=1}^{n-1} |b_{i+1}-b_i-c|.\n$$\nFind the lexicographically smallest permutation $b$ of the array $a$ that achieves this minimum.\n\nA sequence $x$ is lexicographically smaller than a sequence $y$ if and only if one of the following holds:\n\n- $x$ is a prefix of $y$, but $x \\ne y$;\n- in the first position where $x$ and $y$ differ, the sequence $x$ has a smaller element than the corresponding element in $y$.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^3$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $c$ ($1 \\le n \\le 5 \\cdot 10^3$, $-10^9 \\le c \\le 10^9$).\n\nThe second line of each test case contains $n$ integers $a_1,\\dots,a_n$ ($1 \\le a_i \\le 10^9$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $5 \\cdot 10^3$.\n\nOutput Format\nFor each test case, output $n$ integers $b_1,\\dots,b_n$, the lexicographically smallest permutation of $a$ that achieves the minimum $\\sum\\limits_{i=1}^{n-1} |b_{i+1}-b_i-c|$.\n\nExamples\nSample 1\nInput\n3\n6 -7\n3 1 4 1 5 9\n3 2\n1 3 5\n1 2718\n2818\nOutput\n9 3 1 4 5 1\n1 3 5\n2818\n\nNote\nIn the first test case, it can be proven that the minimum possible value of $\\sum\\limits_{i=1}^{n-1} |b_{i+1}-b_i-c|$ is $27$, and the permutation $b = [9,3,1,4,5,1]$ is the lexicographically smallest permutation of $a$ that achieves this minimum: $|3-9-(-7)|+|1-3-(-7)|+|4-1-(-7)|+|5-4-(-7)|+|1-5-(-7)| = 1+5+10+8+3 = 27$.\n\nIn the second test case, the minimum possible value of $\\sum\\limits_{i=1}^{n-1} |b_{i+1}-b_i-c|$ is $0$, and $b = [1,3,5]$ is the lexicographically smallest permutation of $a$ that achieves this.\n\nIn the third test case, there is only one permutation $b$."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Solve the case $$$c \\ge 0$$$ first. There is a very simple description of the answer.\nAnother Hint\nWhat is the answer when $$$c = 0$$$?"
+        },
+        {
+            "title": "Another Hint",
+            "content": "What is the answer when $$$c = 0$$$?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "When $$$c \\ge 0$$$, the answer is the array sorted in nondecreasing order."
+        },
+        {
+            "title": "Hint 3",
+            "content": "When $$$c \\lt 0$$$, the minimum cost is achieved by sorting the array in nonincreasing order, but this is not the lexicographically smallest. Try to greedily form the lexicographically smallest array one element at a time."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution (easy version)",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\ntypedef\nlong\nlong\nint\nLLI\n;\nint\na\n[\n200000\n];\nint\nmain\n()\n{\nint\ni\n,\nj\n;\nint\nt\n,\nn\n,\nc\n;\nscanf\n(\n\"%d\"\n,&\nt\n);\nwhile\n(\nt\n--)\n{\nscanf\n(\n\"%d %d\"\n,&\nn\n,&\nc\n);\nfor\n(\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nscanf\n(\n\"%d\"\n,&\na\n[\ni\n]);\nif\n(\nc\n>=\n0\n)\n{\nsort\n(\na\n,\na\n+\nn\n);\nfor\n(\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nprintf\n(\n\"%d%c\"\n,\na\n[\ni\n],(\ni\n==\nn\n-\n1\n)\n?\n'\\n'\n:\n' '\n);\ncontinue\n;\n}\nsort\n(\na\n,\na\n+\nn\n,\ngreater\n<int>\n());\nfor\n(\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nfor\n(\nj\n=\nn\n-\n1\n;\nj\n>\ni\n;\nj\n--)\n{\nLLI diff\n=\n-\nabs\n(\na\n[\nj\n]-\na\n[\nj\n-\n1\n]-\nc\n);\nif\n(\nj\n<\nn\n-\n1\n)\n{\ndiff\n-=\nabs\n(\na\n[\nj\n+\n1\n]-\na\n[\nj\n]-\nc\n);\ndiff\n+=\nabs\n(\na\n[\nj\n+\n1\n]-\na\n[\nj\n-\n1\n]-\nc\n);\n}\nif\n(\ni\n==\n0\n)\ndiff\n+=\nabs\n(\na\n[\ni\n]-\na\n[\nj\n]-\nc\n);\nelse\n{\ndiff\n-=\nabs\n(\na\n[\ni\n]-\na\n[\ni\n-\n1\n]-\nc\n);\ndiff\n+=\nabs\n(\na\n[\ni\n]-\na\n[\nj\n]-\nc\n);\ndiff\n+=\nabs\n(\na\n[\nj\n]-\na\n[\ni\n-\n1\n]-\nc\n);\n}\nif\n(\ndiff\n==\n0\n)\n{\nfor\n(;\nj\n>\ni\n;\nj\n--)\nswap\n(\na\n[\nj\n],\na\n[\nj\n-\n1\n]);\n}\n}\n}\nfor\n(\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nprintf\n(\n\"%d%c\"\n,\na\n[\ni\n],(\ni\n==\nn\n-\n1\n)\n?\n'\\n'\n:\n' '\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

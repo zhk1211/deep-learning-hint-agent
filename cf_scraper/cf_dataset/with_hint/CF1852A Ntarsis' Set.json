@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nNtarsis has been given a set $ S $ , initially containing integers $ 1, 2, 3, \\ldots, 10^{1000} $ in sorted order. Every day, he will remove the $ a_1 $ -th, $ a_2 $ -th, $ \\ldots $ , $ a_n $ -th smallest numbers in $ S $ simultaneously.\n\nWhat is the smallest element in $ S $ after $ k $ days?\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^5 $ ). The description of the test cases follows.\n\nThe first line of each test case consists of two integers $ n $ and $ k $ ( $ 1 \\leq n,k \\leq 2 \\cdot 10^5 $ ) — the length of $ a $ and the number of days.\n\nThe following line of each test case consists of $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\leq a_i \\leq 10^9 $ ) — the elements of array $ a $ .\n\nIt is guaranteed that:\n\n- The sum of $ n $ over all test cases won't exceed $ 2 \\cdot 10^5 $ ;\n- The sum of $ k $ over all test cases won't exceed $ 2 \\cdot 10^5 $ ;\n- $ a_1 < a_2 < \\cdots < a_n $ for all test cases.\n\nOutput Format\nFor each test case, print an integer that is the smallest element in $ S $ after $ k $ days.\n\nExamples\nSample 1\nInput\n7\n5 1\n1 2 4 5 6\n5 3\n1 3 5 6 7\n4 1000\n2 3 4 5\n9 1434\n1 4 7 9 12 15 17 18 20\n10 4\n1 3 5 7 9 11 13 15 17 19\n10 6\n1 4 7 10 13 16 19 22 25 28\n10 150000\n1 3 4 5 10 11 12 13 14 15\nOutput\n3\n9\n1\n12874\n16\n18\n1499986\n\nNote\nFor the first test case, each day the $ 1 $ -st, $ 2 $ -nd, $ 4 $ -th, $ 5 $ -th, and $ 6 $ -th smallest elements need to be removed from $ S $ . So after the first day, $ S $ will become $ \\require{cancel} $ $ \\{\\cancel 1, \\cancel 2, 3, \\cancel 4, \\cancel 5, \\cancel 6, 7, 8, 9, \\ldots\\} = \\{3, 7, 8, 9, \\ldots\\} $ . The smallest element is $ 3 $ .\n\nFor the second case, each day the $ 1 $ -st, $ 3 $ -rd, $ 5 $ -th, $ 6 $ -th and $ 7 $ -th smallest elements need to be removed from $ S $ . $ S $ will be changed as follows:\n\nDay $ S $ before $ S $ after1 $ \\{\\cancel 1, 2, \\cancel 3, 4, \\cancel 5, \\cancel 6, \\cancel 7, 8, 9, 10, \\ldots \\} $ $ \\to $ $ \\{2, 4, 8, 9, 10, \\ldots\\} $ 2 $ \\{\\cancel 2, 4, \\cancel 8, 9, \\cancel{10}, \\cancel{11}, \\cancel{12}, 13, 14, 15, \\ldots\\} $ $ \\to $ $ \\{4, 9, 13, 14, 15, \\ldots\\} $ 3 $ \\{\\cancel 4, 9, \\cancel{13}, 14, \\cancel{15}, \\cancel{16}, \\cancel{17}, 18, 19, 20, \\ldots\\} $ $ \\to $ $ \\{9, 14, 18, 19, 20, \\ldots\\} $ The smallest element left after $ k = 3 $ days is $ 9 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Suppose that the numbers are arranged in a line in increasing order. Take a look at each number $$$x$$$ before some day. If it isn't deleted on that day, what new position does it occupy, and how is that impacted by its previous position?\nAnswer\nIf $$$x$$$ is between $$$a_i$$$ and $$$a_{i+1}$$$, it will move to a new position of $$$x-i$$$, since $$$i$$$ positions before it are deleted."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Take this observation, and apply it to simulate the process backwards."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Suppose the numbers are arranged in a line in increasing order. Consider simulating backwards; instead of deleting the numbers at positions $$$a_1,a_2,\\ldots,a_n$$$ in each operation, then checking the first number after $$$k$$$ operations, we start with the number $$$1$$$ at the front, try to insert zeroes right after positions $$$a_1-1, a_2-2, \\ldots, a_{n}-n$$$ in each operation so that the zeroes will occupy positions $$$a_1, a_2, \\ldots, a_n$$$ after the insertion, and after $$$k$$$ insertions, we will check the position that $$$1$$$ will end up at.\nIf $$$a_1$$$ is not equal to $$$1$$$, the answer is $$$1$$$. Otherwise, each insertion can be processed in $$$O(1)$$$ if we keep track of how many of $$$a_1-1, a_{2}-2,\\ldots,a_{n}-n$$$ are before the current position $$$x$$$ of $$$1$$$; if $$$a_1-1$$$ through $$$a_i-i$$$ are before $$$x$$$, then we will insert $$$i$$$ zeroes before $$$x$$$.\nThe time complexity is $$$O(n+k)$$$ per test case. The editorial code additionally processes every insertion with the same $$$i$$$ value in $$$O(1)$$$, for $$$O(n)$$$ overall complexity.\nThere are alternative solutions using binary search with complexity $$$O(k\\log nk)$$$ or $$$O(k\\log n\\log nk)$$$, and we allowed them to pass. In fact, this problem was originally proposed with $$$k \\leq 10^9$$$ but we lowered the constraints."
+        },
+        {
+            "title": "Code (C++) -- Model Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n,\nk\n,\na\n[\n200010\n];\nvoid\nsolve\n()\n{\ncin\n>>\nn\n>>\nk\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\na\n[\ni\n]\n-=\ni\n;\n}\nif\n(\na\n[\n0\n]\n!=\n1\n)\n{\ncout\n<<\n1\n<<\n\"\\n\"\n;\nreturn\n;\n}\na\n[\nn\n]\n=\n2e9\n;\n//start at position 1, and find what number moves to its position\nlong\nlong\nans\n=\n1\n;\nint\ninc\n=\n1\n;\n//how many zeroes to insert\nwhile\n(\ninc\n<\nn\n)\n{\nint\ndays\n=\n(\na\n[\ninc\n]\n-\nans\n+\ninc\n-\n1\n)\n/\ninc\n;\nif\n(\ndays\n>=\nk\n){\nans\n+=\nk\n*\ninc\n;\nk\n=\n0\n;\nbreak\n;\n}\nans\n+=\ndays\n*\ninc\n;\nk\n-=\ndays\n;\nwhile\n(\na\n[\ninc\n]\n<=\nans\n)\ninc\n++;\n}\nans\n+=\n1ll\n*\nk\n*\nn\n;\ncout\n<<\nans\n<<\n\"\\n\"\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\nsolve\n();\n}"
+        }
+    ]
+}

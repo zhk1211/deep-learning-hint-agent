@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two integers $ b $ and $ w $ . You have a chessboard of size $ 10^9 \\times 10^9 $ with the top left cell at $ (1; 1) $ , the cell $ (1; 1) $ is painted white.\n\nYour task is to find a connected component on this chessboard that contains exactly $ b $ black cells and exactly $ w $ white cells. Two cells are called connected if they share a side (i.e. for the cell $ (x, y) $ there are at most four connected cells: $ (x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1) $ ). A set of cells is called a connected component if for every pair of cells $ C_1 $ and $ C_2 $ from this set, there exists a sequence of cells $ c_1 $ , $ c_2 $ , ..., $ c_k $ such that $ c_1 = C_1 $ , $ c_k = C_2 $ , all $ c_i $ from $ 1 $ to $ k $ are belong to this set of cells and for every $ i \\in [1, k - 1] $ , cells $ c_i $ and $ c_{i + 1} $ are connected.\n\nObviously, it can be impossible to find such component. In this case print \"NO\". Otherwise, print \"YES\" and any suitable connected component.\n\nYou have to answer $ q $ independent queries.\n\nInput Format\nThe first line of the input contains one integer $ q $ ( $ 1 \\le q \\le 10^5 $ ) — the number of queries. Then $ q $ queries follow.\n\nThe only line of the query contains two integers $ b $ and $ w $ ( $ 1 \\le b, w \\le 10^5 $ ) — the number of black cells required and the number of white cells required.\n\nIt is guaranteed that the sum of numbers of cells does not exceed $ 2 \\cdot 10^5 $ ( $ \\sum w + \\sum b \\le 2 \\cdot 10^5 $ ).\n\nOutput Format\nFor each query, print the answer to it.\n\nIf it is impossible to find the required component, print \"NO\" on the first line.\n\nOtherwise, print \"YES\" on the first line. In the next $ b + w $ lines print coordinates of cells of your component in any order. There should be exactly $ b $ black cells and $ w $ white cells in your answer. The printed component should be connected.\n\nIf there are several answers, you can print any. All coordinates in the answer should be in the range $ [1; 10^9] $ .\n\nExamples\nSample 1\nInput\n3\n1 1\n1 4\n2 5\nOutput\nYES\n2 2\n1 2\nYES\n2 3\n1 3\n3 3\n2 2\n2 4\nYES\n2 3\n2 4\n2 5\n1 3\n1 5\n3 3\n3 5"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nq\n;\ncin\n>>\nq\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nq\n;\n++\ni\n)\n{\nint\nb\n,\nw\n;\ncin\n>>\nb\n>>\nw\n;\nvector\n<\npair\n<\nint\n,\nint\n>>\nres\n;\nbool\nneed\n=\nb\n<\nw\n;\nif\n(\nneed\n)\nswap\n(\nw\n,\nb\n);\nint\nx\n=\n2\n,\ny\n=\n2\n;\nwhile\n(\nw\n>\n0\n)\n{\nif\n((\nx\n+\ny\n)\n%\n2\n==\n1\n)\n{\nres\n.\npush_back\n({\nx\n,\ny\n});\n--\nb\n;\n}\nelse\n{\nres\n.\npush_back\n({\nx\n,\ny\n});\n--\nw\n;\n}\n++\ny\n;\n}\nint\ncx\n=\n1\n,\ncy\n=\n2\n;\nwhile\n(\nb\n>\n0\n&&\ncy\n<=\ny\n)\n{\nres\n.\npush_back\n({\ncx\n,\ncy\n});\n--\nb\n;\ncy\n+=\n2\n;\n}\ncx\n=\n3\n,\ncy\n=\n2\n;\nwhile\n(\nb\n>\n0\n&&\ncy\n<=\ny\n)\n{\nres\n.\npush_back\n({\ncx\n,\ncy\n});\n--\nb\n;\ncy\n+=\n2\n;\n}\nif\n(\nb\n>\n0\n)\n{\nres\n.\npush_back\n({\n2\n,\n1\n});\n--\nb\n;\n}\nif\n(\nb\n>\n0\n)\n{\nres\n.\npush_back\n({\n2\n,\ny\n});\n--\nb\n;\n}\nif\n(\nb\n>\n0\n)\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\nelse\n{\nassert\n(\nw\n==\n0\n);\ncout\n<<\n\"YES\"\n<<\nendl\n;\nfor\n(\nauto\nit\n:\nres\n)\ncout\n<<\nit\n.\nfirst\n<<\n\" \"\n<<\nit\n.\nsecond\n+\nneed\n<<\nendl\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

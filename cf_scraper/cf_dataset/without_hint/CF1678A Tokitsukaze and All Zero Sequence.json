@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nTokitsukaze has a sequence $ a $ of length $ n $ . For each operation, she selects two numbers $ a_i $ and $ a_j $ ( $ i \\ne j $ ; $ 1 \\leq i,j \\leq n $ ).\n\n- If $ a_i = a_j $ , change one of them to $ 0 $ .\n- Otherwise change both of them to $ \\min(a_i, a_j) $ .\n\nTokitsukaze wants to know the minimum number of operations to change all numbers in the sequence to $ 0 $ . It can be proved that the answer always exists.\n\nInput Format\nThe first line contains a single positive integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases.\n\nFor each test case, the first line contains a single integer $ n $ ( $ 2 \\leq n \\leq 100 $ ) — the length of the sequence $ a $ .\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 0 \\leq a_i \\leq 100 $ ) — the sequence $ a $ .\n\nOutput Format\nFor each test case, print a single integer — the minimum number of operations to change all numbers in the sequence to $ 0 $ .\n\nExamples\nSample 1\nInput\n3\n3\n1 2 3\n3\n1 2 2\n3\n1 2 0\nOutput\n4\n3\n2\n\nNote\nIn the first test case, one of the possible ways to change all numbers in the sequence to $ 0 $ :\n\nIn the $ 1 $ -st operation, $ a_1 < a_2 $ , after the operation, $ a_2 = a_1 = 1 $ . Now the sequence $ a $ is $ [1,1,3] $ .\n\nIn the $ 2 $ -nd operation, $ a_1 = a_2 = 1 $ , after the operation, $ a_1 = 0 $ . Now the sequence $ a $ is $ [0,1,3] $ .\n\nIn the $ 3 $ -rd operation, $ a_1 < a_2 $ , after the operation, $ a_2 = 0 $ . Now the sequence $ a $ is $ [0,0,3] $ .\n\nIn the $ 4 $ -th operation, $ a_2 < a_3 $ , after the operation, $ a_3 = 0 $ . Now the sequence $ a $ is $ [0,0,0] $ .\n\nSo the minimum number of operations is $ 4 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "We observe that when there is $$$0$$$ in the sequence, it is optimal to choose $$$0$$$ and any number other than $$$0$$$ for each operation.\nTherefore, when there is $$$0$$$ in the sequence, let $$$cnt$$$ be the number of $$$0$$$s, the answer is $$$n - cnt$$$.\nOtherwise, when $$$0$$$ does not exist in the sequence, there are two situations:\nWhen there exist two equal numbers in the sequence, we can perform the operation $$$1$$$ time to convert it into the situation of having $$$0$$$ in the sequence. So the answer must be $$$n$$$.\nWhen all numbers in the sequence are distinct, we can perform the operation $$$2$$$ times to convert it into the situation of having $$$0$$$ in the sequence. So the answer must be $$$n + 1$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\nt\n;\nscanf\n(\n\"%i\"\n,&\nt\n);\nwhile\n(\nt\n--){\nint\nn\n;\nscanf\n(\n\"%i\"\n,&\nn\n);\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nscanf\n(\n\"%i\"\n,&\na\n[\ni\n]);\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n());\nint\nzero\n=\ncount\n(\na\n.\nbegin\n(),\na\n.\nend\n(),\n0\n);\nif\n(\nzero\n>\n0\n)\nprintf\n(\n\"%i\\n\"\n,\nn\n-\nzero\n);\nelse\n{\nbool\nsame\n=\nfalse\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nn\n;\ni\n++)\nif\n(\na\n[\ni\n]==\na\n[\ni\n-\n1\n])\nsame\n=\ntrue\n;\nif\n(\nsame\n)\nprintf\n(\n\"%i\\n\"\n,\nn\n);\nelse\nprintf\n(\n\"%i\\n\"\n,\nn\n+\n1\n);\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

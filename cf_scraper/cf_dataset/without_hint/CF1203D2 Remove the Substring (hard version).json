@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe only difference between easy and hard versions is the length of the string.\n\nYou are given a string $ s $ and a string $ t $ , both consisting only of lowercase Latin letters. It is guaranteed that $ t $ can be obtained from $ s $ by removing some (possibly, zero) number of characters (not necessary contiguous) from $ s $ without changing order of remaining characters (in other words, it is guaranteed that $ t $ is a subsequence of $ s $ ).\n\nFor example, the strings \"test\", \"tst\", \"tt\", \"et\" and \"\" are subsequences of the string \"test\". But the strings \"tset\", \"se\", \"contest\" are not subsequences of the string \"test\".\n\nYou want to remove some substring (contiguous subsequence) from $ s $ of maximum possible length such that after removing this substring $ t $ will remain a subsequence of $ s $ .\n\nIf you want to remove the substring $ s[l;r] $ then the string $ s $ will be transformed to $ s_1 s_2 \\dots s_{l-1} s_{r+1} s_{r+2} \\dots s_{|s|-1} s_{|s|} $ (where $ |s| $ is the length of $ s $ ).\n\nYour task is to find the maximum possible length of the substring you can remove so that $ t $ is still a subsequence of $ s $ .\n\nInput Format\nThe first line of the input contains one string $ s $ consisting of at least $ 1 $ and at most $ 2 \\cdot 10^5 $ lowercase Latin letters.\n\nThe first line of the input contains one string $ t $ consisting of at least $ 1 $ and at most $ 2 \\cdot 10^5 $ lowercase Latin letters.\n\nIt is guaranteed that $ t $ is a subsequence of $ s $ .\n\nOutput Format\nPrint one integer — the maximum possible length of the substring you can remove so that $ t $ is still a subsequence of $ s $ .\n\nExamples\nSample 1\nInput\nbbaba\nbb\nOutput\n3\n\nSample 2\nInput\nbaaba\nab\nOutput\n2\n\nSample 3\nInput\nabcde\nabcde\nOutput\n0\n\nSample 4\nInput\nasdfasdf\nfasd\nOutput\n3"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nstring\ns\n,\nt\n;\ncin\n>>\ns\n>>\nt\n;\nvector\n<int>\nrg\n(\nt\n.\nsize\n());\nfor\n(\nint\ni\n=\nint\n(\nt\n.\nsize\n())\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n)\n{\nint\npos\n=\nint\n(\ns\n.\nsize\n())\n-\n1\n;\nif\n(\ni\n+\n1\n<\nint\n(\nt\n.\nsize\n()))\npos\n=\nrg\n[\ni\n+\n1\n]\n-\n1\n;\nwhile\n(\ns\n[\npos\n]\n!=\nt\n[\ni\n])\n--\npos\n;\nrg\n[\ni\n]\n=\npos\n;\n}\nint\nans\n=\n0\n;\nint\npos\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\ns\n.\nsize\n());\n++\ni\n)\n{\nint\nrpos\n=\nint\n(\ns\n.\nsize\n())\n-\n1\n;\nif\n(\npos\n<\nint\n(\nt\n.\nsize\n()))\nrpos\n=\nrg\n[\npos\n]\n-\n1\n;\nans\n=\nmax\n(\nans\n,\nrpos\n-\ni\n+\n1\n);\nif\n(\npos\n<\nint\n(\nt\n.\nsize\n())\n&&\nt\n[\npos\n]\n==\ns\n[\ni\n])\n++\npos\n;\n}\ncout\n<<\nans\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

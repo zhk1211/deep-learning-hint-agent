@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two arrays $ a $ and $ b $ , consisting of $ n $ integers each.\n\nLet's define a function $ f(a, b) $ as follows:\n\n- let's define an array $ c $ of size $ n $ , where $ c_i = a_i \\oplus b_i $ ( $ \\oplus $ denotes bitwise XOR);\n- the value of the function is $ c_1 \\mathbin{\\&} c_2 \\mathbin{\\&} \\cdots \\mathbin{\\&} c_n $ (i.e. bitwise AND of the entire array $ c $ ).\n\nFind the maximum value of the function $ f(a, b) $ if you can reorder the array $ b $ in an arbitrary way (leaving the initial order is also an option).\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains one integer $ n $ ( $ 1 \\le n \\le 10^5 $ ) — the size of arrays $ a $ and $ b $ .\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 0 \\le a_i < 2^{30} $ ).\n\nThe third line contains $ n $ integers $ b_1, b_2, \\dots, b_n $ ( $ 0 \\le b_i < 2^{30} $ ).\n\nThe sum of $ n $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case print one integer — the maximum value of the function $ f(a, b) $ if you can reorder the array $ b $ in an arbitrary way.\n\nExamples\nSample 1\nInput\n3\n5\n1 0 0 3 3\n2 3 2 1 0\n3\n1 1 1\n0 0 3\n8\n0 1 2 3 4 5 6 7\n7 6 5 4 3 2 1 0\nOutput\n2\n0\n7"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n),\nb\n(\nn\n);\nfor\n(\nint\n&\nx\n:\na\n)\ncin\n>>\nx\n;\nfor\n(\nint\n&\nx\n:\nb\n)\ncin\n>>\nx\n;\nauto\ncheck\n=\n[&](\nint\nans\n)\n{\nmap\n<\nint\n,\nint\n>\ncnt\n;\nfor\n(\nint\nx\n:\na\n)\n++\ncnt\n[\nx\n&\nans\n];\nfor\n(\nint\nx\n:\nb\n)\n--\ncnt\n[~\nx\n&\nans\n];\nbool\nok\n=\ntrue\n;\nfor\n(\nauto\nit\n:\ncnt\n)\nok\n&=\nit\n.\nsecond\n==\n0\n;\nreturn\nok\n;\n};\nint\nans\n=\n0\n;\nfor\n(\nint\nbit\n=\n29\n;\nbit\n>=\n0\n;\n--\nbit\n)\nif\n(\ncheck\n(\nans\n|\n(\n1\n<<\nbit\n)))\nans\n|=\n1\n<<\nbit\n;\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

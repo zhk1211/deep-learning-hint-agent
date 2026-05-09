@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "fun main\n()\n{\nval n\n=\nreadLine\n()!!.\ntoInt\n()\nval a\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nvar\nm1\n=\n0\nvar\nm2\n=\n0\nvar\nc\n=\n0\nfor\n(\nx\nin\na\n)\n{\nif\n(\nm2\n>\nx\n)\n{\nc\n++\n}\nwhen\n{\nx\n>\nm1\n->\n{\nm2\n=\nm1\n                m1\n=\nx\n}\nx\n>\nm2\n->\n{\nm2\n=\nx\n}\n}\n}\nprintln\n(\nc\n)\n}"
+        }
+    ]
+}

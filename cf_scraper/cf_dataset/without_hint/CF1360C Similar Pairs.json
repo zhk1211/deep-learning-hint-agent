@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWe call two numbers $ x $ and $ y $ similar if they have the same parity (the same remainder when divided by $ 2 $ ), or if $ |x-y|=1 $ . For example, in each of the pairs $ (2, 6) $ , $ (4, 3) $ , $ (11, 7) $ , the numbers are similar to each other, and in the pairs $ (1, 4) $ , $ (3, 12) $ , they are not.\n\nYou are given an array $ a $ of $ n $ ( $ n $ is even) positive integers. Check if there is such a partition of the array into pairs that each element of the array belongs to exactly one pair and the numbers in each pair are similar to each other.\n\nFor example, for the array $ a = [11, 14, 16, 12] $ , there is a partition into pairs $ (11, 12) $ and $ (14, 16) $ . The numbers in the first pair are similar because they differ by one, and in the second pair because they are both even.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case consists of two lines.\n\nThe first line contains an even positive integer $ n $ ( $ 2 \\le n \\le 50 $ ) — length of array $ a $ .\n\nThe second line contains $ n $ positive integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 100 $ ).\n\nOutput Format\nFor each test case print:\n\n- YES if the such a partition exists,\n- NO otherwise.\n\nThe letters in the words YES and NO can be displayed in any case.\n\nExamples\nSample 1\nInput\n7\n4\n11 14 16 12\n2\n1 8\n4\n1 1 1 1\n4\n1 2 5 6\n2\n12 13\n6\n1 6 3 10 5 8\n6\n1 12 3 10 5 8\nOutput\nYES\nNO\nYES\nYES\nYES\nYES\nNO\n\nNote\nThe first test case was explained in the statement.\n\nIn the second test case, the two given numbers are not similar.\n\nIn the third test case, any partition is suitable."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nld\n=\nlong\ndouble\n;\nusing\nll\n=\nlong\nlong\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\nv\n(\nn\n);\nint\na\n=\n0\n,\nb\n=\n0\n;\nfor\n(\nint\n&\ne\n:\nv\n)\n{\ncin\n>>\ne\n;\nif\n(\ne\n%\n2\n==\n0\n)\n{\na\n++;\n}\nelse\n{\nb\n++;\n}\n}\nif\n(\na\n%\n2\n!=\nb\n%\n2\n)\n{\ncout\n<<\n\"NO\\n\"\n;\n}\nelse\n{\nif\n(\na\n%\n2\n==\n0\n)\n{\ncout\n<<\n\"YES\\n\"\n;\n}\nelse\n{\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\ni\n+\n1\n;\nj\n<\nn\n;\nj\n++)\n{\nif\n(\nv\n[\ni\n]\n%\n2\n!=\nv\n[\nj\n]\n%\n2\n&&\nabs\n(\nv\n[\ni\n]\n-\nv\n[\nj\n])\n==\n1\n)\n{\ncout\n<<\n\"YES\\n\"\n;\nreturn\n;\n}\n}\n}\ncout\n<<\n\"NO\\n\"\n;\n}\n}\n}\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

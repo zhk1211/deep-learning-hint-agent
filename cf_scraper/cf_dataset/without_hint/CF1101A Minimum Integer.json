@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given $ q $ queries in the following form:\n\nGiven three integers $ l_i $ , $ r_i $ and $ d_i $ , find minimum positive integer $ x_i $ such that it is divisible by $ d_i $ and it does not belong to the segment $ [l_i, r_i] $ .\n\nCan you answer all the queries?\n\nRecall that a number $ x $ belongs to segment $ [l, r] $ if $ l \\le x \\le r $ .\n\nInput Format\nThe first line contains one integer $ q $ ( $ 1 \\le q \\le 500 $ ) — the number of queries.\n\nThen $ q $ lines follow, each containing a query given in the format $ l_i $ $ r_i $ $ d_i $ ( $ 1 \\le l_i \\le r_i \\le 10^9 $ , $ 1 \\le d_i \\le 10^9 $ ). $ l_i $ , $ r_i $ and $ d_i $ are integers.\n\nOutput Format\nFor each query print one integer: the answer to this query.\n\nExamples\nSample 1\nInput\n5\n2 4 2\n5 10 4\n3 10 1\n1 2 3\n4 6 5\nOutput\n6\n4\n1\n3\n10"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "q\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nq\n):\nl\n,\nr\n,\nd\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nif\n(\nd\n<\nl\nor\nd\n>\nr\n):\nprint\n(\nd\n)\nelse\n:\nprint\n((\nr\n// d) * d + d)"
+        }
+    ]
+}

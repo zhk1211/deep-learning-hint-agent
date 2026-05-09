@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are standing at the point $ 0 $ on a coordinate line. Your goal is to reach the point $ n $ . In one minute, you can move by $ 2 $ or by $ 3 $ to the left or to the right (i. e., if your current coordinate is $ x $ , it can become $ x-3 $ , $ x-2 $ , $ x+2 $ or $ x+3 $ ). Note that the new coordinate can become negative.\n\nYour task is to find the minimum number of minutes required to get from the point $ 0 $ to the point $ n $ .\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Then $ t $ lines describing the test cases follow.\n\nThe $ i $ -th of these lines contains one integer $ n $ ( $ 1 \\le n \\le 10^9 $ ) — the goal of the $ i $ -th test case.\n\nOutput Format\nFor each test case, print one integer — the minimum number of minutes required to get from the point $ 0 $ to the point $ n $ for the corresponding test case.\n\nExamples\nSample 1\nInput\n4\n1\n3\n4\n12\nOutput\n2\n1\n2\n4"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (vovuh)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\nprint\n(\n1\n+\n(\nn\n==\n1\n)\nif\nn\n<=\n3\nelse\n(\nn\n+\n2\n)\n// 3)"
+        }
+    ]
+}

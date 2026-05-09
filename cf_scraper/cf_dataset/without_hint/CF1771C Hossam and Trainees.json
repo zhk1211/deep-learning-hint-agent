@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nHossam has $ n $ trainees. He assigned a number $ a_i $ for the $ i $ -th trainee.\n\nA pair of the $ i $ -th and $ j $ -th ( $ i \\neq j $ ) trainees is called successful if there is an integer $ x $ ( $ x \\geq 2 $ ), such that $ x $ divides $ a_i $ , and $ x $ divides $ a_j $ .\n\nHossam wants to know if there is a successful pair of trainees.\n\nHossam is very tired now, so he asks you for your help!\n\nInput Format\nThe input consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^5 $ ), the number of test cases. Description of the test cases follows.\n\nThe first line of each test case contains an integer number $ n $ ( $ 2 \\le n \\le 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers, the number of each trainee $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nPrint the answer — \"YES\" (without quotes) if there is a successful pair of trainees and \"NO\" otherwise. You can print each letter in any case.\n\nExamples\nSample 1\nInput\n2\n3\n32 48 7\n3\n14 5 9\nOutput\nYES\nNO\n\nNote\nIn the first example, the first trainee and the second trainee make up a successful pair:\n\n$ a_1 = 32, a_2 = 48 $ , you can choose $ x = 4 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution(_HossamYehia_)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n1e5\n+\n5\n,\nM\n=\n2\n*\nN\n+\n5\n;\nbool\nvis\n[\nN\n],\nans\n;\nvoid\nSieve\n(){\nmemset\n(\nvis\n,\ntrue\n,\nsizeof\n(\nvis\n));\nvis\n[\n0\n]\n=\nvis\n[\n1\n]\n=\nfalse\n;\nfor\n(\nint\ni\n=\n4\n;\ni\n<\nN\n;\ni\n+=\n2\n)\nvis\n[\ni\n]\n=\nfalse\n;\nfor\n(\nint\ni\n=\n3\n;\ni\n<\nN\n/\ni\n;\ni\n+=\n2\n){\nif\n(!\nvis\n[\ni\n])\ncontinue\n;\nfor\n(\nint\nj\n=\ni\n*\ni\n;\nj\n<\nN\n;\nj\n+=\ni\n+\ni\n)\nvis\n[\nj\n]\n=\nfalse\n;\n}\n}\nint\nin\n[\nN\n],\nvid\n;\nvector\n<int>\nprimes\n;\nvoid\nGen\n(){\nfor\n(\nint\ni\n=\n2\n;\ni\n<\nN\n;\n++\ni\n)\nif\n(\nvis\n[\ni\n])\nprimes\n.\nemplace_back\n(\ni\n);\n}\nset\n<int>\nst\n;\nvoid\ncheck\n(\nint\nx\n){\nif\n(\nin\n[\nx\n]\n==\nvid\n){\nans\n=\ntrue\n;\nreturn\n;\n}\nin\n[\nx\n]\n=\nvid\n;\n}\nvoid\nfact\n(\nint\nx\n){\nif\n(\nx\n<\nN\n&&\nvis\n[\nx\n]\n==\ntrue\n){\ncheck\n(\nx\n);\nreturn\n;\n}\nint\nidx\n=\n0\n,\nsz\n=\nprimes\n.\nsize\n();\nwhile\n(\nx\n>\n1\n&&\nidx\n<\nsz\n&&\nx\n/\nprimes\n[\nidx\n]\n>=\nprimes\n[\nidx\n]){\nif\n(\nx\n%\nprimes\n[\nidx\n]\n==\n0\n){\ncheck\n(\nprimes\n[\nidx\n]);\nwhile\n(\nx\n%\nprimes\n[\nidx\n]\n==\n0\n)\nx\n/=\nprimes\n[\nidx\n];\n}\n++\nidx\n;\n}\nif\n(\nx\n>\n1\n){\nif\n(\nx\n<\nN\n)\nreturn\ncheck\n(\nx\n),\nvoid\n();\nif\n(\nst\n.\nfind\n(\nx\n)\n!=\nst\n.\nend\n()){\nans\n=\ntrue\n;\nreturn\n;\n}\nst\n.\nemplace\n(\nx\n);\n}\n}\nvoid\npre\n(){\n++\nvid\n;\nst\n.\nclear\n();\n}\nint\nmain\n(){\nSieve\n();\nGen\n();\nint\nt\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nwhile\n(\nt\n--){\npre\n();\nint\nn\n;\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nans\n=\nfalse\n;\nwhile\n(\nn\n--){\nint\nx\n;\nscanf\n(\n\"%d\"\n,\n&\nx\n);\nfact\n(\nx\n);\n}\nputs\n(\nans\n?\n\"YES\"\n:\n\"NO\"\n);\n}\n}"
+        }
+    ]
+}

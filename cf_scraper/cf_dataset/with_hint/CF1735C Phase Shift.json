@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere was a string $ s $ which was supposed to be encrypted. For this reason, all $ 26 $ lowercase English letters were arranged in a circle in some order, afterwards, each letter in $ s $ was replaced with the one that follows in clockwise order, in that way the string $ t $ was obtained.\n\nYou are given a string $ t $ . Determine the lexicographically smallest string $ s $ that could be a prototype of the given string $ t $ .\n\nA string $ a $ is lexicographically smaller than a string $ b $ of the same length if and only if:\n\n- in the first position where $ a $ and $ b $ differ, the string $ a $ has a letter, that appears earlier in the alphabet than the corresponding letter in $ b $ .\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\le t \\le 3 \\cdot 10^4 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains one integer $ n $ ( $ 1 \\le n \\le 10^5 $ ) — the length of the string $ t $ .\n\nThe next line contains the string $ t $ of the length $ n $ , containing lowercase English letters.\n\nIt is guaranteed that the sum of $ n $ over all test cases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single line containing the lexicographically smallest string $ s $ which could be a prototype of $ t $ .\n\nExamples\nSample 1\nInput\n5\n1\na\n2\nba\n10\ncodeforces\n26\nabcdefghijklmnopqrstuvwxyz\n26\nabcdefghijklmnopqrstuvwxzy\nOutput\nb\nac\nabcdebfadg\nbcdefghijklmnopqrstuvwxyza\nbcdefghijklmnopqrstuvwxyaz\n\nNote\nIn the first test case, we couldn't have the string \"a\", since the letter a would transit to itself. Lexicographically the second string \"b\" is suitable as an answer.\n\nIn the second test case, the string \"aa\" is not suitable, since a would transit to itself. \"ab\" is not suitable, since the circle would be closed with $ 2 $ letters, but it must contain all $ 26 $ . The next string \"ac\" is suitable.\n\nBelow you can see the schemes for the first three test cases. The non-involved letters are skipped, they can be arbitrary placed in the gaps.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1735C/40f1e4167acecb5e201b23a56898bccbc525d101.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "What is the first letter in the answer?"
+        },
+        {
+            "title": "Answer to Hint1",
+            "content": "$$$a$$$ if $$$t$$$ doesn't start with $$$a$$$ and $$$b$$$ otherwise."
+        },
+        {
+            "title": "Hint2",
+            "content": "Ask the same question as Hint1 for each position."
+        },
+        {
+            "title": "Hint3",
+            "content": "When we can't choose the minimum unused letter?"
+        },
+        {
+            "title": "Answer to Hint3",
+            "content": "If we form a circle of size less then $$$26$$$.\nMaintain any structure to check it."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "First of all, the encryption process is reversible. If we obtained $$$t$$$ from $$$s$$$ using the circle $$$c$$$, we can obtain $$$s$$$ from $$$t$$$ using the same cycle $$$c$$$, but reversed.\nSo, let's think in terms of encryption of $$$t$$$.\nLexicographical order itself is a greedy thing. So, we can create a greedy algorithm.\nLet's go from left to right and generate the result letter by letter. We have to choose the best possible option at each step. Let's describe the options we have.\nIf the current letter was used earlier, we already know the replacement we need to choose.\nOtherwise, we would like to choose the minimum possible option. We need to maintain some structure to know what is acceptable.\nLet's keep the circle that is already generated(it's a graph). For each letter we have one incoming edge and one outgoing edge in the end. Let's keep them for every letter: arrays $$$in[26]$$$, $$$out[26]$$$.\nWhen we want to generate an outgoing edge at some step(let's define the letter on this step as $$$x$$$), we have to choose the minimum letter that doesn't have an incoming edge yet. With one exception: if creating the edge using this rule creates a circle of size less than $$$26$$$. It would mean that we wouldn't have a full circle in the end. It's easy to see that there is no more than one such letter, as this letter is just the end of a chain starting in $$$x$$$.\nTo check that a small circle wasn't generated, we can go along an outgoing edge $$$26$$$ times, starting at $$$x$$$. If we end up in $$$x$$$ or there was no edge at some step then everything is ok, we can create this edge.\nComplexity is $$$\\mathcal{O}(26 \\cdot 26 + n)$$$, that is, $$$\\mathcal{O}(n)$$$."
+        }
+    ]
+}

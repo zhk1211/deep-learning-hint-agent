@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a non-degenerate triangle (a non-degenerate triangle is a triangle with positive area). The vertices of the triangle have coordinates $ (x_1, y_1) $ , $ (x_2, y_2) $ and $ (x_3, y_3) $ .\n\nYou want to draw a straight line to cut the triangle into two non-degenerate triangles. Furthermore, the line you draw should be either horizontal or vertical.\n\nCan you draw the line to meet all the constraints?\n\nHere are some suitable ways to draw the line:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1767A/eae3d7282c3158bdbed223cdc7230dcfb540b234.png)However, these ways to draw the line are not suitable (the first line cuts the triangle into a triangle and a quadrangle; the second line doesn't cut the triangle at all; the third line is neither horizontal nor vertical):\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1767A/bffea37399e8b2b37904bb00d4f9d390b630614c.png)\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nEach test case consists of four lines. The first of them is empty. The $ i $ -th of the next three lines contains two integers $ x_i $ and $ y_i $ ( $ 1 \\le x_i, y_i \\le 10^8 $ ) — the coordinates of the $ i $ -th vertex of the triangle.\n\nAdditional constraint on the input: in each test case, the triangle formed by three vertices has positive area (i. e. it is non-degenerate).\n\nOutput Format\nFor each test case, print YES if it is possible to cut the triangle according to the statement, or NO otherwise. You may print each letter in any case (YES, yes, Yes will all be recognized as positive answer, NO, no and nO will all be recognized as negative answer).\n\nExamples\nSample 1\nInput\n4\n\n4 7\n6 8\n3 5\n\n4 5\n4 7\n6 8\n\n5 8\n1 8\n2 5\n\n3 6\n6 6\n6 3\nOutput\nYES\nYES\nYES\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\ninput\n()\nxs\n=\n[]\nys\n=\n[]\nfor\nj\nin\nrange\n(\n3\n):\nx\n,\ny\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nxs\n.\nappend\n(\nx\n)\nys\n.\nappend\n(\ny\n)\nprint\n(\n'YES'\nif\nlen\n(\nset\n(\nxs\n))\n==\n3\nor\nlen\n(\nset\n(\nys\n))\n==\n3\nelse\n'NO'\n)"
+        }
+    ]
+}

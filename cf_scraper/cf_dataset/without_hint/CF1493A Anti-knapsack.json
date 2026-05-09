@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two integers $ n $ and $ k $ . You are asked to choose maximum number of distinct integers from $ 1 $ to $ n $ so that there is no subset of chosen numbers with sum equal to $ k $ .\n\nA subset of a set is a set that can be obtained from initial one by removing some (possibly all or none) elements of it.\n\nInput Format\nThe first line contains the number of test cases $ T $ ( $ 1 \\le T \\le 100 $ ).\n\nEach of the next $ T $ lines contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 1000 $ ) — the description of test cases.\n\nOutput Format\nFor each test case output two lines. In the first line output a single integer $ m $ — the number of chosen integers.\n\nIn the second line output $ m $ distinct integers from $ 1 $ to $ n $ — the chosen numbers.\n\nIf there are multiple answers, print any. You can print the numbers in any order.\n\nExamples\nSample 1\nInput\n3\n3 2\n5 3\n1 1\nOutput\n2\n3 1\n3\n4 5 2\n0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (74TrAkToR)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nt\n,\nn\n,\nk\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\ncin\n>>\nn\n>>\nk\n;\ncout\n<<\nn\n-\nk\n+\nk\n/\n2\n<<\n'\\n'\n;\nfor\n(\nint\ni\n=\nk\n+\n1\n;\ni\n<=\nn\n;\n++\ni\n)\ncout\n<<\ni\n<<\n\" \"\n;\nfor\n(\nint\ni\n=\n(\nk\n+\n1\n)\n/\n2\n;\ni\n<\nk\n;\n++\ni\n)\ncout\n<<\ni\n<<\n\" \"\n;\ncout\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

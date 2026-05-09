@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIt is raining heavily. But this is the first day for Serval, who just became 3 years old, to go to the kindergarten. Unfortunately, he lives far from kindergarten, and his father is too busy to drive him there. The only choice for this poor little boy is to wait for a bus on this rainy day. Under such circumstances, the poor boy will use the first bus he sees no matter where it goes. If several buses come at the same time, he will choose one randomly.\n\nServal will go to the bus station at time $ t $ , and there are $ n $ bus routes which stop at this station. For the $ i $ -th bus route, the first bus arrives at time $ s_i $ minutes, and each bus of this route comes $ d_i $ minutes later than the previous one.\n\nAs Serval's best friend, you wonder which bus route will he get on. If several buses arrive at the same time, you can print any of them.\n\nInput Format\nThe first line contains two space-separated integers $ n $ and $ t $ ( $ 1\\leq n\\leq 100 $ , $ 1\\leq t\\leq 10^5 $ ) — the number of bus routes and the time Serval goes to the station.\n\nEach of the next $ n $ lines contains two space-separated integers $ s_i $ and $ d_i $ ( $ 1\\leq s_i,d_i\\leq 10^5 $ ) — the time when the first bus of this route arrives and the interval between two buses of this route.\n\nOutput Format\nPrint one number — what bus route Serval will use. If there are several possible answers, you can print any of them.\n\nExamples\nSample 1\nInput\n2 2\n6 4\n9 5\nOutput\n1\n\nSample 2\nInput\n5 5\n3 3\n2 5\n5 6\n4 9\n6 1\nOutput\n3\n\nSample 3\nInput\n3 7\n2 2\n2 3\n2 4\nOutput\n1\n\nNote\nIn the first example, the first bus of the first route arrives at time $ 6 $ , and the first bus of the second route arrives at time $ 9 $ , so the first route is the answer.\n\nIn the second example, a bus of the third route arrives at time $ 5 $ , so it is the answer.\n\nIn the third example, buses of the first route come at times $ 2 $ , $ 4 $ , $ 6 $ , $ 8 $ , and so fourth, buses of the second route come at times $ 2 $ , $ 5 $ , $ 8 $ , and so fourth and buses of the third route come at times $ 2 $ , $ 6 $ , $ 10 $ , and so on, so $ 1 $ and $ 2 $ are both acceptable answers while $ 3 $ is not."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Find the first bus Serval can see in each route and find the earliest one. For each route, finding the first bus Serval sees can work in $$$O(1)$$$.\nOr mark all the time no more than $$$\\max(s_i,t+\\max(d_i))$$$ which bus would come or there will be no bus, then search the nearest one."
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Small hints",
+            "content": "Is it possible that the graph formed has a cycle? How to evaluate whether a sequence is good?"
+        },
+        {
+            "title": "Hint",
+            "content": "Let's look at the most significant bit, and group the numbers into two sets $$$S_0$$$ and $$$S_1$$$, depending on the value of the bit. What can we say about sizes of $$$S_0$$$ and $$$S_1$$$ in a good sequence?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let $$$F(S)$$$ be the maximum possible number of values we can take from $$$S$$$ so that they form a good sequence. Divide the numbers into $$$S_0$$$ and $$$S_1$$$ as above. If $$$S_0$$$ or $$$S_1$$$ is empty, strip the most significant bit and solve the problem recursively. Otherwise, the result is $$$1 + max(F(S_0), F(S_1))$$$. Straightforward recursive calculation of this formula gives the runtime of $$$(n\\cdot 30)$$$, as all numbers are smaller than $$$2^{30}$$$."
+        }
+    ]
+}

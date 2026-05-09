@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ consisting only of first $ 20 $ lowercase Latin letters ('a', 'b', ..., 't').\n\nRecall that the substring $ s[l; r] $ of the string $ s $ is the string $ s_l s_{l + 1} \\dots s_r $ . For example, the substrings of \"codeforces\" are \"code\", \"force\", \"f\", \"for\", but not \"coder\" and \"top\".\n\nYou can perform the following operation no more than once: choose some substring $ s[l; r] $ and reverse it (i.e. the string $ s_l s_{l + 1} \\dots s_r $ becomes $ s_r s_{r - 1} \\dots s_l $ ).\n\nYour goal is to maximize the length of the maximum substring of $ s $ consisting of distinct (i.e. unique) characters.\n\nThe string consists of distinct characters if no character in this string appears more than once. For example, strings \"abcde\", \"arctg\" and \"minecraft\" consist of distinct characters but strings \"codeforces\", \"abacaba\" do not consist of distinct characters.\n\nInput Format\nThe only line of the input contains one string $ s $ consisting of no more than $ 10^6 $ characters 'a', 'b', ..., 't' (first $ 20 $ lowercase Latin letters).\n\nOutput Format\nPrint one integer — the maximum possible length of the maximum substring of $ s $ consisting of distinct characters after reversing no more than one its substring.\n\nExamples\nSample 1\nInput\nabacaba\nOutput\n3\n\nSample 2\nInput\nabcdecdf\nOutput\n6\n\nSample 3\nInput\naabbcc\nOutput\n3\n\nSample 4\nInput\nabcdeefc\nOutput\n6"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nstring\ns\n;\ncin\n>>\ns\n;\nvector\n<int>\ndp\n(\n1\n<<\n20\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\ns\n.\nsize\n());\n++\ni\n)\n{\nvector\n<bool>\nused\n(\n20\n);\nint\nmask\n=\n0\n;\nfor\n(\nint\nj\n=\n0\n;\ni\n+\nj\n<\nint\n(\ns\n.\nsize\n());\n++\nj\n)\n{\nif\n(\nused\n[\ns\n[\ni\n+\nj\n]\n-\n'a'\n])\nbreak\n;\nused\n[\ns\n[\ni\n+\nj\n]\n-\n'a'\n]\n=\ntrue\n;\nmask\n|=\n1\n<<\n(\ns\n[\ni\n+\nj\n]\n-\n'a'\n);\ndp\n[\nmask\n]\n=\n__builtin_popcount\n(\nmask\n);\n}\n}\nfor\n(\nint\nmask\n=\n0\n;\nmask\n<\n(\n1\n<<\n20\n);\n++\nmask\n)\n{\nfor\n(\nint\npos\n=\n0\n;\npos\n<\n20\n;\n++\npos\n)\n{\nif\n((\nmask\n>>\npos\n)\n&\n1\n)\n{\ndp\n[\nmask\n]\n=\nmax\n(\ndp\n[\nmask\n],\ndp\n[\nmask\n^\n(\n1\n<<\npos\n)]);\n}\n}\n}\nint\nans\n=\n0\n;\nfor\n(\nint\nmask\n=\n0\n;\nmask\n<\n(\n1\n<<\n20\n);\n++\nmask\n)\n{\nif\n(\ndp\n[\nmask\n]\n==\n__builtin_popcount\n(\nmask\n))\n{\nint\ncomp\n=\n~\nmask\n&\n((\n1\n<<\n20\n)\n-\n1\n);\nans\n=\nmax\n(\nans\n,\ndp\n[\nmask\n]\n+\ndp\n[\ncomp\n]);\n}\n}\ncout\n<<\nans\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

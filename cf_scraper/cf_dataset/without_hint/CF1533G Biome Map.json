@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "fun main\n()\n=\nrepeat\n(\nreadLine\n()!!.\ntoInt\n())\n{\nval\n(\nn\n,\nm\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval a\n=\nArray\n(\nn\n)\n{\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\n}\nval used\n=\nBooleanArray\n(\n111\n)\n{\nfalse\n}\nval ord\n=\nArrayList\n<\nInt\n>()\nval dx\n=\nintArrayOf\n(\n0\n,\n1\n,\n0\n,\n-\n1\n)\nval dy\n=\nintArrayOf\n(\n1\n,\n0\n,\n-\n1\n,\n0\n)\nfun dfs\n(\nx\n:\nInt\n,\ny\n:\nInt\n)\n{\nord\n.\nadd\n(\na\n[\nx\n][\ny\n])\nused\n[\na\n[\nx\n][\ny\n]]\n=\ntrue\nfor\n(\ni\nin\n0\nuntil\n4\n)\n{\nval nx\n=\nx\n+\ndx\n[\ni\n]\nval ny\n=\ny\n+\ndy\n[\ni\n]\nif\n(\n0\n<=\nnx\n&&\nnx\n<\nn\n&&\n0\n<=\nny\n&&\nny\n<\nm\n&&\na\n[\nnx\n][\nny\n]\n!=\n0\n&&\n!\nused\n[\na\n[\nnx\n][\nny\n]])\n{\ndfs\n(\nnx\n,\nny\n)\nord\n.\nadd\n(\na\n[\nx\n][\ny\n])\n}\n}\n}\nvar\nk\n=\n0\nfor\n(\nx\nin\n0\nuntil\nn\n)\n{\nfor\n(\ny\nin\n0\nuntil\nm\n)\n{\nif\n(\na\n[\nx\n][\ny\n]\n!=\n0\n)\n{\nk\n+=\n1\nif\n(\nord\n.\nisEmpty\n())\ndfs\n(\nx\n,\ny\n)\n}\n}\n}\nif\n(\nord\n.\ncount\n()\n!=\n2\n*\nk\n-\n1\n)\n{\nreturn\n@repeat\nprintln\n(-\n1\n)\n}\nprintln\n(\n\"$k $k\"\n)\nfor\n(\nx\nin\n0\nuntil\nk\n)\n{\nfor\n(\ny\nin\n0\nuntil\nk\n)\n{\nprint\n(\n\"${ord[x + y]} \"\n)\n}\nprintln\n()\n}\n}"
+        }
+    ]
+}

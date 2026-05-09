@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are playing another computer game, and now you have to slay $ n $ monsters. These monsters are standing in a circle, numbered clockwise from $ 1 $ to $ n $ . Initially, the $ i $ -th monster has $ a_i $ health.\n\nYou may shoot the monsters to kill them. Each shot requires exactly one bullet and decreases the health of the targeted monster by $ 1 $ (deals $ 1 $ damage to it). Furthermore, when the health of some monster $ i $ becomes $ 0 $ or less than $ 0 $ , it dies and explodes, dealing $ b_i $ damage to the next monster (monster $ i + 1 $ , if $ i < n $ , or monster $ 1 $ , if $ i = n $ ). If the next monster is already dead, then nothing happens. If the explosion kills the next monster, it explodes too, damaging the monster after it and possibly triggering another explosion, and so on.\n\nYou have to calculate the minimum number of bullets you have to fire to kill all $ n $ monsters in the circle.\n\nInput Format\nThe first line contains one integer $ T $ ( $ 1 \\le T \\le 150000 $ ) — the number of test cases.\n\nThen the test cases follow, each test case begins with a line containing one integer $ n $ ( $ 2 \\le n \\le 300000 $ ) — the number of monsters. Then $ n $ lines follow, each containing two integers $ a_i $ and $ b_i $ ( $ 1 \\le a_i, b_i \\le 10^{12} $ ) — the parameters of the $ i $ -th monster in the circle.\n\nIt is guaranteed that the total number of monsters in all test cases does not exceed $ 300000 $ .\n\nOutput Format\nFor each test case, print one integer — the minimum number of bullets you have to fire to kill all of the monsters.\n\nExamples\nSample 1\nInput\n1\n3\n7 15\n2 14\n5 3\nOutput\n6"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Ne0n25)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\n++\ni\n)\ntypedef\nlong\nlong\nli\n;\nconst\nint\nN\n=\n300\n*\n1000\n+\n13\n;\nint\nn\n;\nli a\n[\nN\n],\nb\n[\nN\n];\nvoid\nsolve\n()\n{\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nforn\n(\ni\n,\nn\n)\nscanf\n(\n\"%lld%lld\"\n,\n&\na\n[\ni\n],\n&\nb\n[\ni\n]);\nli ans\n=\n0\n,\nmn\n=\n1e18\n;\nforn\n(\ni\n,\nn\n)\n{\nint\nni\n=\n(\ni\n+\n1\n)\n%\nn\n;\nli val\n=\nmin\n(\na\n[\nni\n],\nb\n[\ni\n]);\nans\n+=\na\n[\nni\n]\n-\nval\n;\nmn\n=\nmin\n(\nmn\n,\nval\n);\n}\nans\n+=\nmn\n;\nprintf\n(\n\"%lld\\n\"\n,\nans\n);\n}\nint\nmain\n()\n{\nint\nT\n;\nscanf\n(\n\"%d\"\n,\n&\nT\n);\nforn\n(\ni\n,\nT\n)\nsolve\n();\n}"
+        }
+    ]
+}

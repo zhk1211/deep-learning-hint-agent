@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVictor wants to become \"Mr. Perfectly Fine\". For that, he needs to acquire a certain set of skills. More precisely, he has $ 2 $ skills he needs to acquire.\n\nVictor has $ n $ books. Reading book $ i $ takes him $ m_i $ minutes and will give him some (possibly none) of the required two skills, represented by a binary string of length $ 2 $ .\n\nWhat is the minimum amount of time required so that Victor acquires all of the two skills?\n\nInput Format\nThe input consists of multiple test cases. The first line contains an integer $ t $ ( $ 1 \\leq t \\leq 1000 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ ) — the number of books available.\n\nThen $ n $ lines follow. Line $ i $ contains a positive integer $ m_i $ ( $ 1 \\leq m_i \\leq 2 \\cdot 10^5 $ ) and a binary string of length $ 2 $ , where $ s_{i1} = 1 $ if reading book $ i $ acquires Victor skill $ 1 $ , and $ s_{i1} = 0 $ otherwise, and $ s_{i2} = 1 $ if reading book $ i $ acquires Victor skill $ 2 $ , and $ s_{i2} = 0 $ otherwise.\n\nIt is guaranteed that the sum of $ n $ over all test cases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer denoting the minimum amount of minutes required for Victor to obtain both needed skills and $ -1 $ in case it's impossible to obtain the two skills after reading any amount of books.\n\nExamples\nSample 1\nInput\n6\n4\n2 00\n3 10\n4 01\n4 00\n5\n3 01\n3 01\n5 01\n2 10\n9 10\n1\n5 11\n3\n9 11\n8 01\n7 10\n6\n4 01\n6 01\n7 01\n8 00\n9 01\n1 00\n4\n8 00\n9 10\n9 11\n8 11\nOutput\n7\n5\n5\n9\n-1\n8\n\nNote\nIn the first test case, we can use books $ 2 $ and $ 3 $ , with a total amount of minutes spent equal to $ 3 + 4 = 7 $ .\n\nIn the second test case, we can use the books $ 1 $ and $ 4 $ , with a total amount of minutes spent equal to $ 3 + 2 = 5 $ .\n\nIn the third test case, we have only one option and that is reading book $ 1 $ for a total amount of minutes spent equal to $ 5 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n\"bits/stdc++.h\"\nusing\nnamespace\nstd\n;\n#define\nll\nlong\nlong\n#define\nall\n(\nv\n)\nv\n.\nbegin\n(),\nv\n.\nend\n()\n#define\nrall\n(\nv\n)\nv\n.\nrbegin\n(),\nv\n.\nrend\n()\n#define\npb                push_back\n#define\nsz\n(\na\n)\n(\nint\n)\na\n.\nsize\n()\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nmap\n<\nstring\n,\nint\n>\nmp\n;\nmp\n[\n\"00\"\n]\n=\nmp\n[\n\"01\"\n]\n=\nmp\n[\n\"10\"\n]\n=\nmp\n[\n\"11\"\n]\n=\n1e9\n;\nint\nans\n=\n1e9\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nint\nx\n;\ncin\n>>\nx\n;\nstring\ns\n;\ncin\n>>\ns\n;\nmp\n[\ns\n]\n=\nmin\n(\nmp\n[\ns\n],\nx\n);\n}\nif\n(\nmin\n(\nmp\n[\n\"11\"\n],\nmp\n[\n\"10\"\n]\n+\nmp\n[\n\"01\"\n])\n>\n(\nint\n)\n1e6\n)\n{\ncout\n<<\n\"-1\\n\"\n;\n}\nelse\n{\ncout\n<<\nmin\n(\nmp\n[\n\"11\"\n],\nmp\n[\n\"10\"\n]\n+\nmp\n[\n\"01\"\n])\n<<\n\"\\n\"\n;\n}\n}\nint32_t\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\nint\nt\n=\n1\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

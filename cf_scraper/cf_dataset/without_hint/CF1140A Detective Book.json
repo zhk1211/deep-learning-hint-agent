@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIvan recently bought a detective book. The book is so interesting that each page of this book introduces some sort of a mystery, which will be explained later. The $ i $ -th page contains some mystery that will be explained on page $ a_i $ ( $ a_i \\ge i $ ).\n\nIvan wants to read the whole book. Each day, he reads the first page he didn't read earlier, and continues to read the following pages one by one, until all the mysteries he read about are explained and clear to him (Ivan stops if there does not exist any page $ i $ such that Ivan already has read it, but hasn't read page $ a_i $ ). After that, he closes the book and continues to read it on the following day from the next page.\n\nHow many days will it take to read the whole book?\n\nInput Format\nThe first line contains single integer $ n $ ( $ 1 \\le n \\le 10^4 $ ) — the number of pages in the book.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ i \\le a_i \\le n $ ), where $ a_i $ is the number of page which contains the explanation of the mystery on page $ i $ .\n\nOutput Format\nPrint one integer — the number of days it will take to read the whole book.\n\nExamples\nSample 1\nInput\n9\n1 3 3 6 7 6 8 8 9\nOutput\n4\n\nNote\nExplanation of the example test:\n\nDuring the first day Ivan will read only the first page. During the second day Ivan will read pages number $ 2 $ and $ 3 $ . During the third day — pages $ 4 $ - $ 8 $ . During the fourth (and the last) day Ivan will read remaining page number $ 9 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (adedalic)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n;\nvector\n<int>\na\n;\ninline\nbool\nread\n()\n{\nif\n(!(\ncin\n>>\nn\n))\nreturn\nfalse\n;\na\n.\nresize\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\na\n[\ni\n]--;\n}\nreturn\ntrue\n;\n}\ninline\nvoid\nsolve\n()\n{\nint\ncnt\n=\n0\n,\npos\n=\n0\n;\nwhile\n(\npos\n<\nn\n)\n{\ncnt\n++;\nint\nmx\n=\npos\n;\nwhile\n(\npos\n<\nn\n&&\npos\n<=\nmx\n)\n{\nmx\n=\nmax\n(\nmx\n,\na\n[\npos\n]);\npos\n++;\n}\n}\ncout\n<<\ncnt\n<<\nendl\n;\n}\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n#endif\nif\n(\nread\n())\n{\nsolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

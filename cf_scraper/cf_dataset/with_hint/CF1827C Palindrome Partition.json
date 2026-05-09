@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA substring is a continuous and non-empty segment of letters from a given string, without any reorders.\n\nAn even palindrome is a string that reads the same backward as forward and has an even length. For example, strings \"zz\", \"abba\", \"abccba\" are even palindromes, but strings \"codeforces\", \"reality\", \"aba\", \"c\" are not.\n\nA beautiful string is an even palindrome or a string that can be partitioned into some smaller even palindromes.\n\nYou are given a string $ s $ , consisting of $ n $ lowercase Latin letters. Count the number of beautiful substrings of $ s $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 5\\cdot 10^5 $ ).\n\nThe second line of each test case contains a string $ s $ . String $ s $ consists of only lowercase Latin letters and has a length of $ n $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 5\\cdot 10^5 $ .\n\nOutput Format\nFor each test case print the number of beautiful substrings.\n\nExamples\nSample 1\nInput\n6\n6\nabaaba\n1\na\n2\naa\n6\nabcdef\n12\naccabccbacca\n6\nabbaaa\nOutput\n3\n0\n1\n0\n14\n6\n\nNote\nIn the first test case, the beautiful substrings are \"abaaba\", \"baab\", \"aa\".\n\nIn the last test case, the beautiful substrings are \"aa\" (counted twice), \"abba\", \"bb\", \"bbaa\", \"abbaaa\"."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint1",
+            "content": "Try to construct beautiful string greedily."
+        },
+        {
+            "title": "Hint2",
+            "content": "What happens when we have two even palindromes share one of their endpoints?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "For the simplicity of the solution, we will abbreviate even palindrome as evp.\nLemma\n: Consider a beautiful string $$$t$$$, we can find the\nunique maximal\npartition for it by greedily choosing the smallest possible evp in each step from the left. Here maximal means maximum number of parts.\nProof\n: Suppose $$$t[0..l)$$$ is smallest prefix which is an evp and $$$t[0..r)$$$ is the first part in the partition of $$$t$$$, here $$$t[l..r)$$$ mean substring $$$t_l t_{l+1}\\ldots t_{r-1}$$$. We consider two cases:\n$$$2l\\le r$$$: In this case, it is clear that $$$t[0..l)$$$, $$$t[l..r - l)$$$ and $$$t[r-l..r)$$$ are evps, so we can replace $$$t[0..r)$$$ with them.\n$$$2l \\gt r$$$: In this case, due to the fact that $$$t[r-l..l)$$$ and $$$t[0..l)$$$ are evps, $$$t[0..2l-r)$$$ is also an evp, which contradicts to above assumption that $$$t[0..l)$$$ is the smallest.\nWe can use dynamic programming to solve this problem. Let $$$dp_i$$$ be the number of beautiful substrings starting at $$$i$$$. For all $$$i$$$ from $$$n-1$$$ to $$$0$$$, if there are such $$$next_i$$$ satisfying $$$s[i..next_i)$$$ is the smallest evp beginning at $$$i$$$, then $$$dp_i=dp_{next_i}+1$$$, otherwise $$$dp_i=0$$$. The answer will be the sum of $$$dp_i$$$ from $$$0$$$ to $$$n-1$$$.\nTo calculate the $$$next$$$ array, first, we use Manacher algorithm or hashing to find the maximum $$$pal_i$$$ satisfying $$$s[i-pal_i..i+pal_i)$$$ is an evp for each $$$i$$$. Then for all $$$0\\le i \\lt n$$$, $$$next_i=2j-i$$$ where $$$j$$$ is smallest position such that $$$i \\lt j$$$ and $$$j-pal_j\\le i$$$. The time complexity is $$$\\mathcal{O}(n \\log{n})$$$."
+        },
+        {
+            "title": "Implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n500005\n;\nconst\nint\nLOG\n=\n19\n;\nint\nn\n,\npal\n[\nN\n],\nrmq\n[\nLOG\n][\nN\n],\ncnt\n[\nN\n];\nstring\ns\n;\nint\nmain\n()\n{\ncin\n.\ntie\n(\n0\n)->\nsync_with_stdio\n(\n0\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\ncin\n>>\nn\n>>\ns\n;\nfor\n(\nint\ni\n=\n0\n,\nl\n=\n0\n,\nr\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\npal\n[\ni\n]\n=\ni\n>=\nr\n?\n0\n:\nmin\n(\npal\n[\nl\n+\nr\n-\ni\n],\nr\n-\ni\n);\nwhile\n(\ni\n+\npal\n[\ni\n]\n<\nn\n&&\ni\n-\npal\n[\ni\n]\n-\n1\n>=\n0\n&&\ns\n[\ni\n+\npal\n[\ni\n]]\n==\ns\n[\ni\n-\npal\n[\ni\n]\n-\n1\n])\npal\n[\ni\n]++;\nif\n(\ni\n+\npal\n[\ni\n]\n>\nr\n)\n{\nl\n=\ni\n-\npal\n[\ni\n];\nr\n=\ni\n+\npal\n[\ni\n];\n}\n}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\nrmq\n[\n0\n][\ni\n]\n=\ni\n-\npal\n[\ni\n];\nfor\n(\nint\nk\n=\n1\n;\nk\n<\nLOG\n;\nk\n++)\nfor\n(\nint\ni\n=\n0\n;\ni\n+\n(\n1\n<<\nk\n)\n<=\nn\n;\ni\n++)\nrmq\n[\nk\n][\ni\n]\n=\nmin\n(\nrmq\n[\nk\n-\n1\n][\ni\n],\nrmq\n[\nk\n-\n1\n][\ni\n+\n(\n1\n<<\n(\nk\n-\n1\n))]);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ncnt\n[\ni\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\nj\n=\ni\n+\n1\n;\nfor\n(\nint\nk\n=\nLOG\n-\n1\n;\nk\n>=\n0\n;\nk\n--)\nif\n(\nj\n+\n(\n1\n<<\nk\n)\n<=\nn\n&&\nrmq\n[\nk\n][\nj\n]\n>\ni\n)\nj\n+=\n1\n<<\nk\n;\nif\n(\n2\n*\nj\n-\ni\n<=\nn\n)\ncnt\n[\n2\n*\nj\n-\ni\n]\n+=\ncnt\n[\ni\n]\n+\n1\n;\n}\nlong\nlong\nres\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nres\n+=\ncnt\n[\ni\n];\ncout\n<<\nres\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

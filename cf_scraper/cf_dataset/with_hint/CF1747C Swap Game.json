@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlice and Bob are playing a game on an array $ a $ of $ n $ positive integers. Alice and Bob make alternating moves with Alice going first.\n\nIn his/her turn, the player makes the following move:\n\n- If $ a_1 = 0 $ , the player loses the game, otherwise:\n- Player chooses some $ i $ with $ 2\\le i \\le n $ . Then player decreases the value of $ a_1 $ by $ 1 $ and swaps $ a_1 $ with $ a_i $ .\n\nDetermine the winner of the game if both players play optimally.\n\nInput Format\nThe input consists of multiple test cases. The first line contains a single integer $ t $ $ (1 \\leq t \\leq 2 \\cdot 10^4) $ — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ $ (2 \\leq n \\leq 10^5) $ — the length of the array $ a $ .\n\nThe second line of each test case contains $ n $ integers $ a_1,a_2 \\ldots a_n $ $ (1 \\leq a_i \\leq 10^9) $ — the elements of the array $ a $ .\n\nIt is guaranteed that sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, if Alice will win the game, output \"Alice\". Otherwise, output \"Bob\".\n\nYou can output each letter in any case. For example, \"alIcE\", \"Alice\", \"alice\" will all be considered identical.\n\nExamples\nSample 1\nInput\n3\n2\n1 1\n2\n2 1\n3\n5 4 4\nOutput\nBob\nAlice\nAlice\n\nNote\nIn the first testcase, in her turn, Alice can only choose $ i = 2 $ , making the array equal $ [1, 0] $ . Then Bob, in his turn, will also choose $ i = 2 $ and make the array equal $ [0, 0] $ . As $ a_1 = 0 $ , Alice loses.\n\nIn the second testcase, once again, players can only choose $ i = 2 $ . Then the array will change as follows: $ [2, 1] \\to [1, 1] \\to [1, 0] \\to [0, 0] $ , and Bob loses.\n\nIn the third testcase, we can show that Alice has a winning strategy."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Divide problem into two different cases. When $$$a_1 \\gt \\min(a)$$$ and when $$$a_1 = \\min(a)$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "You do not need more hints to solve the problem."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Case 1\n: $$$a_1 \\gt \\min(a)$$$\n$$$\\texttt{Alice}$$$ can force the $$$\\texttt{Bob}$$$ to always decrease the minimum element by always choosing minimum element of $$$a$$$ in her turn. Where as $$$\\texttt{Bob}$$$ can not do much, all other elements he would swap with would be greater than or equal to $$$\\min(a)$$$. Even if there exists multiple minimums in $$$a$$$, In first move $$$\\texttt{Alice}$$$ would decrease from $$$a_1$$$, hence in this case $$$\\texttt{Alice}$$$ would always win.\nCase 2\n: $$$a_1 = \\min(a)$$$\nIn this case optimal startegy for $$$\\texttt{Bob}$$$ would be to always chhose minimum element of the array, which is $$$a_1$$$. $$$\\texttt{Alice}$$$ would always be swapping the element greater than $$$a_1$$$ in her turn, hence in the case $$$\\texttt{Bob}$$$ would always win"
+        },
+        {
+            "title": "Solution",
+            "content": "// Jai Shree Ram\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nrep\n(\ni\n,\na\n,\nn\n)\nfor\n(\nint\ni\n=\na\n;\ni\n<\nn\n;\ni\n++)\n#define\nll\nlong\nlong\n#define\nint\nlong\nlong\n#define\npb             push_back\n#define\nall\n(\nv\n)\nv\n.\nbegin\n(),\nv\n.\nend\n()\n#define\nendl\n\"\\n\"\n#define\nx              first\n#define\ny              second\n#define\ngcd\n(\na\n,\nb\n)\n__gcd\n(\na\n,\nb\n)\n#define\nmem1\n(\na\n)\nmemset\n(\na\n,-\n1\n,\nsizeof\n(\na\n))\n#define\nmem0\n(\na\n)\nmemset\n(\na\n,\n0\n,\nsizeof\n(\na\n))\n#define\nsz\n(\na\n)\n(\nint\n)\na\n.\nsize\n()\n#define\npii            pair\n<\nint\n,\nint\n>\n#define\nhell\n1000000007\n#define\nelasped_time\n1.0\n*\nclock\n()\n/\nCLOCKS_PER_SEC\ntemplate\n<\ntypename\nT1\n,\ntypename\nT2\n>\nistream\n&\noperator\n>>(\nistream\n&\nin\n,\npair\n<\nT1\n,\nT2\n>\n&\na\n){\nin\n>>\na\n.\nx\n>>\na\n.\ny\n;\nreturn\nin\n;}\ntemplate\n<\ntypename\nT1\n,\ntypename\nT2\n>\nostream\n&\noperator\n<<(\nostream\n&\nout\n,\npair\n<\nT1\n,\nT2\n>\na\n){\nout\n<<\na\n.\nx\n<<\n\" \"\n<<\na\n.\ny\n;\nreturn\nout\n;}\ntemplate\n<\ntypename\nT\n,\ntypename\nT1\n>\nT maxs\n(\nT\n&\na\n,\nT1 b\n){\nif\n(\nb\n>\na\n)\na\n=\nb\n;\nreturn\na\n;}\ntemplate\n<\ntypename\nT\n,\ntypename\nT1\n>\nT mins\n(\nT\n&\na\n,\nT1 b\n){\nif\n(\nb\n<\na\n)\na\n=\nb\n;\nreturn\na\n;}\nint\nsolve\n(){\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nauto\n&\ni\n:\na\n)\ncin\n>>\ni\n;\nsort\n(\na\n.\nbegin\n()\n+\n1\n,\na\n.\nend\n());\ncout\n<<\n(\na\n[\n0\n]\n>\na\n[\n1\n]\n?\n\"Alice\"\n:\n\"Bob\"\n)\n<<\nendl\n;\nreturn\n0\n;\n}\nsigned\nmain\n(){\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\n//freopen(\"input.txt\", \"r\", stdin);\n//freopen(\"output.txt\", \"w\", stdout);\n#ifdef\nSIEVE\n    sieve\n();\n#endif\n#ifdef\nNCR\n    init\n();\n#endif\nint\nt\n=\n1\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nsolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

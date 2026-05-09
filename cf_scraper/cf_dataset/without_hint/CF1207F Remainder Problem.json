@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ 500000 $ integers (numbered from $ 1 $ to $ 500000 $ ). Initially all elements of $ a $ are zero.\n\nYou have to process two types of queries to this array:\n\n- $ 1 $ $ x $ $ y $ — increase $ a_x $ by $ y $ ;\n- $ 2 $ $ x $ $ y $ — compute $ \\sum\\limits_{i \\in R(x, y)} a_i $ , where $ R(x, y) $ is the set of all integers from $ 1 $ to $ 500000 $ which have remainder $ y $ modulo $ x $ .\n\nCan you process all the queries?\n\nInput Format\nThe first line contains one integer $ q $ ( $ 1 \\le q \\le 500000 $ ) — the number of queries.\n\nThen $ q $ lines follow, each describing a query. The $ i $ -th line contains three integers $ t_i $ , $ x_i $ and $ y_i $ ( $ 1 \\le t_i \\le 2 $ ). If $ t_i = 1 $ , then it is a query of the first type, $ 1 \\le x_i \\le 500000 $ , and $ -1000 \\le y_i \\le 1000 $ . If $ t_i = 2 $ , then it it a query of the second type, $ 1 \\le x_i \\le 500000 $ , and $ 0 \\le y_i < x_i $ .\n\nIt is guaranteed that there will be at least one query of type $ 2 $ .\n\nOutput Format\nFor each query of type $ 2 $ print one integer — the answer to it.\n\nExamples\nSample 1\nInput\n5\n1 3 4\n2 3 0\n2 4 3\n1 4 -4\n2 1 0\nOutput\n4\n4\n0"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n500043\n;\nconst\nint\nK\n=\n750\n;\nint\na\n[\nN\n];\nint\nsum\n[\nK\n][\nK\n];\nint\nmain\n()\n{\nint\nq\n;\nscanf\n(\n\"%d\"\n,\n&\nq\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nq\n;\ni\n++)\n{\nint\nt\n,\nx\n,\ny\n;\nscanf\n(\n\"%d %d %d\"\n,\n&\nt\n,\n&\nx\n,\n&\ny\n);\nif\n(\nt\n==\n1\n)\n{\na\n[\nx\n]\n+=\ny\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nK\n;\ni\n++)\nsum\n[\ni\n][\nx\n%\ni\n]\n+=\ny\n;\n}\nelse\n{\nif\n(\nx\n>=\nK\n)\n{\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\ny\n;\ni\n<=\n500000\n;\ni\n+=\nx\n)\nans\n+=\na\n[\ni\n];\nprintf\n(\n\"%d\\n\"\n,\nans\n);\n}\nelse\nprintf\n(\n\"%d\\n\"\n,\nsum\n[\nx\n][\ny\n]);\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

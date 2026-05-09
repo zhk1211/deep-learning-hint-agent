@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a binary array $ ^{\\dagger} $ of length $ n $ . You are allowed to perform one operation on it at most once. In an operation, you can choose any element and flip it: turn a $ 0 $ into a $ 1 $ or vice-versa.\n\nWhat is the maximum number of inversions $ ^{\\ddagger} $ the array can have after performing at most one operation?\n\n$ ^\\dagger $ A binary array is an array that contains only zeroes and ones.\n\n$ ^\\ddagger $ The number of inversions in an array is the number of pairs of indices $ i,j $ such that $ i<j $ and $ a_i > a_j $ .\n\nInput Format\nThe input consists of multiple test cases. The first line contains an integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\leq n \\leq 2\\cdot10^5 $ ) — the length of the array.\n\nThe following line contains $ n $ space-separated positive integers $ a_1 $ , $ a_2 $ ,..., $ a_n $ ( $ 0 \\leq a_i \\leq 1 $ ) — the elements of the array.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\\cdot10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the maximum number of inversions the array can have after performing at most one operation.\n\nExamples\nSample 1\nInput\n5\n4\n1 0 1 0\n6\n0 1 0 0 1 0\n2\n0 0\n8\n1 0 1 1 0 0 0 1\n3\n1 1 1\nOutput\n3\n7\n1\n13\n2\n\nNote\nFor the first test case, the inversions are initially formed by the pairs of indices ( $ 1, 2 $ ), ( $ 1, 4 $ ), ( $ 3, 4 $ ), being a total of $ 3 $ , which already is the maximum possible.\n\nFor the second test case, the inversions are initially formed by the pairs of indices ( $ 2, 3 $ ), ( $ 2, 4 $ ), ( $ 2, 6 $ ), ( $ 5, 6 $ ), being a total of four. But, by flipping the first element, the array becomes $ {1, 1, 0, 0, 1, 0} $ , which has the inversions formed by the pairs of indices ( $ 1, 3 $ ), ( $ 1, 4 $ ), ( $ 1, 6 $ ), ( $ 2, 3 $ ), ( $ 2, 4 $ ), ( $ 2, 6 $ ), ( $ 5, 6 $ ) which total to $ 7 $ inversions which is the maximum possible."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n\"bits/stdc++.h\"\nusing\nnamespace\nstd\n;\nusing\nll\n=\nlong\nlong\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n#define\nall\n(\nv\n)\nv\n.\nbegin\n(),\nv\n.\nend\n()\n#define\nrall\n(\nv\n)\nv\n.\nrbegin\n(),\nv\n.\nrend\n()\n#define\npb                push_back\n#define\nsz\n(\na\n)\n(\nint\n)\na\n.\nsize\n()\nll calc\n(\nvector\n<int>\n&\na\n)\n{\nll zeroes\n=\n0\n,\nans\n=\n0\n;\nfor\n(\nint\ni\n=\nsz\n(\na\n)\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n)\n{\nif\n(\na\n[\ni\n]\n==\n0\n)\n++\nzeroes\n;\nelse\nans\n+=\nzeroes\n;\n}\nreturn\nans\n;\n}\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nforn\n(\ni\n,\nn\n)\ncin\n>>\na\n[\ni\n];\nll ans\n=\ncalc\n(\na\n);\nforn\n(\ni\n,\nn\n)\n{\nif\n(\na\n[\ni\n]\n==\n0\n)\n{\na\n[\ni\n]\n=\n1\n;\nans\n=\nmax\n(\nans\n,\ncalc\n(\na\n));\na\n[\ni\n]\n=\n0\n;\nbreak\n;\n}\n}\nfor\n(\nint\ni\n=\nn\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n)\n{\nif\n(\na\n[\ni\n]\n==\n1\n)\n{\na\n[\ni\n]\n=\n0\n;\nans\n=\nmax\n(\nans\n,\ncalc\n(\na\n));\na\n[\ni\n]\n=\n1\n;\nbreak\n;\n}\n}\ncout\n<<\nans\n<<\n\"\\n\"\n;\n}\nint32_t\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncout\n.\ntie\n(\n0\n);\nint\nt\n=\n1\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

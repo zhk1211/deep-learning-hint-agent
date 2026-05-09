@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a_1, a_2, \\dots, a_n $ . You can perform operations on the array. In each operation you can choose an integer $ i $ ( $ 1 \\le i < n $ ), and swap elements $ a_i $ and $ a_{i+1} $ of the array, if $ a_i + a_{i+1} $ is odd.\n\nDetermine whether it can be sorted in non-decreasing order using this operation any number of times.\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^5 $ ) — the number of test cases. Description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^5 $ ) — the length of the array.\n\nThe second line of each test case contains $ n $ integers $ a_1,a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the elements of the array.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print \"Yes\" or \"No\" depending on whether you can or can not sort the given array.\n\nYou may print each letter in any case (for example, \"YES\", \"Yes\", \"yes\", \"yEs\" will all be recognized as positive answer).\n\nExamples\nSample 1\nInput\n4\n4\n1 6 31 14\n2\n4 2\n5\n2 9 6 7 10\n3\n6 6 6\nOutput\nYes\nNo\nNo\nYes\n\nNote\nIn the first test case, we can simply swap $ 31 $ and $ 14 $ ( $ 31 + 14 = 45 $ which is odd) and obtain the non-decreasing array $ [1,6,14,31] $ .\n\nIn the second test case, the only way we could sort the array is by swapping $ 4 $ and $ 2 $ , but this is impossible, since their sum $ 4 + 2 = 6 $ is even.\n\nIn the third test case, there is no way to make the array non-decreasing.\n\nIn the fourth test case, the array is already non-decreasing."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Replace the condition \"$$$a_i+a_{i+1}$$$ is odd\" with something easier to work with."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The condition means that we only swap elements of different parity. Now, make some observations."
+        },
+        {
+            "title": "Hint 3",
+            "content": "What happens if there are some elements $$$a_i$$$ and $$$a_j$$$ ($$$i \\lt j$$$) of the same parity, such that $$$a_i \\gt a_j$$$?"
+        },
+        {
+            "title": "Hint 4",
+            "content": "If such pair exists, the answer is \"NO\". Now consider the array to be a merge between two increasing arrays (one with odd elements, one with even elements). Try to prove that the answer is always \"YES\" in this case."
+        },
+        {
+            "title": "Hint 5",
+            "content": "What does the Bubble Sort algorithm do here? Does it ever do an illegal swap?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "The condition \"$$$a_i + a_{i+1}$$$ is odd\" means that we can only swap elements of different parity. If either the order of even elements or the order of odd elements is not non-decreasing, then it is impossible to sort the sequence. Otherwise, let's prove that it is always possible to sort the sequence. We can for example perform Bubble Sort algorithm. Note that this algorithm only swaps elements $$$a_i$$$ and $$$a_{i+1}$$$ if $$$a_i \\gt a_{i+1}$$$, so it will never swap two elements of the same parity (given our assumption on their order).\nTime complexity: $$$O(n)$$$."
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is a simplified version of the problem B2. Perhaps you should read the problem B2 before you start solving B1.\n\nPaul and Mary have a favorite string $ s $ which consists of lowercase letters of the Latin alphabet. They want to paint it using pieces of chalk of two colors: red and green. Let's call a coloring of a string wonderful if the following conditions are met:\n\n1. each letter of the string is either painted in exactly one color (red or green) or isn't painted;\n2. each two letters which are painted in the same color are different;\n3. the number of letters painted in red is equal to the number of letters painted in green;\n4. the number of painted letters of this coloring is maximum among all colorings of the string which meet the first three conditions.\n\nE. g. consider a string $ s $ equal to \"kzaaa\". One of the wonderful colorings of the string is shown in the figure.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1551B1/c8856daa04b74978f65da846cae3db3aad690b80.png)The example of a wonderful coloring of the string \"kzaaa\".Paul and Mary want to learn by themselves how to find a wonderful coloring of the string. But they are very young, so they need a hint. Help them find $ k $ — the number of red (or green, these numbers are equal) letters in a wonderful coloring.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nEach test case consists of one non-empty string $ s $ which consists of lowercase letters of the Latin alphabet. The number of characters in the string doesn't exceed $ 50 $ .\n\nOutput Format\nFor each test case, output a separate line containing one non-negative integer $ k $ — the number of letters which will be painted in red in a wonderful coloring.\n\nExamples\nSample 1\nInput\n5\nkzaaa\ncodeforces\narchive\ny\nxxxxxx\nOutput\n2\n5\n3\n0\n1\n\nNote\nThe first test case contains the string from the statement. One of the wonderful colorings is shown in the figure. There's no wonderful coloring containing $ 3 $ or more red letters because the total number of painted symbols will exceed the string's length.\n\nThe string from the second test case can be painted as follows. Let's paint the first occurrence of each of the letters \"c\", \"o\", \"e\" in red and the second ones in green. Let's paint the letters \"d\", \"f\" in red and \"r\", \"s\" in green. So every letter will be painted in red or green, hence the answer better than $ 5 $ doesn't exist.\n\nThe third test case contains the string of distinct letters, so you can paint any set of characters in red, as long as the size of this set doesn't exceed half of the size of the string and is the maximum possible.\n\nThe fourth test case contains a single letter which cannot be painted in red because there will be no letter able to be painted in green.\n\nThe fifth test case contains a string of identical letters, so there's no way to paint more than one letter in red."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nL\n=\n26\n;\nint\ncnt\n[\nL\n];\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nstring\ns\n;\ncin\n>>\ns\n;\nmemset\n(\ncnt\n,\n0\n,\nsizeof\n(\ncnt\n));\nfor\n(\nauto\nc\n:\ns\n)\ncnt\n[\nc\n-\n'a'\n]++;\nint\ncnt1\n=\n0\n;\nint\ncnt2\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nL\n;\ni\n++)\nif\n(\ncnt\n[\ni\n]\n==\n1\n)\ncnt1\n++;\nelse\nif\n(\ncnt\n[\ni\n]\n>\n0\n)\ncnt2\n++;\ncout\n<<\n(\ncnt2\n+\ncnt1\n/\n2\n)\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,44 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou want to advertise your new business, so you are going to place two posters on a billboard in the city center. The billboard consists of $ n $ vertical panels of width $ 1 $ and varying integer heights, held together by a horizontal bar. The $ i $ -th of the $ n $ panels has height $ h_i $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1638F/248fedf6954feaff373111c2b5be4b885dfbc9ba.png)Initially, all panels hang down from the bar (their top edges lie on it), but before placing the two posters, you are allowed to move each panel up by any integer length, as long as it is still connected to the bar (its bottom edge lies below or on it).\n\nAfter the moves are done, you will place two posters: one below the bar and one above it. They are not allowed to go over the bar and they must be positioned completely inside of the panels.\n\nWhat is the maximum total area the two posters can cover together if you make the optimal moves? Note that you can also place a poster of $ 0 $ area. This case is equivalent to placing a single poster.\n\nInput Format\nThe first line of input contains one integer $ n $ ( $ 1 \\le n \\le 10^4 $ ) — the number of vertical panels.\n\nThe second line of input contains $ n $ integers $ h_1, h_2, ..., h_n $ ( $ 1 \\le h_i \\le 10^{12} $ ) — the heights of the $ n $ vertical panels.\n\nOutput Format\nPrint a single integer — the maximum total area the two posters can cover together.\n\nExamples\nSample 1\nInput\n6\n2 2 3 5 4 5\nOutput\n18\n\nSample 2\nInput\n1\n1\nOutput\n1\n\nNote\nIn the first sample test, we can choose an upper poster with area $ 12 $ and a lower poster of area $ 6 $ as in the image below.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1638F/0100a99d0411aa7185136cd640cb514920fb0633.png)In the second sample test, we can cover the whole billboard using a single poster."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Consider the ranges of panels covered by the two posters. Split the problem into multiple cases according to how these intervals are positioned relative to eachother. Throughout the solution, consider the concept of \"bottlenecks\". These are panels that stop the area to be any larger."
+        },
+        {
+            "title": "Hint 2",
+            "content": "First case: the ranges are disjoint. How do you solve this?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Now, for the other cases, make some observations when the posters share some common range of pannels. Consider the heights to be fixed and group panels into two different types."
+        },
+        {
+            "title": "Hint 4",
+            "content": "There are panels that could fit both (let them be grey) and panels that could fit only one (let them be yellow). The shared range of pannels is between two consecutive yellow panels. Moreover, it is bounded by yellow panels in an optimal solution."
+        },
+        {
+            "title": "Hint 5",
+            "content": "Now, consider the heights of the two posters to not be fixed anymore. How many possible maximal ranges of shared panels can there be? They seem to be $$$O(n^2)$$$, but maybe there are less."
+        },
+        {
+            "title": "Hint 6",
+            "content": "Let the shortest panel inside a maximal shared range to be its \"representative panel\". Starting from such a panel, what ranges does it represent?"
+        },
+        {
+            "title": "Hint 7",
+            "content": "It can be proven that the only possible range is the one between the closest shorter panels to the left and right. Now you are able to consider all possible shared ranges because there are $$$O(n)$$$. You can split further into two cases and solve them using two-pointers and possibly some precomputations."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        }
+    ]
+}

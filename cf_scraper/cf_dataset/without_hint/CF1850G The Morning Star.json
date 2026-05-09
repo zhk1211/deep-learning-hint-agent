@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA compass points directly toward the morning star. It can only point in one of eight directions: the four cardinal directions (N, S, E, W) or some combination (NW, NE, SW, SE). Otherwise, it will break.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1850G/8d9b572fed03355750b2607ba5390b111ed87f73.png) The directions the compass can point.There are $ n $ distinct points with integer coordinates on a plane. How many ways can you put a compass at one point and the morning star at another so that the compass does not break?\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\leq n \\leq 2 \\cdot 10^5 $ ) — the number of points.\n\nThen $ n $ lines follow, each line containing two integers $ x_i $ , $ y_i $ ( $ -10^9 \\leq x_i, y_i \\leq 10^9 $ ) — the coordinates of each point, all points have distinct coordinates.\n\nIt is guaranteed that the sum of $ n $ over all test cases doesn't exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of pairs of points that don't break the compass.\n\nExamples\nSample 1\nInput\n5\n3\n0 0\n-1 -1\n1 1\n4\n4 5\n5 7\n6 9\n10 13\n3\n-1000000000 1000000000\n0 0\n1000000000 -1000000000\n5\n0 0\n2 2\n-1 5\n-1 10\n2 11\n3\n0 0\n-1 2\n1 -2\nOutput\n6\n2\n6\n8\n0\n\nNote\nIn the first test case, any pair of points won't break the compass:\n\n- The compass is at $ (0,0) $ , the morning star is at $ (-1,-1) $ : the compass will point $ \\text{SW} $ .\n- The compass is at $ (0,0) $ , the morning star is at $ (1,1) $ : the compass will point $ \\text{NE} $ .\n- The compass is at $ (-1,-1) $ , the morning star is at $ (0,0) $ : the compass will point $ \\text{NE} $ .\n- The compass is at $ (-1,-1) $ , the morning star is at $ (1,1) $ : the compass will point $ \\text{NE} $ .\n- The compass is at $ (1,1) $ , the morning star is at $ (0,0) $ : the compass will point $ \\text{SW} $ .\n- The compass is at $ (1,1) $ , the morning star is at $ (-1,-1) $ : the compass will point $ \\text{SW} $ .\n\nIn the second test case, only two pairs of points won't break the compass:\n\n- The compass is at $ (6,9) $ , the morning star is at $ (10,13) $ : the compass will point $ \\text{NE} $ .\n- The compass is at $ (10,13) $ , the morning star is at $ (6,9) $ : the compass will point $ \\text{SW} $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nstartt ios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\ntypedef\nlong\nlong\nll\n;\nusing\nnamespace\nstd\n;\n#define\nvint vector\n<int>\n#define\nall\n(\nv\n)\nv\n.\nbegin\n(),\nv\n.\nend\n()\n#define\nint\nlong\nlong\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nmap\n<\nint\n,\nint\n>\nup\n,\nside\n,\ndiag1\n,\ndiag2\n;\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\nx\n,\ny\n;\ncin\n>>\nx\n>>\ny\n;\nup\n[\nx\n]++;\nside\n[\ny\n]++;\ndiag1\n[\nx\n-\ny\n]++;\ndiag2\n[\nx\n+\ny\n]++;\n}\nfor\n(\nauto\nx\n:\nup\n)\n{\nans\n+=\nx\n.\nsecond\n*(\nx\n.\nsecond\n-\n1\n);\n}\nfor\n(\nauto\nx\n:\nside\n)\n{\nans\n+=\nx\n.\nsecond\n*(\nx\n.\nsecond\n-\n1\n);\n}\nfor\n(\nauto\nx\n:\ndiag1\n)\n{\nans\n+=\nx\n.\nsecond\n*(\nx\n.\nsecond\n-\n1\n);\n}\nfor\n(\nauto\nx\n:\ndiag2\n)\n{\nans\n+=\nx\n.\nsecond\n*(\nx\n.\nsecond\n-\n1\n);\n}\ncout\n<<\nans\n<<\nendl\n;\n}\nint32_t\nmain\n(){\nstartt\nint\nt\n=\n1\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

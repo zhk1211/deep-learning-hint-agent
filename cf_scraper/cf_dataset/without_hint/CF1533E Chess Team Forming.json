@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "fun main\n()\n{\nval n\n=\nreadLine\n()!!.\ntoInt\n()\nval a\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}.\ntoIntArray\n()\nval b\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}.\ntoIntArray\n()\nval m\n=\nreadLine\n()!!.\ntoInt\n()\nval c\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}.\ntoIntArray\n()\na\n.\nsort\n()\nb\n.\nsort\n()\nval pr\n=\nIntArray\n(\nn\n+\n1\n)\n{\n-\n2e9\n.\ntoInt\n()\n}\nfor\n(\ni\nin\n0\nuntil\nn\n)\n{\npr\n[\ni\n+\n1\n]\n=\nmaxOf\n(\npr\n[\ni\n],\nb\n[\ni\n]\n-\na\n[\ni\n])\n}\nval su\n=\nIntArray\n(\nn\n+\n1\n)\n{\n-\n2e9\n.\ntoInt\n()\n}\nfor\n(\ni\nin\n(\nn\n-\n1\n)\ndownTo\n0\n)\n{\nsu\n[\ni\n]\n=\nmaxOf\n(\nsu\n[\ni\n+\n1\n],\nb\n[\ni\n+\n1\n]\n-\na\n[\ni\n])\n}\nval ans\n=\nIntArray\n(\nm\n)\nfor\n(\ni\nin\n0\nuntil\nm\n)\n{\nvar\npos\n=\na\n.\nbinarySearch\n(\nc\n[\ni\n])\nif\n(\npos\n<\n0\n)\n{\npos\n=\n-\npos\n-\n1\n}\nans\n[\ni\n]\n=\nmaxOf\n(\npr\n[\npos\n],\nsu\n[\npos\n],\nb\n[\npos\n]\n-\nc\n[\ni\n])\n}\nprintln\n(\nans\n.\njoinToString\n(\n\" \"\n))\n}"
+        }
+    ]
+}

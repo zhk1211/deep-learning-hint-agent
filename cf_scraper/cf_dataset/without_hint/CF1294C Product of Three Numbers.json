@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given one integer number $ n $ . Find three distinct integers $ a, b, c $ such that $ 2 \\le a, b, c $ and $ a \\cdot b \\cdot c = n $ or say that it is impossible to do it.\n\nIf there are several answers, you can print any.\n\nYou have to answer $ t $ independent test cases.\n\nInput Format\nThe first line of the input contains one integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases.\n\nThe next $ n $ lines describe test cases. The $ i $ -th test case is given on a new line as one integer $ n $ ( $ 2 \\le n \\le 10^9 $ ).\n\nOutput Format\nFor each test case, print the answer on it. Print \"NO\" if it is impossible to represent $ n $ as $ a \\cdot b \\cdot c $ for some distinct integers $ a, b, c $ such that $ 2 \\le a, b, c $ .\n\nOtherwise, print \"YES\" and any possible such representation.\n\nExamples\nSample 1\nInput\n5\n64\n32\n97\n2\n12345\nOutput\nYES\n2 4 8\nNO\nNO\nNO\nYES\n3 5 823"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nq\n;\ncin\n>>\nq\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nq\n;\n++\ni\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nset\n<int>\nused\n;\nfor\n(\nint\ni\n=\n2\n;\ni\n*\ni\n<=\nn\n;\n++\ni\n)\n{\nif\n(\nn\n%\ni\n==\n0\n&&\n!\nused\n.\ncount\n(\ni\n))\n{\nused\n.\ninsert\n(\ni\n);\nn\n/=\ni\n;\nbreak\n;\n}\n}\nfor\n(\nint\ni\n=\n2\n;\ni\n*\ni\n<=\nn\n;\n++\ni\n)\n{\nif\n(\nn\n%\ni\n==\n0\n&&\n!\nused\n.\ncount\n(\ni\n))\n{\nused\n.\ninsert\n(\ni\n);\nn\n/=\ni\n;\nbreak\n;\n}\n}\nif\n(\nint\n(\nused\n.\nsize\n())\n<\n2\n||\nused\n.\ncount\n(\nn\n)\n||\nn\n==\n1\n)\n{\ncout\n<<\n\"NO\"\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\n\"YES\"\n<<\nendl\n;\nused\n.\ninsert\n(\nn\n);\nfor\n(\nauto\nit\n:\nused\n)\ncout\n<<\nit\n<<\n\" \"\n;\ncout\n<<\nendl\n;\n}\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

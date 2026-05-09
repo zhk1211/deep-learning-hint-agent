@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou want to type the string $ s $ , consisting of $ n $ lowercase Latin letters, using your favorite text editor Notepad#.\n\nNotepad# supports two kinds of operations:\n\n- append any letter to the end of the string;\n- copy a continuous substring of an already typed string and paste this substring to the end of the string.\n\nCan you type string $ s $ in strictly less than $ n $ operations?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of testcases.\n\nThe first line of each testcase contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the length of the string $ s $ .\n\nThe second line contains a string $ s $ , consisting of $ n $ lowercase Latin letters.\n\nThe sum of $ n $ doesn't exceed $ 2 \\cdot 10^5 $ over all testcases.\n\nOutput Format\nFor each testcase, print \"YES\" if you can type string $ s $ in strictly less than $ n $ operations. Otherwise, print \"NO\".\n\nExamples\nSample 1\nInput\n6\n10\ncodeforces\n8\nlabacaba\n5\nuohhh\n16\nisthissuffixtree\n1\nx\n4\nmomo\nOutput\nNO\nYES\nNO\nYES\nNO\nYES\n\nNote\nIn the first testcase, you can start with typing \"codef\" ( $ 5 $ operations), then copy \"o\" ( $ 1 $ operation) from an already typed part, then finish with typing \"rces\" ( $ 4 $ operations). That will be $ 10 $ operations, which is not strictly less than $ n $ . There exist other ways to type \"codeforces\". However, no matter what you do, you can't do less than $ n $ operations.\n\nIn the second testcase, you can type \"labac\" ( $ 5 $ operations), then copy \"aba\" ( $ 1 $ operation), finishing the string in $ 6 $ operations."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\ns\n=\ninput\n()\ncur\n=\n{}\nfor\ni\nin\nrange\n(\nn\n-\n1\n):\nt\n=\ns\n[\ni\n:\ni\n+\n2\n]\nif\nt\nin\ncur\n:\nif\ncur\n[\nt\n]\n<\ni\n-\n1\n:\nprint\n(\n\"YES\"\n)\nbreak\nelse\n:\ncur\n[\nt\n]\n=\ni\nelse\n:\nprint\n(\n\"NO\"\n)"
+        }
+    ]
+}

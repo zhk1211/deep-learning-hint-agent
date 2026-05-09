@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "fun main\n()\n{\nval\n(\nn\n,\nm\n)\n=\nreadInts\n()\nval a\n=\nreadInts\n().\ntoIntArray\n()\nval q\n=\nreadInt\n()\nval b\n=\nIntArray\n(\n4\n*\na\n.\nsize\n)\nfun buildTree\n(\nil\n:\nInt\n,\nir\n:\nInt\n,\np\n:\nInt\n):\nInt\n{\nval s\n=\nif\n(\nil\n==\nir\n)\n{\na\n[\nil\n]\n}\nelse\n{\nval im\n=\n(\nil\n+\nir\n)\n/\n2\nbuildTree\n(\nil\n,\nim\n,\n2\n*\np\n+\n1\n)\n+\nbuildTree\n(\nim\n+\n1\n,\nir\n,\n2\n*\np\n+\n2\n)\n}\nb\n[\np\n]\n=\ns\nreturn\ns\n}\nbuildTree\n(\n0\n,\nn\n-\n1\n,\n0\n)\nval ans\n=\nList\n(\nq\n)\n{\nval w\n=\nreadInts\n().\ndrop\n(\n1\n)\n+\n(\nm\n+\n1\n)\n// sentinel\nif\n(\nsolveDoors\n(\nn\n,\nm\n,\nb\n,\nw\n))\n\"YES\"\nelse\n\"NO\"\n}.\njoinToString\n(\n\"\\n\"\n)\nprintln\n(\nans\n)\n}\nprivate\nfun solveDoors\n(\nn\n:\nInt\n,\nm\n:\nInt\n,\nb\n:\nIntArray\n,\nw\n:\nList\n<\nInt\n>):\nBoolean\n{\nvar\npp\n=\n0\nvar\ni\n=\n0\nvar\nrem\n=\n0\nfun queryTree\n(\nil\n:\nInt\n,\nir\n:\nInt\n,\np\n:\nInt\n,\ni\n:\nInt\n):\nInt\n{\nif\n(\nil\n==\ni\n&&\nrem\n>=\nb\n[\np\n])\n{\nrem\n-=\nb\n[\np\n]\nreturn\nir\n+\n1\n}\nif\n(\nil\n==\nir\n)\nreturn\ni\n        val im\n=\n(\nil\n+\nir\n)\n/\n2\nif\n(\ni\n>\nim\n)\nreturn\nqueryTree\n(\nim\n+\n1\n,\nir\n,\n2\n*\np\n+\n2\n,\ni\n)\nval j\n=\nqueryTree\n(\nil\n,\nim\n,\n2\n*\np\n+\n1\n,\ni\n)\nif\n(\nj\n<=\nim\n)\nreturn\nj\nreturn\nqueryTree\n(\nim\n+\n1\n,\nir\n,\n2\n*\np\n+\n2\n,\nim\n+\n1\n)\n}\nfor\n(\ncp\nin\nw\n)\n{\nrem\n=\ncp\n-\npp\n-\n1\ni\n=\nqueryTree\n(\n0\n,\nn\n-\n1\n,\n0\n,\ni\n)\nif\n(\ni\n>=\nn\n)\nreturn\ntrue\npp\n=\ncp\n}\nreturn\nfalse\n}\nprivate\nfun readInt\n()\n=\nreadLine\n()!!.\ntoInt\n()\nprivate\nfun readInts\n()\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}"
+        }
+    ]
+}

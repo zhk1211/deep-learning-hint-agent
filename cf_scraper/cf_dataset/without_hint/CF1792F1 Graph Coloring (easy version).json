@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe only difference between the easy and the hard version is the constraint on $ n $ .\n\nYou are given an undirected complete graph on $ n $ vertices. A complete graph is a graph where each pair of vertices is connected by an edge. You have to paint the edges of the graph into two colors, red and blue (each edge will have one color).\n\nA set of vertices $ S $ is red-connected if, for every pair of vertices $ (v_1, v_2) $ such that $ v_1 \\in S $ and $ v_2 \\in S $ , there exists a path from $ v_1 $ to $ v_2 $ that goes only through red edges and vertices from $ S $ . Similarly, a set of vertices $ S $ is blue-connected if, for every pair of vertices $ (v_1, v_2) $ such that $ v_1 \\in S $ and $ v_2 \\in S $ , there exists a path from $ v_1 $ to $ v_2 $ that goes only through blue edges and vertices from $ S $ .\n\nYou have to paint the graph in such a way that:\n\n- there is at least one red edge;\n- there is at least one blue edge;\n- for each set of vertices $ S $ such that $ |S| \\ge 2 $ , $ S $ is either red-connected or blue-connected, but not both.\n\nCalculate the number of ways to paint the graph, and print it modulo $ 998244353 $ .\n\nInput Format\nThe first (and only) line contains one integer $ n $ ( $ 3 \\le n \\le 5 \\cdot 10^3 $ ).\n\nOutput Format\nPrint one integer — the number of ways to paint the graph, taken modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n3\nOutput\n6\n\nSample 2\nInput\n4\nOutput\n50\n\nSample 3\nInput\n100\nOutput\n878752271\n\nSample 4\nInput\n1337\nOutput\n520628749"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nadd\n(\nint\nx\n,\nint\ny\n)\n{\nx\n+=\ny\n;\nwhile\n(\nx\n>=\nMOD\n)\nx\n-=\nMOD\n;\nwhile\n(\nx\n<\n0\n)\nx\n+=\nMOD\n;\nreturn\nx\n;\n}\nint\nmul\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\n(\nx\n*\n1ll\n*\ny\n)\n%\nMOD\n;\n}\nint\nvarMul\n(\nint\nx\n)\n{\nreturn\nx\n;\n}\ntemplate\n<\ntypename\n...\nArgs\n>\nint\nvarMul\n(\nint\nx\n,\nArgs\n...\nargs\n)\n{\nreturn\nmul\n(\nx\n,\nvarMul\n(\nargs\n...));\n}\nint\nbinpow\n(\nint\nx\n,\nint\ny\n)\n{\nint\nz\n=\n1\n;\nwhile\n(\ny\n)\n{\nif\n(\ny\n&\n1\n)\nz\n=\nmul\n(\nz\n,\nx\n);\nx\n=\nmul\n(\nx\n,\nx\n);\ny\n/=\n2\n;\n}\nreturn\nz\n;\n}\nvector\n<int>\nfact\n,\nrfact\n;\nvector\n<int>\ndp\n;\nint\nn\n;\nvoid\nprecalc\n()\n{\nfact\n.\nresize\n(\nn\n+\n1\n);\nrfact\n.\nresize\n(\nn\n+\n1\n);\nfact\n[\n0\n]\n=\n1\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\nfact\n[\ni\n]\n=\nmul\n(\ni\n,\nfact\n[\ni\n-\n1\n]);\nfor\n(\nint\ni\n=\n0\n;\ni\n<=\nn\n;\ni\n++)\nrfact\n[\ni\n]\n=\nbinpow\n(\nfact\n[\ni\n],\nMOD\n-\n2\n);\ndp\n.\nresize\n(\nn\n+\n1\n,\n-\n1\n);\n}\nint\nC\n(\nint\nn\n,\nint\nk\n)\n{\nif\n(\nn\n<\n0\n||\nn\n<\nk\n||\nk\n<\n0\n)\nreturn\n0\n;\nreturn\nvarMul\n(\nfact\n[\nn\n],\nrfact\n[\nk\n],\nrfact\n[\nn\n-\nk\n]);\n}\nint\ncalc\n(\nint\nx\n)\n{\nif\n(\ndp\n[\nx\n]\n!=\n-\n1\n)\nreturn\ndp\n[\nx\n];\nif\n(\nx\n==\n1\n)\nreturn\ndp\n[\nx\n]\n=\n1\n;\nif\n(\nx\n==\n2\n)\nreturn\ndp\n[\nx\n]\n=\n1\n;\ndp\n[\nx\n]\n=\n0\n;\nint\n&\nd\n=\ndp\n[\nx\n];\nfor\n(\nint\ni\n=\n1\n;\ni\n<\nx\n;\ni\n++)\n{\nd\n=\nadd\n(\nd\n,\nvarMul\n(\ncalc\n(\ni\n),\n(\ni\n==\nx\n-\n1\n?\n(\nMOD\n+\n1\n)\n/\n2\n:\ncalc\n(\nx\n-\ni\n)),\n2\n,\nC\n(\nx\n-\n1\n,\ni\n-\n1\n)));\n}\nreturn\nd\n;\n}\nint\nmain\n()\n{\ncin\n>>\nn\n;\nprecalc\n();\ncout\n<<\nadd\n(\nmul\n(\ncalc\n(\nn\n),\n2\n),\n-\n2\n)\n<<\nendl\n;\n}"
+        }
+    ]
+}

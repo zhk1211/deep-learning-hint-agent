@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nIt is the easy version of the problem. The only difference is that in this version $ k = 3 $ .\n\nYou are given a positive integer $ n $ . Find $ k $ positive integers $ a_1, a_2, \\ldots, a_k $ , such that:\n\n- $ a_1 + a_2 + \\ldots + a_k = n $\n- $ LCM(a_1, a_2, \\ldots, a_k) \\le \\frac{n}{2} $\n\nHere $ LCM $ is the [least common multiple](https://en.wikipedia.org/wiki/Least_common_multiple) of numbers $ a_1, a_2, \\ldots, a_k $ .\n\nWe can show that for given constraints the answer always exists.\n\nInput Format\nThe first line contains a single integer $ t $ $ (1 \\le t \\le 10^4) $ — the number of test cases.\n\nThe only line of each test case contains two integers $ n $ , $ k $ ( $ 3 \\le n \\le 10^9 $ , $ k = 3 $ ).\n\nOutput Format\nFor each test case print $ k $ positive integers $ a_1, a_2, \\ldots, a_k $ , for which all conditions are satisfied.\n\nExamples\nSample 1\nInput\n3\n3 3\n8 3\n14 3\nOutput\n1 1 1\n4 2 2\n2 6 6"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "// три манула\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n-->\n0\n)\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nif\n(\nn\n%\n2\n)\ncout\n<<\n1\n<<\n' '\n<<\nn\n/\n2\n<<\n' '\n<<\nn\n/\n2\n<<\n'\\n'\n;\nelse\nif\n(\nn\n%\n2\n==\n0\n&&\nn\n%\n4\n)\ncout\n<<\n2\n<<\n' '\n<<\nn\n/\n2\n-\n1\n<<\n' '\n<<\nn\n/\n2\n-\n1\n<<\n'\\n'\n;\nelse\ncout\n<<\nn\n/\n2\n<<\n' '\n<<\nn\n/\n4\n<<\n' '\n<<\nn\n/\n4\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

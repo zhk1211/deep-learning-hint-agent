@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are both a shop keeper and a shop assistant at a small nearby shop. You have $ n $ goods, the $ i $ -th good costs $ a_i $ coins.\n\nYou got tired of remembering the price of each product when customers ask for it, thus you decided to simplify your life. More precisely you decided to set the same price for all $ n $ goods you have.\n\nHowever, you don't want to lose any money so you want to choose the price in such a way that the sum of new prices is not less than the sum of the initial prices. It means that if you sell all $ n $ goods for the new price, you will receive at least the same (or greater) amount of money as if you sell them for their initial prices.\n\nOn the other hand, you don't want to lose customers because of big prices so among all prices you can choose you need to choose the minimum one.\n\nSo you need to find the minimum possible equal price of all $ n $ goods so if you sell them for this price, you will receive at least the same (or greater) amount of money as if you sell them for their initial prices.\n\nYou have to answer $ q $ independent queries.\n\nInput Format\nThe first line of the input contains one integer $ q $ ( $ 1 \\le q \\le 100 $ ) — the number of queries. Then $ q $ queries follow.\n\nThe first line of the query contains one integer $ n $ ( $ 1 \\le n \\le 100) $ — the number of goods. The second line of the query contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^7 $ ), where $ a_i $ is the price of the $ i $ -th good.\n\nOutput Format\nFor each query, print the answer for it — the minimum possible equal price of all $ n $ goods so if you sell them for this price, you will receive at least the same (or greater) amount of money as if you sell them for their initial prices.\n\nExamples\nSample 1\nInput\n3\n5\n1 2 3 4 5\n3\n1 2 2\n4\n1 1 1 1\nOutput\n3\n2\n1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\n#ifdef\n_DEBUG\n\tfreopen\n(\n\"input.txt\"\n,\n\"r\"\n,\nstdin\n);\n//\tfreopen(\"output.txt\", \"w\", stdout);\n#endif\nint\nq\n;\ncin\n>>\nq\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nq\n;\n++\ni\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\nsum\n=\n0\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\nn\n;\n++\nj\n)\n{\nint\nx\n;\ncin\n>>\nx\n;\nsum\n+=\nx\n;\n}\ncout\n<<\n(\nsum\n+\nn\n-\n1\n)\n/\nn\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two integers $ n $ and $ k $ .\n\nFor an array of length $ n $ , let's define its cost as the maximum number of contiguous subarrays of this array that can be chosen so that:\n\n- each element belongs to at most one subarray;\n- the length of each subarray is exactly $ k $ ;\n- each subarray contains each integer from $ 1 $ to $ k $ exactly once.\n\nFor example, if $ n = 10 $ , $ k = 3 $ and the array is $ [1, 2, 1, 3, 2, 3, 2, 3, 1, 3] $ , its cost is $ 2 $ because, for example, we can choose the subarrays from the $ 2 $ -nd element to the $ 4 $ -th element and from the $ 7 $ -th element to the $ 9 $ -th element, and we can show that it's impossible to choose more than $ 2 $ subarrays.\n\nCalculate the sum of costs over all arrays of length $ n $ consisting of integers from $ 1 $ to $ k $ , and print it modulo $ 998244353 $ .\n\nInput Format\nThe only line of the input contains two integers $ n $ and $ k $ ( $ 2 \\le k \\le n \\le 4000 $ ).\n\nOutput Format\nPrint one integer — the sum of costs of all arrays of length $ n $ consisting of integers from $ 1 $ to $ k $ taken modulo $ 998244353 $ .\n\nExamples\nSample 1\nInput\n10 3\nOutput\n71712\n\nSample 2\nInput\n2 2\nOutput\n2\n\nSample 3\nInput\n1337 42\nOutput\n524933698"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\n998244353\n;\nint\nadd\n(\nint\nx\n,\nint\ny\n)\n{\nx\n+=\ny\n;\nwhile\n(\nx\n>=\nMOD\n)\nx\n-=\nMOD\n;\nwhile\n(\nx\n<\n0\n)\nx\n+=\nMOD\n;\nreturn\nx\n;\n}\nint\nsub\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\nadd\n(\nx\n,\n-\ny\n);\n}\nint\nmul\n(\nint\nx\n,\nint\ny\n)\n{\nreturn\n(\nx\n*\n1ll\n*\ny\n)\n%\nMOD\n;\n}\nint\nbinpow\n(\nint\nx\n,\nint\ny\n)\n{\nint\nz\n=\n1\n;\nwhile\n(\ny\n>\n0\n)\n{\nif\n(\ny\n&\n1\n)\nz\n=\nmul\n(\nz\n,\nx\n);\nx\n=\nmul\n(\nx\n,\nx\n);\ny\n/=\n2\n;\n}\nreturn\nz\n;\n}\nint\nmain\n()\n{\nint\nn\n,\nk\n;\ncin\n>>\nn\n>>\nk\n;\nint\nans\n=\n0\n;\nvector\n<\nvector\n<int>\n>\ndp\n(\nn\n+\n1\n,\nvector\n<int>\n(\nk\n,\n0\n));\ndp\n[\n0\n][\n0\n]\n=\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\ncur\n=\n0\n;\nfor\n(\nint\nj\n=\nk\n-\n1\n;\nj\n>=\n1\n;\nj\n--)\n{\ncur\n=\nadd\n(\ncur\n,\ndp\n[\ni\n][\nj\n]);\ndp\n[\ni\n+\n1\n][\nj\n]\n=\ncur\n;\n}\nfor\n(\nint\nj\n=\nk\n-\n1\n;\nj\n>=\n0\n;\nj\n--)\n{\nint\nnxt\n=\n(\nj\n+\n1\n)\n%\nk\n;\ndp\n[\ni\n+\n1\n][\nnxt\n]\n=\nadd\n(\ndp\n[\ni\n+\n1\n][\nnxt\n],\nmul\n(\ndp\n[\ni\n][\nj\n],\nk\n-\nj\n));\n}\nans\n=\nadd\n(\nans\n,\nmul\n(\ndp\n[\ni\n+\n1\n][\n0\n],\nbinpow\n(\nk\n,\nn\n-\n(\ni\n+\n1\n))));\n}\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "The quote is from the well known TV series\nBuffy the Vampire Slayer\n.\nPerhaps you notice the lengths of the words\nbuffy\n,\nthe\n,\nvampire\n,\nslayer\nare unique integers in the set {3,5,6,7}.\nGiven the string $$$s$$$, simply \"add\" that string with the target word of the same length.\nHere's how adding two letters work:\nConvert both letters to numbers in $$$[0,25]$$$.\nAdd the two numbers up modulo 26.\nConvert the number back into a letter.\nYou can verify your addition algorithm is correct by checking whether \"tourist\" + \"vampire\" = \"ooggqjx\" (as provided in the sample).\nFinally, if the length of $$$s$$$ is $$$4$$$, the answer is \"none\", because there is no word of length 4 in Buffy the Vampire Slayer."
+        },
+        {
+            "title": "Solution Code (Python)",
+            "content": "s\n=\ninput\n().\nstrip\n()\nwords\n=\n[\n\"\"\n,\n\"\"\n,\n\"\"\n,\n\"the\"\n,\n\"\"\n,\n\"buffy\"\n,\n\"slayer\"\n,\n\"vampire\"\n]\nif\nlen\n(\ns\n)==\n4\n:\nprint\n(\n\"none\"\n)\nelse\n:\ntarget\n=\nwords\n[\nlen\n(\ns\n)]\nans\n=\n\"\"\nfor\ni\nin\nrange\n(\nlen\n(\ns\n)):\na\n=\nord\n(\ns\n[\ni\n])-\nord\n(\n'a'\n)\nb\n=\nord\n(\ntarget\n[\ni\n])-\nord\n(\n'a'\n)\nans\n+=\nchr\n((\na\n+\nb\n)%\n26\n+\nord\n(\n'a'\n))\nprint\n(\nans\n)"
+        }
+    ]
+}

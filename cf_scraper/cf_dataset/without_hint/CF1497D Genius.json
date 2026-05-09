@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPlease note the non-standard memory limit.\n\nThere are $ n $ problems numbered with integers from $ 1 $ to $ n $ . $ i $ -th problem has the complexity $ c_i = 2^i $ , tag $ tag_i $ and score $ s_i $ .\n\nAfter solving the problem $ i $ it's allowed to solve problem $ j $ if and only if $ \\text{IQ} < |c_i - c_j| $ and $ tag_i \\neq tag_j $ . After solving it your $ \\text{IQ} $ changes and becomes $ \\text{IQ} = |c_i - c_j| $ and you gain $ |s_i - s_j| $ points.\n\nAny problem can be the first. You can solve problems in any order and as many times as you want.\n\nInitially your $ \\text{IQ} = 0 $ . Find the maximum number of points that can be earned.\n\nInput Format\nThe first line contains a single integer $ t $ $ (1 \\le t \\le 100) $ — the number of test cases.\n\nThe first line of each test case contains an integer $ n $ $ (1 \\le n \\le 5000) $ — the number of problems.\n\nThe second line of each test case contains $ n $ integers $ tag_1, tag_2, \\ldots, tag_n $ $ (1 \\le tag_i \\le n) $ — tags of the problems.\n\nThe third line of each test case contains $ n $ integers $ s_1, s_2, \\ldots, s_n $ $ (1 \\le s_i \\le 10^9) $ — scores of the problems.\n\nIt's guaranteed that sum of $ n $ over all test cases does not exceed $ 5000 $ .\n\nOutput Format\nFor each test case print a single integer — the maximum number of points that can be earned.\n\nExamples\nSample 1\nInput\n5\n4\n1 2 3 4\n5 10 15 20\n4\n1 2 1 2\n5 10 15 20\n4\n2 2 4 1\n2 8 19 1\n2\n1 1\n6 9\n1\n1\n666\nOutput\n35\n30\n42\n0\n0\n\nNote\nIn the first test case optimal sequence of solving problems is as follows:\n\n1. $ 1 \\rightarrow 2 $ , after that total score is $ 5 $ and $ \\text{IQ} = 2 $\n2. $ 2 \\rightarrow 3 $ , after that total score is $ 10 $ and $ \\text{IQ} = 4 $\n3. $ 3 \\rightarrow 1 $ , after that total score is $ 20 $ and $ \\text{IQ} = 6 $\n4. $ 1 \\rightarrow 4 $ , after that total score is $ 35 $ and $ \\text{IQ} = 14 $\n\nIn the second test case optimal sequence of solving problems is as follows:\n\n1. $ 1 \\rightarrow 2 $ , after that total score is $ 5 $ and $ \\text{IQ} = 2 $\n2. $ 2 \\rightarrow 3 $ , after that total score is $ 10 $ and $ \\text{IQ} = 4 $\n3. $ 3 \\rightarrow 4 $ , after that total score is $ 15 $ and $ \\text{IQ} = 8 $\n4. $ 4 \\rightarrow 1 $ , after that total score is $ 35 $ and $ \\text{IQ} = 14 $\n\nIn the third test case optimal sequence of solving problems is as follows:\n\n1. $ 1 \\rightarrow 3 $ , after that total score is $ 17 $ and $ \\text{IQ} = 6 $\n2. $ 3 \\rightarrow 4 $ , after that total score is $ 35 $ and $ \\text{IQ} = 8 $\n3. $ 4 \\rightarrow 2 $ , after that total score is $ 42 $ and $ \\text{IQ} = 12 $"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Implementation",
+            "content": "// пять манулов\n#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nT\n;\ncin\n>>\nT\n;\nwhile\n(\nT\n-->\n0\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<\nlong\nlong\n>\ns\n(\nn\n),\ntag\n(\nn\n),\ndp\n(\nn\n,\n0\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\ncin\n>>\ntag\n[\ni\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\ncin\n>>\ns\n[\ni\n];\nfor\n(\nint\nj\n=\n1\n;\nj\n<\nn\n;\n++\nj\n)\n{\nfor\n(\nint\ni\n=\nj\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n)\n{\nif\n(\ntag\n[\ni\n]\n==\ntag\n[\nj\n])\ncontinue\n;\nlong\nlong\ndpi\n=\ndp\n[\ni\n],\ndpj\n=\ndp\n[\nj\n],\np\n=\nabs\n(\ns\n[\ni\n]\n-\ns\n[\nj\n]);\ndp\n[\ni\n]\n=\nmax\n(\ndp\n[\ni\n],\ndpj\n+\np\n);\ndp\n[\nj\n]\n=\nmax\n(\ndp\n[\nj\n],\ndpi\n+\np\n);\n}\n}\ncout\n<<\n*\nmax_element\n(\ndp\n.\nbegin\n(),\ndp\n.\nend\n())\n<<\n'\\n'\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

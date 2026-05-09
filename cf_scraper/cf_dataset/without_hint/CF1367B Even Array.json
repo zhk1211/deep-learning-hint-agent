@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a[0 \\ldots n-1] $ of length $ n $ which consists of non-negative integers. Note that array indices start from zero.\n\nAn array is called good if the parity of each index matches the parity of the element at that index. More formally, an array is good if for all $ i $ ( $ 0 \\le i \\le n - 1 $ ) the equality $ i \\bmod 2 = a[i] \\bmod 2 $ holds, where $ x \\bmod 2 $ is the remainder of dividing $ x $ by 2.\n\nFor example, the arrays \\[ $ 0, 5, 2, 1 $ \\] and \\[ $ 0, 17, 0, 3 $ \\] are good, and the array \\[ $ 2, 4, 6, 7 $ \\] is bad, because for $ i=1 $ , the parities of $ i $ and $ a[i] $ are different: $ i \\bmod 2 = 1 \\bmod 2 = 1 $ , but $ a[i] \\bmod 2 = 4 \\bmod 2 = 0 $ .\n\nIn one move, you can take any two elements of the array and swap them (these elements are not necessarily adjacent).\n\nFind the minimum number of moves in which you can make the array $ a $ good, or say that this is not possible.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases in the test. Then $ t $ test cases follow.\n\nEach test case starts with a line containing an integer $ n $ ( $ 1 \\le n \\le 40 $ ) — the length of the array $ a $ .\n\nThe next line contains $ n $ integers $ a_0, a_1, \\ldots, a_{n-1} $ ( $ 0 \\le a_i \\le 1000 $ ) — the initial array.\n\nOutput Format\nFor each test case, output a single integer — the minimum number of moves to make the given array $ a $ good, or -1 if this is not possible.\n\nExamples\nSample 1\nInput\n4\n4\n3 2 7 6\n3\n3 2 6\n1\n7\n7\n4 9 2 1 18 3 0\nOutput\n2\n1\n-1\n0\n\nNote\nIn the first test case, in the first move, you can swap the elements with indices $ 0 $ and $ 1 $ , and in the second move, you can swap the elements with indices $ 2 $ and $ 3 $ .\n\nIn the second test case, in the first move, you need to swap the elements with indices $ 0 $ and $ 1 $ .\n\nIn the third test case, you cannot make the array good."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nusing\nld\n=\nlong\ndouble\n;\nusing\nll\n=\nlong\nlong\n;\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nint\na\n=\n0\n,\nb\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nint\nx\n;\ncin\n>>\nx\n;\nif\n(\nx\n%\n2\n!=\ni\n%\n2\n)\n{\nif\n(\ni\n%\n2\n==\n0\n)\n{\na\n++;\n}\nelse\n{\nb\n++;\n}\n}\n}\nif\n(\na\n!=\nb\n)\n{\ncout\n<<\n-\n1\n<<\nendl\n;\n}\nelse\n{\ncout\n<<\na\n<<\nendl\n;\n}\n}\nint\nmain\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nwhile\n(\nn\n--)\n{\nsolve\n();\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVasya has a multiset $ s $ consisting of $ n $ integer numbers. Vasya calls some number $ x $ nice if it appears in the multiset exactly once. For example, multiset $ \\{1, 1, 2, 3, 3, 3, 4\\} $ contains nice numbers $ 2 $ and $ 4 $ .\n\nVasya wants to split multiset $ s $ into two multisets $ a $ and $ b $ (one of which may be empty) in such a way that the quantity of nice numbers in multiset $ a $ would be the same as the quantity of nice numbers in multiset $ b $ .\n\nInput Format\nThe first line contains a single integer $ n~(2 \\le n \\le 100) $ .\n\nThe second line contains $ n $ integers $ s_1, s_2, \\dots s_n~(1 \\le s_i \\le 100) $ — the multiset $ s $ .\n\nOutput Format\nIf there exists no split of $ s $ to satisfy the given requirements, then print \"NO\" in the first line.\n\nOtherwise print \"YES\" in the first line.\n\nThe second line should contain a string, consisting of $ n $ characters. $ i $ -th character should be equal to 'A' if the $ i $ -th element of multiset $ s $ goes to multiset $ a $ and 'B' if if the $ i $ -th element of multiset $ s $ goes to multiset $ b $ . Elements are numbered from $ 1 $ to $ n $ in the order they are given in the input.\n\nIf there exist multiple solutions, then print any of them.\n\nExamples\nSample 1\nInput\n4\n3 5 7 1\nOutput\nYES\nBABA\n\nSample 2\nInput\n3\n3 5 1\nOutput\nNO"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution (Ajosteen)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n109\n;\nint\nn\n;\nint\na\n[\nN\n];\nmap\n<\nint\n,\nint\n>\nm\n;\nset\n<int>\ns\n[\n2\n];\nint\nmain\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n){\ncin\n>>\na\n[\ni\n];\nm\n[\na\n[\ni\n]]++;\n}\nint\npos\n=\n0\n;\nfor\n(\nauto\np\n:\nm\n)\nif\n(\np\n.\nsecond\n==\n1\n){\ns\n[\npos\n].\ninsert\n(\np\n.\nfirst\n);\npos\n=\n1\n-\npos\n;\n}\nif\n(\ns\n[\n0\n].\nsize\n()\n==\ns\n[\n1\n].\nsize\n()){\nstring\nres\n(\nn\n,\n'A'\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\nif\n(\ns\n[\n1\n].\ncount\n(\na\n[\ni\n]))\nres\n[\ni\n]\n=\n'B'\n;\ncout\n<<\n\"YES\"\n<<\nendl\n;\nfor\n(\nauto\nc\n:\nres\n)\ncout\n<<\nc\n;\ncout\n<<\nendl\n;\nreturn\n0\n;\n}\nelse\n{\nassert\n(\nint\n(\ns\n[\n0\n].\nsize\n())\n-\n1\n==\nint\n(\ns\n[\n1\n].\nsize\n()));\nstring\nres\n(\nn\n,\n'A'\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\nif\n(\ns\n[\n1\n].\ncount\n(\na\n[\ni\n]))\nres\n[\ni\n]\n=\n'B'\n;\nint\nid\n=\n-\n1\n;\nfor\n(\nauto\np\n:\nm\n)\nif\n(\np\n.\nsecond\n>=\n3\n){\nid\n=\np\n.\nfirst\n;\nbreak\n;\n}\nif\n(\nid\n==\n-\n1\n){\ncout\n<<\n\"NO\"\n<<\nendl\n;\nreturn\n0\n;\n}\nbool\nflag\n=\nfalse\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n){\nif\n(\na\n[\ni\n]\n==\nid\n)\nif\n(!\nflag\n){\nflag\n=\ntrue\n;\nres\n[\ni\n]\n=\n'B'\n;\n}\n}\ncout\n<<\n\"YES\"\n<<\nendl\n;\nfor\n(\nauto\nc\n:\nres\n)\ncout\n<<\nc\n;\ncout\n<<\nendl\n;\nreturn\n0\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

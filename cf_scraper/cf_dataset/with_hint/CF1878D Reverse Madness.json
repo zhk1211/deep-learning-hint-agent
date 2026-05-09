@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ of length $ n $ , containing lowercase Latin letters.\n\nNext you will be given a positive integer $ k $ and two arrays, $ l $ and $ r $ of length $ k $ .\n\nIt is guaranteed that the following conditions hold for these 2 arrays:\n\n- $ l_1 = 1 $ ;\n- $ r_k = n $ ;\n- $ l_i \\le r_i $ , for each positive integer $ i $ such that $ 1 \\le i \\le k $ ;\n- $ l_i = r_{i-1}+1 $ , for each positive integer $ i $ such that $ 2 \\le i \\le k $ ;\n\nNow you will be given a positive integer $ q $ which represents the number of modifications you need to do on $ s $ .\n\nEach modification is defined with one positive integer $ x $ :\n\n- Find an index $ i $ such that $ l_i \\le x \\le r_i $ (notice that such $ i $ is unique).\n- Let $ a=\\min(x, r_i+l_i-x) $ and let $ b=\\max(x, r_i+l_i-x) $ .\n- Reverse the substring of $ s $ from index $ a $ to index $ b $ .\n\nReversing the substring $ [a, b] $ of a string $ s $ means to make $ s $ equal to $ s_1, s_2, \\dots, s_{a-1},\\ s_b, s_{b-1}, \\dots, s_{a+1}, s_a,\\ s_{b+1}, s_{b+2}, \\dots, s_{n-1}, s_n $ .\n\nPrint $ s $ after the last modification is finished.\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Description of the test cases follows.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le k \\le n \\le 2\\cdot 10^5 $ ) — the length of the string $ s $ , and the length of arrays $ l $ and $ r $ .\n\nThe second line of each test case contains the string $ s $ ( $ |s| = n $ ) containing lowercase Latin letters — the initial string.\n\nThe third line of each test case contains $ k $ positive integers $ l_1, l_2, \\dots, l_k $ ( $ 1 \\le l_i \\le n $ ) — the array $ l $ .\n\nThe fourth line of each test case contains $ k $ positive integers $ r_1, r_2, \\dots, r_k $ ( $ 1 \\le r_i \\le n $ ) — the array $ r $ .\n\nThe fifth line of each test case contains a positive integer $ q $ ( $ 1 \\le q \\le 2 \\cdot 10^5 $ ) — the number of modifications you need to do to $ s $ .\n\nThe sixth line of each test case contains $ q $ positive integers $ x_1, x_2, \\dots, x_q $ ( $ 1\\le x_i \\le n $ ) — the description of the modifications.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\\cdot10^5 $ .\n\nIt is guaranteed that the sum of $ q $ over all test cases does not exceed $ 2\\cdot10^5 $ .\n\nIt is guaranteed that the conditions in the statement hold for the arrays $ l $ and $ r $ .\n\nOutput Format\nFor each test case, in a new line, output the string $ s $ after the last modification is done.\n\nExamples\nSample 1\nInput\n5\n4 2\nabcd\n1 3\n2 4\n2\n1 3\n5 3\nabcde\n1 2 3\n1 2 5\n3\n1 2 3\n3 1\ngaf\n1\n3\n2\n2 2\n10 1\naghcdegdij\n1\n10\n5\n1 2 3 4 2\n1 1\na\n1\n1\n1\n1\nOutput\nbadc\nabedc\ngaf\njihgedcdga\na\n\nNote\nIn the first test case:\n\nThe initial string is \"abcd\". In the first modification, we have $ x=1 $ . Since $ l_1=1\\leq x \\leq r_1=2 $ , we find the index $ i = 1 $ . We reverse the substring from index $ x=1 $ to $ l_1+r_1-x=1+2-1=2 $ . After this modification, our string is \"bacd\".\n\nIn the second modification (and the last modification), we have $ x=3 $ . Since $ l_2=3\\leq x \\leq r_2=4 $ , we find the index $ i = 2 $ . We reverse the substring from index $ x=3 $ to $ l_2+r_2-x=3+4-3=4 $ . After this modification, our string is \"badc\".\n\nIn the second test case:\n\nThe initial string is \"abcde\". In the first modification, we have $ x=1 $ . Since $ l_1=1\\leq x \\leq r_1=1 $ , we find the index $ i = 1 $ . We reverse the substring from index $ x=1 $ to $ l_1+r_1-x=1+1-1=1 $ . After this modification, our string hasn't changed (\"abcde\").\n\nIn the second modification, we have $ x=2 $ . Since $ l_2=2\\leq x \\leq r_2=2 $ , we find the index $ i = 2 $ . We reverse the substring from index $ x=2 $ to $ l_2+r_2-x=2+2-2=2 $ . After this modification, our string hasn't changed (\"abcde\").\n\nIn the third modification (and the last modification), we have $ x=3 $ . Since $ l_3=3\\leq x \\leq r_3=5 $ , we find the index $ i = 3 $ . We reverse the substring from index $ x=3 $ to $ l_3+r_3-x=3+5-3=5 $ . After this modification, our string is \"abedc\"."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nFor each $$$i$$$, ($$$1 \\le i \\le k$$$), we can treat the substring $$$[l_i, r_i]$$$ as a seperate test case.\nHint 2\nWhat happens when we make the same modification twice?\nHint 3\nDoes the order of the operations matter?\nHint 4\nTry pre-processing the queries"
+        },
+        {
+            "title": "Hint 1",
+            "content": "For each $$$i$$$, ($$$1 \\le i \\le k$$$), we can treat the substring $$$[l_i, r_i]$$$ as a seperate test case."
+        },
+        {
+            "title": "Hint 2",
+            "content": "What happens when we make the same modification twice?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Does the order of the operations matter?"
+        },
+        {
+            "title": "Hint 4",
+            "content": "Try pre-processing the queries"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n(){\nint\nt\n;\n//number of test cases\ncin\n>>\nt\n;\nwhile\n(\nt\n--){\nint\nn\n,\nk\n;\n//read the input\ncin\n>>\nn\n>>\nk\n;\nstring\ns\n;\ncin\n>>\ns\n;\nint\na\n[\nk\n];\nint\nb\n[\nk\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\ni\n++){\ncin\n>>\na\n[\ni\n];\na\n[\ni\n]--;}\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\ni\n++){\ncin\n>>\nb\n[\ni\n];\nb\n[\ni\n]--;}\nint\nq\n;\ncin\n>>\nq\n;\nint\ncnt\n[\nn\n+\n1\n]={\n0\n};\n//read and preprocess queries\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nq\n;\ni\n++){\nint\nx\n;\ncin\n>>\nx\n;\ncnt\n[\nx\n-\n1\n]++;\n}\nstring\nans\n=\n\"\"\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\ni\n++){\n//treat each interval as a seperate test case\nstring\ns1\n=\ns\n.\nsubstr\n(\na\n[\ni\n],\nb\n[\ni\n]-\na\n[\ni\n]+\n1\n);\nint\nsum\n=\n0\n;\nint\nl\n=\na\n[\ni\n];\nint\nr\n=\nb\n[\ni\n];\nfor\n(\nint\nj\n=\nl\n;\nj\n<=(\nl\n+\nr\n)/\n2\n;\nj\n++){\nsum\n+=\ncnt\n[\nj\n]+\ncnt\n[\nr\n-\nj\n+\nl\n];\nif\n(\nsum\n&\n1\n)\nswap\n(\ns1\n[\nj\n-\nl\n],\ns1\n[\nr\n-\nj\n]);\n}\nans\n+=\ns1\n;\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

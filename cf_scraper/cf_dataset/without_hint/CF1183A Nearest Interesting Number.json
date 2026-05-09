@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nPolycarp knows that if the sum of the digits of a number is divisible by $ 3 $ , then the number itself is divisible by $ 3 $ . He assumes that the numbers, the sum of the digits of which is divisible by $ 4 $ , are also somewhat interesting. Thus, he considers a positive integer $ n $ interesting if its sum of digits is divisible by $ 4 $ .\n\nHelp Polycarp find the nearest larger or equal interesting number for the given number $ a $ . That is, find the interesting number $ n $ such that $ n \\ge a $ and $ n $ is minimal.\n\nInput Format\nThe only line in the input contains an integer $ a $ ( $ 1 \\le a \\le 1000 $ ).\n\nOutput Format\nPrint the nearest greater or equal interesting number for the given number $ a $ . In other words, print the interesting number $ n $ such that $ n \\ge a $ and $ n $ is minimal.\n\nExamples\nSample 1\nInput\n432\nOutput\n435\n\nSample 2\nInput\n99\nOutput\n103\n\nSample 3\nInput\n237\nOutput\n237\n\nSample 4\nInput\n42\nOutput\n44"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nsum\n(\nint\na\n)\n{\nint\nresult\n=\n0\n;\nwhile\n(\na\n>\n0\n)\n{\nresult\n+=\na\n%\n10\n;\na\n/=\n10\n;\n}\nreturn\nresult\n;\n}\nint\nmain\n()\n{\nint\na\n;\ncin\n>>\na\n;\nwhile\n(\nsum\n(\na\n)\n%\n4\n!=\n0\n)\n{\na\n++;\n}\ncout\n<<\na\n<<\nendl\n;\n}"
+        }
+    ]
+}

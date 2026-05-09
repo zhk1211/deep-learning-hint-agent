@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWelcome to Rockport City!\n\nIt is time for your first ever race in the game against Ronnie. To make the race interesting, you have bet $ a $ dollars and Ronnie has bet $ b $ dollars. But the fans seem to be disappointed. The excitement of the fans is given by $ gcd(a,b) $ , where $ gcd(x, y) $ denotes the [greatest common divisor (GCD)](https://en.wikipedia.org/wiki/Greatest_common_divisor) of integers $ x $ and $ y $ . To make the race more exciting, you can perform two types of operations:\n\n1. Increase both $ a $ and $ b $ by $ 1 $ .\n2. Decrease both $ a $ and $ b $ by $ 1 $ . This operation can only be performed if both $ a $ and $ b $ are greater than $ 0 $ .\n\nIn one move, you can perform any one of these operations. You can perform arbitrary (possibly zero) number of moves. Determine the maximum excitement the fans can get and the minimum number of moves required to achieve it.\n\nNote that $ gcd(x,0)=x $ for any $ x \\ge 0 $ .\n\nInput Format\nThe first line of input contains a single integer $ t $ ( $ 1\\leq t\\leq 5\\cdot 10^3 $ ) — the number of test cases.\n\nThe first and the only line of each test case contains two integers $ a $ and $ b $ ( $ 0\\leq a, b\\leq 10^{18} $ ).\n\nOutput Format\nFor each test case, print a single line containing two integers.\n\nIf the fans can get infinite excitement, print 0 0.\n\nOtherwise, the first integer must be the maximum excitement the fans can get, and the second integer must be the minimum number of moves required to achieve that excitement.\n\nExamples\nSample 1\nInput\n4\n8 5\n1 2\n4 4\n3 9\nOutput\n3 1\n1 0\n0 0\n6 3\n\nNote\nFor the first test case, you can apply the first operation $ 1 $ time to get $ a=9 $ and $ b=6 $ . It can be shown that $ 3 $ is the maximum excitement possible.\n\nFor the second test case, no matter how many operations you apply, the fans will always have an excitement equal to $ 1 $ . Since the initial excitement is also $ 1 $ , you don't need to apply any operation.\n\nFor the third case, the fans can get infinite excitement by applying the first operation an infinite amount of times.\n\nFor the fourth test case, you can apply the second operation $ 3 $ times to get $ a=0 $ and $ b=6 $ . Since, $ gcd(0,6)=6 $ , the fans will get an excitement of $ 6 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "$$$GCD(a,b)=GCD(a-b,b)$$$ if $$$a \\gt b$$$"
+        },
+        {
+            "title": "Hint 2",
+            "content": "$$$a-b$$$ does not change by applying any operation. However, $$$b$$$ can be changed arbitrarily."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "If $$$a=b$$$, the fans can get an infinite amount of excitement, and we can achieve this by applying the first operation infinite times.\nOtherwise, the maximum excitement the fans can get is $$$g=\\lvert a-b\\rvert$$$ and the minimum number of moves required to achieve it is $$$min(a\\bmod g,g-a\\bmod g)$$$.\nProof\nWithout loss of generality, assume $$$a \\gt b$$$ otherwise we can swap $$$a$$$ and $$$b$$$. We know that $$$GCD(a,b) = GCD(a-b,b)$$$. Notice that no matter how many times we apply any operation, the value of $$$a-b$$$ does not change. We can arbitrarily change the value of $$$b$$$ to a multiple of $$$a-b$$$ by applying the operations. In this way, we can achieve a $$$GCD$$$ equal to $$$a-b$$$. Now, since $$$GCD(x,y)\\leq min(x,y)$$$ for any positive $$$x$$$ and $$$y$$$, $$$GCD(a-b,b)$$$ can never exceed $$$a-b$$$. So, we cannot achieve a higher GCD by any means.\nTo achieve the required $$$GCD$$$, we need to make $$$b$$$ a multiple of $$$g=a-b$$$ using as few operations as possible. There are two ways to do so $$$-$$$ decrease $$$b$$$ to the largest multiple of $$$g$$$ less than or equal to $$$b$$$ or increase $$$b$$$ to the smallest multiple of $$$g$$$ greater than $$$b$$$. The number of operations required to do so are $$$b\\bmod g$$$ and $$$g-b\\bmod g$$$ respectively. We will obviously choose the minimum of the two. Also notice that $$$a\\bmod g=b\\bmod g$$$ since $$$a=b+g$$$. So, it doesn't matter if we use either $$$a$$$ or $$$b$$$ to determine the minimum number of operations.\nTime Complexity\n$$$\\mathcal{O}(1)$$$ per test case."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nlong\nlong\na\n,\nb\n;\ncin\n>>\na\n>>\nb\n;\nif\n(\na\n==\nb\n)\ncout\n<<\n0\n<<\n\" \"\n<<\n0\n<<\n'\\n'\n;\nelse\n{\nlong\nlong\ng\n=\nabs\n(\na\n-\nb\n);\nlong\nlong\nm\n=\nmin\n(\na\n%\ng\n,\ng\n-\na\n%\ng\n);\ncout\n<<\ng\n<<\n\" \"\n<<\nm\n<<\n'\\n'\n;\n}\n}\n}"
+        }
+    ]
+}

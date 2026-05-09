@@ -1,0 +1,23 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere's a chessboard of size $ n \\times n $ . $ m $ rooks are placed on it in such a way that:\n\n- no two rooks occupy the same cell;\n- no two rooks attack each other.\n\nA rook attacks all cells that are in its row or column.\n\nIs it possible to move exactly one rook (you can choose which one to move) into a different cell so that no two rooks still attack each other? A rook can move into any cell in its row or column if no other rook stands on its path.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 2000 $ ) — the number of testcases.\n\nThe first line of each testcase contains two integers $ n $ and $ m $ ( $ 1 \\le n, m \\le 8 $ ) — the size of the chessboard and the number of the rooks.\n\nThe $ i $ -th of the next $ m $ lines contains two integers $ x_i $ and $ y_i $ ( $ 1 \\le x_i, y_i \\le n $ ) — the position of the $ i $ -th rook: $ x_i $ is the row and $ y_i $ is the column.\n\nNo two rooks occupy the same cell. No two rooks attack each other.\n\nOutput Format\nFor each testcase, print \"YES\" if it's possible to move exactly one rook into a different cell so that no two rooks still attack each other. Otherwise, print \"NO\".\n\nExamples\nSample 1\nInput\n2\n2 2\n1 2\n2 1\n3 1\n2 2\nOutput\nNO\nYES\n\nNote\nIn the first testcase, the rooks are in the opposite corners of a $ 2 \\times 2 $ board. Each of them has a move into a neighbouring corner, but moving there means getting attacked by another rook.\n\nIn the second testcase, there's a single rook in a middle of a $ 3 \\times 3 $ board. It has $ 4 $ valid moves, and every move is fine because there's no other rook to attack it."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution 1 (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n,\nm\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nfor\n_\nin\nrange\n(\nm\n):\ninput\n()\nprint\n(\n\"NO\"\nif\nn\n==\nm\nelse\n\"YES\"\n)"
+        },
+        {
+            "title": "Solution 2 (awoo)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\nscanf\n(\n\"%d\"\n,\n&\nt\n);\nforn\n(\n_\n,\nt\n){\nint\nn\n,\nm\n;\nscanf\n(\n\"%d%d\"\n,\n&\nn\n,\n&\nm\n);\nvector\n<\npair\n<\nint\n,\nint\n>>\na\n(\nm\n);\nforn\n(\ni\n,\nm\n){\nscanf\n(\n\"%d%d\"\n,\n&\na\n[\ni\n].\nfirst\n,\n&\na\n[\ni\n].\nsecond\n);\n--\na\n[\ni\n].\nfirst\n,\n--\na\n[\ni\n].\nsecond\n;\n}\nbool\nans\n=\nfalse\n;\nforn\n(\ni\n,\nm\n)\nforn\n(\nx\n,\nn\n)\nforn\n(\ny\n,\nn\n)\nif\n((\nx\n==\na\n[\ni\n].\nfirst\n)\n^\n(\ny\n==\na\n[\ni\n].\nsecond\n)){\nbool\nok\n=\ntrue\n;\nforn\n(\nj\n,\nm\n)\nif\n(\ni\n!=\nj\n){\nok\n&=\nx\n!=\na\n[\nj\n].\nfirst\n&&\ny\n!=\na\n[\nj\n].\nsecond\n;\n}\nans\n|=\nok\n;\n}\nputs\n(\nans\n?\n\"YES\"\n:\n\"NO\"\n);\n}\n}"
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a new attraction in Singapore Zoo: The Infinite Zoo.\n\nThe Infinite Zoo can be represented by a graph with an infinite number of vertices labeled $ 1,2,3,\\ldots $ . There is a directed edge from vertex $ u $ to vertex $ u+v $ if and only if $ u\\&v=v $ , where $ \\& $ denotes the [bitwise AND operation](https://en.wikipedia.org/wiki/Bitwise_operation#AND). There are no other edges in the graph.\n\nZookeeper has $ q $ queries. In the $ i $ -th query she will ask you if she can travel from vertex $ u_i $ to vertex $ v_i $ by going through directed edges.\n\nInput Format\nThe first line contains an integer $ q $ ( $ 1 \\leq q \\leq 10^5 $ ) — the number of queries.\n\nThe $ i $ -th of the next $ q $ lines will contain two integers $ u_i $ , $ v_i $ ( $ 1 \\leq u_i, v_i < 2^{30} $ ) — a query made by Zookeeper.\n\nOutput Format\nFor the $ i $ -th of the $ q $ queries, output \"YES\" in a single line if Zookeeper can travel from vertex $ u_i $ to vertex $ v_i $ . Otherwise, output \"NO\".\n\nYou can print your answer in any case. For example, if the answer is \"YES\", then the output \"Yes\" or \"yeS\" will also be considered as correct answer.\n\nExamples\nSample 1\nInput\n5\n1 4\n3 6\n1 6\n6 2\n5 5\nOutput\nYES\nYES\nNO\nNO\nYES\n\nNote\nThe subgraph on vertices $ 1,2,3,4,5,6 $ is shown below.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1491D/3e9f4f0ae45942255adad5106d073ee5450fdd69.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Since $$$\\&$$$ is a bitwise operation, represent the number in binary form!"
+        },
+        {
+            "title": "Hint 2",
+            "content": "We can convert any $$$u+v$$$ move to a series of $$$u+v'$$$ moves where $$$u\\&v'=v'$$$ and $$$v'=2^k$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Such a move converts a substring of the binary string of the form $$$01\\ldots11$$$ into $$$10\\ldots00$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Focus on converting $$$01$$$ into $$$10$$$."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Firstly, we can show that the reachability graph is equivalent if we restrict to a directed edge between vertices $$$u$$$ and $$$u+v$$$ if $$$u\\&v=v$$$ and that $$$v=2^k$$$ for some $$$k$$$.\nThis is because we can add each bit from $$$v$$$ from $$$u$$$ from the highest bit as adding a bit to a number will not affect lower bits.\nNow, we observe that such as operation converts a binary string of the form $$$01\\ldots11$$$ into $$$10\\ldots00$$$ for some substring when we represent $$$u$$$ as a binary string. (more significant bits are to the left).\nNow, we consider $$$s$$$ and $$$t$$$ as binary strings.\nIf and only if there is a matching from bits in $$$t$$$ to a lower bit in $$$s$$$ and $$$t$$$ > $$$s$$$, then $$$t$$$ is reachable from $$$s$$$.\nTurning $$$01\\ldots11$$$ into $$$10\\ldots00$$$ means that we can move a bit ($$$01$$$->$$$10$$$) or we can squish multiple bits ($$$0111$$$->$$$1000$$$).\nLet us show it is necessary. If $$$s \\gt t$$$, it is impossible. And if there is no such matching, we are not able to put a position in $$$t$$$ as bits cannot move back, or there are not enough bits in $$$s$$$ to form $$$t$$$ (since the number of bits cannot increase).\nLet is show it is sufficient. Since $$$s \\lt t$$$ ($$$s=t$$$ is trivial), the strings have some common prefix and the most significant different bit has $$$0$$$ in $$$s$$$ and $$$1$$$ and $$$t$$$. Now, we can shift every bit in s into a position in t and squish the most significant bits.\nTo check if there is a matching, we find the least significant bit ($$$lsb$$$) of $$$t$$$ and $$$s$$$. if $$$lsb(t) \\lt lsb(s)$$$ or if $$$s = 0$$$, then it is impossible. Else, we remove the $$$lsb$$$ from both $$$t$$$ and $$$s$$$ and repeat. If we're able to remove bits until $$$t=0$$$, then it is possible to go from $$$s$$$ to $$$t$$$."
+        }
+    ]
+}

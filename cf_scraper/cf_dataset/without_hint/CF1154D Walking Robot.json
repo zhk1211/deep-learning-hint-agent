@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is a robot staying at $ X=0 $ on the $ Ox $ axis. He has to walk to $ X=n $ . You are controlling this robot and controlling how he goes. The robot has a battery and an accumulator with a solar panel.\n\nThe $ i $ -th segment of the path (from $ X=i-1 $ to $ X=i $ ) can be exposed to sunlight or not. The array $ s $ denotes which segments are exposed to sunlight: if segment $ i $ is exposed, then $ s_i = 1 $ , otherwise $ s_i = 0 $ .\n\nThe robot has one battery of capacity $ b $ and one accumulator of capacity $ a $ . For each segment, you should choose which type of energy storage robot will use to go to the next point (it can be either battery or accumulator). If the robot goes using the battery, the current charge of the battery is decreased by one (the robot can't use the battery if its charge is zero). And if the robot goes using the accumulator, the current charge of the accumulator is decreased by one (and the robot also can't use the accumulator if its charge is zero).\n\nIf the current segment is exposed to sunlight and the robot goes through it using the battery, the charge of the accumulator increases by one (of course, its charge can't become higher than it's maximum capacity).\n\nIf accumulator is used to pass some segment, its charge decreases by 1 no matter if the segment is exposed or not.\n\nYou understand that it is not always possible to walk to $ X=n $ . You want your robot to go as far as possible. Find the maximum number of segments of distance the robot can pass if you control him optimally.\n\nInput Format\nThe first line of the input contains three integers $ n, b, a $ ( $ 1 \\le n, b, a \\le 2 \\cdot 10^5 $ ) — the robot's destination point, the battery capacity and the accumulator capacity, respectively.\n\nThe second line of the input contains $ n $ integers $ s_1, s_2, \\dots, s_n $ ( $ 0 \\le s_i \\le 1 $ ), where $ s_i $ is $ 1 $ if the $ i $ -th segment of distance is exposed to sunlight, and $ 0 $ otherwise.\n\nOutput Format\nPrint one integer — the maximum number of segments the robot can pass if you control him optimally.\n\nExamples\nSample 1\nInput\n5 2 1\n0 1 0 1 0\nOutput\n5\n\nSample 2\nInput\n6 2 1\n1 0 0 1 0 1\nOutput\n3\n\nNote\nIn the first example the robot can go through the first segment using the accumulator, and charge levels become $ b=2 $ and $ a=0 $ . The second segment can be passed using the battery, and charge levels become $ b=1 $ and $ a=1 $ . The third segment can be passed using the accumulator, and charge levels become $ b=1 $ and $ a=0 $ . The fourth segment can be passed using the battery, and charge levels become $ b=0 $ and $ a=1 $ . And the fifth segment can be passed using the accumulator.\n\nIn the second example the robot can go through the maximum number of segments using battery two times and accumulator one time in any order."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\na\n,\nb\n,\nmaxa\n;\nvoid\nuse_battery\n(\nint\ns\n)\n{\nif\n(\ns\n==\n1\n)\na\n=\nmin\n(\na\n+\n1\n,\nmaxa\n);\n--\nb\n;\n}\nvoid\nuse_accum\n()\n{\n--\na\n;\n}\nint\nmain\n()\n{\nint\nans\n=\n0\n;\nint\nn\n;\ncin\n>>\nn\n>>\nb\n>>\na\n;\nmaxa\n=\na\n;\nvector\n<int>\ns\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\ncin\n>>\ns\n[\ni\n];\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\na\n==\n0\n&&\nb\n==\n0\n)\nbreak\n;\nelse\nif\n(\na\n==\n0\n)\nuse_battery\n(\ns\n[\ni\n]);\nelse\nif\n(\nb\n==\n0\n)\nuse_accum\n();\nelse\nif\n(\ns\n[\ni\n]\n==\n1\n&&\na\n<\nmaxa\n)\nuse_battery\n(\ns\n[\ni\n]);\nelse\nuse_accum\n();\nans\n++;\n}\ncout\n<<\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

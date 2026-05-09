@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Solve the easy version of the problem."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Taking each coordinate modulo 4 no longer works. This is because if $$$\\Delta{x}$$$ or $$$\\Delta{y}$$$ are odd, there's no way to predict whether the boundary count (see editorial of the easy version) is 1 or 3 mod 4."
+        },
+        {
+            "title": "Hint 3",
+            "content": "By playing with Pick's Theorem, you should find that $$$B$$$ (the total number of boundary points) has to be even. Let $$$b_1$$$, $$$b_2$$$, and $$$b_3$$$ be the boundary count of the three sides of a lattice triangle."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Lets count the answer. Fix a point. Fix the boundary count mod 4 of the two sides adjacent to that point. Fix more things."
+        },
+        {
+            "title": "Hint 5",
+            "content": "In Hint 4, we fixed a point. It's critical that you fix the boundary count of the side opposite that point to be even."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "First read (and understand!) the editorial for the easy version of the problem.\nDefinition: The $$$\\textbf{modularity}$$$ of a point\n(x,y)\nis\n(x%4,y%4)\n.\nDefinition: The $$$\\textbf{boundary count}$$$ of a segment is the number of lattice points on that segment, minus 1.\nLets precompute the array\ncnt[i][x][y][b]\n(dimensions $$$N\\times 4\\times 4\\times 4$$$), which equals the number of other points respective to\npoints[i]\nwith modularity $$$(x,y)$$$ and with a boundary count mod 4 equal to $$$b$$$. This precomputation can be done in $$$\\mathcal{O}(N^2 \\log{10^7})$$$ time, by iterating over every pair of points. The boundary count of the segment $$$(x_1,y_1)$$$ to $$$(x_2,y_2)$$$ is $$$\\gcd{(|x_2-x_1|,|y_2-y_1|)}$$$.\nConsider the number of boundary points on the three sides of a triangle, and call them $$$b_1,b_2,b_3$$$. Clearly, $$$B=b_1+b_2+b_3$$$. The key idea is that since $$$B$$$ is even, wlog we can assume that $$$b_3$$$ is even, and that $$$b_1 \\equiv b_2 \\mod{2}$$$. The other key idea is that it is easy to figure out if the boundary count is congruent to 0 or 2 mod 4 based on the modularities of the coordinates alone, but it's impossible if the boundary count is odd.\nLet's fix a point, and count the number of triangles that involve this point. Let's also iterate over all the relevant modularities of the other two points in the triangle, which range from $$$(0,0)$$$ up to $$$(3,3)$$$. Let's also make sure that there are an even number of boundary points on the side opposite the fixed point, which we know almost nothing about. It can be shown that $$$b_3 \\equiv 0\\mod{4}$$$ IFF $$$(x_1,y_1)=(x_2,y_2)$$$, and that $$$b_3 \\equiv 2\\mod{4}$$$ IFF $$$x_1,x_2$$$ have the same parity, and $$$y_1,y_2$$$ have the same parity, and the previous case doesn't apply. Finally, make sure that the parity of the boundary count of the two sides next to the fixed point are the same.\nUsing the precomputed array $$$cnt$$$ and the formula for $$$b_3$$$, we can quickly find $$$B$$$ in this case. Using the Shoelace Formula, we can quickly find what $$$A$$$ is modulo 4. If $$$A$$$ is even and equal to $$$B$$$, then we know that $$$I$$$ must be odd (in the easy version of the problem, we found that $$$A \\equiv B \\mod{4}$$$ IFF $$$I$$$ is odd), so all triangles in this class are interesting. Thus, we add to the answer a number roughly equal to $$$cnt[i][x_1][y_1][b_1]\\cdot cnt[i][x_2][y_2][b_2]$$$ (it could be lower due to the potential overcount, if two points fall into the same bucket of the array).\nLastly, be sure not to overcount triangles! In my code, I count each of the\nEEE\ntriangles ($$$b_1,b_2,b_3$$$ all even) 3 times, and the\nOOE\ntriangles once.\nThe time complexity is $$$\\mathcal{O}(N^2 \\log{10^7})$$$ (the main part of the solution is approximately $$$\\mathcal{O}(512N)$$$).\nImplementation Note: The bottleneck of the algorithm is computing the GCDs. The simplest optimization that is sufficient for AC is to only calculate $$$\\frac{N^2}{2}$$$ GCDs instead of all $$$N^2$$$ (since the GCD is commutative). Java requires additional optimizations, such as precomputing small GCDs."
+        }
+    ]
+}

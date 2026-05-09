@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the easy version of this problem. In this version, we do not have queries. Note that we have multiple test cases in this version. You can make hacks only if both versions of the problem are solved.\n\nAn array $ b $ of length $ m $ is good if for all $ i $ the $ i $ -th element is greater than or equal to $ i $ . In other words, $ b $ is good if and only if $ b_i \\geq i $ for all $ i $ ( $ 1 \\leq i \\leq m $ ).\n\nYou are given an array $ a $ consisting of $ n $ positive integers. Find the number of pairs of indices $ (l, r) $ , where $ 1 \\le l \\le r \\le n $ , such that the array $ [a_l, a_{l+1}, \\ldots, a_r] $ is good.\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\leq t \\leq 2 \\cdot 10^5 $ ). Description of the test cases follows.\n\nThe first line of each test case contains an integer $ n $ ( $ 1 \\leq n \\leq 2 \\cdot 10^5 $ ), the length of the array $ a $ .\n\nThe second line of each test case contains $ n $ space-separated integers $ a_1,a_2,\\ldots,a_n $ ( $ 1 \\leq a_i \\leq n $ ), representing the array $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print the number of suitable pairs of indices.\n\nExamples\nSample 1\nInput\n3\n3\n1 2 3\n3\n1 1 1\n4\n2 1 4 3\nOutput\n6\n3\n7\n\nNote\nIn the first test case, all subarrays of $ a $ are good, so all pairs are suitable.\n\nIn the second test case, the pairs $ (1, 1) $ , $ (2, 2) $ , and $ (3, 3) $ are suitable. For example, when $ (l, r) = (1, 2) $ , the array $ b=[1,1] $ is not good because $ b_2 < 2 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Suppose $$$l[i]$$$ represents the leftmost point such that subarray $$$a[l[i],i]$$$ is good.\nNotice that the array $$$l$$$ is non-decreasing.\nSo suppose $$$dp[i]$$$ denotes the length of longest good subarray which ends at index $$$i$$$.\nTake $$$dp[0]=0$$$.\nNow $$$dp[i]=min(dp[i-1]+1,a[i])$$$.\nSuppose $$$a[i] \\geq dp[i-1]+1$$$. Now we claim that $$$dp[i]=dp[i-1]+1$$$. We know $$$a[i-dp[i-1],i-1]$$$ is \\t{good}. Now if we look at array $$$b=a[i-dp[i-1],i]$$$, $$$b_i \\geq i $$$ for $$$ 1 \\leq i \\leq dp[i-1]$$$. For $$$b$$$ to be good, last element of $$$b$$$(which is $$$a[i]$$$) should be greater than or equal $$$dp[i-1]+1$$$(which is consistent with our supposition). So $$$b$$$ is good.\nWe can similarly cover the case when $$$a[i] \\lt dp[i-1]+1$$$.\nSo our answer is $$$ \\sum_{i=1}^{n} dp[i]$$$. Time complexity is $$$O(n)$$$."
+        }
+    ]
+}

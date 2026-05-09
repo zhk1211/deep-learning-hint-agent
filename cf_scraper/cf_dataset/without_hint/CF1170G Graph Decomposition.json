@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Tutorial is loading..."
+        },
+        {
+            "title": "Solution",
+            "content": "fun main\n()\n{\nsolveEuler\n()\n}\nclass\nE\n(\nval y\n:\nInt\n,\nvar\nc\n:\nInt\n=\n0\n)\nclass\nEdges\n{\nprivate\nval e\n=\nHashMap\n<\nInt\n,\nE\n>(\n2\n)\nprivate\nval c\n=\nArrayList\n<\nE\n>(\n2\n)\nprivate\nvar\nfirst\n=\n0\nfun degree\n()\n=\nc\n.\nsumBy\n{\nit\n.\nc\n}\nfun\nadd\n(\ny\n:\nInt\n)\n{\nval cur\n=\ne\n.\ngetOrPut\n(\ny\n)\n{\nE\n(\ny\n)\n}\nif\n(\ncur\n.\nc\n==\n0\n)\nc\n.\nadd\n(\ncur\n)\ncur\n.\nc\n++\n}\nfun first\n()\n=\nc\n[\nfirst\n].\ny\n\n    fun hasNext\n()\n=\nfirst\n<\nc\n.\nsize\n\n    fun rem\n(\ny\n:\nInt\n)\n{\nval cur\n=\ne\n.\ngetValue\n(\ny\n)\nif\n(--\ncur\n.\nc\n==\n0\n)\n{\nwhile\n(\nfirst\n<\nc\n.\nsize\n&&\nc\n[\nfirst\n].\nc\n==\n0\n)\nfirst\n++\n}\n}\n}\nprivate\nfun solveEuler\n()\n{\nval\n(\nn\n,\nm\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n}\nval g\n=\nArray\n(\nn\n)\n{\nEdges\n()\n}\nrepeat\n(\nm\n)\n{\nval\n(\nx\n,\ny\n)\n=\nreadLine\n()!!.\nsplit\n(\n\" \"\n).\nmap\n{\nit\n.\ntoInt\n()\n-\n1\n}\ng\n[\nx\n].\nadd\n(\ny\n)\ng\n[\ny\n].\nadd\n(\nx\n)\n}\nif\n(!\ng\n.\nall\n{\nit\n.\ndegree\n()\n%\n2\n==\n0\n})\n{\nprintln\n(\n\"NO\"\n)\n}\nelse\n{\nval c\n=\nArrayList\n<\nList\n<\nInt\n>>()\nvar\nstart\n=\n0\nval v\n=\nIntArray\n(\nn\n)\n{\n-\n1\n}\nwhile\n(\ntrue\n)\n{\nwhile\n(\nstart\n<\nn\n&&\n!\ng\n[\nstart\n].\nhasNext\n())\nstart\n++\nif\n(\nstart\n>=\nn\n)\nbreak\nval list\n=\nArrayList\n<\nInt\n>()\nvar\nx\n=\nstart\nwhile\n(\ntrue\n)\n{\nv\n[\nx\n]\n=\nlist\n.\nsize\n                list\n.\nadd\n(\nx\n)\nval y\n=\ng\n[\nx\n].\nfirst\n()\ng\n[\nx\n].\nrem\n(\ny\n)\ng\n[\ny\n].\nrem\n(\nx\n)\nif\n(\ny\n==\nstart\n)\nbreak\nif\n(\nv\n[\ny\n]\n>=\n0\n)\n{\nval d\n=\nlist\n.\nsubList\n(\nv\n[\ny\n],\nlist\n.\nsize\n)\nc\n.\nadd\n(\nd\n.\ntoList\n())\nfor\n(\nz\nin\nd\n)\nv\n[\nz\n]\n=\n-\n1\nd\n.\nclear\n()\n}\nx\n=\ny\n}\nc\n.\nadd\n(\nlist\n)\nfor\n(\nz\nin\nlist\n)\nv\n[\nz\n]\n=\n-\n1\n}\nprintln\n(\n\"YES\"\n)\nprintln\n(\nc\n.\nsize\n)\nval ans\n=\nc\n.\njoinToString\n(\n\"\\n\"\n)\n{\nlist\n->\n\"$$${list.size + 1} $$${list.joinToString(\"\n\") { (it + 1).toString() }} ${list[0] + 1}\"\n}\nprintln\n(\nans\n)\n}\n}"
+        }
+    ]
+}
