@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1862F - Magic Will Save the World\nFirst, let's note that Vika can defeat all the monsters at once, in the last second. There is no point in spending mana gradually.\nNow, let's say we know how many seconds Vika will accumulate mana before spending it. Then we also know how much mana she will have accumulated by that time. How should she spend it?\nNote that the total strength of the monsters is given to us. Therefore, it is enough for us to spend as much of the available water mana as possible, so that there is enough fire mana left for the remaining monsters. This is a well-known knapsack problem.\nFinally, let's note that we don't need to iterate over the number of seconds and build the knapsack each time. It is enough to build it initially, and then iterate over how much water mana we will spend and whether we will have enough fire mana left for the rest."
         },
         {
             "title": "Solution",

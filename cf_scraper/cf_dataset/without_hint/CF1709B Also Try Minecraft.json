@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1709B - Also Try Minecraft\nSo, the first idea that is coming into mind is prefix sums. Let's define two values $$$l_i = max(0, a_i - a_{i + 1})$$$ and $$$r_i = max(0, a_{i + 1} - a_i)$$$. The value $$$l_i$$$ means the amount of fall damage when we are going to the right from the column $$$i$$$ to the column $$$i + 1$$$, and $$$r_i$$$ means the amount of fall damage when we are going to the left from the column $$$i + 1$$$ to the column $$$i$$$. Then let's build prefix sums on these two arrays. Now let $$$pl_i$$$ be the sum of all $$$l_i$$$ on a prefix $$$[0; i)$$$ (i. e. $$$pl_0 = 0$$$), and $$$pr_i$$$ be the sum of all $$$r_i$$$ on a prefix $$$[0; i)$$$. Then if $$$s  \\lt  t$$$ in a query, the answer is $$$pl_{t - 1} - pl_{s - 1}$$$, otherwise (if $$$s  \\gt  t$$$) the answer is $$$pr_{s - 1} - pr_{t - 1}$$$.\nTime complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution (vovuh)",

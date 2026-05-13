@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1513B - AND Sequences\nConsider an arbitrary sequence $$$b_1,b_2,\\dots,b_n$$$. First let us define the arrays $$$AND\\_pref$$$ and $$$AND\\_suf$$$ of length $$$n$$$ where $$$AND\\_pref_i = b_1 \\: \\& \\: b_2 \\: \\& \\: \\dots \\: \\& \\: b_i$$$ and $$$AND\\_suf_i = b_{i} \\: \\& \\: b_{i+1} \\: \\& \\: \\dots \\: \\& \\: b_n$$$ .\nAccording to the definition of good sequence:\n$$$AND\\_pref_1 = AND\\_suf_2$$$ which means $$$b_1 = b_2 \\: \\& \\: b_3 \\: \\& \\: \\dots \\: \\& \\: b_n$$$ .\nNow $$$AND\\_pref_2 \\leq AND\\_pref_1 = AND\\_suf_2 \\leq AND\\_suf_3$$$. Also according to definition of good sequence, $$$AND\\_pref_2 = AND\\_suf_3$$$. This means that $$$b_1 = AND\\_pref_2 = AND\\_suf_3$$$. Similarly, for all $$$i$$$ from $$$1$$$ to $$$n$$$, we get $$$AND\\_pref_i = b_1$$$ and $$$AND\\_suf_i = b_1$$$.\nTherefore for the sequence to be good, $$$b_1 = b_n$$$ and the $$$b_i$$$ must be a super mask of $$$b_1$$$ for all $$$i$$$ from $$$2$$$ to $$$n-1$$$.\nInitially, we have an array $$$a_1,a_2,\\dots,a_n$$$. Let the minimum value among these elements be $$$x$$$. Let the number of elements that have the value of $$$x$$$ be $$$cnt$$$.\nIn order to rearrange the elements of $$$a_1,a_2,\\dots,a_n$$$ to a good sequence, we need to have $$$cnt \\geq 2$$$ and the remaining elements need to be a super mask of $$$x$$$. If we don't meet this criterion, then the answer is $$$0$$$. Else the answer will be $$$(cnt \\cdot (cnt-1) \\cdot (n-2)!) \\% (10^9+7)$$$.\nThe time complexity is $$$O(n)$$$."
         },
         {
             "title": "Implementation in C++",

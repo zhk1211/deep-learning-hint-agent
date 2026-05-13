@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1305D - Kuroni and the Celebration\nFor each question, pick any two leaves $$$u$$$ and $$$v$$$ and ask for the lowest common ancestor of them.\nThe answer is either $$$u$$$ or $$$v$$$: The root of the tree must be the answer we received.\nThe answer is neither $$$u$$$ nor $$$v$$$: Since $$$u$$$ and $$$v$$$ are leaves, there are no other vertices that lie within the subtree of either of these vertices. We remove $$$u$$$ and $$$v$$$ from the tree and repeat the process.\nWe repeat the process until we find the root in one of the question, or there is one vertex remaining in tree which will be our root.\nComplexity: $$$O(n)$$$."
         },
         {
             "title": "Solution (Akikaze, C++)",

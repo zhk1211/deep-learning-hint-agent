@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1567B - MEXor Mixup\nFirst consider the MEX condition: the shortest array with MEX $$$a$$$ is the array $$$[0, 1, \\dots, a - 1]$$$, which has length $$$a$$$. Now we'll consider the XOR condition. Let the XOR of the array $$$[0, 1, \\dots, a - 1]$$$ be $$$x$$$. We have three cases.\nCase 1: $$$x = b$$$. Then we don't need to add any elements to the array, so the answer is $$$a$$$.\nCase 2: $$$x \\neq b$$$ and $$$x \\oplus b \\neq a$$$. Then we can add the element $$$x \\oplus b$$$ to the array since $$$x \\oplus b \\neq a$$$, so the MEX will still be $$$a$$$. The XOR of the array will then be $$$x \\oplus x \\oplus b = b$$$. The answer is $$$a + 1$$$.\nCase 3: $$$x \\neq b$$$ and $$$x \\oplus b = a$$$. Then we cannot add the element $$$x \\oplus b$$$ to the end of the array. We can just add $$$x \\oplus b \\oplus 1$$$ and $$$1$$$, so the XOR of the array will be $$$x \\oplus x \\oplus b \\oplus 1 \\oplus 1 = b$$$. The answer is $$$a + 2$$$.\nTime complexity: $$$\\mathcal{O}(n)$$$ precomputation and $$$\\mathcal{O}(1)$$$ per test case if you precalculate the XOR of the numbers from $$$0$$$ to $$$n-1$$$, or $$$\\mathcal{O}(1)$$$ if\nyou use the well-known formula\nfor it."
         },
         {
             "title": "Implementation (C++)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1676E - Eating Queries\nLet's solve the problem with just one query. Greedily, we should pick the candies with the most sugar first, since there is no benefit to picking a candy with less sugar.\nSo the solution is as follows: sort the candies in descending order, and then find the prefix whose sum is $$$\\geq x$$$. This is $$$\\mathcal{O}(n)$$$ per query, which is too slow for us.\nTo speed it up, notice that we just need to find a prefix sum at least $$$x$$$. So if we compute the prefix sums of the reverse-sorted array, we need to find the first element that is at least $$$x$$$.\nSince all elements of $$$a$$$ are positive, the array of prefix sums is increasing. Therefore, you can binary search the first element $$$\\geq x$$$. This solves the problem in $$$\\log n$$$ per query.\nTotal time complexity: $$$\\mathcal{O}(q \\log n + n)$$$."
         },
         {
             "title": "Solution",

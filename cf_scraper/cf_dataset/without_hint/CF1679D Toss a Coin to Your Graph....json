@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1679D - Toss a Coin to Your Graph...\nNote that the function of existence of the answer relatively to the minimum value of the maximum in the path is monotonous. If we were able to construct the path with maximum, not greater than $$$x$$$, we are able to construct the path with maximum, not greater than $$$x + 1$$$. This leads to the idea of binary search the answer.\nLet binary search to fix some integer $$$x$$$. We have to check, if there is a path in the graph, that consists of $$$k - 1$$$ edges and the maximum on this path is not greater than $$$x$$$. In the beginning let's leave in consideration only vertices which values are not greater than $$$x$$$. Now we need to check if the needed path exist in the resulting graph.\nIf there is a cycle in the graph, there is a path of every length in it, so there is a path of length $$$k - 1$$$. Otherwise we have a directed acyclic graph. Let's find a longest path in it and compare its length with $$$k - 1$$$. Let's sort the graph topologically and calculate $$$dp[v]$$$ — the length of the longest path in the graph that begins in vertex $$$v$$$, it's a well-known classical problem.\nTime complexity: $$$\\mathcal{O}((n + m) \\log MAX)$$$."
         }
     ]
 }

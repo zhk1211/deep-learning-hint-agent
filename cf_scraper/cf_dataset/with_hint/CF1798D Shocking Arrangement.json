@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1798D - Shocking Arrangement\nIf the array consists entirely of zeros, then this is impossible, since $$$\\max(a) - \\min(a) = 0$$$.\nOtherwise, we will put all zeros at the beginning. Now our array is without zeros.\nWe will add the elements into the array in order.\nIf now the sum of the added elements is $$$\\leq 0$$$, we will take any of the remaining positive numbers as the next element. Since the sum of all the numbers is $$$0$$$, a positive number is guaranteed to be found (if there are still numbers left).\nIf now the sum is $$$ \\gt  0$$$, then we will take any of the remaining negative numbers as the next element. Again, since the sum of all the numbers is $$$0$$$, a negative number is bound to be found.\nWhy it works:\nThe maximum number of the form $$$\\lvert a_l + a_{l+1} + ... + a_r \\rvert$$$ is the same as $$$maxPrefSum(a) - minPrefSum(a)$$$ (including $$$0$$$)\nAccording to the structure of the algorithm, it is clear that in the resulting array $$$maxPrefSum \\leq \\max(a)$$$, and $$$minPrefSum  \\gt  \\min(a)$$$.\nIn total, the condition will be met."
         },
         {
             "title": "Solution",

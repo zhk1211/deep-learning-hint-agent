@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1839B - Lamps\nLet's denote number of lamps with $$$a_i = k$$$ as $$$c_k$$$.\nIf $$$c_k \\ge k$$$ and you turn $$$k$$$ lamps with $$$a_i = k$$$ lamps on, all $$$c_k$$$ of them will break and you will not be able to receive points for the other $$$c_k - k$$$ lamps.\nIf we denote values $$$b_i$$$ for all $$$i$$$ such that $$$a_i = k$$$ as $$$d_{k, 1}, d_{k, 2}, \\ldots, d_{k, c_k}$$$ ($$$d_{k, 1} \\ge d_{k, 2} \\ge \\ldots \\ge d_{k, c_k}$$$), then you can't get more than $$$s_k = d_{k, 1} + d_{k, 2} + \\ldots + d_{k, \\min(c_k, k)}$$$ points for lamps with $$$a_i = k$$$.\nSo, the total number of points is not bigger than $$$s_1 + s_2 + \\ldots + s_n$$$.\nThis bound can always be achieved in the following way: while there is at least one lamp that is not turned on and not broken, turn on the one with minimum $$$a_i$$$ (if there are multiple lamps with minimum $$$a_i$$$, choose the one with maximum $$$b_i$$$).\nThis works because if at least $$$k$$$ lamps are turned on, then all lamps with $$$a_i \\lt k$$$ are already broken."
         }
     ]
 }

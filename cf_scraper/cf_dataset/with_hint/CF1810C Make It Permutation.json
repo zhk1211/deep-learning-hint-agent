@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have an integer array $ a $ of length $ n $ . There are two kinds of operations you can make.\n\n- Remove an integer from $ a $ . This operation costs $ c $ .\n- Insert an arbitrary positive integer $ x $ to any position of $ a $ (to the front, to the back, or between any two consecutive elements). This operation costs $ d $ .\n\nYou want to make the final array a permutation of any positive length. Please output the minimum cost of doing that. Note that you can make the array empty during the operations, but the final array must contain at least one integer.\n\nA permutation of length $ n $ is an array consisting of $ n $ distinct integers from $ 1 $ to $ n $ in arbitrary order. For example, $ [2,3,1,5,4] $ is a permutation, but $ [1,2,2] $ is not a permutation ( $ 2 $ appears twice in the array), and $ [1,3,4] $ is also not a permutation ( $ n=3 $ but there is $ 4 $ in the array).\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. Their description follows.\n\nThe first line of each test case contains three integers $ n $ , $ c $ , $ d $ ( $ 1 \\le n \\le 10^5 $ , $ 1 \\le c,d \\le 10^9 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_{1}, a_{2}, \\ldots, a_{n} $ ( $ 1 \\le a_{i} \\le 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output in one line the minimum cost to make the final array a permutation.\n\nExamples\nSample 1\nInput\n8\n3 3 3\n1 2 3\n5 1 5\n1 2 3 5 6\n5 2 3\n1 1 1 3 3\n5 1 10\n2 4 6 8 10\n6 2 8\n7 3 5 4 4 8\n4 10 1\n1 2 6 7\n4 3 3\n2 5 8 7\n2 1000000000 1\n1000000000 1\nOutput\n0\n2\n8\n14\n20\n3\n12\n999999998\n\nNote\nIn the first test case, the array is already a permutation, so there's no need for operations.\n\nIn the second test case, we can remove numbers $ 5 $ , $ 6 $ to get the permutation $ [1,2,3] $ in cost $ 2 $ . Note that we can also get a permutation by inserting a number $ 4 $ , but it costs $ 5 $ .\n\nIn the third test case, we can just remove all the numbers except for the first number $ 1 $ . It costs $ 8 $ , and the final array is $ [1] $ , which is a permutation of length $ 1 $ .\n\nIn the fourth test case, we can remove all the numbers except for $ 2 $ , and insert a number $ 1 $ to the first position. It costs $ 4+10=14 $ , and the final array is $ [1,2] $ , which is a permutation of length $ 2 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Try the enumerate the length $$$n$$$ of permutation."
+        },
+        {
+            "title": "Hint 2",
+            "content": "There're too many lengths to be checked. How to decrease the amount of $$$n$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "Firstly, we need to remove numbers such that each number appears at most once, this part of cost is unavoidable. Then, let's sort the array $$$a_{1},a_{2} \\dots a_{m}$$$ ($$$1\\le a_{i} \\lt a_{2} \\lt \\dots \\lt a_{m}$$$).\nSecondly, assume we enumerate the length of the permutation $$$n$$$. We need to remove all the $$$a_{i}$$$ greater than $$$n$$$, and insert some numbers $$$x$$$ ($$$x \\le n$$$) but does not appear in the array $$$a$$$. We can find some $$$i$$$ such that $$$a_{i} \\le n \\lt a_{i+1}$$$, the cost here is simply $$$(m-i)\\cdot a + (n - i)\\cdot b$$$. Here, $$$m$$$ is the length of array $$$a$$$, after removing the repeated numbers.\nHowever, $$$n$$$ can up to $$$10^9$$$ and can not be enumerated. But for all the $$$n \\in [a_{i} , a_{i+1})$$$, the smaller $$$n$$$ has a smaller cost. (see that $$$(m-i)\\cdot a$$$ do not change, and $$$(n-i)\\cdot b$$$ decreases). Thus, the possible $$$n$$$ can only be some $$$a_{i}$$$, and we can caculate the cost in $$$O(n)$$$ in total.\nDon't forget the special case: remove all the numbers and add a $$$1$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\np\n[\n100005\n];\ntypedef\nlong\nlong\nll\n;\nvoid\nsolve\n()\n{\nint\nn\n,\na\n,\nb\n;\nscanf\n(\n\"%d%d%d\"\n,&\nn\n,&\na\n,&\nb\n);\nset\n<int>\nst\n;\nll sol\n=\n0\n,\nans\n=\n2e18\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\n{\nint\nx\n;\nscanf\n(\n\"%d\"\n,&\nx\n);\nif\n(\nst\n.\nfind\n(\nx\n)\n==\nst\n.\nend\n())\nst\n.\ninsert\n(\nx\n);\nelse\nsol\n+=\na\n;\n}\nint\nc\n=\n0\n;\nfor\n(\nauto\nx\n:\nst\n)\np\n[++\nc\n]\n=\nx\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nc\n;\ni\n++)\n{\nans\n=\nmin\n(\nans\n,\n1LL\n*(\np\n[\ni\n]\n-\ni\n)*\nb\n+\n1LL\n*(\nc\n-\ni\n)*\na\n);\n}\nans\n=\nmin\n(\nans\n,\n1LL\n*\nc\n*\na\n+\nb\n)\n;\nprintf\n(\n\"%lld\\n\"\n,\nans\n+\nsol\n);\n}\nint\nmain\n()\n{\nint\nt\n;\nscanf\n(\n\"%d\"\n,&\nt\n);\nwhile\n(\nt\n--)\nsolve\n();\n}"
+        }
+    ]
+}

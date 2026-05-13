@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1760E - Binary Inversions\nLet's find out how to count the number of binary inversions, without flips. This is the number of $$$1$$$s that appear before a $$$0$$$. To do this, iterate through the array and keep a running total $$$k$$$ of the number of $$$1$$$s seen so far. When we see a $$$0$$$, increase the total inversion count by $$$k$$$, since this $$$0$$$ makes $$$k$$$ inversions: one for each of the $$$1$$$s before it.\nNow let's see how to maximize the inversions. Consider the flip $$$0 \\to 1$$$. We claim that it is best to always flip the earliest $$$0$$$ in the array. It's never optimal to flip a later $$$0$$$, since we have strictly fewer $$$0$$$s after it to form inversions. Similarly, we should flip the latest $$$1$$$ in the array.\nNow recalculate the answer for these two choices for flipping, and pick the maximum. The complexity is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution",

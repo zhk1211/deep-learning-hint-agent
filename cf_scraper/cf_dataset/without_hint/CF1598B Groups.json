@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1598B - Groups\nSince there are only five days, we can iterate over the two of them that will be the answer.\nNow we have fixed a pair of days $$$a$$$ and $$$b$$$ and want to check if it can be the answer.\nAll students can be divided into four groups: marked neither of days $$$a$$$ and $$$b$$$, marked only day $$$a$$$, marked only day $$$b$$$ and marked both days.\nObviously, if the first group is non-empty, days $$$a$$$ and $$$b$$$ can't be the answer.\nLet's call the number of students, who only marked day $$$a$$$, $$$\\mathit{cnt}_a$$$ and the number of students, who only marked day $$$b$$$, $$$\\mathit{cnt}_b$$$.\nIf either of $$$\\mathit{cnt}_a$$$ or $$$\\mathit{cnt}_b$$$ exceed $$$\\frac{n}{2}$$$, then days $$$a$$$ and $$$b$$$ can't be the answer as well. Otherwise, we can always choose $$$\\frac{n}{2} - \\mathit{cnt}_a$$$ students from the ones who marked both days and send them to day $$$a$$$. The rest of the students can go to day $$$b$$$."
         },
         {
             "title": "Solution (BledDest)",

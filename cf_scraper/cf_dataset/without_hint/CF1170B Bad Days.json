@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1170B - Bad Days\nIterate over all elements in $$$a$$$ from $$$a_1$$$ to $$$a_n$$$ one by one. You can easily maintain two maximum values. If the current element is strictly less than the second maximum, increment the result. Here is the main part of the code:\nfor (x in a) {\nif (m2 > x) {\nresult++\n}\nwhen {\nx > m1 -> {\nm2 = m1\nm1 = x\n}\nx > m2 -> {\nm2 = x\n}\n}\n}"
         },
         {
             "title": "Solution",

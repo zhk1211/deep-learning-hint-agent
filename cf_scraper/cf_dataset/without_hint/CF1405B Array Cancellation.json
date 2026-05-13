@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1405B - Array Cancellation\nThe answer is the maximum suffix sum, which can be computed in $$$\\mathcal{O}(n)$$$.\nFormal proof.\nDefine $$$c_i = a_i + a_{i+1} + \\cdots + a_n$$$ (partial suffix sum). Note $$$M = \\max(c)$$$.\nWe can observe that $$$a_1 = \\cdots = a_n = 0$$$ if and only if $$$c_1 = \\cdots = c_n = 0$$$. (If $$$c$$$ is null, $$$a_i = c_i - c_{i+1} = 0 - 0 = 0$$$.)\nA free operation on $$$i  \\lt  j$$$ is equivalent to incrementing $$$c_{i+1}, \\ldots, c_j$$$. Free operations can only increment elements of $$$c$$$, so we obviously need at least $$$M$$$ coins.\nLet's do $$$M$$$ times the operation $$$(i = n, j = 1)$$$, which decrement every element $$$M$$$ times.\nNow, for every $$$i$$$, $$$c_i \\le 0$$$ and we can make it equal to $$$0$$$ by performing $$$-c_i$$$ times the free operation $$$(i-1, i)$$$."
         }
     ]
 }

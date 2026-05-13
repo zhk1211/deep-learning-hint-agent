@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1450C2 - Errich-Tac-Toe (Hard Version)\nIf for every three consecutive tokens in the grid, we make sure there is an\nX\nand there is an\nO\n, we are done. For each cell $$$(i,j)$$$, let's associate it with the color $$$(i+j)\\bmod 3$$$. Since every three consecutive cells contains one of each color, if we make all of one color\nX\nand all of a different color\nO\n, it would be a solution. It remains to prove that one such way makes at most $$$\\lfloor \\frac{k}{3}\\rfloor$$$ operations.\nFor each token on the grid, it is associated with a color ($$$0$$$, $$$1$$$, or $$$2$$$) and a type (\nX\nor\nO\n). Therefore each token falls into one of $$$6$$$ categories. So we can make a table for how many tokens fall in each category.\n$$$\\begin{array}{c|c|c|c} &0&1&2\\\\\\hline \\text{X}&x_0&x_1&x_2\\\\\\hline \\text{O}&o_0&o_1&o_2\\\\ \\end{array}$$$\nFirstly, $$$k=x_0+x_1+x_2+o_0+o_1+o_2$$$.\nLet $$$a_{ij}$$$ denote the number of operations we make if we flip all\nX\n's in cells with color $$$i$$$ and flip all\nO\n's in cells with color $$$j$$$. Then $$$a_{ij}=x_i+o_j$$$.\nNow, we have $$$a_{01}+a_{02}+a_{10}+a_{12}+a_{20}+a_{21}=2k$$$.\nFinally, $$$\\min\\{a_{01},a_{02},a_{10},a_{12},a_{20},a_{21}\\}\\le \\lfloor 2k/6\\rfloor=\\lfloor \\frac{k}{3}\\rfloor$$$.\nHere's the coloring in an example. We flip all green\nX\n's and blue\nO\n's."
         }
     ]
 }

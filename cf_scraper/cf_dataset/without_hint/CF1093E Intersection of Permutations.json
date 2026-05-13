@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1093E - Intersection of Permutations\nAt first, time limit was not that tight for the problem. We didn't want any sqrt, bitset or straight up $$$nm$$$ solution to pass (and it's close to none to pass). Jury solution works faster than twice the time limit so we decided 6 seconds is alright.\nThe task is purely about implementation. You renumerate numbers in permutations so that the queries are\n(segment of values, segment of positions)\nand then have the structure to make update in point and sum on rectangle.\nRenumeration in my case was making the first permutation into identity one and changing the numbers in second appropriately.\nYou can choose the structure you want, I'll tell about the one I use when the queries are offline. For online the common technique is having $$$n$$$ BITs, each with treap in it (ordered_set template from pbds is usually enough). For offline you can precalculate the values to fall into each BIT beforehand and do BIT on these values inside. Preprocess all the update and get queries $$$(x, y)$$$, adding $$$y$$$ into all the BITs $$$x$$$ will fall into. Then sort them and leave only unique occurrences.\nOverall complexity: $$$O((n + m) \\cdot \\log^2 n)$$$."
         },
         {
             "title": "Solution (PikMike)",

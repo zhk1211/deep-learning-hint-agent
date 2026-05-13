@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1562C - Rings\nLet us first consider the boundary case. Let a string (hereafter we will assume that the string length $$$n$$$) consists of only ones. Then we can output the numbers $$$1$$$ $$$n-1$$$ $$$2$$$ $$$n$$$ as the answer, since there will be the same substrings.\nNow let's figure out what to do in the other case. Let's call the substring [$$$1$$$ ... $$$\\lfloor\\frac{n}{2}\\rfloor$$$] the left half of the string, and the substring [$$$\\lfloor\\frac{n}{2}\\rfloor+1$$$ ... $$$n$$$] the right half of the string. Then there are two cases:\nThere is $$$0$$$ in the left half of the row, and its position is $$$k$$$. Then we can take the numbers $$$k$$$ $$$n$$$ $$$k+1$$$ $$$n$$$ as the answer, since they are the same numbers, just the second number has an extra leading zero.\nThere is $$$0$$$ in the right half of the row, and its position is $$$k$$$. Then you can take the numbers $$$1$$$ $$$k$$$ $$$1$$$ $$$k-1$$$ as the answer, since the second number — is the first number multiplied by two (multiplying by two in binary is equivalent to adding one zero to the right).\nAsymptotics: $$$O(n)$$$ per test case."
         },
         {
             "title": "Solution of Additional Problem 1",

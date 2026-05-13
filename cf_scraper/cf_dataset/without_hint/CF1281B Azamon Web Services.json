@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution Sketch",
-            "content": "Tutorial is loading..."
+            "content": "1281B - Azamon Web Services\nThe problem becomes a bit easier if we try to answer a different question:\nWhat is the lexicographically smallest string we can form from $$$S$$$?\nWe then simply compare this string with $$$C$$$. This works because if the\nsmallest\nstring we can form is not smaller than $$$C$$$, then clearly no other string we can form will be smaller than $$$C$$$.\nTo find the lexicographically smallest string we can form, we can be greedy. We sort $$$S$$$ and find the first letter that isn't in its correct sorted position. In other words, find the first position where $$$S$$$ and $$$\\mathrm{sorted}(S)$$$ doesn't match. We then find the letter that should be in that position and put it in its correct position. If there are multiple choices, it is better to take the one that occurs last, since it makes the resulting string smallest.\nA special case is when $$$S$$$ is already sorted. In this case, we can't make $$$S$$$ any smaller, so we should not swap at all.\nThe solution runs in $$$O(|S| \\log |S|)$$$, but solutions running in $$$O(|S|^2)$$$ are also accepted. (There are other, different solutions that run in $$$O(|S|^2)$$$.) This can be improved to $$$O(|S|)$$$ by replacing the sorting step with simpler operations, since we don't actually need the full sorted version of $$$S$$$."
         }
     ]
 }

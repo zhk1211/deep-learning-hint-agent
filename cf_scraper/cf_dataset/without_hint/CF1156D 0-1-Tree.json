@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1156D - 0-1-Tree\nLet's divide all valid pairs into three categories: the ones containing only $$$0$$$-edges on the path, the ones containing only $$$1$$$-edges, and the ones containing both types of edges.\nTo calculate the number of pairs containing only $$$0$$$-edges, we may build a forest on the vertices of the original graph and $$$0$$$-edges, and choose all pairs of vertices belonging to the same connected components of this forest (we can find all connected components with DSU or any graph traversal algorithm). The same can be done for the pairs containing only $$$1$$$-edges.\nIf a path from $$$x$$$ to $$$y$$$ is valid and contains both types of edges, then there exists a vertex $$$v$$$ such that the simple path from $$$x$$$ to $$$v$$$ goes only through $$$0$$$-edges, and the simple path from $$$v$$$ to $$$y$$$ goes only through $$$1$$$-edges. So, let's iterate on this vertex $$$v$$$, and choose some other vertex from its component in $$$0$$$-graph as $$$x$$$, and some other vertex from its component in $$$1$$$-graph as $$$y$$$, and add the number of ways to choose them to the answer."
         },
         {
             "title": "Solution (BledDest)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1684B - Z mod X = C\nIn this problem it is enough to find a contstruction that works for all $$$a  \\lt  b  \\lt  c$$$. For example:\n$$$x = a + b + c$$$\n$$$y = b + c$$$\n$$$z = c$$$\nIn this case\n$$$x \\bmod y = (a + b + c) \\bmod (b + c) = a$$$ since $$$a  \\lt  b  \\lt  b + c$$$\n$$$y \\bmod z = (b + c) \\bmod c = b$$$ since $$$b  \\lt  c$$$\n$$$z \\bmod x = c \\bmod (a + b + c) = c$$$ since $$$c  \\lt  (a + b + c)$$$."
         },
         {
             "title": "Implementation",

@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1826D - Running Miles\nThere is a fairly straightforward solution using DP, but I'll leave that for the comment section and present a very short and simple solution.\nFirst we need to notice, that at two of the maximums are at the ends of $$$[l, r]$$$, otherwise we can move one of the boundaries closer to the other and improve the answer.\nUsing this observation we can reduce the problem to the following: choose three indices $$$l  \\lt  m  \\lt  r$$$, such that $$$b_l + b_m + b_r - (r - l)$$$ is maximum.\nNow, let's iterate over the middle index $$$m$$$ and rewrite the function as $$$b_m + (b_l + l) + (b_r - r)$$$. We can see, that values in the braces are pretty much independent — on of them depends only on the index $$$l$$$ and the second one depends only on the index $$$r$$$. So, for a given $$$m$$$ we can choose the numbers $$$l$$$ and $$$r$$$ greedily! To make it fast enough we can precalculate the prefix maximum for the array $$$b_l + l$$$ and the suffix maximum for array $$$b_r - r$$$. This results in a $$$O(n)$$$ time complexity solution."
         }
     ]
 }

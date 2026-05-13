@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1796A - Typical Interview Problem\nIt's easy to see that the FB-string repeats every $$$8$$$ characters: after processing every $$$15$$$ numbers, we will get the same remainders modulo $$$3$$$ and $$$5$$$ as $$$15$$$ numbers ago, and when we process $$$15$$$ consecutive numbers, we get $$$8$$$ characters. So, $$$f_{i+8} = f_i$$$.\nThis means that if we want to find a substring no longer than $$$10$$$ characters in the FB-string, we don't need to consider more than $$$17$$$ first characters of the FB-string: the substring of length $$$10$$$ starting with the $$$8$$$-th character ends with the $$$17$$$-th character, and we don't need to consider substrings starting on positions greater than $$$8$$$.\nSo, the solution is to generate at least $$$17$$$ first characters of the FB-string, and then check if the substring occurs in the generated string using a standard function like\nfind\n."
         },
         {
             "title": "Solution (BledDest)",

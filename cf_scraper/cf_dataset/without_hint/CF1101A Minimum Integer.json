@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1101A - Minimum Integer\nThere are two basic cases we have to consider: either the element we want to find is less than $$$l_i$$$, or it is greater than $$$r_i$$$.\nIn the first case, we are interested in $$$d_i$$$ itself: it is the minimum positive number divisible by $$$d_i$$$, and if it is less than $$$l_i$$$, then it is the answer.\nIn the second case, we have to find minimum element that is greater than $$$r_i$$$ and is divisible by $$$d_i$$$. This can be done as follows: we calculate the number of elements divisible by $$$d_i$$$ that are not greater than $$$r_i$$$ as $$$c = \\lfloor \\frac{r_i}{d_i} \\rfloor$$$, and then we take $$$(c+1)$$$-th element, which is $$$d_i(c + 1)$$$."
         },
         {
             "title": "Solution (BledDest)",

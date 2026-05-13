@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1256C - Platforms Jumping\nThis problem has a very easy idea but requires terrible implementation. Firstly, let's place all platforms as rightmost as we can. Thus, we will have the array, in which the first $$$n - \\sum\\limits_{i=1}^{m} c_i$$$ elements are zeros and other elements are $$$1$$$, $$$2$$$, ..., $$$m$$$.\nNow, let's start the algorithm. Firstly, we need to jump to the position $$$d$$$ or less. If we could jump to the position $$$d$$$ then we don't need to jump to some position to the left from $$$d$$$. But if we cannot do it, let's take the leftmost platform to the right from the position $$$d$$$ and move it in such a way that its left border will be at the position $$$d$$$. Now we can jump to the position $$$d$$$ and then jump by $$$1$$$ right to reach the position $$$d + c_1 - 1$$$. Let's repeat the same algorithm and continue jumping.\nIf after some move we can jump to the position at least $$$n+1$$$ then we are done.\nTime complexity: $$$O(n^2)$$$ but I'm sure it can be implemented in $$$O(n \\log n)$$$ or $$$O(n)$$$."
         },
         {
             "title": "Solution",

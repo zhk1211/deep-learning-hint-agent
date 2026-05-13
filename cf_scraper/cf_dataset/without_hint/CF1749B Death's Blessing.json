@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1749B - Death's Blessing\nNote that whichever order you choose, the total time will always contain all initial health $$$a_i$$$, in other words, any answer will contain $$$\\sum_{i=1}^{n}{a_i}$$$ as its part. So the lower the sum of $$$b_i$$$ you will add to the answer — the better.\nLook at some monster $$$i$$$. If you kill it while it has both left and right neighbor, it will add $$$2 \\cdot b_i$$$ to the answer. If it is the first or the last in the row, it will add just $$$b_i$$$. And if it is the last monster, it will add $$$0$$$.\nThere can be only one last monster, so any other will add at least $$$b_i$$$ to the answer. And for any chosen last monster $$$l$$$ you can find the order that gives exactly $$$b_i$$$ for all other monsters. For example, you can firstly kill monsters $$$1, 2, \\dots, (l-1)$$$, then $$$n, (n-1), \\dots, (l + 1)$$$ and, finally, moster $$$l$$$.\nIn other words, if the last monster is the $$$l$$$-th one, the total answer will be equal to $$$\\sum_{i=1}^{n}{a_i} + \\sum_{i=1}^{n}{b_i} - b_l$$$. Since we need to minimize answer, we can choose monster with maximum $$$b_l$$$.\nSo, the answer is $$$\\sum_{i=1}^{n}{a_i} + \\sum_{i=1}^{n}{b_i} - \\max_{i=1}^{n}{b_i}$$$."
         },
         {
             "title": "Solution (adedalic)",

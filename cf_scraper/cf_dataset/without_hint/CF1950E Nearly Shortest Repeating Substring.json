@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1950E - Nearly Shortest Repeating Substring\nLet's call a string a\nperiod\nif it can be multiplied to the same length as $$$s$$$\nWhat are the possibilities for the lengths of the period? Clearly, it must be a divisor of $$$n$$$. So the solution is to check all divisors of $$$n$$$ and see the smallest one that works.\nTo check if length $$$l$$$ works, multiply the prefix of length $$$l$$$ until it's the same length as $$$s$$$ and check how many differences there are. However, the different letter can be in the prefix(for example, $$$\\texttt{hshaha}$$$ and $$$l = 2$$$), so we also check the same for the suffix of length $$$l$$$. If either of them is true, output $$$l$$$.\nAll numbers at most $$$10^5$$$ have at most $$$128$$$ divisors, so this will take $$$\\sim 128 \\cdot 10^5$$$ operations, which is fast enough."
         },
         {
             "title": "Solution",

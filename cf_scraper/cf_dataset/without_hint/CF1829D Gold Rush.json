@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1829D - Gold Rush\nWe can solve this problem recursively. Let the current pile have $$$n$$$ gold nuggets.\nIf $$$n=m$$$, then we can make a pile with exactly $$$m$$$ gold nuggets by not doing any operations.\nIf $$$n$$$ is not a multiple of $$$3$$$, then it is not possible to make a move, because after a move we split $$$n$$$ into $$$x$$$ and $$$2x$$$, so $$$n=x+2x=3x$$$ for some integer $$$x$$$, meaning $$$n$$$ has to be a multiple of $$$3$$$.\nFinally, if $$$n$$$ is a multiple of $$$3$$$, then we can split the pile into two piles with $$$\\frac{n}{3}$$$ and $$$\\frac{2n}{3}$$$ gold nuggets, and we can recursively check if we can make a pile with exactly $$$m$$$ gold nuggets.\nSee the implementation for more details.\nBy the Master Theorem, the time complexity is $$$\\mathcal{O}(n^{\\log_32}) \\approx \\mathcal{O}(n^{0.631})$$$. Most compilers and languages optimize the recursion enough for this to pass comfortably. (The model solution in C++ runs in 15 milliseconds.)"
         },
         {
             "title": "Solution",

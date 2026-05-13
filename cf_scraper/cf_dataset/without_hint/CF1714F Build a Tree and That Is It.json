@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1714F - Build a Tree and That Is It\nIf the answer exists, you can hang the tree by some vertex such that the distances $$$d_{12}, d_{23}$$$ and $$$d_{31}$$$ can be expressed through the sums of distances to vertices $$$1,2$$$ and $$$3$$$. Then from the system of equations we express the required values of distances to vertices $$$1,2,3$$$ and construct a suitable tree. If the distance to a vertex is $$$0$$$, then that vertex is the root. There cannot be two roots, nor can there be negative distances.\nIf none of the vertices of $$$1,2,3$$$ is the root, then make vertex $$$4$$$ the root.\nNext we build the required tree: add the required number of unique vertices on the path from the root to vertices $$$1,2,3$$$. Note also that if the sum of distances is greater than or equal to $$$n$$$, then we cannot build the tree either.\nThe remaining vertices can be simply joined to the root."
         },
         {
             "title": "Solution",

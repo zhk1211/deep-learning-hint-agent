@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1615A - Closing The Gap\nIf $$$\\max(a) - \\min(a)$$$ is strictly greater than $$$1$$$, you can apply the operation on the max and the min respectively, which brings them both closer to each other. In other words, it either decreases $$$\\max(a) - \\min(a)$$$ or leaves it the same. This implies that the answer is always $$$\\leq 1$$$. Now what remains is determining whether the answer is $$$0$$$ or $$$1$$$. The answer can only be $$$0$$$ if the sum of the array is divisible by $$$n$$$, as the sum of the array can't change after an operation, and if it's not divisible by $$$n$$$ you can't make every element equal. This means that the answer is $$$0$$$ if the sum is divisible by $$$n$$$, and $$$1$$$ otherwise."
         }
     ]
 }

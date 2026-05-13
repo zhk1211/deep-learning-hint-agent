@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1223E - Paint the Tree\nIt is obvious that if we paint two vertices in the same color, they should be adjacent to each other — otherwise we could paint them in different colors, and the answer would not be worse. So we can reduce the problem to the following: choose a set of edges with maximum cost such that no vertex is adjacent to more than $$$k$$$ chosen edges. This problem is very similar to maximum weighted matching on the tree, and we can try to use some methods that allow us to solve that problem.\nLet's solve the problem using dynamic programming $$$dp_{v, f}$$$ — the answer to the problem for the subtree of the vertex $$$v$$$, $$$f$$$ is the flag that denotes whether the edge from $$$v$$$ to its parent is chosen. Depending on the flag $$$f$$$, we can choose $$$k$$$ or $$$k - 1$$$ edges connecting our vertex to its children (let's denote the maximum number of edges we can choose as $$$t$$$).\nWe have to select no more than $$$t$$$ child nodes of the vertex $$$v$$$. If we choose an edge leading to node $$$u$$$, then $$$dp_{u, 1} + w_ {v, u}$$$ is added to the $$$dp$$$ value we are currently calculating; otherwise, $$$dp_{u, 0}$$$ is added.\nBased on this formula, you have to choose no more than $$$t$$$ child nodes of vertex $$$v$$$ for which the total sum of $$$dp_{u, 1} + w_{v, u} - dp_{u, 0}$$$ is maximum."
         },
         {
             "title": "Solution (Ne0n25)",

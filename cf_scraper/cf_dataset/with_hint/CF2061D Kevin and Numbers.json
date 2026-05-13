@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2061D - Kevin and Numbers\nIt can be challenging to determine how to merge small numbers into a larger number directly. Therefore, we approach the problem in reverse.\nInstead of merging numbers, we consider transforming the number $$$b$$$ back into $$$a$$$. For each number $$$x$$$, it can only be formed by merging $$$\\lceil \\frac{x}{2} \\rceil$$$ and $$$\\lfloor \\frac{x}{2} \\rfloor$$$. Thus, the reversed operation is as follows:\nSelect an integer $$$x$$$ from $$$b$$$ and split it into $$$\\lceil \\frac{x}{2} \\rceil$$$ and $$$\\lfloor \\frac{x}{2} \\rfloor$$$.\nWe can perform this splitting operation on the numbers in $$$b$$$ exactly $$$n - m$$$ times. If the largest number in $$$b$$$ also appears in $$$a$$$, we can remove it from both $$$a$$$ and $$$b$$$ simultaneously. Otherwise, the largest number in $$$b$$$ must be split into two smaller numbers.\nTo efficiently manage the numbers in $$$a$$$ and $$$b$$$, we can use a priority queue or a multiset.\nThe time complexity of this approach is $$$O((n + m) \\log (n + m))$$$."
         }
     ]
 }

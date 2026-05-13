@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2039C1 - Shohag Loves XOR (Easy Version)\nTHOUGHT:\nHere $$$x  \\gt  0$$$ and $$$y  \\gt  0$$$. So $$$x \\oplus y$$$ is neither equal to $$$x$$$ nor $$$y$$$. So $$$x \\oplus y$$$ is a divisor of $$$x$$$ or $$$y$$$ and $$$x \\oplus y  \\lt  x$$$ or $$$x \\oplus y  \\lt  y$$$.\nOBSERVATION:\nAny divisor $$$d$$$ of $$$p$$$ such that $$$d  \\lt  p$$$ we know that $$$d \\le \\lfloor \\frac{p}{2} \\rfloor$$$.\nAlso, the highest bits of $$$d$$$ and $$$p$$$ are different when $$$d \\le \\lfloor \\frac{p}{2} \\rfloor$$$.\nTHOUGHT:\nWait but $$$x \\oplus y$$$ has the same highest bit as $$$y$$$ if $$$y \\ge 2 \\cdot x$$$.\nCONCLUSION:\nSo if $$$y \\ge 2 \\cdot x$$$, then $$$x \\oplus y$$$ can not be a divisor of $$$y$$$.\nTHOUGHT:\nBut can it be a divisor of $$$x$$$?\nOBSERVATION:\nIf $$$y \\ge 2 \\cdot x$$$, then $$$x \\oplus y  \\gt  x$$$ because the highest bit in $$$x \\oplus y$$$ is greater than that in $$$x$$$. So $$$x \\oplus y$$$ can not be a divisor of $$$x$$$.\nCONCLUSION:\nIf $$$y \\ge 2 \\cdot x$$$, then $$$x \\oplus y$$$ can not be a divisor of $$$x$$$ or $$$y$$$. So no solution in this case.\nTHOUGHT:\nNow we need to consider the case when $$$y  \\lt  2 \\cdot x$$$. But $$$x$$$ is small in this problem, making it feasible to iterate over all possible values of $$$y$$$.\nACTION:\nIterate over all possible values of $$$y  \\lt  2 \\cdot x$$$ and check if $$$x \\oplus y$$$ is a divisor of either $$$x$$$ or $$$y$$$.\nTime Complexity:\n$$$\\mathcal{O}(x)$$$."
         }
     ]
 }

@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1638C - Inversion Graph\nThe key idea is to start merging from the beginning using a stack. Assume that the connected components are always segments in the permutation (this solution also proves this by induction).\nWe will iterate the prefix and maintain in our stack the minimum/maximum element of all the segments in order. When we increase the prefix adding the next position $$$i$$$, we add $$$(p_i, p_i)$$$ to the top of the stack. Then, we merge the top two segments while we are able to. If the top two segments have their minimum/maximum elements $$$(min_1, max_1)$$$ and $$$(min_2, max_2)$$$, in this order from the top, we will merge them only if $$$max_2  \\gt  min_1$$$, because this means that an edge exist between the two.\nWhen we reach the end, our stack contains all connected components. Note that merging two adjacent intervals forms a new interval, so we have proven by induction that our first assumption is correct.\nTime complexity: $$$O(n)$$$."
         }
     ]
 }

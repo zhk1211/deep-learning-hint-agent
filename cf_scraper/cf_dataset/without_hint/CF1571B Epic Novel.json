@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1571B - Epic Novel\nNote that since each day Alex either reads the same volume or the next one, then for $$$x$$$ days he can't read more than $$$x$$$ volumes, or (in other words) for any day $$$i$$$ and $$$j$$$ ($$$i  \\lt  j$$$) $$$v_j - v_i \\le j - i$$$.\nNow, let's iterate over all possible variants for $$$v_b$$$. It's obvious that $$$v_a \\le v_b \\le v_c$$$. So we need to check:\nit is possible that Alex was reading volume $$$v_a$$$ at day $$$a$$$ and volume $$$v_b$$$ at day $$$b$$$;\nit is possible that Alex was reading volume $$$v_b$$$ at day $$$b$$$ and volume $$$v_c$$$ at day $$$c$$$.\nTo check the first case, it's enough to check that $$$v_b - v_a \\le b - a$$$. Analogically, to check the second case, we check that $$$v_c - v_b \\le c - b$$$.\nAs a result, all we need to do is find any $$$v_b$$$ from $$$v_a$$$ to $$$v_c$$$ where $$$v_b - v_a \\le b - a$$$ and $$$v_c - v_b \\le c - b$$$."
         },
         {
             "title": "Solution (adedalic)",

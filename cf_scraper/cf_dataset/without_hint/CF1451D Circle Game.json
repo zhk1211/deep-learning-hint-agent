@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1451D - Circle Game\nKey Idea:\nLet $$$z$$$ be the maximum integer such that the point $$$(kz, kz)$$$ is within the circle. If the point $$$(kz, k(z+1))$$$ is also within the circle, player 1 wins. Otherwise player 2 wins.\nSolution:\nRegardless of what move player 1 makes, player 2 can force the token to be at some point on the line $$$x = y$$$ at the end of his turn (if player 1 moves up, player 2 can move right and vice versa).\nCase 1: $$$(kz, k(z+1))$$$ lies outside the circle\nPlayer 2 can guarantee his victory in this fashion as player 1 will not have any moves left after reaching the point $$$(kz, kz)$$$. Player 2 wins.\nCase 2: $$$(kz, k(z+1))$$$ lies within the circle\nAfter player 1 makes his first move, player 2 finds himself in the same situation as player 1 did in the previous case. That is, player 1 can ensure that they reach either $$$(kz, k(z+1))$$$ or $$$(k(z+1), kz)$$$ in the same way. Points $$$(k(z+1), k(z+1))$$$ and $$$(kz, k(z+2))$$$ do not lie within the circle as by definition\n$$$d^2 \\lt k^2(z+1)^2 + k^2(z+1)^2 \\lt k^2z^2 + k^2(z+2)^2$$$.\nThus player 2 will not have any moves left and player 1 wins."
         }
     ]
 }

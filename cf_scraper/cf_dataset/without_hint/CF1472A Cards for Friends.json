@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1472A - Cards for Friends\nIf we cut the sheet in width, we will reduce its width by half, without changing the height. Therefore, the width and height dimensions do not affect each other in any way.\nLet's calculate the maximum number of sheets that we can get by cutting. Let's say that initially this number is $$$1$$$. Let's cut the sheet in width. Then the sheets number will become $$$2$$$, but they will be the same. If we can cut the sheet again, it is more profitable to cut all the sheets we have, because this way we will get more new sheets and their size will still be the same.\nSo we can maintain the current number of identical sheets and as long as either the width or height is divided by $$$2$$$, divide it, and multiply the number of sheets by two."
         },
         {
             "title": "Solution",

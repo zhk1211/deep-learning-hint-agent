@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1418C - Mortal Kombat Tower\nIf $$$a_1 = 1$$$ then our friend always needs one skip point because he always has to kill the first boss. Let's just remove this boss from our consideration and increase the answer if needed.\nWhat about other skip points? Firstly, let's understand that we can always do our moves in such a way that the first hard boss will always be killed by us (except the first one). So, if it's our friend turn now and there is only one easy boss before the hard, our friend just kills this easy boss. If there are two easy bosses, he kills both. If there are three, friend kills the first, we kill the second, and he kills the third. And so on. So we can always assume that each segment of hard bosses starts with our move.\nWe can kill each such segment greedily: we kill two bosses and our friend kills one. If there are less than three bosses in the segment, we just kill remaining and proceed. So if the length of the current segment of hard bosses is $$$k$$$ then we need $$$\\left\\lfloor\\frac{k}{3}\\right\\rfloor$$$ skip points. Summing up these values over all segments we get the answer (and don't forget that the first boss should be handled separately). Segments of ones can be extracted using two pointers.\nThere are also dynamic programming solution but I found this one more clever."
         },
         {
             "title": "Solution (vovuh)",

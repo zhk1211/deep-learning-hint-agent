@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1671B - Consecutive Points Segment\nWe can see that the answer is\nYES\nif and only if there are no more than two gaps of length $$$1$$$ between the given points. If there is no gap, the answer is obviously\nYES\n. If there is only one gap of length $$$1$$$, we can just move the left (or the right) part of the set to this gap. When there are two gaps, we can move the part before the first gap to the right and the part after the second gap to the left. Of course, if there is a gap of length at least $$$3$$$ (or multiple gaps with the total length $$$3$$$), we can't move the points from the left and the right part to satisfy the middle gap.\nTime complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution (vovuh)",

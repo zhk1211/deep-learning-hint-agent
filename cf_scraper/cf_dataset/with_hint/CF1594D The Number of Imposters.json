@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1594D - The Number of Imposters\nIf person $$$A$$$ said in a comment that person $$$B$$$ is a $$$crewmate$$$ then $$$A$$$ and $$$B$$$ belong to the same team (either imposters or crewmates).\nIf person $$$A$$$ said in a comment that person $$$B$$$ is an $$$imposter$$$ then $$$A$$$ and $$$B$$$ belong to different teams.\nSolution $$$1$$$:\nYou can build a graph and check if all its components are bipartite.\nIf person $$$A$$$ said that $$$B$$$ is an imposter then we add an edge from $$$A$$$ to $$$B$$$.\nIf person $$$A$$$ said that $$$B$$$ is a crewmate then we add an edge from $$$A$$$ to a fake node and from the same fake node to $$$B$$$.\nFor each component, we check if it's bipartite and take the maximum from the two colours.\nIf a component is not bipartite then the answer is $$$-1$$$.\nSolution $$$2$$$:\nWe can build the graph in the other way:\nIf $$$A$$$ and $$$B$$$ are in the same team then we add edge with weight $$$0$$$, otherwise with weight $$$1$$$.\nThen you can use dfs and colour the nodes either $$$0$$$ or $$$1$$$ maintaining the property that $$$u \\oplus v = w(u, v)$$$."
         }
     ]
 }

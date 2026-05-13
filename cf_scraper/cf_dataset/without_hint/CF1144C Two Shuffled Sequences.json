@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1144C - Two Shuffled Sequences\nLet's count the number of occurrences of each element in the\narray\n$$$cnt$$$. Because the maximum possible element is $$$2 \\cdot 10^5$$$, it can be done without any data structures.\nThen let's check if $$$cnt_i$$$ is greater than $$$2$$$ for some $$$i$$$ from $$$0$$$ to $$$2 \\cdot 10^5$$$, and if it is, then the answer is \"\nNO\n\", because this element should occur at least twice in one of the sequences.\nNow let's output the increasing sequence. The number of elements in it is the number of elements $$$i$$$ such that $$$cnt_i = 2$$$. Let's iterate from left to right, print the suitable elements and decrease their $$$cnt$$$.\nThe number of elements in the decreasing sequence is just the number of elements with non-zero $$$cnt$$$. So let's iterate from right to left and just print suitable elements."
         },
         {
             "title": "Solution",

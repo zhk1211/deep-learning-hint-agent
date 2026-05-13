@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1133A - Middle of the Contest\nFirstly, let's parse both strings to four integers ($$$h_1, m_1, h_2, m_2$$$). Just read them and then use some standard functions to transform them into integers (or we can do it manually).\nThe second part is to obtain $$$t_1 = h_1 \\cdot 60 + m_1$$$ and $$$t_2 = h_2 \\cdot 60 + m_2$$$. Then let $$$t_3 = \\frac{t_1 + t_2}{2}$$$. It is the answer.\nWe have to print $$$h_3 = \\lfloor\\frac{t_3}{60}\\rfloor$$$ and $$$m_3 = t_3 \\% 60$$$, where $$$\\lfloor\\frac{a}{b}\\rfloor$$$ is $$$a$$$ divided by $$$b$$$ rounding down and $$$a \\% b$$$ is $$$a$$$ modulo $$$b$$$.\nThe only thing we should do more carefully is to print one leading zero before $$$h_3$$$ if it is less than $$$10$$$ and do the same for $$$m_3$$$."
         },
         {
             "title": "Solution",

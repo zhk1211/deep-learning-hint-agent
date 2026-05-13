@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1533D - String Searching\nTo answer a query, it is enough to iterate over a character we delete from the string given in the query, and then check whether the resulting string is in the given set of strings (which should be stored in some associative data structure, for example, in a\nSet\n). Note that if deleting different positions can lead to identical strings, you have to count these strings once (i. e., if the query is\naaa\n, then the string\naa\nshould be counted $$$1$$$ time, not $$$3$$$); it can be done by storing all strings we can obtain by deleting one character in another\nSet\n, since it removes duplicate elements."
         },
         {
             "title": "Solution (Neon)",

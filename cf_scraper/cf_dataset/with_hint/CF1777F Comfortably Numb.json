@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1777F - Comfortably Numb\nThe problem can be solved recursively. Keep dividing the array into subarrays at the maximum element of the current subarray.\nLet's say the maximum element of the initial array is at index $$$x$$$, so the array gets divided into two subarrays $$$a[1...x-1]$$$ and $$$a[x+1,...n]$$$. Say we have already calculated the answer for the left and right subarrays. Now, we need to calculate the answer for all the subarrays containing $$$a[x]$$$ to complete the process for the array.\nTo do this, we will maintain two separate tries for both the left and right parts. This trie will contain all the prefix xor values for all the indices in the respective part. We will iterate over the smaller subarray out of the two. For every index, we will try to find the largest answer that can be obtained from a subarray with one end at this index. This can be done by moving the prefix xor value at the current index (xor'ed with $$$a[x]$$$) over the 'prefix xor trie' of the other subarray. This will cover all the subarrays containing $$$a[x]$$$, and so the entire array will now get covered. After the process, we will merge the two tries into one by again iterating over the smaller subarray.\nSimilarly, we can solve for left subarray and right subarray by finding their respective maximum element, and dividing the subarray at that element.\nAs we follow small-to-large merging, there are about $$$nlogn$$$ operations on the trie, and so the overall time complexity is $$$\\mathcal{O}(n \\log n \\log A)$$$."
         },
         {
             "title": "Implementation (C++)",

@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1856A - Tales of a Sort\nSuppose we have performed $$$k$$$ operations and have gotten the array $$$b$$$. Then $$$b_i := \\max(0, a_i - k)$$$ for all $$$i$$$ from $$$1$$$ to $$$n$$$.\nIf $$$b$$$ is sorted, then $$$b_i \\le b_{i + 1}$$$ for all $$$i$$$ from $$$1$$$ to $$$n - 1$$$. In other words, $$$\\max(0, a_i - k) \\le \\max(0, a_{i + 1} - k)$$$. Let's find for which $$$k$$$ this inequality holds.\nSuppose $$$a_i \\le a_{i + 1}$$$. Then $$$\\max(0, a_i - k) \\le \\max(0, a_{i + 1} - k)$$$ is true for any $$$k \\ge 0$$$.\nNow suppose $$$a_i  \\gt  a_{i + 1}$$$. Then $$$\\max(0, a_i - k) \\le \\max(0, a_{i + 1} - k)$$$ is true only if $$$k \\ge a_i$$$.\nFor the array to be sorted after $$$k$$$ operations, $$$\\max(0, a_i - k) \\le \\max(0, a_{i + 1} - k)$$$ must hold for all $$$1 \\le i  \\lt  n$$$. From the statements above, we can see that the smallest $$$k$$$ for which this is true is equal to the maximum value of $$$a_{i}$$$ over all $$$1 \\le i  \\lt  n$$$ such that $$$a_{i}  \\gt  a_{i + 1}$$$. If no such $$$i$$$ exists, the answer is $$$0$$$, since the array is already sorted.\nComplexity: $$$\\mathcal{O}(n)$$$\nNote: there are at least two other solutions:\nThe solution above is also equivalent to finding the maximum value of $$$a_{i}$$$ over all $$$1 \\le i  \\lt  j \\le n$$$ such that $$$a_i  \\gt  a_j$$$, which leads to a $$$\\mathcal{O}(n^2)$$$ solution.\nAlternatively, you can do binary search on the answer to get a $$$\\mathcal{O}(n \\log A)$$$ solution, where $$$A$$$ is the maximum possible value of $$$a_i$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1832B - Maximum Sum\nThe first instinct is to implement a greedy solution which removes either two minimums or one maximum, according to which of the options removes elements with smaller sum. Unfortunately, this doesn't work even on the examples (hint to the participants of the round: if your solution gives a different answer on the examples,\nmost probably\nyou should try to find an error in your solution, not send messages to the author that their answers are definitely wrong).\nOkay, we need something other. Let's notice that the order of operations does not matter: deleting two minimums and then maximum is the same as choosing the other way around. So, we can iterate on the number of operations $$$m$$$ when we remove the two minimums; then the resulting array is the array $$$a$$$ from which we removed $$$2m$$$ minimums and $$$(k-m)$$$ maximums.\nHow to quickly calculate the sum of remaining elements? First of all, sorting the original array $$$a$$$ won't hurt, since the minimums then will always be in the beginning of the array, and the maximums will be in the end. After the array $$$a$$$ is sorted, every operation either deletes two leftmost elements, or one rightmost element. So, if we remove $$$2m$$$ minimums and $$$(k-m)$$$ maximums, the elements that remain form the segment from the position $$$(2m+1)$$$ to the position $$$(n-(k-m))$$$ in the sorted array; and the sum on it can be computed in $$$O(1)$$$ with prefix sums.\nTime complexity: $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution (awoo)",

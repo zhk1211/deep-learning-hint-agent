@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1627D - Not Adding\nNote that the $$$\\gcd$$$ of two numbers cannot exceed their maximum. Let the maximum element of the array be $$$A$$$. So for every number from $$$1$$$ to $$$A$$$, we try to check whether that element can be included in the array after performing some operations or not.\nHow to check for a particular number $$$x$$$?\nFor $$$x$$$ to be in the final array, either:\nIt already exists in the initial array.\nOr, the $$$\\gcd$$$ of all multiples of $$$x$$$ present in the initial array equals $$$x$$$.\nProof\nFor $$$x$$$ to be added after some operations, there must be some\nsubset\nof the array which has a $$$\\gcd$$$ equal to $$$x$$$. We can perform the operations by taking the current gcd and one element from the subset at a time and at the end we will obtain $$$x$$$.\nNote that such a subset can only contain multiples of $$$x$$$. So it is enough to check that the $$$\\gcd$$$ of all multiples is equal to $$$x$$$.\nThus, the overall solution takes $$$\\mathcal{O}(n + A \\log{A})$$$."
         },
         {
             "title": "Implementation (C++)",

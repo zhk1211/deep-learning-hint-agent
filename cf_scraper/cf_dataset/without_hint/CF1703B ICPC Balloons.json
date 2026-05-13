@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1703B - ICPC Balloons\nLet's keep an array $$$a$$$ of booleans, $$$a_i$$$ denoting whether or not some team has solved the $$$i$$$th problem already. Now we can iterate through the string from left to right and keep a running total $$$\\mathrm{tot}$$$. If $$$a_i$$$ is true (the $$$i$$$-th problem has already been solved), increase $$$\\mathrm{tot}$$$ by $$$1$$$; otherwise, increase $$$\\mathrm{tot}$$$ by $$$2$$$ and set $$$a_i$$$ to true.\nThe time complexity is $$$\\mathcal{O}(n)$$$.\nBonus: the answer is always $$$n + \\text{number of distinct characters in }s$$$. Can you see why?"
         },
         {
             "title": "Solution",

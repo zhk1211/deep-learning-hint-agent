@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1840F - Railguns\nLet's first solve it in $$$\\mathcal{O}(nmt)$$$.\nThis can be done using dynamic programming. $$$dp[i][j][k] = true$$$ if the character can be at coordinates $$$(i, j)$$$ at time $$$t$$$, otherwise $$$dp[i][j][k] = false$$$. Such dynamics can be easily recalculated: $$$dp[i][j][k] = dp[i - 1][j][k - 1] | dp[i][j - 1][k - 1] | dp[i][j][k - 1]$$$. If the cell is shot by one of the railguns at time $$$t$$$, then $$$dp[i][j][k] = false$$$.\nNow let's notice that if the character can reach the final point $$$(n, m)$$$, then he will have to stand still no more than $$$r$$$ times. To prove this, we can prove another statement: if the character can reach the final point along some trajectory, then for any such trajectory the character can stand still no more than $$$r$$$ times. And this statement can already be proven by mathematical induction.\nThus, instead of the $$$dp[n][m][t]$$$ dynamics, we can calculate the $$$dp[n][m][r]$$$ dynamics, where the third parameter is the number of times the character stood still. The transitions here are made similarly."
         },
         {
             "title": "Solution",

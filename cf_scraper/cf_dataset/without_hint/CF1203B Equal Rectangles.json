@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1203B - Equal Rectangles\nAfter sorting $$$a$$$ we can observe that if the answer is \"\nYES\n\" then the area of each rectangle is $$$area = a_{1} \\cdot a_{4n}$$$. Then we just need to check for each $$$i$$$ from $$$1$$$ to $$$n$$$ that $$$a_{2i-1} = a_{2i}$$$ and $$$a_{4n-2i+1} = a_{4n-2i+2}$$$ and $$$a_{2i-1} \\cdot a_{4n-2i+2} = area$$$. If all conditions are satisfied for all $$$i$$$ then the answer is \"\nYES\n\". Otherwise the answer is \"\nNO\n\"."
         },
         {
             "title": "Solution",

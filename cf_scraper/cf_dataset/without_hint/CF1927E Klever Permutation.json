@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1927E - Klever Permutation\nTo construct a permutation, let's make an important observation: $$$s_i$$$ cannot be equal to $$$s_{i + 1}$$$ (i.e., they differ by at least $$$1$$$). Since the array $$$s$$$ can only contain two different values, it always has the form $$$[x, x+1, x, x+1, \\dots]$$$ or $$$[x, x-1, x, x-1, \\dots]$$$.\nLet's construct a permutation of the first form.\nSince $$$s_1 + 1 = s_2$$$, then $$$a_1 + 1=a_{k+1}$$$;\nsince $$$s_2 = s_3 + 1$$$, then $$$a_2 = a_{k+2} + 1$$$;\nsince $$$s_3 + 1 = s_4$$$, then $$$a_3 + 1 = a_{k+3}$$$;\n$$$\\dotsi$$$\nsince $$$s_k = s_{k + 1} + 1$$$, then $$$a_k = a_{k+k} + 1$$$;\n$$$\\dotsi$$$\nThus, for all odd positions $$$i$$$, it must hold that $$$a_i + 1 = a_{i + k}$$$, and for even positions, $$$a_i = a_{i + k} + 1$$$. To construct such a permutation, we will iterate through all positions $$$i$$$ from $$$1$$$ to $$$k$$$ and fill the permutation in positions $$$i, i+k, i+2\\cdot k, \\dots$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1217D - Coloring Edges\nLet's run dfs on the graph and color all \"back edges\" ($$$(u, v)$$$ is back edge if there is a path from $$$v$$$ to $$$u$$$ by edges from dfs tree) in black and all other edges in white.\nIt can be proven that any cycle will have at least one white edge and at least black edge. Moreover each back edge connected with at least one cycle (path from $$$v$$$ to $$$u$$$ and $$$(u, v)$$$ back edge). So the coloring we got is exactly the answer.\nHow to prove that any cycle have at least one edge of both colors? Let's look only at edges from dfs trees. We can always renumerate vertices in such way that index of parent $$$id(p)$$$ is bigger than the index of any its child $$$id(c)$$$. We can process and assign $$$id(p)$$$ with minimal free number after we processed all its children.\nNow we can note that for any white edge $$$(u, v)$$$ (not only tree edge) condition $$$id(u)  \\gt  id(v)$$$ holds (because of properties of dfs: forward edges are obvious; cross edge $$$(u, v)$$$ becomes cross because dfs at first processed vertex $$$v$$$ and $$$u$$$ after that, so $$$id(v)  \\lt  id(u)$$$). And for each back edge $$$(u, v)$$$ it's true that $$$id(u)  \\lt  id(v)$$$.\nSince any cycle have both $$$id(u)  \\gt  id(v)$$$ and $$$id(u)  \\lt  id(v)$$$ situations, profit!"
         },
         {
             "title": "Solution (Roms)",

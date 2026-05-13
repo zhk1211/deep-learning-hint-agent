@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1490E - Accidental Victory\nHow can a player be checked if he can win the championship? Obviously, he must participate in all the games (otherwise we will increase the number of tokens of the opponents). So you can sort out all the people and play greedily with the weakest ones. Such a check will work in linear time after sorting, so we got a solution for $$$\\mathcal{O}(n^2)$$$.\nThe simplest solution to this problem is — binary search for the answer. We will sort all the players by the number of tokens they have. Let's prove that if player $$$i$$$ can win, then player $$$i+1$$$ can also win (the numbers are dealt after sorting). If the player $$$i$$$ was able to win, then based on the strategy above, he was able to defeat all the players on the prefix $$$[0 \\ldots i+1]$$$. The player $$$i+1$$$ can also defeat all these players since he has at least as many tokens. Now both players have to defeat all opponents with numbers $$$[i+2 \\ldots n]$$$ and the number of chips both players have is equal to the sum of the first $$$i+1$$$ numbers in the array. So if the player $$$i$$$ has a strategy, then the player $$$i+1$$$ can use the same strategy.\nHence the answer to the problem is — sorted suffix of the input array. You can find this suffix using binary search and linear time checking.\nBonus: this problem also has a fully linear (after sorting) solution."
         },
         {
             "title": "Solution",

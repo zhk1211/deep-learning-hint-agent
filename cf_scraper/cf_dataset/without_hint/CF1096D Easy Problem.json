@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1096D - Easy Problem\nDenote string $$$t$$$ as\nhard\n.\nWe will solve this problem with dynamic programming.\nDenote $$$dp_{cnt, len}$$$ — the minimum possible ambiguity if we considered first $$$cnt$$$ letters of statement and got prefix $$$t$$$ having length $$$len$$$ as a subsequence of the string.\nIf $$$cnt$$$-th letter of the statement is not equal to $$$t_{len}$$$, then $$$dp_{cnt, len} = dp_{cnt-1, len}$$$ — we don't have to change it.\nOtherwise we either change the letter, or let it stay as it is (and the length of the prefix we found so far increases): $$$dp_{cnt, len} = \\min (dp_{cnt-1, len-1}, dp_{cnt-1, len} + a_{cnt-1})$$$."
         },
         {
             "title": "Solution (PikMike)",

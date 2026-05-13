@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1797B - Li Hua and Pattern\nWe can calculate the minimum needed operations $$$k_{\\min}$$$ easily by enumerating through the cells and performing an operation if the color of the cell is different from the targeted cell. Obviously, if $$$k  \\lt  k_{\\min}$$$, the problem has no solution.\nOtherwise, there are two cases:\nIf $$$2\\mid n$$$, the solution exists if and only if $$$2\\mid(k-k_{\\min})$$$, as we must perform two operations each time to meet the requirement.\nIf $$$2\\nmid n$$$, the solution always exists, as we can perform the remaining operations at the center of the pattern.\nTime complexity: $$$O(n^2)$$$."
         },
         {
             "title": "Solution (rui_er)",

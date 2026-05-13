@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1872G - Replace With Product\nKey observation: if the product of all elements in the array is\nsufficiently large\n, it is always optimal to perform the operation on the entire array, except for a possible prefix/suffix consisting of ones.\nYou can estimate\nsufficiently large\n, for example, with the number $$$2^{60}$$$ (in reality, $$$2 \\cdot n$$$ will be sufficient). There won't be a proof, but that's how it is.\nNow the problem reduces to the case where the product of the array is not greater than $$$2^{60}$$$. This means that the number of array elements that are $$$ \\gt  1$$$ is at most $$$60$$$.\nNotice that in an optimal segment, there won't be a situation where the left/right element is equal to $$$1$$$, because then we can move that boundary and the sum will increase by $$$1$$$.\nTherefore, both the start and end of the segment must be in non-ones elements. This means that there are at most $$$60^2$$$ interesting segment options.\nWe can explicitly iterate through all of them and choose the best one. Use prefix products and sums to quickly estimate the value of a specific segment."
         },
         {
             "title": "Solution",

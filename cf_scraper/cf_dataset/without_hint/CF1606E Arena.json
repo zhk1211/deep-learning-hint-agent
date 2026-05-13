@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1606E - Arena\nLet's calculate the following dynamic programming $$$dp_{i, j}$$$ — the number of ways to choose the initial health if there are $$$i$$$ heroes still alive, and they already received $$$j$$$ damage. Let's iterate over $$$k$$$ — the number of heroes that will survive after the next round. Then we have to make a transition to the state $$$dp_{k, nj}$$$, where $$$nj = \\min(x, j + i - 1)$$$ (the minimum of the maximum allowed health and $$$j$$$ plus the damage done in this round). It remains to understand with what coefficient we should make this transition in dynamic programming. This coefficient is equal to $$$\\binom{i}{i - k} \\cdot (nj - j)^{i - k}$$$ — the number of ways to choose which of the $$$i$$$ living heroes will die in this round multiplied by the number of ways to choose health for these $$$i - k$$$ heroes (because their health is greater than $$$j$$$ so that they are still alive at the moment, but not more than $$$nj$$$ so that they are guaranteed to die in this round). Of course, we don't make any transitions from the states $$$dp_{i,j}$$$ where $$$i  \\lt  2$$$, since they represent the fights that have already finished.\nThe answer is the sum of all $$$dp_{0, j}$$$ for every $$$j \\in [0, x]$$$."
         },
         {
             "title": "Solution (Neon)",

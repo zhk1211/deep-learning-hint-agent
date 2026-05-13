@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nBajtek, known for his unusual gifts, recently got an integer array $ x_0, x_1, \\ldots, x_{k-1} $ .\n\nUnfortunately, after a huge array-party with his extraordinary friends, he realized that he'd lost it. After hours spent on searching for a new toy, Bajtek found on the arrays producer's website another array $ a $ of length $ n + 1 $ . As a formal description of $ a $ says, $ a_0 = 0 $ and for all other $ i $ ( $ 1 \\le i \\le n $ ) $ a_i = x_{(i-1)\\bmod k} + a_{i-1} $ , where $ p \\bmod q $ denotes the remainder of division $ p $ by $ q $ .\n\nFor example, if the $ x = [1, 2, 3] $ and $ n = 5 $ , then:\n\n- $ a_0 = 0 $ ,\n- $ a_1 = x_{0\\bmod 3}+a_0=x_0+0=1 $ ,\n- $ a_2 = x_{1\\bmod 3}+a_1=x_1+1=3 $ ,\n- $ a_3 = x_{2\\bmod 3}+a_2=x_2+3=6 $ ,\n- $ a_4 = x_{3\\bmod 3}+a_3=x_0+6=7 $ ,\n- $ a_5 = x_{4\\bmod 3}+a_4=x_1+7=9 $ .\n\nSo, if the $ x = [1, 2, 3] $ and $ n = 5 $ , then $ a = [0, 1, 3, 6, 7, 9] $ .\n\nNow the boy hopes that he will be able to restore $ x $ from $ a $ ! Knowing that $ 1 \\le k \\le n $ , help him and find all possible values of $ k $ — possible lengths of the lost array.\n\nInput Format\nThe first line contains exactly one integer $ n $ ( $ 1 \\le n \\le 1000 $ ) — the length of the array $ a $ , excluding the element $ a_0 $ .\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^6 $ ).\n\nNote that $ a_0 $ is always $ 0 $ and is not given in the input.\n\nOutput Format\nThe first line of the output should contain one integer $ l $ denoting the number of correct lengths of the lost array.\n\nThe second line of the output should contain $ l $ integers — possible lengths of the lost array in increasing order.\n\nExamples\nSample 1\nInput\n5\n1 2 3 4 5\nOutput\n5\n1 2 3 4 5\n\nSample 2\nInput\n5\n1 3 5 6 8\nOutput\n2\n3 5\n\nSample 3\nInput\n3\n1 5 3\nOutput\n1\n3\n\nNote\nIn the first example, any $ k $ is suitable, since $ a $ is an arithmetic progression.\n\nPossible arrays $ x $ :\n\n- $ [1] $\n- $ [1, 1] $\n- $ [1, 1, 1] $\n- $ [1, 1, 1, 1] $\n- $ [1, 1, 1, 1, 1] $\n\nIn the second example, Bajtek's array can have three or five elements.\n\nPossible arrays $ x $ :\n\n- $ [1, 2, 2] $\n- $ [1, 2, 2, 1, 2] $\n\nFor example, $ k = 4 $ is bad, since it leads to $ 6 + x_0 = 8 $ and $ 0 + x_0 = 1 $ , which is an obvious contradiction.\n\nIn the third example, only $ k = n $ is good.\n\nArray $ [1, 4, -2] $ satisfies the requirements.\n\nNote that $ x_i $ may be negative."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "First, let's observe that we can replace array\na\ni\nwith array\nb\ni\n=\na\ni\n-\na\ni\n- 1\n, because all we care about are differences between neighboring elements. Now, we can see that our lost array can have length\nd\nif and only if for every\nj\nsuch that\nj\n+\nd\n≤\nn\n,\nb\nj\n=\nb\nj\n+\nd\n. So we can iterate over every possible\nd\nfrom\n1\nto\nn\nand check if it is correct in\nO\n(\nn\n)\n. Complexity of whole algorithm is\nO\n(\nn\n2\n)\n."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n1007\n;\nint\nn\n;\nint\nin\n[\nN\n];\nbool\nok\n(\nint\nd\n){\nfor\n(\nint\ni\n=\n0\n;\ni\n+\nd\n<\nn\n;\n++\ni\n)\nif\n(\nin\n[\ni\n+\n1\n]\n-\nin\n[\ni\n]\n!=\nin\n[\ni\n+\nd\n+\n1\n]\n-\nin\n[\ni\n+\nd\n])\nreturn\nfalse\n;\nreturn\ntrue\n;\n}\nint\nmain\n(){\nscanf\n(\n\"%d\"\n,\n&\nn\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\nscanf\n(\n\"%d\"\n,\n&\nin\n[\ni\n]);\nvector\n<int>\nres\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\nif\n(\nok\n(\ni\n))\nres\n.\npush_back\n(\ni\n);\nprintf\n(\n\"%d\\n\"\n,\nres\n.\nsize\n());\nfor\n(\nint\nv\n:\nres\n)\nprintf\n(\n\"%d \"\n,\nv\n);\nreturn\n0\n;\n}"
+        }
+    ]
+}

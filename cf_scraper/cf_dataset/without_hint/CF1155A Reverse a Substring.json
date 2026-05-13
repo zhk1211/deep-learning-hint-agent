@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1155A - Reverse a Substring\nIf the answer is \"\nYES\n\" then we always can reverse a substring of length $$$2$$$. So we need to check only pairs of adjacent characters in $$$s$$$. If there is no such pair of characters $$$s_i  \\gt  s_{i + 1}$$$ for all $$$i$$$ from $$$1$$$ to $$$n-1$$$ then the answer is \"\nNO\n\".\nWhy is it so? Consider the substring $$$s[l; r] = s_l s_{l+1} \\dots s_r$$$ we have to reverse. It is obvious that $$$s_l  \\gt  s_r$$$, otherwise it is pointless to reverse this substring. Then consider two cases: $$$s_l \\le s_{l+1}$$$ then $$$s_{l+1}  \\gt  s_r$$$ (by transitivity) and then we can go to a smaller substring ($$$s[l + 1; r]$$$); otherwise $$$s_l  \\gt  s_{l + 1}$$$ and it means that we can take the substring $$$s[l; l + 1]$$$."
         },
         {
             "title": "Solution (Vovuh)",

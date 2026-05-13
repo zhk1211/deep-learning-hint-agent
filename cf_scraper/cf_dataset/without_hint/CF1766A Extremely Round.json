@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1766A - Extremely Round\nThere are many ways to solve this problem.\nThe most naive one (iterating through all numbers from $$$1$$$ to $$$n$$$ in each test case and checking if they are extremely round) fails, since it is $$$O(tn)$$$, but you can optimize it by noticing that extremely round numbers are rare. So, for example, we can iterate through all numbers from $$$1$$$ to $$$999999$$$ once, remember which ones are extremely round, store them into an array, and while answering the test case, only check the numbers from the array we have created.\nThere is also a solution in $$$O(1)$$$ per test case with a formula, try to invent it yourself."
         },
         {
             "title": "Solution (BledDest)",

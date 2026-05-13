@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1737C - Ela and Crickets\nThe initial configuration will have one central piece and 2 non-central pieces. The central piece is the one on the square that shares the edges with both of the 2 other squares.\nAs the crickets are standing next to each other, we can prove that each of them can only jump into another square with the same color of the square it's standing on. Assuming that the central piece are on the dark square, we consider 3 cases:\nThe central piece initially lies on the corner of the board (restrict the moves of the crickets): can only move pieces to squares on the edges they cover.\nThe target square is dark: we can prove that there is always a way to line up 2 pieces on the same-colored squares with the target square diagonally.\nThe target square is light: we can see that the only piece on the white square can only move 2 squares horizontally/vertically, not diagonally in any way, so if the target square x-coordinates has the same oddity as the original square x-coordinate of the light, then it's possible. Otherwise, it's not.\nFor the case of 2 lights, and 1 dark, use the same reasoning.\nComplexity: $$$O(1)$$$"
         },
         {
             "title": "Solution snippet (low_, C++)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1619E - MEX and Increments\nFirst, let's sort the array. Then we will consider its elements in non-decreasing order. To make MEX equal to $$$0$$$, you need to increase all zeros. To make MEX at least $$$n$$$, you first need to make MEX at least $$$n - 1$$$, and then, if the number $$$n - 1$$$ is missing in the array, you need to get it. If there are no extra values less than $$$n - 1$$$, then this and all subsequent MEX values cannot be obtained. Otherwise, you can use the maximum of the extra array values. To do this, you can use a data structure such as a stack. If an element occurs more than once in the array, put its extra occurrences on the stack."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1497B - M-arrays\nLet's take each number modulo $$$m$$$. Now let $$$cnt_x$$$ be the amount of $$$x$$$ in array $$$a$$$.\nIf $$$cnt_0 \\neq 0$$$, then all $$$0$$$ should be put in a single array, answer increases by $$$1$$$.\nFor each number $$$x \\neq 0$$$ we put it in an array $$$x, m - x, x, m - x, \\dots$$$ In this array the amount of $$$x$$$ and the amount of $$$m - x$$$ should differ not more than by $$$1$$$, that's why we need to make $$$max(0, |cnt_x - cnt_{m-x}| - 1)$$$ arrays, containing a single number ($$$x$$$ or $$$m - x$$$) that is more common."
         },
         {
             "title": "Implementation",

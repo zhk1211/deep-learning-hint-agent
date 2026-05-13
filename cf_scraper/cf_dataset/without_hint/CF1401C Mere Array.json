@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1401C - Mere Array\nLet's define the minimum element of $$$a$$$ as $$$m$$$. We can find the position of the elements which is not divisible by $$$m$$$ cannot be changed because these elements don't have $$$m$$$ as factor. But we can rearrange elements divisible by $$$m$$$ whatever we want in the following way:\n$$$\\bullet$$$ Let's suppose $$$m$$$ = $$$a_x$$$, and there is two elements $$$a_y$$$, $$$a_z$$$ in which $$$x$$$, $$$y$$$, $$$z$$$ are all different. Swap($$$a_x$$$, $$$a_y$$$), swap($$$a_y$$$, $$$a_z$$$), and swap($$$a_z$$$, $$$a_x$$$). Then only $$$a_y$$$ and $$$a_z$$$ are swapped from the initial state. Repeat this process.\nSo we can rearrange elements divisible by $$$m$$$ in non-descending order. After that if whole array is non-descending the answer is $$$YES$$$, otherwise $$$NO$$$.\nTime complexity : $$$O(n \\log n)$$$"
         },
         {
             "title": "Solution Code",

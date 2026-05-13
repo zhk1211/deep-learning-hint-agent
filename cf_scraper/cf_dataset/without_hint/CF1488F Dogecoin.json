@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1488F - Dogecoin\nFirst, let's solve a problem for a single query. Let's say we sold Dogecoins on days $$$d_1, d_2, \\dots, d_k$$$, and $$$d_{i}  \\lt  d_{i + 1}$$$. Since all the Dogecoins that we can sell on day $$$d_i$$$, we can sell on $$$d_{i + 1}$$$ day as well, so if $$$a_{d_{i}} \\le a_{d_{i + 1}}$$$, then we could not sell Dogecoin on day $$$d_i$$$, but sell on day $$$d_{i + 1}$$$ and the answer would not decrease. So the values of $$$a_{d_i}$$$ should decrease.\nLet's maintain a stack in which we will store the days in which we sold Dogecoin. Let the number of the current day be $$$i$$$, and the number of the day when we last sold Dogecoin is $$$j$$$ (the last value in the stack). If $$$a_j \\le a_i$$$, then we should remove $$$j$$$ from the stack and recalculate the current answer. Note that a single value of $$$i$$$ can remove multiple values from the stack. After that, we have to add $$$(i-j) \\cdot a_i$$$ to the current answer, because we sell all the Dogecoin that accumulated from the last sale.\nNow, to quickly answer the ($$$l, r$$$) query, note that if we build a stack for the first $$$r$$$ days, then all the numbers from the stack that belong to the $$$[l, r]$$$ segment will be the optimal set of days to sell Dogecoin on. To get the answer for this set of days, we can maintain the prefix sums array of the array where the values are equal to each day's contribution to the answer (the number of accumulated Dogecoins multiplied by their price on that day)."
         }
     ]
 }

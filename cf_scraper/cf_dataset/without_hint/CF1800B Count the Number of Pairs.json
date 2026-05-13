@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1800B - Count the Number of Pairs\nCount two arrays $$$big$$$ and $$$small$$$, such that $$$big[i]$$$ contains the number of occurrences of $$$i$$$th letter of the alphabet in the string in upper case, while $$$small[i]$$$ — in lower case.\nLet's add all existing pairs to the answer, so let's add $$$min(small[i], big[i])$$$ to it for each letter. Subtract this minimum from $$$small[i]$$$ and $$$big[i]$$$ to get the number of unpaired identical letters.\nNext, we will act greedily: if there is some set of at least two identical letters in the same case, we can apply the operation to half of them and get new pairs. Therefore, for each letter we will add $$$\\frac{min(k, max(small[i], big[i]))}{2}$$$ to the answer and decrease $$$k$$$ by that amount."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1829B - Blank Space\nWe can iterate through the array $$$a$$$ and keep track of the length of the current blank space. Whenever we encounter a $$$0$$$, we increase the length of the current blank space, and whenever we encounter a $$$1$$$, we check if the current blank space is longer than the previous longest blank space. If it is, we update the length of the longest blank space. Finally, we return the length of the longest blank space.\nThe time complexity of this algorithm is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution",

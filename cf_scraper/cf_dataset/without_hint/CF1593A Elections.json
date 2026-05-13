@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1593A - Elections\nLet's solve the problem for the first candidate. To win the election, he needs to get at least $$$1$$$ more votes than every other candidate. Therefore, the first candidate needs to get at least $$$\\max(b, c) + 1$$$ votes. If $$$a$$$ is already greater than this value, then you don't need to add any votes, otherwise, you need to add $$$\\max(b, c) + 1 - a$$$ votes. So the answer for the first candidate is $$$\\max(0, \\max(b,c) + 1 - a)$$$.\nSimilarly, the answer for the second candidate is $$$\\max(0, \\max(a, c) + 1 - b)$$$, and, for the third one, the answer is $$$\\max(0, \\max(a, b) + 1 - c)$$$."
         },
         {
             "title": "Solution",

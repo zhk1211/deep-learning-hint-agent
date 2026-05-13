@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1829G - Hits Different\nThere are many solutions which involve going row by row and using some complicated math formulas, but here is a solution that requires no formulas and is much quicker to code.\nThe cans are hard to deal with, but if we replace them with a different shape, a diamond, we get the following:\nNow the cans that fall just form a rectangle. In fact, let's rotate the picture:\nWhat we can see is that each query is just a\n2D prefix sum\n! So we can precompute all prefix sums in the grid in $$$\\mathcal{O}(M)$$$ time, where $$$M = 10^6$$$ is the maximum value of the input, and answer each sum in $$$\\mathcal{O}(1)$$$ time.\nTo avoid finding the row and column, we can instead iterate through the cells in order $$$1, 2, 3, \\dots$$$, that is, we go diagonal-by-diagonal in the grid above. Now, make a separate array $$$\\texttt{ans}$$$, and keep track of the answer for each cell from $$$1$$$ to $$$10^6$$$ as we find its prefix sum. This avoids having to do any complicated math or binary search to find the row and column for the prefix sum. See the implementation for more details.\nThe time complexity is $$$\\mathcal{O}(n)$$$ precomputation with $$$\\mathcal{O}(1)$$$ per test case."
         },
         {
             "title": "Solution",

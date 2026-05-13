@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1862B - Sequence Game\nLet's compare each pair of adjacent numbers. If the left number is smaller than the right number, then the right number is at least $$$2$$$. We will insert $$$1$$$ between them.\nNow, for each pair of numbers, it is true that either these two numbers were originally in the sequence, or one of them is $$$1$$$. In this case, if two numbers were originally in the sequence, then the left number is not smaller than the right number. If the left number is $$$1$$$, then it is smaller than the right number, since the right number was at least $$$2$$$. If the right number is $$$1$$$, then the left number in the pair is not smaller than the right number.\nWe have checked all cases. It is evident that such a sequence is valid, as Vika would have only removed all the $$$1$$$ we added and nothing more."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1615D - X(or)-mas Tree\nLet $$$\\text{count}(x)$$$ be the number of $$$1$$$-bits in an integer $$$x$$$. Notice that $$$\\text{count}(x \\oplus y)\\mod 2$$$ = $$$\\text{count}(x) \\mod 2 \\oplus \\text{count}(y) \\mod 2$$$. This means that you can replace each integer $$$x$$$ on the tree with $$$\\text{count}(x) \\mod 2$$$. Note that you can pretend the initial given edges are also just elves who traveled over the path consisting solely of that edge. After this transformation, each of the edge weights is either $$$0$$$ or $$$1$$$, and you're given a set of paths and you are told the XOR of each path.\nRoot the tree at node $$$1$$$. Let $$$r_i$$$ be the XOR of the values on the edges from node $$$i$$$ to the root ($$$r_1 = 0$$$). Notice that the XOR of a path $$$(a, b)$$$ is $$$r_a \\oplus r_b$$$. From this, each constraint of the form $$$(a, b, c)$$$ telling you that the XOR of the path $$$(a, b)$$$ has to equal $$$c$$$ is equivalent to $$$r_a \\oplus r_b = c$$$.\nThis problem can be solved using a variant of bipartite coloring, where you create a graph and add a bidirectional edge between $$$(a, b)$$$ with weight $$$c$$$ for each of those constraints. You run dfs through each of the individual connected components. Within a component, choosing the value of a single node uniquely determines the rest. During the dfs, if you're at a node $$$a$$$ and are considering traversing the edge $$$(a, b, c)$$$, you know that $$$r_b = r_a \\oplus c$$$, so you can determine $$$r_b$$$ from $$$r_a$$$.\nThe final value of an edge between $$$a$$$ and $$$p$$$ (the parent of $$$a$$$) is $$$r_a \\oplus r_p$$$."
         }
     ]
 }

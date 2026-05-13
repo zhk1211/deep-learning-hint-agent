@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1156B - Ugly Pairs\nTo be honest, the solution to this problem is easier to code than to prove.\nLet's follow the next strategy. Write down all the letters of the string which have odd positions in alphabet (\"\naceg$$$\\dots$$$\n\") and even positions in alphabet (\"\nbdfi$$$\\dots$$$\n\"). Sort both of these lists in non-decreasing order. The answer is either concatenation of the lists (odd + even or even + odd) or \"\nNo answer\n\".\nNow for the proof part. Let's establish that we don't care about equal letters and leave just a single copy of each letter of the string. Let's check some cases:\nThere is just a single letter. That's trivial.\nThere are two letters of the same parity. There is no incorrect arrangement for this.\nThere are two letters of different parity. If they differ by one then no answer exists. Otherwise any arrangement works.\nThere are three letters and they are consecutive in alphabet. No answer exists.\nThere are other types of three letters. Then the one of the different parity can put on the side (e.g. \"\nacd\n\" and \"\ndac\n\"). As the difference between at least one of these letters and that one isn't 1, that arrangement will be ok.\nFinally, there are at least 4 letters. It means that the difference between either the smallest odd and the largest even or between the smallest even and the largest odd isn't 1.\nThe only thing you need to do is to implement the check function the most straightforward way possible and check both arrangements.\nOverall complexity: $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution (PikMike)",

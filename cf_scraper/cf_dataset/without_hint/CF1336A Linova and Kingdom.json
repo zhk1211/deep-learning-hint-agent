@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1336A - Linova and Kingdom\nLemma: In the optimum solution, if a node (except the root) is chosen to develop tourism, its parent must be chosen to develop tourism, too.\nProof: Otherwise, if we choose its parent to develop tourism instead of itself, the sum of happiness will be greater.\nThen we can calculate how much happiness we will get if we choose a certain node to develop tourism. Suppose the depth of node $$$u$$$ is $$$dep_u$$$ (i.e. there are $$$dep_u$$$ nodes on the path $$$(1,u)$$$), the size of the subtree rooted on $$$u$$$ is $$$siz_u$$$ (i.e. there are $$$siz_u$$$ nodes $$$v$$$ that $$$u$$$ is on the path $$$(1,v)$$$). Then, if we choose $$$u$$$ to develop tourism, compared to choose it to develop industry, the total happiness will be increased by $$$siz_u-dep_u$$$: the envoy of $$$u$$$ won't be sent, we will lose $$$dep_u-1$$$ happiness; a total of $$$siz_u-1$$$ envoys of all nodes in the subtree rooted on $$$u$$$ except $$$u$$$ itself will get one more happiness.\nSo, just use DFS to calculate all $$$siz_u-dep_u$$$, then sort them from big to small, calculate the sum of the first $$$n-k$$$ elements. You can also use\nstd::nth_element\nin STL to get an $$$O(n)$$$ solution."
         },
         {
             "title": "Solution by EternalAlexander",

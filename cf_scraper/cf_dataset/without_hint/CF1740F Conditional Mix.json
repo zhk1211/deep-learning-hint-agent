@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1740F - Conditional Mix\nLet $$$cnt_i$$$ denote the number of occurrences of element $$$i$$$ in array $$$a$$$.\nClaim: A multiset $$$M$$$ of size $$$n$$$, $$$M_1,M_2,\\ldots,M_n$$$ where $$$M_1 \\geq M_2 \\geq \\ldots \\geq M_n \\geq 0$$$ is good if and only if $$$\\sum_{i=1}^{n} M_i=n$$$ and $$$\\sum_{i=1}^k M_i \\leq \\sum_{i=1}^n \\min(k,cnt_i)$$$ for every $$$1 \\leq k \\leq n$$$.\nThe proof of that claim has been discussed in the comment section\nhere\n.\nWe proceed with formulating a dynamic programming solution. Let $$$dp[pos][sum][last]$$$ denote that we have picked a prefix $$$P_1,P_2,\\ldots,P_{pos}$$$ such that $$$\\sum_{i=1}^{pos} P_i = sum$$$ and $$$P_{pos}=last$$$. Our transition is going from $$$dp[pos][sum][last]$$$ to $$$dp[pos+1][sum+x][x]$$$ for all $$$x \\leq last$$$, this can be easily handled using prefix sums. However, we still have $$$O(n^3)$$$ states.\nWe can cut down the number of states by noting that $$$n \\geq \\sum_{i=1}^{pos} P_i \\geq last \\cdot pos$$$. That is, for each value of $$$pos$$$, there are only $$$\\frac{n}{pos}$$$ values of $$$last$$$. Since $$$\\frac{n}{1}+\\frac{n}{2}+\\frac{n}{3}+\\ldots+\\frac{n}{n} \\approx n\\log n$$$, the number of states is bounded by $$$O(n^2 \\log n)$$$.\nTime complexity: $$$O(n^2 \\log n)$$$"
         }
     ]
 }

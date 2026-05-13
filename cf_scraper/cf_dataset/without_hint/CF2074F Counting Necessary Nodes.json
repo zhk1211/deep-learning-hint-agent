@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "2074F - Counting Necessary Nodes\nNotice how the interval on each axis corresponds to\nthose found in nodes of segment trees\n.\nLet us find the segment tree intervals on each axis and call those sets of intervals $$$I_x$$$ and $$$I_y$$$.\nThen, for each rectangle formed by some $$$a \\times b$$$ such that $$$a \\in I_x$$$, $$$b \\in I_y$$$, the following holds.\nNo node with side length strictly greater than $$$\\min(|a|,|b|)$$$ can cover this rectangle without moving outside the given region.\nAll nodes with side length no greater than $$$\\min(|a|,|b|)$$$ are either completely inside the rectangle or completely outside.\nThus, we find the following strategy to cover the region optimally.\nFor all $$$a \\times b$$$ such that $$$a \\in I_x$$$, $$$b \\in I_y$$$, cover the sub-region with the following method.\nAs both $$$|a|$$$ and $$$|b|$$$ are powers of two, the larger one is divisible by the smaller one.\nTherefore, we can cover the sub-region with nodes with side length $$$\\min(|a|,|b|)$$$.\nThis requires us to use $$$\\frac{\\max(|a|,|b|)}{\\min(|a|,|b|)}$$$ nodes.\nImplementing this leads to a solution with time complexity $$$\\mathcal{O}(\\log^2 X)$$$.\nWhile there are solutions with time complexity $$$\\mathcal{O}(\\log X)$$$, they were not needed."
         }
     ]
 }

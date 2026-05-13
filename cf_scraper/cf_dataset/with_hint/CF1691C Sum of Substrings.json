@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1691C - Sum of Substrings\nWe can observe that for any string $$$s$$$, $$$F(s)$$$ can also be written as: $$$$$$ F(s) = 10\\times s_1 + 11 \\times s_2 + 11 \\times s_3 \\dots 11 \\times s_{n-1} + 1 \\times s_n $$$$$$ In the above equation, $$$s_i$$$ is the integral face value of the $$$i^{th}$$$ character of the string $$$s$$$. We came to this equation by observing what $$$i^{th}$$$ character is contributing to the value of $$$F(s)$$$. If the $$$i^{th}$$$ character is a '1', it will contribute a value of 1 to $$$d_{i-1}$$$ and a value of 10 to $$$d_i$$$.\nNow, in order to minimize the value of $$$F(s)$$$, we would want to put the 1s at position $$$n$$$ first, then at position $$$1$$$ and then anywhere in the middle of the string. In order to achieve the best configuration in at max $$$k$$$ operations, we will try to move the last '1' at position $$$n$$$ first, then with the remaining operations, we will try to move the first '1' at position 1. The remaining 1s can stay where they are as they will anyways be contributing a value of $$$11$$$ no matter which position they take."
         }
     ]
 }

@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2207A - 1-1\nNote that no zeroes that are adjacent to other zeroes will ever become ones, and it is not possible to create adjacent zeroes. So, we look at runs of ones that have only gaps of at most one zero in between. If such a run has length $$$L$$$, we can easily convert it to all ones. The minimum number of zeroes you can create in such a run is $$$\\left\\lfloor \\frac{L-1}{2} \\right\\rfloor$$$. To solve, we can now just sum these values over all such runs."
         },
         {
             "title": "Implementation",

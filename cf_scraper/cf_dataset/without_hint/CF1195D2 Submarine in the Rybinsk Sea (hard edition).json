@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1195D2 - Submarine in the Rybinsk Sea (hard edition)\nLet $$$cnt_{len}$$$ be the number of $$$a_i$$$ with length $$$len$$$. We will calculate each number's contribution in the answer separately.\nWhen we calculate the contribution of the current number in the answer, let's iterate over all lengths $$$l$$$ from $$$1$$$ to $$$L$$$ where $$$L$$$ is the maximum length of some number in the array and add the following value to the answer: $$$cnt_{l} \\cdot (fl_{a_i, l} + fr_{a_i, l})$$$.\nThe function $$$fl_{x, l}$$$ means that we merge the number $$$x$$$ with some (it does not matter) number of length $$$l$$$ and digits of $$$x$$$ will be on odd positions in the resulting number (except some leading digits which will be on odd and on even position as well). And the function $$$fr_{x, l}$$$ does almost the same thing but it counts digits of $$$x$$$ on even positions.\nTime complexity is $$$O(n)$$$ with the constant factor $$$L^2$$$."
         },
         {
             "title": "Solution",

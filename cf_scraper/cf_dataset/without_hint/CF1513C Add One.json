@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1513C - Add One\nWe can solve this problem using 1D dp.\nLet $$$dp_i$$$ be defined as the length of the string after applying operation $$$i$$$-times to the number $$$10$$$. Then,\n$$$dp_i =2$$$, $$$\\forall$$$ $$$i$$$ in $$$[0,8]$$$\n$$$dp_i =3$$$, if $$$i=9$$$\n(The final number after applying $$$9$$$ operations to the number $$$10$$$ is $$$109$$$.)\n$$$dp_i =dp_{i-9}+dp_{i-10}$$$, Otherwise.\n(length would be the sum of $$$i-9$$$ operations and $$$i-10$$$ operations.)\nWe can precalculate the above table until $$$m$$$ (\nNote:\n$$$1 \\le m  \\lt  2 \\cdot 10^5$$$).\nNow for each test case, the final answer is:\n$$$ans=\\sum_{i=1}^{|s|}\\Bigl( \\bigr(m+(int)(s[i]-'0') \\lt 10 \\bigr) ? 1 : dp_{m-10+(int)(s[i]-'0')} \\Bigr)$$$, where $$$s$$$ is $$$n$$$ (in form of string).\nTime Complexity O($$$m$$$+$$$t \\cdot $$$|$$$s$$$|), where\n|$$$s$$$| is the number of digits in $$$n$$$\n."
         },
         {
             "title": "Implementation in C++",

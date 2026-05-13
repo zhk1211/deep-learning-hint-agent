@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1634F - Fibonacci Additions\nLet $$$C_i = A_i - B_i$$$. Consider another auxiliary array $$$D$$$, where $$$D_1 = C_1$$$, $$$D_2 = C_2 - C_1$$$, and $$$D_i = C_i - C_{i - 1} - C_{i - 2}$$$ for $$$i  \\gt  2$$$. Notice that arrays $$$A$$$ and $$$B$$$ are equal if and only if all elements of $$$D$$$ are equal to $$$0$$$.\nLet's analyze how Fibonacci addition affects $$$D$$$. If Fibonacci addition is performed on array $$$A$$$ on a segment from $$$l$$$ to $$$r$$$, then:\n$$$D_l$$$ will increase by $$$1$$$,\n$$$D_{r + 1}$$$ will decrease by $$$F_{r - l + 2}$$$, and\n$$$D_{r + 2}$$$ will decrease by $$$F_{r - l + 1}$$$.\nFibonacci addition on $$$B$$$ can be handled in a similar way.\nFibonacci numbers modulo $$$MOD$$$ can be easily precomputed, and therefore the problem can be solved in linear time."
         },
         {
             "title": "Solution",

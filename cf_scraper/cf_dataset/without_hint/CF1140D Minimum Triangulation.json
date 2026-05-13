@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1140D - Minimum Triangulation\nYou can use straightforward way and calculate answer with \"l-r-dp\" with $$$O(n^3)$$$.\nBut there is a easier claim: it's optimal to split $$$n$$$-gon with diagonals coming from $$$1$$$, so answer is $$$\\sum\\limits_{i = 2}^{n - 1}{i \\cdot (i + 1)}$$$.\nProof: let's look at the triange which contains edge $$$1-n$$$. Let's name it $$$1-n-x$$$. If $$$x = n - 1$$$, we can delete this triangle and go to $$$(n-1)$$$-gon.\nOtherwise, $$$1  \\lt  x  \\lt  n - 1$$$. Let's look at triangle $$$n-x-k$$$. It always exists and $$$x  \\lt  k  \\lt  n$$$. Finally, if we change pair of triangles ($$$1-n-x$$$, $$$n-x-k$$$) to ($$$1-n-k$$$, $$$1-k-x$$$), answer will decrease since $$$nx  \\gt  kx$$$ and $$$nxk  \\gt  nk$$$, that's why $$$nx + nxk  \\gt  nk + kx$$$.\nNote, that triangle $$$1-n-x$$$ changes to $$$1-n-k$$$ and $$$k  \\gt  x$$$, so repeating this step will eventually lead us to situation $$$x = n - 1$$$.\nAs a result, we can morph any triangulation into one mentioned above and its weight won't increase."
         },
         {
             "title": "Solution (adedalic)",

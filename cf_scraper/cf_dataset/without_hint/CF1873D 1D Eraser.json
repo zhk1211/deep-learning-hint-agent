@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1873D - 1D Eraser\nThe key idea is greedy. Let's go from the left to the right, and if the current cell is black, we should use the operation starting at this cell (it may go off the strip, but that's okay, we can always shift it leftwards to contain all the cells we need it to).\nWe can implement this in $$$\\mathcal{O}(n)$$$: iterate from left to right with a variable $$$i$$$, and when you see a black cell, you should skip the next $$$k-1$$$ cells (because the eraser will take care of them) and increase the number of operations by $$$1$$$. The answer is the total number of operations.\nWhy does it work? Notice the order of operations doesn't matter. Consider the leftmost black cell we erase. It means none of the cells to its right are black. So it doesn't make sense to use the operation on any of the cells to its right, since they are already white. It is at least as good to use the operation starting at this cell and to the $$$k-1$$$ cells on the left, since we may or may not hit another black cell."
         },
         {
             "title": "Solution",

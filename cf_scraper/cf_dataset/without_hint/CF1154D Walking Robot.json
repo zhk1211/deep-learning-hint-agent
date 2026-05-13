@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1154D - Walking Robot\nLet's simulate the process of walking and maintain the current charges of the battery and the accumulator, carefully choosing which to use each time we want to pass a segment.\nObviously, if at the beginning of some segment our battery is exhausted (its current charge is $$$0$$$), we must use the accumulator to continue, and vice versa.\nWhat if we can use both types of energy storage? If we can recharge the accumulator (the current segment is exposed\nand\nthe current charge of accumulator is lower than its initial charge), let's do it — because it only consumes one charge of the battery, and there is no better way to spend it. And if we cannot recharge the accumulator, it's optimal to use it instead of the battery (suppose it's not right: our solution uses the accumulator during current moment of time $$$t$$$ and the battery during some moment in future $$$t_2$$$, but optimal solution does vice versa. Then the usage of the battery in optimal solution does not grant us any additional charges, so we can instead swap our decisions in these moments, use the accumulator right now and the battery later, and the answer won't get worse).\nSo, what's left is to carefully implement the simulation, keeping track of charges and choosing what to use according to aforementioned rules."
         },
         {
             "title": "Solution",

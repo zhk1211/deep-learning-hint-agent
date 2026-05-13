@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a permutation $ ^\\dagger $ $ a $ of length $ n $ .\n\nFind any permutation $ b $ of length $ n $ such that $ a_1+b_1 \\le a_2+b_2 \\le a_3+b_3 \\le \\ldots \\le a_n+b_n $ .\n\nIt can be proven that a permutation $ b $ that satisfies the condition above always exists.\n\n$ ^\\dagger $ A permutation of length $ n $ is an array consisting of $ n $ distinct integers from $ 1 $ to $ n $ in arbitrary order. For example, $ [2,3,1,5,4] $ is a permutation, but $ [1,2,2] $ is not a permutation ( $ 2 $ appears twice in the array), and $ [1,3,4] $ is also not a permutation ( $ n=3 $ but there is $ 4 $ in the array).\n\nInput Format\nEach test contains multiple test cases. The first line of input contains a single integer $ t $ ( $ 1 \\le t \\le 2000 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 100 $ ) — the length of permutations $ a $ and $ b $ .\n\nThe second line of each test case contains $ n $ distinct integers $ a_1,a_2,\\ldots,a_n $ ( $ 1 \\le a_i \\le n $ ) — the elements of permutation $ a $ . All elements of $ a $ are distinct.\n\nNote that there is no bound on the sum of $ n $ over all test cases.\n\nOutput Format\nFor each test case, output any permutation $ b $ which satisfies the constraints mentioned in the statement. It can be proven that a permutation $ b $ that satisfies the condition above always exists.\n\nExamples\nSample 1\nInput\n5\n5\n1 2 4 5 3\n2\n1 2\n1\n1\n3\n3 2 1\n4\n1 4 3 2\nOutput\n1 2 4 3 5\n2 1\n1\n1 2 3\n1 2 3 4\n\nNote\nIn the first test case $ a=[1, 2, 4, 5, 3] $ . Then the permutation $ b=[1, 2, 4, 3, 5] $ satisfies the condition because $ 1 + 1 \\le 2 + 2 \\le 4 + 4 \\le 5 + 3 \\le 3 + 5 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nIf $$$a_i+b_i \\le a_{i+1}+b_{i+1}$$$, then $$$a_i+b_i$$$ can be equal to $$$a_{i+1}+b_{i+1}$$$.\nHint 2\nBuilding on the idea from the first hint, can we build a permutation $$$b$$$ such that $$$a_1+b_1=a_2+b_2=\\ldots=a_n+b_n$$$?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "If $$$a_i+b_i \\le a_{i+1}+b_{i+1}$$$, then $$$a_i+b_i$$$ can be equal to $$$a_{i+1}+b_{i+1}$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Building on the idea from the first hint, can we build a permutation $$$b$$$ such that $$$a_1+b_1=a_2+b_2=\\ldots=a_n+b_n$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Since $$$a_i+b_i \\le a_{i+1}+b_{i+1}$$$, then $$$a_i+b_i$$$ can be equal to $$$a_{i+1}+b_{i+1}$$$.\nTherefore, any permutation $$$b$$$ which satisfies $$$a_1+b_1=a_2+b_2=\\ldots=a_n+b_n$$$ is a valid answer.\nIf $$$b_i=n+1-a_i$$$, then:\n$$$b$$$ is a permutation;\n$$$a_1+b_1=a_2+b_2=\\ldots=a_n+b_n=n+1$$$\nConsequently, $$$b=[n+1-a_1,n+1-a_2,\\ldots,n+1-a_i,\\ldots,n+1-a_n]$$$ is a valid answer.\nTime complexity per test case : $$$O(N)$$$"
+        }
+    ]
+}

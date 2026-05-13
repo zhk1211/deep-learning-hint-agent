@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1374E1 - Reading Books (easy version)\nLet's divide all books into four groups:\n00\n— both Alice and Bob doesn't like these books;\n01\n— only Alice likes these books;\n10\n— only Bob likes these books;\n11\n— both ALice and Bob like these books.\nObviously,\n00\n-group is useless now. So, how to solve the problem? Let's iterate over the number of books we take from\n11\n-group. Let it be $$$cnt$$$. Then we obviously need to take exactly $$$k-cnt$$$ books from groups\n01\nand\n10\n. Among all books in these three groups we have to choose the cheapest ones. To calculate sum of times in each group fast enought, we can sort each group independently and implement prefix sums on these arrays. If $$$k-cnt$$$ is less than zero or greater than the size of\n01\nor\n10\n-group for each possible $$$cnt$$$ then the answer is\n-1\n.\nAnd don't forget that the answer can be up to $$$2 \\cdot 10^9$$$.\nTime complexity: $$$O(n \\log{n})$$$."
         },
         {
             "title": "Solution",

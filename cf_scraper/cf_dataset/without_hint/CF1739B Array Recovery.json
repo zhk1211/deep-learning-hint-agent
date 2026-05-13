@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1739B - Array Recovery\nNote that $$$a_i = a_{i-1} + d_i$$$ or $$$a_i= a_{i-1} - d_i$$$. Since there is no upper bound for the values of $$$a_i$$$, the case where $$$a_i = a_{i-1} + d_i$$$ for all $$$i$$$ always exists. It remains to check if there are other ways. To do this, it is enough to check whether there is such a position $$$pos$$$ that:\n$$$pos  \\gt  1$$$;\n$$$d_{pos} \\ne 0$$$;\nthe change $$$a_{pos} = a_{pos-1} + d_{pos}$$$ to $$$a_{pos} = a_{pos-1} - d_{pos}$$$ doesn't result in a negative value of $$$a_{pos}$$$.\nThe reason for $$$d_{pos} \\ne 0$$$ is that for $$$d_{pos} = 0$$$ no matter the plus or minus we choose, the array $$$a$$$ doesn't change. If you could change at least one sign to minus, that would be another answer."
         },
         {
             "title": "Solution (Neon)",

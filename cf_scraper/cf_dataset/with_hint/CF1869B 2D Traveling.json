@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1869B - 2D Traveling\nFirst of all, it's easy to see that if there are no major cities, the minimum value of the total cost should be $$$|x_a-x_b|+|y_a-y_b|$$$ — the optimal choice is to fly directly from city $$$a$$$ to city $$$b$$$.\nClaim.\nPiggy will pass through a maximum of $$$2$$$ major cities.\nProof.\nIf he passes through $$$3$$$ or more major cities in a row, then he can fly directly from the first one to the last one. If he passes through $$$2$$$ major cities and passes an ordinary city between them, the cost must be higher than flying directly between these two major cities. So the optimal choice always consists of no more than $$$2$$$ major cities, and they are in a row.\nThus, you can express the optimal choice as $$$a(\\to s)(\\to t)\\to b$$$, where $$$s$$$ and $$$t$$$ are both major cities. If you naively enumerate $$$s$$$ and $$$t$$$, the total complexity of the solution will be $$$\\mathcal O(k^2)$$$. But after seeing that $$$s$$$ and $$$t$$$ work independently, we can enumerate them separately. The total complexity decreases to $$$\\mathcal O(n+k)$$$."
         },
         {
             "title": "Implementation",

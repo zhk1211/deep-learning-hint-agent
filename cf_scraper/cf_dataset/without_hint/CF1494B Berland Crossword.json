@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nBerland crossword is a puzzle that is solved on a square grid with $ n $ rows and $ n $ columns. Initially all the cells are white.\n\nTo solve the puzzle one has to color some cells on the border of the grid black in such a way that:\n\n- exactly $ U $ cells in the top row are black;\n- exactly $ R $ cells in the rightmost column are black;\n- exactly $ D $ cells in the bottom row are black;\n- exactly $ L $ cells in the leftmost column are black.\n\nNote that you can color zero cells black and leave every cell white.\n\nYour task is to check if there exists a solution to the given puzzle.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of testcases.\n\nThen the descriptions of $ t $ testcases follow.\n\nThe only line of each testcase contains $ 5 $ integers $ n, U, R, D, L $ ( $ 2 \\le n \\le 100 $ ; $ 0 \\le U, R, D, L \\le n $ ).\n\nOutput Format\nFor each testcase print \"YES\" if the solution exists and \"NO\" otherwise.\n\nYou may print every letter in any case you want (so, for example, the strings yEs, yes, Yes and YES are all recognized as positive answer).\n\nExamples\nSample 1\nInput\n4\n5 2 5 3 1\n3 0 0 0 0\n4 4 1 4 0\n2 1 1 1 1\nOutput\nYES\nYES\nNO\nYES\n\nNote\nHere are possible solutions to testcases $ 1 $ , $ 2 $ and $ 4 $ :\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1494B/d621c171f085bccb3662990f2929812003bf6b92.png)"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1494B - Berland Crossword\nConsider some corner of the picture. If it's colored black, then it contributes to counts to both of the adjacent sides. Otherwise, it contributes to none. All the remaining cells can contribute only to the side they are on. There are $$$n-2$$$ of such cells on each side.\nSo let's try all $$$2^4$$$ options of coloring the corners. After fixing the colors of the corners, we can calculate the number of cells that have to be colored on each side. That is calculated by taking the initial requirement and subtracting the adjacent colored corners from it. If any of the numbers is below $$$0$$$ or above $$$n-2$$$ then that corner coloring doesn't work. Otherwise, you can always color the cells in some way.\nOverall complexity: $$$O(1)$$$ per testcase."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n,\nU\n,\nR\n,\nD\n,\nL\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nfor\nmask\nin\nrange\n(\n16\n):\nrU\n,\nrR\n,\nrD\n,\nrL\n=\nU\n,\nR\n,\nD\n,\nL\nif\nmask\n&\n1\n:\nrU\n-=\n1\nrL\n-=\n1\nif\nmask\n&\n2\n:\nrL\n-=\n1\nrD\n-=\n1\nif\nmask\n&\n4\n:\nrD\n-=\n1\nrR\n-=\n1\nif\nmask\n&\n8\n:\nrR\n-=\n1\nrU\n-=\n1\nif\nmin\n(\nrU\n,\nrR\n,\nrD\n,\nrL\n)\n>=\n0\nand\nmax\n(\nrU\n,\nrR\n,\nrD\n,\nrL\n)\n<=\nn\n-\n2\n:\nprint\n(\n\"YES\"\n)\nbreak\nelse\n:\nprint\n(\n\"NO\"\n)"
+        }
+    ]
+}

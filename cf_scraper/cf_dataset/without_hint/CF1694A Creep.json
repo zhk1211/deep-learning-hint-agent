@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1694A - Creep\nDefine the minimum possible creepiness of the string as $$$ans$$$. We want to show that $$$ans$$$ is equal to $$$max(1, |a - b|)$$$.\nCreepiness of $$$S[1 \\ldots 1]$$$ is equal to $$$1$$$ and creepiness of $$$S[1 \\ldots n]$$$ is equal to $$$|a - b|$$$ so $$$max(1, |a - b|) \\le ans$$$.\nThe way to make a string with creepiness equal to $$$max(1, |a - b|)$$$:\nwhile $$$0  \\lt  a, b$$$ holds, add\n01\nto the end of the string. After that, add the remaining character to the end of the string. Now we know $$$ans \\le max(1, |a - b|)$$$.\nSo $$$ans = max(1, |a - b|)$$$.\ncomplexity: $$$\\mathcal{O}(a + b)$$$"
         },
         {
             "title": "Implementation",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1690G - Count the Trains\nIn the set we will keep the indices that start the trains. That is, if the array $$$v$$$ — the real speeds of the carriages, then we will store in the network such values $$$2 \\le i$$$ that $$$v[i]  \\lt  v[i-1]$$$. As well as the value of $$$0$$$. Thus, the size of the set —is the answer to the problem.\nConsider now the operation to reduce the speed of the carriage: find such maximal index $$$j \\le k$$$ in the set, if the value $$$a_k  \\lt  a_j$$$, then we should add the value $$$k$$$ to the set, since it will start a new train. Then we should remove all subsequent indexes $$$j$$$ from the set such that $$$a_k  \\lt  a_j$$$. Thus, for all operations we will add no more than $$$n$$$ elements to the array, and remove in total no more than $$$2 \\cdot n$$$ elements from the set. We obtain the asymptotic $$$O(m \\cdot logn)$$$."
         },
         {
             "title": "Solution",

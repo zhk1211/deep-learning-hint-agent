@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nEcrade has an integer array $ a_1, a_2, \\ldots, a_n $ . It's guaranteed that for each $ 1 \\le i < n $ , $ a_i \\neq a_{i+1} $ .\n\nEcrade can perform several operations on the array to make it strictly increasing.\n\nIn each operation, he can choose two integers $ l $ and $ r $ ( $ 1 \\le l \\le r \\le n $ ) and replace $ a_l, a_{l+1}, \\ldots, a_r $ with any $ r-l+1 $ integers $ a'_l, a'_{l+1}, \\ldots, a'_r $ satisfying the following constraint:\n\n- For each $ l \\le i < r $ , the comparison between $ a'_i $ and $ a'_{i+1} $ is the same as that between $ a_i $ and $ a_{i+1} $ , i.e., if $ a_i < a_{i + 1} $ , then $ a'_i < a'_{i + 1} $ ; otherwise, if $ a_i > a_{i + 1} $ , then $ a'_i > a'_{i + 1} $ ; otherwise, if $ a_i = a_{i + 1} $ , then $ a'_i = a'_{i + 1} $ .\n\nEcrade wants to know the minimum number of operations to make the array strictly increasing. However, it seems a little difficult, so please help him!\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ -10^9 \\le a_i \\le 10^9 $ ).\n\nIt is guaranteed that for each $ 1 \\le i< n $ , $ a_i \\neq a_{i+1} $ .\n\nIt is guaranteed that the sum of $ n $ across all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer representing the minimum number of operations to make the array strictly increasing.\n\nExamples\nSample 1\nInput\n4\n3\n3 2 1\n3\n3 1 2\n4\n-2 -5 5 2\n7\n1 9 1 9 8 1 0\nOutput\n2\n1\n1\n3\n\nNote\nIn the first test case, a possible way to obtain the minimum number of operations:\n\n- In the first operation, choose $ l = 2, r = 2 $ and $ a'_2 = 4 $ , then $ a=[3, 4, 1] $ ;\n- In the second operation, choose $ l = 1, r = 2 $ and $ a'_1 = -1, a'_2 = 0 $ , then $ a=[-1, 0, 1] $ .\n\nIn the second test case, a possible way to obtain the minimum number of operations:\n\n- In the first operation, choose $ l = 2, r = 3 $ and $ a'_2 = 4, a'_3 = 5 $ , then $ a = [3, 4, 5] $ .\n\nIn the third test case, a possible way to obtain the minimum number of operations:\n\n- In the first operation, choose $ l = 2, r = 3 $ and $ a'_2 = -1, a'_3 = 1 $ , then $ a = [-2, -1, 1, 2] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Let's only consider the comparison between adjacent pairs first. Call a pair $$$(a_i,a_{i+1})$$$ an inversion pair if $$$a_i \\gt a_{i+1}$$$.\nIn each operation, how can the number of inversion pairs change?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Under what circumstances can we decrease the maximum number of inversion pairs in every operation?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's only consider the comparison between adjacent pairs first. Call a pair $$$(a_i,a_{i+1})$$$ an inversion pair if $$$a_i \\gt a_{i+1}$$$. Our goal is to decrease the number of inversion pairs to zero.\nIf we choose to replace $$$a_l,a_{l+1},\\ldots,a_r$$$, only the comparison between $$$(a_{l-1},a_l)$$$ and $$$(a_{r},a_{r+1})$$$ can change, which means we can eliminate at most two inversion pairs in one operation. Let $$$s$$$ be the number of inversion pairs in $$$a_1,a_2,\\ldots,a_n$$$, then a lower bound of the answer is $$$l=\\left\\lceil\\dfrac{s}{2}\\right\\rceil$$$.\nCase 1: $$$s \\gt 0$$$ and $$$2\\mid s$$$\nIn order to obtain the lower bound $$$l$$$, each operation must eliminate exactly two inversion pairs. This necessitates that we cannot alter any numbers before the first element $$$a_{p_1}$$$ of the first inversion pair or after the second element $$$a_{p_2}$$$ of the last inversion pair. (Why?)\nAn intuitive idea is that the difference between $$$a_{p_1}$$$ and $$$a_{p_2}$$$ should be as large as possible (more precisely, $$$a_{p_2} - a_{p_1} \\geq p_2 - p_1$$$), so that a strictly increasing sequence can be \"accommodated\" between them. It is not difficult to constructively prove by recursion that this condition is both necessary and sufficient.\nIn other words, when $$$a_{p_2} - a_{p_1} \\geq p_2 - p_1$$$, the answer is $$$l$$$; otherwise, an additional operation is required, making the answer $$$l+1$$$.\nCase 2: $$$s=0$$$ or $$$2\\not\\mid s$$$\nIt's not difficult to prove that the answer in this case is $$$l$$$. (Why?)\nThe time complexity is $$$O(\\sum n)$$$."
+        }
+    ]
+}

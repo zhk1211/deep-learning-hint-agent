@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1650D - Twist the Permutation\nThe first thing to notice — the answer always exists. For $$$n$$$ numbers $$$1\\cdot2\\cdot3 \\dots n = n!$$$ answer choices, as well as $$$n!$$$ permutation combinations. It remains only to restore the answer from this permutation.\nWe will restore by performing reverse operations. On the $$$i$$$-th ($$$i = n,~n - 1, ~\\dots, ~2, ~1$$$) operation will be selectd the first $$$i$$$ elements of the array and rotate them $$$d[i]$$$ times to the left ( elements with numbers $$$i+1$$$ and more remain in their places).\nWhere $$$d[i]$$$ is equal to $$$0$$$ if $$$i = 1$$$, otherwise $$$d[i] = (index + 1) \\bmod i$$$, and $$$index$$$ – is the index of the number $$$i$$$.\nThus, for each $$$i$$$ from right to left, performing a left cyclic shift operation, we move the number $$$i$$$ at index $$$i$$$.\nAs a result, we move $$$O(n)$$$ numbers $$$n$$$ times. The time complexity $$$O(n^2)$$$."
         },
         {
             "title": "Solution",

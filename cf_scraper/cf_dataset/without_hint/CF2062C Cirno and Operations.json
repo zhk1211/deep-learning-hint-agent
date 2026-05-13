@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2062C - Cirno and Operations\nLet the reversal be called operation $$$1$$$, and the difference be called operation $$$2$$$. Consider swapping two adjacent operations: $$$12 \\to 21$$$. If the sequence before the operations is $$$[a_1, a_2, \\dots, a_n]$$$, then after the operations, the sequence changes from $$$[a_{n-1} - a_n, a_{n-2} - a_{n-1}, \\dots, a_1 - a_2]$$$ to $$$[a_n - a_{n-1}, a_{n-1} - a_{n-2}, \\dots, a_2 - a_1]$$$. Thus, swapping adjacent $$$1,2$$$ is equivalent to taking the negation of each element of the array.\nTherefore, any operation sequence is equivalent to first performing $$$2$$$ several times, and then performing $$$1$$$ several times, and then taking the negation several times. Since $$$1$$$ does not change the sum of the sequence, the answer is the maximum absolute value of the sequence sum after performing a certain number of $$$2$$$.\nThere is a corner case: if you don't perform $$$2$$$ at all, you can not take the negation. Besides, the upper bound of the answer is $$$1000\\times 2^{50}$$$, so you have to use 64-bit integers."
         }
     ]
 }

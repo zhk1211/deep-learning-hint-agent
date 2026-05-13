@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1401E - Divide Square\nUnder given condition, there are only two cases in which the number of pieces increases.\n$$$\\bullet$$$ When a segment intersects with two sides (facing each other) of the square, the number of pieces increases by one.\n$$$\\bullet$$$ When two segment intersects in the square (not including sides), the number of pieces increases by one.\nSo the answer is equal to (the number of segment intersecting with two sides of the square) $$$+$$$ (the number of intersection in the square). You can sort the segments by ascending order of $$$y$$$-coordinate (Set the start and end points of vertical lines separately.) and do sweeping using segment tree to calculate the number of intersections in the square.\nTime complexity : $$$O(n \\log n + m \\log m)$$$"
         },
         {
             "title": "Solution Code",

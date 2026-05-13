@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "1706E - Qpwoeirut and Vertices\nIf $$$l = r$$$, answer is $$$0$$$. From now on we assume $$$l  \\lt  r$$$.\nSay we have a function $$$f(i)$$$ that tells us for some $$$2 \\le i \\le n$$$ the answer for the query $$$[i - 1, i]$$$. Then for some query $$$[l, r]$$$, the answer will be $$$k = \\max(f(l+1), f(l+2), \\ldots, f(r-1), f(r))$$$. This is true because:\nSince all consecutive nodes are connected, the first $$$k$$$ edges will be sufficient to connect all nodes $$$l, l+1, \\ldots, r$$$.\nSay that it is possible to connect these nodes using the first $$$k'$$$ edges ($$$k'  \\lt  k$$$). We know that there is at least $$$1$$$ index $$$l + 1 \\le i \\le r$$$ such that $$$f(i) = k$$$. But if the answer for this query is $$$k'$$$, then it must be true that $$$f(i) \\le k'$$$ (because we can reach vertex $$$i - 1$$$ from vertex $$$i$$$ using only the first $$$k'$$$ edges then). Then, we have $$$f(i) \\le k'  \\lt  k = f(i)$$$, which is a contradiction.\nSo if we precompute the values of $$$f(i)$$$ for all $$$2 \\le i \\le n$$$, we can answer any query efficiently using a range max query structure (for example, a sparse table or segment tree). Here's how to find $$$f(i)$$$:\nWeight the edges, so that the $$$i$$$-th edge has a weight $$$i$$$.\nFind the unique minimum spanning tree of this weighted graph.\n$$$f(i)$$$ will be the maximum weight of an edge on the path from $$$i - 1$$$ to $$$i$$$.\nThis will always give the correct value for $$$f(i)$$$ since edges not in the MST are useless. Let's imagine building the MST with Kruskal's: if we don't add the $$$W$$$-th edge, that means that the first $$$W-1$$$ edges are sufficient to connect $$$u_W$$$ and $$$v_W$$$, and we can use those instead to get a better answer.\nOn the resulting tree, the optimal way to connect any two nodes is to use the edges on the simple shortest path between them. Finding the max edge weight in a path on a tree can be done, for example, with binary lifting: for each node we store the maximum weight on the path to the root with length $$$1$$$, $$$2$$$, $$$4$$$, $$$8$$$, and so on. Then, we can find the max edge weight on the path from any two nodes to their LCA in $$$\\mathcal O(\\log(n))$$$.\nInstead of using binary lifting, we can also directly represent the MST in the DSU. After successfully merging two components rooted at $$$u$$$ and $$$v$$$ in the DSU, we add an edge $$$(u, v)$$$ with the weight being the edge number from the input. $$$f(i)$$$ will then be the maximum edge from $$$i-1$$$ to $$$i$$$ in the newly constructed tree. We can just walk up the tree since the maximum depth is at most $$$\\mathcal O(\\log n)$$$ assuming the DSU implementation uses small-to-large merging.\nThis gives an $$$\\mathcal O((m+q)\\log(n))$$$ or $$$\\mathcal O(m\\log(n) + q)$$$ solution, depending on the implementation."
+        }
+    ]
+}

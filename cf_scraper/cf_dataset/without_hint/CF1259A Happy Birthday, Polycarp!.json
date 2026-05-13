@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1259A - Happy Birthday, Polycarp!\nIt seems that one of the easiest ways to solve this problem is to iterate over all beautiful numbers up to $$$10^9$$$ and check each of the numbers to ensure that it does not exceed $$$n$$$. First of all, you can iterate over a length from $$$1$$$ to $$$8$$$, supporting a number of the form\n11...1\nof this length, and inside iterate over a factor for this number from $$$1$$$ to $$$9$$$. The main part of a solution might look like this:\ncin >> n;\nint b = 0, ans = 0;\nfor (int len = 1; len <= 9; len++) {\nb = b * 10 + 1;\nfor (int m = 1; m <= 9; m++)\nif (b * m <= n)\nans++;\n}\ncout << ans << endl;"
         }
     ]
 }

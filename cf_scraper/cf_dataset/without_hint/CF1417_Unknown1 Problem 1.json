@@ -9,39 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
-        },
-        {
-            "title": "Editorial",
-            "content": "Tutorial is loading..."
-        },
-        {
-            "title": "Editorial",
-            "content": "Tutorial is loading..."
-        },
-        {
-            "title": "Editorial",
-            "content": "Tutorial is loading..."
-        },
-        {
-            "title": "Editorial",
-            "content": "Tutorial is loading..."
-        },
-        {
-            "title": "Editorial",
-            "content": "Tutorial is loading..."
-        },
-        {
-            "title": "Editorial",
-            "content": "Tutorial is loading..."
-        },
-        {
-            "title": "Alternative solution code in C++ (hugopm)",
-            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nint\nlong\nlong\n#define\nlen\n(\nv\n)\n((\nint\n)((\nv\n).\nsize\n()))\n#define\nall\n(\nv\n)\n(\nv\n).\nbegin\n(),\n(\nv\n).\nend\n()\n#define\nrall\n(\nv\n)\n(\nv\n).\nrbegin\n(),\n(\nv\n).\nrend\n()\n#define\nchmax\n(\nx\n,\nv\n)\nx\n=\nmax\n((\nx\n),\n(\nv\n))\n#define\nchmin\n(\nx\n,\nv\n)\nx\n=\nmin\n((\nx\n),\n(\nv\n))\nusing\nnamespace\nstd\n;\nusing\npii\n=\npair\n<\nint\n,\nint\n>;\nstruct\nEndSet\n{\nset\n<int>\npoints\n;\npii seg\n=\n{\n1\n,\n0\n};\nint\ncbase\n=\n0\n,\ncdir\n=\n1\n;\nvoid\nsetFree\n(\nint\nmx\n)\n{\npoints\n.\nclear\n(),\ncbase\n=\n0\n,\ncdir\n=\n1\n;\nseg\n=\n{\n1\n,\nmx\n};\n}\nvoid\nsetPush\n(\nint\nx\n)\n{\nsetFree\n(\n0\n);\npoints\n.\ninsert\n(\nx\n);\n}\nvoid\nrotate\n(\nint\nbalance\n)\n{\ncbase\n=\nbalance\n-\ncbase\n;\ncdir\n=\n-\ncdir\n;\nseg\n=\n{\nbalance\n-\nseg\n.\nsecond\n,\nbalance\n-\nseg\n.\nfirst\n};\n}\nint\ntr\n(\nint\nx\n)\n{\nreturn\ncbase\n+\ncdir\n*\nx\n;\n}\nint\nanti\n(\nint\nx\n)\n{\nreturn\ncdir\n*\n(\nx\n-\ncbase\n);\n}\nbool\nin\n(\nint\nx\n)\n{\nif\n(\npoints\n.\ncount\n(\nanti\n(\nx\n)))\nreturn\ntrue\n;\nreturn\n(\nseg\n.\nfirst\n<=\nx\n&&\nx\n<=\nseg\n.\nsecond\n);\n}\nvoid\npush\n(\nint\nx\n)\n{\npoints\n.\ninsert\n(\nanti\n(\nx\n));\n}\nvoid\npopBelow\n(\nint\nx\n)\n{\nseg\n.\nsecond\n=\nmin\n(\nseg\n.\nsecond\n,\nx\n);\nauto\nnextIt\n=\n[&]\n{\nreturn\n(\ncdir\n==\n1\n?\nprev\n(\npoints\n.\nend\n())\n:\npoints\n.\nbegin\n());\n};\nwhile\n(!\npoints\n.\nempty\n()\n&&\ntr\n(*\nnextIt\n())\n>\nx\n)\npoints\n.\nerase\n(\nnextIt\n());\n}\nbool\nempty\n()\n{\nreturn\npoints\n.\nempty\n()\n&&\nseg\n.\nfirst\n>\nseg\n.\nsecond\n;\n}\n};\nvoid\nsolve\n()\n{\nint\nn\n;\ncin\n>>\nn\n;\nEndSet\nutil\n;\nint\ncurAns\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nint\nx\n;\ncin\n>>\nx\n;\nutil\n.\npopBelow\n(\nx\n-\n1\n);\nif\n(\nx\n%\n2\n==\n0\n&&\nutil\n.\nin\n(\nx\n/\n2\n))\n{\ncurAns\n+=\n2\n;\nutil\n.\nsetPush\n(\nx\n/\n2\n);\n}\nelse\nif\n(\nutil\n.\nempty\n())\n{\nif\n(\nx\n%\n2\n==\n0\n)\ncurAns\n+=\n1\n,\nutil\n.\nsetPush\n(\nx\n/\n2\n);\nelse\nutil\n.\nsetFree\n(\nx\n-\n1\n);\n}\nelse\n{\ncurAns\n+=\n1\n;\nif\n(\nx\n%\n2\n==\n0\n)\nutil\n.\npush\n(\nx\n/\n2\n);\n}\nutil\n.\nrotate\n(\nx\n);\n}\ncout\n<<\n2\n*\nn\n-\ncurAns\n<<\n\"\\n\"\n;\n}\nsigned\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n),\ncin\n.\ntie\n(\n0\n);\nint\nnbTests\n;\ncin\n>>\nnbTests\n;\nfor\n(\nint\niTest\n=\n0\n;\niTest\n<\nnbTests\n;\n++\niTest\n)\n{\nsolve\n();\n}\n}"
-        },
-        {
-            "title": "Editorial",
-            "content": "..."
+            "content": "1417A - Copy-paste\nIf we do our operation on two arbitrary integers $$$x \\le y$$$, it is always better to copy $$$x$$$ into $$$y$$$ rather than to copy $$$y$$$ into $$$x$$$ (since a resulting pair $$$(x, x + y)$$$ is better than $$$(y, x + y)$$$).\nNow, let's assume that we do our operation on two integers $$$x \\le y$$$ such that $$$x$$$ is not the minimum element of our array. If we replace $$$x$$$ with minimum, we can always achieve at least the same answer. Thus, we can take any index $$$m$$$ such that $$$a_m$$$ is the array minimum and use it to increase all other values.\nTime complexity: $$$O(n)$$$ or $$$O(nk)$$$ per testcase.\nSpace complexity: $$$O(n)$$$"
         }
     ]
 }

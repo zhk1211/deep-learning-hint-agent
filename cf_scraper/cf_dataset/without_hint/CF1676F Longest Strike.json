@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1676F - Longest Strike\nLet's call a value\ngood\nif it appears at least $$$k$$$ times. For example, if $$$a=[1,1,2,2,3,4,4,4,5,5,6,6]$$$ and $$$k=2$$$, then good values are $$$[1,2,4,5,6]$$$.\nSo we need to find the longest subarray of this array in which all values are consecutive. For example, the subarray $$$[4,5,6]$$$ is the answer, because all values are good and the length of the array is longest.\nThere are many ways to do this. For example, we can see when the difference between two elements is more than $$$1$$$, and then break the array into parts based on that. For instance, $$$[1,2,4,5,6] \\to [1,2], [4,5,6]$$$. You can also iterate from left to right and keep track of the size of the current array.\nTime complexity: $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution",

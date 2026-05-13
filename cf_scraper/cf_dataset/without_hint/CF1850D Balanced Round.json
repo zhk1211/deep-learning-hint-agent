@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1850D - Balanced Round\nLet's calculate the maximum number of problems we can take, and the answer will be $$$n$$$ subtracted by that count.\nAn arrangement that always minimizes the absolute difference between adjacent pairs is the array in sorted order. What we notice, is that if the array is sorted, we will always take a subarray (all taken elements will be consecutive).\nSo, the problem converts to finding the largest subarray for which $$$a_i - a_{i-1} \\leq k$$$. It's easy to see that all the subarrays are totally different (don't share any intersection of elements), thus, we can maintain a count variable of the current number of elements in the current subarray, and iterate through array elements from left to right. If we currently are at $$$i$$$ and $$$a_i - a_{i-1}  \\gt  k$$$ then we just set the count to $$$1$$$ since we know a new subarray starts, otherwise, we just increase our count by $$$1$$$. The answer will be $$$n$$$ subtracted by the largest value that our count has achieved."
         },
         {
             "title": "Solution",

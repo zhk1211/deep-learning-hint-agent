@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1547E - Air Conditioners\nLet's calculate two arrays $$$L$$$ and $$$R$$$, where:\n$$$L_i$$$ is the temperature in cell $$$i$$$ if we take only air conditioners with numbers less than or equal to $$$i$$$;\n$$$R_i$$$ is the temperature in cell $$$i$$$ if we take only air conditioners with numbers greater than or equal to $$$i$$$;\nLet's show how to calculate array $$$L$$$. We will calculate values from left to right using DP and next formula: $$$L_i = \\min(L_{i+1}+1, c_i)$$$, where $$$c_i$$$ is the temperature of air conditioner in cell $$$i$$$ (or infinity if there is no air conditioner in this cell). Indeed, the value of $$$L_i$$$ is either determined by the air conditioner in this cell (i.e. equals $$$c_i$$$) or by some air conditioner to the left, but this means that we should take the answer from the previous cell and increase it by $$$1$$$. The full code for calculating $$$L$$$ looks like this:\nvector<long long> L(n, INT_MAX);\np = INT_MAX;\nforn(i, n) {\np = min(p + 1, c[i]);\nL[i] = p;\n}\nIn exactly the same way (but from right to left) we will calculate $$$R$$$:\nvector<long long> R(n, INT_MAX);\np = INT_MAX;\nfor (int i = n - 1; i >= 0; i–) {\np = min(p + 1, c[i]);\nR[i] = p;\n}\nThe answer for cell $$$i$$$ is $$$\\min(L[i], R[i])$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1249C1 - Good Numbers (easy version)\nAs you can see from the example, the maximum answer doesn't exceed $$$2 \\cdot 10^4$$$. So we can run some precalculation before all queries, which will find all\ngood numbers\nless than $$$2 \\cdot 10^4$$$. The number is\ngood\nif it has no $$$2$$$ in the ternary numeral system. When you read the next query, you can increase $$$n$$$ until you find some precalculated\ngood number\n. Time complexity is $$$O(nq + n \\log n)$$$.\nYou also can implement the solution which doesn't use any precalculations and just increase $$$n$$$ each time in each query and checks if the number is\ngood\ninside this loop. Then time complexity will be $$$O(n q \\log n)$$$."
         },
         {
             "title": "Solution",

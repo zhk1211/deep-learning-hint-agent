@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1362B - Johnny and His Hobbies\nConsider $$$i$$$-th least significant bit ($$$0$$$ indexed). If it is set in $$$k$$$, but not in $$$s$$$, it will be set in $$$k \\oplus s$$$. Hence $$$k \\oplus s \\geq 2^i$$$.\nConsider such minimal positive integer $$$m$$$, that $$$2^m  \\gt  s$$$ holds for all $$$s \\in S$$$. $$$k$$$ cannot have the $$$i$$$-th bit set for any $$$i \\geq m$$$. From this follows that $$$k  \\lt  2^m$$$. So there are only $$$2^m$$$ feasible choices of $$$k$$$. We can verify if a number satisfies the condition from the statement in $$$ \\mathcal{O} \\left(n \\right) $$$ operations. This gives us a solution with complexity $$$\\mathcal{O} \\left(n \\cdot 2^m \\right)$$$. Note that in all tests $$$m$$$ is at most $$$10$$$.\nThere is also another solution possible. It uses the observation that if $$$k$$$ satisfies the required conditions, then for every $$$s \\in S$$$ there exists such $$$t \\in S$$$ ($$$t \\neq s$$$) , that $$$t \\oplus s = k$$$. This gives us $$$n-1$$$ feasible choices of $$$k$$$ and thus the complexity of this solution is $$$\\mathcal{O} \\left( n^2 \\right)$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1473A - Replacing Elements\nLet's note that since all $$$a_i$$$ are positive, any $$$a_i + a_j  \\gt  \\max(a_i, a_j)$$$. It means that we can't make the first and second minimums lower than they already are: suppose the first and second minimums are $$$mn_1$$$ and $$$mn_2$$$, if we choose any other element to replace, we can't make it less than $$$mn_1 + mn_2$$$ and if we choose to replace $$$mn_1$$$ or $$$mn_2$$$ we will only make them bigger.\nAs a result, it means that we can choose for each element either not to change it or make it equal to $$$mn_1 + mn_2$$$. So, to be able to make all elements $$$\\le d$$$ we need just check that either $$$mn_1 + mn_2 \\le d$$$ or maximum $$$a_i \\le d$$$.\nWe can do it, for example, by sorting our array $$$a$$$ in increasing order and checking that either $$$a_1 + a_2 \\le d$$$ or $$$a_n \\le d$$$."
         },
         {
             "title": "Solution (Neon)",

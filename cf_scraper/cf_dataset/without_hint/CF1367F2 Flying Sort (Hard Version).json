@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1367F2 - Flying Sort (Hard Version)\nLet's replace each number $$$a_i$$$ with the number of unique numbers less than $$$a_i$$$.\nFor example, the array $$$a=[3, 7, 1, 2, 1, 3]$$$ will be replaced by $$$[2, 3, 0, 1, 0, 2]$$$.\nNote that the values of the numbers themselves were not important to us, only the order between them was important.\nLet's sort such an array. Let's see what maximum length of the segment from the array $$$a$$$ is already sorted (it forms a subsequence). This segment can be left in place, and all other numbers can be moved either to the beginning or to the end. That is, the task came down to finding the maximum sorted subsequence in the array.\nThis problem can be solved with the help of simple dynamic programming. Let $$$dp[i]$$$ —- be the maximum length of a subsequence ending in position $$$i$$$. To calculate it, we will find the closest past position, which also has the value $$$a[i]$$$ and the position with value $$$a[i]-1$$$ (lower numbers cannot be used, since $$$a[i]-1$$$ must stand between them). Any of these positions can be extended, so we take the maximum out of them and add 1. It is necessary to separately consider the first numbers in the subsequence and the last, since the first should include their suffix, and the last should have their prefix."
         },
         {
             "title": "Solution",

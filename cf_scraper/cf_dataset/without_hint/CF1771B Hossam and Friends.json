@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1771B - Hossam and Friends\nJust $$$a_i  \\lt  b_i$$$ in non-friends pairs. Let's calculate $$$r_i = $$$ minimum non-friend for all people. So, we can't start subsegment in $$$a_i$$$ and finish it righter $$$r_i$$$.\nLet's process people from right to left and calculate the rightmost positions there subsegment can end. Initially, $$$R = n-1$$$. Then we go to $$$a_i$$$ just do $$$R = \\min(R, r_i)$$$ and add $$$R - i + 1$$$ to answer."
         },
         {
             "title": "Solution(_HossamYehia_)",

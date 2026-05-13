@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1843E - Tracking Segments\nLet's use a binary search for an answer. It will work, because if some segment was good, then after one more change it will not be no longer good, and if all segments were bad, then if you remove the last change, they will remain bad.\nTo check if there is a good segment for the prefix of changes, you can build the array obtained after these changes, and then count the prefix sums in $$$O(n)$$$. After that, you can go through all the segments and check for $$$O(1)$$$ for a segment whether it is a good or not.\nTotal complexity: $$$O((n + m) \\cdot \\log q)$$$."
         },
         {
             "title": "Solution",

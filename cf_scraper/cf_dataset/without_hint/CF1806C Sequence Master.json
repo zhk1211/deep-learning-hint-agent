@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1806C - Sequence Master\nHint 1: The number of good sequences is small.\nHint 2: Consider two cases: all elements in $$$q$$$ are (not) equal.\nIn case that all elements in $$$q$$$ are equal, we have $$$q_1^n=nq_1$$$. The integer solutions to this equation is $$$q_1=0$$$, $$$n=1$$$ or $$$(q_1,n)=(2,2)$$$.\nIn the other case, we can see that the constraints are strong, so let's list some equations to find good sequences, using the property that not all elements are equal.\nLet $$$q$$$ be such a good sequence. WLOG $$$q_1\\neq q_2$$$. Then we have:\n$$$$$$ q_1\\cdot q_3q_4\\cdots q_{n+1}=q_2+q_{n+2}+q_{n+3}+\\cdots+q_{2n}\\tag{1} $$$$$$\n$$$$$$ q_2\\cdot q_3q_4\\cdots q_{n+1}=q_1+q_{n+2}+q_{n+3}+\\cdots+q_{2n}\\tag{2} $$$$$$\nSubstract $$$(2)$$$ from $$$(1)$$$:\n$$$$$$ (q_1-q_2)q_3q_4\\cdots q_{n+1}=q_2-q_1\\\\ \\iff (q_1-q_2)(q_3q_4\\cdots q_{n+1}+1)=0 $$$$$$\nSince $$$q_1-q_2\\neq 0$$$, there must be $$$q_3q_4\\cdots q_{n+1}=-1$$$.\nSimilarly, for each exactly $$$n-1$$$ numbers in $$$q_3,q_4,\\cdots,q_{2n}$$$, their product will be $$$-1$$$, which leads to $$$q_3=q_4=\\cdots =q_{2n}$$$. Therefore, we have $$$q_3^{n-1}=-1$$$, which leads to $$$2\\mid n$$$ and $$$q_3=q_4=\\cdots=q_{2n}=-1$$$.\nBringing it back to $$$(1)$$$, we have $$$q_1+q_2=n-1$$$.\nSince $$$q_1q_2\\cdots q_n=q_{n+1}+\\cdots q_{2n}$$$, we know $$$q_1q_2=-n$$$.\nThe only solution is $$$\\{q_1,q_2\\}=\\{-1,n\\}$$$. Q.E.D.\nBack to the problem. For the first case, it is easy to calculate the distance. For the second case, let $$$S=\\sum_{i=1}^n |q_i-(-1)|$$$, the answer is $$$\\min_{1\\le j\\le n}\\{S-|q_j-(-1)|+|q_j-n|\\}$$$."
         }
     ]
 }

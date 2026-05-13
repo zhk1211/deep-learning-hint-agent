@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1346B - Boot Camp\nThe following greedy strategy works: iterate on days from the first one to the last, and place the maximum possible number of lectures during each day so that no constraint breaks. So, during excursion days, we will place $$$0$$$ lectures, and during non-excursion days, we will place $$$\\min(k_1, k_2 - prev)$$$ lectures (where $$$prev$$$ is the number of lectures during the previous day).\nWhy is it optimal? Suppose that there exists a better solution if we didn't place the maximum possible number of lectures during some day $$$i$$$. Consider the days $$$i$$$ and $$$i + 1$$$. If we didn't conduct any lectures during day $$$i + 1$$$ (or $$$i + 1  \\gt  n$$$), then we can increase the number of lectures during day $$$i$$$, and the answer becomes better. If there are some lectures during the day $$$i + 1$$$, we may move the maximum possible number of them to the day $$$i$$$, and the answer won't become worse (but after several such steps it will have the same structure as we described earlier)."
         },
         {
             "title": "Solution (elizarov)",

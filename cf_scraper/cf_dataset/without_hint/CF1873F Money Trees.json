@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1873F - Money Trees\nLet's compute $$$len_l$$$ for each $$$l \\leq n$$$, the maximum $$$r$$$ such that the subarray $$$[h_l \\dots h_r]$$$ satisfies the height divisibility condition.\nNow let's do a binary search on the $$$size$$$ of the segment, where we check every $$$i$$$ such that $$$len_i \\geq i+size-1$$$.\nCheck the sum between $$$i$$$ and $$$i+size-1$$$ using a prefix sum. If it is smaller or equal to $$$k$$$, we update the lower bound of the binary search, otherwise, if we find no such $$$i$$$ for this $$$size$$$ then we update the upper bound.\nFinal complexity $$$O(n logn)$$$"
         },
         {
             "title": "Solution",

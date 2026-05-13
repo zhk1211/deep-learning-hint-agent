@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1195D1 - Submarine in the Rybinsk Sea (easy edition)\nLet's take a look into some number $$$a = a_1, a_2, \\dots, a_{len}$$$, where $$$len$$$ is the length of each number in the array. We know that in $$$n$$$ cases it will be the first argument of the function $$$f(a, b)$$$ (where $$$b$$$ is some other number), and in $$$n$$$ cases it will be the second argument. What it means? It means that $$$a_1$$$ will have multiplier $$$10^{2len-1} \\cdot 10^{2len-2} \\cdot n$$$, $$$a_2$$$ will have multiplier $$$10^{2len-3} \\cdot 10^{2len-4} \\cdot n$$$, and so on. If we take a look closer, $$$a$$$ will add to the answer exactly $$$f(a, a) \\cdot n$$$. So the final answer is $$$n\\sum\\limits_{i=1}^{n} f(a_i, a_i)$$$. Don't forget about modulo and overflow (even $$$64$$$-bit datatype can overflow in this problem, because $$$f(10^9, 10^9)$$$ has $$$20$$$ digits in decimal notation)."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1238C - Standard Free2play\nYou are given the input data in compressed format, let's decompress it in binary string, where the $$$i$$$-th character is\n0\nif the $$$i$$$-th platform is hidden and\n1\notherwise. For, example, the third query is\n101110011\n.\nLet's look how our string changes: if we had\n...0\n1\n...\nthen after pulling the lever it becomes\n...\n1\n0...\nand if we had\n...11\n1\n...\nthen we'd get\n...\n1\n00...\n(The underlined index is the platform we are currently on). So it looks like we are standing on\n1\nand move it to the left until it clashes with the next one. So we can determine that we should look only at subsegments on\n1\n-s.\nNow we can note, that the \"good\" string should have all subsegments of ones with even length except two cases: the subsegment that starts from $$$h$$$ should have odd length and subsegment, which ends in $$$1$$$ can have any length.\nNow we can say, that the answer is equal to number of subsegments which doesn't match the pattern of the \"good string\", since we can fix each subsegment with one crystal. And we can prove that it's optimal since the only way to fix two subsegments with one crystal is to merge them but it does not help.\nFinally, we can understand that we have no need in decompressing the input and can determine subsegments of ones straightforwardly."
         },
         {
             "title": "Solution (adedalic)",

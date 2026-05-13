@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1706A - Another String Minimization Problem\nLet's iterate through the elements of $$$a$$$. For convenience, we'll make $$$a_i = \\min(a_i, m + 1 - a_i)$$$. If the $$$a_i$$$-th character of $$$s$$$ is not currently\nA\n, then we should replace it. Otherwise, we replace the $$$(m+1-a_i)$$$-th character. This is because if we have the choice between replacing two characters, replacing the one with the smaller index will result in a lexicographically smaller string.\nAlternatively, we can keep track of how many times either $$$x$$$ or $$$m + 1 - x$$$ appears in $$$a$$$ for each $$$1 \\le x \\le \\lceil \\frac{m}{2} \\rceil$$$.\nIf they appear $$$0$$$ times, neither of these indices in $$$s$$$ can become\nA\n.\nIf they appear $$$1$$$ time, it is optimal to set the $$$x$$$-th character to\nA\n, since this will produce a lexicographically smaller string.\nOtherwise, they appear at least $$$2$$$ times, and it is possible to set both the $$$x$$$-th and $$$(m + 1 - x)$$$-th character to\nA\n."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1328B - K-th Beautiful String\nLet's try to find the position of the leftmost occurrence of '\nb\n' (iterate over all positions from $$$n-2$$$ to $$$0$$$). If $$$k \\le n - i - 1$$$ then this is the required position of the leftmost occurrence of '\nb\n'. Then the position of rightmost occurrence is $$$n - k$$$ so we can print the answer. Otherwise, let's decrease $$$k$$$ by $$$n-i-1$$$ (remove all strings which have the leftmost '\nb\n' at the current position) and proceed to the next position. It is obvious that in such a way we consider all possible strings in lexicographic order."
         },
         {
             "title": "Solution",

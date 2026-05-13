@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1533C - Sweets\nYou have to simulate the process described in the statement. Let's consider one of the many approaches to the solution.\nLet's store a boolean array $$$used$$$, where sweets will be marked (a sweet $$$i$$$ is marked if $$$used[i]$$$ is true) if Anya has already eaten them. As long as there is at least one index $$$i$$$, such that $$$s_i = 1$$$ and $$$used_i = false$$$, we choose the next sweet that Anya will eat. To find the next sweet, it is enough to run a loop that will find the $$$k$$$-th position from the previous one among the remaining sweets (i. e., those sweets whose values in $$$used$$$ are $$$false$$$)."
         },
         {
             "title": "Solution (Neon)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1348C - Phoenix and Distribution\nWe first try to assign one letter to each string $$$a_i$$$. Let's denote the smallest letter in $$$s$$$ as $$$c$$$. If there exists at least $$$k$$$ occurrences of $$$c$$$ in $$$s$$$, we will assign $$$c$$$ as the first letter of each string $$$a_i$$$. Otherwise, the minimal solution is the $$$k$$$th smallest letter in $$$s$$$. For example, if $$$s=$$$\naabbb\nand $$$k=3$$$, the $$$3$$$rd smallest letter is $$$b$$$ and that will be the answer.\nOtherwise, we consider the letters that are left in $$$s$$$. If they are all the same letter (or there are no letters left because $$$n=k$$$), we split the remaining letters as evenly as possible among $$$a_i$$$. If not, we will show that it is optimal to sort the remaining letters in $$$s$$$ and append them to arbitrary $$$a_i$$$.\nFor example, let's suppose after assigning a letter to each $$$a_i$$$ that the remaining letters in $$$s$$$ are\naaabb\n. We want to assign the $$$b$$$s as late as possible, so any string $$$a_i$$$ that receives a $$$b$$$ should have some number of $$$a$$$s before. It makes sense in fact that the string that receives a $$$b$$$ should receive\nall\nthe $$$a$$$s, because if not it will be lexicographically larger. It can then be shown that all remaining larger letters should be sorted and added to the same string $$$a_i$$$ to minimize the answer.\nTime complexity for each test case: $$$O(n \\log{n})$$$ (for sorting $$$s$$$)"
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1398E - Two Types of Spells\nLet's solve this problem for fixed set of spells. For example, we have a fireball spells with powers $$$f_1, f_2, \\dots , f_m$$$ and lighting spells with powers $$$l_1, l_2, \\dots, l_k$$$. We reach the maximum total damage if we can double all $$$k$$$ spells with maximum damage. It's possibly iff the set of $$$k$$$ largest by power spell (let's denote this set as $$$s$$$) contains at least one fireball spell. Otherwise (if set $$$s$$$ contains only lightning spells) the maximum damage reach when we double $$$k-1$$$ largest spells in set $$$s$$$ and one largest spell not from set $$$s$$$ (if such spell exist).\nNow how do you solve the original problem when spells are added and removed? All we have to do it maintain the set of $$$x$$$ largest by power spells (where $$$x$$$ is current number of lightning spells), and change this set by adding or removing one spell. Also you have to maintain the sum of spells power in set this set and the number of fireball spells in this set. You can do it by\nset\nin\nC++\nor\nTreeSet\non\nJava\n."
         },
         {
             "title": "Solution (Roms)",

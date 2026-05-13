@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2167G - Mukhammadali and the Smooth Array\nIf we decide to\nkeep\nan index $$$i$$$, its value remains $$$a_i$$$. Hence, the kept indices must form a\nnon-decreasing subsequence\nof $$$a$$$.\nOur goal is to minimize the total cost. Equivalently, we can\nmaximize\nthe sum of $$$c_i$$$ over the kept indices, since\n$$$$$$ cost = \\sum c_i - \\sum_{kept} c_i $$$$$$\nThus, the problem reduces to finding a non-decreasing subsequence that maximizes the sum of corresponding $$$c_i$$$.\nLet $$$dp[i]$$$ be the maximum sum of $$$c$$$ in a non-decreasing subsequence that ends at index $$$i$$$.\nFor each $$$i$$$, we can append $$$a_i$$$ to any valid subsequence that ends at some $$$j  \\lt  i$$$ with $$$a_j \\le a_i$$$:\n$$$$$$ dp[i] = c_i + \\max_{j  \\lt  i,\\, a_j \\le a_i} dp[j] $$$$$$\nIf there is no such $$$j$$$, we simply take $$$dp[i] = c_i$$$.\nAfter computing all $$$dp[i]$$$, the maximum achievable sum of kept elements is $$$\\max_i dp[i]$$$.\nHence, the final answer is\n$$$$$$ answer = \\sum_{i=1}^{n} c_i - \\max_i dp[i] $$$$$$"
         }
     ]
 }

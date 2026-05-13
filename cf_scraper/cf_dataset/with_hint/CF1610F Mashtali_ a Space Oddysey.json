@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "$$$\\textbf{Read the Hints and Assumptions before reading this.}$$$\nTutorial is loading..."
+            "content": "$$$\\textbf{Read the Hints and Assumptions before reading this.}$$$\n1610F - Маштали: космическая одиссея\nIf there is a vertex $$$v$$$ connected to its neighbors $$$x$$$ and $$$y$$$ with same edge weights, we delete these edges and add a new edge between $$$x$$$ and $$$y$$$. So the number of edges decreases by 1.\nNow we solve the problem for our new graph recurrently.\nThen we check whether the assigned direction is from $$$x$$$ to $$$y$$$ or from $$$y$$$ to $$$x$$$. In the first case, we should delete this edge and add a directional edge from $$$x$$$ to $$$v$$$ and from $$$v$$$ to $$$y$$$. Otherwise, after deleting the edge we add a directional edge from $$$y$$$ to $$$v$$$ and from $$$v$$$ to $$$x$$$.\nAfter these changes, for every $$$v$$$, $$$d^+(v) - d^-(v)$$$ will not change.\nHowever if there is no such vertex, the graph contains some paths and cycles in which the weight of each path and cycle is 1 or 2 every other one.\nSo we can direct edges of each cycle to produce a directed cycle and do the same thing for edges of each path in order to make a directed path.\nBy doing this, every $$$v$$$ with odd $$$c_v$$$ will become Oddysey."
         },
         {
             "title": "Implementation",

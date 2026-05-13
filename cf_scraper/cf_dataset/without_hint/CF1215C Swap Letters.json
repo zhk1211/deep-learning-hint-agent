@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1215C - Swap Letters\nLet's calculate two vectors $$$pos_{01}$$$ and $$$pos_{10}$$$. $$$pos_{01}$$$ will contain all positions $$$x$$$ such that $$$s[x] = 0$$$ и $$$t[x] = 1$$$. Analogically, $$$pos_{10}$$$ will contain all positions $$$x$$$ such that $$$s[x] = 1$$$ и $$$t[x] = 0$$$. If the sizes of these vectors are not equal modulo $$$2$$$, the answer does not exist, because the total number of letters \"\na\n\" and \"\nb\n\" should be even.\nIn the other case, we should perform operations in a greedy way. In one operation we can make $$$s[a]$$$ equal to $$$t[a]$$$ and $$$s[b]$$$ equal to $$$t[b]$$$, if both $$$a$$$ and $$$b$$$ belong to $$$pos_{01}$$$, or if both these positions belong $$$pos_{10}$$$.\nIf the sizes of $$$pos_{01}$$$ and $$$pos_{10}$$$ are even, we need only $$$(\\frac{|pos_{01}|}{2} + \\frac{|pos_{10}|}{2})$$$ operation. In the other case, there are two positions $$$x$$$ and $$$y$$$ such that $$$s[x] = 0$$$, $$$s[y] = 1$$$, $$$t[x] = 1$$$, $$$t[y] = 0$$$. We need two operations to make $$$s[x] = t[x]$$$ and $$$s[y] = t[y]$$$: at first we perform the operation $$$(x, x)$$$, and then the operation $$$(x, y)$$$. After that, strings $$$s$$$ and $$$t$$$ will be equal to each other."
         },
         {
             "title": "Solution (fcspartakm)",

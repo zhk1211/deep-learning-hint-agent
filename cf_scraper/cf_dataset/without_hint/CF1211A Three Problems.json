@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1211A - Three Problems\nJust choose any three indices with different values and print them in order of increasing values. You can do it in a billion ways. One of the is to use map data structure (from elements to indices): while reading the data assign value $$$i$$$ for the key $$$a_i$$$ (use an ordered map, for example, TreeMap). If the size of the map less than $$$3$$$, print\n-1\n. Overwise print values (i.e. correspondent values) for the first three elements of the map.\nHere is the example of a solution in Kotlin:\nfun main() {\nval n = readLine()!!.toInt()\nval r = readLine()!!.split(\" \").map { it.toInt() }\n.withIndex()\n.distinctBy { it.value }\n.sortedBy { it.value }\n.map { it.index + 1 }\nif (r.size < 3) {\nprintln(\"-1 -1 -1\")\n} else {\nprintln(\"${r[0]} ${r[1]} ${r[2]}\")\n}\n}"
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1850E - Cardboard for Pictures\nThe key idea is to binary search on the answer. If you don't know what that is, you should read\nthis Codeforces EDU article\n. Let's make a function $$$f(x)$$$, which tells us the total area of cardboard if we use a width of $$$x$$$. Then you can see that we can calculate $$$f(x)$$$ in $$$\\mathcal{O}(n)$$$ time as $$$(a_1 + 2x)^2 + (a_2 + 2x)^2 + \\dots + (a_n + 2x)^2$$$, because the side length of the $$$i$$$-th cardboard is $$$a_i + 2x$$$.\nSo this means that now we can binary search on the answer: let's find the largest $$$w$$$ so that $$$f(w) \\leq c$$$. The maximum theoretical value of $$$w$$$ can be seen not to exceed $$$10^9$$$, since $$$c$$$ is not more than $$$10^{18}$$$ (you can set an even lower bound).\nA quick note about implementation: the value of $$$f(x)$$$ can exceed 64-bit numbers, so you need to exit the function as soon as you get a value greater than $$$c$$$, or else you risk overflow.\nSo the time complexity is $$$\\mathcal{O}(n \\log(10^9))$$$ per test case, which is equal to $$$\\mathcal{O}(n)$$$ with some constant factor. It's not that big to make it fail.\nYou can also use the quadratic formula, but be careful about implementation of square root and precision issues."
         },
         {
             "title": "Solution",

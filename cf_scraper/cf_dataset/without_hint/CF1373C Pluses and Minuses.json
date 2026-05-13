@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ consisting only of characters + and -. You perform some process with this string. This process can be described by the following pseudocode:\n\n```\nres = 0\nfor init = 0 to inf\ncur = init\nok = true\nfor i = 1 to |s|\nres = res + 1\nif s[i] == '+'\ncur = cur + 1\nelse\ncur = cur - 1\nif cur < 0\nok = false\nbreak\nif ok\nbreak\n```\n\nNote that the $ inf $ denotes infinity, and the characters of the string are numbered from $ 1 $ to $ |s| $ .\n\nYou have to calculate the value of the $ res $ after the process ends.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThe only lines of each test case contains string $ s $ ( $ 1 \\le |s| \\le 10^6 $ ) consisting only of characters + and -.\n\nIt's guaranteed that sum of $ |s| $ over all test cases doesn't exceed $ 10^6 $ .\n\nOutput Format\nFor each test case print one integer — the value of the $ res $ after the process ends.\n\nExamples\nSample 1\nInput\n3\n--+-\n---\n++--+-\nOutput\n7\n9\n6"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1373C - Pluses and Minuses\nLet's replace all\n+\nwith\n1\n, and all\n-\nwith\n-1\n. After that let's create a preffix-sum array $$$p$$$ ($$$p_i = \\sum\\limits_{j=1}^{i} s_j$$$). Also lets create array $$$f$$$ such that $$$f_i$$$ is equal minimum index $$$j$$$ such that $$$p_j = -i$$$ (if there is no such index $$$p_i = -1$$$).\nLet's consider the first iteration of loop $$$for ~ init ~ = ~ 0 ~ to ~ inf$$$. If $$$f_1 = -1$$$ then process ends and $$$res = |s|$$$. Otherwise the condition $$$if ~ cur ~  \\lt  ~ 0$$$ fulfilled then the value of $$$i$$$ will be equal to $$$f_1$$$. So, the value of $$$res$$$ is equal to $$$f_1$$$ after first iteration.\nNow, let's consider the second iteration of loop $$$for ~ init ~ = ~ 0 ~ to ~ inf$$$. If $$$f_2 = -1$$$ then process ends and $$$res = f_1 + |s|$$$. Otherwise the condition $$$if ~ cur ~  \\lt  ~ 0$$$ fulfilled then the value of $$$i$$$ will be equal to $$$f_2$$$. So, the value of $$$res$$$ is equal to $$$f_1 + f_2$$$ after second iteration.\nIn this way we can calculate the value of $$$res$$$ after the process ends."
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\ns\n=\ninput\n()\ncur\n,\nmn\n,\nres\n=\n0\n,\n0\n,\nlen\n(\ns\n)\nfor\ni\nin\nrange\n(\nlen\n(\ns\n)):\ncur\n+=\n1\nif\ns\n[\ni\n]\n==\n'+'\nelse\n-\n1\nif\ncur\n<\nmn\n:\nmn\n=\ncur\n            res\n+=\ni\n+\n1\nprint\n(\nres\n)"
+        }
+    ]
+}

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1849C - Binary String Copying\nWe can see that each modified copy is determined by only two integers $$$lb$$$ and $$$rb$$$ — the first position at which the character has changed and the last such position. If we can find such numbers for each of the copies, the number of different pairs will be the answer to the problem.\nLet $$$lf_i$$$ be the position of the nearest character\n0\nat the position $$$i$$$ or to the left of it, and $$$rg_i$$$ be the position of the nearest character\n1\nat the position $$$i$$$ or to the right of it. If the first character of the string $$$s$$$ is\n1\nthen $$$lf_0 = -1$$$, otherwise $$$lf_0 = 0$$$. And if the last character of the string $$$s$$$ is\n0\n, then $$$rg_{n - 1} = n$$$, otherwise $$$rg_{n - 1} = n - 1$$$. The values $$$lf$$$ and $$$rg$$$ can be calculated using simple dynamic programming, $$$lf$$$ is calculated from left to right, and $$$rg$$$ — from right to left. Then the numbers $$$lb$$$ and $$$rb$$$ we need are equal to $$$rg_l$$$ and $$$lf_r$$$, respectively. If $$$rg_l  \\gt  lf_r$$$, then the changed segment is degenerate (and this means that the string does not change at all). We can define some special segment for this type of strings, for example, $$$(-1, -1)$$$. Otherwise, the segment $$$(rg_l, lf_r)$$$ of the string will change.\nTime complexity: $$$O(n \\log{n})$$$."
         },
         {
             "title": "Solution (vovuh)",

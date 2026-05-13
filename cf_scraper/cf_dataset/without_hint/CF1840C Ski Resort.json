@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1840C - Ski Resort\nTo simplify the task, let's replace all numbers in the array $$$a$$$. If the value of $$$a_i$$$ is greater than $$$q$$$, then replace it with $$$0$$$. Otherwise, replace it with $$$1$$$.\nNow Dima can go on this day if $$$a_i = 1$$$. Therefore, we need to consider segments consisting only of $$$1$$$.\nNote that if the segment consists of less than $$$k$$$ ones, then Dima will not be able to go on these dates, so the segment can be ignored.\nFor all remaining segments, we need to calculate the number of ways for Dima to choose travel dates on this segment. And for a segment of length $$$l$$$, the number of ways to choose a trip of at least length $$$k$$$ is $$$\\binom{l - k + 2}{l - k}$$$.\nThe answer to the problem will be the sum of the number of ways to choose travel dates for all segments."
         },
         {
             "title": "Solution",

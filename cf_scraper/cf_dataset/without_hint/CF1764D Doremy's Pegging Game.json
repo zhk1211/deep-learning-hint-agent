@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1764D - Doremy's Pegging Game\nThe game will end immediately when the blue peg is not inside the convex formed by all remaining red pegs. Namely, there are $$$\\lfloor \\frac{n}{2} \\rfloor$$$ consecutive red pegs removed. It can be proven by geometry.\nAssume $$$t=\\lfloor \\frac{n}{2} \\rfloor$$$, and $$$n$$$ is odd.\nLet's enumerate the ending status: there are $$$i$$$ ($$$t \\le i\\le n -2$$$) consecutive red pegs removed and another $$$j$$$ ($$$0 \\le j \\le n - 2 - i$$$) red pegs removed.\nThe last move makes the rubber band to stretch and touch the blue peg. So there is $$$2t-i$$$ ways to choose the last move. There are $$$\\binom{n-2-i}{j}$$$ ways to choose another $$$j$$$ pegs. And there are $$$\\binom{i+j-1}{j}j!(i-1)!$$$ ways to combine them.\nWhen $$$n$$$ is even, the analysis is similar. The only difference is that there is a special case when $$$i = n-1$$$.\nSo the answer is: $$$$$$ \\begin{aligned} & n\\sum_{i=t}^{n-2} \\sum_{j=0}^{n-i-2}\\binom{n-i-2}{j}(i+j-1)!\\cdot(2t-i) \\\\ +&[n \\text{ is even}]n(n-2)! \\end{aligned} $$$$$$ which can be easily calculated in $$$O(n^2)$$$."
         }
     ]
 }

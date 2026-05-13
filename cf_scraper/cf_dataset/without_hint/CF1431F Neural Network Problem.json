@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1431F - Neural Network Problem\nBinary search is pretty obvious even from the problem statement. Let's fix the maximum sum of the block $$$sum$$$. Now we have to check if we can remove at most $$$k$$$ elements to obtain some array where each block has the sum at most $$$sum$$$.\nTo check it, let's implement the following greedy solution: go from left to right and maintain the priority queue of $$$x$$$ minimums. Suppose we are at the position $$$i$$$ now. Add the current element $$$a_i$$$ to the priority queue and remove the biggest element from it while its size is greater than $$$x$$$ or the sum is greater than $$$sum$$$. If the size of the queue is $$$x$$$ it also means that its sum is not greater than $$$sum$$$. Let's end the current block here (just clear the queue) and start a new one from the next position. In general, we are trying to complete the block as soon as possible. It is always optimal because the earlier we end the block — the more blocks we can create (the fewer elements we have to remove). After processing all elements, let's check if the number of elements removed is not greater than $$$k$$$.\nTime complexity: $$$O(n \\log^2{n})$$$."
         },
         {
             "title": "Solution (vovuh)",

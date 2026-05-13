@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1927G - Paint Charges\nLet's use the method of dynamic programming. Let $$$dp[i][j][k]$$$ be the minimum number of operations required for the distance from $$$i$$$ to the farthest unpainted cell on the left to be $$$j$$$, and to the nearest unpainted cell on the right to be $$$k$$$ (including itself).\nWe will update the values forward, that is, for all reachable states, we will find the states reachable from it and update the answer for them. In this case, we will move from the current $$$i$$$ to $$$i + 1$$$, recalculating $$$j$$$ and $$$k$$$ depending on the action: not spraying paint from $$$i$$$, spraying paint from $$$i$$$ to the left, spraying paint from $$$i$$$ to the right.\nThe problem could also have been solved in $$$O(n^2)$$$, however, the constraints did not require this."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1194E - Count The Rectangles\nLet's iterate over the lower horizontal segment. Denote its coordinates as ($$$xl, yh$$$) and ($$$xr, yh$$$), where $$$xl  \\lt  xr$$$.\nWe call vertical segment ($$$x_{i, 1}$$$, $$$y_{i, 1}$$$), ($$$x_{i, 2}$$$, $$$y_{i, 2}$$$) good, if followings conditions holds:\n$$$xl \\le x_{i, 1} = x_{i, 2} \\le xr$$$;\n$$$min(y_{i, 1}, y_{i, 2}) \\le yh$$$.\nNow let's use the scanline method. At first, for each good vertical segment $$$i$$$ we increment the value of element in position $$$x_{i, 1}$$$ in some data structure (for example, Fenwick Tree). Next we will process two types of queries in order of increasing their y-coordinate:\nhorizontal segments with coordinates ($$$x_{i, 1}$$$, $$$y_{i, 1}$$$), ($$$x_{i, 2}$$$, $$$y_{i, 2}$$$);\nupper point of some vertical segment with coordinates $$$(x_i, y_i)$$$.\nAnd if two events of different types have the same y-coordinate then the event of first type must be processed first.\nFor event of first type we need to find sum on range $$$[x_{i, 1}, x_{i, 2}]$$$ ($$$x_{i, 1}  \\lt  x_{i, 2}$$$) in our data structure. Let's denote this sum as $$$s$$$. Then we need to add $$$\\frac{s (s - 1)}{2}$$$ to the answer (because we have $$$s$$$ vertical segments which intersect with both fixed horizontal segments and we can choose two of them in so many ways).\nFor event of second type we just need decrement the value of element in position $$$x_i$$$ in our data structure."
         },
         {
             "title": "Solution (Roms)",

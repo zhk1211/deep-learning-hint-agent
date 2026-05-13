@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1798B - Three Sevens\nLet's calculate the array $$$last$$$, where $$$last_X$$$ is the last day of the lottery in which the person $$$X$$$ participated. Then the only day when $$$X$$$ could be a winner is the day $$$last_X$$$. Then on the day of $$$i$$$, only the person with $$$last_X = i$$$ can be the winner. It is also clear that if there are several such participants for the day $$$i$$$, you can choose any of them as the winner, since these participants cannot be winners on any other days. In total, we need to go through all the days, if for some day there are no participants with $$$last$$$ equal to this day, then the answer is $$$-1$$$. Otherwise, we choose any participant with $$$last_X = i$$$ as the winner on the day of $$$i$$$."
         },
         {
             "title": "Solution",

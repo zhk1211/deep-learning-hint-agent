@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1455A - Strange Functions\nLet's analyze which values can the function $$$g(x)$$$ have. It can be proven that the value of $$$g(x)$$$ is equal to $$$10^k$$$, where $$$k$$$ is the number of zero-digits at the end of the number $$$x$$$, because $$$f(f(x))$$$ is the same number as $$$x$$$ except for the fact that it doesn't have any trailing zeroes.\nOkay, now let's analyze when we reach the new value of $$$g(x)$$$. $$$1$$$ is the first value of $$$x$$$ such that $$$g(x) = 1$$$, $$$10$$$ is the first value of $$$x$$$ such that $$$g(x) = 10$$$, $$$100$$$ is the first value of $$$x$$$ such that $$$g(x) = 100$$$, and so on. We have to calculate the maximum number that has the form $$$10^k$$$ and is not greater than $$$n$$$, and the answer is exactly $$$k + 1$$$.\nIt can be done with a mathematical solution, but the most simple way to do it is read $$$n$$$ as a string instead, and calculate its length."
         },
         {
             "title": "Solution (Ne0n25)",

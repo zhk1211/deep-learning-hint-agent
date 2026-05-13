@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1194D - 1-2-K Game\nLet's determine for each cell whether it's winning or losing position (we can do it since the game is symmetric and doesn't depend on a player). The\n0\n-th cell is obviously losing, the\n1\n-st and\n2\n-nd ones is both winning, since we can move to the\n0\n-th cell and put our opponent in the losing position (here comes criterion: the position is winning if and only if there is a move to the losing position).\nIf\nk\nis large enough, then the\n0\n-th,\n3\n-rd,\n6\n-th,\n9\n-th... are losing. So here comes divisibility by\n3\n. If\nthen this move doesn't change anything, since if\nthen\nso it's not the move to the losing position, so\nx\ndoesn't become the winning one.\nOtherwise, if\nthen the\nk\n-th positions becomes winning, but the\n(\nk\n+ 1)\n-th cell is losing (all moves are to\n(\nk\n- 1)\n-th,\nk\n-th or\n1\n-st cells and all of them are winning). The\n(\nk\n+ 2)\n-th and\n(\nk\n+ 3)\n-th cells are winning and so on. In the end, we came up with cycle of length\nk\n+ 1\nwhere position divisible by\n3\nexcept\nk\nare losing.\nAll we need to do is small case work."
         },
         {
             "title": "Solution (adedalic)",

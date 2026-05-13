@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1675G - Sorting Pancakes\nFor convenience, we will calculate the prefix sums on the array $$$a$$$, we will also enter the array $$$b$$$ containing the indexes of all pancakes and calculate the prefix sums on it.\nLet's use dynamic programming. Let's define $$$dp[i][last][sum]$$$ as the required number of operations to correctly lay out the $$$i$$$-th prefix, with the final $$$a_i = last$$$, and $$$\\sum_{j = 1}^i a_j = sum$$$. Then you can go to $$$dp[i][last][sum]$$$ from $$$dp[i - 1][last + j][sum - last]$$$ (the previous number must be greater, and the sum is fixed). To $$$dp[i - 1][last + j][sum - last]$$$, it will be necessary to add a certain number of actions necessary to get $$$a_i = last$$$, let's call it $$$add$$$ (all the terrible prefix sums are needed to count it). Since $$$add$$$ depends only on $$$last$$$ and $$$sum$$$, we only need to choose the minimum $$$dp[i - 1][last + j][sum - last]$$$, the choice can be optimized by suffix minima. As a result, the solution works for $$$\\mathcal{O}(n*m^2)$$$, that's how many states need to be processed."
         },
         {
             "title": "Solution",

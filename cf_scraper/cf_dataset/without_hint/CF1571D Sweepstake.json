@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1571D - Sweepstake\nLet's iterate over all possible pairs (winner, looser), calculate our place and take a maximum among all of them.\nSuppose, $$$\\mathit{cntPairs}_{w, l}$$$ be the number of spectators who chose pair winner $$$w$$$ and looser $$$l$$$, $$$\\mathit{cntFirst}_w$$$ be the number of spectators who chose $$$w$$$ as winner, and $$$\\mathit{cntLast}_l$$$ be the number of spectators who chose $$$l$$$ as looser.\nThen, for a fixed pair (winner $$$w$$$ and looser $$$l$$$) it's possible to calculate both $$$c_2$$$ and $$$c_1$$$ in the following way: $$$c_2 = \\mathit{cntPairs}_{w, l}$$$ and $$$c_1 = \\mathit{cntFirst}_w + \\mathit{cntLast}_l - 2 \\mathit{cntPairs}_{w, l}$$$ (because, both $$$\\mathit{cntFirst}_w$$$ and $$$\\mathit{cntLast}_l$$$ contain spectators who guessed $$$2$$$ results). After that, baced on the number of our right answers, we can calculate our rank: is it $$$1$$$, $$$c_2 + 1$$$ or $$$c_2 + c_1 + 1$$$.\nBut there is one simplification: it can be proved that we can always iterate only over pairs $$$(w, l)$$$ where we guessed $$$0$$$ right answers. In this case our rank will always be $$$c_2 + c_1 + 1$$$ $$$=$$$ $$$\\mathit{cntFirst}_w + \\mathit{cntLast}_l - \\mathit{cntPairs}_{w, l} + 1$$$ (union of all spectators who answered right at least once)."
         },
         {
             "title": "Solution (adedalic)",

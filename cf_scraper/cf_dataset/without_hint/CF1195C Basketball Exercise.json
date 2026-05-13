@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1195C - Basketball Exercise\nThis is pretty standard dynamic programming problem. Let $$$dp_{i, 1}$$$ be the maximum total height of team members if the last student taken has the position $$$(i-1, 1)$$$, $$$dp_{i, 2}$$$ is the same but the last student taken has the position $$$(i-1, 2)$$$ and $$$dp_{i, 3}$$$ the same but we didn't take any student from position $$$i-1$$$. Transitions are pretty easy:\n$$$dp_{i, 1} = max(dp_{i-1, 2} + h_{i, 1}, dp_{i-1, 3} + h_{i, 1}, h_{i, 1})$$$;\n$$$dp_{i, 2} = max(dp_{i-1, 1} + h_{i, 2}, dp_{i-1, 3} + h_{i, 2}, h_{i, 2})$$$;\n$$$dp_{i, 3} = max(dp_{i-1, 1}, dp_{i-1, 2})$$$.\nThis dynamic programming can be calculated almost without using memory because we need only the $$$i-1$$$-th row to calculate the $$$i$$$-th row of this dp. Moreover, we don't actually need $$$dp_{i, 3}$$$ if we will add transitions $$$dp_{i, 1} = max(dp_{i, 1}, dp_{i - 1, 1})$$$ and $$$dp_{i, 2} = max(dp_{i, 2}, dp_{i - 1, 2})$$$. These transition will change our dp a bit. Now $$$dp_{i, j}$$$ is the maximum total height of the team members if the last student taken has the position $$$(i-1,1)$$$ or less. The same with $$$dp_{i, 2}$$$. The answer is $$$max(dp_{n, 1}, dp_{n, 2})$$$.\nTime complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution",

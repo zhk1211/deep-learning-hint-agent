@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading...\nUPD:\nAn alternative implementation using segment tree\ncomment link\n."
+            "content": "1787G - Colorful Tree Again\nOn the original tree, all good paths are constant and one edge can only be on at most one good path.\nFor each color $$$c$$$, find all edges of color $$$c$$$, and judge if they form a simple path by counting the degree of each node on the path. If so, mark these edges and calculate the length.\nWhen a query changes a node $$$u$$$, several paths across $$$u$$$ are infected.\nFor example,\nAn example doodle, assume that we are destroying node $$$2$$$.\nIf we are destroying node $$$2$$$, path $$$8-1-2-3$$$, $$$2-4-9$$$, $$$2-5$$$, and $$$7-6-2-10$$$ will not be good paths.\nA brute-force solution is to use a priority queue, delete length of bad paths, find the maximum length.\nTo gain better time complexity, treat two cases of influenced paths separately:\n1. Only one path that goes from the ancestor of $$$u$$$ to its subtree, like $$$8-1-2-3$$$.\n2. All paths whose LCA is $$$u$$$ will be infected, like $$$2-4-9$$$, $$$2-5$$$, and $$$7-6-2-10$$$.\nThis inspires us to maintain these paths according to their LCAs. That is, use priority queue on every node $$$u$$$ to maintain all paths whose LCA is $$$u$$$.\nThen use a global priority queue to maintain the answer of all paths maintained on all nodes.\nUPD:\nAn alternative implementation using segment tree\ncomment link\n."
         }
     ]
 }

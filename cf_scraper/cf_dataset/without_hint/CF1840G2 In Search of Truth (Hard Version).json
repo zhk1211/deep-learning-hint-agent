@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1840G2 - In Search of Truth (Hard Version)\nLet's sample $$$n$$$ by making $$$k$$$ random queries \"+ x\" where we pick $$$x$$$ each time randomly between $$$1$$$ and $$$10^6$$$ and get $$$k$$$ random integers $$$n_1, n_2, \\dots, n_k$$$ in the range $$$[1, n]$$$ as the answers to the queries. Then, we can sample $$$n$$$ with $$$n_0 = max(n_1, n_2, \\dots, n_k)$$$. Now, we can assume that $$$n_0 \\le n \\le n_0 + d$$$ for some integer $$$d$$$. Let's talk about picking the right $$$d$$$ a bit later.\nNow we can perform an algorithm similar to G1 solution and determine $$$n$$$ within $$$2 \\cdot \\sqrt{d}$$$ queries.\nSo, we have $$$1000$$$ queries in total, meaning that $$$2 \\cdot \\sqrt{d} + k$$$ is approximately equals to $$$1000$$$. Thus, for each $$$k$$$ we can find optimal $$$d = \\frac{1000 - k}{2}$$$, the probability that $$$n$$$ is not in the range $$$[n_0, n_0 + d]$$$ does not exceed $$$(\\frac{n - d}{n}) ^ k$$$ which is less than $$$8.5 \\cdot 10 ^{-18}$$$ for $$$k = 320$$$ and for each $$$1 \\le n \\le 10^6$$$.\nTherefore, by picking $$$k$$$ somewhere between $$$300$$$ and $$$400$$$, we can get a solution which passes a testcase with probability of $$$p \\ge 1 - 10 ^{-16}$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1836A - Destroyer\nWe can simplify the statement to the following — can we divide the input sequence into multiple arithmetic sequences starting with $$$0$$$ and a common difference equal to $$$1$$$?\nNote that for each such arithmetic sequence, if a number $$$x  \\gt  0$$$ belongs to it, then $$$x - 1$$$ must also be included in it. Thus, if we denote $$$cnt_x$$$ as the number of occurrences of $$$x$$$ in the input, we must have $$$cnt_x \\geq cnt_{x + 1}$$$ for each $$$x \\geq 0$$$. We can note that if such a condition is fulfilled, we can always divide the input into described arithmetic sequences.\nWe can implement it straightforwardly in $$$\\mathcal{O}(N + L)$$$, where $$$L$$$ is the maximum value in the input."
         },
         {
             "title": "Solution",

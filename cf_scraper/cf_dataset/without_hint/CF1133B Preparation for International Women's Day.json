@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1133B - Preparation for International Women's Day\nLet $$$cnt_i$$$ be the number of boxes with $$$i$$$ candies modulo $$$k$$$.\nFirstly, the number of\npairs\nof boxes we can obtain using two boxes with remainder $$$0$$$ modulo $$$k$$$ is $$$\\lfloor\\frac{cnt_0}{2}\\rfloor$$$.\nSecondly, if $$$k$$$ is even then we also can obtain\npairs\nof boxes using two boxes with remainder $$$\\frac{k}{2}$$$ modulo $$$k$$$ and its number is $$$\\lfloor\\frac{cnt_{\\frac{k}{2}}}{2}\\rfloor$$$.\nAnd for any other remainder $$$i$$$ from $$$1$$$ to $$$\\lfloor\\frac{k}{2}\\rfloor$$$ the number of pairs of boxes is $$$min(cnt_{i}, cnt_{k - i - 1})$$$.\nSo, if we sum up all these values, the answer is this sum multiplied by two (because we have to print the number of boxes, not pairs)."
         },
         {
             "title": "Solution",

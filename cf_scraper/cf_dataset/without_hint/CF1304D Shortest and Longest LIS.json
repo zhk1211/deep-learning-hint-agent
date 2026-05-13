@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1304D - Shortest and Longest LIS\nThere are various strategies to solve each part. I'll explain one of them for each. It would be fun to come up with your own strategy as well :)\nShortest LIS\nLet's group each contiguously\nincreasing\npart. We can easily see that we cannot make the LIS shorter than the maximum size among these groups. It can be shown that we can make the length of the LIS not longer than that as well.\nOne strategy is to fill the largest unused numbers in increasing order for each group from left to right. There will be no indices $$$i$$$ and $$$j$$$ ($$$i \\lt j$$$) such that $$$perm[i]$$$ < $$$perm[j]$$$ where $$$i$$$ and $$$j$$$ are in different groups. Therefore the maximum size among the groups will be the length of the LIS.\nLongest LIS\nLet's group each contiguously\ndecreasing\npart. We can easily see that there can be at most one element from each group that is included in any possible LIS. It can be shown that we can make a sequence that takes one element from every groups to form the LIS.\nOne strategy is to fill the smallest unused numbers in decreasing order for each group from left to right. Then for every indices $$$i$$$ and $$$j$$$ ($$$i \\lt j$$$) where $$$i$$$ and $$$j$$$ are in different groups, $$$perm[j]$$$ will be always greater than $$$perm[i]$$$. Thus, we can take any one element from each and every groups to form the LIS.\nTime complexity: $$$O(n)$$$ for each test case.\nHere's a little challenge for people who want harder things: Can you make a sequence that has the length of its LIS exactly $$$k$$$?"
         },
         {
             "title": "Solution",

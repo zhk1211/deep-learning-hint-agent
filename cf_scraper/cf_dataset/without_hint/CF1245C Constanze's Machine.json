@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1245C - Constanze's Machine\nIf $$$s$$$ has any\n'm'\nor\n'w'\n, the answer is 0. Otherwise, we can do dp.\nDefine $$$dp_i$$$ to be the number of strings that Constanze's machine would've turned into the first $$$i$$$ characters of $$$s$$$. Then, $$$dp_0 = dp_1 = 1$$$. For $$$i  \\gt  1$$$, transition is $$$dp_i = dp_{i - 1} + dp_{i - 2}$$$ if both $$$s_i = s_{i - 1}$$$ and $$$s_i$$$ is either\n'u'\nor\n'n'\n, and simply $$$dp_i = dp_{i - 1}$$$ otherwise. Answer is $$$dp_{|s|}$$$.\nAlternatively, notice that the maximum cardinality segment consisiting of $$$k$$$ letters\n'u'\nor\n'n'\nmultiplies the answer by the $$$k$$$-th term of Fibonacci sequence. Thus, you can precalculate it and some sort of two iterators."
         },
         {
             "title": "Solution",

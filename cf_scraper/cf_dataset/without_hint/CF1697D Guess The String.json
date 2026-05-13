@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1697D - Guess The String\nThere are several ways to solve this problem. The model solution does it as follows:\nRestore the characters of $$$s$$$ from left to right. The first character is restored by query\n? 1 1\n. For each of the next characters, let's ask if this character is new (by querying\n? 2 1 i\nand comparing the result with the number of different characters on the segment $$$[1, i-1]$$$). If it's new, ask\n? 1 i\nto obtain the $$$i$$$-th character (there will be at most $$$26$$$ such queries).\nOtherwise, we can find the previous occurrence of the $$$i$$$-th character with binary search. Let $$$f(x,y)$$$ be the number of different characters from position $$$x$$$ to position $$$y$$$. If we want to find the previous occurrence of the $$$i$$$-th character, we need to find the last index $$$j$$$ such that $$$f(j,i) = f(j,i-1)$$$. Since the value $$$f(j,i) - f(j,i-1)$$$ does not decrease when we increase $$$j$$$, we can find the last $$$j$$$ such that $$$f(j,i) - f(j,i-1) = 0$$$, with binary search.\nUnfortunately, the number of queries of type $$$2$$$ will be too large if we just use binary search over the whole segment $$$[1,i-1]$$$. To decrease the number of queries, we can use the fact that the value of $$$j$$$ we are interested in is the last occurrence of some character we already met; there are at most $$$26$$$ such values, and binary search among them will need only $$$5$$$ iterations."
         },
         {
             "title": "Solution (BledDest)",

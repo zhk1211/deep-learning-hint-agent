@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1490F - Equalize the Array\nLet's calculate the value of $$$cnt_x$$$ — how many times the number $$$x$$$ occurs in the array $$$a$$$. We will iterate over the value of $$$C$$$ and look for the minimum number of moves necessary for each number to appear in the $$$a$$$ array either $$$0$$$ times, or $$$C$$$ times. Note that if there is no such number $$$y$$$ that $$$cnt_y = C$$$, then such a value of $$$C$$$ will not give the minimum answer (because we have removed unnecessary elements).\nThen, for a specific $$$C$$$, the answer is calculated as follows: $$$$$$ \\sum\\limits_{cnt_x \\lt C} cnt_x + \\sum\\limits_{cnt_x \\ge C}(cnt_x - C) $$$$$$\nSince the number of candidates for the value of $$$C$$$ is no more than $$$n$$$, this method works in $$$\\mathcal{O}(n^2)$$$.\nThen there are two ways to optimize our solution:\nyou can consider only unique values of $$$C$$$ (there are no more than $$$\\mathcal{O}(\\sqrt n)$$$), and get a solution in $$$\\mathcal{O}(n \\sqrt n)$$$;\nyou can sort the values $$$cnt_x$$$ and use prefix sums, this solution works for $$$\\mathcal{O}(n \\log n)$$$ or for $$$\\mathcal{O}(n)$$$ (if you use counting sort)."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1211D - Teams\nConsider that $$$a  \\lt  b$$$. If you have a chain of ratings $$$rr_1, rr_2, \\dots, rr_t$$$ such that $$$rr_{i+1} = rr_i \\cdot k$$$ for each $$$1 \\le i  \\lt  t$$$ and $$$cc_i$$$ is number of players with the rating equals $$$rr_i$$$, then you can compose teams in a greedy way from left to right. This is true, since if you move a composed team along the chain to the left, then only improve the situation.\nIn the opposite case $$$a \\ge b$$$ you should compose teams greedy from right to left.\nSo for each rating compute the number of players in a map (say, $$$rm$$$). After it iterate through all the keys (possible ratings) in increasing order if $$$a \\lt b$$$ or in decreasing order if $$$a \\ge b$$$. Each time try compose as many teams as you can using two ratings $$$r$$$ and $$$r \\cdot k$$$ (i.e. increase the answer by $$$\\min(rm[r] / a, rm[r \\cdot k] / b)$$$).\nHere is the example of a solution in Kotlin:\nimport kotlin.math.*\nfun main() {\nval (n, a, b, k) = readLine()!!.split(\" \").map { it.toInt() }\nval rm = readLine()!!.split(\" \").map { it.toInt() }\n.groupingBy { it }.eachCount()\n.mapValues { Left(it.value) }\nval rl = rm.keys.sorted()\n.let { if (a >= b) it else it.reversed() }\nvar ans = 0\nfor (r in rl) {\nval p = rm.getValue(r)\nif (p.cnt < a) continue\nval q = rm[r * k] ?: continue\nif (q.cnt < b) continue\nval t = min(p.cnt / a, q.cnt / b)\nans += t\np.cnt -= a * t\nq.cnt -= b * t\n}\nprintln(ans)\n}\ndata class Left(var cnt: Int)"
         }
     ]
 }

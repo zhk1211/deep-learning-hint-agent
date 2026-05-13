@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1165D - Almost All Divisors\nSuppose the given list of divisors is a list of\nalmost all\ndivisors of some $$$x$$$ (in other words, suppose that the answer exists). Then the minimum divisor multiplied by maximum divisor should be $$$x$$$. This is true because if we have a divisor $$$i$$$ we also have a divisor $$$\\frac{n}{i}$$$. Let's sort all divisors and let $$$x = d_1 \\cdot d_n$$$.\nNow we need to check if all divisors of $$$x$$$ except $$$1$$$ and $$$x$$$ are the permutation of the array $$$d$$$ (check that our answer is really correct). We can find all divisors of $$$x$$$ in $$$O(\\sqrt{x})$$$, sort them and compare with the array $$$d$$$. If arrays are equal then the answer is $$$x$$$ otherwise the answer is\n-1\n."
         },
         {
             "title": "Solution",

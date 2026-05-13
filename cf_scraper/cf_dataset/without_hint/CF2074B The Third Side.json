@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "2074B - The Third Side\nWe can solve this problem by observing a property on the sum of elements.\nAfter each operation, it must hold that $$$a_i+a_j \\gt x$$$, and the new element is at most $$$a_i+a_j-1$$$. Therefore, the sum decreases by at least $$$1$$$.\nHowever, we notice that a triangle of side lengths $$$p$$$, $$$q$$$, $$$p+q-1$$$ is always non-degenerate due to the following:\n$$$p+q \\gt p+q-1$$$;\n$$$p+(p+q-1) \\gt q$$$ due to $$$2p-1 \\gt 0$$$;\n$$$q+(p+q-1) \\gt p$$$ due to $$$2q-1 \\gt 0$$$.\nTherefore, you can decrease the sum by exactly $$$1$$$ on each operation. The maximum final sum (which is the last element) is thus $$$\\text{sum}-n+1$$$."
         }
     ]
 }

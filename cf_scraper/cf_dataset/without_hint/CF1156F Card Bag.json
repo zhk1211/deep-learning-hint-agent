@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1156F - Card Bag\nLet's solve the problem by dynamic programming.\nLet $$$dp_{i, j}$$$ be the probability of winning if the last taken card has number $$$i$$$ on it and the number of taken cards is $$$j$$$.\nWe win immediately next turn if we take card with number $$$i$$$ on it. The probability of this is $$$\\frac{cnt_{i} - 1}{n - j}$$$, where $$$cnt_i$$$ is number of cards with $$$i$$$.\nAlso we can win if we take a greater card next turn.\nWe take a card with number $$$i + 1$$$ with probability $$$\\frac{cnt_{i + 1}}{n - j}$$$, with number $$$i+2$$$ — with probability $$$\\frac{cnt_{i + 2}}{n - j}$$$, and so on. The probability of winning in this case will be $$$\\frac{cnt_{i + 1}}{n - j} \\cdot dp_{i + 1, j + 1}$$$ and $$$\\frac{cnt_{i + 2}}{n - j} \\cdot dp_{i + 2, j + 1}$$$ respectively.\nSo the probability of winning for $$$dp_{i, j}$$$ is $$$\\frac{cnt_{i} - 1}{n - j} + \\sum\\limits_{k = i + 1}^{n} (\\frac{cnt_{k}}{n - j} \\cdot dp_{k, j + 1}$$$) = $$$\\frac{cnt_{i} - 1}{n - j} + \\frac{1}{n - j} \\cdot \\sum\\limits_{k = i + 1}^{n} (cnt_{k} \\cdot dp_{k, j + 1}$$$).\nTherefore, all we need is to maintain the sum $$$\\sum\\limits_{i = x}^{n} (cnt_{i} \\cdot dp_{i, j})$$$ while calculating our dynamic programming."
         },
         {
             "title": "Solution (Roms)",

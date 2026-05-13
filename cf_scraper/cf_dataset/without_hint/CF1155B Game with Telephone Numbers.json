@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1155B - Game with Telephone Numbers\nLet's understand how players should act.\nVasya needs to delete the first digit that is not equal to $$$8$$$, because the first digit of telephone number should be $$$8$$$, and the first digit not equal to $$$8$$$ is preventing it.\nPetya needs to delete the first digit equal to $$$8$$$, for the same reasons.\nSo, all that we need to do is delete first $$$\\frac{n-11}{2}$$$ digits not equal to $$$8$$$ (if they exist), and first $$$\\frac{n-11}{2}$$$ digits equal to $$$8$$$ (again if they exist). It's enough to stop when there is either no $$$8$$$'s left or no non-$$$8$$$'s because the latter moves won't change the result of the game anyway. Finally, if first digit of resulting string is $$$8$$$, then Vasya wins, otherwise Petya.\nOverall complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution (Roms)",

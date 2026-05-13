@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1582E - Pchelyonok and Segments\nLet's notice that $$$k$$$ can be the answer, only if the sum of lengths of the segments does not exceed the number of elements in the array, that is $$$\\frac{k \\cdot (k + 1)}{2} \\le n$$$. From this inequation we can get that $$$k$$$ is less than $$$\\sqrt{2n}$$$, and when $$$n$$$ hits its maximal value, it does not exceed $$$447$$$.\nLet $$$dp_{i,j}$$$ be the maximal sum on the segment of length $$$j$$$, with that we have already considered all elements on the suffix $$$i$$$ (that is, elements with indices $$$i, i + 1, \\ldots, n$$$) and have already chosen segments with lengths $$$j, j - 1, \\ldots, 1$$$, in which the sums increase. Let's learn to recalculate the values of dynamics. We can either not include the $$$i$$$-th element in the segment of length $$$j$$$, then we need refer to the value of dynamics $$$dp_{i+1,j}$$$, or include the $$$i$$$-th element, and then we are interested in the value of dynamics $$$dp_{i+j,j-1}$$$ — if it's greater than the sum on the segment $$$i, i + 1, \\ldots, i + j - 1$$$, then we can take $$$j$$$ segments with lengths from $$$j$$$ to $$$1$$$ on the suffix $$$i$$$, answ otherwise we cannot take such segments on the suffix $$$i$$$. We need to take the maximum among these two cases in order to maximize the sum. To calculate the sum on a segment you can use prefix sums.\nAsymptotic behavior of this solution — $$$O(n \\cdot \\sqrt{n})$$$."
         },
         {
             "title": "Solution (74TrAkToR)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1263E - Editor\nTo respond to requests, you need two stacks. The first stack will contain all the brackets at the positions left than the cursor position, and the second one all the remaining ones.\nAlso, for each closing bracket in the first stack, we will maintain the maximum depth of the correct bracket sequence (CBS) ending with this bracket. Similarly, in the second stack, we will maintain the maximum depth of CBS that starting in this bracket. Since the brackets are added to the stack at the end and one at a time, you can easily recalculate this value.\nEven in the left stack, you need to maintain the number of opening brackets that do not have a pair of closing brackets, and in the right stack the number of closing brackets that do not have a pair of opening brackets.\nIf the previous two values are equal, then the current line is CBS. Otherwise, there is either one non-closed bracket or one bracket that does not have an opening one.\nThe answer to the problem, after each query, will be a maximum of three values - the maximum depth in the left stack, the maximum depth in the right stack and the number of non-closed brackets (the number of non-opened brackets in the right stack does not need to be taken into account, since if the line is CBS, then it is the number of open brackets in the left).\nTotal complexity is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution (Supermagzzz)",

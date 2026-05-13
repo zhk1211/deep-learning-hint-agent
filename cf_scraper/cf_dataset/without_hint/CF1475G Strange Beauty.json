@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1475G - Strange Beauty\nLet's calculate for each number $$$x$$$ how many times it occurs in the array $$$a$$$. Let's denote this number as $$$cnt_x$$$.\nLet's use the dynamic programming method. Let $$$dp(x)$$$ be equal to the maximum number of numbers not greater than $$$x$$$ such that for each pair of them one of the conditions above is satisfied. More formally, if $$$dp(x) = k$$$, then there exists numbers $$$b_1, b_2, \\ldots, b_k$$$ ($$$b_i \\leq x$$$) from the array $$$a$$$ such that for all $$$i \\ne j$$$ ($$$1 \\leq i, j \\leq k$$$) one of the conditions above is satisfied.\nThen to calculate $$$dp(x)$$$ you can use the following formula: $$$$$$dp(x) = cnt(x) + \\max \\limits_{y = 1, x mod y = 0}^{x-1} dp(y)$$$$$$.\nNote that to calculate $$$dp(x)$$$ you need to go through the list of divisors of $$$x$$$. For this, we use the sieve of Eratosthenes."
         },
         {
             "title": "Solution",

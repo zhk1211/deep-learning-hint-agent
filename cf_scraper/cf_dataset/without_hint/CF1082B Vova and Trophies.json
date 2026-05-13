@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nVova has won $ n $ trophies in different competitions. Each trophy is either golden or silver. The trophies are arranged in a row.\n\nThe beauty of the arrangement is the length of the longest subsegment consisting of golden trophies. Vova wants to swap two trophies (not necessarily adjacent ones) to make the arrangement as beautiful as possible — that means, to maximize the length of the longest such subsegment.\n\nHelp Vova! Tell him the maximum possible beauty of the arrangement if he is allowed to do at most one swap.\n\nInput Format\nThe first line contains one integer $ n $ ( $ 2 \\le n \\le 10^5 $ ) — the number of trophies.\n\nThe second line contains $ n $ characters, each of them is either G or S. If the $ i $ -th character is G, then the $ i $ -th trophy is a golden one, otherwise it's a silver trophy.\n\nOutput Format\nPrint the maximum possible length of a subsegment of golden trophies, if Vova is allowed to do at most one swap.\n\nExamples\nSample 1\nInput\n10\nGGGSGGGSGG\nOutput\n7\n\nSample 2\nInput\n4\nGGGG\nOutput\n4\n\nSample 3\nInput\n3\nSSS\nOutput\n0\n\nNote\nIn the first example Vova has to swap trophies with indices $ 4 $ and $ 10 $ . Thus he will obtain the sequence \"GGGGGGGSGS\", the length of the longest subsegment of golden trophies is $ 7 $ .\n\nIn the second example Vova can make no swaps at all. The length of the longest subsegment of golden trophies in the sequence is $ 4 $ .\n\nIn the third example Vova cannot do anything to make the length of the longest subsegment of golden trophies in the sequence greater than $ 0 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1082B - Vova and Trophies\nLet $$$r_i$$$ be the maximal segment of gold cups that begins in the cup $$$i$$$. Let $$$l_i$$$ be the maximum segment of gold cups that ends in the cup $$$i$$$. Also, let the total number of gold cups be $$$cntG$$$.\nNote that it makes no sense to change the cups of the same color. Then let's consider the silver cup, which will change with the gold cup, let its number be $$$i$$$. Then if $$$r_{i + 1} + l_{i - 1}  \\lt  cntG$$$, then we will update the answer with the value $$$r_{i + 1} + l_{i - 1} + 1$$$, and otherwise with the value $$$r_{i + 1} + l_{i - 1}$$$. This will not work if all the cups are golden. In this case, the answer is $$$n$$$."
+        },
+        {
+            "title": "Solution (Ajosteen)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nn\n;\nstring\ns\n;\nint\nmain\n()\n{\ncin\n>>\nn\n>>\ns\n;\nvector\n<int>\nl\n(\nn\n),\nr\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n){\nif\n(\ns\n[\ni\n]\n==\n'G'\n){\nl\n[\ni\n]\n=\n1\n;\nif\n(\ni\n>\n0\n)\nl\n[\ni\n]\n+=\nl\n[\ni\n-\n1\n];\n}\n}\nfor\n(\nint\ni\n=\nn\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n){\nif\n(\ns\n[\ni\n]\n==\n'G'\n){\nr\n[\ni\n]\n=\n1\n;\nif\n(\ni\n+\n1\n<\nn\n)\nr\n[\ni\n]\n+=\nr\n[\ni\n+\n1\n];\n}\n}\nint\nres\n=\n0\n;\nint\ncntG\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\ncntG\n+=\ns\n[\ni\n]\n==\n'G'\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n){\nif\n(\ns\n[\ni\n]\n==\n'G'\n)\ncontinue\n;\nint\nnres\n=\n1\n;\nif\n(\ni\n>\n0\n)\nnres\n+=\nl\n[\ni\n-\n1\n];\nif\n(\ni\n+\n1\n<\nn\n)\nnres\n+=\nr\n[\ni\n+\n1\n];\nres\n=\nmax\n(\nres\n,\nnres\n);\n}\nres\n=\nmin\n(\nres\n,\ncntG\n);\nif\n(\ncntG\n==\nn\n)\nres\n=\ncntG\n;\ncout\n<<\nres\n<<\nendl\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

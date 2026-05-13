@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1660F1 - Promising String (easy version)\nNote the fact that if the number of minus signs is greater than the number of plus signs by at least $$$2$$$, then there is sure to be a pair of standing next to minus signs (according to the Dirichlet principle). When we apply the operation of replacing two adjacent minus signs with a plus sign, the balance (the difference of plus signs and minus signs) increases by $$$3$$$. Then we need to find the number of subsections such that the balance on them is a multiple of $$$3$$$ and non-positive (then we can apply the operations until the balance is $$$0$$$). The balance value on the segment equals the balance value on the right boundary minus the balance value on the left boundary, i.e. we can find $$$O(1)$$$ by prefix sums."
         },
         {
             "title": "Solution",

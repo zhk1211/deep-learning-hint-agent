@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1096F - Inversion Expectation\nLet's break the problem into four general cases.\nCase 1. Inversions between two unknown numbers. Each pair of numbers can either be or inversion or not and the number of permutations for both cases is the same. Thus, the expected value of that is $$$\\frac{cnt(-1) \\cdot (cnt(-1) - 1)}{2} \\cdot \\frac 1 2$$$.\nCase 2 and 3. Inversions between the known and unknown number. Let's check the case with left number being unknown and right being known. The opposite will be done similarly. For each known number calculate the number of unknowns to the left of it $$$lft_x$$$ and the total number of unknowns greater than it $$$gt_x$$$. Then you'll need to put a greater number out of all possible to make an inversion. Add $$$lft_x \\cdot \\frac{gt_x}{cnt(-1)}$$$ to the answer.\nCase 4. Inversions between two known numbers. Just calculate that number ignoring all $$$-1$$$ and add it to answer.\nOverall complexity: $$$O(n \\log n)$$$ (for the lase case, all others are done in $$$O(n)$$$)."
         },
         {
             "title": "Solution (PikMike)",

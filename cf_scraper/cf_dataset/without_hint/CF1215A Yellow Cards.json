@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1215A - Yellow Cards\nAt first, if $$$k_1  \\gt  k_2$$$, then we swap $$$k_1$$$ with $$$k_2$$$ and $$$a_1$$$ with $$$a_2$$$, so the number of yellow cards required to send a player of the first team off is not greater than the same value for the second team.\nIf all players from the first team receive $$$k_1 - 1$$$ cards each and all players from the second team receive $$$k_2 - 1$$$ cards each, we will minimize the number of players who left the game. Let $$$cnt = a_1 \\cdot (k_1 - 1) + a_2 \\cdot (k_2 - 1)$$$. If $$$cnt \\le 0$$$, then the minimum number of players who left the game is equal to $$$0$$$. In the other case, if any player receivse one more yellow card, he leaves the game. So the minimum number of players who left the game is $$$(n - cnt)$$$.\nWhen we maximize the number of players who left the game, at first we should give cards to players in the first team, and then give cards to players in the second team. So, if $$$n \\le a_1 \\cdot k_1$$$, the answer is $$$\\lfloor \\frac{n}{k_1} \\rfloor$$$. In the other case, the answer is $$$a_1 + \\lfloor \\frac{n - a_1 \\cdot k_1}{k_2} \\rfloor$$$."
         },
         {
             "title": "Solution (fcspartakm)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2057E2 - Another Exercise on Graphs (hard version)\nPlease read the solution to problem E1.\nLet's return to the process where we sequentially changed the weights of the edges from $$$1$$$ to $$$0$$$. If we replace the weight of another edge with $$$0$$$ and it connects vertices that are at a distance of $$$0$$$, it means that the shortest paths between each pair of vertices will not change at all, so we will not recalculate the shortest paths in this case.\nWe also will not store useless layers in the array $$$\\textrm{dp}[k][i][j]$$$. This allows us to improve the asymptotic complexity of our solution to $$$O(n^3 + q \\log n)$$$.\nProof.\nWe will consider a graph that consists only of edges with weight $$$0$$$. We have $$$m$$$ consecutive requests to add an edge. Notice that we compute a new layer of $$$\\textrm{dp}$$$ only if, after adding the edge, some two components of this graph are merged, but this will happen exactly $$$n-1$$$ times."
         },
         {
             "title": "Implementation",

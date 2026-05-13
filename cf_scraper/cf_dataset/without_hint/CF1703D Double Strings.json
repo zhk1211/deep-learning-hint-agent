@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1703D - Double Strings\nUse some data structure that allows you to answer queries of the form: \"does the string $$$t$$$ appear in the array $$$s_1, \\dots, s_n$$$?\" For example, in C++ you can use a\nmap<string, bool>\n, while in Python you can use a dictionary\ndict\n.\nAfterwards, for each string $$$s$$$, brute force all strings $$$x$$$ and $$$y$$$ such that $$$s = x + y$$$. There are at most $$$7$$$ such strings, because $$$s$$$ has length at most $$$8$$$. Then check if both $$$x$$$ and $$$y$$$ appear in the array using your data structure.\nThe time complexity is $$$\\mathcal{O}(\\ell n \\log n)$$$ per test case, where $$$\\ell$$$ is the maximum length of an input string."
         },
         {
             "title": "Solution",

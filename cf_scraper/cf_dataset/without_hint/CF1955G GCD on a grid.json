@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1955G - GCD on a grid\nFirst, let's learn how to check for a fixed $$$x$$$ if there exists a path from $$$(1,1)$$$ to $$$(n,m)$$$ with a GCD of $$$x$$$. It is necessary for all numbers along the path to be divisible by $$$x$$$. Let's define a grid $$$b$$$ of size $$$n$$$ by $$$m$$$, where $$$b_{i,j} = 1$$$ if $$$a_{i,j}$$$ is divisible by $$$x$$$, and $$$b_{i,j} = 0$$$ otherwise. If there exists a path of ones in $$$b$$$, then there exists a path in $$$a$$$ with a GCD of $$$x$$$.\nTo check if there exists a path consisting entirely of ones, dynamic programming can be used. Let $$$dp_{i, j}$$$ denote whether it is possible to reach $$$(i,j)$$$ from $$$(1,1)$$$. Then the transitions are $$$dp_{i,j} = dp_{i - 1,j} \\lor dp_{i,j - 1}$$$, with the base case of the dynamic programming being $$$dp_{1,1} = b_{1,1}$$$.\nSince the path will definitely pass through the cells $$$(1,1)$$$ and $$$(n,m)$$$, we iterate through all divisors of the number $$$g = \\gcd(a_{1,1}, a_{n,m})$$$, check for each one if there exists a path with that GCD, and take the maximum such divisor. The complexity of the solution is $$$O(n \\cdot m \\cdot \\sqrt[3]{A})$$$, where $$$A \\le 10^6$$$."
         },
         {
             "title": "Solution",

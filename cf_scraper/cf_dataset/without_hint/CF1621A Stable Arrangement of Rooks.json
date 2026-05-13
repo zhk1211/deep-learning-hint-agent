@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1621A - Stable Arrangement of Rooks\nIt is easy to see that if there are two rooks in the neighbouring rows we can move one of them to the another of these two rows, so there shouldn't be two rooks in the neighbouring rows in a stable arrangement.\nLet's split chessboard into $$$\\lceil \\frac{n}{2} \\rceil$$$ regions in the following way: region $$$1$$$ contains all cells of rows $$$1$$$, $$$2$$$, region $$$2$$$ contains all cells of rows $$$3$$$, $$$4$$$ and so on. The last region can contain cells of only one row if $$$n$$$ is odd. We had shown that there can't be two rooks in one region so if $$$k  \\gt  \\lceil \\frac{n}{2} \\rceil = \\lfloor \\frac{n+1}{2} \\rfloor$$$ there is no stable arrangement.\nWe can always place $$$k \\leq \\lfloor \\frac{n+1}{2} \\rfloor$$$ rooks into cells $$$(1, 1)$$$, $$$(3, 3)$$$, $$$\\ldots$$$, $$$(2k-1, 2k-1)$$$. Such arrangement is stable because after moving any rook to the neighbouring row it will be in the same collumn and in the even numbered row where there are no other rooks. The same applies for moving rook to the neighbouring collumn.\nActually, we can show that condition from the first paragraph combined with the same condition for collumns is sufficient and necessary criterion for stable placement.\nBonus: how many stable arrangements exist?"
         },
         {
             "title": "Solution",

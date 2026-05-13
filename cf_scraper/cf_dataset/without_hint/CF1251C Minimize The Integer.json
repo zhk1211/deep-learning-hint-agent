@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1251C - Minimize The Integer\nLet's consider two sequences of digits: $$$e_1, e_2, \\dots , e_k$$$ and $$$o_1, o_2, \\dots , o_m$$$, there $$$e_1$$$ is the first even digit in $$$a$$$, $$$e_2$$$ is the second even digit and so on and $$$o_1$$$ is the first odd digit in $$$a$$$, $$$o_2$$$ is the second odd digit and so on.\nSince you can't swap digits of same parity, the sequence $$$e$$$ of even digits of $$$a$$$ never changed. Sequence $$$o$$$ of odd digits of $$$a$$$ also never changed. So the first digit in the answer will be equal to $$$e_1$$$ or to $$$o_1$$$. And since we have to minimize the answer, we have to chose the $$$min(e_1, o_1)$$$ as the first digit in answer and them delete it from the corresponding sequence (in this way sequence $$$e$$$ turn into $$$e_2, e_3, \\dots , e_k$$$ or sequence $$$o$$$ turn into $$$o_2, o_3, \\dots , o_m$$$). Second, third and followings digits need to choose in the same way."
         },
         {
             "title": "Solution (Roms)",

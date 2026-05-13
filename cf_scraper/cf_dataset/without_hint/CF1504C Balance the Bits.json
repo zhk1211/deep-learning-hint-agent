@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1504C - Balance the Bits\nAny balanced bracket sequence must begin with '\n(\n' and end with '\n)\n'. Therefore, $$$a$$$ and $$$b$$$ must agree in the first and last positions, so we require $$$s_1=s_n=1$$$ or a solution doesn't exist.\nThe total number of open brackets in $$$a$$$ and $$$b$$$ must be $$$n$$$, which is even. Each $$$1$$$ bit in $$$s$$$ creates an even number of open brackets and each $$$0$$$ bit creates an odd number of open brackets. Therefore, there must be an even number of $$$0$$$ bits, or a solution doesn't exist. Note that the number of $$$1$$$ bits also must be even.\nAssuming these conditions hold, let's construct a solution. Suppose there are $$$k$$$ positions where $$$s_i=1$$$. We will make the first $$$\\frac k2$$$ positions open in both $$$a$$$ and $$$b$$$, and we will make the last $$$\\frac k2$$$ positions closed in both $$$a$$$ and $$$b$$$. Then, the $$$0$$$ bits in $$$s$$$ will alternate between which string gets the open bracket."
         }
     ]
 }

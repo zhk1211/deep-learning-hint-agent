@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1487D - Pythagorean Triples\nWe have to find the number of triples ($$$a, b, c$$$) such that equations $$$a^2+b^2=c^2$$$ and $$$a^2-b=c$$$ are satisfied. Let's subtract one equation from another and get that $$$b^2+b=c^2-c \\implies b(b+1)=c(c-1)$$$. So we know that $$$c=b+1$$$ and after substituting, we get that $$$a^2=2b+1$$$. We can see that there is only one correct value of $$$b$$$ (and $$$c$$$) for every odd value of $$$a$$$ (greater than $$$1$$$). So we can iterate over the value of $$$a$$$ and check that the corresponding value of $$$c$$$ doesn't exceed $$$n$$$. This solution works in $$$O(\\sqrt{n})$$$ because $$$a \\approx \\sqrt{c} \\le \\sqrt{n}$$$, but you can also solve it in $$$O(1)$$$."
         },
         {
             "title": "Solution (Neon)",

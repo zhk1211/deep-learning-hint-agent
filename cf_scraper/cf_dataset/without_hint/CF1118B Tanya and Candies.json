@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1118B - Tanya and Candies\nLet's maintain four variables $$$oddPref$$$, $$$evenPref$$$, $$$oddSuf$$$ and $$$evenSuf$$$, which will mean the sum of $$$a_i$$$ with odd $$$i$$$ on prefix, even $$$i$$$ on prefix, odd $$$i$$$ on suffix and even $$$i$$$ on suffix. Initially, $$$oddPref$$$ and $$$evenPref$$$ are $$$0$$$, $$$oddSuf$$$ equals to the sum of $$$a_i$$$ with odd $$$i$$$ in a whole array and $$$evenSuf$$$ equals to the sum of $$$a_i$$$ with even $$$i$$$ in a whole array.\nLet's iterate from left to right over all elements of the array. Let's consider the current element $$$a_i$$$. If $$$i$$$ is even, then set $$$evenSuf := evenSuf - a_i$$$, otherwise let's set $$$oddSuf := oddSuf - a_i$$$. Then let's consider we give the current candy to dad. Then we have to increase the answer if $$$oddPref = evenSuf$$$ and $$$evenPref = oddSuf$$$. Then if $$$i$$$ is even then let's set $$$evenPref := evenPref + a_i$$$, otherwise let's set $$$oddPref := oddPref + a_i$$$."
         },
         {
             "title": "Solution",

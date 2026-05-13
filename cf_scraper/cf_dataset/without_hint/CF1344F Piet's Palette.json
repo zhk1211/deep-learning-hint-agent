@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1344F - Piet's Palette\nEquate an empty cell with the color white, and let's represent the colors as 0/1 vectors: $$$$$$W=\\begin{bmatrix}0\\\\0\\end{bmatrix},\\ R=\\begin{bmatrix}1\\\\0\\end{bmatrix},\\ Y=\\begin{bmatrix}0\\\\1\\end{bmatrix},\\ B=\\begin{bmatrix}1\\\\1\\end{bmatrix}.$$$$$$\nUnder this representation, mixing becomes addition $$$\\pmod{2}$$$. And the operations $$$\\mathrm{RY}$$$, $$$\\mathrm{RB}$$$, $$$\\mathrm{YB}$$$ are linear transformations of the colors. That is, each of these operations is equivalent to multiplying the corresponding matrix by a cell's vector: $$$$$$\\mathrm{RY}=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix},\\ \\mathrm{RB}=\\begin{bmatrix}1&0\\\\1&1\\end{bmatrix},\\ \\mathrm{YB}=\\begin{bmatrix}1&1\\\\0&1\\end{bmatrix}.$$$$$$\nWe simply have a system of $$$2k$$$ linear equations on $$$2n$$$ unknowns, which we can solve with Gaussian elimination using bitsets.\nComplexity is $$$O((2k)^2 (2n) / 64).$$$"
         }
     ]
 }

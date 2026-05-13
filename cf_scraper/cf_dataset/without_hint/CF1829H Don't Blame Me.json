@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1829H - Don't Blame Me\nWe can notice that the numbers are pretty small (up to $$$63$$$) and the AND values will be up to $$$63$$$ as well. Thus, we can count the number of subsequences that have AND value equal to $$$x$$$ for all $$$x$$$ from $$$0$$$ to $$$63$$$.\nWe can do this using dynamic programming. Let's denote $$$dp_{ij}$$$ as the number of subsequences using the first $$$i$$$ elements that have a total AND value of $$$j$$$. The transitions are quite simple. We can iterate over all $$$j$$$ values obtained previously and update the values respectively:\nWe have three cases:\nThe first case is when we don't use the $$$i$$$-th value. Here we just update the $$$dp_{ij}$$$ in the following way: $$$dp[i][j] = dp[i][j] + dp[i - 1][j]$$$.\nThe second case is when we use the $$$i$$$-th value. Here we update the $$$dp[i][a[i] \\text{&} j]$$$ in the following way: $$$dp[i][a[i] \\text{&} j] = dp[i][a[i] \\text{&} j] + dp[i - 1][j]$$$.\nThe third case is starting a new subsequence with just the $$$i$$$-th element. Thus, we update $$$dp[i][a[i]] = dp[i][a[i]] + 1$$$."
         },
         {
             "title": "Solution",

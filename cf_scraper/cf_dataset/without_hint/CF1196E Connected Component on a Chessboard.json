@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1196E - Connected Component on a Chessboard\nI'll consider the case when $$$b \\ge w$$$, the other case is symmetric and the answer I construct is the same but shifted by $$$1$$$ to the right.\nConsider the given field as a matrix where $$$x$$$ is the number of row and $$$y$$$ is the number of column. Firstly, let's build the line of length $$$2w-1$$$ from the cell $$$(2, 2)$$$ to the cell $$$(2, 2w)$$$. Then $$$b$$$ will decrease by $$$w-1$$$ and $$$w$$$ will (\nformally\n) become $$$0$$$.\nThen we have two black cells to the left and to the right ($$$(2, 1)$$$ and $$$(2, 2w+1)$$$) and $$$w-1$$$ black cells to the up (all cells ($$$1, 2w+2*i$$$) for all $$$i$$$ from $$$0$$$ to $$$w-1$$$) and $$$w-1$$$ black cells to the down (all cells ($$$3, 2w+2*i$$$) for all $$$i$$$ from $$$0$$$ to $$$w-1$$$). Let's add the required number of cells to the answer.\nIf even after adding all these cells $$$b$$$ still be greater than $$$0$$$ then the answer is \"\nNO\n\" (maybe there will be a proof why it is so but you can read it already from other participants). Otherwise the answer is \"\nYES\n\" and we constructed the required component."
         },
         {
             "title": "Solution",

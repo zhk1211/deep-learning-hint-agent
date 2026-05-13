@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1117C - Magic Ship\nNote, that if we can reach the destination in $$$x$$$ days, so we can reach it in $$$y \\ge x$$$ days, since we can stay in the destination point by moving to the opposite to the wind direction. So, we can binary search the answer.\nTo check the possibility to reach the destination point $$$(x_2, y_2)$$$ in $$$k$$$ days we should at first look at the position $$$(x_3, y_3)$$$ the wind moves ship to. Now we can calculate where we can go: since each day we can move in one of four directions or not move at all, we can reach any point $$$(x, y)$$$ with Manhattan distance $$$|x - x_3| + |y - y_3| \\le k$$$. So we need to check that $$$|x_2 - x_3| + |y_2 - y_3| \\le k$$$.\nTo calculate $$$(x_3, y_3)$$$ we can note, that there were $$$\\lfloor \\frac{k}{n} \\rfloor$$$ full cycles and $$$k \\bmod n$$$ extra days. So it can be calculated with $$$O(1)$$$ time using prefix sums.\nFinally, about borders of binary search: to reach the destination point we need to move closer at least by one (it terms of Manhattan distance) from the full cycle of the wind. So, if answer exists then it doesn't exceed $$$(|x_1 - x_2| + |y_1 - y_2|) \\cdot n \\le 2\\cdot 10^{14}$$$."
         },
         {
             "title": "Solution (Roms)",

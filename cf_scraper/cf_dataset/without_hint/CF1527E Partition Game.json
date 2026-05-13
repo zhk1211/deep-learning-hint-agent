@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1527E - Partition Game\nLet's use dynamic programming to solve this problem.\nConsider $$$dp[i][j]$$$ be the answer for prefix $$$j$$$ with $$$i$$$ subsegments. Transitions are fairly straightforward. Let $$$c[i][j]$$$ be the cost of subarray starting at $$$i^{th}$$$ index and ending at $$$j^{th}$$$ index.\n$$$dp[i][j] = \\min\\limits_{k \\lt j}(dp[i-1][k] + c[k+1][j])$$$\nIf we calculate it naively, it would result in $$$O(n^2k)$$$ solution which would not be enough for given constraints.\nWe need some data structure to maintain $$$dp[i-1][k] + c[k+1][j]$$$ for every $$$k \\lt j$$$. Consider the example $$$a = [2,2,3,2,3]$$$. We can write cost as $$$(2-1) + (4-2) + (5-3) = 5$$$.\nExcept for the first occurrence, we just need a sum of $$$b[k] = k - last[a[k]]$$$ in the range, where $$$last[a[k]]$$$ is the index of the last occurrence of $$$a[k]$$$ just before index $$$k$$$.\nWe can maintain this in some segment tree. Let's say our segment tree is built for prefix $$$j$$$, we can transition to prefix $$$j+1$$$ by adding $$$b[j+1]$$$ in range $$$[0,last[a[j+1]]-1]$$$.\nThis will result in a $$$O(n \\cdot k log(n))$$$ solution."
         },
         {
             "title": "Solution (rivalq)",

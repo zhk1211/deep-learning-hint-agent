@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2059B - Cost of the Array\nIf $$$k = n$$$, then the partition is unique and the answer can be explicitly found.\nIn all other cases, the answer does not exceed $$$2$$$. We want the second subarray of our partition to start not with $$$1$$$, while we can ignore all other subarrays, since in this case the answer will be $$$1$$$. We will iterate over the starting position of the second subarray, which can range from $$$2$$$ to $$$n - k + 2$$$. If we encounter only ones in this segment, then the second subarray can consist of $$$2$$$ ones, and the answer will be $$$2$$$."
         },
         {
             "title": "Implementation",

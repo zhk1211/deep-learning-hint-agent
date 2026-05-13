@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1846F - Rudolph and Mimic\nThe strategy is to keep track of the number of objects of each type. When the number of objects of a certain type increases, that means the mimic has turned into an object of that type. Then you can delete all other objects. After the first such removal, all objects will become equal. Then, after maximum two stages, the mimic will be forced to turn into something else and it will be possible to unambiguously identify it.\nLet's consider the worst case, where the mimic does not change its appearance between the first and second stages. Then we do not remove any element with the first two requests. Between the second and third steps, the mimic will be forced to transform, and then we can remove all objects except for those that have the same type as the mimic. The mimic may not change between the third and fourth stages, but will be forced to transform between the fourth and fifth. Then we will be able to unambiguously determine the mimic, since before the transformation all objects were the same."
         },
         {
             "title": "Solution",

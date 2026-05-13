@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1221C - Perfect Team\nNotice that if $$$c \\ne m$$$, then you can equalize them to the min and re-qualify the rest into students without specialization. That won't change the answer.\nNow analyze the possible team formations: 1 of each kind, 2 coders and 1 mathematician or 1 coder and 2 mathematicians. Each of these squads have 1 coder and 1 mathematician, so you can only choose the type of the third member.\nThe students without specialization can only be used in the first kind of teams, so let's use them first. After that you might have been left with a nonzero count of coders and mathematicians. These are equal however, so $$$\\lfloor \\frac{c + m}{3} \\rfloor$$$ can be added to the answer.\nThis solves each query in $$$O(1)$$$.\nYou can also run a binary search and solve each query in $$$O(\\log MAX)$$$."
         },
         {
             "title": "Solution 1 (BledDest)",

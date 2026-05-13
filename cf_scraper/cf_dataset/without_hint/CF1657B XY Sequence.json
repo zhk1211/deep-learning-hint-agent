@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1657B - XY Sequence\nStrategy is quite easy: we go from $$$a_1$$$ to $$$a_n$$$ and if $$$a_{i - 1} + x \\le B$$$ we take this variant (we set $$$a_i = a_{i - 1} + x$$$); otherwise we set $$$a_i = a_{i - 1} - y$$$. Note that all $$$a_i$$$ are in range $$$[-(x + y), B]$$$ so there won't be any overflow/underflow.\nIt's also not hard to prove that this strategy maximizes the sum. By contradiction: suppose the optimal answer has some index $$$i$$$ where $$$a_{i - 1} + x \\le B$$$ but $$$a_i = a_{i - 1} - y$$$. Let's find first position $$$j \\ge i$$$ where $$$a_j = a_{j - 1} + x$$$ and swap operations between $$$i$$$ and $$$j$$$. As a result, $$$B \\ge a_i  \\gt  a_{i + 1}  \\gt  \\dots  \\gt  a_{j}$$$, all $$$a_i$$$ from $$$[i, j - 1]$$$ were increased while $$$a_j$$$ remained the same, i. e. there is no violation of the rules and the total sum increased — contradiction."
         },
         {
             "title": "Solution (adedalic)",

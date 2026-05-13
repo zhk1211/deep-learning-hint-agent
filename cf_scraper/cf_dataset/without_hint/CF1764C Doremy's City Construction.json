@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1764C - Doremy's City Construction\nWe can first assume that no edge links two vertices with the same value, then for each vertex $$$u$$$ and his neighbors $$$S_u$$$, either $$$a_u \\gt \\max\\limits_{v\\in S_u}a_v$$$ or $$$a_u \\lt \\min\\limits_{v\\in S_u}a_v$$$. If $$$a_u \\gt \\max\\limits_{v\\in S_u}a_v$$$, we paint $$$u$$$ black, otherwise we paint it white. Then it's obviously that any edge connects two vertices with different color.\nSo we can first determine the color of each vertex and then add as many as edges according to the color. $$$(u,v)$$$ is addable only when $$$u$$$ is black, $$$v$$$ is white and $$$a_u \\gt a_v$$$. If we paint $$$u$$$ black and $$$v$$$ white and $$$a_u \\lt a_v$$$, we can swap the colors and the edges connecting to these 2 vertices and the answer will be no worse. So the best painting plan is determining a value $$$A$$$, painting $$$u$$$ black if and only if $$$a_u\\ge A$$$, painting $$$u$$$ white if and only if $$$a_u \\lt A$$$.\nIf we add an edge linking two vertices with the same value, then the two vertices can not connect other vertices. This plan will only be considered when $$$a_1=a_2=\\cdots=a_n$$$. When $$$a_1=a_2=\\cdots=a_n$$$, the answer is $$$\\lfloor\\frac{n}{2}\\rfloor$$$."
         }
     ]
 }

@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1846E1 - Rudolf and Snowflakes (simple version)\nFor the current given constraint you can precalculate whether it is possible to obtain each $$$n$$$ for some $$$k$$$. To do this, we can iterate through all possible $$$2 \\le k \\le 10^6$$$ and for each of them calculate the values $$$1 + k + k^2$$$, $$$1 + k + k^2 + k^3$$$, ..., $$$1 + k + k^2 + k^3 + ... + k^p$$$, where $$$p$$$ is such that $$$1 \\le 1 + k + k^2 + k^3 + ... + k^p \\le 10^6$$$. For this version of problem it is enougth to calculete valuse for $$$p \\le 20$$$.\nNote that the minimum number of snowflake layers is $$$3$$$. Therefore, the calculations start from the value $$$1 + k + k^2$$$.\nWe can store all the obtained values, for example, in a set. Alternatively, we can use an array called \"used\" and set the value $$$1$$$ in the array element with the corresponding index for each obtained value.\nIt is better to perform this precalculation before iterating through the test cases.\nThen, for each test, we only need to read the value of $$$n$$$ and check if we have obtained it in the precalculation described above.\nThe time complexity of the solution using a set is $$$O(\\sqrt n \\cdot p \\cdot \\log n + tc \\cdot \\log n$$$.\nThe time complexity of the solution using the \"used\" array is $$$O(\\sqrt n \\cdot p + tc)$$$.\nHere $$$tc$$$ — number of test cases."
         },
         {
             "title": "Solution",

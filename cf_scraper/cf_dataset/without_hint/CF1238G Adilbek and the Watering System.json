@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1238G - Adilbek and the Watering System\nDespite the fact that statement sounds like some dp or flow, the actual solution is pretty greedy.\nLet's iterate over all minutes Adilbek has to water at and maintain the cheapest $$$C$$$ liters he can obtain to this minute. Let this be some structure which stores data in form (price for 1 liter, total volume Adilbek can buy for this price). Pairs will be sorted by the price of a liter. The most convenient structure for that might be a C++ map, for example.\nWhen moving to the next minute, pop the cheapest liter out of this structure and add it to the answer.\nIf that minute some friend comes, then push his water to the structure: if the total updated volume in the structure is greater than $$$C$$$, then pop the most expensive left-overs out of it so that the structure holds no more than $$$C$$$ liters total. That prevents out solution to fill the watering system over its capacity.\nThe main idea for why this greedy strategy works is that it's never optimal to take not the cheapest liter because a liter of that price or cheaper will still be available in the future minutes.\nNote that between each pairs of adjacent coming friends basically nothing happens. Thus you can find the time between them and pop that number of cheapest liters right away instead of iterating minute by minute.\nOverall complexity: $$$O(n \\log n)$$$ per query."
         },
         {
             "title": "Solution (Ne0n25)",

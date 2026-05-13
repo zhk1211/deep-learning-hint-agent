@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1538C - Number of Pairs\nThe problem can be divided into two classic ones:\nCount the number of pairs $$$a_i+a_j \\le r$$$;\nCount the number of pairs $$$a_i+a_j \\le l-1$$$.\nLet $$$A$$$ — be the answer to the first problem, and $$$B$$$ — be the answer to the second problem. Then $$$A-B$$$ is the answer to the original problem.\nThe new problem can be solved by binary search. Iterate over the first element of the pair. Then you need to count the number of elements such that $$$a_j \\le r - a_i$$$. If you sort the array, this value can be calculated by running a single binary search."
         },
         {
             "title": "Solution",

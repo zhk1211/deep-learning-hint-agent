@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1633B - Minority\nLet's try to estimate the maximum possible answer. Best case, you will be able to remove either all zeros or all ones from the entire string. Whichever has the least occurrences, can be the answer.\nIf the amounts of zeros and ones in the string are different, this bound is actually easy to reach: just choose the substring that is the entire string.\nIf the amounts are the same, the bound is impossible to reach. Choosing the entire string will do nothing, and asking a smaller substring will decrease the answer.\nThe smallest we can decrease the answer by is $$$1$$$. If you choose the substring that is the string without the last character, you will decrease one of the amounts by one. That will make the amounts different, and the bound will be reached.\nOverall complexity: $$$O(|s|)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

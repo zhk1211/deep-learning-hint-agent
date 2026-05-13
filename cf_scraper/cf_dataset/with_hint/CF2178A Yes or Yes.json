@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2178A - Yes or Yes\nIn any operation, there are two things we are allowed to do:\nConvert a 'Yes' and a 'No' into a 'Yes'\nConvert two 'No's into a 'No'\nIn either operation the number of 'Yes's remains unchanged.\nThis means that if we start with at least two 'Yes's, then the final state must contain at least two 'Yes's, and cannot be a single character.\nOn the other hand, if we start with at most one 'Yes', then any operation we do will be legal, as there will not be two 'Yes's to combine. This means we can do any $$$n - 1$$$ operations, and we will be left with a single character.\nThus, the answer to the question is 'Yes' if and only if the input string contains at most one 'Y'."
         },
         {
             "title": "Implementation",

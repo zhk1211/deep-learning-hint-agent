@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1305C - Kuroni and Impossible Calculation\nLet's consider $$$2$$$ cases.\n$$$n\\le m$$$. Then we can calculate this product directly in $$$O(n^2)$$$.\n$$$n  \\gt  m$$$. Note that there are only $$$m$$$ possible remainders under division by $$$m$$$, so some $$$2$$$ numbers of $$$n$$$ have the same remainder. Then their difference is divisible by $$$m$$$, so the entire product is $$$0 \\bmod m$$$.\nAsymptotic $$$O(m^2)$$$."
         },
         {
             "title": "Solution (antontrygubO_o, C++)",

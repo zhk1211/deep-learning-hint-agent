@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1697B - Promo\nFirst of all, there is an answer with exactly $$$x$$$ items bought. Suppose items worth $$$p_1 \\le p_2 \\le\\dots \\le p_m$$$ ($$$x  \\lt  m$$$) were purchased. Then by removing $$$p_1$$$ from this set, the sum of $$$y$$$ the cheapest items in the set will change by $$$p_{y+1}-p_1\\ge 0$$$, which means the answer will not decrease.\nThe second fact that is necessary to solve the problem  — $$$x$$$ of the most expensive items should be chosen. Otherwise, one can remove the minimum price item from the set and add an item with a higher price (it can always be found), which means the answer will not decrease.\nUsing these two facts, it is enough to sort the array and use prefix sums."
         },
         {
             "title": "Solution (Neon)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1624F - Interacdive Problem\nAfter each query we know the $$$\\lfloor\\frac{x}{n}\\rfloor$$$ value, then we need to find $$$x \\mod n$$$ to find the current $$$x$$$ value. To find it, we will use a binary search.\nSuppose $$$x \\mod n$$$ is in the $$$[l, r)$$$ half-interval, in order to understand which half it is in, we will make a query, select the middle $$$m$$$ of the half-interval and make a\n+ $$$n-m$$$\nquery. After that, $$$\\lfloor\\frac{x}{n}\\rfloor$$$ will either change, which means that $$$x \\mod n$$$ was in the $$$[m, r)$$$ half-interval, or not, then it was in the $$$[l, m)$$$ half-interval. Now you just need to properly shift the half-interval to accommodate the query change."
         },
         {
             "title": "Solution",

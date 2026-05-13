@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1703F - Yet Another Problem About Pairs Satisfying an Inequality\nCall a pair\ngood\nif it satisfies the condition. Let's split the inequality into three parts: $$$a_i  \\lt  i$$$, $$$i  \\lt  a_j$$$, $$$a_j  \\lt  j$$$.\nNote that if $$$a_i \\geq i$$$ for any $$$i$$$, then it can't be an element of a good pair, because it fails the first and third conditions. So we can throw out all elements of the array satisfying $$$a_i \\geq i$$$.\nFor the remaining elements, the first and third inequalities are already satisfied, so we only have to count the number of pairs $$$(i,j)$$$ with $$$i  \\lt  a_j$$$. Let's iterate $$$j$$$ through the array from the left to the right, and make a list storing all $$$i$$$ that appear before $$$j$$$. Then for each $$$j$$$, count the number of $$$i$$$ less than $$$a_j$$$ by binary searching on the number of elements in the list less than $$$a_j$$$. Afterwards, add $$$j$$$ to the end of the list.\nSince we iterate from left to right, the list will always remain sorted (we insert the indices of elements, which are increasing from left to right), so the binary search will always work.\nThe time complexity is $$$\\mathcal{O}(n \\log n)$$$."
         },
         {
             "title": "Solution",

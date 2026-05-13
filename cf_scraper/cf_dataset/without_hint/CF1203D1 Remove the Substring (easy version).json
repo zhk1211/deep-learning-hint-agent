@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1203D1 - Remove the Substring (easy version)\nIn this problem we can just iterate over all possible substrings and try to remove each of them. After removing the substring we can check if $$$t$$$ remains the subsequence of $$$s$$$ in linear time.\nLet we remove the substring $$$s[l; r]$$$. Let's maintain a pointer $$$pos$$$ (the initial value of the pointer is $$$1$$$) and iterate over all possible $$$i$$$ from $$$1$$$ to $$$|s|$$$. If $$$pos \\le |t|$$$ and $$$s_i = t_{pos}$$$ let's increase $$$pos$$$ by one. If after all iterations $$$pos = |t| + 1$$$ then let's update the answer with the length of the current substring."
         },
         {
             "title": "Solution",

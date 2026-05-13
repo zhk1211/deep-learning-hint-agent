@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1612B - Special Permutation\nThere are many different constructions that give the correct answer, if it exists. In my opinion, one of the most elegant is the following one.\n$$$a$$$ should always be present in the left half, and $$$b$$$ should be present in the right half, but the exact order of elements in each half doesn't matter. So, it will never be wrong to put $$$a$$$ in the first position, and $$$b$$$ in the second position.\nAs for the remaining elements, we want elements of the left half to be as big as possible (since they shouldn't be less than $$$a$$$), and elements of the right half — as small as possible (since they shouldn't be greater than $$$b$$$). Let's put the elements $$$n$$$, $$$n - 1$$$, $$$n - 2$$$, ..., $$$1$$$ (excluding $$$a$$$ and $$$b$$$) on positions $$$2$$$, $$$3$$$, $$$4$$$, ..., $$$n-1$$$, respectively, so the elements in the left half are as big as possible, and the elements in the right half are as small as possible.\nAfter constructing a permutation according to these rules, we should check if it meets the constraints (and print it if it does)."
         },
         {
             "title": "Solution (BledDest)",

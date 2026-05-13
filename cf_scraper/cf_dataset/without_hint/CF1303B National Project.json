@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1303B - National Project\nThere are two conditions that should be met according to the statement. On the one hand, we should repair the whole highway, so we must spend at least $$$n$$$ days to do it. On the other hand, at least half of it should have high-quality pavement or at least $$$needG = \\left\\lceil \\frac{n}{2} \\right\\rceil$$$ units should be laid at good days.\nHow to calculate the minimum number of days (name it as $$$totalG$$$) for the second condition to meet? Note that the first $$$totalG$$$ days can be represented as several (maybe zero) blocks of $$$g + b$$$ days, where exactly $$$g$$$ days in each block are good and some remaining days $$$1 \\le rem \\le g$$$. The $$$rem  \\gt  0$$$ because $$$totalG$$$ will not be minimum otherwise.\nThere are plenty of ways to calculate $$$totalG$$$. One of them is the following: Firstly, let's calculate the number of $$$g + b$$$ cycles we need: $$$totatG = \\left\\lfloor \\frac{needG}{g} \\right\\rfloor \\cdot (g + b)$$$. Now, if $$$needG \\mod g  \\gt  0$$$ we just add it (since it's exactly the $$$rem$$$) or $$$totalG = totalG + (needG \\mod g)$$$. But if $$$needG \\mod g = 0$$$ we added to $$$totalG$$$ last $$$b$$$ block and should subtract it or $$$totalG = totalG - b$$$.\nThe answer is $$$\\max(n, totalG)$$$."
         },
         {
             "title": "Solution (adedalic)",

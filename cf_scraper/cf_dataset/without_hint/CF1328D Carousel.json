@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1328D - Carousel\nThe answer to this problem is at most $$$3$$$. Let's prove it by construction.\nFirstly, if all $$$t_i$$$ are equal then the answer is $$$1$$$. Otherwise, there are at least two different values in the array $$$t$$$ so the answer is at least $$$2$$$. If $$$n$$$ is even then the answer is always $$$2$$$ because you can color figures in the following way: $$$[1, 2, 1, 2, \\dots, 1, 2]$$$. If $$$n$$$ is odd then consider two cases. The first case is when some pair of adjacent figures have the same type. Then the answer is $$$2$$$ because you can merge these two values into one and get the case of even $$$n$$$. Otherwise, all pairs of adjacent figures have different types and if you consider this cyclic array as a graph (cycle of length $$$n$$$) then you can notice that it isn't bipartite so you need at least $$$3$$$ colors to achieve the answer (color all vertices in such a way that any two adjacent vertices have different colors). And the answer looks like $$$[1, 2, 1, 2, \\dots, 1, 2, 3]$$$."
         },
         {
             "title": "Solution",

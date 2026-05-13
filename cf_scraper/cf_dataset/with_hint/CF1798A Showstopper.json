@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1798A - Showstopper\nThe first solution: Fix the position of the numbers $$$a_n, b_n$$$. And for each other index $$$i$$$, let's check whether the conditions $$$a_i \\leq a_n$$$ and $$$b_i \\leq b_n$$$ are met. If not, swap $$$a_i$$$ and $$$b_i$$$ and check again. If the conditions are not met for some index in both variants — the answer is\n\"No\"\n, otherwise\n\"Yes\"\n.\nThe second solution: Let $$$M$$$ be the maximum of all the numbers $$$a_1, a_2, \\ldots, a_n, b_1, b_2, \\ldots, b_n$$$. Then if $$$a_n  \\lt  M$$$ and $$$b_n  \\lt  M$$$ the answer is —\n\"No\"\n, since in the one of the arrays where the number $$$M$$$ appears after the operations, the maximum will be $$$M$$$, which is greater than $$$a_n$$$ and $$$b_n$$$. Otherwise, either $$$a_n = M$$$ or $$$b_n = M$$$. If $$$a_n = M$$$, then swap $$$a_n$$$ and $$$b_n$$$, now $$$b_n = M$$$. So the condition $$$b_n = \\max(b_1, b_2, \\ldots, b_n)$$$ will always be met, regardless of the numbers $$$b_1, b_2, \\ldots, b_{n-1}$$$. Therefore, it would be best to put in $$$b_i$$$ the maximum of the numbers $$$a_i, b_i$$$ for each $$$i$$$. After that, it remains to check the condition for the array $$$a_1, a_2, \\ldots, a_n$$$, and if it is met, the answer is —\n\"Yes\"\n, otherwise —\n\"No\""
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1693C - Keshi in Search of AmShZ\nDefine $$$dis_v$$$ as the minimum number of days needed to reach city $$$n$$$ from city $$$v$$$. $$$dis_n = 0$$$.\nWe have to assume that Keshi will always choose the worst reachable city, that is the city with maximum $$$dis$$$.\nFor each node $$$v$$$ we kind of have to choose $$$nxt_v$$$ and block all neighbors(outgoing edges) with a distance more than $$$dis_{nxt_v}$$$.\nWe will use Dijkstra's algorithm.\nNote that in Dijkstra's algorithm we mark the nodes in increasing order of $$$dis$$$.\nAt each step get the node $$$v$$$ with the minimum $$$dis$$$. For each node $$$u$$$ that there is an edge from $$$u$$$ to $$$v$$$, calculate $$$dis_u$$$ if $$$nxt_u$$$ was $$$v$$$. You know the number of edges you have to block since the neighbors with greater $$$dis$$$ are the ones that are not marked yet.\nTime complexity: $$$\\mathcal{O}(n\\log n)$$$"
         },
         {
             "title": "Implementation",

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have a garland consisting of $ 4 $ colored light bulbs, the color of the $ i $ -th light bulb is $ s_i $ .\n\nInitially, all the light bulbs are turned off. Your task is to turn all the light bulbs on. You can perform the following operation any number of times: select a light bulb and switch its state (turn it on if it was off, and turn it off if it was on). The only restriction on the above operation is that you can apply the operation to a light bulb only if the previous operation was applied to a light bulb of a different color (the first operation can be applied to any light bulb).\n\nCalculate the minimum number of operations to turn all the light bulbs on, or report that this is impossible.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe single line of each test case contains $ s $ — a sequence of $ 4 $ characters, where each character is a decimal digit. The $ i $ -th character denotes the color of the $ i $ -th light bulb.\n\nOutput Format\nFor each test case, print one integer — the minimum number of operations to turn all the light bulbs on. If it is impossible to turn all the bulbs on, print -1.\n\nExamples\nSample 1\nInput\n3\n9546\n0000\n3313\nOutput\n4\n-1\n6\n\nNote\nIn the first example, all the colors are different, so you can just turn all the bulbs on in $ 4 $ operations.\n\nIn the second example, it is impossible to turn all the bulbs on, because after you switch one light bulb, it is impossible to turn the others on.\n\nIn the third example, you can proceed as follows: turn the first light bulb on, turn the third light bulb on, turn the fourth light bulb on, turn the third light bulb off, turn the second light bulb on, turn the third light bulb on."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1809A - Garland\nNote that there are only a few configuration classes:\n1111\n,\n1112\n,\n1122\n,\n1123\nand\n1234\n. Let's discuss each of them.\nIf all $$$4$$$ bulbs are of the same color, then it is impossible to turn all the bulbs on, because after you switch one light bulb, it is impossible to turn the others on.\nIf there is a color with $$$3$$$ bulbs, then it is impossible to turn all the bulbs on in $$$4$$$ operations, which means there is a bulb that turns on, turns off and then turns on again, i.e. the answer is at least $$$6$$$ operations. And there is a sequence of exactly $$$6$$$ operations (such an example was shown in the problem notes).\nFor configurations like\n1122\nand\n1123\n, it is enough to turn on the $$$1$$$ color bulbs not in a row (i.e. in order $$$[1, 2, 1, 2]$$$ for the first case and $$$[1, 2, 1, 3]$$$ for the second one). So the answer for such configurations is $$$4$$$.\nIf all the bulbs are of different colors, then nothing prevents you from turning them all on in $$$4$$$ operations."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\n0\n);\nint\ntc\n;\ncin\n>>\ntc\n;\nwhile\n(\ntc\n--)\n{\nstring\ns\n;\ncin\n>>\ns\n;\nvector\n<int>\ncnt\n(\n10\n);\nfor\n(\nauto\nc\n:\ns\n)\n++\ncnt\n[\nc\n-\n'0'\n];\nint\nmx\n=\n*\nmax_element\n(\ncnt\n.\nbegin\n(),\ncnt\n.\nend\n());\nif\n(\nmx\n==\n4\n)\ncout\n<<\n-\n1\n;\nelse\nif\n(\nmx\n==\n3\n)\ncout\n<<\n6\n;\nelse\ncout\n<<\n4\n;\ncout\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1203E - Boxers\nLet $$$lst$$$ be the last weight of the boxer taken into the team. Initially $$$lst = \\infty$$$. Let's sort all boxers in order of non-increasing their weights and iterate over all boxers in order from left to right. If the current boxer has the weight $$$w$$$ then let's try to take him with weight $$$w+1$$$ (we can do it if $$$w+1 \\lt lst$$$). If we cannot do it, let's try to take him with weight $$$w$$$. And in case of fault let's try to take him with weight $$$w-1$$$. If we cannot take him even with weight $$$w-1$$$ then let's skip him. And if we take him let's replace $$$lst$$$ with him weight. The answer is the number of boxers we took."
         },
         {
             "title": "Solution",

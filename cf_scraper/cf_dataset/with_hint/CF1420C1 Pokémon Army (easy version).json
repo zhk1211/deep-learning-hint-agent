@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1420C1 - Pokémon Army (easy version)\nThe easy version of the task can be solved in different ways. For example, you can use the dynamic programming method.\nLet $$$d1_i$$$ – be the maximum possible sum of a subsequence on a prefix from the first $$$i$$$ elements, provided that the length of the subsequence is odd. Similarly enter $$$d2_i$$$, only for subsequences of even length. Then $$$d1_i$$$ and $$$d2_i$$$ are easy to recalculate: $$$$$$d1_{i+1} = \\max(d1_i,\\ d2_i + a_i),$$$$$$. $$$$$$d2_{i+1} = \\max(d2_i,\\ d1_i - a_i).$$$$$$. The initial values are $$$d1_0 = -\\infty,\\ d2_0 = 0$$$. The answer will be stored in $$$\\max(d1_n, d2_n)$$$.\nThis solution works for $$$O(n)$$$ in time. Its main drawback is that it cannot be used to solve a complex version of a task where a different approach is needed."
         }
     ]
 }

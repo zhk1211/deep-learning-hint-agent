@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1698F - Equal Reversal\nConsider the following invariants of the array:\n$$$a_1$$$ and $$$a_n$$$ don't change as a result of the operations.\nThe set of unordered pairs of adjacent elements doesn't change as a result of the operations. In other words, if you build a graph $$$\\mathcal{G}$$$ whose vertices are labelled $$$1$$$ to $$$n$$$, and make an edge connecting $$$a_i$$$ and $$$a_{i+1}$$$ for all $$$1 \\leq i  \\lt  n$$$, the graph does not change after operations. This is because the operation can be seen as reversing the order we traverse a cycle in $$$\\mathcal{G}$$$, which doesn't change the undirected graph.\nIt turns out that these conditions are necessary and sufficient to determine if $$$a$$$ can be turned into $$$b$$$. Let's prove it by fixing the elements of $$$a$$$ one at a time.\nThe first element of $$$a$$$ already has to match. Suppose the second element does not match; that is, $$$a_1 = b_1$$$ but $$$a_2 \\neq b_2$$$. Then there has to be some other copy of $$$b_1$$$ later in $$$a$$$ next to the element in $$$a$$$ equal to $$$b_2$$$, by the graph condition mentioned above. If the copy of $$$b_1$$$ appears after the element equal to $$$b_2$$$, we can reverse the subarray whose endpoints are the two copies of $$$b_1$$$. Otherwise, it can be shown that there must exist some subarray with equal endpoints that contains $$$b_1$$$ followed by $$$b_2$$$, so we can reverse it.\nThis takes $$$2n$$$ operations, but it requires $$$\\mathcal{O}(n^2)$$$ time to construct. So the overall complexity is $$$\\mathcal{O}(n^3)$$$."
         },
         {
             "title": "Implementation (C++)",

@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2131D - Arboris Contractio\nWe first handle the case where $$$n=2$$$. The diameter is $$$1$$$, and we do not need to perform any operations.\nFor $$$n \\gt 2$$$, it can be proven that the minimum diameter achievable is $$$2$$$. You can choose any vertex as the root, and repeatedly perform the operations to make every other vertex a child of it.\nLet's fix the final root of the tree as $$$r$$$. Denote $$$p_u$$$ as the parent of $$$u$$$, and $$$d_u$$$ as the depth of $$$u$$$. We define $$$d_u$$$ as such:\n$$$d_r=0$$$;\n$$$d_u=d_{p_u}+1$$$.\nFor vertices with depth no larger than $$$1$$$, we do not need to perform any operations on them as they are already in their desired positions. For vertices with depth larger than $$$1$$$, notice that in every operation, only one of the vertices on the path selected can be a leaf. This means that we can only \"get rid\" of one leaf in one operation. Also, you can always choose the path where one end is $$$r$$$ and the other end is a leaf with depth larger than $$$1$$$. Doing so for all leaves with depth larger than $$$1$$$ guarantees all vertices to be a child of $$$r$$$. Hence, the minimum number of operations for fixed root $$$r$$$ is the number of leaves with depth larger than $$$1$$$. The final answer would be the minimum over all choices of roots.\nWith careful implementation, the final complexity should be $$$O(n)$$$ per test case."
         }
     ]
 }

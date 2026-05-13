@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1533G - Biome Map\nNote that if the available biomes do not form a $$$4$$$-connected region (which can be checked with a simple DFS), then the answer is $$$-1$$$, because we will not be able to fulfill either the second rule or the third rule. Otherwise, the answer always exists.\nHere is one of the possible constructions. Our map will have a size of $$$k \\times k$$$. Such a matrix has $$$2k-1$$$ diagonals, so if we can find a sequence of biomes of length $$$2k-1$$$, such that each biome belongs to the sequence and the third rule is met for any two neighboring biomes in the sequence, then we can fill the matrix by diagonals (the $$$i$$$-th diagonal will be filled with the $$$i$$$-th biome in the sequence). Such a sequence can be obtained by using a DFS traversal, writing out vertices when entering and returning to them."
         },
         {
             "title": "Solution (Neon)",

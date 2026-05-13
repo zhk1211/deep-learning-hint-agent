@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1213D1 - Equalizing by Division (easy version)\nLet $$$x$$$ be the number such that after some sequence of moves there will be at least $$$k$$$ elements $$$x$$$ in the array. We can see that there is always $$$O(n \\log n)$$$ possible candidates because all values $$$x$$$ are among all possible values of $$$\\lfloor\\frac{a_i}{2^m}\\rfloor$$$ for some $$$m$$$ from $$$0$$$ to $$$18$$$. So we need to check each candidate separately and try to update the answer with it. How to do this?\nLet the current number we trying to obtain is $$$x$$$. Then let's iterate over all $$$a_i$$$ in any order. Let $$$y$$$ be the current value of $$$a_i$$$. Let's divide it by $$$2$$$ while its value is greater than $$$x$$$ and carry the number of divisions we made $$$cur$$$. If after all divisions $$$y=x$$$ then let's remember the value of $$$cur$$$ in some array $$$cnt$$$. If after iterating over all $$$n$$$ elements of $$$a$$$ the size of $$$cnt$$$ is greater than or equal to $$$k$$$ then let's sort it and update the answer with the sum of $$$k$$$ smallest values of $$$cnt$$$.\nTime complexity: $$$O(n^2 \\log^2max(a_i) \\log(n \\log max(a_i)))$$$ or $$$O(n^2 \\log^2max(a_i))$$$, depends on sorting method."
         },
         {
             "title": "Solution",

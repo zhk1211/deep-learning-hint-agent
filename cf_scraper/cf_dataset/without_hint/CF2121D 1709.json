@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2121D - 1709\nUsing bubble sort, we will sort array $$$a$$$: while there exists an index $$$1 \\leq i  \\lt  n$$$ such that $$$a_i  \\gt  a_{i + 1}$$$, we will swap them. Similarly, we will sort array $$$b$$$. In this part of the task, we will perform no more than $$$\\frac{n \\cdot (n - 1)}{2} + \\frac{n \\cdot (n - 1)}{2} = n \\cdot (n - 1)$$$ operations, since the number of swaps in bubble sort is equal to the number of inversions in the array.\nNext, for all $$$1 \\leq i \\leq n$$$ such that $$$a_i  \\gt  b_i$$$, we will swap $$$a_i$$$ and $$$b_i$$$. After this, we will satisfy both conditions and perform a total of no more than $$$n \\cdot (n - 1) + n = n^2$$$ operations.\nThe solution can be implemented in $$$O(n^2)$$$."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1926F - Vlad and Avoiding X\nNotice that we can split the grid into two parts, red and blue, in a chessboard coloring fashion as shown, and that Xs from one color only influence cells of that color.\nThis means that we can solve the problem for the red and blue parts independently, and combine them at the end.\nLet's brute force the number of cells in the blue part that we need to flip using backtracking (i.e. let's brute force all ways we can flip $$$0$$$ cells and see if all the black cells work, then try flipping $$$1$$$, then $$$2$$$, and so on). In fact, it can be shown that this number does not exceed $$$4$$$, by running this algorithm on an all-black grid. Similarly, we see that the number of cells in the red part that we need to flip is also not more than $$$4$$$.\nThe backtracking will try $$$\\sim \\binom{25}{4} + \\binom{24}{4}$$$ flips, and each takes around $$$50$$$ operations to check the whole grid, which not more than $$$115000$$$. This is not very big, and even with $$$200$$$ test cases, it does not take more than 140 milliseconds. You can run the worst-case locally to check.\nBonus.\nCan this problem be solved in polynomial time?"
         },
         {
             "title": "Solution",

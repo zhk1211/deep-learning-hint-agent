@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1738A - Glory Addicts\nSuppose the first skill to be performed is fixed. Then it is optimal to use the following greedy strategy.\nIf possible, perform a skill of a different type from the last skill. If there are multiple skills of a different type from the last skill, choose the one with the largest initial damage.\nInspired by the above observation, if the type of the first skill is fixed, it is optimal to choose the one with the smallest initial damage. This is because the first skill will be never doubled.\nTherefore, we have the following algorithm.\nTry each possible type $$$a$$$ (of the first skill).\nRemove the skill of type $$$a$$$ with the smallest intial damage.\nAlternate the types of the following skills as much as possible.\nThis algorithm is sufficient to pass this problem. Nevertheless, a slightly more elegant analysis will give a simpler solution.\nIf the number of skills of type fire is equal to that of skills of type frost, double the damage of all skills except for the one with the smallest initial damage.\nOtherwise, let $$$k$$$ be the smaller number of skills of either type, then double the damage of the largest $$$k$$$ skills of both types.\nThe time complexity is $$$O(n \\log n)$$$ due to sortings."
         },
         {
             "title": "Solution",

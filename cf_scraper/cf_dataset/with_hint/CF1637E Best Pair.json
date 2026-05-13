@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1637E - Best Pair\nLet's fix $$$x$$$ and iterate over $$$cnt_y \\le cnt_x$$$. Then we need to find maximum $$$y$$$ over all elements that occurs exactly $$$cnt_y$$$ times, such that $$$x \\neq y$$$ and pair $$$(x, y)$$$ is not bad. To do that, we will just iterate over all elements that occurs exactly $$$cnt_y$$$ times in not increasing order, while pair $$$(x, y)$$$ is bad or $$$x = y$$$. If we find such $$$y$$$ then we will update the answer.\nTo check if the pair is bad, just add all pairs into the set, and check is the pair is in the set. Also you can sort all bad pairs and check it using binary search. Both methods works in $$$O(\\log{n})$$$.\nIterating over all $$$x$$$ and $$$cnt_y \\le cnt_x$$$ works in $$$O(\\sum cnt_x) = O(n)$$$. And finding maximum $$$y$$$ such that $$$x \\neq y$$$ and the pair $$$(x, y)$$$ is not bad works in $$$O((n + m) \\log{m})$$$ summary, because there are $$$O(n + m)$$$ checks if the pair is bad or not. So this solution works in $$$O((n + m) \\log{m} + n \\log{n}).$$$"
         },
         {
             "title": "Solution",

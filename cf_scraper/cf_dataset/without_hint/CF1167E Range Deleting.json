@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1167E - Range Deleting\nLets find the maximum number $$$pref$$$ such that all values $$$1, 2, \\dots, pref$$$ form the non-descending order array. It can be done the following way. Let values $$$1, 2, \\dots, x$$$ form the non-descending order array. Then values $$$1, 2, \\dots, x, x+1$$$ will form the non-descending order array if the first occurrence of $$$x+1$$$ in array $$$a$$$ is after the last occurrence of $$$x$$$. In similar manner we can find the minimum number $$$suf$$$ such that all values $$$suf, suf+1, \\dots, x$$$ form the non-descending order array.\nNow let's find out how to get the minimum number $$$s$$$ such that all values $$$1, 2, \\dots, p, s, s + 1, \\dots, x$$$ form the non-descending order array if we fixed the value $$$p$$$. We denote this value $$$s$$$ for some fixed value $$$p$$$ as $$$f(p)$$$. Firstly, conditions $$$s  \\gt  p$$$, $$$suf \\le s$$$ and $$$p \\le pre$$$ should hold. Secondly, there should be no such a pair $$$(m, r)$$$ that conditions $$$1 \\le m  \\lt  r \\le n$$$, $$$1 \\le a_r, \\le p$$$ and $$$s \\le a_m \\le x$$$ hold. Since the condition $$$p \\le pre$$$ is satisfied, it means that $$$s$$$ must be greater than $$$\\max\\limits_{1 \\le i \\le lst} a_i$$$, where $$$lst$$$ is the last occurrence of $$$p$$$ in array $$$a$$$.\nIn this way the answer is $$$\\sum\\limits_{i=1}^{pref} (x - f(i) + 1)$$$."
         },
         {
             "title": "Solution (Roms)",

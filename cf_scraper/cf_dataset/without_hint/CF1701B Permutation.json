@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1701B - Permutation\nLet's notice that for a fixed value of $$$d$$$, the answer (the cost of permutation) does not exceed $$$\\frac{n}{d}$$$, because only numbers from $$$1$$$ to $$$\\frac{n}{d}$$$ can have a pair. It turns out that it is always possible to construct a permutation with the cost of exactly $$$\\frac{n}{d}$$$. It is enough to consider the number \"chains\" of the form: $$$x, x \\cdot d, x \\cdot d^2, \\dots, x \\cdot d^k$$$, where $$$x \\neq 0 \\pmod d$$$. It is not difficult to understand that each number is included in exactly one such chain. Therefore, if we append the chains one after another, then in such a permutation the answer will be equal to $$$n - \\mathrm{the\\_number\\_of\\_ chains}$$$ (because all numbers will have a pair except the last element in the chain). The number of chains is equal to $$$n - \\frac{n}{d}$$$, which means the cost of the permutation is equal to $$$n - (n - \\frac{n}{d}) = \\frac{n}{d}$$$. By choosing $$$d = 2$$$ the permutation will have the maximum possible cost."
         },
         {
             "title": "Solution (Neon)",

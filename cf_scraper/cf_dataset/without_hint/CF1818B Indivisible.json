@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1818B - Indivisible\nIf $$$n  \\gt  1$$$ is odd, there is no solution, as the sum of the whole array $$$\\frac{n(n+1)}{2}$$$ is always divisible by $$$n$$$. Otherwise, the solution is as follows:\nStart with the identity permutation $$$1, 2, \\dots, n$$$.\nSwap the adjacent pairs to get $$$2, 1, 4, 3, 6, 5, ..., n, n-1$$$.\nIndeed, consider the sum of a sub-array $$$a_l, \\dots, a_r$$$. There are $$$2$$$ cases:\n$$$l$$$ and $$$r$$$ have different parity: the sum is $$$\\frac{(r-l+1)(l+r)}{2}$$$ and its greatest common divisor with $$$r-l+1$$$ is $$$\\frac{r-l+1}{2}$$$, as $$$l+r$$$ is not divisible by $$$2$$$;\n$$$l$$$ and $$$r$$$ have the same parity: the sum is $$$\\frac{(r-l+1)(l+r)}{2}+1$$$ or $$$\\frac{(r-l+1)(l+r)}{2}-1$$$, depending on the parity. The first summand is divisible by $$$r-l+1$$$, as $$$l+r$$$ is even. So, the whole sum has the remainder $$$1$$$ or $$$-1$$$ modulo $$$r-l+1$$$, thus it can't be divisible by it."
         },
         {
             "title": "Solution",

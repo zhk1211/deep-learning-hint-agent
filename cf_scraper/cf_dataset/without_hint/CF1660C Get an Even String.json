@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1660C - Get an Even String\nWe will act greedily: we will make an array $$$prev$$$ consisting of $$$26$$$ elements, in which we will mark $$$prev[i] = true$$$ if the letter is already encountered in the string, and $$$prev[i] = false$$$ otherwise. In the variable $$$m$$$ we will store the length of the even string that can be obtained from $$$s$$$. We will go through the string by executing the following algorithm:\nif $$$prev[i] = false$$$, mark $$$prev[i] = true$$$.\nif $$$prev[i] = true$$$, then we already have a pair of repeating characters to add to an even string — add $$$2$$$ to the number $$$m$$$ and clear the array $$$used$$$.\nClearing $$$prev$$$ is necessary because both characters that will make up the next pair must be in the $$$s$$$ string after the current character. In other words, if the last character in the current pair was $$$s_t$$$, then the first character in the new pair can be $$$s_k$$$, where $$$ t \\lt k \\lt n$$$.\nThen we calculate the answer as $$$n - m$$$."
         },
         {
             "title": "Solution",

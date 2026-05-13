@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1213F - Unstable String Sort\nBecause if we write down all characters of $$$s$$$ in order of both permutations and this string will be sorted, it is obvious that these two strings are equal. Let's try the maximum possible number of distinct characters and then replace extra characters with '\nz\n'. How to find the maximum number of distinct characters?\nLet's iterate over all values of $$$p$$$ (and $$$q$$$) in order from left to right. If we staying at the position $$$i$$$ now, let's add to the set $$$vals_1$$$ the value $$$p_i$$$ and to the set $$$vals_2$$$ the value $$$q_i$$$. And when these sets become equal the first time, let's say that the block of positions $$$i$$$ such that values $$$p_i$$$ are in the set right now, have the same letter, and then clear both sets. We can see that this segment of positions is the minimum by inclusion set that can contain equal letters. We don't need to compare sets naively and clear them naively, you can see implementation details in author's solution.\nIf the number of such segments is less than $$$k$$$ then the answer is \"\nNO\n\", otherwise the answer is \"\nYES\n\" and we can fill the string $$$s$$$ with letters in order of these segments (if the segment is $$$[l; r]$$$ then all characters of $$$s$$$ with indices $$$p_l, p_{l + 1}, \\dots, p_r$$$ has the same letter, the first segment has the letter '\na\n', the second one has the letter '\nb\n', and so on, all segments after $$$25$$$-th has the letter '\nz\n').\nTime complexity: $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution",

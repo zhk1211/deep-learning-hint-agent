@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2167E - khba Loves to Sleep!\nLet the minimum time until the first arrival (that is, the minimum distance among all friends to the nearest teleport) be $$$m$$$. It can be noticed that if we can choose $$$k$$$ teleports such that the first arrival time equals $$$m$$$, then we can also choose $$$k$$$ teleports such that the first arrival time equals $$$m - 1$$$. Therefore, we can perform a binary search on the value of $$$m$$$.\nNow we need to check whether it is possible to choose $$$k$$$ teleports such that none of them lies inside the segment $$$[a_i - (m - 1), a_i + (m - 1)]$$$ for any $$$i$$$ $$$(1 \\le i \\le n)$$$.\nLet us add the values $$$-10^9$$$ and $$$10^9$$$ to the array $$$a$$$, update $$$n$$$, and sort the array. When checking a given value of $$$m$$$, we can replace values of $$$-10^9$$$ to $$$-m$$$ and $$$10^9$$$ to $$$x+m$$$, we can consider that between two consecutive friends $$$a_{i-1}$$$ and $$$a_i$$$, we may choose any teleport position in the range $$$[a_{i-1} + m,\\, a_i - m]$$$.\nThe total number of valid integer points is equal to\n$$$$$$ \\sum_{i=2}^{n} \\max(0,\\, (a_i - m) - (a_{i-1} + m) + 1) $$$$$$\nWe just need to check whether this number is at least $$$k$$$. After finding the maximum possible value of $$$m$$$, we can simply iterate over these intervals and output teleport positions until we have printed $$$k$$$ of them.\nTime complexity: $$$O(nlogn)$$$."
         }
     ]
 }

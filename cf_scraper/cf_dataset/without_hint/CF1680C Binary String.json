@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1680C - Binary String\nThere are many different approaches to this problem: dynamic programming, binary search, greedy, two pointers, anything you want. The model solution uses an approach based on binary search, so I'll describe it.\nFirst of all, why does binary search work? Let's say that the number of\n1\n's is $$$c$$$. If the cost of deletion is $$$k$$$, then we have deleted at most $$$k$$$ characters\n1\n, and have left at most $$$k$$$ characters\n0\n. Let's increase the number of characters we delete from the prefix of the string until the number of deleted\n1\n's becomes $$$k+1$$$: if $$$c \\ge k+1$$$, it's always possible. So, if we consider the segment of values $$$[0, c]$$$, the fact that we can get cost $$$k$$$ implies that we can get cost $$$k+1$$$, so we can use binary search on segment $$$[0, c]$$$ to find the minimum achievable cost.\nNow, how to check if we can obtain the cost of deletion equal to $$$k$$$? One possible way to do this is to form an array $$$pos$$$, where $$$pos_i$$$ is the position of the $$$i$$$-th character\n1\nin the string, and find the minimum value of $$$pos_{i+c-k-1} - pos_i$$$ in this array: the string that should remain has to contain at least $$$c-k$$$ characters\n1\n, and the minimum value of $$$pos_{i+c-k-1} - pos_i$$$ is the minimum possible length of such string. Then we can find the number of\n0\n's in this string and check if it is greater than $$$k$$$ or not."
         },
         {
             "title": "Solution (BledDest)",

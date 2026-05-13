@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1283B - Candies Division\nFirstly, we can notice that we always can distribute $$$n - n \\% k$$$ (where $$$\\%$$$ is the modulo operation) candies between kids. In this case $$$a=\\lfloor\\frac{n}{k}\\rfloor$$$ and the answer is at least $$$ak$$$. And then we can add the value $$$min(n \\% k, \\lfloor\\frac{k}{2}\\rfloor)$$$ to the answer. Why? Because there is only $$$n \\% k$$$ candies remain and the maximum number of kids to whom we can give one more candy is $$$\\lfloor\\frac{k}{2}\\rfloor$$$."
         },
         {
             "title": "Solution",

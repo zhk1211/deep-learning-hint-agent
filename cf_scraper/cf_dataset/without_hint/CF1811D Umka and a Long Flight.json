@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1811D - Umka and a Long Flight\n$$$F_0^2 + F_1^2 +\\ldots + F_n^2 = F_n\\cdot F_{n+1}$$$, which can be proved by induction: $$$F_n\\cdot F_{n+1} = F_n\\cdot (F_{n-1}+F_n) = F_{n-1} \\cdot F_n + F_n^2$$$.\nIf the partition exists, it has the form $$$[F_0, F_1, \\ldots, F_n]$$$, since the area of the rectangle with another partition will be greater than $$$F_n \\cdot F_{n+1}$$$.\nWe will cut the rectangles in the order $$$F_n, F_{n-1}, \\ldots, F_0$$$. Denote the coordinates of the colored cell at the step $$$n$$$ as $$$\\langle x_n, y_n\\rangle$$$.\nIf $$$F_{n-1}  \\lt y_n\\le F_n$$$ and $$$n \\gt  1$$$, then there is no partition, since the square $$$F_n$$$ at any location overlaps the colored cell.\nCut off the square $$$F_n$$$ from the right or left edge, depending on the location of the colored cell, that is, $$$\\langle x_{n-1}, y_{n-1} \\rangle = \\langle y_n, x_n\\rangle$$$ or $$$\\langle x_{n-1}, y_{n-1} \\rangle = \\langle y_n - F_n, x_n \\rangle$$$.\nSuppose that it was advantageous to cut it not from the edge, then it is necessary to cut the rectangles $$$z\\times F_n$$$ and $$$(F_{n-1}-z)\\times F_n$$$, where $$$1\\le z  \\lt F_{n+1}-F_n =F_{n-1}$$$ using the set $$$[F_0, F_1 \\ldots F_{n-1}]$$$. Then $$$F_{n-1}$$$ will not enter the partition, but $$$2\\cdot F_{n-2}^2  \\lt  (2F_{n-2}+F_{n-3})^2 + 1 = ( F_{n-2} + F_{n-1})^2 +1$$$, so $$$F_1^2 + F_2^2 + \\ldots +2 \\cdot F_{n-2}^2  \\lt  F_0^2 +F_1^2 +\\ldots+F_{n-1}^2 = F_{n-1} \\cdot F_n = z \\cdot F_n + (F_{n-1} - z) \\cdot F_n$$$. We came to a contradiction."
         },
         {
             "title": "Solution",

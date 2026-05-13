@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1650G - Counting Shortcuts\nNote that in any shortest path, we cannot return to the previous vertex. Since if the current vertex $$$v$$$, the previous $$$u$$$. The current distance $$$d_v = d_u + 1$$$ (the shortest distance to vertex $$$v$$$), the shortest distance to vertex $$$t$$$ — $$$d_t$$$. Then, if we return to the vertex $$$u$$$, the shortest distance from it to $$$t$$$ is $$$d_t - d_u = d_t - d_v + 1$$$. If we add to the current distance, we get: $$$(d_v + 1) + (d_t - d_v + 1) = d_t + 2$$$. Thus, we get a path at least $$$2$$$ longer than the shortest one. Thus, our answer consists of only simple paths.\nIf the answer consists only of simple paths, then we will simply add vertices to the queue when traversing bfs twice (on the first visit, and on the next visit, when the distance to the vertex is equal to the shortest $$$+1$$$). And we will also count the number of ways to get to that vertex. Then we can output the answer as soon as we get to the vertex $$$t$$$ the second time for processing. After that we can terminate the loop. The asymptotic will be $$$O(n + m)$$$ since we only need bfs."
         },
         {
             "title": "Solution",

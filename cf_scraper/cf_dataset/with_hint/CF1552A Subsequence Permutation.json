@@ -1,0 +1,48 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA string $ s $ of length $ n $ , consisting of lowercase letters of the English alphabet, is given.\n\nYou must choose some number $ k $ between $ 0 $ and $ n $ . Then, you select $ k $ characters of $ s $ and permute them however you want. In this process, the positions of the other $ n-k $ characters remain unchanged. You have to perform this operation exactly once.\n\nFor example, if $ s=\\texttt{\"andrea\"} $ , you can choose the $ k=4 $ characters $ \\texttt{\"a_d_ea\"} $ and permute them into $ \\texttt{\"d_e_aa\"} $ so that after the operation the string becomes $ \\texttt{\"dneraa\"} $ .\n\nDetermine the minimum $ k $ so that it is possible to sort $ s $ alphabetically (that is, after the operation its characters appear in alphabetical order).\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe first line of each test case contains one integer $ n $ ( $ 1 \\le n \\le 40 $ ) — the length of the string.\n\nThe second line of each test case contains the string $ s $ . It is guaranteed that $ s $ contains only lowercase letters of the English alphabet.\n\nOutput Format\nFor each test case, output the minimum $ k $ that allows you to obtain a string sorted alphabetically, through the operation described above.\n\nExamples\nSample 1\nInput\n4\n3\nlol\n10\ncodeforces\n5\naaaaa\n4\ndcba\nOutput\n2\n6\n0\n4\n\nNote\nIn the first test case, we can choose the $ k=2 $ characters $ \\texttt{\"_ol\"} $ and rearrange them as $ \\texttt{\"_lo\"} $ (so the resulting string is $ \\texttt{\"llo\"} $ ). It is not possible to sort the string choosing strictly less than $ 2 $ characters.\n\nIn the second test case, one possible way to sort $ s $ is to consider the $ k=6 $ characters $ \\texttt{\"_o__force_\"} $ and rearrange them as $ \\texttt{\"_c__efoor_\"} $ (so the resulting string is $ \\texttt{\"ccdeefoors\"} $ ). One can show that it is not possible to sort the string choosing strictly less than $ 6 $ characters.\n\nIn the third test case, string $ s $ is already sorted (so we can choose $ k=0 $ characters).\n\nIn the fourth test case, we can choose all $ k=4 $ characters $ \\texttt{\"dcba\"} $ and reverse the whole string (so the resulting string is $ \\texttt{\"abcd\"} $ )."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints for Solution 1",
+            "content": "Hint 1.\nThe \"superiority\" relationship induces a complete directed graph with $$$n$$$ vertices and $$$\\binom{n}{2}$$$ edges.\nHint 2.\nThere can be at most one athlete who is superior to everyone else.\nHint 3.\nMorally, the problem is equivalent to finding the maximum of an array (performing not too many comparisons)."
+        },
+        {
+            "title": "Hint 1.",
+            "content": "The \"superiority\" relationship induces a complete directed graph with $$$n$$$ vertices and $$$\\binom{n}{2}$$$ edges."
+        },
+        {
+            "title": "Hint 2.",
+            "content": "There can be at most one athlete who is superior to everyone else."
+        },
+        {
+            "title": "Hint 3.",
+            "content": "Morally, the problem is equivalent to finding the maximum of an array (performing not too many comparisons)."
+        },
+        {
+            "title": "Hints for Solution 2",
+            "content": "Hint 1.\nTry to optimize the obvious quadratic solution.\nHint 2.\nMaybe put in some randomization?"
+        },
+        {
+            "title": "Hint 1.",
+            "content": "Try to optimize the obvious quadratic solution."
+        },
+        {
+            "title": "Hint 2.",
+            "content": "Maybe put in some randomization?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Implementation",
+            "content": "123770893"
+        },
+        {
+            "title": "Solution",
+            "content": "1552B - Running for Gold\nSolution 1\nFirst of all, observe that athlete $$$i$$$ is superior to athlete $$$j$$$ if and only if athlete $$$j$$$ is\nnot\nsuperior to athlete $$$i$$$.\nThe issue is, of course, that we cannot iterate over all pairs of athletes as there are $$$\\binom{n}{2} = O(n^2)$$$ pairs, which is too much to fit in the time limit.\nNotice that there can be at most one athlete who is likely to get the gold medal (if there were $$$2$$$, one would not be superior to the other which is a contradiction).\nLet us describe the algorithm. We iterate over the athletes from $$$1$$$ to $$$n$$$, keeping a\npossible winner\n$$$w$$$.\nWhen we process $$$i$$$, we check whether $$$w$$$ is superior to $$$i$$$. In that case, clearly $$$i$$$ is not the one who is likely to get the gold medal and we do nothing. On the other hand, if $$$i$$$ is superior to $$$w$$$, we deduce that $$$w$$$ cannot be the athlete who is likely to get the gold medal. In this case, we assign $$$w:=i$$$ and we proceed.\nNotice that, when we have finished processing athletes, if there is an athlete superior to everyone else it is for sure $$$w$$$. Finally, we check whether $$$w$$$ is superior to everyone else or not.\nComplexity:\n$$$O(n)$$$.\n$$$$$$$$$$$$\nSolution 2\nLet us describe a randomized solution which seems very naive but can actually be proven to have a good complexity (still, the proof is much harder than an optimistic guess). There are many other possible randomized approach which can be proven to have a correct complexity with a similar proof.\nFor each athlete $$$i$$$ check whether he is superior to all other athletes,\niterating over other athletes in a random order\n, and stop as soon as you find an athlete who is superior to $$$i$$$.\nLet us show that the described algorithm has complexity $$$O(n\\log n)$$$.\nConsider an athlete $$$i$$$ who is superior to exactly $$$n-1-k$$$ other athletes. Let us compute the expected amount of other athletes the algorithm processes when deciding if athlete $$$i$$$ is likely to get a medal.\nIf $$$k = 0$$$, the algorithm iterates over all other $$$n - 1 = O(n)$$$ athletes.\nIf $$$k \\ge 1$$$, the expected number of other athletes the algorithm iterates over is $$$O\\Big(\\frac{n}{k}\\Big)$$$. To prove this, one shall observe that if we take $$$k$$$ random distinct elements out of $$$\\{1, \\, 2, \\, \\dots, \\, n\\}$$$ the expected value of the smallest one is $$$O\\Big(\\frac{n}{k}\\Big)$$$.\nSo, the overall complexity of the algorithm is: $$$$$$ O\\left(q_0 \\cdot n + \\sum_{k = 1}^{n - 1} q_k \\frac{n}{k}\\right) = O\\left(n \\left(q_0 + \\sum_{k = 1}^{n - 1}\\frac{q_k}{k}\\right)\\right), $$$$$$ where $$$q_k$$$ is the number of athletes who are superior to exactly $$$n - 1 - k$$$ other athletes.\nIf we let $$$s_k = q_0 + q_1 + \\cdots + q_k$$$, we can also estimate the complexity with $$$$$$ O\\left(n \\left(s_0 + \\sum_{k = 1}^{n - 1}\\frac{s_k - s_{k-1}}{k}\\right)\\right) = O\\left(n\\left(\\sum_{k = 1}^{n - 2}\\frac{s_k}{k(k + 1)} + \\frac{s_{n - 1}}{n - 1}\\right)\\right). $$$$$$\nIt remains to estimate $$$s_k$$$ and the following lemma does exactly this.\nLemma\n.\nFor each $$$k \\ge 0$$$, there are at most $$$2k + 1$$$ athletes which are superior to at least $$$n - 1 - k$$$ athletes.\nProof.\nAssume that there are $$$m$$$ athletes who are superior to at least $$$n - 1 - k$$$ other athletes. Consider the complete directed graph on these $$$m$$$ athletes so that the edge $$$i \\to j$$$ is present if and only if athlete $$$i$$$ is superior to athlete $$$j$$$. Each vertex has out-degree $$$\\ge m - 1 - k$$$ and therefore the number of edges is at least $$$m(m - 1 - k)$$$. On the other hand, the number of edges is clearly $$$\\binom{m}{2}$$$ and therefore we obtain $$$$$$ m(m - 1 - k) \\le \\frac{m(m - 1)}2 \\implies m \\le 2k+1 $$$$$$ as desired.\nThe lemma tells us that $$$s_k \\le 2k + 1$$$ and therefore the complexity is estimated by $$$$$$ O\\left(n\\left(\\sum_{k = 1}^{n - 2} \\frac{2k + 1}{k(k + 1)} + \\frac{2n - 1}{n - 1}\\right)\\right) = O\\left(2n\\sum_{k = 1}^{n - 2} \\frac{1}{k}\\right) = O(n\\log n). $$$$$$\nComplexity:\n$$$O(n\\log n)$$$, randomized."
+        }
+    ]
+}

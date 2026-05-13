@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1342C - Yet Another Counting Problem\nIt's quite easy to see that $$$((ab + x) \\bmod a) \\bmod b = (x \\bmod a) \\bmod b$$$. What does it mean? The property given in the statement holds for $$$x$$$ if and only if it holds for $$$x \\bmod ab$$$. It allows us to answer each testcase in $$$O(ab + q)$$$ as follows: for each number from $$$0$$$ to $$$ab - 1$$$, we may check the given property before processing the queries, and build an array of prefix sums on it to efficiently count the number of integers satisfying the property from the segment $$$[0, y]$$$, where $$$y  \\lt  ab$$$. Then each query $$$[l, r]$$$ can be divided into two prefix-queries $$$[0, l - 1]$$$ and $$$[0, r]$$$. To answer a prefix query $$$[0, p]$$$ in $$$O(1)$$$, we can calculate the number of \"full segments\" of length $$$ab$$$ inside this prefix (that is $$$\\lfloor \\frac{p}{ab} \\rfloor$$$) and the length of the last segment of numbers that don't belong into a full segment (that is $$$p \\bmod ab$$$). To handle full segments, we multiply the number of integers satisfying the property on one segment by the number of such segments, and to handle the last part of segment, we use prefix sums."
         },
         {
             "title": "Solution (BledDest)",

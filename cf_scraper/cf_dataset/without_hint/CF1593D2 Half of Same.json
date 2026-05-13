@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1593D2 - Half of Same\n$$$k$$$ can be arbitrarily large if and only if at least half of the numbers in the array are the same. In this case, we can choose any number $$$k$$$ and subtract it from all numbers, for example, exactly once.\nLet's iterate over the element $$$a_{i_0}$$$, it will be the minimum among the numbers that we want to make the same. Let's calculate the number of numbers in the array that are equal to this element. If this number is at least $$$\\frac{n}{2}$$$, then the answer is\n-1\n. Otherwise, we will iterate over numbers $$$a_i$$$ which are strictly greater than the selected minimum, and, for each number, we will iterate over the divisors of the number $$$a_i - a_{i_0}$$$. For each of the found divisors, let's calculate the number of $$$a_i$$$ for which this divisor was found. Among all such divisors for which the sum of the found number and the number of numbers equal to $$$a_{i_0}$$$ is greater than or equal to $$$\\frac{n}{2}$$$, we will choose the maximum one. The greatest found divisor will be the desired $$$k$$$. This solution works in $$$O(n^2\\times\\sqrt{A})$$$ (where $$$A$$$ is the absolute value of the maximum on the array)."
         },
         {
             "title": "Solution",

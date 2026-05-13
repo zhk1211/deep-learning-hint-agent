@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1316B - String Modification\nLet the input string $$$s$$$ be $$$s_{1}s_{2}..s_{n}$$$. We observe the sequence of modifications that the string goes through for some value of $$$k$$$. After reversing the first sub-string of length $$$k$$$, the string becomes $$$s_{k}s_{k-1}..s_{1}s_{k+1}s_{k+2}..s_{n}$$$. Notice that the first character of this string will not be part of any subsequent modifications. After the next step of modification, the string becomes $$$s_{k}s_{k+1}s_{1}..s_{k-1}s_{k+2}..s_{n}$$$. Again, notice that the first two characters of this string will not be part of any subsequent modifications. Keep repeating the steps of modification. Do you see any pattern?\nIt is easy to realise that after $$$i$$$ steps of modifications, the prefix of the resulting string will be $$$s_{k}s_{k+1}..s_{k+i-1}$$$. Since the number of sub-strings to reverse is $$$(n - k + 1)$$$, the prefix of our answer string will be $$$s_{k}s_{k+1}..s_{k+(n-k+1)-1}$$$, which is just the suffix string $$$s_{k}..s_{n}$$$. What about the suffix of our answer string? It can be observed that the suffix will be $$$s_{1}..s_{k-1}$$$ if $$$n$$$ and $$$k$$$ have the same parity and $$$s_{k-1}..s_{1}$$$ otherwise.\nWe can generate and compare the modified string for each possible value of $$$k$$$ from $$$1$$$ to $$$n$$$ and find the lexicographically smallest among them. Additionally, we need to take care that the solution outputs the smallest possible $$$k$$$ in case when multiple values give the optimal string.\nTime complexity: $$$\\mathcal{O}(n^{2})$$$ per testcase."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1772B - Matrix Rotation\nSure, you can just implement the rotation operation and check all $$$4$$$ possible ways to rotate the matrix, but it's kinda boring. The model solution does the different thing.\nIf a matrix is beautiful, then its minimum is in the upper left corner, and its maximum is in the lower right corner (and vice versa). If you rotate it, the element from the upper left corner goes to the upper right corner, and the element from the lower right corner goes to the lower left corner — so these elements are still in the opposite corners. No matter how many times we rotate a beautiful matrix, its minimum and maximum elements will be in the opposite corners — and the opposite is true as well; if you have a $$$2 \\times 2$$$ matrix with minimum and maximum elements in opposite corners, it can be rotated in such a way that it becomes beautiful.\nSo, all we need to check is that the minimum and the maximum elements are in the opposite corners. There are many ways to do it; in my opinion, the most elegant one is to read all four elements in an array of size $$$4$$$; then the opposite corners of the matrix correspond either to positions $$$0$$$ and $$$3$$$, or to positions $$$1$$$ and $$$2$$$ in this array. So, we check that the sum of positions of minimum and maximum is exactly $$$3$$$."
         },
         {
             "title": "Solution (BledDest)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1433E - Two Round Dances\nFirstly, we need to choose the set of $$$\\frac{n}{2}$$$ people to be in the first round dance (the other half is going to the second one). The number of ways to do that is $$$\\binom{n}{\\frac{n}{2}}$$$. Then we need to set some order of people in both round dances, but we don't want to forget about rotation (because rotation can lead us to counting the same ways several times). So, the number of ways to arrange people inside one round dance is $$$(\\frac{n}{2} - 1)!$$$. This is true because we just \"fixed\" who will be the first in the round dance, and place others in every possible order. So, we need to multiply our initial answer by this value twice because we have two round dances. And, finally, we have to divide our answer by $$$2$$$ because we counted \"ordered\" pairs (i.e. we distinguish pairs of kind $$$(x, y)$$$ and $$$(y, x)$$$ but we don't have to do that). So, the final answer is $$$\\binom{n}{\\frac{n}{2}} \\cdot (\\frac{n}{2} - 1)! \\cdot (\\frac{n}{2} - 1)!$$$ divided by $$$2$$$. This formula can be reduced to $$$\\frac{n!}{\\frac{n}{2}^2 \\cdot 2}$$$.\nYou could also find the sequence of answers in OEIS (and this can be really useful skill sometimes)."
         },
         {
             "title": "Solution",

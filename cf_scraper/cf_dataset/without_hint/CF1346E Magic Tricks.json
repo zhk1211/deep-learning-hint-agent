@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1346E - Magic Tricks\nFirst, let's design an $$$O(nq)$$$ solution with dynamic programming. Let $$$dp_{a, b}$$$ be the minimum number of fake swaps required to put the special ball on position $$$a$$$ after exactly $$$b$$$ swaps. Initially, $$$dp_{k, 0} = 0$$$, all other states are unreachable. When we want to process the $$$i$$$-th operation, we may choose one of the following options:\nthe ball is currently on position $$$x_i$$$ and should stay there, then we have to make a fake swap;\nthe ball is currently on position $$$x_i$$$ and should move to $$$y_i$$$, then we don't fake the swap;\nthe ball is currently on position $$$y_i$$$ and should stay there, then we have to make a fake swap;\nthe ball is currently on position $$$y_i$$$ and should move to $$$x_i$$$, then we don't fake the swap;\nthe ball is currently on position unaffected by the swap, so the swap does not change anything (and we don't have to fake it).\nFor most positions, the value of $$$dp_{a, b + 1}$$$ is equal to the value of $$$dp_{a, b}$$$. Only positions affected by the swap have their $$$dp$$$ value changed, so we may instead get rid of the second state altogether and recalculate $$$dp$$$ values for only two positions during each swap."
         },
         {
             "title": "Solution (elizarov)",

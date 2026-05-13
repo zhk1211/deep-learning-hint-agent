@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1863F - Divide, XOR, and Conquer\nLet $$$s = a_l \\oplus a_{l + 1} \\oplus \\ldots \\oplus a_r$$$, $$$x = a_l \\oplus a_{l + 1} \\oplus \\ldots \\oplus a_k$$$, $$$y = a_{k + 1} \\oplus a_{k + 2} \\oplus \\ldots \\oplus a_{r}$$$.\nIf $$$s$$$ is zero, than we can choose any $$$k$$$ and any side because $$$s = x \\oplus y = 0 \\implies x = y$$$.\nIf $$$s$$$ is not zero we can choose such $$$k$$$ for the left side that the most significant bit of $$$s$$$ is the same as the most significant bit of $$$x$$$ because $$$y = s \\oplus x$$$ does not have this bit, and therefore less than $$$x$$$. Same for the right side.\nWe will iterate over all subarrays in non-increasing order of length and will calculate two set of bits $$$mask\\_start_i$$$ and $$$mask\\_end_i$$$ for each position of array — bits, one of which must contain the XOR of subarray numbers to start/end at that position.\nTo check that we can achieve $$$l$$$, $$$r$$$ we need to check that $$$s \\land mask\\_start_l  \\gt  0$$$ or $$$s \\land mask\\_end_r  \\gt  0$$$ or any segment can start/end in these positions, since there was a segment with zero XOR with such start/end.\nIf we can achieve $$$[l; r]$$$ than:\nif $$$s \\neq 0$$$ add the most significant bit of $$$s$$$ to $$$mask\\_start_l$$$ and $$$mask\\_end_r$$$;\nif $$$s = 0$$$ remember that any subarray of shorter length can start/end at these positions.\nThe time complexity is $$$O(n^2)$$$, the space complexity is $$$O(n)$$$."
         }
     ]
 }

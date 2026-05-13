@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1430A - Number of Apartments\nThere are many possible solutions to this problem. The simplest one is to notice that, using several flats of size $$$3$$$ and one flat of some size (possibly also $$$3$$$, possibly not), we can get any $$$n$$$ equal to $$$[3, 6, 9, \\dots]$$$, $$$[5, 8, 11, \\dots]$$$ or $$$[7, 10, 13, \\dots]$$$. The only numbers that don't belong to these lists are $$$1$$$, $$$2$$$ and $$$4$$$, and it's easy to see that there is no answer for that numbers. So the solution is to try all possible sizes of one flat, and if the remaining number of windows is non-negative and divisible by $$$3$$$, then take the required number of three-room flats."
         },
         {
             "title": "Solution (fcspartakm)",

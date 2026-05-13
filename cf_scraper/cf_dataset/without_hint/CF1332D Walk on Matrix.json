@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1332D - Walk on Matrix\nIn fact, the following matrix will work: $$$$$$\\left( \\begin{array}{ccc} 2^{17}+k & 2^{17} & 0\\\\ k & 2^{17}+k & k\\\\ \\end{array} \\right)$$$$$$\nTo find such a matrix, one should find out why the dp solution fails.\nOne should notice that $$$dp_{2,2}=\\max(a_{1,1}\\&a_{1,2}\\&a_{2,2},a_{1,1}\\&a_{2,1}\\&a_{2,2})$$$ and dp solution will choose the optimal path from $$$(1,1)$$$ to $$$(2,2)$$$ for later decision. However, we should notice that we can only discard the suboptimal result if and only if $$$ans_{suboptimal} \\& ans_{optimal}=ans_{suboptimal}$$$ rather than $$$ans_{suboptimal}  \\lt  ans_{optimal}$$$. Based on above analysis, we can construct the matrix easily.\nIn fact, even if $$$n,m$$$ is fixed satisfying that $$$n \\ge 2,m \\ge 2$$$ and $$$n\\cdot m \\gt 4$$$, we could easily construct a matrix for a given $$$k$$$ based on our $$$2 \\times 3$$$ matrix."
         },
         {
             "title": "Solution(python by pikmike)",

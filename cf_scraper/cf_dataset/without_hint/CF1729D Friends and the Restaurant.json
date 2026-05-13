@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1729D - Friends and the Restaurant\nFirst, we sort the friends in descending order of $$$y_i - x_i$$$. Now for each friend we know the amount of money he lacks, or vice versa, which he has in excess.\nIn order to maximize the number of days, it is most advantageous for friends to break into pairs. It is the number of groups that matters, not the number of people in the group, so adding a third person to the pair won't improve the answer in any way.\nLet's solve the problem using two pointers: for the richest friend, find the first friend from the end such that the sum of their values $$$y$$$ exceeds the sum of their values $$$x$$$. Then repeat this for all subsequent friends until the pointers meet.\nIf no pair could be formed, or none of the friends has a value $$$x$$$ greater than $$$y$$$, then the answer is\n-1\n.\nOtherwise, print the number of pairs formed."
         },
         {
             "title": "Solution",

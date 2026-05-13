@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1092E - Minimal Diameter Forest\nLet's start with the solution and then proceed to the proof.\nFor each tree in a forest find such a vertex that the maximal distance from it to any vertex is minimal possible (a center of a tree). Tree may include two centers, take any of them in that case. Find the the tree with the maximum diameter. Connect the centers of other trees with its center.\nOverall complexity is the complexity of looking for a diameter: $$$O(n)$$$ or $$$O(n^2)$$$.\nThe center is the best vertex in a tree to connect to. The diameter of merging two trees $$$t_1$$$ and $$$t_2$$$ by $$$v$$$ in $$$t_1$$$ and $$$u$$$ in $$$t_2$$$ with $$$d_1$$$ being the maximum shortest path from $$$v$$$ to any other vertex in $$$t_1$$$, $$$d_2$$$ being the same for $$$u$$$ in $$$t_2$$$ is $$$max(diam_1, diam_2, d_1 + d_2 + 1)$$$. Thus minimizing both $$$d_1$$$ and $$$d_2$$$ will produce the best result.\nThe most optimal structure is a star. The center tree will be connected directly to any other tree. The other trees will be connected through a single vertex among each other, which leads to the answer no more than 1 worse than connecting them directly. And building the answer the other way will exceed this difference as some tree will be connected to the center tree of the star through one vertex as well.\nThe previous fact implies that the center tree of the star should have the maximal diameter among all trees."
         },
         {
             "title": "Solution",

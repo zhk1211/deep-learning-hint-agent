@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1170E - Sliding Doors\nLet's look at one query. It can be proven, that it's always optimal to fill free spaces between chosen cells greedily from left to right (or from right to left). The proof is based on the fact that placing doors as much as possible before the leftmost chosen cell doesn't harm us. After that, we can \"cut\" that prefix and solve the task recursively.\nTo calculate the maximum number of doors, that can be fit in the gap between two consecutive chosen cells, we can't just iterate, since we can make up to $$$O(n)$$$ operation per query. But we can use the binary search (while calculating the sum of widths by prefix sums). So, the complexity of one query is $$$O(c_k \\log{n})$$$ and total complexity is $$$O(\\sum{c_k} \\log{n})$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1676G - White-Black Balanced Subtrees\nLet's run a dynamic programming from the leaves to the root. For each vertex store the values of the number of balanced subtrees, as well as the number of white and black vertices in it.\nThen from a vertex we can count the total number of white vertices in its subtree as well as the black vertices in its subtree, and update our total if they are equal. Remember to include the color of the vertex itself in these counts. The answer is the answer at the root.\nTherefore the problem is solved in $$$\\mathcal{O}(n)$$$ time."
         },
         {
             "title": "Solution",

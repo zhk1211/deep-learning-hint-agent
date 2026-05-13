@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1646C - Factorials and Powers of Two\nIf the problem asked to represent $$$n$$$ as a sum of distinct powers of two only (without the factorials), then there is a unique way to do it, using the binary representation of $$$n$$$ and the number of terms will be the number of digits equal to $$$1$$$ in this binary representation. Let's denote this number by $$$\\text{ones}(n)$$$.\nIf we fix the factorials we are going to use in the sum, then the rest of the terms are uniquely determined because of the observation above. Note that $$$1$$$ and $$$2$$$ will not be considered as factorials in order to avoid repeating terms.\nSo, to solve the problem it is enough to iterate through all possibilities of including or not including each factorial (up to $$$14!$$$) and for each of them calculate the number of terms used in the sum. If we used $$$f$$$ factorials and their sum is $$$s$$$, then the number of terms can be calculated as $$$f+\\text{ones}(n-s)$$$. The minimum of all these numbers will be the answer.\nIntended complexity: $$$\\mathcal{O}(2^k)$$$ where $$$k$$$ is the biggest positive integer such that $$$k!\\leq n$$$"
         }
     ]
 }

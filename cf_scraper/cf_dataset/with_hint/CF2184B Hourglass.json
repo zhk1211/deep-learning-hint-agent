@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "2184B - Hourglass\nFor now, we will not consider $$$m$$$. Let's note two cases:\nIf $$$s  \\gt  k$$$, then in the first $$$k$$$ minutes, $$$k$$$ minutes of sand will fall out, and there will be $$$s-k$$$ minutes of sand left in the upper half of the hourglass. After the first flip, there will be $$$k$$$ minutes of sand on top. This means that in the first $$$2 \\cdot k$$$ minutes, there will be nothing left in the upper half. From this, we can conclude that every $$$2 \\cdot k$$$ minutes, the amount of sand in the upper half will be the same.\nIf $$$s \\le k$$$, then in the first $$$k$$$ minutes, all $$$s$$$ minutes of sand will fall out, and there will be nothing left in the upper half. From this, we can conclude that every $$$k$$$ minutes, the amount of sand in the upper half will be the same.\nNow let's return to $$$m$$$. We will consider both cases:\nIf $$$s  \\gt  k$$$, replace the value of $$$m$$$ with $$$m \\mod {2 \\cdot k}$$$. If $$$0 \\le m \\le k-1$$$, then there will be $$$s - m$$$ minutes of sand left in the upper half, and if $$$k \\le m \\le 2\\cdot k - 1$$$, then there will be $$$k - (m - k)$$$ minutes of sand left in the upper half.\nIf $$$s \\le k$$$, replace the value of $$$m$$$ with $$$m \\mod {k}$$$. If $$$0 \\le m  \\lt  s$$$, then there will be $$$s - m$$$ minutes of sand left in the upper half; otherwise, there will be $$$0$$$ minutes of sand left."
         },
         {
             "title": "Solution",

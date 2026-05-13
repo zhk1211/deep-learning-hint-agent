@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1354G - Find a Gift\nThe solution consists of several steps.\nThe first step.\nLet's find out \"does the first box contain stone or valuable gift\" using random. Let's make $$$30$$$ queries to compare the weight of the first box with the weight of another random box. If the first box is lighter than we found an answer, otherwise the probability of the first box having stones is at least $$$1 - 2^{-30}$$$.\nThe second step.\nLet's compare the weights of the first box and the second one. If they are equal then let's compare the weights of boxes $$$[1, 2]$$$ and $$$[3,4]$$$. If they are equal then let's compare the boxes $$$[1 \\dots 4]$$$ and $$$[5 \\dots 8]$$$ and so on. In other words, let's find the minimum $$$k \\ge 0$$$ such that $$$[1, 2^k]$$$ contains only boxes with stones but $$$[2^k + 1, 2^{k + 1}]$$$ contain at least one box with a valuable gift. It's easy to see that we'd spend no more than $$$10$$$ queries.\nThe third step.\nWe have segment $$$[1, 2^k]$$$ with only stones and $$$[2^k + 1, 2^{k + 1}]$$$ with at least one gift. Let's just binary search the leftmost gift in the segment $$$[2^k + 1, 2^{k + 1}]$$$ using boxes from $$$[1, 2^k]$$$ as reference: if we need to know \"does segment of boxes $$$[l, mid)$$$ have at least one gift\", let's just compare it with segment $$$[0, mid - l)$$$ which have only stones. if $$$[l, mid)$$$ is lighter then it has, otherwise doesn't have. This part also requires no more than $$$10$$$ queries."
         },
         {
             "title": "Solution (adedalic)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1385E - Directing Edges\nFirstly, if the graph consisting of initial vertices and only directed edges contains at least one cycle then the answer is \"\nNO\n\". Otherwise, the answer is always \"\nYES\n\". Let's build it. Let's build the topological sort of the graph without undirected edges. Then let's check for each directed edge if it's going from left to right (in order of topological sort). If it isn't true then there is a cycle and the answer is \"\nNO\n\". Otherwise, let's direct each edge from left to right in order of the topological sort."
         },
         {
             "title": "Solution",

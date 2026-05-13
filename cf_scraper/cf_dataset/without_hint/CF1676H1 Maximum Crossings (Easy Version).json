@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1676H1 - Maximum Crossings (Easy Version)\nLet's look at two wires from $$$i \\to a_i$$$ and $$$j \\to a_j$$$.\nIf $$$a_i  \\lt  a_j$$$, there can never be any intersection.\nIf $$$a_i  \\gt  a_j$$$, there has to be an intersection.\nIf $$$a_i = a_j$$$, it is possible that there is an intersection or not, depending on how we arrange the wires on the bottom terminal.\nIn the last case, if there are multiple wires that go to the same segment $$$a_i$$$, we can make all pairs of them cross by arranging the points in which they hit this segment from right to left. For example, if $$$a=[1,1,1,1]$$$, then we can make all pairs of segments cross as shown.\nSince we want to maximize the number of intersections, we just need to count the number of pairs $$$(i,j)$$$ such that $$$a_i \\geq a_j$$$. You can brute force all pairs in $$$\\mathcal{O}(n^2)$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1437B - Reverse Binary Strings\nWe need to make our string alternating, i. e. $$$s_i \\neq s_{i + 1}$$$. When we reverse substring $$$s_l \\dots s_r$$$, we change no more than two pairs $$$s_{l - 1}, s_l$$$ and $$$s_r, s_{r + 1}$$$. Moreover, one pair should be a consecutive pair\n00\nand other —\n11\n. So, we can find lower bound to our answer as maximum between number of pairs of\n00\nand number of pairs of\n11\n. And we can always reach this lower bound, by pairing\n00\nwith\n11\nor with left/right border of $$$s$$$.\nAnother way to count the answer is next: suppose we want to make string\n0101...\n, then let's transform $$$s$$$ to\n1\n+ $$$s$$$ +\n0\n. For example, if $$$s =$$$\n0110\n, we will get\n101100\n. We claim that after this transformation, we will have equal number of\n00\nand\n11\n, so the answer is the number of consecutive pairs of the same character divided by two. The answer is the minimum between answers for\n1\n+ $$$s$$$ +\n0\nand\n0\n+ $$$s$$$ +\n1\n."
         },
         {
             "title": "Solution (adedalic)",

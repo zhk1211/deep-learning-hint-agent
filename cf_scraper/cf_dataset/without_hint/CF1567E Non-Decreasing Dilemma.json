@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1567E - Non-Decreasing Dilemma\nNote that if there exists a non-decreasing array of length $$$x$$$, then it contains $$$\\frac{x(x+1)}{2}$$$ non-decreasing subarrays. Therefore, we can break our solution down to counting the lengths of the non-decreasing \"chains\" within the queried subarray.\nWe can solve this problem using a data structure called a segment tree. On each node of this segment tree, we shall maintain four pieces of information:\n$$$\\cdot$$$ the length of the longest non-decreasing prefix.\n$$$\\cdot$$$ the length of the longest non-decreasing suffix.\n$$$\\cdot$$$ a boolean flag denoting if the entire segment is non-decreasing.\n$$$\\cdot$$$ the total number of nondecreasing subarrays not part of the longest prefix or suffix.\nI won't explain the merging process here (you can examine the implementation below), but it is not too complex.\nUsing this, we can traverse the segment tree, from the left of our queried range to the right, while maintaining the number of non-decreasing subarrays in the prefix of the range and the length of the outgoing non-decreasing suffix to get our answer.\nTime complexity: $$$\\mathcal{O}(q\\log n)$$$."
         },
         {
             "title": "Implementation (C++)",

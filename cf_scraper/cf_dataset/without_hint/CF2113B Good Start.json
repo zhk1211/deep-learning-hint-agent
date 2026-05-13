@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2113B - Good Start\nLet $$$x_1 \\neq x_2, y_1 \\neq y_2$$$. We will show that the necessary and sufficient condition to tile the roof is $$$(x_2 - x_1)~\\text{mod}~a = 0$$$ or $$$(y_2 - y_1)~\\text{mod}~b = 0$$$. If this condition is satisfied, then we can tile the roof either \"by columns\" or \"by rows\". On the other hand, suppose there is some tiling, then some rectangle covers the cell $$$(x_1 - 1, y_1)$$$ and either it is in the same column as the first polygon, or it also covers the cell $$$(x_1 - 1, y_1 - 1)$$$. If the second case occurs, note that the rectangle covering the cell $$$(x_1, y_1 - 1)$$$ must be in the same row as it. Thus, any tiling is either by rows or by columns, and our condition must be satisfied.\nIn the cases $$$x_1 = x_2$$$ or $$$y_1 = y_2$$$, note that the tiling must necessarily be by rows or columns, respectively. This follows from the reasoning described earlier. The final solution, taking into account the cases described, looks as follows: if $$$$$$(x_1 \\neq x_2~\\text{and}~(x_2 - x_1)~\\text{mod}~a = 0)$$$$$$ or $$$$$$(y_1 \\neq y_2~\\text{and}~(y_2 - y_1)~\\text{mod}~b = 0)$$$$$$ then it is possible to tile the roof, otherwise it is not."
         }
     ]
 }

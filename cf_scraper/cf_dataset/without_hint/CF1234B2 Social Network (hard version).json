@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1234B2 - Social Network (hard version)\nThe idea of this solution is the same as in the easy version, but now we need to do the same sequence of moves faster. We can notice that the smartphone screen works as a queue, so let store it as a queue! When the new message appears, we have to check if the friend with this ID is in the queue already, but we need to check it somehow fast. Let's use some logarithmic structure that stores the same information as the queue but in other order to find, add and remove elements fast. In C++ this structure is\nstd::set\n.\nSo let's check if the current friend is in the queue, and if no, let's check if the size of the queue is $$$k$$$. If it is so then let's remove the first element of the queue from it and the same element from the set also. Then add the current friend to the queue and to the set. After processing all messages, the reversed queue (the queue from tail to head) is the answer to the problem.\nTime complexity: $$$O(n \\log{k})$$$.\nAnd don't forget that\nstd::unordered_map\nand other standard hashmaps can work in linear time in the worst case, so you need to redefine the hash function to use them. You can read more about this issue here:\nhttps://codeforces.com/blog/entry/62393\n."
         },
         {
             "title": "Solution",

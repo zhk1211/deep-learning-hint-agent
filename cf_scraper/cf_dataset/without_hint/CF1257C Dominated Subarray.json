@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1257C - Dominated Subarray\nAt first, let's prove that the shortest dominated subarray has pattern like $$$v, c_1, c_2, \\dots, c_k, v$$$ with $$$k \\ge 0$$$ and dominated by value $$$v$$$. Otherwise, we can decrease its length by erasing an element from one of its ends which isn't equal to $$$v$$$ and it'd still be dominated.\nNow we should go over all pairs of the same numbers and check its subarrays... Or not? Let's look closely at the pattern: if $$$v$$$ and all $$$c_i$$$ are pairwise distinct then the pattern is dominated subarray itself. Otherwise, we can find in our pattern other shorter pattern and either the found pattern is dominated or it has the pattern inside it and so on.\nWhat does it mean? It means that the answer is just the shortest pattern we can find. And all we need to find is the shortest subarray with the same first and last elements or just distance between two consecutive occurrences of each number. We can do it by iterating over current position $$$i$$$ and keeping track of the last occurrence of each number in some array $$$lst[v]$$$. Then the current distance is $$$i - lst[a[i]] + 1$$$.\nThe total complexity is $$$O(n)$$$."
         },
         {
             "title": "Solution (adedalic)",

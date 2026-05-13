@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1671C - Dolce Vita\nFirstly, note that if we want to buy as many packs as possible, then it's optimal to buy the cheapest packs. In other words, if we sort all packs, we'll always buy a prefix of array $$$a$$$.\nNext, note that each day we buy some number of packs $$$i \\in [1, n]$$$, so, instead of iterating through the days, we can iterate through the number of packs $$$i$$$ and for each $$$i$$$ calculate the number of days we'll buy exactly $$$i$$$ packs.\nSince the prices increasing and at day $$$k + 1$$$ the price is $$$a_i + k$$$, then exists last day $$$k_i + 1$$$ such that as days $$$1, 2, \\dots, k_i + 1$$$ we could buy $$$i$$$ packs and at days $$$k_i + 2, k_i + 3, \\dots$$$ we can't. And we can find $$$k_i$$$ as maximum possible integer solution to inequation $$$(a_1 + k_i) + \\dots + (a_i + k_i) \\le x$$$ or $$$k_i = \\left\\lfloor \\frac{x - (a_1 + \\dots + a_i)}{i} \\right\\rfloor$$$.\nWe can calculate all $$$k_i$$$ using prefix sums $$$a_1 + \\dots + a_i$$$ in linear time. As a result, we buy\n$$$n$$$ packs in days $$$(0, k_1 + 1]$$$; $$$n \\cdot (k_1 + 1)$$$ in total;\n$$$n - 1$$$ packs in days $$$(k_1 + 1, k_2 + 1]$$$; $$$(n - 1) \\cdot (k_2 - k_1)$$$ in total;\n$$$n - 2$$$ packs in days $$$(k_2 + 1, k_3 + 1]$$$; $$$(n - 2) \\cdot (k_3 - k_2)$$$ in total and so on.\nThe resulting complexity is $$$O(n \\log{n})$$$ because of sort."
         },
         {
             "title": "Solution (adedalic)",

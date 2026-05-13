@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1066E - Binary Numbers AND Sum\nTo solve this problem let's take a look which powers of $$$2$$$ in $$$a$$$ will be affected by powers of $$$2$$$ in $$$b$$$. Firstly, let's reverse numbers. Let's carry the current power of $$$2$$$ (let it be $$$pw$$$), the current sum of powers of $$$2$$$ in $$$a$$$ from the position $$$0$$$ to the current position inclusive (let it be $$$res$$$) and the answer is $$$ans$$$. Initially, $$$pw = 1$$$, $$$res = 0$$$ and $$$ans = 0$$$. Let's iterate over all bits of $$$b$$$ from $$$0$$$ to $$$m - 1$$$. Let the current bit in $$$b$$$ have the number $$$i$$$. Firstly, if $$$i  \\lt  n$$$ and $$$a_i = 1$$$ then set $$$res := res + pw$$$ (in other words, we add to the sum of powers of $$$2$$$ in $$$a$$$ the current power of $$$2$$$). If $$$b_i = 1$$$ then this bit will add to the answer all the powers of $$$2$$$ in $$$a$$$ from $$$0$$$ to $$$i$$$ inclusive (in other words, $$$res$$$), so if it is, then set $$$ans := ans + res$$$. And after all we can set $$$pw := pw + pw$$$ and go on to $$$i+1$$$. And don't forget to take all values modulo $$$998244353$$$ to avoid overflow."
         },
         {
             "title": "Solution",

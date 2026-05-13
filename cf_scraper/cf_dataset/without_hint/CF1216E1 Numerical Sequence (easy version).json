@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1216E1 - Numerical Sequence (easy version)\nLet's take a look on the upper bound of the number $$$n$$$, where $$$n$$$ is the maximum possible number of block which can be asked. If we assume that each number has length $$$1$$$ then the sum of lengths will be equal to $$$1 + 2 + \\dots + n$$$. And as we know this value equals $$$\\frac{n(n+1)}{2}$$$. So the maximum value of $$$n$$$ is not greater than $$$O(\\sqrt{k})$$$.\nNow we can just iterate over all $$$i$$$ from $$$1$$$ to $$$n$$$ (where $$$n$$$ is no more than $$$5 \\cdot 10^4$$$) and carry the length of the last block. If this length is greater than or equal to $$$k$$$ ($$$0$$$-indexed) then let's decrease $$$k$$$ by this length, increase the length of the last block and continue. Otherwise our answer lies in the current block. So then let's iterate over all $$$j$$$ from $$$1$$$ to $$$i$$$ and if the decimal length of $$$j$$$ is greater than or equal to $$$k$$$ then decrease $$$k$$$ by this length otherwise our answer lies in the current number $$$j$$$ and we just need to print $$$j_k$$$ ($$$0$$$-indexed).\nTime complexity: $$$O(\\sqrt{k})$$$ per query."
         },
         {
             "title": "Solution",

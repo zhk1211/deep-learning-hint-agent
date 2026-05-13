@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1278C - Berry Jam\nLet's transit from counting strawberry and blueberry jam jars separately to their difference. Let $$$dif$$$ be equal to $$$\\#of\\_strawberry\\_jars - \\#of\\_blueberry\\_jars$$$. Then eating one strawberry jar decreases $$$dif$$$ by $$$1$$$ and eating one blueberry jar increases $$$dif$$$ by $$$1$$$. The goal is to make $$$dif$$$ equal to $$$0$$$.\nLet there be some initial difference $$$dif_{init}$$$. Let's eat first $$$l$$$ jars from the left and first $$$r$$$ jars from the right. Difference of the jars on the left is $$$difl$$$, on the right it's $$$difr$$$. So the goal becomes to find such $$$l$$$ and $$$r$$$ that $$$dif_{init} - difl_l - difr_r = 0$$$. Rewrite that as $$$dif_{init} - difl_l = difr_r$$$. Now for each unique value of $$$difr_r$$$ save the smallest $$$r$$$ to reach that value in a map. Finally, iterate over the $$$l$$$ and find the minimum answer.\nOverall complexity: $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution (pikmike)",

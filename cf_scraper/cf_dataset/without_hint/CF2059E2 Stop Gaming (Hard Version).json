@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2059E2 - Stop Gaming (Hard Version)\nLet's find the answer to problem E1. We just need to restore the necessary sequence of actions.\nLet's take a closer look at the inductive proof from E1. Notice that it represents an algorithm where at each step we find the rightmost element at the end of some array after which we need to add something. Thus, such an algorithm will definitely lead to the answer.\nThe only difficulty lies in finding the rightmost element after which something needs to be inserted. We will maintain a data structure (let's call it a segment tree) on the indices from the prefix of the remaining balls. In the $$$i$$$-th cell, we will store the number of elements that need to be added for this element to become the last in its array if something needs to be added after it; otherwise, it will be 0. When adding the next element after the $$$i$$$-th, we will subtract 1 from the suffix after it. To find the rightmost element at the end of some array after which something needs to be added, we will look for the rightmost zero in the segment tree, and when we have performed all actions for a certain element, we will write a very large number in its cell so that it never appears again."
         },
         {
             "title": "Implementation",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1788B - Sum of Two Numbers\nLet's assume that there is no carry while adding $$$x$$$ and $$$y$$$. Denote $$$n=a_9 \\cdots a_1a_0$$$, $$$x=b_9 \\cdots b_1b_0$$$, $$$y=c_9 \\cdots c_1c_0$$$ in decimal system. The condition can be changed as the following condition.\n- $$$a_i=b_i+c_i$$$ for all $$$0 \\leq i \\leq 9$$$. - Sum of $$$b_i$$$ and sum of $$$c_i$$$ should differ by at most $$$1$$$.\nIf $$$a_i$$$ is even, let $$$b_i=c_i=a_i/2$$$. Otherwise, let $$$b_i$$$ and $$$c_i$$$ be $$$\\frac{a_i+1}{2}$$$ or $$$\\frac{a_i-1}{2}$$$. By alternating between $$$(b_i, c_i)=(\\frac{a_i+1}{2}, \\frac{a_i-1}{2})$$$ and $$$(b_i, c_i)=(\\frac{a_i-1}{2}, \\frac{a_i+1}{2})$$$, we can satisfy the condition where sum of $$$b_i$$$ and sum of $$$c_i$$$ differ by at most $$$1$$$.\nThere is an alternative solution. If $$$n$$$ is even, divide it into ($$$\\frac{n}{2}, \\frac{n}{2}$$$). If remainder of $$$n$$$ divided by $$$10$$$ is not $$$9$$$, divide it into ($$$\\frac{n+1}{2}, \\frac{n-1}{2}$$$). If remainder of $$$n$$$ divided by $$$10$$$ is $$$9$$$, recursively find an answer for $$$\\lfloor \\frac{n}{10} \\rfloor$$$ which is ($$$x', y'$$$) and the answer will be ($$$10x'+4, 10y'+5$$$) or ($$$10x'+5, 10y'+4$$$) depending on what number has a bigger sum of digits.\nThe following solution has a countertest.\n1. Trying to find $$$x$$$ and $$$y$$$ by bruteforce from ($$$1, n-1$$$). 2. Trying to find $$$x$$$ and $$$y$$$ by bruteforce from ($$$\\frac{n+1}{2}, \\frac{n-1}{2}$$$)\nA solution that randomly finds ($$$x, y$$$) passes."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1618D - Array and Operations\nIt's kinda obvious that we have to choose the $$$k$$$ greatest elements of the array as the denominators in the operations: suppose we haven't chosen one of them, but have chosen a lesser element as a denominator; if we swap them, the total score won't decrease.\nIt is a bit harder to prove that the numerators of the fractions should be the next $$$k$$$ greatest elements (the elements on positions from $$$n - 2k + 1$$$ to $$$n - k$$$ in sorted order). It can be proved as follows: each fraction we will get in such a way rounds down to either $$$1$$$ or to $$$0$$$, and if we choose a lesser element as a numerator, we can decrease a fraction from $$$1$$$ to $$$0$$$, but we'll increase the sum of elements that remain in the array, so this is not optimal.\nAll that's left is to pair the numerators and denominators. A fraction with numerator equal to denominator rounds down to $$$1$$$, any other fraction will round down to $$$0$$$, so our goal is to minimize the number of fractions having the numerator equal to the denominator. It can be done by pairing the numbers into fractions in the following way: $$$\\frac{a_{n-2k+1}}{a_{n-k+1}}$$$, $$$\\frac{a_{n-2k+2}}{a_{n-k+2}}$$$, ..., $$$\\frac{a_{n-k}}{a_n}$$$ (assuming $$$a$$$ is sorted).\nSo, the solution of the problem is the following: sort the array $$$a$$$, then calculate $$$\\sum \\limits_{i=1}^{n-2k} a_i + \\sum\\limits_{i=1}^{k} \\lfloor \\dfrac{a_{n-2k+i}}{a_{n-k+i}} \\rfloor$$$."
         },
         {
             "title": "Solution (BledDest)",

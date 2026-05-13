@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1454C - Sequence Transformation\nFirstly, let's remove all consecutive equal elements (just keep one occurrence of each such element). For example, the array $$$[1, 1, 2, 3, 3, 3, 2]$$$ becomes $$$[1, 2, 3, 2]$$$.\nNow, the answer for each $$$a_i$$$ is\nalmost\nthe number of its occurrences plus one. Why is it so? Because we need to remove all segments of elements between every pair of consecutive occurrences of $$$a_i$$$. The number of such segments is the number of occurrences of $$$a_i$$$ minus one. There is also a segment before the first occurrence of $$$a_i$$$ and a segment after the last occurrence of $$$a_i$$$. But the first segment doesn't exist for the first element and the last segment doesn't exist for the last element.\nSo, after removing consecutive elements, let's calculate for each $$$a_i$$$ the number of its occurrences plus one, subtract one from the value of the first element and from the value of the last element. Then the answer is the minimum among these values for all $$$a_i$$$."
         },
         {
             "title": "Solution",

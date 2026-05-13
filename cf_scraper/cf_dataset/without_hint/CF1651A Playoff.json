@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nConsider a playoff tournament where $ 2^n $ athletes compete. The athletes are numbered from $ 1 $ to $ 2^n $ .\n\nThe tournament is held in $ n $ stages. In each stage, the athletes are split into pairs in such a way that each athlete belongs exactly to one pair. In each pair, the athletes compete against each other, and exactly one of them wins. The winner of each pair advances to the next stage, the athlete who was defeated gets eliminated from the tournament.\n\nThe pairs are formed as follows:\n\n- in the first stage, athlete $ 1 $ competes against athlete $ 2 $ ; $ 3 $ competes against $ 4 $ ; $ 5 $ competes against $ 6 $ , and so on;\n- in the second stage, the winner of the match \" $ 1 $ – $ 2 $ \" competes against the winner of the match \" $ 3 $ – $ 4 $ \"; the winner of the match \" $ 5 $ – $ 6 $ \" competes against the winner of the match \" $ 7 $ – $ 8 $ \", and so on;\n- the next stages are held according to the same rules.\n\nWhen athletes $ x $ and $ y $ compete, the winner is decided as follows:\n\n- if $ x+y $ is odd, the athlete with the lower index wins (i. e. if $ x < y $ , then $ x $ wins, otherwise $ y $ wins);\n- if $ x+y $ is even, the athlete with the higher index wins.\n\nThe following picture describes the way the tournament with $ n = 3 $ goes.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1651A/5e1871b96c9101b943a5400444d0518e867eae14.png)Your task is the following one: given the integer $ n $ , determine the index of the athlete who wins the tournament.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 30 $ ) — the number of test cases.\n\nEach test case consists of one line containing one integer $ n $ ( $ 1 \\le n \\le 30 $ ).\n\nOutput Format\nFor each test case, print one integer — the index of the winner of the tournament.\n\nExamples\nSample 1\nInput\n2\n3\n1\nOutput\n7\n1\n\nNote\nThe case $ n = 3 $ is shown in the picture from the statement.\n\nIf $ n = 1 $ , then there's only one match between athletes $ 1 $ and $ 2 $ . Since $ 1 + 2 = 3 $ is an odd number, the athlete with the lower index wins. So, the athlete $ 1 $ is the winner."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1651A - Playoff\nDuring the first stage, every player with an even index competes against a player with an odd index, so in each match during the first stage, the player whose index is smaller wins. The pairs are formed in such a way that, in each pair, the player with an odd index has smaller index, so all players with even indices get eliminated, and all players with odd indices advance to the next stage.\nAll of the remaining matches are between players with odd indices, so the winner of each match is the player with the larger index. So, the overall winner of the tournament is the player with the greatest odd index, which is $$$2^n-1$$$.\nNote: in some languages (for example, C++), standard power functions work with floating-point numbers instead of integers, so they will produce the answer as a floating-point number (which may lead to wrong formatting of the output and/or calculation errors). You might have to implement your own power function that works with integers, or compute $$$2^n$$$ using a loop."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\nn\n=\nint\n(\ninput\n())\nprint\n(\n2\n**\nn\n-\n1\n)"
+        }
+    ]
+}

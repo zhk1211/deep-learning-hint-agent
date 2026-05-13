@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1307F - Cow and Vacation\nWe will run a BFS from all the rest stops in parallel and use union-find to determine which rest stops can reach each other directly. We will split each edge into two to simplify this process. Note that this means Bessie can now travel at most $$$2k$$$ roads before needing a rest. While we perform the BFS, we also color all nodes that are within distance $$$k$$$ from a rest stop and store the rest stop that can reach each colored node in an array. When two frontiers collide, merge them.\nLet's consider each query individually. First of all, if $$$a$$$ can reach $$$b$$$ directly, the answer is\nYES\n.\nOtherwise, let's walk $$$a$$$ towards $$$b$$$ for $$$k$$$ edges, and $$$b$$$ towards $$$a$$$ for $$$k$$$ edges. Note that they may cross over $$$lca(a,b)$$$ in the process. The walks will not meet because if they did, the condition that $$$a$$$ can reach $$$b$$$ directly would have been satisfied.\nThen, the answer is\nYES\nif the new $$$a$$$ is a colored node, the new $$$b$$$ is a colored node, and they both belong to the same component of rest stops which we can check from our union find.\nOtherwise, the answer is\nNO\n.\nTime Complexity: $$$O((n+v)\\log{n})$$$"
         },
         {
             "title": "Solution",

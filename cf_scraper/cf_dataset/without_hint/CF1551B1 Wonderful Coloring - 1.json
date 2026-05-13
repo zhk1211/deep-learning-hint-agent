@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1551B1 - Wonderful Coloring - 1\nLet's calculate the number of letters which occur exactly once in the string and letters that occur more than once — $$$c_1$$$ and $$$c_2$$$, respectively.\nIf a letter occurs more than once, one of its occurrences may be painted in red and another one may be painted in green. We cannot paint all other occurrences because there will be two equal letters painted in one color, but this is unacceptable by the statement. So there are no more than $$$c_2$$$ occurrences of letters that occur more than once to be painted in red. Let's select $$$c_2$$$ such occurrences and paint them. We need to paint additionally the letters which occur exactly once by meeting the same conditions as we meet painting the whole string.\nThere's no way to paint these letters and not meet the first two conditions. So we must select the maximal count of the letters so that we will be able to paint some set of remaining letters in green so that the number of red letters will be equal to the number of green letters. This number is equal to $$$\\lfloor \\frac{c_1}{2} \\rfloor$$$.\nSo the final answer is equal to $$$c_2 + \\lfloor \\frac{c_1}{2} \\rfloor$$$."
         },
         {
             "title": "Solution",

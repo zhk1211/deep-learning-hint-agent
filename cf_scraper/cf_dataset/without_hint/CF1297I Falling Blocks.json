@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1297I - Falling Blocks\nIf we store, for each height, an ordered set of all blocks currently there then if we know, the height $$$maxH$$$ to start from, we can efficiently enough vaporize blocks or decide that the current block has stopped falling.\nWe can query the set for that level to check if the fall is stopped (i.e. if the dropped block comes in contact with a block that it does not cover). If so, stop the vaporizing and remember the final height. If not, use the set to determine which blocks to vaporize before repeating the drop.\nThe question is: how to determine starting height $$$maxH$$$? If blocks wouldn't be vaporized then we could use a standard Segment Tree with \"set value on the segment\" and \"get the maximum on the segment\" to set a block on some height and to find the maximum height of blocks on some segment.\nIn fact, we can use it! It's because of the property that the block vaporizes only blocks it covers, so \"setting new block\" operation in ST will replace all vaporized blocks with the current one and we don't need to think about methods to erase blocks from ST manually.\nThe resulting complexity is $$$O(n \\log(n))$$$."
         },
         {
             "title": "Solution (elizarov)",

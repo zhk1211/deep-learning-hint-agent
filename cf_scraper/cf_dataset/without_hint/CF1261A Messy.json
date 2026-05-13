@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1261A - Messy\nIt's easy to construct a valid bracket sequence, for example \"\n()()()() ... (((...(())...))))\n\".\nNow let the initial bracket sequence be $$$s$$$, the target one be $$$t$$$. For each position, if $$$s_{i} = t_{i}$$$ then we needn't do anything, otherwise find a position $$$j$$$ which $$$j  \\gt  i$$$ and $$$s_{j} = t_{i}$$$ (it exists), and reverse the segment $$$[i \\dots j]$$$.\nThe number of operations is at most $$$n$$$, and the solution works in $$$O(n^{2})$$$."
         }
     ]
 }

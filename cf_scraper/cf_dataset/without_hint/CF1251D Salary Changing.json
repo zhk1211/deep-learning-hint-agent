@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1251D - Salary Changing\nLet $$$f(mid)$$$ be equal minimum amount of money to obtain the median salary at least $$$mid$$$. We'll solve this problem by binary search by $$$mid$$$.\nSuppose the have to calculate the minimum amount of money for obtaining median salary at least $$$mid$$$. Let's divide all salaries into three groups:\n$$$r_i  \\lt  mid$$$;\n$$$mid \\le l_i$$$;\n$$$l_i  \\lt  mid \\le r_i$$$.\nIn order to the median salary be at least $$$mid$$$ there must be at least $$$\\frac{n+1}{2}$$$ salaries greater than or equal to $$$mid$$$. Let's denote the number of such salaries as $$$cnt$$$.\nNote that salaries of the first group can't increment the value of $$$cnt$$$, so it's beneficial for us to pay the minimum salary for this group. Salaries if second group always increment the value of $$$cnt$$$, so it's also beneficial for us to pay the minimum salary.\nThe salaries from the third group are more interesting. For each salary $$$[l_i, r_i]$$$ in this group we can pay $$$mid$$$ and increment $$$cnt$$$, or we can pay $$$l_i$$$ and don't increase $$$cnt$$$. The value of $$$cnt$$$ should be increased by $$$rem = max(0, \\frac{n+1}{2} - cnt)$$$. So, if the size of the third group is less than $$$rem$$$ than we can't obtain the median salary $$$mid$$$. Otherwise, we can define how many salaries we can take with value $$$l_i$$$ and chose the minimal ones."
         },
         {
             "title": "Solution (Roms)",

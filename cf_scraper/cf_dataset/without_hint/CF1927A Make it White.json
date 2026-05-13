@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1927A - Make it White\nTo repaint all the black cells in white, it is necessary to select a segment from $$$l$$$ to $$$r$$$ that contains all the black cells.\nLet's choose the entire strip as a segment ($$$l=1, r=n$$$). As long as the segment starts with a white cell, it can be left unpainted, i.e., $$$l$$$ can be increased by one. Otherwise, we cannot exclude the cell from the segment. Similarly, we can exclude the last cell from the segment until it becomes black. After all exclusions, the answer will be $$$r - l + 1$$$.\nThe selected segment contains all the black cells, as we have excluded only white cells. The segment is also minimal because reducing the segment from either side will result in one of the black cells remaining black."
         },
         {
             "title": "Solution",

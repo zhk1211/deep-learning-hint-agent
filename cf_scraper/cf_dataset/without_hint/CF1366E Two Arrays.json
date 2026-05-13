@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1366E - Two Arrays\nAt first, let's reverse arrays $$$a$$$ and $$$b$$$. Now array $$$b$$$ is sorted in descending order.\nNow let's find minimum index $$$x$$$ such that $$$a_x = b_1$$$. If there is no such index or if $$$\\min\\limits_{1 \\le i \\le x}a_i  \\lt  b_1$$$ then the answer is $$$0$$$ (because minimum on any prefix of array $$$a$$$ will never be equal to $$$b_1$$$).\nOtherwise, let's find the minimum index $$$y  \\gt  x$$$ such that $$$a_y = b_2$$$. If there is no such index or if $$$\\min\\limits_{x \\le i \\le y}a_i  \\lt  b_2$$$ then the answer is $$$0$$$. Also let's find the minimum index $$$mid  \\gt  x$$$ such that $$$a_{mid}  \\lt  b_1$$$ (it can't be greater than $$$y$$$). The first subarray starts in position $$$1$$$ and ends in any position $$$x, x + 1, x + 2, \\dots, mid - 1$$$ (because if it ends in position $$$mid$$$ or further, then the minimum in the first subarray is greater than $$$b_1$$$). So there are $$$mid - x$$$ ways to split subarrays $$$1$$$ and $$$2$$$.\nA similar approach can be used to calculate the number of ways to split the second and third subarrays and, so on.\nAfter all, you have to check that minimum in the last subarray is equal to $$$b_m$$$ (otherwise the answer is $$$0$$$)."
         },
         {
             "title": "Solution (Roms)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1389F - Bicolored Segments\nThere are two approaches to this problem. Most of the participants of the round got AC by implementing dynamic programming with data structures such as segment tree, but I will describe another solution which is much easier to code.\nLet's consider a graph where each vertex represents a segment, and two vertices are connected by an edge if the corresponding segments compose a bad pair.\nSince each bad pair is formed by two segments of different colors, the graph is bipartite. The problem asks us to find the maximum independent set, and in bipartite graphs, the size of the independent set is equal to $$$V - M$$$, where $$$V$$$ is the number of vertices, and $$$M$$$ is the size of the maximum matching.\nThe only thing that's left is finding the maximum matching. Let's use event processing approach to do it: for each segment, create two events \"the segment begins\" and \"the segment ends\". While processing the events, maintain the currently existing segments in two sets (grouped by their colors and sorted by the time they end). When a segment ends, let's try to match it with some segment of the opposite color — and it's quite obvious that we should choose a segment with the minimum $$$r_i$$$ to form a pair.\nOverall, this solution runs in $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution 1 (Ne0n25)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1257E - The Contest\nSuppose we want to divide $$$r$$$ first problems of the contest between the first contestant and the second contestant (the first contestant will get $$$l$$$ first problems, and the second contestant will get $$$r - l$$$ problems in the middle), and then give all the remaining problems to the third contestant. We are going to iterate on $$$r$$$ from $$$0$$$ to $$$n$$$ and, for each possible $$$r$$$, find the best value of $$$l$$$.\nOkay. Now suppose we fixed $$$l$$$ and $$$r$$$, and now we want to calculate the number of problems that should be redistributed. Let's denote $$$cnt_{l, i}$$$ as the number of problems among $$$l$$$ first ones given to the $$$i$$$-th contestant, $$$cnt_{r, i}$$$ as the number of problems among $$$r$$$ last ones given to the $$$i$$$-th contestant, and $$$cnt_{m, i}$$$ as the number of problems in the middle given to the $$$i$$$-th contestant.\nObviously, the answer for fixed $$$l$$$ and $$$r$$$ is $$$cnt_{l, 2} + cnt_{l, 3} + cnt_{m, 1} + cnt_{m, 3} + cnt_{r, 1} + cnt_{r, 2}$$$, but we don't like this expression because we don't know how to minimize it for fixed $$$r$$$. We know that, for fixed $$$r$$$, the values of $$$cnt_{l, i} + cnt_{m, i}$$$ and $$$cnt_{r, i}$$$ are constant. Using that, we may arrive at the fact that minimizing $$$cnt_{l, 2} + cnt_{l, 3} + cnt_{m, 1} + cnt_{m, 3} + cnt_{r, 1} + cnt_{r, 2}$$$ is the same as minimizing $$$cnt_{l, 2} - cnt_{l, 1}$$$ for fixed $$$r$$$ — and now we have a way to quickly find best possible $$$l$$$ for fixed $$$r$$$."
         },
         {
             "title": "Solution (BledDest)",

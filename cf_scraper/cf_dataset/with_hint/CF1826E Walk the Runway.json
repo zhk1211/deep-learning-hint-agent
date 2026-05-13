@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1826E - Walk the Runway\nAt first, let's define the relation between two models, that go one after another in the show. Their ratings must satisfy $$$r_{i, j}  \\lt  r_{i, k}$$$ for all cities $$$i$$$. Now let's precompute this relations for all pairs of models naively in $$$O(n^2m)$$$, which is ok for now.\nNow, we have the relations \"model $$$i$$$ can go before model $$$j$$$\", let's build a graph of such relations. This graph has no cycles, since the ratings are strictly increasing. Now we can build the topological sorting of this graph and compute $$$dp_i = $$$ the biggest profit, if the last model is model $$$i$$$ in $$$O(n^2)$$$.\nNow, how to calculate this relation for all pairs of models fast enough? Let's process each city one by one and update the relations using bitsets! More formally, let's store a bitset of all the models, that can be before model $$$j$$$ in city $$$i$$$. If we process the models in order of increasing rating, we can update each models bitset of relations in $$$O(\\frac{n}{64})$$$, so the total time complexity would be $$$O(\\frac{n^2m}{64})$$$, which is fast enough."
         }
     ]
 }

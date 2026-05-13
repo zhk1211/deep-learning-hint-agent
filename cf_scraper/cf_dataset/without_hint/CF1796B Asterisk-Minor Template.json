@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1796B - Asterisk-Minor Template\nWhat's the reason behind authors specifically asking for templates that have less or equal asterisks than letters? Well, without that the problem would be kind of trivial. A template \"\n*\n\" is matched by every string, so it would always work.\nHmm, let's try to make something similar to that template then. We basically have to find some part of that occurs in both strings that we can use letters on to get some freedom to use asterisks.\nThere are some easy cases. If the first letters of both strings are the same, then the template can be that letter followed by an asterisk. There's a symmetrical case for the last letter.\nBy studying the examples, you can also notice the final case: a common substring of both strings of length at least two surrounded by two asterisks. Moreover, since we only use two asterisks, we can find a substring of length exactly two (which always exists if a longer common substring exists).\nTurns out, that's it. If a template exists, one of these three kinds also exists.\nThis is not that hard to show. If the first two kinds don't work, then you have to use asterisks on both sides of the template. In order for the template with asterisks on both sides to work, there have to be adjacent letters in it at least once (otherwise, it's like \"\n*a*a*a*\n\", and there are more asterisks than letters). And since at least one such substring exists, we can just remove everything other than this substring and the asterisks on the sides.\nOverall complexity: $$$O(|a| \\cdot |b|)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

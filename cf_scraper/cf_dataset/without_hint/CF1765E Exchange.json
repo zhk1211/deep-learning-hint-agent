@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1765E - Exchange\nIf $$$a  \\gt  b$$$, then Monocarp can go infinite by obtaining just one gold coin: exchanging it for silver coins and then buying it back will earn him $$$a-b$$$ silver coins out of nowhere. So, the answer is $$$1$$$ no matter what $$$n$$$ is.\nIf $$$a \\le b$$$, then it's suboptimal to exchange gold coins for silver coins and then buy the gold coins back. Monocarp should earn the minimum possible number of gold coins so that they all can be exchanged into at least $$$n$$$ silver coins; so, the number of gold coins he needs is $$$\\lceil \\frac{n}{a} \\rceil$$$.\nOne small note: you shouldn't use the functions like\nceil\nto compute a fraction rounded up, since you may get some computation errors related to using floating-point numbers (and possibly getting precision loss). Instead, you should calculate $$$\\lceil \\frac{n}{a} \\rceil$$$ as $$$\\lfloor \\frac{n + a - 1}{a} \\lfloor$$$ (this works for non-negative $$$n$$$ and positive $$$a$$$), and every programming language provides an integer division operator which discards the fractional part and thus doesn't use floating-point computations at all."
         },
         {
             "title": "Solution (BledDest)",

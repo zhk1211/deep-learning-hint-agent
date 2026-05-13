@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1851C - Tiles Comeback\nSince the path must start in the first tile and end in the last tile, it is enough to construct a path consisting of $$$1$$$ or $$$2$$$ blocks of length $$$k$$$ to solve the problem.\nIf $$$c_1 = c_n$$$, then we need to check that there are $$$k-2$$$ tiles of colour $$$c_0$$$ between the first and the last tile. If this condition is satisfied, then the tiles that are found together with the first and the last tile form the path $$$p$$$, and the answer is —\nYES\n. Otherwise — the answer is\nNO\n.\nIf $$$c_1 \\neq c_n$$$ we can solve the problem by the method of two pointers: let's move from the two ends of the array $$$c$$$ to the middle, counting the number of tiles of colour $$$c_1$$$ on the left and tiles of colour $$$c_n$$$ on the right. If the pointers meet no later than $$$k$$$ tiles of the desired colours are found on both sides, the answer is —\nYES\n, otherwise —\nNO\n."
         },
         {
             "title": "Solution",

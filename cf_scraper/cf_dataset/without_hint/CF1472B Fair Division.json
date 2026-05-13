@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1472B - Fair Division\nIf the sum of all the weights is not divisible by two, then it is impossible to divide the candies between two people. If the sum is divisible, then let's count the number of candies with a weight of $$$1$$$ and $$$2$$$. Now, if we can find a way to collect half the sum with some candies, then these candies can be given to Alice, and all the rest can be given to Bob.\nSimple solution — let's iterate through how many candies of weight $$$2$$$ we will give to Alice, then the remaining weight should be filled by candies of weight $$$1$$$. If there are enough of them, then we have found a way of division.\nIn fact, if the sum is even and there are at least two candies with weight $$$1$$$ (there can't be one candy), then the answer is always \"\nYES\n\" (we can collect the weight as close to half as possible with weight $$$2$$$ and then add weight $$$1$$$). If there are no candies with weight $$$1$$$, then you need to check whether $$$n$$$ is even (since all the candies have the same weight, you just need to divide them in half)."
         },
         {
             "title": "Solution",

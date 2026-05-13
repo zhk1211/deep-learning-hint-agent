@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1335E1 - Three Blocks Palindrome (easy version)\nLet's precalculate for each number $$$c$$$ ($$$0$$$-indexed) the array $$$pref_c$$$ of length $$$n+1$$$, where $$$pref_c[i]$$$ is the number of occurrences of the number $$$c$$$ on the prefix of length $$$i$$$. This can be done with easy dynamic programming (just compute prefix sums). Also let $$$sum(c, l, r)$$$ be $$$pref_c[r + 1] - pref_c[l]$$$ and it's meaning is the number of occurrences of the number $$$c$$$ on the segment $$$[l; r]$$$ ($$$0$$$-indexed).\nFirstly, let's update the answer with $$$\\max\\limits_{c=0}^{25} pref_c[n]$$$ (we can always take all occurrences of the same element as the answer). Then let's iterate over all possible segments of the array. Let the current segment be $$$[l; r]$$$. Consider that all occurrences of the element in the middle block belong to $$$a_l, a_{l+1}, \\dots, a_r$$$. Then we can just take the most frequent number on this segment ($$$cntin = \\max\\limits_{c=0}^{25} sum(c, l, r)$$$). We also have to choose the number for the first and the last blocks. It is obvious that for the number $$$num$$$ the maximum amount of such numbers we can take is $$$min(sum(num, 0, l - 1), sum(num, r + 1, n - 1))$$$. So $$$cntout = \\max\\limits_{c=0}^{25} min(sum(c, 0, l - 1), sum(c, r + 1, n - 1))$$$. And we can update the answer with $$$2cntout + cntin$$$.\nTime complexity: $$$O(n^2 \\cdot AL)$$$, where $$$AL$$$ is the size of alphabet (the maximum value of $$$a_i$$$)."
         },
         {
             "title": "Solution",

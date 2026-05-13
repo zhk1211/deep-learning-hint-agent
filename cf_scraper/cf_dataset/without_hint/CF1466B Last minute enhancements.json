@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1466B - Last minute enhancements\nWe describe two solutions.\nThe first focuses on maximal contiguous intervals of values. We notice that for each such interval $$$[l, r]$$$ it can either remain unchanged or get increased to $$$[l, r + 1]$$$ (other possibilities won't increase the number of different elements; thus, we don't need to consider them). From this observation, we conclude that the result is the number of different elements in the input increased by the number of intervals containing at least one duplicate.\nThe second is based on a simple, greedy approach, where we analyze the elements in nondecreasing order. While analyzing, we keep the set of elements for which we have already decided its value. When we want to add the next element, then we check if it is in the set. If it is, we increase it by $$$1$$$; otherwise, we keep it as it is."
         },
         {
             "title": "Solution 1",

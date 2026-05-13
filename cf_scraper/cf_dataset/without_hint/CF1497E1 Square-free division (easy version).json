@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1497E1 - Square-Free Division (easy version)\nFor factorization of $$$x = p_1^{q_1} \\cdot p_2^{q_2} \\cdot \\cdots \\cdot p_k^{q_k}$$$ let's define $$$mask(x) = p_1^{q_1 \\bmod 2} \\cdot p_2^{q_2 \\bmod 2} \\cdot \\cdots \\cdot p_m^{q_m \\bmod 2}$$$. After that it is easy to see that $$$x \\cdot y$$$ is a perfect square if and only if $$$mask(x) = mask(y)$$$.\nNow let's say $$$a_i = mask(a_i)$$$ for all $$$1 \\le i \\le n$$$. The problem we need to solve is: split the array into minimal amount of non-intersecting subsegments so that on each subsegment all numbers are different. Since $$$k = 0$$$ we can do that using a greedy idea. If we consider an element that has not been in our current segment, then we add it to the segment. If it's already taken, then we should end our current segment and start a new one."
         },
         {
             "title": "Implementation",

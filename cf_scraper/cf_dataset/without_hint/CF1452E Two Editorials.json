@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1452E - Two Editorials\nConsider some participant's segment $$$[l; r]$$$ and one of the author's segment $$$[i; i + k - 1]$$$. How does the length of intersection change when you move $$$i$$$ from left to right? It first increases until the centers of both segments coincide (that's the easiest to notice on the segments of the same length) and then decreases. The increase is totally symmetrical to the decrease.\nWith that idea you can conclude that the author's segment, whose center is the closest to the center of participant's segment, has the larger intersection length.\nLet's sort the participants' segments by their center. You can see that the first author will be optimal for the prefix of the segments and the second author — for the remaining suffix.\nSo you can just iterate over the length of the prefix and update the answer with all options.\nOverall complexity: $$$O(n \\log n + nm)$$$."
         },
         {
             "title": "Solution (pikmike)",

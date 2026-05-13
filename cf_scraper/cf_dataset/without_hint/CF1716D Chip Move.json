@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1716D - Chip Move\nLet's calculate dynamic programming $$$dp_{s, i}$$$ — the number of ways to achieve $$$i$$$ in $$$s$$$ moves. From the state $$$(s, i)$$$, you can make a transition to the states $$$(s+1, j)$$$, where $$$i  \\lt  j$$$ and $$$j - i$$$ is divisible by $$$k + s$$$.\nLet's try to estimate the maximum number of moves, because it seems that there can't be very many of them. For $$$m$$$ moves, the minimum distance by which a chip can be moved is $$$k+ (k + 1) + \\dots + (k + m - 1)$$$ or $$$\\frac{(k + k + m - 1) \\cdot m}{2}$$$. From here one can see that the maximum number of transitions does not exceed $$$\\sqrt{2n}$$$ (maximum at $$$k=1$$$). So it remains to make transitions in dynamic programming faster than $$$O(n)$$$ from a single state for a fast enough solution. Let's use the fact that $$$j \\equiv i \\pmod{k+s}$$$. Let's iterate over the value of $$$j$$$ and maintain the sum of dynamic programming values with smaller indices for each remainder modulo $$$k + s$$$ in a separate array.\nThe final complexity of such a solution is $$$O(n\\sqrt{n})$$$.\nIt remains to solve the memory problem, because with the existing limits, it is impossible to save the entire $$$dp$$$ matrix of size $$$n^{\\frac{3}{2}}$$$. However, this is easy to solve if you notice that only the previous layer is used for transitions in dp, i.e. it is enough to store $$$dp_s$$$ to calculate $$$dp_{s+1}$$$."
         },
         {
             "title": "Solution (Neon)",

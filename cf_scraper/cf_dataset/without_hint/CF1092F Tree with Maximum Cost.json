@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1092F - Tree with Maximum Cost\nFirstly, let's calculate the answer (let it be $$$res$$$) for some fixed vertex. Let this vertex be the vertex $$$1$$$. Just run simple\ndfs\nand calculate the result using the formula from the problem statement. Also let's calculate the sum of values (let the sum in the subtree of the vertex $$$v$$$ be $$$sum_v$$$) in each subtree of the given tree if its root is the vertex $$$1$$$. It can be easily done with simple dynamic programming.\nAnd now the magic part: let's apply the technique which is called \"\nre-rooting\n\" (at least we called it so). Let's maintain the correct values in subtrees at each step of our algorithm. How will values and the answer change if we will go through the edge $$$(u, v)$$$?\nThe following sequence of changes will change all values correctly:\nFirstly, it can be seen that $$$res$$$ will decrease by $$$sum_v$$$ (because the distance to each vertex in this subtree will decrease by one);\nthen $$$sum_u$$$ will decrease by $$$sum_v$$$ (because we change the root of the tree) (we need this step to maintain the correct values);\nthen $$$res$$$ will increase by $$$sum_u$$$ (because the distance to each vertex in this subtree will increase by one);\nand then $$$sum_v$$$ will increase by $$$sum_u$$$ (because we change the root of the tree) (we need this step to maintain the correct values).\nSo, we can recalculate all the values we need if we go through the edge. So now we can write another one\ndfs\nto try to update the answer for each vertex as a root (as the chosen vertex)."
         },
         {
             "title": "Solution",

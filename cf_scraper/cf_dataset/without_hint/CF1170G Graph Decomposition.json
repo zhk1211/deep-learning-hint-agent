@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1170G - Graph Decomposition\nIf there exists vertex with the odd degree then the answer is \"\nNO\n\", otherwise the answer is \"\nYES\n\". Let's find a way to constuct it.\nAlmost all we need is to run euler cycle finding for each component of the given graph. It can be done with the following code:\ndfs(v) {\nwhile (v.hasAdjacentVertices) {\nto = v.anyAdjacentVertex\nv.removeOneEdge(to)\nto.removeOneEdge(v)\ndfs(to)\n}\npath.push(v)\n}\nIn the part when we pushes a new vertex into the path we should try to restore a new cycle. How do we check and do it? Let's maintain an array $$$used$$$: $$$used_v$$$ is true when the vertex $$$v$$$ is in $$$path$$$. When we try to add the vertex $$$v$$$ that already in $$$path$$$ ($$$used_v$$$ is true), let's extract the new simple cycle instead of adding this vertex. Let's pop out all vertices $$$u$$$ we pushed until the last vertex equals to $$$v$$$ (and don't forget to set $$$used_u$$$ to false). Otherwise let's add this vertex into the list and set $$$used_v$$$ to true."
         },
         {
             "title": "Solution",

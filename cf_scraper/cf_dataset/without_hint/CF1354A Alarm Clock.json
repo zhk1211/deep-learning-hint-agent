@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1354A - Alarm Clock\nLet's handle some cases. Firstly, if $$$b \\ge a$$$ then Polycarp wakes up rested enough immediately, so $$$b$$$ is the answer.\nOtherwise, what does Polycarp do? He sets alarm to go off in $$$c$$$ minutes and falls asleep in $$$d$$$ minutes. Thus, he spends $$$c-d$$$ minutes sleeping. Notice that if $$$c-d$$$ is non-positive, then Polycarp always resets his alarm without sleeping. So for that case the answer is\n-1\n.\nFinally, if Polycarp resets his alarm $$$x$$$ times then he ends up with $$$b + x \\cdot (c - d)$$$ minutes of sleep in total and ends up spending $$$b + x \\cdot c$$$ minutes of time. We know that $$$b + x \\cdot (c - d)$$$ should be greater or equal to $$$a$$$ and $$$x$$$ should be the smallest possible.\n$$$$$$b + x \\cdot (c - d) \\ge a \\leftrightarrow x \\cdot (c - d) \\ge a - b \\leftrightarrow x \\ge \\frac{a - b}{c - d}$$$$$$\nThus, the smallest possible integer $$$x$$$ is equal to $$$\\lceil \\frac{a - b}{c - d} \\rceil$$$. And the answer is $$$b + x \\cdot c$$$.\nOverall complexity: $$$O(1)$$$ per testcase."
         },
         {
             "title": "Solution (pikmike)",

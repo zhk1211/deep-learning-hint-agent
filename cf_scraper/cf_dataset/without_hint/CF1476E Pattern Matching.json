@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1476E - Pattern Matching\nLet's write down the indices of the pattern that the $$$j$$$-th string matches. If $$$mt_j$$$ is not among these, then the answer is\nNO\n. Otherwise, all the patterns except $$$mt_j$$$ should go in the resulting ordering after $$$mt_j$$$.\nConsider that as a graph. Let's add an edge from $$$mt_j$$$ to each of the matches. If you add the edges for all the strings, then the topological ordering of the graph will give you the valid result. If the graph has any cycles in it (you can't topsort it), then there is no answer.\nTo find all the patterns we can use the fact that $$$k$$$ is rather small. Consider all the $$$2^k$$$ binary masks of length $$$k$$$. Each mask can correspond to a set of positions in the string that are replaced with wildcards. Now, if there is a pattern that is exactly equal to the string with the fixed set of positions replaced by wildcards, then that pattern is a match.\nTo search for an exact match, you can either store all patterns in a map beforehand (or in a sorted array) or build a trie of them. The second version is faster by a factor of $$$\\log n$$$ but both solutions should pass easily.\nOverall complexity: $$$O(nk \\log n + mk \\cdot 2^k \\log n)$$$ or $$$O(nk + m \\cdot 2^k)$$$."
         },
         {
             "title": "Solution 1 (awoo)",

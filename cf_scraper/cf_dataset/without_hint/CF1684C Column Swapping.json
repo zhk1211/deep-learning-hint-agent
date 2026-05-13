@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1684C - Column Swapping\nAt first, let's check wether the given table is good. If it is not then there is a row that has elements that should be replaced.\nLet's say that this row is $$$a$$$ and $$$b$$$ is the sorted row $$$a$$$. Then let's find the set of positions $$$i$$$ that $$$a_i \\neq b_i$$$. If there are at least $$$3$$$ such positions then the answer is $$$-1$$$ because by making a swap we remove at most $$$2$$$ such bad positions. If there are no more than $$$2$$$ such positions then let's swap the corresponding columns and check whether each row is sorted. If the table is good we found the answer. If it is not then the answer is $$$-1$$$ because we can not sort $$$a$$$ and get a good table after that."
         },
         {
             "title": "Implementation",

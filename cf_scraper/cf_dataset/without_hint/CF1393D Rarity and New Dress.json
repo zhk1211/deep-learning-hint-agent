@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1393D - Rarity and New Dress\nLet's note that if there is a rhombus of size $$$X$$$ in the cell $$$(i, j)$$$, then there are also rhombuses with the smaller sizes.\nLet's divide the rhombus into the left part and the right part. Let's solve the problem separately for both of them and then the answer for the cell is going to be equal to the minimum of these values.\nNote that if the maximum size for the cell $$$(i, j)$$$ is $$$X$$$, then the maximum size for the cell $$$(i, j+1)$$$ is at most $$$X+1$$$ (and at most $$$1$$$, if these two cells are not equal). Also the maximums size for the left part is at most minimum of the number of consecutive cells to the up and to left from the fixed cell.\nTo find the number of consective equal cells to the up, we will use the dynamic programming. If the cells $$$(i, j)$$$ and $$$(i-1, j)$$$ are equal, then the answer for the cell $$$(i, j)$$$ is equal to the answer for the cell $$$(i-1, j)$$$ plus $$$1$$$, otherwise it is equal to $$$1$$$. Similarly we can find the answer for the cells to the left.\nNow we need to find the maximum size of the left part. We can use dynamic programming and calculate it accordingly to our observations.\nSimilarly for the right part.\nThe total complexity is $$$O(nm)$$$."
         },
         {
             "title": "Solution (74TrAkToR)",

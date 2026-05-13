@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1176C - Lose it!\nLet $$$cnt_1$$$ be the number of subsequences $$$[4]$$$, $$$cnt_2$$$ be the number of subsequences $$$[4, 8]$$$, $$$cnt_3$$$ — the number of subsequences $$$[4, 8, 15]$$$ and so on, and $$$cnt_6$$$ is the number of completed subsequences $$$[4, 8, 15, 16, 23, 42]$$$.\nLet's iterate over all elements of $$$a$$$ in order from left to right. If the current element is $$$4$$$ then let's increase $$$cnt_1$$$ by one (we staring the new subsequence). Otherwise it is always better to continue some existing subsequence (just because why not?). If the current element is $$$8$$$ then we can continue some subsequence $$$[4]$$$, if it is $$$16$$$ then we can continue some subsequence $$$[4, 8, 15]$$$ and the same for remaining numbers. Let $$$pos$$$ be the $$$1$$$-indexed position of the current element of $$$a$$$ in list $$$[4, 8, 15, 16, 23, 42]$$$. Then the case $$$pos = 1$$$ is described above, and in other case ($$$pos  \\gt  1$$$) if $$$cnt_{pos - 1}  \\gt  0$$$ then let's set $$$cnt_{pos - 1} := cnt_{pos - 1} - 1$$$ and $$$cnt_{pos} := cnt_{pos} + 1$$$ (we continue some of existing subsequences). The answer can be calculated as $$$n - 6 cnt_{6}$$$ after all $$$n$$$ iterations."
         },
         {
             "title": "Solution",

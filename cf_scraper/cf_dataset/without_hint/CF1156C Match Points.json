@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1156C - Match Points\nLet's denote the points that have greater coordinates in their matched pairs as $$$R$$$-points, and the points that have smaller coordinates as $$$L$$$-points.\nSuppose we have an $$$R$$$-point that has smaller coordinate than some $$$L$$$-point. Then we can \"swap\" them, and the answer won't become worse. Also, if some $$$R$$$-point has smaller coordinate than some point that doesn't belong to any pair, or some $$$L$$$-point has greater coordinate than some point that doesn't belong to any pair, we can swap them too. So, if the answer is $$$k$$$, we choose $$$k$$$ leftmost points as $$$L$$$-points, and $$$k$$$ rightmost ones as $$$R$$$-points.\nFor a fixed value of $$$k$$$, it's easy to see that we should match the leftmost $$$L$$$-point with the leftmost $$$R$$$-point, the second $$$L$$$-point with the second $$$R$$$-point, and so on, in order to maximize the minimum distance in a pair. This fact allows us to check whether it is possible to construct at least $$$k$$$ pairs, and we can use binary search to compute the answer to the problem."
         },
         {
             "title": "Solution (BledDest)",

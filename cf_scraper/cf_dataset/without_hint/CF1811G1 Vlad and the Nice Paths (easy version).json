@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1811G1 - Vlad and the Nice Paths (easy version)\nLet's use the dynamic programming. Let $$$dp[i][j]$$$ be the number of paths on the prefix $$$i$$$ of $$$j$$$ blocks of the same color. To make transitions in such dynamics, for the position $$$i$$$, we will iterate over the position $$$p$$$ in which the block started. Denote as $$$s$$$ the number of the same elements as $$$c_i$$$ and $$$c_p$$$ between them, then such a transition creates $$$dp[p-1][j-1] \\cdot C_{k-2}^{s}$$$ combinations. This solution works in $$$O(n^3)$$$ complexity."
         },
         {
             "title": "Solution",

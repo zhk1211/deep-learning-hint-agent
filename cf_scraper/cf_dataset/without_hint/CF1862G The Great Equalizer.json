@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1862G - The Great Equalizer\nLet's take a look at the maximum difference between adjacent numbers in a sorted sequence. Each cycle it decreases by $$$1$$$. This helps us understand the main observation: the answer for the sequence is the maximum number in it + the maximum difference between adjacent numbers in sorted order.\nTo answer queries, it is sufficient to maintain these two values.\nTo maintain the maximum number, we will store the numbers in std::multiset. And to maintain the maximum difference, we will maintain std::multiset of differences. When replacing a number, we will remove the old number and replace the difference between it and its neighbors with the difference between the neighbors. Then we will add the new number and replace the difference between its neighbors with the difference between the added number and each of the neighbors.\nAll of this is implemented through working with std::multiset, which you can see, for example, in the author's solution."
         },
         {
             "title": "Solution",

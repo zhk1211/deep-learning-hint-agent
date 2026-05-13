@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1787D - Game on Axis\nFirst, add directed edges from $$$i$$$ to $$$i+a_i$$$. If there's a path from $$$1$$$ to $$$x$$$ satisfying $$$x \\lt 1$$$ or $$$x \\gt n$$$, the game end. We consider all nodes $$$x$$$ satisfying $$$x \\lt 1$$$ or $$$x \\gt n$$$ to be the end node, and we call the path which starts at node $$$1$$$ until it loops or ends the key path.\nIf we can end the game at first:\nLet's count the opposite: the number of invalid pairs. The graph with the end node forms a tree. Changing edges not on the key path is always legal. If changing the edges on the key path, for node $$$x$$$, we can only change its successor to other connected components, its precursor or itself on the tree with the end node.\nFor the answer, use dfs to count the number of precursors for every nodes on this tree, which is the size of subtree.\nIf we cannot end the game at first:\nWe can only change the edge on the key path, redirect them to any nodes on the tree with the end node."
         },
         {
             "title": "Solution",

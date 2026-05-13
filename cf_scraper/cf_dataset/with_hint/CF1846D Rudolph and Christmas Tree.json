@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1846D - Rudolph and Christmas Tree\nLet's consider the triangles in ascending order of $$$y_i$$$. Let the current triangle have index $$$i$$$. There are two cases:\nThe triangle does not intersect with the $$$(i+1)$$$-th triangle $$$(y_{i + 1} - y_i \\ge h)$$$. In this case, we simply add the area of the triangle to the answer. The area will be $$$\\frac{d \\cdot h}{2}$$$.\nThe triangle intersects with the $$$(i+1)$$$-th triangle $$$(y_{i + 1} - y_i  \\lt  h)$$$. We can add to the answer the area of the figure that does not belong to the intersection and move on to the next triangle. Note that this figure is a trapezoid with a lower base $$$d$$$ and height $$$h' = y_{i + 1} - y_i$$$. The upper base can be found based on the similarity of triangles. The heights of the triangles are in the ratio $$$k = \\frac{h - h'}{h}$$$. Then the upper base $$$d_{top} = d \\cdot k$$$. The area of the trapezoid is $$$h' \\cdot \\frac{d + d_{top}}{2}$$$.\nTime complexity is $$$O(n)$$$."
         },
         {
             "title": "Solution",

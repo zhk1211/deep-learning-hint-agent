@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1312D - Count the Arrays\nFirst of all, there will be exactly $$$n - 1$$$ distinct elements in our array. Let's choose them, there are $$${m}\\choose{n-1}$$$ ways to do that.\nAfter that, there should be exactly one element that appears twice. There are $$$n - 1$$$ elements to choose from, but are all of them eligible? If we duplicate the maximum element, there will be no way to meet the fourth condition. So we should multiply the current answer by $$$n - 2$$$, not $$$n - 1$$$.\nAnd finally, some elements will appear earlier than the maximum in our array, and some — later. The duplicated element will appear on both sides, but all other elements should appear either to the left or to the right, so there are $$$2^{n - 3}$$$ ways to choose their positions.\nThus the answer is $$${{m}\\choose{n - 1}} (n - 2)2^{n - 3}$$$. Note that you have to precompute all factorials and use their inverse elements to calculate $$${m}\\choose{n-1}$$$.\nNote that there is a tricky case when $$$n = 2$$$: some binpow implementations go into infinite loop trying to compute $$$2^{-1}$$$, so you may have to handle it specifically."
         },
         {
             "title": "Solution (BledDest)",

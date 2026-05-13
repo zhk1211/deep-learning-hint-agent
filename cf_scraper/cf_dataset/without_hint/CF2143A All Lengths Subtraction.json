@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2143A - All Lengths Subtraction\nWe want to make all elements zero by performing exactly one operation for each $$$k = 1,\\dots,n$$$: choose a subarray of length $$$k$$$ and subtract $$$1$$$ from all its elements.\nLook at the element with value $$$n$$$. It must be decreased $$$n$$$ times, and there are only $$$n$$$ operations, so every chosen subarray must contain it.\nNow look at $$$n-1$$$. It must be decreased $$$n-1$$$ times. The only subarray that can exclude it is the length-$$$1$$$ subarray (which hits only $$$n$$$). The length-$$$2$$$ subarray must include both $$$n$$$ and $$$n-1$$$. So $$$n-1$$$ must be adjacent to $$$n$$$.\nThen look at $$$n-2$$$. It must be decreased $$$n-2$$$ times, so it can be excluded only from the length-$$$1$$$ and length-$$$2$$$ subarrays. The length-$$$3$$$ subarray must contain $$$n,n-1,n-2$$$, so they should form an contiguous segment.\nIn general, the positions of the values $$$\\{i,i+1,\\dots,n\\}$$$ must always form a contiguous segment for every $$$i$$$.\nAs such, we can iterate a value $$$x$$$ from $$$1$$$ to $$$n$$$, and if the given permutation admits a solution, then we should expect that this $$$x$$$ would be in either end. After finding this end, we can erase $$$x$$$ and continue with $$$x+1$$$. In short, this condition at the end will imply that the given permutation is a mountain, i.e. at first it increases and then it decreases. It remains that we check this condition in any equivalent way to produce the answer."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1283D - Christmas Trees\nIn this problem, we first need to consider all points adjacent to at least one Christmas tree, then all points at the distance two from the nearby Christmas tree and so on... What it looks like? Yes, well-known multi-source bfs.\nLet's maintain a queue of positions and the set of used positions (and the distance to each vertex, of course). In the first step, we add all positions of the Christmas tree with a zero distance as initial vertices. Let the current vertex is $$$v$$$. If $$$d_v = 0$$$ (this is the Christmas tree) then just add $$$v-1$$$ and $$$v+1$$$ to the queue (if these vertices aren't added already) and continue. Otherwise, increase the answer by $$$d_v$$$ and add $$$v$$$ to the array of positions of people. When the length of this array reaches $$$m$$$, interrupt bfs and print the answer.\nDon't forget about some special cases as using\nArrays.sort\nin Java or using\nstd::unordered_map\nin C++ because this can lead to the quadratic complexity.\nTime complexity: $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution",

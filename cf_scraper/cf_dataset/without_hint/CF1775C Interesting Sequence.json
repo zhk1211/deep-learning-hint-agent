@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1775C - Interesting Sequence\nNote that the answer $$$-1$$$ will be when $$$n$$$ AND $$$x \\neq x$$$. This holds if there is a bit with number $$$b$$$ which exists in number $$$x$$$, but it does not exist in number $$$n$$$. What is clear now is that some bits in $$$n$$$ must be zeroed. Since we have bitwise AND going sequentially with numbers larger than $$$n$$$, we change the bits from the lowest to the highest. Thus, in number $$$n$$$ some bit prefix is zeroed out, so if number $$$x$$$ is not number $$$n$$$ with a zeroed prefix (possibly empty) of bits, then there is no answer.\nNow we can calculate for each bit $$$i$$$ the minimal number $$$m_i$$$ such that $$$n$$$ AND $$$n + 1$$$ AND $$$\\ldots$$$ AND $$$m_i$$$ has $$$0$$$ in the $$$i$$$-th bit.\nNow calculate $$$m_{zero}$$$ as the maximum $$$m_i$$$ on all bits to be zeroed, and $$$m_{one}$$$ as the minimum $$$m_i$$$ on all bits to be left untouched. Then, if $$$m_{zero}  \\lt  m_{one}$$$, we will take $$$m_{zero}$$$ as the answer, otherwise there is no answer. The problem can also be solved by binary search: we will use it to find $$$m$$$, and check the answer by the formula: for each bit find the nearest $$$m$$$, at which it will be zeroed. We can do this using the following fact: for $$$i$$$-th bit, the first $$$2^i$$$ numbers (starting from zero) will not contain it, then $$$2^i$$$ will, then $$$2^i$$$ again will not and so on. Such a solution works for $$$O(\\log^2 n)$$$."
         }
     ]
 }

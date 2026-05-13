@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1311B - WeirdSort\nThe simple simulation works here: while there is at least one inversion (such a pair of indices $$$i$$$ and $$$i+1$$$ that $$$a[i]  \\gt  a[i + 1]$$$) we can fix, let's fix it (we can fix this inversion if $$$i \\in p$$$). If there are inversions but we cannot fix any of them, the answer is \"\nNO\n\". Otherwise, the answer is \"\nYES\n\".\nThere is also a $$$O(n \\log n)$$$ solution: it is obvious that we have some segments in which we can change the order of elements as we want. And it is also obvious that we cannot move elements between these \"allowed\" segments. So, each of them is independent of each other. We can just find all these segments of indices using two pointers and sort them independently. Then we just need to check if the array becomes sorted.\nTime complexity is $$$O(n^2)$$$ or $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution (n^2)",

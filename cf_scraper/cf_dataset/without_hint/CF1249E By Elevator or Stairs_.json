@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1249E - By Elevator or Stairs?\nThis is easy dynamic programming problem. It is easy to understand that we don't need to go down at all (otherwise your solution will be Dijkstra's algorithm, not dynamic programming). Let $$$dp_{i, 0}$$$ be the minimum required time to reach the floor $$$i$$$ if we not in the elevator right now and $$$dp_{i, 1}$$$ be the minimum required time to reach the floor $$$i$$$ if we in the elevator right now.\nInitially, all values $$$dp$$$ are $$$+\\infty$$$, except $$$dp_{1, 0} = 0$$$ and $$$dp_{1, 1} = c$$$.\nTransitions are pretty easy:\n$$$dp_{i + 1, 0} = min(dp_{i + 1, 0}, dp_{i, 0} + a_i)$$$ (we was not in the elevator and going to the next floor using stairs);\n$$$dp_{i + 1, 0} = min(dp_{i + 1, 0}, dp_{i, 1} + a_i)$$$ (we was in the elevator and going to the next floor using stairs);\n$$$dp_{i + 1, 1} = min(dp_{i + 1, 1}, dp_{i, 0} + b_i + c)$$$ (we was not in the elevator and going to the next floor using elevator);\n$$$dp_{i + 1, 1} = min(dp_{i + 1, 1}, dp_{i, 1} + b_i)$$$ (we was in the elevator and going to the next floor using elevator).\nThe answer for the $$$i$$$-th floor is $$$min(dp_{i, 0}, dp_{i, 1})$$$.\nTime complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution",

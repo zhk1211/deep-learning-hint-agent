@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2122B - Pile Shuffling\nLet's start by finding a lower bound on the number of required operations.\nFor each pile, we determine the minimum number of elements that must be removed from the top:\nIf $$$b_i  \\gt  d_i$$$, we need to remove all the zeros above before we can remove the excess ones at the bottom. So, we must remove at least $$$a_i + b_i - d_i$$$ elements.\nOtherwise, if $$$a_i  \\gt  c_i$$$, we need to remove at least $$$a_i - c_i$$$ zeros to reach the target number of zeros.\nSumming these values over all piles gives us a clear lower bound on the total number of operations.\nThis lower bound is also achievable. For each element that needs to be removed, there always exists a pile where we can place it so that it never has to be moved again. Here's why:\nIf we remove a one, it's because there are too many ones in its current pile. That means there must be another pile $$$i$$$ with fewer than $$$d_i$$$ ones, where we can place it beneath all existing elements.\nIf we remove a zero, we can place it in any pile $$$i$$$ that currently has fewer than $$$c_i$$$ zeros above at most $$$d_i$$$ ones. If we place it in the highest position with at most $$$d_i$$$ ones below it, it will not need to be moved again."
         }
     ]
 }

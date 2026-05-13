@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1059C - Sequence Transformation\nThe answers for $$$n \\le 3$$$ are given in the samples. Now suppose that $$$n \\ge 4$$$. The maximum result must have the earliest appearance of an integer different from $$$1$$$. If $$$n \\ge 4$$$, the earliest integer that may appear is $$$2$$$. So initially we must remove all odd integers and for each of them append $$$1$$$ to the answer. But now the rest of the answer is simply the answer for $$$\\left\\lfloor\\frac{n}{2}\\right\\rfloor$$$ multiplied by $$$2$$$. That gives us an $$$O(n)$$$ solution."
         }
     ]
 }

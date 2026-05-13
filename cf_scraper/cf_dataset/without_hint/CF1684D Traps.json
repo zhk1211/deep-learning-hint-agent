@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1684D - Traps\nFirstly, let's notice that it is always better to use all $$$k$$$ jumps. If we jumped over less than $$$k$$$ traps then we can jump over the last trap and the total damage will be less.\nSecondly, let's say that we immediately get $$$n - i$$$ damage if we jump over $$$i$$$-th trap. This way the first trap that we jump over will cause $$$k - 1$$$ damage more than it should (because of $$$k - 1$$$ traps that we jump over next), the second will cause $$$k - 2$$$ damage more, ..., the last one will cause $$$0$$$ damage more. So the total damage only increases by $$$\\frac{k(k - 1)}{2}$$$ which does not depend on the traps that we choose. That's why the traps that we have to jump over in this problem are the same.\nNow let's consider an array $$$b: b_i = a_i - (n - i)$$$. This array denotes the amount of damage we dodge if we jump over $$$i$$$-th trap (dodge $$$a_i$$$ because we don't take the trap's damage but get $$$n - i$$$ because of the immediate damage we take). Here a simple greedy works: let's just chose $$$k$$$ maximal values of this array, these will be the traps that we have to jump over so the total damage that we dodge is maximized. These traps will be the answer to the original problem."
         },
         {
             "title": "Implementation",

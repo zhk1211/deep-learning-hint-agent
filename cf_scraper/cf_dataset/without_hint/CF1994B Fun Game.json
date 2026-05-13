@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1994B - Fun Game\nIf the string $$$s$$$ consists entirely of $$$0$$$, then obviously no other string can be obtained from it, so the answer is \"\nYes\n\" only if $$$s = t$$$.\nOtherwise, let $$$i$$$ — the index of the first $$$1$$$ in $$$s$$$. Note that if there is at least one $$$1$$$ in $$$t$$$ at positions $$$[1; i)$$$, then the answer is \"\nNo\n\", since $$$s$$$ has $$$0$$$ at these positions, so some of them must be changed to $$$1$$$. However, when applying the operation the first $$$1$$$ from position $$$i$$$ can change bits only at positions greater than or equal to $$$i$$$, i.e. it will not be possible to change $$$0$$$ at positions before $$$i$$$.\nIf there is only $$$0$$$ at positions $$$[1; i)$$$ in $$$t$$$, then it is possible to change any bit on the segment $$$[i; n]$$$ in $$$s$$$ to any other bit by choosing segments of length $$$i$$$ and acting from the end, i.e. the answer is \"\nYes\n\"."
         }
     ]
 }

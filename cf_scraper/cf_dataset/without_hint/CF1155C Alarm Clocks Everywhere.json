@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1155C - Alarm Clocks Everywhere\nIt is obvious that we can always take $$$x_1$$$ as $$$y$$$. But we don't know which value of $$$p$$$ we can take. Let $$$d_i$$$ be $$$x_{i + 1} - x_i$$$ for all $$$i$$$ from $$$1$$$ to $$$n-1$$$. The value of $$$p$$$ should be divisor of\neach\nvalue of $$$d_i$$$. The maximum possible divisor of each $$$d_i$$$ is $$$g = gcd(d_1, d_2, \\dots, d_{n-1})$$$ (greatest common divisor). And then it is obvious that the value of $$$p$$$ should be the divisor of $$$g$$$. So we have to find\nany\ndivisor of $$$g$$$ among all values $$$p_j$$$. If there is no such value then the answer is \"\nNO\n\".\nTime complexity: $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution (Vovuh)",

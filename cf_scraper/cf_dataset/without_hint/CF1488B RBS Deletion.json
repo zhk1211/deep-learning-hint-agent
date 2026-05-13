@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1488B - RBS Deletion\nIt's quite easy to see that the answer cannot exceed $$$\\frac{n}{2}$$$ (each action removes at least two characters).\nLet's build the balance array for our string $$$s$$$ ($$$bal_i$$$ is the difference between the count of opening and closing brackets among the first $$$i$$$ characters). The first operation allows us to remove some prefix with $$$bal_i = 0$$$, so if we were allowed to use only the operations of the first type, the answer would be equal to the number of non-empty prefixes with $$$bal_i = 0$$$ (let's call it $$$c$$$).\nIf we want to apply a second operation, let's find a way to do it so the number of prefixes with $$$bal_i = 0$$$ doesn't decrease. We can always pair of neighbouring brackets\n()\n, and removing it still makes $$$s$$$ an RBS. So, let's remove some pair of neighbouring brackets that doesn't decrease the number of $$$bal_i = 0$$$, until the string becomes\n()()()()...\n, where each first operation can remove just $$$2$$$ characters, or until we run out of operations of type $$$2$$$.\nSo, the answer to our problem can be calculated as $$$\\min(\\frac{n}{2}, k + c)$$$."
         }
     ]
 }

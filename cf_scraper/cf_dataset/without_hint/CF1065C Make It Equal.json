@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1065C - Make It Equal\nLet's iterate over height $$$pos$$$ of slice in decreasing order. All we need to know is a number of towers with height more than $$$pos$$$ (name it $$$c$$$) and sum of its heights $$$sum$$$.\nCurrent slice on height $$$pos$$$ is good if $$$k \\ge sum - c \\cdot pos$$$. Let's greedily decrease value $$$pos$$$ while slice on $$$pos$$$ is good keeping correct values $$$c$$$ and $$$sum$$$. When we found minimal good slice we can perform it increasing answer by one and \"changing tower heights\" just by setting new value to $$$sum$$$ equal to $$$c \\cdot pos$$$.\nFinish algorithm when $$$pos$$$ becomes equal to minimal height of towers and make final slice."
         },
         {
             "title": "Solution (Ajosteen)",

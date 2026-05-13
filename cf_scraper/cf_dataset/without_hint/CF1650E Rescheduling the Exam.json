@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1650E - Rescheduling the Exam\nTo begin with, we will learn how to find the optimal place for the exam that we want to move. Let's imagine that it is not in the schedule, in this case we have two options:\nPut the exam at the end of the session so that there are $$$d - a_n - 1$$$ days before it.\nPut it in the middle of the largest break between exams ((let its length be $$$mx$$$), so that between it and the nearest one there is $$$\\left\\lfloor \\frac{mx - 1}{2} \\right\\rfloor$$$, because this is no worse than putting it in any part of any other break.\nThat is, the answer for such an arrangement is  — the minimum of the larger of these options and the minimum break, in schedule without the moved exam.\nNow note that the minimum break in most variants is the same — minimum in the initial schedule. So in order to reduce $$$\\mu$$$, you need to move exactly one of the two exams that form it and you need to check which of the two options is better."
         },
         {
             "title": "Solution",

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere are $ n $ benches in the Berland Central park. It is known that $ a_i $ people are currently sitting on the $ i $ -th bench. Another $ m $ people are coming to the park and each of them is going to have a seat on some bench out of $ n $ available.\n\nLet $ k $ be the maximum number of people sitting on one bench after additional $ m $ people came to the park. Calculate the minimum possible $ k $ and the maximum possible $ k $ .\n\nNobody leaves the taken seat during the whole process.\n\nInput Format\nThe first line contains a single integer $ n $ $ (1 \\le n \\le 100) $ — the number of benches in the park.\n\nThe second line contains a single integer $ m $ $ (1 \\le m \\le 10\\,000) $ — the number of people additionally coming to the park.\n\nEach of the next $ n $ lines contains a single integer $ a_i $ $ (1 \\le a_i \\le 100) $ — the initial number of people on the $ i $ -th bench.\n\nOutput Format\nPrint the minimum possible $ k $ and the maximum possible $ k $ , where $ k $ is the maximum number of people sitting on one bench after additional $ m $ people came to the park.\n\nExamples\nSample 1\nInput\n4\n6\n1\n1\n1\n1\nOutput\n3 7\n\nSample 2\nInput\n1\n10\n5\nOutput\n15 15\n\nSample 3\nInput\n3\n6\n1\n6\n5\nOutput\n6 12\n\nSample 4\nInput\n3\n7\n1\n6\n5\nOutput\n7 13\n\nNote\nIn the first example, each of four benches is occupied by a single person. The minimum $ k $ is $ 3 $ . For example, it is possible to achieve if two newcomers occupy the first bench, one occupies the second bench, one occupies the third bench, and two remaining — the fourth bench. The maximum $ k $ is $ 7 $ . That requires all six new people to occupy the same bench.\n\nThe second example has its minimum $ k $ equal to $ 15 $ and maximum $ k $ equal to $ 15 $ , as there is just a single bench in the park and all $ 10 $ people will occupy it."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1042A - Benches\nThe maximum value of $$$k$$$ should be determined in the following way: let's find the maximum number of people already sitting on the same bench (i. e. the maximum value in the array $$$a$$$). Let this number be $$$t$$$. Then if all additional $$$m$$$ people will seat on this bench, we will get the maximum value of $$$k$$$, so the answer is $$$t + m$$$.\nTo determine the minimum value of $$$k$$$ let's perform $$$m$$$ operations. During each operation we put a new person on the bench currently having minimum number of people occupying it. The answer is the maximum number of people on the bench after we perform this operation for each of $$$m$$$ newcomers."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<set>\n#include\n<algorithm>\n#include\n<iostream>\n#include\n<vector>\n#include\n<string>\n#include\n<cassert>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n100\n+\n13\n;\nint\nn\n,\nm\n;\nint\na\n[\nN\n];\nint\nmain\n()\n{\ncin\n>>\nn\n>>\nm\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\ncin\n>>\na\n[\ni\n];\n}\nint\nans2\n=\n*\nmax_element\n(\na\n,\na\n+\nn\n)\n+\nm\n;\nfor\n(\nint\nit\n=\n0\n;\nit\n<\nm\n;\nit\n++)\n{\nint\npos\n=\n-\n1\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nif\n(\npos\n==\n-\n1\n||\na\n[\ni\n]\n<\na\n[\npos\n])\n{\npos\n=\ni\n;\n}\n}\nassert\n(\npos\n!=\n-\n1\n);\na\n[\npos\n]++;\n}\nint\nans1\n=\n*\nmax_element\n(\na\n,\na\n+\nn\n);\ncout\n<<\nans1\n<<\n' '\n<<\nans2\n<<\nendl\n;\n}"
+        }
+    ]
+}

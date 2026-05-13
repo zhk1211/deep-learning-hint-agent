@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1512G - Short Task\nNote that $$$n \\le d(n) \\le {10}^7$$$ ($$${10}^7$$$ is the maximum value of $$$c$$$ in the problem), so it is enough for every $$$n=1..{10}^7$$$ to calculate the value of $$$d(n)$$$.\nTo calculate the value of $$$d(n)$$$, you can use the sieve of Eratosthenes and get the solution for $$$\\mathcal{O}({10}^7 \\log ({10}^7))$$$.\nAlso, you can use the linear sieve of Eratosthenes to find the minimum divisor for each $$$n=1..{10}^7 $$$ and use the multiplicativity of the function $$$d(n)$$$:\n$$$d(a \\cdot b) = d(a) \\cdot d(b)$$$ if $$$gcd(a, b)=1$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1059D - Nature Reserve\nIf there are both positive and negative $$$y_i$$$, the answer is $$$-1$$$. Now assume that $$$y_i  \\gt  0$$$. Key observation: the answer can be binary searched. How to check if there is a valid circle with radius $$$R$$$? Firstly, the center of such circle is on the line $$$y = R$$$. Every point must be not farther than $$$R$$$ from the center. It means that the center is inside or on the boundary of all circles $$$(p_i, R)$$$. The intersection of every such circle with $$$y = R$$$ creates a segment (possibly empty). If the intersection of all such segments is non-empty, there exists some valid circle. Total complexity is $$$O(n\\log C)$$$. There is also an $$$O(n\\log n)$$$ solution, but it's much harder to implement."
         }
     ]
 }

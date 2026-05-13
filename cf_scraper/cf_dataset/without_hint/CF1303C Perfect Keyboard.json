@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1303C - Perfect Keyboard\nThe problem can be solved using a greedy algorithm. We will maintain the current layout of the keyboard with letters that have already been encountered in the string, and the current position on the layout.\nIf the next letter of the string is already on the layout, it must be adjacent to the current one, otherwise there is no answer.\nIf there was no such letter yet, we can add it to the adjacent free position, if both of them is occupied, then there is no answer.\nAt the end, you have to add letters that were not in the string $$$s$$$."
         },
         {
             "title": "Solution (Ne0n25)",

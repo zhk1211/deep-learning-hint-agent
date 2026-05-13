@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1765B - Broken Keyboard\nThere are many ways to solve this problem. Basically, we need to check two conditions.\nThe first one is the condition on the number of characters: $$$n \\bmod 3 \\ne 2$$$, since after the first key press, we get the remainder $$$1$$$ modulo $$$3$$$, after the second key press, we get the remainder $$$0$$$ modulo $$$3$$$, then $$$1$$$ again, then $$$0$$$ — and so on, and we cannot get the remainder $$$2$$$.\nThen we need to check that, in each pair of characters which appeared from the same key press, these characters are the same — that is, $$$s_2 = s_3$$$, $$$s_5 = s_6$$$, $$$s_8 = s_9$$$, and so on."
         },
         {
             "title": "Solution (vovuh)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1533F - Binary String Partition\nWe will solve the problem for each value of $$$k$$$ separately.\nNote that there is an optimal partition where all $$$t_i$$$ (except the last one) contain exactly $$$k$$$ zeros or ones. Using this fact, we can find in which position the next block $$$t_i$$$ will end. The current block $$$t_i$$$ should end before it contains at least $$$k+1$$$ zeros and at least $$$k+1$$$ ones. To quickly find this position, you can use a binary search with prefix sums, or save all the positions of zeros (ones) in a separate array. Such a solution will work for $$$O(m)$$$ or $$$O(m \\log{n})$$$ (depending on whether binary search is used), where $$$m$$$ is the number of strings in the partition.\nFor each $$$k$$$, the value of $$$m$$$ does not exceed $$$\\frac{n}{2k+1}$$$ (because there are at least $$$2k+1$$$ elements in each block). This means that the sum of $$$m$$$ for all $$$k$$$ does not exceed $$$\\sum\\limits_{k=1}^{n} \\frac{n}{k}$$$, which is estimated as $$$O(n \\log{n})$$$, which means that the entire solution works for $$$O(n \\log{n})$$$ or $$$O(n \\log^2{n})$$$."
         },
         {
             "title": "Solution (Neon)",

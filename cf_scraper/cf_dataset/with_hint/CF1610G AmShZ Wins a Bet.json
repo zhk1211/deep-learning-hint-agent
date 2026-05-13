@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "$$$\\textbf{Read the Hints and Assumptions before reading this.}$$$\nTutorial is loading..."
+            "content": "$$$\\textbf{Read the Hints and Assumptions before reading this.}$$$\n1610G - AmShZ Wins a Bet\nMake a rooted tree. Each suffix has a node and except for the root, each node belongs to a suffix. Each edge has a character written on it. \"(\" or \")\"\nThe answer for each suffix can be obtained by moving up from it's node to the root and concatenating the characters. (kind of like an upside-down Trie)\nNow we need to be able to compare answers of two suffixes.\nFor each node $$$v$$$ and for each $$$i \\le \\log(n)$$$ store hash of the path of $$$v$$$ to it's $$$2^i$$$-th ancestor in $$$h[v][i]$$$.\nIn order to compare two nodes $$$v$$$ and $$$u$$$, find the smallest $$$i$$$ that the $$$i$$$-th character of them differ. Then we can determine which one is lexicographically smaller. And we use binary lifting to find that $$$i$$$.\nThe root of the tree is called node $$$n + 1$$$.\nIterate $$$i$$$ in decreasing order.\nAssign node $$$i + 1$$$ to be the parent of node $$$i$$$.\nIf currently $$$ans_i  \\lt  ans_{nxt_i}$$$, assign $$$nxt_i$$$'s parent to be $$$i$$$'s parent with the same edge character as $$$nxt_i$$$. (You could also make $$$nxt_i$$$ to present both of them. In order to do this, for each suffix you need to store which node is storing it's answer.)\nAnd then you have calculate the answer by moving up the tree.\nTime complexity: $$$\\mathcal{O}(n\\log n)$$$"
         },
         {
             "title": "Implementation",

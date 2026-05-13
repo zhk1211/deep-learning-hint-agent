@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1863C - MEX Repetition\nAppend the initial array $$$a_1, \\ldots, a_n$$$ with $$$a_{n+1} = \\operatorname{MEX}(a_1, \\ldots, a_n)$$$. It is easy to see that $$$a_1, \\ldots, a_{n+1}$$$ is a permutation of $$$0, 1, \\ldots, n$$$. In this case setting $$$a_i = \\operatorname{MEX}(a_1, \\ldots, a_n)$$$ is basically equivalent $$$a_i = a_{n+1}$$$, but after this the new $$$\\operatorname{MEX}(a_1, \\ldots, a_n)$$$ is changed. In fact, it becomes equal to the old value of $$$a_i$$$, since this value is not now present in the array.\nIn other words, performing the operation on $$$a_i$$$ is equivalent to swapping $$$a_i$$$ and $$$a_{n+1}$$$. Performing the operation on $$$i = 1, 2, \\ldots, n$$$ can be viewed as $$$n$$$ swaps. It means that the array changes from $$$[a_1, a_2, \\ldots, a_{n+1}]$$$ to $$$[a_{n+1}, a_1, a_2, \\ldots, a_n]$$$, i. e. we simply perform the cyclic shift to the right.\nTo finish up the solution, first, calculate $$$a_{n+1} = \\operatorname{MEX}(a_1, \\ldots, a_n)$$$ (you can do so, for example, by setting $$$a_{n+1} = \\frac{n(n+1)}{2} - \\sum\\limits_{i=1}^{n} a_i$$$). Second, calculate $$$k \\% (n+1)$$$ and then perform the cyclic shift in $$$O(n)$$$."
         }
     ]
 }

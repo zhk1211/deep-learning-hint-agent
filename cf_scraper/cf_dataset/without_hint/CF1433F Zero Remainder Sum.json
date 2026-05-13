@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1433F - Zero Remainder Sum\nThis is pretty standard dynamic programming problem. Let $$$dp[x][y][cnt][rem]$$$ be the maximum possible sum we can obtain if we are at the element $$$a_{x, y}$$$ right now, we took $$$cnt$$$ elements in the row $$$x$$$ and our current remainder is $$$rem$$$.\nInitially, all states are $$$-\\infty$$$ except $$$dp[0][0][0][0] = 0$$$.\nTransitions are standard because this is a knapsack problem: we either take the element if $$$cnt  \\lt  \\left\\lfloor\\frac{m}{2}\\right\\rfloor$$$ or don't take it. If the element $$$a_{x, y}$$$ is not the last element of the row, then transitions look like that:\n$$$dp[x][y + 1][cnt][rem] = max(dp[x][y + 1][cnt][rem], dp[x][y][cnt][rem])$$$ — we don't take the current element.\n$$$dp[x][y + 1][cnt + 1][(rem + a_{x, y}) \\% k] = max(dp[x][y + 1][cnt + 1][(rem + a_{x, y}) \\% k], dp[x][y][cnt][rem] + a_{x, y})$$$ — we take the current element (this transition is only possible if $$$cnt  \\lt  \\left\\lfloor\\frac{m}{2}\\right\\rfloor$$$).\nThe transitions from the last element of the row are almost the same, but the next element is $$$a_{x + 1, 0}$$$ and the new value of $$$cnt$$$ is always zero.\nThe answer is $$$max(0, dp[n][0][0][0])$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1196C - Robot Breakout\nIn fact, we have some restrictions on $$$OX$$$ axis and $$$OY$$$ axis (for example, if some robot stays at the position $$$x$$$ and cannot move to the left, then the answer point should have $$$X \\ge x$$$).\nSo we can take the minimum among all $$$y$$$-coordinates of robots that cannot go up and save it into $$$maxy$$$, maximum among all $$$y$$$-coordinates of robots that cannot go down and save it into $$$miny$$$, minimum among all $$$x$$$-coordinates of robots that cannot go right and save it into $$$maxx$$$ and maximum among all $$$x$$$-coordinates of robots that cannot go right and save it into $$$minx$$$. Initially $$$minx = miny = -\\infty, maxx = maxy = +\\infty$$$.\nSo these restrictions are describe some rectangle (possibly incorrect, with $$$minx  \\gt  maxx$$$ or $$$miny  \\gt  maxy$$$). Let $$$(minx, miny)$$$ be the bottom-left point of this rectangle and $$$(maxx, maxy)$$$ be the top-right point of this rectangle.\nIn case if this rectangle have $$$minx  \\gt  maxx$$$ or $$$miny  \\gt  maxy$$$, the answer is \"\nNO\n\". Otherwise this rectangle describes all integer points which can be reachable all robots and you can print any of them."
         },
         {
             "title": "Solution",

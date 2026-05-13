@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1826B - Lunatic Never Content\nFor the sequence to be a palindrome, it has to satisfy $$$b_i = b_{n - i + 1}$$$. In our case $$$b_i = a_i \\pmod x$$$. We can rewrite the palindrome equation as $$$a_i \\pmod x = a_{n - i + 1} \\pmod x$$$. Moving all the terms to the left we get $$$a_i - a_{n - i + 1} \\equiv 0 \\pmod x$$$, which basically says $$$x$$$ divides $$$a_i - a_{n - i + 1}$$$.\nNow, how to find the biggest $$$x$$$, which satisfies all such conditions?\nGreatest common divisor\nof course! We just need to calculate the $$$GCD$$$ of the numbers $$$a_i - a_{n - i + 1}$$$ for all $$$i$$$.\nThis results in a $$$O(n + log(10^9))$$$ solution, since computing the gcd of $$$n$$$ numbers up to $$$10^9$$$ takes exactly this much time.\nA useful assumption here is that $$$GCD(x, 0) = x$$$ for any number $$$x$$$. This holds true for standard template library implementations. And do not forget that this function should work correctly for negative numbers too. An easy trick here is to just use the absolute value of $$$a_i - a_{n - i + 1}$$$."
         }
     ]
 }

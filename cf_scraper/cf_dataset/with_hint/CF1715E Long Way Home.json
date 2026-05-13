@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1715E - Long Way Home\nLet's assume we know the shortest distances from the first vertex to each, if we have added no more than $$$k$$$ edges (air travels). Let's learn to recalculate the answer for $$$(k + 1)$$$ edges.\nFirst, let's update the answer for all the paths ending in an air travel. Then we can run Dijkstra to take into account all the paths ending with a usual edge.\nIn order to add an air travel, we need to update the distance to $$$v$$$, with all the paths ending with an air travel to $$$v$$$. To do so, we can use Convex Hull Trick, since the recalculation formula has the following form ($$$d_{old}$$$ — array of distances for $$$k$$$ edges, $$$d_{new}$$$ — array of distances if $$$k+1$$$ the flight goes exactly to the $$$i$$$-th vertex):\n$$$$$$d_{new}[v] = \\min\\limits_{u} \\ d_{old}[u] + (u - v)^2$$$$$$\nAfter that, we need to run Dijkstra to update the distances with all the paths not ending with an air travel.\nThe resulting asymptotics is $$$O(k(m \\log n + n))$$$"
         }
     ]
 }

@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAndrea is playing the game Tanto Cuore.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1854B/1661c88808ceec929a74ca91720280905e810592.png)He has a deck of $ n $ cards with values $ a_1, \\ldots, a_n $ from top to bottom. Each card can be either locked or unlocked. Initially, only the topmost card is unlocked.\n\nThe game proceeds in turns. In each turn, Andrea chooses an unlocked card in the deck — the value written on the card is $ v $ — and performs exactly one of the following two operations:\n\n1. Unlock the first $ v $ locked cards in the deck from the top. If there are less than $ v $ locked cards in the deck, then unlock all the locked cards.\n2. Earn $ v $ victory points.\n\nIn both cases, after performing the operation, he removes the card from the deck.The game ends when all the cards remaining in the deck are locked, or there are no more cards in the deck.\n\nWhat is the maximum number of victory points Andrea can earn?\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\leq n \\leq 10^5 $ ) — the number of cards in the deck.\n\nThe second line contains $ n $ integers $ a_1, \\ldots, a_n $ ( $ 0 \\leq a_1, \\ldots, a_n \\leq n $ ) — the values of the cards in the deck.\n\nOutput Format\nOutput a single integer — the maximum number of victory points Andrea can earn.\n\nExamples\nSample 1\nInput\n2\n1 2\nOutput\n2\n\nSample 2\nInput\n5\n2 4 5 0 1\nOutput\n9\n\nSample 3\nInput\n4\n0 4 4 4\nOutput\n0\n\nNote\nIn the first sample test, the deck starts as \\[unlocked, locked\\]. Then, Andrea uses the first card to unlock the second card. Then he uses the second card to earn $ 2 $ victory points.\n\nIn the second sample test, Andrea can use the first card to unlock the second and the third card. Then he uses the second and the third card to earn $ 4+5=9 $ victory points.\n\nIn the third sample test, Andrea can't unlock any cards or gain any victory points with the first card."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "The order of used cards doesn't matter. So, you can assume you always use the card on the top."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Suppose that you unlock $$$x$$$ cards in total. How many points can you get?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "If you unlock $$$x$$$ cards, it means you end up making moves with the first $$$x$$$ cards. So, you know the total number of (cards + points) that you get."
+        },
+        {
+            "title": "Hint 4",
+            "content": "If you unlock $$$x$$$ cards, the number of points is uniquely determined. It's convenient to assume that $$$x \\leq 2n$$$ and the cards $$$n+1, \\dots, 2n$$$ have value $$$0$$$."
+        },
+        {
+            "title": "Hint 5",
+            "content": "Now you have to determine the unlockable prefixes of cards (i.e., the values of $$$x$$$ you can reach). It looks similar to knapsack."
+        },
+        {
+            "title": "Hint 6",
+            "content": "You can optimize the solution using a bitset. Be careful not to use locked cards."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "First, note that the order of used cards doesn't matter. If you use at least once a card that is not on the top on the deck, you can prove that using the cards in order (from the top) would give the same number of victory points.\nLet's add $$$n$$$ cards with value $$$0$$$ at the end of the deck. Then, it's optimal to unlock $$$x \\leq 2n$$$ cards, and use cards $$$1, \\dots, x$$$, getting $$$a_1 + \\dots + a_x - x + 1$$$ points.\nLet's find the reachable $$$x$$$. Let $$$dp_i$$$ be a bitset that stores the reachable $$$x$$$ after using the first $$$i$$$ cards.\nBase case: $$$dp_{0,1} = 1$$$.\nTransitions: first, $$$dp_{i}$$$\n|=\n$$$dp_{i-1}$$$\n<<\n$$$a_i$$$. If $$$dp_{i,i} = 1$$$, you can update the answer with $$$a_1 + \\dots + a_i - i + 1$$$, but you can't unlock any other card, so you have to set $$$dp_{i,i} = 0$$$ before transitioning to $$$i+1$$$.\nComplexity: $$$O(n^2/w)$$$"
+        }
+    ]
+}

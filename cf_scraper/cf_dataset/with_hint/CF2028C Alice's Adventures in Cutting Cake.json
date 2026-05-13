@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2028C - Alice's Adventures in Cutting Cake\nAlice's piece of cake will be some subsegment $$$a[i:j]$$$. For a fixed $$$i$$$, how large can $$$j$$$ be?\nTo determine this, let $$$pfx[i]$$$ be the maximum number of creatures that can be fed on $$$a[:i]$$$ and $$$sfx[j]$$$ the maximum number of creatures on $$$a[j:]$$$. Then, for a given $$$i$$$, the maximum possible $$$j$$$ is exactly the largest $$$j$$$ such that $$$pfx[i] + sfx[j] \\ge m$$$.\nIf we compute the $$$pfx$$$ and $$$sfx$$$ arrays, we can then compute these largest $$$j$$$ for all $$$i$$$ with two pointers in $$$O(n)$$$ (or with binary search in $$$O(n\\log n)$$$, since $$$sfx$$$ is monotonically non-increasing).\nTo compute $$$pfx[i]$$$, we can use prefix sums and binary search to find the maximum $$$k  \\lt  i$$$ such that $$$\\sum_{\\ell=k}^{i}a[\\ell] \\ge v$$$: then $$$pfx[i] = 1 + pfx[k]$$$. We can compute $$$sfx$$$ similarly by reversing $$$a$$$. This takes time $$$O(n\\log n)$$$ (it is also possible to do this with two pointers in $$$O(n)$$$, which you can see in the model solution).\nExpected complexity: $$$O(n)$$$ or $$$O(n\\log n)$$$."
         }
     ]
 }

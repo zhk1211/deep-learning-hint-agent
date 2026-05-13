@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1555C - Coin Rows\nFirst, observe that each of the players has only $$$m$$$ options for their path — which column to go down in.\nLet's consider a Bob's response to a strategy chosen by Alice. The easiest way to approach that is to look at the picture of the Alice's path.\nThe path clearly separates the field into two independent pieces — suffix of the first row and the prefix of the second row. Bob can't grab the coins from both of them at once. However, he can grab either of them fully. So the optimal path for him will be one of these two options.\nYou can precalculate some prefix sums and become able to get the Bob's score given the Alice's path. Alice has $$$m$$$ possibly paths, so you can iterate over them and choose the minimum answer.\nHowever, prefix sums are not required, since you can quickly recalculate both needed sums while iterating over the Alice's column to go down in.\nOverall complexity: $$$O(m)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1758D - Range = √Sum\nLet us consider the cases when $$$n$$$ is odd and when its even.\n$$$n$$$ is odd: First, we can start with the $$$n$$$ consecutive distinct numbers centered at $$$n$$$. The minimum-maximum difference is $$$n - 1$$$, and the sum is $$$n^2$$$. If we add 2 to each number, the minimum-maximum difference remains the same, and the sum increases to $$$n^2 + 2n$$$.\nNow, we can decrease the minimum by 1 and the increase the maximum by 1. The sum remains at $$$n^2 + 2n$$$, while the difference increases to $$$n + 1$$$. To make the sum equal $$$(n + 1)^2 = n^2 + 2n + 1$$$, we can increase the 2nd last number by 1, which we can do since we previously increased the maximum by 1.\nAs an example, this sequence is followed for $$$n = 5$$$:\n[3, 4, 5, 6, 7] (centered at $$$5$$$)\n[5, 6, 7, 8, 9] (increase by $$$2$$$)\n[4, 6, 7, 8, 10] (shift min/max)\n[4, 6, 7, 9, 10] (shift 2nd last)\n$$$n$$$ is even: We can let $$$[a_1, \\dots, a_n] = [n / 2, n / 2 + 1, \\dots, n - 1, n + 1, \\dots, 3n / 2]$$$. The difference between the minimum and maximum is $$$n$$$, and the sum of the numbers equals $$$n^2$$$, so this is valid.\nOther solutions exist, only one is described here."
         },
         {
             "title": "Implementation (C++)",

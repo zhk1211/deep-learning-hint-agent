@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1407D - Discrete Centrifugal Jumps\nConsider such a jump, when all of the skyscrapers between are smaller than initial and final (another case is similar). Let's stand on the skyscraper with index $$$x$$$. We want to find out whether $$$y$$$-th skyscraper satisfies our conditions. We have two cases:\n$$$h_x \\leq h_y$$$. Then, obviously, $$$y$$$ is the first skyscraper that not lower than $$$x$$$ (otherwise we have a building that higher than starter, it's contradiction).\n$$$h_x  \\gt  h_y$$$. Then, it's easy to see, that $$$x$$$ is the first skyscraper to the left of $$$y$$$, that higher than $$$y$$$ for the same reason.\nFor another case, reasoning is similar, but skyscaper should be lower, not higher. We can see, that amount of pairs $$$i, j : i  \\lt  j$$$ such that we can jump from $$$i$$$ to $$$j$$$, we can estimate as $$$O(n)$$$.\nSo, we can find for each skyscraper the nearest bigger (and smaller) one using stack and simply count $$$dp_i$$$ — minimal count of jumps that we need to reach $$$i$$$-th skyscraper.\nCheck the solution for a better understanding."
         },
         {
             "title": "Solution",

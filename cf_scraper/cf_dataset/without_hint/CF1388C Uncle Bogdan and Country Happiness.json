@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1388C - Uncle Bogdan and Country Happiness\nFor each city $$$v$$$ count $$$a_v$$$ — how many people will visit it. Knowing this value and the value of the level of happiness — $$$h_v$$$, we can calculate how many people visited the city in a good mood: $$$g_v=\\frac {a_v + h_v} {2}$$$.\nWe can single out the $$$3$$$ criterions for the correctness of the values of the happiness indices:\n$$$a_v + h_v$$$ is a multiple of $$$2$$$. For each $$$v$$$, $$$g_v$$$ — an integer.\n$$$0 \\le g_v \\le a_v$$$. In each city $$$v$$$ the number of residents who passed this city in a good mood — a non-negative number not exceeding $$$a_v$$$.\n$$$ g_{to_1} + g_{to_2} + \\ldots + g_{to_k} \\le g_v,$$$ where $$$to_1, $$$ $$$to_2,$$$ $$$\\ldots,$$$ $$$to_k$$$ are the cities where the resident can move out of the city $$$v$$$ on the way home. This follows from the fact that the mood of the inhabitants can be deteriorated and cannot be improved.\nThis is enough, since these conditions guarantee the correctness of the happiness indices by definition, as well as the peculiarities of changes in the mood of residents."
         },
         {
             "title": "Solution (Karavaev1101)",

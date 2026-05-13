@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1211B - Traveling Around the Golden Ring of Berland\nThe first solution is to find $$$w = \\max a_i-1$$$. We need to make $$$w$$$ whole cycles plus some partial cycle. The last addend (partial cycle) is the index of the last occurrence of $$$\\max a_i$$$.\nLet's iterate through all possible $$$a_i$$$ and consider the length of the minimal path to make exactly $$$a_i$$$ selfie in the city $$$i$$$ in total (just do not consider other $$$a_j$$$ for other cities). If is exactly $$$i + (a_i - 1) \\cdot n$$$ (or $$$0$$$ if $$$a_i=0$$$). The answer is the maximum value among all of them.\nHere is the example of a solution in Kotlin:\nfun main() {\nval n = readLine()!!.toLong()\nval a = readLine()!!.split(\" \").map { it.toInt() }\nvar ans = 0L\nfor ((i, k) in a.withIndex()) {\nif (k == 0) continue\nvar visits = (i + 1).toLong()\nif (k > 0) visits += (k - 1) * n\nif (visits > ans) ans = visits\n}\nprintln(ans)\n}"
         }
     ]
 }

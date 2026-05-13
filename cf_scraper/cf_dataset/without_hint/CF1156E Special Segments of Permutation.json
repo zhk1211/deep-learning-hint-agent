@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1156E - Special Segments of Permutation\nLet's fix the maximum element on segment and iterate on either the elements to the left of it or to the right of it, and if the current maximum is $$$x$$$, and the element we found is $$$y$$$, check whether the element $$$x - y$$$ can form a special subsegment with $$$y$$$ (that is, $$$x$$$ is the maximum value on the segment between $$$y$$$ and $$$x - y$$$). That obviously works in $$$O(n^2)$$$, yes?\nWell, not exactly. If we can precompute the borders of the segment where $$$x$$$ is the maximum element (this can be done with some logarithmic data structure, or just by processing the array with a stack forwards and backwards) and always choose to iterate on the smaller part of the segment, it's $$$O(n \\log n)$$$. Why is it so? Every element will be processed no more than $$$\\log n$$$ times because, if we process it in a segment of size $$$m$$$, the smaller part of it contains no more than $$$\\frac{m}{2}$$$ elements (which we will process later, and the smaller part of this segment contains no more than $$$\\frac{m}{4}$$$ elements, and so on). Checking whether the element belongs to the segment we are interested in can be done in $$$O(1)$$$ if we precompute inverse permutation for $$$p$$$."
         },
         {
             "title": "Solution (BledDest)",

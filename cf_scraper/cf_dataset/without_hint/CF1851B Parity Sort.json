@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1851B - Parity Sort\nLet's copy array $$$a$$$ to array $$$b$$$. Then sort array $$$b$$$. Let's check that for each $$$1 \\le i \\le n$$$ it is satisfied that $$$(a_i \\bmod 2) = (b_i \\bmod 2)$$$, where $$$\\bmod$$$ is the operation of taking the remainder from division. In other words, we need to check that in the sorted array $$$b$$$, the element at the $$$i$$$-th position has the same parity as the element at the $$$i$$$-th position in the unsorted array $$$a$$$.\nThis is true because any array can be sorted using at most $$$n^2$$$ operations, in which any two elements are swapped. Consequently, if the parity of the elements in the sorted array is preserved, then the even and odd subsequences of the elements can be sorted separately, and the answer is\nYES\n. If the parity of the elements is not preserved after sorting, the answer is\nNO\n."
         },
         {
             "title": "Solution",

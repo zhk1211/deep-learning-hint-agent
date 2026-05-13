@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1065B - Vasya and Isolated Vertices\nVasya can decrease number of isolated vertices up to $$$2$$$ using one edge and pairing them. So minimum number of isolated vertices is $$$max(0, n - 2m)$$$.\nTo calculate maximum number of isolated vertices let's keep number of non-isolated vertices knowing that each pair connected by edge (i.e. size of clique). Let we have size of clique $$$cur$$$ and $$$rem$$$ edges remained unassigned at current step. If $$$rem = 0$$$ then answer is $$$n - cur$$$. Otherwise we need to increase clique with one vertex. Maximum number of edges we can add to connect this vertex is $$$add = min~(rem, cur)$$$. So, subtract it from $$$rem$$$ and increase $$$cur$$$ by one. Repeat this step while $$$rem$$$ greater than zero. Answer is $$$n - cur$$$.\nOne corner case is next: if $$$cur = 1$$$, then answer is $$$n$$$, not $$$n - cur$$$."
         },
         {
             "title": "Solution (Ajosteen)",

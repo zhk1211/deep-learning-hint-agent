@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1476D - Journey\nThere are two key observations to this problem:\nafter each pair of moves, the directions go back to the original ones;\nafter each move, we can immediately go back (and combining these observations, we can derive that if we go from city $$$i$$$ to some other city $$$j$$$, we can always go back).\nOne of the solutions we can write using these observations is to build an undirected graph on $$$2n+2$$$ vertices. Each vertex represents a pair $$$(v, k)$$$, where $$$v$$$ is the city we are currently staying in, and $$$k$$$ is the number of moves we made, modulo $$$2$$$. Since each move is to a neighboring city, each vertex $$$(v, 0)$$$ is unreachable from $$$(v, 1)$$$, and vice versa. And since we can always go back, and each pair of steps doesn't change the directions, this graph is actually an undirected one. So, we can find the connected components of this graph using DFS/BFS/DSU, and for each city $$$v$$$, print the size of the component the vertex $$$(v, 0)$$$ belongs to.\nAnother solution is to find the leftmost and the rightmost city reachable from each city. For example, finding the leftmost reachable city can be done with the following dynamic programming: let $$$dp_i$$$ be the leftmost city reachable from $$$i$$$. Then, if we can't go left from $$$i$$$, $$$dp_i = i$$$; if we can make only one step to the left from $$$i$$$, $$$dp_i = i - 1$$$; and if we can make two steps, we can take the answer from the city $$$i - 2$$$: $$$dp_i = dp_{i - 2}$$$. The same approach can be used to calculate the rightmost reachable city."
         },
         {
             "title": "Solution 1 (BledDest)",

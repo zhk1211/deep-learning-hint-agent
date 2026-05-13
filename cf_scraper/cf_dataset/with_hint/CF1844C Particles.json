@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1844C - Particles\nConsider the set of even-indexed particles and the set of odd-indexed particles. Observe that particles can only ever combine with other particles from the same set. It follows that the answer is at most $$$$$$\\max\\left(\\sum_{\\text{odd }i} \\max(c_i,0),\\sum_{\\text{even }i} \\max(c_i,0)\\right).$$$$$$\nOn the other hand, this bound is almost always obtainable. We can first perform the operation on all negatively charged particles in the same set as the desired final particle, then perform the operation on all the particles from the opposite set. There is a corner case where all particles are negative, where the answer is just $$$\\max(c_1,\\dots,c_n)$$$.\nThe time complexity is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Implementation",

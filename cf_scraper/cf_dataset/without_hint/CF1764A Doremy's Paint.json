@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1764A - Doremy's Paint\nAssume that you have picked a interval $$$[L,R]$$$ as your answer. Now try to move the left point to make the answer larger.\nCompare $$$[L,R]$$$ with $$$[L-1,R]$$$.\n$$$\\Delta(r-l)=1$$$ because the length of the interval increases by $$$1$$$.\n$$$\\Delta c(l,r)$$$ increases at most $$$1$$$. If $$$a_L$$$ appears in $$$[L,R]$$$, $$$c(L,R)=c(L-1,R)$$$; If $$$a_L$$$ does not appear in $$$[L,R]$$$, $$$c(L,R)+1=c(L-1,R)$$$.\nSo $$$[L-1,R]$$$ is always better than $$$[L,R]$$$.\nFurthermore, we can see that if $$$a\\le b \\le c \\le d$$$, then $$$[a,d]$$$ is better than $$$[b,c]$$$.\nSince $$$[1,n]$$$ includes all intervals, it is always better than any other interval. So just output $$$1$$$ and $$$n$$$."
         }
     ]
 }

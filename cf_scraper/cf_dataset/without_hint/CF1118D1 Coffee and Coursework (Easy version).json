@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1118D1 - Coffee and Coursework (Easy version)\nSince the number of days doesn't exceed $$$n$$$, let's iterate over this value (from $$$1$$$ to $$$n$$$). So now we have to check (somehow), if the current number of days is enough to write a coursework.\nLet the current number of days be $$$k$$$. The best way to distribute first cups of coffee for each day is to take $$$k$$$ maximums in the array. Then we have to distribute second cups for each day. Let's also take the next $$$k$$$ maximums in the remaining array, and so on.\nHow do we can calculate such a thing easily? Let's sort the array $$$a$$$ in the reversed order (before iterating over all numbers of days), then the following formula will work fine for the current number of days $$$k$$$: $$$\\sum\\limits_{i=1}^{n}max(0, a_i - \\lfloor\\frac{i - 1}{k}\\rfloor)$$$.\nSo if the value of the formula above is greater than or equal to $$$m$$$ then the current number of days is enough. If there is no any suitable number of days, the answer is\n-1\n."
         },
         {
             "title": "Solution",

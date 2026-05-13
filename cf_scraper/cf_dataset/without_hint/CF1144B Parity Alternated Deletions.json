@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1144B - Parity Alternated Deletions\nLet's calculate the sum of the whole array $$$sum$$$ and then divide all its elements into two arrays $$$odd$$$ and $$$even$$$ by their parity ($$$odd$$$ for odd, $$$even$$$ for even). Sort both of them in non-increasing order. Then what can we see? We always can delete first $$$k = min(|odd|, |even|)$$$ elements from both arrays (where $$$|x|$$$ is the size of $$$x$$$). So let's decrease $$$sum$$$ by the sum of first $$$k$$$ elements of the array $$$odd$$$ and the same for the array $$$even$$$. If one the arrays has more than $$$k$$$ elements (both arrays cannot have more than $$$k$$$ elements because if it is so then $$$k$$$ should be greater) then let's decrease $$$sum$$$ by the $$$k+1$$$-th element of this array (because this is the maximum possible element we can remove). Now $$$sum$$$ is the answer for the problem."
         },
         {
             "title": "Solution",

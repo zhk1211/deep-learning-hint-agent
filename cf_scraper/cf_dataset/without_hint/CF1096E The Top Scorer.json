@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1096E - The Top Scorer\nAn straightforward dp solution is to calculate $$$dp_{s,p,m} = $$$ {number of states at the end of the game in which no one has scored more than $$$m$$$ goals} where $$$s$$$ is the number of total goals to be scored and $$$p$$$ is the number players in the game. Fix the score of Hasan in the game and by using this dp the rest is easy (also described below). But as long as the time needed to calculate $$$dp_{s,p,m}$$$ is $$$O(s \\cdot r \\cdot p)$$$ this solution won't fit in the constraints.\nWith a little help from combinatorics, we can calculate the value of mentioned dp function without using recursions.\nDefine $$$$$$g(s,p,m) = \\sum_{i=0}^{p}{(-1)^i \\binom{p}{i} \\binom{s+p-1-i(m+1)}{p-1}}$$$$$$ by inclusion-exclusion principle it can be easily seen that the value of $$$g$$$ equals to the above $$$dp_{s,p,m}$$$. And the complexity of calculation for $$$g$$$ is $$$O(p)$$$ with a $$$O(s)$$$ preprocess for calculating binomial coefficients.\nThis formula is a well-known modification of \"Star and Bars\" problem but with the upper limit on terms.\nNow we can calculate the answer, firstly fix Hasan's score and number of top-scorers, then use $$$g$$$ to calculate each state: $$$$$$f(s,r,p) = \\frac{\\sum_{t=r}^s{\\sum_{q=1}^p{\\binom{p-1}{q-1} \\cdot \\frac 1 q \\cdot g(s-qt,p-q,t-1)}}}{\\binom{s-r+p-1}{p-1}}$$$$$$ By using modulus arithmetic, the answer can be reported in the requested form.\nOverall complexity: $$$O(s\\cdot p^2)$$$."
         },
         {
             "title": "Solution (PikMike)",

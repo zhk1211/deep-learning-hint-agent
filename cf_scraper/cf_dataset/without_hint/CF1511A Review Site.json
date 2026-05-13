@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1511A - Review Site\nNotice that the answer depends only on the number of the reviewers of the third type who upvote the movie. Optimally we would want every single reviewer of the third type to upvote. We can achieve it with the following construction: send all reviewers of the first type to the first server, all reviewers of the second type to the second server and all reviewers of the third type to the first server. Since there are no downvotes on the first server, all reviewers of the third type will upvote.\nThus, the answer is the total number of reviewers of the first and the third type.\nOverall complexity: $$$O(n)$$$ per testcase."
         },
         {
             "title": "Solution (adedalic)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1394A - Boboniu Chats with Du\nIf $$$a_i \\gt m$$$, we consider it as a\nbig\nitem with value $$$a_i$$$, else a\nsmall\nitem with value $$$a_i$$$. We are asked to choose some items and maximize the total value. If an item is not chosen, it means we put it on a muzzled day.\nEnumerate the number of chosen\nbig\nitem, which is denoted by $$$x$$$. Thus they take $$$(x-1)(d+1)+1$$$ days. The remaining days are used to place\nsmall\nitem on it. Choose items greedily. i. e. We sort items by value from largest to smallest, choose previous $$$x$$$\nbig\nitems and previous $$$n-(x-1)(d+1)-1$$$\nsmall\nitems and update the answer.\nThe total time complexity is $$$O(n\\log n)$$$."
         },
         {
             "title": "Solution",

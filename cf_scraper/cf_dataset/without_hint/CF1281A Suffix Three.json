@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution Sketch",
-            "content": "Tutorial is loading..."
+            "content": "1281A - Suffix Three\nThe simplest way to solve it is to use your language's builtin string methods like\nends_with\n. (It might be different in your preferred language.) Alternatively, if you know how to access the individual letters of a string, then you may implement something similar to\nends_with\nyourself.\nTo print the required output, you can just use something like:\nif s.endswith(\"po\"):\nprint(\"FILIPINO\")\nif s.endswith(\"desu\") or s.endswith(\"masu\"):\nprint(\"JAPANESE\")\nif s.endswith(\"mnida\"):\nprint(\"KOREAN\")\nAlternatively, notice that you can simply check the last letter since\no\n,\nu\nand\na\nare distinct, so it can be simplified slightly. One can even write a Python one-liner (for a single test case):\nprint({\"o\": \"FILIPINO\", \"a\": \"KOREAN\", \"u\": \"JAPANESE\"}[input()[-1]])"
         }
     ]
 }

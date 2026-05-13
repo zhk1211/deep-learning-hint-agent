@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1862A - Gift Carpet\nNote that if the answer is «\nYES\n», then there exists a reading of the word «\nvika\n» in which the leftmost letter «\nv\n» is included. Among such readings, we can also consider the one in which the leftmost letter «\ni\n» is included, which is located to the right of the first occurrence of «\nv\n». Similarly, we can do the same for the remaining letters. Therefore, it is sufficient to greedily search for the characters in order.\nLet's store the input data in a 2D array and process it by going through the columns from left to right. First, we will search for the character «\nv\n» by iterating through all the characters in each processed column. Once we find the character «\nv\n», we will similarly search for the character «\ni\n» and so on."
         },
         {
             "title": "Solution",

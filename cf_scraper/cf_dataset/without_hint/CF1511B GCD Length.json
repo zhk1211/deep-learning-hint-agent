@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1511B - GCD Length\nThe easiest way to force some gcd to be of some fixed length is to use the divisibility rules for $$$2$$$, $$$5$$$ or $$$10$$$: if the number produced by the last $$$y$$$ digits $$$x$$$ is divisible by $$$2^y$$$, then $$$x$$$ is also divisible by $$$2^y$$$ (same goes for $$$5^y$$$ and $$$10^y$$$).\nOne of the possible constructions is the following: let $$$x=1\\underbrace{0..0}_{a-c}\\underbrace{0..0}_{c-1}$$$ and $$$y=1\\underbrace{1..1}_{b-c}\\underbrace{0..0}_{c-1}$$$. Since $$$10..0$$$ and $$$11..1$$$ are pairwise prime, gcd is $$$10^{c-1}$$$.\nOverall complexity: $$$O(1)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

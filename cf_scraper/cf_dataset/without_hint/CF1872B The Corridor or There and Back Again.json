@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1872B - The Corridor or There and Back Again\nLet's see when we can reach room $$$k$$$ and return back. In this case, the time difference between entering and exiting room $$$1 \\le x \\le k$$$ is equal to $$$2 \\cdot (k - x)$$$. Therefore, it is necessary for all traps to satisfy: $$$s_i  \\gt  2 \\cdot (k - d_i)$$$. Now we need to find the maximum $$$k$$$ that satisfies these conditions. To do this, we can either iterate through all $$$k$$$ from $$$1$$$ to $$$300$$$, or use binary search for the answer, or notice that $$$$$$s_i  \\gt  2 \\cdot (k - d_i) \\to s_i + 2 \\cdot d_i  \\gt  2 \\cdot k \\to d_i + \\frac{s_i}{2}  \\gt  k \\to d_i + \\frac{s_i - 1}{2} \\geq k$$$$$$ Therefore, the maximum suitable $$$k$$$ will be $$$\\min(d_i + \\lfloor \\frac{s_i - 1}{2} \\rfloor)$$$."
         },
         {
             "title": "Solution",

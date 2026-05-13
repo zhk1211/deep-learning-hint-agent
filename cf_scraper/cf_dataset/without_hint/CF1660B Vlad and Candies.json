@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1660B - Vlad and Candies\nThere will be three cases in total, let's consider them on two types of candies:\n$$$a_1 = a_2$$$, then we will eat candies in this order $$$[1, 2, 1, 2, \\ dots, 1, 2]$$$\n$$$a_1 = a_2 + 1$$$, then we will eat a candy of the type $$$1$$$, and then we will eat in this order $$$[2, 1, 2, 1, \\dots, 2, 1]$$$ (almost as in the case above)\n$$$a_1  \\gt = a_2 + 2$$$, then we will eat a candy of the type $$$1$$$, but there will still be more of them than candies of the type $$$2$$$ and we will have to eat a candy of the type $$$1$$$ again. So the answer is \"\nNO\n\".\nNow we prove that it is enough to check these conditions on two maximums of the array $$$a$$$. If the third condition is true, the answer is obvious \"\nNO\n\". Otherwise, we will by turns eat candies of the two maximum types until their number is equal to the third maximum, after which we will by turns eat candies of these three types and so on."
         },
         {
             "title": "Solution",

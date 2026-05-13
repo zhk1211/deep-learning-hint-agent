@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1715B - Beautiful Array\nTo start with, the sum of the numbers in the array $$$s$$$ cannot be less, than $$$k \\cdot b$$$ (where $$$k$$$ is the number by which we divide, and $$$b$$$ is beauty ($$$s \\ge k \\cdot b$$$))\nIt is important, that $$$s \\le k \\cdot b + (k - 1) \\cdot n$$$. Let's assume that is not true. Consider the sum of divisible parts of numbers in the array: it obviously does not exceed $$$k \\cdot b$$$, thus the sum of remainders is at least $$$(k - 1) \\cdot n + 1$$$, which means, that at least one of the numbers' remainders is $$$k$$$, which is impossible by definition of the remainder.\nThat way we got the criteria for the existence of the answer: $$$k \\cdot b \\le s \\le k \\cdot b + (k - 1) \\cdot n$$$.\nIf there does exist an answer, then we can use the following algorithm:\nAssign $$$k \\cdot b$$$ to any of the $$$n$$$ cells of the array.\nIterate over all the cells (including the cell from the previous item) and add $$$min(s - sum, k - 1)$$$ to the current cell, where $$$sum$$$ is the current sum of the elements."
         }
     ]
 }

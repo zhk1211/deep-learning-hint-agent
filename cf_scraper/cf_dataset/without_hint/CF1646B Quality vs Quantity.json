@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1646B - Quality vs Quantity\n$$$ \\def\\myred#1{\\color{red}{\\underline{\\bf{#1}}}} \\def\\myblue#1{\\color{blue}{\\overline{\\bf{#1}}}} $$$ $$$\\def\\RED{\\myred{Red}} \\def\\BLUE{\\myblue{Blue}}$$$\nSuppose $$$\\text{Count}(\\RED)=k$$$. If a solution exists, then there is one with $$$\\text{Count}(\\BLUE)=k+1$$$, because if there are more than $$$k+1$$$ numbers painted blue, we can remove some of them until we have exactly $$$k+1$$$ numbers, and the sum of these numbers will be smaller.\nAs we want $$$\\text{Sum}(\\RED)  \\gt  \\text{Sum}(\\BLUE)$$$ to hold, the optimal way to paint the numbers is to paint the $$$k$$$ largest numbers red, and the $$$k+1$$$ smallest numbers blue.\nSo, to solve the problem it is enough to sort the sequence, iterate over the value of $$$k$$$ and for each of them compute the sum of the $$$k$$$ largest numbers, the sum of the $$$k+1$$$ smallest numbers and compare them. This can be done efficiently by computing the sum of every prefix and suffix of the sorted sequence in linear time. This way, we can make a constant number of operations for each $$$k$$$.\nIntended complexity: $$$\\mathcal{O}(n\\:\\text{log}\\:n)$$$"
         }
     ]
 }

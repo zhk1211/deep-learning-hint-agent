@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1133D - Zero Quantity Maximization\nFor each index $$$i \\in [1, n]$$$ let's try to find which $$$d$$$ we should use in order to make $$$i$$$-th element of $$$c$$$ equal to zero.\nIf $$$a_i = 0$$$, then $$$c_i = b_i$$$ no matter which $$$d$$$ we choose. So we should just ignore this index and add $$$1$$$ to the answer if $$$b_i = 0$$$.\nOtherwise, we should choose $$$d = \\frac{-b_i}{a_i}$$$. Let's calculate the required fraction for each index, and among all fractions find one that fits most indices (this can be done, for example, by storing all fractions in a\nmap\n).\nThe only thing that's left to analyze is how to compare the fractions, because floating-point numbers may be not precise enough. Let's store each fraction as a pair of integers $$$(x, y)$$$, where $$$x$$$ is the numenator and $$$y$$$ is the denominator. We should normalize each fraction as follows: firstly, we reduce it by finding the greatest common divisor of $$$x$$$ and $$$y$$$, and then dividing both numbers by this divisor. Secondly, we should ensure that numenator is non-negative, and if numenator is zero, then denominator should also be non-negative (this can be achieved by multiplying both numbers by $$$-1$$$)."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1399B - Gifts Fixing\nAt first, consider the problems on candies and oranges independently. Then it's pretty obvious that for candies the optimal way is to decrease all $$$a_i$$$ to the value $$$min(a)$$$ (we need obtain at least this value to equalize all the elements and there is no point to decrease elements further). The same works for the array $$$b$$$. Then, if we unite these two problems, we need to take the maximum moves we need for each $$$i$$$, because we need exactly that amount of moves to decrease $$$a_i$$$ to $$$min(a)$$$ and $$$b_i$$$ to $$$min(b)$$$ simultaneously.\nSo, the answer is $$$\\sum\\limits_{i=1}^{n} max(a_i - min(a), b_i - min(b))$$$."
         },
         {
             "title": "Solution",

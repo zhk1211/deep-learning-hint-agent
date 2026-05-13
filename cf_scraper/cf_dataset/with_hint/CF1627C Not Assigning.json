@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1627C - Not Assigning\nLet us first see when a valid assignment does not exist.\nClaim.\nIf any vertex has 3 or more edges adjacent to it, no valid assignment exists.\nProof.\nConsider a graph where a vertex has edges to three other vertices with weights $$$x$$$, $$$y$$$ and $$$z$$$ respectively. For a valid assignment, $$$x$$$, $$$y$$$ and $$$z$$$ need to be primes themselves. Also, $$$x+y$$$, $$$y+z$$$ and $$$x + z$$$ need to be primes too.\nSince $$$x, y, z \\ge 2$$$ (as $$$2$$$ is the smallest prime), thus $$$x + y, x + z, y + z \\ge 4$$$, so they must be odd primes. This implies:\n$$$x$$$ and $$$y$$$ have opposite parity.\n$$$y$$$ and $$$z$$$ have opposite parity.\n$$$x$$$ and $$$z$$$ have opposite parity.\nAs all the three conditions cannot hold together, hence we have a contradiction.\nProven.\nSo, we have a tree where every vertex has either one or two edges adjacent to it. Such a tree will have exactly two leaf nodes for $$$n \\ge 2$$$ and have the following structure, where $$$V_1$$$ and $$$V_n$$$ are the leaf nodes.\n$$$V_1 \\longleftrightarrow V_2 \\longleftrightarrow V_3 \\dots \\longleftrightarrow V_{n-1} \\longleftrightarrow V_n $$$\nThus, starting a DFS from any leaf node, we can assign weights $$$2$$$ and $$$3$$$ (or $$$2$$$ and the first number of any\ntwin prime pair\n) alternatingly to form a prime tree, as $$$2$$$, $$$3$$$ and $$$2+3 = 5$$$ are all primes.\nExpected time complexity: $$$\\mathcal{O}(n)$$$"
         },
         {
             "title": "Implementation (C++)",

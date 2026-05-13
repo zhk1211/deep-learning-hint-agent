@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1806B - Mex Master\nHint 1: $$$ans\\le 2$$$.\nFirst, let's determine if $$$ans$$$ can be $$$0$$$. That means we can't place two $$$0$$$s next to each other. This is achievable when the number of $$$0$$$s is not greater than $$$\\lceil\\frac{n}{2}\\rceil$$$.\nThen determine if $$$ans$$$ can be $$$1$$$. That means we can't place $$$0$$$ and $$$1$$$ next to each other. Therefore, if there is no $$$1$$$ in $$$a$$$ or there exist an element $$$x\\ge 2$$$ in $$$a$$$, we can simply rearrange $$$a$$$ as $$$[0,0,\\ldots,0,x,1,1,\\ldots]$$$ to make $$$ans=1$$$.\nThe last case：there are only $$$0$$$ and $$$1$$$ in $$$a$$$ and the number of $$$0$$$s is greater than $$$\\lceil\\frac{n}{2}\\rceil$$$. We want to make $$$ans=2$$$ which is the minimum. Since the number of $$$1$$$s is not greater than the number of $$$0$$$s, we can rearrange $$$a$$$ as $$$[0,1,0,1,\\ldots,0,1,0,0,\\ldots]$$$ to make $$$ans=2$$$."
         }
     ]
 }

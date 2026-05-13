@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1490D - Permutation Transformation\nWe will construct the required tree recursively. Let us describe the state of tree construction by three values $$$(l, r, d)$$$, where $$$[l, r]$$$ — is the segment of the permutation, and $$$d$$$ — is the current depth. Then the following transitions can be described:\nfind the position $$$m$$$ of the maximum element on the segment $$$[l, r]$$$, that is, $$$a_m = \\max\\limits_{i=l}^{r} a_i$$$;\nthe depth of the vertex $$$a_m$$$ is equal to $$$d$$$;\nif $$$l \\lt m$$$, then make the transition to the state $$$(l, m-1, d + 1)$$$;\nif $$$m \\lt r$$$, then make the transition to the state $$$(m + 1, r, d + 1)$$$;\nThen, in order to construct the required tree, it is necessary to take $$$(1, n, 0)$$$ as the initial state."
         },
         {
             "title": "Solution",

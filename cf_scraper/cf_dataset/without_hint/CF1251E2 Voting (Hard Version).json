@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1251E2 - Voting (Hard Version)\nDenote the number of voters with $$$m_i = x$$$ as $$$c_x$$$. Also denote $$$pref_x = \\sum\\limits_{i=0}^{x-1} c_x$$$, i.e. $$$pref_x$$$ is equal to number of voters with $$$m_i  \\lt  x$$$.\nLet's group all voters by value $$$m_i$$$. We'll consider all these group in decreasing value of $$$m_i$$$. Assume that now we consider group with $$$m_i = x$$$. Then there are two cases:\nif $$$pref_{x} + cnt \\ge x$$$ then all these voters will vote for you for free. $$$cnt$$$ is equal to the number of votes bought in previous steps;\nif $$$pref_{x} + cnt  \\lt  x$$$ then we have to buy $$$x - pref_{s} - cnt$$$ additional votes. Moreover the value $$$m_i$$$ of this \"bought\" voter must be greater than or equal to $$$x$$$. Since these voters indistinguishable we have to buy $$$x - pref_{s} - cnt$$$ cheapest voter (with a minimal value of $$$p_i$$$).\nSo, all we have to do it maintain values $$$p_i$$$ not yet bought voters in some data structure (for example\nmultiset\nin\nC++\n)."
         },
         {
             "title": "Solution (Roms)",

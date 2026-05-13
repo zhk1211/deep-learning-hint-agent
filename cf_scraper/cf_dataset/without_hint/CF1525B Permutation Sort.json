@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1525B - Permutation Sort\nTo solve the problem, it is enough to consider several cases:\nif the array is already sorted, the answer is $$$0$$$;\nif $$$a[1] = 1$$$ (or $$$a[n] = n$$$), then you can sort the array in one operation by selecting the subarray $$$[1, n-1]$$$ (or $$$[2, n]$$$);\nif $$$a[1] = n$$$ and $$$a[n] = 1$$$, you can perform the sequence of operations $$$[1, n-1]$$$, $$$[2, n]$$$ and $$$[1, n-1]$$$ and sort the array on each of them (you can't do it faster since you can't move both $$$n$$$ to position $$$n$$$ and $$$1$$$ to position $$$1$$$ in only $$$2$$$ operations);\notherwise, the array can be sorted in $$$2$$$ operations."
         },
         {
             "title": "Solution (Neon)",

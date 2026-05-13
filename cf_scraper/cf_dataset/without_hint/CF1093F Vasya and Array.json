@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1093F - Vasya and Array\nLet's try dynamic programming approach to this problem. Let $$$dp_{cnt, lst}$$$ be the number of ways to replace all $$$-1$$$ with numbers from $$$1$$$ to $$$k$$$ in such a way that array $$$a_{1 \\dots cnt}$$$ is good and the last number of that array is $$$lst$$$.\nLet $$$sdp_{cnt} = \\sum\\limits_{i=1}^{k} dp_{cnt, i}$$$.\nThen initially it's $$$dp_{cnt, lst} = sdp_{cnt-1}$$$ if $$$a_{cnt}$$$ equals to $$$-1$$$ or $$$lst$$$. However, we could include incorrect states — such that segment $$$[a_{cnt-len+1} \\dots a_{cnt}]$$$ consist of the same value. It happens when:\n$$$cnt \\ge len$$$, as we should have at least $$$len$$$ elements;\nsegment $$$[a_{cnt-len+1} \\dots a_{cnt}]$$$ has all its elements either equal to $$$-1$$$ or $$$lst$$$.\nIf both of these conditions hold then you should subtract all the bad states from $$$dp_{cnt, lst}$$$. The number of them is $$$sdp_{cnt-len} - dp_{cnt-len, lst}$$$."
         },
         {
             "title": "Solution (Ajosteen)",

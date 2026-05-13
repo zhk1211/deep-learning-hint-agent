@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1857D - Strong Vertices\nThe first step is to modify the inequality.\n$$$a_u-a_v \\geq b_u-b_v \\Leftrightarrow a_u-b_u \\geq a_v-b_v$$$.\nWe can create a new array $$$c$$$, where $$$c_i=a_i-b_i$$$ and our inequality is transformed to $$$c_u\\geq c_v$$$.\nSuppose the set $$$p_1,\\dots p_m$$$ is the set of such vertices $$$v$$$ that $$$c_v$$$ is maximum possible. From each $$$p_i$$$ there will be a path to all other vertices, because $$$c_{p_i}$$$ is not less than any other $$$c_u$$$, so the set $$$p$$$ is guaranteed will be in our answer.\nNow the question is whether there are other vertices in our answer?\nLet's prove that from any such vertex $$$v$$$, that is not maximum, there is no path to any vertex from $$$p$$$. The first observation, that there is no edge between $$$v$$$ and any $$$p_i$$$. So the path must go through other vertices. But even if there exist a path to another vertex $$$u$$$, $$$c_u$$$ will be still less that $$$c_{p_i}$$$, so it is impossible to get any $$$p_i$$$.\nIn such way we proved that the answer will always be the set of such $$$v$$$, that $$$c_v$$$ is maximized.\nThe complexity is $$$O(n)$$$."
         }
     ]
 }

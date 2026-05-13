@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1297B - Cartoons\nLet's prove the next proposition: if the answer is not equal to $$$-1$$$ then exists such answer $$$x$$$ that either $$$|x - l_i| \\le 1$$$ or $$$|x - r_i| \\le 1$$$ for some $$$1 \\le i \\le n$$$. Let we have the answer $$$x$$$ and $$$x \\ne l_i$$$ and $$$x \\ne r_i$$$. Then let's move $$$x$$$ to the left one by one until we fulfill the condition above — it will surely happens since there is at least one $$$l_i  \\lt  x$$$.\nWe can use the proposition above in such way: there are only $$$O(n)$$$ candidates for an answer to check: $$$l_i - 1$$$, $$$l_i$$$, $$$l_i + 1$$$, $$$r_i - 1$$$, $$$r_i$$$ and $$$r_i + 1$$$ for all $$$i$$$. And for each candidate, we just calculate the number of segments it is in.\nThe total complexity is $$$O(\\sum\\limits_{\\text{test cases}}{n^2})$$$."
         },
         {
             "title": "Solution (elizarov)",

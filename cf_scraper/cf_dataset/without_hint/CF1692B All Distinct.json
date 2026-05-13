@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1692B - All Distinct\nNote that the size of the array doesn't change parity, since it always decreases by $$$2$$$. Let's count the number of distinct elements, call it $$$x$$$.\nIf $$$x$$$ is the same parity as $$$n$$$ (the length of the array), then we can make sure all of these $$$x$$$ distinct elements stay in the array by removing two elements at a time.\nOtherwise, $$$x$$$ isn't the same parity as $$$n$$$. Then $$$x-1$$$ is the same parity as $$$n$$$, and we can make sure $$$x-1$$$ distinct elements stay in the array by removing two elements at a time. So the answer is $$$x$$$ if $$$x$$$ and $$$n$$$ have the same parity, and $$$x-1$$$ otherwise.\nFor example: $$$[15,16,16,15]$$$ has $$$x=4$$$, $$$n=2$$$. So $$$x$$$ and $$$n$$$ have the same parity, and we can get all distinct numbers $$$[15,16]$$$ by removing $$$i=3$$$, $$$j=4$$$.\nTime complexity: $$$\\mathcal{O}(n \\log n)$$$ or $$$\\mathcal{O}(n)$$$, depending on the implementation."
         },
         {
             "title": "Solution",

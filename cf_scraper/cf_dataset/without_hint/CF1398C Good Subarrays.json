@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1398C - Good Subarrays\nWe use zero indexing in this solution. We also use half-closed interval (so subarray $$$[l, r]$$$ is $$$a_l, a_{l + 1}, \\dots, a_{r-1}$$$).\nLet's precalculate the array $$$p$$$, where $$$p_i = \\sum\\limits_{j = 0}^{i - 1} a_j$$$ (so $$$p_x$$$ if sum of first $$$x$$$ elements of $$$a$$$).\nThen subarray $$$[l, r]$$$ is good if $$$p_r - p_l = r - l$$$, so $$$p_r - r = p_l - l$$$.\nThus, we have to group all prefix by value $$$p_i - i$$$ for $$$i$$$ from $$$0$$$ to $$$n$$$. And if the have $$$x$$$ prefix with same value of $$$p_i - i$$$ then we have to add $$$\\frac{x (x-1)}{2}$$$ to the answer."
         },
         {
             "title": "Solution (Roms)",

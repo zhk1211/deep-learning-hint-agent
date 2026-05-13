@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1475B - New Year's Number\nLet $$$x$$$ — the number of $$$2020$$$, $$$y$$$ — the number of $$$2021$$$ ($$$x, y \\geq 0$$$). Let us write the required decomposition of the number $$$n$$$: $$$$$$n = 2020 \\cdot x + 2021 \\cdot y = 2020 \\cdot (x + y) + y$$$$$$ Then we get that $$$n - y$$$ is divisible by $$$2020$$$. Take $$$y$$$ equal to the remainder of $$$n$$$ divided by $$$2020$$$. Then $$$x$$$ is uniquely determined from the formula above: $$$$$$x = \\frac{n - y}{2020} - y$$$$$$ Then, if the result is that $$$x \\geq 0$$$ ($$$y \\geq 0$$$ because the remainder of dividing $$$n$$$ by $$$2020$$$ is non-negative), then $$$n$$$ can be represented as the sum of a certain number of $$$2020$$$ and a certain number of $$$2021$$$."
         },
         {
             "title": "Solution",

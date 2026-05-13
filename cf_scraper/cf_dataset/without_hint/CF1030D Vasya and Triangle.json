@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1030D - Vasya and Triangle\nDoubled area of any triangle with integer coordinates is always integer. That's why if $$$2 n m $$$ is not divisible by $$$k$$$ then there is no valid triangle.\nOtherwise, it's always possible to find required triangle. We will construct the answer with next algorithm. At first, if $$$k$$$ is even then divide it by $$$2$$$. Next, find $$$g = \\gcd(k, n)$$$, where $$$\\gcd(x, y)$$$ is greatest common divisor of $$$x$$$ and $$$y$$$. Denote $$$k' = \\frac{k}{g}$$$ and assign $$$a = \\frac{n}{g}$$$ as length of the first side. Next assign $$$b = \\frac{m}{k'}$$$ as length of the second side. Now, if $$$k$$$ was odd we need to multiply one of the sides by $$$2$$$. If $$$a  \\lt  n$$$ then $$$a = 2a$$$, otherwise $$$b = 2b$$$. $$$b$$$ still won't be greater than $$$m$$$ since if $$$a = n$$$ then $$$b$$$ was strictly lower than $$$m$$$.\nThe answer is the triangle with vertices $$$(0, 0), (a, 0), (0, b)$$$. You can check that its area is equal to $$$\\frac{nm}{k}$$$."
         },
         {
             "title": "Solution",

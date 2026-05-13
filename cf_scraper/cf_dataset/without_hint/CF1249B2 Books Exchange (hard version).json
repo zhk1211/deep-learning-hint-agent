@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1249B2 - Books Exchange (hard version)\nIn this problem, we can notice that when we calculate the answer for the kid $$$i$$$, we also calculate the answer for kids $$$p_i$$$, $$$p_{p_i}$$$ and so on. So we can a little bit modify the pseudocode from the easy version to calculate answers faster:\npos = p[i]\nans = 1\ncycle = [i]\nwhile pos != i:\ncycle.append(pos)\nans += 1\npos = p[pos]\nfor el in cycle: res[el] = ans\nAnd of course, we don't need to run this while for all elements for which we already calculated the answer. Total time complexity is $$$O(n)$$$ because you'll process each element exactly once."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1843C - Sum in Binary Tree\nIt is easy to notice that the children of the vertex with number $$$u$$$ have numbers $$$2 \\cdot u$$$ and $$$2 \\cdot u + 1$$$. So, the ancestor of the vertex $$$u$$$ has the number $$$\\lfloor \\frac{u}{2} \\rfloor$$$. Note that based on this formula, the size of the path from the root to the vertex with number $$$n$$$ equals $$$\\lfloor \\log_2 n \\rfloor$$$. Therefore with given constraints we can write out the path to the root explicitly and calculate the sum of vertex numbers on it in $$$O(\\log n)$$$.\nTotal complexity: $$$O(\\log n)$$$ for the test case."
         },
         {
             "title": "Solution",

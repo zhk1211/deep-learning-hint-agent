@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1176F - Destroy it!\nThe first (and crucial) observation is that we don't need all the cards that we get during each turn. In fact, since the total cost is limited to $$$3$$$, we may leave three best cards of cost $$$1$$$, one best card of cost $$$2$$$ and one best card of cost $$$3$$$, and all other cards may be discarded. So, the problem is reduced: we get only $$$5$$$ cards each turn.\nThe problem may be solved with dynamic programming: $$$dp_{x, y}$$$ is the maximum damage we may deal if we played $$$x$$$ turns and the last card we played had remainder $$$y$$$ modulo $$$10$$$. Processing each turn may be done with auxiliary dp: $$$z_{c, f}$$$ — the maximum damage we can deal during the turn if we play $$$c$$$ cards, and $$$f$$$ denotes whether some card (there will be only one such card, obviously) deals double damage. To calculate this auxiliary dp, we may do almost anything since we are limited to $$$5$$$ cards during each turn. It is possible to calculate it in a fast way using some casework, but it is easier, for example, to try all possible permutations of $$$5$$$ cards and play some prefix of a fixed permutation.\nBy combining these two techniques, we get a solution."
         },
         {
             "title": "Solution",

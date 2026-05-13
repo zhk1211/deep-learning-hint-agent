@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1311E - Construct the Binary Tree\nThis problem has an easy constructive solution. We can find lower and upper bounds on the value of $$$d$$$ for the given $$$n$$$. If the given $$$d$$$ does not belong to this segment, then the answer is \"\nNO\n\". Otherwise, the answer is \"\nYES\n\" for any $$$d$$$ in this segment.\nHow to construct it? Let's start from the chain. The answer for the chain is the upper bound of $$$d$$$ and it is $$$\\frac{n(n-1)}{2}$$$. Then let's try to decrease the answer by $$$1$$$ in one move. Let's take some leaf $$$v$$$ (the vertex without children) with the smallest depth that is not\nbad\nand try to move it up. The definition of badness will be below. To do this, let's find such vertex $$$p$$$ that its depth is less than the depth of $$$v$$$ by $$$2$$$ and it has less than $$$2$$$ children. If we found such vertex $$$p$$$ then let's make $$$v$$$ the child of $$$p$$$ and decrease the answer by one.\nIf we didn't find such vertex $$$p$$$, I claim that the vertex $$$v$$$ has the minimum possible depth it can have and we should not consider it in the future. Let's mark this vertex as\nbad\nand continue our algorithm.\nIf at some moment we cannot find any not\nbad\nleaf $$$v$$$, then the answer is \"\nNO\n\". Otherwise, the answer is \"\nYES\n\".\nTime complexity: $$$O(nd)$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1296F - Berland Beauty\nFirstly, let's precalculate $$$n$$$ arrays $$$p_1, p_2, \\dots, p_n$$$. The array $$$p_v$$$ is the array of \"parents\" if we run dfs from the vertex $$$v$$$. So, $$$p_{v, u}$$$ is the vertex that is the previous one before $$$u$$$ on the directed path $$$(v, u)$$$. This part can be precalculated in time $$$O(n^2)$$$ and we need it just for convenience.\nInitially, all values $$$f_j$$$ (beauties of the edges) are zeros. Let's consider queries in order of non-decreasing $$$g_i$$$. For the current query, let's consider the whole path $$$(a_i, b_i)$$$ and update the value $$$f_j$$$ for each $$$j$$$ on this path in the following way: $$$f_j = max(f_j, g_i)$$$. After processing all queries, let's replace all values $$$f_j = 0$$$ with $$$f_j = 10^6$$$. This part works also in time $$$O(n^2)$$$.\nAnd the last part of the solution is to check if the data we constructed isn't contradictory. We can iterate over all paths $$$(a_i, b_i)$$$ and find the minimum value $$$f_j$$$ on this path. We have to sure if it equals $$$g_i$$$. If it isn't true for at least one query, then the answer is\n-1\n.\nOtherwise, we can print the resulting tree.\nTime complexity: $$$O(n^2)$$$, but it can be done in at least $$$O(n \\log n)$$$ (I hope someone can explain this solution because I am too lazy to do it now)."
         },
         {
             "title": "Solution",

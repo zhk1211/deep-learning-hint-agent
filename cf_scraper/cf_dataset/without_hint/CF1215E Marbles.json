@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1215E - Marbles\nThe main fact is that the number of colors is less than $$$20$$$, which allows us to use exponential solutions.\nFor each pair of colors $$$(i, j)$$$, we can calculate $$$cnt[i][j]$$$ — the number of swaps required to place all marbles of color $$$i$$$ before all marbles of color $$$j$$$ (if we consider only marbles of these two colors). We can store a sorted vector for each color, and calculate this information for a fixed pair with two pointers.\nThen let's use subset DP to fix the order of colors. Let $$$d[mask]$$$ be the minimum number of operations to correctly order all marbles from the $$$mask$$$ of colors. Let's iterate on the next color we consider — it should be a position in binary representation of $$$mask$$$ with $$$0$$$ in it. We will place all marbles of this color after all marbles we already placed. If we fix a new color $$$i$$$, let's calculate the $$$sum$$$ (the additional number of swaps we have to make) by iterating on the bit $$$j$$$ equal to $$$1$$$ in the $$$mask$$$, and increasing $$$sum$$$ by $$$cnt[j][i]$$$ for every such bit. The new state of DP can be calculated as $$$nmask = mask | (1 « i)$$$. So the transition can be implemented as $$$d[nmask] = min(d[nmask], d[mask] + sum)$$$.\nThe answer is the minimum number of swaps required to place all the colors, and that is $$$d[2^{20} - 1]$$$."
         },
         {
             "title": "Solution (fcspartakm)",

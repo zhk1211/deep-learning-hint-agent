@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1931E - Anna and the Valentine's Day Gift\nIf the decimal representation of a number $$$x$$$ has exactly $$$c$$$ digits, then $$$x \\ge 10^{c - 1}$$$. From this, it can be concluded that Sasha is not required to maximize the final number; it is sufficient for him to maximize the number of digits in it.\nDuring his turn, Sasha does not change the total number of digits, but Anna can change it. It is easy to understand that the total number of digits cannot increase, but it can decrease if Anna removes trailing zeros from a number ($$$1200 \\to 21$$$).\nNow the optimal strategy for Sasha and Anna can be formulated. Anna should choose a number with the largest number of trailing zeros and remove them. Sasha should find a number with the largest number of trailing zeros and concatenate it with any other number. Thus, since $$$1 \\le a_i$$$, he will preserve the zeros of this number ($$$100500, 2007 \\to 1005002007$$$).\nImplementing such a solution in $$$O(n \\log n)$$$ can be done using sorting and linear traversal or by using\nstd::set\n. If desired, counting sort can be used to improve the asymptotic complexity to linear."
         },
         {
             "title": "Solution",

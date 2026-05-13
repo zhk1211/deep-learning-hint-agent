@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1690E - Price Maximization\nNote that we do not need to consider the numbers $$$x \\ge k$$$, we are only interested in the remainder of the division of $$$x$$$ by $$$k$$$, and we simply add the value $$$\\left \\lfloor\\frac{x}{k}\\right\\rfloor $$$ to the answer.\nWe get an array $$$a$$$, where $$$a_i  \\lt  k$$$. Let's sort it and greedily type index pairs $$$i  \\lt  j$$$ such that $$$a_i + a_j \\ge k$$$. This can be done with two pointers. Then add the number of matching pairs to the answer counter. This will be the answer to the problem."
         },
         {
             "title": "Solution",

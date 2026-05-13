@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1772C - Different Differences\nWe can transform the problem as follows. Let $$$d_i = a_{i+1} - a_i$$$. We need to find an array $$$[d_1, d_2, \\dots, d_{k-1}]$$$ so that the sum of elements in it is not greater than $$$n-1$$$, all elements are positive integers, and the number of different elements is the maximum possible.\nSuppose we need $$$f$$$ different elements in $$$d$$$. What can be the minimum possible sum of elements in $$$d$$$? It's easy to see that $$$d$$$ should have the following form: $$$[2, 3, 4, \\dots, f, 1, 1, 1, \\dots, 1]$$$. This array contains exactly $$$f$$$ different elements, these different elements are as small as possible (so their sum is as small as possible), and all duplicates are $$$1$$$'s. So, if the sum of this array is not greater than $$$n-1$$$, then it is possible to have the number of different elements in $$$d$$$ equal to $$$f$$$.\nThe rest is simple. We can iterate on $$$f$$$, find the maximum possible $$$f$$$, construct the difference array, and then use it to construct the array $$$a$$$ itself."
         },
         {
             "title": "Solution (BledDest)",

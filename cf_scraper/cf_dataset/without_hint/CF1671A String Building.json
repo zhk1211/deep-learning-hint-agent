@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1671A - String Building\nEvery character in strings\naa\n,\naaa\n,\nbb\nand\nbbb\nhas at least one character adjacent to it that is the same. So, if there is an isolated character in our string (a character that has no neighbors equal to it), we cannot build it.\nIt's easy to see that in the other case, we can build the string: we can split it into blocks of consecutive equal characters, and since there are no isolated characters, each block will have at least $$$2$$$ characters, so it can be formed from strings of length $$$2$$$ and/or $$$3$$$ consisting of equal characters.\nSo, the problem is reduced to checking if each character has a neighbor equal to it."
         },
         {
             "title": "Solution (BledDest)",

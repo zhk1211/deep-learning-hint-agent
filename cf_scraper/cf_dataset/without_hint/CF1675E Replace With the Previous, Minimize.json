@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1675E - Replace With the Previous, Minimize\nGreedy idea. To minimize the string, we will go from left to right and maintain a variable $$$mx$$$ = maximal character, from which we will reduce everything to 'a'. Initially it is 'a' and we spend $$$0$$$ of operations on it. Then, at the next symbol, we can either reduce it to 'a' in no more than $$$k$$$ operations, or reduce to 'a' the prefix we have already passed and minimize the next character in the remaining operations."
         },
         {
             "title": "Solution",

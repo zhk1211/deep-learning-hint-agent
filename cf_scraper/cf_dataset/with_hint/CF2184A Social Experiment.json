@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "2184A - Social Experiment\nFirst, let's find out how many people can be in one civilization. Note that there can be $$$0$$$, $$$2$$$, or $$$3$$$ people in it. If we add any number of groups of two people to a group of $$$2$$$, we can obtain any even number of people. The same can be done with a group of $$$3$$$ people; thus, we can achieve any odd number of people, except for the number $$$1$$$. That is, a civilization can be of any non-negative size, except for $$$1$$$.\nThis means that if we split $$$n$$$ into two civilizations as evenly as possible (to $$$\\frac{n}{2}$$$ if $$$n$$$ is even or to $$$\\frac{n-1}{2}$$$ and $$$\\frac{n+1}{2}$$$ if $$$n$$$ is odd), and neither of the sizes equals $$$1$$$, then such a partition is achievable. Note that the size $$$1$$$ in such a division is only reached when $$$n$$$ is equal to $$$2$$$ or $$$3$$$. Therefore, if $$$n \\le 3$$$, the answer is $$$n$$$; otherwise, the answer is $$$n \\mod 2$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1196B - Odd Sum Segments\nFirstly, let $$$cnt$$$ be the number of odd elements in the array. Note that even elements are don't matter at all because they cannot change the parity of the sum.\nIf $$$cnt  \\lt  k$$$ then it is obviously impossible to split the given array into $$$k$$$ subsegments with odd sum. And if $$$cnt \\% 2 \\ne k \\% 2$$$ then it is impossible to split the array into $$$k$$$ subsegments with odd sum also because at least one of $$$k$$$ segments will have even number of odd elements (so will have odd sum).\nIn other cases the answer is always \"\nYES\n\" and you can print $$$k-1$$$ leftmost positions of odd elements and $$$n$$$ as right borders of segments (it means that when you find one odd element, you end one segment). Because $$$cnt \\% 2 = k \\% 2$$$ now, the last segment will have odd number of odd elements so it will have odd sum also."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1692E - Binary Deque\nNote that the remaining array is a subarray of the original array. There are many ways to approach the problem. Here is one solution, which the main solution uses:\nCompute prefix sums on the array, so we can find out the value of $$$a_l + \\dots + a_r$$$ quickly. Let's iterate through the left endpoint $$$l$$$ from $$$1$$$ to $$$n$$$. Afterwards, we can binary search on the smallest value of $$$r$$$ such that $$$a_l + \\dots + a_r = s$$$, since this sum is strictly increasing.\nThe time complexity is $$$\\mathcal{O}(n \\log n)$$$."
         },
         {
             "title": "Solution",

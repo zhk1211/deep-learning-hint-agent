@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1841B - Keep it Beautiful\nFirst, notice that the given operation is a cyclic shift of the array. So we can treat the array as cyclic, meaning element $$$n$$$ is a neighbor of element $$$1$$$.\nLet's try to rephrase the condition for the beautiful array. What does it mean for the array to be sorted? For all $$$j$$$ from $$$1$$$ to $$$n-1$$$, $$$a_j \\le a_{j+1}$$$ should hold. If they do, then you can choose $$$i=0$$$ (leave the array as is).\nWhat if there are such $$$j$$$ that $$$a_j  \\gt  a_{j+1}$$$? If there is only one such $$$j$$$, then we might still be able to fix the array: choose $$$i = j$$$. However, that will make a pair $$$a_n$$$ and $$$a_1$$$ cyclically shift into the array. So $$$a_n \\le a_1$$$ should hold.\nIf there are at least two such $$$j$$$ or just one but $$$a_n  \\gt  a_1$$$, then we can show that it's impossible to make the array sorted. Since there are at least two pairs of neighboring elements that are not sorted, at least one of them will still be in the array after any cyclic shift.\nThus, we can maintain the number of such $$$j$$$ that $$$a_j  \\gt  a_{j+1}$$$ and check if $$$a_n  \\gt  a_1$$$ every time if the count is exactly $$$1$$$.\nOverall complexity: $$$O(q)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

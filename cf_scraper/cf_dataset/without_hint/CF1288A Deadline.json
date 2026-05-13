@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1288A - Deadline\nAt first, let's note that if $$$x$$$ is integer and $$$x$$$ and $$$y$$$ are non-negative then $$$x + \\left\\lceil y \\right\\rceil = \\left\\lceil x + y \\right\\rceil$$$. So, instead of looking at $$$x + \\left\\lceil \\frac{d}{x + 1} \\right\\rceil$$$ we can consider $$$\\left\\lceil x + \\frac{d}{x + 1} \\right\\rceil$$$.\nIt's easier since the function $$$x + \\frac{d}{x + 1} = (x + 1) + \\frac{d}{(x + 1)} - 1$$$ is more common function and it can be proven that it's concave upward. It means that this function has a unique minimum and, moreover, we can calculate it: $$$f(x) = x + \\frac{d}{x + 1}$$$ has minimum value in $$$x_0 = \\sqrt{d} - 1$$$ and $$$f(x_0) = 2 \\sqrt{d} - 1$$$.\nSince the ceiling function is monotonically increasing so we can assume that $$$\\left\\lceil f(x) \\right\\rceil \\le \\left\\lceil f(x + 1) \\right\\rceil$$$ for all $$$x \\ge \\sqrt{d}$$$.\nSo we can just iterate $$$x$$$ from $$$0$$$ to $$$\\left\\lfloor \\sqrt{d} \\right\\rfloor$$$ and check the unequation $$$\\left\\lceil f(x) \\right\\rceil \\le n$$$. The total complexity is equal to $$$O(T \\sqrt{d})$$$.\nThere is a simple optimization: because of the monotone ceiling we can prove that we need to check only $$$\\left\\lfloor \\sqrt{d} - 1 \\right\\rfloor$$$ and $$$\\left\\lceil \\sqrt{d} - 1 \\right\\rceil$$$."
         },
         {
             "title": "Solution (adedalic)",

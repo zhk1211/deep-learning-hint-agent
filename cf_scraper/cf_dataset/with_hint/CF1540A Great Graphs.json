@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1540A - Great Graphs\nNote that if there are two nodes $$$a$$$ and $$$b$$$ and you want to add an edge between them, the value of the edge\nmust\nbe $$$\\geq d_b - d_a$$$. Otherwise, the cows could take a path to $$$b$$$ that goes through $$$d_a$$$ that's strictly less than $$$d_b$$$. With this in mind, let's add all edges $$$(a, b)$$$ with weight $$$d_b - d_a$$$ if and only if $$$d_b \\leq d_a$$$. All of these numbers are not positive, which means they can't make our answer worse. They also don't change the shortest paths, from our first observation. Now, let's call the node with the max $$$d_i$$$ node $$$x$$$. You can add a single edge from node $$$1$$$ to node $$$x$$$ with cost $$$d_x$$$, and now the graph is good. This is because node $$$x$$$ is already connected to all other nodes, which means there is always a shortest path to some node $$$a$$$ with the right length by going from $$$1 \\rightarrow x \\rightarrow a$$$. However, naively looping through all pairs is too slow. Instead, you can sort $$$d$$$ and calculate the contribution of each node to the answer. The complexity is $$$O(n log n)$$$."
         }
     ]
 }

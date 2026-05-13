@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1433D - Districts Connection\nIf all districts belong to the same gang then the answer is\nNO\n. Otherwise, the answer is always\nYES\n(yeah, as in the previous problem). How to construct it? Let's choose the first \"root\" as the district $$$1$$$ and connect all such districts $$$i$$$ that $$$a_1 \\ne a_i$$$ to the district $$$1$$$. So, all disconnected districts that remain are under control of the gang $$$a_1$$$. Let's find any district $$$i$$$ that $$$a_i \\ne a_1$$$ and just connect all remaining districts of the gang $$$a_1$$$ to this district. This district always exists because we have at least two different gangs and it is connected to the remaining structure because its gang is not $$$a_1$$$. So, all conditions are satisfied."
         },
         {
             "title": "Solution",

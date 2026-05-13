@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1367E - Necklace Assembly\nLet's iterate over the $$$m$$$ — length of the $$$k$$$-beautiful necklace. For each position $$$i$$$, make an edge to the position $$$p[i] = (i + k) \\bmod m$$$, where $$$a \\bmod b$$$ — is the remainder of dividing $$$a$$$ by $$$b$$$. What is a cyclic shift by $$$k$$$ in this construction? A bead located at position $$$i$$$ will go along the edge to position $$$p[i]$$$. Consider all the cycles of a graph constructed on $$$p$$$. You may notice that if only equal letters are found in each cycle, then with a cyclic shift by $$$k$$$ the graph and the string will remain unchanged. Thus, in order to check whether it is possible to make a $$$k$$$-beautiful necklace of length $$$m$$$, you need to make a graph $$$p$$$, find the cycles in it and check whether it is possible to distribute the letters from the string $$$s$$$ in cycles such that each cycle have equal letters. The last part of the solution can be done with simple greedy."
         },
         {
             "title": "Solution",

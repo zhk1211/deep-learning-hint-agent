@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1729C - Jumping on Tiles\nIt's worth knowing that ways like ('\na\n' -> '\ne\n') and ('\na\n' -> '\nc\n' -> '\ne\n') have the same cost. That is, first you need to understand the letter on the first tile and the last one (conditionally, the letters $$$first$$$ and $$$last$$$).\nThen you just need to find all such tiles on which the letters are between the letters $$$first$$$ and $$$last$$$ inclusive.\nWe go through each letter from $$$first$$$ to $$$last$$$ and for each letter we visit every tile that has a given letter (but we must not forget to start exactly at tile $$$1$$$ and end at tile $$$n$$$)."
         },
         {
             "title": "Solution",

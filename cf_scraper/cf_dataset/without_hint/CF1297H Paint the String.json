@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1297H - Paint the String\nSuppose (without loss of generality) the first letter $$$s_0$$$ belongs to string $$$r$$$. To find out some properties of the optimal answer, let's look at the following situation: the prefix of length $$$i$$$ of $$$s$$$ belongs to $$$r$$$ (so, $$$b$$$ is empty) and we decide where to put $$$s_i$$$.\nIf $$$s_i  \\gt  r_0$$$ then it's optimal to add it in $$$r$$$ since $$$\\max(r + s_i, \"\")  \\lt  \\max(r, s_i)$$$. If $$$s_i  \\lt  r_0$$$ then it's optimal to add all suffix $$$s_i \\dots s_{|s|-1}$$$ in $$$b$$$ since $$$s_i \\dots s_{|s|-1}  \\lt  r$$$ and $$$r  \\lt  r + \\text{(any letters)}$$$.\nThe only case is $$$s_i = r_0$$$ and here we should check both variants. But if we add $$$s_i$$$ to $$$b$$$ we can \"drop\" first letters both in $$$r$$$ and $$$b$$$. So we can see that in any case, the following pattern will hold: $$$s = ps + ss$$$, $$$r \\subseteq ps$$$ and $$$b = (\\text{prefix of $$$r$$$}) + ss$$$ (of course, $$$r \\ge b$$$).\nSo we can write $$$dp[i][j]$$$, where $$$i$$$ is the length of the prefix $$$ps$$$ and $$$j$$$ is the length the first part of $$$b$$$ which is a prefix of $$$r$$$. The value of $$$dp$$$ is the lexicographically minimum string $$$r$$$ if it exists.\nThe transitions are natural: for $$$dp[i][j]$$$ we can try to add $$$s_i$$$ either to $$$r$$$ or to $$$b$$$ if possible. The minimal possible $$$r$$$ is either $$$dp[n][j]$$$ for some $$$j$$$ or $$$dp[i][j]$$$ if $$$s_i  \\lt  r_j$$$.\nThe resulting complexity is $$$O(t \\cdot n^3)$$$ but with quite a small constant factor."
         },
         {
             "title": "Solution (elizarov)",

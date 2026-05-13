@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1359A - Berland Poker\nThere are many different ways to solve this problem. The easiest one, in my opinion, is to iterate on the number of jokers the winner has (let it be $$$a_1$$$) and the number of jokers the runner-up has (let it be $$$a_2$$$). Then the following conditions should be met:\n$$$a_1 \\ge a_2$$$ (the winner doesn't have less jokers than the runner-up);\n$$$a_1 \\le \\frac{n}{k}$$$ (the number of jokers in the winner's hand does not exceed the number of cards in his hand);\n$$$a_1 + a_2 \\le m$$$ (the number of jokers for these two players does not exceed the total number of jokers);\n$$$a_1 + (k - 1)a_2 \\ge m$$$ (it is possible to redistribute remaining jokers among other players so that they have at most $$$a_2$$$ jokers).\nIterating on $$$a_1$$$ and $$$a_2$$$, then checking these constraints gives us a $$$O(n^2)$$$ solution. It is possible to get a constant-time solution using some greedy assumptions and math (the first player should get as many jokers as possible, while the remaining jokers should be evenly distributed among other players)."
         },
         {
             "title": "Solution 1 (BledDest)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1475C - Ball in Berland\nWe can think that it is given a bipartite graph. Boys and girls are the vertices of the graph. If a boy and a girl are ready to dance together, then an edge is drawn between them. In this graph, you need to select two edges that do not intersect at the vertices.\nLet $$$deg(x)$$$ — the number of edges included in the vertex $$$x$$$.\nIterate over the first edge — ($$$a, b$$$). It will block $$$deg(a)+deg(b)-1$$$ of other edges (all adjacent to vertex $$$a$$$, to vertex $$$b$$$, but the edge ($$$a, b$$$) will be blocked twice. All non-blocked edges do not intersect with ($$$a, b$$$) at the vertices. So you can add $$$k-deg(a)-deg(b)+1$$$ to the answer."
         },
         {
             "title": "Solution",

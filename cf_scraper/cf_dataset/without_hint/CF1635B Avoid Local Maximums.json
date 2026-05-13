@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1635B - Avoid Local Maximums\nLet's check all elements in $$$a$$$ from the left.\nOnce we find that $$$a_i$$$ is a local maximum, then we should perform an operation to fix it. There are many ways to do this, but the optimal way is to set $$$a_{i+1}$$$ to $$$max(a_{i},a_{i+2})$$$, because we can avoid $$$a_i$$$ and $$$a_{i+2}$$$ from being local maximums at the same time.\nProof: Let's take all indices of local maximums in the initial array and append them to an empty array $$$b$$$ with their corresponding order. For example, if $$$a=[1,2,1,3,1,1,3,1,4,1,2 ,1]$$$, we obtain $$$b=[2,4,7,9,11]$$$. Then, we devide $$$b$$$ into subarrays, such that $$$b_i$$$ and $$$b_{i+1}$$$ are in the same subarray if and only if $$$b_{i+1}-b_i=2$$$. Using the same example above, we will devide $$$b$$$ into $$$[2,4], [7,9,11]$$$. To finish our proof, we need two important observations.\n1. Any operation would cancel at most two local maximums.\n2. Any operation won't cancel two local maximums whose indices are in different subarrays of $$$b$$$.\nSo for a fixed subarray, we need at least $$$\\lceil \\frac{length}{2} \\rceil $$$ operations to cancel all corresponding local maximums, and the lower bound of the answer is the sum of $$$\\lceil \\frac{length}{2} \\rceil $$$ for all subarrays.\nSince the strategy described above could achieve this lower bound, our proof has completed."
         },
         {
             "title": "Solution",

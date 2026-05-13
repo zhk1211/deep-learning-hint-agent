@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1800E1 - Unforgivable Curse (easy version)\nIn these constraints , the problem could be solved as follows:\nNote that for strings of length $$$6$$$ and more, it is enough to check that the strings $$$s$$$ and $$$t$$$ match character by character, that is, up to permutation, since each character can be moved to the desired half, and then moved to the desired side by length $$$1$$$ by applying two operations on the length is $$$3$$$ and $$$4$$$.\nFor example, there was a string \"\nabudance\n\" and we want to shift the $$$c$$$ character to the left, then we can first get the string \"\nacudab\n\" and then the string \"\naaudcb\n\". Well, we can restore the used symbols by putting them in their place \"\nbudka\n\". That is, we were able to simply swap two adjacent characters.\nThus, with such a clipping, it was possible to solve the problem by brute force for $$$n\\le 5$$$. To iterate, it was possible to store $$$map$$$ of strings, which we can get and iterate through all the strings using $$$bfs$$$."
         },
         {
             "title": "Solution",

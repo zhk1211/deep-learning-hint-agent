@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "$$$\\textbf{Read the Hints and Assumptions before reading this.}$$$\nTutorial is loading..."
+            "content": "$$$\\textbf{Read the Hints and Assumptions before reading this.}$$$\n1610B - Калиндромный массив\nIf the array is already a palindrome the answer is Yes. Otherwise, let's find the minimum $$$i$$$ that $$$a_i \\neq a_{n + 1 - i}$$$.\nWe can prove that we have to remove either $$$a_i$$$ or $$$a_{n + 1 - i}$$$ in order the make the array palindrome.\nImagine it's possible to make the array palindrome by removing all appearances of $$$x$$$. $$$x \\neq a_i, a_{n + 1 - i}$$$\nThe number of appearances of $$$x$$$ before $$$i$$$ is equal to the number of appearances of $$$x$$$ after $$$n + 1 - i$$$. So in order to make the array palindrome, $$$a_i$$$ must be equal to $$$a_{n + 1 - i}$$$.\nSo we just have to check if the array will be palindrome after removing all appearances of $$$a_i$$$ or after removing all appearances of $$$a_{n + 1 - i}$$$.\nTime complexity: $$$\\mathcal{O}(n)$$$"
         },
         {
             "title": "Implementation",

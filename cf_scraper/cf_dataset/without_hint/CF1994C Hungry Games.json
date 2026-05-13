@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1994C - Hungry Games\nWe'll solve the problem by dynamic programming. Let $$$dp[i]$$$ — the number of good subsegments with left boundary at $$$i$$$. We will count $$$dp$$$ from the end, for each $$$i$$$ we will find such a minimum $$$j$$$ that the sum on the subsegment $$$[i; j]$$$ is greater than $$$x$$$. If there is no such $$$j$$$, then all right bounds are good, otherwise $$$dp[i] = dp[j + 1] + j - i$$$. To search for $$$j$$$, we can use a binary search on prefix sums. The answer will be the sum of all $$$dp$$$."
         }
     ]
 }

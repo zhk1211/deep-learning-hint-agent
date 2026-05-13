@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1619C - Wrong Addition\nLet's compute the answer to the array $$$b$$$, where $$$b_ k$$$ is the digit at the $$$k$$$ position in the number we are looking for. Let $$$i$$$ be the position of the last digit in number $$$a$$$, $$$j$$$ be the position of the last digit in number $$$s$$$. Then denote $$$x = a_i$$$, $$$y = s_j$$$, and consider the cases:\nif $$$x \\le y$$$, then the sum of $$$a_i + b_i$$$ was exactly $$$s_i$$$, then $$$b_i = y - x$$$.\nif $$$x \\gt y$$$, then the sum $$$a_i + b_i$$$ was greater than $$$9$$$ and we need to look at the next digit of the number $$$s$$$. If there isn't one, we can't get the answer — we'll output\n-1\n. Otherwise we recalculate $$$y = 10 \\cdot s_{j - 1} + s_j$$$ and reduce $$$j$$$ by one.\nif now $$$y \\ge 10$$$ and $$$y \\le 18$$$, then $$$b_i = y - x$$$. Otherwise, we deduce\n-1\n, since we cannot get more than $$$9 + 9 = 18$$$ when adding two digits, and the cases where $$$a_i + b_i \\lt 10$$$ have already been considered before.\nAfter considering the cases, reduce $$$i$$$ and $$$j$$$ by one and repeat the checks as long as $$$i  \\gt  0$$$ or $$$j  \\gt  0$$$. In the situation where $$$j = 0$$$, but $$$i  \\gt  0$$$, we will still have uncheked digits of number $$$a$$$, so we will also output\n-1\n. Otherwise, we output an array with the answer without leading zeros."
         },
         {
             "title": "Solution",

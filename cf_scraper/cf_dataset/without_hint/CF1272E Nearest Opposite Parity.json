@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1272E - Nearest Opposite Parity\nIn this problem, we have directed graph consisting of $$$n$$$ vertices (indices of the array) and at most $$$2n-2$$$ edges. Some vertices have the value $$$0$$$, some have the value $$$1$$$. Our problem is to find for every vertex the nearest vertex having the opposite parity. Let's try to solve the problem for odd numbers and then just run the same algorithm with even numbers.\nWe have multiple odd vertices and we need to find the nearest even vertex for each of these vertices. This problem can be solved with the standard and simple but pretty idea. Let's inverse our graph and run a multi-source breadth-first search from all even vertices. The only difference between standard bfs and multi-source bfs is that the second one have many vertices at the first step (vertices having zero distance).\nNow we can notice that because of bfs every odd vertex of our graph has the distance equal to the minimum distance to some even vertex in the initial graph. This is exactly what we need. Then just run the same algorithm for even numbers and print the answer.\nTime complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution",

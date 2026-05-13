@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1690F - Shifting String\nTo begin with, let's understand why the string will return to its original form. In fact, the graph that the permutation sets consists of simple cycles and it turns out that after a certain number of operations, each character will return to its place.\nConsider each cycle as a string that is cyclically shifted every turn. It may seem that the answer is  — $$$lcm$$$ (the smallest common multiple) of the cycle lengths, but to become equal to the initial string, it is not necessary to go through the entire cycle. The constraints allow us to calculate the length of the minimum suitable shift $$$k_j$$$ in $$$\\mathcal{O}(len^2)$$$, where $$$len$$$ is the length of the cycle, so just iterate over the desired shift. Note that after $$$k_j$$$ operations, the cycle will return to its original form and this will happen again after $$$k_j$$$ operations.\nThe answer will be $$$lcm$$$ of all $$$k_j$$$, since each cycle individually comes to its original form after the number of operations is a multiple of its $$$k_j$$$."
         },
         {
             "title": "Solution",

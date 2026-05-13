@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1857A - Array Coloring\nLet's analyze the impact of adding odd or even numbers to a set with sum $$$S$$$:\nIf you add an even element to the set, the parity of $$$S$$$ remains unchanged.\nIf you add an odd element to the set, the parity of $$$S$$$ changes.\nBased on this observation, let's focus on the coloring of odd elements in the array. The number of odd elements colored in blue and the number of odd elements colored in red must have the same parity for a valid coloring. This is because we need to divide the odd elements into two parts (blue and red).\nTo achieve the same parity for both blue and red odd elements, the total number of odd elements in the array must be even. If it is not even, we won't be able to create two sets with the same parity.\nHence, the answer is \"YES\" if the number of odd elements in the array is even, and \"NO\" otherwise."
         }
     ]
 }

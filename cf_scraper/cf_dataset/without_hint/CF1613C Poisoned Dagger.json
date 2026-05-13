@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1613C - Poisoned Dagger\nLet's find out the total damage for a fixed value of $$$k$$$. Since the effect of the poison from the $$$i$$$-th attack deals damage $$$\\min(k, a_{i+1} - a_i)$$$ seconds for $$$i  \\lt  n$$$ and $$$k$$$ seconds for $$$i = n$$$, then the total damage is $$$k +\\sum\\limits_{i=1}^{n-1}{\\min(k, a_{i+1} - a_i)}$$$. We can see that the higher the value of $$$k$$$, the greater the total sum. So we can do a binary search on $$$k$$$ and find the minimum value when the sum is greater than or equal to $$$h$$$."
         },
         {
             "title": "Solution (Neon)",

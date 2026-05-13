@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1808E2 - Minibuses on Venus (medium version)\nFirst, read the editorial of problem E1. This section is a continuation and improvement of ideas from the previous section.\nLet us improve the solution for $$$O(nk^3)$$$. To do this, note that the transitions from $$$i$$$ to $$$i + 1$$$ can be given by a matrix $$$g$$$ of size $$$k \\times k$$$. Then by multiplying $$$f[i]$$$ (i.e., multiplying exactly $$$1 \\times k$$$ matrix of the form $$$[f[i][0], f[i][1], \\ldots, f[i][k - 1]]$$$) by this $$$g$$$ matrix, we get $$$f[i + 1]$$$.\nNow note that for a fixed sum $$$S$$$ modulo $$$k$$$, the matrix $$$g$$$ will be the same for any $$$i$$$. Then let us take $$$g$$$ to the power of $$$n$$$. Then $$$f[n]$$$ can be obtained by calculating $$$f[0] \\cdot g^n$$$. We can use multiplication algorithm for $$$O(k^3 \\log n)$$$ to get the matrix powered $$$n$$$."
         }
     ]
 }

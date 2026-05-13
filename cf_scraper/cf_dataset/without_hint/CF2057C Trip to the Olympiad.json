@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2057C - Trip to the Olympiad\nLet's take a look at the $$$i$$$-th bit. If it appears in all numbers or in none, it contributes nothing to the answer; however, if it appears in one or two numbers, it adds $$$2^{i + 1}$$$ to the answer.\nTherefore, let's examine the most significant bit, let's say the $$$k$$$-th bit, which differs in the numbers $$$l$$$ and $$$r$$$, and note that the more significant bits do not affect the outcome, so the answer cannot exceed $$$T = 2 \\cdot (1 + 2 + \\ldots + 2^k)$$$.\nThus, let $$$x$$$ be the only number that is divisible by $$$2^k$$$ in the range $$$[l, r]$$$. Take $$$y = x - 1$$$ and $$$z$$$ as any number in the range $$$[l, r]$$$ that is neither $$$x$$$ nor $$$y$$$. Notice that by choosing such a triplet of numbers, the value of the expression $$$(x \\oplus y) + (x \\oplus z) + (y \\oplus z)$$$ is exactly equal to $$$T$$$."
         },
         {
             "title": "Implementation",

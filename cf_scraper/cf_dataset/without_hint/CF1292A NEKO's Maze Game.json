@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1292A - NEKO's Maze Game\nSIHanatsuka - REmorse\nThe main observation is that, it is possible to travel from $$$(1, 1)$$$ to $$$(2, n)$$$ if and only if there exist no pair of forbidden cell $$$(1, a)$$$ and $$$(2, b)$$$ such that $$$|a - b| \\le 1$$$.\nTherefore, to answer the query quickly, for every $$$d$$$ from $$$-1$$$ to $$$1$$$, one should keep track of the number of pair $$$(a, b)$$$ such that:\n$$$(1, a)$$$ and $$$(2, b)$$$ are both forbidden.\n$$$a - b = d$$$.\nOne of the methods to do this is: after a cell $$$(x, y)$$$ has been swapped, check for all cells $$$(3-x, y-1)$$$, $$$(3-x, y)$$$, $$$(3-x, y+1)$$$ and update the number of pairs based on the status of those cells and new status of $$$(x, y)$$$. Since $$$n \\le 10^5$$$, the status of all cells can be easily kept in a 2D boolean array, and accessed in $$$\\mathcal{O}(1)$$$ time complexity.\nTotal complexity: $$$\\mathcal{O}(n + q)$$$."
         },
         {
             "title": "Video editorial",

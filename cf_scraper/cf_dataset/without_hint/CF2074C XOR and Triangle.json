@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "2074C - XOR and Triangle\nLet us interpret the triangle inequality in terms of bitmasking. Then, we get the following. (One is omitted as it is implied in the constraints.)\n$$$x+y \\gt x \\oplus y$$$, $$$(x \\oplus y)+2(x \\,\\&\\, y) \\gt  x \\oplus y$$$, $$$x\\,\\&\\,y \\gt 0$$$;\n$$$y+(x \\oplus y) \\gt x$$$, $$$y+(x + y) - 2(x\\,\\&\\,y) \\gt  x$$$, $$$y  \\gt  x\\,\\&\\,y$$$.\nIn other words, $$$y$$$ satisfies the following conditions.\n$$$y$$$ contains at least one bit turned on in $$$x$$$;\n$$$y$$$ contains at least one bit\nnot\nturned on in $$$x$$$.\nThe smallest values of $$$y$$$ that satisfy this have exactly two bits turned on; one in $$$x$$$ and one not in it. Therefore, if one such value exists, then a smallest one can be found in $$$\\mathcal{O}(\\log ^2 x)$$$ time by simply bruteforcing all integers with two bits turned on. If any one of them is less than $$$x$$$, then it satisfies all conditions.\nThe problem has been solved in $$$\\mathcal{O}(\\log ^2 x)$$$ per test case. While there exist ways to solve it in $$$\\mathcal{O}(\\log x)$$$ per test case, they were not required."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1433C - Dominant Piranha\nIf all the piranhas have the same size then the answer is\n-1\n. Otherwise, there are at least two different sizes of piranhas and the answer always exists. Claim that the answer is such a piranha with the maximum size that one of the adjacent piranhas has the size less than a maximum.\nWhy is it true and why the answer always exists? First, if the piranha with the maximum size eats some other piranha, it becomes the only maximum in the array and can eat all other piranhas. Why is there always such a pair of piranhas? Let's change our array a bit: replace every maximum with $$$1$$$ and every non-maximum with $$$0$$$. There is always some $$$01$$$-pair or $$$10$$$-pair in such array because we have at least two different elements."
         },
         {
             "title": "Solution",

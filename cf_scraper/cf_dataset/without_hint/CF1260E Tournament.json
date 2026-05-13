@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1260E - Tournament\nIf our friend is the strongest boxer, he wins without any bribing. Otherwise, we have to bribe the strongest boxer — and he can defeat some $$$\\frac{n}{2} - 1$$$ other boxers (directly or indirectly). Suppose we chose the boxers he will defeat, then there is another strongest boxer. If our friend is the strongest now, we don't need to bribe anyone; otherwise we will bribe the strongest remaining boxer again, and he can defeat $$$\\frac{n}{4} - 1$$$ other boxers, and so on.\nThe only thing that's unclear is which boxers should be defeated by the ones we bribe. We may use dynamic programming to bribe them: $$$dp_{i, j}$$$ is the minimum cost to bribe $$$i$$$ boxers so that all boxers among $$$j$$$ strongest ones are either bribed or defeated by some bribed boxer. For each value of $$$i$$$ we know the maximum amount of boxers that are defeated by $$$i$$$ bribed boxers, so the transitions in this dynamic programming are the following: if we can't defeat the next boxer \"for free\" (our bribed boxers have already defeated as many opponents as they could), we have to bribe him; otherwise, we either bribe him or consider him defeated by some other boxer.\nOverall complexity is $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution (Roms)",

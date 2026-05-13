@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1102C - Doors Breaking and Repairing\nLet's consider two cases:\nIf $$$x  \\gt  y$$$ then the answer is $$$n$$$ because we can make opposite moves to the Slavik's moves and it always will reduce durability of some door (so at some point we will reach the state when all doors will have durability $$$0$$$).\nOtherwise $$$x \\le y$$$ and we have to realize the optimal strategy for us. If we have some door with durability $$$z \\le x$$$ then let's break it immediately (why shouldn't we do this?). If we don't do it then Slavik will repair this door during his move. So what Slavik will do now? He will repair some door. Which door he has to repair? Of course the one with durability $$$z \\le x$$$ because otherwise we will break it during our next move. So we can realize that doors with durability $$$z  \\gt  x$$$ are not interesting for us because Slavik will make opposite moves to our moves. And what is the answer if the number of doors with durability $$$z \\le x$$$ equals to $$$cnt$$$? It is $$$\\lceil\\frac{cnt}{2}\\rceil$$$."
         },
         {
             "title": "Solution",

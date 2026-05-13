@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1073C - Vasya and Robot\nDenote $$$d = |x| + |y​|$$$. If $$$d  \\gt  n$$$, then the answer is -1, since the robot will not have the time to reach $$$(x, y)$$$ cell in $$$n$$$ steps. Also, if $$$d$$$ and $$$n$$$ have different parity, then the answer is also -1, as in one move the robot changes the parity of the sum of its coordinates.\nIn all other cases, the answer exists. Let's use binary search to solve this problem. Consider all segments of length $$$len$$$. For a fixed length of the segment $$$len$$$, let's iterate over the position of the beginning of the segment $$$l$$$. At the same time, we will maintain the cell that the robot will stop at if it execute all commands, except commands with indices $$$l, l + 1, \\dots, l + len - 1$$$. We denote this position as $$$(x_0, y_0)$$$. We also calculate the distances from the cell $$$(x_0, y_0)$$$ to the cell $$$(x, y)$$$ — the value $$$d_0 = |x - x_0| + |y ​​- y_0|$$$. If there is at least one position of the beginning of the segment for which $$$d_0 \\le len$$$, then we can change the segment of length $$$len$$$ so that the robot comes to the $$$(x, y)$$$ cell, otherwise it can't."
         },
         {
             "title": "Solution (Ajosteen)",

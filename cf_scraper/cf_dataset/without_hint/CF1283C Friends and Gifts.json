@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1283C - Friends and Gifts\nIn this problem, we need to print the permutation without fixed points (without values $$$p_i = i$$$) but some values are known in advance. Let's consider the permutation as a graph. We know that the permutation is the set of non-intersecting cycles. In this problem, we are given such a graph but some edges are removed. How to deal with it?\nFirstly, let's find isolated vertices in the graph. Let its number be $$$cnt$$$. If $$$cnt=0$$$ then all is ok and we skip the current step. If $$$cnt=1$$$ then let's pin this isolated vertex to any vertex to which we can pin it. Otherwise, $$$cnt \\gt 1$$$ and we can create the chine consisting of all isolated vertices.\nNow $$$cnt=0$$$ and we can finally construct the remaining part of the graph. We can notice that we have the same number of vertices with zero incoming and zero outcoming degrees. And because we got rid of all possible loops in the graph, we can match these vertices as we want.\nTime complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution",

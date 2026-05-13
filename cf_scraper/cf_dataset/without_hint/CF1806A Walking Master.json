@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1806A - Walking Master\nHint 1: The value of $$$b$$$ is always non-decreasing, and the value of $$$a-b$$$ is always non-increasing.\nIt is possible to move from $$$(a,b)$$$ to $$$(c,d)$$$ if and only if $$$d\\ge b$$$ and $$$a-b\\ge c-d$$$, since the value of $$$b$$$ is always non-decreasing and the value of $$$a-b$$$ is always non-increasing.\nIf it is possible, the answer is $$$(d-b)+((a+d-b)-c)$$$. One possible way is $$$(a,b)\\to (a+d-b,d)\\to (c,d)$$$.\nAnother way to understand this: $$$(a,b)\\to (a+d-b,d)\\to (c,d)$$$ is always a valid path if it is possible to move from $$$(a,b)$$$ to $$$(c,d)$$$. So first let $$$a\\leftarrow a+(d-b)$$$ and $$$b\\leftarrow d$$$, then the answer only depends on $$$a$$$ and $$$c$$$."
         }
     ]
 }

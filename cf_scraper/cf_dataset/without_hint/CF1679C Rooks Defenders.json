@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1679C - Rooks Defenders\nConsider some subrectangle. Note that each its cell is attacked by some rook if and only if there is at least one rook in each row $$$x$$$ ($$$x_1 \\le x \\le x_2$$$) or in each column $$$y$$$ ($$$y_1 \\le y \\le y_2$$$).\nNow we will solve the problem using this criterium. Let's create a set $$$freeRows$$$ where we will store indices of rows in which there are\nno\nrooks. Similarly, we will store indices of columns in which there are\nno\nrooks in a set $$$freeCols$$$. If we have to answer the query of the third type, we have to check if there is at least one $$$x$$$ in the $$$freeRows$$$ set such that $$$x_1 \\le x \\le x_2$$$ or there is at least one $$$y$$$ in the $$$freeCols$$$ set such that $$$y_1 \\le y \\le y_2$$$. If we will store these two sets sorted, we can perform this type of query in $$$\\mathcal{O}(\\log n)$$$ using binary search.\nNow we're going to answer queries of the first and the second types. Let's store for each row and column, how many rooks are there in this row or column. When we add a new rook we should increment this counters for the corresponding row and column and remove the row from $$$freeRows$$$ set and the column from $$$freeColumns$$$ set. When we remove a rook we should decrement counters for its row and column and if there is no more rooks in the row or in the column, we should add their indices to $$$freeRows$$$ or $$$freeCols$$$.\nTime complexity: $$$\\mathcal{O}(q \\log n)$$$."
         }
     ]
 }

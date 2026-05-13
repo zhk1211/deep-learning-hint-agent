@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1866D - Digital Wallet\nFirst, notice that since the initial value of all elements are positive, it is always optimal to always choose an element that has not been chosen before in each operation.\nLet's look at the $$$N$$$ arrays as a grid of $$$N$$$ rows and $$$M$$$ columns. We can solve this problem by iterating each column from left to right and using dynamic programming. Define the following:\n$$$\\text{dp}[i][j]$$$: the maximum money Chaneka can earn by only taking the elements of the first $$$i$$$ columns in $$$j$$$ operations.\nWhen we iterate a new column $$$i$$$, we can choose to choose $$$c$$$ elements in that column for some value $$$c$$$ ($$$0\\leq c\\leq N$$$). If we choose to choose $$$c$$$ elements in that column, it is always the most optimal to choose the $$$c$$$ biggest elements in that column.\nNotice that if we only consider the first $$$i$$$ columns, in the optimal strategy, we must do a minimum of $$$i-K+1$$$ operations and a maximum of $$$i$$$ operations. So there are only a maximum of $$$K$$$ different values of $$$j$$$ we need to consider when calculating all values of $$$\\text{dp}[i][j]$$$ for each new column $$$i$$$. For each $$$\\text{dp}[i][j]$$$, there are only $$$N+1$$$ possibilities for the number of elements we choose in column $$$i$$$, and each of them can be handled in $$$O(1)$$$.\nTime complexity: $$$O(NMK)$$$"
         }
     ]
 }

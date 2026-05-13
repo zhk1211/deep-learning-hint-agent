@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1644C - Increase Subarray Sums\nConsider the naive solution.\nIterate over $$$k$$$. Then iterate over the segment that will have the maximum sum. Let its length be $$$l$$$. Since $$$x$$$ is non-negative, it's always optimal to increase the elements inside the segment. So if $$$k \\le l$$$, then the sum of the segment increases by $$$k \\cdot x$$$. Otherwise, only the elements inside the segment will affect the sum, thus, it will increase by $$$l \\cdot x$$$. That can be written as $$$min(k, l) \\cdot x$$$.\nNotice that we only care about two parameters for each segment. Its length and its sum. Moreover, if there are several segments with the same length, we only care about the one with the greatest sum.\nThus, the idea of the solution is the following. For each length, find the segment of this length with the greatest sum. Then calculate $$$f(k)$$$ in $$$O(n)$$$ by iterating over the length of the segment.\nOverall complexity: $$$O(n^2)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

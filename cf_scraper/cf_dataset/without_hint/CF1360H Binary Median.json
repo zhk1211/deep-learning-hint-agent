@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1360H - Binary Median\nIf we did not delete the strings, then the median would be equal to the binary notation of $$$2^{(m-1)}$$$. After deleting $$$n$$$ strings, the median cannot change (numerically) by more than $$$2 \\cdot n$$$.\nLet's start with the median $$$2^{(m-1)}$$$ and each time decrease it by one if there are fewer not deleted smaller numbers than not deleted large numbers. Similarly, you need to increase the median by one, otherwise. The algorithm stops when the result is the median of the current set. All these steps will run at most $$$200$$$ times."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2062D - Balanced Tree\nFirst, assume that the values of $$$a_i$$$ have already been determined and $$$1$$$ is the root of the tree. For any edge connecting $$$x$$$ and $$$\\text{fa}(x)$$$, to make $$$a_x=a_{\\text{fa}(x)}$$$, the only useful operation is to set $$$u=x,v=\\text{fa}(x)$$$ or $$$v=x,u=\\text{fa}(x)$$$. After the operation, $$$a_x-a_{\\text{fa}(x)}$$$ changes by $$$1$$$, so you will always perform exactly $$$|a_x - a_{\\text{fa}(x)}|$$$ operations to make $$$a_x=a_{\\text{fa}(x)}$$$. You will perform the above operation for each edge to make all nodes' values equal. Among those operations, the connected component containing $$$1$$$ will increase by $$$\\sum \\max(a_u - a_{\\text{fa}(u)}, 0)$$$ times. Thus, the final answer is $$$a_1 + \\sum \\max(a_u - a_{\\text{fa}(u)}, 0)$$$.\nNow, consider how to choose the values of $$$a$$$. If $$$r_u = +\\infty$$$, then $$$a_u$$$ should always be no less than the maximum value of its child nodes $$$a_v$$$ (why? Because decreasing $$$a_u$$$ by $$$1$$$ can only reduce $$$a_u - a_{\\text{fa}(u)}$$$ by at most $$$1$$$, but it will increase $$$a_v - a_u$$$ by at least $$$1$$$). So $$$a_u=\\min(r_u,\\max(l_u,\\max\\limits_{\\text{fa}(v)=u}a_v))$$$."
         }
     ]
 }

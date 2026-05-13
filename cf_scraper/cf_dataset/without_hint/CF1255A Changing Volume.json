@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1255A - Changing Volume\nNotice that if at some moment we increase the volume and at some moment we decrease the volume, we can remove those two actions and replace them with at most two new actions that are both increasing or decreasing (for instance, $$$+5$$$ $$$-1$$$ can be replaced with $$$+2$$$ $$$+2$$$; $$$+2$$$ and $$$-2$$$ can be replaced with nothing and $$$+2$$$ and $$$-1$$$ can be replaced with $$$+1$$$). We can see that replacing like this will not make the volume goes below zero at any moment. So, we will increase the volume all the time, or decrease all the time.\nAssume that we only increase the volume. It can be proved that for any set consists of only $$$1$$$s and $$$2$$$s and the sum of its elements is greater than or equal to $$$5$$$, it has a subset which its elements sums to $$$5$$$. This means that if we use $$$+1$$$ and $$$+2$$$ to increase the volume by at least $$$5$$$, we can replace some of those actions with a $$$+5$$$. Hence, it is optimal to increase the volume by $$$5$$$ until the gap between $$$a$$$ and $$$b$$$ is less than $$$5$$$, then the remaining job is trivial."
         }
     ]
 }

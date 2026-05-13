@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1857C - Assembly via Minimums\nSuppose we have an array $$$a$$$ that we want to construct, with elements $$$a_1, a_2, \\dots, a_n$$$. To simplify the process, let's assume that the elements of $$$a$$$ are sorted in non-decreasing order, meaning $$$a_1 \\le a_2 \\le \\dots \\le a_n$$$.\nLet's start with $$$a_1$$$. Since the elements of $$$a$$$ are sorted, the pairs $$$(a_1, a_2), (a_1, a_3), \\dots, (a_1, a_n)$$$ will have $$$a_1$$$ as the smallest element in each pair. Therefore, the number of occurrences of $$$a_1$$$ in array $$$b$$$ will be $$$n-1$$$.\nMoving on to $$$a_2$$$, we already know that $$$a_1$$$ appears $$$n-1$$$ times in $$$b$$$. Since the elements of $$$a$$$ are sorted, all pairs involving $$$a_2$$$ will have $$$a_2$$$ as the second smallest element. This means $$$a_2$$$ will appear $$$n-2$$$ times in array $$$b$$$.\nWe continue this process for each element $$$a_i$$$ in $$$a$$$. The number of occurrences of $$$a_i$$$ in array $$$b$$$ will be $$$n-i$$$.\nWe can't determine the exact value of $$$a_n$$$ , because it won't be written to array b. Therefore, for $$$a_n$$$ we can choose any number in the range $$$[a_{n-1};10^9]$$$.\nIn case there are multiple elements $$$b_i$$$ in array $$$b$$$ that satisfy the condition for a particular $$$a_i$$$, we choose the smallest $$$b_i$$$. This greedy approach works, because we are constructing $$$a$$$ in non-decreasing order.\nThe complexity is $$$O(n^2 \\log n)$$$."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1316C - Primitive Primes\nWe will prove a simple result thereby giving one of the power that satisfies the constraint:\nWe know that cumulative gcd of coefficients is one in both cases. Hence no prime divides all the coefficients of the polynomial. We call such polynomials primitive polynomials. This question in a way tells us that the product of two primitive polynomials is also a primitive polynomial.\nLet $$$x_i$$$ be the lowest power of $$$x$$$ in $$$f(x)$$$ whose coefficient is coprime to given prime $$$p$$$, and $$$x_j$$$ be the lowest power of $$$x$$$ in $$$g(x)$$$ whose coefficient is coprime to given prime $$$p$$$. Since both such coefficients exist, the answer is proved to exist.\nWhen we multiply $$$f(x)$$$ and $$$g(x)$$$, we get the following as the coefficient for $$$x^{i + j}$$$,\n$$$(a_0 * b_{i + j} + a_1 * b_{i + j - 1} + ...) + a_i * b_j + (a_{i + 1} * b_{j - 1} + a_{i + 2} * b_{j - 2} +...)$$$\nWe see the terms inside parentheses are all divisible by the prime $$$p$$$, and only $$$a_i * b_j$$$ is not divisible by $$$p$$$. So, we can say that the coefficient of $$$x^{i+j}$$$ is not divisible by $$$p$$$.\nTime complexity : $$$O(n+m)$$$"
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1096G - Lucky Tickets\nThe naive solution would be $$$dp_{x, y}$$$ — the number of sequences of allowed digits with length $$$x$$$ and sum $$$y$$$. We compute it for $$$x = \\frac{n}{2}$$$ and for every possible $$$y$$$, and the answer is $$$\\sum_y dp_{\\frac{n}{2}, y}^2$$$.\nLet's speed this up. Let's denote the following polynomial: $$$f(x) = \\sum_{i = 0}^{9} c_i x^i$$$, where $$$c_i = 1$$$ if $$$i$$$ is an allowed digit, otherwise $$$c_i = 0$$$.\nIt's easy to see that the coefficients of $$$f(x)$$$ are equal to the values of $$$dp_{1, y}$$$. Using mathematical induction we may prove that the coefficients of $$$(f(x))^a$$$ are equal to $$$dp_{a, y}$$$.\nSo now we need to compute $$$(f(x))^{\\frac{n}{2}}$$$. There are two possible ways to do this that result in $$$O(n \\log n)$$$ complexity. The first option is to apply binary exponentiation with NTT polynomial multiplication. The second option is to use the fact that if we apply NTT to a polynomial, we get a set of its values in some points. So, if we exponentiate these values, we get a set of values of exponentiated polynomial in the same points. So we may apply NTT to $$$f(x)$$$ treating it as a polynomial of degree $$$5n$$$, raise each resulting value to the power of $$$\\frac{n}{2}$$$ and apply inverse transformation."
         },
         {
             "title": "Solution 1 (adedalic)",

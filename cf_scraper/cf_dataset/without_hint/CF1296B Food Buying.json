@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1296B - Food Buying\nLet's do the following greedy solution: it is obvious that when we buy food that costs exactly $$$10^k$$$ for $$$k \\ge 1$$$, we don't lose any burles because of rounding. Let's take the maximum power of $$$10$$$ that is not greater than $$$s$$$ (let it be $$$10^c$$$), buy food that costs $$$10^c$$$ (and add this number to the answer) and add $$$10^{c-1}$$$ to $$$s$$$. Apply this process until $$$s  \\lt  10$$$ and then add $$$s$$$ to the answer.\nTime complexity: $$$O(\\log s)$$$ per test case."
         },
         {
             "title": "Solution",

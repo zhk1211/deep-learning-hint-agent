@@ -26,7 +26,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "2184G - Nastiness of Segments\nFix the left boundary $$$l$$$. Consider two functions of $$$d \\in [0, r-l]$$$:\n$$$f(d) = d$$$ — strictly increases.\n$$$g(d) = \\min(a_l, a_{l+1}, \\ldots, a_{l+d})$$$ — is non-increasing.\nThe problem condition is equivalent to finding $$$d$$$ such that $$$f(d) = g(d)$$$. Since one function strictly increases and the other is non-increasing, they can have\nat most one\nintersection point on the integers. Consequently, the sought value for the segment does not exceed $$$1$$$.\nTo find this point, note: if a solution exists, it is the minimum $$$d$$$ such that $$$f(d) \\ge g(d)$$$. The difference $$$h(d) = f(d) - g(d)$$$ is monotonic, so we can apply binary search.\nTo solve, we use binary search and a segment tree. We search for the minimum $$$d$$$ with binary search, calculating $$$\\min$$$ on the segment $$$[l,\\ l+d]$$$ using the segment tree at each iteration. Complexity: $$$O(n + q \\log^2 n)$$$. To get rid of the squared logarithm, we use a descent on the segment tree. We start from the root and at each step determine whether the intersection point can be in the left child. To do this, we check if the sign of the function $$$h(c_l)$$$ is not equal to the sign of the function $$$h(c_r)$$$, where $$$[c_l,\\ c_r]$$$ is the segment covered by the left child. If the signs are equal, then the sought point lies in the right child. This allows finding $$$d$$$ in $$$O(\\log n)$$$.\nFinal complexity: $$$O(n + q \\log n)$$$."
         },
         {
             "title": "Solution",

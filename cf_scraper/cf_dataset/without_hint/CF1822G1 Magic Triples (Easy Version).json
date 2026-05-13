@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1822G1 - Magic Triples (Easy Version)\nLet $$$M = \\max {a_i}$$$, obviously $$$M\\le 10^6$$$, $$$cnt[x]$$$ — the number of occurrences of the number $$$x$$$ in the array $$$a$$$.\nSeparately, let's count the number of\nmagic\ntriples for $$$b=1$$$. The total number of such triples will be $$$\\sum_{i=1}^{n}{(cnt[a_i] - 1) \\cdot (cnt[a_i] - 2)}$$$.\nNext, we will count $$$b\\ge 2$$$. Note that $$$a_i \\cdot b \\cdot b = a_k$$$, so $$$b \\le \\sqrt{a_k /a_i} \\le \\sqrt{M}$$$. Thus, after sorting through all possible $$$i$$$ from $$$1$$$ to $$$n$$$, as well as all $$$b\\le\\sqrt{M}$$$ and adding $$$cnt[a_i\\cdot b] \\cdot cnt[a_i\\cdot b\\cdot b]$$$ to the answer, we get a solution for $$$O(\\sqrt{M}\\cdot n)$$$."
         },
         {
             "title": "Solution",

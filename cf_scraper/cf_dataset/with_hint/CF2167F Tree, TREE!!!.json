@@ -26,7 +26,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2167F - Tree, TREE!!!\nLet us define $$$sz_{i}$$$ = subtree size of $$$i$$$ and $$$f(i) = |S_i|$$$.\nLet's first proof why\nLCA\nis connected to the $$$sz_{i}$$$. If $$$sz_{i} \\geq k$$$, it implies that we can choose $$$k - 1$$$ nodes in the subtree of $$$i$$$ other than $$$i$$$ and $$$i$$$ itself, it gives $$$i$$$ as a result.\nNow that we know the condition, our task is now just to derive the formula to calculate. Instead of calculating $$$f(i)$$$ independently, we will focus on the contribution of node $$$i$$$ in the sum.\nTo calculate the contribution of $$$i$$$ in the sum, it is equal to checking, in how many roots($$$1 \\ldots n$$$), $$$sz_{i} \\geq k$$$ holds. We will divide it into two parts: subtree of $$$i$$$ and outside of subtree of $$$i$$$. If $$$sz_{i} \\geq k$$$, then we can choose any node outside of subtree of $$$i$$$ as a root, and still $$$sz_{i} \\geq k$$$ holds, because we are not changing subtree itself. Now let's consider outside of it, if $$$n - sz_{i} \\geq k$$$ holds, then we can choose any node in the subtree of $$$i$$$ as a root, and still $$$sz_{i} \\geq k$$$ holds."
         },
         {
             "title": "Solution for bonus",

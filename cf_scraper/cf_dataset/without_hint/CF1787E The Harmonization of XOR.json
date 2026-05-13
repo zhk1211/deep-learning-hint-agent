@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1787E - The Harmonization of XOR\nFirst, we observe that three subsequences can combine into one, so we only need to care about the maximum number of subsequences.\nMake subsequences in the form of $$$[a,a \\oplus x]$$$ as much as possible, leave $$$[x]$$$ alone if possible, and the rest becomes a subsequence. This would be optimal.\nProof:\nLet $$$B$$$ be the highest bit of $$$x$$$, i.e. the $$$B$$$-th bit of $$$x$$$ is on.\nLet $$$M$$$ be the number of numbers from $$$1$$$ to $$$n$$$ satisfying the $$$B$$$-th bit is on.\nThen the number of subsequences must be smaller than or equal to $$$M$$$, since there's at least one $$$B$$$-th-bit-on number in each subsequence.\nThese $$$B$$$-th-bit-on numbers XOR $$$x$$$ must be smaller than themselves, so we can always obtain $$$M$$$ subsequences."
         }
     ]
 }

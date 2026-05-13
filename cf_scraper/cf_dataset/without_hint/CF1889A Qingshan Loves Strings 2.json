@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1889A - Qingshan Loves Strings 2\nFirst, there is no solution when the number of\n0\n's and\n1\n's are different.\nOtherwise, the construction follows:\nIf the $$$s_1 \\ne s_n$$$ now, we can ignore $$$s_1$$$ and $$$s_n$$$, and consider $$$s_{2..n-1}$$$ as a new $$$s$$$. If $$$s$$$ is empty, the algorithm ends.\nNow $$$s_1=s_n$$$. If they are\n1\n, insert\n01\nto the front; otherwise, insert\n01\nto the end. Look at this example:\n\"\n110010\n\"\n\"\n1001\n\"\n\"\n01\n1001\n\"\n\"\n1100\n\"\n\"\n10\n\"\n\"\n\"\nThis operation is actually equivalent to moving the last\n1\nto the front or moving the first\n0\nto the end. For example, in step 2 to 4 above, we succeed moving the last\n1\nto the front. So in the worst case, every character in the string are moved, and we need $$$n$$$ moves.\nActually, we don't need $$$n$$$ moves but $$$n/2$$$ moves. Because for the\n0\nand\n1\ndeleted in the same operation, at most one of them need to be moved.\nTime complexity $$$O(n)$$$."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1847A - The Man who became a God\nLet us find $$$f(1,n)$$$. Now, you need to divide the array into more $$$K-1$$$ parts. When you split an array $$$b$$$ of size $$$m$$$ into two parts, the suspicion changes from $$$f(1,m)$$$ to $$$f(1,i)+f(i+1,m)$$$ ($$$1 \\leq i  \\lt  m$$$). Also, $$$f(1,m) = f(1,i) + |b_i - b_{i+1}| + f(i+1,m)$$$. Substituting this in previous change, we get $$$f(1,i) + |b_i - b_{i+1}| + f(i+1,m)$$$ changes to $$$f(1,i) + f(i+1,m)$$$. That is, $$$|b_i - b_{i+1}|$$$ gets subtracted. Now, to get minimum suspicion, we need to break the array $$$a$$$ at $$$i$$$ such that $$$|a_i-a_{i+1}|$$$ gets maximised.\nNow, we have array $$$dif$$$ of size $$$n-1$$$ where $$$dif_i = |a_{i+1} - a_i|$$$ ($$$ 1 \\leq i  \\lt  n$$$). We can solve the problem using any of the two approaches.\n- Find the least element in $$$dif$$$ and remove that from $$$dif$$$ and add that element to the answer. Do this exactly $$$k-1$$$ times. Time complexity - $$$O(n^2)$$$.\n- We can sort $$$dif$$$ and don't take $$$k-1$$$ maximum elements (or take first $$$(n-1)-(k-1)$$$ elements. Time Complexity - $$$O(n \\log n)$$$."
         },
         {
             "title": "solution",

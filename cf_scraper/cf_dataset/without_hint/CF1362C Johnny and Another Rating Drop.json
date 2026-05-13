@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1362C - Johnny and Another Rating Drop\nLet us start by calculating the result for $$$n = 2^k$$$. It can be quickly done by calculating the results for each bit separately and summing these up. For $$$i$$$-th bit, the result is equal to $$$\\frac{2^k}{2^{i}}$$$ as this bit is different in $$$d-1$$$ and $$$d$$$ iff $$$d$$$ is a multiple of $$$2^i$$$. Summing these up we get that the result for $$$n = 2^k$$$ is equal to $$$2^{k + 1} - 1 = 2n - 1$$$.\nHow to compute the answer for arbitrary $$$n$$$? Let us denote $$$b_1  \\gt  b_2  \\gt  \\ldots  \\gt  b_k$$$ as set bits in the binary representation of $$$n$$$. I claim that the answer is equal to the sum of answers for $$$2^{b_1}, 2^{b_2}, \\ldots, 2^{b_k}$$$. Why?\nWe can compute results for intervals $$$[0, 2^{b_1}], [2^{b_1}, 2^{b_1} + 2^{b_2}], \\ldots, [n - 2^{b_k}, n]$$$. We can notice that the result for interval $$$[s, s + 2^i]$$$, where $$$s$$$ is a multiple of $$$2^i$$$, is equal to the answer for $$$[0, 2^i]$$$ so we can just compute the results for intervals $$$[0, 2^{b_1}], [0, 2^{b_2}], \\ldots, [0, 2^{b_k}]$$$!\nThis allows us to compute the answer for arbitrary $$$n$$$ in $$$\\mathcal{O}(\\log n)$$$ – just iterate over all bits $$$b$$$ and add $$$2^{b + 1} - 1$$$ if $$$b$$$ is set. Equivalently we can just write down $$$2n - \\texttt{#bits set}$$$ as the answer.\nFinal complexity is $$$\\mathcal{O}(t \\log n)$$$."
         },
         {
             "title": "Solution",

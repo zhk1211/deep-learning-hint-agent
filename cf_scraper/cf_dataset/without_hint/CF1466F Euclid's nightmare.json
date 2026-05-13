@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1466F - Euclid's nightmare\nWe start by simplifying the task. Increase the length of all vectors by $$$1$$$, i.e., add additional dimension. For the vectors from $$$S$$$, the $$$m+1$$$-th character will be $$$1$$$ in those with exactly one character $$$1$$$. This way, all the vectors in $$$S$$$ will have $$$1$$$s on precisely two positions.\nWhen we have some items and some subsets of these items of size exactly $$$2$$$, it is intuitive to create a graph on these items. Thus we create a graph where vertices represent dimensions of our space, and edges are vectors given in the input.\nConsider a sum of a subset of vectors in the input. Notice that each such vector contributes $$$1$$$ to the sum at exactly $$$2$$$ positions. Thus the resulting vector has an even number of $$$1$$$.\nMoreover, consider any connected component in the constructed graph. Note that our vector needs to have an even number of $$$1$$$ in each connected component for the same reason. It turns out that we can represent any vector fulfilling this condition.\nFrom these observations, we conclude that all we care about are connected components of the graph. Thus the answer is the MST of this graph, where the value of an edge is its index. The number of achievable vectors is $$$2^{|S'|}$$$. Complexity is $$$\\mathcal{O}((n + m) \\log (n + m))$$$ or faster depending on the algorithm to find the MST."
         },
         {
             "title": "Solution",

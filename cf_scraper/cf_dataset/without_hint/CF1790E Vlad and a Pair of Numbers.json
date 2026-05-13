@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1790E - Vlad and a Pair of Numbers\nConsider the answer by bits. We know that if the $$$i$$$th bit of the number $$$x$$$ is zero, then these bits are the same for $$$a$$$ and $$$b$$$, otherwise they differ. Then let's first make $$$a = x$$$, $$$b = 0$$$. Note that $$$a\\oplus b$$$ is already equal to $$$x$$$, but $$$\\frac{a+b}{2}$$$ is not yet. So we need to dial another $$$x$$$ with matching bits, we will add them to both integers greedily, going from the highest bit to the lowest, skipping those bits that are already one in $$$a$$$. If after this algorithm $$$a$$$ and $$$b$$$ do not satisfy the conditions, then the answer is $$$-1$$$. In total, this solution works for $$$\\mathcal{O}(\\log{x})$$$.\nYou can see that in the solution above, we actually just added $$$\\frac{x}{2}$$$ to both numbers, which could only be done with one set of bits, so if the answer exists, the pair $$$a= \\frac{3\\cdot x}{2} fits$$$, $$$b = \\frac{x}{2}$$$."
         },
         {
             "title": "Solution",

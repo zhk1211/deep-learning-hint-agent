@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1627A - Not Shading\nThere are several cases to consider:\nIf all the cell are white, then it is impossible to perform any operations, so you cannot make any cell black. The answer is $$$-1$$$.\nIf the cell in row $$$r$$$ and column $$$c$$$ is already black, then we don't need to perform any operations. The answer is $$$0$$$.\nIf any of the cells in row $$$r$$$ are already black (that is, the cell we need to turn black shares a row with a black cell), then we can take this black cell and make row $$$r$$$. The same is true if any of the cells in column $$$c$$$ are already black. The answer is $$$1$$$.\nOtherwise, we claim the answer is $$$2$$$. Take any black cell and make its row black. This means that every column contains a black cell, so now we can take column $$$c$$$ are turn it black. Thus the answer is $$$2$$$.\nThis can be easily implemented in $$$\\mathcal{O}(nm)$$$ time per test case."
         },
         {
             "title": "Implementation (C++)",

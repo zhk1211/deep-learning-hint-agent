@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1176D - Recover it!\nFirstly, let's generate first $$$199999$$$ primes. It can be done in $$$O(n \\sqrt{n})$$$ almost naively (just check all elements in range $$$[2; 2750131]$$$). It also can be done with Eratosthenes sieve in $$$O(n)$$$ or $$$O(n \\log \\log n)$$$. We also can calculate for each number in this range the maximum its divisor non-equal to it (if this number is not a prime). And in other case we can calculate the index of this prime. Using all this information we can restore the array $$$a$$$.\nLet's maintain a multiset (a set in which multiple copies of the same element are allowed) of all elements in $$$b$$$. While it is not empty, let's take the maximum element from this set $$$mx$$$. If it is prime (we can check it using the information calculated earlier) then it is some $$$p_{a_i}$$$. Let's find the index of this prime ($$$a_i$$$) using calculated information, remove this element and $$$a_i$$$, push $$$a_i$$$ in $$$a$$$ and continue. Otherwise this element is not a prime and then it is some $$$a_i$$$. Let's remove it and its maximum divisor non-equal to it from the multiset, push $$$a_i$$$ in $$$a$$$ and continue."
         },
         {
             "title": "Solution",

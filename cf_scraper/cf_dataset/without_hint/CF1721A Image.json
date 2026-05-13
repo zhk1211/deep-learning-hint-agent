@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1721A - Image\nThere are some solutions based on case analysis, but in my opinion, the most elegant one is the following:\nLet's pick a color with the maximum possible number of pixels and repaint all other pixels into it. We will try to pick all pixels of some other color and repaint them in one operation, and we can ignore the constraint that we can repaint no more than $$$2$$$ pixels, since we will never need to repaint $$$3$$$ or $$$4$$$ pixels in one operation. So, the number of operations is just the number of colors other than the one we chosen, or just $$$d - 1$$$, where $$$d$$$ is the number of different colors in the image. To calculate this, we can use a set or an array of size $$$26$$$, where we mark which colors are present."
         },
         {
             "title": "Solution (BledDest)",

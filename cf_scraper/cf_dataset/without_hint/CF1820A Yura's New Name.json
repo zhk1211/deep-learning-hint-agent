@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1820A - Yura's New Name\nLet's see that if initial name contains \"\n_\n_\n\" as a substring, we have to add character \"\n^\n\" between these two characters because both smiley faces start and end with character \"\n^\n\" and don't contain \"\n_\n_\n\" as a substring. Also let's see that the resulting name have to start and end with character \"\n^\n\" and it's length have to be at least two.\nTo calculate the answer we have to count the number of indices $$$i$$$ such that $$$s_i = s_{i + 1} =$$$ \"\n_\n\". After that we have to increment the answer if the first character of the name equals to \"\n_\n\" and increment the answer if the last character of the name equals to \"\n_\n\".\nAlso we shouldn't forget about the case when the initials name equals to \"\n^\n\" — in this case the answer equals to one.\nTime complexity: $$$\\mathcal{O}(\\lvert s \\rvert)$$$."
         },
         {
             "title": "Solution",

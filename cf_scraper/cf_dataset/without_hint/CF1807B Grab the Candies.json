@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1807B - Grab the Candies\nLet $$$s_e$$$ be the total number of candies with all bags with an even number of candies, and $$$s_o$$$ — the total of all bags with an odd number of candies. If $$$s_e \\leq s_o$$$, then the answer is\nNO\n, because at the end Mihai (who takes only even numbers of candies) will have less candies than Bianca.\nOtherwise if $$$s_e  \\gt  s_o$$$ the answer is\nYES\n. The construction is to simply put all even bags first, and then all odd bags: since all even bags come before all odd bags and $$$s_e \\gt s_o$$$, at any point in time Mihai will have more candies than Bianca.\nThe time complexity is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution",

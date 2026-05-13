@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1525A - Potion-making\nSince you need $$$e$$$ liters of essence to be exactly $$$k\\ \\%$$$ of potion then we can write an equality: $$$\\frac{e}{e + w} = \\frac{k}{100}$$$ or $$$k = x \\cdot e$$$ and $$$100 = x \\cdot (e + w)$$$ for some integer $$$x$$$. Since we need to minimize $$$e + w$$$ and $$$x(e + w) = 100$$$, then we should maximize $$$x$$$, but both $$$k$$$ and $$$100$$$ should be divisible by $$$x$$$. In other words, taking $$$x$$$ as Greatest Common Divisor of $$$k$$$ and $$$100$$$ is optimal.\nAs a result $$$e + w = \\frac{100}{x} = \\frac{100}{\\gcd(k, 100)}$$$."
         },
         {
             "title": "Solution (adedalic)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1245A - Good ol' Numbers Coloring\nIf $$$\\gcd(a, b) \\neq 1$$$, print \"Infinite\". This is correct because any integer that isn't divisible by $$$\\gcd(a, b)$$$ will not be expressible in the form $$$ax + by$$$ since $$$ax + by$$$ is always divisible by $$$\\gcd(a, b)$$$.\nOtherwise, print \"Finite\". To show that this is correct, we will prove that any integer greater than $$$ab$$$ is colored white. Let $$$x$$$ be an integer greater than $$$ab$$$. Consider the set $$$S = \\{x, x - a, x - 2a, \\ldots, x - (b - 1) a\\}$$$. If, for any $$$y \\in S$$$, $$$y$$$ is divisible by $$$b$$$, we are done. Otherwise, by the pigeonhole principle, there exists distinct $$$x - sa, x - ta \\in S$$$ such that they have the same remainder when divided by $$$b$$$, thus $$$b$$$ divides $$$(x - sa) - (x - ta) = a (t - s)$$$. WLOG, let $$$s  \\lt  t$$$. Thus, $$$0  \\lt  t - s$$$ and $$$b$$$ divides $$$t - s$$$, since $$$\\gcd(a, b) = 1$$$. But $$$t - s \\leq t  \\lt  b$$$. However, it is not possible for $$$b$$$ to divide any integer $$$x$$$ such that $$$0  \\lt  x  \\lt  b$$$, thus we arrive at a contradiction."
         },
         {
             "title": "Solution",

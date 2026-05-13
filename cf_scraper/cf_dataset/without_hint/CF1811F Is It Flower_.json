@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1811F - Is It Flower?\nNote a few things:\nThere are exactly $$$k^2$$$ vertices in the $$$k$$$-flower, since from each of the $$$k$$$ vertices of the main cycle comes another cycle of size $$$k$$$;\nin the $$$k$$$-flower, all vertices have degree $$$2$$$, except for the vertices of the main cycle, whose degrees are $$$4$$$;\nit follows that in $$$k$$$-flower $$$k^2 +k$$$ edges;\nThe listed properties do not take into account only the connectivity of the graph and the sizes of our $$$k$$$ cycles. To check connectivity we run a bfs or dfs from any vertex and check that all vertices have been visited. To check the cycle lengths, we cut out the edges of the main one and make sure that the graph has fell apart into components of size $$$k$$$."
         },
         {
             "title": "Solution",

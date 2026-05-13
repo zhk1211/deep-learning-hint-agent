@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1797D - Li Hua and Tree\nDenote $$$T_x$$$ as the subtree of $$$x$$$.\nThe \"rotate\" operation doesn't change the tree much. More specifically, only the\nimportance\nof $$$T_{fa_x},T_x,T_{son_x}$$$ changes. We can use the brute force method to maintain useful information about each vertex when the operations are performed.\nWhat we need to do next is to find the\nheavy son\nof a vertex in a reasonable time. We can use a set to maintain the\nsize\nand index of all the sons of each vertex.\nTime complexity: $$$O((n+m)\\log n)$$$."
         },
         {
             "title": "Solution (rui_er)",

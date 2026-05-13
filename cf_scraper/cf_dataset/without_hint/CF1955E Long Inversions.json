@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1955E - Long Inversions\nNo substring of the string needs to be inverted twice, as it does not change the string in any way. Let's fix $$$k$$$ and try to check if all the characters of the string can be made equal to\n1\n. Suppose the first $$$i$$$ characters are already equal to\n1\n, and $$$s_{i + 1}=0$$$. Then we need to invert all the bits starting from the $$$i + 1$$$-th to the $$$i + k$$$-th inclusive, i.e., not invert the first $$$i$$$ characters. If we invert any of the first $$$i$$$ characters, then we will have to invert it again. Either we will invert $$$s_{i + 1}$$$ again, so it will become equal to\n0\n, or we will invert the characters to the left and come to the same situation, but for a smaller prefix.\nNaive checking for a fixed $$$k$$$ takes $$$O(n \\cdot k)$$$ time, if we honestly invert $$$k$$$ characters every time we encounter\n0\n. We will maintain an inversion counter — how many times we need to invert a character of the string. Getting the actual value of a character is simple — if the counter is odd, invert the character. If $$$s_{i} = 0$$$, add $$$1$$$ to the counter, and remember that we need to subtract $$$1$$$ from the counter after position $$$i + k$$$, forming a segment $$$[i, i + k)$$$. This way, the complexity of the check will be $$$O(n)$$$.\nIt remains to iterate over $$$k$$$ and find the maximum for which it was possible to bring the string to all\n1\ns. The complexity of the solution is $$$O(n ^ 2)$$$."
         },
         {
             "title": "Solution",

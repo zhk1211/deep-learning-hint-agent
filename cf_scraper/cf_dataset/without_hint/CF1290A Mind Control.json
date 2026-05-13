@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1290A - Mind Control\nPeople behind you are useless, ignore them. Let's assume that $$$k \\le m-1$$$. It's always optimal to control as many people as possible.\nYour strategy can be summarized by a single integer $$$x$$$, the number of people you force to take the first element (among the $$$k$$$ you control).\nSimilarly, the strategy of your opponents can be summarized by a single integer integer $$$y$$$, the number of non-controlled friends who choose to take the first element.\nWhen it will be your turn, the array will contain exactly $$$n-m+1$$$ elements. You will be able to take the biggest element among the first element $$$a_{1+x+y}$$$ and the last element $$$a_{1+x+y+(n-m)}$$$.\nThese observations lead to an obvious $$$O(n^2)$$$ solution (iterate over all strategies $$$x$$$ and for each strategy, iterate over all cases $$$y$$$), which was sufficient to pass the tests.\nHowever, the second iteration can be easily optimized with a data structure.\nLet's note $$$b_i = \\max(a_{1+i}, a_{1+i+(n-m)})$$$. The final answer is $$$\\displaystyle \\max_{x \\in [0 ; k]} \\bigg[ \\min_{y \\in [0 ; m-1-k]} b_{x+y} \\bigg]$$$.\nNote that it can be rewritten as $$$\\displaystyle \\max_{x \\in [0 ; k]} \\bigg[ \\min_{y' \\in [x ; x+m-1-k]} b_{y'} \\bigg]$$$.\nIt can be computed in $$$O(n \\log n)$$$ using segment tree or in $$$O(n)$$$ using monotonic deque."
         },
         {
             "title": "Implementation (quadratic)",

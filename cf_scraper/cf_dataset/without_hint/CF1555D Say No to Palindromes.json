@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1555D - Say No to Palindromes\nNote that in the beautiful string $$$s_i \\neq s_{i-1}$$$ (because it is a palindrome of length $$$2$$$) and $$$s_i \\neq s_{i-2}$$$ (because it is a palindrome of length $$$3$$$). This means $$$s_i = s_{i-3}$$$, i.e. a beautiful string has the form\nabcabcabc...\n, up to the permutation of the letters\na\n,\nb\nand\nc\n.\nFor each permutation of the letters\na\n,\nb\nand\nc\n, we will construct a string $$$t$$$, of the form\nabcabcabc...\nof length $$$n$$$. Let's define an array $$$a$$$ of length $$$n$$$ as follows: $$$a_i = 0$$$ if $$$s_i = t_i$$$ (i.e. the character at the $$$i$$$-th position does not need to be changed) and $$$a_i = 1$$$ otherwise. Let's build an array $$$pr$$$ of prefix sums of the array $$$a$$$. Now you can process a query of the number of positions that need to be replaced for the current line $$$t$$$ in $$$O(1)$$$."
         },
         {
             "title": "Solution (Neon)",

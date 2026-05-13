@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1431D - Used Markers\nSuppose, we used $$$k$$$ markers. It means that there were $$$k - 1$$$ indices $$$1  \\lt  i_1  \\lt  i_2  \\lt  \\dots  \\lt  i_{k - 1} \\le n$$$ such that the $$$ord_{i_j}$$$ lecturer asks for a replacement. Since the $$$ord_{i_j}$$$ lecturer asks for a replacement, it means that from the last replacement at least $$$a_{i_j}$$$ lecturers gave a lecture. In other words, $$$i_{j - 1} + a_{i_j} \\le i_j$$$ and $$$1 + a_{i_1} \\le i_1$$$.\nAs a result, we get that $$$1 + a_{i_1} + a_{i_2} + \\dots + a_{i_{k-1}} \\le i_{k-1} \\le n$$$ or $$$a_{i_1} + a_{i_2} + \\dots + a_{i_{k-1}}  \\lt  n$$$. We can understand that to get $$$k$$$ as big as possible we need to make $$$a_{i_1} + \\dots + a_{i_{k - 1}}$$$ as small as possible. So it's optimal to take $$$k$$$ minima possible $$$a_i$$$-s.\nIf we always take several minima possible $$$a_i$$$-s then if we sort all $$$a_i$$$ we can just find the maximum prefix such that its sum is lower than $$$n$$$. It will be the answer, but we still need to restore the order.\nTo restore order $$$ord$$$ we can choose these $$$k$$$ minima $$$a_i$$$-s and place all other $$$a_i$$$ between them that there will be exactly $$$a_{i_j} - 1$$$ lecturers between the $$$i_{j - 1}$$$ and $$$i_j$$$ lecturers, $$$a_{i_1}$$$ lecturers before the $$$i_1$$$-th lecturer, and all other lecturers after the $$$i_{k - 1}$$$-th."
         },
         {
             "title": "Solution (elizarov)",

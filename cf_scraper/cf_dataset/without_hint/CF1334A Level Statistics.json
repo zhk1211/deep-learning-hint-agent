@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1334A - Level Statistics\nLet's use the fact that initially the level has $$$0$$$ plays and $$$0$$$ clears. Call the differences before the previous stats and the current ones $$$\\Delta p$$$ and $$$\\Delta c$$$.\nThe stats are given in chronological order, so neither the number of plays, nor the number of clears should decrease (i.e. $$$\\Delta p \\ge 0$$$ and $$$\\Delta c \\ge 0$$$).\nFinally, $$$\\Delta p$$$ should be greater or equal to $$$\\Delta c$$$. It's easy to show that if $$$\\Delta c$$$ players pass the level successfully and $$$\\Delta p - \\Delta c$$$ players just try the level then such deltas are achieved.\nSo in implementation it's enough to check these three conditions between the consecutive pieces of data (including the initial ($$$0, 0$$$)).\nOverall complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution (pikmike)",

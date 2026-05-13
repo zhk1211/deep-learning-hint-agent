@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1833D - Flipper\nIn these constraints we could solve the problem for $$$O(n^2)$$$. Let us note that there can be no more than two candidates for the value $$$r$$$. Since the first number in the permutation will be either $$$p_{r+1}$$$ if $$$r  \\lt  n$$$, or $$$p_r$$$ if $$$r = n$$$. Then let's go through the value of $$$r$$$ and choose the one in which the first number in the resulting permutation is as large as possible. Next, if $$$p_n = n$$$, then we can have two candidates for $$$r$$$ is $$$n, n-1$$$, but note that it is always advantageous to put $$$r = n$$$ in that case, since it will not spoil the answer. Then we can go through $$$l$$$ and get the solution by the square, but we can do something smarter.\nNotice now that the answer already contains all the numbers $$$p_i$$$ where $$$i  \\gt  r$$$. And then we write $$$p_r, p_{r-1}, \\ldots, p_l$$$ where $$$l$$$ is still unknown, and then $$$p_1, p_2, \\ldots, p_{l-1}$$$. In that case, let's write $$$p_r$$$ as $$$l \\le r$$$ and then write $$$p_{r-1}, p_{r-2}, \\ldots$$$ as long as they are larger than $$$p_1$$$. Otherwise, we immediately determine the value of $$$l$$$ and finish the answer to the end. Thus, constructively we construct the maximal permutation."
         },
         {
             "title": "Solution",

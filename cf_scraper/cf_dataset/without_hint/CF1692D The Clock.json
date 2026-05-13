@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1692D - The Clock\nNote that Victor looks at the clock forever, but there are only at most $$$1440$$$ different times the clock can show (because there are $$$1440$$$ different minutes in a day). So we only have to check the first $$$1440$$$ times Victor sees, and count the palindromes (you can check a few more just to be safe, but they will repeat anyways).\nNow we just have to implementing adding $$$x$$$ minutes to a clock. There are several ways to do this. One of the slower ways might be writing functions converting a number of minutes into a time for a clock, or you can just compute all palindrome times in terms of minutes and that way you don't have to convert from clock time to number of minutes.\nThe complexity is $$$\\mathcal{O}(1)$$$ per test case, since you only have to check a constant number of times."
         },
         {
             "title": "Solution",

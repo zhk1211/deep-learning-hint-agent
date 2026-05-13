@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1358C - Celex Update\nLet's look at the way with the minimum sum (first we go $$$y_2-y_1$$$ steps right, and then $$$x_2-x_1$$$ steps down). Let's look at such a change in the \"bends\" of the way:\nAfter each step, the sum on the way will increase by $$$1$$$.\nWe're going to bend like this until we get to the maximum sum. We're not going to miss any possible sum, because we're incrementing the sum by 1. We started with the minimum sum and finished with the maximum sum, so we can use these changes to get all possible sums.\nIn order for us to come from the minimum to the maximum way, we must bend the way exactly 1 time per each cell of table (except for the cells of the minimum way). That is, the number of changes equals the number of cells not belonging to the minimum way — $$$(x_2-x_1)\\cdot(y_2-y_1)$$$. Then the number of different sums will be $$$(x_2-x_1)\\cdot(y_2-y_1) + 1$$$.\nThe overall compexity is $$$\\mathcal{O}(1)$$$ per test."
         },
         {
             "title": "Solution",

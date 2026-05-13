@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1860A - Not a Substring\nLet's consider the following two cases:\nthe string $$$s$$$ contains two consecutive equal characters, for example, \"\n)(((\n\" or \"\n())\n\". In this case, we can choose a string $$$t$$$ of the form \"\n()()()\n\", since it does not contain a substring of two equal characters, therefore $$$s$$$ is not a substring of $$$t$$$;\nin the string $$$s$$$, all adjacent characters are different, i.e., it is alternating. In this case, we can choose a string $$$t$$$ of the form \"\n((()))\n\", since here the length of the longest alternating substring is $$$2$$$. The only alternating substring it contains is \"\n()\n\", which is a part of\nevery\nregular bracket sequence.\nThus, it is sufficient to consider the answer among only two candidates — \"\n()()()\n\" and \"\n((()))\n\" of length $$$2n$$$."
         },
         {
             "title": "Solution (Neon)",

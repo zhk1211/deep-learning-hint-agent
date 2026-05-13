@@ -9,11 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
-        },
-        {
-            "title": "Solution",
-            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nint\npower\n(\nint\na\n,\nint\ne\n)\n{\nif\n(\ne\n==\n0\n)\nreturn\n1\n;\nreturn\ne\n==\n1\n?\na\n:\na\n*\npower\n(\na\n,\ne\n-\n1\n);\n}\nvoid\nanswer\n(\nint\na\n,\nint\nb\n)\n{\nstd\n::\ncout\n<<\na\n<<\n\" + \"\n<<\nb\n<<\n\" = \"\n<<\na\n+\nb\n<<\nstd\n::\nendl\n;\n}\nint\nmain\n()\n{\nusing\nll\n=\nlong\nlong\n;\nint\nt\n;\nstd\n::\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\na\n,\nb\n,\nc\n;\nll k\n;\nstd\n::\ncin\n>>\na\n>>\nb\n>>\nc\n>>\nk\n;\nbool\ngood\n=\nfalse\n;\nfor\n(\nint\ni\n=\npower\n(\n10\n,\na\n-\n1\n);\ni\n<\npower\n(\n10\n,\na\n);\n++\ni\n)\n{\nint\nleft\n=\nstd\n::\nmax\n(\npower\n(\n10\n,\nb\n-\n1\n),\npower\n(\n10\n,\nc\n-\n1\n)\n-\ni\n);\nint\nright\n=\nstd\n::\nmin\n(\npower\n(\n10\n,\nb\n)-\n1\n,\npower\n(\n10\n,\nc\n)\n-\n1\n-\ni\n);\nif\n(\nleft\n>\nright\n)\ncontinue\n;\nint\nhave\n=\nright\n-\nleft\n+\n1\n;\nif\n(\nk\n<=\nhave\n)\n{\nanswer\n(\ni\n,\nleft\n+\nk\n-\n1\n);\ngood\n=\ntrue\n;\nbreak\n;\n}\nk\n-=\nhave\n;\n}\nif\n(!\ngood\n)\nstd\n::\ncout\n<<\n\"-1\"\n<<\nstd\n::\nendl\n;\n}\nreturn\n0\n;\n}"
+            "content": "1836C - k-th equality\nThe largest possible value for $$$a$$$ is $$$10^6 - 1$$$, so we can iterate over each possibility. When we fix $$$a$$$, we can find the range of values for $$$b$$$ such that $$$10^{C - 1} \\leq a + b  \\lt  10^C$$$, and $$$10^{B - 1} \\leq b  \\lt  10^B$$$. For each such value, we have a correct equality.\nWe can easily find this range. We get that $$$\\max \\{ 10^{C - 1} - a, 10^{B - 1} \\} \\leq b  \\lt  \\min \\{ 10^C - a, 10^B \\}$$$ and from this inequality, we know how many equations for the given $$$a$$$ we have. As we start by minimizing $$$a$$$, we can find its value for the $$$k$$$-th equation if we iterate from the smallest possible values of $$$a$$$.\nWhen we have fixed $$$a$$$ (or find out that there is no such equation), we iterate over all possible values of $$$b$$$ and check if the resulting $$$c$$$ has $$$C$$$ digits. The complexity is $$$\\mathcal{O}(10^A + 10^B)$$$."
         }
     ]
 }

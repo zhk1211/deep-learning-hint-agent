@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1797A - Li Hua and Maze\nWe can put obstacles around $$$(x_1,y_1)$$$ or $$$(x_2,y_2)$$$ and the better one is the answer. More formally, let's define a function $$$f$$$:\n$$$$$$ f(x,y)= \\begin{cases} 2,&(x,y)\\textrm{ is on the corner}\\\\ 3,&(x,y)\\textrm{ is on the border}\\\\ 4,&(x,y)\\textrm{ is in the middle}\\\\ \\end{cases} $$$$$$\nThen the answer is $$$\\min\\{f(x_1,y_1),f(x_2,y_2)\\}$$$.\nWithout loss of generality, assume that $$$f(x_1,y_1)\\le f(x_2,y_2)$$$. As the method is already given, the answer is at most $$$f(x_1,y_1)$$$. Let's prove that the answer is at least $$$f(x_1,y_1)$$$.\nIf $$$(x_1,y_1)$$$ is on the corner, we can always find two paths from $$$(x_1,y_1)$$$ to $$$(x_2,y_2)$$$ without passing the same cell (except $$$(x_1,y_1)$$$ and $$$(x_2,y_2)$$$).\nSimilarly, we can always find three or four paths respectively if $$$(x_1,y_1)$$$ is on the border or in the middle.\nAs the paths have no common cell, we need to put an obstacle on each path, so the answer is at least $$$f(x_1,y_1)$$$.\nIn conclusion, the answer is exactly $$$f(x_1,y_1)$$$. As we assumed that $$$f(x_1,y_1)\\le f(x_2,y_2)$$$, the answer to the original problem is $$$\\min\\{f(x_1,y_1),f(x_2,y_2)\\}$$$.\nTime complexity: $$$O(1)$$$."
         },
         {
             "title": "Solution (rui_er)",

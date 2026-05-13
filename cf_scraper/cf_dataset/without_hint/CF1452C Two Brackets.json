@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1452C - Two Brackets\nNotice that it's never optimal to erase a subsequence of length greater than $$$2$$$ because every RBS of length above $$$2$$$ contains an RBS of length $$$2$$$ inside and removing it won't break the regular property of the outside one.\nSo the task can be solved for the round and the square brackets independently, the answer will be the sum of both. Let's solve the version for brackets '\n(\n' and '\n)\n'. In general, you just want to remove consecutive substring \"\n()\n\" until there is no more left in the string. That can be done by processing the string from left and right and maintaining a stack of current brackets. If the top bracket in it is '\n(\n' and the current bracket is '\n)\n', then you can increment the answer and remove that bracket from the stack. Otherwise, you push the current bracket to the stack.\nOverall complexity: $$$O(|s|)$$$ per testcase."
         },
         {
             "title": "Solution (pikmike)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1249C2 - Good Numbers (hard version)\nLet's see the representation of $$$n$$$ in the ternary numeral system. If it has no twos, then the answer is $$$n$$$. Otherwise, let $$$pos_2$$$ be the maximum position of $$$2$$$ in the ternary representation. Then we obviously need to replace it with $$$0$$$ and add some power of three to the right from it. Let $$$pos_0$$$ be the leftmost position of $$$0$$$ to the right from $$$pos_2$$$. We can add $$$3^{pos_0}$$$ and replace all digits from the position $$$pos_0 - 1$$$ to the position $$$0$$$ with $$$0$$$. Then the resulting number will be\ngood\nbecause we replaced all twos with zeros and the minimum because, in fact, we added only one power of three and this power is the minimum one we could add.\nTime complexity is $$$O(\\log n)$$$ per query."
         },
         {
             "title": "Solution",

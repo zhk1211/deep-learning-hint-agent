@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1499A - Domino on Windowsill\nWe can prove that if we have $$$k_1 + k_2$$$ white cells on the board then we can place any $$$w$$$ white dominoes as long as $$$2w \\le k_1 + k_2$$$.\nThe proof is the following: if $$$k_1 \\ge k_2$$$ let's place one domino at position $$$((1, k_1 - 1), (1, k_1))$$$, otherwise let's place domino at position $$$((2, k_2 - 1), (2, k_2))$$$. Then we can solve the placement of $$$w - 1$$$ dominoes in $$$k_1 - 2$$$ cells in the first row and $$$k_2$$$ cells of the second row recursively (or, analogically, $$$k_1$$$ and $$$k_2 - 2$$$).\nAt the end, either all dominoes are placed or $$$k_1  \\lt  2$$$ and $$$k_2  \\lt  2$$$. If $$$k_1 = 0$$$ or $$$k_2 = 0$$$ then, since $$$2w \\le k_1 + k_2$$$, then $$$w = 0$$$ or we successfully placed all dominoes. If $$$k_1 = 1$$$ and $$$k_2 = 1$$$ then we, possibly, need to place one domino more — and we can place it vertically.\nWe can prove that we can place any $$$b$$$ dominoes as long as $$$2b \\le (n - k_1) + (n - k_2)$$$ in the same manner.\nAs a result, all we need to check is that $$$2w \\le k_1 + k_2$$$ and $$$2b \\le (n - k_1) + (n - k_2)$$$."
         },
         {
             "title": "Solution (adedalic)",

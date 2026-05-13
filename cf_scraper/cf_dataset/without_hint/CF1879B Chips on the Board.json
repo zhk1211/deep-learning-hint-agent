@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1879B - Chips on the Board\nLet's note that to maintain the rule for all cells in a certain row, one of two conditions must hold: either the row contains at least one chip, or each column contains at least one chip. Let's apply this observation to all rows of the board. If we consider all rows, this observation means that the placement of chips satisfies the rule if either each row contains at least one chip, or each column contains at least one chip.\nLet's consider the case when each row contains at least one chip. Since we want to calculate the minimum total cost of placement, each row needs exactly one chip. Now we have to determine where exactly in each row the chip is placed. Since the cost of a chip in the $$$i$$$-th row and $$$j$$$-th column is equal to $$$a_i + b_j$$$, to minimize the cost, we have to choose the minimum value of $$$b_j$$$. Applying this to all rows, we obtain that the total cost is equal to $$$\\sum\\limits_{i=1}^{n} (a_i + mnB)$$$, where $$$mnB$$$ is the minimum element in the array $$$b$$$.\nSimilar reasoning can be applied to the case when there is a chip in each column. In this case, the total cost is equal to $$$\\sum\\limits_{j=1}^{n} (mnA + b_j)$$$, where $$$mnA$$$ is the minimum element in the array $$$a$$$.\nThe answer to the problem is the minimum of the two values described above."
         },
         {
             "title": "Solution (Neon)",

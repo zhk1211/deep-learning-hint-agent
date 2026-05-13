@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1187C - Vasya And Array\nLet's consider array $$$b_1, b_2, \\dots , b_{n-1}$$$, such that $$$b_i = a_{i + 1} - a_i$$$.\nThen subarray $$$a_l, a_{l+1}, \\dots , a_r$$$ is sorted in non-decreasing order if and only if all elements $$$b_l, b_{l + 1} , \\dots , b_{r - 1}$$$ are greater or equal to zero.\nSo if we have fact $$$t_i = 1, l_i, r_i$$$, then all elements $$$b_{l_i}, b_{l_i + 1}, \\dots , b_{r_i - 1}$$$ must be greater or equal to zero.\nLet's create the following array $$$b$$$: $$$b_i = 0$$$ if there is such a fact $$${t_j, l_j, r_j}$$$ that $$$t_j = 1, l_j \\le i  \\lt  r_j$$$, and $$$b_i = -1$$$ otherwise.\nAfter that we create the following array $$$a$$$: $$$a_1 = n$$$, and for all other indexes $$$a_i = a_{i - 1} + b_{i - 1}$$$.\nThis array $$$a$$$ satisfies all facts $$${t_i, l_i, r_i}$$$ such that $$$t_i = 1$$$. So all we have to do is check that all remaining facts are satisfied."
         },
         {
             "title": "Solution (Roms)",

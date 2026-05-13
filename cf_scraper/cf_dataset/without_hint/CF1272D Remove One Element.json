@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1272D - Remove One Element\nFirstly, let's calculate for each $$$i$$$ from $$$1$$$ to $$$n$$$ two following values: $$$r_i$$$ and $$$l_i$$$. $$$r_i$$$ means the maximum length of the increasing sequence starting in the position $$$i$$$, and $$$l_i$$$ means the maximum length of the increasing sequence ending in the position $$$i$$$. Initially, all $$$2n$$$ values are $$$1$$$ (the element itself).\nThe array $$$r$$$ can be calculated in order from right to left with the following condition: if $$$a_i  \\lt  a_{i + 1}$$$ then $$$r_i = r_{i + 1} + 1$$$, otherwise it still remain $$$1$$$. The same with the array $$$l$$$, but we have to calculate its values in order from left to right, and if $$$a_i  \\gt  a_{i - 1}$$$ then $$$l_i = l_{i - 1} + 1$$$, otherwise it still remain $$$1$$$.\nHaving these arrays we can calculate the answer. The initial answer (if we don't remove any element) is the maximum value of the array $$$l$$$. And if we remove the $$$i$$$-th element (where $$$i = 2 \\dots n - 1$$$), then we can update the answer with the value $$$l_{i - 1} + r_{i + 1}$$$ if $$$a_{i - 1}  \\lt  a_{i + 1}$$$.\nTime complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution",

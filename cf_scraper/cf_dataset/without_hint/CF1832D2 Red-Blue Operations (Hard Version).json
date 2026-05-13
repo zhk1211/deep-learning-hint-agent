@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1832D2 - Red-Blue Operations (Hard Version)\nRead the editorial to the easy version to get the general idea of the solution.\nNow, we should only optimize the calculations.\nFirst, the sorting can obviously be done beforehand. Now we want to get the minimum and the sum after applying the last increase operations. Consider $$$(n + k) \\bmod 2 = 0$$$ and $$$k  \\gt  n$$$, the other cases are similar. The minimum is that: $$$\\min_{i=1}^n a_i - (i - 1) + k = k + \\min_{i=1}^n a_i - (i - 1)$$$. Notice how the second part doesn't depend on $$$k$$$ and precalculate it.\nYou can calculate prefix minimum array over $$$a'$$$.\nThis surely helps with the case of $$$k  \\lt  n$$$. The resulting minimum is $$$\\min(\\mathit{pref}_k + k, a_{k+1})$$$ (since $$$a$$$ is sorted, the first element after the changed prefix is the smallest).\nFor $$$k \\bmod 2 = n \\bmod 2$$$, the minimum is $$$\\mathit{pref}_n + k$$$.\nFor $$$k \\bmod 2 \\neq n \\bmod 2$$$, the minimum is $$$\\min(\\mathit{pref}_{n-1} + k, a_n)$$$.\nThe sum is similar: $$$\\sum_{i=1}^n a_i - (i - 1) + k = n \\cdot k + \\sum_{i=1}^n a_i - (i - 1)$$$. As easy to precalculate.\nThe rest is the same.\nOverall complexity: $$$O(n \\log n + q)$$$."
         },
         {
             "title": "Solution (awoo)",

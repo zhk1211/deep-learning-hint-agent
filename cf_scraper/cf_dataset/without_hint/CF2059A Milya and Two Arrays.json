@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2059A - Milya and Two Arrays\nIf there are at least three distinct values in any of the arrays, the answer is $$$yes$$$. We can select any three elements from the other array and arrange them in increasing order, then the corresponding sums will also increase.\nIf each array contains exactly two distinct values, the answer is also $$$yes$$$. If we find elements $$$x$$$ and $$$y$$$ in the first array, where $$$x  \\lt  y$$$, and elements $$$a$$$ and $$$b$$$ in the second array, such that $$$a  \\lt  b$$$, we can match the elements to obtain the sums $$$x + a  \\lt  x + b  \\lt  y + b$$$. Since the arrays are good, $$$x$$$ appears at least twice, and all three sums can definitely be obtained.\nIn the remaining cases, one of the arrays will contain only equal elements. Since the second array contains no more than $$$2$$$ distinct values, it will not be possible to obtain $$$3$$$ distinct sums."
         },
         {
             "title": "Implementation",

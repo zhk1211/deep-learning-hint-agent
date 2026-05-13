@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1527A - And Then There Were K\nLet $$$T = $$$ $$$n$$$ & ($$$n-1$$$) & ($$$n-2$$$) & ($$$n-3$$$) & ... ($$$k$$$)\nIf there is at least one integer from $$$K$$$ to $$$N$$$ whose bit at the $$$i_{th}$$$ index is $$$0$$$, then the value of the $$$i_{th}$$$ bit in $$$T$$$ will also be $$$0$$$. We can easily observe that the $$$msb$$$ (Highest set bit in $$$n$$$) in $$$N$$$ will become $$$0$$$ for the first time when $$$K = 2^{msb}- 1$$$. All the other bits will become zero when $$$K = 2^{msb}$$$.\nThus the answer is, $$$K = 2^{msb} - 1$$$."
         },
         {
             "title": "Solution (Loud_mouth)",

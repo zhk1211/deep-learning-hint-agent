@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2224A - Zhily and Array Operating\nWe want to maximize every single number so that the final goodness is the best.\nAn operation at $$$i$$$ only changes $$$a_i$$$; it never harms positivity elsewhere, but may make $$$a_j$$$ bigger for $$$j \\lt i$$$.So we greedily judge every $$$i=n-1$$$ down to $$$1$$$. If $$$a_{i+1} \\gt 0$$$, adding it strictly increases, increasing the chance of having more positives. Otherwise, adding it would not help, so we skip it."
         },
         {
             "title": "Implementation",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1778B - The Forbidden Permutation\nIf the array $$$a$$$ is\ngood\n, the answer is obviously $$$0$$$. Now, how can we optimally transform a\nnot\ngood\narray $$$a$$$ to a\ngood\narray? Let, we are on the index $$$i$$$ $$$(i \\lt m)$$$ and $$$x = a_i$$$, $$$y = a_{i+1}$$$. If we observe carefully, we will find that there are basically two cases that will make the array $$$a$$$\ngood\n:\nMove $$$x$$$ and $$$y$$$ in the permutation $$$p$$$ in such a way that $$$pos(y)$$$ becomes greater than $$$pos(x) + d$$$. To do that, in the permutation $$$p$$$, we can swap $$$x$$$ to the left and $$$y$$$ to the right. The total number of swaps needed is $$$= d - (pos(y) - pos(x)) + 1$$$. We need to check if there is enough space to the left of $$$pos(x)$$$ and to the right of $$$pos(y)$$$ to perform the needed number of swaps.\nMove $$$x$$$ and $$$y$$$ in the permutation $$$p$$$ in such a way that $$$pos(y)$$$ becomes smaller than $$$pos(x)$$$. To do that, In the permutation $$$p$$$, we can simply swap $$$y$$$ to the left until the condition is satisfied. The number of swaps needed is $$$pos(y) - pos(x)$$$.\nFor each $$$i  \\lt  m$$$, calculate the minimum number of swaps needed among these two cases. The minimum number of swaps among all $$$i  \\lt  m$$$ will be the desired answer.\nTime complexity: In each test case, $$$\\mathcal{O}(n)$$$"
         }
     ]
 }

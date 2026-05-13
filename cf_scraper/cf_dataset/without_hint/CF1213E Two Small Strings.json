@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1213E - Two Small Strings\nWe can check the following solution by stress-testing (or maybe prove it somehow): let's iterate over all possible permutations of the string \"\nabc\n\". Let the first character of the current permutation be $$$c_1$$$, the second one be $$$c_2$$$ and the third one be $$$c_3$$$. Then let's add the following two candidates to the answer: \"\nc_1 c_2 c_3 c_1 c_2 c_3 ... c_1 c_2 c_3\n\" (the string consisting of $$$n$$$ copies of \"\nc_1 c_2 c_3\n\") and \"\nc_1 ... c_1 c_2 ... c_2 c_3 ... c_3\n\" (exactly $$$n$$$ copies of $$$c_1$$$ then exactly $$$n$$$ copies of $$$c_2$$$ and exactly $$$n$$$ copies of $$$c_3$$$). Then the answer will be among these $$$12$$$ strings and we can check each of them naively."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1693B - Fake Plastic Trees\nLemma 1. You won't perform the operation on a particular vertex more than once. Because you could merge the operations.\nLemma 2. If you perform the operation on some vertex $$$v$$$, you can do it with $$$c_k = r_v$$$. If there is another operation that helps this vertex, you can cut the operation into two pieces and merge one with the operation that starts at $$$v$$$. And you can just increase $$$c_k$$$ if it's not equal to $$$r_v$$$.\nDefine $$$dp_v$$$ as the minimum number of operations needed to satisfy the conditions on the vertices in the subtree of vertex $$$v$$$.\nWe claim that there is a way to achieve our goal with minimum number of operations in which for each vertex $$$v$$$ there are exactly $$$dp_v$$$ operations done in the subtree of vertex $$$v$$$.\nImagine there is a vertex $$$v$$$ that there are more than $$$dp_v$$$ operations on vertices in the subtree of vertex $$$v$$$. We can instead satisfy the subtree by $$$dp_v$$$ operations and make sure that we perform the operation on vertex $$$p_v$$$.\nDenote $$$mx_v$$$ as the maximum value that vertex $$$v$$$ can pass to its ancestors if exactly $$$dp_v$$$ operations are performed in the subtree of vertex $$$v$$$.\nWe need to perform the operation on a vertex $$$v$$$ if and only if $$$\\sum_\\limits{u | p_u = v}{mx_u}  \\lt  l_v$$$.\nIf we need to perform the operation on vertex $$$v$$$ then $$$mx_v = r_v$$$, otherwise $$$mx_v = min(r_v, \\sum_\\limits{u | p_u = v}{mx_u})$$$.\nTime complexity: $$$\\mathcal{O}(n)$$$"
         },
         {
             "title": "Implementation",

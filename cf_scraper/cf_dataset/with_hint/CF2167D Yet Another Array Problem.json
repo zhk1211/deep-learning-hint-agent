@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2167D - Yet Another Array Problem\nLet's first try to prove our first claim. Let $$$x$$$ be the answer and $$$p$$$ the smallest prime divisor of $$$x$$$. $$$\\gcd(x, a_{i})=$$$ $$$ p_{1}^{min(e_{1}, e2_{1})} \\cdot p_{2}^{min(e_{2}, e2_{2})} \\cdot \\ldots \\cdot p_{i}^{min(e_{k}, e2_{k})} = 1$$$, where $$$p_{i}$$$ and $$$e_{i}$$$ are prime factorization of $$$x$$$ and $$$p2_{i}$$$ and $$$e2_{i}$$$ are that of $$$a_{i}$$$. Since $$$\\gcd(x, a_{i}) = 1$$$, for each $$$i$$$ either $$$e_{i} = 0$$$ or $$$e2_{i} = 0$$$ should hold. If $$$p$$$ is prime divisor of $$$x$$$, then $$$e_{i} \\geq 1$$$ for $$$p_{i} = p$$$, thus $$$e2_{i} = 0$$$ must hold. This implies that $$$\\gcd(p, a_{i}) = 1$$$. So we will focus only on prime numbers.\nSince $$$a_{i} \\equiv 0 \\ (mod \\ x)$$$ for each $$$i$$$, if $$$x$$$ does not satisfy the condition, the problem is asking for the\nsmallest\n$$$x$$$. The answer will not be big, because $$$2 \\cdot 3 \\cdot 5 \\cdot 7 \\ldots \\cdot 53$$$ $$$  \\gt  10^{18}$$$. Thus, it is sufficient to check the first prime numbers up to $$$53$$$ using brute force (inclusive)."
         }
     ]
 }

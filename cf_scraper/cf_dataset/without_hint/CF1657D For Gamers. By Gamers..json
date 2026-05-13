@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1657D - For Gamers. By Gamers.\nImagine you are fighting the $$$j$$$-th monster, and you fixed the type of units $$$i$$$ and their amount $$$x$$$.\nWhat's the win condition? $$$\\frac{H_j}{d_i \\cdot x}  \\lt  \\frac{h_i}{D_j}$$$. Rewrite it as $$$H_j \\cdot D_j  \\lt  d_i \\cdot x \\cdot h_i$$$. Notice how we only care about $$$d \\cdot h$$$ for both the units and the monster, but not about $$$d$$$ and $$$h$$$ on their own.\nLet's call $$$d \\cdot h \\cdot x$$$ and $$$D \\cdot H$$$ the power of the squad and the monster.\nYou can see that for each cost $$$c$$$ we can only leave one unit type of that price that has the largest value of $$$d \\cdot h$$$. Let's call it $$$\\mathit{bst}_c$$$.\nNow let's learn to determine the maximum power we can obtain for cost exactly $$$c$$$. We can iterate over the cost $$$c$$$ of one unit and the count $$$x$$$ of units in the squad. Since $$$c \\cdot x$$$ should not exceed $$$C$$$, that will take $$$\\frac{C}{1} + \\frac{C}{2} + \\dots + \\frac{C}{C} = O(C \\log C)$$$. Propagate $$$\\mathit{bst}_c$$$ to be the maximum power for cost exactly $$$c$$$.\nWe have the knowledge about cost exactly $$$c$$$, but we actually want no more than $$$c$$$. Calculate prefix maximums over $$$\\mathit{bst}$$$ — that will be the maximum power we can obtain with no more than $$$c$$$ coins.\nFor each monster, we just have to find the smallest $$$c$$$ such that $$$\\mathit{bst}_c  \\gt  D \\cdot H$$$. Since the array is monotone, we can use binary search.\nOverall complexity: $$$O(n + (C + m) \\log C)$$$."
         },
         {
             "title": "Solution (awoo)",

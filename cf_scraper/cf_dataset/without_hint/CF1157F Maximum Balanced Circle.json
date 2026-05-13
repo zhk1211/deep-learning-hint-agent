@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1157F - Maximum Balanced Circle\nLet's realize what we need to construct the\nminimum\nbalanced circle\nwith heights from $$$l$$$ to $$$r$$$. We can represent it as $$$l, l + 1, \\dots, r - 1, r, r - 1, \\dots, l + 1$$$. As we can see, we need one occurrence of $$$l$$$ and $$$r$$$ and two occurrences of all other heights from $$$l + 1$$$ to $$$r - 1$$$. How can we find the\nmaximum\nbalanced circle\nusing this information? We can find the\nmaximum by inclusion\nsegment of neighboring heights with at least two occurrences using the array of frequencies $$$cnt$$$, sorted array of unique heights $$$b$$$ and two pointers technique. For the current left border $$$l$$$ we should increase $$$r$$$ (initially it is $$$l + 1$$$ and it is an excluded border) while $$$b_r - b_{r - 1}=1$$$ and $$$cnt_{b_r} \\ge 2$$$. Then for the current left and right borders we can try to extend the segment to the left if $$$b_l - b_{l - 1} = 1$$$ and to the right if $$$b_{r + 1} - b_r = 1$$$ and try to update the answer with the the current segment (and go to the next segment). There may be some corner cases like $$$n = 1$$$ or all $$$cnt$$$ are $$$1$$$, but you can avoid them if you will implement the solution carefully. There are almost no corner cases in my solution, you can see details of implementation in authors code.\nTime complexity: $$$O(n \\log n)$$$ or $$$O(n)$$$ (depends on sorting method)."
         },
         {
             "title": "Solution",

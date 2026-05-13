@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1307E - Cow and Treats\nFirst, we observe that it is impossible to send more than one cow with the same favorite sweetness on the same side without upsetting any of them. This means we can send at most two cows of each favorite sweetness, one on each side.\nNow, let's assume we know the index of the rightmost cow that came from the left side.\nFor each sweetness $$$i$$$, we denote the number of units of grass to the left of the index as $$$l_i$$$ and to the right as $$$r_i$$$. There are three cases we have to consider. If there does not exist a cow of this favorite sweetness or the one of this favorite sweetness with minimum hunger cannot be satisfied from either direction, then $$$0$$$ cows of the type will be asleep. Otherwise, $$$1$$$ or $$$2$$$ cows will be asleep, and we can derive a simple formula based on $$$l_i$$$, $$$r_i$$$, and the cows of this type. Remember that we always maximize the number of sleeping cows first.\nWe maintain how much each sweetness contributed to the answer. When we shift this index of the rightmost cow to the right, we can undo and recompute our answer.\nYou can speed up the solution using binary search, but we chose not to require it. We also chose to allow other $$$O(n^2)$$$ and $$$O(n^2\\log{n})$$$ solutions to pass.\nTime Complexity: $$$O(n\\log{n})$$$"
         },
         {
             "title": "Solution",

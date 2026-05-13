@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1203F2 - Complete the Projects (hard version)\nTo view the main idea of the problem, read the editorial of easy version. The only difference is that for non-negative $$$b_i$$$ we don't need to print \"\nNO\n\" if we cannot take the project, we just need to skip it because we cannot take it at all. And for negative $$$b_i$$$ we need to write the knapsack dynamic programming to take the maximum possible number of projects (we need to consider them in order of their sorting). Dynamic programming is pretty easy: $$$dp_{i, j}$$$ means that we consider $$$i$$$ projects and our current rating is $$$j$$$ and the value of dp is the maximum number of negative projects we can take. If the current project is the $$$i$$$-th negative project in order of sorting, we can do two transitions: $$$dp_{i + 1, j} = max(dp_{i + 1, j}, dp_{i, j})$$$ and if $$$r + b_i \\ge 0$$$ then we can make the transition $$$dp_{i + 1, j + b_i} = max(dp_{i + 1, j + b_i}, dp_{i, j} + 1)$$$. And then we just need to find the maximum value among all values of dp and add the number of positive projects we take to find the answer."
         },
         {
             "title": "Solution",

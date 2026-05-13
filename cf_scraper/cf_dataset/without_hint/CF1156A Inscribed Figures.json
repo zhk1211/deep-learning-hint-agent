@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1156A - Inscribed Figures\nFirstly, let's find out when the answer is infinite.\nObviously, any point of intersection is produced by at least a pair of consecutive figures. Take a look at every possible pair and you'll see that only square inscribed in triangle and vice verse produce infinite number of points in intersection. The other cases are finite.\nFrom now we assume that initial sequence has no 2 and 3 next to each other. Basically, it's all triangles and squares separated by circles.\nIf the task was to count all pairs of intersecting figures, the solution will be the following. Square next to circle gives 4 points, triangle next to circle gives 3 points.\nUnfortunately, the task asked for distinct points. Notice that there is a single subsegment which can produce coinciding points (square $$$\\rightarrow$$$ circle $$$\\rightarrow$$$ triangle). So you have to find each triplet (3 1 2) and subtract their count from the sum.\nOverall complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution (PikMike)",

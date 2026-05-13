@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1155E - Guess the Root\nSince $$$10^6 + 3$$$ is a prime and degree $$$k$$$ of the polynomial is small enough, we can get this polynomial in our hands asking $$$k + 1$$$ queries in different points. Knowing values $$$f(x_i)$$$ for $$$x_1, x_2, \\dots, x_{k + 1}$$$, we can interpolate $$$f$$$ by various ways.\nFor example, we can construct a system of linear equations thinking of $$$a_i$$$ as variables. In other words, we know, that $$$a_0 \\cdot x_i^0 + a_1 \\cdot x_i^1 + \\dots + a_k \\cdot x_i^k = f(x_i)$$$ for $$$i = 1 \\dots (k+1)$$$, also we know $$$x_i^l$$$ and $$$f(x_i)$$$. So we can solve this system using Gaussian elimination in $$$O(k^3)$$$.\nNow, knowing the polynomial $$$f(x)$$$ we can locally brute force all possible candidates for $$$x_0$$$, since there is only $$$10^6 + 3$$$ such candidates, and print the one we found."
         },
         {
             "title": "Solution (adedalic)",

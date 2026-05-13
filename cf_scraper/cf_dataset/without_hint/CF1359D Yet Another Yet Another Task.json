@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1359D - Yet Another Yet Another Task\nAlice wants to choose such a segment $$$[l; r]$$$ that $$$\\sum \\limits_{l \\le i \\le r} a_i - \\max \\limits_{l \\le i \\le r} a_i$$$ is maximum possible.\nThere is a well-known problem where you have to find a segment with maximum $$$\\sum \\limits_{l \\le i \\le r} a_i$$$. That problem is solved with Kadane algorithm. Let's learn how to reduce our problem to that one.\nNotice that the values in the array are unusually small. Let's iterate over the maximum value on segment. Let $$$mx$$$ be the current value. If we make all $$$a_i$$$ such that $$$a_i  \\gt  mx$$$ equal to $$$-\\infty$$$, then it will never be optimal to take them in a segment. Find the maximum sum subarray in that modified array and update the answer with its $$$sum - mx$$$.\nNotice that you can ignore the fact if there is a value exactly equal to $$$mx$$$ on the maximum sum segment. If there isn't then you'll update the answer with a smaller value than the actual one. Let the actual maximum on the maximum sum segment be some $$$y$$$. You can see that for any value between $$$y$$$ and $$$mx$$$ the maximum sum segment will always be that chosen one. Thus, when you reach $$$y$$$, you'll update the answer with the correct value.\nOverall complexity: $$$O(\\max a_i \\cdot n)$$$."
         },
         {
             "title": "Solution (pikmike)",

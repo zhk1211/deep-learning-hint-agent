@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2122C - Manhattan Pairs\nLet's begin by considering the 1D version of the problem.\nIn one dimension, the optimal strategy is to pair the smallest $$$\\tfrac{n}{2}$$$ values with the largest $$$\\tfrac{n}{2}$$$ values.\nNow, let's move to the 2D case. The Manhattan distance is the independent sum of the contributions from the $$$x$$$-coordinates and the $$$y$$$-coordinates. Therefore, if we find a matching that is optimal independently for both the $$$x$$$- and $$$y$$$-coordinates, it will also be optimal in 2D.\nTo achieve this, partition the set of points in two different ways:\nLet $$$X_l$$$ and $$$X_r$$$ be the sets of points with the smallest and largest $$$\\tfrac{n}{2}$$$ $$$x$$$-coordinates, respectively.\nLet $$$Y_l$$$ and $$$Y_r$$$ be the sets of points with the smallest and largest $$$\\tfrac{n}{2}$$$ $$$y$$$-coordinates, respectively.\nA pairing will be optimal in both dimensions if:\neach point in $$$X_l$$$ is paired with a point in $$$X_r$$$,\neach point in $$$Y_l$$$ is paired with a point in $$$Y_r$$$.\nTo satisfy both conditions simultaneously, we can pair:\neach point in $$$X_l \\cap Y_l$$$ with a point in $$$X_r \\cap Y_r$$$,\neach point in $$$X_l \\cap Y_r$$$ with a point in $$$X_r \\cap Y_l$$$.\nLet $$$a$$$, $$$b$$$, $$$c$$$, $$$d$$$ denote the sizes of these four groups, respectively. Note that they are disjoint. Then, we have:\n$$$a + c = b + d$$$, because $$$|X_l| = |X_r|$$$,\n$$$a + d = b + c$$$, because $$$|Y_l| = |Y_r|$$$.\nAdding these equations up yields $$$a = b$$$ and $$$c = d$$$, so such a pairing is always possible."
         }
     ]
 }

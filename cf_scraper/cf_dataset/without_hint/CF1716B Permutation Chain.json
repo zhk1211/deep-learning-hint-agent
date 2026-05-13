@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1716B - Permutation Chain\nIdeally, we would want the fixedness values to be $$$n, n - 1, n - 2, \\dots, 0$$$. That would make a chain of length $$$n + 1$$$.\nHowever, it's impossible to have fixedness of $$$n - 1$$$ after one swap. The first swap always makes a permutation with fixedness $$$n - 2$$$.\nOkay, how about $$$n, n - 2, n - 3, \\dots, 0$$$ then? That turns out to always be achievable.\nFor example, swap elements $$$1$$$ and $$$2$$$, then elements $$$2$$$ and $$$3$$$, then $$$3$$$ and $$$4$$$ and so on.\nOverall complexity: $$$O(n^2)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2061G - Kevin and Teams\nUsing graph theory terminology, let edges labeled as $$$0$$$ be represented in red and edges labeled as $$$1$$$ be represented in blue.\n—\nWe can prove that if a graph has $$$3k + 1$$$ vertices, the maximum matching will be at most $$$k$$$. To see this, you can construct a blue clique of size $$$2k+1$$$, with all other edges colored red. It is not hard to verify that the maximum matching in both colors is $$$k$$$.\nSo the maximum matching you can find is $$$\\lfloor \\frac{n+1}{3} \\rfloor$$$.\n—\nTo construct a matching, we can maintain a chain of edges of the same color. Suppose we currently have a red chain $$$p_1, p_2, \\dots, p_k$$$. Now, we want to add a new vertex $$$q$$$. We check the color of the edge between $$$p_k$$$ and $$$q$$$:\nIf the edge is red, we add $$$q$$$ to the chain.\nIf the edge is blue, $$$p_{k-1}, p_k, q$$$ will form a \"mixed-color triplet.\" In this case, we remove $$$p_{k-1}$$$ and $$$p_k$$$ from the chain.\nAfter at most $$$n-1$$$ queries, the graph will be divided into several \"mixed-color triplets\" and one chain of edges of the same color.\nFor the chain of length $$$k$$$, we can find $$$\\lfloor \\frac{k}{2} \\rfloor$$$ matchings. For each \"mixed-color triplet\", we can always find one matching corresponding to the color.\nWe can construct a matching of size $$$\\lfloor \\frac{n+1}{3} \\rfloor$$$."
         }
     ]
 }

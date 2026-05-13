@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1843D - Apple Tree\nLet $$$cnt_v$$$ be the number of vertices from which an apple can fall if it is in the vertex $$$v$$$. Then the answer to the query is $$$cnt_v \\cdot cnt_u$$$.\nNote that the value of $$$cnt_v$$$ is equal to the number of leaves in the subtree of vertex $$$v$$$. Then, these values can be computed using the DFS or BFS. The value $$$cnt$$$ for a vertex will be equal to $$$1$$$ if this vertex is a leaf, otherwise it will be equal to the sum of these values for all children of the vertex.\nTotal complexity: $$$O(n + q)$$$."
         },
         {
             "title": "Solution",

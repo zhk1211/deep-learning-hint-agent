@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1343F - Restore the Permutation by Sorted Segments\nLet's fix the first element and then try to restore permutation using this information. One interesting fact: if such permutation exists (with this first element) then it can be restored uniquely. Let's remove the first element from all segments containing it (we can use some logarithmic data structure for it). Then we just have a smaller problem but with one important condition: there is a segment consisting of one element (again, if such permutation exists). So, if the number of segments of length $$$1$$$ is zero or more than one by some reason then there is no answer for this first element. Otherwise, let's place this segment (a single element) in second place, remove it from all segments containing it and just solve a smaller problem again.\nIf we succeed with restoring the permutation then we need to check if this permutation really satisfies the given input segments (see the first test case of the example to understand why this case appears). Let's just iterate over all $$$i$$$ from $$$2$$$ to $$$n$$$ and then over all $$$j$$$ from $$$i-1$$$ to $$$1$$$. If the segment $$$a_j, a_{j+1}, \\dots, a_i$$$ is in the list, remove it and go to the next $$$i$$$. If we can't find the segment for some $$$i$$$ then this permutation is wrong.\nTime complexity: $$$O(n^3 \\log n)$$$ (or less, maybe?)"
         },
         {
             "title": "Solution",

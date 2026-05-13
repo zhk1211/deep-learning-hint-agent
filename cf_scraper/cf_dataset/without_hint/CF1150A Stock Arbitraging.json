@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1150A - Stock Arbitraging\nThe main observation is that we always want to buy shares as cheaply as possible, and sell them as expensively as possible. Therefore, we should pick the lowest price at which we can buy shares $$$s_{\\min} = \\min(s_1, s_2, \\dots, s_n)$$$, and the highest price at which we can sell the shares $$$b_{\\max} = \\max(b_1, b_2, \\dots, b_m)$$$. Now, we have two cases:\nIf $$$s_{\\min}  \\lt  b_{\\max}$$$, it's optimal to buy as many shares and possible in the morning and sell them all in the evening. We can buy as many as $$$\\left\\lfloor \\frac{r}{s_{\\min}} \\right\\rfloor$$$ shares and gain $$$b_{\\max} - s_{\\min}$$$ bourles profit on each of them. Therefore, the final balance is $$$r + \\left\\lfloor \\frac{r}{s_{\\min}} \\right\\rfloor (b_{\\max} - s_{\\min})$$$.\nIf $$$s_{\\min} \\geq b_{\\max}$$$, we're not gaining any profit on the shares and therefore we shouldn't care about trading stocks at all. The final balance is then $$$r$$$.\nThe solution can be therefore implemented in $$$O(n + m)$$$ time. However, the constraints even allowed brute-forcing the seller, the buyer and the amount of stock we're buying in $$$O(nmr)$$$ time.\nNote that many programming languages have routines for finding the minima/maxima of the collections of integers: e.g.\nmin_element\nin C++,\nCollections.min\nin Java, or\nmin\nin Python. This should make the code shorter and quicker to write."
         }
     ]
 }

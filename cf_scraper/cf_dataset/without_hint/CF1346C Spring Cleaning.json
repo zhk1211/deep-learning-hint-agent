@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1346C - Spring Cleaning\nThere are only two possible cases in the problem: we remove all books from all bookcases or at least one bookcase is not removed.\nIn the first case, the answer is just $$$n \\cdot x$$$.\nIn the second case, let's apply the following greedy approach: sort all bookcases and iterate over the number of remaining bookcases from $$$1$$$ to $$$n$$$. Of course, we want to remain bookcases which contain the least amount of books. Let's maintain the current sum of $$$i$$$ first bookcases (in sorted order) $$$sum$$$. If $$$sum  \\gt  n \\cdot k$$$ then we just need to stop the algorithm. Otherwise, we can distribute all the books of the first $$$i$$$ bookcases between all $$$n$$$ bookcases to satisfy the conditions of the statement. Then we need to spend $$$(n-i) \\cdot x$$$ seconds to remove books from other bookcases and if $$$a_{i-1}  \\gt  k$$$ then we need to spend $$$y$$$ seconds in addition to distribute remaining books. So we can update the answer with the calculated value.\nTime complexity: $$$O(n \\log{n})$$$."
         },
         {
             "title": "Solution (elizarov)",

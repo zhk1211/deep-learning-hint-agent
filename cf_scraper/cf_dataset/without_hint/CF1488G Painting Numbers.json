@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1488G - Painting Numbers\nNote that if some $$$x$$$ is red and its multiplier $$$y$$$ (i. e., $$$y = kx$$$ for some integer $$$k  \\gt  1$$$) is blue, then we can swap their colors and the answer will not decrease, since all numbers that were divisible by $$$y$$$ will be divisible by $$$x$$$, and all numbers that were divisors of $$$x$$$ will be divisors of $$$y$$$. This means that $$$x$$$ can only turn red if all its multipliers are already red. So we can estimate in advance the value that $$$x$$$ will add to the answer if it is repainted from blue to red. This value is $$$f(x) - g(x)$$$, where $$$f(x)$$$ is the number of divisors of $$$x$$$, and $$$g(x)$$$ is the number of multipliers of $$$x$$$ not exceeding $$$n$$$. Therefore, it is enough to sort all the numbers by the value $$$f(x) - g(x)$$$ and take $$$k$$$ best ones."
         }
     ]
 }

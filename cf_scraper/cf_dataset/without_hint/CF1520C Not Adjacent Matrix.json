@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1520C - Not Adjacent Matrix\nNote that $$$n = 2$$$ is the only case where there is no answer.\nFor other cases, consider the following construction:\nLet's say that the cell $$$(i, j)$$$ is white if $$$i + j$$$ is an even number, otherwise, we will say that the cell $$$(i, j)$$$ is black;\nLet's arrange the cells so that all white cells are first, and if the colors are equal, the cells will be compared lexicographically.\nArrange numbers from $$$1$$$ to $$$n^2$$$ in ordered cells.\nFor example, for $$$n=3$$$, the following matrix will be constructed: $$$$$$ \\begin{pmatrix} 1 & 6 & 2\\\\ 7 & 3 & 8\\\\ 4 & 9 & 5\\\\ \\end{pmatrix} $$$$$$"
         },
         {
             "title": "Solution",

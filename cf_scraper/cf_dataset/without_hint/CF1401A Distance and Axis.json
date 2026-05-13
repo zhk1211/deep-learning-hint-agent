@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1401A - Distance and Axis\nIf $$$n$$$ is less than $$$k$$$, we have to move $$$A$$$ to coordinate $$$k$$$, and set the coordinate of $$$B$$$ as $$$0$$$ or $$$k$$$. So the answer is $$$k - n$$$.\nIf $$$n$$$ is not less than $$$k$$$, let's define the coordinate of $$$B$$$ as $$$m$$$($$$m \\times 2 \\le n$$$). By the condition in the problem, the difference between ($$$m - 0$$$) and ($$$n - m$$$) should be equal to $$$k$$$. That is, $$$(n - m) - (m - 0)$$$ is $$$k$$$, and summarizing the formula, $$$m = (n - k) / 2$$$. Because the coordinate of $$$B$$$ is integer, if the parity of $$$n$$$ and $$$k$$$ is same the answer is $$$0$$$, otherwise the answer is $$$1$$$(If we increase the coordinate of $$$A$$$ by $$$1$$$, m becomes integer).\nTime complexity : $$$O(1)$$$"
         },
         {
             "title": "Solution Code",

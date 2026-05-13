@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1463C - Busy Robot\nThe main idea in the problem is not how to solve it but how to code it neatly. I've come up with the following way.\nLet's store three variables: where is the robot now, what direction does it move ($$$-1$$$, $$$0$$$ or $$$1$$$) and how much time is left until it stops moving.\nThe processing of the commands looks becomes pretty easy. If there is no time left to move then the command is executed, and we tell the robot the direction and the time left for the current command. Then there are two cases: either the robot stops before the next command or after it. However, they can be processed simultaneously.\nLet $$$T$$$ be the minimum of the time left before the robot stops moving and the time before the next command. We sure know that before the next command the robot will visit exactly the segment of positions between the current position and the current position plus direction multiplied by $$$T$$$. If the destination for the current command is in this segment, then that command is successful.\nAfter the command is processed subtract $$$T$$$ from the time left and increase the position by direction multiplied by $$$T$$$.\nOverall complexity: $$$O(n)$$$ per testcase."
         },
         {
             "title": "Solution (pikmike)",

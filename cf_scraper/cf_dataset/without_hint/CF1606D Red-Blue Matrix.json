@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1606D - Red-Blue Matrix\nImagine you fixed some cut and then colored one row red. Which rows can now be colored red or blue so that the condition on the left matrix is satisfied? If the row has at least one number greater or equal than the numbers in the red row, then the row must be red. Otherwise, it can be either red or blue.\nHowever, imagine a weaker condition. Let's look only at the first cell in each row. Sort the rows by the first cell in them. Similarly, if a row is colored red, all the rows that are further in the sorted order should also be red, because they already have a greater or equal number in them.\nIt implies that after you sort the rows, the only possible colorings are: color some prefix of the rows in blue and the remaining suffix in red.\nSo there are $$$n$$$ possible colorings and $$$m$$$ possible cuts. If we learn to check if they are perfect in $$$O(1)$$$, we can get the solution in $$$O(nm)$$$.\nTurns out, the condition \"all numbers in the submatrix should be greater than all numbers in the other submatrix\" is the same as \"the minimum in the first submatrix should be greater than the maximum in the second submatrix\".\nThus, you can first precalculate prefix and suffix minimums and maximums and check a coloring and a cut in $$$O(1)$$$.\nOverall complexity: $$$O(n \\log n + nm)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

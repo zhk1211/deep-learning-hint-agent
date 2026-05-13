@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1833E - Round Dance\nLet's build an undirected graph, draw the edges $$$i \\to a_i$$$. Let's split this graph into connectivity components, denote their number by $$$k$$$. There could not be more than $$$k$$$ round dances.\nSince the degree of each vertex is no more than two, the connectivity components are simple cycles and bamboos. If we connect the vertices of degree one in each bamboo, we get a partition into $$$k$$$ round dances.\nNow let's try to get the minimum number of round dances. Nothing can be done with cycles, and all bamboos can be combined into one. If you get $$$b$$$ bamboos and $$$c$$$ cycles, then the answer is $$$\\langle c + \\min(b, 1), c + b \\rangle$$$.\nTime complexity is $$$O(n)$$$."
         },
         {
             "title": "Solution",

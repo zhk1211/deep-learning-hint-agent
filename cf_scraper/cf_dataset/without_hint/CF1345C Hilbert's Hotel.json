@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1345C - Hilbert's Hotel\nSuppose that $$$i+a_i\\equiv j+a_j\\pmod{n}$$$ for some $$$0\\le i \\lt j \\lt n$$$. Then $$$i+a_i=j+a_j+kn$$$ for some integer $$$k$$$, so the guest in room $$$i$$$ is assigned the same room as guest $$$j+kn$$$.\nSimilarly, suppose that two different guests $$$k$$$ and $$$m$$$ are assigned the same room. Then we have $$$i+a_i\\equiv j+a_j\\pmod{n}$$$ for $$$i=k\\bmod n$$$ and $$$j=m\\bmod n$$$.\nThis proves there is a collision if and only if all $$$i+a_i$$$ are not distinct $$$\\pmod n$$$. That is, $$$\\{(0+a_0)\\bmod n,(1+a_1)\\bmod n,\\ldots,(n-1+a_{n-1})\\bmod n\\}=\\{0,1,\\ldots,n-1\\}$$$. This is simply checked with a boolean array to make sure each number from $$$0$$$ to $$$n-1$$$ is included.\nNote that there are also no vacancies if this condition holds: Let $$$k$$$ be some room. Then $$$k\\bmod n$$$ must appear in the array, so there is some $$$i$$$ with $$$i+a_i\\equiv k\\pmod n$$$. Then there is an integer $$$m$$$ with $$$i+mn+a_i=k$$$, meaning guest $$$i+mn$$$ is moved to room $$$k$$$.\nComplexity is $$$O(n)$$$."
         }
     ]
 }

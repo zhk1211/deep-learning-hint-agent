@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1791G2 - Teleporters (Hard Version)\nPlease also refer to the tutorial for the easy version.\nIf we are not at the first taken portal, the problem is still independent for each portal, but this time the cost of a portal is $$$min(a_i + i, a_i + n + 1 - i)$$$ (since we can come to a portal either from point $$$0$$$ or point $$$n+1$$$). So, we again sort the portals by their costs. But this time, we need to make sure that the first taken portal is taken from point $$$0$$$, so we will iterate over all portals and check the maximum amount of portals we can take if we use it as the first one. We can check this using prefix sums over the minimum cost array and binary searching, checking if the amount of considered portals taken doesn't exceed the number of coins we initially have (we also have to deal with the case when the portal we are considering is included both times as the initial portal and in the minimum cost prefix)."
         },
         {
             "title": "Solution",

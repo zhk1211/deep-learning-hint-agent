@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1792B - Stand-up Comedian\nFirst, let Eve tell the jokes of the first type — they will never do any harm. At the same time, let her tell the jokes of the fourth time at the very end — they will not do any good.\nTypes two and three are kind of opposites of each other. If you tell jokes of each of them one after another, then the moods of both spectators don't change. Let's use that to our advantage. Tell the jokes of these types in pairs until one of them runs out. There's a little corner case here, though. If there were no jokes of the first type, then you can't use a single pair because of the spectators leaves after one joke.\nFinally, try to tell the remaining jokes of the same type before the fourth type. So the construction looks like $$$1, 1, \\dots, 1, 2, 3, 2, 3, \\dots, 2, 3, 2, 2, 2, \\dots, 2, 4, 4, 4, \\dots, 4$$$ with $$$2$$$ and $$$3$$$ possibly swapped with each other.\nLet's recover the answer from that construction. After the first type, both moods are $$$a_1$$$. After the alternating jokes, the moods are still the same. After that, one of the spectators will have his/her mood only decreasing until the end. Once it reaches $$$-1$$$, the show ends.\nThus, Eve can tell $$$a_1 + min(a_2, a_3) \\cdot 2 + min(a_1 + 1, abs(a_2 - a_3) + a_4)$$$ jokes if $$$a_1 \\neq 0$$$. Otherwise, it's always $$$1$$$.\nOverall complexity: $$$O(1)$$$."
         },
         {
             "title": "Solution (awoo)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1261C - Arson In Berland Forest\nLet's note that if there is a possible configuration in which the forest burnt $$$T$$$ minutes then there is a configuration when the forest burnt $$$T - 1$$$ minutes. So we can binary search the answer.\nNow we need to check the existence of the configuration for a fixed time $$$T$$$. Let's find all trees that can be set on fire. There are two equivalent conditions for such trees: either the square of length $$$2T + 1$$$ with a center in this cell contains only\nX\n-s or a distance between the current cell and any cell with \"\n.\n\" (or border) is more or equal to $$$T$$$.\nWe can use any of the conditions. The first condition can be checked with prefix sums on 2D - we can precalculate them one time and use them to take a sum on a rectangle. The second condition can be checked by running bfs from all \"\n.\n\"-s or borders (or from\nX\n-s which are neighboring to \"\n.\n\"-s or to the borders) also one time before the binary search.\nThe second step is to check that it's possible to cover all burnt trees starting from all set-on-fire trees. We can check it either with \"add value on a rectangle\" (using prefix sums) since each set-on-fire tree will burn a $$$(2T + 1) \\times (2T + 1)$$$ square with center in it. Or, alternatively, we can run bfs from set-on-fire trees.\nAnyways, both algorithms have $$$O(nm)$$$ complexity. And, since all damaged trees are shown on the map, the answer can't be more than $$$\\min(n, m)$$$. So, the total complexity is $$$O(nm \\log(\\min(n, m)))$$$."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1472C - Long Jumps\nLet $$$score(i)$$$ be the result of the game if we chose $$$i$$$ as the starting position.\nLet's look at some starting position $$$j$$$. After making a move from it, we will get $$$a[j]$$$ points and move to the position $$$j + a[j]$$$, continuing the same game. This means that by choosing the position $$$j$$$, we can assume that we will get a result $$$a[j]$$$ more than if we chose the position $$$j + a[j]$$$. Formally, $$$score(j) = score(j + a[j]) + a[j]$$$.\nLet's calculate all the results of $$$score$$$ and store them in an array. Let's start iterating through the positions from the end, then being in the position $$$i$$$ we will know $$$score(j)$$$ for all $$$j  \\gt  i$$$. Using the formula above, we can calculate $$$score(i)$$$ in one operation. It remains only to choose the maximum of all such values."
         },
         {
             "title": "Solution",

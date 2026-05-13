@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1541A - Pretty Permutations\nThere are two cases:\nif $$$n$$$ is even, print: $$$[2, 1, 4, 3, 6, 5 \\ldots n, n-1]$$$ Formally, you swap every other pair of adjacent elements. This is optimal because the total distance is $$$n$$$, which has to be minimal since the distance of one cat must be $$$ \\geq 1$$$.\nif $$$n$$$ is odd, first print $$$[3, 1, 2]$$$ then solve the even case for the remaining elements. This is optimal because the distance is $$$n+1$$$, which has to be minimal since a distance of $$$n$$$ is not achievable."
         }
     ]
 }

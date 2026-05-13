@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1737D - Ela and the Wiring Wizard\nNote that you can turn $$$(u, v)$$$ edge into a self loop $$$(u, u)$$$ in a single operation.\nWe can prove that it is always better to make an edge directly connect $$$1$$$ and $$$n$$$. Denote the index of that edge as $$$i$$$, and $$$\\text{dist}[u][v]$$$ as the shortest path from $$$u$$$ to $$$v$$$ on the unweighted version of the input graph. There are two cases:\nConnect $$$u_i$$$ to $$$1$$$ and $$$v_i$$$ to $$$n$$$ (and vice-versa) directly. The cost is $$$\\text{dist}[u_i][1] + \\text{dist}[v_i][n] + 1$$$ multiplied by $$$w_i$$$.\nConnect $$$1$$$, $$$n$$$ and $$$u_i$$$ through an intermediate vertex $$$x$$$. Then we will follow the shortest path from $$$u_i$$$ to $$$x$$$, connect $$$v_i$$$ to $$$x$$$, then create a self loop $$$(x, x)$$$. After that one of the edges will follow the path from $$$x$$$ to $$$1$$$, the other one will go from $$$x$$$ to $$$n$$$, and we are able to create an edge $$$(1, n)$$$ with weight $$$w$$$. The similar procedure is used to connect $$$1$$$, $$$n$$$ and $$$v_i$$$. The cost of the transformation is $$$\\text{dist}[1][x] + \\text{dist}[x][n] + \\text{dist}[u_i][x] + 2$$$ multiplied by $$$w_i$$$.\nWe may use BFS or Floyd algorithm in order to calculate $$$\\text{dist}[u][v]$$$. The final complexity is $$$O(n^3)$$$."
         },
         {
             "title": "Solution (magnified, C++)",

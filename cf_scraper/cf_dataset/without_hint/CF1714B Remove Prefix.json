@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1714B - Remove Prefix\nLet's turn the problem around: we'll look for the longest suffix that will make Polycarp happy, since it's the same thing.\nLet's create an array $$$cnt$$$, in which we will mark the numbers already encountered. Let's go along $$$a$$$ from right to left and check if $$$a_i$$$ does not occur to the right (in this case it is marked in $$$cnt$$$), if it occurs to the right, then removing any prefix that does not include $$$i$$$, we get an array where $$$a_i$$$ occurs twice, so we have to delete prefix of length $$$i$$$."
         },
         {
             "title": "Solution",

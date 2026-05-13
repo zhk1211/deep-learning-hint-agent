@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1646A - Square Counting\nLet the number of elements in the sequence equal to $$$n^2$$$ be $$$x$$$ and let the sum of all other numbers be $$$u$$$. Then, $$$s=x\\cdot n^2+u$$$. If an element of the sequence is not equal to $$$n^2$$$, then its value is at most is $$$n-1$$$. There are $$$n+1$$$ numbers in the sequence, so $$$u\\leq (n-1)\\times (n+1)=n^2-1$$$. Thus, $$$\\displaystyle \\left \\lfloor \\frac{s}{n^2} \\right \\rfloor= \\left \\lfloor \\frac{x\\cdot n^2+u}{n^2} \\right \\rfloor=\\left\\lfloor x+\\frac{u}{n^2} \\right\\rfloor=x$$$, which is the value we want to find. So, to solve the problem it is enough to compute the value of $$$\\displaystyle \\left\\lfloor \\frac{s}{n^2} \\right\\rfloor$$$.\nIntended complexity: $$$O(1)$$$ per test case."
         }
     ]
 }

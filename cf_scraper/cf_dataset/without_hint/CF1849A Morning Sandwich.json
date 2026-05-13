@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1849A - Morning Sandwich\nNotice that the type of filling doesn't matter. We can treat both cheese and ham together as one filling, with quantity $$$c + h$$$.\nThen let's start building a sandwich layer by layer. Put a piece of bread. Then put a layer of filling and a piece of bread. Then another layer of filling and a piece of bread. Observe that you can add one layer of filling and one piece of bread until one of them runs out. After you've done that $$$k$$$ times, you placed $$$k + 1$$$ layers of bread and $$$k$$$ layers of filling.\nThus, there are two general cases. If bread runs out first, then $$$k = b - 1$$$. Otherwise, $$$k = c + h$$$. The one that runs out first is the smaller of these two values. So the answer is $$$min(b - 1, c + h)$$$.\nOverall complexity: $$$O(1)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

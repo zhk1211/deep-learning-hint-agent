@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1475E - Advertising Agency\nIt is obvious that Masha will enter into agreements only with bloggers that have the most subscribers. You can sort all the bloggers and greedily select the prefix.\nLet $$$x$$$ — be the minimum number of subscribers for the hired blogger. Then we must hire all the bloggers who have more subscribers. Let $$$m$$$ — the number of bloggers who have more than $$$x$$$ subscribers, $$$cnt[x]$$$ — the number of bloggers who have exactly $$$x$$$ subscribers. Then we should select $$$k-m$$$ bloggers from $$$cnt[x]$$$. The number of ways to do this is equal to the binomial coefficient of $$$cnt[x]$$$ by $$$k-m$$$.\nYou could calculate it by searching for the inverse element modulo. Then you could calculate the factorials and use the equality $$$\\binom n k = \\frac{n!}{k! \\cdot (n-k)!}$$$.\nAlternatively, you can use the equation $$$\\binom n k = \\binom {n-1} {k} + \\binom {n-1} {k-1}$$$ and calculate it using dynamic programming. This method is better known as the Pascal triangle."
         },
         {
             "title": "Solution",

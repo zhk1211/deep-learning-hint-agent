@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1497C2 - k-LCM (hard version)\nIn this solution we will reuse the solution for $$$k = 3$$$.\nThe answer will be $$$1, 1, \\ldots, 1$$$ ($$$k - 3$$$ times) and the solution $$$a, b, c$$$ of the easy version for $$$n - k + 3$$$.\n$$$(1 + 1 + \\ldots + 1) + (a + b + c) = (k - 3) + (n - k - 3) = n$$$.\nAlso $$$LCM(1, 1, \\ldots, 1, a, b, c) = LCM(a, b, c) \\le \\frac{n - k + 3}{2} \\le \\frac{n}{2}$$$."
         },
         {
             "title": "Implementation",

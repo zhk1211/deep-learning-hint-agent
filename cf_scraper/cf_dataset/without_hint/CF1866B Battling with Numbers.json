@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1866B - Battling with Numbers\nFor a prime $$$k$$$, let $$$f_k(w)$$$ be the exponent of $$$k$$$ in the factorisation of $$$w$$$. In particular, if the factorisation of $$$w$$$ does not contain $$$k$$$, then $$$f_k(w)=0$$$.\nWe can obtain that for any prime $$$k$$$, it holds that:\n$$$f_k(X)=f_k(\\text{LCM}(p,q))=\\max(f_k(p),f_k(q))$$$\n$$$f_k(Y)=f_k(\\text{GCD}(p,q))=\\min(f_k(p),f_k(q))$$$\nFor each prime $$$k$$$, there are three cases:\nIf $$$f_k(X) \\lt f_k(Y)$$$, then it is impossible to assign the exponents since $$$\\max(f_k(p),f_k(q)) \\lt \\min(f_k(p),f_k(q))$$$ cannot be satsified.\nIf $$$f_k(X)=f_k(Y)$$$, then there is only one way to assign the exponents, which is $$$f_k(p)=f_k(q)=f_k(X)$$$.\nIf $$$f_k(X) \\gt f_k(Y)$$$, then there are two ways to assign the exponents, which are the following:\n$$$f_k(p)=f_k(X)$$$, $$$f_k(q)=f_k(Y)$$$\n$$$f_k(p)=f_k(Y)$$$, $$$f_k(q)=f_k(X)$$$\nThis means, if there is at least one prime $$$k$$$ such that $$$f_k(X) \\lt f_k(Y)$$$, the answer is $$$0$$$. Otherwise, the answer is $$$2$$$ to the power of the number of primes $$$k$$$ such that $$$f_k(X) \\gt f_k(Y)$$$.\nTo maintain the values of $$$f_k(X)$$$ and $$$f_k(Y)$$$, you can use two pointers, the map data structure, or other methods.\nTime complexity: $$$O(N)$$$"
         }
     ]
 }

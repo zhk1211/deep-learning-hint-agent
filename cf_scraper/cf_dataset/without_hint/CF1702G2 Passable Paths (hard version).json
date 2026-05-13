@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1702G2 - Passable Paths (hard version)\nRecall that the path in the rooted tree — ascends from one end to the least common ancestor ($$$lca$$$) of the ends and descends to the other end (possibly by 0). Then our set is divided into two simple ways.\nTo check this, you only need to count $$$lca$$$.\nWe will first calculate the depths, as for solving an easy version of the problem. We will go along the vertices according to the non-growth of the depths, if $$$lca$$$ of the deepest vertex and the current one is equal to the current one, then it is the ancestor of the deepest one, we will mark it. Next, we will find the deepest unmarked vertex and do the same, if there is no such vertex, then the whole path goes down and the answer is\nYES\n.\nIf there are unmarked vertices, then there are vertices outside of those two ascents and the answer is\nNO\n. Now we need to check that the two ascents do not intersect or intersect only at the $$$lca$$$ of ends, for this we just make sure that $$$lca$$$ is not deeper than the shallowest vertex of the set."
         },
         {
             "title": "Solution",

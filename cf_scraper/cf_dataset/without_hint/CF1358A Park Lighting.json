@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1358A - Park Lighting\nNote that if at least one of the sides is even, the square can be divided into pairs of neighbors and the answer is $$$\\frac{nm}{2}$$$.\nIf both sides are odd, we can first light up a $$$(n - 1) \\times m$$$ part of the park. Then we'll still have the part $$$m \\times 1$$$. We can light it up with $$$\\frac{m + 1}{2}$$$ lanterns. Then the total number of the lanterns is $$$\\frac{(n-1) \\cdot m}{2} + \\frac{m + 1}{2} = \\frac{nm - m + m + 1}{2} = \\frac{nm + 1}{2}$$$.\nNote that both cases can be combined into one formula: $$$\\lfloor \\frac{nm + 1}{2} \\rfloor$$$.\nThe overall compexity is $$$\\mathcal{O}(1)$$$ per test."
         },
         {
             "title": "Solution",

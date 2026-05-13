@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1216C - White Sheet\nThere are at least two solution to the problem. I'll describe both of them.\nThe first solution: firstly let's notice that the point we search can have non-integer coordinates, but if the answer exists then there will be the answer such that its point has at most half-integer coordinates. So let's multiply all coordinates by two and solve the problem with integer coordinates. The second thing is that for some $$$x$$$ there is only two points we need to check — top point with this $$$x$$$ and bottom point with this $$$x$$$. The same for some $$$y$$$. So we can iterate over all possible values of $$$x$$$ and check if the point $$$(x, y_1)$$$ lies outside of both black rectangles. The same with point $$$(x, y_2)$$$. Then do the same for points $$$(y, x_1)$$$ and $$$(y, x_2)$$$. $$$x$$$ should be in range $$$[x_1; x_2]$$$ and $$$y$$$ should be in range $$$[y_1; y_2]$$$. Time complexity is linear on size of the white rectangle.\nThe second solution is most tricky but has the better time complexity. Let $$$wb_1$$$ be the intersection of white rectangle and the first black rectangle, $$$wb_2$$$ the same but with the second black rectangle and $$$inter$$$ be the intersection of $$$wb_1$$$ and $$$wb_2$$$. Then it is obvious that the answer exists if $$$wb_1$$$ and $$$wb_2$$$ doesn't cover the whole white rectangle ($$$sq(w)  \\gt  sq(wb_1) + sq(wb_2) - sq(inter)$$$). Time complexity: $$$O(1)$$$."
         },
         {
             "title": "Solution 1",

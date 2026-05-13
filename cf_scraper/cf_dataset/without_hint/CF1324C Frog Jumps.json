@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1324C - Frog Jumps\nThe only observation we need is that we don't need to jump left at all. This only decreases our position so we have less freedom after the jump to the left. Then, to minimize $$$d$$$, we only need to jump between the closest '\nR\n' cells. So, if we build the array $$$b = [0, r_1, r_2, \\dots, r_k, n + 1]$$$, where $$$r_i$$$ is the position of the $$$i$$$-th '\nR\n' cell from left to right ($$$1$$$-indexed), then the answer is $$$\\max\\limits_{i=0}^{k} b_{i + 1} - b_i$$$.\nTime complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution",

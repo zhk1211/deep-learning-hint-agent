@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1553A - Digits Sum\nLet's think: what properties do all interesting numbers have? Well, if a number $$$x$$$ does not end with $$$9$$$, we can say for sure that $$$f(x+1) = f(x) + 1$$$, because the last digit will get increased. What if the number ends with $$$9$$$? Then the last digit will become $$$0$$$, so, no matter what happens to other digits, we can say that $$$f(x+1)$$$ will surely be less than $$$f(x)$$$.\nSo the problem asks us to count all numbers $$$1 \\le x \\le n$$$ with the last digit equal to $$$9$$$. It is not hard to see that the answer is equal to $$$\\lfloor \\frac{n + 1}{10} \\rfloor$$$.\nThis concludes the solution, as we are now able to answer all testcases in $$$O(1)$$$, resulting in total $$$O(t)$$$ runtime."
         },
         {
             "title": "Solution (kefaa2)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1450C1 - Errich-Tac-Toe (Easy Version)\nFor each cell $$$(i,j)$$$, let's associate it with the color $$$(i+j)\\bmod 3$$$. Every three consecutive cells contains one of each color. So, if we choose one color and flip all tokens with that color, it will be a solution. We need only prove that there is a color associated with at most one third of the tokens.\nLet there be $$$x_i$$$ tokens in cells of diagonal number $$$i$$$, for $$$i=0,1,2$$$. Then we have $$$k=x_0+x_1+x_2$$$. Therefore, $$$\\min\\{x_0,x_1,x_2\\}\\le \\lfloor \\frac{k}{3}\\rfloor$$$.\nHere's the coloring on an example. There are $$$3$$$\nX\n's on red, $$$4$$$ on blue, and $$$5$$$ on green. Red has the fewest, so we flip those."
         }
     ]
 }

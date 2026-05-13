@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1513A - Array and Peaks\nThere are many ways to solve this problem. The key idea is we try to use the first $$$k$$$ largest elements from $$$n$$$ to $$$n-k+1$$$ to construct the $$$k$$$ peaks. So try constructing the array like this: $$$1, n, 2, n-1, 3, n-2,..., n-k+1, k+1, k+2,..., n-k$$$. For this answer to be possible $$$n-k+1 \\gt k+1$$$ which means $$$2 \\cdot k \\lt n$$$. If this is not the case we output $$$-1$$$."
         },
         {
             "title": "Implementation in C++",

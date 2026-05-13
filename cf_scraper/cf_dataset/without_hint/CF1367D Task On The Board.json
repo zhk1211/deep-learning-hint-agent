@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1367D - Task On The Board\nWe will construct the string $$$t$$$, starting with the largest letters. Note that if $$$b_i = 0$$$, then the $$$i$$$-th letter of the string $$$t$$$ is maximal, so we know that the $$$i$$$-th letter affect all $$$b_j \\ne 0$$$. While the string $$$t$$$ is not completely constructed, we will do the following:\nFind all $$$i$$$ such that $$$b_i = 0$$$ and the $$$i$$$-th character of string $$$t$$$ is not placed;\nPut on all these positions $$$i$$$ in the string $$$t$$$ the maximum letter not used in the string $$$t$$$ (there should be a sufficient number of letters in the string $$$s$$$);\nSubtract $$$|i - j|$$$ from all $$$b_j \\ne 0$$$."
         },
         {
             "title": "Solution",

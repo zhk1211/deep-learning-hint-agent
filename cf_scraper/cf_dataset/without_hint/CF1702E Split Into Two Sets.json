@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1702E - Split Into Two Sets\nPolycarp has $$$n$$$ dominoes, on each domino there are $$$2$$$ numbers — it turns out, there will be $$$2n$$$ numbers in total.\nWe need to divide $$$2n$$$ numbers (each number from $$$1$$$ to $$$n$$$) into two sets so that all numbers in each set are different — each set will consist of $$$n$$$ numbers. It turns out that all numbers from $$$1$$$ to $$$n$$$ must occur exactly $$$2$$$ times, no more and no less.\nLet's imagine it all as a bipartite graph, where there are vertices from $$$1$$$ to $$$n$$$, and dominoes are edges. Since each number occurs exactly $$$2$$$ times, then we have a lot of cycles. In which the edges of each number must be included in different sets, in other words, the cycles must be of even length.\nThis can be checked in $$$O(n)$$$ by a simple enumeration."
         },
         {
             "title": "Solution",

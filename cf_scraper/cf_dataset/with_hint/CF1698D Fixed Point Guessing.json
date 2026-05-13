@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1698D - Fixed Point Guessing\nNote that $$$\\left\\lceil\\log_2 10^4\\right\\rceil = 14$$$, which is less than the number of queries. If we can answer a question of the form \"given a subarray, does it contain the fixed point?\", then we can binary search on this subarray until we find the fixed point.\nGiven a subarray $$$[a_l, \\dots, a_r]$$$, let's count the number of $$$a_i$$$ such that $$$l \\leq a_i \\leq r$$$. We claim that if this count is odd, then the subarray contains the fixed point; otherwise, it does not.\nFirst, let's show that each swapped pair either increases the count by $$$0$$$ or by $$$2$$$. Suppose that $$$x \\leftrightarrow y$$$ are swapped (that is, $$$a_x = y$$$ and $$$a_y = x$$$). If $$$a_x$$$ is in the range from $$$l$$$ to $$$r$$$, then $$$l \\leq y \\leq r$$$ (since $$$a_x = y$$$), so $$$a_y$$$ is also in the range from $$$l$$$ to $$$r$$$. Similarly, if $$$a_x$$$ is not in the range, then neither is $$$a_y$$$. So this pair either increases the count by $$$0$$$ or $$$2$$$.\nContrarily, the fixed point increases the count by $$$0$$$ if it is not in the range and $$$1$$$ if it is. So we can simply look at the parity of the number of elements satisfying the condition, and run our binary search.\nThe time complexity is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Implementation (C++)",

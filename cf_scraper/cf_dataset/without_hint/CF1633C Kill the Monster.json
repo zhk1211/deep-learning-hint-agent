@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1633C - Kill the Monster\nFirst of all, let's understand how to solve the problem without upgrades. To do this, it is enough to compare two numbers: $$$\\left\\lceil\\frac{h_M}{d_C}\\right\\rceil$$$ and $$$\\left\\lceil\\frac{h_C}{d_M}\\right\\rceil$$$ — the number of attacks that the character needs to kill the monster and the number of attacks that the monster needs to kill the character, respectively. So, if the first number is not greater than the second number, then the character wins.\nNote that the number of coins is not very large, which means we can iterate over the number of coins that we will spend on weapon upgrades, and the remaining coins will be spent on armor upgrades. After that, we can use the formula described above to check whether the character will win.\nThe complexity of the solution is $$$O(k)$$$."
         },
         {
             "title": "Solution (awoo)",

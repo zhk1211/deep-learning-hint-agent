@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1093C - Mishka and the Last Exam\nLet's present the following greedy approach. The numbers will be restored in pairs $$$(a_1, a_n)$$$, $$$(a_2, a_{n - 1})$$$ and so on. Thus, we can have some limits on the values of the current pair (satisfying the criteria about sort). Initially, $$$l = 0, r = 10^{18}$$$ and they are updated with $$$l = a_i, r = a_{n - i + 1}$$$. Let $$$l$$$ be minimal possible in the answer. Take $$$a_i = max(l, b_i - r)$$$ and $$$r = b_i - l$$$. That way $$$l$$$ was chosen in such a way that both $$$l$$$ and $$$r$$$ are within the restrictions and $$$l$$$ is also minimal possible. If $$$l$$$ was any greater than we would move both $$$l$$$ limit up and $$$r$$$ limit down leaving less freedom for later choices.\nOverall complexity: $$$O(n)$$$.\nFunnily enough, I coded some naive solution just to test main correct and with restriction of $$$10^9$$$ on numbers it passed all tests in 300 ms at max. After I saw that I guessed why it worked in $$$O(MAXVAL)$$$ but it looked fun nonetheless."
         },
         {
             "title": "Solution (PikMike)",

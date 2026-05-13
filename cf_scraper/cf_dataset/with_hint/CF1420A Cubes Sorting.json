@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1420A - Cubes Sorting\nIt is not difficult to see that the answer «\nNO\n» in this task is possible when and only when all $$$a_i$$$ are different and sorted in descending order. In this case we need $$$\\frac{n \\cdot (n-1)}{2}$$$ operations. Otherwise the answer is always «\nYES\n».\nWhy does this solution work? Let's define\nnumber of inversions\nas the number of pairs $$$1 \\le i  \\lt  j \\le n$$$ such as $$$a_i  \\gt  a_j$$$. Note that if the number of inversions is zero, the $$$a$$$ array is sorted in non-decreasing order. If the array is not sorted, we can always choose two neighboring elements such that $$$a_i  \\gt  a_{i+1}$$$ and swap them. In this case, the number of inversions is reduced by one. In this case, we cannot reduce the number of inversions by more than one, so it is equal to the minimum number of operations we must perform.\nNow, all we have to do is notice that the number of inversions does not exceed $$$\\frac{n(n-1)}2$$$, and the maximum is only reached when $$$a_i  \\gt  a_j$$$ for all pairs $$$1 \\le i  \\lt  j \\le n$$$. It follows that in this case the array must be strictly descending.\nThus, we have a solution with a time of $$$O(n)$$$."
         }
     ]
 }

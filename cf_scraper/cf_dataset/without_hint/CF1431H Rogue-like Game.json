@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1431H - Rogue-like Game\nWhile Marina is playing the game, there will be at most $$$n + m$$$ events when she unlocks something. Let's sort all unlockables by the required score.\nAfter Marina has unlocked something, it is quite obvious that she has to play runs with the best combination of species and class she has already unlocked, until she unlocks something else. Since the number of unlockables is at most $$$n + m$$$, Marina needs to consider only at most $$$n + m$$$ different combinations — only the best combinations available between two \"unlocking\" events are needed.\nSo, the solution consists of two parts:\nfind at most $$$n + m$$$ combinations we need to consider (these are the best combinations before each \"unlocking\" event);\nthen iterate on one of these combinations that we will boost by reading a guide, and solve the problem with $$$n + m$$$ combinations, one of which is already boosted, greedily in $$$O(n + m)$$$ or $$$O((n + m) \\log (n + m))$$$.\nThe complexity of the model solution is $$$O((n + m)^2 \\log (n + m))$$$."
         },
         {
             "title": "Solution (Ne0n25)",

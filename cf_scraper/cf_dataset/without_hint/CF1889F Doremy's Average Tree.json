@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1889F - Doremy's Average Tree\nLet $$$f_{i,j}$$$ be the array with the smallest lexicographical order if you do at most $$$j$$$ operations in the subtree of $$$i$$$ (only consisting of the elements in the subtree of $$$i$$$). Let $$$g_{i,j}$$$ be the first position $$$k$$$ where $$$f_{i,j}[k]$$$ is different from $$$f_{i,j-1}[k]$$$. To get the answer, we just need to calculate $$$g_{i,j}$$$ which gives us enough information to compare the lexicographical order between two choice. At the same time we need to record the first number of $$$f_{i,j}$$$ (let the number be $$$t$$$) and its label, and the first number in $$$f_{i,j}$$$ such that it is different from $$$t$$$ and its label, which gives us enough information to decide whether to do an operation on $$$i$$$. The time complexity is $$$O(nk)$$$."
         }
     ]
 }

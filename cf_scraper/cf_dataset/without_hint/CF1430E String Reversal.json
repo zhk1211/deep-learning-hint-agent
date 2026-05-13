@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1430E - String Reversal\nFirst of all, let's find the resulting position for each character of the string. It's easy to see that we don't need to swap equal adjacent characters (it changes nothing), so the first character\na\nin the original string is the first character\na\nin the resulting string, the second character\na\nin the original string is the second character\na\nin the resulting string, and so on.\nNow, let's build a permutation $$$p$$$ of $$$n$$$ elements, where $$$p_i$$$ is the resulting position of the element that was on position $$$i$$$ in the original string. For example, for the string\nabcad\nthis permutation will be $$$p = [2, 4, 3, 5, 1]$$$. In one operation, we may swap two elements in this permutation, and our goal is to sort it (since each character of the string has its own required position, and when for every $$$i$$$ the condition $$$p_i = i$$$ holds, each character is on the position it should be). The required number of swaps of adjacent elements to sort a permutation is exactly the number of inversions in it (since each swap changes the number of inversions by $$$1$$$), and this number can be calculated using many different techniques, for example, mergesort tree or Fenwick tree."
         },
         {
             "title": "Solution (fcspartakm)",

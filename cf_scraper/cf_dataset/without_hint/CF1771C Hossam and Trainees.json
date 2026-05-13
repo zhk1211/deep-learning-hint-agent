@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1771C - Hossam and Trainees\nIf exists $$$x \\geq 2$$$ such that $$$a_i$$$ divides $$$x$$$ and $$$a_j$$$ divides $$$x$$$ then exists prime number $$$p$$$ such that $$$a_i$$$ and $$$a_j$$$ divides $$$p$$$. We can choose $$$p = $$$ any prime divisor of $$$x$$$.\nSo, let's factorize all numbers and check, if two of them divides one prime number. We can use default factorization, and it will be $$$O(n \\cdot \\sqrt{A})$$$. It's too long, so just calculate prime numbers $$$\\leq \\sqrt{A}$$$ and check if $$$a_i$$$ divides this numbers. It will be $$$O(n \\cdot \\frac{\\sqrt{A}}{\\log{A}})$$$ - fast enouth."
         },
         {
             "title": "Solution(_HossamYehia_)",

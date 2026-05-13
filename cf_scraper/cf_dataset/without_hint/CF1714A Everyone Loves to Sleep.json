@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1714A - Everyone Loves to Sleep\nTo begin with, let's learn how to determine how much time must pass before the $$$i$$$ alarm to trigger. If the alarm time is later than the current one, then obviously $$$60*(h_i - H) + m_i - M$$$ minutes should pass. Otherwise, this value will be negative and then it should pass $$$24*60 + 60* (h_i - H) + m_i - M$$$ since a full day must pass, not including the time from the alarm to the current time. We just need to find the minimum number of minutes among all the alarm clocks.\nDue to small constrains, the problem can also be solved by stimulating the sleep process: increase the answer by $$$1$$$ and check whether any alarm will work after this time."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1304B - Longest Palindrome\nLet's define $$$rev(S)$$$ as the reversed string of a string $$$S$$$. There are two cases when we choose $$$K$$$ strings to make a palindrome string $$$S_1 + S_2 + \\cdots + S_K$$$:\nIf $$$K$$$ is even, for every integer $$$X$$$ ($$$1 \\le X \\le \\cfrac{K}{2}$$$), $$$S_X = rev(S_{K-X+1})$$$.\nif $$$K$$$ is odd, $$$S_{\\frac{K+1}{2}}$$$ must be palindrome. Also for every integer $$$X$$$ ($$$1 \\le X \\le \\cfrac{K-1}{2}$$$), $$$S_X = rev(S_{K-X+1})$$$.\nIn either case we want to find as many pairs of strings as possible such that one is the reverse of the other. It is also clear that if $$$T$$$ is a palindrome string then $$$rev(T) = T$$$. We cannot make a pair of T and rev(T) because all strings in the input are distinct.\nTherefore, for each string we need to find if there is another string that is its reverse. If there exists one, put them on the left / right end respectively. If there are one or more strings that are palindrome themselves, pick any one of them and put it in the middle.\nTime complexity: $$$O(n^2m)$$$ if we implement it naively. $$$O(nmlogn)$$$ is possible if we use a data structure that provides $$$O(logn)$$$ search such as std::set in C++."
         },
         {
             "title": "Solution",

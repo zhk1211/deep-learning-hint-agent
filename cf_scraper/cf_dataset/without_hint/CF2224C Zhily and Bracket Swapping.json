@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2224C - Zhily and Bracket Swapping\nIf $$$a_i=b_i$$$, it doesn't matter; we ignore them. Otherwise, half of the $$$a_i$$$ should be '(', since there should be same number of '(' in $$$a$$$ and $$$b$$$.\nAfter that, the number of '(' and ')' in both $$$a$$$ and $$$b$$$ are determined. Thus, we just need to ensure for each prefix, the number of ')' is no more than '('. So we can just set $$$a_i$$$ = '(' if there are more ')' in $$$a$$$ before index $$$i$$$, and set $$$a_i$$$ = ')' otherwise.\nWe can see that it equals to simply set the odd indices of $$$i$$$ such that $$$a_i \\neq b_i$$$ as $$$a_i$$$ = '(', vice versa. Just check if it's legal."
         },
         {
             "title": "Implementation",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1479A - Searching Local Minimum\nWe maintain by binary search a range $$$[l, r]$$$ which has a local minimum. Moreover, we assume that $$$a_{l-1}  \\gt  a_l$$$ and $$$a_r  \\lt  a_{r+1}$$$. Initially, $$$[l, r] = [1, n]$$$.\nIn each iteration, let $$$m$$$ be the midpoint of $$$l$$$ and $$$r$$$.\nCase 1\n. If $$$a_m  \\lt  a_{m+1}$$$, then the range becomes $$$[l, m]$$$.\nCase 2\n. If $$$a_m  \\gt  a_{m+1}$$$, then the range becomes $$$[m+1, r]$$$.\nWhen $$$l = r$$$, we have found a local minimum $$$a_l$$$.\nThe number of queries to $$$a_i$$$ is at most $$$2 \\lceil \\log_2 n \\rceil \\leq 34  \\lt  100$$$."
         },
         {
             "title": "Solution",

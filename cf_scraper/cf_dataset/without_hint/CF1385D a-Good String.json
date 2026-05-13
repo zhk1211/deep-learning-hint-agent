@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1385D - a-Good String\nConsider the problem in $$$0$$$-indexation. Define the function $$$calc(l, r, c)$$$ which finds the minimum number of changes to make the string $$$s[l \\dots r)$$$\n$$$c$$$-good string\n. Let $$$mid = \\frac{l + r}{2}$$$. Then let $$$cnt_l = \\frac{r - l}{2} - count(s[l \\dots mid), c) + calc(mid, r, c + 1)$$$ and $$$cnt_r = \\frac{r - l}{2} - count(s[mid \\dots r), c) + calc(l, mid, c + 1)$$$, where $$$count(s, c)$$$ is the number of occurrences of the character $$$c$$$ in $$$s$$$. We can see that $$$cnt_l$$$ describes the second condition from the statement and $$$cnt_r$$$ describes the third one. So, $$$calc(l, r, c)$$$ returns $$$min(cnt_l, cnt_r)$$$ except one case. When $$$r - l = 1$$$, we need to return $$$1$$$ if $$$s_l \\ne c$$$ and $$$0$$$ otherwise. This function works in $$$O(n \\log n)$$$ (each element of $$$s$$$ belongs to exactly $$$\\log{n}$$$ segments, like segment tree). You can get the answer if you run $$$calc(0, n,~ 'a')$$$."
         },
         {
             "title": "Solution",

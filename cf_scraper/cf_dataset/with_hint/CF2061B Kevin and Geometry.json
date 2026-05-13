@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2061B - Kevin and Geometry\nLet $$$a$$$ and $$$b$$$ be the lengths of the two bases, and let $$$c$$$ be the length of the two legs. A necessary and sufficient condition for forming an isosceles trapezoid with a positive area is $$$|a - b|  \\lt  2c$$$, as the longest edge must be shorter than the sum of the other three edges.\nTo determine whether an isosceles trapezoid can be formed, consider the following cases:\nIf there are two distinct pairs of identical numbers that do not overlap, these pairs can always form an isosceles trapezoid.\nIf there are no pairs of identical numbers, it is impossible to form an isosceles trapezoid.\nIf there is exactly one pair of identical numbers, denoted by $$$c$$$, we will use them as the legs. Remove this pair and check whether there exist two other numbers whose difference is less than $$$2c$$$. This can be efficiently done by sorting the remaining numbers and checking adjacent pairs.\nThe time complexity of this approach is $$$O(n \\log n)$$$."
         }
     ]
 }

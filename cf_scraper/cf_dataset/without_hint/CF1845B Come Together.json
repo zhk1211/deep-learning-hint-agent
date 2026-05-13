@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1845B - Come Together\nLet $$$d(P_1, P_2)$$$ be the Manhattan distance between points $$$P_1 = (x_1, y_1)$$$ and $$$P_2 = (x_2, y_2)$$$. Then $$$d(P_1, P_2) = |x_1 - x_2| + |y_1 - y_2|$$$.\nNote that if you are going from $$$A$$$ to $$$B$$$ (or to $$$C$$$) along the shortest path, the Manhattan distance will be decreasing with each move. So Bob and Carol can walk together as along as they find the next cell that is closer to both $$$B$$$ and $$$C$$$.\nNow note that if they are in the bounding box of cells $$$B$$$ and $$$C$$$ then there are no such \"next cell\", since $$$d(X, B) + d(X, C)$$$ is constant and equal to $$$d(A, B)$$$ if $$$X$$$ is in the bounding box. In other words, Bob and Carol can walk together until they reach some cell $$$X$$$ inside the bounding box, where they split up.\nFinally, let's look at the total distance they will walk: from one side it's $$$d(A, B) + d(A, C)$$$. But from the other side it's $$$2 \\cdot d(A, X) + d(X, B) + d(X, C)$$$.\nSo, $$$$$$d(A, X) = \\frac{d(A, B) + d(A, C) - (d(X, B) + d(X, C))}{2}$$$$$$ But since $$$d(X, B) + d(X, C) = d(B, C)$$$ whichever $$$X$$$ is chosen we can calculate answer as $$$$$$\\frac{d(A, B) + d(A, C) - d(B, C)}{2} + 1$$$$$$ where $$$+1$$$ is because we are talking about cells $$$A$$$, $$$B$$$ and $$$C$$$ and not just points."
         },
         {
             "title": "Solution (adedalic)",

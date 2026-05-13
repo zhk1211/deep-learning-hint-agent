@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1066C - Books Queries\nLet imagine our shelf as an infinite array. Let's carry the rightmost free position from the left of our shelf (let it be $$$l$$$ and initially it equals to $$$0$$$) and the leftmost free position from the right of our shelf (let it be $$$r$$$ and initially it equals to $$$0$$$). Also let's carry the array $$$pos$$$ of length $$$2 \\cdot 10^5$$$ where $$$pos_i$$$ will be equal to the position in our imaginary array of the book with a number $$$i$$$.\nLet's put the first book to the position $$$0$$$. Also let's save that $$$pos_{id}$$$ (where $$$id$$$ is the number of the first book) equals to $$$0$$$. How will change $$$l$$$ and $$$r$$$? $$$l$$$ will become $$$-1$$$ and $$$r$$$ will become $$$1$$$. Now let's process queries one by one. If now we have the query of type $$$1$$$ with a book with a number $$$id$$$, then let's set $$$pos_{id} := l$$$ and set $$$l := l - 1$$$. The query of type $$$2$$$ can be processed similarly. Now what about queries of type $$$3$$$? The answer to this query equals to $$$min(|pos_{id} - l|, |pos_{id} - r|) - 1$$$, where $$$|v|$$$ is the absolute value of $$$v$$$."
         },
         {
             "title": "Solution",

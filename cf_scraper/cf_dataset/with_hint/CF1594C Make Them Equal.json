@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1594C - Make Them Equal\nIf the whole string is equal to $$$c$$$ then you don't need to make any operations.\nIn order to find if it is possible with exactly $$$1$$$ operation, we can pass through every $$$x$$$ and count all the letters $$$c$$$ that are divisible by $$$x$$$. This takes $$$O(|s| log |s|)$$$ time complexity.\nIf for some $$$x$$$ all its multiples are $$$c$$$ then the answer is $$$1$$$ operation with that $$$x$$$.\nIf all the above conditions don't hold you can always make $$$2$$$ operations and make all the elements equal.\nOne possible way is with $$$x = |s|$$$ and $$$x = |s|-1$$$.\nAfter the first operation only the last element of $$$s$$$ is not $$$c$$$ thus if we use $$$x = |s|-1$$$ since $$$gcd(|s|,|s|-1) = 1$$$ then $$$|s|$$$ is not divisible by $$$|s|-1$$$ and it will become equal to $$$c$$$.\nTime complexity: $$$O(|s| log |s|)$$$ per test case."
         }
     ]
 }

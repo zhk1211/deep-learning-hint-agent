@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1359E - Modular Stability\nWe claim that the array is stable if and only if all elements are divisible by its minimum. The proof of this fact will be at the end of the editorial.\nTo calculate the number of stable arrays now, we need to iterate on the minimum in the array and choose the remaining elements so that they are multiples of it. If the minimum is $$$i$$$, then the resulting elements should be divisible by $$$i$$$. There are $$$d = \\lfloor\\frac{n}{i}\\rfloor$$$ such numbers between $$$1$$$ and $$$n$$$, and we have to choose $$$k - 1$$$ elements out of $$$d - 1$$$ (since $$$i$$$ is already chosen). The number of ways to do it can be calculated by precomputing factorials modulo $$$998244353$$$, since it is a binomial coefficient.\nProof of the claim at the beginning of the editorial:\nOn the one hand, since $$$(x \\bmod a) \\bmod (ba) = (x \\bmod (ba)) \\bmod a = x \\bmod a$$$, if all elements in the array are divisible by some element, nothing depends on the order of these elements.\nOn the other hand, suppose there exists an element $$$a_i$$$ such that it is not divisible by $$$a_1$$$. Let's take $$$x = a_i$$$ and two following reorders of the array $$$a$$$: $$$[a_1, a_2, \\dots, a_k]$$$ and $$$[a_i, a_1, a_2, \\dots, a_{i - 1}, a_{i + 1}, \\dots, a_k]$$$. For the first array, we get $$$x \\bmod a_1 = a_i \\bmod a_1$$$, which is non-zero; and for the second array, $$$a_i \\bmod a_i = 0$$$, so the result is zero."
         },
         {
             "title": "Solution (BledDest)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1863D - Two-Colored Dominoes\nLet's consider the requirement on the rows. Clearly, all horizontal dominoes (since each of them has $$$1$$$ black and $$$1$$$ white cell) do not influence the black-white balance for the rows. Thus, we are only interested in vertical dominoes.\nConsider the first row and the vertical dominoes that intersect this row. Their number has to be even, otherwise, the first row has an odd number of cells covered by dominoes and the solution is clearly impossible. But if there is an even number of such dominoes, we have to paint half of them black-white, and half of them white-black. What's more, it doesn't actually matter the exact order we paint them in, because vertical dominoes do not affect the columns' balance and we will not influence the balance of the second row anyway. So we can freely paint them however we like. The same logic applies for rows $$$2, \\ldots, n$$$.\nNow we turn to horizontal dominoes. In the first row, there once again has to be an even number of dominoes which intersect this column. And we can paint half them black-white, and half of them white-black, and it doesn't matter which exact way we choose. Do the same for columns $$$2, \\ldots, m$$$."
         }
     ]
 }

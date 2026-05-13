@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1840A - Cipher Shifer\nNote that during encryption, only characters different from $$$c$$$ are added after the character $$$c$$$. However, when the character $$$c$$$ is\nencrypted\nwith different characters, another $$$c$$$ character is added to the string.\nThis means that for decryption, we only need to read the characters of the string after $$$c$$$ until we find the first character equal to $$$c$$$. It signals the end of the block of characters that will be converted to the character $$$c$$$ during decryption.\nTo decrypt the entire string, we decrypt the first character $$$s_1$$$. Let the next occurrence of the character $$$s_1$$$ be at position $$$pos_1$$$. Then the next character of the original string is $$$s_{pos_1 + 1}$$$. We apply the same algorithm to find the next paired character and so on."
         },
         {
             "title": "Solution",

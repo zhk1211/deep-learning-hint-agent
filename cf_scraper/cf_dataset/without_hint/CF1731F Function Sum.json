@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1731F - Function Sum\nLet's try to write a brute force solution of this using combinatorics. Let's say that $$$a[i]=t$$$ now we will try to see that in how many permutations this is contributing towards the answer. Using combinatorics, it can be calculated as $$$$$$F(t) = t \\cdot {\\sum_{i=1}^n \\sum_{x=0}^{i-1} \\sum_{y = x+1}^{n-i} \\left( \\binom{i-1}{x} (t-1)^{x} (K+1-t)^{i-1-x} \\cdot \\binom{n-i}{y} (K-t)^{y} \\cdot t^{n-i-y} \\right)} $$$$$$.\nHere $$$x$$$ represents $$$\\operatorname{lsl}(i)$$$ and y represents $$$\\operatorname{grr}(i)$$$.\nLet $$$$$$P(u) = {\\sum_{t=1}^u F(t)} $$$$$$ be a polynomial whose degree will be $$$\\le n+2$$$. And now our answer will be $$$P(k)$$$.\nNow, we can evaluate this polynomial for smaller values (by brute force) and will use the technique of polynomial interpolation to find the answer."
         }
     ]
 }

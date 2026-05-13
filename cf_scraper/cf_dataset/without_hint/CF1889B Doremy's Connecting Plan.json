@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1889B - Doremy's Connecting Plan\nFirst, we can just solve $$$c=1$$$. Because letting $$$a_i' = \\frac{a_i}{c}$$$ reduces $$$c\\ne 1$$$ to $$$c=1$$$.\nFor convenience, let $$$s_i = \\sum a_j$$$, where $$$j$$$ is currently connected with $$$i$$$.\nLet's see if you can add an edge between $$$i$$$ and $$$j$$$ ($$$i \\ne 1, j \\ne 1$$$) right now, it means\n$$$$$$ s_i + s_j \\ge i \\cdot j \\ge i+j $$$$$$\nThis actually implies at least one of $$$s_i \\ge i$$$ and $$$s_j \\ge j$$$ holds (otherwise $$$s_i + s_j  \\lt  i + j$$$). WLOG, let $$$s_i \\ge i$$$ be true. Therefore $$$s_i + s_1 \\ge 1 \\cdot i$$$, which means you can add an edge between $$$1$$$ and $$$i$$$.\nMoreover, adding a new edge does not cause other edges that can be added to become unable to be added. So it's always good to add the edge between $$$1$$$ and $$$i$$$. Now we only need to decide the order.\nConsider this inequality $$$s_i + s_1 \\ge 1 \\cdot i$$$. You can see that larger $$$s_i - i$$$ is, faster node $$$i$$$ is able to be linked with $$$1$$$. So we can sort $$$i$$$ by $$$a_i-i$$$ in descending order, and that is the order we need.\nTime complexity $$$O(n \\log n)$$$.\nBonus: Time complexity can be $$$O(n)$$$ based on this observation: If you link $$$(1,i)$$$, then any $$$j  \\lt  i$$$ can be linked to $$$1$$$."
         }
     ]
 }

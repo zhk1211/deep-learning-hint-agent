@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1857F - Sum and Product\nThe system of equations in the statement resembles Vieta's formula for quadratic equations. If we have $$$$$$ \\begin{cases} a_i + a_j = b \\\\ a_i \\cdot a_j = c \\end{cases} $$$$$$ the quadratic equation will be $$$x^2 - bx + c = 0$$$, here $$$a_i$$$ and $$$a_j$$$ will be its roots.\nTo find the roots of the quadratic equation, we can use the discriminant formula, $$$D = b^2 - 4ac$$$. The roots will then be $$$x_1 = \\frac{b - \\sqrt{D}}{2}$$$ and $$$x_2 = \\frac{b + \\sqrt{D}}{2}$$$.\nOnce we have the potential integer values for $$$a_i$$$ and $$$a_j$$$, we can calculate the number of pairs by multiplying the number of occurrences, respectively.\nHowever, remember to consider some special cases:\nIf $$$D  \\lt  0$$$, the equation won't have real roots.\nIf $$$D = 0$$$, then $$$x_1 = x_2$$$, the formula for counting pairs in this case is different.\nThe complexity of this solution is $$$O((n + q) \\log n)$$$, using maps to store integer occurrences."
         }
     ]
 }

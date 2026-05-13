@@ -1,0 +1,40 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThe position of the leftmost maximum on the segment $ [l; r] $ of array $ x = [x_1, x_2, \\ldots, x_n] $ is the smallest integer $ i $ such that $ l \\le i \\le r $ and $ x_i = \\max(x_l, x_{l+1}, \\ldots, x_r) $ .\n\nYou are given an array $ a = [a_1, a_2, \\ldots, a_n] $ of length $ n $ . Find the number of integer arrays $ b = [b_1, b_2, \\ldots, b_n] $ of length $ n $ that satisfy the following conditions:\n\n- $ 1 \\le b_i \\le m $ for all $ 1 \\le i \\le n $ ;\n- for all pairs of integers $ 1 \\le l \\le r \\le n $ , the position of the leftmost maximum on the segment $ [l; r] $ of the array $ b $ is equal to the position of the leftmost maximum on the segment $ [l; r] $ of the array $ a $ .\n\nSince the answer might be very large, print its remainder modulo $ 10^9+7 $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^3 $ ) — the number of test cases.\n\nThe first line of each test case contains two integers $ n $ and $ m $ ( $ 2 \\le n,m \\le 2 \\cdot 10^5 $ , $ n \\cdot m \\le 10^6 $ ).\n\nThe second line of each test case contains $ n $ integers $ a_1,a_2,\\ldots,a_n $ ( $ 1 \\le a_i \\le m $ ) — the array $ a $ .\n\nIt is guaranteed that the sum of $ n \\cdot m $ over all test cases doesn't exceed $ 10^6 $ .\n\nOutput Format\nFor each test case print one integer — the number of arrays $ b $ that satisfy the conditions from the statement, modulo $ 10^9+7 $ .\n\nExamples\nSample 1\nInput\n4\n3 3\n1 3 2\n4 2\n2 2 2 2\n6 9\n6 9 6 9 6 9\n9 100\n10 40 20 20 100 60 80 60 60\nOutput\n8\n5\n11880\n351025663\n\nNote\nIn the first test case, the following $ 8 $ arrays satisfy the conditions from the statement:\n\n- $ [1,2,1] $ ;\n- $ [1,2,2] $ ;\n- $ [1,3,1] $ ;\n- $ [1,3,2] $ ;\n- $ [1,3,3] $ ;\n- $ [2,3,1] $ ;\n- $ [2,3,2] $ ;\n- $ [2,3,3] $ .\n\nIn the second test case, the following $ 5 $ arrays satisfy the conditions from the statement:\n\n- $ [1,1,1,1] $ ;\n- $ [2,1,1,1] $ ;\n- $ [2,2,1,1] $ ;\n- $ [2,2,2,1] $ ;\n- $ [2,2,2,2] $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nLet $$$m$$$ be the position of the leftmost maximum on the segment $$$[1;n]$$$.\nIf $$$l \\le m \\le r$$$, then the position of the leftmost maximum on the segment $$$[l;r]$$$ is equal to $$$m$$$.\nIf $$$l \\le r \\lt m $$$, then the leftmost maximum on the segment $$$[l;r]$$$ is some element $$$a_p$$$, $$$p \\lt m$$$.\nIf $$$m \\lt l \\le r$$$, then the leftmost maximum on the segment $$$[l;r]$$$ is some element $$$a_{p_2}$$$, $$$p_2 \\gt m$$$.\nHint 2\nLet $$$m$$$ be the position of the leftmost maximum on the segment $$$[l;r]$$$.\nIf $$$p$$$ is the position of the leftmost maximum on the segment $$$[l;m-1]$$$ and $$$p_2$$$ is the position of the leftmost maximum on the segment $$$[m+1;r]$$$, then $$$b_m \\gt b_{p}$$$ and $$$b_m \\ge b_{p_2}$$$.\nHint 3\nUsing the idea from the previous hint, we can recursively build a binary tree where the children of node $$$m$$$ are nodes $$$p$$$ and $$$p_2$$$.\nHint 4\nCan this problem be boiled down to a tree dp? (Note that $$$n \\cdot m \\le 10^6$$$)"
+        },
+        {
+            "title": "Hint 1",
+            "content": "Let $$$m$$$ be the position of the leftmost maximum on the segment $$$[1;n]$$$.\nIf $$$l \\le m \\le r$$$, then the position of the leftmost maximum on the segment $$$[l;r]$$$ is equal to $$$m$$$.\nIf $$$l \\le r \\lt m $$$, then the leftmost maximum on the segment $$$[l;r]$$$ is some element $$$a_p$$$, $$$p \\lt m$$$.\nIf $$$m \\lt l \\le r$$$, then the leftmost maximum on the segment $$$[l;r]$$$ is some element $$$a_{p_2}$$$, $$$p_2 \\gt m$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Let $$$m$$$ be the position of the leftmost maximum on the segment $$$[l;r]$$$.\nIf $$$p$$$ is the position of the leftmost maximum on the segment $$$[l;m-1]$$$ and $$$p_2$$$ is the position of the leftmost maximum on the segment $$$[m+1;r]$$$, then $$$b_m \\gt b_{p}$$$ and $$$b_m \\ge b_{p_2}$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Using the idea from the previous hint, we can recursively build a binary tree where the children of node $$$m$$$ are nodes $$$p$$$ and $$$p_2$$$."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Can this problem be boiled down to a tree dp? (Note that $$$n \\cdot m \\le 10^6$$$)"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let $$$f(i,j)$$$ be the position of the leftmost maximum in the interval $$$(i;j)$$$, $$$1 \\le i \\le j \\le n$$$.\nLet's consider an interval $$$(l;r)$$$ such that $$$f(l,r)=m$$$. For the sake of simplicity, let's assume that $$$l \\lt m \\lt r$$$.\nLet $$$p=f(l,m-1)$$$ and $$$p_2=f(m+1,r)$$$. Since $$$a_m$$$ is the leftmost maximum in $$$(l;r)$$$, $$$p \\lt m$$$ and $$$p_2 \\gt m$$$, the following conditions must hold for array $$$b$$$:\n$$$b_m \\gt b_p$$$\n$$$b_m \\ge b_{p_2}$$$\nLet's consider a binary tree where the children of node $$$u=f(l,r)$$$ are nodes $$$p=f(l,u-1)$$$ and $$$p_2=f(u+1,r)$$$, for every $$$1 \\le u \\le n$$$.\nNote that if $$$u=l$$$, $$$f(l,l-1)$$$ is not defined, and, as such, node $$$u$$$ will have no left child. Similarly, if $$$u=r$$$, then node $$$u$$$ will have no right child.\nLet $$$dp[u][x]$$$ be equal to the number of ways to assign values to every element $$$b_v$$$ from the subtree rooted in $$$u$$$, if $$$b_u=x$$$.\nIf $$$u$$$ has a left child and $$$x=1$$$, then $$$dp[u][x]=0$$$;\nOtherwise, if $$$u$$$ has two children, then $$$dp[u][x]=(\\sum_{i=1}^{x-1}dp[p][i]) \\cdot(\\sum_{i=1}^{x}dp[p_2][i])$$$;\nIf $$$u$$$ only has a left child, then $$$dp[u][x]=\\sum_{i=1}^{x-1}dp[p][i]$$$;\nIf $$$u$$$ only has a right child, then $$$dp[u][x]=\\sum_{i=1}^{x}dp[p_2][i]$$$;\nIf $$$u$$$ has no children, then $$$dp[u][x]=1$$$.\nTo optimise the transitions, we'll also need to compute $$$sum[u][x]=\\sum_{i=1}^{x} dp[u][x]$$$ alongside our normal $$$dp$$$.\nIntended time complexity per testcase: $$$O(n \\cdot m+n \\cdot log(n))$$$\nAdditional implementation details\nIn order to construct the binary tree, we can use a recursive divide and conquer function $$$divide(l,r)$$$ to split our current interval $$$(l;r)$$$ into two new intervals $$$(l;m-1)$$$ and $$$(m+1;r)$$$.\nAdditionally, we can also compute the values of $$$dp[m][x]$$$ and $$$sum[m][x]$$$ inside $$$divide(l,r)$$$ after calling $$$divide(l,m-1)$$$ and divide $$$(m+1,r)$$$.\nRange leftmost maximumum queries can be answered in $$$O(1)$$$ using a sparse table, see the model solution for more information."
+        },
+        {
+            "title": "Additional implementation details",
+            "content": "In order to construct the binary tree, we can use a recursive divide and conquer function $$$divide(l,r)$$$ to split our current interval $$$(l;r)$$$ into two new intervals $$$(l;m-1)$$$ and $$$(m+1;r)$$$.\nAdditionally, we can also compute the values of $$$dp[m][x]$$$ and $$$sum[m][x]$$$ inside $$$divide(l,r)$$$ after calling $$$divide(l,m-1)$$$ and divide $$$(m+1,r)$$$.\nRange leftmost maximumum queries can be answered in $$$O(1)$$$ using a sparse table, see the model solution for more information."
+        }
+    ]
+}

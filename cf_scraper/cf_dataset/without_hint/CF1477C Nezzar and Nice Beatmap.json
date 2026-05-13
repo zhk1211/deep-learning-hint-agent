@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1477C - Nezzar and Nice Beatmap\nThere are two different approaches to solve this task.\nFurthest Points\nPick an arbitrary point, and in each iteration, select the furthest point from previously chosen point among all available points. Indeed, we can prove the correctness by contradiction.\nInsertion Sorting\nNotice that in any triangle (possibly degenerate), there exists at most one obtuse angle or right angle in this triangle. Therefore, we may build our permutation using modified version of insertion sort (it suffices to substitute comparing operator).\nWe believe that time complexity for the latter approach is better than $$$O(n^2)$$$. However, we fail to find a proof or counterexample for it. It would be grateful if someone could figure it out and inform us about it!"
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1073D - Berland Fair\nLet's code the following process. Go one circle across the booths, calculate the total cost $$$C$$$ of sweets bought and the number $$$S$$$ of sweets bought. Now you can decrease you money down to $$$T = T~mod~C$$$ and add $$$S \\cdot (T~div~C)$$$ to answer. It represents that you went maximum number of such circles. The later circles will have smaller cost. Let's continue this process until $$$T$$$ becomes smaller than the minimum priced sweet.\nThe number of operations made is $$$O(\\log T)$$$. Let $$$T_{cur}$$$ be the amount of money before some operation, $$$C_{cur}$$$ be the total cost of sweets bought on that operation and $$$T_{new} = T_{cur}~mod~C_{cur}$$$. $$$T_{new}$$$ is actually smaller than $$$C_{cur}$$$ (that's how modulo works) and smaller than $$$T_{cur} - C_{cur}$$$ (that's also how modulo works). And these inequalities imply that $$$T_{new}  \\lt  \\frac{T_{cur}}{2}$$$. That leads to about $$$O(\\log T)$$$ steps to reach the minimal price.\nOverall complexity: $$$O(n \\log T)$$$."
         },
         {
             "title": "Solution (PikMike)",

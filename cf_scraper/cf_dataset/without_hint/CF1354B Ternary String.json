@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1354B - Ternary String\nThere are multiple solutions involving advanced methods such as binary search or two pointers, but I'll try to describe a simpler one.\nThe main idea of my solution is that the answer should look like\nabb...bbbbbc\n: one character of type $$$a$$$, a block of characters of type $$$b$$$, and one character of type $$$c$$$. If we find all blocks of consecutive equal characters in our string, each candidate for the answer can be obtained by expanding a block to the left and to the right by exactly one character. So the total length of all candidates is $$$O(n)$$$, and we can check them all.\nWhy does the answer look like\nabb...bbbbbc\n? If the first character of the substring appears somewhere else in it, it can be deleted. The same applies for the last character. So, the first and the last characters should be different, and should not appear anywhere else within the string. Since there are only three types of characters, the answer always looks like\nabb...bbbbbc\n."
         },
         {
             "title": "Solution (BledDest)",

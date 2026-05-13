@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1119C - Ramesses and Corner Inversion\nOne can notice that the operation does not change the total parity of the matrix. So, if the total parity of $$$A$$$ and $$$B$$$ do not match, then the answer is\nNo\n. However, this is not the only case when the answer is no.\nYou can also notice that the operation does not change the total parity of each row/column independently. Thus, if in at least one row or column the parity of $$$A$$$ and $$$B$$$ do not match, then the answer is\nNo\n. It turns out that if all these parities match, then the answer is\nYes\n.\nWe will prove this constructing a sequence of operations that transforms $$$A$$$ to $$$B$$$ whenever parities in all rows and column match. Let's perform an operation $$$(1, 1, x, y)$$$ for all such $$$x  \\gt  1$$$ and $$$y  \\gt  1$$$ that $$$A_{xy} \\ne B_{xy}$$$. After all these operations the whole matrices except maybe the first column and the first row match. But the first column and the first row also match because of the parity! So $$$A$$$ is now $$$B$$$."
         }
     ]
 }

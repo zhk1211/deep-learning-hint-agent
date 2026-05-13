@@ -1,0 +1,20 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAlex is solving a problem. He has $ n $ constraints on what the integer $ k $ can be. There are three types of constraints:\n\n1. $ k $ must be greater than or equal to some integer $ x $ ;\n2. $ k $ must be less than or equal to some integer $ x $ ;\n3. $ k $ must be not equal to some integer $ x $ .\n\nHelp Alex find the number of integers $ k $ that satisfy all $ n $ constraints. It is guaranteed that the answer is finite (there exists at least one constraint of type $ 1 $ and at least one constraint of type $ 2 $ ). Also, it is guaranteed that no two constraints are the exact same.\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 500 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\leq n \\leq 100 $ ) — the number of constraints.\n\nThe following $ n $ lines describe the constraints. Each line contains two integers $ a $ and $ x $ ( $ a \\in \\{1,2,3\\}, \\, 1 \\leq x \\leq 10^9 $ ). $ a $ denotes the type of constraint. If $ a=1 $ , $ k $ must be greater than or equal to $ x $ . If $ a=2 $ , $ k $ must be less than or equal to $ x $ . If $ a=3 $ , $ k $ must be not equal to $ x $ .\n\nIt is guaranteed that there is a finite amount of integers satisfying all $ n $ constraints (there exists at least one constraint of type $ 1 $ and at least one constraint of type $ 2 $ ). It is also guaranteed that no two constraints are the exact same (in other words, all pairs $ (a, x) $ are distinct).\n\nOutput Format\nFor each test case, output a single integer — the number of integers $ k $ that satisfy all $ n $ constraints.\n\nExamples\nSample 1\nInput\n6\n4\n1 3\n2 10\n3 1\n3 5\n2\n1 5\n2 4\n10\n3 6\n3 7\n1 2\n1 7\n3 100\n3 44\n2 100\n2 98\n1 3\n3 99\n6\n1 5\n2 10\n1 9\n2 2\n3 2\n3 9\n5\n1 1\n2 2\n3 1\n3 2\n3 3\n6\n1 10000\n2 900000000\n3 500000000\n1 100000000\n3 10000\n3 900000001\nOutput\n7\n0\n90\n0\n0\n800000000\n\nNote\nIn the first test case, $ k \\geq 3 $ and $ k \\leq 10 $ . Furthermore, $ k \\neq 1 $ and $ k \\neq 5 $ . The possible integers $ k $ that satisfy the constraints are $ 3,4,6,7,8,9,10 $ . So the answer is $ 7 $ .\n\nIn the second test case, $ k \\ge 5 $ and $ k \\le 4 $ , which is impossible. So the answer is $ 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Suppose there are no $$$\\neq$$$ constraints. How would you solve the problem? How would you then factor in the $$$\\neq$$$ constraints into your solution?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Let's first only consider the $$$\\geq$$$ and $$$\\leq$$$ constraints. The integers satisfying those two constraints will be some contiguous interval $$$[l, r]$$$. To find $$$[l,r]$$$, for each $$$\\geq x$$$ constraint, we do $$$l := \\max{(l, x)}$$$ and for each $$$\\leq x$$$ constraint, we do $$$r := \\min{(r, x)}$$$.\nNow, for each, $$$\\neq x$$$ constraint, we check if $$$x$$$ is in $$$[l, r]$$$. If so, we subtract one from the answer (remember that there are no duplicate constraints). Let the total number of times we subtract be $$$s$$$. Then our answer is $$$\\max{(r-l+1-s,0)}$$$. The time complexity of this solution is $$$O(n)$$$."
+        }
+    ]
+}

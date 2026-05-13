@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1843F2 - Omsk Metro (hard version)\nSimilarly to the problem F1, we need to be able to find a subsegment with maximum and minimum sum, but on an arbitrary path in the tree. To do this, we will use the technique of binary lifts. For each lift, we will store the maximum/minimum sum on the prefix and suffix, the sum of the subsegment and the maximum sum on the subsegment, as in the problem about the maximum sum on a subsegment of an array. Then, such values are easily can be recalculated by analogy with the recalculation from the problem F1. It is also worth noting that such binary lifts can also be constructed online, but this was not required in the problem.\nThen, all that remains is to go up from the ends of the path to their LCA, and then combine the answers of the vertical paths into the answer for the whole path.\nTotal complexity: $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution",

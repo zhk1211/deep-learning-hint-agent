@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1760C - Advantage\nMake a copy of the array $$$s$$$: call it $$$t$$$. Sort $$$t$$$ in non-decreasing order, so that $$$t_1$$$ is the maximum strength and $$$t_2$$$ — the second maximum strength.\nThen for everyone but the best person, they should compare with the best person who has strength $$$t_1$$$. So for all $$$i$$$ such that $$$s_i \\neq t_1$$$, we should output $$$s_i - t_1$$$. Otherwise, output $$$s_i - t_2$$$ — the second highest strength, which is the next best person."
         },
         {
             "title": "Solution",

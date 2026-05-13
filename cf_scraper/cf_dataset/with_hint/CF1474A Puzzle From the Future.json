@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1474A - Puzzle From the Future\nHint $$$1$$$: Should we always make first digit of $$$d$$$ not equal to $$$0$$$? How can we do it?\nHint $$$2$$$: Try to choose such $$$a$$$ that $$$d$$$ will have $$$n$$$ digits.\nAt first, we can make the first digit of $$$d$$$ not equal to $$$0$$$ by setting $$$1$$$ to the first digit of $$$a$$$. Now we say that $$$d$$$ doesn't have leading zeroes. In this case, more digits $$$d$$$ has — the larger $$$d$$$ is. It turns out, we can always construct $$$d$$$ of length $$$n$$$ if we make each consecutive pair of digits different.\nIn other words, we want to select $$$a_i$$$ in order to make $$$a_{i-1} + b_{i-1} \\neq a_{i} + b_{i}$$$ for all $$$i  \\gt  1$$$. Since we want to maximize $$$a_{i} + b_{i}$$$, if $$$a_{i} = 1$$$ satisfies $$$a_{i-1} + b_{i-1} \\neq a_i + b_i$$$ we take $$$a_{i} = 1$$$. Otherwise, $$$a_{i} = 0$$$ satisfies this condition.\nTime complexity is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution",

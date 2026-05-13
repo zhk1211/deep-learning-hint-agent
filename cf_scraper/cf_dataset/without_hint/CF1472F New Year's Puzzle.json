@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1472F - New Year's Puzzle\nIf the first column is empty, we can always cover it with a vertical tile:\nif the next column is also empty, then we will have to put either two vertical or two horizontal tiles, but they are obtained from each other by rotating;\nif the next column contains at least one blocked cell, then we have no other options but to cover the column with a vertical board.\nIf the first column is fully blocked, then we can just skip it.\nRemove such columns from the beginning, reducing the problem. Now the first column contains one empty and one blocked cell. Obviously, in place of an empty cell, we will have to place a horizontal tile. If this did not work, then the tiling does not exist. Otherwise there are two cases:\nif the next column is empty, it will turn into a column with one occupied cell. Then we continue to put horizontal tiles;\nif the next column contains one blocked cell, then it becomes fully blocked and we return to the first step.\nIt turns out the following greedy algorithm, we sort all columns with at least one cell blocked (there are no more than $$$m$$$ such columns) by number. Now, if we see a column with one occupied cell, then the next one must also be with one occupied cell (we skipped the empty columns), but this cell must have a different color in the chess coloring (so that we can tile the space between them with horizontal boards. This check is easy to do after sorting the columns."
         },
         {
             "title": "Solution",

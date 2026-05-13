@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1215D - Ticket Game\nLet's denote the balance as the difference between the sum of digits in the left half and the sum of digits in the right half. Also let $$$L$$$ be the minimum possible balance (it can be calculated if we replace all question marks in the left half with $$$0$$$'s and all the question marks in the right half with $$$9$$$'s), and let $$$R$$$ be the maximum possible balance.\nThe second player wins if and only if $$$\\frac{L + R}{2} = 0$$$. Let's prove it by induction on the number of question marks left in the ticket.\nIf all characters are digits, the second player wins only if the ticket is happy, and that is when $$$\\frac{L + R}{2} = 0$$$.\nOkay, now suppose the number of question marks is even, and now it's first player's turn. Each turn decreases the value of $$$R - L$$$ by $$$9$$$, and may set $$$L$$$ to any number from current $$$L$$$ to $$$L + 9$$$. If $$$L + R  \\gt  0$$$, then the first player can make $$$L$$$ as large as possible, and set it to $$$L + 9$$$. The best thing the second player can do on his turn is to set $$$R$$$ to $$$R - 9$$$ (and leave $$$L$$$ as it is), and the value of $$$L + R$$$ will be the same as it was two turns earlier. The case $$$L + R  \\lt  0$$$ can be analyzed similarly. And in the case $$$L + R = 0$$$ the second player has a symmetric strategy."
         },
         {
             "title": "Solution (fcspartakm)",

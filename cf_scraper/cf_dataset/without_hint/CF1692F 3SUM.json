@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1692F - 3SUM\nSince we only care about the last digit of the sum $$$a_i + a_j + a_k$$$, we can ignore all numbers other than the last digits of the elements of $$$a$$$. (For example, we can consider $$$[20, 22, 19, 84]$$$ to be the same as $$$[0, 2, 9, 4]$$$.)\nNow note that if a number appears more than $$$3$$$ times in the array, we can ignore all copies that occur more than $$$3$$$ times, since our sum $$$a_i + a_j + a_k$$$ only involves three numbers. (For example, we can consider $$$[1,1,1,1,2]$$$ to be the same as $$$[1,1,1,2]$$$.)\nUsing these observations, note that there are only $$$10$$$ digits, and each digit can occur at most $$$3$$$ times. So we can always reduce the array to one of length $$$30$$$. Since $$$30$$$ is very small, we can brute force all triples $$$a_i + a_j + a_k$$$, which runs quickly enough.\nTime complexity: $$$\\mathcal{O}(n + \\min(n, 30)^3)$$$."
         },
         {
             "title": "Solution",

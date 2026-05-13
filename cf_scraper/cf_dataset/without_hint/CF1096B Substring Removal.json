@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1096B - Substring Removal\nFirstly, let's calculate the length of the prefix of equal letters (let it be $$$l$$$) and the length of the suffix of equal letters (let it be $$$r$$$). It can be done with two cycles with breaks. It is obvious that this prefix and suffix wouldn't overlap.\nThen let's consider two cases: the first one is when $$$s_1 \\ne s_n$$$ and the second one is when $$$s_1 = s_n$$$.\nIn the first case we can only remain either prefix or suffix of $$$s$$$ consisting only of equal letters. Then the answer is $$$l + r + 1$$$ (because we can remain from $$$1$$$ to $$$l$$$ letters on the prefix, from $$$1$$$ to $$$r$$$ on the suffix or empty string).\nIn the second case we can remain from $$$0$$$ to $$$l$$$ letters on the prefix and from $$$0$$$ to $$$r$$$ letters on the suffix. But now because $$$s_1 = s_n$$$ we can combine these ways, so the answer is $$$(l + 1) \\cdot (r + 1)$$$.\nAnd the bonus (this case is not belong to the given problem): if all letters in the string are equal then then answer is $$$\\frac{n (n-1)}{2} + n$$$ because we can choose any substring of $$$s$$$ of length at least $$$2$$$ and any substring of length $$$1$$$."
         },
         {
             "title": "Solution (Vovuh)",

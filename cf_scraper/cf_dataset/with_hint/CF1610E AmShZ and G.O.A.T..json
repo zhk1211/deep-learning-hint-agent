@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "$$$\\textbf{Read the Hints and Assumptions before reading this.}$$$\nTutorial is loading..."
+            "content": "$$$\\textbf{Read the Hints and Assumptions before reading this.}$$$\n1610E - AmShZ and G.O.A.T.\nWe build the longest good subsequence starting with $$$a_s$$$ greedily step by step.\nIn each step we add the smallest possible element to the subsequence. If the last element is $$$a_k$$$, we have to find the minimum $$$i$$$ that $$$i  \\gt  k$$$ and $$$a_i \\ge 2 \\cdot a_k - a_s$$$. (using lower_bound)\nAssume $$$b_1 \\neq b_2$$$, then $$$k  \\lt  \\log(a_n))$$$. Because for each $$$i$$$, $$$b_{i + 1} \\ge 2 \\cdot b_i - b_1$$$ then $$$b_{i + 1} - b_1 \\ge 2 \\cdot b_i - 2 \\cdot b_1$$$ then $$$b_{i + 1} - b_1 \\ge 2 \\cdot (b_i - b_1)$$$.\nAnd for cases that $$$b_1 = b_2$$$, $$$ + cnt_i$$$. ($$$cnt_i$$$ being the number of occurrences of element $$$i$$$)\nSo for each $$$i$$$ that $$$a_i \\neq a_{i - 1}$$$ we do the above greedy approach. We don't need to do it for indices that $$$a_i = a_{i - 1}$$$ since adding $$$a_{i - 1}$$$ to the longest subsequence starting from $$$a_i$$$ doesn't make it bad.\nTime complexity is $$$\\log(n) \\cdot \\displaystyle\\sum_{a_i \\neq a_{i - 1}}{cnt_i + \\log(a_n)} \\le \\log(n) \\cdot \\left( n \\cdot \\log(a_n) + \\displaystyle\\sum_{a_i \\neq a_{i - 1}}{cnt_i} \\right) \\le \\log(n) \\cdot (n \\cdot \\log(a_n) + n)$$$.\nThe overall time complexity will be $$$\\mathcal{O}(n \\cdot \\log n \\cdot \\log a_n)$$$"
         },
         {
             "title": "Implementation",

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ n $ integers.\n\nLet's call a pair of indices $ i $ , $ j $ good if $ 1 \\le i < j \\le n $ and $ \\gcd(a_i, 2a_j) > 1 $ (where $ \\gcd(x, y) $ is the greatest common divisor of $ x $ and $ y $ ).\n\nFind the maximum number of good index pairs if you can reorder the array $ a $ in an arbitrary way.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of test cases.\n\nThe first line of the test case contains a single integer $ n $ ( $ 2 \\le n \\le 2000 $ ) — the number of elements in the array.\n\nThe second line of the test case contains $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^5 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2000 $ .\n\nOutput Format\nFor each test case, output a single integer — the maximum number of good index pairs if you can reorder the array $ a $ in an arbitrary way.\n\nExamples\nSample 1\nInput\n3\n4\n3 6 5 3\n2\n1 7\n5\n1 4 2 4 1\nOutput\n4\n0\n9\n\nNote\nIn the first example, the array elements can be rearranged as follows: $ [6, 3, 5, 3] $ .\n\nIn the third example, the array elements can be rearranged as follows: $ [4, 4, 2, 1, 1] $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1535B - Array Reodering\nIf the value of $$$a_i$$$ is even, then $$$\\gcd(a_i, 2a_j)$$$ at least $$$2$$$, regardless of the value of $$$a_j$$$. Therefore, we can put all the even values before the odd ones (it does not matter in what order). Now it remains to arrange the odd values. In fact, their order is not important, because $$$\\gcd(a_i, 2a_j) = \\gcd(a_i, a_j)$$$ (for odd $$$a_i$$$ and $$$a_j$$$). This means that each pair will be considered exactly $$$1$$$ time, regardless of the order of the odd elements."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\n&\nx\n:\na\n)\ncin\n>>\nx\n;\nsort\n(\na\n.\nbegin\n(),\na\n.\nend\n(),\n[](\nint\nx\n,\nint\ny\n)\n{\nreturn\nx\n%\n2\n<\ny\n%\n2\n;\n});\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nfor\n(\nint\nj\n=\ni\n+\n1\n;\nj\n<\nn\n;\n++\nj\n)\n{\nans\n+=\n__gcd\n(\na\n[\ni\n],\na\n[\nj\n]\n*\n2\n)\n>\n1\n;\n}\n}\ncout\n<<\nans\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

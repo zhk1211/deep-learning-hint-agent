@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1619F - Let's Play the Hat?\nFor each game, we want to seat $$$n$$$ people at $$$m$$$ tables, $$$n \\mod m$$$ of them will be big and $$$B = \\lceil\\frac{n}{m}\\rceil$$$ will sit at them, and $$$m - n \\mod m$$$ will be small. Each round $$$p = n \\mod m * B$$$ people will sit at the big tables.\nLet's put people with numbers $$$0, 1, 2 \\dots p - 1$$$ at large tables in the first round (for convenience we index from zero), and the rest for small ones, in the second round we will seat people at large tables with numbers $$$p \\mod n, (p + 1) \\mod n \\dots (2p - 1) \\mod n$$$ and so on.\nWe cycle through the players from $$$1$$$ to $$$n$$$ in blocks of $$$p$$$. Since $$$p  \\lt n$$$, no one person can be ahead of any other by 2 or more large tables."
         },
         {
             "title": "Solution",

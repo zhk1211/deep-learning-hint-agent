@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1454D - Number into Sequence\nConsider $$$n$$$ in this canonical form $$${p_1}^{a_1} \\cdot {p_2}^{a_2} \\cdot \\ldots \\cdot {p_k}^{a_k}$$$ (just find the prime factorization of $$$n$$$).\nLet $$$i$$$ be such an index that $$$a_i$$$ is the maximum among all values of $$$a$$$. Then the answer length can not exceed $$$a_i$$$. This is because if the answer has greater length, then some number doesn't have $$$p_i$$$ in its representation (thus, there will be problems with divisibility because we are considering primes). So, let's create the answer of length $$$a_i$$$ consisting of $$$p_i$$$. Then let's just multiply the last element by all other primes in their degrees. So, we satisfied the divisibility rule and the length of the answer is the maximum possible."
         },
         {
             "title": "Solution",

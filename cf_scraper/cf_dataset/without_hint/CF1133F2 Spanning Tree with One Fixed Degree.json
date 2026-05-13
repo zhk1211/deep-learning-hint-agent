@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1133F2 - Spanning Tree with One Fixed Degree\nFirstly, let's remove the vertex $$$1$$$ from the graph. Then let's calculate the number of connected components. Let it be $$$cnt$$$.\nThe answer is\nNO\nif and only if $$$cnt  \\gt  D$$$ or $$$D$$$ is greater than the number of edges incident to the first vertex.\nOtherwise let's construct the answer. Firstly, let's add into the new graph spanning trees of components in the initial graph without vertex $$$1$$$.\nThen let's add into the new graph $$$cnt$$$ edges from vertex $$$1$$$ — one edge to each component.\nThen let's add into the new graph any $$$D - cnt$$$ remaining edges from vertex $$$1$$$.\nThe last thing we need is to construct a spanning tree of a new graph such that all edges incident to the vertex $$$1$$$ are in this spanning tree (and other edges doesn't matter).\nHow to do it? Let's run\nbfs\nfrom the vertex $$$1$$$ in a new graph!"
         },
         {
             "title": "Solution",

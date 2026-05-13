@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1550B - Maximum Cost Deletion\nLet $$$l_1, l_2, \\dots, l_k$$$ be the length of the substring deleted at the $$$i$$$-th step. Then the number of points will be equal to $$$\\sum\\limits_{i=1}^{k} (a \\cdot l_i + b)$$$ or $$$a\\sum\\limits_{i=1}^{k}l_i + bk$$$. The sum of all $$$l_i$$$ is equal to $$$n$$$ (because in the end we deleted the entire string), so the final formula has the form $$$an + bk$$$. Obviously, for $$$b \\ge 0$$$, you should delete the characters one by one so that $$$k=n$$$. Now $$$b  \\lt  0$$$ and you have to delete the string in the minimum number of operations. Let the string $$$s$$$ consist of $$$m$$$ blocks of zeros and ones, then $$$\\lfloor\\frac{m}{2}\\rfloor + 1$$$ is the minimum number of operations for which the entire string can be deleted. As long as the number of blocks is more than $$$2$$$, we will delete the second block, the number of blocks will decrease by $$$2$$$ after each such operation (the block that we delete will disappear, and the first and third blocks will merge into one)."
         },
         {
             "title": "Solution (Neon)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1234B1 - Social Network (easy version)\nThe solution to this problem is just the implementation of what is written in the problem statement. Let's carry the array $$$q$$$ which shows the current smartphone screen. When we receive the new message from the friend with ID $$$id_i$$$, let's do the following sequence of moves:\nFirstly, let's try to find him on the screen. If he is found, just do nothing and continue.\nOtherwise, let's check if the current number of conversations is $$$k$$$. If it is so then let's remove the last conversation.\nNow the number of conversations is less than $$$k$$$ and the current friend is not shown on the screen. Let's insert him into the first position.\nAfter processing all $$$n$$$ messages the answer is just the array $$$q$$$."
         },
         {
             "title": "Solution",

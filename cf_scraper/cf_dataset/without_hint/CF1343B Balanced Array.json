@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1343B - Balanced Array\nFirstly, if $$$n$$$ is not divisible by $$$4$$$ then the answer is \"\nNO\n\" because the parities of halves won't match. Otherwise, the answer is always \"\nYES\n\". Let's construct it as follows: firstly, let's create the array $$$[2, 4, 6, \\dots, n, 1, 3, 5, \\dots, n - 1]$$$. This array is almost good except one thing: the sum in the right half is exactly $$$\\frac{n}{2}$$$ less than the sum in the left half. So we can fix it easily: just add $$$\\frac{n}{2}$$$ to the last element."
         },
         {
             "title": "Solution",

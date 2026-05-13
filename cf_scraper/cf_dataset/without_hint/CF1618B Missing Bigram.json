@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1618B - Missing Bigram\nConsider a full sequence of bigrams for some word. The first bigram consists of letters $$$1$$$ and $$$2$$$ of the word. The second bigram consists of letters $$$2$$$ and $$$3$$$. The $$$i$$$-th bigram consists of letters $$$i$$$ and $$$i+1$$$.\nAfter one bigram is removed, there becomes two adjacent bigrams such that one consists of letters $$$i$$$ and $$$i+1$$$ and the other consists of letters $$$i+2$$$ and $$$i+3$$$. Thus, we can find the position of the removed bigram by looking for a pair of adjacent bigrams such that the second letter of the first one differs from the first letter of the second one.\nIf there is no such pair, then the sequence of bigrams represents a valid word of length $$$n-1$$$. We can append it with any bigram that starts with the second letter of the last bigram to make it a valid word of length $$$n$$$.\nIf there exists such a pair, then all letters of the word can be recovered. We can find the position of the removed bigram, determine the letters it consisted of and insert it into the sequence.\nAfter that, we have a full sequence of bigrams and we can restore the word from it.\nOverall complexity: $$$O(n)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

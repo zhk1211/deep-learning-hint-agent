@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1790F - Timofey and Black-White Tree\nLet's store for each vertex the minimum distance from it to the nearest\nblack\none, let's call it $$$d[v]$$$. We will also store the global answer, which for obvious reasons does not increase, we will call it $$$ans$$$.\nLet's now color the vertex $$$c_i$$$, let's set $$$d[c_i] = 0$$$ and run a depth first search from it. This DFS will visit\nonly\nthe vertices $$$v$$$ with $$$d[v] \\lt ans$$$. Let us consider the vertex $$$v$$$ and its neighbour $$$u$$$. If we can relax $$$d[u]$$$ through $$$d[v]+ 1$$$, let's do it and start from $$$u$$$. Otherwise, $$$u$$$ has a closer\nblack\nneighbour, let's try to update the answer through it $$$ans = min(ans, d[v] +1 +d[u])$$$. Also, do not forget to update the answer via $$$d[v]$$$ from all\nblack\nvertices $$$v$$$ that we visited.\nThe correctness of the algorithm is obvious, let's evaluate its time complexity. It is easy to notice that after the first $$$\\lceil \\sqrt n\\rceil$$$ operations, $$$ans \\le\\lceil \\sqrt n\\rceil$$$. We enter only the vertices, $$$d$$$ from which, firstly, does not exceed $$$ans$$$, and secondly, was relaxed by the parent (that is, decreased by at least $$$1$$$).\nSo, we allowed ourselves a complete tree bypassing for the first $$$\\lceil\\sqrt n\\rceil$$$ operations, and then amortized performed no more than $$$n\\lceil\\sqrt n\\rceil$$$ operations. The final asymptotics will be $$$O(n\\sqrt n)$$$."
         },
         {
             "title": "Solution",

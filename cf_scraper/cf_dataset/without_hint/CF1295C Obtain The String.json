@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given two strings $ s $ and $ t $ consisting of lowercase Latin letters. Also you have a string $ z $ which is initially empty. You want string $ z $ to be equal to string $ t $ . You can perform the following operation to achieve this: append any subsequence of $ s $ at the end of string $ z $ . A subsequence is a sequence that can be derived from the given sequence by deleting zero or more elements without changing the order of the remaining elements. For example, if $ z = ac $ , $ s = abcde $ , you may turn $ z $ into following strings in one operation:\n\n1. $ z = acace $ (if we choose subsequence $ ace $ );\n2. $ z = acbcd $ (if we choose subsequence $ bcd $ );\n3. $ z = acbce $ (if we choose subsequence $ bce $ ).\n\nNote that after this operation string $ s $ doesn't change.\n\nCalculate the minimum number of such operations to turn string $ z $ into string $ t $ .\n\nInput Format\nThe first line contains the integer $ T $ ( $ 1 \\le T \\le 100 $ ) — the number of test cases.\n\nThe first line of each testcase contains one string $ s $ ( $ 1 \\le |s| \\le 10^5 $ ) consisting of lowercase Latin letters.\n\nThe second line of each testcase contains one string $ t $ ( $ 1 \\le |t| \\le 10^5 $ ) consisting of lowercase Latin letters.\n\nIt is guaranteed that the total length of all strings $ s $ and $ t $ in the input does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each testcase, print one integer — the minimum number of operations to turn string $ z $ into string $ t $ . If it's impossible print $ -1 $ .\n\nExamples\nSample 1\nInput\n3\naabce\nace\nabacaba\naax\nty\nyyt\nOutput\n1\n-1\n3"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1295C - Obtain The String\nThe answer is $$$-1$$$ when in string $$$t$$$ there is a character that is not in string $$$s$$$.\nOtherwise let's precalculate the following array $$$nxt_{i, j}$$$ = minimum index $$$x$$$ from $$$i$$$ to $$$|s|$$$ such that $$$s_x = j$$$ (if there is no such index then $$$nxt_{i, j} = inf$$$).\nNow we can solve this problem by simple greed. Presume that now $$$z = t_0 t_1 \\dots t_{i-1}$$$, and last taken symbol in $$$s$$$ is $$$s_{pos}$$$. Then there are two options:\nif $$$nxt_{pos, i} \\neq inf$$$, then $$$i = i + 1$$$, $$$pos = nxt_{pos+1, i}$$$;\nif $$$nxt_{pos, i} = inf$$$, then $$$pos = 0$$$ and $$$ans = ans + 1$$$ ($$$ans$$$ is equal to $$$0$$$ initially);"
+        },
+        {
+            "title": "Solution (Roms)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\nint\n(\n2e5\n)\n+\n99\n;\nconst\nint\nINF\n=\nint\n(\n1e9\n)\n+\n99\n;\nint\ntc\n;\nstring\ns\n,\nt\n;\nint\nnxt\n[\nN\n][\n26\n];\nint\nmain\n()\n{\ncin\n>>\ntc\n;\nwhile\n(\ntc\n--){\ncin\n>>\ns\n>>\nt\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\ns\n.\nsize\n()\n+\n5\n;\n++\ni\n)\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n26\n;\n++\nj\n)\nnxt\n[\ni\n][\nj\n]\n=\nINF\n;\nfor\n(\nint\ni\n=\nint\n(\ns\n.\nsize\n())\n-\n1\n;\ni\n>=\n0\n;\n--\ni\n){\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n26\n;\n++\nj\n)\nnxt\n[\ni\n][\nj\n]\n=\nnxt\n[\ni\n+\n1\n][\nj\n];\nnxt\n[\ni\n][\ns\n[\ni\n]\n-\n'a'\n]\n=\ni\n;\n}\nint\nres\n=\n1\n,\npos\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nt\n.\nsize\n();\n++\ni\n){\nif\n(\npos\n==\ns\n.\nsize\n()){\npos\n=\n0\n;\n++\nres\n;\n}\nif\n(\nnxt\n[\npos\n][\nt\n[\ni\n]\n-\n'a'\n]\n==\nINF\n){\npos\n=\n0\n;\n++\nres\n;\n}\nif\n(\nnxt\n[\npos\n][\nt\n[\ni\n]\n-\n'a'\n]\n==\nINF\n&&\npos\n==\n0\n){\nres\n=\nINF\n;\nbreak\n;\n}\npos\n=\nnxt\n[\npos\n][\nt\n[\ni\n]\n-\n'a'\n]\n+\n1\n;\n}\nif\n(\nres\n>=\nINF\n)\ncout\n<<\n-\n1\n<<\nendl\n;\nelse\ncout\n<<\nres\n<<\nendl\n;\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

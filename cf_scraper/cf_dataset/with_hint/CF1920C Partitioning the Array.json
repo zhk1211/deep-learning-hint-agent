@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAllen has an array $ a_1, a_2,\\ldots,a_n $ . For every positive integer $ k $ that is a divisor of $ n $ , Allen does the following:\n\n- He partitions the array into $ \\frac{n}{k} $ disjoint subarrays of length $ k $ . In other words, he partitions the array into the following subarrays:\n\n$$[a_1,a_2,\\ldots,a_k],[a_{k+1}, a_{k+2},\\ldots,a_{2k}],\\ldots,[a_{n-k+1},a_{n-k+2},\\ldots,a_{n}]$$\n\n- Allen earns one point if there exists some positive integer $ m $ ( $ m \\geq 2 $ ) such that if he replaces every element in the array with its remainder when divided by $m$, then all subarrays will be identical.\n\nHelp Allen find the number of points he will earn.\n\nInput Format\nEach test consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\leq n \\leq 2\\cdot10^5 $ ) — the length of the array $ a $ .\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2,\\ldots, a_n $ ( $ 1 \\leq a_i \\leq n $ ) — the elements of the array $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of points Allen will earn.\n\nExamples\nSample 1\nInput\n8\n4\n1 2 1 4\n3\n1 2 3\n5\n1 1 1 1 1\n6\n1 3 1 1 3 1\n6\n6 2 6 2 2 2\n6\n2 6 3 6 6 6\n10\n1 7 5 1 4 3 1 3 1 4\n1\n1\nOutput\n2\n1\n2\n4\n4\n1\n2\n1\n\nNote\nIn the first test case, $ k=2 $ earns a point since Allen can pick $ m = 2 $ and both subarrays will be equal to $ [1, 0] $ . $ k=4 $ also earns a point, since no matter what $ m $ Allen chooses, there will be only one subarray and thus all subarrays are equal.\n\nIn the second test case, Allen earns $ 1 $ point for $ k=3 $ , where his choice for $ m $ does not matter."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Try to solve the problem for just two integers $$$x$$$ and $$$y$$$. Under what $$$m$$$ are they equal (modulo $$$m$$$)?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "How can we use the previous hint and gcd to solve the problem?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "For some $$$x$$$ and $$$y$$$, let's try to find all $$$m$$$ such that $$$x \\bmod m \\equiv y \\bmod m$$$. We can rearrange the equation into $$$(x-y) \\equiv 0 \\pmod m$$$. Thus, if $$$m$$$ is a factor of $$$|x-y|$$$, then $$$x$$$ and $$$y$$$ will be equal modulo $$$m$$$.\nLet's solve for some $$$k$$$. A valid partition exists if there exists some $$$m \\gt 1$$$ such that the following is true:\n$$$a_1 \\equiv a_{1+k} \\pmod m$$$\n$$$a_2 \\equiv a_{2+k} \\pmod m$$$\n...\n$$$a_{n-k} \\equiv a_{n} \\pmod m$$$\nThe first condition $$$a_1 \\equiv a_{1+k} \\pmod m$$$ is satisfied if $$$m$$$ is a factor of $$$|a_1-a_{1+k}|$$$. The second condition $$$a_2 \\equiv a_{2+k} \\pmod m$$$ is satisfied if $$$m$$$ is a factor of $$$|a_2-a_{2+k}|$$$. And so on...\nThus, all conditions are satisfied if $$$m$$$ is a factor of:\n$$$|a_1-a_{1+k}|, |a_2-a_{2+k}|,...,|a_{n-k}-a_n|$$$\nIn other words, all conditions are satisfied if $$$m$$$ is a factor of:\n$$$\\gcd(|a_1-a_{1+k}|, |a_2-a_{2+k}|,...,|a_{n-k}-a_n|)$$$\nSo a valid $$$m$$$ exists for some $$$k$$$ if the aforementioned $$$\\gcd$$$ is greater than $$$1$$$.\nWe can iterate over all possible $$$k$$$ (remember that $$$k$$$ is a divisor of $$$n$$$) and solve for each $$$k$$$ to get our answer. The time complexity of this will be $$$O((n + \\log n) \\cdot \\text{max divisors of n})$$$. Note that each pass through the array takes $$$n + \\log n$$$ time because of how the gcd will either be halved or stay the same at each point."
+        }
+    ]
+}

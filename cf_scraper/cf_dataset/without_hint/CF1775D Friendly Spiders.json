@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1775D - Friendly Spiders\nNote that if we construct the graph by definition, it will be large. This will lead us to the idea to make it more compact. Let us create a bipartite graph whose left part consists of $$$n$$$ vertices with numbers $$$a_i$$$. And in the right part each vertex corresponds to some prime number, not larger than the maximal number from the left part. Draw an edge from the vertex $$$v$$$ of the left part to the vertex $$$u$$$ of the right lpart if and only if $$$a_v$$$ is divisible by a prime number corresponding to the vertex $$$u$$$. In this graph from vertex $$$s$$$ to vertex $$$t$$$, run bfs and output the distance divided by $$$2$$$.\nNow about how to construct such a graph quickly. Obviously, the number $$$a_i$$$ will have at most $$$\\log a_i$$$ different prime divisors. Then let us factorize $$$a_v$$$ and draw edges from vertex $$$v$$$ to each prime in factorization."
         }
     ]
 }

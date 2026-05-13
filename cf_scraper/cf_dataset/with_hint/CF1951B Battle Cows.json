@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Tutorial and Implementation",
-            "content": "Tutorial is loading...\n255371643"
+            "content": "1951B - Battle Cows\nIt is easy to note that the $$$i$$$-th match is between cow $$$i+1$$$ and the strongest cow among cows $$$1, 2, \\cdots, i$$$. Therefore, in order to win any match at all, you cow have to be stronger than every cow before her (and cow $$$2$$$ if your cow is cow $$$1$$$). Consider the following cases:\nThere exists no stronger cow before your cow. Then you should maximize the number of wins by swapping your cow with cow $$$1$$$.\nThere exists some stronger cows before your cow. Let $$$i$$$ be the first such cow. Obviously you want cow $$$i$$$ to end up to the right of your cow. There are two ways to achieve this:\nSwap your cow before cow $$$i$$$. Since your cow will lose to cow $$$i$$$ anyway, you should maximize the number of wins by swapping with cow $$$1$$$.\nSwap your cow\nwith\ncow $$$i$$$.\nThe answer for the problem is the maximum among all above candidates. Since there are only $$$2$$$ of them, the overall time complexity is $$$O(n)$$$.\n255371643"
         }
     ]
 }

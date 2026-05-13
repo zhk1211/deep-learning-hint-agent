@@ -1,0 +1,32 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nToday we will be playing a red and white colouring game (no, this is not the Russian Civil War; these are just the colours of the Canadian flag).\n\nYou are given an $ n \\times m $ grid of \"R\", \"W\", and \".\" characters. \"R\" is red, \"W\" is white and \".\" is blank. The neighbours of a cell are those that share an edge with it (those that only share a corner do not count).\n\nYour job is to colour the blank cells red or white so that every red cell only has white neighbours (and no red ones) and every white cell only has red neighbours (and no white ones). You are not allowed to recolour already coloured cells.\n\nInput Format\nThe first line contains $ t $ ( $ 1 \\le t \\le 100 $ ), the number of test cases.\n\nIn each test case, the first line will contain $ n $ ( $ 1 \\le n \\le 50 $ ) and $ m $ ( $ 1 \\le m \\le 50 $ ), the height and width of the grid respectively.\n\nThe next $ n $ lines will contain the grid. Each character of the grid is either 'R', 'W', or '.'.\n\nOutput Format\nFor each test case, output \"YES\" if there is a valid grid or \"NO\" if there is not.\n\nIf there is, output the grid on the next $ n $ lines. If there are multiple answers, print any.\n\nIn the output, the \"YES\"s and \"NO\"s are case-insensitive, meaning that outputs such as \"yEs\" and \"nO\" are valid. However, the grid is case-sensitive.\n\nExamples\nSample 1\nInput\n3\n4 6\n.R....\n......\n......\n.W....\n4 4\n.R.W\n....\n....\n....\n5 1\nR\nW\nR\nW\nR\nOutput\nYES\nWRWRWR\nRWRWRW\nWRWRWR\nRWRWRW\nNO\nYES\nR\nW\nR\nW\nR\n\nNote\nThe answer for the first example case is given in the example output, and it can be proven that no grid exists that satisfies the requirements of the second example case. In the third example all cells are initially coloured, and the colouring is valid."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Let's say you know the colour of the first square, what colours can you figure out next?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Colour it like a chessboard, but there's more than one possible chessboard!"
+        },
+        {
+            "title": "Hint 3",
+            "content": "Brute force the color of the first square!"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1534A - Colour the Flag\nObserve that there are only two valid grids, one where the top left cell is \"\nR\n\" and one where it's \"\nW\n\". We can just test those two grids and see if they conform with the requirements.\nTime complexity: $$$\\mathcal{O}(nm)$$$"
+        },
+        {
+            "title": "Solution",
+            "content": "119400830"
+        }
+    ]
+}

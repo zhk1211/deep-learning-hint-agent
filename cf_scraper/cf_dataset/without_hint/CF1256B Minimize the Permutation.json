@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1256B - Minimize the Permutation\nThe following greedy solution works: let's take the minimum element and move it to the leftmost position we can. With this algorithm, all forbidden operations are form the prefix of operations: ($$$1, 2$$$), $$$(2, 3)$$$, ..., and so on. So we can carry the position of the leftmost operation we can perform $$$pos$$$. Initially, it is $$$1$$$. We repeat the algorithm until $$$pos \\ge n$$$. Let's find the position of the minimum element among elements $$$a_{pos}, a_{pos + 1}, \\dots, a_{n}$$$. Let this position be $$$nxt$$$. If $$$nxt = pos$$$ then let's increase $$$pos$$$ and continue the algorithm. Otherwise, we need to move the element from the position $$$nxt$$$ to the position $$$pos$$$ and then set $$$pos := nxt$$$.\nTime complexity: $$$O(n^2)$$$."
         },
         {
             "title": "Solution",

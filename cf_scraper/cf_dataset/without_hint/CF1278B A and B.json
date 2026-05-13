@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1278B - A and B\nAssume that $$$a  \\gt  b$$$. Let's denote the minimum number of operations required to make $$$a$$$ and $$$b$$$ equal as $$$x$$$.\nThere are two restrictions on $$$x$$$:\nAt first, $$$\\frac{x(x+1)}{2} \\ge a - b$$$, because if $$$\\frac{x(x+1)}{2}  \\lt  a - b$$$ then $$$a$$$ will be greater than $$$b$$$ (after applying all operations);\nSecondly, integers $$$\\frac{x(x+1)}{2}$$$ and $$$a - b$$$ must have the same parity, because if they have different parity, then $$$a$$$ and $$$b$$$ will have different parity (after applying all operations).\nIt turns out that we always can make integers $$$a$$$ and $$$b$$$ equal after applying $$$x$$$ operations. It's true because we have to add $$$\\frac{\\frac{x(x+1)}{2} - a + b}{2} + a - b$$$ to $$$b$$$ and the rest to $$$a$$$. And we can get any integer from $$$0$$$ to $$$\\frac{z(z+1)}{2}$$$ as a sum of subset of set $$$\\{1, 2, \\dots, z\\}$$$."
         },
         {
             "title": "Solution (Roms)",

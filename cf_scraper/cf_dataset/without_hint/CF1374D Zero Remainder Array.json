@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1374D - Zero Remainder Array\nFirstly, we can understand that during each full cycle of $$$x$$$ from $$$0$$$ to $$$k-1$$$ we can fix each remainder only once. Notice that when we add some $$$x$$$ then we fix the remainder $$$k-x$$$ (and we don't need to fix elements which are already divisible by $$$k$$$). So, let $$$cnt_i$$$ be the number of such elements for which the condition $$$k - a_i \\bmod k = i$$$ holds (i.e. the number of such elements that we can fix if we add the value $$$i \\bmod k$$$ to them). We can count this using some logarithmic data structure (like\nstd::map\nin C++).\nSo, what's the number of full cycles? It equals to the amount of most frequent element in $$$cnt$$$ minus one. So, the answer is at least $$$k \\cdot (max(cnt) - 1)$$$. And there can be one last cycle which will be incomplete. So what is the remanining number of moves? It equals to the maximum possible $$$i$$$ among all $$$cnt_i = max(cnt)$$$. So if $$$key$$$ is the maximum such $$$i$$$ that $$$cnt_{key} = max(cnt)$$$ then the answer is $$$k \\cdot (cnt_{key} - 1) + key + 1$$$.\nTime complexity: $$$O(n \\log{n})$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1533H - Submatrices\nLet's iterate through the subset of the first $$$5$$$ letters and count the number of submatrices that contain only letters from this subset. To do this, create a matrix $$$a$$$ of size $$$n \\times m$$$, where $$$a_{i, j} = 1$$$ if $$$s_{i, j}$$$ belongs to the fixed subset, and $$$0$$$ otherwise. Now, you have to calculate the number of submatrices that consist only of $$$1$$$'s in this matrix.\nThis can be calculated as follows. Let's iterate over the row $$$i$$$, it will be the lower boundary of the submatrix. Denote $$$d_j$$$ as the maximum value such that all $$$a_{k, j} = 1$$$ for $$$k \\in (i - d_j, i]$$$ (build an array of these values). Using this array, let's calculate $$$l_j$$$ — the closest position to the left where the value in the array $$$d$$$ is strictly less than $$$d_j$$$, and $$$r_j$$$ — the closest position to the right where the value in the array $$$d$$$ is not greater than $$$d_j$$$. Then the number of unit submatrices where $$$i$$$ is the lower bound is $$$\\sum\\limits_{j=1}^{m} (j - l_j) * (r_j - j) * d_j$$$.\nThus, we have counted all the answers for subsets of letters, but these values are not exactly what we need to print (for example, if the submatrix contained $$$2$$$ different letters, then it will be taken into account in subsets of $$$3$$$, $$$4$$$ and $$$5$$$ letters that include these $$$2$$$ letters), but this is easy to fix with an approach similar to inclusion-exclusion. The final complexity of the solution is $$$O (2^5nm)$$$."
         },
         {
             "title": "Solution (Neon)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1213G - Path Queries\nLet's carry the value $$$res$$$ that means the answer for the current set of edges. Initially it is $$$0$$$. Let's sort all edges by their weight and all queries by their weight also (both in non-decreasing order).\nLet's merge components of the tree using\nDSU\n(disjoint set union). We need to carry sizes of components also (it is easy if we use\nDSU\n). Then let's iterate over all queries in order of non-decreasing their weights. If the current query has weight $$$cw$$$ then let's merge all components connected by edges with weight $$$w_i \\le cw$$$. When we merge two components with sizes $$$s_1$$$ and $$$s_2$$$, the answer changes like that: $$$res := res - \\binom{s_1}{2} - \\binom{s_2}{2} + \\binom{s_1 + s_2}{2}$$$. The value $$$\\binom{x}{2}$$$ equals to $$$\\frac{x(x-1)}{2}$$$. It is so because we subtract all old paths corresponding to these components and add all new paths in the obtained component. So the answer for the current query will be $$$res$$$ after all required merges.\nTime complexity: $$$O(n \\log n + m \\log m)$$$."
         },
         {
             "title": "Solution",

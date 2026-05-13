@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1822G2 - Magic Triples (Hard Version)\nLet $$$M = \\max {a_i}$$$, obviously $$$M \\le 10^9$$$, $$$cnt[x]$$$ — the number of occurrences of the number $$$x$$$ in the array $$$a$$$.\nSeparately, let's count the number of\nmagic\ntriples for $$$b=1$$$. The total number of such triples will be $$$\\sum_{i=1}^{n}{(cnt[a_i] - 1) \\cdot (cnt[a_i] - 2)}$$$. Next, we will count $$$b \\ge 2$$$. We will iterate over $$$a_j$$$, if $$$a_j \\ge M ^ \\frac{2}{3}$$$, then $$$a_j \\cdot b = a_k \\le M$$$, then $$$b\\le M^\\frac{1}{3}$$$. Otherwise, $$$a_j \\le M^\\frac{2}{3}$$$, since $$$a_i \\cdot b = a_j$$$, then $$$b$$$ is a divisor of $$$a_j$$$, which means it is enough to iterate as $$$b$$$ the divisors of the number $$$a_j$$$, the divisors of such the numbers can be found for $$$O(M^\\frac{1}{3})$$$, which means the total complexity will be $$$O(n\\cdot M^\\frac{1}{3})$$$ if you use the hash table $$$cnt[x]$$$, or $$$O(n\\cdot M^\\frac{1}{3}\\cdot\\log{n})$$$ if you use std::map."
         },
         {
             "title": "Solution",

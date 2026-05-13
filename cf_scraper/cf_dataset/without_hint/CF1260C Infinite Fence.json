@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1260C - Infinite Fence\nAt first, suppose that $$$r \\le b$$$ (if not — swap them). Let's look at the case, where $$$gcd(r, b) = 1$$$. We can be sure that there will be a situation where the $$$pos$$$-th plank is painted in blue and $$$pos + 1$$$ plank is painted in red. It's true because it's equivalent to the solution of equation $$$r \\cdot x - b \\cdot y = 1$$$.\nAnd all we need to check that interval $$$(pos, pos + b)$$$ contains less than $$$k$$$ red planks. Or, in formulas, $$$(k - 1) \\cdot r + 1 \\ge b$$$.\nThe situation with $$$gcd(r, b)  \\gt  1$$$ is almost the same if we look only at positions, which are divisible by $$$gcd(r, b)$$$ — in other words we can just divide $$$r$$$ on $$$gcd$$$ and $$$b$$$ on $$$gcd$$$ and check the same condition."
         },
         {
             "title": "Solution (adedalic)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1519D - Maximum Sum of Products\nThe naive approach is to iterate over $$$l$$$ and $$$r$$$, reverse the subsegment of the array $$$[l, r]$$$ and calculate the answer. But this solution is too slow and works in $$$O(n^3)$$$.\nInstead, we can iterate over the center of the reversed segment and its length. If the current segment is $$$[l, r]$$$, and we want to go to $$$[l - 1, r + 1]$$$, then the answer for the subsegment will increase by $$$a_{l-1}* b_{r + 1} + a_{r + 1} * b_{l-1}$$$. It remains to add the answer for $$$[1, l)$$$ and $$$(r, n]$$$, but without reversion, this is easy to do if you pre-calculate the prefix sums of the values $$$a_i * b_i$$$."
         },
         {
             "title": "Solution (Neon)",

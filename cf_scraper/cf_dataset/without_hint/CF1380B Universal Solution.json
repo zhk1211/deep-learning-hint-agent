@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1380B - Universal Solution\nLet's look at the contribution of each choice $$$c_i$$$ to the total number of wins $$$win(1) + win(2) + \\dots + win(n)$$$ (we can look at \"total\" instead of \"average\", since \"average\" is equal to \"total\" divided by $$$n$$$). For example, let's look at the first choice $$$c_1$$$: in $$$win(1)$$$ we compare $$$c_1$$$ with $$$s_1$$$, in $$$win(2)$$$ — $$$c_1$$$ with $$$s_2$$$, in $$$win(3)$$$ — $$$c_1$$$ with $$$s_3$$$ and so on.\nIn the result, we compare $$$c_1$$$ with all $$$s_i$$$ once. So, to maximize the total sum, we need to choose $$$c_1$$$ that beats the maximum number of $$$s_i$$$ or, in other words, let's find the most frequent character in $$$s$$$ and choose $$$c_1$$$ that beats it.\nOkay, we found the optimal $$$c_1$$$. But if we look at the contribution of any other $$$c_i$$$ we can note that we compare any $$$c_i$$$ with all $$$s_i$$$ once. So we can choose all $$$c_i$$$ equal to $$$c_1$$$ which is equal to the choice that beats the most frequent choice in $$$s$$$."
         },
         {
             "title": "Solution (adedalic)",

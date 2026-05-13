@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "editorial",
-            "content": "Tutorial is loading..."
+            "content": "1529B - Sifid and Strange Subsequences\nIt's easy to prove that a strange subsequence can't contain more than one positive element.\nSo it's optimal to pick all of the non-positive elements, now we can pick at most one positive element.\nAssume $$$x$$$ is the minimum positive element in the array. We can pick $$$x$$$ if no two elements in the already picked set such as $$$a$$$ and $$$b$$$ exist in a way that $$$|a - b|  \\lt  x$$$.\nTo check this, we just have to sort the already picked elements and see the difference between adjacent pairs.\ncomplexity: $$$\\mathcal{O}(n\\log n)$$$"
         },
         {
             "title": "official solution",

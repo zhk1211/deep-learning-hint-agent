@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1334C - Circle of Monsters\nWe cannot utilize the explosion of the last monster we kill. So the naive approach is to iterate on the monster we kill the last, break the circle between this monster and the next one, and then shoot the first monster in the broken circle until it's dead, then the second one, and so on.\nLet's calculate the number of bullets we will fire this way. If the circle is broken after the monster $$$i$$$, then the first monster gets $$$a_{i + 1}$$$ bullets, the second one — $$$\\max(0, a_{i + 2} - b_{i + 1})$$$, and so on; all monsters except the first one get exactly $$$\\max(0, a_i - b_{i - 1})$$$ bullets.\nSo we should choose an index $$$i$$$ such that $$$a_{i + 1} - \\max(0, a_{i + 1} - b_i)$$$ is minimum possible, since this is the number of bullets we have to spend additionally since we cannot utilize the explosion of the $$$i$$$-th monster. After breaking the circle between the monsters $$$i$$$ and $$$i + 1$$$, you may use a formula to calculate the required number of bullets, or just model the shooting."
         },
         {
             "title": "Solution (Ne0n25)",

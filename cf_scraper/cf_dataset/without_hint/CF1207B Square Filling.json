@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1207B - Square Filling\nIt is quite obvious that we can't choose any submatrix that contains at least one zero in $$$A$$$. The contrary is also true — if a submatrix of $$$A$$$ consists of only ones, then there's no reason not to choose it (suppose there is an answer that does not choose it — then choosing this submatrix won't affect it).\nSo we may perform an operation on every submatrix of $$$B$$$ such that the corresponding submatrix in $$$A$$$ is filled with $$$1$$$'s, and check if our answer is correct."
         },
         {
             "title": "Solution (BledDest)",

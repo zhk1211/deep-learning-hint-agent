@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1092D2 - Great Vova Wall (Version 2)\nFairly enough, solutions of both versions of the problem are pretty similar.\nRead the second part of the previous tutorial first.\nThis problem can also be implemented in the strightforward manner. The greedy solution now is searching for the first minimum in array and putting a brick in there. If it's impossible then the answer is \"\nNO\n\". This can also be simulated with sets, a bit more tedious but still ok and also $$$O(n \\log n)$$$.\nNow back to the stack approach. Here you can't go to parities of the numbers (like tests $$$[1, 3]$$$ and $$$[1, 1]$$$ lead to different results). You push the number itself. However, you will also need an extra condition on the stack. You can't push to it the number greater than the current topmost element.\nThe only problem with this are maximums of array. Obviously, the resulting wall (if the answer exists) will be of height equal to the maximum initial height. And it means that you shouldn't care about the ability to match all maximums in stack. They way I suggest to take around the issue is to process separately each segment between two consecutive maximums.\nOne can easily prove the correctness of it by construction.\nOverall complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution",

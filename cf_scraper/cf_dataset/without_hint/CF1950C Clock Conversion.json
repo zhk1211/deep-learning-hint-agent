@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1950C - Clock Conversion\nFrom 24-hour format to 12-hour format, the minutes are the same. For the hours:\nIf $$$\\texttt{hh}$$$ is $$$00$$$, then it should become $$$12 \\; \\mathrm{AM}$$$.\nIf $$$\\texttt{hh}$$$ is from $$$01$$$ to $$$11$$$, then it should become $$$\\texttt{hh} \\; \\mathrm{AM}$$$.\nIf $$$\\texttt{hh}$$$ is $$$12$$$, then it should become $$$12 \\; \\mathrm{PM}$$$.\nIf $$$\\texttt{hh}$$$ is from $$$13$$$ to $$$23$$$, then it should become $$$(\\texttt{hh} - 12) \\; \\mathrm{PM}$$$.\nA fast way to implement this: replace the hours $$$h$$$ by $$$h \\bmod 12$$$, and if this value is $$$0$$$, set it to $$$12$$$. Be careful to handle the case when $$$h$$$ and $$$m$$$ are single digits."
         },
         {
             "title": "Solution",

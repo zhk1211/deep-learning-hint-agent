@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1836B - Astrophysicists\nNote that in the perfect world, we'd give each astrophysicist precisely $$$\\lfloor \\frac{G - 1}{2} \\rfloor$$$, and we'd spare $$$N \\cdot \\lfloor \\frac{G - 1}{2} \\rfloor$$$ silver coins. Unfortunately, two things may happen:\nFirst, we may run out of money. This is an easy case; it is enough to output $$$K \\cdot G$$$ if it is less than $$$\\lfloor \\frac{G - 1}{2} \\rfloor$$$.\nSecond, we may have some money left. It turns out that an acceptable solution is to give everything to one astrophysicist. The intuition behind it is simple — we are only interested in bonus sizes modulo $$$G$$$, and by decreasing the bonus of one astrophysicist, we can get at most $$$1$$$ from another one, and by increasing it, we lose $$$\\lfloor \\frac{G - 1}{2} \\rfloor$$$. In both cases, it is not worth changing the value.\nThus, we got a formula to calculate in $$$\\mathcal{O}(1)$$$."
         },
         {
             "title": "Solution",

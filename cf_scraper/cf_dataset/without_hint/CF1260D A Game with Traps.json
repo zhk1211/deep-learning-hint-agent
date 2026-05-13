@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1260D - A Game with Traps\nWhen we fix a set of soldiers, we can determine a set of traps that may affect our squad: these are the traps with danger level greater than the lowest agility value. So we can use binary search on minimum possible agility of a soldier that we can choose.\nHow should we actually bring our soldiers to the boss? Each trap that can affect our squad can be actually treated as a segment $$$[l_i, r_i]$$$ such that our squad cannot move to $$$l_i$$$ until we move to $$$r_i$$$ and disarm this trap. We should walk through such segments for three times: the first time we walk forwards without our squad to disarm the trap, the second time we walk backwards to return to our squad, and the third time we walk forwards with our squad. So the total time we have to spend can be calculated as $$$n + 1 + 2T$$$, where $$$T$$$ is the number of unit segments belonging to at least one trap-segment — and it can be calculated with event processing algorithms or with segment union.\nTime complexity is $$$O(n \\log n)$$$ or $$$O(n \\log^2 n)$$$, but it is possible to write a solution in $$$O(n \\alpha(n))$$$ without binary search."
         },
         {
             "title": "Solution (BledDest)",

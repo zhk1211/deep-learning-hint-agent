@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1515I - Phoenix and Diamonds\nSuppose the largest weight of an item is less than $$$2^k$$$. Call an item heavy if its weight is in the range $$$[2^{k-1},2^k)$$$ and light if its weight is in the range $$$(0,2^{k-1})$$$. Sort the items in decreasing order by value. As the thief moves left to right, his remaining capacity is nonincreasing. Consider the point where it drops below $$$2^{k-1}$$$. Before this point, he takes all light items. After this point, he takes no heavy items. The latter can be solved recursively by querying the same data structure only on light items, starting at the appropriate point. The former is a bit trickier.\nThe thief will take every item until his capacity drops below $$$2^k$$$. This point can be found by binary searching on a segment tree of sums. After this point, he can only take at most one more heavy item. To find this item (if it exists), we can binary search on a segment tree storing range minimums of prefix sum of light items plus weight of heavy item. The first item that is small enough will be taken, if it exists. Either way, we've located all heavy items that will be taken and can recursively handle the light items.\nTo handle updates, reserve space for all items offline and change their multiplicity as needed. When an item is updated, we can modify all segment trees that it participates in.\nThis solution is $$$O((n+q)\\log{n}\\log{C})$$$."
         },
         {
             "title": "Solution",

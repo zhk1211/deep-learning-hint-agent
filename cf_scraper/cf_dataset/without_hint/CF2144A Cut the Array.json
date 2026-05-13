@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2144A - Cut the Array\nOf course, we can iterate through the positions $$$l$$$ and $$$r$$$, and then check if we get a valid cut. However, there is a simpler solution.\nLet's try to rephrase the condition \"either all numbers $$$s_1, s_2, s_3$$$ are different, or all numbers $$$s_1, s_2, s_3$$$ are the same\". Since these are remainders when divided by $$$3$$$, their sum will be equal to $$$0$$$ modulo $$$3$$$:\nif they are all equal to $$$0$$$, $$$1$$$, or $$$2$$$, then their sum is divisible by $$$3$$$;\notherwise, one of them is $$$0$$$, another is $$$1$$$, and the third is $$$2$$$, and their sum equals $$$3$$$.\nOn the other hand, if $$$s_1+s_2+s_3$$$ is equal to $$$0$$$ modulo $$$3$$$, then there are two possible cases:\neither $$$s_1 = s_2$$$, in which case $$$s_3$$$ will be equal to them (otherwise their sum would not be divisible by $$$3$$$);\nor $$$s_1 \\ne s_2$$$, then $$$s_3 = 3 - s_1 - s_2$$$, and regardless of the values of $$$s_1$$$ and $$$s_2$$$, $$$s_3$$$ will differ from them.\nThus, if the sum of the array is not divisible by $$$3$$$, then there is no suitable cut; and if it is divisible by $$$3$$$, then any cut will be valid."
         },
         {
             "title": "Solution (BledDest)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1765L - Project Manager\nFirst, notice that the answer can't be that large. Even the worst case: one developer works one day of the week, responsible for a $$$2 \\cdot 10^5$$$ part project, the first $$$2 \\cdot 10^5$$$ of his workdays are holidays. It's just $$$7 \\cdot (2 \\cdot 10^5 + 2 \\cdot 10^5)$$$.\nThus, we'd like to iterate over time and complete project parts exactly as they are due. If we manage to deduce the parts that have to be completed during the current day, the complexity will be limited by the total number of parts plus the maximum time.\nTo determine that, I propose to maintain the following data structures. First, maintain $$$7$$$ vectors of maps: for each day of the week, maintain pairs (the developer, the number of projects they are currently the blocking person for). Each developer is only counted in days they work at and only if they have a non-zero number of projects. Second, maintain $$$n$$$ vectors of sets: for each developer, maintain the projects they are currently the blocking person for.\nTo process a day, extract all pairs from the map for the current day of the week. All these developers will complete a part of a project. The index of that project is the first element in the corresponding set. Update all maps and sets and proceed. If the number of projects for any developers becomes zero, remove them from the maps.\nIf the current day is a holiday, just skip it."
         },
         {
             "title": "Solution (awoo)",

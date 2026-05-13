@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1194B - Yet Another Crosses Problem\nLet's consider each cell as a center of a cross and take the fastest one to paint. Calculating each time naively will take $$$O(nm(n + m))$$$ overall, which is too slow. Notice how the answer for some cell $$$(x, y)$$$ can be represented as $$$cnt_{row}[x] + cnt_{column}[y] -$$$ ($$$1$$$ if $$$a[x][y]$$$ is white else $$$0$$$), where $$$cnt_{row}[i]$$$ is the number of white cells in row $$$i$$$ and $$$cnt_{column}[i]$$$ is the same for column $$$i$$$. The first two terms can be precalculated beforehand.\nOverall complexity: $$$O(nm)$$$ per query."
         },
         {
             "title": "Solution (PikMike)",

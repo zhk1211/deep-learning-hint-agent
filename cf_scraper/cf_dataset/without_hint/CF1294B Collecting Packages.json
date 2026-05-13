@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1294B - Collecting Packages\nIt is obvious that if there is a pair of points $$$(x_i, y_i)$$$ and $$$(x_j, y_j)$$$ such that $$$x_i  \\lt  x_j$$$ and $$$y_i  \\gt  y_j$$$ then the answer is \"\nNO\n\". It means that if the answer is \"\nYES\n\" then there is some ordering of points such that $$$x_{i_1} \\le x_{i_2} \\le \\dots \\le x_{i_n}$$$ and $$$y_{i_1} \\le y_{i_2} \\le \\dots \\le y_{i_n}$$$ because we can only move right or up. But what is this ordering? it is just sorted order of points (firstly by $$$x_i$$$ then by $$$y_i$$$).\nSo we can sort all points, check if this ordering is valid and traverse among all these points. For each $$$k$$$ from $$$2$$$ to $$$n$$$ firstly do $$$x_{i_k} - x_{i_{k-1}}$$$ moves to the right then do $$$y_{i_k} - y_{i_{k-1}}$$$ moves to the up (because this order minimizing the answer lexicographically).\nTime complexity: $$$O(n \\log n)$$$ or $$$O(n^2)$$$."
         },
         {
             "title": "Solution",

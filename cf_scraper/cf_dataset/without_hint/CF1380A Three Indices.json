@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1380A - Three Indices\nA solution in $$$O(n^2)$$$: iterate on $$$j$$$, check that there exists an element lower than $$$a_j$$$ to the left of it, and check that there exists an element lower than $$$a_j$$$ to the right of it. Can be optimized to $$$O(n)$$$ with prefix/suffix minima.\nA solution in $$$O(n)$$$: note that if there is some answer, we can find an index $$$j$$$ such that $$$a_{j - 1}  \\lt  a_j$$$ and $$$a_j  \\gt  a_{j + 1}$$$ (if there is no such triple, the array descends to some point and ascends after that, so there is no answer). So we only have to check $$$n - 2$$$ consecutive triples."
         },
         {
             "title": "Solution (Ne0n25)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1450D - Rating Compression\nFor $$$k=1$$$, we simply need to check that the array is a permutation.\nIf $$$k=n$$$, we simply need to check that the array has minimum $$$1$$$.\nFor $$$1 \\lt k \\lt n$$$, we know the $$$k$$$-compression should contain exactly one occurrence of $$$1$$$. But $$$1$$$ is the minimum possible element, so it should occur in only one length $$$k$$$ subarray. Therefore, $$$1$$$ should only occur at one of the extremes: index $$$1$$$ or index $$$n$$$. Without loss of generality, suppose it occurs at index $$$n$$$. Then we require that the $$$k$$$-compression of $$$a[1,\\ldots,n-1]$$$ is a permutation of the numbers $$$\\{2,3,\\ldots,n-k+1\\}$$$, and we can solve iteratively.\nThis gives us the following algorithm. We maintain an interval $$$[l,r]$$$. Initially $$$l=1$$$ and $$$r=n$$$. Now, we iterate $$$i=1,\\ldots,n$$$. For each $$$i$$$, we make sure that either $$$a_l=i$$$ or $$$a_r=i$$$, increment $$$l$$$ or decrement $$$r$$$ accordingly. Then check that $$$\\min\\limits_{j=l}^r a_j=i+1$$$.\nIf $$$i$$$ is the first index that our checks fail, then the answer is $$$0$$$ for $$$2\\le k\\le n-i+1$$$ and the answer is $$$1$$$ for $$$n-i+1 \\lt  k\\le n$$$.\nChecking the minimum element each iteration can be done with data structures like a sparse table or segment tree. It is also sufficient to maintain a $$$count$$$ array of the elements, for a complexity of $$$O(n)$$$."
         }
     ]
 }

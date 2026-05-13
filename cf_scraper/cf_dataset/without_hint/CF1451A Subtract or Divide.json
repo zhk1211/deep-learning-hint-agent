@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1451A - Subtract or Divide\nKey Idea:\nFor $$$n  \\gt  3$$$, the answer is $$$2$$$ when $$$n$$$ is even and $$$3$$$ when $$$n$$$ is odd. Cases when $$$n \\leq 3$$$ can be handled separately.\nSolution:\nCase 1: $$$n \\leq 3$$$\nFor $$$n = 1, 2, 3$$$, it can be shown that the minimum number of operations required are $$$0$$$, $$$1$$$, $$$2$$$ respectively.\nCase 2: $$$n  \\gt  3$$$ and $$$n$$$ is even\nIf $$$n$$$ is even and greater than $$$2$$$, then $$$\\frac{n}{2}$$$ is a proper divisor. So we can divide $$$n$$$ by $$$\\frac{n}{2}$$$ to make it $$$2$$$ and then subtract $$$1$$$. This requires $$$2$$$ operations.\nCase 3: $$$n  \\gt  3$$$ and $$$n$$$ is odd\nIn this case, $$$n$$$ can be made even by subtracting $$$1$$$. From case 2, it can be seen that it will take $$$2$$$ more operations. Thus a total of $$$3$$$ operations are required.\nTime complexity: $$$O(1)$$$ per case"
         }
     ]
 }

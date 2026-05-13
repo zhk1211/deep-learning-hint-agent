@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1385C - Make It Good\nConsider the maximum element $$$a_{mx}$$$ of the good array $$$a$$$ of length $$$k$$$. Then we can notice that the array $$$a$$$ looks like $$$[a_1 \\le a_2 \\le \\dots \\le a_{mx} \\ge \\dots \\ge a_{k-1} \\ge a_k]$$$. And this is pretty obvious that if the array doesn't have this structure, then it isn't good (you can see it yourself). So we need to find the longest such suffix. It's pretty easy doable with pointer: initially, the pointer $$$pos$$$ is at the last element. Then, while $$$pos  \\gt  1$$$ and $$$a_{pos - 1} \\ge a_{pos}$$$, decrease $$$pos$$$ by one. If we're done with the previous step, we do the same, but while $$$pos  \\gt  1$$$ and $$$a_{pos - 1} \\le a_{pos}$$$. The answer is $$$pos-1$$$."
         },
         {
             "title": "Solution",

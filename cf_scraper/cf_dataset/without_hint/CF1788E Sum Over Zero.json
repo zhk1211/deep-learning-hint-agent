@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1788E - Sum Over Zero\nDenote $$$p$$$ as the prefix sum of $$$a$$$. For a segment $$$[x+1, y]$$$ to be an element of $$$S$$$, $$$p_x \\leq p_y$$$ should be satisfied.\nLet's denote $$$dp_i$$$ as the maximum value of the sum of length of segment smaller than $$$i$$$ in $$$S$$$. Segment $$$[x, y]$$$ is smaller than $$$i$$$ if $$$y \\leq i$$$. If there is no segment ending at $$$i$$$, $$$dp_i=dp_{i-1}$$$. If there is segment $$$[k+1, i]$$$ in $$$S$$$, $$$dp_i=\\max_{ p_{k} \\leq p_i }(dp_k+i-k)$$$. By summing up, $$$dp_i = \\max(dp_{i-1}, \\max_{p_k \\leq p_i}(dp_k+i-k)$$$ With this dp, we get an $$$O(N^2)$$$ solution.\nNow let's try to speed up the dp transition using segment tree. First, use coordinate compression on $$$p_i$$$ since we only see whether one prefix sum is bigger than the other. We will maintain a segment tree that stores $$$dp_k-k$$$ in position $$$p_k$$$.\nLet's find $$$dp_i$$$ in order of $$$i$$$. $$$dp_i = \\max(dp_{i-1}, \\max_{p_k \\leq p_i}(dp_k-k)+i)$$$ We can solve $$$\\max_{p_k \\leq p_i}(dp_k-k)$$$ by range query $$$[0, p_i]$$$ on a segment tree. So we can solve $$$dp_i$$$ in $$$O(logN)$$$ for each $$$i$$$.\nThe entire problem is solved in $$$O(NlogN)$$$.\nThere is an alternative solution that maintains pair $$$(dp_k-k, p_k)$$$ monotonically with a set. This solution also runs in $$$O(NlogN)$$$."
         }
     ]
 }

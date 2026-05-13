@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2121B - Above the Clouds\nNotice that if there exist three non-empty strings $$$a$$$, $$$b$$$, and $$$c$$$ that satisfy the condition, then there exist three non-empty strings $$$a'$$$, $$$b'$$$, and $$$c'$$$ that satisfy the condition, where the length of string $$$b'$$$ is equal to $$$1$$$. To achieve this, one can choose any character from string $$$b$$$, append all characters before it to the end of string $$$a$$$, and prepend all characters after it to the beginning of string $$$c$$$.\nLet $$$cnt_l$$$ be the number of times character $$$l$$$ appears in string $$$s$$$. Then the answer \"\nYes\n\" will be given if any of the following conditions hold:\nThere exists a character $$$l$$$ such that $$$cnt_l \\geq 3$$$. We can choose the second occurrence of character $$$l$$$ in string $$$s$$$ as string $$$b$$$.\nThere exists a character $$$l$$$ such that $$$cnt_l = 2$$$ and either the first or the last character of string $$$s$$$ is not equal to $$$l$$$. We can choose any occurrence of character $$$l$$$ in the string as string $$$b$$$, except when it is the first or last character of string $$$s$$$.\nThe solution can be implemented in $$$O(n)$$$."
         }
     ]
 }

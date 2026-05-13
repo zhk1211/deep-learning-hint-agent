@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1327D - Infinite Path\nLet's look at the permutation as at a graph with $$$n$$$ vertices and edges $$$(i, p_i)$$$. It's not hard to prove that the graph consists of several cycles (self-loops are also considered as cycles). So, the sequence $$$i, p[i], p[p[i]], \\dots$$$ is just a walking on the corresponding cycle.\nLet's consider one cycle $$$c_1, c_2, \\dots, c_m$$$. In permutation $$$p$$$ we have $$$p[c_i] = c_{(i + 1) \\mod m}$$$. But since $$$p^2 = p \\times p$$$ or $$$p^2[i] = p[p[i]]$$$, so $$$p^2[c_i] = c_{(i + 2) \\mod m}$$$ and in general case, $$$p^k[c_i] = c_{(i + k) \\mod m}$$$.\nNow, walking with step $$$k$$$ we can note, that the initial cycle $$$c$$$ split up on $$$GCD(k, m)$$$ cycles of length $$$\\frac{m}{GCD(k, m)}$$$. Looking at the definition of infinite path we can understand that all we need to do is to check that at least one of $$$GCD(k, m)$$$ cycles have all vertices of the same color. We can check it in $$$O(m)$$$ time for the cycle $$$c$$$ and fixed $$$k$$$.\nThe final observation is next: for $$$k_1$$$ and $$$k_2$$$ such that $$$GCD(k_1, m) = GCD(k_2, m)$$$ the produced cycles will have the same sets of vertices and differ only in the order of walking, so we can check only one representative for each $$$GCD(k, m)$$$, i.e. we can take only such $$$k$$$ which divide $$$m$$$.\nWe can handle each cycle of $$$p$$$ separately. So, using the approximation that the number of divisors of $$$n$$$ is $$$O(n^{\\frac{1}{3}})$$$, we get $$$O(n^{\\frac{4}{3}})$$$ time complexity."
         },
         {
             "title": "Solution (adedalic)",

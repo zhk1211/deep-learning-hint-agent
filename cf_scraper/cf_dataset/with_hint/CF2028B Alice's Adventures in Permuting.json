@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2028B - Alice's Adventures in Permuting\nSuppose that $$$b = 0$$$. Then, if $$$c \\ge n$$$, the answer is $$$n$$$; if $$$c = n - 1$$$ or $$$c = n - 2$$$, the answer is $$$n - 1$$$; and otherwise, it is $$$-1$$$ (for example, consider $$$c = n - 3$$$, in which case we will end up with $$$$$$a = [0, 1, \\ldots, n - 4, n - 3, n - 3, n - 3] \\rightarrow [0, 1, \\ldots, n - 4, n - 3, n - 3, n - 2] \\rightarrow [0, 1, \\ldots, n - 4, n - 3, n - 3, n - 1]$$$$$$ and the last two steps alternate)\nOtherwise, since $$$a$$$ has distinct elements, we claim that the answer is $$$n - m$$$, where $$$m$$$ is the number of elements in $$$0, 1, \\ldots, n - 1$$$ already present in the array. Equivalently, it is the number of steps until $$$\\max(a)  \\lt  n$$$ since we always preserve the distinctness of the elements of $$$a$$$.\nSo, we want to find the maximum $$$i$$$ such that $$$a_i  \\lt  n$$$. This happens exactly when $$$i  \\lt  \\frac{n - c}{b}$$$. The expected complexity is $$$O(1)$$$ per testcase."
         }
     ]
 }

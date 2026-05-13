@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1619G - Unusual Minesweeper\nOur first task is to separate mines into components. We will store in the hashmap $$$mapx$$$ at the $$$x$$$ coordinate all the $$$y$$$ coordinates where there is a mine. Let's do the same with the $$$mapy$$$ hashmap. Thus, going through the available arrays in $$$mapx$$$ and $$$mapy$$$, we connect adjacent elements into one component, if $$$|mapx[x][i] - mapx[x][i + 1]|  \\lt = k$$$, also with $$$mapy$$$.\nAs a result, we have components, where if you detonate one mine in the $$$j$$$'s component, then all the mines belonging to this component will also explode.\nFurther, we find a mine with a minimum timer in each component. Finding the minimum for each component, we store it conditionally in the array $$$a$$$. Now we know at what minimum time some component will explode if it is left unaffected.\nTo answer, it remains to find in the sorted array $$$a$$$ such a minimum index $$$i$$$ $$$(0 \\le i \\le a.size - 1)$$$ that $$$max (a[i], a.size - i - 2)$$$ is min.\nAnd the general asymptotic behavior is $$$O(n log (n))$$$."
         },
         {
             "title": "Solution",

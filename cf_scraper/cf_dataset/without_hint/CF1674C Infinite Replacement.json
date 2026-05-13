@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1674C - Infinite Replacement\nLet's consider some cases.\nIf there are letters 'a' in string $$$t$$$, then the moves can be performed endlessly. If $$$t$$$ itself is equal to \"a\", then the string won't change, so the answer is $$$1$$$. Otherwise, the length of $$$t$$$ is least $$$2$$$, so string $$$s$$$ will be increasing in length after each move, and the answer is\n-1\n.\nIf there are no letters 'a' in string $$$t$$$, then the resulting string is only determined by whichever letters 'a' we chose to replace with $$$t$$$. That's because once we replace a letter 'a' with string $$$t$$$, we can do nothing with the new letters anymore.\nWe can actually imagine that $$$t$$$ is equal to \"b\", and the answer won't change. Now it's easy to see that the answer is equal to the number of strings of length $$$n$$$, consisting only of letters 'a' and 'b'. There are two options for each position, and there are $$$n$$$ positions, so the answer is $$$2^n$$$.\nOverall complexity: $$$O(|s| + |t|)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

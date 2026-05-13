@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1213D2 - Equalizing by Division (hard version)\nIn this problem we need to write almost the same solution as in the previous one (easy version) but faster. Observe that we calculate the value of $$$\\lfloor\\frac{a_i}{2^m}\\rfloor$$$ too many times. Let $$$vals_x$$$ for all $$$x$$$ from $$$1$$$ to $$$2 \\cdot 10^5$$$ be the array of numbers of divisions we need to obtain $$$x$$$ from every possible $$$a_i$$$ from which we can. We can calculate these arrays in time $$$O(n \\log n)$$$. How? Let's iterate over all $$$a_i$$$ and divide it by $$$2$$$ while it is positive (and carry the number of divisions $$$cur$$$). Then let's add to the array $$$vals_{a_i}$$$ the number $$$cur$$$ before each division.\nThen we can see that we obtain the array $$$cnt$$$ from the tutorial of the previous problem for each $$$x$$$ from $$$1$$$ to $$$2 \\cdot 10^5$$$. Let's iterate over all possible values of $$$x$$$ and try to update the answer with the sum of $$$k$$$ smallest values of $$$vals_x$$$ if there is at least $$$k$$$ elements in this array.\nTime complexity: $$$O(n \\log n \\log(n \\log n))$$$ or $$$O(n \\log n)$$$, depends on sorting method."
         },
         {
             "title": "Solution",
