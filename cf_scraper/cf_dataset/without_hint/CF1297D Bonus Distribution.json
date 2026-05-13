@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1297D - Bonus Distribution\nAt first, let's reorder array $$$a$$$ in such way that $$$a_i \\ge a_{i + 1}$$$. Then the maximum among all $$$a_i + d_i$$$ is just a value $$$a_1 + d_1$$$.\nIn the first step, let's look at what is the maximum total bonus we can distribute if $$$d_1 = 0$$$ (so the $$$a_1 + d_1$$$ is the minimum possible). We can find the next formula: $$$d_i = a_1 - (i - 1) - a_i$$$ and the maximum possible bonus will be equal to $$$\\sum{a_1 - (i - 1) - a_i}$$$.\nIf $$$k$$$ doesn't exceed the maximal bonus we can distribute if $$$d_1 = 0$$$ then the optimal answer is already found and we can greedily distribute bonus $$$k$$$: give to the first employe $$$0$$$, to the second $$$a_1 - 1 - a_2$$$ if we can (or all we have if we can't) and so on.\nOtherwise, we need to increase $$$d_1$$$. But increasing $$$d_1$$$ by $$$1$$$ leads to increasing the maximal bonus by $$$n$$$. So, let's define $$$rem = k - \\sum{a_1 - (i - 1) - a_i}$$$, and we can see that all we need to do is just give first $$$rem \\mod n$$$ employees additional $$$\\frac{rem}{n} + 1$$$ (or $$$d_i = d_i + \\frac{rem}{n} + 1$$$) and other employes $$$\\frac{rem}{n}$$$ (or $$$d_i = d_i + \\frac{rem}{n}$$$)."
         },
         {
             "title": "Solution (elizarov)",

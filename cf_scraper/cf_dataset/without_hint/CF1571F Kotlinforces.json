@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1571F - Kotlinforces\nNotice that it doesn't make sense to not put the competitions with $$$t=1$$$ not next to each other or start them from day $$$1$$$.\nSo the problem is to place competitions with $$$t=2$$$ over the remaining $$$m - cnt_1$$$ days.\nAny competition with $$$t=2$$$ takes up either consecutive odd days or consecutive even days. We can count the number of remaining odd and even days.\nThe issue is to decide for each competition which of these two it should take up. So we want the total length of the competitions in the odd days to not exceed $$$\\mathit{cnt}_{odd}$$$ and the total length of the competitions in the even days to not exceed $$$\\mathit{cnt}_{even}$$$.\nIf the total length of the competitions exceeds $$$\\mathit{cnt}_{odd} + \\mathit{cnt}_{even}$$$, then there is no way for sure. Otherwise, you can fill up the odd days as much as possible and leave the remaining competitions for the even days.\nThat can be done with a $$$dp_{i,j}$$$ — is it possible to fill $$$j$$$ odd days with some subset of the first $$$i$$$ competitions. You should get AC with $$$O(nm)$$$ memory, but it's possible to make it $$$O(m)$$$.\nOverall complexity: $$$O(nm)$$$."
         },
         {
             "title": "Solution (pashka)",

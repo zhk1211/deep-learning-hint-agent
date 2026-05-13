@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2061C - Kevin and Puzzle\nFor the $$$i$$$-th person, there are at most two possible cases:\nIf they are honest, there are exactly $$$a_i$$$ liars to their left.\nIf they are a liar, since two liars cannot stand next to each other, the $$$(i-1)$$$-th person must be honest. In this case, there are $$$a_{i-1} + 1$$$ liars to their left.\nLet $$$dp_i$$$ represent the number of possible game configurations for the first $$$i$$$ people, where the $$$i$$$-th person is honest. The transitions are as follows:\nIf the $$$(i-1)$$$-th person is honest, check if $$$a_i = a_{i-1}$$$. If true, add $$$dp_{i-1}$$$ to $$$dp_i$$$.\nIf the $$$(i-1)$$$-th person is a liar, check if $$$a_i = a_{i-2} + 1$$$. If true, add $$$dp_{i-2}$$$ to $$$dp_i$$$.\nThe final answer is given by $$$dp_n + dp_{n-1}$$$.\nTime complexity: $$$O(n)$$$."
         }
     ]
 }

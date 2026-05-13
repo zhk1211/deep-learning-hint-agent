@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1389B - Array Walk\nNotice that your final position is determined by the number of moves to the left you make. Let there be exactly $$$t$$$ moves to the left, that leaves us with $$$k - t$$$ moves to the right. However, let's interpret this the other way. You have $$$t$$$ pairs of moves (right, left) to insert somewhere inside the sequence of $$$k - 2t$$$ moves to the right.\nEasy to see that all the positions from $$$1$$$ to $$$k - 2t + 1$$$ will always be visited. And the extra pairs can also increase the score by visiting some positions ($$$i+1$$$, $$$i$$$) for some $$$i$$$ from $$$1$$$ to $$$k - 2t + 1$$$.\nNotice that it's always optimal to choose exactly the same $$$i$$$ for all the pairs (right, left). And that $$$i$$$ should be such that $$$a_{i+1} + a_i$$$ is maximum possible.\nYou can implement this idea in a straightforward manner: iterate over $$$t$$$ and calculate the sum of values from $$$1$$$ to $$$k - 2t + 1$$$ and the maximum value of $$$a_{i+1} + a_i$$$ over $$$i$$$ from $$$1$$$ to $$$k - 2t + 1$$$.\nThat will lead to a $$$O(zn)$$$ solution per testcase.\nYou can optimize it to $$$O(n)$$$ with prefix sums or with some clever order to iterate over $$$t$$$. It's also possible to iterate over the final position and restore the number of left moves required to achieve it.\nOverall complexity: $$$O(zn)$$$ or $$$O(n)$$$ per testcase."
         },
         {
             "title": "Solution 1 (pikmike)",

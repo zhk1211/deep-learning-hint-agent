@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "2040D - Non Prime Tree\nThere are many array construction tactics that can be devised here. We will show two of them.\nWe will perform a depth-first traversal of the graph and write a number $$$1$$$ greater than the previous one in the traversal order into each subsequent vertex. If the next vertex is not a leaf, then some number has already been written into its parent, which may violate the condition \"$$$|a_{u_i} - a_{v_i}|$$$ is prime\". If the difference is even and not equal to $$$2$$$, then the condition is satisfied. Otherwise, the condition may be satisfied, but we will still achieve an even difference not equal to $$$2$$$. If the difference is odd, first add the number $$$1$$$. If the difference becomes $$$2$$$, add another $$$2$$$. It can be shown that if we added this additional $$$2$$$, then we did not add them to the previous two vertices in the traversal order.\nWe will write the values $$$2, 4, 6, \\dots$$$ to the vertices with even depth in breadth-first order. We will write the values $$$n \\cdot 2, n \\cdot 2 - 2, n \\cdot 2 - 4, \\dots$$$ to the vertices with odd depth in breadth-first order. In such a traversal, the condition \"$$$|a_{u_i} - a_{v_i}|$$$ is prime\" can be violated only for one pair, and one of the vertices of this pair will be a leaf. We will change the value of this leaf to the value of the parent minus $$$1$$$."
         },
         {
             "title": "Solution 1",

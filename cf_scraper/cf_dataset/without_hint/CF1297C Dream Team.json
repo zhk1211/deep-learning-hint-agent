@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1297C - Dream Team\nIt can be proven that there are only two configurations we need to consider:\nThe subset with the maximum sum, but without the smallest positive element. It's possible if there are at least two positive elements in array $$$a$$$.\nThe subset with the maximum sum, but with one extra negative element (obviously, it should be one with the lowest absolute value). It's possible if there is at least one negative element in array $$$a$$$.\nWe can check both configurations separately or simultaneously in linear time and choose the best one.\nP.S.: It's not hard to prove that the configuration should have no more than one positive element being absent (since, in the other way, we can return other elements and make the answer better) comparing to the subset with maximal sum. In the same manner, the configuration should have no more than one extra negative element."
         },
         {
             "title": "Solution (elizarov)",

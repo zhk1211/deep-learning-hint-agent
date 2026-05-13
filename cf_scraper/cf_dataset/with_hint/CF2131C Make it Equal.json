@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2131C - Make it Equal\nKey observation:\nWe can only change an element $$$x$$$ to $$$y$$$ if and only if $$$x\\equiv y \\pmod k$$$ or $$$x + y\\equiv 0 \\pmod k$$$.\nProof:\nStep 1: If $$$x\\equiv y \\pmod k$$$, assume that $$$x  \\lt  y$$$, we can do the following operations: add $$$x$$$ to $$$k$$$ for $$$\\frac{y-x}{k}$$$ times. Vice versa.\nStep 2: If $$$x + y\\equiv 0 \\pmod k$$$, we can make $$$x$$$ become $$$x\\bmod k$$$ with some operations, then make $$$x\\bmod k$$$ become $$$z=(k-x) \\% k$$$, and now we can see $$$z\\equiv y \\pmod k$$$, repeat the operations in step 1 to make $$$z$$$ to $$$y$$$.\nSo, for every element $$$x$$$ in multiset $$$S$$$ and $$$T$$$, we make it become as small as possible, which is equal to $$$min(x\\% k, (k - x \\% k) \\% k)$$$. Then check $$$S$$$ and $$$T$$$ if they are equal."
         }
     ]
 }

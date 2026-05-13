@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1714C - Minimum Varied Number\nLet's use the greedy solution: we will go through the digits in decreasing order. If the sum of $$$s$$$ we need to dial is greater than the current digit, we add the current digit to the end of the line with the answer.\nNote that in this way we will always get an answer consisting of the minimum possible number of digits, because we are going through the digits in descending order.\nSuppose that the resulting number is not optimal. Then some digit can be reduced, and some digit that comes after it can be increased, in order to save the sum (we can not increase the digit before it, as then we get a number greater than the current one). Two variants are possible.\nWe want to increase the digit $$$x$$$ to $$$x+1$$$, but then it becomes equal to the digit following it, or exceeds the value $$$9$$$. Then we can't increment that digit.\nOtherwise, in the first step, we can get $$$x+1$$$ instead of $$$x$$$, but since we are going through the digits in decreasing order, we cannot get the value of $$$x$$$ in that case. Contradiction."
         },
         {
             "title": "Solution",

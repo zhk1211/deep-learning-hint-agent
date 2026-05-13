@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1593D1 - All are Same\n$$$k$$$ can be arbitrarily large if and only if all numbers in the array are the same. In this case, we can choose any number $$$k$$$ and subtract it from all the numbers, for example, exactly once.\nSuppose we fix some $$$k$$$. Let $$$q_i$$$ be the number of subtractions of the number $$$k$$$ from the number $$$a_i$$$. In this case, all numbers will be equal if and only if, for any two numbers $$$a_i$$$ and $$$a_j$$$ from the array, $$$a_i - k \\cdot q_i = a_j - k\\cdot q_j$$$. Let $$$q_{i_0}$$$ be the minimum of $$$q_i$$$. Then all numbers in the array become the same if for each index $$$i$$$ we subtract from $$$a_i$$$ $$$k$$$ not $$$q_i$$$, but $$$q_i - q_{i_0}$$$ times. Then we will never subtract $$$k$$$ from the element $$$a_{i_0}$$$. This means that there is always an element in the array from which we can never subtract $$$k$$$. This element is the minimum on the array. Then from $$$a_i$$$ we will subtract $$$k$$$ exactly $$$\\frac{a_i - a_{i_0}}{k}$$$ times.\nThus, with the current $$$k$$$, it is possible to make all elements equal if and only if for all elements $$$a_i$$$ the value $$$a_i - a_{i_0}$$$ (where $$$a_{i_0}$$$ is the minimum on the array) is divisible by $$$k$$$. So, the maximum $$$k$$$ is the greatest common divisor of all values of $$$a_i - a_{i_0}$$$, $$$i = \\overline{1, n}$$$."
         },
         {
             "title": "Solution",

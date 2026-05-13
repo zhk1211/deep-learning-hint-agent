@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "C++ Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMOD\n=\n119\n<<\n23\n|\n1\n;\nint\nfpow\n(\nint\na\n,\nint\nk\n)\n{\nint\nr\n=\n1\n,\nt\n=\na\n;\nwhile\n(\nk\n)\n{\nif\n(\nk\n&\n1\n)\nr\n=\n(\nlong\nlong\n)\nr\n*\nt\n%\nMOD\n;\nt\n=\n(\nlong\nlong\n)\nt\n*\nt\n%\nMOD\n;\nk\n>>=\n1\n;\n}\nreturn\nr\n;\n}\nint\nmain\n()\n{\nstring\ns\n;\ncin\n>>\ns\n;\nint\nn\n=\ns\n.\nsize\n();\nvector\n<\nvector\n<int>\n>\ndp\n(\nn\n,\nvector\n<int>\n(\nn\n));\nvector\n<int>\nf\n(\nn\n+\n1\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\ni\n++)\n{\nf\n[\ni\n+\n1\n]\n=\nf\n[\ni\n];\nf\n[\ni\n+\n1\n]\n+=\ns\n[\ni\n]\n==\n'?'\n;\n}\nfor\n(\nint\nlen\n=\n2\n;\nlen\n<=\nn\n;\nlen\n++)\n{\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\nlen\n+\n1\n;\ni\n++)\n{\nint\nj\n=\ni\n+\nlen\n-\n1\n;\nif\n(\ns\n[\ni\n]\n!=\n'('\n)\n{\ndp\n[\ni\n][\nj\n]\n+=\ndp\n[\ni\n+\n1\n][\nj\n];\ndp\n[\ni\n][\nj\n]\n%=\nMOD\n;\n}\nif\n(\ns\n[\nj\n]\n!=\n')'\n)\n{\ndp\n[\ni\n][\nj\n]\n+=\ndp\n[\ni\n][\nj\n-\n1\n];\ndp\n[\ni\n][\nj\n]\n%=\nMOD\n;\n}\nif\n(\ns\n[\ni\n]\n!=\n'('\n&&\ns\n[\nj\n]\n!=\n')'\n)\n{\ndp\n[\ni\n][\nj\n]\n-=\ndp\n[\ni\n+\n1\n][\nj\n-\n1\n];\ndp\n[\ni\n][\nj\n]\n+=\nMOD\n;\ndp\n[\ni\n][\nj\n]\n%=\nMOD\n;\n}\nif\n(\ns\n[\ni\n]\n!=\n')'\n&&\ns\n[\nj\n]\n!=\n'('\n)\n{\ndp\n[\ni\n][\nj\n]\n+=\ndp\n[\ni\n+\n1\n][\nj\n-\n1\n];\ndp\n[\ni\n][\nj\n]\n%=\nMOD\n;\ndp\n[\ni\n][\nj\n]\n+=\nfpow\n(\n2\n,\nf\n[\nj\n]\n-\nf\n[\ni\n+\n1\n]);\ndp\n[\ni\n][\nj\n]\n%=\nMOD\n;\n}\n}\n}\ncout\n<<\ndp\n[\n0\n][\nn\n-\n1\n]\n<<\n\"\\n\"\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

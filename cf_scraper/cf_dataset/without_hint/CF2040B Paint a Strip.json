@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "2040B - Paint a Strip\nAt each moment of time, the array contains a number of non-intersecting segments consisting only of ones. Using an operation of the first type can increase the number of these segments by $$$1$$$. Using an operation of the second type decreases the number of these segments by $$$x - 1$$$, where $$$x$$$ — is the number of segments that this operation covers. Therefore, the number of operations of the second type is no more than the number of operations of the first type minus $$$1$$$.\nThe optimal strategy — is to perform one operation of the first type, and then alternate operations of the first and second types, increasing the number of ones from $$$x$$$ to $$$2 \\cdot (x + 1)$$$ on each such pair of operations. There is no point in doing more operations of the first type on the prefix of operations, since we still must cover no more than two segments of ones with operations of the second type; otherwise, we will reduce the possible number of operations of the second type."
         },
         {
             "title": "Solution Python",

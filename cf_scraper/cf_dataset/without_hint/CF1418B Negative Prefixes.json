@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1418B - Negative Prefixes\nLet's collect the prefix sums of the initial array $$$a$$$. How do they change if you swap two values in the array? Let's swap values on positions $$$l$$$ and $$$r$$$ ($$$l  \\lt  r$$$). Prefix sums from $$$1$$$ to $$$l-1$$$ aren't changed. Prefix sums from $$$l$$$ to $$$r-1$$$ are increased by $$$a_r-a_l$$$ (note that if $$$a_l \\gt a_r$$$ then these sums become smaller). Finally, prefix sums from $$$r$$$ to $$$n$$$ aren't changed as well.\nThus, swapping two values $$$a_l \\lt a_r$$$ will only increase some prefix sums but never decrease any of them.\nThat helps us see that the array such that all values on the unlocked positions are sorted in a non-increasing order is the most optimal one.\nOverall complexity: $$$O(n \\log n)$$$ per testcase."
         },
         {
             "title": "Solution (Ne0n25)",

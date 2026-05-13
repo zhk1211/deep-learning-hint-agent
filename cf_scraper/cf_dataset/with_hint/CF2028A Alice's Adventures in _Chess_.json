@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2028A - Alice's Adventures in ''Chess''\nWe can run the whole pattern $$$100\\gg \\max(a, b, n)$$$ times, which gives a total runtime of $$$O(100tn)$$$ (be careful in that running the pattern only 10 times is not enough!)\nTo prove that $$$100$$$ repeats suffices, suppose that Alice's steps on the first run of the pattern are $$$(0, 0), (x_1, y_1), (x_2, y_2), \\ldots, (x_n, y_n)$$$ (we will take $$$x_0 = 0, y_0 = 0$$$ for convenience) Then, Alice ends up at position $$$(a, b)$$$ if there exists a $$$t\\ge 0$$$ (the number of extra repeats) such that for some $$$i$$$, $$$x_i + tx_n = a$$$ and $$$y_i + ty_n = b$$$.\nCertainly, if $$$x_n = y_n = 0$$$, we only need one repeat so assume WLOG that $$$x_n \\neq 0$$$. Then, it must be the case that $$$t = \\frac{a - x_i}{x_n}$$$. However, $$$a - x_i \\le 20$$$ (since $$$x_i \\ge -10$$$) and $$$|x_n|\\ge 1$$$, so $$$t \\le 20$$$ and therefore $$$21$$$ repeats always suffice.\nIn fact, the above proof shows that we can solve each testcase in time $$$O(n)$$$."
         }
     ]
 }

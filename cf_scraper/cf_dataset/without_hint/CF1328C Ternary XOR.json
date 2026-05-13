@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1328C - Ternary XOR\nLet's iterate from left to right over the digits of $$$x$$$. If the current digit is either $$$0$$$ or $$$2$$$ then we can set $$$a_i = b_i = 0$$$ or $$$a_i = b_i = 1$$$ correspondingly. There are no better choices. And if the current digit $$$x_i$$$ is $$$1$$$ then the optimal choise is to set $$$a_i = 1$$$ and $$$b_i = 0$$$. What happens after the first occurrence of $$$1$$$? Because of this choice $$$a$$$ is greater than $$$b$$$ even if all remaining digits in $$$b$$$ are $$$2$$$. So for each $$$j  \\gt  i$$$ set $$$a_j = 0$$$ and $$$b_j = x_j$$$ and print the answer. The case without $$$1$$$ is even easier and in fact we handle it automatically."
         },
         {
             "title": "Solution",

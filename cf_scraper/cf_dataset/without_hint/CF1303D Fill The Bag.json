@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1303D - Fill The Bag\nIf $$$\\sum\\limits_{i=1}^{n} a_i \\ge n$$$, then the answer is\nYES\n, because the just can divide all boxes to size $$$1$$$ and then fill the bag. Otherwise the answer is\nNO\n.\nIf the answer is\nYES\n, let's calculate the minimum number of divisions. Let's consider all boxes from small to large. Presume that now we consider boxes of size $$$2^i$$$. Then there are three cases:\nif in binary representation of $$$n$$$ the $$$i$$$-th bit is equal to $$$0$$$, then we don't need boxes of size $$$2^i$$$ and we can merge it into boxes of size $$$2^{i+1}$$$;\nif in binary representation of $$$n$$$ the $$$i$$$-th bit is equal to $$$1$$$ and we have at most one box of size $$$2^i$$$, then we have to put it box in the bag and then merge the remaining boxes of size $$$2^i$$$ into boxes of size $$$2^{i+1}$$$;\nif in binary representation of $$$n$$$ the $$$i$$$-th bit is equal to $$$1$$$ and we have not boxes of size $$$2^i$$$, then we have to divide the large box into box of size $$$2^i$$$ (let's presume that it's box of size $$$2^x$$$). After that we just continue this algorithm with box of size $$$2^x$$$."
         },
         {
             "title": "Solution (Roms)",

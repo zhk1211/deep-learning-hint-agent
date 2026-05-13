@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1946F - Nobody is needed\nLet's iterate the left boundary of our queries $$$L$$$ from $$$n$$$ to $$$1$$$ and maintain the Fenwick tree $$$F$$$, where $$$F_i$$$ = the number of sought sets of indices in which $$$t_k = i$$$, and $$$t_1 \\ge L$$$. Then the answer to the query with the left boundary at $$$L$$$ will be the sum over the interval $$$[l_i; r_i]$$$ in our Fenwick tree. Now we just need to learn how to update our tree when transitioning from $$$L$$$ to $$$L - 1$$$. Some new sets of indices may have been added, starting at $$$L - 1$$$. Let's denote $$$pos_i$$$ as the position of the number $$$i$$$ in the permutation. We'll create an auxiliary array $$$dp$$$. We'll learn to calculate the dynamics $$$dp_i = $$$ the number of sought sets of indices where $$$t_1 = L - 1$$$, $$$t_k = i$$$. The base case will be $$$dp_{L - 1} = 1$$$. Suppose we know the value of $$$dp_{pos_x}$$$. Then we can update $$$dp_{pos_y} = dp_{pos_y} + dp_{pos_x}$$$, if $$$y$$$ is divisible by $$$x$$$ and $$$y \\ne x$$$, $$$pos_{a_i} \\le pos_x \\le pos_y$$$. We can calculate this dynamics straightforwardly, iterating over $$$x$$$ and $$$y$$$ $$$(y$$$ is divisible by $$$x$$$ and $$$x$$$ is divisible by $$$a_i)$$$. Notice that this will work in total for $$$O(n \\cdot \\log{n} \\cdot \\log{n})$$$ for the permutation. Now we can iterate over all numbers again that are multiples of $$$a_i$$$, update the Fenwick tree, and clear the $$$dp$$$ array to reuse it in the future."
         },
         {
             "title": "Solution",

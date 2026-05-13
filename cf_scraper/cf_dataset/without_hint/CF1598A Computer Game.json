@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1598A - Computer Game\nAt first glance, it seems like a graph problem. And indeed, this problem can be solved by explicitly building a graph considering cells as the vertices and checking that there is a safe path from start to finish via DFS/BFS/DSU/any other graph algorithm or data structure you know. But there's a much simpler solution.\nSince there are only two rows in a matrix, it's possible to move from any cell in the column $$$i$$$ to any cell in column $$$i + 1$$$ (if they are both safe, of course). It means that as long as there is at least one safe cell in each column, it is possible to reach any column of the matrix (and the cell $$$(2, n)$$$ as well).\nIt's easy to see that if this condition is not met, there exists a column with two unsafe cells — and this also means that this column and columns to the right of it are unreachable. So, the problem is reduced to checking if there is a column without any unsafe cells. To implement this, you can read both rows of the matrix as strings (let these strings be $$$s_1$$$ and $$$s_2$$$) and check that there is a position $$$i$$$ such that both $$$s_1[i]$$$ and $$$s_2[i]$$$ are equal to\n1\n."
         },
         {
             "title": "Solution (BledDest)",

@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ , consisting of $ n $ letters, each letter is either 'a' or 'b'. The letters in the string are numbered from $ 1 $ to $ n $ .\n\n$ s[l; r] $ is a continuous substring of letters from index $ l $ to $ r $ of the string inclusive.\n\nA string is called balanced if the number of letters 'a' in it is equal to the number of letters 'b'. For example, strings \"baba\" and \"aabbab\" are balanced and strings \"aaab\" and \"b\" are not.\n\nFind any non-empty balanced substring $ s[l; r] $ of string $ s $ . Print its $ l $ and $ r $ ( $ 1 \\le l \\le r \\le n $ ). If there is no such substring, then print $ -1 $ $ -1 $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 1000 $ ) — the number of testcases.\n\nThen the descriptions of $ t $ testcases follow.\n\nThe first line of the testcase contains a single integer $ n $ ( $ 1 \\le n \\le 50 $ ) — the length of the string.\n\nThe second line of the testcase contains a string $ s $ , consisting of $ n $ letters, each letter is either 'a' or 'b'.\n\nOutput Format\nFor each testcase print two integers. If there exists a non-empty balanced substring $ s[l; r] $ , then print $ l $ $ r $ ( $ 1 \\le l \\le r \\le n $ ). Otherwise, print $ -1 $ $ -1 $ .\n\nExamples\nSample 1\nInput\n4\n1\na\n6\nabbaba\n6\nabbaba\n9\nbabbabbaa\nOutput\n-1 -1\n1 6\n3 6\n2 5\n\nNote\nIn the first testcase there are no non-empty balanced subtrings.\n\nIn the second and third testcases there are multiple balanced substrings, including the entire string \"abbaba\" and substring \"baba\"."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1569A - Balanced Substring\nAny non-empty balanced string contains at least one letter '\na\n' and at least one letter '\nb\n'. That implies that there's an '\na\n' adjacent to a '\nb\n' somewhere in that string. Both strings \"\nab\n\" and \"\nba\n\" are balanced. Thus, any balanced string contains a balanced substring of length $$$2$$$. So the solution is to check all $$$n-1$$$ pairs of adjacent letters. If there exists a pair of different ones, print it.\nOverall complexity: $$$O(n)$$$ per testcase."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\ns\n=\ninput\n()\nfor\ni\nin\nrange\n(\nn\n-\n1\n):\nif\ns\n[\ni\n]\n!=\ns\n[\ni\n+\n1\n]:\nprint\n(\ni\n+\n1\n,\ni\n+\n2\n)\nbreak\nelse\n:\nprint\n(-\n1\n,\n-\n1\n)"
+        }
+    ]
+}

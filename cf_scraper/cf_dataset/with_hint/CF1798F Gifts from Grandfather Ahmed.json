@@ -30,7 +30,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1798F - Gifts from Grandfather Ahmed\nIncredible mathematical fact: from any $$$2n - 1$$$ integers, you can choose $$$n$$$ with a sum divisible by $$$n$$$ (Erdős–Ginzburg–Ziv theorem) The proof can be found in the world wide Web. Brief idea: first prove for primes, and then prove that if true for $$$n = a$$$ and $$$n = b$$$, then true for $$$n = ab$$$.\nSort the class sizes: $$$s_1 \\leq s_2 \\leq\\ldots \\leq s_k$$$. Let's distribute the available boxes into the first $$$k - 1$$$ classes in order. Then considering the $$$i$$$ class, we have $$$s_i + \\ldots + s_k - 1$$$ boxes at our disposal. $$$s_k\\geq s_i$$$, which means there are at least $$$2\\cdot s_i - 1$$$ boxes from which you can always allocate $$$s_i$$$ to send to the $$$i$$$ class. And for the last class, we can add a box with the necessary number of gifts ourselves to ensure divisibility.\nThe question remains how to allocate $$$s_i$$$ numbers with a sum divisible by $$$s_i$$$ among $$$2 \\cdot s_i - 1$$$ numbers. Restrictions allow you to do this in a straight dynamics for $$$n^3$$$. $$$dp[i][j][k]$$$ — is it possible to choose $$$j$$$ among the first $$$i$$$ numbers so that their sum gives the remainder of $$$k$$$ by the required modulus. Restore of the answer is done by the classical method."
         },
         {
             "title": "Solution",

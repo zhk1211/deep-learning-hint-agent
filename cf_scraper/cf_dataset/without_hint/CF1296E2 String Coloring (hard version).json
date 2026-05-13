@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1296E2 - String Coloring (hard version)\nThe solution of this problem is based on Dilworth's theorem. You can read about it on Wikipedia. In two words, this theorem says that the minimum number of non-decreasing sequences we need to cover the whole sequence equals the length of longest decreasing subsequence.\nLet's calculate the dynamic programming $$$dp_i$$$ — the length of longest decreasing sequence that ends in the position $$$i$$$. To recalculate this dynamic, let's carry the array $$$maxdp$$$ of length $$$26$$$, where $$$maxdp_c$$$ means the maximum value of $$$dp$$$ for the character $$$c$$$ on the prefix we already considered. So, initially all $$$dp_i$$$ are ones, all values of $$$maxdp$$$ are zeros. For the position $$$i$$$ we update $$$dp_i$$$ with $$$max(maxdp_{s_i + 1}, maxdp_{s_i + 2}, \\dots, maxdp_{25}) + 1$$$ and update $$$maxdp_{s_i}$$$ with $$$dp_i$$$.\nOkay, how to restore the answer? That's pretty easy. The color of the $$$i$$$-th character is exactly $$$dp_i$$$. Why it is so? If $$$dp_i$$$ becomes greater than $$$max(maxdp_{s_i + 1}, maxdp_{s_i + 2}, \\dots, maxdp_{25})$$$ then we surely need to use the new color for this character because we cannot append it to the end of any existing sequence. Otherwise, we will append it to some existing sequence (with the maximum possible number) and because it has the maximum number and we didn't update the value of $$$dp$$$ with the number of this sequence plus one, the current character is not less than the last in this sequence.\nTime complexity: $$$O(n \\cdot AL)$$$ or $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1297F - Movie Fan\nThe key observation is the following: when we choose which movies to watch, it's optimal to choose ones whose $$$b_i$$$ are minimal possible. It can be proven by contradiction: suppose we have the answer where $$$t_i  \\gt  t_j$$$ but $$$b_i  \\lt  b_j$$$, let's swap $$$t_i$$$ and $$$t_j$$$ and get $$$\\max(b_i - t_j, b_j - t_i) \\le \\max(b_i - t_i, b_j - t_j)$$$ — the contradiction.\nNow, let's carefully simulate the process. Let's iterate over day $$$D$$$ and maintain a set of segments $$$[a_i, b_i]$$$ (where $$$a_i \\le D$$$) sorted by $$$b_i$$$. The moments of starting airing $$$a_i$$$ will become events.\nSo we can do the following: for a fixed $$$D$$$, at first, let's add to the set all segments $$$[a_i, b_i]$$$ with $$$a_i = D$$$. Then choose $$$\\min(m, \\text{set size})$$$ movies we will watch at day $$$D$$$. And finally, if the set is not empty then move from $$$D$$$ to $$$D + 1$$$. Otherwise, let's move $$$D$$$ straight to the next event.\nSince there are $$$O(n)$$$ events and $$$O(n)$$$ movies it can be proven that we will check only $$$O(n)$$$ days and there will be $$$O(n)$$$ \"first()\" and \"remove()\" queries to the set. So, the total complexity is $$$O(n \\log(n))$$$."
         },
         {
             "title": "Solution (elizarov)",

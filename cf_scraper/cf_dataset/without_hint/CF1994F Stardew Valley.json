@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1994F - Stardew Valley\nThe edges with $$$0$$$ on them will be called black, the other edges will be called white.\nTo find such a route, we need the graph to be Eulerian (degree of each vertex is even). To achieve this, we can remove some black edges.\nLet's calculate the degree of each vertex (further we will keep this degree in mind) and leave only black edges. Solve the problem independently for each component. If a component has an odd number of vertices with odd degree, we cannot remove edges so that all degrees become even (since removing an edge does not change the parity of the sum of degrees), so in this case the answer is NO. Otherwise, such a route exists. Leave only the spanning tree and run dfs on it. If we leave a vertex and it has an odd degree, we remove an edge to its ancestor. This will work since the sum of the degrees in the component is even.\nFinally, we need to find the Eulerian cycle in the resulting graph and print it."
         }
     ]
 }

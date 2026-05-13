@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1170C - Minus and Minus Give Plus\nLet's process $$$s$$$ and $$$t$$$ character by character from left to right in parallel. Let's use two indices $$$i$$$ and $$$j$$$: the index $$$i$$$ is for $$$s$$$ and the index $$$j$$$ is for $$$t$$$. Initially, $$$i=j=0$$$. If $$$s[i] == t[j]$$$ then you can simply increase both indices $$$i$$$ and $$$j$$$ ($$$i$$$++, $$$j$$$++). In the opposite case, the only allowed situation is $$$s[i] = s[i+1] = $$$ '\n-\n' and $$$t[j] = $$$ '\n+\n'. In this case, increase $$$i$$$ by $$$2$$$ and $$$j$$$ by one. Stop the process if at least one index ($$$i$$$ or $$$j$$$) reaches the end of the corresponding string. Return positive answer\nYES\nif and only if both $$$i$$$ and $$$j$$$ reach the ends of strings $$$s$$$ and $$$t$$$ ($$$i=len(s), j=len(t)$$$) at the same time."
         },
         {
             "title": "Solution",

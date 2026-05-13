@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1183D - Candy Box (easy version)\nLet's calculate the array $$$cnt$$$ where $$$cnt_i$$$ is the number of candies of the $$$i$$$-th type. Let's sort it in non-ascending order.\nObviously, now we can take $$$cnt_1$$$ because this is the maximum number of candies of some type in the array. Let $$$lst$$$ be the last number of candies we take. Initially it equals $$$cnt_1$$$ (and the answer $$$ans$$$ is initially the same number). Then let's iterate over all values of $$$cnt$$$ in order from left to right. If the current number $$$cnt_i$$$ is greater than or equal to the last taken number of candies $$$lst$$$ then we cannot take more candies than $$$lst - 1$$$ (because we iterating over values of $$$cnt$$$ in non-ascending order), so let's increase answer by $$$lst - 1$$$ and set $$$lst := lst - 1$$$. Otherwise $$$cnt_i  \\lt  lst$$$ and we can take all candies of this type, increase the answer by $$$cnt_i$$$ and set $$$lst := cnt_i$$$."
         },
         {
             "title": "Solution",

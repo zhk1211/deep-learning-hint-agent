@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1462A - Favorite Sequence\nIn this problem, you can implement an algorithm opposite to that given in the condition. Let's maintain two pointers to the left-most and right-most unhandled element. Then, restoring the original array, you:\nput the left-most unhandled item in the first position\nput the right-most unhandled item in the second position\nput the left-most unhandled item in the third position\nput the right-most unhandled item in the fourth position\n...\nThat is, in general, you put the leftmost elements on all odd positions, and the rightmost ones on all even positions. After processing each element, you either move the left pointer forward by one, or the right one backward by one."
         },
         {
             "title": "Solution",

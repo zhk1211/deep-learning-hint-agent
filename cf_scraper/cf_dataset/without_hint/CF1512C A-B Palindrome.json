@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1512C - A-B Palindrome\nFirst, let's find such positions $$$i$$$ ($$$1 \\le i \\le n$$$) such that $$$s[i]\\ne$$$'\n?\n' (symbols in symmetric positions are uniquely determined):\nIf $$$s[n-i+1]=$$$'\n?\n', then $$$s[n-i+1] = s[i]$$$;\nIf $$$s[i] \\ne s[n-i+1]$$$, then at the end we will not get a palindrome in any way, so the answer is '\n-1\n'.\nNote that after such a replacement, the remaining characters '\n?\n' are split into pairs, except maybe the central one. If the center character is '\n?\n' then it is necessary to put the character '\n0\n' if $$$a$$$ is odd, or '\n1\n' if $$$b$$$ is odd (if neither $$$a$$$, nor $$$b$$$ is odd, then the answer is '\n-1\n').\nNow the remaining characters '\n?\n' are split into pairs (i.e. if $$$s[i]=$$$'\n?\n', then $$$s[n-i+1]=$$$'\n?\n'). This allows the remaining characters '\n0\n' and '\n1\n' to be replaced greedily:\nIf $$$s[i]=$$$'\n?\n' and $$$a \\gt 1$$$, then $$$s[i]=s[n-i+1]=$$$'\n0\n' and decrease $$$a$$$ for $$$2$$$;\nIf $$$s[i]=$$$'\n?\n' and $$$b \\gt 1$$$, then $$$s[i]=s[n-i +1]=$$$'\n1\n' and decrease $$$b$$$ for $$$2$$$;\nOtherwise the answer is '\n-1\n'."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1272C - Yet Another Broken Keyboard\nLet's replace all characters of $$$s$$$ with zeros and ones (zero if the character is unavailable and one otherwise). Then we have the binary string and we have to calculate the number of contiguous segments of this string consisting only of ones. It can be done with two pointers approach.\nIf we are staying at the position $$$i$$$ and its value is zero, just skip it. Otherwise, let's find the leftmost position $$$j$$$ such that $$$j  \\gt  i$$$ and the $$$j$$$-th value is zero. Then we have to add to the answer the value $$$\\frac{(j - i) \\cdot (j - i + 1)}{2}$$$ and set $$$i := j$$$.\nTime complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution",

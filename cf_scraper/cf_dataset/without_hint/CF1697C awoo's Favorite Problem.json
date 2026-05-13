@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1697C - awoo's Favorite Problem\nFirst, check that the counts of all letters are the same in both strings.\nThen consider the following restatement of the moves. The letters '\nb\n' in the string $$$s$$$ are stationary. Letters '\na\n' and '\nc\n', however, move around the string. The move of the first type moves a letter '\na\n' to the right. The move of the second type moves a letter '\nc\n' to the left.\nNotice that letters '\na\n' and '\nc\n' can never swap with each other. Thus, if you remove all letters '\nb\n' from both strings, the remaining strings should be the same.\nAgain, since letters '\na\n' and '\nc\n' can never swap with each other, you can deduce where each of these letters should end up after the swaps. The first letter '{a}' in $$$s$$$ should be on the position of the first letter '\na\n' in $$$t$$$ and so on.\nAfter that, we recall that '\na\n's can only move to the right and '\nc\n's can only move to the left. Thus, we check that the $$$i$$$-th occurrence of '\na\n' in $$$s$$$ is to the left or equal to the $$$i$$$-th occurrences of '\na\n' in $$$t$$$ and vice versa for '\nc\n's.\nFinally, we can see that this is a sufficient condition. Easy to show by construction: you can just fix the positions one after another left to right.\nOverall complexity: $$$O(n)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1926C - Vlad and a Sum of Sum of Digits\nLet's denote $$$S(x)$$$ as the sum of digits of number $$$x$$$. Since $$$n \\leq 2 \\cdot 10^5$$$, for a single test case, we can brute force $$$S(1) + S(2) + S(3) + \\dots + S(n)$$$ and output the answer. However, since the number of test cases is large, we can't compute this value for $$$n$$$ each time.\nThis needs a standard idea of precomputation: we will compute the answer for each value from $$$1$$$ to $$$n$$$ and store it in an array $$$\\mathrm{ans}$$$: $$$\\mathrm{ans}(n) = S(n) + \\mathrm{ans}(n-1)$$$. Then to answer each test case we just output $$$\\mathrm{ans}(n)$$$.\nNo math is needed!\nThe precomputation takes $$$\\mathcal{O}(n \\log n)$$$ time (it takes $$$\\mathcal{O}(\\log n)$$$ time to find sum of digits), but now we can answer queries in $$$\\mathcal{O}(1)$$$ per test case, so overall the complexity is $$$\\mathcal{O}(n \\log n + t)$$$."
         },
         {
             "title": "Solution",

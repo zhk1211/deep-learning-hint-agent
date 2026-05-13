@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1336B - Xenia and Colorful Gems\nFirst, let's assume that there exists an optimum solution in which we choose $$$r_x$$$, $$$g_y$$$ and $$$b_z$$$ satisfying $$$r_x \\le g_y \\le b_z$$$.\nHere's a lemma:\nWhen $$$y$$$ is fixed, $$$r_x$$$ is the maximum one that $$$r_x \\le g_y$$$, and $$$b_z$$$ is the minimum one that $$$g_y \\le b_z$$$.\nIt's easy to prove: no matter what $$$z$$$ is, the bigger $$$r_x$$$ is, the smaller $$$(r_x-g_y)^2$$$ and $$$(r_x-b_z)^2$$$ are; for $$$b_z$$$ it's similar.\nSo, if we know that in one of the optimum solutions, $$$r_x \\le g_y \\le b_z$$$, we can sort each array at first and then find $$$x$$$ and $$$z$$$ by binary search or maintaining some pointers while enumerating $$$y$$$.\nBack to the original problem without $$$r_x \\le g_y \\le b_z$$$, we can enumerate the six possible situations: $$$r_x \\le g_y \\le b_z$$$, $$$r_x \\le b_z \\le g_y$$$, $$$g_y \\le r_x \\le b_z$$$, $$$g_y \\le b_z \\le r_x$$$, $$$b_z \\le r_x \\le g_y$$$ and $$$b_z \\le g_y \\le r_x$$$. Find the optimum solution in each situation and the optimum one among them is the answer."
         },
         {
             "title": "Solution by Sooke",

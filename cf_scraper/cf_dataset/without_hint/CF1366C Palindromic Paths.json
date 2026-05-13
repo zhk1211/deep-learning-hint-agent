@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1366C - Palindromic Paths\nLet's group the cells by their distance from the starting point: the group $$$0$$$ consists of a single cell $$$(1, 1)$$$; the group $$$1$$$ consists of the cells $$$(1, 2)$$$ and $$$(2, 1)$$$, and so on. In total, there are $$$n + m - 1$$$ groups.\nLet's analyze the groups $$$k$$$ and $$$n + m - 2 - k$$$. There are two cases:\nif $$$k = 0$$$ or $$$n + m - 2 - k = 0$$$, then we are looking at the starting cell and the ending cell, and their contents should be equal;\notherwise, suppose two cells $$$(x, y)$$$ and $$$(x + 1, y - 1)$$$ belong to the same group. We can easily prove that the contents of these two cells should be equal (for example, by analyzing two paths that go through cell $$$(x + 1, y)$$$ and coincide after this cell, but one goes to $$$(x + 1, y)$$$ from $$$(x, y)$$$, and another — from $$$(x + 1, y - 1)$$$) — and, using induction, we can prove that the contents of all cells in a group should be equal. And since the paths should be palindromic, the contents of the group $$$k$$$ should be equal to the contents of the group $$$n + m - 2 - k$$$.\nSo, in each pair of groups, we should calculate the number of $$$1$$$'s and $$$0$$$'s, and choose which of them to change. Note that if $$$n + m$$$ is even, the central group has no pair, so it should not be modified."
         },
         {
             "title": "Solution (BledDest)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1873E - Building an Aquarium\nWe need to find the maximum height with a certain upper bound — this is a tell-tale sign of\nbinary search\n. If you don't know what that is, you should read\nthis Codeforces EDU article\n.\nFor a given value of $$$h$$$, in the $$$i$$$-th column we will need $$$h - a_i$$$ units of water if $$$h \\geq a_i$$$, or $$$0$$$ units otherwise. (This is equal to $$$\\max(h - a_i, 0)$$$, why?) So we can compute the amount of water for all $$$n$$$ columns by simply iterating through and summing the total amount of water needed for each column, and see if it's not larger than $$$x$$$.\nThen you can binary search on the optimal value of $$$h$$$. The model solution uses the starting bounds $$$l = 0$$$, $$$r = 2a_i + \\varepsilon$$$, because the optimal height could be $$$a_i + x$$$. So the complexity is $$$\\mathcal{O}(n \\log a_i)$$$ per testcase."
         },
         {
             "title": "Solution",

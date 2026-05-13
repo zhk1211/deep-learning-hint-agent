@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1175A - From Hero to Zero\nIt's always optimal to divide by $$$k$$$ whenever it's possible, since dividing by $$$k$$$ equivalent to decreasing $$$n$$$ by $$$\\frac{n}{k}(k - 1) \\ge 1$$$.\nThe only problem is that it's too slow to just subtract $$$1$$$ from $$$n$$$ each time, since in the worst case we can make $$$O(n)$$$ operations (Consider case $$$n = 10^{18}$$$ and $$$k = \\frac{n}{2} + 1$$$).\nBut if we'd look closer then we can just replace $$$x$$$ times of subtract $$$1$$$ with one subtraction of $$$x$$$. And to make $$$n$$$ is divisible by $$$k$$$ we should make $$$x = (n \\mod{k})$$$ subtractions."
         },
         {
             "title": "Solution (Roms)",

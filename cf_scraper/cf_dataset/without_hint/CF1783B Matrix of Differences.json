@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1783B - Matrix of Differences\nThe first step is to notice that beauty doesn't exceed $$$n^2-1$$$, because the minimum difference between two elements is at least $$$1$$$, and the maximum difference does not exceed $$$n^2-1$$$ (the difference between the maximum element $$$n^2$$$ and the minimum element $$$1$$$).\nAt first, finding a matrix with maximum beauty seems to be a quite difficult task. So let's try to find an array of $$$n^2$$$ elements of maximum beauty. In this case, it is not difficult to come up with an array of the form $$$[n^2, 1, n^2-1, 2, n^2-2, 3, \\dots]$$$. In such an array, there are all possible differences from $$$1$$$ to $$$n^2-1$$$. So we found an array with the maximum possible beauty.\nIt remains to find a way to \"convert\" the array to the matrix, i.e. to find such a sequence of matrix cells that each two adjacent cells in it are side-adjacent. One of the ways is the following: traverse the first row of the matrix from left to right, go down to the second row, traverse it from right to left, go down to the third row, traverse it from left to right, and so on.\nThus, we constructed a matrix with the maximum possible beauty $$$n^2-1$$$."
         },
         {
             "title": "Solution (Neon)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1194C - From S To T\nIf the answer exists then each element of string $$$s$$$ matches with some element of string $$$t$$$. Thereby string $$$s$$$ must be a subsequence of string $$$t$$$.\nLet $$$f(str, a)$$$ equal to the number of occurrences of the letter $$$a$$$ in the string $$$str$$$. Then for any letter $$$a$$$ condition $$$f(s, a) + f(p, a) \\ge f(t, a)$$$ must be hold.\nSo the answer to the query is\nYES\nif following conditions hold:\nstring $$$s$$$ is subsequence of string $$$t$$$;\n$$$f(s, a) + f(p, a) \\ge f(t, a)$$$ for any Latin latter $$$a$$$."
         },
         {
             "title": "Solution (Roms)",

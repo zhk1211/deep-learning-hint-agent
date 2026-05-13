@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1703G - Good Key, Bad Key\nWe will prove it is always optimal to use good keys for a prefix then only use bad keys. Consider we have used a bad key then a good key, by doing this we obtain $$$\\lfloor\\frac{a_i}{2}\\rfloor + \\lfloor\\frac{a_{i+1}}{2}\\rfloor - k$$$ coins. If we switch and use a good key first, the a bad key then we obtain $$$a_i + \\lfloor\\frac{a_{i+1}}{2}\\rfloor - k$$$, this number is clearly bigger so we will never encounter a bad key before a good key in an optimal solution, thus we will use a prefix of good keys then move on to using bad keys.\nFor every possible prefix of good keys we will calculate the coins we get at the end. We do this by maintaining a variable with the prefix sum where we use the good keys and then calculate what we will get from the chests where we use bad keys. Notice that because we halve all the chests when we use a bad key we only need to verify the next $$$\\log_2(10^9) \\approx 30$$$ chests, all chests after it will go to $$$0$$$ coins.\nFinal complexity: $$$\\mathcal{O}(n\\log a_i)$$$."
         },
         {
             "title": "Solution",

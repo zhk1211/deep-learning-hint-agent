@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1245B - Restricted RPS\nLet $$$A$$$, $$$B$$$, $$$C$$$ be the number of rocks, papers, and scissors in Bob's sequence, respectively. It is easy to see that Alice can win at most $$$w := \\min(A, b) + \\min(B, c) + \\min(C, a)$$$ hands.\nSo if $$$2w  \\lt  n$$$, Alice can't win.\nOtherwise, Alice can always win. One way to construct a winning sequence of hands for Alice is as follows:\nCreate a sequence of length $$$n$$$.\nFor Bob's first $$$\\min(A, b)$$$ rock hands, put a paper hand in the corresponding position in our sequence.\nFor Bob's first $$$\\min(B, c)$$$ paper hands, put a scissors hand in the corresponding position in our sequence.\nFor Bob's first $$$\\min(C, a)$$$ scissors hands, put a rock hand in the corresponding position in our sequence.\nJust fill in the other elements of the sequence by the remaining hands that Alice has.\nBy construction, Alice uses exactly $$$a$$$ rock hands, $$$b$$$ paper hands, and $$$c$$$ scissors hands. Also, Alice beats Bob exactly $$$w$$$ times. Since $$$2w \\ge n$$$, Alice wins."
         },
         {
             "title": "Solution",

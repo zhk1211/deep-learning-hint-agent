@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1669F - Eating Candies\nWe can solve the problem with a two pointers technique. Let $$$i$$$ be the left pointer, initially at $$$1$$$, and $$$j$$$ be the right pointer, initially at $$$n$$$. Let's store Alice and Bob's current totals as $$$a$$$ and $$$b$$$.\nLet's iterate $$$i$$$ from the left to the right. For each $$$i$$$, we should do the following.\nIncrease $$$a$$$ by $$$a_i$$$ (Alice eats the $$$i$$$-th candy).\nMove $$$j$$$ leftwards until Bob's total is at least Alice's total, and update $$$b$$$ every time we move.\nIf the two pointers have crossed, then both Alice and Bob took the same candy, which is not possible. So we should exit and output the current answer.\nOtherwise, if $$$a=b$$$ after this step, we should update the current answer to be the value that is equal to Alice and Bob.\nBoth $$$i$$$ and $$$j$$$ move at most $$$n$$$ times in total, so the solution runs in $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution",

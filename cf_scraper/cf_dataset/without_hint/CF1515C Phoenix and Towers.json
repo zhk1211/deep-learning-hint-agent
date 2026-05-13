@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1515C - Phoenix and Towers\nGreedily adding blocks to the current shortest tower will always give a valid solution. Let's prove it with contradiction. If the towers weren't beautiful, then some two towers would have a height difference of more than $$$x$$$. Since a single block cannot exceed a height of $$$x$$$, the difference would be more than one block. This is a contradiction with our solution because we always add to the shortest tower.\nTo implement this, we can use a set-like structure and store pairs of ($$$h_i$$$, $$$i$$$) for each $$$i$$$ ($$$1 \\le i \\le m)$$$, where $$$h_i$$$ is the current height of the $$$i$$$-th tower (initialized to $$$0$$$). When adding a block, we remove the first element of the sorted set, update the tower height, and add it back into the set.\nTime complexity for each test case: $$$O(n \\log{n})$$$"
         },
         {
             "title": "Solution",

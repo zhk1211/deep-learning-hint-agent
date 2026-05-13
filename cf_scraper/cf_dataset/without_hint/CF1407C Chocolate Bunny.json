@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1407C - Chocolate Bunny\nObservation: $$$(a \\bmod b  \\gt  b \\bmod a) \\Leftrightarrow (a  \\lt  b)$$$.\nProof: if $$$a  \\gt  b$$$, then $$$(a \\bmod b)  \\lt  b = (b \\bmod a$$$). If $$$a = b$$$, then $$$(a \\bmod b) = (b \\bmod a) = 0$$$.\nLet's maintain index $$$mx$$$ of maximal number on the reviewed prefix (initially $$$mx = 1$$$). Let's consider index $$$i$$$. Ask two queries:\n? i mx\nand\n? mx i\n. We'll know the less from both of them and either guess $$$p_{mx}$$$ and update $$$mx = i$$$ or guess $$$p_i$$$. In the end, all numbers will be guessed except $$$p_{mx}$$$, that, obviously, equals $$$n$$$.\nIn total, we'll make $$$2 \\cdot n - 2$$$ queries."
         },
         {
             "title": "Solution",

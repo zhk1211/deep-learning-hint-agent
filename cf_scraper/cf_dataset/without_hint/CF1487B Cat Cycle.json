@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1487B - Cat Cycle\nIf $$$n$$$ is even, then each hour A and B are on the spots with different parity, so they will never meet. Otherwise, let's look closely what happens.\nAt the start, A in $$$n$$$ and B in $$$1$$$. But since we can form a cycle from spots then it means that $$$n$$$ and $$$1$$$ in reality are neighbors. After that, A and B (starting from neighboring positions) just go in opposite directions and meet each other in the opposite spot after exactly $$$\\left\\lfloor \\frac{n}{2} \\right\\rfloor$$$ steps.\nAfter meeting B \"jumps over\" A making $$$1$$$ extra step and the situation become practically the same: A and B are neighbors and move in the opposite direction.\nIn other words, each $$$f = \\left\\lfloor \\frac{n}{2} \\right\\rfloor$$$ steps B makes one extra step, so the answer (if both $$$k$$$ and spots are $$$0$$$-indexed) is $$$$$$(k + (n \\bmod 2) \\cdot \\left\\lfloor \\frac{k}{f} \\right\\rfloor) \\bmod n$$$$$$"
         },
         {
             "title": "Solution (adedalic)",

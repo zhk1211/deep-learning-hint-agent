@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial with bonuses",
-            "content": "Tutorial is loading..."
+            "content": "1119B - Alyona and a Narrow Fridge\nFor a fixed set of bottles the optimal way to put them in the fridge is to sort them in decreasing order and then put the tallest next to the second tallest, the third next to the fourth and so on. The total required height is then $$$h_1 + h_3 + h_5 + \\ldots$$$, where $$$h$$$ is the sorted array of heights.\nNow just try all possible $$$k$$$, sort the heights of the first $$$k$$$ bottles, and output the last $$$k$$$ when the bottles fit. The total complexity is $$$O(n^2 \\log{n})$$$.\nBonus 1: solve the problem in $$$O(n \\log^2{n})$$$.\nBonus 2: solve the problem in $$$O(n \\log{n})$$$."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1807G1 - Subsequence Addition (Easy Version)\nFirstly, let's note that it doesn't matter in what order we add the elements to the array, since if we can add an element in any position, if it's possible to get the said elements of the array, then we can obtain them in any order.\nNow, let's note that it's always optimal to obtain the needed elements in sorted order (since we only use smaller values in order to obtain the current one), so we will consider the array $$$c$$$ as sorted. If the first element of the array isn't $$$1$$$ then we immediately know such an array doesn't exist. Otherwise, we can use dynamic programming for finding out if the remaining $$$n - 1$$$ elements are obtainable. Let's denote $$$dp_s$$$ a boolean array which tells us whether sum $$$s$$$ is obtainable. Initially, $$$dp_1 = 1$$$ (since the first element is guaranteed to be $$$1$$$). We will go in increasing order of $$$c_i$$$ and if we calculated an element to be obtainable in the past, we update all obtainable values with the new $$$c_i$$$ value. We do this in $$$O(n \\cdot 5000)$$$, by going through all sums $$$s$$$ and updating $$$dp_s = dp_s | dp_{s - c_i}$$$ ($$$dp_s$$$ is true if it already was true, or if $$$dp_{s - c_i}$$$ was true and we add to that sum the new value $$$c_i$$$.\nThe total time complexity of this solution is $$$O(n \\cdot 5000)$$$."
         },
         {
             "title": "Solution",

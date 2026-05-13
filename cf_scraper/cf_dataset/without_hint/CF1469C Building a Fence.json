@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1469C - Building a Fence\nLet's set sections from left to right. Note that for the $$$i$$$-th section all valid heights $$$x$$$ (heights for which it's possible to choose heights for all sections $$$1 \\dots i$$$ meeting all rules and finishing with the height of $$$i$$$ equal to $$$x$$$) form a segment.\nIt's not hard to prove by induction. For the first section, the valid segment is $$$[h_1, h_1]$$$. The step of induction: if the valid segment for $$$i - 1$$$ is $$$[l_{i - 1}, r_{i - 1}]$$$ then valid $$$x_i$$$-s for $$$i$$$ is the segment $$$[\\max(l_{i - 1} - (k - 1), h_i), \\min(r_{i - 1} + (k - 1), h_i + (k - 1))]$$$, since for each $$$x_i$$$ you can find at least one $$$x_{i - 1}$$$ in $$$[l_{i - 1}, r_{i - 1}]$$$ which don't break the first rule.\nIf for any $$$i$$$ the correct segment is empty or if we can't fulfill the third rule ($$$h_n \\not\\in [l_{n - 1} - (k - 1), r_{n - 1} + (k - 1)]$$$) then there is no answer, otherwise at least one answer is always exist.\nAs a result, to solve the problem, you should just maintain the segment of valid $$$x_i$$$ (using the formula above) while iterating $$$i$$$. Complexity is $$$O(n)$$$."
         },
         {
             "title": "Solution (adedalic)",

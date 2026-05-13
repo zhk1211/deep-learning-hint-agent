@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1259B - Make Them Odd\nConsider the greatest positive value in the set. Anyway, once we will divide it by two. It is always optimal to do it on the first move because the result of the division can be divided again (if needed) later.\nSo, the optimal way to solve this problem is:\nas long as there is at least one even value in the set, we need to choose the maximal even number in the set and divide all the numbers equal to it by $$$2$$$\n.\nFor effective implementation, you can use features of the standard library to represent the set as\nstd::set\n(for C++, in other languages there are alternatives of this data structure or you can modify the solution).\nBelow is an example of a possible implementation of the main part of the solution:\ncin >> n;\nset<int> a;\nfor (int i = 0; i < n; i++) {\nint elem;\ncin >> elem;\na.insert(elem);\n}\nint result = 0;\nwhile (!a.empty()) {\nint m = *a.rbegin();\na.erase(m);\nif (m % 2 == 0) {\nresult++;\na.insert(m / 2);\n}\n}\ncout << result << endl;"
         }
     ]
 }

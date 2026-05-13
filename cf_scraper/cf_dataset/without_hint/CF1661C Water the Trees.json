@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1661C - Water the Trees\nThe first observation we need to solve this problem: the required height is either $$$max$$$ or $$$max + 1$$$, where $$$max$$$ is the maximum initial height of some tree. We don't need heights greater than $$$max + 1$$$, because, for example, if the height is $$$max + 2$$$, we can remove some moves and get the answer for the height $$$max$$$. The same thing applies to all heights greater than $$$max + 1$$$. Why do we even need the height $$$max + 1$$$? In some cases (like $$$[1, 1, 1, 1, 1, 1, 2]$$$) the answer for the height $$$max + 1$$$ is better than the answer for the height $$$max$$$ (in this particular case, it is $$$9$$$ vs $$$11$$$).\nNow, we have two ways to solve the problem: either use some gross formulas, or just write a binary search on the answer. I won't consider the solution with formulas (but we have one), so let's assume we use binary search. Let the current answer be $$$mid$$$. Then let $$$cnt_1 = \\lceil\\frac{mid}{2}\\rceil$$$ be the number of $$$+1$$$ operations we can do and $$$cnt_2 = \\lfloor\\frac{mid}{2}\\rfloor$$$ be the number of $$$+2$$$ operations we can do. We can use $$$+2$$$ operations greedily and then just check if the number of $$$+1$$$ operations is sufficient to grow up the remaining heights.\nTime complexity: $$$O(n \\log{n})$$$ per test case."
         },
         {
             "title": "Solution 1 (vovuh)",

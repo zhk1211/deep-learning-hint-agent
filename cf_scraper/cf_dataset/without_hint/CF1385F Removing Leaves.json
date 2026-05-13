@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1385F - Removing Leaves\nThis is mostly implementation problem. We can notice that all leaves are indistinguishable for us. So if we have some vertex with at least $$$k$$$ leaves attached to it, we can choose it, remove these leaves from the tree and continue the algorithm. The rest is just an implementation: let's maintain for each vertex $$$v$$$ the list of all leaves which are connected to it $$$leaves_v$$$ and the set of vertices which is sorted by the size of $$$leaves_v$$$. So let's take any vertex which Is connected with at least $$$k$$$ leaves (we can just take the vertex with the maximum value in the set) and remove any $$$k$$$ leaves attached to it. If it has zero leaves after the current move, let's mark is as a leaf and append it to the list of the corresponding vertex (you also need to remove edges from the graph fast to find the required vertex, so you may need to maintain the graph as the list of sets). And don't forget about the case $$$k=1$$$ because it may be special for your solution so you could handle it in a special way.\nTime complexity: $$$O(n \\log{n})$$$."
         },
         {
             "title": "Solution",

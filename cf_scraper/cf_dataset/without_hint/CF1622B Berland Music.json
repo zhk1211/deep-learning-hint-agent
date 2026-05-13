@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1622B - Berland Music\nSince we know that every disliked song should have lower rating than every liked song, we actually know which new ratings should belong to disliked songs and which should belong to the liked ones.\nThe disliked songs take ratings from $$$1$$$ to the number of zeros in $$$s$$$. The liked songs take ratings from the number of zeros in $$$s$$$ plus $$$1$$$ to $$$n$$$. Thus, we have two independent tasks to solve.\nLet the disliked songs have ratings $$$d_1, d_2, \\dots, d_k$$$. Their new ratings should be $$$1, 2, \\dots, k$$$. We can show that if we sort the array $$$d$$$, then $$$|d'_1 - 1| + |d'_2 - 2| + \\dots + |d'_k - k|$$$ will be the lowest possible. The general way to prove it is to show that if the order has any inversions, we can always fix the leftmost of them (swap two adjacent values), and the cost doesn't increase.\nSo the solution can be to sort triples $$$(s_i, p_i, i)$$$ and restore $$$q$$$ from the order of $$$i$$$ in these.\nOverall complexity: $$$O(n \\log n)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

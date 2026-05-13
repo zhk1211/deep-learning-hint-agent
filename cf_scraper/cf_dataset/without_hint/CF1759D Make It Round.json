@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1759D - Make It Round\nThe answer is $$$n \\cdot k$$$.\nFirst, count two numbers: $$$cnt_2, cnt_5$$$ which denote the degree of occurrence of $$$2$$$ and $$$5$$$ in the number $$$n$$$ respectively, that is $$$n = 2^cnt_2 \\cdot 5^cnt_5 \\cdot d$$$. Where $$$d$$$ is not divisible by either $$$2$$$ or $$$5$$$. Now while $$$cnt_2 \\neq cnt_5$$$ we will increase the corresponding value. For example, if $$$cnt_2  \\lt  cnt_5$$$, then as long as $$$cnt_2 \\neq cnt_5$$$ and at that $$$k \\cdot 2 \\le m$$$ we will increase $$$cnt_2$$$ by $$$1$$$ and multiply $$$k$$$ by $$$2$$$ times.\nThat way we can get the most round number possible by spending the least possible $$$k$$$.\nNow we either have $$$cnt_2 = cnt_5$$$, or $$$k \\cdot 5  \\gt  m$$$ or $$$k \\cdot 2  \\gt  m$$$. Then in the first case, we will multiply the number $$$k$$$ by $$$10$$$ as long as we can. That is, until $$$k \\cdot 10 \\le m$$$.\nNow in either case we have: $$$k \\cdot 10  \\gt  m$$$. Then $$$\\lfloor \\frac{m}{k} \\rfloor = x  \\lt  10$$$. Then we multiply $$$k$$$ by $$$x$$$ times and get our desired answer.\nIn the last step, we can no longer get a rounder number, but just find the maximal possible number."
         },
         {
             "title": "Solution",

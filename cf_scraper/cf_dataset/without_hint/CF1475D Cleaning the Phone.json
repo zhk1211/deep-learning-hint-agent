@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1475D - Cleaning the Phone\nLet's say we remove $$$x$$$ applications with $$$b_i=1$$$ and $$$y$$$ applications with $$$b_i=2$$$. Obviously, among all the applications with $$$b_i=1$$$, it was necessary to take $$$x$$$ maximum in memory (so we will clear the most memory).\nLet's split all the applications into two arrays with $$$b_i=1$$$ and $$$b_i=2$$$ and sort them. Then you need to take a prefix from each array.\nLet's iterate over which prefix we take from the first array. For it, we can uniquely find the second prefix (we remove applications until the sum exceeds $$$m$$$). If we now increase the first prefix by taking a new application, then we don't need to take any applications in the second array. This means that when the first prefix is increased, the second one can only decrease.\nTo solve the problem, you can use the two-pointer method."
         },
         {
             "title": "Solution",

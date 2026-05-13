@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1360D - Buying Shovels\nIf Polycarp buys $$$a$$$ packages of $$$b$$$ shovels and gets exactly $$$n$$$ shovels in total, then $$$a \\cdot b = n$$$, that is, $$$a$$$ and $$$b$$$ are divisors of $$$n$$$. Then the problem reduces to the following, you need to find the maximum divisor of the number $$$n$$$ not greater than $$$k$$$. To do this, iterate over all the numbers $$$x$$$ from $$$1$$$ to $$$\\sqrt n$$$ inclusive and check whether $$$n$$$ is divisible by $$$x$$$. If so, then $$$x$$$ and $$$\\frac{n}{x}$$$ — are both divisors of $$$n$$$ and you can use them to try to improve the answer."
         },
         {
             "title": "Solution",

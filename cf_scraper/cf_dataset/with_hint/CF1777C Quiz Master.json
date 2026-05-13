@@ -30,7 +30,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1777C - Quiz Master\nWe can sort the smartness values and use two pointers.\nThe two pointers indicate the students we are considering in our team. Let $$$l$$$ be the left pointer and $$$r$$$ be the right pointer.\n$$$a_l$$$ is the minimum smartness of our team and $$$a_r$$$ is the maximum. If this team is collectively proficient in all topics, then the difference would be $$$a_r - a_l$$$.\nNow, if $$$l$$$ is increased, the team may lose proficiency in some topics. $$$r$$$ would either stay the same or increase as well for the team to become proficient again.\nFor a team to be proficient, each number from $$$1$$$ to $$$m$$$ should have a smartness value which is a multiple of it.\nTo check for proficiency, we can maintain a frequency array $$$f$$$ of size $$$m$$$ and a variable $$$count$$$ to indicate the number of topics that have found a multiple.\nWhen we add a student to the team, we iterate through all the factors of their smartness which are less than or equal to $$$m$$$ and increase their frequency. If an element had a frequency of $$$0$$$ before, then $$$count$$$ is increased by $$$1$$$.\nSimilarly, when we remove a student from the team, we go through all the factors less than or equal to $$$m$$$ and decrease their frequency. If an element now has $$$0$$$ frequency, then $$$count$$$ is decreased by $$$1$$$.\n$$$count$$$ being equal to $$$m$$$ at any point indicates a collectively proficient team."
         },
         {
             "title": "Implementation (C++)",

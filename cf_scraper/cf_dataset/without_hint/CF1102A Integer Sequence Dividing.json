@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1102A - Integer Sequence Dividing\nThe first solution: take $$$n$$$ modulo $$$4$$$ and solve the problem manually (then for cases $$$n = 0$$$ and $$$n = 3$$$ the answer is $$$0$$$ and for $$$n = 1$$$ and $$$n = 2$$$ the answer is $$$1$$$).\nProve: Let's see what can we make for numbers $$$n$$$, $$$n - 1$$$, $$$n - 2$$$ and $$$n - 3$$$. We can add $$$n$$$ and $$$n - 3$$$ in $$$A$$$ and add $$$n - 1$$$ and $$$n - 2$$$ in $$$B$$$. Then the difference between sums will be $$$0$$$. We can consider last four numbers this way until we have at least four numbers. And then we have a case $$$n \\le 3$$$. We can prove the solution for these four cases using bruteforce.\nThe second solution: if $$$\\sum\\limits_{i=1}^{n}i$$$ is even then the answer is $$$0$$$ otherwise the answer is $$$1$$$. The formula above is just $$$\\frac{n(n+1)}{2}$$$.\nProve: if we have an integer sequence $$$1, 2, \\dots, n$$$ then we can obtain every number from $$$0$$$ to $$$\\frac{n(n+1)}{2}$$$ as the sum of some elements of this sequence. How? Greedily! You can see how this greedy works (and prove, if you want) yourself. So what's next? If $$$\\frac{n(n+1)}{2}$$$ is even then we can obtain the sum $$$\\frac{n(n+1)}{4}$$$ in $$$A$$$ and in $$$B$$$. Otherwise we can only obtain $$$\\lfloor\\frac{n(n+1)}{4}\\rfloor$$$ in $$$A$$$ and $$$\\lceil\\frac{n(n+1)}{4}\\rceil$$$ in $$$B$$$ (or vice versa)."
         },
         {
             "title": "Solution 1",

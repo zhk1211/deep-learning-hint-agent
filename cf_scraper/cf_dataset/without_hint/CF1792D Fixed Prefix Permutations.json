@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1792D - Fixed Prefix Permutations\nLet's try to solve for one of the given permutations. Let it be some $$$p$$$. How to make the answer for it at least $$$1$$$? Well, we have to find another permutation $$$q$$$ such that $$$p \\cdot q = (1, r_2, r_3, \\dots, r_m)$$$. How about at least $$$k$$$? Well, the same: $$$p \\cdot q = (1 2 \\dots, k, r_{k+1}, \\dots, r_m)$$$.\nPush $$$q$$$ to the right side of the equation. $$$p = (1 2 \\dots, k, r_{k+1}, \\dots, r_m) \\cdot q^{-1}$$$. Now think. What does it actually mean for some permutation to be multiplied by $$$(1, 2, \\dots, k)$$$? It stays the same. So the first $$$k$$$ elements of $$$p$$$ will be equal to the first $$$k$$$ elements of $$$q^{-1}$$$.\nThus, you have to find a permumtation such that its inverse has the longest common prefix with $$$p$$$. This can be done in multiple ways. For example, you can store all inverses in a trie and traverse it with $$$p$$$ until you reach a dead end. Or simply push all prefixes of each inverse into a set and iterate over $$$k$$$. Alternatively, you can just sort inverses and do lower_bound for $$$p$$$ in this list — the permutation with longest common prefix will be either the result or the one before it.\nOverall complexity: $$$O(nm)/O(nm \\log n)/O(nm^2 \\log n)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

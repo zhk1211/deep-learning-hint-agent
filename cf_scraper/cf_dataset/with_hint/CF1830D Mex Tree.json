@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a tree with $ n $ nodes. For each node, you either color it in $ 0 $ or $ 1 $ .\n\nThe value of a path $ (u,v) $ is equal to the MEX $ ^\\dagger $ of the colors of the nodes from the shortest path between $ u $ and $ v $ .\n\nThe value of a coloring is equal to the sum of values of all paths $ (u,v) $ such that $ 1 \\leq u \\leq v \\leq n $ .\n\nWhat is the maximum possible value of any coloring of the tree?\n\n$ ^{\\dagger} $ The MEX (minimum excluded) of an array is the smallest non-negative integer that does not belong to the array. For instance:\n\n- The MEX of $ [2,2,1] $ is $ 0 $ , because $ 0 $ does not belong to the array.\n- The MEX of $ [3,1,0,1] $ is $ 2 $ , because $ 0 $ and $ 1 $ belong to the array, but $ 2 $ does not.\n- The MEX of $ [0,3,1,2] $ is $ 4 $ because $ 0 $ , $ 1 $ , $ 2 $ , and $ 3 $ belong to the array, but $ 4 $ does not.\n\nInput Format\nEach test contains multiple test cases. The first line of input contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 2 \\cdot 10^5 $ ) — the number of nodes in the tree.\n\nThe following $ n-1 $ lines of each test case contains $ 2 $ integers $ a_i $ and $ b_i $ ( $ 1 \\leq a_i, b_i \\leq n, a_i \\neq b_i $ ) — indicating an edge between vertices $ a_i $ and $ b_i $ . It is guaranteed that the given edges form a tree.\n\nIt is guaranteed that the sum of $ n $ across all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print the maximum possible value of any coloring of the tree.\n\nExamples\nSample 1\nInput\n4\n3\n1 2\n2 3\n4\n1 2\n1 3\n1 4\n10\n1 2\n1 3\n3 4\n3 5\n1 6\n5 7\n2 8\n6 9\n6 10\n1\nOutput\n8\n15\n96\n1\n\nNote\nIn the first sample, we will color vertex $ 2 $ in $ 1 $ and vertices $ 1,3 $ in $ 0 $ . After this, we consider all paths:\n\n- $ (1,1) $ with value $ 1 $\n- $ (1,2) $ with value $ 2 $\n- $ (1,3) $ with value $ 2 $\n- $ (2,2) $ with value $ 0 $\n- $ (2,3) $ with value $ 2 $\n- $ (3,3) $ with value $ 1 $\n\nWe notice the sum of values is $ 8 $ which is the maximum possible."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nWhy is bipartite coloring not always optimal?\nHint 2\nHow good is a bipartite coloring actually?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "Why is bipartite coloring not always optimal?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "How good is a bipartite coloring actually?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "Disclaimer: I (\ntibinyte2006\n) wanted to cut $$$O(n \\sqrt{n})$$$ memory because I thought that setting 1024 MB memory limit would spoil the solution. So only blame me for this.\nWe will do a complementary problem which is finding the minimum loss of a coloring. The initial cost is the maximum possible cost, $$$n \\cdot (n+1)$$$.\nIf we analyze how good a bipartite coloring of the given tree is we can note that $$$loss \\le 2 \\cdot n$$$\nNow suppose the tree has a connected component of size $$$k$$$. We can note that in such a coloring $$$loss \\ge \\frac{k \\cdot (k+1)}{2}$$$\nBy the $$$2$$$ claims above, we can note that in an optimal coloring, the maximum size $$$k$$$ of a connected component respects $$$\\frac{k \\cdot (k+1)}{2} \\le 2 \\cdot n$$$. Thus we can safely say $$$k \\le \\sqrt{4 \\cdot n}$$$.\nNow let $$$dp_{i,j,color}$$$ be the minimum loss if we color the subtree of $$$i$$$ and the connected component of vertex $$$i$$$ has size $$$j$$$. We can calculate this in a knapsack style by adding subtrees successively. The computation takes $$$O(n \\cdot \\sqrt{n})$$$ if we use the $$$7$$$-th trick from\nthis\nblog.\nNow we are only left to optimize memory, since now it's $$$O(n \\cdot \\sqrt{n})$$$. We can directly apply\nthis\nto get linear memory.\nHowever, the bound of $$$k \\le \\sqrt{4 \\cdot n}$$$ is overestimated, for $$$n=200000$$$ it can be proven that the worst case for $$$k$$$ is $$$258$$$.\nProof Sketch\nAssume have a connected component of size $$$k$$$ we want it to be colored $$$0$$$ across all optimal colorings. Then we can attach to each node some subtrees such that after flipping its whole subtree the total cost doesn't increase. We will assume all subtrees are leaves for simplicity. Doing such, we can get some inequalities about the number of leaves we need to attatch to each node.\nIn a star tree, the number of leaves we should attatch to nodes has the smallest sum."
+        }
+    ]
+}

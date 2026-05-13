@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1311D - Three Integers\nLet's iterate over all possible values of $$$A$$$ from $$$1$$$ to $$$2a$$$. It is obvious that $$$A$$$ cannot be bigger than $$$2a$$$, else we can just move $$$a$$$ to $$$1$$$. Then let's iterate over all possible multiples of $$$A$$$ from $$$1$$$ to $$$2b$$$. Let this number be $$$B$$$. Then we can find $$$C$$$ as the nearest number to $$$c$$$ that is divisible by $$$B$$$ (we can check two nearest numbers to be sure). These numbers are $$$C = \\lfloor\\frac{c}{B}\\rfloor \\cdot B$$$ and $$$C = \\lfloor\\frac{c}{B}\\rfloor \\cdot B + B$$$. Then we can update the answer with the found triple. Note that the only condition you need to check is that $$$B \\le C$$$.\nTime complexity: $$$O(n \\log n)$$$ because of the sum of the harmonic series."
         },
         {
             "title": "Solution",

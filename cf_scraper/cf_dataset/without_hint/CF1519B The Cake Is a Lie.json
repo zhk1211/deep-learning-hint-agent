@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1519B - The Cake Is a Lie\nNote that whichever path you choose, the total cost will be the same. If you know that the cost is the same, then it's not hard to calculate it. It's equal to $$$n \\cdot m - 1$$$. So the task is to check: is $$$k$$$ equal to $$$n \\cdot m - 1$$$ or not.\nThe constant cost may be proved by induction on $$$n + m$$$: for $$$n = m = 1$$$ cost is $$$1 \\cdot 1 - 1 = 0$$$. For a fixed $$$(n, m)$$$, there are only two last steps you can make:\neither from $$$(n, m - 1)$$$ with cost $$$n$$$: the total cost is $$$n \\cdot (m - 1) - 1 + n$$$ $$$=$$$ $$$n \\cdot m - 1$$$\nor from $$$(n - 1, m)$$$ with cost $$$m$$$: the total cost is $$$(n - 1) \\cdot m - 1 + m$$$ $$$=$$$ $$$n \\cdot m - 1$$$.\nSo, whichever path you choose, the total cost is the same."
         },
         {
             "title": "Solution (adedalic)",

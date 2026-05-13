@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1702C - Train and Queries\nTo solve the problem, we will use the dictionary. Each station will be matched with a pair of integers — the indices of its first and last entries in the route. Then we will sequentially process queries. If at least one of the stations $$$a_j$$$ or $$$b_j$$$ is missing in the dictionary — the answer is\nNO\n. Otherwise, check:\nIf the index of the first entry of station $$$a_j$$$ in the route is strictly less than the index of the last entry of station $$$b_j$$$ in the route — the answer is\nYES\n.\nOtherwise, the answer is\nNO\n."
         },
         {
             "title": "Solution",

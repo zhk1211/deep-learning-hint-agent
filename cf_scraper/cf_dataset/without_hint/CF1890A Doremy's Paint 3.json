@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1890A - Doremy's Paint 3\nStatement says $$$b_1 + b_2 = b_2 + b_3 = \\ldots = b_{n-1} + b_n = k$$$. Let's write it as $$$b_i + b_{i+1} = b_{i+1} + b_{i+2}$$$. This is just $$$b_i = b_{i+2}$$$, which means the positions with the same parity should contain same value.\n$$$$$$ b_1 = b_3 = b_5 = \\cdots \\\\ b_2 = b_4 = b_6 = \\cdots $$$$$$\nWe know that there are $$$\\lceil \\frac{n}{2} \\rceil$$$ odd numbers and $$$ \\lfloor \\frac{n}{2}\\rfloor$$$ even numbers in $$$[1,n]$$$. Therefore, if and only if we can find $$$\\lfloor \\frac{n}{2}\\rfloor$$$ same numbers, and the remaining are also the same numbers, the answer is\nYES\n. All cases can be classified into these categories:\nAll numbers are the same, like $$$[3,3,3,3,3,3]$$$. The answer is\nYES\n.\nThere are two different numbers, like $$$[1,2,1,2,1]$$$. The answer is\nYES\nif and only if one of the number appears exactly $$$\\lfloor \\frac{n}{2}\\rfloor$$$ times. For example $$$[1,2,1,2,1]$$$ and $$$[2,3,2,3]$$$ are\nYES\nwhile $$$[1,1,1,2]$$$ and $$$[3,3,3,3,4,4]$$$ is\nNO\n.\nThere are three or more different numbers, like $$$[1,2,3,2,3]$$$. The answer is\nNO\n.\nTime complexity $$$O(n)$$$."
         }
     ]
 }

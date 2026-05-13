@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1521B - Nastia and a Good Array\nThere are many ways to solve the problem. Here is one of them:\nWe will use the fact that $$$gcd(i, i + 1) = 1$$$ for any integer $$$i \\ge 1$$$.\nLet's find the minimum element $$$x$$$ of the array $$$a$$$ that is located in the position $$$pos$$$. Then for all integer $$$i$$$ ($$$1 \\le i \\le n$$$) perform the following operation: $$$(pos,\\ i,\\ x,\\ x + abs(pos - i))$$$. That's how we replace $$$a_i$$$ to $$$x + abs(pos - i)$$$. The main condition: $$$\\min{(a_i, a_j)} = \\min{(x, y)}$$$ is satisfied because $$$a_{pos}$$$ always equals to $$$x$$$ and this value always less than any other element in the array $$$a$$$.\nConsider the structure of the array $$$a$$$ after performing the operations describing above.\nLet's define $$$l = x + pos - i$$$ and $$$r = x + i - pos$$$. These are the leftmost and the rightmost elements in the array $$$a$$$, respectively.\nThe array $$$a$$$ looks like $$$[l,\\ l - 1\\ \\ldots\\ x + 1,\\ x,\\ x + 1\\ \\ldots\\ r - 1,\\ r]$$$. Thus, we obtain an absolute difference, equal to one, between all pairs of adjacent elements."
         },
         {
             "title": "Solution",

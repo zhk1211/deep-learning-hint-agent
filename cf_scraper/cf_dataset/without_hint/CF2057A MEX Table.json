@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2057A - MEX Table\nNote that $$$0$$$ appears in exactly one row and exactly one column. As for $$$1$$$, if it exists, it can only be placed in one of the rows or columns that contain $$$0$$$, so the answer does not exceed $$$\\operatorname{max}(n, m) + 1$$$, since only one column or row can have an answer greater than one, and in another one there can be an answer of $$$1$$$. It is not difficult to provide an example where the answer is achieved: if $$$n  \\gt  m$$$, we place the numbers from $$$0$$$ to $$$n - 1$$$ in the first column; otherwise, we place the numbers from $$$0$$$ to $$$m - 1$$$ in the first row. The remaining elements can be placed arbitrarily."
         },
         {
             "title": "Implementation",

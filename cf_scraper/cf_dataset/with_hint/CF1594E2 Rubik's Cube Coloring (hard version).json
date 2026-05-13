@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1594E2 - Rubik's Cube Coloring (hard version)\nLet's define a node as marked if it has a predefined node in its subtree. There is always at least $$$1$$$ marked node since all predefined nodes are definitely marked.\nYou can see that marked nodes form a path for the root to any predefined node. Thus there are at most $$$n \\cdot k$$$ marked nodes and we can run a standard $$$dp[i][j]$$$ on them (node $$$i$$$ is colored with $$$j$$$). Depending on the implementation the $$$dp$$$ can have time complexity $$$O(n \\cdot k \\cdot 6 \\cdot 4)$$$ or $$$O(n \\cdot k \\cdot log(n \\cdot k) \\cdot 6 \\cdot 4)$$$ if you use map.\nYou multiply the result with $$$4^{m}$$$ where $$$m$$$ is the number of unmarked nodes. This holds because if their parent has a fixed color they always have $$$4$$$ choices and so on."
         }
     ]
 }

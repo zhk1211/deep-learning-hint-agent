@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "2201A2 - Lost Civilization (Hard Version)\nPlease read the editorial of the easy subtask and understand both solutions.\nLet's use the stack solution, while we will observe something from both solutions.\nThe stack solution maintains the shortest sequence for all suffixes.\nThe prefix solution maintains the shortest sequence for all prefixes.\nNote how both algorithms performed iterations in an online manner. That being said, by the proof of the prefix solution, we know that a prefix of the shortest constructing sequence is a shortest constructing sequence for some prefix. In other words, when we use the stack solution, the stack contains the shortest constructing sequences for all prefixes of this suffix (which are subsegments of the sequence!).\nTherefore, let's record at which index each element in the stack gets added. Then we can record the contribution of each element, and find the sum of all prefixes in $$$\\mathcal{O}(1)$$$ at any moment. As we found the sum of all prefixes for every suffix, we have effectively found the sum of all subsegments in $$$\\mathcal{O}(n)$$$ time."
         }
     ]
 }

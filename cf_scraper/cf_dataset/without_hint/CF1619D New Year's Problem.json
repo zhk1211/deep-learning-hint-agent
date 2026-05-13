@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1619D - New Year's Problem\nNote that if we cannot get joy $$$x$$$, then we cannot get $$$x+1$$$, and if we can get at least $$$x$$$, then we can get at least $$$x−1$$$. These facts allow us to use binary search to find the answer.\nNow we need to understand how exactly we can recognize whether we can gain joy at least $$$x$$$ or not. We can enter at most $$$n−1$$$ shops, so we always need to take two gifts from some store, which means there must be a store in which we can find two or more gifts with pleasure at least $$$x$$$. Also, each friend should receive a gift, which means that we should be able to buy each gift with pleasure at least $$$x$$$. It takes O (nm) to check that both of these conditions are met. The total solution works in O (nm ∗ log (nm))."
         },
         {
             "title": "Solution",

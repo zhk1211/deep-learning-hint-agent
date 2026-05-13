@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1342D - Multiple Testcases\nLet's estimate the smallest possible achievable answer. Let the number of the arrays of size greater than or equal to $$$i$$$ be $$$g_i$$$. The answer is maximum $$$\\lceil \\frac{g_i}{c_i} \\rceil$$$ over all $$$i$$$ from $$$1$$$ to $$$k$$$. You can prove that you can't fit $$$g_i$$$ arrays in less than $$$\\lceil \\frac{g_i}{c_i} \\rceil$$$ testcases with the pigeonhole principle. Let that be called $$$ans$$$.\nOk, let's now construct the solution for that estimate. Sort arrays in the increasing or decreasing order and assign the $$$i$$$-th array ($$$0$$$-indexed) in that order to the $$$i~mod~ans$$$ testcase. It's easy to see that for any $$$i$$$ the number of arrays of size greater than or equal to $$$i$$$ is always restricted by $$$\\lceil \\frac{g_i}{c_i} \\rceil$$$.\nOverall complexity: $$$O(n \\log n + k)$$$ or $$$O(n + k)$$$ if you care enough to do counting sort."
         },
         {
             "title": "Solution (pikmike)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1154B - Make Them Equal\nLet's leave only unique values of the given array in the array $$$b$$$ (i. e. construct an array $$$b$$$ that is actually array $$$a$$$ without duplicate element) and sort it in ascending order. Then let's consider the following cases:\nIf the length of $$$b$$$ is greater than $$$3$$$ then the answer is\n-1\n;\nif the length of $$$b$$$ is $$$3$$$ then there are two cases:\nif $$$b_3 - b_2 = b_2 - b_1$$$ then the answer is $$$b_2 - b_1$$$;\notherwise the answer is\n-1\n;\nif the length of $$$b$$$ is $$$2$$$ then there are also two cases:\nif $$$b_2 - b_1$$$ is even then the answer is $$$\\frac{b_2 - b_1}{2}$$$;\notherwise the answer is $$$b_2 - b_1$$$;\nand if the length of $$$b$$$ is $$$1$$$ then the answer is $$$0$$$."
         },
         {
             "title": "Solution",

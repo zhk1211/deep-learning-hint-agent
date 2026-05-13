@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1238B - Kill `Em All\nNotice the following fact: it's never optimal to fire a missile at such a position that there are monsters to the right of it. That suggests the next solution: sort the positions, leave only the unique ones and process to shoot at the rightmost alive monster until every monster is dead. Position of some monster after $$$s$$$ shots are made is the original position minus $$$r \\cdot s$$$, because the monster could only be pushed to the left.\nOverall complexity: $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution (Ne0n25)",

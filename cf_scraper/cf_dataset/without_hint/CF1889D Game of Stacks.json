@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1889D - Game of Stacks\nLet's first consider an easy version of the problem: what if there is only one element in each stack?\nLet $$$p_i$$$ be the element in stack $$$i$$$. If we link $$$i \\to p_i$$$, these edges will form several directed pseudo trees. For each pseudo tree, there is a cycle. It's not hard to find that those cycles actually can be ignored, because if we go on the cycle, we will come back to the first node on the cycle and the cycle will be eliminated. After deleting (the edges) on the cycle, there are only trees left. Thus the root of each tree is the answer of nodes on the tree.\nWhen it comes back to the original problem, similarly, let $$$p_i$$$ be the top element of stack $$$i$$$. The rest are the same — cycles can be eliminated. In this case, we should run cycle elimination process many times until there is no cycle in the graph.\nTime complexity $$$O(n+\\sum k)$$$."
         }
     ]
 }

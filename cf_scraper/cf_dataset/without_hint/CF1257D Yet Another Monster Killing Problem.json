@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1257D - Yet Another Monster Killing Problem\nAt first, lets precalc array $$$bst$$$; $$$bst_i$$$ is equal to maximum hero power whose endurance is greater than or equal to $$$i$$$.\nNow let's notice that every day it's profitable for as to kill as many monster as possible. Remains to understand how to calculate it.\nSuppose that we already killed $$$cnt$$$ monsters. If $$$a_{cnt+1}  \\gt  bst_1$$$ then answer is\n-1\n, because we can't kill the $$$cnt+1$$$-th monster. Otherwise we can kill at least $$$x = 1$$$ monsters. All we have to do it increase the value $$$x$$$ until conditions $$$\\max\\limits_{cnt  \\lt  i \\le cnt + x} a_i \\le bst_x$$$ holds. After calculating the value $$$x$$$ we just move to the next day with $$$cnt + x$$$ killed monsters."
         },
         {
             "title": "Solution (Roms)",

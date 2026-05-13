@@ -34,7 +34,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1638D - Big Brush\nLet's try to build the solution from the last operation to the first operation. The last operation can be any $$$2 \\times 2$$$ square painted in a single color. If there is no such square, it is clearly impossible. Otherwise, this square being the last operation implies that we could previously color its cells in any color, multiple times, without any consequences. We will name these\nspecial cells\n.\nWhat happens when we run out of $$$2 \\times 2$$$ squares painted in a single color? Well, we can use the special cells described above. The next operation considered can be any $$$2 \\times 2$$$ square such that all its non-special cells are painted in the same color. If there is no such square, it is clearly impossible.\nWe now have a correct solution. It consists of at most $$$nm$$$ operation because at each step we turn at least one non-special cell into a special one and there are $$$nm$$$ cells. We can implement this solution similar to BFS. First, insert all $$$2 \\times 2$$$ squares painted in a single color into a queue. Then, at each step take the square in the front of the queue, add it to the solution and make all its non-special cells special. When making a cell special, check all $$$2 \\times 2$$$ squares that contain it and if some of them meet the condition after the current step, insert them into the queue. Note that there are at most $$$9$$$ such squares.\nTime complexity: $$$O(nm)$$$."
         }
     ]
 }

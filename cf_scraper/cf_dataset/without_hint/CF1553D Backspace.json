@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1553D - Backspace\nThe main idea of the problem is that backspace results in losing $$$2$$$ characters, the one we intended to type (which we replace with a backspace) and the character that the backspace will remove.\nIn general, the idea is to compare every letter $$$s_i$$$ with $$$t_j$$$ ​starting from right to left, if they match we will move to compare $$$s_{i-1}$$$ with $$$t_{j-1}$$$ in the next step, else if they don't match we will delete $$$s_{i}$$$ and $$$s_{i-1}$$$, then compare $$$s_{i-2}$$$ with $$$t_j$$$ in the next step and so on.\nIf we successfully matched all characters in $$$t$$$ we will print $$$YES$$$, $$$NO$$$ otherwise."
         },
         {
             "title": "Solution (Um_nik)",

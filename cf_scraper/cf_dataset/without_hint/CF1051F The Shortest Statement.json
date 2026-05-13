@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1051F - The Shortest Statement\nFirstly let's find any spanning tree and root it at any vertex. For each vertex we calculate the distance to the root (let it be $$$h_v$$$ for vertex $$$v$$$). There are no more than $$$21$$$ edges that don't belong to the tree. For each of these edges, let's run Dijkstra's algorithm from some vertex incident to this edge.\nSuppose we are answering a query $$$u$$$ $$$v$$$. If the shortest path between these vertices passes only along the edges of the tree, then it can be calculated by the formula $$$h_v + h_u - 2h_{lca(u, v)}$$$, where $$$lca(u, v)$$$ is the lowest common ancestor of vertices $$$u$$$ and $$$v$$$. You may use any fast enough algorithm you know to calculate $$$lca(u, v)$$$.\nOtherwise there exists at least one vertex such that we ran Dijkstra's algorithm from it, and it belongs to the shortest path. Just iterate on every vertex for which we ran Dijkstra and update the answer with the value of $$$d_u + d_v$$$, where $$$d_x$$$ is the shortest path to the vertex $$$x$$$ from the fixed vertex."
         },
         {
             "title": "Solution (Ajosteen)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1832C - Contrast Value\nLet's rephrase the problem in the following form: let the elements of the array be points on a coordinate line. Then the absolute difference between two adjacent elements of the array can be represented as the distance between two points, and the contrast of the entire array is equal to the total distance to visit all points in the given order.\nIn this interpretation, it becomes obvious that removing any set of points does not increase contrast. Since the resulting contrast should be equal to the original one, we can only remove elements from the array that do not decrease the contrast.\nFirst of all, let's look at consecutive equal elements, it is obvious that you can delete all of them except one, and the contrast of the array will not change. In some languages, you can use a standard function to do this — for example, in C++ you can use\nunique\n.\nAfter that, let's look at such positions $$$i$$$ that $$$a_{i - 1}  \\lt  a_i  \\lt  a_{i + 1}$$$; you can delete the $$$i$$$-th element, because $$$|a_{i - 1} - a_i| + |a_i - a_{i + 1}| = |a_{i - 1} - a_{i + 1}|$$$. Similarly, for positions $$$i$$$, where $$$a_{i - 1}  \\gt  a_i  \\gt  a_{i + 1}$$$, the element can be removed. In all other cases, removing the element will decrease the contrast."
         },
         {
             "title": "Solution (Neon)",

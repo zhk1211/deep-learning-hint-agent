@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1843A - Sasha and Array Coloring\nFirst, there exists an optimal answer, in which there are no more than two elements of each color.\nProof: let there exist an optimal answer, in which there are more elements of some color than 2. Then, take the median among the elements of this color and paint in another new color in which no other elements are painted. Then the maximum and minimum among the original color will not change, and in the new color the answer is 0, so the answer remains the same.\nAlso, if there are two colors with one element each, they can be combined into one, and the answer will not decrease.\nIt turns out that the numbers are paired (probably except for one; we'll assume it's paired with itself). Sort the array, and then the answer is $$$\\sum_{pair_i  \\lt  i} a_i - \\sum_{i  \\lt  pair_i} a_i$$$ ($$$pair_i$$$ is the number that is paired with $$$i$$$-th). Therefore, in the first summand you should take $$$\\lfloor \\frac{n}{2} \\rfloor$$$ the largest, and in the second $$$\\lfloor \\frac{n}{2} \\rfloor$$$ of the smallest elements of the array.\nTotal complexity: $$$O(n \\log n)$$$ for sorting."
         },
         {
             "title": "Solution",

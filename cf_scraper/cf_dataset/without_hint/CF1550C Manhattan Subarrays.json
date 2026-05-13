@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1550C - Manhattan Subarrays\nLet's figure out criteria for the bad triple $$$p$$$, $$$q$$$, $$$r$$$. It's not hard to prove that the triple is bad, iff point $$$q$$$ lies inside the bounding box of points $$$p$$$ and $$$r$$$. In other words, if $$$\\min(x_p, x_r) \\le x_q \\le \\max(x_p, x_r)$$$ and $$$\\min(y_p, y_r) \\le y_q \\le \\max(y_p, y_r)$$$.\nNow, looking at points $$$p = (a_i, i)$$$, $$$q = (a_j, j)$$$ and $$$r = (a_k, k)$$$ we can see that the bad situation may arise only if $$$i  \\lt  j  \\lt  k$$$ — so we can check only ordered triples.\nLooking closely at inequality $$$\\min(a_i, a_k) \\le a_j \\le \\max(a_i, a_k)$$$ we can note that there are two situations where $$$(i, j, k)$$$ forms a bad triple: when either $$$a_i \\le a_j \\le a_k$$$ or $$$a_i \\ge a_j \\ge a_k$$$. In other words, subarray is bad if and only if it contains either non-decreasing subsequence of length $$$3$$$ or non-increasing subsequence of length $$$3$$$.\nThe final observation is that any sequence of length at least $$$5$$$ contains either non-decreasing or non-increasing subsequence of length $$$3$$$. It's not hard to prove it, either brute-forcing all possible variants (of relative orders) on paper, or searching/remembering the theorem that says it.\nAs a result you need to check only subarrays of length at most $$$4$$$ whichever the way you want. The complexity is $$$O(n)$$$."
         },
         {
             "title": "Solution (adedalic)",

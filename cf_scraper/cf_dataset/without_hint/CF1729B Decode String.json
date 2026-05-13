@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1729B - Decode String\nThe idea is as follows: we will go from the end of the string $$$t$$$ and get the original string $$$s$$$.\nNote that if the current digit is $$$0$$$, then a letter with a two-digit number has been encoded. Then we take a substring of length three from the end, discard $$$0$$$ and get the number of the original letter.\nOtherwise, the current number $$$\\neq 0$$$, then a letter with a one-digit number was encoded. We easily reconstruct the original letter.\nNext, discard the already processed characters and repeat the process until the encoded string is complete."
         },
         {
             "title": "Solution",

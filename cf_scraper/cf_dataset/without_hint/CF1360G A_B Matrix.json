@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1360G - A/B Matrix\nLet's see how the desired matrix looks like. Since each row should have exactly $$$a$$$ ones, and each column should have exactly $$$b$$$ ones, the number of ones in all rows $$$a \\cdot n$$$ should be equal to the number of ones in all columns $$$b \\cdot m$$$. Thus, the desired matrix exists iff $$$a \\cdot n = b \\cdot m$$$ or $$$\\frac{n}{m} = \\frac{b}{a}$$$.\nLet's show how to construct the desired matrix if it exists. Let's find any number $$$0 \\lt d \\lt m$$$ such that $$$(d \\cdot n) \\% m = 0$$$, where $$$a \\% b$$$ — is the remainder of dividing $$$a$$$ by $$$b$$$. In the first row of the desired matrix, we put the ones at the positions $$$[1, a]$$$, and in the $$$i$$$-th row we put the ones, as in the $$$i-1$$$ row, but cyclically shifted by $$$d$$$ to the right."
         },
         {
             "title": "Solution",

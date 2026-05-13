@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1163D - Mysterious Code\nFirstly, we will find the maximal value of $$$f(c', s) - f(c', t)$$$ via dynamic programming. Denote 'dp[i][ks][kt]' as the maximal value of the said value when replacing the first $$$i$$$-th character of $$$c$$$, and the KMP state for the replaced sub-code to be $$$ks$$$ and $$$kt$$$. The maximal value of $$$f(c', s) - f(c', t)$$$ for the whole code will lie among all end states $$$dp[n][ks][kt]$$$ for all values of $$$ks$$$ and $$$kt$$$.\nComplexity: $$$O(|c| \\cdot |s| \\cdot |t|)$$$."
         },
         {
             "title": "Implementation",

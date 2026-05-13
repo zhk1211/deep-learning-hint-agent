@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1926G - Vlad and Trouble at MIT\nLet's think of the problem as trying to separate some rooms(with\nP\nand possibly some\nC\n) that will hear music and the other ones(with\nS\nand possibly some\nC\n) that will not hear music. Imagine red \"water\" from the\nP\nnodes and blue \"water\" flowing from the\nS\nnodes flowing freely until hitting a thick wall. We don't want these two \"waters\" to mix.\nLet's rotate the tree upside down so that on top are all the leaves and end with the root node at the bottom and start letting blue and red water flow down. We want to check so that, at any point, these waters don't mix. Let's go through them layer by layer and do dynamic programming $$$dp_{i, 3}$$$ where for each node $$$i$$$, we remember the minimum number of walls we have to add such that only red water flows there, only blue water flows, or no water flows, ensuring there is no mixing in nodes above. Using the $$$dp$$$ values for the nodes above, we can calculate the $$$dp$$$ value of the node below. Of course, the $$$dp$$$ value for the \"pumping\" nodes (\nP\nor\nS\n) will have the $$$dp$$$ of other colors infinite.\nThe final answer will be the minimum of $$$dp_{1, 0}$$$, $$$dp_{1, 1}$$$, $$$dp_{1, 2}$$$, the minimum number of walls needed for the root to not reach \"water\"(and no mixing above), to reach only red \"water\"(and no mixing above) or reach only blue \"water\"(and no mixing above).\nFinal complexity is $$$\\mathcal{O}(n)$$$"
         },
         {
             "title": "Solution",

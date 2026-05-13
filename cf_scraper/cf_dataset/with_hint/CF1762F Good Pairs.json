@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given an array $ a $ consisting of $ n $ integers and an integer $ k $ .\n\nA pair $ (l,r) $ is good if there exists a sequence of indices $ i_1, i_2, \\dots, i_m $ such that\n\n- $ i_1=l $ and $ i_m=r $ ;\n- $ i_j < i_{j+1} $ for all $ 1 \\leq j < m $ ; and\n- $ |a_{i_j}-a_{i_{j+1}}| \\leq k $ for all $ 1 \\leq j < m $ .\n\nFind the number of pairs $ (l,r) $ ( $ 1 \\leq l \\leq r \\leq n $ ) that are good.\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^5 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two space-separated integers $ n $ and $ k $ ( $ 1 \\leq n \\leq 5 \\cdot 10^5 $ ; $ 0 \\leq k \\leq 10^5 $ ) — the length of the array $ a $ and the integer $ k $ .\n\nThe second line of each test case contains $ n $ space-separated integers $ a_1,a_2,\\ldots,a_n $ ( $ 1 \\leq a_i \\leq 10^5 $ ) — representing the array $ a $ .\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 5 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, print the number of good pairs.\n\nExamples\nSample 1\nInput\n4\n3 0\n1 1 1\n4 2\n4 8 6 8\n6 4\n7 2 5 8 3 8\n20 23\n110 57 98 14 20 1 60 82 108 37 82 73 8 46 38 35 106 115 58 112\nOutput\n6\n9\n18\n92\n\nNote\nIn the first test case, good pairs are $ (1,1) $ , $ (1,2) $ , $ (1,3) $ , $ (2,2) $ , $ (2,3) $ , and $ (3,3) $ .\n\nIn the second test case, good pairs are $ (1,1) $ , $ (1,3) $ , $ (1,4) $ , $ (2,2) $ , $ (2,3) $ , $ (2,4) $ , $ (3,3) $ , $ (3,4) $ and $ (4,4) $ . Pair $ (1,4) $ is good because there exists a sequence of indices $ 1, 3, 4 $ which satisfy the given conditions."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "We should have $$$|a_{i_j}-a_{i_{j+1}}| \\leq k$$$. This seems a bit hard, as we can have $$$a_{i_{j+1}}$$$ greater than, smaller than or equal to $$$a_{i_j}$$$.\nWhy not solve the easier version first?\nA pair $$$(l,r)$$$ is\ngood\nif there exists a sequence of indices $$$i_1, i_2, \\dots, i_m$$$ such that\n$$$i_1=l$$$ and $$$i_m=r$$$;\n$$$i_j \\lt i_{j+1}$$$ for all $$$1 \\leq j \\lt m$$$; and\n$$$0 \\lt a_{i_j}-a_{i_{j+1}} \\leq k$$$ for all $$$1 \\leq j \\lt m$$$.\nSuppose $$$F(a,k)$$$ number of pairs $$$(l,r)$$$ ($$$1 \\leq l \\lt r \\leq n$$$) that are good.\nFind $$$F(a,k)$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "To solve the problem in hint $$$1$$$, let us define $$$dp_i$$$ as the number of pairs $$$j(i \\lt j)$$$ such that $$$(i,j)$$$ is good.\nLet us move from $$$i=n$$$ to $$$1$$$. To find $$$dp_i$$$, let us first find the smallest index $$$j$$$ such that $$$a_j$$$ lies in range $$$[a_i+1,a_i+k]$$$.\nWe can observe that $$$dp_i=dp_j+f(i,a_i+1,a_j)$$$, where $$$f(i,l,r)$$$ gives us the number of indices $$$x$$$ among last $$$i$$$ elements of $$$a$$$ such that $$$a_x$$$ lies in the range $$$[l,r]$$$. We can use fenwik tree or ordered set to find $$$f(i,l,r)$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Now let us get back to original problem.\nFirst let us count number of pairs $$$(i,j)(1 \\leq i \\leq j)$$$ such that $$$a_i=a_j$$$. Assume $$$cnt$$$ is number of such pairs.\nTime for another cool claim!\nFor our original problem, answer is $$$cnt+F(a,k)+F(rev(a),k)$$$, where $$$rev(a)$$$ denotes the array $$$a$$$ when it is reversed."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "How to prove the claim in hint $$$3$$$?\nSuppose we have a good pair $$$(l,r)$$$ such that $$$a_l \\neq a_r$$$. Now using exchange arguments we can claim that there always exists a sequence(say $$$s$$$) starting at index $$$l$$$ and ending at index $$$r$$$\nsuch that difference between adjacent elements of $$$a$$$ is atmost $$$k$$$\nstrictly increasing if $$$a_l \\lt a_r$$$\nstrictly decreasing if $$$a_l \\gt a_r$$$\nThus $$$(l,r)$$$ will be counted in $$$F(a,k)$$$ if $$$a_l \\lt a_r$$$ and $$$(l,r)$$$ will be counted in $$$F(rev(a),k)$$$ if $$$a_l \\gt a_r$$$.\nTime complexity is $$$O(n \\cdot \\log(n))$$$."
+        }
+    ]
+}

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1296D - Fight with Monsters\nLet's calculate the minimum number of secret technique uses we need to kill each of the monsters. Let the current monster has $$$h$$$ hp. Firstly, it is obvious that we can take $$$h$$$ modulo $$$a+b$$$ (except one case). If it becomes zero, let's \"rollback\" it by one pair of turns. Then the number of uses of the secret technique we need is $$$\\lceil\\frac{h}{a}\\rceil - 1$$$.\nLet's sort all $$$n$$$ monsters by this value and take the \"cheapest\" set of monsters (prefix of the sorted array) with the sum of values less than or equal to $$$k$$$.\nTime complexity: $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution",

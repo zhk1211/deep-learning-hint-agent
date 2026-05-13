@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1420D - Rescue Nibel!\nIn this task, we need to find the number of sets of $$$k$$$ segments such that these $$$k$$$ segments intersect at least in one point.\nLet's look at the starting point of the intersection. This point will always be the beginning of a segment. Let us find the number of sets of segments that their intersection begins at the point $$$x$$$. Let us denote $$$p(x)$$$ as number of segments that pass through this point, and $$$s(x)$$$ as numbers of segments that start at this point. Then all the $$$k$$$ segments must pass through $$$x$$$ and at least one segment must start at $$$x$$$. The number of sets of segments passing through $$$x$$$ is $$${p(x) \\choose k}$$$ and the number of sets of segments passing through $$$x$$$, none of which starts at $$$x$$$, is $$${p(x) - s(x) \\choose k}$$$. From here we obtain that the required number of piece sets is $$${p(x) \\choose k}. - {p(x) - s(x) \\choose k}$$$. By summing up all possible $$$x$$$ values, we get the answer to the task.\nIt should be noted that $$$p(x)$$$ and $$$s(x)$$$ can be easily supported using the event method. Then, the total runtime will be $$$O(n\\log n)$$$."
         }
     ]
 }

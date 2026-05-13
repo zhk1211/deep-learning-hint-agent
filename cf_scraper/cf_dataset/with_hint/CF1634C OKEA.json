@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1634C - OKEA\nIf $$$k = 1$$$, you can put items on the shelves in any order.\nOtherwise, there are at least 2 items on each shelf. If there are items of different parity on the shelf, it is obvious that there are two neighboring items of different parity, but then the arithmetic mean of these two items won't be whole, which is against the constraints. Therefore, all items on each shelf are of the same parity.\nNotice that if the number of shelves $$$n$$$ is odd, we cannot arrange the items correctly because the number of shelves with even and odd items must be the same (that is, if $$$k \\ge 2$$$).\nLet us show that for even $$$n$$$ there is always an answer. On $$$i$$$-th shelf we will place items with prices $$$i, i + n, i + 2 \\cdot n, \\ldots, i + n \\cdot (k - 1)$$$. We can use the formula for the sum of an arithmetic progression to compute the sum of prices of a subsegment with coordinates $$$i, l$$$ up to $$$i, r$$$:\n$$$$$$sum = i \\cdot (r - l + 1) + \\frac{n(l - 1) + n(r - 1)}{2} \\cdot (r - l + 1) = \\ = i \\cdot (r - l + 1) + \\frac{n}{2} \\cdot (l + r - 2) \\cdot (r - l + 1) = \\ = (r - l + 1) \\cdot \\left(i + \\frac{n}{2} \\cdot (l + r - 2)\\right)$$$$$$\nThe length of the segment ($$$r - l + 1$$$) always divides this sum, since $$$n$$$ is even. Therefore, this arrangement fits the requirements of the problem."
         },
         {
             "title": "Solution",

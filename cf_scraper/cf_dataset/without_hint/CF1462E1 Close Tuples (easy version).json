@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1462E1 - Close Tuples (easy version)\nIn the easy version of the problem, you can count how many times each number occurs (the numbers themselves do not exceed $$$n$$$). Note that we do not have very many options for which triples of numbers can be included in the answer.\nLet's iterate over $$$x$$$ – the minimum number in the triples. Then there are the following options:\n[$$$x$$$, $$$x + 1$$$, $$$x + 2$$$];\n[$$$x$$$, $$$x + 1$$$, $$$x + 1$$$];\n[$$$x$$$, $$$x + 2$$$, $$$x + 2$$$];\n[$$$x$$$, $$$x$$$, $$$x + 1$$$];\n[$$$x$$$, $$$x$$$, $$$x + 2$$$];\n[$$$x$$$, $$$x$$$, $$$x$$$].\nIn each option, you need to multiply the number of ways to choose one, two or three numbers from all occurrences of this number. This is done using binomial coefficients. Formally, if $$$cnt[x]$$$ — is the number of occurrences of the number $$$x$$$, then the formulas corresponding to the options in the list above are as follows:\n$$$cnt[x] \\cdot cnt[x + 1] \\cdot cnt[x + 2]$$$;\n$$$cnt[x] \\cdot \\frac{cnt[x + 1] \\cdot (cnt[x + 1] - 1)}{2}$$$;\n$$$cnt[x] \\cdot \\frac{cnt[x + 2] \\cdot (cnt[x + 2] - 1)}{2}$$$;\n$$$\\frac{cnt[x] \\cdot (cnt[x] - 1)}{2} \\cdot cnt[x + 1]$$$;\n$$$\\frac{cnt[x] \\cdot (cnt[x] - 1)}{2} \\cdot cnt[x + 2]$$$;\n$$$\\frac{cnt[x] \\cdot (cnt[x] - 1) \\cdot (cnt[x] - 2)}{6}$$$.\nIf we sum these values over all $$$x$$$ from $$$1$$$ to $$$n$$$, then we get the answer to the problem."
         },
         {
             "title": "Solution",

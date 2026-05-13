@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1571C - Rhyme\nLet $$$\\mathit{limit}_i$$$ be the maximum value $$$k$$$ such that the $$$i$$$-th pair rhymes regardless of must it or must not. It's easy to calculate $$$\\mathit{limit}_i$$$ as the length of the longest equal suffix of $$$s_i$$$ and $$$t_i$$$.\nNow, if we know that the $$$i$$$-th pair must rhyme, then any possible $$$k$$$ should not exceed $$$\\mathit{limit}_i$$$. But if the $$$i$$$-th pair must not rhyme, then any possible $$$k$$$ should be strictly greater than $$$\\mathit{limit}_i$$$.\nIn other words, all possible $$$k$$$-s form a segment between minimum possible $$$k$$$ and maximum possible $$$k$$$. So, we can calculate minimum possible $$$k$$$ (named $$$l$$$) as $$$\\max(\\mathit{limit}_i) + 1$$$ among all $$$i$$$ with $$$r_i = 0$$$ and maximum possible $$$k$$$ (named $$$r$$$) as $$$\\min(\\mathit{limit}_i)$$$ among all $$$i$$$ with $$$r_i = 1$$$.\nAs a result there will be $$$\\max(0, r - l + 1)$$$ possible $$$k$$$ from $$$l$$$ to $$$r$$$."
         },
         {
             "title": "Solution (adedalic)",

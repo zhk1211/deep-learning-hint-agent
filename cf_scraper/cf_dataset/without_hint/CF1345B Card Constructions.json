@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1345B - Card Constructions\nLet's count the number of cards in a pyramid of height $$$h$$$. There are $$$2(1+2+3+\\cdots+h)$$$ cards standing up, and there are $$$0+1+2+\\cdots+(h-1)$$$ horizontal cards. So, there are $$$2\\frac{h(h+1)}{2}+\\frac{(h-1)h}{2}=\\frac{3}{2}h^2+\\frac12 h$$$ cards total. Using this formula, we can quickly find the largest height $$$h$$$ that uses at most $$$n$$$ cards.\nThe quadratic formula or binary search can be used here, but are unnecessary. Simply iterating through all $$$h$$$ values works in $$$O(\\sqrt n)$$$ time per test.\nIt's enough to see that this takes $$$O(t\\sqrt N)$$$ time overall, where $$$N$$$ is the sum of $$$n$$$ across all test cases. But interestingly, we can argue for a tighter bound of $$$O(\\sqrt{tN})$$$ due to the Cauchy-Schwarz Inequality:\n$$$$$$\\sum_{i=1}^t \\left(1\\cdot \\sqrt{n_i}\\right)\\le \\sqrt{\\left(\\sum_{i=1}^t1^2\\right)\\left(\\sum_{i=1}^t\\left(\\sqrt n_i\\right)^2\\right)}=\\sqrt{tN}$$$$$$"
         }
     ]
 }

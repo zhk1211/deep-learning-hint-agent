@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1858C - Yet Another Permutation Problem\nIt is impossible to get $$$d_i = \\gcd(a_i, a_{(i\\mod n) + 1})  \\gt  \\left\\lfloor \\frac{n}{2}\\right\\rfloor$$$: otherwise, at least one of the numbers in $$$a$$$ would be divisible by $$$d_i$$$ and would be greater than $$$d_i$$$ at the same time, so it would be at least $$$2 \\cdot d_i$$$, which is greater than $$$n$$$. Therefore, the maximum possible score is no more than $$$\\left\\lfloor\\frac{n}{2}\\right\\rfloor$$$. Actually, we can always get a score equal to $$$\\left\\lfloor\\frac{n}{2}\\right\\rfloor$$$.\nHow do we get such score? Let's set $$$a_1= 1$$$. After that, we put the powers of $$$2$$$ less or equal $$$n$$$ sequentially. Then we put $$$3$$$ and powers of $$$2$$$ multiplied by $$$3$$$, then $$$5$$$ and so on (for example, for $$$n=12$$$, we will get an array $$$a=[1,2,4,8,3,6,12,5,10,7,9,11]$$$). Then, for each number $$$a_i = x \\leq \\lfloor \\frac{n}{2} \\rfloor$$$, the next number will be $$$a_{(i\\bmod n) + 1} = x \\cdot 2 \\leq n$$$. Their $$$\\gcd$$$ will be exactly $$$x$$$, so there will be a pair of adjacent elements of $$$a$$$ with greatest common divisor equal to $$$x$$$ for all $$$1 \\leq x \\leq \\lfloor\\frac{n}{2}\\rfloor$$$."
         }
     ]
 }

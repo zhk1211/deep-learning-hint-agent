@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1335C - Two Teams Composing\nLet the number of students with the skill $$$i$$$ is $$$cnt_i$$$ and the number of different skills is $$$diff$$$. Then the size of the first team can not exceed $$$diff$$$ and the size of the second team can not exceed $$$maxcnt = max(cnt_1, cnt_2, \\dots, cnt_n)$$$. So the answer is not greater than the minimum of these two values. Moreover, let's take a look at the skill with a maximum value of $$$cnt$$$. Then there are two cases: all students with this skill go to the second team then the sizes of teams are at most $$$diff-1$$$ and $$$maxcnt$$$ correspondingly. Otherwise, at least one student with this skill goes to the first team and the sizes are at most $$$diff$$$ and $$$maxcnt - 1$$$ correspondingly. So the answer is $$$max(min(diff - 1, maxcnt), min(diff, maxcnt - 1))$$$.\nTime complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution",

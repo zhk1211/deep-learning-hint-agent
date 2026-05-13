@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAquaMoon has a string $ a $ consisting of only $ 0 $ and $ 1 $ . She wants to add $ + $ and $ - $ between all pairs of consecutive positions to make the absolute value of the resulting expression as small as possible. Can you help her?\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\leq t \\leq 2\\,000 $ ) – the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\leq n \\leq 100 $ ) — the length of $ a $ .\n\nThe second line of each test case contains a string $ a $ of length $ n $ , consisting of only $ 0 $ and $ 1 $ .\n\nOutput Format\nFor each test case, output a string of length $ n - 1 $ consisting of $ - $ and $ + $ on a separate line. If there is more than one assignment of signs that produces the smallest possible absolute value, any of them is accepted.\n\nExamples\nSample 1\nInput\n3\n2\n11\n5\n01101\n5\n10001\nOutput\n-\n+-++\n+++-\n\nNote\nIn the first test case, we can get the expression $ 1 - 1 = 0 $ , with absolute value $ 0 $ .\n\nIn the second test case, we can get the expression $ 0 + 1 - 1 + 0 + 1 = 1 $ , with absolute value $ 1 $ .\n\nIn the third test case, we can get the expression $ 1 + 0 + 0 + 0 - 1 = 0 $ , with absolute value $ 0 $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "The answer is the number of $$$1$$$s modulo $$$2$$$.\nWe can get that by adding '-' before the $$$\\text{2nd}, \\text{4th}, \\cdots, 2k\\text{-th}$$$ $$$1$$$, and '+' before the $$$\\text{3rd}, \\text{5th}, \\cdots, 2k+1\\text{-th}$$$ $$$1$$$."
+        }
+    ]
+}

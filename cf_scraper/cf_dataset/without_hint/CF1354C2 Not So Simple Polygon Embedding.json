@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1354C2 - Not So Simple Polygon Embedding\nAt first, lets place $$$2n$$$-gon in such way that the lowest side of $$$2n$$$-gon is horizontal. Now we can, without loss of generality, think that the square has horizontal and vertical sides and we just rotate $$$2n$$$-gon around its center.\nIf we rotate the $$$2n$$$-gon at angle $$$\\frac{\\pi}{n}$$$ then it will move on itself. Moreover, after rotating at angle $$$\\frac{\\pi}{2n}$$$ we'll get left and right sides vertical and the following rotation is meaningless since it's the same as if we just swap $$$x$$$ and $$$y$$$ coordinates. So we don't we to rotate more than $$$\\frac{\\pi}{2n}$$$.\nAlso, we can see that while rotating the difference between max $$$x$$$ and min $$$x$$$ decreasing while the distance between max $$$y$$$ and min $$$y$$$ increasing. The answer is, obviously, the maximum among these differences. So, for example, we can just ternary search the optimal answer.\nOr we can note that the behavior of differences is symmetrical (just swap $$$x$$$ and $$$y$$$ coordinates) so the answer is in the middle angle, i.e. we just need to rotate $$$2n$$$-gon at angle $$$\\frac{\\pi}{4n}$$$.\nFinally, observing several right triangles we can come up with quite an easy answer:\n$$$$$$ ans = \\frac{\\cos(\\frac{\\pi}{4n})}{\\sin(\\frac{\\pi}{2n})} $$$$$$"
         },
         {
             "title": "Solution (adedalic)",

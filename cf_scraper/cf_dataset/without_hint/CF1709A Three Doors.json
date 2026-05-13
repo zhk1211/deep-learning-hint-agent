@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1709A - Three Doors\nNote that we never have a choice in what door should we open. First, we open the door with the same number as the key in our hand. Then, the door with the same number as the key behind the first opened door. Finally, the door with the same number as the key behind the second opened door.\nIf any of the first and second opened doors didn't have a key behind it, then it's impossible. Otherwise, we open every door.\nLet $$$a_1, a_2, a_3$$$ be the keys behind the corresponding doors. Then we should check if $$$a[x]$$$ is not zero and $$$a[a[x]]$$$ is not zero.\nOverall complexity: $$$O(1)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1327C - Game with Chips\nNote that $$$2nm$$$ is a fairly large number of operations. Therefore, we can first collect all the chips in one cell, and then go around the entire board.\nLet's calculate the required number of operations.\nFirst, let's collect all the chips in the $$$(1, 1)$$$ cell. To do this, let's do $$$n-1$$$ operations $$$U$$$ so that all the chips are in the first row, then do $$$m-1$$$ operations $$$L$$$. After such operations, wherever the chip is initially located, it will end up in the $$$(1, 1)$$$ cell.\nAfter that, we need to go around the entire board. Let's do it in such a way that the rows with odd numbers are be bypassed from left to right, and the even ones — from right to left. We also need $$$n-1$$$ operations $$$D$$$ to move from one row to the next one.\nIn total, we got $$$(n-1) + (m-1) + n * (m-1) + (n-1) = nm + n + m - 3$$$ operations, which is completely suitable for us."
         },
         {
             "title": "Solution (Ne0n25)",

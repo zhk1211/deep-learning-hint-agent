@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1931F - Chat Screenshots\nThe author of the screenshot is always in the first position, so based on his screenshot, nothing can be said about his first position. The rest of the chat participants are ordered based on the real order.\nLet's build a graph of $$$n$$$ vertices. For each screenshot, add $$$n - 2$$$ edges. For all $$$2 \\le i  \\lt n$$$, add an edge between the vertices $$$a_{ji}$$$ and $$$a_{j{i + 1}}$$$, where $$$j$$$ is the number of the current screenshot.\nIf there is an order that satisfies all screenshots, then topological sorting will exist in this graph, which means there will be no cycles in it. So our goal is to check the graph for acyclicity."
         },
         {
             "title": "Solution",

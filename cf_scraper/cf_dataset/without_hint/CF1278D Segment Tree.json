@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1278D - Segment Tree\nThe main idea of the solution is to find a linear number of intersections of segments.\nIntersections can be found with sweep line approach. We will maintain a set for the endpoints open segments. When we add a segment, we find all segments which intersect with it — that is, all segments that end earlier than it.\nObviously, if the number of intersections are greater than $$$n-1$$$, then the answer is \"\nNO\n\". So as soon as we find $$$n$$$ intersections, we stop our algorithm.\nAfter that, it is necessary to check the connectivity of the resulting graph. You can use DFS or DSU to do this."
         },
         {
             "title": "Solution (Ne0n25)",

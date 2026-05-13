@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1729E - Guess the Cycle Size\nThe implication was that the solution works correctly with some high probability. So we tried to give such constraints so that the solution probability is very high.\nThe idea: we will output queries of the form $$$(1, n)$$$ and $$$(n, 1)$$$, gradually increasing $$$n$$$ from $$$2$$$. If we get an answer to query $$$-1$$$ the first time, then the size of the graph is exactly $$$n-1$$$.\nOtherwise, let the answer to the first query be $$$x$$$ and the answer to the second query be $$$y$$$.\nWith probability $$$\\frac{1}{2}, x \\neq y$$$. In this case, we can output the answer: $$$x+y$$$, since there are a total of two different paths from vertex $$$1$$$ to $$$n$$$ and we recognized them. Accordingly the total length of paths will be the size of the cyclic graph.\nBut with probability $$$\\frac{1}{2}, x = y$$$. In this case we must continue the algorithm. At most we can make $$$25$$$ of such attempts.\nLet's calculate the probability of finding the correct graph size: $$$p = 1 - (\\frac{1}{2})^{25}$$$. That is, we \"\nlucky\n\" on one test with probability $$$p \\approx 0.99999997$$$. But we should have \"\nlucky\n\" on $$$50$$$ tests. We get: $$$P = p^{50} \\approx 0.99999851$$$."
         },
         {
             "title": "Solution",

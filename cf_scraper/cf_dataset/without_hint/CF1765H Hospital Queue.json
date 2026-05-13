@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1765H - Hospital Queue\nLet's solve the problem separately for each patient.\nLet's assume that we are solving a problem for a patient with the number $$$s$$$. Let's iterate through the positions in the queue from the end, and the current position is $$$i$$$.\nWhy do we try to construct the queue from the end, and not from its beginning? This allows us to handle the constraint on $$$p_i$$$ for each patient easier. If we try to form the queue starting from the beginning, we have to be very careful with these constraints on $$$p_i$$$, since placing a patient on some position might make it impossible to continue the order, but it's very difficult to understand when it concerns us. On the other hand, if we go from the end to the beginning, each patient that we can place on the current position can be placed on any of the positions we consider later as well, so our actions won't \"break\" the correct order; any order we build while maintaining all of the constraints for its suffix is correct. That's why this problem is easier to solve if we construct the queue backwards.\nNow, all we need to do is try not to place patient $$$s$$$ as long as possible. So, we can maintain all patients we can place (such a patient $$$x$$$ that $$$x$$$ is not placed yet, $$$p_x \\ge i$$$ and there is no such patient $$$y$$$, that $$$x$$$ should be in the queue before $$$y$$$, but $$$y$$$ is not placed yet) now in any data structure, and when choosing who to place on each position, we delay placing patient $$$s$$$ as long as possible."
         },
         {
             "title": "Solution (Neon)",

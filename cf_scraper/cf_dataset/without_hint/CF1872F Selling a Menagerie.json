@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1872F - Selling a Menagerie\nSimple greedy observation: if at some point in time there exists an animal $$$i$$$ such that no one fears it (there is no index $$$a_j = i$$$), then it is optimal to sell that animal first.\nLet's iteratively sell such animals as long as they exist. After selling animal $$$i$$$, we must additionally check if animal $$$a_i$$$ has become such that no one fears it, and if so, add it to the list for sale.\nWhat will we get when we sell all such animals? Note that when there are no such animals left, $$$a_i$$$ will form a permutation, as each animal must be feared by at least one other animal.\nAs it is known, a permutation consists of cycles of the form $$$i \\to a_i \\to a_{a_i} \\to \\ldots \\to i$$$.\nObviously, for each cycle we must solve the problem independently, and then combine the answers in any order. Note that if we sell animals in the order of the cycle, we will only receive a single payment for the last animal sold.\nAt the same time, it is not possible to obtain double payment for all animals in any case: the last animal sold from the cycle will always be sold for a single payment.\nTherefore, it is optimal to sell all animals in the order of the cycle so that the animal with the minimum cost ends up being the last in this order.\nYou can see the implementation details in the code."
         },
         {
             "title": "Solution",

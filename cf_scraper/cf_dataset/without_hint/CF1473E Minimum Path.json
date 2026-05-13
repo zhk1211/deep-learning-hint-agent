@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1473E - Minimum Path\nLet's consider a problem where you can subtract the weight of any edge (not only the maximum one) that belong to the current path and similarly add the weight of any edge (not only the minimum one) that belong to the current path.\nTo solve that problem we can build a new graph where the node can be represented as the following triple (node from the initial graph, flag that some edge has been subtracted, flag that some edge has been added). Now we can run Dijkstra's algorithm to find the length of the shortest paths in such a graph.\nWe can notice that on the shortest path, the maximum weight edge was subtracted and the minimum weight edge was added. Let's assume that this is not the case, and an edge of non-maximum weight was subtracted from the path, then we can reduce the length of the path by choosing an edge of maximum weight. But this is not possible, because we considered the shortest path. Similarly, it is proved that the added edge was of minimal weight.\nUsing this fact, it is not difficult to notice that by solving the modified problem, we have solved the original one."
         },
         {
             "title": "Solution (Neon)",

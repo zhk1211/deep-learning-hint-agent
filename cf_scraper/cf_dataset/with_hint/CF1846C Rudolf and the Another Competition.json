@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1846C - Rudolf and the Another Competition\nFirst of all, it is necessary to determine the optimal order of solving problems for each participant. It is claimed that it is most optimal to solve problems in ascending order of their solution time. Let's prove this:\nFirstly, it is obvious that this strategy will allow solving the maximum number of problems.\nSecondly, this strategy will also result in the minimum total penalty time. Let's assume that the participant solves a total of $$$m$$$ problems. The solution time of the first problem will be added to the penalty time for all $$$m$$$ problems, the solution time of the second problem will be added to the penalty time for $$$m-1$$$ problems, and so on. Therefore, it is advantageous for the longest time to be added to the fewest number of problems. In other words, the problem with the longest solution time should be solved last. Then, the same reasoning is repeated for the remaining $$$m-1$$$ problems.\nNext, it is necessary to calculate the number of solved problems and the penalty time for each participant, based on the described strategy. To do this, sort the solution times of the problems for each participant and simulate the solving process. Finally, count the number of participants who outperform Rudolph in the results table. The overall time complexity is $$$O(n \\cdot m \\cdot \\log m)$$$."
         },
         {
             "title": "Solution",

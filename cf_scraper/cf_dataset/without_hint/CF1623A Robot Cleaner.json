@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1623A - Robot Cleaner\nLet's consider the 1-D problem of this problem: there are $$$n$$$ cells, lying in a row. The robot is at the $$$x$$$-th cell, and the dirty cell is at the $$$y$$$-th cell. Each second, the robot cleans the cell at its position. The robot initially moves by 1 cell to the right each second. If there is no cell in the movement direction, its direction will be reflected. What is the minimum time for the robot to clean the dirty cell?\nThere are two cases needed to be considered:\nIf $$$x \\le y$$$, then the answer is $$$y - x$$$. The robot just goes straight to the dirty cell.\nOtherwise, if $$$x  \\gt  y$$$, then the robot needs to go to the right endpoint first, and then go back to the dirty cell. Going to the right endpoint takes $$$n - x$$$ seconds, and going from that cell to the dirty cell takes $$$n - y$$$ seconds. Therefore, the answer for this case is $$$2 \\cdot n - x - y$$$.\nGoing back to our original problem, we can solve it by dividing it into two 1-D versions. This is done by projecting the position of the robot and the dirty cell onto the $$$Ox$$$ and $$$Oy$$$ axis as follows.\nBy doing so, we can see that we can clean the dirty cell, if and only if one of the projections of the robot can reach the dirty cell. Therefore, the answer is the minimum between the answers of the two sub-problems."
         }
     ]
 }

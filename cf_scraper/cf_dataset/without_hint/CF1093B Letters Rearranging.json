@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1093B - Letters Rearranging\nThe only case when the answer is\n-1\nis when all letters of the string are equal. Why is it so? Because if we have at least two different letters we can place the first one at the first position of the string and the second one at the last position of the string. Then it is clearly that the obtained string is\ngood\n. We can implement this solution by the following way: sort $$$s_i$$$ and if $$$s_{i, 1} = s_{i, |s_i|}$$$ (the first letter equals to the last one) then the answer is\n-1\notherwise the answer is $$$s_i$$$."
         },
         {
             "title": "Solution (Vovuh)",

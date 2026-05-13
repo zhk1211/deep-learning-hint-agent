@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1729G - Cut Substrings\nFirst, find all occurrences of $$$t$$$ in $$$s$$$ as substrings. This can be done using the prefix function.\nTo find the minimum number of times we need to cut substrings, consider all indexes of occurrences. Having considered the index of the occurrence, we cut out the rightmost occurrence that intersects with it. After that, we find the leftmost occurrence that does not intersect with the cut one. If it doesn't, we end the loop.\nThe number of optimal sequences of moves will be calculated using dynamic programming.\nFor each occurrence, we can count how many ways we can cut out all occurrences of $$$t$$$ in the suffix $$$s$$$ starting with this occurrence in the minimum number of moves. Considering the occurrence, we find the leftmost occurrence that does not intersect with it, and then iterate over the occurrences with which we can remove it."
         },
         {
             "title": "Solution",

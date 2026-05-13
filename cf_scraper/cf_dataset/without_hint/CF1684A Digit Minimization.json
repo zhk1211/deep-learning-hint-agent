@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1684A - Digit Minimization\nLet $$$k$$$ be the length of $$$n$$$. Let $$$n_i$$$ be the $$$i$$$-th digit of $$$n$$$ ($$$1$$$-indexation from the left).\n$$$k = 1$$$\nThe game ends immediately so the answer is $$$n$$$ itself.\n$$$k = 2$$$\nAlice should make the first move and she has to swap $$$n_1$$$ and $$$n_2$$$. After that Bob removes $$$n_1$$$ and in the end there is only $$$n_2$$$.\n$$$k \\ge 3$$$\nAlice can make swaps in such way that when there are only two digits left the second digit will be the maximal digit of $$$n$$$. Then she will make a swap and the maximal digit will be on the first position. The other one will be removed by Bob. This way she can always get the maximal digit of $$$n$$$ in the end of the game."
         },
         {
             "title": "Implementation",

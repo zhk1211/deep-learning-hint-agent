@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1788C - Matching Numbers\nLet's assume that $$$1$$$ to $$$2n$$$ is paired and each sum of pair is $$$k, k+1, \\cdots, k+n-1$$$. Sum from $$$1$$$ to $$$2n$$$ should equal to the sum of $$$k$$$ to $$$k+n-1$$$. So we obtain $$$n(2n+1)=\\frac{(2k+n-1)n}{2}$$$, which leads to $$$4n+2=2k+n-1$$$. Since $$$4n+2$$$ is even, $$$2k+n-1$$$ should be even. So if $$$n$$$ is even, we cannot find such pairing.\nIf $$$n$$$ is odd, there are various ways to make such pairing. Let $$$m=\\frac{n-1}{2}$$$. $$$(1, 3m+3), (2, 3m+4), \\ldots (m, 4m+2), (m+1, 2m+2), (m+2, 2m+3), \\ldots (2m+1, 3m+2)$$$ can be such pairing."
         }
     ]
 }

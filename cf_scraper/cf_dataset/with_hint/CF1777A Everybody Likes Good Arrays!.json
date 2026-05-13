@@ -30,7 +30,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1777A - Everybody Likes Good Arrays!\nSolution\nReplace even numbers with $$$0$$$ and odd numbers with $$$1$$$ in the array $$$a$$$. Now we observe that the given operation is equivalent to selecting two equal adjacent elements and deleting one of them.\nNow the array can be visualized as strips of zeros (in green) and ones (in red) like this $$$[\\color{green}{0,0,0},\\color{red}{1,1,1,1},\\color{green}{0},\\color{red}{1,1}]$$$. Note that since the number of adjacent elements ($$$a[i],a[i+1])$$$ such that $$$a[i] \\ne a[i+1]$$$ remains constant (nice invariant!), every strip can be handled independently. The size of every strip must be $$$1$$$ in the final array and performing an operation reduces the size of the corresponding strip by $$$1$$$.\nSo, for a strip of length $$$L$$$, it would require $$$L-1$$$ operations to reduce its size to $$$1$$$. So, every strip would contribute $$$-1$$$ to the number of operations apart from its length. So, the answer is ($$$n - $$$ total no. of strips) which also equals ($$$n - x - 1$$$) where x is number of adjacent elements ($$$a[i],a[i+1]$$$) such that ($$$a[i] \\ne a[i+1]$$$)."
         },
         {
             "title": "Implementation (C++)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1095C - Powers Of Two\nFirst of all, let's analyze how can we calculate the minimum number of powers of two needed to get $$$n$$$ as the sum. We can use binary representation of $$$n$$$: each bit in it, which is equal to $$$1$$$, becomes a summand in the answer.\nFirstly, if the number of summands is greater than $$$k$$$ then the answer is\nNO\n. Okay, what if we don't have enough summands? Every summand $$$x  \\gt  1$$$ can be broken down into two summands equal to $$$\\frac{x}{2}$$$. Let's maintain all summands greater than $$$1$$$ somewhere (stack, array, queue, multiset, anything you want), and pick an arbitrary summand and break it into two until we have exactly $$$k$$$ summands. If $$$n \\ge k$$$, then this process will terminate since we will have some summand to pick until all of them are equal to $$$1$$$."
         },
         {
             "title": "Solution",

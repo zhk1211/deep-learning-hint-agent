@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1698G - Long Binary String\nIgnore leading zeroes of $$$s$$$. We can add them back at the end.\nLet's view the string as a polynomial $$$P(x)$$$ in $$$\\mathrm{GF}(2)$$$. Then in an operation we can multiply $$$P(x)$$$ by any monomial $$$x^k$$$ for some $$$k$$$, so after some number of operations we can multiply $$$P(x)$$$ by some other polynomial $$$Q(x)$$$.\nAt the end, we have a string with two flipped bits. We can in fact make the first character equal to $$$1$$$ by finding the smallest $$$k$$$ such that $$$P(x)Q(x) = x^k + 1$$$. Such a $$$k$$$ exists, because the constant term of $$$P$$$ is $$$1$$$ and $$$Q$$$ is arbitrary. Rewrite this as $$$x^k \\equiv 1 \\pmod{P(x)}$$$. Now it's clear that the answer is a divisor of the order of $$$x$$$ in $$$P(x)$$$.\nWe can use polynomial factoring algorithms or baby-step-giant-step and meet in the middle. The time complexity is $$$\\mathcal{O}(2^{|s|/2} |s|^2)$$$ or $$$\\mathcal{O}(2^{|s|/2} |s|)$$$."
         },
         {
             "title": "Implementation (C++)",

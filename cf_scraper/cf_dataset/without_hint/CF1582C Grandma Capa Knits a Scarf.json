@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1582C - Grandma Capa Knits a Scarf\nLet's iterate over the letter that we will erase from the string (from 'a' to 'z'), and for each letter independently find the minimal number of erased symbols required to make the string a palindrome.\nLet's say we are currently considering a letter $$$c$$$. Let's use the two pointers method: we will maintain two pointers $$$l$$$, $$$r$$$, initially $$$l$$$ points at the beginning of the string, and $$$r$$$ points at the end of the string. Now we will form a palindrome: each time we will compare $$$s_l$$$ and $$$s_r$$$, if they are equal, then we can add both of them to the palindrome at corresponding positions and iterate to symbols $$$l+1$$$ and $$$r-1$$$. If $$$s_l \\neq s_r$$$, then we need to erase one of these symbols (otherwise, we won't get a palindrome), if $$$s_l=c$$$, let's erase it (we'll add to the number of erased symbols $$$1$$$ and iterate to $$$l+1$$$-th symbol), similarly, if $$$s_r=c$$$, we'll add to the number of the erased symbols $$$1$$$ and iterate to $$$r-1$$$-th symbol. And the last case, if $$$s_l \\neq c$$$ and $$$s_r \\neq c$$$, then it's impossible to get a palindrome from $$$s$$$ by erasing only letters equal to $$$c$$$.\nThe asymptotic behaviour of this solution is $$$O(|C| \\cdot n)$$$, where $$$|C|$$$ is the size of the alphabet, i.e. $$$26$$$."
         },
         {
             "title": "Solution (74TrAkToR)",

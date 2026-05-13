@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1437E - Make It Increasing\nFirst, let's solve the problem without blocked positions.\nLet's look at the array $$$b_i = a_i - i$$$. Obviously, if $$$a$$$ strictly increases, then $$$b$$$ does not decrease, and vice versa. Now we have to find the maximum number of positions in the $$$b$$$ array that can be left unchanged. And you can always choose an integer that will not break the non-decreasing array $$$b$$$ for the rest of positions. This problem can be solved in $$$O(n \\log{n})$$$ by analogy with the largest increasing subsequence, but now you can take equal elements.\nNow you can realize that the segments between two blocked positions do not depend on each other, and the initial problem can be solved as the problem described above. All that remains is to check that all blocked positions do not break the strict array increment."
         },
         {
             "title": "Solution (Ne0n25)",

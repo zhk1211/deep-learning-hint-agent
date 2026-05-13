@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1866C - Completely Searching for Inversions\nNote that during the entire process, each time we do\ndfs(x)\nfor the same value of $$$x$$$, the sequence of values appended to the end of $$$Z$$$ is always the same. So, for each vertex $$$x$$$, we want to obtain some properties about the sequence of values that will be appended if we do\ndfs(x)\n. Since we want to calculate the number of inversions in a sequence of $$$0$$$ and $$$1$$$ elements, for each $$$x$$$, we want to calculate:\n$$$f_0[x]$$$: the number of $$$0$$$ elements appended.\n$$$f_1[x]$$$: the number of $$$1$$$ elements appended.\n$$$\\text{inv}[x]$$$: the number of inversions completely within the sequence appended.\nThen, we can solve the problem using dynamic programming on directed acyclic graph. For a vertex $$$x$$$, we iterate each vertex $$$y$$$ that it is directed towards (following the order given in the input). If the integer in the current edge is $$$w$$$, then we temporarily add $$$f_w[y]$$$ by $$$1$$$ and if $$$w=1$$$, then we temporarily add $$$\\text{inv}[y]$$$ by $$$f_0[y]$$$. Then, we do the following transitions:\nAdd $$$\\text{inv}[x]$$$ by $$$\\text{inv}[y]+f_1(x)\\times f_0(y)$$$.\nAdd $$$f_0[x]$$$ by $$$f_0[y]$$$.\nAdd $$$f_1[x]$$$ by $$$f_1[y]$$$.\nThe answer is $$$\\text{inv}[1]$$$.\nTime complexity: $$$O(N+\\sum S)$$$"
         }
     ]
 }

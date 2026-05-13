@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1764E - Doremy's Number Line\nFirst if $$$k$$$ can be colored with certain color, then any $$$K \\lt k$$$ can also be colored the this color. So we only need to calculate what is the biggest number color $$$1$$$ can be. Apparently this value will not exceed $$$x_1+y_1$$$.\nIf $$$x_1$$$ is not maximum among all $$$x$$$, you can pick any $$$j$$$ such that $$$x_j\\ge x_1$$$. Color point $$$x_1$$$ with color $$$j$$$, then color point $$$x_1+y_1$$$ with color $$$1$$$. So $$$x_1+y_1$$$ is the answer in this case.\nIf $$$x_1$$$ is maximum, just enumerate which color precedes color $$$1$$$.\nNo color precedes. Directly color $$$x_1$$$ with color $$$1$$$.\nColor $$$j$$$ precedes, but $$$x_j$$$ is not maximum among $$$x_2,x_3,\\cdots,x_n$$$. In this case, point $$$x_j+y_j$$$ can always be colored with color $$$j$$$. Point $$$\\min\\{x_j+y_j,x_1\\}+y_1$$$ can be colored with color $$$1$$$.\nColor $$$j$$$ precedes, meanwhile $$$x_j$$$ is maximum among $$$x_2,x_3,\\cdots,x_n$$$. In this case, we can just enumerate which color precedes color $$$j$$$, which leads to a recursion, until there is only one color remaining.\nTime complexity is $$$O(n \\log n)$$$ due to sorting."
         }
     ]
 }

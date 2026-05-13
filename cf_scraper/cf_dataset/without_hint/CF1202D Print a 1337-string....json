@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1202D - Print a 1337-string...\nLet's consider the following string $$$1333 \\dots 3337$$$. If digit $$$3$$$ occurs $$$x$$$ times in it, then string have $$$\\frac{x (x-1)}{2}$$$ subsequences $$$1337$$$.\nLet's increase the number of digits $$$3$$$ in this string while condition $$$\\frac{x (x-1)}{2} \\le n$$$ holds ($$$x$$$ is the number of digits $$$3$$$ in this string). The length of this string will not exceed $$$45000$$$ because $$$\\frac{45000 (45000-1)}{2}  \\gt  10^9$$$. The value $$$rem = n - \\frac{x (x-1)}{2}$$$ will not exceed $$$45000$$$ as well.\nAll we have to do is increase the number of subsequences $$$1337$$$ in the current string by $$$rem$$$. So if we add $$$rem$$$ digits $$$7$$$ after the first two digits $$$3$$$ we increase the number of subsequences $$$1337$$$ by $$$rem$$$. The string $$$s$$$ will look like this: $$$133{77 \\dots 77}{33 \\dots 33}7$$$, where sequence $$${77\\dots77}$$$ consists of exactly $$$rem$$$ digits $$$7$$$ and sequence $$${33\\dots33}$$$ consists of exactly $$$x-2$$$ digits $$$3$$$."
         },
         {
             "title": "Solution (Roms)",

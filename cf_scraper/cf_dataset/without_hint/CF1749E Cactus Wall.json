@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1749E - Cactus Wall\nIn order to block any path from the top row to the bottom row, you have to build a path from the left side to the right side consisting of\n'#'\n. Since two consecutive cacti in a path cannot be placed side by side, they should be placed diagonally (i.e $$$(x, y)$$$ should be followed by $$$(x \\pm 1, y \\pm 1)$$$ on the path). So we can rephrase the task as a shortest path problem. The edge weight is $$$0$$$ if cactus is already in the cell that corresponds to the end of the edge, and $$$1$$$ otherwise. Don't forget that some cells can't contain a cactus, thus be part of a path, because of the cacti initially placed. The shortest path can be found using Dijkstra's or 0-1 BFS algorithm."
         },
         {
             "title": "Solution (Neon)",

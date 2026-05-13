@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1327F - AND Segments\nWe will solve the problem for each bit separately, and then multiply the results.\nObviously, if the position is covered by a segment with the value $$$1$$$, then we have no choice, and we must put $$$1$$$ there. For segments with the value $$$0$$$, there must be at least one position that they cover and its value is $$$0$$$.\nSo we can write the following dynamic programming: $$$dp_i$$$ — the number of arrays such that the last $$$0$$$ was exactly at the position $$$i$$$, and all $$$0$$$-segments to the left of it contain at least one zero.\nIt remains to determine which states $$$j$$$ we can update from. The only restriction we have is that there should not be any segment $$$(l, r)$$$ with the value $$$0$$$, such that $$$j  \\lt  l$$$ and $$$r  \\lt  i$$$. Since in this case, this segment will not contain any zero values. For each position $$$i$$$, we may precalculate the rightmost position $$$f_i$$$ where some segment ending before $$$i$$$ begins, and while calculating $$$dp_i$$$, we should sum up only the values starting from position $$$f_i$$$. This can be done with prefix sums."
         },
         {
             "title": "Solution (Ne0n25)",

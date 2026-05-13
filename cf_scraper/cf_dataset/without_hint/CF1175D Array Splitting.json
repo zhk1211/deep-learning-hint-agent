@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1175D - Array Splitting\nLet's denote $$$S(k)$$$ as $$$\\sum\\limits_{i = k}^{n}{a_i}$$$ (just a suffix sum). And let $$$p_i$$$ be the position where starts the $$$i$$$-th subarray (obviously, $$$p_1 = 1$$$ and $$$p_i  \\lt  p_{i + 1}$$$). Then we can make an interesting transformation: $$$$$$\\sum_{i=1}^{n}{a_i \\cdot f(i)} = 1 \\cdot (S(p_1) - S(p_2)) + 2 \\cdot (S(p_2) - S(p_3)) + \\dots + k \\cdot (S(p_k) - 0) = \\\\ = S(p_1) + (2 - 1) S(p_2) + (3 - 2) S(p_3) + \\dots + (k - (k - 1))) S(p_k) = \\\\ = S(p_1) + S(p_2) + S(p_3) + \\dots + S(p_k).$$$$$$ So, our task is equivalent to choosing sum of all array $$$S(1)$$$ and $$$k - 1$$$ different suffix sums. And we want to maximize their total sum.\nThat's why we can just greedily take $$$k - 1$$$ maximum suffix sums along with sum of all array."
         },
         {
             "title": "Solution (Roms)",

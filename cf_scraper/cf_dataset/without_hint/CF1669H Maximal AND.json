@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1669H - Maximal AND\nThe optimal strategy is to greedily take the highest bit we have enough operations to set in every array element. To do this, we maintain a count for each bit with the number of elements that have it set already. The cost to set the $$$i$$$-th bit will be $$$n-\\mathrm{count}_i$$$.\nWe go from the highest bit to the lowest:\nIf we have enough operations left, we set the bit, subtract its cost from the operations and move to the next lower bit.\nIf we don't have enough operations, we move on to the next lower bit and don't modify the operations.\nWe stop once we processed bit $$$0$$$.\nThe time complexity is $$$\\mathcal{O}(n \\log a_i)$$$."
         },
         {
             "title": "Solution",

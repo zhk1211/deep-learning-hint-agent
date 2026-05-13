@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1660D - Maximum Product Strikes Back\nFirst, we can always get a product value equal to $$$1$$$ if we remove all elements of the array. Then we need to know what maximal\npositive\nvalue of the product we can get. Consequently, the remaining array (after removing the corresponding prefix and suffix) should have no $$$0$$$ elements. We can find maxima in all sections between zeros. Now we are left with a set of nonzero numbers. If the value of the product on the current segment is positive, it makes no sense to remove any more elements. Otherwise, the product is negative, then we must remove one negative number from the product (either to the left or to the right). Compare the values of the product on the prefix and suffix to the nearest negative value, and remove either the suffix or the prefix, respectively."
         },
         {
             "title": "Solution",

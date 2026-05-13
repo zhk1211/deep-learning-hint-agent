@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1307B - Cow and Friend\nIf the distance $$$d$$$ is in the set, the answer is $$$1$$$.\nOtherwise, let $$$y$$$ denote Rabbit's largest favorite number. The answer is $$$max(2,\\lceil \\frac{d}{y}\\rceil)$$$. This is true because clearly the answer is at least $$$\\lceil\\frac{d}{y}\\rceil$$$: if it were less Rabbit can't even reach distance $$$d$$$ away from the origin. If $$$\\lceil\\frac{d}{y}\\rceil$$$ is at least $$$2$$$, we can reach $$$(d,0)$$$ in exactly that number of hops by hopping to the right $$$\\lceil\\frac{d}{y}\\rceil-2$$$ times using $$$y$$$ then using the last $$$2$$$ hops for up to $$$2y$$$ additional distance.\nTime Complexity: $$$O(n)$$$"
         },
         {
             "title": "Solution",

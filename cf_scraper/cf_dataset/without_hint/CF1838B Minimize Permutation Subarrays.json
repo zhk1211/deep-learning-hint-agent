@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1838B - Minimize Permutation Subarrays\nLet $$$\\mathrm{idx}_x$$$ be the position of the element $$$x$$$ in $$$p$$$, and consider what happens if $$$\\mathrm{idx}_n$$$ is in between $$$\\mathrm{idx}_1$$$ and $$$\\mathrm{idx}_2$$$. Notice that any subarray of size greater than $$$1$$$ that is a permutation must contain $$$\\mathrm{idx}_1$$$ and $$$\\mathrm{idx}_2$$$. So it must also contain every index in between, including $$$\\mathrm{idx}_n$$$. Therefore, $$$n$$$ is an element of the permutation subarray, so it must be of size at least $$$n$$$, and therefore must be the whole array.\nTherefore, if $$$\\mathrm{idx}_n$$$ is in between $$$\\mathrm{idx}_1$$$ and $$$\\mathrm{idx}_2$$$, the only subarrays that are permutations are $$$[\\mathrm{idx}_1, \\mathrm{idx}_1]$$$ and $$$[1, n]$$$. These two subarrays will always be permutations, so this is minimal.\nTo achieve this, we have 3 cases:\nIf $$$\\mathrm{idx}_n$$$ lies in between $$$\\mathrm{idx}_1$$$ and $$$\\mathrm{idx}_2$$$, swap $$$\\mathrm{idx}_1$$$ and $$$\\mathrm{idx}_2$$$.\nIf $$$\\mathrm{idx}_n  \\lt  \\mathrm{idx}_1, \\mathrm{idx}_2$$$, swap $$$\\mathrm{idx}_n$$$ with the smaller of $$$\\mathrm{idx}_1$$$, $$$\\mathrm{idx}_2$$$.\nIf $$$\\mathrm{idx}_n  \\gt  \\mathrm{idx}_1, \\mathrm{idx}_2$$$, swap $$$\\mathrm{idx}_n$$$ with the larger of $$$\\mathrm{idx}_1$$$, $$$\\mathrm{idx}_2$$$.\nIn all three of these cases, after the swap, $$$\\mathrm{idx}_n$$$ will lie in between $$$\\mathrm{idx}_1$$$ and $$$\\mathrm{idx}_2$$$, minimizing the number of permutation subarrays.\nComplexity: $$$O(n)$$$"
         }
     ]
 }

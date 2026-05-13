@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1051C - Vasya and Multisets\nWrite down all the numbers, which appear exactly once, let there be $$$k$$$ of them. If $$$k$$$ is even, put the first $$$\\frac{k}{2}$$$ of them into the first multiset and put the other $$$\\frac{k}{2}$$$ into the second multiset. All the other numbers (which appear more than once) also go into the first multiset. The only nice numbers will be the initial $$$k$$$, thus the answer is valid.\nIf $$$k$$$ is odd and there is no number to appear more than twice, then the answer is \"\nNO\n\", as all the numbers to appear exactly twice don't change the difference of the amounts of the nice numbers at all. If there is a number to appear more than twice (let it be $$$x$$$), then let's firstly add $$$\\lceil \\frac{k}{2} \\rceil$$$ of the numbers to appear exactly once to the first multiset, add $$$\\lfloor \\frac{k}{2} \\rfloor$$$ others of them to the second multiset. Then the first occurrence of $$$x$$$ goes to the second multiset and all the other numbers go to the first multiset. It's easy to notice that multisets will contain equal number of the nice numbers after all the partitioning."
         },
         {
             "title": "Solution (Ajosteen)",

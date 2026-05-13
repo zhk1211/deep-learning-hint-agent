@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1260A - Heating\nLet's denote the number of sections in the $$$i$$$-th radiator as $$$x_i$$$. Let's prove that in the optimal answer $$$\\max(x_i) - \\min(x_i)  \\lt  2$$$. Proof by contradiction: suppose we have $$$x$$$ and $$$y \\ge x + 2$$$ in the answer, let's move $$$1$$$ from $$$y$$$ to $$$x$$$ and check: $$$$$$(x + 1)^2 + (y - 1)^2 = x^2 + 2x + 1 + y^2 - 2y + 1 = (x^2 + y^2) + 2(x - y + 1)  \\lt  x^2 + y^2$$$$$$ The answer is not optimal — contradiction.\nFinally, there is the only way to take $$$x_1 + x_2 + \\dots + x_c = sum$$$ with $$$\\max(x_i) - \\min(x_i) \\le 1$$$. And it's to take $$$(sum \\mod c)$$$ elements with value $$$\\left\\lfloor \\frac{sum}{c} \\right\\rfloor + 1$$$ and $$$c - (sum \\mod c)$$$ elements with $$$\\left\\lfloor \\frac{sum}{c} \\right\\rfloor$$$."
         },
         {
             "title": "Solution (adedalic)",

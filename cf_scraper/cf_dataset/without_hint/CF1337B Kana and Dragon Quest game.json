@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1337B - Kana and Dragon Quest game\nFirst, it's better not to cast\nVoid Absorptions\nafter a\nLightning Strike\n.\nOtherwise, there will be a\nVoid Absorption\nright after a\nLightning Strike\n. Supposing the hit point was $$$x$$$ before casting these two spells, if you cast\nLightning Strike\nfirst, after these two spells the hit point will be $$$\\left\\lfloor \\frac{x-10}{2} \\right\\rfloor +10 = \\left\\lfloor \\frac{x}{2} \\right\\rfloor + 5$$$, but if you cast\nVoid Absorption\nfirst, after these two spells the hit point will be $$$\\left\\lfloor \\frac{x}{2} \\right\\rfloor$$$, which is smaller.\nSo the solution is to cast\nVoid Absorptions\nuntil the dragon's hit point won't decrease with more casts or you can't cast more\nVoid Absorptions\n, then cast all\nLightning Strikes\nyou have.\nWe can also use DP to solve this problem. Let $$$f_{i,j,k} = 0/1$$$ be possibility of defeating the dragon when the dragon's hit point is at $$$i$$$, you can cast $$$j$$$ more\nVoid Absorptions\nand $$$k$$$ more\nLightning Strikes\n. This is a slow solution but is enough to get accepted. You may have to use boolean arrays instead of integer arrays to save memory."
         },
         {
             "title": "Solution by EternalAlexander",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1650B - DIV + MOD\nConsider $$$f_a(r)$$$. Note that $$$\\left\\lfloor\\frac{r}{a}\\right\\rfloor$$$ is maximal over the entire segment from $$$l$$$ to $$$r$$$, so if there is $$$x$$$ in which $$$f_a$$$ gives a greater result, then $$$x \\bmod a  \\gt  r\\bmod a$$$.\nNote that numbers from $$$r - r \\bmod a$$$ to $$$r$$$ that have an incomplete quotient when divided by $$$a$$$ equal to $$$\\left\\lfloor\\frac{r}{a}\\right\\rfloor$$$ do not fit this condition (and are guaranteed to have a value $$$f_a$$$ less than $$$f_a(r)$$$). And the number $$$x = r - r \\bmod a - 1$$$:\nHas the maximum possible remainder $$$x \\bmod a = a - 1$$$;\nHas the maximum possible $$$\\left\\lfloor\\frac{r}{a}\\right\\rfloor$$$ among numbers less than $$$r - r\\bmod a$$$.\nSo there are two candidates for the answer — these are $$$r$$$ and $$$r - r \\bmod a - 1$$$. The second candidate is suitable only if it is at least $$$l$$$. It remains only to compare the values of $$$f_a$$$ and select the maximum."
         },
         {
             "title": "Solution",

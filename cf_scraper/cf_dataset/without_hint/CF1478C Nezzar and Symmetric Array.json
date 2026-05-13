@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1478C - Nezzar и симметричный массив\nWLOG, we may assume that $$$0  \\lt  a_1  \\lt  a_2  \\lt  \\ldots  \\lt  a_n$$$, and $$$a_{i+n}=-a_i$$$ for each $$$1 \\le i \\le n$$$.\nLet's sort array $$$d$$$ firstly. It can be observed that the array $$$d$$$ satisfied the following property:\n$$$d_{2i-1}=d_{2i}$$$ for each $$$1 \\le i \\le n$$$;\n$$$d_{2i} \\neq d_{2i+2}$$$ for each $$$1 \\le i  \\lt  n$$$.\n$$$d_{2i}$$$ must be generated for index $$$i$$$ or $$$i+n$$$.\nMore importantly, we have the following relation: $$$$$$d_{2n}-d_{2n-2}=\\sum_{i=1}^{n} (a_n-a_i)+\\sum_{i=1}^n (a_n+a_i) - \\sum_{i=1}^n|a_{n-1}-a_i| - \\sum_{i=1}^n (a_{n-1}+a_i) = (2n-2)(a_n-a_{n-1})$$$$$$\nAnd observe that $$$|a_i-a_n|+|a_i+a_n|=2a_n$$$ is a constant independent of index $$$1 \\le i\\le n$$$. Therefore, we may remove $$$a_n$$$ and $$$-a_n$$$ by subtracting some constant for $$$d_i$$$ for all $$$1 \\le i \\le 2(n-1)$$$, indicating that we will calculate $$$a_{i+1}-a_{i}$$$ for all $$$1 \\le i  \\lt  n$$$, which can be done in $$$O(n)$$$.\nLastly, we should determine if there exists an postivie integer $$$a_1$$$ which generates $$$d_1$$$, which can be done in $$$O(n)$$$."
         },
         {
             "title": "Solution",

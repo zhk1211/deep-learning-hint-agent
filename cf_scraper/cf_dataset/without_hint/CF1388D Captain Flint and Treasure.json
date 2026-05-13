@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1388D - Captain Flint and Treasure\nLet's construct a graph $$$G$$$ with $$$n$$$ vertices and directed edges $$$(i; b_i)$$$.\nNote that it is not profitable to process the vertex $$$i$$$ if the vertices $$$j$$$, for which $$$b_j=i$$$, have not yet been processed, since it is possible to process these vertices $$$j$$$ so that they will not decrease $$$a_i$$$.\nWe will do the following operation $$$n$$$ times:\nChoose a vertex $$$V$$$ which does not contain any edge (there is always such a vertex due to an additional condition in the problem). Let's process it as follows:\nif $$$a_V \\gt  0$$$, then apply the operation from the condition to this vertex. This is beneficial because if $$$b_v \\neq -1 $$$ then we will improve the value of $$$a_{b_V}$$$.\nif $$$a_V \\le 0$$$, then the value of $$$a_{b_V}$$$ will not improve, which means that it is profitable to apply the operation to the vertex $$$V$$$ after $$$b_V$$$ (if $$$b_V \\neq -1$$$).\nLet's remember when to process the $$$V$$$ vertex and then remove it from the graph.\nLet's store two containers $$$now$$$ and $$$after$$$. In $$$now$$$ we store the order of processing of vertices for which $$$a_V \\gt 0$$$. In $$$after$$$ - for which $$$a_V \\le 0$$$. Then let's notice that the order $$$now + reverse (after)$$$ is appropriate to achieve the maximum answer.\nTotal $$$O(n)$$$ or $$$O(n \\cdot log(n))$$$ depending on the implementation."
         },
         {
             "title": "Solution (Denisov)",

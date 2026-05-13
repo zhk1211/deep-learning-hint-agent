@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1256F - Equalizing Two Strings\nThe necessary condition to make strings equal is that the number of occurrences of each character should be the same in both strings. Let's show that if some character appears more than once, we always can make strings equal. How? Let's sort the first string by swapping adjacent characters (and it does not matter what do we do in the second string). Then let's sort the second string also by swapping adjacent characters but choose the pair of adjacent equal characters in the first string (it always exists because the first string is already sorted).\nOtherwise, all characters in both strings are distinct and they lengths are at most $$$26$$$. Then the answer is\nYES\nif the parity of the number of inversions (the number inversions in the array $$$a$$$ is the number of such pairs of indices $$$i, j$$$ that $$$i  \\lt  j$$$ but $$$a_i  \\gt  a_j$$$) are the same. It can be proven in the following way: every swap of two adjacent elements changes the parity of the number of inversions.\nTime complexity: $$$O(max(n, AL^2))$$$."
         },
         {
             "title": "Solution",

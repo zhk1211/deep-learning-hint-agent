@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1221D - Make The Fence Great Again\nLet's notice that in optimal answer all boards will be increased by no more than two. It is true because if it is beneficial to increase the length of some board by three or more (denote its length as $$$len$$$) then increasing to the length $$$len - 1$$$, $$$len - 2$$$ or $$$len - 3$$$ is cheaper and one of these boards is not equal to any of its adjacent boards.\nNoticing this, we can write a solution based on dynamic programming. Let's $$$dp_{pos, add}$$$ is minimum amount of money for making fence $$$a_1, a_2, \\dots , a_{pos}$$$ great, moreover the last board(with index $$$pos$$$) we increase by $$$add$$$.\nThen value $$$dp_{pos, add}$$$ can be calculated as follows:\n$$$dp_{pos, add} = add \\cdot b_{pos} + \\min\\limits_{x=0 \\dots 2, a_{pos-1}+x \\neq a_{pos}+add} dp_{pos-1, x}$$$"
         },
         {
             "title": "Solution (Roms)",

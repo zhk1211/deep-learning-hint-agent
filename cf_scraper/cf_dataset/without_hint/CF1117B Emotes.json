@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1117B - Emotes\nIt is obvious that we always can use only two emotes with maximum $$$a_i$$$. Let their values be $$$x$$$ and $$$y$$$ ($$$x \\ge y$$$).\nWe have to solve the problem by some formula. The best way to use emotes — use the emote with the value $$$x$$$ $$$k$$$ times, then use the emotion with the value $$$y$$$, then again use the emote with value $$$x$$$ $$$k$$$ times, and so on.\nSo the \"\ncycle\n\" has length $$$k+1$$$, and we can use the emote with the value $$$x$$$ the remaining number of times. So the answer is $$$\\lfloor\\frac{m}{k+1}\\rfloor \\cdot (x \\cdot k + y) + (m \\% (k + 1)) \\cdot x$$$, where $$$x$$$ is the first maximum of $$$a$$$, $$$y$$$ is the second maximum of $$$a$$$, $$$\\lfloor\\frac{p}{q}\\rfloor$$$ is $$$p$$$ divided by $$$q$$$ rounded down, and $$$p \\% q$$$ is $$$p$$$ modulo $$$q$$$."
         },
         {
             "title": "Solution (Vovuh)",

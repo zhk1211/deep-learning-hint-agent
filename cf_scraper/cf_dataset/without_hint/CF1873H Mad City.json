@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1873H - Mad City\nBecause we have a tree with an additional edge, our graph has exactly one cycle.\nIf Marcel and Valeriu share the same starting building then the answer is\n\"NO\"\n.\nIf we do a depth-first search from Valeriu's node, when we encounter an already visited node that is not the current node's parent, the node is part of the cycle. Moreover, it's the node where Valeriu enters the cycle.\nValeriu can escape Marcel forever if and only if he reaches this node before Marcel can. This is because if Valeriu is in a cycle then he always has $$$2$$$ choices of buildings where he would run that still keep him in the cycle. Marcel can only be in one building at any given time and Valeriu knows Marcel's next move, which means Valeriu can always escape him.\nSo it just remains to check with a breadth-first search or a depth-first search if Marcel arrives at Valeriu's entry node after Valeriu."
         },
         {
             "title": "Solution",

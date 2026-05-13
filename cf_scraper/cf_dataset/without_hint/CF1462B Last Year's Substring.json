@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1462B - Last Year's Substring\nLet's see how the deleted substring $$$t$$$ should look so that after deleting it, the string $$$s$$$ turns into the string \"\n2020\n\". The length of the string $$$t$$$ must be $$$n - 4$$$. Then we can iterate over all substrings of the string $$$s$$$ of length $$$n - 4$$$ (there are no more than five such substrings) and look at the string obtained after deleting the substring.\nThat is, we need to check that one of the following character sequence matches the $$$(2, 0, 2, 0)$$$:\n$$$(s[1], s[2], s[3], s[4])$$$;\n$$$(s[1], s[2], s[3], s[n])$$$;\n$$$(s[1], s[2], s[n - 1], s[n])$$$;\n$$$(s[1], s[n - 2], s[n - 1], s[n])$$$;\n$$$(s[n - 3], s[n - 2], s[n - 1], s[n])$$$;"
         },
         {
             "title": "Solution",

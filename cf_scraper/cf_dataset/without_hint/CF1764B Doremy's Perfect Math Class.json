@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1764B - Doremy's Perfect Math Class\nFor any two natural numbers $$$x,y$$$ , assign $$$|x-y|$$$ to the bigger number. Repeat this process until the smaller number becomes $$$0$$$, and then the bigger number will become $$$\\gcd(x,y)$$$.\nSo we can know that if $$$x,y\\in S$$$, then it is guaranteed that $$$\\gcd(x,y)\\in S$$$. So $$$\\gcd(a_1,a_2,\\dots,a_n)\\in S$$$.\nLet $$$t=\\gcd(a_1,a_2,\\dots,a_n),A=\\max(a_1,a_2,\\dots,a_n)=Kt$$$, then $$$t,A\\in S$$$. So $$$t,2t,\\dots,Kt\\in S$$$.\nBecause $$$|x-y|\\le \\max(x,y)$$$, any number bigger than $$$A$$$ will not be in $$$S$$$. Because $$$|xt-yt|=|x-y|t$$$, any number which is not divisible by $$$t$$$ will not be in $$$S$$$. And $$$0\\not\\in S$$$. So $$$t,2t,\\dots,Kt$$$ are all the numbers that can be in $$$S$$$."
         }
     ]
 }

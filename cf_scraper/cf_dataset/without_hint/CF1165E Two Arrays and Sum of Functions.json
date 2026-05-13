@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1165E - Two Arrays and Sum of Functions\nLet's use\ncontribution to the sum\ntechnique to solve this problem. How many times the value $$$a_i \\cdot b_i$$$ will occur in the answer? It will occur $$$i \\cdot (n - i + 1)$$$ times. Okay, now we can see that for each position $$$i$$$ we have the value $$$a_i \\cdot b_i \\cdot i \\cdot (n - i + 1)$$$. The only non-constant value there is $$$b_i$$$. So let $$$val_i = a_i \\cdot i \\cdot (n - i + 1)$$$.\nNote that you cannot take this value modulo 998244353 here because then you can't compare these values correctly\n. We should pair the minimum $$$b_i$$$ with the maximum $$$val_i$$$, the second minimum with the second maximum and so on. So, let's sort the array $$$val$$$ and the array $$$b$$$, reverse the array $$$b$$$ and calculate the sum of values $$$val_i \\cdot b_i$$$ (don't forget about modulo here!)."
         },
         {
             "title": "Solution",

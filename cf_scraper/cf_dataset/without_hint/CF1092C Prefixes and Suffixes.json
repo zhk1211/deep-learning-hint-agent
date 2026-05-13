@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1092C - Prefixes and Suffixes\nThe first observation: if we will take two strings of length $$$n-1$$$ then we\nalmost\ncan restore the initial string. Why\nalmost\n? Because there are two possible options: when the first string of length $$$n-1$$$ is a prefix and the second one is the suffix and vice versa.\nLet's write a function\ncheck(pref, suf)\nwhich will check if the first string can be the prefix of the guessed string and the second one can be the suffix. After we write this function, we can run it two times (depending on the order of strings of length $$$n-1$$$) and find any suitable answer.\nIf the first string ($$$pref$$$) is the prefix and the second one ($$$suf$$$) is the suffix then the whole string $$$s = pref + suf_{n - 2}$$$ ($$$0$$$-indexed) where '\n+\n' is the concatenation of strings. Let's check if we have all prefixes and suffixes of this string in the input. We can easy do it with two nested loops and some boolean array which can say us if some string is already used or not. Firstly, let's iterate over the length of the prefix or suffix and inside let's find any string from the input matching to the current prefix or suffix. If we find all $$$2n - 2$$$ strings then the current string is one of the guessed and we can print the answer."
         },
         {
             "title": "Solution",

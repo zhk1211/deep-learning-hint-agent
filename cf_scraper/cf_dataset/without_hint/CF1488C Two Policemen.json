@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1488C - Two Policemen\nThe only thing required to solve the problem is to notice that paths of two policemen in the optimal answer can be non-intersecting.\nUsing this, we can iterate over the length of the prefix the leftmost policeman will visit (let it be $$$i \\in [x; y)$$$) and calculate the minimum total time to visit all cells in this prefix: $$$i - 1 + min(x - 1, i - x)$$$ (at least $$$i-1$$$ step is required to visit all $$$i$$$ cells and the additional $$$min(x - 1, i - x)$$$ steps are required to get to the border of our prefix).\nUsing similar formulas, we can calculate the time for the rightmost policeman and the corresponding suffix. And then just update the answer as a maximum of these two values.\nTime complexity: $$$O(n)$$$."
         }
     ]
 }

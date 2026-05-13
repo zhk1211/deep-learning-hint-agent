@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1706D1 - Chopping Carrots (Easy Version)\nLet's iterate over integers $$$v = 0, 1, \\ldots, a_1$$$. We'll construct an answer assuming that the minimum value of $$$\\lfloor \\frac{a_i}{p_i} \\rfloor$$$ is at least $$$v$$$.\nFor all $$$1 \\le i \\le n$$$, we set $$$p_i = \\min(k, \\lfloor \\frac{a_i}{v} \\rfloor)$$$: the maximum value $$$p_i$$$ such that $$$1 \\le p_i \\le k$$$ and $$$v \\le \\lfloor \\frac{a_i}{p_i} \\rfloor$$$ (if $$$v = 0$$$ we can just set $$$p_i = k$$$)).\nNow, we find the value of $$$\\max\\limits_{1 \\le i \\le n}(\\lfloor\\frac{a_i}{p_i}\\rfloor ) - v$$$. This gives the answer when the minimum value of $$$\\lfloor \\frac{a_i}{p_i} \\rfloor$$$ is $$$v$$$.\nFinally, we compute this for all $$$0 \\le v \\le a_1$$$. This gives a $$$\\mathcal{O}(n \\cdot a_1)$$$ time solution per test case."
         }
     ]
 }

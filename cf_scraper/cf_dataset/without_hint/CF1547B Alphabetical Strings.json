@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1547B - Alphabetical Strings\nFor a start, let's find the position of the letter '\na\n' in string $$$s$$$. If this position does not exist, then the answer would be '\nNO\n'. Suppose that this position exists and equals $$$\\text{pos}_a$$$. Let's create two pointers $$$L$$$ and $$$R$$$. Initially $$$L := \\text{pos}_a,~R := L$$$. We will try to build string $$$s$$$ using the algorithm from the statement. Suppose that we have built substring $$$s[L..R]$$$ in $$$i$$$ iterations. Consider the next letter of the Latin alphabet $$$c_i$$$. Let's look at cases:\nfind position $$$pos$$$ of the letter $$$c_i$$$ in $$$s$$$ (if it does not exist then '\nNO\n');\nif $$$pos = L - 1$$$ then make an assignment $$$L := L - 1$$$ and process the next letter $$$c_i$$$;\nif $$$pos = R + 1$$$ then make an assignment $$$R := R + 1$$$ and process the next letter $$$c_i$$$;\notherwise string $$$s$$$ is not alphabetical and the answer is '\nNO\n'.\nSo, if we have built the string in $$$n$$$ iteration, then string $$$s$$$ is alphabetical and the answer is '\nYES\n'."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1737A - Ela Sorting Books\nWe'll iterate through compartments from $$$1$$$ to $$$K$$$. we'll try to put 1\n'a'\nbook in it, so the MEX in that compartment will not be\n'a'\n. If any compartment can't be filled by\n'a'\nbecause we ran out of\n'a'\n, the MEX of that compartment will have to be\n'a'\n.\nThe same logic applies to\n'b'\n,\n'c'\n,\n'd'\n, ..., where for each compartment from $$$1$$$, if the MEX of that compartment hasn't been determined, we'll fill the corresponding letter there.\nWe'll stop when reaching the end of the alphabet, or we've reached the ($$$\\frac{N}{K}$$$)-th letter in the alphabet (because the first compartment is already full)."
         },
         {
             "title": "Solution snippet ( low_ C++)",

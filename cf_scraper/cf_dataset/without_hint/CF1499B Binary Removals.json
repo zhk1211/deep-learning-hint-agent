@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1499B - Binary Removals\nThere are several different ways to solve this problem. In my opinion, the two easiest solutions are:\nnotice that, in the sorted string, there is a prefix of zeroes and a suffix of ones. It means that we can iterate on the prefix (from which we remove all ones), and remove all zeroes from the suffix we obtain. If we try to remove two adjacent characters, then we cannot use this prefix;\nif there is a substring\n11\nbefore the substring\n00\nin our string, then from both of the substrings, at least one character remains, so if the first occurrence of\n11\nis earlier than the last occurrence of\n00\n, there is no answer. Otherwise, the answer always exists."
         },
         {
             "title": "Solution (Neon)",

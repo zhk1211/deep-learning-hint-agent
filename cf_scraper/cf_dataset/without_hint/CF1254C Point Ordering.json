@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1254C - Point Ordering\nLet's start by choosing vertices $$$1$$$ and $$$2$$$ as pivots.\nRecall that if the cross product of two vectors $$$\\vec{A}$$$ and $$$\\vec{B}$$$ is positive, point $$$B$$$ lies to the left of $$$\\vec{A}$$$; if the product is negative, point $$$B$$$ lies to the right of $$$\\vec{A}$$$; and if the product is zero, the 3 points $$$(0,0)$$$, $$$A$$$, $$$B$$$ are collinear.\nWith $$$n-2$$$ queries of type 2, we can know which vertices lie to the left or to the right of edge $$$1-2$$$ and then solve the two sides separately.\nConsider the left side and there are $$$a$$$ vertices lie to the left, we can use $$$a$$$ queries of type 1 to calculate the distance from those vertices to edge $$$1-2$$$ (the distance from vertex $$$X$$$ to edge $$$1-2$$$ is twice the area of the triangle forms by $$$1$$$, $$$2$$$, $$$X$$$, divides by the length of edge $$$1-2$$$).\nLet Y be the farthest from $$$1-2$$$ (there can be at most 2 such vertices). We can use $$$a-1$$$ queries of type 2 to see if the others vertices lie between $$$1, Y$$$ or between $$$Y, 2$$$, then sort them counter-clockwise with the asked distances.\nSo we will use $$$n-2$$$ queries to calculate the distances from vertices $$$3, 4, .. n$$$ to edge $$$1-2$$$ and at most $$$n - 3$$$ for the latter step. This solution uses at most $$$3n-7$$$ queries.\nAnother solution is to find the vertex that is consecutive to $$$1$$$ in $$$n-2$$$ queries and do the same as the solution above."
         }
     ]
 }

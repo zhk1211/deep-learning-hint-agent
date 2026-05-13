@@ -377,8 +377,8 @@ def scrape_cf_dynamic(page, tutorial_url):
 
 	try:
 		page.goto(tutorial_url, wait_until="domcontentloaded", timeout=60000)
-		print("⏳ 等待 10 秒，让 JS 加载真正的题解内容...")
-		page.wait_for_timeout(10000)
+		print("⏳ 等待 20 秒，让 JS 加载真正的题解内容...")
+		page.wait_for_timeout(20000)
 		html_content = page.content()
 
 	except Exception as e:
@@ -645,13 +645,13 @@ def fetch_luogu_problem_statement(page, problem_info):
 	problem_code = f"CF{contest_id}{problem_index}"
 	luogu_url = f"{LUOGU_BASE_URL}/{problem_code}"
 
-	polite_sleep(4, 10, f"准备从洛谷抓取题面 {problem_code} 前")
+	# polite_sleep(4, 10, f"准备从洛谷抓取题面 {problem_code} 前")
 	print(f"📘 正在从洛谷抓取题面: {luogu_url}")
 
 	try:
 		page.goto(luogu_url, wait_until="domcontentloaded", timeout=60000)
 
-		wait_ms = random.randint(5000, 8000)
+		wait_ms = random.randint(5000, 6000)
 		print(f"⏳ 等待洛谷题面加载 {wait_ms / 1000:.2f} 秒...")
 		page.wait_for_timeout(wait_ms)
 
@@ -855,7 +855,7 @@ def process_contest(contest_url, processed_tutorial_urls):
 if __name__ == "__main__":
 	contests_to_scrape = [
 		f"https://codeforces.com/contest/{i}"
-		for i in range(1893, 999, -1)
+		for i in range(1721, 999, -1)
 	]
 
 	processed_tutorial_urls = set()

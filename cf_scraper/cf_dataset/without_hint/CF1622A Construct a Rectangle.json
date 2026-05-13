@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1622A - Construct a Rectangle\nFirst, the condition about being able to construct a rectangle is the same as having two pairs of sticks of equal length.\nLet's fix the stick that we are going to break into two parts. Now there are two cases.\nThe remaining two sticks can be the same. In that case, you can break the chosen stick into equal parts to make the second equal pair of sticks. Note, however, that the stick should have an even length, because otherwise the length of the resulting parts won't be integer.\nThe remaining two sticks can be different. In that case, the chosen stick should have the length equal to their total length, because the only way to make two pairs of equal sticks is to produce the same two sticks as the remaining ones.\nOverall complexity: $$$O(1)$$$ per testcase."
         },
         {
             "title": "Solution (Neon)",

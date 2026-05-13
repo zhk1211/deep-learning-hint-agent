@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1311C - Perform the Combo\nWe can consider all tries independently. During the $$$i$$$-th try we press first $$$p_i$$$ buttons, so it makes $$$+1$$$ on the prefix of length $$$p_i$$$. So the $$$i$$$-th character of the string will be pressed (the number of $$$p_i \\ge i$$$ plus $$$1$$$) times. We can use sorting and some kind of binary search to find this number for each character but we also can build suffix sums to find all required numbers. We can build suffix sums using the following code:\nvector<int> cnt(n);\nfor (int i = 0; i < m; ++i) {\n++cnt[p[i]];\n}\nfor (int i = n - 1; i > 0; --i) {\ncnt[i - 1] += cnt[i];\n}\nSo as you can see, the $$$i$$$-th element of $$$p$$$ will add $$$1$$$ in each position from $$$1$$$ to $$$p_i$$$. So we got what we need. After that we can calculate the answer for each character in the following way:\nvector<int> ans(26);\nfor (int i = 0; i < n; ++i) {\nans[s[i] - 'a'] += cnt[i] + 1;\n}\nTime complexity: $$$O(n \\log n)$$$ or $$$O(n)$$$."
         },
         {
             "title": "Solution",

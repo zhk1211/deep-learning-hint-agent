@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1821A - Matching\nIn a positive integer, the first digit is from $$$1$$$ to $$$9$$$, and every next digit can be any. This allows us to implement the following combinatorial approach:\ncalculate the number of different values for the first digit, which is $$$0$$$ if the first character of $$$s$$$ is\n0\n, $$$1$$$ if the first character of $$$s$$$ is any other digit, or $$$9$$$ if the first character of $$$s$$$ is\n?\n;\ncalculate the number of different values for each of the other digits, which is $$$1$$$ if the corresponding character of $$$s$$$ is a digit, or $$$10$$$ if it is\n?\n;\nmultiply all these values."
         },
         {
             "title": "Solution (BledDest)",

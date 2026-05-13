@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1605A - С.А. Отклонение\n$$$\\rightarrow$$$ Applying the operation on $$$a_1$$$ and $$$a_3$$$ (irrespective of which element is incremented and which one is decremented) does not change the value of $$$a_1 + a_3 - 2 \\cdot a_2$$$.\n$$$\\rightarrow$$$ Incrementing $$$a_1$$$ (or $$$a_3$$$) by $$$1$$$ and decrementing $$$a_2$$$ by $$$1$$$ causes the value of $$$a_1 + a_3 - 2 \\cdot a_2$$$ to increase by $$$3$$$.\n$$$\\rightarrow$$$ Decrementing $$$a_1$$$ (or $$$a_3$$$) by $$$1$$$ and incrementing $$$a_2$$$ by $$$1$$$ causes the value of $$$a_1 + a_3 - 2 \\cdot a_2$$$ to decrease by $$$3$$$.\nThis effectively means that we can add or subtract any multiple of $$$3$$$ by performing some number of operations. Also, the value of $$$a_1 + a_3 - 2 \\cdot a_2$$$ will never change modulo $$$3$$$. Thus,\nIf $$$\\, \\, a_1 + a_3 - 2 \\cdot a_2 \\equiv 0$$$ $$$\\mod 3$$$, then the minimum value of $$$d(a_1, a_2, a_3) = |0| = 0$$$\nIf $$$\\, \\, a_1 + a_3 - 2 \\cdot a_2 \\equiv 1$$$ $$$\\mod 3$$$, then the minimum value of $$$d(a_1, a_2, a_3) = |1| = 1$$$\nIf $$$\\, \\, a_1 + a_3 - 2 \\cdot a_2 \\equiv 2$$$ $$$\\mod 3$$$, then the minimum value of $$$d(a_1, a_2, a_3) = |2-3| = |-1| = 1$$$\nIn simpler words, if $$$a_1 + a_3 - 2 \\cdot a_2$$$ is divisible by $$$3$$$ the answer is $$$0$$$, otherwise it is $$$1$$$.\nTime Complexity\n: $$$\\mathcal{O}(1)$$$"
         },
         {
             "title": "Solution [c++] (JeevanJyot)",

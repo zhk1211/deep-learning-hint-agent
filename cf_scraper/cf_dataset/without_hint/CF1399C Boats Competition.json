@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1399C - Boats Competition\nThis is just an implementation problem. Firstly, let's fix $$$s$$$ (it can be in range $$$[2; 2n]$$$), find the maximum number of boats we can obtain with this $$$s$$$ and choose the maximum among all found values.\nTo find the number of pairs, let's iterate over the smallest weight in the team in range $$$[1; \\lfloor\\frac{s + 1}{2}\\rfloor - 1]$$$. Let this weight be $$$i$$$. Then (because the sum of weights is $$$s$$$) the biggest weight is $$$s-i$$$. And the number of pairs we can obtain with such two weights and the total weight $$$s$$$ is $$$min(cnt_i, cnt_{s - i})$$$, where $$$cnt_i$$$ is the number of occurrences of $$$i$$$ in $$$w$$$. And the additional case: if $$$s$$$ is even, we need to add $$$\\lfloor\\frac{cnt_{\\frac{s}{2}}}{2}\\rfloor$$$. Don't forget that there is a case $$$s - i  \\gt  n$$$, so you need to assume that these values $$$cnt$$$ are zeros."
         },
         {
             "title": "Solution",

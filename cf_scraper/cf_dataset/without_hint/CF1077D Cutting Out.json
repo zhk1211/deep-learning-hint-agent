@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1077D - Cutting Out\nLet's solve the problem using binary search by the answer. It is easy to see that if we can construct the answer for some number of copies $$$val$$$ then we also can do it for $$$val - 1$$$. The only thing we need is to write the function $$$can(val)$$$ which will say can we cut off $$$val$$$ copies of some array $$$t$$$ from $$$s$$$ or not.\nLet's imagine $$$val$$$ copies of string $$$t$$$ as a matrix of size $$$val \\times k$$$. Obviously, each row of this matrix should be equal to each other row. Let's fill not rows but columns of this matrix. For some element $$$i$$$ of $$$s$$$ we can easy notice that we can take exactly $$$\\lfloor\\frac{cnt_i}{val}\\rfloor$$$ columns containing this element where $$$cnt_i$$$ is the number of such elements in $$$s$$$. So, overall number of columns we can fill in this matrix will be $$$\\sum\\limits_{i = 1}^{2 \\cdot 10^5} \\lfloor\\frac{cnt_i}{val}\\rfloor$$$. If this value is greater than or equal to $$$k$$$ then $$$can(val)$$$ is true otherwise it is false.\nIt is easy to construct the answer using all things we described above.\nOverall complexity is $$$O(n + |A|\\log n)$$$ where $$$|A|$$$ is the size of the alphabet."
         },
         {
             "title": "Solution",

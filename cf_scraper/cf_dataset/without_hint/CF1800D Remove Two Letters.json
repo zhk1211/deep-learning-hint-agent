@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1800D - Remove Two Letters\nConsider deleting characters with numbers $$$i$$$ and $$$i + 1$$$, as well as characters with numbers $$$i + 1$$$ and $$$i + 2$$$. In the first case, the symbol with the number $$$i + 2$$$ remains, in the second - $$$i$$$. Symbols with numbers less than $$$i$$$ or more than $$$i + 2$$$ remain in both cases. Therefore, the same strings will be obtained if the characters with the numbers $$$i$$$ and $$$i + 2$$$ match. Therefore, we just need to count the number of $$$i: 1 \\le i\\le n - 2: s_i =s_{i+2}$$$, and subtract this value from $$$n - 1$$$."
         },
         {
             "title": "Solution",

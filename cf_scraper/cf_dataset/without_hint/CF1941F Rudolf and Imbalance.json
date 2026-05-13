@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1941F - Rudolf and Imbalance\nLet's consider the differences $$$a_i - a_{i-1}$$$. Since we can only insert one problem, we can reduce the difference in difficulty in only one place. If we insert a problem not between the tasks whose difference in difficulty is maximum (denote them as $$$a_p$$$ and $$$a_{p+1}$$$), then the\nimbalance\nwill not change. The best way to insert a problem in this way is to choose the middle between these tasks, so the larger of the differences $$$d_i + f_j - a_p$$$ and $$$a_{p + 1} - d_i - f_j$$$ will be minimal.\nWe also cannot forget about the other tasks. Let's find the second maximum among the values $$$a_i - a_{i - 1}$$$. Since we insert a problem in another place, this difference will not decrease, and therefore the answer cannot be less than it.\nTo understand what answer we can achieve, let's sort the functions and iterate through all the models. For the model $$$d_i$$$, using binary search, we will find the maximum index $$$l$$$ such that $$$d_i + f_l \\le \\lfloor \\frac{a_p + a_{p + 1}}{2} \\rfloor$$$. For inserting with the selected model, the best fit will be either a problem of difficulty $$$d_i + f_l$$$ or a problem of difficulty $$$d_i + f_{l + 1}$$$ (if $$$l  \\lt  k$$$) since it is the closest problems to the middle. We will check both options and update the answer."
         },
         {
             "title": "Solution",

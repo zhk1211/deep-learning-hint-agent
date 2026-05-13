@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1093D - Beautiful Graph\nLet's denote a way to distribute numbers as a\npainting\n. Let's also call the paintings that meet the constraints\ngood\npaintings (and all other paintings are bad).\nWe can solve the problem for each connected component of the graph independently and multiply the answers. Let's analyze a painting of some connected component. If some vertex has an odd number written on it, then we should write even numbers on all adjacent vertices, and vice versa. So in fact we need to check if the component is bipartite, and if it is, divide it into two parts. The number of good paintings is $$$2^{a} + 2^b$$$, where $$$a$$$ is the size of the first part, and $$$b$$$ is the size of the second part, because we write $$$2$$$'s into all vertices of one part, and $$$1$$$'s or $$$3$$$'s into all vertices of another part."
         },
         {
             "title": "Solution (Ajosteen)",

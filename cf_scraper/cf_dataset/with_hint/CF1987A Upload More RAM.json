@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1987A - Upload More RAM\nFirst of all, note that you can upload $$$n$$$ GBs of RAM if you upload on the seconds $$$1, k + 1, 2k + 1, \\ldots, (n - 1)k + 1$$$, taking $$$(n - 1)k + 1$$$ seconds in total. Let's show that it's impossible to do better.\nSuppose there is a solution where you upload on the times $$$t_1, t_2, \\ldots t_n$$$, taking $$$t_n$$$ seconds to upload $$$n$$$ GBs. Then, $$$t_{i} + k \\le t_{i + 1}$$$ for all $$$1 \\le i \\le n - 1$$$. Furthermore, $$$t_1 \\ge 1$$$. Thus, we have the following inequalities: $$$$$$1 \\le t_1$$$$$$ $$$$$$t_1 + k \\le t_2$$$$$$ $$$$$$t_2 + k \\le t_3$$$$$$ $$$$$$\\ldots$$$$$$ $$$$$$t_{n - 1} + k \\le t_n$$$$$$\nUsing them, we get the inequalities $$$$$$1 \\le t_1$$$$$$ $$$$$$1 + k \\le t_1 + k \\le t_2$$$$$$ $$$$$$1 + 2k \\le t_2 + k \\le t_3$$$$$$ $$$$$$\\ldots$$$$$$ $$$$$$1 + (n - 1)k \\le t_{n-1} + k \\le t_n$$$$$$\nSo, $$$t_n \\ge (n - 1)k + 1$$$, so the answer is at least $$$(n - 1)k + 1$$$. Since there is always a way to upload in exactly this many seconds, this is the answer to our problem.\nComplexity: $$$\\mathcal{O}(1)$$$"
         },
         {
             "title": "Solution",

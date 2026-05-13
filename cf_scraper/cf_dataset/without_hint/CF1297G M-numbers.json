@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1297G - M-numbers\nNote, that since each divisor of $$$m$$$ should be a digit less than $$$10$$$ then all prime divisors of $$$m$$$ should be less than $$$10$$$, i.e. we can represent $$$m$$$ as $$$m = 2^{f_1} \\cdot 3^{f_2} \\cdot 5^{f_3} \\cdot 7^{f_4}$$$. Otherwise, the answer is $$$-1$$$.\nNow, let's just write dynamic programming $$$dp$$$ with state $$$(f_1, f_2, f_3, f_4, len)$$$ which is equal to the number of $$$m$$$-numbers of length $$$len$$$ and $$$m = 2^{f_1} \\cdot 3^{f_2} \\cdot 5^{f_3} \\cdot 7^{f_4}$$$. The transisions are quite straightforward: let's choose what the last digit $$$d$$$ is or let's check all posible last digit $$$d \\in [1, 9]$$$ recalculate array $$$f$$$ and ask value of state $$$(f_1', f_2', f_3', f_4', len - 1)$$$.\nThe trick is that we'd visit not so many different states, so it's enough just to memorize all of them by hashing and map structure.\nThe last question is how to find $$$k$$$-th smallest in lexicographical order. It's quite a standard algorithm. At first, let find the length of the answer. It should be equal to the minimum $$$len$$$ such that the total number of $$$m$$$-numbers of length no more than $$$len$$$ is at least $$$k$$$. Then let's build the answer from the prefix deciding for each position, what digit should be here. It can be done using the $$$dp$$$ to calculate a number of $$$m'$$$-numbers which has a fixed prefix."
         },
         {
             "title": "Solution (elizarov)",

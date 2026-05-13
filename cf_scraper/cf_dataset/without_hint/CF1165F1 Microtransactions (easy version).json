@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1165F1 - Microtransactions (easy version)\nLet's iterate over all possible answers. Obviously, this value is always in the range $$$[1, 2 \\cdot \\sum\\limits_{i=1}^{n}k_i]$$$. The first day when Ivan can order all microtransactions he wants will be the answer. How to check if the current day $$$ansd$$$ is enough to order everything Ivan wants?\nIf we had several sale days for some type of microtransaction (of course, we can use only such days that are not greater than the fixed last day $$$ansd$$$), let's use the last one, it is always not worse than some of the previous days. Then let's iterate over all days from $$$1$$$ to $$$ansd$$$ and do the following: firstly, let's increase our balance by one burle. Then let's try to order all microtransactions for which the current day is the last sale day (and pay one burle per copy). If we are out of money at some moment then just say that we should order all microtransactions that remain in this sale day during the last day for two burles per copy. It is true because it does not matter which types will remain because this day is the last sale day for all of these types. So, after all, we had some remaining microtransactions that we cannot buy during sales, and the current balance. And the current day is good if the number of such microtransactions multiplied by two is not greater than the remaining balance."
         },
         {
             "title": "Solution",

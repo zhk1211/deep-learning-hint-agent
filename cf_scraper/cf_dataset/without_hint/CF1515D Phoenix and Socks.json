@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1515D - Phoenix and Socks\nFirst, let's remove all pairs that are already matching because an optimal solution will never change them. Suppose there remain $$$l$$$ left socks and $$$r$$$ right socks.\nWithout loss of generality, assume $$$l \\geq r$$$. If not, we can just swap all left and right socks. We know that regardless of other operations, we will always need to turn $$$(l-r)/2$$$ left socks into right socks. So, if there are any pairs of left socks with the same color, we will first make matching pairs by turning half of them into right socks (while making sure $$$l$$$ is always at least $$$r$$$). This is optimal because since we need to turn left socks into right socks eventually, we might as well do it in a way that yields matching pairs immediately. After we equalize the number of left socks and right socks, or run out of pairs of left socks with the same color, we can finish by turning any $$$(l-r)/2$$$ left socks into right socks and then recoloring all left socks to match a right sock. Note that $$$l$$$ and $$$r$$$ change throughout this process.\nTime complexity for each test case: $$$O(n)$$$"
         },
         {
             "title": "Solution",

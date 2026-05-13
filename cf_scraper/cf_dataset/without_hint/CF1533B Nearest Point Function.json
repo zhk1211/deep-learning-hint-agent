@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1533B - Nearest Point Function\nOf course, we can't choose such $$$y$$$ that $$$y  \\lt  x_1$$$, $$$y  \\gt  x_n$$$ or $$$y = x_i$$$ for some $$$i$$$, because there will be exactly one nearest point in the array $$$x$$$. So, we need to choose such $$$y$$$ that $$$x_i  \\lt  y  \\lt  x_{i + 1}$$$ for some $$$i$$$ from $$$1$$$ to $$$n-1$$$. To make both points $$$x_i$$$ and $$$x_{i + 1}$$$ nearest to the point $$$y$$$, we need to choose $$$y = \\frac{x_i + x_{i + 1}}{2}$$$. But this is not always possible, because if $$$x_i$$$ and $$$x_{i + 1}$$$ have different parities, the value $$$y$$$ will be non-integer. So, all we have to do in this problem is to check if there is some pair $$$x_i$$$ and $$$x_{i + 1}$$$ that they have the same parity. If there is such a pair, we can break the function, otherwise we can't. Choosing non-adjacent values in $$$x$$$ is wrong, though, because if we choose such $$$x_i$$$ and $$$x_j$$$ that $$$|j - i|  \\gt  1$$$ then there will be other points from $$$x$$$ that are nearest to the point $$$y = \\frac{x_i + x_j}{2}$$$ (i.e. either $$$x_i$$$ or $$$x_j$$$ will not be the nearest point to $$$y$$$ in such a case)."
         },
         {
             "title": "Solution (vovuh)",

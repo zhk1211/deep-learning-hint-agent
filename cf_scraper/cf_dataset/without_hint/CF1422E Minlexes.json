@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1422E - Minlexes\nLet's find the answer $$$ans_i$$$ for all suffixes, starting with the smallest in length. $$$ ans_n $$$ is equal to an empty string. Then if $$$ s_i = s_{i + 1} $$$ ($$$ 0 \\le i + 1  \\lt  n $$$), then $$$ ans_i = min (s_i + ans_{i + 1}, ans_{i + 2}) $$$, and otherwise $$$ ans_i = s_i + ans_{i + 1} $$$. To quickly find minimum of two strings, they can be stored as \"binary lifts\"  – $$$ next_ {i, j} $$$ will be equal to the position in the string $$$s$$$, on which the $$$2 ^ j$$$ character $$$ ans_i $$$ will be located, and $$$ hash_{i, j} $$$  – hash from the prefix $$$ ans_i $$$ of length $$$ 2 ^ j $$$. Values for $$$ (i, j) $$$ can be obtained from $$$ (i, j-1) $$$ and $$$ (i + 2 ^ {j-1}, j-1) $$$. To restore the answer, $$$ next_ {i, j} $$$ will be enough for us, and for simplicity we can additionally store the length of each answer."
         }
     ]
 }

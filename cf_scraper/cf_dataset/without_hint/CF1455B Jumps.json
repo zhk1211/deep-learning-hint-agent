@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1455B - Jumps\nAt first, let's jump with $$$+k$$$ while $$$x$$$ is still greater than the current position. Now we finished in some position $$$pos = 1 + 2 + \\dots + steps = \\frac{steps (steps + 1)}{2} \\ge x$$$. Note that $$$0 \\le pos - x  \\lt  steps$$$ otherwise, we wouldn't make the last step.\nIf $$$pos = x$$$ then we are lucky to finish right in point $$$x$$$. Otherwise, let's look at what happens if we replace one $$$+k$$$ with $$$-1$$$. Basically, we'll finish in $$$pos' = pos - (k + 1)$$$. And since $$$k \\in [1, steps]$$$ then $$$pos' \\in [pos - steps - 1, pos - 2]$$$.\nWe know that $$$pos - step  \\lt  x$$$ so if $$$x  \\lt  pos - 1$$$ then we can choose the corresponding $$$k = pos - x - 1$$$ and replace $$$+k$$$ with $$$-1$$$ and get straight to the point $$$x$$$. But if $$$x + 1 = pos$$$ then we need one extra operation $$$-1$$$.\nTo calculate $$$steps$$$ fast we can note we need at least $$$steps = \\sqrt{2 \\cdot x} - 1$$$ since $$$steps (steps + 1) \\le (steps + 1)^2 \\le 2x$$$ and then we can increase $$$steps$$$ while $$$steps (steps + 1)  \\lt  2x$$$."
         },
         {
             "title": "Solution (adedalic)",

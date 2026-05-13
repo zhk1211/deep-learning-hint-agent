@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1715F - Crop Squares\nIn fact, two queries are enough. The first query is to find out the area of intersection of the polygon with $$$2n + 2$$$ vertices at the points with coordinates $$$(0, m + 1),\\:(0, 0),\\:(1, m),\\:(1, 0),\\; \\dots ,\\;(n - 1, m),\\:(n - 1, 0),\\:(n, m),\\:(n, m + 1)$$$ with a filled square. Such a polygon is periodic over $$$x$$$ axis with period $$$1$$$, hence the $$$x$$$-coordinate of the lower left corner of the filled square does not affect the intersection area. Denote the intersection area — $$$s$$$, then the $$$y$$$-coordinate of the lower left corner of the square is calculated by the formula $$$y=ms-\\frac{1}{2}$$$.\nAn example of such a polygon for the field $$$5 \\times 4$$$ and a filled square with the lower left corner at the point $$$(3.5, 2.5)$$$:\nWith the second query, we find out the area of intersection of a similar polygon with $$$2m + 2$$$ vertices at points with coordinates $$$(n + 1, m),\\:(0, m),\\:(n, m - 1),\\:(0, m - 1),\\; \\dots ,\\;(n, 1),\\:(0, 1),\\:(n, 0),\\:(n + 1, 0)$$$ with a filled square. Such a polygon is periodic over $$$y$$$ axis with period $$$1$$$, hence the $$$y$$$-coordinate of the lower left corner of the filled square does not affect the intersection area. Denote the intersection area — $$$s$$$, then the $$$x$$$-coordinate of the lower left corner of the square is calculated by the formula $$$x=ns-\\frac{1}{2}$$$.\nAn example of such a polygon for the field $$$5 \\times 4$$$ and a filled square with the lower left corner at the point $$$(3.5, 2.5)$$$:"
         }
     ]
 }

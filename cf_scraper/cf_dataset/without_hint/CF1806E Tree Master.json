@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1806E - Tree Master\nHint 1: The time complexity of the solution is $$$O(n\\sqrt{n})$$$.\nHint 2: Brute force with something to store the answer.\nThe solution turns out quite easy: just store the answer to each pair of $$$(x,y)$$$ when computing the answer by climbing up on the tree. If we see the time complexity of hash table as $$$O(1)$$$, then the time complexity and memory complexity are both $$$O(n\\sqrt{n})$$$. Let's prove it.\nWe will see $$$n=q$$$ in the following proof. It is clear that the above solution's time complexity depends on the number of different pairs $$$(x,y)$$$ which we encounter when climbing. Assume the $$$i$$$-th depth of the tree has $$$s_i$$$ nodes, then its contribution to things above is $$$\\min(s_i^2,n)$$$. It's easy to discover that when $$$s_i \\gt \\sqrt{n}$$$, the contribution of it will equal to the contribution when $$$s_i=\\sqrt{n}$$$. So, making all $$$s_i$$$ not greater than $$$\\sqrt{n}$$$ will contribute more. Therefore, the time complexity is $$$O(\\sum_{i=1}^k s_i^2)$$$. When $$$s_i=\\sqrt{n}$$$, the formula above has a maximum value of $$$n\\sqrt{n}$$$, because $$$(a+b)^2\\ge a^2+b^2$$$.\nIn fact, we don't need to use hash table in this problem. If there exists a pair of $$$(x,y)$$$ of depth $$$i$$$ such that $$$s_i \\gt  \\sqrt{n}$$$, then we don't need to store $$$(x,y)$$$. Since the amount of $$$i$$$ such that $$$s_i \\gt \\sqrt{n}$$$ are not greater than $$$\\sqrt{n}$$$, the time complexity won't change. For other pairs of $$$(x,y)$$$ we can simply store them in an array, then the memory complexity won't change."
         }
     ]
 }

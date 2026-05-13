@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1618E - Singers' Tour\nFirst, $$$b_i = a_i + 2 \\cdot a_{i - 1} + \\dots + i \\cdot a_1 + (i + 1) \\cdot a_n + \\dots n \\cdot a_{i + 1}$$$.\nConsider the sum $$$b_1 + b_2 + \\cdots + b_n$$$. If we substitute the formula of $$$b_i$$$ then for every $$$i = 1, 2, \\dots, n$$$ the coefficient at $$$a_i$$$ will be equal to $$$\\frac{n \\cdot (n + 1)}{2}$$$, so we can find the sum $$$S$$$ of all $$$a_i$$$: $$$S = a_1 + a_2 + \\dots + a_n$$$ is equal to $$$\\frac{2 \\cdot (b_1 + b_2 + \\dots + b_n)}{n \\cdot (n + 1)}$$$. If the sum of $$$b_i$$$ isn't divisible by $$$\\frac{n \\cdot (n + 1)}{2}$$$, then the answer is\nNO\n.\nNow let's consider the difference between two neighboring towns: $$$b_i - b_{(i + n - 2) \\mod n + 1} = a_{i - 1} + a_{i - 2} + \\dots + a_{i \\mod n + 1} - (n - 1) \\cdot a_i = S - a_i - (n - 1) \\cdot a_i = S - n \\cdot a_i$$$, so $$$a_i = \\frac{S - b_i + b_{(i + n - 2) \\mod n + 1}}{n}$$$. If the value of $$$a_i$$$ we found isn't a positive integer, then the answer if\nNO\n. Otherwise, we can find a single value of $$$a_i$$$ for every $$$i = 1, 2, \\dots n$$$. It's easy to see that these values are correct.\nOverall complexity: $$$O(n)$$$ per testcase."
         },
         {
             "title": "Solution (shnirelman)",

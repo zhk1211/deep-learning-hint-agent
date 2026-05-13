@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1634A - Reverse and Concatenate\nIf $$$k = 0$$$, the answer is $$$1$$$. Otherwise, consider two cases:\nThe string is a palindrome (that is, $$$s = rev(s)$$$). Then $$$rev(s) + s = s + rev(s) = s + s$$$, so both operations will replace $$$s$$$ by the string $$$s+s$$$, which is also a palindrome. Then for any $$$k$$$ the answer is $$$1$$$.\nOtherwise $$$s \\ne rev(s)$$$. Then after the first operation we get either $$$s + rev(s)$$$ (which is a palindrome) or $$$rev(s) + s$$$ (also a palindrome). Also note that if we apply the operation to two different palindromes of length $$$x$$$ any number of times, they cannot become equal, since they do not have the same prefix of length $$$x$$$. So, after the first operation from a non-palindrome 2 different strings will be obtained, and after all following operations 2 unequal strings will be obtained. So the answer is — $$$2$$$."
         },
         {
             "title": "Solution",

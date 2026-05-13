@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1650C - Weight of the System of Nested Segments\nWe create a structure that stores for each point its coordinate, weight, and index in the input data. Sort the $$$points$$$ array by increasing weight. The sum of weights of the first $$$2 \\cdot n$$$ points will be minimal, so we use them to construct a system of $$$n$$$ nested segments. We save the weights of the first $$$2 \\cdot n$$$ points in the variable $$$sum$$$ and remove the remaining $$$m - 2 \\cdot n$$$ points from the array.\nNow sort the points in ascending order of coordinates and form a system of nested segments such that the endpoints of $$$i$$$th segment are $$$points[i]$$$ and $$$points[2 \\cdot n - i + 1]$$$ for $$$(1 \\le i \\le 2 \\cdot n)$$$. Thus, the endpoints of the first segment are $$$points[1]$$$ and $$$points[2 \\cdot n]$$$, the endpoints of the $$$n$$$th segment are $$$points[n]$$$ and $$$points[n + 1]$$$.\nFor each test case we first output $$$sum$$$, then — $$$n$$$ pairs of numbers $$$i$$$, $$$j$$$ ($$$1 \\le i, j \\le m$$$) — the indices under which the endpoints of the current segment were written in the input data."
         },
         {
             "title": "Solution",

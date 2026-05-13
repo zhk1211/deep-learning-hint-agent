@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2121A - Letter Home\nNotice that if we visit positions $$$x_1$$$ and $$$x_n$$$, we will necessarily visit all other positions $$$x_i$$$. Therefore, our goal will be to visit positions $$$x_1$$$ and $$$x_n$$$. We then have two options:\nFrom position $$$s$$$, go to position $$$x_1$$$, and from there go to position $$$x_n$$$. We will need to make $$$|s - x_1| + |x_n - x_1|$$$ steps.\nFrom position $$$s$$$, go to position $$$x_n$$$, and from there go to position $$$x_1$$$. We will need to make $$$|s - x_n| + |x_n - x_1|$$$ steps.\nFrom the two cases, we choose the smaller one. The answer will be $$$\\min(|s - x_1|, |s - x_n|) + x_n - x_1$$$. The solution can be implemented in $$$O(n)$$$."
         }
     ]
 }

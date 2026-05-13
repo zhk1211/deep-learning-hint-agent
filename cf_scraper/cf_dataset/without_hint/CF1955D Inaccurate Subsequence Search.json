@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1955D - Inaccurate Subsequence Search\nHow to check if two arrays are good? For each element of $$$b$$$, try to pair it with an element from array $$$a$$$. If we managed to create $$$k$$$ or more pairs, then the arrays are good.\nSince rearranging the elements of the array is allowed, we will maintain three multisets $$$C$$$, $$$D$$$, and $$$E$$$. In $$$D$$$, we will store all elements from $$$b$$$ for which we found a pair, and in $$$C$$$ and $$$E$$$, all elements from $$$b$$$ and $$$a$$$ for which a pair was not found, i.e., $$$C \\cap E = \\emptyset$$$. Then the arrays are good if $$$|D| \\ge k$$$.\nIt remains to understand how to find all good subsegments using this data organization. Suppose we shift the left boundary $$$l$$$ by $$$1$$$, simultaneously moving the right boundary, where $$$r = l + m - 1$$$. We need to remove the pair with the element $$$a_l$$$ from $$$D$$$, if it exists, and immediately try to find a replacement for the removed pair in $$$E$$$. After that, we try to find a pair for $$$a_r$$$ from $$$C$$$, and if a pair cannot be found, we place the element in $$$E$$$.\nThe complexity of the solution is $$$O(n \\log n)$$$ or $$$O(n)$$$ if a hash table is used."
         },
         {
             "title": "Solution",

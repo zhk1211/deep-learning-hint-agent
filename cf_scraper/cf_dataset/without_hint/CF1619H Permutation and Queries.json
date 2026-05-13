@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1619H - Permutation and Queries\nLet's compute an array $$$a$$$ of $$$n$$$ integers — answers to all possible second-type queries with $$$k = Q$$$, $$$Q ≈ \\sqrt n$$$. Now, if we have to perform any second-type query, we can split it into at most $$$n / Q$$$ queries with $$$k = Q$$$ and at most $$$Q - 1$$$ queries with $$$k = 1$$$.\nLet's also compute an array $$$r$$$ of $$$n$$$ integers — reverse permutation. If $$$p_i = j$$$, then $$$r_j = i$$$.\nTo perform any first-type query, we should recompute $$$p$$$, $$$r$$$ and $$$a$$$. We can swap $$$p_x$$$ and $$$p_y$$$ in the array $$$p$$$ and $$$r_{p_x}$$$ and $$$r_{p_y}$$$ in the array $$$r.$$$ No more than $$$2 \\cdot Q$$$ elements will be changed in the array $$$a$$$. These are elements with indexes $$$x, r_x, r_{r_x}, \\dots $$$($$$Q$$$ elements) and $$$y, r_y, r_{r_y}, \\dots $$$($$$Q$$$ elements). We can recompute $$$a_x$$$ and then assign $$$a_{r_x} = r_{a_x}$$$ and $$$x = r_x$$$ $$$Q - 1$$$ times. Similarly for $$$y$$$.\nTime complexity: $$$O((n+q)\\sqrt n)$$$."
         },
         {
             "title": "Solution",

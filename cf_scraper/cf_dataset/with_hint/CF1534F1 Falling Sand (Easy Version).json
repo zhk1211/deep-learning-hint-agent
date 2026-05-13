@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThis is the easy version of the problem. The difference between the versions is the constraints on $ a_i $ . You can make hacks only if all versions of the problem are solved.\n\nLittle Dormi has recently received a puzzle from his friend and needs your help to solve it.\n\nThe puzzle consists of an upright board with $ n $ rows and $ m $ columns of cells, some empty and some filled with blocks of sand, and $ m $ non-negative integers $ a_1,a_2,\\ldots,a_m $ ( $ 0 \\leq a_i \\leq n $ ). In this version of the problem, $ a_i $ will be equal to the number of blocks of sand in column $ i $ .\n\nWhen a cell filled with a block of sand is disturbed, the block of sand will fall from its cell to the sand counter at the bottom of the column (each column has a sand counter). While a block of sand is falling, other blocks of sand that are adjacent at any point to the falling block of sand will also be disturbed and start to fall. Specifically, a block of sand disturbed at a cell $ (i,j) $ will pass through all cells below and including the cell $ (i,j) $ within the column, disturbing all adjacent cells along the way. Here, the cells adjacent to a cell $ (i,j) $ are defined as $ (i-1,j) $ , $ (i,j-1) $ , $ (i+1,j) $ , and $ (i,j+1) $ (if they are within the grid). Note that the newly falling blocks can disturb other blocks.\n\nIn one operation you are able to disturb any piece of sand. The puzzle is solved when there are at least $ a_i $ blocks of sand counted in the $ i $ -th sand counter for each column from $ 1 $ to $ m $ .\n\nYou are now tasked with finding the minimum amount of operations in order to solve the puzzle. Note that Little Dormi will never give you a puzzle that is impossible to solve.\n\nInput Format\nThe first line consists of two space-separated positive integers $ n $ and $ m $ ( $ 1 \\leq n \\cdot m \\leq 400\\,000 $ ).\n\nEach of the next $ n $ lines contains $ m $ characters, describing each row of the board. If a character on a line is '.', the corresponding cell is empty. If it is '\\#', the cell contains a block of sand.\n\nThe final line contains $ m $ non-negative integers $ a_1,a_2,\\ldots,a_m $ ( $ 0 \\leq a_i \\leq n $ ) — the minimum amount of blocks of sand that needs to fall below the board in each column. In this version of the problem, $ a_i $ will be equal to the number of blocks of sand in column $ i $ .\n\nOutput Format\nPrint one non-negative integer, the minimum amount of operations needed to solve the puzzle.\n\nExamples\nSample 1\nInput\n5 7\n#....#.\n.#.#...\n#....#.\n#....##\n#.#....\n4 1 1 1 0 3 1\nOutput\n3\n\nSample 2\nInput\n3 3\n#.#\n#..\n##.\n3 1 1\nOutput\n1\n\nNote\nFor example $ 1 $ , by disturbing both blocks of sand on the first row from the top at the first and sixth columns from the left, and the block of sand on the second row from the top and the fourth column from the left, it is possible to have all the required amounts of sand fall in each column. It can be proved that this is not possible with fewer than $ 3 $ operations, and as such the answer is $ 3 $ . Here is the puzzle from the first example.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1534F1/3a2f28320c431f7fc4be328a7626876c2ea55199.png)For example $ 2 $ , by disturbing the cell on the top row and rightmost column, one can cause all of the blocks of sand in the board to fall into the counters at the bottom. Thus, the answer is $ 1 $ . Here is the puzzle from the second example.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1534F1/a5e473b6fa07dabecf94f6cfb85782199edfaea0.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Make a directed graph on the sand."
+        },
+        {
+            "title": "Hint 2",
+            "content": "The graph should satisfy the following property: if a node $$$a$$$ can reach another node $$$b$$$ by a sequence of edges, disturbing $$$a$$$ will disturb $$$b$$$."
+        },
+        {
+            "title": "Hint 3",
+            "content": "Compress scc's in the graph."
+        },
+        {
+            "title": "Hint 4",
+            "content": "You must disturb all nodes with in-degree $$$0$$$ in the new graph."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1534F1 - Falling Sand (Easy Version)\nLet's model the grid as a directed graph. Take every block of sand in the puzzle as a node. Now add an edge from a node $$$A$$$ to a node $$$B$$$ if:\n$$$B$$$ is the first block of sand below $$$A$$$.\n$$$B$$$ is the first block of sand next to or below $$$A$$$ and on the first column to the left of $$$A$$$.\n$$$B$$$ is the first block of sand next to or below $$$A$$$ and on the first column to the right of $$$A$$$.\n$$$B$$$ is on the cell directly above $$$A$$$.\nWithin this graph, the nodes which are reachable from a node $$$A$$$ are identical to the set of blocks of sand which will be disturbed as a result of $$$A$$$ being disturbed.\nThe question is then converted to, given a directed graph, what is the size of the smallest set of nodes such that all nodes within the graph are reachable from this set.\nTo solve this, we can compress all strongly connected components in the graph (using Tarjan's Algorithm or Kosaraju's Algorithm), leaving us with a directed acyclic graph.\nFrom here, it can be observed that all nodes which have an in-degree of $$$0$$$ need to be disturbed manually, as no other nodes can disturb them. Moreover, as the graph is acyclic, it can also be proven that all nodes which have an in-degree greater than $$$0$$$ are reachable from a node that has an in-degree of $$$0$$$. As such, it is minimal and sufficient to disturb all nodes which have an in-degree of $$$0$$$.\nProof: Take any node $$$X$$$ that does not have an in-degree of $$$0$$$. Take a node $$$Y$$$ that has an edge connecting it to $$$X$$$. This node must exist as $$$X$$$ has a positive in-degree. Now all nodes that can reach $$$Y$$$ can also reach $$$X$$$. Thus, we just need to prove that $$$Y$$$ is reachable from a node with in-degree $$$0$$$ to prove that $$$X$$$ is reachable from a node with in-degree $$$0$$$. Repeat this process on the node $$$Y$$$, taking it as the new $$$X$$$. Continue to do this until $$$X$$$ has an in-degree of $$$0$$$. This process must end and find such an $$$X$$$ because there are only a finite number of nodes in the graph, and any repeated node within this process would indicate that there is a cycle in the graph. However as the graph is acyclic, this can not happen. Once we have found this $$$X$$$, we can say that $$$X$$$ is reachable from a node with an in-degree of $$$0$$$ as it itself is a node within in-degree $$$0$$$. We can then follow the graph to prove that the first $$$X$$$ is reachable from a node with in-degree $$$0$$$.\nThus, the answer is the number of nodes with in-degree $$$0$$$ in the compressed graph.\nFinal Complexity: $$$\\mathcal{O}(nm)$$$ or $$$\\mathcal{O}(nm \\cdot \\log(nm))$$$ depending on implementation."
+        },
+        {
+            "title": "Solution",
+            "content": "119400903"
+        }
+    ]
+}

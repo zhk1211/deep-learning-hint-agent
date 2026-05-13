@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA square of positive (strictly greater than $ 0 $ ) area is located on the coordinate plane, with sides parallel to the coordinate axes. You are given the coordinates of its corners, in random order. Your task is to find the area of the square.\n\nInput Format\nEach test consists of several testcases. The first line contains one integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of testcases. The following is a description of the testcases.\n\nEach testcase contains four lines, each line contains two integers $ x_i, y_i $ ( $ -1000\\le x_i, y_i\\le 1000 $ ), coordinates of the corners of the square.\n\nIt is guaranteed that there is a square with sides parallel to the coordinate axes, with positive (strictly greater than $ 0 $ ) area, with corners in given points.\n\nOutput Format\nFor each test case, print a single integer, the area of the square.\n\nExamples\nSample 1\nInput\n3\n1 2\n4 5\n1 5\n4 2\n-1 1\n1 -1\n1 1\n-1 -1\n45 11\n45 39\n17 11\n17 39\nOutput\n9\n4\n784"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1921A - Square\nThere are many ways to solve this problem, the simplest way is as follows. Let's find the minimum and maximum coordinate $$$x$$$ among all the corners of the square. The difference of these coordinates will give us the length of the square side $$$d = x_{max} - x_{min}$$$. After that, we can calculate the area of the square as $$$s = d^2$$$."
+        },
+        {
+            "title": "Solution",
+            "content": "t\n=\nint\n(\ninput\n())\nfor\n_\nin\nrange\n(\nt\n):\na\n=\n[[\nint\n(\nx\n)\nfor\nx\nin\ninput\n().\nsplit\n()]\nfor\ni\nin\nrange\n(\n4\n)]\nx\n=\n[\np\n[\n0\n]\nfor\np\nin\na\n]\ndx\n=\nmax\n(\nx\n)\n-\nmin\n(\nx\n)\nprint\n(\ndx\n*\ndx\n)"
+        }
+    ]
+}

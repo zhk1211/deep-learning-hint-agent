@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1117G - Recursive Queries\nLet's denote $$$fl(l, r) = (m_{l,r} - l) + fl(l, m_{l,r} - 1) + fl(m_{l,r} + 1, r)$$$ and, analogically, $$$fr(l, r) = (r - m_{l,r}) + fr(l, m_{l,r} - 1) + fr(m_{l,r} + 1, r)$$$. Then, we can note that $$$f(l, r) = (r - l + 1) + fl(l, r) + fr(l, r)$$$. So we can switch to calculating $$$fl$$$ (and $$$fr$$$).\nLet's $$$lf[i]$$$ be the closest from the left to $$$i$$$ element such that $$$a[lf[i]]  \\gt  a[i]$$$.\nTo calculate $$$fl(l, r)$$$ we will look from the other side: we will look at it as the sum of lengths of segments induced by each element from $$$[l, r]$$$. Each element $$$a_i$$$ ($$$l \\le i \\le r)$$$ will add to $$$fl(l, r)$$$ value equal to $$$\\min(i - lf[i] - 1, i - l)$$$, or a piecewise linear function if we look at $$$l$$$ as a variable. And $$$fl(l, r)$$$ is a value of a sum of linear functions induced by $$$a[i]$$$ in a point $$$x = l$$$.\nTo process it efficiently we can one by one add induced linear functions to the corresponding subsegments using BIT or Segment Tree and if we've added functions induced by $$$a[k]$$$ we can calculate answer for all queries which looks like $$$(l_i, k)$$$.\nTo calculate $$$fr(l, r)$$$ we can just reverse array and all queries.\nResult time complexity is $$$O((n + q) \\log{n})$$$. Note, that it's still works quite slow, so you should use fast data structures like BIT of iterative segment tree."
         },
         {
             "title": "Solution (adedalic)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1393B - Applejack and Storages\nLet's maintain the array $$$cnt_i$$$, in it we are going to store the number of planks for each length. Let's note that to be able to build a square and a rectangle we need to have four planks of the same length and also two pairs of planks of the same length. To check it we can maintain two values: $$$sum2=\\sum_{i=1}^{10^5}\\lfloor \\frac{cnt_i}{2}\\rfloor$$$ and $$$sum4=\\sum_{i=1}^{10^5}\\lfloor \\frac{cnt_i}{4}\\rfloor$$$. Then, you will be able to build a square and a rectangular storage if $$$sum4 \\ge 1$$$ and $$$sum2 \\ge 4$$$. The first constraint satisfies the requirement about a square (you should have $$$\\ge 4$$$ planks of some length), and the second constraint satisfies the requirement about a rectangle (two pairs of the same length should be used and also two pairs are already used in the square)."
         },
         {
             "title": "Solution (74TrAkToR)",

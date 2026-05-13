@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1422D - Returning Home\nYou can build a graph with vertices at the start point and all fast travel points. The distance between the vertices $$$(x_1, y_1)$$$ and $$$(x_2, y_2)$$$ is calculated as $$$ min (|x_1 - x_2|, |y_1 - y_2|)$$$. To avoid drawing all $$$m * (m + 1) / 2$$$ edges in the graph, note that for a pair of points $$$(x_1, y_1)$$$ and $$$(x_2, y_2)$$$ such that $$$|x_1 - x_2| \\le |y_1 - y_2|$$$, if there is a point with coordinate $$$x_3$$$ such that it is between $$$x_1$$$ and $$$x_2$$$ ($$$min (x_1, x_2) \\le x_3 \\le max (x_1, x_2)$$$), then the distance between the first and second point will be equal to the sum of the distances between the first and third and between the third and second. In this case, the edge between the first and second points does not need to be drawn  – it will be unnecessary. It turns out that for each point of the graph it will be enough to draw the edges to the points nearest along the $$$x$$$ axis in both directions. Similarly for $$$y$$$. Next, in the constructed graph, we find the minimum distance from the starting point to each point of the graph $$$(x, y)$$$ and sum it up with the distance to the end point $$$(f_x, f_y)$$$, which is equal to $$$|x - f_x| + |y - f_y|$$$. Among all the distances, we choose the minimum one."
         }
     ]
 }

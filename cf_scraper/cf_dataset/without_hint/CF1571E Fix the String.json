@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1571E - Fix the String\nFirstly, let's notice that there are only two correct bracket sequences of length $$$4$$$:\n(())\nand\n()()\n.\nLet's look at the neighboring ones (i.e., there are no other ones between them) in the string $$$a$$$. Let their positions be $$$i$$$ and $$$j$$$ ($$$j  \\lt  i$$$). Let's consider what restrictions they put on each other:\nif $$$i - j = 1$$$, then there is no answer, because it is impossible to choose a pair of correct bracket sequences that the last $$$3$$$ characters of one coincide with the first $$$3$$$ characters of the other;\nif $$$i - j = 2$$$, then the only option when the last $$$2$$$ characters of one coincide with the $$$2$$$ characters of the other is two sequences of the form\n()()\n.\nif $$$i - j = 3$$$, then there is no answer, because it is impossible to choose a pair of correct bracket sequences that the last character of one coincides with the first character of the other;\notherwise, they do not put any restrictions on each other.\nThus, for all $$$i$$$ that $$$a_i = 1$$$, we know what the correct bracket sequence should be the substring $$$s[i;i+3]$$$. If both sequences are suitable, then you have to choose the one that changes the minimum number of positions."
         },
         {
             "title": "Solution (pashka)",

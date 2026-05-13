@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1346D - Constructing the Dungeon\nThe following greedy strategy works: let the number of monsters in room $$$i$$$ be the maximum number of coins in tunnels connected to the room $$$i$$$. After computing $$$[a_1, a_2, \\dots, a_n]$$$ according to it, check that all conditions are satisfied. If some condition is not satisfied, then there is no answer; otherwise we obtained a unique answer.\nWhy is the answer unique, and why does our strategy always find it? Suppose there exists some other answer $$$[b_1, b_2, \\dots, b_n]$$$ that differs from our answer in index $$$i$$$. Let's prove that this answer is either suboptimal, or incorrect:\nif $$$b_i  \\lt  a_i$$$, then the constraint on some tunnel connected to room $$$i$$$ is not met;\nif $$$b_i  \\gt  a_i$$$, then we can decrease $$$b_i$$$ since it is greater than the weights of all tunnels connected to room $$$i$$$, and the total number of monsters will be decreased."
         },
         {
             "title": "Solution (elizarov)",

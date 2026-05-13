@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1345D - Monopole Magnets\nSuppose two cells $$$A$$$ and $$$B$$$ are colored black in the same row. Since there must be a south magnet in every row, there are segments of black cells from $$$A$$$ and $$$B$$$ to the cell with the south magnet. The same result holds for columns. Therefore, for a solution to exist, every row and every column has exactly one segment of black cells or is all-white.\nSuppose there is an all-white row, but not an all-white column. (Or similarly, an all-white column but not an all-white row.) Then wherever we place a south magnet in this row, its column will have a black cell. But then the south magnet would be reachable, contradicting the fact that the row is all-white. Therefore, there should be an all-white row if and only if there is an all-white column, or no solution exists.\nNow that we have excluded these cases where no solution exists, let's construct a solution. Place a south magnet in a cell if:\nThe cell is colored black, or\nIts row and column are both all-white.\nThen place one north magnet in each connected component of black cells. A north magnet cannot travel between components, so this is optimal."
         }
     ]
 }

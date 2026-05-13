@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1621B - Integers Shop\nLet $$$L$$$ be the minimum integer Vasya will buy and $$$R$$$ be the maximum integer Vasya will buy. Then it is easy to see that he will get all integers between $$$L$$$ and $$$R$$$ and only them after receiving a gift.\nBecause Vasya wants to maximise the number of integers he will get, he should buy the smallest and the largest integers available in the shop. They can either appear in the same segment or in different segments. It is important to note that if they appear in the same segment, then it is the longest one.\nLet's add the segments to shop one by one and maintain the following six values:\nThe smallest integer in the shop and the cost of the cheapest segment that contains it.\nThe largest integer in the shop and the cost of the cheapest segment that contains it.\nThe length of the longest segment and the cost of the cheapest of such segments.\nIt is easy to see that when we add new segment this values can only be updated by parameters of the new segment.\nWhen we know all this values it is easy to find how many coins Vasya will spend in the shop.\nTotal time complexity of this solution is $$$\\mathcal{O}(n)$$$. There are other solutions (for example, solution with sets) that runs in $$$\\mathcal{O}(n \\log n)$$$."
         },
         {
             "title": "Solution",

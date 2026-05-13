@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1660E - Matrix and Shifts\nCount to the variable $$$sum$$$ the number of all ones in the matrix.\nThen consider pairs of diagonals, one of which starts in cell $$$A[i][0]$$$, and the other — in cell $$$A[0][n - i]$$$ (for $$$1 \\le i \\le n - 1$$$). Using cyclic shifts, we can assemble the main diagonal from this pair. Then among all such pairs (and the main diagonal), find the one that contains the maximal number of ones, and store this number in the variable $$$Max$$$.\nThe number of zeros on the main diagonal, which should be turned into ones, is equal to $$$n - Max$$$.\nThe number of ones to be turned into zeros, because they are not on the main diagonal, is calculated as $$$sum - Max$$$.\nThe total answer is calculated as $$$n - Max + sum - Max = n + sum - 2Max$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1840E - Character Blocking\nTwo strings are equal if and only if there is no position $$$pos$$$ such that the characters at position $$$pos$$$ are not blocked and $$$s_1[pos] \\neq s_2[pos]$$$ (we will call such a position\nbad\n). We will use this observation to maintain the current number of\nbad\npositions, denoted by $$$cnt$$$.\nLet $$$I_{pos}$$$ be an indicator variable. $$$I_{pos} = 1$$$ if position $$$pos$$$ is\nbad\n, otherwise $$$I_{pos} = 0$$$.\nDuring an operation (blocking or swapping), we only need to subtract the indicator variables of all positions affected by the operation from $$$cnt$$$. There will be $$$\\mathcal{O}(1)$$$ of them. Then, we modify the string according to the operation and add new indicator variables to $$$cnt$$$.\nTo correctly handle blocking queries, or more precisely, to unblock positions in time, we will use a queue. After each blocking query, we will add a pair of numbers to the queue. The first number of the pair is the position to unblock, and the second number is the time to unblock. Now, before each operation, we will unblock positions by looking at the head of the queue."
         },
         {
             "title": "Solution",

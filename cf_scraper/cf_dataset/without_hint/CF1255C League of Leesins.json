@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1255C - League of Leesins\nThere will be exactly $$$2$$$ numbers that appear only once in the input and they are the first and the last element of the permutation. Let $$$p_1$$$ be any of them and start with the only triple that contains $$$p_1$$$. If $$$x, y$$$ are the other members of the mentioned triple, there exists a unique triple that contains $$$x, y$$$ but not $$$p_1$$$. We can easily find that triple by searching through every triple that contains $$$x$$$ (and there are at most $$$3$$$ such triples). By repeating doing this, we can get a list $$$r$$$ that $$$r_i = perm(p_i, p_{i+1}, p_{i+2})$$$.\nFrom $$$r$$$, we can construct a permutation that satisfies the problem. Assume we know $$$p_1$$$ and $$$p_2$$$, then we can find the rest of the permutation easily. To determine which number is $$$p_2$$$, we can use the fact $$$p_2$$$ is the only number that only appears in $$$r_1$$$ and $$$r_2$$$."
         }
     ]
 }

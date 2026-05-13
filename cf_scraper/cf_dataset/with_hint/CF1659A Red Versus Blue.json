@@ -26,7 +26,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1659A - Red Versus Blue\nWe have $$$b$$$\nB\n's which divide the string into $$$b + 1$$$ regions and we have to place the\nR\n's in these regions. By the strong form of the pigeonhole principle, at least one region must have at least $$$\\lceil\\frac{r}{b + 1}\\rceil$$$\nR\n's. This gives us a lower bound on the answer.\nNow, we will construct a string whose answer is exactly equal to the lower bound.\nWe place the\nB\n's so that they are not adjacent. Then we equally distribute the\nR\n's in the $$$b + 1$$$ regions.\nLet $$$p = \\lfloor\\frac{r}{b + 1}\\rfloor$$$ and $$$q = r\\bmod(b + 1)$$$.\nWe place $$$p$$$\nR\n's in each region and an extra\nR\nin any $$$q$$$ regions. Hence, our answer for the construction is $$$\\lceil\\frac{r}{b + 1}\\rceil$$$, which is equal to the lower bound.\nImportantly, $$$r  \\gt  b$$$, so none of the\nB\n's will be consecutive.\nTime complexity: $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Implementation (C++)",

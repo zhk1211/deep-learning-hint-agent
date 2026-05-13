@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA chess tournament will be held soon, where $ n $ chess players will take part. Every participant will play one game against every other participant. Each game ends in either a win for one player and a loss for another player, or a draw for both players.\n\nEach of the players has their own expectations about the tournament, they can be one of two types:\n\n1. a player wants not to lose any game (i. e. finish the tournament with zero losses);\n2. a player wants to win at least one game.\n\nYou have to determine if there exists an outcome for all the matches such that all the players meet their expectations. If there are several possible outcomes, print any of them. If there are none, report that it's impossible.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 200 $ ) — the number of test cases.\n\nThe first line of each test case contains one integer $ n $ ( $ 2 \\le n \\le 50 $ ) — the number of chess players.\n\nThe second line contains the string $ s $ ( $ |s| = n $ ; $ s_i \\in \\{1, 2\\} $ ). If $ s_i = 1 $ , then the $ i $ -th player has expectations of the first type, otherwise of the second type.\n\nOutput Format\nFor each test case, print the answer in the following format:\n\nIn the first line, print NO if it is impossible to meet the expectations of all players.\n\nOtherwise, print YES, and the matrix of size $ n \\times n $ in the next $ n $ lines.\n\nThe matrix element in the $ i $ -th row and $ j $ -th column should be equal to:\n\n- +, if the $ i $ -th player won in a game against the $ j $ -th player;\n- -, if the $ i $ -th player lost in a game against the $ j $ -th player;\n- =, if the $ i $ -th and $ j $ -th players' game resulted in a draw;\n- X, if $ i = j $ .\n\nExamples\nSample 1\nInput\n3\n3\n111\n2\n21\n4\n2122\nOutput\nYES\nX==\n=X=\n==X\nNO\nYES\nX--+\n+X++\n+-X-\n--+X"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1569B - Chess Tournament\nSince the chess players of the first type should not lose a single game, each game between two chess players of the first type should end in a draw (so that none of them gets defeated). And a game between a chess player of the first type and the second type should end either with a victory of the first or a draw. Therefore, for convenience, we will say that all games with a chess player of the first type end in a draw.\nNow there are only games between chess players of the second type left. If there are only $$$1$$$ or $$$2$$$ such players, then there is no answer. Otherwise, we can choose the following method: the $$$i$$$-th chess player of the second type wins against the $$$i+1$$$-th chess player of the second type, and the last one wins against the first; all remaining games are drawn."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nNULL\n);\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nint\nn\n;\nstring\ns\n;\ncin\n>>\nn\n>>\ns\n;\nvector\n<int>\nid\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\nif\n(\ns\n[\ni\n]\n==\n'2'\n)\nid\n.\npush_back\n(\ni\n);\nint\nk\n=\nid\n.\nsize\n();\nif\n(\nk\n==\n1\n||\nk\n==\n2\n)\n{\ncout\n<<\n\"NO\\n\"\n;\ncontinue\n;\n}\nvector\n<string>\nt\n(\nn\n,\nstring\n(\nn\n,\n'='\n));\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\nt\n[\ni\n][\ni\n]\n=\n'X'\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nk\n;\n++\ni\n)\n{\nint\nx\n=\nid\n[\ni\n],\ny\n=\nid\n[(\ni\n+\n1\n)\n%\nk\n];\nt\n[\nx\n][\ny\n]\n=\n'+'\n;\nt\n[\ny\n][\nx\n]\n=\n'-'\n;\n}\ncout\n<<\n\"YES\\n\"\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\ncout\n<<\nt\n[\ni\n]\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

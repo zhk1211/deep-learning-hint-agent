@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1473G - Tiles\nThe group of the rows where the number of rectangular tiles increases $$$a$$$ times and then decreases $$$b$$$ times can be represented as a rectangular table, with $$$a+b+1$$$ diagonals, where the size of the first diagonal is equal to the number of rectangular tiles before the operations are applied (let their number be $$$m$$$), and the size of the last diagonal is $$$m+a-b$$$.\nIn such a rectangular table, one can move from the cell $$$(i, j)$$$ to the cells $$$(i+1, j)$$$ and $$$(i, j+1)$$$ (if they exist), which lie on the next diagonal (next row in terms of the original problem). It's a well-known fact that the number of different paths from one cell to another is some binomial coefficient.\nLet's define $$$ans_{i,j}$$$ as the number of paths from the $$$1$$$-st row to the $$$j$$$-th tile in the ($$$\\sum\\limits_{k=1}^{i} (a_i+b_i)$$$)-th row (i.e. row after the $$$i$$$-th group of operations).\nNow we want to find the values of $$$ans_{i}$$$ using the values of $$$ans_{i-1}$$$ (let its size be $$$m$$$). Using the fact described in the first paragraphs we know that $$$ans_{i, j}$$$ depends on $$$ans_{i-1, k}$$$ with some binomial coefficient. In fact $$$ans_{i, j} = \\sum\\limits_{k=1}^{m} \\binom{a_i+b_i}{b_i-k+j} ans_{i-1,k}$$$ for $$$1 \\le j \\le m + a_i - b_i$$$. But this solution is too slow. To speed up this solution we have to notice that the given formula is a convolution of $$$ans_{i-1}$$$ and some binomial coefficients. So we can use NTT to multiply them in $$$O(n\\log n)$$$ instead of $$$O(n^2)$$$ time."
         },
         {
             "title": "Solution (Neon)",

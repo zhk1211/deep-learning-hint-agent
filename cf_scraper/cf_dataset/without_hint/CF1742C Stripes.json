@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nOn an $ 8 \\times 8 $ grid, some horizontal rows have been painted red, and some vertical columns have been painted blue, in some order. The stripes are drawn sequentially, one after the other. When the stripe is drawn, it repaints all the cells through which it passes.\n\nDetermine which color was used last.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1742C/6f423ce4b1dd07561098c185bf230d882c12b3e9.png)The red stripe was painted after the blue one, so the answer is R.\n\nInput Format\nThe first line of the input contains a single integer $ t $ ( $ 1 \\leq t \\leq 4000 $ ) — the number of test cases. The description of test cases follows. There is an empty line before each test case.\n\nEach test case consists of $ 8 $ lines, each containing $ 8 $ characters. Each of these characters is either 'R', 'B', or '.', denoting a red square, a blue square, and an unpainted square, respectively.\n\nIt is guaranteed that the given field is obtained from a colorless one by drawing horizontal red rows and vertical blue columns.\n\nAt least one stripe is painted.\n\nOutput Format\nFor each test case, output 'R' if a red stripe was painted last, and 'B' if a blue stripe was painted last (without quotes).\n\nExamples\nSample 1\nInput\n4\n\n....B...\n....B...\n....B...\nRRRRRRRR\n....B...\n....B...\n....B...\n....B...\n\nRRRRRRRB\nB......B\nB......B\nB......B\nB......B\nB......B\nB......B\nRRRRRRRB\n\nRRRRRRBB\n.B.B..BB\nRRRRRRBB\n.B.B..BB\n.B.B..BB\nRRRRRRBB\n.B.B..BB\n.B.B..BB\n\n........\n........\n........\nRRRRRRRR\n........\n........\n........\n........\nOutput\nR\nB\nB\nR\n\nNote\nThe first test case is pictured in the statement.\n\nIn the second test case, the first blue column is painted first, then the first and last red rows, and finally the last blue column. Since a blue stripe is painted last, the answer is B."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1742C - Stripes\nNote that if a stripe is painted last, then the entire stripe appears in the final picture (because no other stripe is covering it).\nSince rows are only painted red and columns are only painted blue, we can just check if any row contains 8\nR\ns. If there is such a row, then red was painted last; otherwise, blue was painted last."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nconst\nint\nMAX\n=\n200007\n;\nconst\nint\nMOD\n=\n1000000007\n;\nvoid\nsolve\n()\n{\nchar\ng\n[\n8\n][\n8\n];\nvector\n<int>\nr\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n8\n;\ni\n++)\n{\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n8\n;\nj\n++)\n{\ncin\n>>\ng\n[\ni\n][\nj\n];\nif\n(\ng\n[\ni\n][\nj\n]\n==\n'R'\n)\n{\nr\n.\npush_back\n(\ni\n);}\n}\n}\nfor\n(\nint\ni\n:\nr\n)\n{\nbool\nok\n=\ntrue\n;\nfor\n(\nint\nj\n=\n0\n;\nj\n<\n8\n;\nj\n++)\n{\nif\n(\ng\n[\ni\n][\nj\n]\n!=\n'R'\n)\n{\nok\n=\nfalse\n;\nbreak\n;}\n}\nif\n(\nok\n)\n{\ncout\n<<\n\"R\\n\"\n;\nreturn\n;}\n}\ncout\n<<\n\"B\\n\"\n;\n}\nint\nmain\n()\n{\nios\n::\nsync_with_stdio\n(\nfalse\n);\ncin\n.\ntie\n(\nnullptr\n);\nint\ntt\n;\ncin\n>>\ntt\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\ntt\n;\ni\n++)\n{\nsolve\n();}\n// solve();\n}"
+        }
+    ]
+}

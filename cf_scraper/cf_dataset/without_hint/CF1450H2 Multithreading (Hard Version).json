@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1450H2 - Multithreading (Hard Version)\nContinued from Easy Version tutorial.\nRecall the answer is\n$$$$$$\\frac{1}{2^F}\\sum_{0\\le i\\le F\\atop i\\equiv x\\pmod 2} |x-i| {{F}\\choose{i}}.$$$$$$\nNow we have to maintain this sum over updates.\nLet's ignore the $$$2^{F}$$$, and rewrite the sum as\n$$$$$$\\sum_{0\\le i\\le x-2\\atop i\\equiv x\\pmod 2} x{{F}\\choose{i}} - \\sum_{0\\le i\\le x-2\\atop i\\equiv x\\pmod 2} i{{F}\\choose{i}}\n+ \\sum_{x+2\\le i\\le F\\atop i\\equiv x\\pmod 2} i{{F}\\choose{i}} - \\sum_{x+2\\le i\\le F\\atop i\\equiv x\\pmod 2} x{{F}\\choose{i}}.$$$$$$\nWe will transform sums of the form $$$i{{F}\\choose{i}}$$$ to sums of the form $$${F\\choose i}$$$. We rewrite them with the following identity. $$$$$$i{{F}\\choose{i}} = F{{F-1}\\choose{i-1}}$$$$$$\nTo deal with the $$$i\\equiv x\\pmod 2$$$ condition, we use Pascal's rule to rewrite each $$${F}\\choose{i}$$$ as $$${{F-1}\\choose{i-1}} + {{F-1}\\choose{i}}$$$, and each sum becomes a prefix sum or suffix sum of some binomial coefficients with the same upper index. The indices change by $$$O(1)$$$ between updates, and we should handle these cases. We can handle changes to the upper index by noting the following equation, again due to Pascal's rule.\n$$$$$$\\sum_{i=0}^{k} {{F+1}\\choose{i}} = 2\\sum_{i=0}^{k} {{F}\\choose{i}} - {{F}\\choose{k}}.$$$$$$\nIt is easy to handle updates to the lower index by adding and subtracting some binomial coefficients when necessary.\nBe careful about cases where $$$F = 1$$$ since the transformed prefix sum won't consider all possibilities."
         }
     ]
 }

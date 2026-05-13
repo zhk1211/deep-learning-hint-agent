@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1509C - The Sports Festival\nAssume that the array of speeds is sorted, i.e. $$$s_1 \\le s_2 \\le \\dots \\le s_n$$$.\nThe key observation is that the last running can be assumed to be either $$$s_1$$$ or $$$s_n$$$. This is because if $$$s_1$$$ and $$$s_n$$$ are both in the prefix of length $$$i$$$, then clearly $$$d_i = s_n - s_1$$$, which is the maximum possible value of any discrepancy. Similarly $$$d_{i + 1}, d_{i + 2}, \\dots, d_n$$$ are all equal to $$$s_n - s_1$$$. This moving either $$$s_1$$$ or $$$s_n$$$ (whichever appears last) to the very end of the array cannot possibly increase the sum of these discrepancies, since they already have the largest possible value.\nIf we repeat the previous observation, we deduce that for each $$$i$$$, the prefix of length $$$i$$$ in an optimal solution forms a contiguous subarray of the sorted array. Therefore, we may solve the problem through dynamic programming: $$$dp(l, r)$$$ represents the minimum possible answer if we solve for the subarray $$$s[l \\dots r]$$$. Clearly $$$dp(x, x) = 0$$$, and the transition is given by\n$$$$$$dp(l, r) = s_r - s_l + \\min(dp(l + 1, r), dp(l, r - 1))$$$$$$\nWhich corresponds to placing either the smallest or the largest element at the end of the sequence. The final answer is $$$dp(1, n)$$$. This allows us to solve the problem in $$$O(n^2)$$$."
         }
     ]
 }

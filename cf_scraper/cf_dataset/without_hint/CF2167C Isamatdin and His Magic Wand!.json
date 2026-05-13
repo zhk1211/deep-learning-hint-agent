@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2167C - Isamatdin and His Magic Wand!\nFirst of all, notice that if all elements have the same parity, we cannot perform any swaps. Therefore, the answer in this case is simply the array $$$a$$$ itself.\nHowever, if the array contains both an odd and an even element, it turns out that we can fully sort the array. Let's prove it.\nConsider the array $$$[3, 2, 1]$$$ Our goal is to sort it. We want to swap the first and third elements, but since both are odd, we cannot do it directly. Instead, we can perform the following sequence of swaps:\n1. Swap elements $$$(1, 2)$$$: $$$[2, 3, 1]$$$\n2. Swap elements $$$(1, 3)$$$: $$$[1, 3, 2]$$$\n3. Swap elements $$$(2, 3)$$$: $$$[1, 2, 3]$$$\nAs we can see, by using an element of opposite parity as a bridge, we can swap any two elements of the same parity. Thus, any pair of elements can be exchanged, meaning we can always fully sort the array.\nHence, the final answer is the sorted array."
         }
     ]
 }

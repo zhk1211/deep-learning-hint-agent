@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1881C - Perfect Square\nWhen rotating a matrix of size $$$n$$$ by $$$n$$$ by $$$90$$$ degrees:\nelement $$$a[i][j]$$$ takes the position of element $$$a[j][n - 1 - i]$$$;\nelement $$$a[n - 1 - j][i]$$$ takes the position of element $$$a[i][j]$$$;\nelement $$$a[n - 1 - i][n - 1 - j]$$$ takes the position of element $$$a[n - 1 - j][i]$$$.\nIn order for the matrix to be a perfect square, the symbols at all of these positions must be equal. Since we can only maximize a symbol, we do the following:\nAmong these 4 symbols, let's find the lexicographically maximal one, that is, the one that is in the alphabet not before all the others;\nFor all characters that are not equal to the maximum, calculate the number of operations that must be applied to them to make them equal to the maximum character. This number of operations is equal to the difference of positions of symbols in the alphabet."
         },
         {
             "title": "Solution",

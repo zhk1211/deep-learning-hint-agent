@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1399E2 - Weights Division (hard version)\nRead the easy version editorial first, because almost all solution is the solution to the easy version with little changes.\nFirstly, let's simulate the greedy process we used to solve the easy version problem, for edges with cost $$$1$$$ and edges with cost $$$2$$$, independently. But we don't stop when our sum reach something, let's simulate until our sum becomes $$$0$$$ and store each intermediate result in the array $$$v_1$$$ for edges with cost $$$1$$$ and $$$v_2$$$ for edges with cost $$$2$$$. So, the array $$$v_1$$$ contains the initial total impact of edges of cost $$$1$$$, then the impact after making one move, two moves, and so on... The same with $$$v_2$$$ but for edges with cost $$$2$$$.\nNow let's fix how many moves on edges with cost $$$1$$$ we do. Let it be $$$i$$$ (and arrays $$$v_1$$$ and $$$v_2$$$ are $$$0$$$-indexed). Then the sum we obtain from the $$$1$$$-cost edges is $$$v_1[i]$$$. So we need to find the minimum number of moves $$$p$$$ we can do on $$$2$$$-cost edges so that $$$v_1[i] + v_2[p] \\le S$$$. This can be done using binary search or moving pointer (if we iterate over $$$i$$$ in increasing order, place $$$p$$$ at the end of $$$v_2$$$ and move it to the left while $$$v_1[i] + v_2[p] \\le S$$$). Then, if $$$v_1[i] + v_2[p] \\le S$$$, we can update the answer with the value $$$i + 2p$$$.\nTime complexity is actually the same as in easy version of the problem: $$$O(n \\log{w} \\log{n})$$$."
         },
         {
             "title": "Solution",

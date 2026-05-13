@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1431C - Black Friday\nLet's consider the most optimal set of items of some fixed size $$$x$$$. We want the cheapest items to be as expensive as possible, so it's easy to see that taking $$$x$$$ most expensive items overall works the best.\nThe other observation that makes it easier to code is that you only have to consider such $$$x$$$ that are multiples of $$$k$$$. If you take some $$$x$$$ that is not multiple of $$$k$$$, then you will only make $$$\\lfloor \\frac x k \\rfloor$$$ cheapest items cheaper compared to the nearest multiple below it.\nSo the solution is to iterate over multiples of $$$k$$$ and choose the best answer of them.\nOverall complexity: $$$O(n^2)$$$ per testcase."
         },
         {
             "title": "Solution (elizarov)",

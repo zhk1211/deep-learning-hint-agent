@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1382D - Unmerge\nConsider the maximum element $$$2n$$$ of $$$p$$$. Assume without loss of generality that it comes from array $$$a$$$. Then the merge algorithm will exhaust array $$$b$$$ before it takes the element $$$2n$$$. Therefore, if $$$2n$$$ appears at index $$$i$$$ in $$$p$$$, the entire suffix of $$$p$$$ beginning at index $$$i$$$ must be a contiguous block in one of the arrays $$$a$$$ or $$$b$$$.\nThen if we ignore this suffix of $$$p$$$, we should determine if the prefix of $$$p$$$ can be the merge of two arrays of certain sizes. We can repeat the same argument, as the maximum remaining element also corresponds to a contiguous block.\nTaking this argument all the way, consider all indices $$$i$$$ where $$$p_i$$$ is greater than all elements that come before. This gives us all the lengths of the contiguous blocks, and we should determine if a subset of them add up to $$$n$$$. We've shown this condition is necessary. It is also sufficient because if we assign the blocks to $$$a$$$ and $$$b$$$ accordingly, the merge algorithm works correctly.\nNow, this is just a subset-sum problem. The standard subset-sum DP approach takes $$$O(n^2)$$$ time, which is good enough.\nIt's also possible to do $$$O(n\\sqrt n)$$$ by using the fact that sum of values is $$$2n$$$ (as they are the lengths of disjoint blocks), meaning there are only $$$O(\\sqrt n)$$$ distinct values."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1840G1 - In Search of Truth (Easy Version)\nLet $$$a_1, a_2, \\dots, a_n$$$ be the numbers of the sectors in clockwise order, and let the arrow initially point to the sector with number $$$a_1$$$.\nFirst, let's make $$$999$$$ queries of \"+ 1\", then we will know the numbers of $$$1000$$$ consecutive sectors. If $$$n  \\lt  1000$$$, then the number of the first query that gives the answer $$$a_1$$$ is the desired $$$n$$$.\nIf we did not find $$$n$$$, this means that $$$n \\ge 1000$$$. Let's save $$$a_1, a_2, \\dots, a_{1000}$$$. Now we will make queries of \"+ 1000\" until we get one of the numbers $$$a_1, a_2, \\dots, a_{1000}$$$ as the answer. Note that we will need no more than $$$1000$$$ queries of this type, after which it is easy to determine the number $$$n$$$.\nThus, we can determine the number $$$n$$$ in no more than $$$999 + 1000 = 1999 \\le 2023$$$ queries."
         },
         {
             "title": "Solution",

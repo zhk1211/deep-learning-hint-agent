@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1771E - Hossam and a Letter\nLet's preprocess the following data for each cell.\n1. first medium cell above current cell. 2. first medium cell below current cell. 3. first bad cell above current cell. 4. first bad cell below current cell.\nThen we will try to solve the problem for each row (i), and 2 columns (j, k).\nNow we have a horizontal line in row (i), and we can calculate the length of vertical line by the following.\nThere is two cases:\nIn case of the horizontal line contains one letter 'm'.\nFor each column (j, k): get first cell above it the don't contain ('#' or 'm') and first cell below it the don't contain ('#' or 'm').\nIn case of the horizontal line doesn't contain any letter 'm'.\nWe will try to get the 4 cells as it contains letter 'm', but in this case we will 4 trials.\nfor each cell from the 4 cells, we allow to have only one letter 'm' in that line.\nAfter getting above cells and below cells for each line. the starting cell will be the maximum between the two above cells, and the ending cell will be the minimum between the two below cells.\nThen we need to check that starting cell is above the current row (i) to avoid making letter n instead of H\nAnd check that ending cell is below the current row (i) to avoid making letter u instead of H.\nSince n, m has the same maximum limit 400.\nThus, time complexity of this solution is $$$O(n^3)$$$."
         },
         {
             "title": "Solution(_HossamYehia_)",

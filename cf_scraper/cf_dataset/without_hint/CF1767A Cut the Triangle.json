@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1767A - Cut the Triangle\nThe line we draw must go through a triangle's vertex; otherwise, two sides of the triangle are split, and one of the resulting parts becomes a quadrilateral.\nSo we need to check if it is possible to make a horizontal or vertical cut through a vertex. A horizontal cut is possible if all $$$y$$$-coordinates are different (we can draw it through a vertex with the median $$$y$$$-coordinate); a vertical cut is possible if all $$$x$$$-coordinates are different (we can draw it through a vertex with the median $$$x$$$-coordinate).\nSo, all we need to check is the following pair of conditions:\nall $$$x_i$$$ are different;\nall $$$y_i$$$ are different."
         },
         {
             "title": "Solution (BledDest)",

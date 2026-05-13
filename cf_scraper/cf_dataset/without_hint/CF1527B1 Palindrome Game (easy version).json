@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1527B1 - Palindrome Game (easy version)\nIf the count of zeros in the string $$$s$$$ is even then Bob always win\nProof\nBob can restrict Alice from performing operation $$$2$$$ by making string $$$s$$$ palindrome (if Alice changes $$$s[i]$$$ to '\n1\n' then Bob will change $$$s[n-i+1]$$$ to '\n1\n'). However, when the last '\n0\n' is remaining, Bob will reverse the string, eventually forcing Alice to perform the operation $$$1$$$. This way Alice will spend $$$2$$$ dollars more than Bob resulting in Bob's win.\nIf the count of zeros in the string $$$s$$$ is odd then Alice always win except for the case of one '\n0\n'\nProof\nAlice will change $$$s[n/2]$$$ from '\n0\n' to '\n1\n' and play with the same strategy as Bob did in the above case. This way Bob will spend $$$1$$$ dollar more than Alice resulting in Alice's win."
         },
         {
             "title": "Solution (DenOMINATOR)",

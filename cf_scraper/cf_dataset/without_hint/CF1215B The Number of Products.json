@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1215B - The Number of Products\nAt first, let's calculate the value of $$$ans_p$$$ — the number of subsegments with positive product. We should iterate through the array and store $$$bal$$$ — the number of negative elements. Also we should store $$$cnt_1$$$ and $$$cnt_2$$$ — the number of elements such that there is an even number of negative elements before them ($$$cnt_1$$$) or an odd number of negative elements before them ($$$cnt_2$$$). If for the current element $$$bal$$$ is even, we should increase $$$cnt_1$$$ by one, else we should increase $$$cnt_2$$$ by one. Then if the current element is negative, we should increase $$$bal$$$ by one. Then we should add the number of subsegments ending in the current element and having positive product to $$$ans_p$$$. If $$$bal$$$ is even, then any subsegment ending in the current element and containing even number of negative elements should begin in a position where $$$bal$$$ was even too, so we should add $$$cnt_1$$$ to $$$ans_p$$$. If $$$bal$$$ is odd, we should add $$$cnt_2$$$ to $$$ans_p$$$ (we use similar reasoning).\nThe number of segments having negative product can be calculated, for example, by subtracting $$$ans_p$$$ from the total number of subsegments, which is $$$\\frac{n \\cdot (n + 1)}{2}$$$."
         },
         {
             "title": "Solution (fcspartakm)",

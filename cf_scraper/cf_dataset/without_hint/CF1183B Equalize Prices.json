@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1183B - Equalize Prices\nIt is very intuitive that the maximum price we can obtain is $$$min + k$$$ where $$$min$$$ is the minimum value in the array. For this price we should check that we can change prices of all products to it. It can be done very easily: we can just check if each segment $$$[a_i - k; a_i + k]$$$ covers the point $$$min + k$$$. But this is not necessary because if we can change the price of the maximum to this value ($$$min + k$$$) then we can change each price in the segment $$$[min; max]$$$ to this value. So we just need to check that $$$min + k \\ge max - k$$$ and if it is then print $$$min + k$$$ otherwise print\n-1\n."
         },
         {
             "title": "Solution",

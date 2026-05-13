@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1950B - Upscaling\nYou just need to implement what is written. One way is to go cell-by-cell in a regular $$$n \\times n$$$ checkerboard, and construct the larger one one cell at a time by copying cell $$$(i,j)$$$ into cells $$$(2i,2j)$$$, $$$(2i+1, 2j)$$$, $$$(2i, 2j+1)$$$, $$$(2i+1, 2j+1)$$$.\nA faster solution is to notice that if we round down coordinates $$$(x,y)$$$ in the enlarged checkerboard to $$$(\\lfloor \\frac{x}{2} \\rfloor, \\lfloor \\frac{y}{2} \\rfloor)$$$, we get the corresponding cell in the original checkerboard. And to output a regular checkerboard, we output $$$\\texttt{#}$$$ if the sum of coordinates is even, and $$$\\texttt{.}$$$ if it is odd.\nSo the faster implementation is: iterate over all cells $$$(x,y)$$$ in the $$$2n \\times 2n$$$ checkerboard. If $$$\\lfloor \\frac{x}{2} \\rfloor + \\lfloor \\frac{y}{2} \\rfloor$$$ is even output $$$\\texttt{#}$$$, else output $$$\\texttt{.}$$$."
         },
         {
             "title": "Solution",

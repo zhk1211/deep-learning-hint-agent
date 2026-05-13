@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1618C - Paint the Array\nWhat does it mean that no pair of adjacent elements should have the same color? It means that either all elements on odd positions are blue and all elements on even positions are red, or vice versa. So, we need to check these two cases.\nLet's try to solve a case when we have to find a number $$$d$$$ such that $$$a_1, a_3, \\dots$$$ are divisible by $$$d$$$, and $$$a_2, a_4, \\dots$$$ are not. What does it mean that $$$d$$$ divides all of the numbers $$$a_1, a_3, \\dots$$$? It means that $$$d$$$ divides the $$$gcd(a_1, a_3, \\dots)$$$, where $$$gcd$$$ represents the greatest common divisor. Let's calculate this $$$gcd$$$ using Euclidean algorithm or some built-in functions in $$$O(n + \\log A)$$$.\nOkay, now we need to check all divisors of the $$$gcd(a_1, a_3, \\dots)$$$ and find if any of them does not divide $$$a_2, a_4, \\dots$$$. So, we have to factorize $$$gcd$$$ and generate all of its divisors... or do we? In fact, if $$$gcd(a_1, a_3, \\dots)$$$ divides any of the numbers $$$a_2, a_4, \\dots$$$, then every divisor of $$$gcd$$$ also divides that number. So, the only two numbers we have to check as canditates for the answer are $$$gcd(a_1, a_3, \\dots)$$$ and $$$gcd(a_2, a_4, \\dots)$$$."
         },
         {
             "title": "Solution (BledDest)",

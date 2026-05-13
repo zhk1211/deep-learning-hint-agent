@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1477A - Nezzar and Board\nLet's first assume that $$$x_1=0$$$ (Otherwise, we could subtract $$$x_1$$$ for $$$x_1,x_2,\\ldots,x_n$$$ and $$$k$$$). We will now prove that the answer is \"\nYES\n\" if and only if $$$k$$$ can be divided by $$$g=\\gcd(x_2,x_3,\\ldots,x_n)$$$.\nOne direction is straightforward. Note that any number written on the board should be divisible by $$$g$$$, which follows from the fact that $$$g|x, g|y \\implies g|2x-y$$$. It only remains to prove that for any $$$x$$$ divisible by $$$g$$$, we could write down $$$x$$$ on the board. We will prove it by induction on $$$n$$$.\nBase case ($$$n=2$$$) is obvious. Let $$$g_0=\\gcd(x_2,x_3,\\ldots,x_{n-1})$$$. By Bézout's Theorem, there exists integers $$$s,t$$$ such that $$$g_0 s-x_n t = g$$$. By induction, we could write down $$$g_0$$$ on the board, and trivially $$$x_n t$$$ can be written on the board. Therefore, we could write down $$$g$$$ applying operation recursively."
         },
         {
             "title": "Solution",

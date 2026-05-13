@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1520F2 - Guess the K-th Zero (Hard version)\nIn this problem, you can apply the same solution as in the previous one, but you need to remember the responses to the requests and not make the same requests several times.\nWhy does it work? Imagine a binary tree with a segment at each vertex, and its children — the left and right half of the segment. We will leave only those vertexes for which we made requests. It remains to show that there are no more than $$$6 \\cdot 10^4 $$$ such vertices.\nFirst — the height of the tree is not more than $$$18$$$. Let's understand what the maximum number of vertices can be in the tree. We will consider each level separately. If the level number $$$x$$$ is less than $$$\\log{t} \\le 14$$$, then we can spend no more than $$$x$$$ of vertices (since there are simply no more vertices). If the level number is from $$$15$$$ to $$$18$$$, then we can spend no more than $$$t$$$ vertices, so each request uses only one vertex per level. By limiting the number of vertices in this way, we get that there are no more than $$$2^14 - 1 + 4 \\cdot 10^4 = 56383$$$, which fits into the constraints."
         },
         {
             "title": "Solution",

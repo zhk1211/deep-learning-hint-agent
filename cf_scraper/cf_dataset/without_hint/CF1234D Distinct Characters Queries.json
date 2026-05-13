@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1234D - Distinct Characters Queries\nLet's store for each letter all positions in which it appears in some data structure. We need such a data structure that can add, remove and find the next element greater than or equal to our element, fast enough. Suddenly, this data structure is\nstd::set\nagain (in C++).\nWhen we meet the first type query, let's just modify two elements of corresponding sets (one remove, one add). When we meet the second type query, let's iterate over all letters. If the current letter is in the segment $$$[l; r]$$$ then the first element greater than or equal to $$$l$$$ in the corresponding set should exist and be less than or equal to $$$r$$$. If it is so, let's increase the answer by one. After iterating over all letters just print the answer.\nTime complexity: $$$O(n \\log{n} AL)$$$, when $$$AL$$$ is the size of the alphabet."
         },
         {
             "title": "Solution",

@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given three integers $ n $ , $ l $ , and $ r $ . You need to construct an array $ a_1,a_2,\\dots,a_n $ ( $ l\\le a_i\\le r $ ) such that $ \\gcd(i,a_i) $ are all distinct or report there's no solution.\n\nHere $ \\gcd(x, y) $ denotes the [greatest common divisor (GCD)](https://en.wikipedia.org/wiki/Greatest_common_divisor) of integers $ x $ and $ y $ .\n\nInput Format\nThe input consists of multiple test cases. The first line contains a single integer $ t $ ( $ 1\\le t\\le 10^4 $ ) — the number of test cases. The description of the test cases follows.\n\nThe first line contains three integers $ n $ , $ l $ , $ r $ ( $ 1 \\le n \\le 10^5 $ , $ 1\\le l\\le r\\le 10^9 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, if there is no solution, print \"NO\" (without quotes). You can print letters in any case (upper or lower).\n\nOtherwise, print \"YES\" (without quotes). In the next line, print $ n $ integers $ a_1,a_2,\\ldots,a_n $ — the array you construct.\n\nIf there are multiple solutions, you may output any.\n\nExamples\nSample 1\nInput\n4\n5 1 5\n9 1000 2000\n10 30 35\n1 1000000000 1000000000\nOutput\nYES\n1 2 3 4 5\nYES\n1145 1926 1440 1220 1230 1350 1001 1000 1233\nNO\nYES\n1000000000\n\nNote\nIn the first test case, $ \\gcd(1,a_1),\\gcd(2,a_2),\\ldots,\\gcd(5,a_5) $ are equal to $ 1 $ , $ 2 $ , $ 3 $ , $ 4 $ , $ 5 $ , respectively."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "1708B - Difference of GCDs\n$$$\\gcd(i,a_i)\\le i$$$. Because all $$$\\gcd(i,a_i)$$$ are different, then $$$\\gcd(i,a_i)=i$$$, which means $$$a_i$$$ is the multiple of $$$i$$$.\nTo check if there is such $$$a_i$$$, just check if $$$a_i=\\left(\\lfloor \\frac{l-1}{i} \\rfloor +1\\right)\\cdot i$$$ (the minimum multiple of $$$i$$$ that is strictly bigger than $$$l-1$$$) is less than $$$r$$$.\nTime complexity $$$O(n)$$$ for each test case."
+        }
+    ]
+}

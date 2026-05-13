@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1030C - Vasya and Golden Ticket\nLet's iterate over all possible lengths $$$len$$$ of the first segment of the partition. Now, knowing this length, we also can calculate sum $$$S$$$ of each segment. Now we can form partition with greedy solution: starting from position $$$len + 1$$$ we will find maximal prefix (strictly, segment starting at $$$len + 1$$$) with sum lower or equal to $$$S$$$, cut it and again. If all formed segments have sums equal to $$$S$$$ then it's valid partition and answer is \"\nYES\n\".\nOtherwise, there is no valid length of the first segment, there is no valid partition, so answer is \"\nNO\n\"."
         },
         {
             "title": "Solution",

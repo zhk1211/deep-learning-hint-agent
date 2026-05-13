@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1927C - Choose the Different Ones!\nNotice that elements with a value greater than $$$k$$$ are not relevant to us. Let's divide the values into three categories:\nOccurring only in array $$$a$$$;\noccurring only in array $$$b$$$;\noccurring in both arrays.\nThe answer will be\nNO\nif any of the following conditions are met:\nthe number of values of the first type is greater than $$$\\frac{k}{2}$$$ (this implies that we cannot select all such elements);\nthe number of values of the second type is greater than $$$\\frac{k}{2}$$$ (this implies that we cannot select all such elements);\nthe total number of values of all three types is less than $$$k$$$ (this implies that some values do not occur in either of the arrays).\nOtherwise, the answer is\nYES\n."
         },
         {
             "title": "Solution",

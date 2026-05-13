@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1635C - Differential Sorting\nFirst of all, if $$$a_{n-1}  \\gt  a_n$$$, then the answer is $$$-1$$$ since we can't change the last two elements.\nIf $$$a_n \\geq 0$$$, there exists a simple solution: perform the operation $$$(i, n - 1, n)$$$ for each $$$1 \\leq i \\leq n - 2$$$.\nOtherwise, the answer exists if and only if the initial array is sorted.\nProof:\nAssume that $$$a_n  \\lt  0$$$ and we can sort the array after $$$m  \\gt  0$$$ operations.\nConsider the last operation we performed ($$$x_m, y_m, z_m$$$). Since all elements should be negative after the last operation, so $$$a_{z_m}  \\lt  0$$$ should hold before the last operation. But $$$a_{x_m} = a_{y_m} - a_{z_m}  \\gt  a_{y_m}$$$ after this, so the array isn't sorted in the end. By contradiction, we have proved that we can't perform any operations as long as $$$a_n  \\lt  0$$$."
         },
         {
             "title": "Solution",

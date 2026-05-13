@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2143C - Max Tree\nClaim:\nFor each edge $$$(u, v, x, y)$$$ we can make it's contribution equal to $$$max(x, y)$$$.\nProof:\nLet's assign an orientation to each edge. If $$$x \\leq y$$$ then our edge in the newly formed graph will be $$$u \\to v$$$, otherwise it will be $$$v \\to u$$$.\nIt's easy to see that this graph is a DAG (Directed Acyclic Graph).\nNow, we can topologically sort our DAG to obtain an ordering of its vertices. Let's say $$$order_1, order_2, \\dots, order_n$$$ is the resulting order. If we make $$$p_{order_i} = i$$$ then all our conditions will be satisfied. Why?\nLet's say that we have an edge $$$x \\to y$$$. We know that $$$x$$$ appears earlier in the ordering than $$$y$$$, thus $$$p_x \\lt p_y$$$ which is exactly what we wanted."
         }
     ]
 }

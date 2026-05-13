@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1538E - Funny Substrings\nWe can't model this process directly, since the maximum string length reaches $$$2^{50}$$$ (look at the second example from the statements).\nTo optimize this process, you can store each row as a set of the following values.\nNumber of occurrences of\nhaha\nin the string  — $$$cnt$$$.\nString length  — $$$length$$$.\nThe first three characters of the string are  — $$$pref$$$.\nThe last three characters of the string are  — $$$suff$$$.\nThen, to process the second type of request and combine the two strings $$$a$$$ and $$$b$$$ into the string $$$c$$$, you need:\n$$$c.length = a.length + b.length$$$.\n$$$c.cnt = a.cnt + b.cnt + count(a.suff + b.pref, haha)$$$. (New occurrences may be added at the junction of two words)\n$$$c. pref = a. pref$$$ (However, if the string length is less than $$$6=3+3$$$, then you need to handle this case carefully with your hands)\n$$$c. suff = b. suff$$$ (Similarly, you need to process small strings separately)."
         },
         {
             "title": "Solution",

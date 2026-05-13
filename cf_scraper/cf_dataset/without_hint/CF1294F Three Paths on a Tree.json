@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1294F - Three Paths on a Tree\nThere is some obvious dynamic programming solution that someone can describe in the comments, but I will describe another one, that, in my opinion, much easier to implement.\nFirstly, let's find some diameter of the tree. Let $$$a$$$ and $$$b$$$ be the endpoints of this diameter (and first two vertices of the answer). You can prove yourself why it is always good to take the diameter and why any diameter can be taken in the answer. Then there are two cases: the length of the diameter is $$$n-1$$$ or the length of the diameter is less than $$$n-1$$$. In the first case, you can take any other vertex as the third vertex of the answer $$$c$$$, it will not affect the answer anyway. Otherwise, we can run multi-source bfs from all vertices of the diameter and take the farthest vertex as the third vertex of the answer. It is always true because we can take any diameter and the farthest vertex will increase the answer as much as possible.\nTime complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1312C - Adding Powers\nThis is the solution that doesn't involve masks. Let's reverse the process and try to get all zeroes from the array $$$a$$$: since all $$$a_i \\le 10^{16}$$$ we can start from maximum $$$k^s \\le 10^{16}$$$.\nThe key idea: since $$$k^s  \\gt  \\sum_{x=0}^{s-1}{k^x}$$$ then there should be no more than one position $$$pos$$$ such that $$$a_{pos} \\ge k^s$$$ and we should decrease it by $$$k^s$$$. Now we can decrease $$$s$$$ by $$$1$$$ and repeat the same process.\nIf at any step there are at least two $$$a_{pos} \\ge k^s$$$ or as result, we won't get array filled with $$$0$$$ then there is no way to build the array $$$a$$$."
         },
         {
             "title": "Solution 1 (adedalic)",

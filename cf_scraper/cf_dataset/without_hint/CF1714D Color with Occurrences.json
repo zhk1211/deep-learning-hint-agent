@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1714D - Color with Occurrences\nThe first step is to find the word that covers the maximum length prefix. If there is no such word, we cannot color the string.\nThen go through the positions inside the found prefix and find the next word, which is a tweak of $$$t$$$, has the maximal length, and ends not earlier than the previous found word, and not later than the text $$$t$$$. If there is no such word, it is impossible to color $$$t$$$.\nAfter the second word is found, similarly continue looking for the next ones."
         },
         {
             "title": "Solution",

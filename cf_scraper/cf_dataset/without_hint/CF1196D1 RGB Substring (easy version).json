@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1196D1 - RGB Substring (easy version)\nYou can just implement what is written in the problem statement and solve this problem this way.\nLet's iterate over all starting positions of the substring $$$i$$$ from $$$0$$$ to $$$n-k+1$$$ and over all possible offsets of the string $$$t$$$ = \"\nRGB\n\" $$$offset$$$ from $$$0$$$ to $$$2$$$ inclusive. Then let's iterate over all position of the current substring $$$pos$$$ from $$$0$$$ to $$$k-1$$$ and carry the variable $$$cur$$$ which denotes the answer for the current starting position and the current offset. And if $$$s_{i + pos} \\ne t_{(offset + pos) \\% 3}$$$ then let's increase $$$cur$$$ by $$$1$$$. After iterating over all positions $$$pos$$$ let's update the answer with the value of $$$cur$$$."
         },
         {
             "title": "Solution",

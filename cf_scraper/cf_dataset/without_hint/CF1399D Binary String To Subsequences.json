@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1399D - Binary String To Subsequences\nLet's iterate over all characters of $$$s$$$ from left to right, maintaining two arrays $$$pos_0$$$ and $$$pos_1$$$, where $$$pos_0$$$ stores indices of all subsequences which end with '\n0\n' and $$$pos_1$$$ stores indices of all subsequences which end with '\n1\n'. If we met '\n0\n', then the best choice is to append it to some existing subsequence which ends with '\n1\n'. If there are no such sequences, we need to create new one which ends with '\n0\n'. Otherwise we need to convert one of '\n1\n'-sequences to '\n0\n'-sequence. The same works with characters '\n1\n'. So, when we don't need to create the new sequence, we try to don't do that. And values in arrays $$$pos_0$$$ and $$$pos_1$$$ help us to determine the number of sequence we assign to each character.\nAnd also, there is a cute proof of this solution from Gassa: let $$$f(i)$$$ be the difference between the number of '\n1\n' and the number of '\n0\n' on the prefix of $$$s$$$ of length $$$i$$$. We claim that the answer is $$$max(f(i)) - min(f(i))$$$ and let's show why is it true. Let's build a function on a plane with points $$$(i, f(i))$$$. Then we can match each $$$x$$$ between $$$min(f(i))$$$ and $$$max(f(i))$$$ with some subsequence."
         },
         {
             "title": "Solution",

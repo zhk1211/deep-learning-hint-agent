@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1927F - Microcycle\nLet's use the disjoint sets union (DSU). We will add edges to the DSU in descending order of weight. At the same time, we will build a graph containing only the edges that, when added to the DSU, unite different sets. We will also remember the last edge that we did not add to the graph, as it will be the lightest edge of the desired cycle. To find the cycle itself, we will find a path in the constructed graph leading from one end of this edge to the other (due to the construction of the graph, it does not contain cycles, so we need to find a path in the tree)."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1927D - Find the Different Ones!\nBefore processing the requests, let's calculate the position $$$p_i$$$ of the nearest element to the left that is not equal to it (we will consider $$$p_1 = -1$$$). To do this in linear time, we will traverse the array from left to right. For the $$$i$$$-th element ($$$1  \\lt  i \\le n$$$), if $$$a_i \\ne a_{i - 1}$$$, then $$$p_i=i-1$$$, otherwise $$$p_i=p_{i-1}$$$ (all elements between $$$p_{i - 1}$$$ and $$$i$$$ will be equal to $$$a_i$$$ by construction).\nTo answer a query, we will fix the right boundary as one of the positions for the answer. Then the best of all suitable positions for it is $$$p_r$$$, as it is the maximum, and we just need to check that $$$l \\le p_r$$$. (Note that by fixing any other position, you may not find the answer for a segment of the form $$$[1, 1, 1, \\dots, 1, 2]$$$)"
         },
         {
             "title": "Solution",

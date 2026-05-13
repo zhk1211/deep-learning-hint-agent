@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1366B - Shuffle\nLet's consider how the set of possible indices where the $$$1$$$ can be changes. Initially, only one index is correct — $$$x$$$. After performing an operation $$$l, r$$$ such that $$$x  \\lt  l$$$ or $$$x  \\gt  r$$$ this set does not change. But after performing an operation $$$l, r$$$ such that $$$l \\le x \\le r$$$ we should insert the elements $$$\\{l, l+1, l+2, \\dots, r-1, r\\}$$$ into this set, if they are not present.\nNow consider how the set $$$\\{L, L+1, L+2, \\dots, R-1, R\\}$$$ changes. If segments $$$[l, r]$$$ and $$$[L, R]$$$ do not share any indices, there are no changes — but if they do, the set turns into $$$\\{ \\min(l, L), \\min(l, L)+1, \\min(l, L)+2, \\dots, \\max(r, R)-1, \\max(r, R) \\}$$$.\nSo the set of reachable indices is always a segment of numbers, and to process an operation, we should check whether the segment from operation intersects with the segment of indices we have — and if it is true, unite them."
         },
         {
             "title": "Solution (Roms)",

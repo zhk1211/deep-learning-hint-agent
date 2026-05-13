@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1216D - Swords\nFirstly, let's notice that for the fixed value of $$$z$$$ our problem is reduced to the following: we are given $$$n$$$ numbers $$$a_1, a_2, \\dots, a_n$$$. We need to choose such values $$$k_1, k_2, \\dots, k_n$$$ that $$$a_1 + k_1 \\cdot z = a_2 + k_2 \\cdot z = \\dots = a_n + k_n \\cdot z$$$. And among all such values $$$k_1, k_2, \\dots, k_n$$$ we need to choose values in a way to minimize $$$\\sum\\limits_{i=1}^{n}k_i$$$. And the sum of $$$k_i$$$ is $$$y$$$! Of course, for the fixed value $$$z$$$ the minimum sum of $$$k_i$$$ can be only one.\nLet's start with $$$z=1$$$. It is obvious that if the maximum value in the array $$$a$$$ is $$$mx$$$ the value $$$k_i$$$ equals $$$mx - a_i$$$ (for $$$z=1$$$). Assume that each $$$k_i$$$ from $$$1$$$ to $$$n$$$ has some divisor $$$d$$$. Then if we multiply $$$z$$$ by $$$d$$$ and divide each $$$k_i$$$ by $$$d$$$ the answer will only become better. How to calculate this value of $$$z$$$ fast? We can see that this value equals to $$$gcd(k_1, k_2, \\dots, k_n)$$$! And it can be proven that this value of $$$z$$$ is always optimal and we can easily determine $$$y$$$ for such $$$z$$$.\nTime complexity: $$$O(n + \\log max(a_i))$$$."
         },
         {
             "title": "Solution",

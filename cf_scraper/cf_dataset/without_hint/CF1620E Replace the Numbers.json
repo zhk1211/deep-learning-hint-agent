@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1620E - Replace the Numbers\nLet's solve the problem from the end. Let's maintain the array $$$p_x$$$ — what number will $$$x$$$ become if we apply to it all the already considered queries of type $$$2$$$. If the current query is of the first type, then we simply add $$$p_x$$$ to the resulting array. If the current query is of the second type, then we have to change the value of $$$p_x$$$. Since all occurrences of $$$x$$$ must be replaced with $$$y$$$, it is enough to assign $$$p_x = p_y$$$.\nSince we process each query in $$$O(1)$$$, the final complexity is $$$O(n)$$$.\nThere is also an alternative solution. Let's process queries in the direct order. Let's store all its positions in an array for each number. Then for the first query, it is enough to put the index in the corresponding array of positions. And for a query of the second type, we have to move all the positions of the number $$$x$$$ into an array of positions of the number $$$y$$$. The naive implementation is obviously too slow, but we can use the small to large method, then the complexity of the solution will be $$$O(n \\log{n})$$$."
         },
         {
             "title": "Solution 1 (Neon)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1946B - Maximum Sum\nLet's denote $$$s$$$ as the sum of the original array and $$$x$$$ as the sum of the subarray with the maximum sum from the original array.\nWe solve the problem when $$$k$$$ equals $$$1$$$. In this case, we need to find the subarray of the array with the maximum sum and insert this sum anywhere in the array, so the answer is $$$s + x$$$. Now, let $$$k$$$ be $$$2$$$. In this case, there is already a value where we insert the sum of the subarray with the maximum sum. Then we can increase the sum of the subarray with the maximum sum by no more than $$$x$$$ (we can increase it by $$$x$$$ simply by inserting it into the subarray with the maximum sum), and obtain the sum of the subarray with the maximum sum $$$2 \\cdot x$$$. Then insert it anywhere in the array, thus obtaining the sum of the final array equal to $$$s + x + 2 \\cdot x$$$. Similarly, for any $$$k$$$, the sum of the subarray with the maximum sum is initially $$$x$$$, then $$$2 \\cdot x$$$, then $$$4 \\cdot x$$$, $$$\\dots$$$, $$$2^{k - 1} \\cdot x$$$, then the answer is equal to $$$s + x + 2 \\cdot x + \\dots + 2^{k - 1} \\cdot x = s + 2^k \\cdot x - x$$$."
         },
         {
             "title": "Solution",

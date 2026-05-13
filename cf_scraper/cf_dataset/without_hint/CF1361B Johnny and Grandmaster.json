@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1361B - Johnny and Grandmaster\nThe solution for the case $$$p = 1$$$ is trivial, the answer is $$$1$$$ for odd $$$n$$$ and $$$0$$$ for even $$$n$$$. From now on, I will assume that $$$p  \\gt  1$$$. Instead of partitioning the elements into two sets, I will think of placing plus and minus signs before them to minimize the absolute value of the resulting expression.\nWe will process the exponents in non-increasing order and maintain the invariant that the current sum is nonnegative. Say we are processing $$$k_i.$$$ In such cases, we will know the current sum modulo $$$10^{9}+7$$$ and its exact value divided by $$$p^{k_i}$$$ (denoted as $$$v$$$) or information that it's too big.\nInitially, the sum (I will denote it $$$s$$$) equals $$$0$$$. While processing elements:\nIf $$$s  \\gt  0$$$, subtract the current element from the sum (it easy to show that it won't be negative after this operation).\nIf $$$s = 0$$$, add the current element to the sum.\nIf at any point of the algorithm, $$$v = \\frac{s}{p^{k_i}}  \\gt  n$$$, there is no need to store the exact value of $$$v$$$ anymore, because it is so big that all the elements from this moment on will be subtracted. Thus, it is enough to store this information and the current sum modulo $$$10^{9}+7$$$.\nWhen we move to the next element, the exponent may change, and $$$v$$$ needs to be multiplied by a power of $$$p$$$. Since the exponents can be large, we use fast multiplication.\nThe time complexity of this solution is $$$\\mathcal{O}(n \\log n + n \\log \\max k_i)$$$."
         },
         {
             "title": "Solution",

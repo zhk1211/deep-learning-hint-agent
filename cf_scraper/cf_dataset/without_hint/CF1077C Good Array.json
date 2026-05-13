@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1077C - Good Array\nThe first part: calculate the sum of the whole array: $$$sum = \\sum\\limits_{i = 1}^n a_i$$$ (be careful, it can be $$$2 \\cdot 10^{11}$$$!).\nThe second part: let's maintain an array $$$cnt$$$ of size $$$10^6 + 1$$$ where $$$cnt_i$$$ will be equal to the number of elements in the given array equals to $$$i$$$.\nThe third part: iterate over the array, let the current position be $$$i$$$. Set $$$sum := sum - a_i$$$, make $$$cnt_{a_i} := cnt_{a_i} - 1$$$. If $$$sum$$$ is even, $$$\\frac{sum}{2} \\le 10^6$$$ and $$$cnt_{\\frac{sum}{2}}  \\gt  0$$$ then the index $$$i$$$ is\nnice\notherwise it doesn't. And after all make $$$cnt_{a_i} := cnt_{a_i} + 1$$$ and set $$$sum := sum + a_i$$$."
         },
         {
             "title": "Solution",

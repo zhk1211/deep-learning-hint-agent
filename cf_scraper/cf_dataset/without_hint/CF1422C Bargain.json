@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1422C - Bargain\nLet's count for each digit how many times it will be included in the final sum and in what place. Let's denote $$$ m $$$ as the length of the number $$$ n $$$. Consider the digit $$$ a_i $$$ at the position $$$ i $$$ in the number $$$ n $$$ ($$$ 1 \\le i \\le m $$$). If some part of the number to the left of the digit is removed, then the current digit will remain in its place  — and we add the number of ways to remove the subsegment to the left to the answer multiplied by the current digit $$$ i * (i - 1) / 2 \\times 10 ^ {m - i} \\times a_i $$$. If the segment to the right is deleted, then the place of the digit will change – $$$ (j + 1) \\times 10^j \\times a_i $$$ for all $$$ 0 \\le j  \\lt  m - i $$$, or $$$ \\sum_ {j = 0 }^{m - i - 1} {(j + 1) \\times 10 ^ j} \\times a_i $$$. The $$$ j $$$ sum can be pre-calculated for all values."
         }
     ]
 }

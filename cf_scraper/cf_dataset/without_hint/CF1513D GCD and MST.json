@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1513D - GCD and MST\nWe will iterate from smallest to largest number like in\nkrushkal's algorithm\n. By this, we will consider the edges with the smallest weight first.\nNow, while iterating, we will assume the current value as the gcd we want to get, let's say $$$g$$$ and we will go left and then right while going left/right, if $$$gcd(new\\_element, g) = g$$$, we will add an edge in the graph between corresponding positions of $$$new\\_element$$$ and $$$g$$$. Also while adding edge we must keep in mind that we shouldn't create a cycle. If we are forming a cycle, we shouldn't add this edge and stop spanning in that direction. We can use a DSU to check this but in this particular problem, this is not required. We can simply check previously whether there is any edge connected to $$$new\\_element$$$. If so, we will add this edge and stop spanning further as any further entry forms a cycle (Think why this is so.\nHint:\nThis is because we are adding edges in segments kind of fashion).\nAlso, we need to stop when the current $$$g$$$ we are considering is greater than the parameter $$$p$$$ since we can connect the currently connected components by edges with weight $$$p$$$.\nThus the number of edges considered would be $$$O(N)$$$, and then the overall complexity of finding $$$MST$$$ would be $$$O(N \\log N)$$$ due to sorting."
         },
         {
             "title": "Implementation in C++",

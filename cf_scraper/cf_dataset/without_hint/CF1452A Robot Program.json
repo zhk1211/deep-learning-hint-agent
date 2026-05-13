@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1452A - Robot Program\nObviously, you can always obtain the optimal answer without using west or south moves. So the shortest path consists of $$$x$$$ east moves and $$$y$$$ north moves.\nLet's estimate the lower bound of the answer. Take a look at these constructions: \"\nE?E?E?E?E\n\" and \"\nN?N?N?N?N\n\" (let question mark be any command different from the used one). That's the tightest you can put east or north moves in.\nSo the answer is at least $$$2 \\cdot max(x, y) - 1$$$. For $$$x \\neq y$$$ you can put them just as in the construction and fill the rest of question marks with a stay in place move. $$$x = y$$$ case works differently, though. You can do it only in $$$x + y$$$ moves by taking alternating moves.\nOverall complexity: $$$O(1)$$$ per testcase."
         },
         {
             "title": "Solution (BledDest)",

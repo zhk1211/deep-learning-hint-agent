@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1656A - Good Pairs\nBy the\ntriangle inequality\n, for all real numbers $$$x, y, z$$$, we have: $$$$$$ |x-y| + |y-z| \\geq |x-z| $$$$$$\nwith equality if and only if $$$\\min(x, z) \\leq y \\leq \\max(x, z)$$$.\nNow, take indices $$$i$$$ and $$$j$$$ such that $$$a_i$$$ and $$$a_j$$$ are the maximum and minimum values of the array, respectively. Then, for each index $$$k$$$, we have $$$a_i \\geq a_k \\geq a_j$$$, meaning that $$$|a_i - a_k| + |a_k - a_j| = a_i - a_k + a_k - a_j = a_i- a_j = |a_i - a_j|$$$, as we desired."
         }
     ]
 }

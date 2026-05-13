@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1108D - Diverse Garland\nLet's divide the initial string into blocks of consecutive equal letters. For example, if we have the string \"\nGGBBBRRBBBB\n\" then have $$$4$$$ blocks: the first block is two letters '\nG\n', the second one is three letters '\nB\n', the third one is two letters '\nR\n' and the last one is four letters '\nB\n'.\nLet's see at the current block (let it has the length $$$len$$$) and consider two cases.\nThe first case is when this block has odd length. Then it seems like \"\nXXXXXXX\n\". So, what is the minimum number of recolors we need to make this block correct? It is $$$\\lfloor\\frac{len}{2}\\rfloor$$$. Why can we always make this block correct for such number of recolors? Because we can recolor all '\nX\n' at even positions to any '\nY\n' which differs from '\nX\n'. So our block will be look like \"\nXYXYXYX\n\".\nThe second case is when this block has even length. Then it seems like \"\nXXXXYYY ... YYY\n\" where '\nY\n' is the next block letter (if the next block exists, because the last block doesn't have the next one). What is the minimum number of recolors in this case? It is $$$\\frac{len}{2}$$$. How can we recolor this block to make it correct? Let's recolor all '\nX\n' at even positions (again) to any '\nZ\n' which differs from '\nX\n' and differs from '\nY\n'. So our block will be look like \"\nXZXZYYY ... YYY\n\".\nSo all we have to do is to iterate over all blocks from left to right and apply the algorithm above to recolor them."
         },
         {
             "title": "Solution",

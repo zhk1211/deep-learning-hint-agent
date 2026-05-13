@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1490B - Balanced Remainders\nNote that the numbers in the $$$a$$$ array are not important to us, so initially we will calculate the values of $$$c_0$$$, $$$c_1$$$, $$$c_2$$$. Now applying a move for the number $$$a_i$$$ is equivalent to:\ndecreasing $$$c_{a_i\\ mod\\ 3}$$$ by $$$1$$$;\nand increasing $$$c_{(a_i + 1)\\ mod\\ 3}$$$ by $$$1$$$;\nWe will perform the following greedy algorithm:\nwhile the array $$$a$$$ have no balanced remainders, find any $$$i$$$ ($$$0 \\le i \\le 2$$$) such that $$$c_i  \\gt  \\frac{n}{3}$$$;\nwe apply the move for $$$c_i$$$, that is, replace $$$c_i$$$ with $$$c_i-1$$$, and $$$c_{(i+1)\\ mod\\ 3}$$$ with $$$c_{(i+1)\\ mod\\ 3}+1$$$.\nIt is easy to prove the correctness of this greedy algorithm by cyclically shifting the values $$$c_0$$$, $$$c_1$$$, and $$$c_2$$$ so that the first element is equal to the maximum of them."
         },
         {
             "title": "Solution",

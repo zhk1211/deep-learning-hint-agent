@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "editorial",
-            "content": "Tutorial is loading..."
+            "content": "1528B - Kavi on Pairing Duty\nLet $$$dp_i$$$ be the number of good pairings of $$$2i$$$ points.\nClearly, the answer is $$$dp_n$$$.\nLemma: Denote $$$x$$$ as the point matched with the point $$$1$$$. Notice that each point $$$p$$$ $$$(x  \\lt  p \\le 2n)$$$ belongs to a segment with length equal to $$$[1 , x]$$$'s length.\nProof: Assume some point $$$p$$$ $$$(x  \\lt  p \\le 2n)$$$ is paired with a point $$$q$$$ $$$(q  \\gt  p)$$$, since $$$[p , q]$$$ doesn't lie inside $$$[1, x]$$$ then their size must be the equal for the pairing to be good.\nTo compute $$$dp_n$$$, consider the following cases:\n$$$x  \\gt  n$$$: Similar to lemma mentioned above, it can be proved that each point $$$p$$$ $$$(1 \\le p \\le 2n-x+1)$$$ is paired with the point $$$i + x - 1$$$, the remaining unpaired $$$x - n - 1$$$ points form a continuous subarray which lies inside each of the current pairs, thus they can be paired in $$$dp_{x - n - 1}$$$ ways.\n$$$x \\le n$$$: In this case, due to the lemma mentioned above all the segments must have the same length, thus their length must be a divisor of $$$n$$$, in this case they can be paired in $$$D(n)$$$ ways; where $$$D(n)$$$ is the number of divisors of $$$n$$$.\nSo $$$dp_n$$$ = $$$D(n) + \\sum_{i = 0}^{n-1} {dp_i}$$$.\nNote that $$$dp_0 = dp_1 = 1$$$.\ncomplexity: $$$\\mathcal{O}(n\\log n)$$$"
         },
         {
             "title": "official solution",

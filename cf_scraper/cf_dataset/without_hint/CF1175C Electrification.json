@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1175C - Electrification\nFirst observation: $$$k$$$ closest points to any point $$$x$$$ form a contiguous subsegment $$$a_i, \\dots, a_{i + k - 1}$$$, so $$$f_k(x) = \\min(|a_{i - 1} - x|, |a_{i + k} - x|)$$$.\nSecond observation: for any contiguous subsegment $$$a_i, \\dots, a_{i + k - 1}$$$ all points $$$x$$$ this subsegment closest to, also form a contiguous segment $$$[l_i, r_i]$$$. And, because of the nature of $$$f_k(x)$$$, value of $$$f_k(x)$$$ is minimal in borders $$$l_i$$$ and $$$r_i$$$.\nSo, all we need is to check all $$$l_i$$$ and $$$r_i$$$. But what is a value of $$$r_i$$$? It's such point, that $$$|a_i - r_i| \\le |a_{i + k} - r_i|$$$, but $$$|a_i - (r_i + 1)|  \\gt  |a_{i + k} - (r_i + 1)|$$$. So, it's just in the middle of segment $$$[a_i, a_{i + k}]$$$. Note, that $$$r_i + 1 = l_{i + 1}$$$ and $$$f_k(l_{i + 1}) \\ge f_k(r_i)$$$, so it's enough to check only $$$r_i$$$-s.\nIn result, all we need is to find minimal possible value $$$|a_{i + k} - a_i|$$$ and resulting $$$x = a_i + \\frac{a_{i + k} - a_{i}}{2}$$$."
         },
         {
             "title": "Solution (adedalic)",

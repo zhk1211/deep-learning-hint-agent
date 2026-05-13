@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1633D - Make Them Equal\nLet's calculate $$$d_i$$$ — the minimum number of operations to get the number $$$i$$$ from $$$1$$$. To do this, it is enough to use BFS or dynamic programming. Edges in the graph (transitions in dynamic programming) have the form $$$\\left(i, i + \\left\\lfloor\\frac{i}{x}\\right\\rfloor\\right)$$$ for all $$$1 \\le x \\le i$$$.\nNow the problem itself can be reduced to a knapsack problem: there are $$$n$$$ items, $$$i$$$-th item weighs $$$d_{b_i}$$$ and costs $$$c_i$$$, you have to find a set of items with the total weight of no more than $$$k$$$ of the maximum cost. This is a standard problem that can be solved in $$$O(nk)$$$, but it is too slow (although some participants passed all the tests with such a solution). However, we can notice that the values of $$$d_i$$$ should not grow too fast, namely, the maximum value of $$$d_i$$$ for $$$1 \\le i \\le 10^3$$$ does not exceed $$$12$$$. This means that the maximum possible weight is no more than $$$12n$$$, and we can limit $$$k$$$ to this number (i. e. make $$$k = \\min(k, 12n)$$$)."
         },
         {
             "title": "Solution (Neon)",

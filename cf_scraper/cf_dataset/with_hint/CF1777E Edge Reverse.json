@@ -26,7 +26,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1777E - Edge Reverse\nIf the cost for completing the task is $$$c$$$, we can reverse any edge with cost $$$\\le c$$$. This is equivalent to making those edges bidirectional since when checking for reachability, we only need to traverse an edge once, and we can choose to reverse it or not, depending upon the need.\nWe can apply a binary search on the minimum cost and check if there exists at least one node such that all nodes are reachable from it if all edges with cost less than or equal to the current cost become bidirectional.\nTo check in linear time if there exists such a suitable node, we will use a suppressed version of the Kosa Raju algorithm. We condense the nodes into Strongly Connected Components (SCCs) and perform a topological sort on them. If there exists an SCC from which all SCCs are reachable, then the first element in the topological sort will be that SCC (since in a topological sort, an element can only reach elements coming after it). So, we can choose any node from the first SCC in the topological sort and apply DFS to check if all the nodes are reachable from that node. If they aren't, we conclude it is impossible to complete the task with the current cost.\nOverall time complexity: $$$O((N+M) \\cdot \\log C)$$$"
         },
         {
             "title": "Implementation (C++)",

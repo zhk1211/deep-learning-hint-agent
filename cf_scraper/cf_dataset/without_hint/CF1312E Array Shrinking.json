@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1312E - Array Shrinking\nLet's look at the answer: by construction, each element in the final answer was the result of replace series of elements on the corresponding segment. So all we need to find is the minimal (by size) partition of the array $$$a$$$ on segments where each segment can be transformed in one element by series of replaces.\nWe can calculate it using standard prefix dynamic programming, or $$$dp2[len]$$$ is the size of such minimal partition of a prefix of length $$$len$$$. The transitions are standard: let's check all segments $$$[len, nxt)$$$ and if it can be replaced by one element let's relax $$$dp2[nxt]$$$.\nNow we need to check for all segments of $$$a$$$ — can it be replaced by one element. Let's calculate another $$$dp[l][r]$$$ using the following fact: if there is a way to replace all segment as one element so the segment either has the length $$$1$$$ or it can be divided into two parts where the prefix can be replaced by one element, the suffix also can be replaced by one element and these elements are equal. It's exactly the transitions we need to check to calculate $$$dp[l][r]$$$.\nThe resulting complexity is $$$O(n^3)$$$."
         },
         {
             "title": "Solution (adedalic)",

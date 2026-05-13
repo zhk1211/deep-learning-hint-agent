@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1811E - Living Sequence\nNote that any number in the sequence can be made up of $$$9$$$ possible digits (all digits except $$$4$$$). Then let's find the first digit of the answer, notice that it is just $$$x$$$ or $$$x+1$$$, where $$$x \\cdot 9^{l-1} \\le k$$$ (where $$$l$$$ — the length of the number we're looking for) and $$$x$$$ — the maximum. Note that $$$x$$$ simply corresponds to a digit in the base-$$$9$$$ numeral system.\nWhy is this so? Because without the first digit we can assemble any numbers with $$$9$$$ possible digits, and we can put the digits $$$0...x$$$ except $$$4$$$ in the first place. Thus, in the answer, the first digit will be $$$x$$$ if $$$x  \\lt  4$$$ and $$$x+1$$$ if $$$x \\ge 4$$$.\nNote that once the first digit is determined, the rest can be found the same way, since the prefix does not affect anything."
         },
         {
             "title": "Solution",

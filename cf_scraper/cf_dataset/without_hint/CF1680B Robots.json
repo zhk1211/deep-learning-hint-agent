@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1680B - Robots\nLet's assume that the rows are numbered from $$$0$$$ to $$$n-1$$$ from top to bottom, and columns are numbered from $$$0$$$ to $$$m-1$$$ from left to right.\nIf there is no robot in the cell $$$(0, 0)$$$ initially, we have to perform several moves up and/or left. If the first row with at least one robot is the $$$i$$$-th row, then we can make at most $$$i$$$ steps up (and we should do at least $$$i$$$ steps up, since otherwise there will me no robot in the upper row). Similarly, if the first column with at least one robot is the $$$j$$$-th column, then we can make at most $$$j$$$ steps to the left (and we should do at least $$$j$$$ steps to the left, since otherwise there will me no robot in the leftmost column).\nNow there are two possible solutions, both starting with finding $$$i$$$ and $$$j$$$: we afterwards either simulate $$$i$$$ moves up and $$$j$$$ moves to the left and check that everything is fine, or just check that there is a robot in the cell $$$(i, j)$$$ (since only this robot can end up in $$$(0, 0)$$$)."
         },
         {
             "title": "Solution (BledDest)",

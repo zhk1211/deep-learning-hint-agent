@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1819C - The Fox and the Complete Tree Traversal\nNote that if the tree contains the subgraph shown below, then there is no answer. To prove this it is enough to consider all possible cases for how a cyclic route can pass through the upper vertex and understand that it is impossible to construct such route.\nLet's assume that the tree does not contain the subgraph shown. It is easy to see that in this case, the tree can be represented as a path and vertices directly attached to it. To check that the tree can be represented in this way, we will find the diameter of the tree and check that all other vertices are directly connected to it. Now we need to learn how to build a cyclic route.\nNumber the vertices of the diameter from $$$1$$$ to $$$k$$$ in the order of traversal of the diameter from one end to the other. Now let's build the route as follows. Firstly, visit vertex $$$1$$$, then visit all vertices not on the diameter attached to vertex $$$2$$$, then move to vertex $$$3$$$, then to all vertices not on the diameter attached to vertex $$$4$$$, and so on. When we reach the end of the diameter, we will visit all vertices of the diameter with even numbers, as well as all vertices of the tree not on the diameter attached to the vertices of the diameter with odd numbers. Now let's make the same route in the opposite direction along the diameter, but through vertices of a different parity, which reaches vertex $$$2$$$.\nTime complexity: $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1163B2 - Cat Party (Hard Edition)\nWe can iterate over all streaks and check for each streak if we can remove one day so that each color has the same number of cats.\nThere are 4 cases where we can remove a day from the streak to satisfy the condition:\nThere is only one color in this streak.\nAll appeared colors in this streak have the occurrence of $$$1$$$ (i.e. every color has exactly $$$1$$$ cat with that color).\nEvery color has the same occurrence of cats, except for exactly one color which has the occurrence of $$$1$$$.\nEvery color has the same occurrence of cats, except for exactly one color which has the occurrence exactly $$$1$$$ more than any other color.\nAll of these four conditions can be checked using counting techniques.\nComplexity: $$$O(n)$$$."
         },
         {
             "title": "Implementation",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1621C - Hidden Permutations\nAt first, let's solve this problem when $$$p$$$ is a cycle of length $$$n$$$. It can be done by asking for $$$q_1$$$ for $$$n$$$ times. After this, we will receive $$$1$$$, $$$p_1$$$, $$$p_{p_1}$$$, $$$p_{p_{p_1}}, \\ldots$$$ in this order. Since $$$p$$$ is a cycle, each $$$x$$$ will appear once in this sequence. The next element after $$$x$$$ will be $$$p_x$$$.\nWhen $$$p$$$ is not a cycle we can determine the cycle containing the first element of permutation by asking such queries. Actually, we can stop asking queries after receiving $$$1$$$, thus determining this cycle in $$$len+1$$$ queries, where $$$len$$$ is the length of this cycle. We can determine other cycles in the same way.\nWe will ask $$$n$$$ queries to determine all elements and one more query for determining each cycle end, that is not more than $$$2n$$$ queries."
         },
         {
             "title": "Solution",

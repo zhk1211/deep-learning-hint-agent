@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nA picture can be represented as an $ n\\times m $ grid ( $ n $ rows and $ m $ columns) so that each of the $ n \\cdot m $ cells is colored with one color. You have $ k $ pigments of different colors. You have a limited amount of each pigment, more precisely you can color at most $ a_i $ cells with the $ i $ -th pigment.\n\nA picture is considered beautiful if each cell has at least $ 3 $ toroidal neighbors with the same color as itself.\n\nTwo cells are considered toroidal neighbors if they toroidally share an edge. In other words, for some integers $ 1 \\leq x_1,x_2 \\leq n $ and $ 1 \\leq y_1,y_2 \\leq m $ , the cell in the $ x_1 $ -th row and $ y_1 $ -th column is a toroidal neighbor of the cell in the $ x_2 $ -th row and $ y_2 $ -th column if one of following two conditions holds:\n\n- $ x_1-x_2 \\equiv \\pm1 \\pmod{n} $ and $ y_1=y_2 $ , or\n- $ y_1-y_2 \\equiv \\pm1 \\pmod{m} $ and $ x_1=x_2 $ .\n\nNotice that each cell has exactly $ 4 $ toroidal neighbors. For example, if $ n=3 $ and $ m=4 $ , the toroidal neighbors of the cell $ (1, 2) $ (the cell on the first row and second column) are: $ (3, 2) $ , $ (2, 2) $ , $ (1, 3) $ , $ (1, 1) $ . They are shown in gray on the image below:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1710A/e3c8d205b2238ddbd1672ed2006ec3bad526c6bc.png)The gray cells show toroidal neighbors of $ (1, 2) $ .Is it possible to color all cells with the pigments provided and create a beautiful picture?\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\leq t \\leq 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains three integers $ n $ , $ m $ , and $ k $ ( $ 3 \\leq n,m \\leq 10^9 $ , $ 1 \\leq k \\leq 10^5 $ ) — the number of rows and columns of the picture and the number of pigments.\n\nThe next line contains $ k $ integers $ a_1,a_2,\\dots, a_k $ ( $ 1 \\leq a_i \\leq 10^9 $ ) — $ a_i $ is the maximum number of cells that can be colored with the $ i $ -th pigment.\n\nIt is guaranteed that the sum of $ k $ over all test cases does not exceed $ 10^5 $ .\n\nOutput Format\nFor each test case, print \"Yes\" (without quotes) if it is possible to color a beautiful picture. Otherwise, print \"No\" (without quotes).\n\nExamples\nSample 1\nInput\n6\n4 6 3\n12 9 8\n3 3 2\n8 8\n3 3 2\n9 5\n4 5 2\n10 11\n5 4 2\n9 11\n10 10 3\n11 45 14\nOutput\nYes\nNo\nYes\nYes\nNo\nNo\n\nNote\nIn the first test case, one possible solution is as follows:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1710A/3537b81501ae3eaf0154251b0f27e35d8e63b1ec.png)In the third test case, we can color all cells with pigment $ 1 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "hint1.",
+            "content": "The picture must consist of some stripes with at least $$$2$$$ rows or at least $$$2$$$ columns."
+        },
+        {
+            "title": "hint2.",
+            "content": "When $$$n$$$ is odd and all $$$\\lfloor \\frac{a_i}{m} \\rfloor=2$$$, we cannot draw a beautiful picture using row stripes."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "solution",
+            "content": "Let's first prove hint1 first.\nIf there is a pair of toroidal neighbors with different colors. For example, $$$col_{x,y}=a$$$ and $$$col_{x+1,y}=b(a\\neq b)$$$. Then we will find $$$col_{x-1,y}=col_{x,y+1}=col_{x,y-1}=a$$$,$$$col_{x+2,y}=col_{x+1,y+1}=col_{x+1,y-1}=b$$$ must hold. Then we find another two pairs of toroidal neighbors $$$col_{x,y+1},col_{x+1,y+1}$$$ and $$$col_{x,y-1},col_{x+1,y-1}$$$. Repeat such process, we will find the boundary should be like:\nSimilar, the boundaries can be vertical lines, but horizontal lines and vertical lines can not exist in one picture.\nSo the pattern should be row stripes all with at least $$$2$$$ rows or column stripes all with at least $$$2$$$ columns.\nCheck if one can draw a beautiful picture with row stripes only or with column stripes only. We consider only the case of row stripes, the reasoning is analogous for column stripes.\nIf it is possible, then $$$\\sum_{a_i \\geq 2m} \\lfloor \\frac{a_i}{m} \\rfloor \\geq n$$$ must hold.\nIf $$$n$$$ is even, then such a condition is enough.\nIf $$$n$$$ is odd, there must be some $$$\\lfloor \\frac{a_i}{m} \\rfloor \\geq 3$$$. In this case, you can draw a beautiful picture using such algorithm:\nSort $$$a_i$$$ from large to small.\nDraw $$$2$$$ rows stripes of each color if possible.\nIf the picture still has some rows empty, insert new rows into each stripe.\nTotal time complexity: $$$O(n)$$$."
+        }
+    ]
+}

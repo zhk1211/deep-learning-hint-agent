@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1404E - Bricks\nInstead of placing a minimum number of bricks into the cells, let's imagine that we start out with all $$$1\\times 1$$$ bricks and delete the maximum number of borders. Of course, we need to make sure that when we delete borders, all the regions are in fact bricks.\nA region is a brick if and only if it contains no \"L\" shape. Let's construct a graph where each vertex is a border between two black cells, and we connect two vertices if deleting both would create an \"L\" shape.\nThen the tilings correspond exactly with the independent vertex sets in this graph, and the optimal tiling corresponds to the maximum independent set. The number of bricks is simply the total number of black cells minus the size of our independent set. Here is the graph and independent vertex set corresponding to a tiling:\nIn general, computing the maximum independent vertex set of a graph is NP-complete. But in our special case, this graph is bipartite (the bipartition being horizontal borders and vertical borders). And Kőnig's Theorem states that for bipartite graphs, the size of the maximum matching is equal to the size of the minimum vertex cover. Recall that the complement of a minimum vertex cover is a maximum independent set.\nThe maximum matching can be computed using maximum flow. In particular, Dinic's algorithm runs in $$$O(\\sqrt{V}E)$$$ time. For our graph, $$$V$$$ and $$$E$$$ are both $$$O(nm)$$$. Overall complexity is therefore $$$O(nm\\sqrt{nm})$$$."
         }
     ]
 }

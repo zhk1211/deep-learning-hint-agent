@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1775E - The Human Equation\nLet's calculate an array of prefix sums. What do the operations look like in this case? If we calculate the array of prefix sums, we'll see that the operations now look like \"add 1 on a subsequence\" or \"take away 1 on a subsequence\". Why? If we take the indices $$$i$$$ and $$$j$$$ and apply our operation to them (i.e. $$$a_i = a_i + 1$$$ and $$$a_j = a_j - 1$$$), it will appear that we added $$$1$$$ on the segment $$$[i ... j - 1]$$$ in the prefix sums array.\nWe still need to make the array all zeros. How? We will add $$$1$$$ to all elements that are less than zero, then subtract $$$1$$$ from all elements that are greater than $$$0$$$.\nFrom this we get that the answer is the difference between the maximum and minimum prefix sums."
         }
     ]
 }

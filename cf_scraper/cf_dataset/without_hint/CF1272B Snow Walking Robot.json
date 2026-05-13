@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1272B - Snow Walking Robot\nLet $$$cnt[L]$$$ be the number of occurrences of the character '\nL\n' in the initial string, $$$cnt[R]$$$ — the number of occurrences of the character '\nR\n', $$$cnt[U]$$$ and $$$cnt[D]$$$ are the same things for remaining characters.\nIt is obvious that in every answer the number of '\nL\n' equals the number of '\nR\n' and the same for '\nD\n' and '\nU\n'. The maximum theoretic answer we can obtain has length $$$2 \\cdot (min(cnt[L], cnt[R]) + min(cnt[U] + cnt[D]))$$$. And... We almost always can obtain this answer! If there is at least one occurrence of each character, then we can construct some kind of rectangular path: $$$min(cnt[L], cnt[R])$$$ moves right, then $$$min(cnt[U], cnt[D])$$$ moves up, and the completing part.\nBut there are some corner cases when some characters are missing. If $$$min(cnt[U], cnt[D]) = 0$$$ then our answer is empty or (if it is possible) it is \"\nLR\n\". The same if $$$min(cnt[L], cnt[R]) = 0$$$.\nTime complexity: $$$O(|s|)$$$ per test case."
         },
         {
             "title": "Solution",

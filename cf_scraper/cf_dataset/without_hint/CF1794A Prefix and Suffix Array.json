@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1794A - Prefix and Suffix Array\nObserve that there are exactly two strings of length $$$n-1$$$ (one prefix and one suffix). We will call them $$$x$$$ and $$$y$$$. Then, $$$s$$$ is a palindrome if and only if $$$\\text{rev}(x)=y$$$, where $$$\\text{rev}(x)$$$ is the reversal of string $$$x$$$.\nSo, to solve the problem it is enough to find the two strings of length $$$n-1$$$ and check if one of them is equal to the reversal of the other. This solution also works for any length greater or equal to $$$\\lfloor \\frac{n}{2} \\rfloor$$$.\nIntended complexity: $$$\\mathcal{O}(n^2)$$$ per test case. (reading the input)"
         }
     ]
 }

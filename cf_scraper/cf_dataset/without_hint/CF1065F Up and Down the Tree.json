@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1065F - Up and Down the Tree\nLet's calculate answer in two steps. At first, let's calculate for each vertex $$$v$$$ $$$drev(v)$$$ — what we can gain if we must return from subtree of $$$v$$$ in the end. We need only pair of values: minimal possible depth we can acquire to move up from subtree of $$$v$$$ and maximal number of different leaves we can visit.\nNote, that this two values are independent since we must return from $$$v$$$ and if for some child $$$to$$$ of $$$v$$$ we can return from it, it's profitable to visit $$$to$$$ and return. But if we can't return from $$$to$$$ so we are prohibited to descent to $$$to$$$. So, $$$drev(v).second$$$ (number of visited leaves) is just a sum of all $$$drev(to).second$$$ if $$$drev(to).first \\le h_v$$$. Also note that we can always reorder all children in such way that last visited vertex $$$to$$$ will have minimal $$$drev(to).first$$$. So $$$drev(to).first$$$ (minimal possible depth) is a minimum over all $$$drev(to).first$$$.\nAt second, let's calculate $$$d(v)$$$ — maximal number of different leaves we can visit if we don't need to return from subtree of $$$v$$$. It can be calculated quite easy using array $$$drev(v)$$$. We just need to choose child $$$to$$$ we will not return from, so from vertex $$$to$$$ we will take value $$$d(to)$$$ and from other childen (which we can return from) value $$$drev(v).second$$$.\nResult complexity is $$$O(n)$$$."
         },
         {
             "title": "Solution (adedalic)",

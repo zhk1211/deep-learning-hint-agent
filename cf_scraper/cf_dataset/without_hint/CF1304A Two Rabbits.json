@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1304A - Two Rabbits\nWe can see that the taller rabbit will be at position $$$x + Ta$$$ and the shorter rabbit will be at position $$$y - Tb$$$ at the $$$T$$$-th second. We want to know when these two values are equal. Simplifying the equation, we get $$$\\cfrac{y - x}{a + b} = T$$$. Since we only consider positive integers for $$$T$$$, the answer is $$$\\cfrac{y - x}{a + b}$$$ only if $$$y - x$$$ is divisible by $$$a + b$$$. Otherwise, the answer is $$$-1$$$.\nAnother intuitive approach is to think of it as relative speed. In the perspective of the taller rabbit, the shorter rabbit will move (or more like, teleport) to the negative direction at speed of $$$a + b$$$ per second. Therefore the initial distance $$$y - x$$$ must be divisible by $$$a + b$$$ in order to make the two rabbits meet at time $$$\\cfrac{y - x}{a + b}$$$.\nTime complexity: $$$O(1)$$$ for each test case."
         },
         {
             "title": "Solution",

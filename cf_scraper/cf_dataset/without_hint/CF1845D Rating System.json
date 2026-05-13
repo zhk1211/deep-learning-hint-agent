@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1845D - Rating System\nLet's fix some $$$k$$$ and look at the first and the last moment when the rating should fall below $$$k$$$, but doesn't. After such moments, the rating is equal to $$$k$$$. So we can \"delete\" all changes (array elements) between those moments. And the remaining changes (to the left from the first moment and to the right from the last moment) can be considered without any additional constraints (the value of $$$k$$$ doesn't affect those changes).\nUsing this fact, we can see that the total rating is not greater than the sum of the whole array minus some continuous segment. So the maximum possible final rating doesn't exceed the sum of the array minus the minimum sum segment (this segment can be empty, if all elements are positive). In fact, there is always such $$$k$$$ that provides such rating. Let the minimum sum segment be $$$[l; r]$$$, then $$$k$$$ is equal to the prefix sum from $$$1$$$-st to $$$(l-1)$$$-th positions of the array.\nThe only remaining question is: why the rating after $$$r$$$-th match is equal to $$$k$$$? It can't fall below $$$k$$$ (since the rating is at least $$$k$$$ already); and if it is greater than $$$k$$$, then there is a positive suffix of the segment $$$[l; r]$$$, so we can remove it, and the sum of the segment would decrease. Which means the segment $$$[l; r]$$$ is not minimum sum segment, which contradicts the previous statement. So the rating after $$$r$$$-th match is equal to $$$k$$$."
         },
         {
             "title": "Solution (Neon)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1862E - Kolya and Movie Theatre\nLet's notice that if we visit the cinema on days with numbers $$$i_1, i_2, \\ldots, i_k$$$, the total entertainment value of the visited movies will be equal to $$$(a_{i_1} - d \\cdot i_1) + (a_{i_2} - d \\cdot (i_2 - i_1)) + \\ldots + (a_{i_k} - d \\cdot (i_k - i_{k-1})) = (a_{i_1} + a_{i_2} + \\ldots + a_{i_k}) - d \\cdot i_k$$$.\nThus, it is sufficient to iterate over the day when Kolya will visit the cinema for the last time — $$$i_k$$$, and maintain the maximum $$$m - 1$$$ non-negative elements on the prefix $$$[1, i_k - 1]$$$. This can be done, for example, using std::multiset. The total complexity of the solution will be $$$O(n \\log{n})$$$."
         },
         {
             "title": "Solution",

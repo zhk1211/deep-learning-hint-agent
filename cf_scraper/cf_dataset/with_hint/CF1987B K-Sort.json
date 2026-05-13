@@ -26,7 +26,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1987B - K-Sort\nSuppose that after all of the operations, the value at index $$$i$$$ has been increased by $$$b_i$$$. Notice that our cost can be factored into two parts: $$$k$$$ is responsible for how many elements we choose, and $$$1$$$ is responsible for how many operations we apply.\nSince we have to apply at least $$$\\max(b_i)$$$ operations, and over all operations we select a total of $$$\\sum{b_i}$$$ elements, we have to pay at least $$$\\sum{b_i} + \\max(b_i)$$$ coins. This bound is also achievable, if on the $$$m$$$-th operation (numbered from $$$1$$$ to $$$\\max(b_i)$$$) we select all indices with $$$b_i \\ge m$$$.\nSuppose the resulting array is sorted ($$$a_1 + b_1 \\le a_2 + b_2 \\le \\ldots \\le a_n + b_n$$$). Then, $$$a_i + b_i \\le a_j + b_j$$$ must hold for all $$$1 \\le i \\le j \\le n$$$. Using $$$b_i \\ge 0$$$, we get $$$a_j + b_j \\ge a_i + b_i \\ge a_i \\implies b_j \\ge a_i - a_j$$$ for all $$$1 \\le i \\le j$$$. If we define $$$p_j := max(a_1, \\ldots, a_j)$$$, we get $$$b_j \\ge p_j - a_j$$$. This gives the lower bounds $$$\\sum{b_i} \\ge \\sum(p_i - a_i)$$$ and $$$\\max(b_i) \\ge \\max(p_i - a_i)$$$. Setting $$$b_i := p_i - a_i$$$ achieves them, so the answer to our problem is $$$\\sum(p_i - a_i) + \\max(p_i - a_i)$$$ coins.\nComplexity: $$$\\mathcal{O}(n)$$$\nNote: it's possible to simulate the process on the values of $$$b$$$ (described above) in $$$\\mathcal{O}(n \\log n)$$$."
         },
         {
             "title": "Solution",

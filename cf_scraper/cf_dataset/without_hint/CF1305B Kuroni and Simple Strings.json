@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1305B - Kuroni and Simple Strings\nWe claim that the answer is always $$$0$$$ or $$$1$$$. First, note we can't apply any operations if and only if each\n'('\nsymbol is left from each\n')'\nsymbol, so that the string looks as '\n)))((((((\n'.\nLet $$$a_1, a_2, \\dots, a_p$$$ be the indexes of symbols\n'('\nin the string, and $$$b_1, b_2, \\dots, b_q$$$ be the indexes of symbols\n')'\nin the string. Let $$$i$$$ be the largest index for which $$$a_i  \\lt  b_{q-i+1}$$$. We claim that we can delete subsequence $$$\\{a_1, a_2, \\dots, a_i, b_{q-i+1}, \\dots, b_{q-1}, b_q\\}$$$, and won't be able to apply any operation to the resulting string. Indeed, suppose that in the resulting string some\n'('\nsymbol will be to the left from some\n')'\nsymbol, say they were $$$a_k$$$ and $$$b_l$$$ in out sequences. Then we must have $$$k \\gt i$$$ and $$$l \\lt q-i+1$$$, as they weren't deleted yet. So, we get that $$$b_{i+1} \\le b_k  \\lt  b_l \\le b_{q-i}$$$, so $$$i$$$ wasn't maximal.\nIn other words, just pick brackets greedily from ends, forming as large simple string as you can. Asymptotics $$$O(|s|)$$$."
         },
         {
             "title": "Solution (Ari, C++)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1165F2 - Microtransactions (hard version)\nThe main idea of this problem is the same as in the easy version. The only thing we should replace is the search method. Replacing linear search with binary search leads to reducing time complexity from $$$O(n^2)$$$ to $$$O(n \\log n)$$$. And it is obvious that we can apply binary search here because if we can order all microtransactions during some day $$$d$$$ then we can order all of them during day $$$d+1$$$ (even using the answer for $$$d$$$ days and doing nothing during day $$$d+1$$$)."
         },
         {
             "title": "Solution",

@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou have $ n $ rectangular wooden blocks, which are numbered from $ 1 $ to $ n $ . The $ i $ -th block is $ 1 $ unit high and $ \\lceil \\frac{i}{2} \\rceil $ units long.\n\nHere, $ \\lceil \\frac{x}{2} \\rceil $ denotes the result of division of $ x $ by $ 2 $ , rounded up. For example, $ \\lceil \\frac{4}{2} \\rceil = 2 $ and $ \\lceil \\frac{5}{2} \\rceil = \\lceil 2.5 \\rceil = 3 $ .\n\nFor example, if $ n=5 $ , then the blocks have the following sizes: $ 1 \\times 1 $ , $ 1 \\times 1 $ , $ 1 \\times 2 $ , $ 1 \\times 2 $ , $ 1 \\times 3 $ .\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1748A/19d3138a2c88b0952d5d3d3158c75a2a14071bba.png) The available blocks for $ n=5 $ Find the maximum possible side length of a square you can create using these blocks, without rotating any of them. Note that you don't have to use all of the blocks.\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1748A/241be5d182fd6bff2bfe8df8e72795f57d91cb34.png) One of the ways to create $ 3 \\times 3 $ square using blocks $ 1 $ through $ 5 $\n\nInput Format\nEach test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — the number of test cases.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10^9 $ ) — the number of blocks.\n\nOutput Format\nFor each test case, print one integer — the maximum possible side length of a square you can create.\n\nExamples\nSample 1\nInput\n3\n2\n5\n197654321\nOutput\n1\n3\n98827161\n\nNote\nIn the first test case, you can create a $ 1 \\times 1 $ square using only one of the blocks.\n\nIn the second test case, one of the possible ways to create a $ 3 \\times 3 $ square is shown in the statement. It is impossible to create a $ 4 \\times 4 $ or larger square, so the answer is $ 3 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nIf $$$n$$$ is odd, it is possible to create a square using all $$$n$$$ blocks.\nHint 2\nIf $$$n$$$ is even, it is possible to create a square using only the first $$$n-1$$$ blocks, since $$$n-1$$$ is odd. Can we use the last block to create a larger square?"
+        },
+        {
+            "title": "Hint 1",
+            "content": "If $$$n$$$ is odd, it is possible to create a square using all $$$n$$$ blocks."
+        },
+        {
+            "title": "Hint 2",
+            "content": "If $$$n$$$ is even, it is possible to create a square using only the first $$$n-1$$$ blocks, since $$$n-1$$$ is odd. Can we use the last block to create a larger square?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "If $$$n$$$ is odd, let $$$k=\\frac{n+1}{2}$$$ be the width of the last block. It is possible to create a square of side length $$$k$$$ using every block as follows:\nLine $$$1$$$ contains a $$$1 \\times k$$$ block;\nLine $$$2$$$ contains a $$$1 \\times 1$$$ block and a $$$1 \\times (k-1)$$$ block;\nLine $$$3$$$ contains a $$$1 \\times 2$$$ block and a $$$1 \\times (k-2)$$$ block;\n$$$\\ldots$$$\nLine $$$i$$$ contains a $$$1 \\times (i-1)$$$ block and a $$$1 \\times (k-i+1)$$$ block;\n$$$\\ldots$$$\nLine $$$k$$$ contains a $$$1 \\times (k-1)$$$ block and a $$$1 \\times 1$$$ block.\nSince the area of this square is $$$k^2$$$, and the $$$n+1$$$-th block has a width of $$$k$$$ tiles, the total area of the first $$$n+1$$$ blocks is equal to $$$k^2+k \\lt (k+1)^2$$$. Therefore, the answer for $$$n+1$$$ is also $$$k$$$.\nIn conclusion, the answer for each testcase is $$$\\lfloor \\frac{n+1}{2} \\rfloor$$$.\nTime complexity per testcase: $$$O(1)$$$."
+        }
+    ]
+}

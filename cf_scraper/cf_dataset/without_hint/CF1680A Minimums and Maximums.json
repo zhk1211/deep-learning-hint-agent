@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1680A - Minimums and Maximums\nFirstly, since we are interested in minimum possible size of the array, we don't need any elements other than minimums and maximums. So, the array has at most $$$2$$$ distinct elements.\nNow there are many possible solutions. The simplest one is to iterate on the number of minimums (let this be $$$i$$$) and maximums (let this be $$$j$$$). If the number of minimums is equal to the number of maximums, then the array should have all elements as both its minimums and maximums, so its length should be $$$i$$$; otherwise, it should be $$$i + j$$$. We can iterate on all possible pairs $$$(i, j)$$$ and find the best result over all of them.\nA solution in $$$O(1)$$$ is possible if you see that you only have to consider $$$l_1$$$ and $$$l_2$$$ as the number of minimums/maximums, or check if the segments $$$[l_1, r_1]$$$ and $$$[l_2, r_2]$$$ intersect in $$$O(1)$$$."
         },
         {
             "title": "Solution (BledDest)",

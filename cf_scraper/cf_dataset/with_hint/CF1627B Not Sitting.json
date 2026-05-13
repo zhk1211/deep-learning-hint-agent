@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1627B - Not Sitting\nLet's denote Rahul's seat as $$$(a, b)$$$ and Tina's seat as $$$(c, d)$$$. Notice that the in the distance between their seats, $$$|a-c| + |b-d|$$$, $$$|a-c|$$$ and $$$|b-d|$$$ are independent of each other, i.e. both the $$$x$$$-coordinate and $$$y$$$-coordinate of Tina's seat are independent. From the answer to the hint above, we can see that the optimal seat for Tina in a $$$1$$$-dimensional classroom is one of the edge seats, and combining this with the previous observation means that the optimal seat for Tina is always one of the corner seats.\nSince Rahul chooses seats optimally, he will know that Tina will choose one of the corner seats, so he will choose a seat such that the maximum distance from it to one of the corner seats is minimised. As Tina also chooses which seats to paint optimally, the best strategy for her is to paint the $$$k$$$ seats with minimum maximum distance to one of the corner seats pink.\nWe can implement this by calculating for each seat the maximum distance to one of the corner seats from it, and storing these values in an array. After sorting this array in non-decreasing order, we can simply print the first $$$n \\cdot m - 1$$$ values of the array, as the $$$i$$$-th value of the array ($$$0$$$-indexed) is the optimal answer for $$$k = i$$$.\nThis can be implemented in $$$\\mathcal{O}(nm\\log(nm))$$$ time per test case."
         },
         {
             "title": "Implementation (C++)",

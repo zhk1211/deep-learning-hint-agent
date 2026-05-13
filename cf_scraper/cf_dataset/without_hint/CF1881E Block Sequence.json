@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1881E - Block Sequence\nLet's use the dynamic programming approach: let $$$dp[i]$$$ be the number of operations required to make the segment from $$$i$$$ to $$$n$$$ beautiful. There are two possible ways to achieve this:\nRemove the element at position $$$i$$$ and make the segment from $$$i + 1$$$ to $$$n$$$ beautiful, then $$$dp[i] = dp[i+1] + 1$$$;\nMake the segment from $$$i + a_i + 1$$$ to $$$n$$$ beautiful, then $$$dp[i] = dp[i + a_i + 1]$$$ (cases where $$$i + a_i + 1  \\gt  n$$$ need to be handled separately)."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1538G - Gift Set\nIn this problem, we can use a binary search for the answer (If we can make $$$x$$$ sets, then we can make $$$y  \\lt  x$$$ sets). So, we need to come up with the following test, whether we can make $$$n$$$ sets knowing the parameters $$$x, y, a, b$$$.\nLet $$$a  \\gt  b$$$ (otherwise we will swap them). If $$$a == b$$$, the answer is $$$\\lfloor\\frac{min(x, y)}{a}\\rfloor$$$.\nOtherwise, let's say we want to make $$$k$$$ sets of the first kind. Then we get a system of inequalities $$$$$$x \\le a \\cdot k + b \\cdot (n - k)$$$$$$ $$$$$$y \\le a \\cdot (n - k) + b \\cdot k$$$$$$\nLet's express $$$k$$$from here\n$$$$$$\\frac{(x - b \\cdot n)}{a - b} \\le k$$$$$$ $$$$$$\\frac{(x - a \\cdot n)}{b - a} \\ge k$$$$$$ $$$$$$0 \\le k$$$$$$ $$$$$$n \\ge k$$$$$$\nWe need to check whether these four equations have an intersection in integers. If there is, then the division into $$$n$$$ gifts exists."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1256D - Binary String Minimizing\nThis problem has a very standard solution: let's take the leftmost zero, place it as left as possible, and solve the problem without this zero and all operations we spent.\nBut we should do it fast. Let's go from left to right and carry the number of ones on the prefix $$$cnt$$$. If we meet $$$1$$$, let's just increase $$$cnt$$$ and continue the algorithm. It is obvious that if we meet $$$0$$$ we need to make exactly $$$cnt$$$ swaps to place it before all ones. If we can do it, let's just add $$$0$$$ to the answer, decrease $$$k$$$ by $$$cnt$$$ and continue. Otherwise, this zero will be between some of these $$$cnt$$$ ones and we can place it naively. In this case, the suffix of the string will not change. If after all operations we didn't meet the case above, let's add all ones to the suffix of the resulting string.\nTime complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution",

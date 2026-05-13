@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1811C - Restore the Array\nTo solve the problem, you can build an array $$$a$$$ as follows\n$$$a_1 = b_1$$$\n$$$a_i = \\min(b_{i-1}, b_i)$$$ at $$$2 \\le i \\le n-1$$$\n$$$a_n = b_{n-1}$$$\nLet's show that from the constructed array $$$a$$$ we can get an array $$$B$$$ equal to the original array $$$b$$$:\n$$$B_1 = \\max(a_1, a_2) = \\max(b_1, \\min(b_1, b_2))$$$\nIf $$$b_1 \\gt b_2$$$, then $$$\\max(b_1, b_2) = b_1$$$\nIf $$$b_2 \\ge b_1$$$, then $$$\\max(b_1, b_1) = b_1$$$\nSo $$$B_1 = b_1$$$\n$$$B_i = \\max(a_i, a_{i+1}) = \\max(\\min(b_{i-1}, b_i), \\min(b_i, b_{i+1}))$$$ at $$$2 \\le i \\le n-2$$$\nIf $$$b_{i+1} \\ge b_i$$$ and $$$b_{i-1} \\ge b_i$$$, then $$$\\max(\\min(b_{i-1}, b_i), \\min(b_i, b_{i+1}) = \\min(b_i, b_i) = b_i$$$\nIf $$$b_{i+1} \\ge b_i \\ge b_{i-1}$$$, then $$$\\max(b_{i-1}, b_i) = b_i$$$\nIf $$$b_{i-1} \\ge b_i \\ge b_{i+1}$$$, then $$$\\max(b_i, b_{i+1}) = b_i$$$\nBy the construction of the array $$$b$$$ it is not possible that $$$b_i \\gt b_{i+1}$$$ and $$$b_i \\gt b_{i-1}$$$. So $$$B_i = b_i$$$\n$$$B_{n-1} = \\max(a_{n-1}, a_n) = \\max(\\min(b_{n-2}, b_{n-1}), b_{n-1})$$$\nIf $$$b_{n-2} \\gt b_{n-2}$$$, then $$$\\max(b_{n-1}, b_{n-1}) = b_{n-1}$$$\nIf $$$b_{n-1} \\ge b_{n-2}$$$, then $$$\\max(b_{n-2}, b_{n-1}) = b_{n-1}$$$\nSo $$$B_{n-1} = b_{n-1}$$$\nWe get that $$$B_i = b_i$$$ for $$$1 \\le i \\le n-1$$$, so $$$B = b$$$ and array $$$a$$$ is built correctly."
         },
         {
             "title": "Solution",

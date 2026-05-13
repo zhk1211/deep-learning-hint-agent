@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nFor an array $ a = [a_1, a_2, \\dots, a_n] $ , let's denote its subarray $ a[l, r] $ as the array $ [a_l, a_{l+1}, \\dots, a_r] $ .\n\nFor example, the array $ a = [1, -3, 1] $ has $ 6 $ non-empty subarrays:\n\n- $ a[1,1] = [1] $ ;\n- $ a[1,2] = [1,-3] $ ;\n- $ a[1,3] = [1,-3,1] $ ;\n- $ a[2,2] = [-3] $ ;\n- $ a[2,3] = [-3,1] $ ;\n- $ a[3,3] = [1] $ .\n\nYou are given two integers $ n $ and $ k $ . Construct an array $ a $ consisting of $ n $ integers such that:\n\n- all elements of $ a $ are from $ -1000 $ to $ 1000 $ ;\n- $ a $ has exactly $ k $ subarrays with positive sums;\n- the rest $ \\dfrac{(n+1) \\cdot n}{2}-k $ subarrays of $ a $ have negative sums.\n\nInput Format\nThe first line contains one integer $ t $ ( $ 1 \\le t \\le 5000 $ ) — the number of test cases.\n\nEach test case consists of one line containing two integers $ n $ and $ k $ ( $ 2 \\le n \\le 30 $ ; $ 0 \\le k \\le \\dfrac{(n+1) \\cdot n}{2} $ ).\n\nOutput Format\nFor each test case, print $ n $ integers — the elements of the array meeting the constraints. It can be shown that the answer always exists. If there are multiple answers, print any of them.\n\nExamples\nSample 1\nInput\n4\n3 2\n2 0\n2 2\n4 6\nOutput\n1 -3 1\n-13 -42\n-13 42\n-3 -4 10 -2"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1809C - Sum on Subarrays\nThere are many ways to solve this problem. I will describe the following recursive solution:\nif $$$k  \\lt  n$$$, let's compose an array where every segment ending with the $$$k$$$-th element is positive, and every other segment is negative. This array can be $$$[-1, -1, -1, \\dots, 200, -400, -1, -1, -1]$$$, where $$$200$$$ is the $$$k$$$-th element of the array (note that when $$$k = 0$$$, $$$200$$$ doesn't belong to the array, so it consists of only negative numbers).\nbut if $$$k \\ge n$$$, solve the same problem with $$$n-1$$$ and $$$k-n$$$ recursively, get an array of length $$$n-1$$$ with $$$k-n$$$ positive subarrays, and append $$$1000$$$ to it to make all $$$n$$$ segments ending with the last element positive."
+        },
+        {
+            "title": "Solution (BledDest)",
+            "content": "def\nsolve\n(\nn\n,\nk\n):\nif\nn\n==\n0\n:\nreturn\n[]\nif\nk\n<\nn\n:\na\n=\n[-\n1\nfor\ni\nin\nrange\n(\nn\n)]\nif\nk\n>\n0\n:\na\n[\nk\n-\n1\n]\n=\n200\na\n[\nk\n]\n=\n-\n400\nelse\n:\na\n=\nsolve\n(\nn\n-\n1\n,\nk\n-\nn\n)\na\n.\nappend\n(\n1000\n)\nreturn\na\n\nt\n=\nint\n(\ninput\n())\nfor\ni\nin\nrange\n(\nt\n):\nn\n,\nk\n=\nmap\n(\nint\n,\ninput\n().\nsplit\n())\nb\n=\nsolve\n(\nn\n,\nk\n)\nprint\n(*\nb\n)"
+        }
+    ]
+}

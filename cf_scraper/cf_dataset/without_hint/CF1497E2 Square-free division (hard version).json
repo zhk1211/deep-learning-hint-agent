@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1497E2 - Square-Free Division (hard version)\nLet's use the same definitions as in tutorial of E1. So after making $$$a_i = mask(a_i)$$$ for all $$$1 \\le i \\le n$$$ we need to split the whole array into minimal amount of contiguous subsegments with all different elements. Also, we can change $$$k$$$ elements how we want.\nFirstly, for each $$$1 \\le i \\le n$$$ and $$$0 \\le j \\le k$$$ let's find $$$left_{i,j}$$$  — such minimal index $$$l$$$, so that after making $$$j$$$ changes the segment $$$a_l, a_{l + 1}, \\ldots, a_i$$$ contains only distinct values. For fixed $$$j$$$ if $$$i$$$ is increased then $$$left_{i,j}$$$ increases, too, that's why for fixed $$$j$$$ we can use the two pointers technique. This allows us to calculate $$$left_{i,j}$$$ in $$$O(n \\cdot k)$$$.\nNow for each $$$1 \\le i \\le n$$$ and $$$0 \\le j \\le k$$$ let's calculate $$$dp_{i,j}$$$  — the minimal amount of contiguous subsegments that prefix $$$a_1, a_2, \\ldots, a_i$$$ is possible to divide into after making $$$j$$$ changes. For each $$$j$$$ let's consider $$$0 \\le x \\le j$$$  — the amount of changes on the last subsegment. Let's say that $$$l = left_{i,x}$$$ then $$$dp_{i,j} = min(dp_{i,j}, dp_{l - 1,j-x} + 1)$$$. This is done in $$$O(n \\cdot k^2)$$$ so the total complexity of the solution after making $$$a_i = mask(a_i)$$$ is $$$O(n \\cdot k^2)$$$."
         },
         {
             "title": "Implementation",

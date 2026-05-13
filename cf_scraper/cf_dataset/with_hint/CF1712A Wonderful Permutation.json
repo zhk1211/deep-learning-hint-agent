@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1712A - Wonderful Permutation\nFor any permutation $$$p$$$ of length $$$n$$$, the final sum $$$p_1 + p_2 + \\ldots + p_k$$$ after some number of operations can't be less than $$$1 + 2 + \\ldots + k$$$.\nThis means that we need to apply the operation at least once for every $$$i$$$ such that $$$1 \\le i \\le k$$$ and $$$p_i  \\gt  k$$$. Every time we apply it, we have to choose some index $$$j$$$ such that $$$k  \\lt  j \\le n$$$ and $$$p_j \\le k$$$.\nThis is always possible since initially the number of suitable $$$i$$$ is equal to the number of suitable $$$j$$$, and one operation decreases both the number of suitable $$$i$$$ and the number of suitable $$$j$$$ by one.\nIt is easy to see that in the end, the set $$$\\{p_1, p_2, \\ldots, p_k \\}$$$ only contains the values $$$\\{1, 2, \\ldots , k \\}$$$, which means that the sum is equal to $$$1 + 2 + \\ldots + k$$$, which is the smallest sum we can get.\nSo the answer is the the number of $$$i$$$ such that $$$1 \\le i \\le k$$$ and $$$p_i  \\gt  k$$$.\nComplexity: $$$\\mathcal{O}(n)$$$"
         },
         {
             "title": "Solution",

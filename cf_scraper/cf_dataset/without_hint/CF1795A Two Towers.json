@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1795A - Two Towers\nNote that it does not make sense to move several blocks first from the left tower to the right, and then from the right to the left, since this is similar to canceling the last actions.\nUsing the fact described above and small restrictions on the input data, one of the possible solutions is the following: choose which tower will be the one where we take blocks from (try both options), iterate over the number of operations, and then check that both towers are beautiful after that number of operations.\nThere is a faster solution: move all the blocks to the left tower, and then check that there is no more than one pair of adjacent blocks of the same color. If there are no such pairs, then we can divide the tower into two in an arbitrary way, and if there is exactly one pair, then we need to make a \"cut\" exactly between two blocks of the same color. Otherwise, there will always be a pair of adjacent blocks of the same color in one of the towers."
         },
         {
             "title": "Solution (Neon) 1",

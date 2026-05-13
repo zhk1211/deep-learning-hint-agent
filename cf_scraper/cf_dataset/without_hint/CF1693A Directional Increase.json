@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1693A - Directional Increase\nFirst of all the sum of the elements has to be $$$0$$$ because the pointer has to end up on the first element.\nDenote the number of times you do the first operation while the pointer is on the $$$i$$$-th element as $$$b_i$$$. And the number of times you do the second operation while the pointer is on the $$$i$$$-th element as $$$c_i$$$.\n$$$a_i = b_i - c_i$$$ and $$$c_i = b_{i - 1}$$$ because the pointer has to end up on the first element.\nSo $$$a_i = b_i - b_{i - 1} \\to b_i = a_i + b_{i - 1}$$$ and $$$b_1 = a_1$$$.\nNow that we have calculated $$$b$$$, we need to determine whether it's possible to perform the operations like so.\nThere are two conditions.\n$$$b_i \\geq 0$$$ ($$$1 \\leq i \\leq n$$$).\nIf $$$b_i = 0$$$ for each $$$j$$$, $$$i  \\lt  j$$$, $$$b_j = 0$$$. Because the pointer couldn't reach the $$$j$$$-th element.\nYou can always construct $$$a$$$ if these two conditions hold.\nProof by induction. Perform the first operation and the second operation $$$b_1 - 1$$$ times in a row. Then perform the first operation. Construct the rest by induction and then perform the second operation.\nTime complexity: $$$\\mathcal{O}(n)$$$"
         },
         {
             "title": "Implementation",

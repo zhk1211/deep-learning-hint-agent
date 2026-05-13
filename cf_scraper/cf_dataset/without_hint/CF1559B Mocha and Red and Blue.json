@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nAs their story unravels, a timeless tale is told once again...\n\nShirahime, a friend of Mocha's, is keen on playing the music game Arcaea and sharing Mocha interesting puzzles to solve. This day, Shirahime comes up with a new simple puzzle and wants Mocha to solve them. However, these puzzles are too easy for Mocha to solve, so she wants you to solve them and tell her the answers. The puzzles are described as follow.\n\nThere are $ n $ squares arranged in a row, and each of them can be painted either red or blue.\n\nAmong these squares, some of them have been painted already, and the others are blank. You can decide which color to paint on each blank square.\n\nSome pairs of adjacent squares may have the same color, which is imperfect. We define the imperfectness as the number of pairs of adjacent squares that share the same color.\n\nFor example, the imperfectness of \"BRRRBBR\" is $ 3 $ , with \"BB\" occurred once and \"RR\" occurred twice.\n\nYour goal is to minimize the imperfectness and print out the colors of the squares after painting.\n\nInput Format\nEach test contains multiple test cases.\n\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases. Each test case consists of two lines.\n\nThe first line of each test case contains an integer $ n $ ( $ 1\\leq n\\leq 100 $ ) — the length of the squares row.\n\nThe second line of each test case contains a string $ s $ with length $ n $ , containing characters 'B', 'R' and '?'. Here 'B' stands for a blue square, 'R' for a red square, and '?' for a blank square.\n\nOutput Format\nFor each test case, print a line with a string only containing 'B' and 'R', the colors of the squares after painting, which imperfectness is minimized. If there are multiple solutions, print any of them.\n\nExamples\nSample 1\nInput\n5\n7\n?R???BR\n7\n???R???\n1\n?\n1\nB\n10\n?R??RB??B?\nOutput\nBRRBRBR\nBRBRBRB\nB\nB\nBRRBRBBRBR\n\nNote\nIn the first test case, if the squares are painted \"BRRBRBR\", the imperfectness is $ 1 $ (since squares $ 2 $ and $ 3 $ have the same color), which is the minimum possible imperfectness."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "solution",
+            "content": "#include\n<cstdio>\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n105\n;\nint\nt\n,\nn\n,\ncnt\n;\nchar\ns\n[\nN\n];\nint\nmain\n()\n{\nscanf\n(\n\"%d\"\n,&\nt\n);\nwhile\n(\nt\n--)\n{\ncnt\n=\n0\n;\nscanf\n(\n\"%d\"\n,&\nn\n);\nscanf\n(\n\"%s\"\n,\ns\n+\n1\n);\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\ni\n++)\ncnt\n+=(\ns\n[\ni\n]!=\n'?'\n);\nif\n(!\ncnt\n)\ns\n[\n1\n]=\n'R'\n;\nfor\n(\nint\ni\n=\n2\n;\ni\n<=\nn\n;\ni\n++)\nif\n(\ns\n[\ni\n]==\n'?'\n&&\ns\n[\ni\n-\n1\n]!=\n'?'\n)\ns\n[\ni\n]=\ns\n[\ni\n-\n1\n]^(\n'B'\n^\n'R'\n);\nfor\n(\nint\ni\n=\nn\n-\n1\n;\ni\n;\ni\n--)\nif\n(\ns\n[\ni\n]==\n'?'\n&&\ns\n[\ni\n+\n1\n]!=\n'?'\n)\ns\n[\ni\n]=\ns\n[\ni\n+\n1\n]^(\n'B'\n^\n'R'\n);\nprintf\n(\n\"%s\\n\"\n,\ns\n+\n1\n);\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "2063A - Minimal Coprime\nIt is easy to see that two integers $$$l$$$ and $$$l+1$$$ are always coprime, due to $$$\\gcd(l,l+1)=\\gcd(1,l)=\\gcd(0,1)=1$$$. Thus, all segments in the form $$$[l,l+1]$$$ are coprime, and all minimal coprime segments must have a size of at most $$$2$$$ (otherwise, it will contain another segment of size $$$2$$$).\nIt can be observed that the only coprime segment with size $$$1$$$ is $$$[1,1]$$$ as $$$\\gcd(a,a)=a$$$. The set of minimal coprime segments is as follows:\n$$$[1,1]$$$ is minimal coprime.\nFor all $$$l \\gt 1$$$, $$$[l,l+1]$$$ is minimal coprime.\nAnd there is\nno other segment\nthat is minimal coprime.\nThe solution is thus as follows:\nIf $$$x=y=1$$$, it contains $$$[1,1]$$$ and the answer is $$$1$$$.\nOtherwise, $$$y \\gt 1$$$. There exists\nexactly one\n$$$l$$$ for all $$$x \\le l  \\lt  y$$$ such that $$$[l,*]$$$ is minimal coprime and is contained in $$$[x,y]$$$.\nIn other words, the answer is $$$(y-1)-x+1=y-x$$$ in this case.\nThe problem has been solved with time complexity $$$\\mathcal{O}(1)$$$ per test case."
         }
     ]
 }

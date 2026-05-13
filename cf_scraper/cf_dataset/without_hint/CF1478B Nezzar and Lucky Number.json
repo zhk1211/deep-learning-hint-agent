@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1478B - Nezzar и счастливые числа\nFor any given $$$d$$$, We can observe the following:\n$$$10d$$$ to $$$10d + 9$$$ contains $$$d$$$ as one of its digit\nLet $$$k = 10d + 9$$$ be the upper bound of such range For every number $$$x  \\gt  k$$$, we can keep reducing $$$x$$$ by $$$d$$$, $$$x$$$ will eventually fall into the range mentioned above, which contains $$$d$$$ as digit.\nTherefore, for numbers $$$x  \\gt  k$$$, they are always achievable. For $$$x \\leq k - 10$$$, as $$$k  \\lt = 109$$$, we can run a standard knapsack dynamicprogramming solution, where $$$dp[x]$$$ indicates if $$$x$$$ is achievable. $$$dp[x]$$$ is achievable, if and only if one of the following is true:\n$$$x = 0$$$\nFor some $$$y  \\lt  x$$$, $$$dp[y]$$$ is true and $$$x - y$$$ contains $$$d$$$ as digit\nIterating for every $$$x$$$, all $$$dp[x]$$$ for $$$x  \\lt  k$$$ can be computed with $$$O(k)$$$ per state (as we only need to consider $$$y  \\lt  k$$$.\nBesides dynamic programming solution, brute force solutions with enough optimization should also pass the test cases easily.\nTime complexity: $$$O((10d)^2)$$$ per test case."
         },
         {
             "title": "Solution",

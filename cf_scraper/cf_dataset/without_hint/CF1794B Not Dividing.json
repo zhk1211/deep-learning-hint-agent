@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1794B - Not Dividing\nFirst, we add one to all the numbers in the array equal to $$$1$$$. This uses at most $$$n$$$ operations. Then, we iterate through the elements of the array from left to right, starting from the second element. At each step, let $$$a_x$$$ be the element we are iterating. If $$$a_x$$$ is divisible by $$$a_{x-1}$$$, we add one to $$$a_x$$$. Now this element is not divisible by $$$a_{x-1}$$$, because otherwise both $$$a_x$$$ and $$$a_x+1$$$ are divisible by $$$a_{x-1}$$$, but that means $$$1$$$ is also divisible by $$$a_{x-1}$$$ which cannot happen since all the elements in the array are at least $$$2$$$ (because of the first step we did). This part also uses at most $$$n$$$ operations, so we used at most $$$2n$$$ operations in total. The resulting array will satisfy the statement property.\nIntended complexity: $$$\\mathcal{O}(n)$$$ per test case."
         }
     ]
 }

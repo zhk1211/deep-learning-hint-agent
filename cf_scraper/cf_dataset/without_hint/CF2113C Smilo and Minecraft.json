@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2113C - Smilo and Minecraft\nLet us consider the first explosion. Note that all the gold ore that was inside this square will be lost. However, observe that all the remaining gold ore in the mine will be obtained for sure. Indeed, we make explosions first in all the cells on the border of the square with side $$$3$$$ and center at the point of the first explosion, then on the border of the square with side $$$5$$$, $$$7$$$, and so on.\nThus, the problem reduces to minimizing the loss of gold during the first explosion. To do this, simply iterate over the possible locations of the first explosion and keep track of the sum in the current explosion square, which can be done using prefix sums."
         }
     ]
 }

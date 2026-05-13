@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1095D - Circular Dance\nLet's write a function\ncheck(a, b)\nwhich will try to restore the circle if kid with number $$$b$$$ comes right after kid with number $$$a$$$. If $$$b$$$ comes right after $$$a$$$ then we can determine $$$c$$$ — the number of kid who is next to kid $$$b$$$. So now we have: $$$b$$$ comes right after $$$a$$$, $$$c$$$ comes right after $$$b$$$. Let's determine $$$d$$$ — kid who is next to kid $$$c$$$.\nIf we repeat this operation $$$n$$$ times then we can \"\ndetermine\n\" the answer if $$$b$$$ comes right after $$$a$$$. But it can be wrong so we have to check that our answer corresponds to the input.\nSo if we have this function, we can apply it two times to determine the correct answer. Just call\ncheck($$$1, a_{1, 1}$$$)\nand\ncheck($$$1, a_{1, 2}$$$)\n."
         },
         {
             "title": "Solution",

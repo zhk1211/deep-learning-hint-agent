@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1795B - Ideal Point\nFirst of all, let's delete all segments that do not cover the point $$$k$$$ (because they increase the value of the function $$$f$$$ at points other than $$$k$$$). If there are no segments left, then the answer is\nNO\n. Otherwise, all segments cover the point $$$k$$$. And it remains to check whether the point $$$k$$$ is the only point which is covered by all segments. Note that it does not make sense to delete any of the remaining segments, because if there are several points with maximum value of $$$f$$$, then deleting segments can only increase their number.\nTo check the number of points with the maximum value of $$$f$$$, you can iterate over $$$x$$$ from $$$1$$$ to $$$50$$$ and calculate $$$f(x)$$$, because of the small number of segments in the problem. A faster way is to check the size of the intersection of all segments. The left boundary of the intersection is $$$L = \\max\\limits_{i=1}^{n}{l_i}$$$, and the right boundary is $$$R = \\min\\limits_{i=1}^{n}{r_i}$$$; if $$$L = R$$$, then the point $$$k$$$ is ideal, otherwise it is not."
         },
         {
             "title": "Solution (Neon)",

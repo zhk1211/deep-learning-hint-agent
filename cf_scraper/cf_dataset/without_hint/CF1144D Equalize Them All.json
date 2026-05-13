@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1144D - Equalize Them All\nLet's find the most frequent element in the array (using the array of frequencies $$$cnt$$$, of course). Let this element be $$$x$$$. If we will see the operations more carefully, we can see that the part of these operations means \"\nset element $$$p$$$ to element $$$q$$$\n\". if $$$p  \\lt  q$$$ then this operation is $$$1 p q$$$, otherwise it is $$$2 p q$$$.\nNow let's consider the number of operations in the optimal answer. It is obvious that we need at least $$$n - cnt_x$$$ operations to equalize all the elements. And it is also obvious that we can always do it with $$$n - cnt_x$$$ such operations we have.\nHow to restore the answer? There is an easy way to do it: find the first occurrence of $$$x$$$. Let it be $$$pos$$$. Then let's go from $$$pos - 1$$$ to $$$1$$$ and set each element to the next element (element at the position $$$pos - 1$$$ to $$$pos$$$, $$$pos - 2$$$ to $$$pos - 1$$$ and so on). And don't forget to print right type of operation. Then let's go from left to right from $$$1$$$ to $$$n$$$ and if the $$$i$$$-th element don't equal to $$$x$$$ then set it to $$$i-1$$$-th element using right operation."
         },
         {
             "title": "Solution",

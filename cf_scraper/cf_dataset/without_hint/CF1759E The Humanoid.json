@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1759E - The Humanoid\nLet's make two obvious remarks:\nIf we can absorb two astronauts with\npower\n$$$x \\le y$$$, then we can always first absorb an astronaut with\npower\n$$$x$$$, and then an astronaut with\npower\n$$$y$$$;\nIf we can absorb some astronaut, it is effective for us to do it right now.\nLet's sort the astronauts\npowers\nin increasing order.\nNow let's lock the sequence of serums we use. There are only three of them:\nblue\nserum can be the first, second or third.\nLet's absorb the astronauts in increasing order of their\npowers\n, and if we can't, then use the next serum in a locked sequence or stop.\nThis solution works for $$$O(n)$$$."
         },
         {
             "title": "Solution",

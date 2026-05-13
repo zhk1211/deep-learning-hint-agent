@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1150B - Tiling Challenge\nNotice that there is only one orientation of the wooden piece (and this is the orientation depicted in the statement). Moreover, we can notice the following fact:\nTake any (untiled) topmost cell of the board. If there is any correct tiling of the board, this cell must be covered by the topmost tile of the piece.\nThe fact is pretty obvious — there is simply no other way to cover the cell.\nHaving that, it's straightforward to implement an $$$O(n^4)$$$ solution: while the board isn't fully covered, take any topmost untiled cell and try to cover it with a piece. If it's impossible, declare the failure. If it's possible, lay the piece and repeat the procedure. We can lay at most $$$O(n^2)$$$ pieces, and we're looking for the topmost cell in $$$O(n^2)$$$ time. This gives us $$$O(n^4)$$$ running time.\nWhile this is enough to solve the task, one can also notice that we don't have to seek the whole board in search of the cell. In fact, we can do a single scan through the board in row-major order, and as soon as we find any uncovered cell, we try to cover it by a wooden piece. This allows us to implement the solution in $$$O(n^2)$$$ time."
         }
     ]
 }

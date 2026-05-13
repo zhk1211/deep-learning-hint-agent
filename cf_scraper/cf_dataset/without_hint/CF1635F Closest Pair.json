@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1635F - Closest Pair\nFirst of all, let's solve the problem for the whole array.\nDefine $$$L_i$$$ as the biggest $$$j$$$ satisfying $$$j  \\lt  i$$$ and $$$w_j \\leq w_i$$$, and $$$R_i$$$ as the smallest $$$j$$$ satisfying $$$j  \\gt  i$$$ and $$$w_j \\leq w_i$$$.\nThen, we consider $$$2n$$$ pairs of points: $$$(L_i, i)$$$ and $$$(i, R_i)$$$ for each $$$1 \\leq i \\leq n$$$. In conclusion, the closest pair (the pair with the minimum weighted distance) must be among them.\nProof: Assume that $$$(a, b)$$$ is the closest pair and $$$a  \\lt  b$$$. If $$$w_a \\leq w_b$$$ holds, then $$$a = L_b$$$ must holds, otherwise $$$(a, L_b)$$$ would obviously be a better pair.\nSimilarly, if $$$w_a  \\gt  w_b$$$ holds, then $$$b = R_a$$$ must holds, otherwise $$$(R_a, b)$$$ would obviously be a better pair.\nThe lemma above also applies to range queries by the exact same proof. So now, we first need to find $$$L_i$$$ and $$$R_i$$$ for each $$$1 \\leq i \\leq n$$$, this could be simply done with a stack. Then, imagine we draw lines between the endpoints of each pair, and the problem could be reduced to: given $$$2n$$$ weighted segments, for each query $$$i$$$ find the one with the minimum weight that is totally covered by $$$[l_i, r_i]$$$. This is actually a classic problem, which could be solved by sweep line trick + any data structure able to maintain prefix-minimum with single point updates, like BIT or segment tree.\nTotal Complexity: $$$\\mathcal{O}((n+q)\\log n)$$$."
         },
         {
             "title": "Solution",

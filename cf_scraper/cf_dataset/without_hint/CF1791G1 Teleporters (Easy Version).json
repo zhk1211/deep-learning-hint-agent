@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1791G1 - Teleporters (Easy Version)\nIt's easy to see that it's optimal to only move right or to use a portal once we are at it. We can notice that when we teleport back, the problem is independent of the previous choices. We still are at point $$$0$$$ and have some portals left. Thus, we can just find out the individual cost of each portal, sort portals by individual costs, and take them from smallest to largest by cost as long as we can. The cost of portal $$$i$$$ is $$$i + a_i$$$ (since we pay $$$a_i$$$ to use it and need $$$i$$$ moves to get to it)."
         },
         {
             "title": "Solution",

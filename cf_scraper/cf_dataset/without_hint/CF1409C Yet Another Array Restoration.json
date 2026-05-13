@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1409C - Yet Another Array Restoration\nThe only fact required to solve this problem is just to notice that the answer array is just an arithmetic progression. After that, we can fix the first element $$$start$$$, fix the difference $$$d$$$, construct the array $$$[start, start + d, start + 2d, \\dots, start + d \\cdot (n-1)]$$$, check if $$$x$$$ and $$$y$$$ are in this array and, if yes, update the answer with $$$start + d \\cdot (n-1)$$$. This is $$$O(n^3)$$$ solution.\nThere are faster solutions, though. Other author's solution is $$$O(n \\sqrt{y})$$$ but I didn't want to make this problem harder, so I allowed $$$O(n^3)$$$ solutions.\nIt is obvious that the difference of the progression is some divisor of $$$y-x$$$. Let it be $$$d$$$. Let's add some elements starting from $$$y$$$ \"to the left\" ($$$y, y-d, y-2d$$$ and so on) and stop if we reach $$$n$$$ elements or the next element is less than $$$1$$$. If we didn't find $$$x$$$ among these elements, just skip this difference, it is useless for us. Otherwise, if we have less than $$$n$$$ elements, let's add $$$y+d, y+2d, y+3d$$$ and so on until we get $$$n$$$ elements. And then update the answer with the maximum element of the array.\nThere is also a solution in $$$O(n + \\sqrt{y})$$$ with some greedy observations :)"
         },
         {
             "title": "Solution (Gassa)",

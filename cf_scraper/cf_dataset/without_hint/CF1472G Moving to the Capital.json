@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1472G - Moving to the Capital\nFind the distances to all vertices and construct a new graph that has only edges that goes from a vertex with a smaller distance to a vertex with a larger distance. Such a graph cannot contain cycles.\nNext, you need to run a dynamic programming similar to finding bridges in an undirected graph. First, we write the minimum distance from each vertex to the capital using no more than one edge. This distance is either equal to the distance from the capital to the vertex itself, or the distance to the vertex connected to us by one of the remote edges. We can't go through more than one remote edge.\nThe real answer for a vertex $$$v$$$ is the minimum of such values in all vertices reachable from $$$v$$$ in the new graph. Since the new graph is acyclic, we can calculate the answer using dynamic programming and a depth-first search started from the capital."
         },
         {
             "title": "Solution",

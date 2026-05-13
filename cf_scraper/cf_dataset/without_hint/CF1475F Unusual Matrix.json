@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1475F - Unusual Matrix\nIt is clear that the order of operations does not affect the final result, also it makes no sense to apply the same operation more than once (by the property of the\nxor\noperation). Let's construct a sequence of operations that will reduce the matrix $$$a$$$ to the matrix $$$b$$$ (if the answer exists). Let's try iterate over: will we use the operation \"horizontal\nxor\n\".\nNow, by the each element of the first line ($$$a_{1,j}$$$), we can understand whether it is necessary to apply the operation \"vertical\nxor\n\" (if $$$a_{1,j} \\ne b_{1,j}$$$). Let's apply all necessary operations \"vertical\nxor\n\". It remains clear whether it is necessary to apply the operation \"horizontal\nxor\n\" for $$$i$$$ ($$$2 \\le i \\le n$$$). Let's look at each element of the first column ($$$a_{i,1}$$$) by it you can understand whether it is necessary to apply the operation \"horizontal\nxor\n\" (if $$$a_{i, 1} \\ne b_{i,1}$$$)."
         },
         {
             "title": "Solution",

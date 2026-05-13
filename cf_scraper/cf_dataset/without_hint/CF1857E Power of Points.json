@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1857E - Power of Points\nIf we have the segments $$$[l_1,r_1],\\dots,[l_n,r_n]$$$, the sum of $$$f_p$$$ is the sum of the segments' lengths. That's because a segment $$$[a,b]$$$ intersect exactly $$$b-a+1$$$ points. Now we can find the answer for fixed $$$s$$$ in $$$O(N)$$$.\nHow to do it more efficiently?\nLet's sort the given points so that $$$x_1\\le x_2\\le \\dots \\le x_n$$$.\nProcessing $$$s=x_i$$$ we get that for all $$$j\\le i$$$ the segments are $$$[x_j,s]$$$ and for all $$$j \\gt i$$$ the segments are $$$[s,x_j]$$$. We need to summarize their lengths. Formally we need to calculate\n$$$$$$ \\sum\\limits_{j=1}^{i}(s-x_j+1)+\\sum\\limits_{j=i+1}^{n}(x_j-s+1)= $$$$$$\n$$$$$$ n+s \\cdot i-\\sum\\limits_{j=1}^{i}x_j+\\sum\\limits_{j=i+1}^{n}x_j -s(n-i)= $$$$$$\n$$$$$$ n+s(2\\cdot i-n)-\\sum\\limits_{j=1}^{i}x_j+\\sum\\limits_{j=i+1}^{n}x_j $$$$$$\nWe can maintain the sum of coordinates on the prefix and suffix, and calculate this formula for fixed $$$s$$$ in $$$O(1)$$$.\nThe total complexity is $$$O(n\\log n)$$$."
         }
     ]
 }

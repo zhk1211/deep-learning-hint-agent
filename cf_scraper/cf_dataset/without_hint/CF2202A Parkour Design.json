@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "2202A - Parkour Design\nNotice how these three paths end up on the same coordinate:\n$$$(0,0) \\to (2,1) \\to (6,0)$$$\n$$$(0,0) \\to (3,0) \\to (6,0)$$$\n$$$(0,0) \\to (4-1) \\to (6,0)$$$\nBecause of this, using both $$$(+2,+1)$$$ and $$$(+4,-1)$$$ types of moves is meaningless because they can be substituted into two $$$(+3,0)$$$ moves. Now we can simply align the $$$y$$$ coordinate using only one type of move, and then check if the given coordinate is reachable by checking the $$$x$$$ coordinate.\nAlternatively, one can show that the answer is\nYES\nif $$$(x,y)$$$ satisfies the following two conditions:\n$$$x+y \\equiv 0 \\pmod 3$$$\n$$$-\\frac{x}{4} \\le y \\le \\frac{x}{2}$$$\nThe proof is left as a practice for the reader."
         }
     ]
 }

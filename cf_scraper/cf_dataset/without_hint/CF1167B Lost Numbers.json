@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1167B - Lost Numbers\nThe key fact that allows us to solve this problem is that if we analyze the pairwise products of special numbers, we will see that all of them (considering that we always multiply two different numbers) are unique. So, if we, for example, know that $$$a_i \\cdot a_j = x$$$, then there are only two possibilities for the values of $$$a_i$$$ and $$$a_j$$$: $$$x$$$ is uniquely expressed as the product of two distinct special numbers $$$A$$$ and $$$B$$$, and either $$$a_i = A$$$, $$$a_j = B$$$, or $$$a_i = B$$$, $$$a_j = A$$$. This allows us to guess three numbers using two queries: we ask $$$a_i \\cdot a_j$$$ and $$$a_j \\cdot a_k$$$, we uniquely determine $$$a_j$$$ as the only number that is suitable for the both pairs, and then we express $$$a_i = \\frac{a_i \\cdot a_j}{a_j}$$$ and $$$a_k = \\frac{a_j \\cdot a_k}{a_j}$$$.\nOf course, there are easier ways to solve this problem, considering there are only $$$6$$$ special numbers. For example, you could use four queries $$$a_i \\cdot a_{i + 1}$$$ (for all $$$i \\in [1, 4]$$$) and try all $$$6!$$$ permutations, and the model solution uses exactly this approach."
         },
         {
             "title": "Solution (BledDest)",

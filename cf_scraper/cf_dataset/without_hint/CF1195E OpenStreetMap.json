@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1195E - OpenStreetMap\nThere is almost nothing to say about this problem. It is pretty standard data structure problem.\nLet $$$mn_{i, j}$$$ be the minimum value over all values $$$h_{i, j}, h_{i - 1, j}, \\dots, h_{i - a + 1}{j}$$$. If $$$i$$$ is less than $$$a$$$ then its value does not matter for us because the corresponding submatrix is not counted in the answer. These values can be calculated using\nstd::deque\nor minimum queue. You can read more about it here:\nhttps://cp-algorithms.com/data_structures/stack_queue_modification.html\n.\nAfter building such matrix $$$mn$$$ we can actually calculate the answer. Let's iterate over all rows of the matrix (starting from row $$$a$$$) $$$i$$$ and carry the floating window of width $$$b$$$ of values $$$mn_{i, j}$$$. And when the size of the queue with minimums reaches $$$b$$$ we know the minimum on the corresponding submatrix that ends in the current element and we can add it to the answer.\nTime complexity: $$$O(nm)$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1743B - Permutation Value\nThe subsegment $$$[1]$$$, as well as the whole permutation, will always be a permutation, so the value is at least $$$2$$$. Let's try to find a way to generate a permutation of $$$n$$$ elements with value equal to $$$2$$$.\nEvery permutation must contain the number $$$1$$$. Let's try to construct the answer in such a way that if a subsegment contains the number $$$1$$$, then it also contains the number $$$n$$$ (if it is so, it can only be a permutation if it contains all $$$n$$$ numbers). If we begin our permutation with the numbers $$$1$$$ and $$$n$$$, we will reach our goal: the only subsegment which does not contain $$$n$$$ but contains $$$1$$$ is $$$[1]$$$, and the only subsegment which contains $$$n$$$ and also a permutation is the whole permutation itself. So, any permutation that begins with $$$[1, n \\dots]$$$ can be the answer."
         },
         {
             "title": "Solution (BledDest)",

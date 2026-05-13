@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1297E - Modernization of Treeland\nThere are many constructive solutions to this problem. Let's describe one of them — a slightly modified breadth-first search (bfs).\nLet's spread our chosen subset from any fixed vertex (vertex $$$1$$$, for simplicity) as bfs does. Suppose we are \"standing\" in vertex $$$v \\ne 1$$$ and have edges $$$(v, to_1), (v, to_2), \\dots, (v, to_k)$$$ with vertices $$$to_i$$$ which aren't chosen yet.\nWe can be sure that $$$v$$$ is a leaf in the currently chosen subset, but what will happen if we'd try to add $$$to_i$$$ in the chosen subset? If we add $$$to_1$$$, then $$$v$$$ stops being a leaf but $$$to_1$$$ becomes, so the total number of leaves doesn't decrease. If we'd add $$$to_2$$$ after that then $$$to_2$$$ also becomes a leaf — the total number of leaves is increased by $$$1$$$.\nThe starting vertex $$$1$$$ has some extra cases, but, in general, we can see that the total number of leaves stays the same or increases by $$$1$$$ at each step — so we can get any number of leaves from $$$1$$$ to maximum possible — and it's not hard to prove that the maximum possible number of leaves has the whole tree (and it's a finish state of bfs).\nAs a result, all our modifications of standard bfs algorithm are carrying the current number of leaves and breaking when it becomes equal to $$$k$$$."
         },
         {
             "title": "Solution (elizarov)",

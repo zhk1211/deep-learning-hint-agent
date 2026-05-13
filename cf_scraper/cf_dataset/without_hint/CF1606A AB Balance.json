@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1606A - AB Balance\nLet's look at the first and the last characters of $$$s$$$. Note that if $$$s_1 = s_n$$$ (where $$$n = |s|$$$), then $$$\\operatorname{AB}(s)$$$ is always equal to $$$\\operatorname{BA}(s)$$$.\nIt can be proved, for example, by induction: if $$$s$$$ consists of equal characters then $$$\\operatorname{AB}(s) = \\operatorname{BA}(s) = 0$$$; if $$$s$$$ has a structure like\nabb...ba\n(or\nbaa...ab\n) then $$$\\operatorname{AB}(s) = \\operatorname{BA}(s) = 1$$$.\nOtherwise, there is at least one character $$$s_i$$$ in the middle that equal to $$$s_1$$$ and $$$s_n$$$. So we can split string $$$s$$$ in $$$s[1..i]$$$ and $$$s[i..n]$$$. Both these string has $$$\\operatorname{AB} = \\operatorname{BA}$$$ (by induction), so our string $$$s$$$ also has $$$\\operatorname{AB}(s) = \\operatorname{BA}(s)$$$.\nAs a result, if $$$s_1 = s_n$$$ then the answer is $$$0$$$, and we print the string untouched. Otherwise, we replace either $$$s_1$$$ or $$$s_n$$$ and get the desired string.\n(It also can be proved that if $$$s_1 \\neq s_n$$$ then $$$\\operatorname{AB}(s) \\neq \\operatorname{BA}(s)$$$)"
         },
         {
             "title": "Solution (adedalic)",

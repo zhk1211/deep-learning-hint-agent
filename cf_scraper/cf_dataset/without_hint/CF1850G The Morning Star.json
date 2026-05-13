@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1850G - The Morning Star\nLet's look at four directions of the line connecting the compass and morning star: vertical, horizontal, with slope $$$1$$$ (looks like /), and with slope $$$-1$$$ (looks like \\).\nvertical: the two points need to have the same $$$y$$$-coordinate. If there are $$$k$$$ points with the same $$$y$$$-coordinate, then how many pairs are possible for the morning star and compass? Well, there are $$$k$$$ possibilities for the compass, and $$$k-1$$$ for the morning star, so there are a total of $$$k(k-1)$$$ valid pairs. In this case, we can use a data structure like a C++\nmap\nto count the number of points at each $$$y$$$-coordinate, and add $$$k(k-1)$$$ to the total for each $$$k$$$ in the map.\nhorizontal: the two points need to have the same $$$x$$$-coordinate. Similarly, we count pairs with the same $$$x$$$-coordinate using a map.\nslope $$$1$$$: note that all lines of this form can be written as $$$x-y=c$$$ for a constant $$$c$$$. (Draw some examples out for $$$c=-1, 0, 1$$$.) So we can use a map to count values of $$$x-y$$$, and add to the total.\nslope $$$-1$$$: similarly, all such lines can be written as $$$x+y=c$$$ for a constant $$$c$$$.\nThe time complexity is $$$\\mathcal{O}(n \\log n)$$$."
         },
         {
             "title": "Solution",

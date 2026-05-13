@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1213C - Book Reading\nLet $$$k = \\lfloor\\frac{n}{m}\\rfloor$$$ be the number of integers from $$$1$$$ to $$$n$$$ divisible by $$$m$$$. We can notice that because we write down only the last digit of each number divisible by $$$m$$$ then the length of the \"cycle\" of digits does not exceed $$$10$$$. In fact, we can always suppose that it is $$$10$$$ because $$$i \\cdot m \\% 10 = (10 + i) \\cdot m \\% 10$$$ for all $$$i$$$ from $$$0$$$ to $$$9$$$. So let $$$cycle_i = m * (i + 1) \\% 10$$$ for all $$$i$$$ from $$$0$$$ to $$$9$$$. Then the answer is $$$\\lfloor\\frac{k}{10}\\rfloor \\cdot \\sum\\limits_{i=0}^{9} cycle_i + \\sum\\limits_{i=0}^{k \\% 10} cycle_i$$$."
         },
         {
             "title": "Solution",

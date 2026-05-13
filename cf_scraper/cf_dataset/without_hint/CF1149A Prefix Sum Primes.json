@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1150C - Prefix Sum Primes\nThere are at least a couple of correct solutions I had in mind. Let me present the one I find the most straightforward, which doesn't even require implementing any sieve.\nIf all the numbers on the tiles are equal, we have no choice but to output the only possible permutation. In the remaining cases, we'll show that the following solution is optimal:\nStart with $$$2$$$ and $$$1$$$.\nUse all remaining $$$2$$$s.\nFinish with all remaining $$$1$$$s.\nIt's easy to see that we generate $$$2$$$ and all odd numbers between $$$3$$$ and $$$\\sum_{i=1}^{n} a_i$$$ as the prefix sums. Notice now that each prime is either $$$2$$$ or an odd number greater than or equal to $$$3$$$. Therefore, using the construction above we construct all possible prime prefix sums we possibly can — and so the construction is optimal. The solution can be implemented easily in $$$O(n)$$$ time."
         }
     ]
 }

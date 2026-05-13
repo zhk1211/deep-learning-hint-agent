@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2224B - Zhily and Mex and Max\nFirst, we demonstrate that the maximum element ($$$max$$$) must be placed in the first position. After that, we can put the smallest number that does not appear in the new array to maximize the mex.\nSuppose this is not the case, and $$$max$$$ first appears at index $$$i+1$$$. Let $$$t$$$ be the MEX of the first $$$i$$$ positions; it follows that $$$t \\leq i$$$.\nIf we move $$$max$$$ directly to the first position (shifting the original elements one step back), consider the changes in the first $$$i$$$ prefix sets (the sets from position $$$i+1$$$ onwards remain unchanged):\nContribution of prefix maximums: The sum increases by at least $$$i$$$, as the original maximum for each of the first $$$i$$$ prefixes was strictly less than $$$max$$$.\nContribution of prefix MEX: The sum decreases by at most $$$t$$$. This is because the original MEX at position $$$p$$$ is no greater than the new MEX at position $$$p+1$$$, and the new MEX at the first position is at most $$$t$$$ smaller than the original MEX at position $$$i$$$.\nSince $$$t \\leq i$$$, placing $$$max$$$ at the first position is always an optimal strategy. Consequently, the remaining elements should be arranged in ascending order starting from 0, with any duplicate values moved to the end of the sequence."
         },
         {
             "title": "Implementation",

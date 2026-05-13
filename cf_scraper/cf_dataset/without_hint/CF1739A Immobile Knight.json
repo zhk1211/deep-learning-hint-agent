@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1739A - Immobile Knight\nLet's consider some cases.\nIf at least one of $$$n$$$ or $$$m$$$ are $$$1$$$, then all cells are isolated. A knight can't move one in a perpendicular direction.\nIf at least one of $$$n$$$ or $$$m$$$ are at least $$$4$$$, then the knight always has at least one move. No matter where you place it, it can move two cells along the greater of the dimensions and move one in a perpendicular direction, because it's at least $$$2$$$.\nThree cases are left. $$$(2, 2)$$$, $$$(2, 3)$$$ and $$$(3, 3)$$$. For all of these cases, the middle cell is isolated. That cell is $$$(\\lfloor \\frac n 2 \\rfloor + 1, \\lfloor \\frac m 2 \\rfloor + 1)$$$.\nSince it doesn't matter which cell you print in the first two cases, you can always print $$$(\\lfloor \\frac n 2 \\rfloor + 1, \\lfloor \\frac m 2 \\rfloor + 1)$$$.\nOverall complexity: $$$O(1)$$$ per testcase.\nAlternatively, you can check every possible cell. Iterate over a cell and check all eight possible knight moves from it. If none are inside the board, the cell is isolated.\nOverall complexity: $$$O(nm)$$$ per testcase."
         },
         {
             "title": "Solution 1 (awoo)",

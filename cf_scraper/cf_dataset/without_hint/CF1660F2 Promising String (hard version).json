@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1660F2 - Promising String (hard version)\nNow we need to quickly find for a given balance value (on the prefix), the number of matching left boundaries. The boundary is suitable if the balance on the boundary is comparable modulo $$$3$$$ to the current balance and the current balance is less than the balance on the boundary, since we need the balance on the segment to be non-positive. That is, we need to be able to find a number of numbers for each value of the balance that is not less than ours. This can be done either by data structure, or notice that the balance takes only $$$2n+1$$$ different values, then you can find the number of numbers not less on the prefix for $$$O(1)$$$."
         },
         {
             "title": "Solution",

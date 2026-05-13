@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1796D - Maximum Subarray\nThere are greedy and dynamic programming solutions. We will describe dynamic programming solution.\nThe main task is to choose some segment that is the answer to the problem, while choosing $$$k$$$ positions to increase by $$$x$$$. To do this, we can use dynamic programming $$$dp_{i, j, t}$$$, where $$$i$$$ is the number of positions that have already been considered (from $$$0$$$ to $$$n$$$), $$$j$$$ is the number of elements that have already been increased by $$$x$$$ (from $$$0$$$ to $$$k$$$), $$$t$$$ is the flag showing the current state (whether we are before the chosen segment, inside the segment, or after the segment). Transitions in such dynamic programming are quite simple: we have a choice either to increase $$$j$$$ by $$$1$$$, then the value of the $$$i$$$-th element is $$$a_i + x$$$, or not to increase, then the value of the $$$i$$$-th element is $$$a_i - x$$$; we can also change the state of the flag (note that you can only switch from the current state to the subsequent ones, i.e., for example, you cannot switch from the state \"the segment has already ended\" to the state \"inside the segment\"). If the current state of the flag is \"inside the segment\", then $$$a_i + x$$$ or $$$a_i - x$$$ (depending on the selected transition) should be added to the dynamic programming value itself.\nSo, we got a solution in $$$O(nk)$$$."
         },
         {
             "title": "Solution (Neon)",

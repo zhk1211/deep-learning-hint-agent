@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1760D - Challenging Valleys\nOne possible solution is to represent a range of equal element as a single element with that value. Construct this array $$$b$$$ and loop through it and check how many element $$$b_i$$$ satisfy the conditions $$$i = 0$$$ or $$$b_{i-1}  \\lt  b_i$$$ and $$$i = n-1$$$ or $$$b_i  \\gt  b_{i+1}$$$. If exactly one index satisfies these conditions, print \"YES\" and othewise \"NO\".\nComplexity: $$$O(n)$$$"
         },
         {
             "title": "Solution",

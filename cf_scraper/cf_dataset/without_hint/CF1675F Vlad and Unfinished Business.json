@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1675F - Vlad and Unfinished Business\nTo begin with, we will hang the tree by the vertex $$$x$$$. In fact, we want to go from the root to the top of $$$y$$$, going off this path to do things and coming back. At one vertex of the path, it is advantageous to get off it in all the necessary directions and follow it further. So we will go $$$1$$$ once for each edge leading to $$$y$$$ and $$$2$$$ times for each edge leading to some of the cases, but not leading to $$$y$$$.\nLet's match each vertex with an edge to its ancestor. If the edge of a vertex leads to $$$y$$$, then $$$y$$$ is in the subtree of this vertex, similarly with vertices with cases. It is necessary for each vertex to determine whether there is a vertex $$$y$$$ in its subtree and whether there is a vertex from the array $$$a$$$, this can be done using a depth-first search, then we will calculate the answer according to the rules described above."
         },
         {
             "title": "Solution",

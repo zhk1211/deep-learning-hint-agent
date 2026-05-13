@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1692H - Gambling\nThere are several solutions. Here is one.\nIf we fix the value of $$$a$$$, then let's make a new array $$$b$$$ as follows: $$$b_i = 1$$$ if $$$\\mathrm{round}_i = a$$$, and $$$b_i = -1$$$ otherwise. Then the total amount of money earned will just be $$$2^{b_l + \\dots + b_r}$$$, so we only need to maximize $$$b_l + \\dots + b_r$$$. In other words, we need to find the maximum sum of a subarray. This is a standard problem that can be solved using segment tree.\nNote that we need to iterate over all values of $$$a$$$, of which there are $$$n$$$ possibilities. So we have to update elements of the segment tree $$$\\mathcal{O}(n)$$$ times and query once for each $$$a$$$, which means overall the solution runs in $$$\\mathcal{O}(n \\log n)$$$."
         },
         {
             "title": "Solution",

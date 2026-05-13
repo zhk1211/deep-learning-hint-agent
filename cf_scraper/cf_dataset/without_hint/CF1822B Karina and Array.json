@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1822B - Karina and Array\nIn the problem, we are not required to minimize the number of deletions, so we will search for the answer greedily.\nFirst, let's find two numbers in the array whose product is maximal. Note that the product of this pair of numbers will be the answer, since we can remove all elements from the array except this pair, then they will become neighboring.\nIt is easy to see that the product of a pair of positive numbers is maximal when both numbers in the pair are maximal. So we need to consider the product of the two largest numbers. But it's worth remembering that the product of two negative numbers is positive, so the product of the two smallest numbers is also worth considering. The answer to the problem will be the maximum of these two products.\nTo find the two largest and two smallest numbers, you can simply sort the array. The final asymptotics of the solution will be $$$O(n\\log n)$$$."
         },
         {
             "title": "Solution",

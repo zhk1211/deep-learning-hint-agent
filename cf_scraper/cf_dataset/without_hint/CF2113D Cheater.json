@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2113D - Cheater\nLet us consider all prefix minimums, and let their positions be $$$k_{1}, k_{2}, \\ldots, k_{s}$$$. Note that if at some round the card $$$a_{k_{j}}$$$ wins ($$$a_{k_{j}}  \\gt  b_{t}$$$), then the cards $$$a_{k_{j} + 1}, a_{k_{j} + 2}, \\ldots, a_{k_{j + 1}}$$$ will also win, since all of them have a nominal value greater than $$$a_{k_{j}}$$$. Since the answer is a monotonic function, we use binary search on the answer. For a fixed prefix length of the player's cards, we replace the minimum on this prefix with the maximum on the remaining suffix and simulate the game."
         }
     ]
 }

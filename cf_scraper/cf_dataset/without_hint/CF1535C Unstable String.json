@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ consisting of the characters 0, 1, and ?.\n\nLet's call a string unstable if it consists of the characters 0 and 1 and any two adjacent characters are different (i. e. it has the form 010101... or 101010...).\n\nLet's call a string beautiful if it consists of the characters 0, 1, and ?, and you can replace the characters ? to 0 or 1 (for each character, the choice is independent), so that the string becomes unstable.\n\nFor example, the strings 0??10, 0, and ??? are beautiful, and the strings 00 and ?1??1 are not.\n\nCalculate the number of beautiful contiguous substrings of the string $ s $ .\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 10^4 $ ) — number of test cases.\n\nThe first and only line of each test case contains the string $ s $ ( $ 1 \\le |s| \\le 2 \\cdot 10^5 $ ) consisting of characters 0, 1, and ?.\n\nIt is guaranteed that the sum of the string lengths over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output a single integer — the number of beautiful substrings of the string $ s $ .\n\nExamples\nSample 1\nInput\n3\n0?10\n???\n?10??1100\nOutput\n8\n6\n25"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1535C - Unstable String\nLet's find a simple condition when the string is not beautiful. A string is not beautiful if there are two characters\n0\n(or two characters\n1\n) at an odd distance, or\n0\nand\n1\nat an even distance (because in this case, the string cannot be made unstable).\nIterate over the right border of the substring $$$r$$$. Let $$$l$$$ be the maximum index such that the substring $$$s[l, r]$$$ is not beautiful (or $$$0$$$ if the substring $$$s[1, r]$$$ is beautiful). Then we have to add $$$r - l$$$ to the answer (since any substring of a beautiful string is also beautiful).\nDenote $$$lst_{c, p}$$$ as the last occurrence of $$$c$$$ ($$$0$$$ or $$$1$$$) at the position of parity $$$p$$$.\nLet $$$s_r = 0$$$, $$$p$$$ is the parity of $$$r$$$, then $$$l = \\max(lst_{0, p \\oplus 1}, lst_{1, p})$$$, i. e. find the nearest character that breaks a beautiful substring (\n0\nat an odd distance or\n1\nat an even distance)\nThe case for $$$s_r = 1$$$ is similar. If $$$s_r = ?$$$, then we can choose what this character will be. Obviously, we need to choose the option with the smaller value of $$$l$$$."
+        },
+        {
+            "title": "Solution (Neon)",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nwhile\n(\nt\n--)\n{\nstring\ns\n;\ncin\n>>\ns\n;\nvector\n<\nvector\n<int>\n>\nlst\n(\n2\n,\nvector\n<int>\n(\n2\n,\n-\n1\n));\nlong\nlong\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\ns\n.\nsize\n());\n++\ni\n)\n{\nint\nj\n=\ni\n-\n1\n;\nint\np\n=\ni\n&\n1\n;\nif\n(\ns\n[\ni\n]\n!=\n'1'\n)\nj\n=\nmin\n(\nj\n,\nmax\n(\nlst\n[\n0\n][\np\n^\n1\n],\nlst\n[\n1\n][\np\n]));\nif\n(\ns\n[\ni\n]\n!=\n'0'\n)\nj\n=\nmin\n(\nj\n,\nmax\n(\nlst\n[\n0\n][\np\n],\nlst\n[\n1\n][\np\n^\n1\n]));\nans\n+=\ni\n-\nj\n;\nif\n(\ns\n[\ni\n]\n!=\n'?'\n)\nlst\n[\ns\n[\ni\n]\n-\n'0'\n][\np\n]\n=\ni\n;\n}\ncout\n<<\nans\n<<\n'\\n'\n;\n}\n}"
+        }
+    ]
+}

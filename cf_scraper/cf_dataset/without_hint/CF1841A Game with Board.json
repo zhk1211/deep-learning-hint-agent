@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1841A - Game with Board\nLet's try to find a winning strategy for Alice. We can force Bob into a situation where his only action will be to make a move that leaves Alice without any legal moves, so she will win. For example, Alice can start by merging $$$n-2$$$ ones, so the board will be $$$\\{1, 1, n-2\\}$$$ after her move. The only possible move for Bob is to merge the remaining $$$1$$$'s, and the board becomes $$$\\{2, n-2\\}$$$, and Alice wins.\nUnfortunately, this works only for $$$n \\ge 5$$$. Cases $$$n=2$$$, $$$n=3$$$, $$$n=4$$$ should be analyzed separately:\nif $$$n=2$$$, the only possible first move for Alice is to merge two $$$1$$$'s, and the board becomes $$$\\{2\\}$$$, so Bob wins;\nif $$$n=3$$$, Alice can transform the board either to $$$\\{3\\}$$$ or to $$$\\{1,2\\}$$$; in both cases, Bob instantly wins;\nif $$$n=4$$$, Alice can transform the board to $$$\\{4\\}$$$, $$$\\{1,3\\}$$$, or $$$\\{1,1,2\\}$$$. In the first two cases, Bob instantly wins. In the third case, the only possible response for Bob is to merge two $$$1$$$'s; the board becomes $$$\\{2,2\\}$$$. It's easy to see that after the only possible move for Alice, the board becomes $$$\\{4\\}$$$, and Bob wins.\nSo, when $$$n \\ge 5$$$, Alice wins, and when $$$n \\le 4$$$, Bob wins."
         },
         {
             "title": "Solution (BledDest)",

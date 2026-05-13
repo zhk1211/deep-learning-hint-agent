@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nToday, Osama gave Fadi an integer $ X $ , and Fadi was wondering about the minimum possible value of $ max(a, b) $ such that $ LCM(a, b) $ equals $ X $ . Both $ a $ and $ b $ should be positive integers.\n\n$ LCM(a, b) $ is the smallest positive integer that is divisible by both $ a $ and $ b $ . For example, $ LCM(6, 8) = 24 $ , $ LCM(4, 12) = 12 $ , $ LCM(2, 3) = 6 $ .\n\nOf course, Fadi immediately knew the answer. Can you be just like Fadi and find any such pair?\n\nInput Format\nThe first and only line contains an integer $ X $ ( $ 1 \\le X \\le 10^{12} $ ).\n\nOutput Format\nPrint two positive integers, $ a $ and $ b $ , such that the value of $ max(a, b) $ is minimum possible and $ LCM(a, b) $ equals $ X $ . If there are several possible such pairs, you can print any.\n\nExamples\nSample 1\nInput\n2\nOutput\n1 2\n\nSample 2\nInput\n6\nOutput\n2 3\n\nSample 3\nInput\n4\nOutput\n1 4\n\nSample 4\nInput\n1\nOutput\n1 1"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "easier implementation",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nfinish\n(\nx\n)\nreturn\ncout\n<<\nx\n<<\nendl\n,\n0\n#define\nll\nlong\nlong\nll x\n;\nll lcm\n(\nll a\n,\nll b\n){\nreturn\na\n/\n__gcd\n(\na\n,\nb\n)\n*\nb\n;\n}\nint\nmain\n(){\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\ncin\n>>\nx\n;\nll ans\n;\nfor\n(\nll i\n=\n1\n;\ni\n*\ni\n<=\nx\n;\ni\n++){\nif\n(\nx\n%\ni\n==\n0\n&&\nlcm\n(\ni\n,\nx\n/\ni\n)\n==\nx\n){\nans\n=\ni\n;\n}\n}\ncout\n<<\nans\n<<\n\" \"\n<<\nx\n/\nans\n<<\nendl\n;\n}"
+        }
+    ]
+}

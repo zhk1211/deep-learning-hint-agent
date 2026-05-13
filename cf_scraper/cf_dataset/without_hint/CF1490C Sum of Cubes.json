@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1490C - Sum of Cubes\nIn this problem, we need to find $$$a$$$ and $$$b$$$ such that $$$x=a^3+b^3$$$ and $$$a \\ge 1, b \\ge 1$$$.\nSince $$$a$$$ and $$$b$$$ are positive, $$$a^3$$$ and $$$b^3$$$ are also positive. Hence $$$a^3 \\le a^3 + b^3 \\le x$$$. Therefore, the number $$$a$$$ can be iterated from $$$1$$$ to $$$\\sqrt[3]{x}$$$. Since in all tests $$$x \\le 10^{12}$$$, then $$$a \\le 10^4$$$.\nFor each $$$a$$$ , you can find $$$b$$$ by the formula $$$b=\\sqrt[3]{x-a^3}$$$. This is a positive number. It remains to check that $$$b$$$ is an integer."
         },
         {
             "title": "Solution",

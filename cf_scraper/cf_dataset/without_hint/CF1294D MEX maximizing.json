@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1294D - MEX maximizing\nFirstly, let's understand what the operation does. It changes the element but holds the remainder modulo $$$x$$$. So we can consider all elements modulo $$$x$$$.\nLet $$$cnt_0$$$ be the number of elements with the value $$$0$$$ modulo $$$x$$$, $$$cnt_1$$$ be the number of elements with the value $$$1$$$ modulo $$$x$$$, and so on. Let's understand, where is the \"bottleneck\" of MEX. Obviously, we can always fill exactly $$$min(cnt_0, cnt_1, \\dots, cnt_{x - 1})$$$ full blocks, so MEX is at least $$$min(cnt_0, cnt_1, \\dots, cnt_{x - 1}) \\cdot x$$$. MEX will be among all elements $$$y \\in [0; x - 1]$$$ such that $$$cnt_y = min(cnt_0, cnt_1, \\dots, cnt_{x - 1})$$$. Among all such elements MEX will be the minimum such $$$y$$$. Let it be $$$mn$$$. So the final value of MEX is $$$cnt_{mn} \\cdot x + mn$$$.\nHow to deal with queries? Let's maintain the sorted set of pairs ($$$cnt_y, y$$$) for all $$$y \\in [0; x - 1]$$$ and change it with respect to appended values. During each query let's change the set correspondingly and take the answer as the first element of this set using the formula above.\nTime complexity: $$$O(n \\log n)$$$. There is also an easy linear solution that uses the same idea but in a different way."
         },
         {
             "title": "Solution",

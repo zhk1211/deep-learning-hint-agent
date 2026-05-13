@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1621E - New School\nSuppose, that you know average ages of each group of studens $$$avg_1, avg_2, \\ldots, avg_m$$$. How can we check whether we can start lessons? Let's sort this ages and ages of teachers in the decreasing order. Now we have $$$avg_1 \\geq avg_2 \\geq \\ldots \\geq avg_m$$$ and $$$a_1 \\geq a_2 \\geq \\ldots \\geq a_n$$$. In all the following solution I will assume that average ages of students and teachers are sorted in the decreasing order.\nLet's show that we can start lessons if and only if $$$avg_i \\leq a_i$$$ for all $$$1 \\leq i \\leq m$$$. If $$$avg_i  \\gt  a_i$$$ for some $$$i$$$ then the eldest $$$i$$$ groups can be assigned only to the $$$i-1$$$ eldest teachers, so there is no possible assignment. Otherwise we can assign the $$$i$$$-th group to the $$$i$$$-th teacher.\nWhen one of the students refuse to study, only one value of $$$avg_i$$$ changes to the new value $$$x$$$. Let's denote the new position of this group in the sorted list as $$$j$$$. Then all groups on positions between $$$i$$$ and $$$j$$$ will move by $$$1$$$ towards the initial position of group $$$i$$$.\nThis position $$$j$$$ can be easily found with binary search. Then we can compare $$$a_j$$$ and $$$x$$$, $$$a_k$$$ with $$$avg_k$$$ for groups that haven't move and $$$a_k$$$ with $$$avg_{k \\pm 1}$$$ for groups that have moved to the neighbouring positions. It can be easy done with prefix sum arrays.\nWe can also show that we can do binary search in each group, but it doesn't decrease time complexity (for example, in case when all groups are small)."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1606C - Banknotes\nFirst of all, let's find out how to calculate $$$f(s)$$$. This can be done greedily, let's iterate from the higher denominations to the lower ones, the number of banknotes of $$$i$$$-th type is equal to $$$\\left\\lfloor {\\frac{s}{10^{a_i}}} \\right\\rfloor$$$ (the value of $$$s$$$ here changes to reflect that we have already taken some banknotes; that is, we subtract $$$\\left\\lfloor {\\frac{s}{10^{a_i}}} \\right\\rfloor \\cdot 10^{a_i}$$$ from $$$s$$$ each time, which is the same as taking $$$s$$$ modulo $$$10^{a_i}$$$). We can see that after we process the $$$i$$$-th type of banknotes, the condition $$$s  \\lt  10^{a_i}$$$ holds, which means that the number of banknotes of $$$i$$$-th type does not exceed $$$\\frac{10^{a_{i + 1}}}{10^{a_i}} - 1$$$ (except in the case of $$$i = n$$$).\nNow we can find the minimum number $$$s$$$ such that $$$f(s)  \\gt  k$$$. Let $$$\\mathit{lft}$$$ be the number of banknotes that still remains to take, initially equal to $$$k+1$$$ (because we want $$$f(s)$$$ to be at least $$$k + 1$$$). Let's iterate from the lower denominations to the highest ones, the number of banknotes of $$$i$$$-th type we take should be equal to $$$\\min(\\mathit{lft}, \\frac{10^{a_{i + 1}}}{10^{a_i}} - 1)$$$ — the minimum of how many we need to take and how many we are allowed to take, so as not to break the minimality of the function $$$f$$$."
         },
         {
             "title": "Solution (Neon)",

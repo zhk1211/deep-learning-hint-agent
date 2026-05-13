@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1851G - Vlad and the Mountains\nLet's consider the change in energy when traveling from $$$i \\rightarrow j \\rightarrow k$$$, $$$h_i - h_j + h_j - h_k = h_i - h_k$$$, it can be seen that this is the difference between the heights of the first and last mountains on the path. In other words, from vertex $$$a$$$, it is possible to reach any vertex for which there is a path that does not pass through vertices with a height greater than $$$h_a+e$$$.\nTherefore, for each query, it is necessary to construct a component from vertex $$$a$$$, in which all vertices with a height not greater than $$$h_a + e$$$ are included, and check if vertex $$$b$$$ lies within it. To do this efficiently, let's sort the queries by $$$h_a + e$$$, and the edges of the graph by $$$\\max(h_u, h_v)$$$, and maintain a disjoint set data structure (DSU).\nBefore each query, add all edges that have not been added yet and their $$$\\max(h_u, h_v)$$$ is not greater than $$$h_a+e$$$ for that specific query. After this, it remains to only check if vertices $$$a$$$ and $$$b$$$ belong to the same connected component."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1367C - Social Distance\nLet's split a given string into blocks of consecutive zeros. Then in each such block, you can independently put the maximum number of people who fit in it. But there are three cases to consider.\nIf the current block is not the first and not the last, then there are ones at the border and this means that the first $$$k$$$ tables of the current block and the last $$$k$$$ are prohibited. Therefore, remove these zeroes from the string.\nIf the current block is the first, then the one is at the end and you need to delete the last $$$k$$$ zeros.\nIf the current block is the last, then in the beginning there is one and you need to delete the first $$$k$$$ zeros.\nAlso, as a separate case, you need to consider — a string consisting only of zeros. Then there is exactly one block from which you do not need to remove zeros.\nNow all the tables in each block are free, then in each block we can put $$$\\lfloor \\frac{\\text{number of zeros}}{k} \\rfloor$$$. Sum these values over all blocks."
         },
         {
             "title": "Solution",

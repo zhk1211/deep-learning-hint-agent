@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1624B - Make AP\nLet's iterate over the number that we want to multiply by $$$m$$$.\nHow can we check that we can multiply the current number so that an AP is formed?\nNote that those $$$2$$$ numbers that we do not touch should form an AP themselves. For instance, let at the current operation we want somehow multiply the number $$$c$$$. Then $$$a = x_1$$$, and $$$b = x_2 = x_1 + d$$$.\nNote that $$$b - a = x_1 + d - x_1 = d$$$. Thus, we know what $$$d$$$ is. Also we know that $$$c = x_1 + 2 \\cdot d = a + 2 \\cdot d$$$. Let's check if $$$a + 2 \\cdot d$$$ is divisible by $$$c$$$. If yes, then we have found the answer, if not, then move on to the next number.\nWe do the same for $$$a$$$ and $$$b$$$.\nBe careful with non positive numbers, integer divisions and other edge cases."
         },
         {
             "title": "Solution",

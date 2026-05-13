@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1644B - Anti-Fibonacci Permutation\nLet's consider one of the possible solutions. Let's put the first element in the $$$x$$$-th permutation equal to $$$x$$$, and sort all the other elements in descending order. Thus, we get permutations of the form: $$$[1, n, n-1, \\dots, 2]$$$, $$$[2, n, n-1, \\dots, 1]$$$, ..., $$$[n, n-1, n-2, \\dots, 1]$$$. In such a construction $$$p_{i-1}  \\gt  p_i$$$ for all $$$i$$$ ($$$3 \\le i \\le n$$$), and hence $$$p_{i-2} + p_{i-1}  \\gt  p_i$$$."
         },
         {
             "title": "Solution (Neon)",

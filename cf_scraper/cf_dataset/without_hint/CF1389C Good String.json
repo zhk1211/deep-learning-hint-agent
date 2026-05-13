@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1389C - Good String\nLet's analyze when the string is good. Suppose it is $$$t_1t_2 \\dots t_k$$$.\nThe cyclic shifts of this string are $$$t_kt_1t_2 \\dots t_{k-1}$$$ and $$$t_2t_3 \\dots t_k t_1$$$. We get the following constraints for a good string: $$$t_k = t_2$$$, $$$t_1 = t_3$$$, $$$t_2 = t_4$$$, ..., $$$t_{k - 2} = t_k$$$, $$$t_{k - 1} = t_1$$$. If the string has odd length, then all characters should be equal to each other; otherwise, all characters on odd positions should be equal, and all characters on even positions should be equal.\nNow, since there are only $$$10$$$ different types of characters, we can brute force all possible combinations of the first and the second character of the string we want to obtain (there are only $$$100$$$ of them) and, for each combination, greedily construct the longest possible subsequence of $$$s$$$ beginning with those characters in $$$O(n)$$$."
         },
         {
             "title": "Solution (Ne0n25)",

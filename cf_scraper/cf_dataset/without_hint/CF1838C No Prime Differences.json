@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1838C - No Prime Differences\nNote that if we fill in the numbers in order from the top left to the bottom right, for example, for $$$n=5$$$, $$$m=7$$$,\nthe only adjacent differences are $$$1$$$ and $$$m$$$. So if $$$m$$$ is not prime, this solves the problem. We'll now rearrange the rows so that it works regardless of whether $$$m$$$ is prime. Put the first $$$\\lfloor\\frac{n}{2}\\rfloor$$$ rows in rows $$$2$$$, $$$4$$$, $$$6$$$, ... and the last $$$\\lceil\\frac{n}{2}\\rceil$$$ rows in rows $$$1$$$, $$$3$$$, $$$5$$$, .... In the example above, this would give\nNote that because we are just rearranging the rows from the above solution, all of the horizontal differences are $$$1$$$, and the vertical differences are multiples of $$$m\\ge 4$$$. Therefore, as long as none of the vertical differences equal $$$m$$$ itself, they must be composite.\nBecause $$$n\\ge 4$$$, no row is next to either of its original neighbors in this ordering, and therefore all vertical differences are greater than $$$m$$$, and thus composite.\nSo we can use this final grid regardless of whether $$$m$$$ is prime.\nComplexity: $$$O(nm)$$$"
         }
     ]
 }

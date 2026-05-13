@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1749C - Number Game\nNote that if Bob has increased some element, then Alice can't remove it on the next stages. Obviously, it is more profitable for Bob to \"prohibit\" the smallest element of the array. Using this fact, we can iterate over the value of $$$k$$$, and then simulate the game process. To simulate the game, we can maintain the set of elements that Alice can remove. On the $$$i$$$-th stage, Alice removes the maximum element $$$x$$$, such that $$$x \\le k - i + 1$$$, if there are no such elements, then Alice lost. Bob always removes the minimum element of the set.\nThus, the complexity of the solution is $$$O(n^2\\log{n})$$$ for each test case.\nThere is another possible solution: we can notice that, if Alice wins, Bob will \"prohibit\" the elements on positions $$$1, 2, \\dots, k-1$$$ of the sorted array. So, Alice has to delete the next $$$k$$$ elements. So, if the segment $$$[k \\dots 2k-1]$$$ of the sorted array can be deleted by Alice during the game phases, she wins with this value of $$$k$$$."
         },
         {
             "title": "Solution (Neon)",

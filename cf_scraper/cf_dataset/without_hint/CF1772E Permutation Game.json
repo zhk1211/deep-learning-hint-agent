@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1772E - Permutation Game\nNote that it makes no sense to use the first type of operation if it does not lead to an instant win, because the opponent can return the previous state of the array with their next move.\nSo the winner is the one who has time to color \"their\" elements in blue first. Let's denote $$$a$$$ as the number of elements that only the first player needs to color, $$$b$$$ as the number of elements only the second player needs to color, $$$c$$$ — both players needs to color.\nTo win, the first player needs to have time to paint $$$a+c$$$ elements, and they have no more than $$$b$$$ moves to do it, because otherwise the second player can prevent the win of the first player. So the winning condition for the first player is $$$a+c \\le b$$$. Similarly, for the second player, with the only difference that they have $$$1$$$ move less (because they go second), which means the condition is $$$b+c  \\lt  a$$$. If none of these conditions are met, then neither player has a winning strategy, which means they will both reduce the game to a draw."
         },
         {
             "title": "Solution (Neon)",

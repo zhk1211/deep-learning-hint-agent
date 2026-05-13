@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1527C - Sequence Pair Weight\nFirst of all, it can be proved that the maximum possible answer occurs when $$$n = 10^5$$$ and all the elements are identical which comes out to be of the order $$$4 \\cdot 10^{18}$$$, which fits in the long long integer range, thus preventing overflow.\nThe brute force approach is just to find the weight of each subarray and sum them up but it will definitely not fit into TL.\nLet $$$dp_i$$$ represents the sum of the weights of all subsegments which ends at index $$$i$$$.\nSo $$$answer = \\sum_{i = 1}^{n} dp_i $$$\nNow, $$$dp_i$$$ includes:\nSum of the weights of all subsegments ending at index $$$i-1$$$ which is equal to $$$dp_{i-1}$$$.\nThe contribution of $$$i_{th}$$$ index for all the subsegments ending at index $$$i$$$. This is just the sum of prefix sums of indexes of the element having the same value as that of $$$a_i$$$ which has occurred before index $$$i$$$. This is because the number of subsegments ending at index $$$i$$$ in which any index $$$j$$$ ($$$j  \\lt  i$$$ and $$$a_j = a_i$$$) has been counted as unordered pair $$${j,i}$$$ is equal to $$$j$$$. This can be done by maintaining a map that stores the prefix sum of indexes for a given value till $$$i$$$.\n$$$dp_i = dp_{i-1} + \\sum j $$$ where $$$j  \\lt  i$$$ and $$$a_j = a_i$$$"
         },
         {
             "title": "Solution (sharabhagrawal25)",

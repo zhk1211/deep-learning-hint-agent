@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1203D2 - Remove the Substring (hard version)\nLet $$$rg_i$$$ be such rightmost position $$$x$$$ in $$$s$$$ that the substring $$$t[i;|t|]$$$ is the subsequence of $$$s[x;|s|]$$$. We need values $$$rg_i$$$ for all $$$i$$$ from $$$1$$$ to $$$|t|$$$. We can calculate it just iterating from right to left over all characters of $$$s$$$ and maintaining the pointer to the string $$$t$$$ as in easy version.\nThen let's iterate over all positions $$$i$$$ from $$$1$$$ to $$$|s|$$$ and maintain the pointer $$$pos$$$ as in the easy version which tells us the maximum length of the prefix of $$$t$$$ we can obtain using only the substring $$$s[1;i)$$$ (exclusively!). Suppose we want to remove the substring of $$$s$$$ starting from $$$i$$$. Then if $$$pos \\le |t|$$$ then let $$$rpos$$$ be $$$rg_{pos} - 1$$$, otherwise let $$$rpos$$$ be $$$|s|$$$. $$$rpos$$$ tells us the farthest rightmost character of the substring we can remove. So we can update the answer with the value $$$rpos - i + 1$$$ and go to the next position (and don't forget to increase $$$pos$$$ if needed)."
         },
         {
             "title": "Solution",

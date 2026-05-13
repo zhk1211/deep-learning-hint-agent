@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1778F - Maximizing Root\nLet, $$$x_u$$$ be the value of node $$$u$$$ and $$$dp[u][d]$$$ be the minimum number of moves required to make the GCD of the subtree of $$$u$$$ equal to a multiple of $$$d$$$.\nNow, $$$dp[u][d] = 0$$$ if the subtree GCD of node $$$u$$$ is already a multiple of $$$d$$$ and $$$dp[u][d] = \\infty$$$ if $$$(x_u \\cdot x_u)$$$ is not a multiple of $$$d$$$.\nFor each divisor $$$y$$$ of $$$d$$$, suppose, we want to perform the move on the subtree of $$$u$$$ by multiplying each node value of the subtree with $$$y$$$ iff $$$(x_u\\cdot y)$$$ is a multiple of $$$d$$$ and $$$y$$$ is a divisor of $$$x_u$$$. In this case, we have to make the GCD of all the subtree of child nodes of $$$u$$$ equal to a multiple of $$$LCM(\\frac{d}{y}, y)$$$ before performing the move on the subtree of $$$u$$$. This is because we have to make each node of the subtree a multiple of $$$\\frac{d}{y}$$$ to get the multiple of $$$d$$$ after performing the move on the subtree of node $$$u$$$ using $$$y$$$. Also, to perform the move of multiplying by $$$y$$$, the value of each subtree node should be a multiple of $$$y$$$. So we have to make each node value a multiple of $$$LCM(\\frac{d}{y}, y)$$$.\nSo, $$$dp[u][d]$$$ will be calculated from $$$dp[v][LCM(\\frac{d}{y}, y)]$$$ for each divisor $$$y$$$ of $$$d$$$ for all child $$$v$$$ of $$$u$$$.\nNow, $$$x_1\\cdot D$$$ is the answer where $$$D$$$ is the largest divisor of $$$x_1$$$ such that $$$k \\geq dp[1][D]$$$.\nTime Complexity: $$$O(n\\cdot m^2)$$$ where $$$m$$$ is the number of divisors of $$$x_1$$$."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1823B - Sort with Step\nLet's fix a number $$$0 \\le x  \\lt  k$$$ and consider all indices $$$i$$$ such that $$$i \\bmod k = x$$$. Note that numbers in these positions can be reordered however we want, but they can't leave this set of positions, since $$$i \\bmod k$$$ stay the same. Moreover, in the sorted permutation these positions must contain numbers $$$j$$$ such that $$$(j - 1) \\bmod k = x$$$. In total, itm means that the permutation can be sorted if $$$(p[i] - 1) \\bmod k = i \\bmod k$$$ holds for all $$$i$$$.\nBy preliminary exchange, we can swap two elements from different sets. Therefore, if the last equality fails for exactly two elements, they can be swapped, making sorting possible. Otherwise, the answer is $$$-1$$$."
         },
         {
             "title": "Solution Python",

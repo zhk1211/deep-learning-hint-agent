@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1872C - Non-coprime Split\nTo begin with, let's learn how to solve the problem when $$$l = r$$$. In other words, we need to find a value $$$1 \\le a  \\lt  l$$$ such that $$$\\gcd(a, l - a) \\neq 1$$$. Notice that $$$\\gcd(a, l - a) = \\gcd(a, l)$$$. Then it is easy to see that if $$$l$$$ is prime, then $$$\\gcd(a, l) = 1$$$ for any $$$1 \\le a  \\lt  l$$$, otherwise any divisor of $$$l$$$ (except $$$1$$$ and $$$l$$$) will work as $$$a$$$. Thus, we can solve the problem when $$$l = r$$$ using the standard algorithm for primality testing in $$$O(\\sqrt{r})$$$ time. Next, we can solve the problem in several ways:\nSequentially check for primality all numbers from $$$l$$$ to $$$r$$$, and stop and output the answer as soon as we find the first composite number. This works faster than $$$O(r \\sqrt r)$$$ because there are no two adjacent prime numbers starting from $$$3$$$, so the answer will be found very quickly.\nHandle the case $$$l = r$$$ separately. Also, separately consider the case $$$r \\le 3$$$, in which the answer is $$$-1$$$. Otherwise, notice that since there are at least $$$2$$$ numbers in the interval $$$[l, r]$$$, there must be an even number in this interval. And for $$$r \\ge 4$$$, the maximum even number in the interval, $$$s$$$, will be $$$\\ge 4$$$, so for example, $$$a = \\frac{s}{2}, b = \\frac{s}{2}$$$ will be a valid answer. To find the maximum even number in the interval $$$l  \\lt  r$$$, we can use the formula $$$r - r \\% 2$$$."
         },
         {
             "title": "Solution",

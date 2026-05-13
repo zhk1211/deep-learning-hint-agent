@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1731C - Even Subarrays\nLet's calculate the number of subarrays whose $$$\\operatorname{XOR}$$$ sum has an odd number of divisors and subtract them from total no of subarrays.\nNote: A number has an odd number of divisors only if it is a perfect square. So we have to calculate number of subarray having $$$\\operatorname{XOR}$$$ sum a perfect square.\nFor the given constraints for elements in the array, the maximum possible $$$\\operatorname{XOR}$$$ sum of any subarray will be less than $$$2n$$$, so the number of possible elements with odd divisors $$$\\leq \\sqrt{2n}$$$. Number of subarrays with a given $$$\\operatorname{XOR}$$$ sum can be calculated in $$$O(n)$$$.\nTherefore, calculate the same for each perfect square less than $$$2n$$$ and add all these to get the number of subarrays whose $$$\\operatorname{XOR}$$$ sum has an odd number of divisors. Subtract from total number of subarrays to get the required answer.\nTime complexity : $$$O(n \\cdot \\sqrt{n})$$$."
         }
     ]
 }

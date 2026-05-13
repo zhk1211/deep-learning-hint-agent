@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1623C - Balanced Stone Heaps\nThe answer can be binary searched. That is, we can find the biggest number $$$x$$$, such that we can make all heap having at least $$$x$$$ stones. So our job here is to check if we can satisfy the said condition with a number $$$x$$$.\nLet's consider a\nreversed\nproblem: we go from $$$1$$$ to $$$n - 2$$$, pick a number $$$d$$$ ($$$0 \\le 3\\cdot d \\le h_i$$$), move $$$d$$$ and $$$2\\cdot d$$$ stones from the $$$i$$$-th heap to the $$$i + 1$$$ heap and $$$i + 2$$$-th heap respectively. In this problem, we can greedily move the stones: since $$$x$$$ is the minimum required stones, if at some moment, we have $$$h_i  \\lt  x$$$, then we can not satisfy the condition for $$$x$$$ anymore. Otherwise, it is always the best to use as many stones as we can, that is, choose $$$d = \\left \\lfloor \\frac {h_i - x} 3 \\right \\rfloor$$$, and move $$$d$$$ and $$$2\\cdot d$$$ stones to the $$$i + 1$$$ and $$$i + 2$$$ heaps respectively. In the end, if all the heap are not less than $$$x$$$, we can conclude that we can make all heaps having not less than $$$x$$$ stones with this process.\nGoing back to our original problem, it seems like we can solve it by doing the process in the reversed order, as discussed above. But there is a catch! The number of stones that can be moved\nmust not exceed\nthe number of the stones in the original heap! So, if we call $$$h_i$$$ — the original heap size, and $$$h'_i$$$ — the current modified heap size, then the number of stones that we should move is $$$d = \\left \\lfloor \\frac {\\min \\{ h_i, h'_i - x \\}} 3 \\right\\rfloor $$$ at each step."
         }
     ]
 }

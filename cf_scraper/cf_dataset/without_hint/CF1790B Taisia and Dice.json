@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1790B - Taisia and Dice\nIt is easy to find the value on the cube that the cat stole, it is equal $$$mx = s - r$$$. All other values must be\nno more than\n$$$mx$$$. Let's try to get $$$r$$$ by taking $$$mx$$$ $$$\\lfloor\\frac{r}{mx}\\rfloor$$$ times and adding the remainder there if it is non-zero.\nWe could not get more than $$$n - 1$$$ cubes this way, because otherwise $$$(n - 1)mx  \\gt  r$$$, but we are guaranteed that the answer exists. Now, until we get the $$$n-1$$$ cube, let's find the cube with the maximum value, reduce it by $$$1$$$ and add the cube with the value of $$$1$$$.\nWe can definitely get $$$n - 1$$$ dice, because otherwise $$$r  \\lt  n - 1$$$, but we are guaranteed that the answer exists. It remains only to add a cube with the value of $$$mx$$$ to our $$$n-1$$$ cubes.\nWe obtained a solution with $$$O(n^2)$$$ asymptotics."
         },
         {
             "title": "Solution",

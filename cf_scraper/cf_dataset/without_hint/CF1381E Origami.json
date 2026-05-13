@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1381E - Origami\nFirst, let's imagine the problem in one dimension. And let's see how the length of the folded segment changes as we sweep the fold line from left to right.\nIf the fold line is to the left of the paper, it's just the length of the segment. Then as the fold line enters the left side of the paper, we subtract the length of paper to the left of the fold line, since it gets folded onto the right half. Then as the fold line passes the midpoint of the segment, we should add back the length we passed after the midpoint, since the left half gets folded past the right end of the paper. Finally, after the line exits the paper, the answer stays constant again.\nNow let's advance to the two-dimensional setting. Imagine the process described above applied to all horizontal segments of the polygon simultaneously. We see that the answer is the integral of the answers for all the segments.\nNow, let's split the polygon into two halves by the midpoints of each horizontal segment. For a fold line, the answer is the total area, minus the area left of the sweep line belonging to the first polygon, plus the area left of the sweep line belonging to the second polygon.\nWe can sort all line segments and queries, and answer all queries in a sweep line. To simplify the process, it helps to know the standard algorithm to compute the area of a polygon by considering a trapezoid for each line segment and combining their areas with inclusion-exclusion.\nEssentially, we have to sweep the integral of a piecewise linear function.\nComplexity is $$$O((n+q)\\log(n+q))$$$."
         }
     ]
 }

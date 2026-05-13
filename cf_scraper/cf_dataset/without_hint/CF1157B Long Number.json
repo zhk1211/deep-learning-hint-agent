@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1157B - Long Number\nLet's find the first digit in $$$a$$$ that becomes\nstrictly\ngreater if we replace it (obviously, if there is no such digit, then the best solution is to leave $$$a$$$ unchanged). In the optimal solution we will replace this digit and maybe some digits after this. Why is it so? It is impossible to make any of the previous digits greater (since we found the first digit that can be replaced with a greater one).\nThen let's analyze all digits to the right of it. We should not replace any digit with a lower digit (because it is better not to replace it and all digits to the right of it at all), but there's nothing wrong with replacing any other digits.\nSo, the segment we need to replace begins with the first digit that can become greater after replacing (and includes this digit) and goes to the right until the first digit that becomes less after replacing (and this digit is excluded)."
         },
         {
             "title": "Solution",

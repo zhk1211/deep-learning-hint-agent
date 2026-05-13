@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1303F - Number of Components\nNote that because of the low constraints on the number of colors, the problem can be solved independently for each color. Now you can divide the queries into two types: add a cell to the field and delete it. You have to maintain the number of components formed by added cells. Cell deletions will occur after all additions because of the condition $$$c_i \\le c_{i+1}$$$.\nThe first part of the solution will be to calculate the number of components while adding new cells. This is a standard problem that can be solved using the DSU.\nAfter that, we should note that if we consider the process of removing cells from the end, this process is similar to the process of adding. Therefore, we have to process delete requests from the end in the same way as add requests, only their contribution to the number of components will be opposite in sign."
         },
         {
             "title": "Solution (Ne0n25)",

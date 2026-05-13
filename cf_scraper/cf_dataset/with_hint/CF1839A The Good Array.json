@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1839A - The Good Array\nLet's find lower bound for answer. In any good array, there are at least $$$\\lceil \\frac{n - 1}{k} \\rceil$$$ ones among the first $$$n - 1$$$ elements. Also, $$$a_n$$$ is always $$$1$$$, as $$$\\lceil \\frac{1}{k} \\rceil = 1$$$.\nSo there are at least $$$\\lceil \\frac{n - 1}{k} \\rceil + 1$$$ ones in any good array.\nThis lower bound can always be achieved by placing ones on position $$$n$$$ and on positions $$$1 + k \\cdot x$$$ for all integers $$$x$$$ such that $$$0 \\le x \\le \\lfloor \\frac{n - 2}{k} \\rfloor = \\lceil \\frac{n - 1}{k} \\rceil - 1$$$.\nThe answer to the probelm is $$$\\lceil \\frac{n - 1}{k} \\rceil + 1$$$."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1722F - L-shapes\nThe problem is mainly a tricky implementation problem. Let's denote the\nelbow\nof an L-shape as the square in the middle (the one that is side-adjacent to two other squares). Every elbow is part of exactly one L-shape, and every L-shape has exactly one elbow.\nIterate through the grid and count the number of side-adjacent neighbors they have. If there is a cell with more than 2, or if there is a cell with exactly two neighbors on opposite sides, then the answer is\nNO\n. Otherwise, if there are exactly 2 neighbors, this cell is an elbow. Mark all three cells of this L-shape with a unique number (say, mark the first one you find with $$$1$$$, the second with $$$2$$$, and so on.) If you ever remark a cell that already has a number, then two elbows are adjacent, and you can output\nNO\n.\nAfter all elbows are marked, check if all shaded cells have a number. If some don't, then they are not part of an L-shape, so you can output\nNO\n.\nFinally, we should check that L-shapes don't share edge or corner. Just check, for each number, if it is only diagonally adjacent to other numbers equal to it or unshaded cells. If it is diagonally adjacent to other unequal numbers, then the answer is\nNO\n, because two L-shapes share an edge or corner then.\nOtherwise the answer is\nYES\n.\nThere are many other solutions, all of which are various ways to check the conditions. The complexity is $$$\\mathcal{O}(mn)$$$ per testcase."
         },
         {
             "title": "Solution",

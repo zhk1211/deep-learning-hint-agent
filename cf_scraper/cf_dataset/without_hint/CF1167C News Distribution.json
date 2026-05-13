@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1167C - News Distribution\nThe first intention after reading the problem is to reformulate it in graph theory terms. Let people be vertices, edge between two vertices $$$x$$$ and $$$y$$$ exists if $$$x$$$ and $$$y$$$ have some group in common. Basically, if person $$$x$$$ starts distributing the news, everyone in his connectivity component recieves it. Thus, the task is to calculate the number of vertices of each vertex component.\nAs of now, the graph can have up to $$$O(n^2)$$$ edges (consider the case where everyone is in the same group). Let's reduce the number of edges without changing connectivity components. For each group you know for sure that people in it are in the same component. Let's connect not just every pair of vertices in it, but every pair of neighbouring ones in each group. It's easy to see that they are still in the same component.\nThis graph will have $$$O(\\sum \\limits_{i = 1}^{m} k_i)$$$ edges which is a much smaller number. You can use dfs or dsu to find the components and their sizes.\nOverall complexity: $$$O(n + \\sum \\limits_{i = 1}^{m} k_i)$$$."
         },
         {
             "title": "Solution (BledDest)",

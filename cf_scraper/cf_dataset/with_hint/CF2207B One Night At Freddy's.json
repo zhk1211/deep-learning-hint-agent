@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2207B - One Night At Freddy's\nWe make a series of observations. First, we will solve the night guard's strategy. Suppose he sees danger levels $$$d_1 \\leq \\ldots \\leq d_m$$$. Then, flashing any animatronic $$$j$$$ will result in danger levels $$$[0, d_1, \\dots, d_{j-1}, d_{j+1}, \\dots, d_m]$$$. Of these, choosing $$$j = m$$$ simultaneously minimizes all of the danger values, so he will always flash the animatronic with the current highest $$$d_j$$$.\nNotice that if there are $$$k$$$ flashes remaining, there is no reason to increment any animatronic outside the top $$$k + 1$$$ danger levels. Once there are less than $$$m$$$ flashes remaining, the animatronic that gets flashed will no longer be incremented as it is outside the top $$$k + 1$$$ danger levels after the flash. This means that we will eventually flash at least $$$\\min(n, m - 1)$$$ different animatronics.\nDue to this, the final danger level will only be accumulated on one animatronic, which means it is equal to $$$\\ell$$$ minus the sum of the flashed animatronic values. So, our goal is to minimize this sum, which is clearly done by greedily incrementing the current minimum.\nThis process may be simulated naively to arrive at an $$$O(m \\ell)$$$ solution."
         },
         {
             "title": "Implementation",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1661A - Array Balancing\nLet's look at our arrays $$$a$$$ and $$$b$$$. Note that for any position $$$p$$$ such that $$$|a_{p-1} - a_p| + |b_{p-1} - b_p|  \\gt  |a_{p-1} - b_p| + |b_{p-1} - a_p|$$$ we can always \"fix it\" by swapping\nall\npositions $$$i$$$ from $$$p$$$ to $$$n$$$. In that case, contribution from all $$$i  \\lt  p$$$ won't change, contribution of pair $$$(p - 1, p)$$$ will decrease and contribution from all $$$i  \\gt  p$$$ won't change again, since we swapped all of them.\nIt means that we already can use the following algorithm: while exists such $$$p$$$ that $$$|a_{p-1} - a_p| + |b_{p-1} - b_p|  \\gt  |a_{p-1} - b_p| + |b_{p-1} - a_p|$$$ just swap all $$$i$$$ from $$$p$$$ to $$$n$$$. This solution works for $$$O(n^2)$$$ per test, that should be enough.\nBut we can optimize our approach by realizing that we can (instead of searching $$$p$$$ each time) just go from $$$2$$$ to $$$n$$$ and fix pairs one by one: if $$$|a_1 - a_2| + |b_1 - b_2|  \\gt  |a_1 - b_2| + |b_1 - a_2|$$$ then swap $$$a_2$$$ with $$$b_2$$$; next, if $$$|a_2 - a_3| + |b_2 - b_3|  \\gt  |a_2 - b_3| + |b_2 - a_3|$$$ then swap $$$a_3$$$ with $$$b_3$$$ and so on. In such way, solution works in $$$O(n)$$$."
         },
         {
             "title": "Solution (adedalic)",

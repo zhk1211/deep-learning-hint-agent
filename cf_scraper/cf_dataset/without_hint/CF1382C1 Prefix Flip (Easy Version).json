@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1382C1 - Prefix Flip (Easy Version)\nThe easy version has two main solutions:\nSolution 1: $$$O(n)$$$ time with $$$3n$$$ operations\nThe idea is to fix the bits one-by-one. That is, make $$$s_1=t_1$$$, then make $$$s_2=t_2$$$, etc. To fix the bit $$$i$$$ (when $$$s_i\\ne t_i$$$), we can flip the prefix of length $$$i$$$, then flip the prefix of length $$$1$$$, and again flip the prefix of length $$$i$$$. These three operations do not change any other bits in $$$s$$$, so it's simple to implement in $$$O(n)$$$. Since we use $$$3$$$ operations per bit, we use at most $$$3n$$$ operations overall.\nSolution 2: $$$O(n^2)$$$ time with $$$2n$$$ operations\nIn this solution, we take a similar approach to solution 1, in that we fix the bits one-by-one. This time, we will fix the bits in reverse order. To fix the bit $$$i$$$, we can either flip the prefix of length $$$i$$$, or flip the first bit and then flip the prefix of length $$$i$$$. Since we do this in reverse order, the previously fixed bits do not get messed up by this procedure. And we use at most $$$2$$$ operations per bit, so $$$2n$$$ operations overall.\nHowever, we do have to simulate the operations in order to check if we should flip the first bit. Simulating an operation can easily be done in $$$O(n)$$$ time per operation, or $$$O(n^2)$$$ time to simulate all operations."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1607A - Linear Keyboard\nSince it does not take time to place your hand over the first letter, you need to calculate the sum of the distances between the keyboard keys corresponding to each pair of adjacent letters of the word, that is $$$$$$\\sum\\limits_{i=2}^n |\\mathtt{pos}(s_i) - \\mathtt{pos}(s_{i-1})|$$$$$$ where $$$\\mathtt{pos}(c)$$$ is the position of the keyboard key corresponding to the letter $$$c$$$.\nIn order to calculate this sum, let's just iterate through the word $$$s$$$ with the\nfor\nloop and find the differences between the positions of $$$s_i$$$ and $$$s_{i-1}$$$ on the keyboard.\nTo find the position of a character on the keyboard, you could either use the built-in strings functions (such as\nstr.index\nin Python or\nstring::find\nin C++) or precalculate each letter's position on the keyboard into a separate array using another loop over a keyboard."
         },
         {
             "title": "Solution",

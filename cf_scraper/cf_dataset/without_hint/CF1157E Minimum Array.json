@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1157E - Minimum Array\nLet's maintain all elements of the array $$$b$$$ in a set that allows multiple copies of equal elements (\nstd::multiset\nfor C++). Then let's iterate from left to right over the array $$$a$$$ and try to minimize the current element in array $$$c$$$. This order will minimize the resulting array by lexicographical comparing definition. So for the $$$i$$$-th element $$$a_i$$$ let's find the minimum element greater than or equal to $$$n - a_i$$$ in the set because $$$n - a_i$$$ will give us remainder $$$0$$$, $$$n - a_i + 1$$$ will give us remainder $$$1$$$ and so on. If there is no greater or equal element in the set then let's take the minimum element of the set and take it as a pair for $$$a_i$$$ otherwise let's take this greater or equal element and remove it from the set.\nTime complexity: $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution",

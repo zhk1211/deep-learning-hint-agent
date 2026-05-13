@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nNote that the only differences between easy and hard versions are the constraints on $ n $ and the time limit. You can make hacks only if all versions are solved.\n\nSlime is interested in sequences. He defined good positive integer sequences $ p $ of length $ n $ as follows:\n\n- For each $ k>1 $ that presents in $ p $ , there should be at least one pair of indices $ i,j $ , such that $ 1 \\leq i < j \\leq n $ , $ p_i = k - 1 $ and $ p_j = k $ .\n\nFor the given integer $ n $ , the set of all good sequences of length $ n $ is $ s_n $ . For the fixed integer $ k $ and the sequence $ p $ , let $ f_p(k) $ be the number of times that $ k $ appears in $ p $ . For each $ k $ from $ 1 $ to $ n $ , Slime wants to know the following value:\n\n$ \\left(\\sum_{p\\in s_n} f_p(k)\\right)\\ \\textrm{mod}\\ 998\\,244\\,353 $\n\nInput Format\nThe first line contains one integer $ n\\ (1\\le n\\le 100\\,000) $ .\n\nOutput Format\nPrint $ n $ integers, the $ i $ -th of them should be equal to $ \\left(\\sum_{p\\in s_n} f_p(i)\\right)\\ \\textrm{mod}\\ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n2\nOutput\n3 1\n\nSample 2\nInput\n3\nOutput\n10 7 1\n\nSample 3\nInput\n1\nOutput\n1\n\nNote\nIn the first example, $ s=\\{[1,1],[1,2]\\} $ .\n\nIn the second example, $ s=\\{[1,1,1],[1,1,2],[1,2,1],[1,2,2],[2,1,2],[1,2,3]\\} $ .\n\nIn the third example, $ s=\\{[1]\\} $ ."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "106873892"
+        }
+    ]
+}

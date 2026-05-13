@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1541B - Pleasant Pairs\nLoop over all values of $$$a_i$$$ and $$$a_j$$$. Because $$$i + j \\leq 2 \\cdot n$$$, we only care about pairs $$$(a_i, a_j)$$$ if $$$a_i \\cdot a_j \\leq 2 \\cdot n$$$. The number of such pairs is $$$O(n log n)$$$, so you can brute force all pairs.\nThe reason the total number of pairs is $$$O(n log n)$$$ is because if the first element of the pair is $$$x$$$, there are only $$$\\frac{2 \\cdot n}{x}$$$ possible values of $$$y$$$. $$$\\frac{2 \\cdot n}{1} + \\frac{2 \\cdot n}{2} + \\frac{2 \\cdot n}{3} + \\ldots \\frac{2 \\cdot n}{n} = 2 \\cdot n (\\frac{1}{1} + \\frac{1}{2} + \\frac{1}{3} \\ldots \\frac{1}{n}) = O(n log n)$$$ by the harmonic series. Thus the solution runs in $$$O(n log n)$$$ time total."
         }
     ]
 }

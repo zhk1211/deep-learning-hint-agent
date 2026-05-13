@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1722D - Line\nFor each person, let's calculate how much the value will change if they turn around. For example, in the line\nLRRLL\n, if the $$$i$$$-th person turns around, then the value of the line will change by $$$+4$$$, $$$-2$$$, $$$0$$$, $$$-2$$$, $$$-4$$$, respectively. (For instance, if the second person turns around, they see $$$3$$$ people before and $$$1$$$ person after, so the value of the line changes by $$$-2$$$ if they turn around.)\nNow note that if a person turns around, it doesn't affect anyone else's value. So the solution is a greedy one: let's sort the array of values in increasing order. Afterwards, we should go from the left to the right, and see if the value will increase if this person turns around; if it does, we should add it to the current total and continue.\nThe time complexity of this solution is $$$\\mathcal{O}(n \\log n)$$$ per testcase."
         },
         {
             "title": "Solution",

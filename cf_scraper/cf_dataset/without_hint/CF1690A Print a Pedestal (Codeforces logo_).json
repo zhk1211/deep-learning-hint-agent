@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1690A - Print a Pedestal (Codeforces logo?)\nIn the $$$n \\le 10^5$$$ constraints, the problem can be solved by brute force: we will go through the value for $$$h_1$$$ (the height for the first place), and then select suitable values for $$$h_2$$$ and $$$h_3$$$. Since $$$h_2  \\gt  h_3$$$, we divide the remaining $$$n - h_1$$$ blocks equally between $$$h_2$$$ and $$$h_3$$$. If it turns out that $$$h_2 = h_3$$$, then we try to decrease $$$h_3$$$ by $$$1$$$ and increase $$$h_2$$$ by 1. If we get the right answer ($$$h_1  \\gt  h_2  \\gt  h_3  \\gt  1$$$), output the heights and stop the process. We will go through the value of $$$h_1$$$ in order of increasing."
         },
         {
             "title": "Solution",

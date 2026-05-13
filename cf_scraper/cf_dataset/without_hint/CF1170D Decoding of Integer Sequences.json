@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1170D - Decoding of Integer Sequences\nThe number of occurrences of '\n-1\n' is exactly $$$n$$$ (the number of sequences). Construct a linked list $$$l$$$ containing all the numbers from $$$0$$$ to $$$n-1$$$ (i.e. all the sequence indices) and $$$n$$$ empty sequences. Now process the input sequence, each time you take an element $$$b_i$$$ append it to the corresponding sequence. The index of the corresponding sequence is exactly the value of the current element in $$$l$$$ (use an iterator). If $$$b_i=-1$$$ then the corresponding sequence is over and just remove from $$$l$$$ the current element and move to the next (or to the first if there is no next element). If $$$b_i \\ne -1$$$ then simply move to the next (or to the first if there is no next element)."
         },
         {
             "title": "Solution",

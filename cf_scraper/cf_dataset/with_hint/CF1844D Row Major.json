@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1844D - Row Major\nThe condition is equivalent to a graph of pairs of characters in $$$s$$$ that need to be different. In graph-theoretic language, we need to find the chromatic number of this graph.\nBy considering the $$$1 \\times n$$$ and $$$n \\times 1$$$ grids, there is an edge between character $$$u$$$ and $$$u+1$$$ for all $$$1 \\le u \\le n-1$$$. By considering a $$$\\frac{n}{d} \\times d$$$ grid (where $$$d$$$ divides $$$n$$$), there is an edge between character $$$u$$$ and $$$u+d$$$ for all $$$1 \\le u \\le n-d$$$ whenever $$$d$$$ divides $$$n$$$.\nLet $$$c$$$ be the smallest positive integer that does not divide $$$n$$$. There is an edge between every pair of the characters $$$1,\\dots,c$$$ (in graph-theoretic language, this is a clique), so the answer is at least $$$c$$$. On the other hand, consider the string obtained by letting $$$s_1,\\dots,s_c$$$ be all distinct characters and repeating this pattern periodically ($$$s_i = s_{i+c}$$$ for all $$$1 \\le i \\le n-c$$$). Any pair of equal characters have an index difference that is a multiple of $$$c$$$, say $$$kc$$$. But since $$$c$$$ does not divide $$$n$$$, $$$kc$$$ also does not divide $$$n$$$, so these characters are not connected by an edge. Therefore this construction gives a suitable string with $$$c$$$ distinct characters.\nThe time complexity is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Implementation",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1511C - Yet Another Card Deck\nLet's look at one fixed color. When we search a card of such color, we take the card with minimum index and after we place it on the top of the deck it remains the one with minimum index.\nIt means that for each color we take and move the same card — one card for each color. In other words, we need to keep track of only $$$k$$$ cards, where $$$k$$$ is the number of colors ($$$k \\le 50$$$). As a result, if $$$pos_c$$$ is the position of a card of color $$$c$$$ then we can simulate a query in the following way: for each color $$$c$$$ such that $$$pos_c  \\lt  pos_{t_j}$$$ we increase $$$pos_c$$$ by one (since the card will move down) and then set $$$pos_{t_j} = 1$$$. Complexity is $$$O(n + qk)$$$.\nBut, if we look closely, we may note that we don't even need array $$$pos_c$$$. We can almost manually find the first card of color $$$t_j$$$ and move it to the first position either by series of swaps or, for example, using\nrotate\nfunction (present in C++) and it will work fast.\nWhy? Let's look at one color $$$c$$$. For the first time it will cost $$$O(n)$$$ operations to search the corresponding card and move it to the position $$$1$$$. But after that, at any moment of time, the position of the card won't exceed $$$k$$$, since all cards before are pairwise different (due to the nature of queries). So, all next moves the color $$$c$$$ costs only $$$O(k)$$$ time.\nAs a result, the complexity of such almost naive solution is $$$O(kn + qk)$$$."
         },
         {
             "title": "Solution (Neon)",

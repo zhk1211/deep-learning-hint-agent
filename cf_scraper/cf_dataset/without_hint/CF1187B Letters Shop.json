@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1187B - Letters Shop\nLet's construct the answer letter by letter.\nHow to get enough letters 'a' for the name? Surely, the taken letters will be the first 'a', the second 'a', up to $$$cnt_a$$$-th 'a' in string $$$s$$$, where $$$cnt_a$$$ is the amount of letters 'a' in the name. It's never profitable to skip the letter you need.\nDo the same for all letters presented in the name. The answer will the maximum position of these last taken letters.\nHow to obtain the $$$cnt_a$$$-th letter fast? Well, just precalculate the list of positions for each letter and take the needed one from it.\nOverall complexity: $$$O(n + m)$$$."
         },
         {
             "title": "Solution (PikMike)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "editorial",
-            "content": "Tutorial is loading..."
+            "content": "1528D - It's a bird! No, it's a plane! No, it's AaParsa!\nSuppose we did normal dijkstra, the only case that might be missed is when we wait in a vertex for some time.\nTo handle the 'waiting' concept, we can add $$$n$$$ fake edges, $$$i$$$-th of which is from the $$$i$$$-th vertex to the $$$(i+1 \\mod n)$$$ -th vertex with weight equal to one.\nNote that unlike the cannons, fake edges do not rotate.\nIt can be proved that doing dijkstra in the new graph is sufficient if we guarantee that the first used edge is not fake.\nWe can map waiting for $$$x$$$ seconds and then using an edge to go to $$$u$$$ from $$$v$$$ to using a cannon and then using $$$x$$$ fake edges to go to $$$u$$$ from $$$v$$$.\nAlso due to the strict time limit you should use the $$$\\mathcal{O}(n^2)$$$ variant of dijkstra.\ncomplexity: $$$\\mathcal{O}(n^3)$$$"
         },
         {
             "title": "official solution",

@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1731A - Joey Takes Money\nIf we take two elements $$$a_1$$$ and $$$a_2$$$ and do the operation on it as $$$a_1 \\cdot a_2 = x \\cdot y$$$, then it is easy to observe that $$$x + y$$$ will attain its maximum value when one of them is equal to $$$1$$$. So, the solution for this is $$$x = 1$$$ and $$$y = a_1 \\cdot a_2$$$.\nLet $$$n$$$ be the total number of elements and $$$P$$$ ($$$P = a_1 \\cdot a_2 \\cdot \\ldots \\cdot a_n$$$) be the product of all elements.\nNow if we do the above step for every pair of elements, then the maximum value of the sum is achieved when $$$a_1 = 1$$$, $$$a_2 = 1$$$, $$$\\dots$$$, $$$a_{n-1} = 1$$$ and $$$a_n = P$$$.\nIn the final array, assign $$$P$$$ to $$$a_1$$$ and assign $$$1$$$ to all the remaining elements $$$a_2, a_3, \\dots a_n$$$.\nSo, our answer is simply $$$P + n - 1$$$ multiplied by $$$2022$$$, of course.\nTime complexity: $$$O(n)$$$."
         }
     ]
 }

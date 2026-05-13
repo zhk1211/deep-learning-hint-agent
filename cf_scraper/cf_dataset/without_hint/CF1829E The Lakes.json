@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1829E - The Lakes\nWe can approach this problem using Depth First Search (DFS) or Breadth First Search (BFS) on the given grid.\nThe idea is to consider each cell of the grid as a potential starting point for a lake, and explore all the cells reachable from it by only moving up, down, left or right, without stepping on any cell with depth $$$0$$$. If we reach a dead end, or a cell with depth $$$0$$$, we backtrack and try another direction.\nDuring this exploration, we keep track of the sum of depths of all the cells that we have visited. This sum gives us the volume of the current lake. When we have explored all the reachable cells from a starting point, we compare the volume of this lake with the maximum volume found so far, and update the maximum if necessary.\nTo implement this approach, we can use a nested loop to iterate through all the cells of the grid. For each cell, we check if its depth is greater than $$$0$$$, and if it has not already been visited in a previous lake. If these conditions are satisfied, we start a DFS/BFS from this cell, and update the maximum volume found so far. See the implementation for more details.\nThe time complexity is $$$\\mathcal{O}(mn)$$$."
         },
         {
             "title": "Solution",

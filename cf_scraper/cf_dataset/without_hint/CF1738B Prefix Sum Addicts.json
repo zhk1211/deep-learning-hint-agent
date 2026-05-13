@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1738B - Prefix Sum Addicts\nIf $$$k = 1$$$, it is always possible, so the answer is \"\nYES\n\".\nIn the following, we assume that $$$k \\geq 2$$$. Here, we are given $$$s_{n-k+1}, \\dots, s_n$$$. We can resume $$$a_{n-k+2}, \\dots, a_{n}$$$ by letting $$$a_{i} = s_{i} - s_{i-1}$$$ for every $$$n-k+2 \\leq i \\leq n$$$.\nIf the known elements of $$$a_i$$$ cannot form a sorted array, i.e., it does not hold that $$$a_{n-k+2} \\leq \\dots \\leq a_n$$$, the answer is \"\nNO\n\".\nNote that the sum of the first $$$n-k+1$$$ elements of $$$a_i$$$ should satisfy that $$$s_{n-k+1} = a_1 + \\dots + a_{n-k+1} \\leq (n-k+1) a_{n-k+2}$$$. If this does not hold, the answer is \"\nNO\n\".\nHaving checked that both $$$a_{n-k+2} \\leq \\dots \\leq a_n$$$ and $$$s_{n-k+1} \\leq (n-k+1) a_{n-k+2}$$$ hold, we claim that the answer is \"\nYES\n\". A possible solution could be $$$$$$ a_i = \\begin{cases} \\left\\lfloor\\dfrac{s_{n-k+1}}{n-k+1}\\right\\rfloor, & 1 \\leq i \\leq s_{n-k+1} \\bmod (n-k+1), \\\\ \\left\\lceil\\dfrac{s_{n-k+1}}{n-k+1}\\right\\rceil, & s_{n-k+1} \\bmod (n-k+1)  \\lt  i \\leq n-k+1. \\end{cases} $$$$$$"
         },
         {
             "title": "Solution",

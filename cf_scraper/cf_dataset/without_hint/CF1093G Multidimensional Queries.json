@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1093G - Multidimensional Queries\nLet's rewrite the formula of distance between two points as follows:\n$$$\\sum \\limits_{i = 1}^{k} |a_{x, i} - a_{y, i}| = \\sum \\limits_{i = 1}^{k} c_i (a_{x, i} - a_{y, i}) = \\sum \\limits_{i = 1}^{k} c_i a_{x, i} - \\sum \\limits_{i = 1}^{k} c_i a_{y, i}$$$, where $$$c_i = 1$$$ if $$$a_{x, i} \\ge a_{y, i}$$$, otherwise $$$c_i = -1$$$.\nConsider what will happen if we change some $$$c_i$$$ to the opposite value. The result of this formula obviously won't increase, so we may try all possible values of $$$c_i$$$ and pick maximum result.\nThis allows us to consider every option to set values of $$$c_i$$$ (there are $$$2^k$$$ such options) separately, and when we fix a set of values of $$$c_i$$$, find two points that maximize the distance if it is expressed with fixed $$$c_i$$$. To do so, we have to find the point having maximum $$$\\sum \\limits_{i = 1}^{k} c_i a_{x, i}$$$ and having minimum $$$\\sum \\limits_{i = 1}^{k} c_i a_{x, i}$$$.\nSo actually our problem is reduced to the following: we have $$$2^k$$$ arrays, we want to process some queries in the form \"change an element of some array\" and \"find maximum and minimum on some segment of some array\". This can be done simply by building a segment tree over each array, and then we will get the solution having $$$O((n + q) 2^k \\log n)$$$ time complexity."
         },
         {
             "title": "Solution (BledDest)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1702G1 - Passable Paths (easy version)\nIf the answer is\nYES\n, then we can choose a subset of the tree vertices forming a simple path and containing all the vertices of our set. Let's choose the minimum possible path, its ends — vertices from the set. The constraints allow us to answer the query in $$$\\mathcal{O}(n)$$$, hang the tree by one of the ends and check if it is true that there is only one selected vertex that does not have any selected ones in the subtree, if there is one such vertex, then it is  — the second end. To make it easier to search for one of the ends, we will hang the tree by any vertex before the queries, calculate their depths and take the deepest of the set."
         },
         {
             "title": "Solution",

@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "C++ Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nmap\n<\nint\n,\nint\n>\nhs\n;\ncin\n>>\nhs\n[\n0\n]\n>>\nhs\n[\n1\n]\n>>\nhs\n[\n2\n]\n>>\nhs\n[\n3\n];\nint\ntotal\n=\nhs\n[\n0\n]\n+\nhs\n[\n1\n]\n+\nhs\n[\n2\n]\n+\nhs\n[\n3\n];\nfor\n(\nint\nst\n=\n0\n;\nst\n<\n4\n;\nst\n++)\nif\n(\nhs\n[\nst\n])\n{\nvector\n<int>\nres\n;\nauto\nths\n=\nhs\n;\nths\n[\nst\n]--;\nres\n.\npush_back\n(\nst\n);\nint\nlast\n=\nst\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\ntotal\n-\n1\n;\ni\n++)\n{\nif\n(\nths\n[\nlast\n-\n1\n])\n{\nths\n[\nlast\n-\n1\n]--;\nres\n.\npush_back\n(\nlast\n-\n1\n);\nlast\n--;\n}\nelse\nif\n(\nths\n[\nlast\n+\n1\n])\n{\nths\n[\nlast\n+\n1\n]--;\nres\n.\npush_back\n(\nlast\n+\n1\n);\nlast\n++;\n}\nelse\n{\nbreak\n;\n}\n}\nif\n((\nint\n)\nres\n.\nsize\n()\n==\ntotal\n)\n{\ncout\n<<\n\"YES\\n\"\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\n(\nint\n)\nres\n.\nsize\n();\ni\n++)\n{\ncout\n<<\nres\n[\ni\n]\n<<\n\" \\n\"\n[\ni\n==\n(\nint\n)\nres\n.\nsize\n()\n-\n1\n];\n}\nreturn\n0\n;\n}\n}\ncout\n<<\n\"NO\\n\"\n;\nreturn\n0\n;\n}"
+        }
+    ]
+}

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1473B - String LCM\nWe should notice that if some string $$$x$$$ is a multiple of string $$$y$$$, then $$$|x|$$$ is a multiple of $$$|y|$$$. This fact leads us to the conclusion that $$$|LCM(s, t)|$$$ should be a common multiple of $$$|s|$$$ and $$$|t|$$$. Since we want to minimize the length of the string $$$LCM(s, t)$$$, then its length is $$$LCM(|s|, |t|)$$$.\nSo we have to check that $$$\\frac{LCM(|s|, |t|)}{|s|}$$$ copies of the string $$$s$$$ equal to $$$\\frac{LCM(|s|, |t|)}{|t|}$$$ copies of the string $$$t$$$. If such strings are equal, print them, otherwise, there is no solution."
         },
         {
             "title": "Solution (Neon)",

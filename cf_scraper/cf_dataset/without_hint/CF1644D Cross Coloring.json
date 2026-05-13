@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1644D - Cross Coloring\nLet's take a look at a final coloring. Each cell has some color. There exist cells such that there were no operation in their row and their column. They are left white, and they don't affect the answer.\nAll other cells are colored in one of $$$k$$$ colors. For each cell $$$(x, y)$$$ there is a query that has been the last one to color this cell (it covered row $$$x$$$, column $$$y$$$ or both of them). So all cells that have the same query as the last one will have the same color. Since the color for each query is chosen independently, the number of colorings will be $$$k$$$ to the power of the number of queries that have at least one cell belong to them.\nHow to determine if a query has at least one cell. This is true unless one of these things happen afterwards:\nboth its row and its column are recolored;\nall rows are recolored;\nall columns are recolored.\nSo the solution is to process the queries backwards. Maintain the set of colored rows and colored columns. For each query, check the conditions. If none hold, multiply the answer by $$$k$$$.\nOverall complexity: $$$O(q \\log (n + m))$$$ or $$$O(q)$$$ per testcase."
         },
         {
             "title": "Solution 1 (awoo)",

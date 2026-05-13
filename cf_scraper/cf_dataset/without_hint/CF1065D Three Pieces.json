@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1065D - Three Pieces\nThere are a lot of different solutions for the problem. Most of them have the similar structure.\nThe first part is to find the shortest distance between the states $$$(x_1, y_1, p_1)$$$ and $$$(x_2, y_2, p_2)$$$, where $$$x$$$ and $$$y$$$ are the coordinates of the square and $$$p$$$ is the current piece. This can be done with 0-1 bfs, Floyd or Dijkstra. Just represent the triple as a single integer by transforming it to $$$(x \\cdot n \\cdot 3 + y \\cdot 3 + p)$$$ and do everything on that graph.\nThe second part is to write some dp to go from $$$i$$$-th square with piece $$$p_1$$$ to $$$(i + 1)$$$-th square with piece $$$p_2$$$. The value of this $$$dp[n][3]$$$ is a pair (moves, replacements). It is easy to see that you can always choose the minimum of two such pairs while updating.\nOverall complexity may vary. We believe, $$$O(n^4)$$$ is achievable. However, the particular solution I coded works in $$$O(n^6)$$$."
         },
         {
             "title": "Solution (PikMike)",

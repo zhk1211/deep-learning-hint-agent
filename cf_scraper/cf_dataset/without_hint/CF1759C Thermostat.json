@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1759C - Thermostat\nFirst let's consider the cases when the answer exists:\nIf $$$a=b$$$, then the thermostat is already set up and the answer is $$$0$$$.\nelse if $$$|a - b| \\ge x$$$, then it is enough to reconfigure the thermostat in $$$1$$$ operation.\nelse if exist such temperature $$$c$$$, that $$$|a - c| \\ge x$$$ and $$$|b - c| \\ge x$$$, then you can configure the thermostat in $$$2$$$ operations. If such $$$c$$$ exists between $$$l$$$ and $$$r$$$, we can chose one of bounds: $$$a \\rightarrow l \\rightarrow b$$$ or $$$a \\rightarrow r \\rightarrow b$$$.\nwe need to make $$$3$$$ operations if times if we cannot reconfigure through one of the boundaries as above, but we can through both: $$$a \\rightarrow l \\rightarrow r \\rightarrow b$$$ or $$$a \\rightarrow r \\rightarrow l \\rightarrow b$$$\nIf we can't get the temperature $$$b$$$ in one of these ways, the answer is $$$-1$$$."
         },
         {
             "title": "Solution",

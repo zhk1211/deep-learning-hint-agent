@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1118F1 - Tree Cutting (Easy Version)\nLet's root the tree by some vertex. The edge $$$(v, u)$$$, where $$$v$$$ is the parent of $$$u$$$, is now nice if and only if the subtree of $$$u$$$ contains either all red vertices of the tree and no blue vertices or all blue vertices of the tree and no red vertices. That's because removing that edge splits the tree into the subtree of $$$u$$$ and the component of every other vertex.\nThus, the task is to calculate the number of red and blue vertices in each subtree with dfs and check a couple of conditions.\nOverall complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution",

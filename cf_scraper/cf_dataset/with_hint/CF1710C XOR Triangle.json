@@ -1,0 +1,24 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a positive integer $ n $ . Since $ n $ may be very large, you are given its binary representation.\n\nYou should compute the number of triples $ (a,b,c) $ with $ 0 \\leq a,b,c \\leq n $ such that $ a \\oplus b $ , $ b \\oplus c $ , and $ a \\oplus c $ are the sides of a non-degenerate triangle.\n\nHere, $ \\oplus $ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).\n\nYou should output the answer modulo $ 998\\,244\\,353 $ .\n\nThree positive values $ x $ , $ y $ , and $ z $ are the sides of a non-degenerate triangle if and only if $ x+y>z $ , $ x+z>y $ , and $ y+z>x $ .\n\nInput Format\nThe first and only line contains the binary representation of an integer $ n $ ( $ 0 < n < 2^{200\\,000} $ ) without leading zeros.\n\nFor example, the string 10 is the binary representation of the number $ 2 $ , while the string 1010 represents the number $ 10 $ .\n\nOutput Format\nPrint one integer — the number of triples $ (a,b,c) $ satisfying the conditions described in the statement modulo $ 998\\,244\\,353 $ .\n\nExamples\nSample 1\nInput\n101\nOutput\n12\n\nSample 2\nInput\n1110\nOutput\n780\n\nSample 3\nInput\n11011111101010010\nOutput\n141427753\n\nNote\nIn the first test case, $ 101_2=5 $ .\n\n- The triple $ (a, b, c) = (0, 3, 5) $ is valid because $ (a\\oplus b, b\\oplus c, c\\oplus a) = (3, 6, 5) $ are the sides of a non-degenerate triangle.\n- The triple $ (a, b, c) = (1, 2, 4) $ is valid because $ (a\\oplus b, b\\oplus c, c\\oplus a) = (3, 6, 5) $ are the sides of a non-degenerate triangle.\n\nThe $ 6 $ permutations of each of these two triples are all the valid triples, thus the answer is $ 12 $ .\n\nIn the third test case, $ 11\\,011\\,111\\,101\\,010\\,010_2=114\\,514 $ . The full answer (before taking the modulo) is $ 1\\,466\\,408\\,118\\,808\\,164 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "hint1.",
+            "content": "Consider the same bit of three integers at the same time."
+        },
+        {
+            "title": "hint2.",
+            "content": "$$$a\\bigoplus b \\leq a+b$$$"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "solution",
+            "content": "Define $$$cnt_{i_1 i_2 i_3}$$$ as:\n$$$j$$$th bit of $$$cnt_{i_1 i_2 i_3}$$$ is $$$1$$$ iif $$$i_1=a_j,i_2=b_j,i_3=c_j$$$\ne.g. $$$a=(10)_2,b=(11)_2,c=(01)_2$$$ then $$$cnt_{110}=(10)_2,cnt_{011}=(01)_2$$$, other $$$cnt$$$ is 0.\n$$$a=cnt_{100}+cnt_{101}+cnt_{110}+cnt_{111}$$$\n$$$b=cnt_{010}+cnt_{011}+cnt_{110}+cnt_{111}$$$\n$$$c=cnt_{001}+cnt_{011}+cnt_{101}+cnt_{111}$$$\n$$$a\\bigoplus b = cnt_{010}+cnt_{011}+cnt_{100}+cnt_{101}$$$\n$$$a\\bigoplus c = cnt_{001}+cnt_{011}+cnt_{100}+cnt_{110}$$$\n$$$b\\bigoplus c = cnt_{001}+cnt_{010}+cnt_{101}+cnt_{110}$$$\n$$$a\\bigoplus b + a\\bigoplus c \\gt b \\bigoplus c \\iff cnt_{011}+cnt_{100} \\gt 0$$$\nsimilar:\n$$$cnt_{101}+cnt_{010} \\gt 0$$$\n$$$cnt_{110}+cnt_{001} \\gt 0$$$\nthen we use digit dp: $$$dp[n][i][j]$$$ means when we consider first $$$n$$$ bits, state of reaching the upper bound is $$$i$$$, state of conditions is $$$j$$$.\nEnumerate $$$a_j b_j c_j$$$ for $$$j$$$ from $$$|n|-1$$$ to $$$0$$$ and make transition.\nTime complexity is $$$O(2^9 |n|)$$$ where $$$|n|$$$ is the length of input."
+        }
+    ]
+}

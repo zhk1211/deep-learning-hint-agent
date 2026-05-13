@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2057B - Gorilla and the Exam\nNote that $$$f(a)$$$ is the number of distinct numbers in the array. Since it is beneficial for us to always choose the entire array as the segment, because we will eventually remove the minimum element, it is advantageous to remove it from the entire array at once.\nTherefore, our task has been reduced to changing no more than $$$k$$$ elements in order to minimize the number of distinct elements. To achieve this, we observe that it is always beneficial to change all the numbers that occur the least in the array and change them to the number that occurs the most frequently. This process can be easily accomplished in $$$O(n \\log n) $$$."
         },
         {
             "title": "Implementation",

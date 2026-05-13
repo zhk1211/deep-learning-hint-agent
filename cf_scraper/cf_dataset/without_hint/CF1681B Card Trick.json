@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1681B - Card Trick\nThe easiest way to solve to problem is probably to see the resemblense of a shuffle operation to an std::rotate function. So you can obtain the final deck by applying cyclic shifts of the deck by $$$b_1$$$, then $$$b_2$$$ and so on.\nSince the shifts are cyclic, it doesn't matter if you shift by $$$x$$$ or by $$$x + n$$$ or by $$$x + k \\cdot x$$$ for any non-negative $$$k$$$. The result will be the same. Thus, you can calculate the sum of rotations you apply, and subtract $$$n$$$, until it becomes less than $$$n$$$. That is taking it modulo $$$n$$$.\nFinally, after rotating a sequence by some $$$x$$$, the $$$x$$$-th element of it ($$$0$$$-indexed) becomes the first one. Thus, you just want to print the ($$$sum \\bmod n$$$)-th element of $$$a$$$.\nOverall complexity: $$$O(n + m)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

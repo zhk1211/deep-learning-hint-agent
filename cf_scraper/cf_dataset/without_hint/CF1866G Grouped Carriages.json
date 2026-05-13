@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1866G - Grouped Carriages\nSuppose we set the maximum number of passengers in the same carriage to be at most $$$Z$$$. If there is a valid strategy to fit the constraint, doing the same strategy for every maximum number of passengers in the same carriage that is greater than $$$Z$$$ is also possible. Hence, we can try to find the answer by doing binary search the answer.\nNote that a passenger from carriage $$$i$$$ can move to carriage $$$j$$$ as long as $$$i-D_i \\leq j \\leq i+D_i$$$. So for each initial carriage $$$i$$$, create a segment $$$[i-D_i,i+D_i]$$$.\nSuppose we try to find a valid strategy for moving the passengers with the constraint that the maximum number of passengers in the same carriage is at most $$$Z$$$. We can solve this greedily. Iterate the destination carriages from left to right to be filled with passengers. The initial carriages that can fill the current carriage are only the ones whose segments contain the current carriage.\nNote that it is always optimal to take passengers from the segments with the smallest right endpoints first. We take the passengers until the current destination carriage reaches $$$Z$$$ passengers or there are no more segments to take from.\nIf there exists a non-empty segment of an initial carriage that cannot donate its passengers anywhere, then it is impossible.\nWe can do something like line sweep and prioritise the segments based on their right endpoints using priority queue or other data structures.\nTime complexity: $$$O(N\\log N\\log\\max(A))$$$"
         }
     ]
 }

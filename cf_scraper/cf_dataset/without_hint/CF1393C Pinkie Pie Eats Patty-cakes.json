@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1393C - Pinkie Pie Eats Patty-cakes\nLet's note that if you can find the arrangement with the maximum distance $$$\\geq X$$$, then you can also find the arrangement with the maximum distance $$$\\geq X-1$$$. It allows you to use the binary search on the answer.\nTo check that the answer is at least $$$X$$$, we can use the greedy algorithm. Each time let's use the element that we can use (we didn't use it on the last $$$x-1$$$ steps) and the number of the remaining elements equal to it is as large as possible. You can store the set of elements that you can use in the sorted by the number of appearances in $$$std::set$$$. This sol works $$$O(n log^2 n)$$$.\nAlso there is a solution in $$$O(n)$$$."
         },
         {
             "title": "Solution (AlFlen)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1466A - Bovine Dilemma\nThe solution is to iterate over all possible triangles, find their areas, and compute how many of these areas are distinct. So the problem is to calculate the area of a given triangle efficiently. There are many possible ways to do it; I will describe the most straightforward method.\nRecall the formula for the triangle's area: $$$$$$ area = \\frac{base \\cdot height}{2} $$$$$$\nAs we want to count distinct areas we can forget about dividing by $$$2$$$ and focus on calculating $$$base \\cdot height$$$. Note that all triangles are of form $$$(x_1, 0)$$$, $$$(x_2, 0)$$$ and $$$(0, 1)$$$. Thanks to this, if we pick a side $$$(x_1, 0)$$$, $$$(x_2, 0)$$$ as a base, then the height is equal to $$$1$$$! As a result, $$$base \\cdot height = |x_1 - x_2|$$$. Final complexity is $$$\\mathcal{O}(n^2)$$$ per test case."
         },
         {
             "title": "Solution 1",

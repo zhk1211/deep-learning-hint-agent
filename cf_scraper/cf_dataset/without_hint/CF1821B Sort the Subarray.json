@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1821B - Sort the Subarray\nLet's find the leftmost and the rightmost position in which the arrays $$$a$$$ and $$$a'$$$ differ. Since only the elements in the chosen subsegment might change, the subarray we sorted should contain these two positions.\nLet's start with the subarray from the leftmost \"different\" position to the rightmost one, and then expand it to get the longest subarray which meets the conditions. Suppose we want to expand it to the left. Let the current left border be $$$L$$$; how to decide if we can make it $$$L-1$$$ or less? If $$$a'_L  \\lt  a_{L-1}$$$, then we cannot include $$$L-1$$$ in the subarray we sort, since otherwise the order of these two elements would have changed. Otherwise, $$$a_{L-1}$$$ is not greater than any element in the subarray we have chosen, so we can include it and reduce $$$L$$$ by $$$1$$$. We do this until it's impossible to reduce $$$L$$$ further.\nThe same goes for the right border: we expand it to the right until we find an element which is less than the previous element, and we cannot include this element in the subarray."
         },
         {
             "title": "Solution (BledDest)",

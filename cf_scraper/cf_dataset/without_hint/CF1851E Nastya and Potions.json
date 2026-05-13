@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1851E - Nastya and Potions\nTo begin with, let's note that potions of types $$$p1, p2, \\dots, p_k$$$ are essentially free, so we can replace their costs with $$$0$$$.\nLet $$$ans[i]$$$ be the answer for the $$$i$$$-th potion. Each potion can be obtained in one of two ways: by buying it or by mixing it from other potions. For mixing, we obtain all the required potions at the minimum cost. That is, if there is a way to mix a potion of type $$$i$$$, then the answer for it is either $$$c_i$$$ or the sum of answers for all $$$e_i$$$. Since the graph in the problem does not have cycles, this can be done by a simple depth-first search."
         },
         {
             "title": "Solution",

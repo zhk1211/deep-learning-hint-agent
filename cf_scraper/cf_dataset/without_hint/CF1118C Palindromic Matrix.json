@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1118C - Palindromic Matrix\nBasically, what does the matrix being palindromic imply? For each $$$i, j$$$ values in cells $$$(i, j)$$$, $$$(i, n - j - 1)$$$, $$$(n - i - 1, j)$$$ and $$$(n - i - 1, n - j - 1)$$$ are equal (all zero-indexed). You can easily prove it by reversing the order of rows or columns and checking the overlapping cells in them.\nThus, all cells can be split up into equivalence classes. The even $$$n$$$ case is simple: all classes have size $$$4$$$. The odd $$$n$$$ case has classes of sizes $$$1$$$, $$$2$$$ and $$$4$$$.\nLet's fill the classes one by one. Obviously, the order between the classes of the same size doesn't matter. I claim that filling the classes in order $$$4, 2, 1$$$ in sizes construct the answer if any exists. The key observation is that each next size is divisible by the previous one.\nThe implementation can come in lots of different forms and complexities. Mine works in $$$O(MAXVAL + n^2)$$$, you can refer to it in attachment."
         },
         {
             "title": "Solution",

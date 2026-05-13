@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "editorial",
-            "content": "Tutorial is loading..."
+            "content": "1529A - Eshag Loves Big Arrays\nWe state that every element except for the elements with the smallest value can be deleted.\nProof: denote $$$MN$$$ as the minimum element (s) of the array $$$a$$$, in each operation pick $$$MN$$$ and some other element, say $$$X$$$, which is bigger than $$$MN$$$, since $$$AVG = \\frac{X + MN}{2}  \\lt  X$$$, then $$$X$$$ will be deleted.\nDoing this for every $$$X  \\gt  MN$$$ will result in the deletion of every element except for the elements with the smallest value. So the answer to the problem is $$$n - cntMN$$$, where $$$cntMN$$$ is the number of times $$$MN$$$ appeared in $$$a$$$.\ncomplexity: $$$\\mathcal{O}(n)$$$"
         },
         {
             "title": "official solution",

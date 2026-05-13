@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1553B - Reverse String\nLet's iterate over starting positions, the number of times we go to the right and the number of times we go to the left. After that we can check that resulting string is equal to the needed one. This solution works in $$$O(n^4)$$$, since there are $$$O(n^3)$$$ possible combinations of starting position, number of moves to the right and left and each check can take up to $$$O(n)$$$ time. To optimize this solution we can notice that if we know number of moves to the right then we can recover number of moves to the left(because we know the length of needed string). So, we have $$$O(n^2)$$$ possible combinations, that's why this solution works in $$$O(n^3)$$$, which is enough to pass tests.\nCan you solve this problem in $$$O(n^2)$$$ time? Maybe even faster?"
         },
         {
             "title": "Solution (BledDest)",

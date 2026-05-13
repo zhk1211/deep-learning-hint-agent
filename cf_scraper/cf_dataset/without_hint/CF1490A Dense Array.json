@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1490A - Dense Array\nNote that adding elements between positions $$$i$$$ ($$$1 \\le i \\le n - 1$$$) and $$$i + 1$$$ will not change the ratio of the adjacent elements, except for the ones just added. Therefore, for each pair of adjacent numbers, the problem can be solved independently.\nLet us solve the problem for a adjacent pair of numbers $$$a_i$$$ and $$$a_{i+1}$$$ for which the inequality from the statements does not hold. Suppose that $$$2a_i \\le a_{i+1}$$$ (if not, we will swap them). Then between $$$a_i$$$ and $$$a_{i+1}$$$ it requires to insert $$$\\left\\lceil log_2 \\left(\\frac{a_{i+1}}{a_i}\\right) - 1 \\right\\rceil$$$ elements of the form: $$$$$$ 2a_i, 4a_i, ..., 2^{\\left\\lceil log_2 \\left(\\frac{a_{i+1}}{a_i}\\right) - 1 \\right\\rceil} a_i $$$$$$\nIt is better not to use explicit formula, but to use the following cycle:\nwhile a[i] * 2 < a[i + 1]:\na[i] *= 2\nans += 1"
         },
         {
             "title": "Solution",

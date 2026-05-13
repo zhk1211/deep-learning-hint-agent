@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2062F - Traveling Salescat\nLet $$$x_i = \\frac{a_i + b_i}{2}$$$, $$$y_i = \\frac{a_i - b_i}{2}$$$. Then $$$\\max(a_i + b_j , b_i + a_j) = \\max( x_i + y_i + x_j - y_j , x_i - y_i + x_j + y_j) = x_i + x_j + \\max(y_i - y_j, y_j - y_i)$$$\n$$$ = x_i + x_j + |y_i - y_j|$$$.\nConsider a road that passes through $$$k$$$ different cities, and consider the contribution as two parts, $$$x$$$ and $$$y$$$. For the contribution of $$$x$$$, the first and last cities will only contribute to the answer once. And all other cities on the path will contribute twice.\nFor the contribution of $$$y$$$, after determining the cities that need to be passed through and the two cities as starting or ending cities (referred to as endpoint cities), you can start from the endpoint city with smaller $$$y$$$, move to the city with the smallest $$$y$$$ among the cities to be passed through, then move to the city with the largest $$$y$$$ among the cities to be passed through, and finally move to the endpoint city with larger $$$y$$$. This way, the minimum contribution of y can be obtained while passing through all the cities that need to be passed through.\nYou can sort the cities by $$$y$$$ and perform a dp to find the minimum answer among the first $$$i$$$ cities where $$$j$$$ cities have been selected, including $$$0$$$ or $$$1$$$ or $$$2$$$ endpoint cities. The total time complexity is $$$O(n^2)$$$."
         }
     ]
 }

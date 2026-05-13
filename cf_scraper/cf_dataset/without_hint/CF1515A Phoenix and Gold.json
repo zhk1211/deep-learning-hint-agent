@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1515A - Phoenix and Gold\nNote that if the sum of all the weights is $$$x$$$, the scale will always explode and the answer will be\nNO\n. Otherwise, we claim there is always an answer.\nBasically, at each point, we choose an arbitrary gold piece to add to the scale so that it doesn't explode. There is always a valid gold piece to add because the weights are distinct.\nFor example, we can try adding piece $$$1$$$, $$$2$$$, $$$\\dots$$$, $$$n$$$, in that order. Suppose we are currently considering the $$$i$$$-th piece. If we can add it to the scale without an explosion, we do it. If we can't, then we can just first add piece $$$i+1$$$, and then piece $$$i$$$ ($$$w_i \\neq w_{i+1}$$$ because weights are distinct). $$$i+1$$$ must be less than or equal to $$$n$$$ because otherwise, the total sum of the weights would be $$$x$$$.\nTime complexity for each test case: $$$O(n)$$$"
         },
         {
             "title": "Solution",

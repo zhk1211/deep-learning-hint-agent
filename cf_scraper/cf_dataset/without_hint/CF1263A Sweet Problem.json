@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1263A - Sweet Problem\nSort the values of $$$r$$$, $$$g$$$, $$$b$$$ such that $$$r \\geq g \\geq b$$$. Now consider two cases.\nIf $$$r \\geq g + b$$$, then Tanya can take $$$g$$$ candies from piles $$$r$$$ and $$$g$$$, and then — $$$b$$$ candies from piles $$$r$$$ and $$$b$$$. After that there may be a bunch of candies left in the pile $$$r$$$ that Tanya won't be able to eat, so the answer is $$$g + b$$$.\nOtherwise, we need to achieve the equality of the piles $$$r$$$, $$$g$$$, $$$b$$$. First, we make equal $$$r$$$ and $$$g$$$ by eating $$$r - g$$$ from the piles $$$r$$$ and $$$b$$$ (this can always be done since $$$r  \\lt  g + b$$$). Then we make equal the piles $$$g$$$, $$$b$$$ by eating $$$g - b$$$ from the piles $$$r$$$ and $$$g$$$. After that, $$$r = g = b$$$, and we can get three different cases.\n$$$r = g = b = 0$$$ — nothing needs to be done, Tanya has already eaten all the sweets;\n$$$r = g = b = 1$$$ — you can take candy from any of two piles so in the end there will always be one candy left;\n$$$r = g = b \\geq 2$$$ — we reduce all the piles by $$$2$$$, taking, for example, a candy from piles $$$r$$$ and $$$g$$$, $$$g$$$ and $$$b$$$, $$$r$$$ and $$$b$$$. With such actions, Tanya eventually reaches the two previous cases, since the sizes of the piles are reduced by 2.\nSince with this strategy we always have 0 or 1 candy at the end, Tanya will be able to eat candies for $$$\\lfloor \\frac{r + g + b}{2} \\rfloor$$$ days."
         },
         {
             "title": "Solution (MikeMirzayanov)",

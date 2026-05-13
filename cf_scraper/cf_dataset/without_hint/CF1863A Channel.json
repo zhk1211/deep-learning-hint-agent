@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1863A - Channel\nLet $$$p$$$ be the total number of\n+\nsigns in the notification string. If $$$a + p  \\lt  n$$$, then the answer is clearly \"\nNO\n\".\nNow let's look at the current number of users online. Initially there are $$$a$$$ of them. Each notification either increases this number by $$$1$$$, or decreases it by $$$1$$$. If at some moment of time the number of users online is $$$n$$$, then all users are online, thus, everyone must have read the post. The answer is \"\nYES\n\" in this case.\nOtherwise the answer is \"\nMAYBE\n\". Indeed, suppose that the number of users online never hits $$$n$$$, but $$$a + p \\ge n$$$. On the one hand, if the first $$$(n - a)$$$ notifications of the\n+\ntype correspond to new users, then all subscribers will have read the post. On the other hand, a situation when the $$$n$$$-th user never log in is also possible."
         }
     ]
 }

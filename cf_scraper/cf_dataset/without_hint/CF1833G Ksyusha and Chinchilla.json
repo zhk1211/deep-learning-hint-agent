@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1833G - Ksyusha and Chinchilla\nLet's hang the tree by the vertex $$$1$$$. This problem can be solved by dynamic programming.\n$$$dpc_v$$$ — the ability to cut a subtree of $$$v$$$ if the edges in all children of $$$v$$$ must be cut off.\n$$$dpo_v$$$ — the ability to cut a subtree of $$$v$$$ if exactly one edge needs to be saved from $$$v$$$ to the child.\n$$$dp_v$$$ — ability to cut a subtree of $$$v$$$ if an edge above $$$v$$$ is cut off.\nObviously, the answer will be $$$dp_1$$$. Recalculation in such dynamics is offered to the reader as an exercise.\nThere is a simpler greedy solution. Let's call\nlight\na vertex that is not a leaf and whose children are all leaves. Let's call\nheavy\na vertex that is not a leaf and that has a\nlight\nchild.\nIf there is a\nlight\nvertex with at least three children, the desired cut does not exist. If the\nlight\nvertex $$$v$$$ has exactly one child, we will cut off all children from its parent except $$$v$$$. If the\nlight\nvertex $$$v$$$ has exactly two children, we cut the edge into the parent $$$v$$$.\nIt is easy to understand that in this way the desired cut is restored uniquely. This problem can be solved by an elegant DFS, but the author considers BFS easier to understand.\nFirst, let's count the number of children and the number of\nlight\nchildren for each vertex. We will store all\nlight\nvertices in the queue and process them sequentially. Cutting edges will change the number of children and the number of\nlight\nchildren at some vertices. It should be handled carefully.\nThis solution works for $$$O(n)$$$."
         },
         {
             "title": "Solution",

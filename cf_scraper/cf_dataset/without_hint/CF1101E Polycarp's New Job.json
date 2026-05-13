@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1101E - Polycarp's New Job\nLet's find the smallest wallet to fit all bills. One its side is the maximum side of any bill. Now we orient the bills in such a way that their longer side is put against this side of the wallet. The second side of the wallet is the maximum of the other sides. More formally, for set of bills $$$(a_1, b_1)$$$, $$$(a_2, b_2)$$$, ... ($$$a_i \\le b_i$$$ for each $$$i$$$), the minimum wallet is ($$$max~a_i$$$, $$$max~b_i$$$).\nThe minimum wallet fits all sufficient wallets.\nSo the solution is maintaining the maximum of all $$$a_i$$$ and $$$b_i$$$ and checking if $$$h \\ge a_i$$$ and $$$w \\ge b_i$$$ ($$$h \\le w$$$).\nChoose your i/o functions wisely.\nOverall complexity: $$$O(n)$$$."
         },
         {
             "title": "Solution (PikMike)",

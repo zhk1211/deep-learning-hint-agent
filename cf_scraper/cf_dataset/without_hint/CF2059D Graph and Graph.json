@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2059D - Graph and Graph\nFirst, we need to understand when the answer is less than infinity. For this to happen, the first token in the first graph must be at vertex $$$v$$$, and the second token in the second graph must also be at the vertex with the same number $$$v$$$. Additionally, there must be an identical edge from $$$v$$$ to $$$u$$$ in both graphs for some $$$u$$$. If we find ourselves in such a situation, the tokens (each in their respective graph) can move along this edge back and forth as many times as needed with a cost of $$$0$$$. Let's first identify all the vertices $$$v$$$ (which we will call good) that have this property, and then we will calculate the minimum cost to reach any of these vertices.\nWe will create a new graph where each vertex corresponds to a specific state, and the edges represent transitions between states. We will define a state as a pair $$$v_1, v_2$$$, which indicates that the first token is currently at vertex $$$v_1$$$, and the second token is at vertex $$$v_2$$$. The number of vertices in this graph will be $$$n^2$$$. A vertex will have $$$deg(v_1) \\cdot deg(v_2)$$$ edges (where $$$deg(v)$$$ is the degree of $$$v$$$ in the graph where this vertex is located). Given the overall constraint on the sum of $$$deg(v)$$$, the number of edges in the new state graph will not exceed $$$m_1 \\cdot m_2$$$. Let's run Dijkstra's algorithm on this graph and take the distance to the pair of good vertices."
         },
         {
             "title": "Implementation",

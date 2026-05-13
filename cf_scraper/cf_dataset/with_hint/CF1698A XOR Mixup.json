@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1698A - XOR Mixup\nAny element of the array works. Let's use $$$\\oplus$$$ for $$$\\mathsf{XOR}$$$.\nSuppose that the original array is $$$[a_1, \\dots, a_{n-1}]$$$. Then $$$x=a_1 \\oplus \\dots \\oplus a_{n-1}$$$.\nLet's show that $$$a_1$$$ is the $$$\\mathsf{XOR}$$$ of all other elements of the array; that is, $$$a_1 = a_2 \\oplus \\dots \\oplus a_{n-1} \\oplus x$$$. Substituting $$$x=a_1 \\oplus \\dots \\oplus a_{n-1}$$$, we have $$$$$$a_1 = a_2 \\oplus \\dots \\oplus a_{n-1} \\oplus a_2 \\oplus \\dots \\oplus a_{n-1}.$$$$$$ There are two occurences of $$$a_2, \\dots, a_n$$$ on the right-hand side and only one occurrence of $$$a_1$$$. Since $$$y \\oplus y = 0$$$ for all $$$y$$$, the $$$a_2, \\dots, a_{n-1}$$$ all cancel out, leaving only $$$a_1$$$.\nMore formally, we can write the following. $$$$$$\\begin{align*} a_1 &\\stackrel{?}{=} a_2 \\oplus \\dots \\oplus a_{n-1} \\oplus x \\\\ &= a_2 \\oplus \\dots \\oplus a_{n-1} \\oplus (a_1 \\oplus \\dots \\oplus a_{n-1}) \\\\ &= a_2 \\oplus \\dots \\oplus a_{n-1} \\oplus (a_1 \\oplus a_2 \\oplus \\dots \\oplus a_{n-1}) \\\\ &= (a_2 \\oplus \\dots \\oplus a_{n-1}) \\oplus a_1 \\oplus (a_2 \\oplus \\dots \\oplus a_{n-1}) \\\\ &= a_1 \\oplus (a_2 \\oplus \\dots \\oplus a_{n-1}) \\oplus (a_2 \\oplus \\dots \\oplus a_{n-1}) \\\\ &= a_1. \\end{align*}$$$$$$\nThe same proof follows for any $$$a_i$$$. Hence you can output any element of the array.\nThe time complexity is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Implementation (C++)",

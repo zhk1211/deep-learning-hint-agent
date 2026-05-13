@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1223C - Save the Nature\nAt first, let's assume that $$$x \\ge y$$$ (otherwise, we can swap parameters of programs). Let's define $$$cont(len)$$$ as the maximum contribution we can get selling exactly $$$len$$$ tickets.\nNote, in general case sold ticket can be one of $$$4$$$ types:\ntickets with $$$(x + y)\\%$$$ of the price are contributed; the number of such tickets is $$$cXY$$$;\ntickets with $$$x\\%$$$ of the price are contributed; the number of such tickets is $$$cX$$$;\ntickets with $$$y\\%$$$ of the price are contributed; the number of such tickets is $$$cY$$$;\ntickets which are not in both programs.\nAll values $$$cXY$$$, $$$cX$$$, $$$cY$$$ can be easily counted by iterating over indices $$$i$$$ from $$$1$$$ to $$$len$$$ and checking whenever $$$i$$$ is divisible by $$$a$$$ or by $$$b$$$ or both.\nNow we can understand that it's always optimal to choose in the first group $$$cXY$$$ maximums from $$$p$$$, in the second group next $$$cX$$$ maximums and in the third — next $$$cY$$$ maximums.\nUsing the algorithm above we can calculate $$$cont(len)$$$ in linear time (just sort $$$p$$$ beforehand).\nThe final step is to understand that function $$$cont(len)$$$ is non decreasing, so we can just binary search the minimal $$$len$$$ with $$$cont(len) \\ge k$$$.\nThe time complexity is $$$O(n \\log{n})$$$, but $$$O(n \\log^2{n})$$$ can pass too."
         },
         {
             "title": "Solution (adedalic)",

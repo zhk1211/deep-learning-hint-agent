@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Tutorial and Implementation",
-            "content": "Tutorial is loading...\n255371688"
+            "content": "1951D - Buying Jewels\nWe first assume that $$$p_i \\leq n$$$ for $$$1 \\leq i \\leq s$$$, since adding stalls with price greater than $$$n$$$ doesn't change the result.\nIf $$$n  \\lt  k$$$ then the answer is obviously\n\"NO\"\n. If $$$n = k$$$ then the answer is obviously\n\"YES\"\n— we can set up a single stall of price $$$1$$$.\nOtherwise, the first stall should have price $$$p_1 \\geq 2$$$. Let $$$n = p_1q + r$$$ such that $$$q$$$, $$$r$$$ are integers and $$$q \\geq 1$$$, $$$0 \\leq r  \\lt  p_1$$$. Obviously Alice can buy at most $$$q + r$$$ jewels ($$$q$$$ from stall $$$1$$$, at most $$$r$$$ from other stalls). On the other hand:\n$$$n - 2(q+r) = (p_1 - 2)q - r$$$\n$$$\\geq (p_1 - 2)q - p_1 + 1$$$ (since $$$r \\leq p_1 - 1$$$)\n$$$\\geq (p_1 - 2) - p_1 + 1$$$ (since $$$q \\geq 1, p_1 \\geq 2$$$)\n$$$= -1$$$\n$$$\\Rightarrow 2(q+r) \\leq n + 1$$$\nThus, if $$$k  \\lt  n$$$ and $$$2k  \\gt  n + 1$$$, the answer is\n\"NO\"\n. Otherwise, choosing $$$p_1 = n - k + 1$$$ and $$$p_2 = 1$$$ solves the problem (you also have the option to print $$$58$$$ random integers afterwards to test our checker!)\n255371688"
         }
     ]
 }

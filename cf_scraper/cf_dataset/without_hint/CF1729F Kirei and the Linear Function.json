@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1729F - Kirei and the Linear Function\nNote that the remainder of dividing a number by $$$9$$$ is equal to the remainder of dividing its sum of digits by $$$9$$$. This is easy to check, because the number $$$a$$$ of $$$n$$$ digits is representable as a polynomial $$$a_0 + a_1\\cdot 10 + a_2\\cdot 100 + \\dots + a_{n-1}\\cdot 10^{n-1} + a_n\\cdot 10^n$$$, and $$$10^k$$$ gives a remainder of $$$1$$$ when divided by $$$9$$$ for any $$$k$$$.\nLet's count an array of prefix sums of digits for the string $$$s$$$.\nNow, knowing $$$w$$$, we can pre-calculate for each remainder modulo $$$9$$$ all possible $$$L$$$.\nAlso, for each query, we can easily find the remainder of dividing $$$v(l,r)$$$ by $$$9$$$ using all the same prefix sums.\nLet's iterate over the remainder of the number $$$a$$$ when dividing by $$$9$$$. Knowing it, we can easily find the remainder of the number $$$b$$$ when divided by $$$9$$$, as $$$k - a\\cdot v(l,r)$$$ modulo $$$9$$$.\nNow, using each pair of remainers $$$(a, b)$$$, let's try to update the answer:\n$$$a = b$$$, then the minimum index from the pre-calculated array will act as $$$L_1$$$, and the next largest will act as $$$L_2$$$ (if such exist);\n$$$a\\neq b$$$, then the minimum indexes from the pre-calculated array will act as $$$L_1$$$ and $$$L_2$$$.\nThis solution works for $$$9\\cdot(n+m)$$$ or for $$$O(n + m)$$$."
         },
         {
             "title": "Solution",

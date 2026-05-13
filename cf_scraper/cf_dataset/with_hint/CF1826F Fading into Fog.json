@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1826F - Fading into Fog\nAt first let's query two non-parallel lines. In this general case building perpendicular lines from projections and intersecting them will give us $$$O(n^2)$$$ candidates for the answer. This gives us the intuition, that 2 queries isn't enough. Also, the constraint from the statement suggests, that asking $$$x = 0$$$ and $$$y = 0$$$ will guarantee, that no two candidates are closer, than $$$1$$$ from each other, which will come in handy later.\nNow let's prove we can solve the problem in 3 queries. Indeed, there will always some space between the candidates. A simple proof of that would go something like this: there are $$$O(n^2)$$$ candidates and $$$O(n^4)$$$ pairs of candidates; now we can sort the directional vectors by the angle, and there will be at least one angle of at least $$$\\frac{2\\pi}{O(n^4)}$$$ between some two neighbouring vectors by the pigeonhole principle, which is big enough.\nOne way to choose such a line is by queriying random lines, till we find a good enough one, or query some constant amount of lines and choose the one with the biggest distance. Checking one line can be done in $$$O(n^2logn)$$$ with a simple sort. How many exactly do we need is an exercise to the reader, but it can be proven, that under the given constraints this number is $$$O(1)$$$.\nNow, when we have the line, let's query it and check all the candidates in $$$O(n^3)$$$ or $$$O(n^2logn)$$$ or even $$$O(n^2)$$$. It doesn't really affect the runtime.\nThe total complexity is $$$O(n^2logn)$$$ per testcase."
         }
     ]
 }

@@ -26,7 +26,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1712C - Sort Zero\nAn array is sorted in non-decreasing order if and only if there is no index $$$i$$$ such that $$$a_i  \\gt  a_{i + 1}$$$. This leads to a strategy: while there is at least one such index $$$i$$$, apply one operation with $$$x = a_i$$$.\nWhy is this optimal? Since our operation can only decrease values, and we must decrease $$$a_i$$$ so that $$$a_i  \\gt  a_{i + 1}$$$ is no longer true, this leaves us no choice but to use the operation with $$$x = a_i$$$.\nYou can simulate this strategy by maintaining a set of bad indices, since if an index $$$i$$$ becomes bad, after you apply an operation with $$$x = a_i$$$, it can never become bad again. So in total, there are at most $$$2 \\cdot (n - 1)$$$ operations with the set.\nComplexity: $$$\\mathcal{O}(n \\log n)$$$ or $$$\\mathcal{O}(n)$$$, depending on which set you use.\nNote: you can solve the problem in $$$\\mathcal{O}(n)$$$ by noticing that if an index $$$i$$$ is bad, we need to apply the operation for all unique non-zero values in $$$\\{a_1 \\ldots a_i\\}$$$. This is also quite a bit shorter to code."
         },
         {
             "title": "Solution",

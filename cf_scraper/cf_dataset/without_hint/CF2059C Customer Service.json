@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2059C - Customer Service\nAt the last moment in time, we clear some queue, and it will have an empty number of people left, so among the $$$x_i$$$, there is guaranteed to be a $$$0$$$. To maximize the value of $$$MEX$$$, it is necessary for the value $$$1$$$ to appear among the $$$x_i$$$. However, a positive number of people was added to each queue at the last moment in time. Thus, if $$$1$$$ appears among the $$$x_i$$$, then the $$$i$$$-th queue was served in the penultimate moment in time. We can continue this reasoning and conclude that if we find $$$x_i$$$ with values from $$$0$$$ to $$$k$$$, then the value $$$k + 1$$$ could only have been obtained if, in some queue different from these, one was added in each of the last $$$k + 1$$$ moments in time, and in the $$$k + 2$$$-th moment from the end, that queue was empty.\nLet's calculate the maximum suffix consisting only of $$$1$$$s in the array of additions for each queue. If a queue has a suffix of $$$m$$$ ones, then after all events in that queue, we could leave any number from $$$0$$$ to $$$m$$$, which will participate in $$$MEX$$$. To solve this, we will greedily collect the answer by taking the smallest suitable suffix each time."
         },
         {
             "title": "Implementation",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1118E - Yet Another Ball Problem\nThe first observation: we cannot construct more than $$$k(k-1)$$$ pairs at all due to second and third rules.\nThe second observation: we always can construct an answer which will contain all $$$k(k-1)$$$ pairs (and get some prefix of this answer if we need less than $$$k(k-1)$$$ pairs). Ho do we do that?\nLet man's costumes colors be in the following order: $$$1, 2, \\dots, k; 1, 2, \\dots, k; 1, 2, \\dots, k$$$ and so on. Now we have to set some colors to woman's costumes. The first thing comes to mind is to use some cyclic shift of $$$1, 2, \\dots, k$$$. And it is the best thing we can do! So let women's costumes colors be in the following order: $$$2, 3, \\dots, k, 1; 3, 4, \\dots, k, 1, 2; 4, 5, \\dots, k, 1, 2, 3$$$ ans so on. So we use each cyclic shift of $$$1, 2, \\dots, k$$$ in order from second to last. The maximum number of pairs can be obtained when $$$k=447$$$ and the number of such pairs is $$$n=199362$$$.\nSo now we have to prove that second, third and fourth rules are satisfied (or write a stress test, it is not so hard to do it). The easiest way to prove all rules are satisfied is the following: if some element $$$x$$$ in the left part has position $$$i$$$ (let's consider all positions modulo $$$k$$$) then each element $$$x$$$ in the right part will have all positions expect $$$i$$$ in order $$$i-1, i-2, \\dots, i-k+1$$$ (you can see it from our placement). Now we can see that all rules are satisfied because of such a placement."
         },
         {
             "title": "Solution",

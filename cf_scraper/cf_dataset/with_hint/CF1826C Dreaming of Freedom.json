@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1826C - Dreaming of Freedom\nFirst we need to notice, that in order to keep some amount of options indefinetely, this number has to be at least $$$2$$$ and divide $$$n$$$. Let's find the smallest such number $$$d$$$. Now, if $$$d \\leq m$$$, let's always vote for the first $$$d$$$ options evenly. In the other case $$$(d  \\gt  m)$$$ each round would force us to to decrease the number of remaining options, so eventually it will become one. So the answer is\nYES\nif and only if $$$d  \\gt  m$$$.\nNow on how to find the number $$$d$$$ fast. Since $$$d$$$ is a divisor of $$$n$$$ we can say, that $$$d$$$ is the smallest divisor of $$$n$$$ not equal to $$$1$$$.\nWe can find the number $$$d$$$ using different approaches. A more straightforward one, is checking all the numbers from $$$2$$$ up to $$$\\sqrt{n}$$$. If no divisors found, then $$$n$$$ is prime and $$$d = n$$$. This results in a $$$O(t \\cdot \\sqrt{n})$$$ solution.\nThe solution presented before is good, but not fast enough in some languages, like Python. We've decided not to cut it off to not make the problem heavy in IO. We can optimize it via finding the smallest divisor using the\nsieve of Eratosthenes\n. This would result in $$$O(nlogn)$$$ or even faster precomputation and $$$O(1)$$$ to answer a test case, so the total time complexity is $$$O(nlogn + t)$$$."
         }
     ]
 }

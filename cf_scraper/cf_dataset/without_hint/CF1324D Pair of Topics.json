@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1324D - Pair of Topics\nLet's rewrite the inequality from $$$a_i + a_j  \\gt  b_i + b_j$$$ to $$$(a_i - b_i) + (a_j - b_j)  \\gt  0$$$. This looks much simpler. Let's build the array $$$c$$$ where $$$c_i = a_i - b_i$$$ and sort this array. Now our problem is to find the number of pairs $$$i  \\lt  j$$$ such that $$$c_i + c_j  \\gt  0$$$.\nLet's iterate over all elements of $$$c$$$ from left to right. For simplicity, we consider only \"greater\" summands. Because our sum ($$$c_i + c_j$$$) must be greater than $$$0$$$, then at least one of these summands will be positive. So, if $$$c_i \\le 0$$$, just skip it. Now $$$c_i  \\gt  0$$$ and we need to calculate the number of such $$$j$$$ that $$$c_i + c_j  \\gt  0$$$ and $$$j  \\lt  i$$$. It means that each $$$c_j \\ge -c_i + 1$$$ (for some $$$j  \\lt  i$$$) will be okay. Such leftmost position $$$j$$$ can be found with\nstd::lower_bound\nor binary search. Then add the value $$$i-j$$$ to the answer and consider the next element.\nTime complexity: $$$O(n \\log n)$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1931C - Make Equal Again\nIf all the elements of the arrays are equal, then nothing additional needs to be done, and the answer is $$$0$$$. Otherwise, you need to apply the assignment operation on the segment alone.\nOur goal is to choose the shortest possible segment, which means to exclude as many elements as possible from the beginning and end of the segment. Note that we can exclude only equal elements, and then assign a value equal to the excluded elements on the segment. Let's find the lengths of the maximum prefix and suffix consisting of equal elements. Let's denote by $$$k$$$ the number of excluded elements, by $$$k_1$$$ — the length of the maximum suitable prefix, by $$$k_2$$$ — the maximum suitable suffix. Then if $$$a_0 = a_{n - 1}$$$, then $$$k = k_1 + k_2$$$ (exclude both prefix and suffix), otherwise $$$k = max(k_1, k_2)$$$ (exclude the longer one).\nThe answer is $$$n - k$$$ — all non-excluded elements must be replaced so that they become equal to the excluded one."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1451C - String Equality\nKey Idea:\nFor the answer to be YES, the frequencies of each character of the alphabet must match after performing some sequence of operations. Let $$$freq_{i, a}$$$ and $$$freq_{i, b}$$$ be the frequencies of the $$$i$$$-th character of the alphabet in strings $$$a$$$ and $$$b$$$ respectively. For each $$$i$$$ starting from \"\na\n\", we keep exactly $$$freq_{i, b}$$$ of the occurrences and try to to convert the rest into the next character. If at any step, this is not possible, the answer is NO.\nSolution:\nConsider operations of the first type. It can be shown that after some finite sequence of swaps, we can reorder the string in any way we like. This is helpful because we do not have to worry about the characters being adjacent when we perform an operation of the second type (we can always reorder the string to allow it). In other words, only frequency of the characters matter.\nTo convert string $$$a$$$ into string $$$b$$$, we first make the frequencies of each character of the alphabet equal, then reorder the string using operations of the first type. The former can be done as described above. If for any $$$i$$$, there are an insufficient number of occurrences ($$$freq_{i, a} \\lt freq_{i, b}$$$) or the remaining occurrences cannot all be converted into the next character, i.e. $$$(freq_{i, a} - freq_{i, b})$$$ is not a multiple of $$$k$$$, the answer is NO. Otherwise, the answer is YES.\nTime complexity: $$$O(n)$$$"
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2042A - Greedy Monocarp\nConsider several first chests that Monocarp will take before exceeding the limit if we don't add any coins; so, this will be the set of several largest chests such that the sum of this set is $$$s \\le k$$$, but if the next chest is taken, the sum would exceed $$$k$$$.\nFor this set, the minimum number of coins that should be added is $$$k - s$$$. We can add exactly that amount if we increase the maximum element, the set of chests will include exactly the same elements, but now their sum is equal to $$$k$$$.\nNow we have to consider the case where we add coins to some chest that is not the part of this set. Suppose Monocarp took some chest $$$i$$$, which initially had $$$a_i$$$ coins, but did not take chest $$$j$$$, such that $$$a_j  \\gt  a_i$$$. In order for chest $$$i$$$ to be taken, its final value must be at least $$$a_j$$$, as Monocarp selects the maximum chest from the available ones. Let's suppose that $$$x$$$ coins were added to chest $$$i$$$, so that $$$a_i + x \\ge a_j$$$. However, instead, we could have increased chest $$$j$$$ to the value $$$a_i + x$$$, and this would require fewer coins, since $$$a_j  \\gt  a_i$$$. Thus, we have shown that it is not optimal to \"change\" the order of the chests, so we can always assume that Monocarp takes several chests that were the largest in the original order."
         },
         {
             "title": "Solution (Neon)",

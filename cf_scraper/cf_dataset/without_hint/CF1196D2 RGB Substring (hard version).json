@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1196D2 - RGB Substring (hard version)\nIn this problem you should make the same as in the previous one but faster. Let's consider three offsets of string \"\nRGB\n\": \"\nRGB\n\", \"\nGBR\n\" and \"\nBRG\n\". Let's copy the current offset of the string so that it will has the length $$$n$$$ (possibly, without some trailing characters) and save it in the string $$$t$$$.\nThen let's compare the string $$$s$$$ with this offset of length $$$n$$$ and build an array $$$diff$$$ of length $$$n$$$ where $$$diff_i = 1$$$ if $$$s_i \\ne t_i$$$. Then let's iterate over all possible continuous subsegments of this array $$$diff$$$ and maintain the variable $$$cur$$$ denoting the current answer.\nFirstly, for the current position $$$i$$$ let's add $$$diff_i$$$ to $$$cur$$$. Then if the current position $$$i$$$ is greater than or equal to $$$k-1$$$ ($$$0$$$-indexed) let's decrease $$$cur$$$ by $$$diff_{i-k}$$$. So now we have the continuous subsegment of the array $$$diff$$$ of length no more than $$$k$$$. Then if the current position $$$i$$$ is greater than or equal to $$$k$$$ ($$$0$$$-indexed again) (the current subsegment has the length $$$k$$$) then let's update the answer with $$$cur$$$. Then let's do the same with two remaining offsets."
         },
         {
             "title": "Solution",

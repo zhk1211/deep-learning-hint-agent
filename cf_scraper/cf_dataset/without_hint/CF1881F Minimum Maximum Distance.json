@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1881F - Minimum Maximum Distance\nLet's run a breadth-first traversal from any labeled vertex $$$v_1$$$ and find the farthest other labeled vertex $$$v_2$$$ from it. Then we run a traversal from $$$v_2$$$ and find the farthest labeled vertex $$$v_3$$$ from it (it may coincide with $$$v_1$$$). Then the answer is $$$\\lceil \\frac{d}{2} \\rceil$$$, where $$$d$$$ is the distance between $$$v_2$$$ and $$$v_3$$$. It is worth considering separately the case when there is only one labeled vertex in the tree. Then the answer is $$$0$$$."
         },
         {
             "title": "Solution",

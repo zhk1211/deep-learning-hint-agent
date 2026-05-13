@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1644A - Doors and Keys\nThe necessary and sufficient condition is the following: for each color the key should appear before the door.\nNecessary is easy to show: if there is a key after a door, this door can't be opened.\nSufficient can be shown the following way. If there are no closed doors left, the knight has reached the princess. Otherwise, consider the first door the knight encounters. He has a key for this door, so he opens it. We remove both the key and the door from the string and proceed to the case with one less door.\nOverall complexity: $$$O(1)$$$."
         },
         {
             "title": "Solution (awoo)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1493D - GCD of an Array\nNotice that after each query the answer doesn't become smaller and we can solve the problem for each prime divisor independently.\nFor each number let's maintain an amount of occurences for all its prime divisors (you can implement it using $$$map$$$). For each prime divisor let's write to its corresponding $$$multiset$$$ the amount of times it is met in every of the numbers of the array, at the same time we won't add null values.\nInitially, $$$ans=1$$$. Let's understand the way a prime divisor $$$p$$$ is included in the answer. If the size of its $$$multiset$$$ is not equal to $$$n$$$, then $$$ans$$$ won't change, otherwise $$$ans=(ans \\cdot p^x)$$$ $$$\\%$$$ $$$mod$$$, where $$$x$$$ is a minimal number of $$$multiset$$$.\nSince $$$ans$$$ is not decreasing, then we can avoid calculating it all over again every time and instead recalculate it only for divisors that are being changed (with that, because the minimal number of $$$multiset$$$ is not decreasing as well, we can just increase the answer using multiplication).\nTo process the query, we need to find the prime factorization of $$$x$$$ (for example, using the Sieve of Eratosthenes) and add the prime divisors to the $$$map$$$ for $$$i$$$-th element (and correspondingly change the $$$multiset$$$ for that divisor).\nEach query is processed in the complexity of the amount of prime divisors multiplied by the time of $$$map$$$ and $$$multiset$$$ operation, i.e. $$$log$$$."
         },
         {
             "title": "Solution (74TrAkToR)",

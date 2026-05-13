@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1657C - Bracket Sequence Deletion\nConsider the first character of the string. If it is '\n(\n', then we can remove the first two characters of the string and continue (because the prefix of length $$$2$$$ will be either a palindrome or a regular bracket sequence). If the first character of the string is '\n)\n' then this is a bad case. Of course, the regular bracket sequence can't start with '\n(\n', so this prefix should be a palindrome. And what is the shortest palindrome we can get with the first character '\n)\n'? It is the closing bracket '\n)\n', then some (possibly, zero) amount of opening brackets '\n(\n', and another one closing bracket. We can see that we can't find a palindrome shorter than this one because we have to find a pair for the first character. So, if the first character of the string is '\n)\n', then we just remove anything until the next character '\n)\n' inclusive. To not remove any characters explicitly, we can just use pointers instead. And the last thing is to carefully handle cases when we can't do any operations."
         },
         {
             "title": "Solution (vovuh)",

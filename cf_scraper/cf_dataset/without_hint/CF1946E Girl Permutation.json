@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1946E - Girl Permutation\nFirst, if $$$p_1$$$ is not equal to $$$1$$$, or $$$s_{m_2}$$$ is not equal to $$$n$$$, or $$$p_{m_1}$$$ is not equal to $$$s_1$$$, then the answer is $$$0$$$ for obvious reasons. Otherwise, we know exactly where the number $$$n$$$ is located, at position $$$s_1$$$. Next, we have $$$\\binom{n - 1}{s_1 - 1}$$$ ways to divide the numbers from $$$1$$$ to $$$n - 1$$$ into two sets — the numbers that will be in the left part and the numbers that will be in the right part (the left part — all indices $$$ \\lt  s_1$$$, the right part — all indices $$$ \\gt  s_1$$$). We solve for the left part, and similarly for the right part. For the left part, the position of the maximum ($$$p_{m_1 - 1}$$$) is again defined, and the maximum itself is also unique in the set of numbers for the left part, so we can again divide the left part into two, with $$$\\binom{p_{m_1} - 2}{p_{m_1 - 1} - 1}$$$ ways to do so, but we can also arrange the numbers between indices $$$p_{m_1 - 1}$$$ and $$$p_{m_1}$$$ (non-inclusive) in any order, i.e., $$$(p_{m_1} - p_{m_1 - 1} - 1)!$$$ ways. Then we solve similarly for the left set (i.e., for indices less than $$$p_{m_1 - 1}$$$)."
         },
         {
             "title": "Solution",

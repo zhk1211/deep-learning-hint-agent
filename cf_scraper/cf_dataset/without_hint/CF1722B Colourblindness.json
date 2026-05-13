@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1722B - Colourblindness\nHere are two solutions.\nSolution 1.\nIterate through the string character by character. If $$$s_i=\\texttt{R}$$$, then $$$t_i=\\texttt{R}$$$; otherwise, if $$$s_i=\\texttt{G}$$$ or $$$\\texttt{B}$$$, then $$$t_i=\\texttt{G}$$$ or $$$\\texttt{B}$$$. If the statement is false for any $$$i$$$, the answer is\nNO\n. Otherwise it is\nYES\n.\nSolution 2.\nReplace all $$$\\texttt{B}$$$ with $$$\\texttt{G}$$$, since they are the same anyway. Then just check if the two strings are equal.\nIn either case the complexity is $$$\\mathcal{O}(n)$$$ per testcase."
         },
         {
             "title": "Solution",

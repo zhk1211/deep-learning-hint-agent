@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1234C - Pipes\nLet's see how the water can flow when it meets the pipe of type $$$1$$$ or $$$2$$$ and in the other case. When the water meets the pipe of type $$$1$$$ or $$$2$$$ we cannot do anything but let it flow to the right of the current cell. Otherwise (if the current pipe is curved) then there are two cases: if the pipe on the same position but in the other row is not curved then the answer is \"\nNO\n\" because the water has to change the row but we cannot turn the next pipe to allow it to move to the right or to the left. So, the current pipe is curved and the pipe on the same position in the other row is also curved, let's change the row and move to the right (it is obvious that we never need to move to the left).\nSo, the answer (and the sequence of pipes) is uniquely defined by types of pipes. If after iterating over all $$$n$$$ positions we didn't meet the case of \"\nNO\n\" and the current row is second, then the answer is \"\nYES\n\"."
         },
         {
             "title": "Solution",

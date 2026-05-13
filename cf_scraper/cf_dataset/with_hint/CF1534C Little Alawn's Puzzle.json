@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nWhen he's not training for IOI, Little Alawn enjoys playing with puzzles of various types to stimulate his brain. Today, he's playing with a puzzle that consists of a $ 2 \\times n $ grid where each row is a permutation of the numbers $ 1,2,3,\\ldots,n $ .\n\nThe goal of Little Alawn's puzzle is to make sure no numbers on the same column or row are the same (we'll call this state of the puzzle as solved), and to achieve this he is able to swap the numbers in any column. However, after solving the puzzle many times, Little Alawn got bored and began wondering about the number of possible solved configurations of the puzzle he could achieve from an initial solved configuration only by swapping numbers in a column.\n\nUnfortunately, Little Alawn got stuck while trying to solve this harder problem, so he was wondering if you could help him with it. Find the answer modulo $ 10^9+7 $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). Description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 4 \\cdot 10^5 $ ).\n\nThe next two lines of each test case describe the initial state of the puzzle grid. Each line will be a permutation of the numbers $ 1,2,3,\\ldots,n $ and the numbers in each column and row will be pairwise distinct.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 4 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case output a single integer, the number of possible solved configurations of the puzzle Little Alawn can achieve from an initial solved configuration only by swapping numbers in a column. As the answer can be very large, please output it modulo $ 10^9+7 $ .\n\nThe answer for each test case should be on a separate line.\n\nExamples\nSample 1\nInput\n2\n4\n1 4 2 3\n3 2 1 4\n8\n2 6 5 1 4 3 7 8\n3 8 7 5 1 2 4 6\nOutput\n2\n8\n\nNote\nThe two possible puzzle configurations for example $ 1 $ are:\n\n- $ [1,4,2,3] $ in the first row and $ [3,2,1,4] $ in the second;\n- $ [3,2,1,4] $ in the first row and $ [1,4,2,3] $ in the second."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Let's say you know whether you flipped the first cell or not, which new columns must be flipped?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Create a graph of $$$n$$$ nodes, draw an edge between two values if they both exist in the same column, what structure does this graph have?"
+        },
+        {
+            "title": "Hint 3",
+            "content": "It is a bunch of disjoint cycles (since each node has an in-degree of $$$2$$$)."
+        },
+        {
+            "title": "Hint 4",
+            "content": "Each cycle is independent, and there are $$$2$$$ ways to flip each cycle."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1534C - Little Alawn's Puzzle\nDefine the \"direction\" of a column as the orientation of its numbers. Swapping the numbers in a column will flip its direction.\nLet's create a simple, undirected graph where the nodes are the $$$n$$$ columns on the puzzle and we draw one edge connecting it to the $$$2$$$ other columns that share a number with it. Notice that the degree of every node in this graph is $$$2$$$, so the graph must be made of some number of disjoint simple cycles.\nNow consider any component in the graph. If we fix the direction of any of the columns in the component, that will fix the direction of the columns adjacent to it, and so on until the direction of every column in the component has been fixed (also note that as the component is a simple cycle, we will never get a contradiction). As there are $$$2$$$ possible directions for any column, there are thus $$$2$$$ ways to direct the columns in this component.\nLastly, notice that the columns in each component are independent, so the answer is simply $$$2^k$$$, where $$$k$$$ is the number of components in our graph.\nTime Complexity: $$$\\mathcal{O}(n)$$$ with DFS"
+        },
+        {
+            "title": "Solution",
+            "content": "119400885"
+        }
+    ]
+}

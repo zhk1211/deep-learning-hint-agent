@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1497D - Genius\nLet's consider a graph where vertexes are problems and there is an edge $$$\\{i, j\\}$$$ between vertexes $$$i$$$ and $$$j$$$ with weight $$$|c_i - c_j|$$$. Each edge has a unique weight. Let's prove that. Let's assume that $$$weight = |2^i - 2^j|$$$ and $$$i  \\gt  j$$$. Then in binary form $$$weight$$$ has its $$$k$$$-th bit set true if and only if $$$j \\le k  \\lt  i$$$. Then for each unique pair $$$\\{i, j\\}$$$ $$$weight$$$ is unique too since the corners of a subsegment with true bits are unique.\nLet $$$dp_i$$$ be the maximal amount of points that may be earned ending with problem $$$i$$$. Initially $$$dp_i = 0$$$ for each $$$1 \\le i \\le n$$$. Let's consider all edges in increasing order (because $$$\\text{IQ}$$$ should increase). To do that we can consider $$$j$$$ in increasing order from $$$2$$$ to $$$n$$$ and then $$$i$$$ in decreasing order from $$$j - 1$$$ to $$$1$$$. It is also explained by the binary form of the $$$weight$$$.\nNow let's relax $$$dp$$$ values. When we consider an edge $$$\\{i, j\\}, tag_i \\neq tag_j$$$ we try to solve problem $$$i$$$ after solving $$$dp_j$$$ problems ending with $$$j$$$, and problem $$$i$$$ after solving $$$dp_i$$$ problems ending with $$$i$$$. It means that $$$dp_i = max(dp_i, dp_j + p), dp_j = max(dp_j, dp_i + p)$$$ at the same time, where $$$p = |s_i - s_j|$$$. After considering all edges the answer is the maximal value among all $$$dp$$$ values."
         },
         {
             "title": "Implementation",

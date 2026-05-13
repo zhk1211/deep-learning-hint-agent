@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2121F - Yamakasi\nTo start, let's recall how to solve the following problem: how many subsegments of the array have a sum of elements equal to $$$s$$$.\nLet $$$pref_i$$$ be the sum of the first $$$i$$$ elements of the array. Then the sum of a subsegment will be equal to $$$pref_r - pref_{l - 1}$$$. We will iterate over the right boundary $$$r$$$ and count the number of suitable left boundaries $$$l$$$, that is, such boundaries that $$$pref_r - pref_{l - 1} = s$$$ or $$$pref_{l - 1} = pref_r - s$$$. For this, we will additionally maintain a map to keep track of the number of left boundaries with a given prefix sum value for the considered prefix.\nNow we must also take into account the fact that the maximum value must equal $$$x$$$. For this, we will maintain a pointer $$$lef$$$ — the smallest left boundary that we have not yet added to the map, but can add when the maximum in the subsegment $$$(lef, r)$$$ equals $$$x$$$. Next, we have the following options:\nIf $$$a_r  \\gt  x$$$, then we need to clear the map and set $$$lef = r + 1$$$, since no good subsegment can contain the element $$$a_r$$$.\nIf $$$a_r = x$$$, we need to add information about the left boundaries $$$lef, lef + 1, \\ldots, r$$$ to the map (add information about their values $$$pref_{l - 1}$$$). After this, set $$$lef = r + 1$$$.\nIf $$$a_r  \\lt  x$$$, nothing changes.\nAnd similarly, for each right boundary, we can count the number of suitable left boundaries. The solution can be implemented in $$$O(n \\log n)$$$."
         }
     ]
 }

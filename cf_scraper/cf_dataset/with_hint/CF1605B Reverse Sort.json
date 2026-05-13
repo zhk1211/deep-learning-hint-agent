@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1605B - Реверс сорт\nAny binary string $$$s$$$ can be sorted in at most $$$1$$$ operation!\nLet the number of $$$0$$$s in $$$s$$$ be $$$cnt_0$$$ and the number of $$$1$$$s in $$$s$$$ be $$$cnt_1$$$.\nThe first $$$cnt_0$$$ positions of the final sorted string will be $$$0$$$ and the remaining $$$cnt_1$$$ positions will be $$$1$$$ (since it is sorted in non-decreasing order).\nKey observation\n: For every $$$1$$$ that is in the first $$$cnt_0$$$ positions of $$$s$$$, there is a $$$0$$$ that is in the last $$$cnt_1$$$ positions of $$$s$$$ (Why?).\nIf the string is not already sorted, in one operation pick the subsequence consisting of all $$$1$$$s among the first $$$cnt_0$$$ positions of $$$s$$$ as well as all $$$0$$$s among the last $$$cnt_1$$$ positions of $$$s$$$. It can be shown that this will correctly sort the string since the number of such $$$0$$$s and $$$1$$$s are equal.\nTime complexity\n: $$$\\mathcal{O}(n)$$$"
         },
         {
             "title": "Solution [c++] (JeevanJyot)",

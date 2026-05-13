@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1807C - Find and Replace\nLet's solve a harder problem: given a string $$$s$$$ and a binary string $$$t$$$, can we make $$$s$$$ into $$$t$$$ using the find and replace operations?\nWe can simply iterate through each character of $$$s$$$ and see the bit it has turned to in $$$t$$$ (that is, $$$s_i \\to t_i$$$ for each $$$i$$$). Keep track of each change, and see if there is some letter that needs to be turned into both $$$\\texttt{0}$$$ and $$$\\texttt{1}$$$. If there is some letter, it is impossible, since each operation requires changing all occurrences of a letter into the same bit. Otherwise, it is possible, and we can directly change each letter into the bit it needs to be. (See the implementation for a better understanding.)\nNow for this problem, since there are only two alternating binary strings of length $$$n$$$ ($$$\\texttt{01010...}$$$ and $$$\\texttt{10101...}$$$), we can simply check both. (Actually, we only have to check one — do you see why?) The time complexity is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution",

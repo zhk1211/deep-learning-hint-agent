@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1772F - Copy of a Copy of a Copy\nNotice the following: once you apply the recolor operation to some cell, you can never recolor it again. That happens because you can't recolor its neighbors too as each of them has at least one neighbor of the same color — this cell itself.\nIn particular, that implies that applying a recolor operation always decreases the possible number of operations that can be made currently. It doesn't always decrease them by $$$1$$$: from $$$1$$$ to $$$5$$$ operations can become unavailable, but it always decreases.\nThat gives us an order of copies. Just sort them in the decreasing order of the number of recolor operations that can be made currently. If the numbers are the same, the copies must be equal, so their order doesn't matter.\nThe only thing remains is to apply the operations. Turns out, their order doesn't matter at all. Consider all different cells for a pair of adjacent pictures. It's never possible that there are two different cells that are adjacent to each other. Thus, no operation can interfere with another one. Just print all positions of different cells in any order you want and make a copy.\nOverall complexity: $$$O(nmk + k \\log k)$$$."
         },
         {
             "title": "Solution (awoo)",

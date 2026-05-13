@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2112C - Coloring Game\nLet the three elements chosen by Alice be $$$a_x, a_y, a_z$$$, where $$$x  \\lt  y  \\lt  z$$$.\nLet's understand Bob's strategy. When Alice has already colored the elements she has chosen, Bob has two options: either to choose the greatest element of the array ($$$a_n)$$$, or to choose the greatest red element ($$$a_z$$$). The first option increases the sum of blue elements by $$$a_n$$$. The second option increases it by $$$a_z$$$ and decreases the sum of red elements by $$$a_z$$$. So, the difference between the sum of red and blue elements will be changed by $$$\\max(2 \\cdot a_z, a_n)$$$.\nIn order for Alice to win, the following condition must be met: $$$a_x + a_y + a_z  \\gt  \\max(2 \\cdot a_z, a_n)$$$. We can iterate on all three elements she chooses and check this condition, but it is too slow.\nInstead, we can iterate on the elements $$$y$$$ and $$$z$$$, and since the array is sorted, $$$a_x  \\lt  a_{x+1}$$$. This allows us to find the minimum valid $$$x$$$ with binary search (and all elements between it and $$$y$$$ will also be valid), resulting in a solution with complexity $$$O(n^2 \\log n)$$$. You can improve it to $$$O(n^2)$$$ by using two pointers instead of binary search, but this was not necessary."
         },
         {
             "title": "Solution (Neon)",

@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1637A - Sorting Parts\nConsider two cases:\nThe array is already sorted.\nTHe array is\nnot\nsorted.\nIn the first case, sorting any prefix and any suffix does not change the array. So the array will always remain sorted so the answer is \"NO\".\nIn the second case, there are two elements with indexes $$$i$$$ and $$$j$$$, such that $$$i  \\lt  j$$$ and $$$a_i  \\gt  a_j$$$. So choose $$$len$$$ so that these two elements will be in different parts. For example — $$$len = i$$$. Note that after operation $$$a_i$$$ will remain to the left of $$$a_j$$$, which means the array will not be sorted. So the answer is \"YES\".\nThen the solution is to check if the array is sorted, which can be done in $$$O(n)$$$."
         },
         {
             "title": "Solution",

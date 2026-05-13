@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "1972B - Игры с монетками\nIt can be proved that Alice will win the game if and only if the number of facing-up coins is odd.\nTime complexity: $$$\\mathcal O(n)$$$ for each case.\nProof:\nConsider all possible operations:\n...U\nU\nU... -> ...DD...\n: The number of\nU\ndecreases by $$$3$$$.\n...U\nU\nD... -> ...DU...\n: The number of\nU\ndecreases by $$$1$$$.\n...D\nU\nU... -> ...UD...\n: The number of\nU\ndecreases by $$$1$$$.\n...D\nU\nD... -> ...UU...\n: The number of\nU\nincreases by $$$1$$$.\nIt can be seen that the parity always changes.\nIt's obvious that if the number of\nU\nis equal to $$$0$$$, the player loses because there aren't any available operations. So Alice wins if and only if the number of\nU\nis odd."
+            "content": "1972B - Coin Games\nIt can be proved that Alice will win the game if and only if the number of facing-up coins is odd.\nTime complexity: $$$\\mathcal O(n)$$$ for each case.\nProof:\nConsider all possible operations:\n...U\nU\nU... -> ...DD...\n: The number of\nU\ndecreases by $$$3$$$.\n...U\nU\nD... -> ...DU...\n: The number of\nU\ndecreases by $$$1$$$.\n...D\nU\nU... -> ...UD...\n: The number of\nU\ndecreases by $$$1$$$.\n...D\nU\nD... -> ...UU...\n: The number of\nU\nincreases by $$$1$$$.\nIt can be seen that the parity always changes.\nIt's obvious that if the number of\nU\nis equal to $$$0$$$, the player loses because there aren't any available operations. So Alice wins if and only if the number of\nU\nis odd."
         },
         {
             "title": "Solution",

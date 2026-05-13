@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nThere is an array $ a $ consisting of non-negative integers. You can choose an integer $ x $ and denote $ b_i=a_i \\oplus x $ for all $ 1 \\le i \\le n $ , where $ \\oplus $ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR). Is it possible to choose such a number $ x $ that the value of the expression $ b_1 \\oplus b_2 \\oplus \\ldots \\oplus b_n $ equals $ 0 $ ?\n\nIt can be shown that if a valid number $ x $ exists, then there also exists $ x $ such that ( $ 0 \\le x < 2^8 $ ).\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 1000 $ ). The description of the test cases follows.\n\nThe first line of the test case contains one integer $ n $ ( $ 1 \\le n \\le 10^3 $ ) — the length of the array $ a $ .\n\nThe second line of the test case contains $ n $ integers — array $ a $ ( $ 0 \\le a_i < 2^8 $ ).\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^3 $ .\n\nOutput Format\nFor each set test case, print the integer $ x $ ( $ 0 \\le x < 2^8 $ ) if it exists, or $ -1 $ otherwise.\n\nExamples\nSample 1\nInput\n5\n3\n1 2 5\n3\n1 2 3\n4\n0 1 2 3\n4\n1 2 2 3\n1\n1\nOutput\n6\n0\n3\n-1\n1\n\nNote\nIn the first test case, after applying the operation with the number $ 6 $ the array $ b $ becomes $ [7, 4, 3] $ , $ 7 \\oplus 4 \\oplus 3 = 0 $ .\n\nThere are other answers in the third test case, such as the number $ 0 $ ."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "Recall the basic properties of the $$$\\oplus$$$ operation: $$$A \\oplus 0 = A$$$, $$$A \\oplus A = 0$$$, $$$A \\oplus B = B \\oplus A$$$."
+        },
+        {
+            "title": "Hint 2",
+            "content": "Consider the cases of even and odd array lengths."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "1805A - We Need the Zero\nNote that $$$(a_1 \\oplus x) \\oplus (a_2 \\oplus x) \\oplus ...$$$ equals $$$a_1 \\oplus a_2 \\oplus \\ldots \\oplus a_n$$$ if $$$n$$$ is even, or $$$a_1 \\oplus a_2 \\oplus \\ldots \\oplus a_n \\oplus x$$$ if $$$n$$$ is odd. Then, if the length of the array is odd, you must print $$$\\oplus$$$ of the whole array. And if the length is even, we can't change the value of the expression with our operation. It turns out that if $$$\\oplus$$$ of the whole array is $$$0$$$, we can output any number, but otherwise there is no answer."
+        },
+        {
+            "title": "Solution",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\na\n=\nlist\n(\nmap\n(\nint\n,\ninput\n().\nsplit\n()))\nxor\n=\n0\nfor\nx\nin\na\n:\nxor\n^=\nx\nif\nxor\n==\n0\n:\nprint\n(\n0\n)\nelse\n:\nif\nn\n%\n2\n==\n1\n:\nprint\n(\nxor\n)\nelse\n:\nprint\n(-\n1\n)"
+        }
+    ]
+}

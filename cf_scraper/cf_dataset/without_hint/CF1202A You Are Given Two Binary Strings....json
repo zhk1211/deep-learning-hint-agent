@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1202A - You Are Given Two Binary Strings...\nMultiplying by power of $$$2$$$ is \"shift left\" binary operation (you, probably, should know it). Reverse $$$x$$$ and $$$y$$$ for the simplicity and look at leftmost $$$1$$$ in $$$y$$$ (let's denote its position as $$$pos_y$$$).\nIf you move it to $$$0$$$ in $$$x$$$ then you make the $$$rev_k$$$ lexicographically bigger than the reverse of $$$x$$$. So you should move it to $$$1$$$ in $$$x$$$ too. You can choose any $$$1$$$ with position $$$\\ge pos_y$$$.\nLet $$$pos_x$$$ be the minimum position of $$$1$$$ in $$$x$$$, such that $$$pos_x \\ge pos_y$$$. You must move $$$pos_y$$$ to $$$pos_x$$$, otherwise the $$$1$$$ in $$$pos_x$$$ still be present in $$$rev_k$$$ and it will be not optimal.\nSo, the solution is next: reverse $$$x$$$ and $$$y$$$, find $$$pos_y$$$, find $$$pos_x \\ge pos_y$$$, print $$$pos_x - pos_y$$$."
         },
         {
             "title": "Solution (adedalic)",

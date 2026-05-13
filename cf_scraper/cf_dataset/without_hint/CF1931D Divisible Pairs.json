@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1931D - Divisible Pairs\nLet's consider a good pair.\nSince $$$(a_i + a_j) \\bmod x = 0$$$, it follows that $$$(a_i \\bmod x + a_j \\bmod x) \\bmod x = 0$$$, which implies that $$$a_i \\bmod x + a_j \\bmod x$$$ is either $$$x$$$ or $$$0$$$. Therefore, for some $$$j$$$, this holds true if $$$a_i \\bmod x = (x - a_j \\bmod x) \\bmod x$$$.\nSince $$$(a_i - a_j) \\bmod y = 0$$$, it follows that $$$a_i \\bmod y - a_j \\bmod y = 0$$$, which implies that $$$a_i \\bmod y = a_j \\bmod y$$$.\nThus, for some fixed $$$a_j$$$, all $$$a_i$$$ will fit the following criteria:\n$$$i  \\lt  j$$$;\n$$$a_i \\bmod x = (x - a_j \\bmod x) \\bmod x$$$;\n$$$a_i \\bmod y = a_j \\bmod y$$$.\nWe will iterate through $$$j$$$ from left to right and maintain the count of elements with specific pairs $$$\\langle a_i \\bmod x, a_i \\bmod y \\rangle$$$ using a\nmap\non the prefix."
         },
         {
             "title": "Solution",

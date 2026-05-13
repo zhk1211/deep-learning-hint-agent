@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1213B - Bad Prices\nLet $$$minPrice_i$$$ be the minimum price of the berPhone during days $$$i, i + 1, \\dots, n$$$. We can precalculate this array moving from right to left and carrying the minimum price we met (in other words, if we iterate over all $$$i$$$ from $$$n$$$ to $$$1$$$ then $$$minPrice_i = a_i$$$ if $$$i = n$$$ otherwise $$$minPrice_i = min(a_i, minPrice_{i + 1})$$$). Then the answer is the number of such days $$$i$$$ from $$$1$$$ to $$$n-1$$$ that $$$a_i  \\gt  minPrice_{i + 1}$$$."
         },
         {
             "title": "Solution",

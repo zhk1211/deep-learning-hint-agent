@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1101C - Division and Union\nLet's prove that division possible if and only if union of all segments has two and more segments.\nIf the union have at least two segments, then we can choose one of them and put all segments it contains in one group and other segments to another group. On the other hand, if we can divide all segments in two groups in such way that there are no pair from different group which intersects, then union of segments from the first group doesn't intersect union of segments from another and union of unions consists of several non-intersecting components.\nHow can it help? If union of segments consits of several segments then exists $$$x$$$ such that for any segment $$$[l_i, r_i]$$$ either $$$l_i \\le r_i \\le x$$$ or $$$x  \\lt  l_i \\le r_i$$$ and both parts are non-empty. Moreover, $$$x$$$ equals to one of $$$r_i$$$.\nIt leads us straight to one of possible solutions: sort all segments by $$$r_i$$$ in increasing order and for each $$$r_i$$$ we should check that $$$r_i  \\lt  \\min\\limits_{i  \\lt  j \\le n}{l_j}$$$ (suffix minimum). If we've found such $$$r_i$$$ then all prefix goes to one group and suffix — to another."
         },
         {
             "title": "Solution (adedalic)",

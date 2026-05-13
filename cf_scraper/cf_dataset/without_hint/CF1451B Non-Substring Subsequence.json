@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1451B - Non-Substring Subsequence\nKey Idea:\nIn each query, the answer is YES iff the first character of the given substring is not the first occurence of that character or the last character of the given substring is not the last occurrence of that character in the string.\nSolution:\nThe condition stated above is both necessary and sufficient.\nProof that it is necessary:\nAssume that a non-contiguous subsequence exists when the condition is false. If the first character of the substring is the first occurrence of its kind, then the subsequence cannot start before it. Similarly, if the last character of the substring is the last occurrence of its kind, then the subsequence cannot end after it. In such a case, the only subsequence that is of the same length as the given substring and equal to it, is the substring itself. However, this subsequence is contiguous  — which is a contradiction.\nThus, it is a necessary condition.\nProof that it is sufficient:\nIf the first character of the substring $$$s[l_i...r_i]$$$ occurs at some index $$$j$$$ $$$(j  \\lt  l_i)$$$, then the subsequence $$$s_js_{l_i+1}...s_{r_i}$$$ is good.\nIf the last character of the substring $$$s[l_i...r_i]$$$ occurs at some index $$$j$$$ $$$(j  \\gt  r_i)$$$, then the subsequence $$$s_{l_i}...s_{r_i-1}s_j$$$ is good.\nThus it is sufficient.\nTime complexity: $$$O(nq)$$$ or $$$O(n+q)$$$ for each case depending on implementation."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1669C - Odd/Even Increments\nNote is that after doing two operations of the same type, they are \"cancelled out\" in terms of parity, since we would change the parity of all elements once, then change it back again.\nSo, we know that we will do each operation exactly $$$0$$$ or $$$1$$$ time. It is possible to check all possible cases just by simulating, or we can notice that all elements on all indices of the same parity\nmust\nhave the same parity and if they do we can always find an answer, by doing just a single type of operation a single time (in case the array doesn't already contain all elements of the same parity).\nThe time complexity is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution",

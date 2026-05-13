@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1606B - Update Files\nLet $$$cur$$$ be the current number of computers with the update already installed (initially it is $$$1$$$). Then, in $$$1$$$ hour, we can increase $$$cur$$$ by $$$\\min(cur, k)$$$. From here we can see that the value of $$$cur$$$ will double for the first few hours, and then, when it becomes greater than $$$k$$$, it will begin to increase by exactly $$$k$$$.\nThe process when the number of computers doubles can be modeled using a loop, because the number of doublings does not exceed $$$\\log{n}$$$. And after that, we have to increase the answer by $$$\\left\\lceil {\\frac{n - cur}{k}} \\right\\rceil$$$ to take the number of additions of $$$k$$$ into account.\nNote that computing $$$\\left\\lceil {\\frac{n - cur}{k}} \\right\\rceil$$$ should be done without using fractional data types; to calculate $$$\\left\\lceil {\\frac{x}{y}} \\right\\rceil$$$ in integers, you should divide $$$x + y - 1$$$ by $$$y$$$ using integer division (this will work provided that both $$$x$$$ and $$$y$$$ are non-negative, and $$$y \\ne 0$$$). If you use real numbers, this may cause precision issues."
         },
         {
             "title": "Solution (Neon)",

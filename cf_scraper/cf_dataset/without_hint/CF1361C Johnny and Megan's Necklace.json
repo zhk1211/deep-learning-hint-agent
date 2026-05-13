@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1361C - Джонни и ожерелье Меган\nSay that we want to check if it is possible to construct a necklace with beauty at least $$$b$$$. To this end, we will construct a graph of $$$2^{b}$$$ vertices. For a necklace part with pearls in colors $$$u$$$ and $$$v$$$ there will be an edge in this graph between vertices with zero-based indices $$$v\\text{ & }(2^b-1)$$$ and $$$u\\text{ & }(2^b-1)$$$. In a necklace with beauty (at least) $$$b$$$, only pearl with colors having last $$$b$$$ bits the same can be glued together. Note that this is the exact condition that the edge endpoints have to satisfy to be in the same vertex. Since all the necklace parts have to be used, a necklace of beauty at least $$$b$$$ is an Euler cycle of this graph.\nThe solution will construct the graph mentioned above for all possible values of $$$b$$$ (we can iterate over all of them since there are only $$$21$$$ of them). If the constructed graph is Eulerian, it is possible to achieve the current value of $$$b$$$.\nIn order to find a sample necklace with the optimal beauty, one has to find the Euler cycle in the graph corresponding to the optimal value.\nChallenge\n: In another version of this task you are not allowed to glue pearls of the same color together. There is also a guarantee that there are no three pearls of the same color. Time complexity of the solution is the same."
         },
         {
             "title": "Solution",

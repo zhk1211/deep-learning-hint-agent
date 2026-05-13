@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1737B - Ela's Fitness and the Luxury Number\nWe shift the perspective to see the pattern from $$$\\lfloor \\sqrt{x} \\rfloor$$$, instead of $$$x$$$, to see what kind of patterns are needed so $$$x$$$ can be luxurious.\nNote that: $$${(a + 1)}^2 - 1 = a * (a + 2)$$$.\nTherefore, every half-closed segment $$$[a^2, (a + 1) ^ 2)$$$ contains\nexactly\n$$$3$$$ luxurious number: $$$a^2$$$, $$$a * (a + 1)$$$ and $$$a * (a + 2)$$$.\nAlso note that, since large numbers can cause inaccuracies in floating point computation, we should use binary search to find the floor-value of a square root, instead of using the sqrt function in any language."
         },
         {
             "title": "Solution snippet (low_, C++)",

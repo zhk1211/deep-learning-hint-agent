@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1348A - Phoenix and Balance\nWe observe that the coin with the weight $$$2^n$$$ is greater than the sum of all the other weights combined. This is true because $$$\\sum\\limits_{i = 1}^{n-1}2^i=2^n-2$$$. Therefore, the pile that has the heaviest coin will always weigh more. To minimize the weight differences, we put the $$$n/2-1$$$ lightest coins into the pile with the heaviest coin. The answer will be $$$(2^n+\\sum\\limits_{i = 1}^{n/2-1}2^i)-\\sum\\limits_{i = n/2}^{n-1}2^i$$$.\nTime complexity for each test case: $$$O(n)$$$\nYou can also solve the problem in $$$O(1)$$$ by simplifying the mathematical expression."
         },
         {
             "title": "Solution",

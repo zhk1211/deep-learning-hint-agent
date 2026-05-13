@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1238F - The Maximum Subtree\nAt first let's understand which trees are good. For this, let's consider some vertex $$$v$$$ (we denote its segment as $$$[l_v, r_v]$$$) which is not a leaf. Also let's consider some adjacent vertex $$$u$$$ (we denote its segment as $$$[l_u, r_u]$$$) which also is not leaf. It is claimed that segment $$$[l_v, r_v]$$$ can't be inside segment $$$[l_u, r_u]$$$ (it's means $$$l_u \\le l_v \\le r_v \\le r_u$$$) and vice versa. It's true because if segment $$$[l_v, r_v]$$$ is inside the segment $$$[l_u, r_u]$$$ then some vertex $$$t$$$ adjacent with $$$v$$$ also will be adjacent with $$$u$$$. So any non-leaf vertex can be adjacent with at most\n2\nnon-leaf vertexes. Therefore good tree is a path with a leafs adjacent to this path.\nSo all the have to do it's find the such subtree of maximum size. We can do it by subtree dynamic programming.\nAt first, let chose the root of the tree — some not leaf vertex.\nLet $$$dp_{v, 0}$$$ be the answer for the subtree with root in $$$v$$$ and dp_{v, 1} be the answer for the subtree with root in $$$v$$$ if we already took $$$v$$$ and its parent to the answer.\nIt can be calculated as follows:\n$$$dp_{v, 0} = \\max\\limits_{to} dp_{to, 0}$$$;\n$$$dp_{v, 0} = \\max(dp_{v, 0}, deg_v + 1 + firstMax + secondMax)$$$, there $$$firstMax$$$ is a first maximum of all $$$dp_{to, 1}$$$, and $$$secondMax$$$ is a second maximum, and $$$deg_v$$$ is a degree of vertex $$$v$$$;\n$$$dp_{v, 1} = deg_v - 1 + \\max\\limits_{to} dp_{to, 1}$$$."
         },
         {
             "title": "Solution (Roms)",

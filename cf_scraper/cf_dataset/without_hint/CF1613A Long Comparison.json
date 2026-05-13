@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1613A - Long Comparison\nFirst, let's say that appending the number with $$$p$$$ zeros is the same as multiplying it by $$$10^p$$$.\nThe given numbers are so large that they can't fit into any reasonable integer type. Even if you use a language with unlimited length integers (python, for example) or store the numbers in strings, you should still face the time limit issue. So let's learn to shrink the numbers a bit.\nNote that the result of the comparison of two numbers doesn't change if you divide both numbers by the same positive number. So we can keep dividing both numbers by $$$10$$$ until one of them is not divisible anymore. Let's also ignore the trailing zeros in $$$x_1$$$ and $$$x_2$$$ and leave them as is. If the first number is appended with $$$p_1$$$ zeros and the second numbers is appended with $$$p_2$$$ zeros, we can subtract $$$min(p_1, p_2)$$$ from both values, effectively dividing both numbers by $$$10^{min(p_1, p_2)}$$$.\nThis way, one of the numbers becomes short enough to fit into an integer type (because it has $$$p=0$$$ and $$$x$$$ is only up to $$$10^6$$$). The other number might still be large enough.\nHowever, if it's really large, we can instantly say that it's larger than another one. Say, if its $$$p$$$ is at least $$$7$$$. This number it at least $$$10^7$$$ and the other number is at most $$$10^6$$$.\nOtherwise, we can calculate this number as well and compare the values normally.\nOverall complexity: $$$O(1)$$$ per testcase."
         },
         {
             "title": "Solution (awoo)",

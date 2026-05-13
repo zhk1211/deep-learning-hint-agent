@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1792A - GamingForces\nThe first spell looks pretty weak compared to the second spell. Feels like you almost always replace one with another. Let's show that you can totally avoid casting the spell of the first type twice or more on one monster.\nLet the two first spell casts be $$$(i, j)$$$ and $$$(i, k)$$$ for some monsters $$$i, j$$$ and $$$k$$$. You can replace them by a cast of the second spell on $$$i$$$ and a cast of the first spell on $$$(j, k)$$$. That would deal even more damage to $$$i$$$ and the same amount to $$$j$$$ and $$$k$$$. The number of casts doesn't change.\nThus, it only makes sense to use the first spell on monsters with $$$1$$$ health. Calculate the number of them, kill the full pairs of them with the first spell, and use the second spell on the remaining monsters.\nOverall complexity: $$$O(n)$$$ per testcase."
         },
         {
             "title": "Solution (Neon)",

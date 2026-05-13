@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1462C - Unique Number\nFirst of all, let's understand that the answer to the problem should not contain zeros (leading zeros are useless, while others increase the number, but do not change the sum). It is also clear that the number we found should have the minimum possible length (since the longer the numbers without leading zeros, the larger they are). Numbers of the same length are compared lexicographically, that is, first by the first digit, then by the second, and so on. This means that the digits in the number must go in sorted order (the order of the digits does not affect the sum, but does affect the value).\nLet's minimize the length of the number first. We need to get the specified sum in as few digits as possible. So we should use as large digits as possible. Then let's start with the number $$$9$$$ and add the digits from $$$8$$$ to $$$1$$$ to the beginning of the number in turn, until the sum of the digits exceeds the specified sum. Obviously, you can't get an answer for fewer digits.\nNow we minimize the number itself. First, we must minimize the first digit. The first digit is uniquely determined as the difference between the sum of the remaining digits and the required sum. So you need to maximize the sum of all digits except the first one (which has already been done in the previous paragraph). It only remains to correct the first digit and print the answer."
         },
         {
             "title": "Solution",

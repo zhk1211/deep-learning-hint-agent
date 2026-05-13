@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1140C - Playlist\nIf we fix a song with minimum beauty in the answer, then we need to take the remaining $$$k - 1$$$ songs (or less) among those having beauty greater than or equal to the beauty of the fixed song — and the longer they are, the better.\nSo, we will iterate on the songs in the order of decreasing their beauty, and for the current song we will maintain $$$k$$$ longest songs having greater or similar beauty. This can be done using some standard containers:\nset\nin\nC++\nor\nTreeSet\nin\nJava\n."
         },
         {
             "title": "Solution (Roms)",

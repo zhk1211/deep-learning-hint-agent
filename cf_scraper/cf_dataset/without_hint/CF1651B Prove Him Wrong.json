@@ -1,0 +1,19 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nRecently, your friend discovered one special operation on an integer array $ a $ :\n\n1. Choose two indices $ i $ and $ j $ ( $ i \\neq j $ );\n2. Set $ a_i = a_j = |a_i - a_j| $ .\n\nAfter playing with this operation for a while, he came to the next conclusion:\n\n- For every array $ a $ of $ n $ integers, where $ 1 \\le a_i \\le 10^9 $ , you can find a pair of indices $ (i, j) $ such that the total sum of $ a $ will decrease after performing the operation.\n\nThis statement sounds fishy to you, so you want to find a counterexample for a given integer $ n $ . Can you find such counterexample and prove him wrong?\n\nIn other words, find an array $ a $ consisting of $ n $ integers $ a_1, a_2, \\dots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) such that for all pairs of indices $ (i, j) $ performing the operation won't decrease the total sum (it will increase or not change the sum).\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe first and only line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 1000 $ ) — the length of array $ a $ .\n\nOutput Format\nFor each test case, if there is no counterexample array $ a $ of size $ n $ , print NO.\n\nOtherwise, print YES followed by the array $ a $ itself ( $ 1 \\le a_i \\le 10^9 $ ). If there are multiple counterexamples, print any.\n\nExamples\nSample 1\nInput\n3\n2\n512\n3\nOutput\nYES\n1 337\nNO\nYES\n31 4 159\n\nNote\nIn the first test case, the only possible pairs of indices are $ (1, 2) $ and $ (2, 1) $ .\n\nIf you perform the operation on indices $ (1, 2) $ (or $ (2, 1) $ ), you'll get $ a_1 = a_2 = |1 - 337| = 336 $ , or array $ [336, 336] $ . In both cases, the total sum increases, so this array $ a $ is a counterexample."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Tutorial",
+            "content": "1651B - Prove Him Wrong\nSuppose the initial sum of $$$a$$$ is equal to $$$S$$$. If we perform the operation, the new sum will be equal to $$$S' = S - (a_i + a_j) + 2 |a_i - a_j|$$$. We want the sum not to decrease, or $$$S' \\ge S$$$. If $$$a_i \\ge a_j$$$, we will get: $$$$$$S' \\ge S,$$$$$$ $$$$$$S - (a_i + a_j) + 2 (a_i - a_j) \\ge S,$$$$$$ $$$$$$a_i - 3 a_j \\ge 0,$$$$$$ $$$$$$a_i \\ge 3 a_j.$$$$$$ If $$$a_i \\le a_j$$$ we'll get $$$3 a_i \\le a_j$$$ analogically.\nIn other words, array $$$a$$$ you need (if sorted) will have $$$a_2 \\ge 3 a_1$$$, $$$a_3 \\ge 3 a_2$$$ and so on. And one of the variants (and, obviously, an optimal one) is just $$$[1, 3, 9, 27, \\dots, 3^{n - 1}]$$$.\nAs a result, since $$$a_i \\le 10^9$$$, we just need to check: if $$$3^{n - 1} \\le 10^9$$$ then we found an answer, otherwise there is no counterexample."
+        },
+        {
+            "title": "Solution (awoo)",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\nif\n3\n**(\nn\n-\n1\n)\n>\n10\n**\n9\n:\nprint\n(\n\"NO\"\n)\nelse\n:\nprint\n(\n\"YES\"\n)\nprint\n(*[\n3\n**\nx\nfor\nx\nin\nrange\n(\nn\n)])"
+        }
+    ]
+}

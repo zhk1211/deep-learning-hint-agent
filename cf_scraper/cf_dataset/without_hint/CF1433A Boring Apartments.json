@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1433A - Boring Apartments\nThis problem has a lot of solutions. You could even hard code all possible tests to solve it. But this problem has $$$O(1)$$$ solution. Let the digit of $$$x$$$ be $$$dig$$$. Then our character pressed each digit before $$$dig$$$ exactly $$$10$$$ times ($$$1 + 2 + 3 + 4$$$). And the amount of times he pressed the digit $$$dig$$$ depends on the length of $$$x$$$. Let $$$len$$$ be the length of $$$x$$$, then the amount of times he pressed the digit $$$dig$$$ is $$$1 + 2 + \\ldots + len = \\frac{len(len + 1)}{2}$$$. So the final answer is $$$10 \\cdot (dig - 1) + \\frac{len(len + 1)}{2}$$$."
         },
         {
             "title": "Solution",

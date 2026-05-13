@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1661B - Getting Zero\nNote that $$$32768 = 2^{15}$$$, so you can make any value equal to $$$0$$$ by multiplying it by two $$$15$$$ times, since $$$(v \\cdot 2^{15}) \\bmod 2^{15} = 0$$$. So, the answer for each value $$$a_i$$$ is at most $$$15$$$.\nNow, let's note that there is always an optimal answer that consists of: at first, add one $$$cntAdd$$$ times, then multiply by two $$$cntMul$$$ times — and $$$cntAdd + cntMul$$$ is the minimum answer. In other words, let's just iterate over all $$$cntAdd \\le 15$$$ and $$$cntMul \\le 15$$$ and check that $$$(v + cntAdd) \\cdot 2^{cntMul} \\bmod 32768 = 0$$$. The answer is minimum $$$cntAdd + cntMul$$$ among them.\nTo prove that it's optimal to add at first and only then to multiply, note that it's not optimal to add more than once after muptiplying ($$$v \\rightarrow 2v \\rightarrow 2v + 2$$$ can be replaced by $$$v \\rightarrow v + 1 \\rightarrow 2(v + 1)$$$). So there is at most one $$$+1$$$ between two $$$\\cdot 2$$$, but it's not optimal to make even one $$$+1$$$ since we need to make $$$v$$$ divisible by $$$2^{15}$$$ and $$$+1$$$ break divisibility.\nThere are many other approaches to this task except this one: for example, since $$$a_i  \\lt  32768$$$ you can write bfs to find the shortest paths from $$$0$$$ to all $$$a_i$$$."
         },
         {
             "title": "Solution (adedalic)",

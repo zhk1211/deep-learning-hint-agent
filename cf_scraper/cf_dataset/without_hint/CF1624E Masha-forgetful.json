@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1624E - Masha-forgetful\nThe key idea is that any string of length greater than 3 can be obtained by concatenating strings of length $$$2$$$ or $$$3$$$. Then when reading the data, remember all occurring substring of length $$$2$$$ and $$$3$$$. There are at most $$$10^4$$$.\nNow we will count the dynamics on the prefix: $$$dp[i] = true$$$ if we can get the prefix of length $$$i$$$ of phone $$$s$$$ by segments of length $$$2$$$ and $$$3$$$ of the known phones Masha. Then for the transition we need to look through the lengths $$$2$$$ and $$$3$$$, then take a substring of the corresponding length and find out whether such a string occurred in the phones known to Masha.\nThen it will take $$$O(m)$$$ or $$$O(mlogm)$$$ time to recalculate the dynamics, depending on the implementation. But it will still take more time to read the data, so the final asymptotic will be $$$O(nm)$$$ or $$$O(nmlogm)$$$."
         },
         {
             "title": "Solution",

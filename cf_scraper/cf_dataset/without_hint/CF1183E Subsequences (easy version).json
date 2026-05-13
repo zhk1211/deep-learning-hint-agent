@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1183E - Subsequences (easy version)\nThe topic of this problem is BFS. Let strings be the vertices of the graph and there is a directed edge from string $$$s$$$ to string $$$t$$$ if and only if we can obtain $$$t$$$ from $$$s$$$ by removing exactly one character.\nIn this interpretation we have to find first $$$k$$$ visited vertices if we start our BFS from the initial string. And then the answer will be just $$$nk$$$ minus the sum of length of visited strings. The last thing to mention: instead of standard queue of integers we need to maintain the queue of strings and instead of array of visited vertices we have to maintain the set of visited strings. Don't forget to stop BFS when you obtain exactly $$$k$$$ strings.\nIf the number of distinct subsequences is less than $$$k$$$ then the answer is\n-1\n."
         },
         {
             "title": "Solution",

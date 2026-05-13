@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1296C - Yet Another Walking Robot\nFormally, the problem asks you to remove the shortest cycle from the robot's path. Because the endpoint of the path cannot be changed, the number of '\nL\n's should be equal to the number of '\nR\n's and the same with '\nU\n' and '\nD\n'.\nHow to find the shortest cycle? Let's create the associative array $$$vis$$$ (\nstd::map\nfor C++) which will say for each point of the path the maximum number of operations $$$i$$$ such that if we apply first $$$i$$$ operations we will stay at this point. Initially, this array will contain only the point $$$(0, 0)$$$ with the value $$$0$$$. Let's go over all characters of $$$s$$$ in order from left to right. Let the current point be $$$(x_i, y_i)$$$ (we applied first $$$i+1$$$ operations, $$$0$$$-indexed). If this point is in the array already, let's try to update the answer with the value $$$i - vis[(x_i, y_i)] + 1$$$ and left and right borders with values $$$vis[(x_i, y_i)]$$$ and $$$i$$$ correspondingly. Then let's assign $$$vis[(x_i, y_i)] := i + 1$$$ and continue.\nIf there were no updates of the answer, the answer is\n-1\n. Otherwise, you can print any substring you found.\nTime complexity: $$$O(n \\log n)$$$ per test case."
         },
         {
             "title": "Solution",

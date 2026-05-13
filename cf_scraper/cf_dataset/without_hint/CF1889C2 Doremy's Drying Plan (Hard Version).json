@@ -9,11 +9,7 @@
     "solutions": [
         {
             "title": "Easy Solution",
-            "content": "Tutorial is loading..."
-        },
-        {
-            "title": "Hard Solution",
-            "content": "Tutorial is loading..."
+            "content": "1889C1 - Doremy's Drying Plan (Easy Version)\nWe consider a brute force solution first.\nAt the beginning, we calculate number of intervals that cover position $$$i$$$ for each $$$i=1,2,\\ldots,n$$$ by prefix sum. Now we can know the number uncovered positions. Let it be $$$A$$$. Then we need to calculate the number of new uncovered position after removing two intervals. Let it be $$$B$$$. So the answer in the end is $$$A + \\max B$$$.\nFor calculating $$$B$$$, let's enumerate two intervals $$$I_1,I_2$$$.\nIf they have no intersection, $$$B$$$ is equal to the number of positions that are covered exactly once in interval $$$I_1$$$ and $$$I_2$$$;\nIf they have intersection. Let the intersection be $$$J$$$ (It is an interval). $$$B$$$ is equal to the number of positions that are covered exactly once in interval $$$I_1$$$ and $$$I_2$$$ plus the number of positions that are covered exactly twice in interval $$$J$$$;\nThe algorithm can be done in $$$O(n+m^2)$$$ time by prefix sum. For optimization, we should notice that:\nIn the \"no intersection\" case, we can just simply pick two best intervals.\nIn the \"intersection\" case, there are at most $$$n$$$ useful interval pairs. The proof and algorithm goes: for each position $$$i$$$, if it is covered by exactly $$$2$$$ intervals, then this interval pair is useful and may update the answer.\nGreat, but for code implementation, how do we find those interval pairs? For each interval $$$[l,r]$$$, we consider it as two events (like difference and prefix sum): it appears at position $$$l$$$, and disappears at position $$$r+1$$$. That way, set or just array is able to handle.\nTime complexity $$$O(n+m)$$$."
         }
     ]
 }

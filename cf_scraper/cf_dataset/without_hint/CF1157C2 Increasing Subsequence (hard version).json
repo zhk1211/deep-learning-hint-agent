@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1157C2 - Increasing Subsequence (hard version)\nThe solution of the previous problem works for this problem also. Almost works. What if the leftmost element is equal the rightmost element? Which one should we choose? Let's analyze it. If we take the leftmost element then we will\nnever\ntake any other element from the right, and vice versa. So we can't meet this case more than once because after meeting it once we can take only leftmost elements or only rightmost elements. The only thing we should understand is which of these two cases is better (take the leftmost element or take the rightmost element). To do it we can just iterate from left to right and calculate the number of elements we can take if we will take the leftmost element each time. If we cannot take the current element then just stop the cycle. And do the same thing for the rightmost element and take the best case."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1791B - Following Directions\nWe can keep track of our current point $$$(x,y)$$$ as we iterate over the string:\nif $$$s_i = \\texttt{L}$$$, then decrement $$$x$$$ (set $$$x \\leftarrow x-1$$$);\nif $$$s_i = \\texttt{R}$$$, then increment $$$x$$$ (set $$$x \\leftarrow x+1$$$);\nif $$$s_i = \\texttt{U}$$$, then increment $$$y$$$ (set $$$y \\leftarrow y+1$$$);\nif $$$s_i = \\texttt{D}$$$, then decrement $$$y$$$ (set $$$y \\leftarrow y-1$$$).\nInitially, set $$$x=y=0$$$. If $$$x=y=1$$$ is ever true, then we should output\nYES\n; otherwise, we output\nNO\n.\nThe time complexity is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution",

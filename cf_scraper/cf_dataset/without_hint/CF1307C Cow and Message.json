@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1307C - Cow and Message\nWe observe that if the hidden string that occurs the most times has length longer than $$$2$$$, then there must exist one that occurs just as many times of length exactly $$$2$$$. This is true because we can always just take the first $$$2$$$ letters; there can't be any collisions. Therefore, we only need to check strings of lengths $$$1$$$ and $$$2$$$. Checking strings of length $$$1$$$ is easy. To check strings of length $$$2$$$, we can iterate across $$$S$$$ from left to right and update the number of times we have seen each string of length $$$1$$$ and $$$2$$$ using DP.\nTime Complexity: $$$O(|s|c)$$$ (c is length of alphabet)"
         },
         {
             "title": "Solution",

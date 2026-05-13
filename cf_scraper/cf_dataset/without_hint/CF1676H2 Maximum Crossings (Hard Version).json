@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1676H2 - Maximum Crossings (Hard Version)\nRead the solution of the easy version.\nWe want to count the number of pairs $$$(i,j)$$$ such that $$$i \\lt j$$$ and $$$a_i \\geq a_j$$$. This is a standard problem, and we can do this we can use a segment tree or BIT, for example. Insert the $$$a_j$$$ from $$$j=1$$$ to $$$n$$$, and then for each $$$a_j$$$ count the number of $$$a_i \\leq a_j$$$ using a BIT.\nIt is also related to the problem of counting inversions, so you can solve it using a modification of merge sort.\nEither way, the solution is $$$\\mathcal{O}(n \\log n)$$$."
         },
         {
             "title": "Solution",

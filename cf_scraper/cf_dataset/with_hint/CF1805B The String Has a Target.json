@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a string $ s $ . You can apply this operation to the string exactly once: choose index $ i $ and move character $ s_i $ to the beginning of the string (removing it at the old position). For example, if you apply the operation with index $ i=4 $ to the string \"abaacd\" with numbering from $ 1 $ , you get the string \"aabacd\". What is the lexicographically minimal $ ^{\\dagger} $ string you can obtain by this operation?\n\n$ ^{\\dagger} $ A string $ a $ is lexicographically smaller than a string $ b $ of the same length if and only if the following holds:\n\n- in the first position where $ a $ and $ b $ differ, the string $ a $ has a letter that appears earlier in the alphabet than the corresponding letter in $ b $ .\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 10^4 $ ). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 10 ^ 5 $ ) — the length of the string.\n\nThe second line of each test case contains the string $ s $ of length $ n $ , consisting of lowercase English letters.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10 ^ 5 $ .\n\nOutput Format\nFor each test case, on a separate line print the lexicographically smallest string that can be obtained after applying the operation to the original string exactly once.\n\nExamples\nSample 1\nInput\n4\n3\ncba\n4\nacac\n5\nabbcb\n4\naaba\nOutput\nacb\naacc\nabbcb\naaab\n\nNote\nIn the first test case, you need to move the last character to the beginning.\n\nIn the second case, you need to move the second letter \"a\".\n\nIn the third set you need to apply the operation with $ i=1 $ , then the string will not change."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "What should be the first character if we are trying to make the string lexicographically minimal?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Consider the string «\nbaba\n». If you choose $$$i=2$$$, you get the string «\nabba\n», and if you choose $$$i=4$$$ you get «\nabab\n». Try to generalize this reasoning to any string."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "1805B - The String Has a Target\nAt first, note that the operation should be applied only to the position of the minimal element of the string (since the 1st position in the final string should always contain the minimal letter).\nNext, let the positions of the minimum letter are $$$a_1, a_2, \\ldots, a_k$$$. Then we must apply the operation to the last position ($$$a_k$$$). Indeed, let us apply the operation to another occurrence: then the prefixes will coincide, and after that there will be a character that is equal to the minimal one if we applied the operation to $$$a_k$$$ and will not be equal to it otherwise, which contradicts the minimal string."
+        },
+        {
+            "title": "Solution",
+            "content": "for\n_\nin\nrange\n(\nint\n(\ninput\n())):\nn\n=\nint\n(\ninput\n())\ns\n=\ninput\n()\nind\n=\ns\n.\nrfind\n(\nmin\n(\ns\n))\n# Find the last ind such that s[ind] = min(s)\nprint\n(\ns\n[\nind\n]\n+\ns\n[:\nind\n]\n+\ns\n[\nind\n+\n1\n:])"
+        }
+    ]
+}

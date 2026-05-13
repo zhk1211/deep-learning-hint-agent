@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1560B - Who's Opposite?\nThe person with the number $$$a$$$ looks at the person with the number $$$b$$$ so the count of people standing to the left of $$$a$$$ between $$$a$$$ and $$$b$$$ is equal to the count of people standing to the right of $$$a$$$ between $$$a$$$ and $$$b$$$. Therefore, both counts are equal to $$$\\frac{n - 2}{2}$$$, hence $$$n$$$ must be a solution of the equation $$$\\frac{n - 2}{2} = |a - b| - 1$$$. The only solution of the equation is $$$n = 2 \\cdot |a - b|$$$.\nLet's check that in the circle of $$$n$$$ people can occur the numbers $$$a$$$, $$$b$$$ and $$$c$$$, i. e. let's check that $$$1 \\le a, b, c \\le n$$$. If it's false, there's no solution (output $$$-1$$$).\nSince the person with the number $$$d$$$ looks at the person with the number $$$c$$$, the condition $$$\\frac{n - 2}{2} = |c - d| - 1$$$ must be met. Let's solve the equation for $$$d$$$. There are two solutions:\n$$$d_1 = c + \\frac{n}{2}$$$;\n$$$d_2 = c - \\frac{n}{2}$$$.\nWe can output any of $$$d_i$$$ such that $$$1 \\le d_i \\le n$$$. It's easy to prove that exactly one of the solutions meets the condition."
         },
         {
             "title": "Solution",

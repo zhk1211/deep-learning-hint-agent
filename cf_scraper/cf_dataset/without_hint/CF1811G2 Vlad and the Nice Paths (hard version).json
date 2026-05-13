@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1811G2 - Vlad and the Nice Paths (hard version)\nTo solve the hard version, let's modify the simple version solution. Note that the $$$j$$$ parameter can be discarded, since we only need paths of maximum length on each prefix. Now, as $$$dp[i]$$$, we denote a pair of the number of maximum paths and the number of blocks in them. For the position $$$i$$$, we will find the position closest to the left, from which we can start a block, and so we will find out what is the maximum for $$$i$$$. We will update $$$dp[i]$$$ until the maximum of the position being sorted is suitable for us."
         },
         {
             "title": "Solution",

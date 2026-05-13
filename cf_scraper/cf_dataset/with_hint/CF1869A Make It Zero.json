@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1869A - Make It Zero\nNote that\n$$$$$$\\underbrace{x\\oplus x\\oplus \\cdots\\oplus x}_{\\text{even times}}=0,$$$$$$\nSo if $$$r-l+1$$$ is even, after performing the operation on $$$[l,r]$$$ twice, the subarray $$$a[l;r]$$$ will all become $$$0$$$.\nWhen $$$n$$$ is even, we can perform the operation on $$$[1,n]$$$ twice.\nWhen $$$n$$$ is odd, we can perform the operation on $$$[1,n-1]$$$ twice. After that the array becomes $$$[0,0,\\ldots,0,a_n]$$$. Then perform the operation on $$$[n-1,n]$$$ twice.\nTime Complexity: $$$\\mathcal{O}(n)$$$ per test case."
         },
         {
             "title": "Implementation",

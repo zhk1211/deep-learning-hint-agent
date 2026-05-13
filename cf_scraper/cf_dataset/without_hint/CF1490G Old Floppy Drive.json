@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1490G - Old Floppy Drive\nLet's denote for $$$S$$$ the sum of all the elements of the array, and for $$$pref$$$ the array of its prefix sums.\nIf the drive runs for $$$t$$$ seconds, the sum is $$$\\left\\lfloor \\frac{t}{s} \\right\\rfloor \\cdot S + pref[t \\bmod n]$$$.\nThis formula immediately shows that if $$$\\max\\limits_{i=0}^{n-1} pref[i]  \\lt  x$$$ and $$$S \\le 0$$$, then the disk will run indefinitely. Otherwise, the answer exists.\nThe disk cannot make less than, $$$\\left\\lceil \\frac{x - \\max\\limits_{i=0}^{n-1} pref[i]}{S} \\right\\rceil$$$ full spins, otherwise the required amount simply will not be achived. The disk can't make more spins either, because when it reaches the position of the maximum prefix sum, $$$x$$$ will already be achived. So we know how to determine the number of full spins of the disk. Let's make these spins: $$$$$$x:= x - \\left\\lceil \\frac{x - \\max\\limits_{i=0}^{n-1} pref[i]}{S} \\right\\rceil \\cdot S$$$$$$.\nNow we have a new problem, given $$$x$$$, find the first position $$$i$$$ in the array, such that $$$pref[i] \\ge x$$$. This problem can be solved using binary search. If $$$pref$$$ is not sorted into the array, that is, there is $$$j$$$, such that $$$pref[j-1]  \\gt  pref[j]$$$, then $$$pref[j]$$$ can simply be thrown out of the array (the answer will never be reached on it)."
         },
         {
             "title": "Solution",

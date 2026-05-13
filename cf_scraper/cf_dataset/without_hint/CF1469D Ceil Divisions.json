@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1469D - Ceil Divisions\nThere are many different approaches. We will describe a pretty optimal one.\nLet's solve the problem recursively. Let's say we need to process segment $$$[1, x]$$$. If $$$x = 2$$$, we don't need to do anything. Otherwise, $$$x  \\gt  2$$$. Let's find the minimum $$$y$$$ such that $$$y \\ge \\left\\lceil \\frac{x}{y} \\right\\rceil$$$.\nThe chosen $$$y$$$ is convenient because it allows making $$$x$$$ equal to $$$1$$$ in two divisions (and it's the minimum number of divisions to get rid of $$$x$$$). Now we can, firstly, make all $$$z \\in [y + 1, x)$$$ equal to $$$1$$$ in one step (by division on $$$x$$$) and then make $$$x$$$ equal to $$$1$$$ with two divisions on $$$y$$$.\nAs a result, we've spent $$$x - y + 1$$$ operations and can solve our task recursively for $$$[1, y]$$$. In total, we will spend $$$n - 2 + \\mathit{\\text{number_of_segments}}$$$ and since the segments are like $$$(\\sqrt{x}, x]$$$, $$$(\\sqrt{\\sqrt{x}}, \\sqrt{x}]$$$,... There will be at most $$$\\log{(\\log{n})}$$$ segments and $$$n + 3$$$ operations are enough for $$$n \\le 2^{32}$$$."
         },
         {
             "title": "Solution (adedalic)",

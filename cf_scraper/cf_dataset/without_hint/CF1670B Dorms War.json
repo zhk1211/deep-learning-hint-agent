@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1670B - Dorms War\nLet's consider the non-special characters as '0' and special characters as '1' since they are indistinguishable. So now the problem is that we have a binary string, where each '1' character removes the character before it each time the program is run.\nThe trivial case is when there is only one '1' character, the answer then is just the number of '0' characters before it.\nBut what if there is more than one '1' character? lets take for example when there are two '1' characters as follows: $$$00000010001\\to 000001001\\to 0000101\\to 00011\\to 001\\to 01\\to 1$$$\nThe observation here is that when the first '1' character from the right reached the second '1', it acts as if it just replaced its place, so we can say that each '1' character replaces another '1' as soon as it reaches it.\nSo we can partition the binary string into small partitions where each partition contains only one '1' character that is the rightmost character in the partition.\nFor example, the string $$$00010000001011$$$ can be partitioned into: $$$(0001),(0000001),(01),(1)$$$\nWe first calculate the amount of time each partition requires to remove all the '0' characters before it, which is basically the number of '0' characters before it. Each partition except for the first partition requires one more second to replace the '1' character in the previous partition.\nSo the answer is the maximum time required among all the partitions."
         },
         {
             "title": "Solution",

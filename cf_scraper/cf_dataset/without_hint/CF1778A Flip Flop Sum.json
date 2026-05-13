@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1778A - Flip Flop Sum\nLet's say we've chosen index $$$i$$$. What will happen?\nIf the values of $$$a_i$$$ and $$$a_{i+1}$$$ have opposite signs, flipping them won't change the initial $$$sum$$$.\nif $$$a_i$$$ = $$$a_{i+1}$$$ = $$$1$$$, flipping them will reduce the $$$sum$$$ by $$$4$$$.\nif $$$a_i$$$ = $$$a_{i+1}$$$ = $$$-1$$$, flipping them will increase the $$$sum$$$ by $$$4$$$.\nSo, for each $$$i  \\lt  n$$$, we can check the values of $$$a_i$$$ and $$$a_{i+1}$$$, and we can measure the effects on the $$$sum$$$ based on the three cases stated above. Among the effects, take the one that maximizes the $$$sum$$$.\nTime complexity: In each test case, $$$\\mathcal{O}(n)$$$"
         }
     ]
 }

@@ -1,0 +1,36 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nOn a circle lie $ 2n $ distinct points, with the following property: however you choose $ 3 $ chords that connect $ 3 $ disjoint pairs of points, no point strictly inside the circle belongs to all $ 3 $ chords. The points are numbered $ 1, \\, 2, \\, \\dots, \\, 2n $ in clockwise order.\n\nInitially, $ k $ chords connect $ k $ pairs of points, in such a way that all the $ 2k $ endpoints of these chords are distinct.\n\nYou want to draw $ n - k $ additional chords that connect the remaining $ 2(n - k) $ points (each point must be an endpoint of exactly one chord).\n\nIn the end, let $ x $ be the total number of intersections among all $ n $ chords. Compute the maximum value that $ x $ can attain if you choose the $ n - k $ chords optimally.\n\nNote that the exact position of the $ 2n $ points is not relevant, as long as the property stated in the first paragraph holds.\n\nInput Format\nThe first line contains a single integer $ t $ ( $ 1 \\le t \\le 100 $ ) — the number of test cases. Then $ t $ test cases follow.\n\nThe first line of each test case contains two integers $ n $ and $ k $ ( $ 1 \\le n \\le 100 $ , $ 0 \\le k \\le n $ ) — half the number of points and the number of chords initially drawn.\n\nThen $ k $ lines follow. The $ i $ -th of them contains two integers $ x_i $ and $ y_i $ ( $ 1 \\le x_i, \\, y_i \\le 2n $ , $ x_i \\ne y_i $ ) — the endpoints of the $ i $ -th chord. It is guaranteed that the $ 2k $ numbers $ x_1, \\, y_1, \\, x_2, \\, y_2, \\, \\dots, \\, x_k, \\, y_k $ are all distinct.\n\nOutput Format\nFor each test case, output the maximum number of intersections that can be obtained by drawing $ n - k $ additional chords.\n\nExamples\nSample 1\nInput\n4\n4 2\n8 2\n1 5\n1 1\n2 1\n2 0\n10 6\n14 6\n2 20\n9 10\n13 18\n15 12\n11 7\nOutput\n4\n0\n1\n14\n\nNote\nIn the first test case, there are three ways to draw the $ 2 $ additional chords, shown below (black chords are the ones initially drawn, while red chords are the new ones):\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1552C/704c17cd22decf087937d97766096b41bea230a2.png)We see that the third way gives the maximum number of intersections, namely $ 4 $ .\n\nIn the second test case, there are no more chords to draw. Of course, with only one chord present there are no intersections.\n\nIn the third test case, we can make at most one intersection by drawing chords $ 1-3 $ and $ 2-4 $ , as shown below:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1552C/abc82045666e4296b48f8b98db9ad5de10f98734.png)"
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1.",
+            "content": "Consider the graph induced by the edges $$$(j, \\, k)$$$ so that $$$a_i = b_j - b_k$$$."
+        },
+        {
+            "title": "Hint 2.",
+            "content": "Such graph contains $$$n$$$ vertices and $$$n$$$ edges, so it has a cycle."
+        },
+        {
+            "title": "Hint 3.",
+            "content": "The sum, with the right signs, of the $$$a_i$$$ over the vertices of a cycle is $$$0$$$."
+        },
+        {
+            "title": "Hint 4.",
+            "content": "The above condition is necessary and sufficient."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Implementation",
+            "content": "123771028"
+        },
+        {
+            "title": "Solution",
+            "content": "1552D - Array Differentiation\nSuppose that a solution $$$b_1, \\, \\dots, \\, b_n$$$ exists. For each $$$1 \\le i \\le n$$$, let $$$j_i, \\, k_i$$$ be the indices such that $$$a_i = b_{j_i} - b_{k_i}$$$.\nConsider the directed graph on vertices $$$1, \\, \\dots, \\, n$$$, with the $$$n$$$ edges $$$j_i \\rightarrow k_i$$$. If we ignore, for a moment, the orientations, we are left with an undirected graph with $$$n$$$ vertices and $$$n$$$ edges, which must contain a cycle (possibly a loop). Let $$$m$$$ be the length of one such cycle, and let $$$v_1, \\, \\dots, v_m$$$ be its vertices.\nNow, of course $$$(b_{v_1} - b_{v_2}) + (b_{v_2} - b_{v_3}) + \\cdots + (b_{v_m} - b_{v_1}) = 0$$$, since all the terms cancel out. Notice that, for each $$$i$$$, there exists $$$1 \\le t_i \\le n$$$ such that (indices are taken modulo $$$m$$$, so that $$$v_{m + 1} = v_1$$$) $$$$$$ b_{v_i} - b_{v_{i + 1}} = \\begin{cases} a_{t_i} & \\text{if there is an edge } v_i \\rightarrow v_{i + 1}, \\\\ -a_{t_i} & \\text{if there is an edge } v_i \\leftarrow v_{i + 1}. \\end{cases} $$$$$$\nThus, there must be a nonempty subset $$$\\{t_1, \\, \\dots, \\, t_m\\} \\subseteq \\{1, \\, \\dots, \\, n\\}$$$ and a choice of signs $$$s_1, \\, \\dots, \\, s_m$$$ ($$$s_i \\in \\{+1, \\, -1\\}$$$) such that $$$$$$\\tag{$\\star$} s_1a_{t_1} + \\cdots + s_ma_{t_m} = 0. $$$$$$\nLet us show that this condition is also sufficient for the existence of a valid sequence $$$b_1, \\, \\dots, \\, b_n$$$. Suppose there exist $$$m$$$, $$$t_1, \\, \\dots, \\, t_m$$$ and $$$s_1, \\, \\dots, \\, s_m$$$ so that $$$(\\star)$$$ holds. We construct $$$b_1, \\, \\dots, \\, b_n$$$ as follows. Set $$$b_{t_1} = 0$$$. Then, inductively, for each $$$1 \\le i  \\lt  m$$$ set $$$b_{t_{i + 1}} = b_{t_i} - s_ia_{t_i}$$$. Finally, for $$$i \\not\\in \\{t_1, \\, \\dots, \\, t_m\\}$$$, set $$$b_i = a_i$$$. It is easy to check that this construction works.\nThe algorithm that iterates over all $$$3^n - 1$$$ choices of the subset and the signs (for each $$$i$$$ we decide whether $$$a_i$$$ is included in the subset and if it is included, whether its sign is positive or negative) and checks if for one of them $$$(\\star)$$$ holds, is sufficient to solve the problem under the given constraints.\nAlternatively, one may treat the problem as a knapsack instance (the weights are $$$a_i$$$, but can be chosen with arbitrary sign, and we shall understand whether we can fill precisely a knapsack with $$$0$$$ capacity). With this approach, the complexity is $$$O(n^2\\max|a_i|)$$$.\nBonus:\nSolve the problem with complexity $$$O(n3^{\\frac{n}{2}})$$$.\nComplexity:\n$$$O(n3^n)$$$."
+        }
+    ]
+}

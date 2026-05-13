@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1635A - Min Or Sum\nThe answer is $$$a_1 | a_2 | \\cdots | a_n$$$. Here is the proof:\nLet $$$m = a_1 | a_2 | \\cdots | a_n$$$. After an operation, the value $$$m$$$ won't change.\nSince, $$$a_1 | a_2 | \\cdots | a_n \\leq a_1 + a_2 + \\cdots + a_n$$$, the sum of the array has a lower bound of $$$m$$$. And this sum can be constructed easily: for all $$$i \\in [1, n - 1]$$$, set $$$a_{i+1}$$$ to $$$a_i | a_{i+1}$$$ and $$$a_i$$$ to $$$0$$$."
         },
         {
             "title": "Solution",

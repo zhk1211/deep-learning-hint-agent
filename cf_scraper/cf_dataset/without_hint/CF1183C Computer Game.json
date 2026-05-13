@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1183C - Computer Game\nFirstly, about the problem description. Vova really needs to\ncomplete the game\ni. e. play\nall $$$n$$$ turns\n. Exactly $$$n$$$ turns. Among all possible ways to do it he need choose one where the number of turns when he\njust plays\n(this is the first type turn!) is\nmaximum possible\n.\nSuppose the answer is $$$n$$$. Then the charge of the battery after $$$n$$$ turns will be $$$c = k - na$$$. If this value is greater than $$$0$$$ then the answer is $$$n$$$. Otherwise we need to replace some turns when Vova\njust plays\nwith turns when Vova\nplays and charges\n. The charge of the battery will increase by $$$diff = a - b$$$ avfter one replacement. We have to obtain $$$c  \\gt  0$$$ with some replacements. The number of turns to do it is equals to $$$turns = \\lceil\\frac{-c + 1}{diff}\\rceil$$$, where $$$\\lceil\\frac{x}{y}\\rceil$$$ is $$$x$$$ divided by $$$y$$$ rounded up. If $$$turns  \\gt  n$$$ then the answer is\n-1\n. Otherwise the answer is $$$n - turns$$$."
         },
         {
             "title": "Solution",

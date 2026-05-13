@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2121G - Gangsta\nLet $$$c_0$$$ be the number of zeros in the subsegment, and $$$c_1$$$ be the number of ones. Notice that $$$\\max(c_0, c_1) = \\frac{c_0 + c_1 + |c_0 - c_1|}{2}$$$. Then we will find the sum $$$c_0 + c_1 + |c_0 - c_1|$$$ over all subsegments, and this sum divided by two will be the answer.\nLet $$$pref_i$$$ be the difference between the number of ones and the number of zeros in the prefix of length $$$i$$$. Then $$$f(s_ls_{l+1} \\ldots s_r) = r - l + 1 + |pref_r - pref_{l - 1}|$$$. We will separately calculate the sum $$$r - l + 1$$$ over all subsegments. This can be done in $$$O(n)$$$: the number of segments of length $$$len$$$ will be $$$n - len + 1$$$, so we need to find $$$\\sum\\limits_{len = 1}^n len \\cdot (n - len + 1)$$$.\nWe still need to find the sum $$$|pref_r - pref_{l - 1}|$$$ over all subsegments. To do this, we will sort the array $$$pref$$$ (here we need to be careful, as this array consists of $$$n + 1$$$ elements, not $$$n$$$). After sorting, we will eliminate the absolute value, and we will need to find the sum $$$pref_r - pref_{l - 1}$$$ over all subsegments. This sum will be equal to $$$\\sum\\limits_{i = 0}^n pref_i \\cdot (i - (n - i))$$$, since in $$$i$$$ terms we will take $$$pref_i$$$ with a positive sign, and in $$$n - i$$$ terms we will take it with a negative sign.\nThe solution can be implemented in $$$O(n \\log n)$$$."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1196F - K-th Path\nThe main observation is that you don't need more than $$$min(k, m)$$$ smallest by weight edges (among all edges with the maximum weights you can choose any). Maybe there will be a proof later, but now I ask other participant to write it.\nSo you sort the initial edges and after that you can construct a graph consisting of no more than $$$2min(k, m)$$$ vertices and no more than $$$min(m, k)$$$ edges. You just can build the new graph consisting only on these vertices and edges and run Floyd-Warshall algorithm to find the matrix of shortest paths. Then sort all shorted distances and print the $$$k$$$-th element of this sorted array.\nTime complexity: $$$O(m \\log m + k^3)$$$.\nI know that there are other approaches that can solve this problem with greater $$$k$$$, but to make this problem easily this solution is enough."
         },
         {
             "title": "Solution",

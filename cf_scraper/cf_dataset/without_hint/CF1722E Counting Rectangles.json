@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading...\nYou can read about\n2D prefix sums\nif you haven't heard of them before."
+            "content": "1722E - Counting Rectangles\nConsider the 2D array with $$$a[x][y]=0$$$ for all $$$x,y$$$. Increase $$$a[h][w]$$$ by $$$h \\times w$$$ if there is an $$$h \\times w$$$ rectangle in the input.\nNow for each query, we need to find the sum of all $$$a[x][y]$$$ in a rectangle with lower-left corner at $$$a[h_s+1][w_s+1]$$$ and upper-right corner at $$$a[h_b-1][w_b-1]$$$. This is the standard problem that can be solved with 2D prefix sums.\nThe time complexity is $$$\\mathcal{O}(n+q+\\max(h_b)\\max(w_b))$$$ per testcase.\nYou can read about\n2D prefix sums\nif you haven't heard of them before."
         },
         {
             "title": "Solution",

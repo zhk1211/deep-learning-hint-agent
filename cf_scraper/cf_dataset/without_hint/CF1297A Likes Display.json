@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1297A - Likes Display\nThere are three different variants to display $$$n$$$: exact number, thousands or millions. Let's find out what range $$$n$$$ should be in for each variant:\nif $$$n \\in [0, 999]$$$ then we should print its exact value;\nif $$$n \\in [1000, 999499]$$$ then we should print it as a number of thousands rounded to the nearest value;\notherwise we should print it as a number of millions also rounded to the nearest value.\nThe last question is how to round to the nearest number of thousands (millions). There are two ways to do it:\nwe can avoid using numbers with floating points, i.e. use formula $$$\\left\\lfloor \\frac{n + 500}{1000} \\right\\rfloor$$$ (or $$$\\left\\lfloor \\frac{n + 5 \\cdot 10^5}{10^6} \\right\\rfloor$$$)\nor we can use $$$roundToInt()$$$ function on Double value."
         },
         {
             "title": "Solution (elizarov)",

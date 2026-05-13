@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1759F - All Possible Digits\nIf all digits from $$$0$$$ to $$$p-1$$$ are initially present in the number, then the answer is $$$0$$$.\nEach time we will increase the number by $$$1$$$. If the last digit is less than $$$p-1$$$, then only it will change. Otherwise, all digits equal to $$$p-1$$$ at the end will become equal to $$$0$$$, and the previous one will increase by $$$1$$$ (or a new digit equal to $$$1$$$ will be added if all digits were equal to $$$p-1$$$).\nFor a $$$p-1$$$ operation, the last digit will run through all possible values. However, we can get all the numbers earlier. We will solve the problem using binary search, sorting through the number of operations.\nWe can have 2 options: whether $$$0$$$ was at the end or not. Depending on this, one or two subsegments of the segment $$$[0, p-1]$$$ — a subsegment in the middle or a prefix and a suffix remained uncovered by the last digit of the number. They need to be completely covered with numbers that were already in positions, except for the last one — these are the original numbers and, in case there was $$$0$$$ at the end, the number into which the transfer was made. There are at most $$$n+1$$$ of them."
         },
         {
             "title": "Solution",

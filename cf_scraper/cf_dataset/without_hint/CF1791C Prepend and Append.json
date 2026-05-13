@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1791C - Prepend and Append\nLet's perform the process in reverse: we will remove the first and last character of the string, if these two characters are different. We should do this as long as possible, since we need to find the shortest initial string.\nSo the algorithm is straightfoward: keep track of the left and right characters, and if they are different, remove both. Otherwise, output the length of the current string (or output $$$0$$$ if the string became empty).\nThere are a few ways to implement this. For example, you can keep two pointers, one at the beginning of the string and one at the end, say, $$$l=1$$$ and $$$r=n$$$, and check if $$$s_l=s_r$$$. If it's true, then we increment $$$l$$$ and decrement $$$r$$$. Otherwise, we output $$$r-l+1$$$. We stop when $$$l \\geq r$$$.\nAlternatively, you can use deque to simulate the operations directly. The time complexity is $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution",

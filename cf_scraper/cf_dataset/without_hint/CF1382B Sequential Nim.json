@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1382B - Последовательный ним\nSuppose $$$a_1 \\gt 1$$$. If removing the entire first pile is winning, player 1 will do that. Otherwise, player 1 can leave exactly one stone in the first pile, forcing player 2 to remove it, leaving player 1 in the winning position. Otherwise, if $$$a_1=1$$$, then it is forced to remove the first pile.\nSo, whichever player gets the first pile with more than one stone wins. That is, let $$$k$$$ be the maximum number such that $$$a_1=\\cdots=a_k=1$$$. If $$$k$$$ is even, the first player will win. Otherwise, the second player will win. The only exception is when all piles have exactly $$$1$$$ stone. In that case, the first player wins when $$$k$$$ is odd.\nComplexity is $$$O(n)$$$."
         }
     ]
 }

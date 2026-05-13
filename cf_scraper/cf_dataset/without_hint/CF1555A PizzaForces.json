@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1555A - PizzaForces\nNote that the \"speed\" of cooking $$$1$$$ slice of pizza is the same for all sizes — $$$1$$$ slice of pizza for $$$2.5$$$ minutes.\nIf $$$n$$$ is odd, then we will increase it by $$$1$$$ (since the pizza is cooked only with an even number of pieces). Now the value of $$$n$$$ is always even. If $$$n  \\lt  6$$$, then for such $$$n$$$ the answer is equal to the answer for $$$n=6$$$, so we can say that $$$n = \\max(n, 6)$$$. While $$$n \\ge 12$$$ we can order a small pizza. Eventually the value of $$$n$$$ will be equal to $$$6$$$, $$$8$$$ or $$$10$$$. This means that for any $$$n$$$ there will be a set of pizzas with exactly $$$n$$$ slices. Then the answer is $$$n * 2.5$$$ (in the solution, it is better to use the formula $$$n / 2 * 5$$$)."
         },
         {
             "title": "Solution (Neon)",

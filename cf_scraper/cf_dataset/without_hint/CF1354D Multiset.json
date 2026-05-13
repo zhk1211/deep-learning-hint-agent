@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1354D - Multiset\nFirst solution: write some data structure that would simulate the operations as they are given, for example, a segment tree or a Fenwick tree. Probably will require optimization since the limits are strict.\nSecond solution: notice that we have to find only one number belonging to the multiset. For example, let's find the minimum element. We can do it with binary search as follows: let's write a function that, for a given element $$$x$$$, tells the number of elements not greater than $$$x$$$ in the resulting multiset. To implement it, use the fact that all elements $$$\\le x$$$ are indistinguishable, and all elements $$$ \\gt  x$$$ are indistinguishable too, so the multiset can be maintained with just two counters.\nOkay, how does this function help? The minimum in the resulting multiset is the minimum $$$x$$$ such that this function returns non-zero for it, and since the function is monotonous, we can find the answer with binary search."
         },
         {
             "title": "Solution (BledDest)",

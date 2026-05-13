@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1861A - Prime Deletion\nThere are many possible approaches to this problem.\nFor example, you could use brute force to solve it: iterate on every integer from $$$1$$$, check that it is a prime number by iterating on its divisors, and check that it appears as a subsequence in the given digit sequence. If you find the answer, break the loop and print the number you found.\nBut that's a bit lengthy to code. Let's try something different.\nWe can try looking for a small set of primes such that at least one of the primes from that set appears in the given sequence. Let's try short primes, they are easier to work with.\nIf there exist two prime numbers of length $$$2$$$ consisting of digits $$$x$$$ and $$$y$$$, one of them is $$$xy$$$, and the other of them is $$$yx$$$, then one of them will definitely appear in our sequence. If $$$x$$$ comes earlier than $$$y$$$, then $$$xy$$$ appears in the sequence, otherwise it's $$$yx$$$.\nThankfully, it's possible to find these two primes. For example, you can use $$$13$$$ and $$$31$$$; one of them will definitely appear in the sequence.\nSo, the easiest solution is to find whether $$$1$$$ is earlier than $$$3$$$ in the sequence. If $$$1$$$ is earlier, then $$$13$$$ is the answer, otherwise it's $$$31$$$."
         },
         {
             "title": "Solution (BledDest)",

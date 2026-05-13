@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1259C - As Simple as One and Two\nConsider each occurrence of substrings\none\nand\ntwo\n. Obviously, at least one character have to be deleted in such substrings. These substrings cannot intersect in any way, except for one case:\ntwone\n. Thus, the answer is necessarily no less than the value $$$c_{21}+c_{1}+c_{2}$$$, where $$$c_{21}$$$ is the number of occurrences of the string\ntwone\nand $$$c_{1}$$$ is the number of occurrences of the string\none\n(which are not part of\ntwone\n) and $$$c_{2}$$$ is the number of occurrences of the string\ntwo\n(which are not part of\ntwone\n).\nLet's propose a method that does exactly $$$ c_ {21} + c_ {1} + c_ {2} $$$ removals and, thus, will be optimal.\nDelete character\no\nin each occurrence of\ntwone\n. This action will delete both substrings\none\nand\ntwo\nat the same time.\nNext, delete character\nn\nin each occurrence of\none\n. This action will delete all substrings\none\n.\nNext, delete character\nw\nin each occurrence of\ntwo\n. This action will delete all substrings\ntwo\n.\nNote that it is important to delete the middle letters in the last two paragraphs to avoid appearing a new occurrence after a line is collapsed.\nThe following is an example of a possible implementation of the main part of a solution:\nstring s;\ncin >> s;\nvector<int> r;\nfor (string t: {\"twone\", \"one\", \"two\"}) {\nfor (size_t pos = 0; (pos = s.find(t, pos)) != string::npos;) {\ns[pos + t.length() / 2] = '?';\nr.push_back(pos + t.length() / 2);\n}\n}\ncout << r.size() << endl;\nfor (auto rr: r)\ncout << rr + 1 << \" \";\ncout << endl;"
         }
     ]
 }

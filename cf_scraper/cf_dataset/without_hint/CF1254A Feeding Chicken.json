@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1254A - Feeding Chicken\nFirst, we will try to solve the problem when our rectangle is an array (or an $$$1 \\cdot n$$$ rectangle).\nLet $$$r$$$ be the number of rice cells. It's not hard to see that the difference between the maximum and the minimum number of cells with rice assigned to a chicken is either $$$0$$$, when $$$r$$$ $$$mod$$$ $$$k = 0$$$, or $$$1$$$ otherwise. Turns out, there is an easy way to assign: for the first $$$r$$$ $$$mod$$$ $$$k$$$ chicken, we will assign to the current chicken a prefix of the current array that contains exactly $$$\\lceil r/k \\rceil$$$ rice cells, and delete that prefix. The same for the others $$$k - (r$$$ $$$mod$$$ $$$k)$$$ chicken, we will assign to the current chicken a prefix of the current array that contains exactly $$$\\lfloor r/k \\rfloor$$$ rice cells.\nNotice that there exists a path that goes through every cell exactly once and every two consecutive cells on the path share a side. One such path is $$$(1, 1), (1, 2), ... (1,c), (2,c), (2, c-1), ..., (2, 1), (3, 1), (3, 2), ...$$$ By thinking the path as an array, we can assign regions on the path according to the above paragraph. Such an assignment is also a valid assignment for the original rectangle."
         }
     ]
 }

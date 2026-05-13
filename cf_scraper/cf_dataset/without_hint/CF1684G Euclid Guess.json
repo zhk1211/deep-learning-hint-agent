@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1684G - Euclid Guess\nLet's consider some pair $$$(a, b)$$$ and consider a sequence of remainders that is induced by this pair: $$$a \\bmod b = x_1$$$, $$$b \\bmod x_1 = x_2$$$, ..., $$$x_{p - 2} \\bmod x_{p - 1} = x_p$$$, where $$$x_p = gcd(a, b)$$$.\nIf $$$x_i \\le \\frac{m}{3}$$$ then we can just add a pair $$$(3x_i, 2x_i)$$$ and we will get the only remainder $$$x_i$$$ so these values will not be a problem.\nIf $$$x_1  \\gt  \\frac{m}{3}$$$ (if $$$i  \\gt  1$$$ then $$$x_i \\le \\frac{m}{3}$$$) then $$$a = b + x_1$$$ because if $$$a \\ge 2b + x_1$$$ then $$$a  \\gt  m$$$ which is impossible. $$$b = x_1 + x_2$$$ because if $$$b \\ge 2x_1 + x_2$$$ then $$$a \\ge 3x_1 + x_2  \\gt  m$$$. Then $$$a = b + x_1 = 2x_1 + x_2 \\ge 2x_1 + x_p$$$ because $$$x_p  \\lt  x_{p - 1}  \\lt  \\ldots  \\lt  x_2  \\lt  x_1$$$.\nIt means that for each $$$x_i  \\gt  \\frac{m}{3}$$$ there should be such $$$x_j$$$ that $$$2x_i + x_j \\le m$$$ and $$$x_j$$$ is a divisor of $$$x_i$$$. For such values we can consider a bipartite graph where in the left part there are only $$$x_i  \\gt  \\frac{m}{3}$$$ and in the right part there are only $$$x_j \\le \\frac{m}{3}$$$ and two integers are connected $$$\\iff$$$ the integer on the right divies the left one. This graph can be built in $$$O(n^2)$$$. After that we just have to find such matching that covers each integer in the left part and add all unused integers from the right part using the method above."
         },
         {
             "title": "Implementation",

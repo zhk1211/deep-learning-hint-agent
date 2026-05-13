@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1728A - Colored Balls: Revisited\nLet's prove that the color with the maximum value of $$$cnt$$$ is one of the possible answers.\nLet the color $$$x$$$ have the maximum value of $$$cnt$$$; if there are several such colors, choose any of them. Let's keep taking the balls of two different colors out of the bag without touching the balls of color $$$x$$$ for as long as possible.\nAfter such operations, two cases exist. In one case, only balls of color $$$x$$$ are left — then everything is fine. In other case, there are balls of color $$$x$$$ and some color $$$y$$$ (let $$$cnt_y$$$ be the remaining number of balls of this color). Since initially $$$cnt_x$$$ was one of the maximums, $$$cnt_y \\le cnt_x$$$. However, the number of remaining balls is odd, which means $$$cnt_y \\ne cnt_x$$$ and $$$cnt_y  \\lt  cnt_x$$$. Therefore, we can keep taking the balls of colors $$$y$$$ and $$$x$$$ until only balls of color $$$x$$$ are left."
         },
         {
             "title": "Solution (Neon)",

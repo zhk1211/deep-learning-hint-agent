@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1787C - Remove the Bracket\n$$$(x_i-s)(y_i-s)\\geq 0$$$ tells us either $$$\\min(x_i,y_i)\\geq s$$$ or $$$\\max(x_i,y_i) \\leq s$$$, so pickable $$$x_i$$$ is a consecutive range.\nJust consider $$$(x_i+y_i)$$$, remove the bracket then it turns to $$$\\ldots+ y_{i-1}\\cdot x_i+y_i\\cdot x_{i+1}+\\ldots$$$. When $$$y_{i-1} = x_{i+1}$$$, the result is constant, so we assume that $$$y_{i-1}  \\lt  x_{i+1}$$$.\nIf $$$x_i$$$ does not hit the maximum, increase $$$x_i$$$ by $$$1$$$ and decrease $$$y_i$$$ by $$$1$$$, the result will increase by $$$y_{i-1}$$$ and decrease by $$$x_{i+1}$$$, which means decrease by $$$x_{i+1}-y_{i-1}$$$, always better. So $$$x_i$$$ will either hit the maximum or the minimum. Thus, each number has only two ways of rewriting that might be optimal.\nThis can be done with DP."
         },
         {
             "title": "Solution",

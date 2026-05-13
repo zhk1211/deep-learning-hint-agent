@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nCopil Copac is given a list of $ n-1 $ edges describing a tree of $ n $ vertices. He decides to draw it using the following algorithm:\n\n- Step $ 0 $ : Draws the first vertex (vertex $ 1 $ ). Go to step $ 1 $ .\n- Step $ 1 $ : For every edge in the input, in order: if the edge connects an already drawn vertex $ u $ to an undrawn vertex $ v $ , he will draw the undrawn vertex $ v $ and the edge. After checking every edge, go to step $ 2 $ .\n- Step $ 2 $ : If all the vertices are drawn, terminate the algorithm. Else, go to step $ 1 $ .\n\nThe number of readings is defined as the number of times Copil Copac performs step $ 1 $ .\n\nFind the number of readings needed by Copil Copac to draw the tree.\n\nInput Format\nEach test contains multiple test cases. The first line of input contains a single integer $ t $ ( $ 1 \\leq t \\leq 10^4 $ ) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 2 \\le n \\le 2 \\cdot 10^5 $ ) — the number of vertices of the tree.\n\nThe following $ n - 1 $ lines of each test case contain two integers $ u_i $ and $ v_i $ ( $ 1 \\le u_i, v_i \\le n $ , $ u_i \\neq v_i $ ) — indicating that $ (u_i,v_i) $ is the $ i $ -th edge in the list. It is guaranteed that the given edges form a tree.\n\nIt is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \\cdot 10^5 $ .\n\nOutput Format\nFor each test case, output the number of readings Copil Copac needs to draw the tree.\n\nExamples\nSample 1\nInput\n2\n6\n4 5\n1 3\n1 2\n3 4\n1 6\n7\n5 6\n2 4\n2 7\n1 3\n1 2\n4 5\nOutput\n2\n3\n\nNote\nIn the first test case:\n\nAfter the first reading, the tree will look like this:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1830A/96592d8d6a7376d06a499045a206685f9a68df31.png)After the second reading:\n\n![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1830A/7b7bd2d2b1a9ad0d44021bb292052bd1a2395dfd.png)Therefore, Copil Copac needs $ 2 $ readings to draw the tree."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hints",
+            "content": "Hint 1\nWhat is the answer if $$$n=3$$$?\nHint 2\nThe previous case can be generalised to find the answer for any tree."
+        },
+        {
+            "title": "Hint 1",
+            "content": "What is the answer if $$$n=3$$$?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "The previous case can be generalised to find the answer for any tree."
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "This problem can be solved via dynamic programming. From here on out, step $$$1$$$ from the statement will be called a \"scan\".\nLet $$$dp[i]$$$ be the number of scans needed to activate node $$$i$$$, and $$$id[i]$$$ be the index (in the order from the input) of the edge which activated node $$$i$$$.\nIntially, since only $$$1$$$ is active, $$$dp[1]=1$$$ and $$$id[1]=0$$$.\nWe will perform a dfs traversal starting from node $$$1$$$. When we process an edge $$$(u,v)$$$, one of the following two cases can happen:\nIf $$$index((u,v)) \\ge id[u]$$$, we can visit $$$v$$$ in the same scan as $$$u$$$:\n$$$dp[v]=dp[u]$$$, $$$id[v]=index((u,v))$$$\nIf $$$index((u,v)) \\lt id[u]$$$, $$$v$$$ will be visited in the next scan after $$$dp[u]$$$:\n$$$dp[v]=dp[u]+1$$$, $$$id[v]=index((u,v))$$$\nThe answer is $$$max_{i=1}^n(dp[i])$$$.\nTime complexity per test case: $$$O(n)$$$"
+        }
+    ]
+}

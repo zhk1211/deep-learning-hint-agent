@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1994D - Funny Game\nNote that we have only $$$n - 1$$$ edges, so after each operation, the number of connectivity components must decrease by $$$1$$$.\nSince the order of operations is not important, we will perform the operations in reverse order. Then after the operation with number $$$x$$$, there will be $$$x + 1$$$ connectivity components in the graph. For each component, let's take any of its vertices $$$v$$$ and look at the number that corresponds to it. Note that we have chosen $$$x + 1$$$ numbers, so by the pigeonhole principle, some two numbers will be equal modulo $$$x$$$. This means that we find two vertices $$$u$$$ and $$$v$$$ from different components such that $$$|a_u - a_v|$$$ is a multiple of $$$x$$$. By drawing an edge between $$$u$$$ and $$$v$$$, we will achieve what we want — the number of connectivity components will become $$$1$$$ less.\nNow it remains to go through the operations in reverse order and print the answer."
         }
     ]
 }

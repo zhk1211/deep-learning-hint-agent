@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1203F1 - Complete the Projects (easy version)\nFirstly, let's divide all projects into two sets: all projects giving us non-negative rating changes (let this set be $$$pos$$$) and all projects giving up negative rating changes (let this set be $$$neg$$$). Firstly let's take all projects from the set $$$pos$$$. How do we do that? Let's sort them by $$$a_i$$$ in non-decreasing order because each project we take cannot make our rating less and we need to consider them in order of their requirements. If we can take the current project $$$i$$$ ($$$r \\ge a_i$$$), set $$$r := r + b_i$$$ and go further, otherwise print \"\nNO\n\" and terminate the program.\nOkay, what do we do with the projects that has negative $$$b_i$$$? Firstly, let's set $$$a_i := max(a_i, -b_i)$$$. This means the tighter requirement of this project, obviously. Then let's sort all projects in order of $$$a_i + b_i$$$ in non-increasing order and go from left to right and take all of them. If we cannot take at least one project, the answer is \"\nNO\n\". Otherwise the answer is \"\nYES\n\"."
         },
         {
             "title": "Solution",

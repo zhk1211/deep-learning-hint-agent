@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "C++ solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\n#define\nforn\n(\ni\n,\nn\n)\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nint\n(\nn\n);\ni\n++)\nint\nmain\n()\n{\nint\nt\n;\ncin\n>>\nt\n;\nforn\n(\ntt\n,\nt\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nmap\n<\nint\n,\nint\n>\nc\n;\nforn\n(\ni\n,\nn\n)\n{\nint\npi\n;\ncin\n>>\npi\n;\nc\n[-\npi\n]++;\n}\nvector\n<int>\npp\n;\nfor\n(\nauto\np\n:\nc\n)\npp\n.\npush_back\n(\np\n.\nsecond\n);\nbool\nok\n=\nfalse\n;\nint\ng\n=\npp\n[\n0\n];\nint\ni\n=\n1\n;\nint\ns\n=\n0\n;\nwhile\n(\ns\n<=\ng\n&&\ni\n<\npp\n.\nsize\n())\ns\n+=\npp\n[\ni\n++];\nif\n(\ng\n<\ns\n)\n{\nint\nb\n=\n0\n;\nwhile\n(\nb\n<=\ng\n&&\ni\n<\npp\n.\nsize\n())\nb\n+=\npp\n[\ni\n++];\nwhile\n(\ni\n<\npp\n.\nsize\n()\n&&\ng\n+\ns\n+\nb\n+\npp\n[\ni\n]\n<=\nn\n/\n2\n)\nb\n+=\npp\n[\ni\n++];\nif\n(\ng\n<\nb\n&&\ng\n+\ns\n+\nb\n<=\nn\n/\n2\n)\n{\nok\n=\ntrue\n;\ncout\n<<\ng\n<<\n\" \"\n<<\ns\n<<\n\" \"\n<<\nb\n<<\nendl\n;\n}\n}\nif\n(!\nok\n)\ncout\n<<\n0\n<<\n\" \"\n<<\n0\n<<\n\" \"\n<<\n0\n<<\nendl\n;\n}\n}"
+        }
+    ]
+}

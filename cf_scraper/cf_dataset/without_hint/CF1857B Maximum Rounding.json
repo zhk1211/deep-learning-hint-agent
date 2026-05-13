@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1857B - Maximum Rounding\nFirst, sorry for the unclear statement. We have rewritten it for several times and have chosen the best one.\nLet's define $$$n$$$ as the length of the $$$x$$$.\nNotice, that after applying the rounding to $$$k$$$, all the digits to the right of $$$k$$$ become $$$0$$$. If the $$$k$$$-th digit is less than $$$5$$$, after the rounding it'll only worsen the answer.\nOn the other side, if the $$$k$$$-th digit is not less than $$$5$$$, than rounding to the $$$k$$$-th digit always leads to better answer, because after the operation $$$x$$$ will increase.\nFrom these observations, we can come up with the following greedy algorithm: look through all $$$k$$$ from $$$1$$$ to $$$n$$$, and if the $$$k$$$-th digit is not less than $$$5$$$, we use the rounding operation adding one to the ($$$k+1$$$)-th digit. And don't worry if that digit which must be increased by one is $$$9$$$, because in such case we always use the rounding operation on the next step."
         }
     ]
 }

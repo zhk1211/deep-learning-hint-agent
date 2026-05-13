@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1217B - Zmei Gorynich\nLets divide all dealing blows into two parts: the last blow and others blows.\nThe last hit should be with maximum value of $$$d$$$.\nThe others blows should be with the maximum value of $$$d - h$$$.\nSo, lets denote $$$\\max\\limits_{1 \\le i \\le n} d_i$$$ as $$$maxD$$$ and $$$\\max\\limits_{1 \\le i \\le n} (d_i - h_i)$$$ as $$$maxDH$$$.\nThen if $$$x \\le maxD$$$ the we can beat Zmei Gorynich with one blow. Otherwise, if $$$maxDH \\le 0$$$, then we cannot defeat Zmei Gorynich.\nOtherwise (if $$$x  \\gt  maxD$$$ and $$$maxDH  \\gt  0$$$) the answer is $$$\\lceil \\frac{x - maxD}{maxDH} \\rceil$$$."
         },
         {
             "title": "Solution (Roms)",

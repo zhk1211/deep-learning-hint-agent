@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1669G - Fall Down\nNote that the columns don't affect each other, so we can solve for each column by itself.\nFor each column, go from the bottom to the top, and keep track of the row of the last obstacle seen; call it $$$\\mathrm{last}$$$. Note that initially, $$$\\mathrm{last}=n+1$$$, since we treat the floor as the $$$n+1$$$th row of obstacles. Whenever we see a new obstacle, we should update $$$\\mathrm{last}$$$.\nNow, if we ever see a stone, we should move it to row $$$\\mathrm{last} - 1$$$, since it will be one row above the last obstacle seen (it will fall on top of it). Afterwards, we should also decrease $$$\\mathrm{last}$$$ by $$$1$$$, because if any future stones fall on top of it, they will land on the row above this stone.\nThis solution works in $$$\\mathcal{O}(nm)$$$. We also accepted slower solutions that run in $$$\\mathcal{O}(n^2m)$$$ that simulate each stone falling."
         },
         {
             "title": "Solution",

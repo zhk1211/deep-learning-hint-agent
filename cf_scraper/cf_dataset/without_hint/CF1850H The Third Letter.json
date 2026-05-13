@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1850H - The Third Letter\nWe can view the conditions and soldiers as a directed graph. The soldiers represent nodes and the conditions represent directed edges. Saying $$$a_i$$$ should be $$$d_i$$$ meters in front of $$$b_i$$$ is equivalent to adding two weighted directed edges:\nAn edge from $$$a_i$$$ to $$$b_i$$$ with weight $$$d_i$$$.\nAn edge from $$$b_i$$$ to $$$a_i$$$ with weight $$$-d_i$$$.\nNow, we iterate over all $$$n$$$ soldiers, and do a standard dfs whenever we encounter an unvisited soldier, assigning coordinates respecting the weights of the edges. That is, for the first soldier in the set we can just set his coordinate to $$$0$$$, then for every neighbor we visit we set it's coordinate to the coordinate of the current node added by the weight of the edge between it and its neighbor.\nFinally, we check at the end if all of the $$$m$$$ conditions are satisfied."
         },
         {
             "title": "Solution",

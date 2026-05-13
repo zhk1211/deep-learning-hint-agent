@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1807G2 - Subsequence Addition (Hard Version)\nLet's prove that for an array $$$a$$$ that was created by using a number of operations, with a sum of elements $$$s$$$ we can add into $$$a$$$ any number $$$x$$$ ($$$1 \\leq x \\leq s$$$).\nSuppose that it is true that in the array $$$a$$$ with some length $$$l$$$ we introduce a number $$$x$$$ ($$$1 \\leq x \\leq sum_a$$$). Then after introducing we can create using the initial elements of the array any number $$$b$$$ ($$$1 \\leq b \\leq sum_a$$$) and using the element $$$x$$$ and some subset of the initial elements we can create any number $$$b$$$ ($$$x \\leq b \\leq sum_a+x$$$), and because $$$x \\leq sum_a$$$ we proved that for the new array of length $$$l+1$$$ we can still create any number between $$$1$$$ and $$$sum_a+x$$$.\nSince it is true for the initial array, we can use induction and this fact to prove it is true for all arrays. So we just need to verify if our array satisfies this condition. We should sort the array and check for each $$$i$$$ ($$$2 \\leq i \\leq n$$$) if $$$c_i \\leq \\sum_{j = 1}^{i-1}c_j$$$."
         },
         {
             "title": "Solution",

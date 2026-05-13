@@ -14,7 +14,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1698C - 3SUM Closure\nLet's consider some array which is 3SUM-closed.\nIf the array has at least three positive elements, consider the largest three $$$x$$$, $$$y$$$, and $$$z$$$. Notice that $$$x+y+z$$$ is strictly larger than $$$x$$$, $$$y$$$, and $$$z$$$, which means that $$$x+y+z$$$ is not an element of the array (since $$$x$$$, $$$y$$$, $$$z$$$ were the largest elements). Therefore the array has $$$\\leq 2$$$ positive elements.\nSimilarly, if the array has at least three negative elements, consider the smallest three $$$x$$$, $$$y$$$, and $$$z$$$. Notice that $$$x+y+z$$$ is strictly smaller than $$$x$$$, $$$y$$$, and $$$z$$$, which means that $$$x+y+z$$$ is not an element of the array (since $$$x$$$, $$$y$$$, $$$z$$$ were the smallest elements). Therefore the array has $$$\\leq 2$$$ negative elements.\nFinally, note that there is no point in having more than $$$2$$$ zeroes in the array, since any additional zeroes won't change the sums that can be formed. So if there are more than $$$2$$$ zeroes, we can remove them until there are exactly $$$2$$$.\nIt follows that the resulting array has at most $$$2 + 2 + 2 = 6$$$ elements. This is small, so we can brute force the condition in the problem in $$$\\mathcal{O}(6^4)$$$ or $$$\\mathcal{O}(6^3)$$$ time.\nThe time complexity is $$$\\mathcal{O}(n + 6^4)$$$ or $$$\\mathcal{O}(n + 6^3)$$$, depending on the implementation."
         },
         {
             "title": "Implementation (C++)",

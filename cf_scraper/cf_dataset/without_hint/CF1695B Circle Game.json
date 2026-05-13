@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nMike and Joe are playing a game with some stones. Specifically, they have $ n $ piles of stones of sizes $ a_1, a_2, \\ldots, a_n $ . These piles are arranged in a circle.\n\nThe game goes as follows. Players take turns removing some positive number of stones from a pile in clockwise order starting from pile $ 1 $ . Formally, if a player removed stones from pile $ i $ on a turn, the other player removes stones from pile $ ((i\\bmod n) + 1) $ on the next turn.\n\nIf a player cannot remove any stones on their turn (because the pile is empty), they lose. Mike goes first.\n\nIf Mike and Joe play optimally, who will win?\n\nInput Format\nEach test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \\le t \\le 1000 $ ). Description of the test cases follows.\n\nThe first line of each test case contains a single integer $ n $ ( $ 1 \\le n \\le 50 $ ) — the number of piles.\n\nThe second line contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ( $ 1 \\le a_i \\le 10^9 $ ) — the size of the piles.\n\nOutput Format\nFor each test case print the winner of the game, either \"Mike\" or \"Joe\" on its own line (without quotes).\n\nExamples\nSample 1\nInput\n2\n1\n37\n2\n100 100\nOutput\nMike\nJoe\n\nNote\nIn the first test case, Mike just takes all $ 37 $ stones on his first turn.\n\nIn the second test case, Joe can just copy Mike's moves every time. Since Mike went first, he will hit $ 0 $ on the first pile one move before Joe does so on the second pile."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nint\nmain\n()\n{\nint\nnum_tests\n;\ncin\n>>\nnum_tests\n;\nfor\n(\nint\ntest\n=\n0\n;\ntest\n<\nnum_tests\n;\n++\ntest\n)\n{\nint\nn\n;\ncin\n>>\nn\n;\nvector\n<int>\na\n(\nn\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\ncin\n>>\na\n[\ni\n];\nif\n(\nn\n%\n2\n==\n1\n)\n{\ncout\n<<\n\"Mike\\n\"\n;\ncontinue\n;\n}\nint\nsmallest\n=\n0\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\nif\n(\na\n[\ni\n]\n<\na\n[\nsmallest\n])\nsmallest\n=\ni\n;\nif\n(\nsmallest\n%\n2\n==\n0\n)\ncout\n<<\n\"Joe\\n\"\n;\nelse\ncout\n<<\n\"Mike\\n\"\n;\n}\n}"
+        }
+    ]
+}

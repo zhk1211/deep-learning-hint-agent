@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading...\nThis problem can be solved in $$$O(n\\log n)$$$ as well, and even $$$O(n)$$$ with some black magic like counting sort, but that is not required during the contest."
+            "content": "1623B - Game on Ranges\nIf the length of a range $$$[l, r]$$$ is 1 (that is, $$$l = r$$$), then $$$d = l = r$$$. Otherwise, if Bob picks a number $$$d$$$, then Alice\nhas to put\nthe sets $$$[l, d - 1]$$$ and $$$[d + 1, r]$$$ (if existed) back to the set. Thus, there will be a moment that Alice picks the range $$$[l, d - 1]$$$ (if existed), and another moment to pick the range $$$[d + 1, r]$$$ (if existed) as well.\nUsing the above observation, for each range $$$[l, r]$$$, we can iterate the number $$$d$$$ from $$$l$$$ to $$$r$$$, check if both range $$$[l, d - 1]$$$ (if $$$d  \\gt  l$$$) and $$$[d + 1, r]$$$ (if $$$d  \\lt  r$$$) existed in the Alice's picked ranges. Or in other words, check if these ranges are given in the input.\nFor checking, we can either use\nset\ndata structures supported in most programming languages or simply use a 2-dimensional array for marking the picked ranges. The time complexity is, therefore, $$$O(n^2)$$$.\nThis problem can be solved in $$$O(n\\log n)$$$ as well, and even $$$O(n)$$$ with some black magic like counting sort, but that is not required during the contest."
         }
     ]
 }

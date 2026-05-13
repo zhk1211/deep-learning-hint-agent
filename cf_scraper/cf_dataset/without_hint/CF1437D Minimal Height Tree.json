@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1437D - Minimal Height Tree\nDue to the nature of BFS, the visiting order consists of several segments: first goes root (has depth $$$0$$$), then all vertices with depth $$$1$$$, then all vertices with depth $$$2$$$ and so on. Since any vertex of depth $$$d$$$ is a child of vertex of depth $$$d - 1$$$, then it's optimal to make the number of vertices with depth $$$1$$$ as many as possible, then make the number of vertices with depth $$$2$$$ as many as possible and so on.\nSince children of a vertex are viewed in ascending order and form a segment in visiting order then an arbitrary segment of visiting order can be children of the same vertex iff elements in the segments are in ascending order.\nThese two observations lead us to a greedy strategy: $$$a_1 = 1$$$, then let's find the maximum $$$r_1$$$ that segment $$$a_2, \\dots, a_{r_1}$$$ is in ascending order — they will be the children of $$$a_1$$$ and the only vertices of depth $$$1$$$. Next search the maximum $$$r_2$$$ such that segment $$$a_{r_1 + 1}, \\dots, a_{r_2}$$$ is in ascending order — they will be the children of $$$a_2$$$, and so on. It's easy to see that this strategy maximizes the number of vertices of each depth level, so minimize the height of the tree."
         },
         {
             "title": "Solution (adedalic)",

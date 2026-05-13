@@ -1,0 +1,28 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given a tree (a connected graph without cycles) with $ n $ vertices.\n\nConsider a fixed integer $ k $ . Then, the graph $ G_k $ is an undirected graph with $ n $ vertices, where an edge between vertices $ u $ and $ v $ exists if and only if the distance between vertices $ u $ and $ v $ in the given tree is at least $ k $ .\n\nFor each $ k $ from $ 1 $ to $ n $ , print the number of connected components in the graph $ G_k $ .\n\nInput Format\nThe first line contains the integer $ n $ ( $ 2 \\le n \\le 10^5 $ ) — the number of vertices in the graph.\n\nEach of the next $ n-1 $ lines contains two integers $ u $ and $ v $ ( $ 1 \\le u, v \\le n $ ), denoting an edge between vertices $ u $ and $ v $ in the tree. It is guaranteed that these edges form a valid tree.\n\nOutput Format\nOutput $ n $ integers: the number of connected components in the graph $ G_k $ for each $ k $ from $ 1 $ to $ n $ .\n\nExamples\nSample 1\nInput\n6\n1 2\n1 3\n2 4\n2 5\n3 6\nOutput\n1 1 2 4 6 6\n\nSample 2\nInput\n5\n1 2\n2 3\n3 4\n3 5\nOutput\n1 1 3 5 5\n\nNote\nIn the first example: If $ k=1 $ , the graph has an edge between each pair of vertices, so it has one component. If $ k=4 $ , the graph has only edges $ 4 \\leftrightarrow 6 $ and $ 5 \\leftrightarrow 6 $ , so the graph has $ 4 $ components.\n\nIn the second example: when $ k=1 $ or $ k=2 $ the graph has one component. When $ k=3 $ the graph $ G_k $ splits into $ 3 $ components: one component has vertices $ 1 $ , $ 4 $ and $ 5 $ , and two more components contain one vertex each. When $ k=4 $ or $ k=5 $ each vertex is a separate component."
+        }
+    ],
+    "hints": [
+        {
+            "title": "Hint 1",
+            "content": "At what maximal $$$k$$$ does the graph $$$G_k$$$ not decompose into single components? What happens if we decrease $$$k$$$ by $$$1$$$?"
+        },
+        {
+            "title": "Hint 2",
+            "content": "Consider some diameter of a tree (the path of the longest length). If in the graph $$$G_k$$$ a vertex has a neighbor, then it is also connected by an edge to one of the ends of the diameter. How can we use this fact to find the answer for $$$k$$$ if we know the components of graph $$$G_{k+1}$$$?"
+        }
+    ],
+    "solutions": [
+        {
+            "title": "Editorial",
+            "content": "1805D - A Wide, Wide Graph\nFind the diameter (the longest path) in the original tree. Now if the number $$$k$$$ is greater than the length of the diameter, then there will be no edges in the graph. Otherwise, the ends of this diameter are connected to each other, and possibly to other vertices as well. Then we can pre-calculate the answer for each $$$k$$$ in descending order. Let's maintain the set of vertices already reachable. Then for updating the answer for $$$k=x$$$ only vertices at a distance $$$x$$$ from one end of the diameter can be added to the answer."
+        },
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\n#define\nall\n(\na\n)\na\n.\nbegin\n(),\na\n.\nend\n()\n#define\nrall\n(\na\n)\na\n.\nrbegin\n(),\na\n.\nrend\n()\nusing\nnamespace\nstd\n;\nconst\nint\nN\n=\n1e5\n+\n228\n;\nvector\n<int>\nG\n[\nN\n];\nvoid\ndfs\n(\nint\nv\n,\nint\npar\n,\nint\nh\n,\nvector\n<int>\n&\nd\n)\n{\nd\n[\nv\n]\n=\nh\n;\nfor\n(\nint\ni\n:\nG\n[\nv\n])\n{\nif\n(\ni\n!=\npar\n)\n{\ndfs\n(\ni\n,\nv\n,\nh\n+\n1\n,\nd\n);\n}\n}\n}\nint\nmain\n()\n{\nios_base\n::\nsync_with_stdio\n(\n0\n);\ncin\n.\ntie\n(\n0\n);\nint\nn\n;\ncin\n>>\nn\n;\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n-\n1\n;\n++\ni\n)\n{\nint\na\n,\nb\n;\ncin\n>>\na\n>>\nb\n;\nG\n[\na\n-\n1\n].\npush_back\n(\nb\n-\n1\n);\nG\n[\nb\n-\n1\n].\npush_back\n(\na\n-\n1\n);\n}\nvector\n<int>\nd1\n(\nn\n),\nd2\n(\nn\n);\ndfs\n(\n0\n,\n-\n1\n,\n0\n,\nd1\n);\nint\na\n=\nmax_element\n(\nall\n(\nd1\n))\n-\nd1\n.\nbegin\n();\ndfs\n(\na\n,\n-\n1\n,\n0\n,\nd1\n);\nint\nb\n=\nmax_element\n(\nall\n(\nd1\n))\n-\nd1\n.\nbegin\n();\ndfs\n(\nb\n,\n-\n1\n,\n0\n,\nd2\n);\nfor\n(\nint\ni\n=\n0\n;\ni\n<\nn\n;\n++\ni\n)\n{\nd2\n[\ni\n]\n=\nmax\n(\nd2\n[\ni\n],\nd1\n[\ni\n]);\n}\nsort\n(\nall\n(\nd2\n));\nint\nans\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\n{\nwhile\n(\nans\n<\nn\n&&\nd2\n[\nans\n]\n<\ni\n)\n{\n++\nans\n;\n}\ncout\n<<\nmin\n(\nn\n,\nans\n+\n1\n)\n<<\n' '\n;\n}\ncout\n<<\n'\\n'\n;\n}"
+        }
+    ]
+}

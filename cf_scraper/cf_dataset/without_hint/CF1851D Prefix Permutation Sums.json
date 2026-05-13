@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1851D - Prefix Permutation Sums\nTo begin with, let's learn how to reconstruct an array from its prefix sum array. This can be done by calculating the differences between adjacent elements.\nIf the element $$$\\frac{n * (n + 1)}{2}$$$ is missing from the array, we will add it and check if the array corresponds to some permutation.\nOtherwise, there is a missing element in the middle or at the beginning of the array.\nLet's count the occurrences of each difference between adjacent elements. Obviously, we should have one extra number and $$$2$$$ missing numbers.\nIf the count of differences occurring at least $$$2$$$ times is at least $$$2$$$, the answer is $$$NO$$$.\nThe answer is also $$$NO$$$ if any difference occurs at least $$$3$$$ times.\nOtherwise, we check that exactly $$$2$$$ distinct numbers are missing, and their sum is equal to the only duplicate."
         },
         {
             "title": "Solution",

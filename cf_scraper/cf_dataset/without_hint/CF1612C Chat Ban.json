@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1612C - Chat Ban\nThis is a pretty obvious binary search problem. If we get banned after $$$y$$$ messages, we also get banned after $$$y+1$$$, $$$y+2$$$ and so on messages (and vice versa, if we don't get banned after $$$y$$$ messages, we also don't get banned after $$$y-1$$$, $$$y-2$$$ and so on messages).\nFor simplicity, let's split the problem into two parts: when we check if we're getting banned after $$$y$$$ messages, let's handle cases $$$y  \\lt  k$$$ and $$$y \\ge k$$$ separately.\nRecall that the sum of the arithmetic progression consisting of integers $$$1$$$, $$$2$$$, ..., $$$y$$$ is $$$\\frac{y(y+1)}{2}$$$. Let it be $$$cnt(y)$$$.\nThe first case is pretty simple: the number of emotes we send with $$$y$$$ messages when $$$y  \\lt  k$$$ is $$$\\frac{y(y+1)}{2}$$$ which is $$$cnt(y)$$$. So we only need to check if $$$cnt(y) \\ge x$$$.\nThe second case is a bit harder but still can be done using arithmetic progression formulas. Firstly, we send all messages for $$$y \\le k$$$ (the number of such messages is $$$cnt(k)$$$). Then, we need to add $$$(k - 1) + (k - 2) + \\ldots + (y - k)$$$ messages. This number equals to $$$cnt(k - 1) - cnt(2k - 1 - y)$$$ (i.e. we send all messages from $$$k-1$$$ to $$$1$$$ and subtract messages from $$$1$$$ to $$$2k - 1 - y$$$ from this amount). The final condition is $$$cnt(k) + cnt(k - 1) - cnt(2k - 1 - y) \\ge x$$$.\nTime complexity: $$$O(\\log{k})$$$ per test case."
         },
         {
             "title": "Solution (vovuh)",

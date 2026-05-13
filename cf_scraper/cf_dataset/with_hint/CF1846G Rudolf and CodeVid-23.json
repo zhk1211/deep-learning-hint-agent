@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1846G - Rudolf and CodeVid-23\nLet's denote Rudolf's state as a binary mask of length $$$n$$$ consisting of $$$0$$$ and $$$1$$$, similar to how it is given in the input data. Then each medicine transforms Rudolf from one state to another.\nLet's construct a weighted directed graph, where the vertices will represent all possible states of Rudolf. There will be $$$2^n$$$ such vertices. Two vertices will be connected by an edge if there exists a medicine that transforms Rudolf from the state corresponding to the first vertex to the state corresponding to the second vertex. The weight of the edge will be equal to the number of days that this medicine needs to be taken. Note that in this case, we simply need to find the shortest path in this graph from the vertex $$$s$$$, corresponding to the initial state of Rudolf, to the vertex $$$f$$$, corresponding to the state without symptoms.\nTo find the shortest path in a weighted graph, we will use Dijkstra's algorithm. We will run it from the vertex $$$s$$$ and if, as a result, we visit the vertex $$$f$$$, output the distance to it, otherwise $$$-1$$$.\nThe time complexity is $$$O(n \\cdot m \\cdot 2^n)$$$."
         },
         {
             "title": "Solution",

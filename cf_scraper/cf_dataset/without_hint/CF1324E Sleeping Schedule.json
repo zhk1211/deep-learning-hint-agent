@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1324E - Sleeping Schedule\nThis is a very standard dynamic programming problem. Let $$$dp_{i, j}$$$ be the maximum number of\ngood\nsleeping times if Vova had a sleep $$$i$$$ times already and the number of times he goes to sleep earlier by one hour is exactly $$$j$$$. Then the value $$$\\max\\limits_{j=0}^{n} dp_{n, j}$$$ will be the answer. Initially, all $$$dp_{i, j} = -\\infty$$$ and $$$dp_{0, 0} = 0$$$.\nWhat about transitions? Let the current state of the dynamic programming be $$$dp_{i, j}$$$ and $$$s = \\sum\\limits_{k=0}^{i} a_k$$$. Then we can don't go to sleep earlier and make the first transition: $$$dp_{i + 1, j} = max(dp_{i + 1, j}, dp_{i, j} + |(s - j) \\% h \\in [l; r]|)$$$. The sign $$$\\%$$$ is modulo operation and the notation $$$|f|$$$ is the boolean result of the expression $$$f$$$ ($$$1$$$ if $$$f$$$ is true and $$$0$$$ otherwise). And the second transition if we go to sleep earlier: $$$dp_{i + 1, j + 1} = max(dp_{i + 1, j + 1}, dp_{i, j} + |(s - j - 1) \\% h \\in [l; r]|)$$$.\nDon't forget to don't make transitions from unreachable states.\nTime complexity: $$$O(n^2)$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1679A - AvtoBus\nLet the number of buses with two axles is $$$x$$$ and the number of buses with three axles is $$$y$$$. Then the equality $$$4x + 6y = n$$$ must be true. If $$$n$$$ is odd, there is no answer, because the left part of the equality is always even. Now we can divide each part of the equality by two: $$$2x + 3y = \\frac{n}{2}$$$.\nLet's maximize the number of buses. Then we should make $$$x$$$ as large as possible. So, we will get $$$2 + \\ldots + 2 + 2 = \\frac{n}{2}$$$ if $$$\\frac{n}{2}$$$ is even, and $$$2 + \\ldots + 2 + 3 = \\frac{n}{2}$$$ otherwise. In both cases the number of buses is $$$\\left\\lfloor \\frac{n}{2} \\right\\rfloor$$$.\nNow let's minimize the number of buses. So, we should make $$$y$$$ as large is possible. We will get $$$3 + \\ldots + 3 + 3 + 3 = \\frac{n}{2}$$$ if $$$\\frac{n}{2}$$$ is divisible by $$$3$$$, $$$3 + \\ldots + 3 + 3 + 2 = \\frac{n}{2}$$$ if $$$n \\equiv 2 \\pmod 3$$$, and $$$3 + \\ldots + 3 + 2 + 2 = \\frac{n}{2}$$$ if $$$n \\equiv 1 \\pmod 3$$$. In all cases the number of buses is $$$\\left\\lceil \\frac{n}{3} \\right\\rceil$$$.\nAlso don't forget the case $$$n = 2$$$ — each bus has at least four wheels, so in this case there is no answer.\nTime complexity: $$$\\mathcal{O}(1)$$$."
         }
     ]
 }

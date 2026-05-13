@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1675C - Detective Task\nFirst, let's note that we will have a transition from $$$1$$$ to $$$0$$$ only once, otherwise it turns out that first the picture disappeared, then it appeared and disappeared back, but we can consider that a friend in the middle, who answered $$$1$$$ lied to us, but this is not true, because even before him the picture disappeared.\nSo we need to find this transition. Since we can also meet $$$?$$$, we find the index of the leftmost $$$0$$$ (in case of absence, we take $$$n - 1$$$) and mark it as $$$r_0$$$, and the index of rightmost $$$1$$$ (in case of absence, we take $$$0$$$) and mark as $$$l_1$$$. Answer – the number of indices between them (inclusive), because only they could lie. $$$r_0 - l_1 + 1$$$\nThere could not be a thief to the left of $$$l_1$$$, since either the friend under the index $$$l_1$$$ lied, or the picture was not stolen before $$$l_1$$$. There could not be a thief to the right of $$$r_0$$$, since either the painting had already been stolen in the presence of $$$r_0$$$'s friend, or it was he who lied."
         },
         {
             "title": "Solution",

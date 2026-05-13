@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1726A - Mainak and Array\nThere are four candidates of the maximum value of $$$a_n - a_1$$$ achievable, each of which can be found in $$$\\mathcal O(n)$$$ time.\nNo subarray is chosen: Answer would be $$$a_n - a_1$$$ in this case.\nChosen subarray contains $$$a_n$$$ and $$$a_1$$$ : Answer would be $$$\\max\\limits_{i = 1}^n\\{ a_{(i - 1)} - a_i\\}$$$ where $$$a_0$$$ is same as $$$a_n$$$ (notice that the previous case is included in this case as well).\nChosen subarray doesn't contain $$$a_n$$$ : Answer would be $$$\\max\\limits_{i = 1}^{n - 1}\\{a_n - a_i\\}$$$.\nChosen subarray doesn't contain $$$a_1$$$ : Answer would be $$$\\max\\limits_{i = 2}^n\\{a_i - a_1\\}$$$.\nFinally we report the maximum of all of these four values in total time $$$\\mathcal O(n)$$$."
         },
         {
             "title": "Implementation",

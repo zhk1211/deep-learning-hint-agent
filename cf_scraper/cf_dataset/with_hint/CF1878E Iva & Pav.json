@@ -34,7 +34,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1878E - Iva & Pav\nWe can, for each bit, calculate the prefix sums of the array ($$$pref[i][j]$$$ is the number of occurrences of the $$$j$$$-th bit in the first $$$i$$$ elements of the array. This can be calculated in $$$\\mathcal{O}(n \\log(max(a)))$$$. We know that if $$$pref[r][j] − pref[l − 1][j] = r − l + 1$$$, then the $$$j$$$-th bit is present in all elements of the subsegment [$$$l, r$$$] of the array $$$a$$$, which means the value of $$$f(l, r)$$$ is equal to the sum of all bits for which this condition is true on the subsegment from $$$l$$$ to $$$r$$$, and we can calculate that in $$$\\mathcal{O}(\\log(max(a)))$$$.\nNext, for each query, we can use binary search to find $$$r$$$, by calculating $$$f(l, mid)$$$. If $$$f(l, r) \\ge k$$$ then we found an index for which the condition is true, so we move the left to $$$mid + 1$$$, else we move the right to $$$mid-1$$$. This solution works in $$$\\mathcal{O}(Q\\cdot\\log(N)\\cdot\\log(max(a)))$$$ which is around $$$4\\cdot10^7$$$ operations, with a low constant factor.\nIt is possible to optimize the solution even more by using sparse tables, to calculate $$$f(l, r)$$$ in $$$\\mathcal{O}(1)$$$ therefore removing the $$$\\log(max(a))$$$ factor, but we think that sparse tables are a little bit too advanced of a topic for div3 E, so we didn't make that solution necessary."
         },
         {
             "title": "Solution",

@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": ""
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "Solution",
+            "content": "#include\n<\nbits\n/\nstdc\n++.\nh\n>\nusing\nnamespace\nstd\n;\nvoid\nsolve\n()\n{\nint\nk\n,\nn\n;\nscanf\n(\n\"%d\"\n,\n&\nk\n);\nn\n=\n2\n<<\nk\n;\nvector\n<\nlong\nlong\n>\ninput\n(\nn\n+\n1\n);\nvector\n<int>\nmemHighBits\n(\n1\n<<\nk\n,\n-\n1\n);\nvector\n<\npair\n<\nint\n,\nint\n>\n>\nmemLowBits\n(\n1\n<<\nk\n,\n{-\n1\n,\n-\n1\n});\nauto\naddInterval\n=\n[&\nmemLowBits\n,\n&\ninput\n](\nint\ns\n,\nint\ne\n)\n{\nconst\nint\nremXor\n=\ninput\n[\ne\n]\n^\ninput\n[\ns\n-\n1\n];\nauto\n&[\nos\n,\noe\n]\n=\nmemLowBits\n[\nremXor\n];\nif\n(\nos\n==\n-\n1\n)\n{\nos\n=\ns\n,\noe\n=\ne\n;\nreturn\nfalse\n;\n}\nif\n(\noe\n<\ns\n)\n{\nprintf\n(\n\"%d %d %d %d\\n\"\n,\nos\n,\noe\n,\ns\n,\ne\n);\n}\nelse\n{\nprintf\n(\n\"%d %d %d %d\\n\"\n,\nmin\n(\ns\n,\nos\n),\nmax\n(\ns\n,\nos\n)\n-\n1\n,\noe\n+\n1\n,\ne\n);\n}\nreturn\ntrue\n;\n};\nmemHighBits\n[\n0\n]\n=\n0\n;\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\n{\nscanf\n(\n\"%lld\"\n,\n&\ninput\n[\ni\n]);\ninput\n[\ni\n]\n^=\ninput\n[\ni\n-\n1\n];\n}\nfor\n(\nint\ni\n=\n1\n;\ni\n<=\nn\n;\n++\ni\n)\n{\nif\n(\nmemHighBits\n[\ninput\n[\ni\n]\n>>\nk\n]\n!=\n-\n1\n)\n{\nif\n(\naddInterval\n(\nmemHighBits\n[\ninput\n[\ni\n]\n>>\nk\n]\n+\n1\n,\ni\n))\n{\nbreak\n;\n}\n}\nmemHighBits\n[\ninput\n[\ni\n]\n>>\nk\n]\n=\ni\n;\n}\n}\nint\nmain\n()\n{\nint\ncases\n;\nscanf\n(\n\"%d\"\n,\n&\ncases\n);\nwhile\n(\ncases\n--)\n{\nsolve\n();\n}\nreturn\n0\n;\n}"
+        }
+    ]
+}

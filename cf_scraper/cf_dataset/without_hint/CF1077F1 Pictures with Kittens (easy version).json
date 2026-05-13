@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1077F1 - Pictures with Kittens (easy version)\nLet's solve the problem using dynamic programming. Let $$$dp_{i, j}$$$ be the maximum total beauty of pictures if Vova is at the $$$i$$$-th picture now, the number of remaining reposts is $$$j$$$ and Vova reposted the $$$i$$$-th picture. Initially, $$$dp_{0, x} = 0$$$ and all other values of $$$dp$$$ are $$$-\\infty$$$.\nLet's learn to do some transitions to calculate this dynamic programming. What is the way to do it? Let's iterate over the position of the previously reposted picture and try to update $$$dp_{i, j}$$$ using previously calculated values. Obviously, this position can be from $$$i-1$$$ to $$$i-k$$$. So let's iterate over the position (let it be $$$p$$$) and if $$$dp_{p, j + 1}$$$ (we need one more repost to repost the $$$i$$$-th picture) is not $$$-\\infty$$$ then try to update $$$dp_{i, j} = max(dp_{i, j}, dp_{p, j + 1} + a_i$$$) (pictures are $$$1$$$-indexed).\nSo, where can we find the answer? The answer is $$$\\max\\limits_{i = n - k + 1}^{n} dp_{i}$$$. If this value is $$$-\\infty$$$ then the answer is\n-1\n.\nOverall complexity is $$$O(nkx)$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1288D - Minimax Problem\nWe will use binary search to solve the problem. Suppose we want to know if the answer is not less than $$$x$$$.\nEach array can be represented by a $$$m$$$-bit mask, where the $$$i$$$-th bit is $$$1$$$ if the $$$i$$$-th element of the array is not less than $$$x$$$, or $$$0$$$ if the $$$i$$$-th element is less than $$$x$$$. If we want to verify that the answer is not less than $$$x$$$, we have to choose two arrays such that bitwise OR of their masks is $$$2^m - 1$$$.\nChecking all pairs of arrays is too slow. Instead, we can treat the arrays represented by the same masks as equal — so we will have no more than $$$2^m$$$ distinct arrays, and we can iterate over $$$4^m$$$ pairs. Overall, the solution works in $$$O(\\log A (4^m + nm))$$$."
         },
         {
             "title": "Solution (BledDest)",

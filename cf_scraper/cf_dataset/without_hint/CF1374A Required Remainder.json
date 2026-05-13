@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1374A - Required Remainder\nThere are two cases in this problem. If we try to maximize the answer, we need to consider only two integers: $$$n - n \\bmod x + y$$$ and $$$n - n \\bmod x - (x - y)$$$. Of course, the first one is better (we get rid of the existing remainder and trying to add $$$y$$$ to this number). If it's too big, then we can and need to take the second one (this number is just the first one but decreased by $$$x$$$). The answer can be always found between these numbers.\nTime complexity: $$$O(1)$$$."
         },
         {
             "title": "Solution",

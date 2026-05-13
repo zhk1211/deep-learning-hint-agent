@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1582A - Luntik and Concerts\nLet $$$S$$$ be the sum of durations of all songs, that is $$$S = a + 2 \\cdot b + 3 \\cdot c$$$.\nLet's notice that since $$$a, b, c \\ge 1$$$, it is possible to make a concert of any duration from $$$0$$$ to $$$S$$$ (indeed, if we just execute a greedy algorithm and take three-minute songs while possible, then take two-minute songs, and then one-minute ones, we can get any duration we need).\nNow, the answer is the remainder of $$$S$$$ modulo $$$2$$$, because if $$$S$$$ is even, then it's possible to from the first concert with duration $$$\\frac{S}{2}$$$, and the second one will be left with duration $$$S-\\frac{S}{2}=\\frac{S}{2}$$$, and the difference between the durations will be $$$0$$$. If $$$S$$$ is odd, then the smallest possible difference is equal to $$$1$$$, let's form the first concert with duration $$$\\left \\lfloor{\\frac{S}{2}}\\right \\rfloor$$$, and the second one is left with duration $$$\\left \\lceil{\\frac{S}{2}}\\right \\rceil$$$"
         },
         {
             "title": "Solution (74TrAkToR)",

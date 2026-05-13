@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1307D - Cow and Fields\nThere are a few solutions that involve breadth first search (BFS) and sorting, this is just one of them. First, let's use BFS to find the distance from fields $$$1$$$ and $$$n$$$ to each special field. For a special field $$$i$$$, let $$$x_i$$$ denote the distance to node $$$1$$$, and $$$y_i$$$ denote the distance to $$$n$$$.\nWe want to choose two fields $$$a$$$ and $$$b$$$ to maximize $$$min(x_a+y_b,y_a+x_b)$$$. Without loss of generality, suppose $$$x_a+y_b \\le y_a+x_b$$$.\nNow we want to maximize $$$x_a+y_b$$$ subject to $$$x_a-y_a \\le x_b-y_b$$$. This can be done by sorting by $$$x_i-y_i$$$ and iterating $$$a$$$ over $$$x$$$ while keeping a suffix maximum array of $$$y$$$ to compute $$$\\max_{b \\gt a}{y_b}$$$.\nRemember that an upper bound of the answer is the distance between field $$$1$$$ and $$$n$$$.\nTime Complexity: $$$O(n\\log{n}+m)$$$"
         },
         {
             "title": "Solution",

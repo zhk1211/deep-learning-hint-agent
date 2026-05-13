@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1764F - Doremy's Experimental Tree\nIf path $$$(x,y) \\subset (X,Y)$$$, then $$$f(x,y)  \\gt  f(X,Y)$$$.\nThen we build a graph based on $$$f(i,j)$$$, the weight of the edge between $$$i,j$$$ is $$$f(i,j)$$$. It can be shown that the MST of the graph have the same structure as the original tree.\nThen we need to compute the weight for each edge. The weight of the edge between $$$x$$$ and $$$y$$$ is $$$\\frac{f(x,x)-f(x,y)}{size_y}$$$, where $$$x$$$ is $$$y$$$'s parent on the tree, $$$size_y$$$ is the size of subtree $$$y$$$."
         }
     ]
 }

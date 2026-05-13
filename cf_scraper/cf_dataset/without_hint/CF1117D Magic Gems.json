@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1117D - Magic Gems\nLet's reformulate the solution to the form of dynamic programming.\n$$$dp_n$$$ — the number of ways to split the gems so that the total amount of space taken is $$$n$$$.\nThen there are obvious transitions of either splitting the last gem or not. $$$dp_n = dp_{n - m} + dp_{n - 1}$$$.\nAnd that can be easily rewritten in such a way that matrix exponentiation becomes the solution.\nOverall complexity: $$$O(m^3 \\cdot \\log n)$$$."
         },
         {
             "title": "Solution (Reziba)",

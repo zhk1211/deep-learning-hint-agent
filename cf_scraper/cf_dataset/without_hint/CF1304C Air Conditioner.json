@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1304C - Air Conditioner\nSince the range of temperatures can be large, it is impossible to consider all possible cases. However, we only need to find\nany\ncase that can satisfy all customers, so let's try to maximize the possible range for each customer in the order of their visit time.\nLet's define two variables $$$mn$$$ and $$$mx$$$, each representing the minimum and maximum possible temperature that can be set now. Initially they are both $$$m$$$ and the current time is $$$0$$$. After $$$K$$$ minutes, we can see that the possible range is $$$[mn-K, mx+K]$$$. This means if a customer that visits after $$$K$$$ minutes has preferred temperature range $$$[L, R]$$$ that intersects with this range (inclusive), Gildong can satisfy that customer. In other words, $$$mn-K \\le R$$$ and $$$L \\le mx+K$$$ must be satisfied. Then we can reset $$$mn$$$ and $$$mx$$$ to fit this intersected range: $$$mn = max(mn-K, L)$$$ and $$$mx = min(mx+K, R)$$$.\nIf this can be continued until the last customer, the answer is \"YES\". Otherwise, the answer is \"NO\".\nTime complexity: $$$O(n)$$$ for each test case."
         },
         {
             "title": "Solution",

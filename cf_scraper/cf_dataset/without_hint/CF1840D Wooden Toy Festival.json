@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1840D - Wooden Toy Festival\nLet the carvers choose patterns $$$x_1$$$, $$$x_2$$$, $$$x_3$$$ for preparation. For definiteness, let us assume that $$$x_1 \\le x_2 \\le x_3$$$, otherwise we will renumber the carvers.\nWhen a person comes to the workshop with a request to make a toy of pattern $$$p$$$, the best solution is to give his order to the carver for whom $$$|x_i - p|$$$ is minimal.\nIt follows that the first cutter will take orders for toys with patterns from $$$1$$$ to $$$\\dfrac{x_1 + x_2}{2}$$$, the second - for toys with patterns from $$$\\dfrac{x_1 + x_2}{2}$$$ to $$$\\dfrac{x_2 + x_3}{2}$$$, the third - for toys with patterns from $$$\\dfrac{x_2 + x_3}{2}$$$ to $$$10^9$$$. Therefore, if you look at the sorted array of patterns $$$a$$$, the first carver will make some prefix of toys, the third will make some suffix, and the remaining toys will be made by the second carver.\nThen the answer can be found by binary search. To check if the time $$$t$$$ is suitable, you need to give the maximum prefix of toys to the first carver and the maximum suffix of toys to the third carver, and then check that the patterns of the remaining toys are within a segment of length $$$2 \\cdot t$$$. The maximum prefix and maximum suffix can be found with a $$$\\mathcal{O}(n)$$$ pass through the array $$$a$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1946A - Median of an Array\nThe median is defined as the number at index $$$\\lceil \\frac{n}{2} \\rceil$$$ in the sorted array, so we can sort the array and work with it.\nSo, let's start by sorting the array and finding the median in it, namely the number $$$a_{\\lceil \\frac{n}{2} \\rceil}$$$, let it be equal to $$$x$$$. In order for the median to increase, that is, to become at least $$$x + 1$$$, it is necessary that there are at least $$$n - \\lceil \\frac{n}{2} \\rceil + 1$$$ numbers in the array greater than or equal to $$$x + 1$$$.\nNow let's find the maximum index $$$t$$$ such that $$$a_t$$$ equals $$$x$$$. Then we know that there are currently $$$n - t$$$ numbers that are greater than or equal to $$$x + 1$$$ (all such $$$a_i$$$ that $$$i  \\gt  t$$$), which means that at least $$$(n - \\lceil \\frac{n}{2} \\rceil + 1) - (n - t) = t - \\lceil \\frac{n}{2} \\rceil + 1$$$ operations will be required. I claim that this estimate is always achievable, it is enough to apply one operation to each index from $$$\\lceil \\frac{n}{2} \\rceil$$$ to $$$t$$$, because all the numbers under these indices are equal to $$$x$$$, so after applying the operations they will become equal to $$$x + 1$$$. And in the end, the number of numbers greater than or equal to $$$x + 1$$$ will become equal to $$$(n - t) + (t - \\lceil \\frac{n}{2} \\rceil + 1) = n - \\lceil \\frac{n}{2} \\rceil + 1$$$, which is what we need."
         },
         {
             "title": "Solution",

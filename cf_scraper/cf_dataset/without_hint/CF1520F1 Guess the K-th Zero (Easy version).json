@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1520F1 - Guess the K-th Zero (Easy version)\nThis problem can be solved by binary search. Let's maintain a segment that is guaranteed to contain the $$$k$$$-th zero and gradually narrow it down.\nLet the current segment be — $$$[l, r]$$$ and we want to find $$$k$$$-th zero on it. Let's make a query on the half of the segment $$$[l, m]$$$, where $$$m = \\frac{l+r}{2}$$$. If there are at least $$$k$$$ zeros on the left half of the segment, then we go to the left segment and look for the $$$k$$$-th zero.\nIf there is only $$$x  \\lt  k$$$ zeros on the left half, then we go to the right segment and look for $$$(k-x)$$$-th zero.\nWe will spend $$$\\log{n}$$$ queries, which is within the limits."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1749A - Cowardly Rooks\nFirst, note that $$$m$$$ is always less than or equal to $$$n$$$. If there were at least $$$n+1$$$ rooks on the board, at least two of them would share a row or a column (by pigeonhole principle).\nIf $$$m  \\lt  n$$$, then there is always at least one free row and at least one free column. You can move any rook into that row or column.\nOtherwise, all rows and columns are taken, so any move will make two rooks share a row or a column, which is prohibited.\nThus, if $$$m = n$$$, then it's \"\nNO\n\". Otherwise, it's \"\nYES\n\".\nOverall complexity: $$$O(1)$$$ per testcase.\nAlternatively, you could check every rook and every possible move.\nOverall complexity: $$$O(m^2 \\cdot n^2)$$$ per testcase."
         },
         {
             "title": "Solution 1 (awoo)",

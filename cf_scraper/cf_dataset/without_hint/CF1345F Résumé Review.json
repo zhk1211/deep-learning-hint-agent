@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1345F - Résumé Review\nIf we increment some $$$b_i$$$ to $$$x$$$, the value of $$$f$$$ changes by $$$$$$\\Delta_i (x):=\\left[x(a_i-x^2)\\right]-\\left[(x-1)(a_i-(x-1)^2)\\right]=a_i-3x^2+3x-1,$$$$$$\nwhich decreases for $$$x\\ge 1.$$$ If we initially set all $$$b_i$$$ to $$$0$$$, then greedily incrementing the best index gives an optimal solution. Since $$$k$$$ is large, we cannot afford to do this one increment at a time. However, we can observe that this process increments the values as long as $$$\\Delta_i (x)\\ge A$$$ for some constant $$$A$$$. Simply binary search on the value of $$$A$$$ so that we increment exactly $$$k$$$ times.\nTo compute the cutoffs for the $$$x$$$ values, we can either use the quadratic formula or do another binary search.\nThere may be ties for the $$$\\Delta_i(x)$$$ values, but this can be handled without too much trouble.\nLet $$$A=\\max_{i=1,\\ldots,n}\\{a_i\\}$$$. Complexity is $$$O(n\\log(A))$$$ with the quadratic formula, or $$$O(n\\log^2(A))$$$ with another binary search."
         }
     ]
 }

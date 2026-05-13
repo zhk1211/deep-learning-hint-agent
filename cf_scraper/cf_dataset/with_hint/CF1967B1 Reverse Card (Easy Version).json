@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "1967B1 - Переворотная карта (простая версия)\nDenote $$$\\gcd(a,b)$$$ as $$$d$$$. Assume that $$$a=pd$$$ and $$$b=qd$$$, then we know that $$$\\gcd(p,q)=1$$$.\n$$$(b\\cdot\\gcd(a,b))\\mid (a+b)\\iff (qd^2)\\mid (pd+qd)\\iff (qd)\\mid (p+q)$$$.\nAssume that $$$p+q=kqd$$$, then $$$p=(kd-1)q$$$. We know $$$q=1$$$ because $$$\\gcd(p,q)=1$$$.\nEnumerate $$$d$$$ from $$$1$$$ to $$$m$$$, we know $$$p+1=kd\\le\\lfloor\\frac{n}{d}\\rfloor+1$$$, so we add $$$\\left\\lfloor\\frac{\\lfloor\\frac{n}{d}\\rfloor+1}{d}\\right\\rfloor$$$ to answer.\nIn this method, $$$p=0,k=1,d=1$$$ will also be included in the answer, so we should subtract $$$1$$$ from the answer.\nTime Complexity: $$$\\mathcal O(\\sum m)$$$."
+            "content": "1967B1 - Reverse Card (Easy Version)\nDenote $$$\\gcd(a,b)$$$ as $$$d$$$. Assume that $$$a=pd$$$ and $$$b=qd$$$, then we know that $$$\\gcd(p,q)=1$$$.\n$$$(b\\cdot\\gcd(a,b))\\mid (a+b)\\iff (qd^2)\\mid (pd+qd)\\iff (qd)\\mid (p+q)$$$.\nAssume that $$$p+q=kqd$$$, then $$$p=(kd-1)q$$$. We know $$$q=1$$$ because $$$\\gcd(p,q)=1$$$.\nEnumerate $$$d$$$ from $$$1$$$ to $$$m$$$, we know $$$p+1=kd\\le\\lfloor\\frac{n}{d}\\rfloor+1$$$, so we add $$$\\left\\lfloor\\frac{\\lfloor\\frac{n}{d}\\rfloor+1}{d}\\right\\rfloor$$$ to answer.\nIn this method, $$$p=0,k=1,d=1$$$ will also be included in the answer, so we should subtract $$$1$$$ from the answer.\nTime Complexity: $$$\\mathcal O(\\sum m)$$$."
         },
         {
             "title": "Solution",

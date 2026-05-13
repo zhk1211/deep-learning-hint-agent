@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1398D - Colored Rectangles\nLet's build some rectangles and take a look at the resulting pairings. For example, consider only red/green rectangles. Let the rectangles be $$$(r_{i1}, g_{i1})$$$, $$$(r_{i2}, g_{i2})$$$, .... Sort them in a non-decreasing order of $$$r_{ij}$$$. I claim that in the most optimal set $$$g_{ij}$$$ are also sorted in a non-decreasing order. It's easy to prove with some induction.\nMoreover, if there are some green or red sticks that are not taken and that are longer than the smallest taken corresponding sticks, then it's always optimal to take those instead.\nThese facts helps us to conclude that from each set only some suffix of the largest sticks are taken. And they also give us the idea of the solution: sort the sticks in each set and pick the largest from any of the two sets into a pair until no pairs can be taken.\nHowever, the greedy approach of \"take from any two of the three sets\" is incorrect. We need to choose these two sets smartly. Let $$$dp[r][g][b]$$$ store the maximum total area that can be obtained by taking $$$r$$$ largest red sticks, $$$g$$$ largest green sticks and $$$b$$$ largest blue sticks. Each transition chooses a pair of colors and takes the next pairs in both of them.\nThe answer is the maximum value in all the $$$dp$$$.\nOverall complexity: $$$O(RGB + R \\log R + G \\log G + B \\log B)$$$."
         },
         {
             "title": "Solution (pikmike)",

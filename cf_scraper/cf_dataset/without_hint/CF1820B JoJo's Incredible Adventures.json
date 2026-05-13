@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Editorial",
-            "content": "Tutorial is loading..."
+            "content": "1820B - JoJo's Incredible Adventures\nFirst of all, consider the cases if the given string consists only of ones and only of zeros. It's easy to see that answers for these cases are $$$n^2$$$ and $$$0$$$.\nIn all other cases let's split all strings into segments that consist only of ones. Also if the first and the last characters of the string equals to \"\n1\n\", these two characters will be in one segment. In other words, the pair of ones will lay inside one group if there exists\nsome\ncyclic shift that these two ones are consecutive. Let the maximum length of such segment be equal to $$$k$$$. Then it can be shown that the answer equals to $$$\\lfloor \\frac{k+1}{2} \\rfloor \\cdot \\lceil \\frac{k+1}{2} \\rceil$$$.\nWe will proof this fact in such way. If there exists some rectangle of size $$$a \\times b$$$. Considering its first row, we can see that it has $$$a+b-1$$$ consecutive ones. But it means that $$$a+b \\leq k+1$$$. Without loss of generality, if $$$a \\le b$$$, we can do the following replacements: $$$a = \\lfloor \\frac{k+1}{2} \\rfloor - \\lambda$$$, $$$b = \\lceil \\frac{k+1}{2} \\rceil + \\lambda$$$. It means that $$$ab = \\lceil \\frac{k+1}{2} \\rceil \\cdot \\lfloor \\frac{k+1}{2} \\rfloor - \\lambda^2 \\le \\lceil \\frac{k+1}{2} \\rceil \\cdot \\lfloor \\frac{k+1}{2} \\rfloor$$$.\nTime complexity: $$$\\mathcal{O}(n)$$$."
         },
         {
             "title": "Solution",

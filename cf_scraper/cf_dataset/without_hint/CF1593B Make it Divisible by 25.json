@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1593B - Make it Divisible by 25\nA number is divisible by $$$25$$$ if and only if its last two digits represent one of the following strings: \"\n00\n\", \"\n25\n\", \"\n50\n\", \"\n75\n\".\nLet's solve for each string the following subtask: what is the minimum number of characters to be deleted so that the string becomes a suffix of the number. Then, choosing the minimum of the answers for all subtasks, we solve the whole problem.\nLet's solve the subtask for a string \"\nX Y\n\" where '\nX\n' and '\nY\n' are digits. We can do it using the following algorithm: let's delete the last digit of the number until it is equal to '\nY\n', then the second to last digit of the number until it is equal to '\nX\n'. If it is not possible, then this subtask has no solution (i.e. its result will not affect the answer)."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution (Observation)",
-            "content": "Tutorial is loading..."
+            "content": "1567C - Carrying Conundrum\nNote that in every\nother\ncolumn, the addition Alice performs is correct. Therefore, we can take our number, split it into alternating digits, and then find the answer.\nFor example, consider $$$n = 12345$$$. We split it into alternating digits: $$$1\\underline{2}3\\underline{4}5 \\to 135, 24$$$. Now the problem is equivalent to find the number of pairs of numbers which add to $$$135$$$ multiplied by the number of pairs of numbers which add to $$$24$$$. It's clear each pair works: for example, $$$45 + 90 = 135$$$ and $$$\\underline{9} + \\underline{15} = \\underline{24}$$$, so $$$4\\underline{9}5 + \\underline{1}9\\underline{5}0$$$ will be equal to $$$12345$$$ according to Alice.\nNow, how many ways are there to find a pair of non-negative integers whose sum is $$$n$$$? There are clearly $$$n+1$$$ ways: $$$n+0,(n-1)+1,(n-2)+2,\\dots,0+n$$$.\nTherefore, suppose we split $$$n$$$ into two numbers $$$a$$$ and $$$b$$$. Then the answer will be $$$(a+1)(b+1)$$$, but we should subtract $$$2$$$ because those correspond to either the first or second number in the sum being $$$0$$$. As a result, the answer is $$$(a+1)(b+1)-2$$$.\nTime complexity: $$$\\mathcal{O}(\\log_{10}n) = \\mathcal{O}(\\log n)$$$."
         },
         {
             "title": "Implementation (C++)",

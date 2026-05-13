@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1759G - Restore the Permutation\nFirst, let's check the $$$b$$$ array for correctness, that is, that it has no repeating elements.\nThen let's look at the following ideas:\neach number $$$b_i$$$ must be paired with another permutation element $$$p_j$$$, with $$$p_j \\lt b_i$$$ by the definition of array $$$b$$$. Then, since we want a lexicographically minimal permutation, it is always more advantageous to put element $$$p_j$$$ before $$$b_i$$$.\nfor the permutation to be lexicographically minimal, the smallest possible numbers must be placed at the beginning. Consequently, the largest numbers must be placed at the end.\nLet's proceed as follows:\nLet's select the set of $$$unused$$$ numbers that are not included in the $$$b$$$ array.\nFor an element $$$b_{\\frac{n}{2}}$$$, find the maximum number $$$k$$$ of the set $$$unused$$$ such that $$$b_{\\frac{n}{2}}  \\gt  k$$$ and put that number in front of the element $$$b_{\\frac{n}{2}}$$$.\nmoving from the end of the array to its beginning, each element $$$b_i$$$ will be matched with such an element. If at some point $$$k$$$ can not be matched — array $$$b$$$ is not composed correctly, and the answer to the query — \"\nNO\n\".\nOtherwise, print \"\nYES\n\" and the resulting permutation $$$p$$$."
         },
         {
             "title": "Solution",

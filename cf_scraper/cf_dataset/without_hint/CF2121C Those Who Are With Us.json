@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "2121C - Those Who Are With Us\nLet $$$mx$$$ be the maximum value in the matrix. Note that the answer to the problem will be either $$$mx - 1$$$ or $$$mx$$$.\nWhen will the answer be $$$mx - 1$$$? If there exists a pair $$$(r, c)$$$ such that all values of $$$mx$$$ are contained in row $$$r$$$ or column $$$c$$$.\nLet $$$row_r$$$ be the number of times $$$mx$$$ appears in row $$$r$$$; $$$col_c$$$ be the number of times $$$mx$$$ appears in column $$$c$$$. Then in row $$$r$$$ or column $$$c$$$, the number $$$mx$$$ appears $$$row_r + col_c$$$ times. However, there is an edge case: if $$$a_{rc} = mx$$$, we have counted it twice, so we need to subtract one. If this count equals the total occurrences of $$$mx$$$ in the matrix, then we can achieve the answer $$$mx - 1$$$.\nThe solution can be implemented in $$$O(n \\cdot m)$$$."
         }
     ]
 }

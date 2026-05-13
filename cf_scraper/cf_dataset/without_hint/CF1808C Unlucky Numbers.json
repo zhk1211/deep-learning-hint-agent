@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1808C - Unlucky Numbers\nCheck all pairs ($$$l$$$, $$$r$$$) — the minimum and maximum digits of the number from the answer. Discard the common prefix of $$$l$$$ and $$$r$$$. Now we are left with some digits $$$a$$$ and $$$b$$$ as the leftmost digits of the number, with $$$a$$$ < $$$b$$$. If $$$b - a \\geq 2$$$, then we can put $$$a + 1$$$ at the beginning of the number, and then put any digit from the interval $$$[l, r]$$$.\nOtherwise, we try $$$a$$$, and then always put the largest digit of $$$[l, r]$$$ that we can. Similarly, then try putting $$$b$$$, and then always put the smallest digit of $$$[l, r]$$$ you can.\nOf all $$$l$$$ and $$$r$$$, for which it is possible to construct a given number, choose such that $$$r - l$$$ is minimal, and the number constructed at these $$$l$$$ and $$$r$$$."
         }
     ]
 }

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1703E - Mirror Grid\nLet's rotate the grid by $$$0^{\\circ}$$$, $$$90^{\\circ}$$$, $$$180^{\\circ}$$$, and $$$270^{\\circ}$$$, and mark all cells that map to each other under these rotations. For example, for $$$4 \\times 4$$$ and $$$5 \\times 5$$$ grids, mirror grid must have the following patterns, the same letters denoting equal values:\n$$$$$$\\begin{matrix} a & b & c & a\\\\ c & d & d & b\\\\ b & d & d & c\\\\ a & c & b & a \\end{matrix} \\qquad \\qquad \\begin{matrix} a & b & c & d & a\\\\ d & e & f & e & b\\\\ c & f & g & f & c\\\\ b & e & f & e & d\\\\ a & d & c & b & a \\end{matrix}$$$$$$\nIn general, we can rotate the grid by $$$0^{\\circ}$$$, $$$90^{\\circ}$$$, $$$180^{\\circ}$$$, and $$$270^{\\circ}$$$ and see which cells need to have equal values by seeing the positions which each cell maps to.\nNow to solve the problem, we consider each equal value (each of the letters $$$a$$$, $$$b$$$, $$$c$$$, ... in the above figures) independently, and consider the minimum number of moves to make them all $$$0$$$ or all $$$1$$$. The answer is the total across all values. See the implementation for better understanding.\nThe time complexity is $$$\\mathcal{O}(n^2)$$$ per testcase."
         },
         {
             "title": "Solution",

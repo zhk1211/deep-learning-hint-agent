@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1674B - Dictionary\nThere are many different ways to solve this problem:\ngenerate all Berland words with two for-loops and store them in an array, then for each test case, go through the array of words to find the exact word you need;\ngenerate all Berland words with two for-loops and store them in a dictionary-like data structure (\nmap\nin C++,\ndict\nin Python, etc), using words as keys and their numbers as values. This allows to search for the index of the given word quickly;\nfor each test case, run two for-loops to iterate over the words, count the number of words we skipped, and stop at the word from the test case;\ntry to invent some formulas that allow counting the number of words before the given one."
         },
         {
             "title": "Solution (BledDest)",

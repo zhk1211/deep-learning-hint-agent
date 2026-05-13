@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1692C - Where's the Bishop?\nThere are many ways to solve the problem. One way is to look for the following pattern: $$$$$$\\texttt{X.X}\\\\\\texttt{.X.}\\\\\\texttt{X.X}$$$$$$ There can only be one such pattern if there is one bishop and it's not on the edge of the board. We can iterate through all cells and see if we can match this pattern, and if we can we output the centre cell.\nYou can also look at the positions of the two diagonals and intersect them, but it requires more implementation.\nTime complexity: $$$\\mathcal{O}(1)$$$ per testcase."
         },
         {
             "title": "Solution",

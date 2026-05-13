@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1777B - Emordnilap\nObservation:\nEvery permutation has the same beauty.\nConsider two indices $$$i$$$ and $$$j$$$ ($$$i  \\lt  j$$$) in a permutation $$$p$$$.\nThese elements appear in the order $$$[p_i, p_j, p_j, p_i]$$$ in array $$$A$$$.\nNow we have two cases:\nCase $$$1$$$:\n$$$p_i  \\gt  p_j$$$\nThe first $$$p_i$$$ appears before both $$$p_j$$$'s in this case, accounting for $$$2$$$ inversions.\nCase $$$2$$$:\n$$$p_i  \\lt  p_j$$$\nBoth the $$$p_j$$$'s appear before the second $$$p_i$$$, accounting for $$$2$$$ inversions again.\nHence, any pair of indices in $$$p$$$ account for $$$2$$$ inversions in $$$A$$$.\nThus, beauty of every permutation $$$p = {n\\choose 2} \\cdot 2 = n \\cdot (n - 1)$$$\nSum of beauties of all permutations $$$= n \\cdot (n - 1) \\cdot n!$$$"
         },
         {
             "title": "Implementation (C++)",

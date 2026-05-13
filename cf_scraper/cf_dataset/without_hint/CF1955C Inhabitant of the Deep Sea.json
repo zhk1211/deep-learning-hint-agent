@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1955C - Inhabitant of the Deep Sea\nTo solve the problem, let's model the behavior of the Kraken. Suppose initially there are two or more ships in the sea, we will consider the first and last ship, denote their durabilities as $$$a_l$$$ and $$$a_r$$$, and also let $$$m = \\min(a_l, a_r)$$$, initially setting $$$l = 1$$$ and $$$r = n$$$.\nAfter two attacks, the durability of both ships will decrease by $$$1$$$. If $$$k \\ge 2 \\cdot m$$$, then we need to subtract $$$m$$$ from the durabilities of both ships, and also reduce the remaining attacks of the Kraken by $$$2 \\cdot m$$$. If $$$k  \\lt  2 \\cdot m$$$, then the Kraken will inflict $$$\\lfloor {k \\over 2} \\rfloor$$$ damage to the $$$r$$$-th ship. In this case, if $$$k$$$ is odd, the $$$l$$$-th ship will receive $$$\\lfloor {k \\over 2} \\rfloor + 1$$$ damage, otherwise $$$\\lfloor {k \\over 2} \\rfloor$$$ damage.\nAfter these attacks, some ships may have sunk. If $$$a_l = 0$$$, we increase $$$l$$$ by $$$1$$$, if $$$a_r = 0$$$, we decrease $$$r$$$ by $$$1$$$, and move on to considering the next pair of ships that will be under attack by the Kraken. If at some point $$$l = r$$$, it means that there is only one ship left in the sea, and the Kraken can sink it if $$$k \\ge a_l$$$.\nA deque is perfect for this problem, allowing us to not think about $$$l$$$ and $$$r$$$ and simply look at the first and last elements in the queue. At each step of considering a pair of ships, either the Kraken's attacks end, or at least one ship sinks. The final complexity of the solution is $$$O(n)$$$."
         },
         {
             "title": "Solution",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1829F - Forever Winter\nThe\ndegree\nof a vertex is the number of vertices connected to it. We can count the degree of a vertex by seeing how many times it appears in the input.\nLet's count the degrees of the vertices in a snowflake graph.\nThe starting vertex has degree $$$x$$$.\nEach of the $$$x$$$ newly-generated vertices has degree $$$y+1$$$ (they have $$$y$$$ new neighbors, along with the starting vertex).\nEach of the $$$x \\times y$$$ newly-generated vertices has degree $$$1$$$ (they are only connected to the previous vertex).\nThus, we can make this table:\nCount\nDegree\n$$$1$$$\n$$$x$$$\n$$$x$$$\n$$$y+1$$$\n$$$xy$$$\n$$$1$$$\nSo we can simply count the degrees, see which degree appears only once (it is $$$x$$$) and see the number of vertices with degree $$$1$$$ (it is $$$xy$$$), and from here we can compute $$$x$$$ and $$$y$$$.\nHowever, there is an edge case. If $$$x=y+1$$$, then the first two rows combine:\nCount\nDegree\n$$$x+1$$$\n$$$x = y + 1$$$\n$$$xy$$$\n$$$1$$$\nWe can still compute $$$xy$$$ by counting the number of vertices with degree $$$1$$$, and from here we can see that the other degree has $$$x+1$$$ vertices of that type, so we can subtract one to extract $$$x$$$ and from there, extract $$$y$$$.\nThe time complexity is $$$\\mathcal{O}(n+m)$$$ per test case."
         },
         {
             "title": "Solution",

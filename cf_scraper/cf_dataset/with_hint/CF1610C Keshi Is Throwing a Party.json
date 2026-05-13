@@ -22,7 +22,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "$$$\\textbf{Read the Hints and Assumptions before reading this.}$$$\nTutorial is loading..."
+            "content": "$$$\\textbf{Read the Hints and Assumptions before reading this.}$$$\n1610C - Keshi Is Throwing a Party\nTake a look at this greedy approach.\nLet $$$p_i$$$ be the $$$i$$$-th poorest invited person.($$$p_i  \\lt  p_{i + 1}$$$)\nFind the poorest person $$$v$$$ that $$$x - 1 - a_v \\le 0 \\le b_v$$$. We will invite this person so $$$p_1 = v$$$.\nFor each $$$2 \\le i \\le x$$$ find the poorest person $$$v$$$ that $$$v  \\gt  p_{i - 1}$$$ and $$$x - 1 - a_v \\le i - 1 \\le b_v$$$ this means that person $$$v$$$ can be the $$$i$$$-th poorest invited person.\nImagine we fail to find $$$x$$$ people but there is a way to do so. The solution chooses $$$s_1, s_2, \\ldots, s_x$$$.\nfor each $$$i$$$ we chose the minimum $$$p_i$$$ possible, therefor $$$p_i \\le s_i$$$. But if our algorithm fails there must exist an index $$$i$$$ that $$$p_i  \\gt  s_i$$$.\nSo our algorithm is correct.\nTime complexity: $$$\\mathcal{O}(n\\log n)$$$"
         },
         {
             "title": "Implementation",

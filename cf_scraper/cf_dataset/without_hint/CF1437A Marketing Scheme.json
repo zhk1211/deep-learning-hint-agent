@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1437A - Marketing Scheme\nNote that if $$$\\left\\lfloor \\frac{l}{a} \\right\\rfloor  \\lt  \\left\\lfloor \\frac{r}{a} \\right\\rfloor$$$ then exists such $$$k \\cdot a$$$ that $$$l \\le ka \\le r$$$ and, obviously, a customer, who wants to buy $$$ka$$$ cans won't buy more than he wants.\nThat's why $$$\\left\\lfloor \\frac{l}{a} \\right\\rfloor = \\left\\lfloor \\frac{r}{a} \\right\\rfloor$$$ and we can rephrase our task as finding such $$$a$$$ that $$$\\frac{a}{2} \\le (l \\bmod a) \\le (r \\bmod a)  \\lt  a$$$. The longer the segment $$$[\\frac{a}{2}, a)$$$ is the better and the maximum we can take is $$$a = 2l$$$.\nAs a result, we need to check that $$$r  \\lt  a \\leftrightarrow r  \\lt  2l$$$."
         },
         {
             "title": "Solution (adedalic)",

@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1862D - Ice Cream Balls\nFirst, let's note that having more than two balls of the same type is meaningless.\nLet's denote $$$x$$$ as the number of flavours of balls represented by two instances of each ball. Let $$$y$$$ denote the number of flavours represented by a single instance.\nLet's calculate the number of different ways to make an ice cream from these balls: we can make $$$x$$$ ice creams from balls of the same flavour and $$$\\dfrac{(x + y) \\cdot (x + y - 1)}{2}$$$ ice creams from balls of different flavours. In the problem, we are asked to select balls in such a way that $$$x + \\dfrac{(x + y) \\cdot (x + y - 1)}{2} = n$$$.\nNote that for a fixed sum of $$$x + y$$$, we can uniquely determine $$$x$$$ and therefore $$$y$$$ (or determine that there is no solution for that sum).\nLet's assume we have found an answer with a\nminimum\nsum of $$$x + y = k$$$. This means $$$\\dfrac{k \\cdot (k - 1)}{2} \\leq n \\leq \\dfrac{k \\cdot (k - 1)}{2} + k$$$. Moreover, if we find an answer with a sum of $$$x + y = k + 1$$$, then $$$k + \\dfrac{k \\cdot (k - 1)}{2} \\leq n \\leq k + \\dfrac{k \\cdot (k - 1)}{2} + k + 1$$$. From this, we can see that this is only possible when $$$n = k + \\dfrac{k \\cdot (k - 1)}{2}$$$. It is also evident that there are no answers with a sum greater than $$$k + 2$$$.\nNow, all we need to do is perform a binary search on the sum of $$$x + y$$$ and then determine $$$x$$$ and $$$y$$$. And don't forget to consider the case when two sums of $$$x + y$$$ may be suitable, in order to choose the one with the fewest number of balls."
         },
         {
             "title": "Solution",

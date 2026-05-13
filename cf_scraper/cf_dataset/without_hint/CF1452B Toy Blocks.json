@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1452B - Toy Blocks\nSince nephew emptying the box $$$i$$$ he's chosen and wants to make all other $$$n - 1$$$ box equal then it means that at least the $$$sum$$$ of all array $$$a$$$ should be divisible by $$$(n - 1)$$$ and the number of blocks in each other box should be at least $$$\\left\\lceil \\frac{sum}{n - 1} \\right\\rceil$$$ (ceiling function).\nOn the other side, since nephew chooses $$$i$$$ (not you), then he can choose a box which is\nnot\na maximum $$$max$$$, and since he makes empty the only box $$$i$$$, then the final number in each other block should be at least $$$max$$$.\nIn total, the resulting number of blocks in each of $$$n - 1$$$ other boxes should be at least $$$k = \\max(\\left\\lceil \\frac{sum}{n - 1} \\right\\rceil, max)$$$ and we need to add at least $$$(n - 1) \\cdot k - sum$$$ elements to the initial array.\nWe can always reach this lower bound if we will put each block in the box with the current minimum number of blocks."
         },
         {
             "title": "Solution (adedalic)",

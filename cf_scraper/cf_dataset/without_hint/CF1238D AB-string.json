@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1238D - AB-string\nInstead of counting the number of good substrings, let's count the number of bad substrings $$$cntBad$$$, then number of good substrings is equal to $$$\\frac{n(n+1)}{2} - cntBad$$$.\nLet's call a character $$$t_i$$$ in string $$$t_1t_2 \\dots t_k$$$ is bad if there is no such palindrome $$$t_lt_{l+1} \\dots t_r$$$ that $$$l \\le i \\le r$$$. Any character in substring $$$t_2t_3 \\dots t_{k-1}$$$ is good. It can be proven as follows. If $$$t_i = t_{i+1}$$$ or $$$t_i = t_{i-1}$$$ then $$$t_i$$$ belong to a palindrome of length\n2\n. If $$$t_i \\neq t_{i+1}$$$ and $$$t_i \\neq t_{i-1}$$$ then $$$t_i$$$ belong to a palindrome $$$t_{i-1} \\dots t_{i+1}$$$.\nSo only characters $$$t_1$$$ and $$$t_k$$$ can be bad. But at the same time character $$$t_1$$$ is bad if there is no character $$$t_i$$$ such that $$$i  \\gt  1$$$ and $$$t_i = t_1$$$. It is true because substring $$$t_1t_2 \\dots t_i$$$ is palindrome (index $$$i$$$ is minimum index such that $$$t_i = t_1$$$).\nSo, there are only\n4\npatterns of bad strings:\n$$$ABB \\dots BB$$$;\n$$$BAA \\dots AA$$$;\n$$$AA \\dots AAB$$$;\n$$$BB \\dots BBA$$$;\nAll that remains is to count the number of substrings of this kind."
         },
         {
             "title": "Solution (Roms)",

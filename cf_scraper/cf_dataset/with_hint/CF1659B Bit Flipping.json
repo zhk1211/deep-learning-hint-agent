@@ -26,7 +26,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1659B - Bit Flipping\nLet's see how many times a given bit will get flipped. Clearly, a bit gets flipped whenever it is not selected in an operation. Therefore, the $$$i$$$-th bit gets flipped $$$k-f_i$$$ times. We want to select a bit as few times as possible. Now we can handle a few cases.\n$$$k$$$ is even, bit $$$i$$$ is $$$1$$$ $$$\\Rightarrow$$$ $$$f_i=0$$$ (even number of flips don't change the bit)\n$$$k$$$ is even, bit $$$i$$$ is $$$0$$$ $$$\\Rightarrow$$$ $$$f_i=1$$$ (odd number of flips toggle the bit from $$$0$$$ to $$$1$$$)\n$$$k$$$ is odd, bit $$$i$$$ is $$$1$$$ $$$\\Rightarrow$$$ $$$f_i=1$$$ (even number of flips don't change the bit)\n$$$k$$$ is odd, bit $$$i$$$ is $$$0$$$ $$$\\Rightarrow$$$ $$$f_i=0$$$ (odd number of flips toggle the bit from $$$0$$$ to $$$1$$$)\nProcess the string from left to right until you can't anymore. If you still have some remaining moves at the end, you can just give them all to the last bit. Then you can construct the final string by checking the parity of $$$k-f_i$$$.\nTime complexity: $$$\\mathcal{O}(n)$$$"
         },
         {
             "title": "Implementation (C++)",

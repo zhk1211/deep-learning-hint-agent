@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1582B - Luntik and Subsequences\nIt can be noticed that all subsequences with sum $$$s-1$$$ appear if we erase some $$$0$$$-es from the array and also erase exactly one $$$1$$$. We can independently calculate the number of ways to erase some $$$0$$$-es from the array (that way the sum will remain the same), then calculate the number of ways to erase exactly one $$$1$$$ from the array (that way the sum will become equal to $$$s-1$$$), and then multiply these two numbers. Therefore, the answer is equal to $$$2^{c_0} \\cdot c_1$$$, where $$$c_0$$$ is the number of $$$0$$$-es in the array, and $$$c_1$$$ is the number of $$$1$$$-s."
         },
         {
             "title": "Solution (74TrAkToR)",

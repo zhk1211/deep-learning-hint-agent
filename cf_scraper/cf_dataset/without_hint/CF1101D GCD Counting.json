@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1101D - GCD Counting\nI know there exists $$$O(n \\log MAXN)$$$ solution and author of the problem promises to tell it to you (\nhere he explained it\n). I'd love to tell easier to code and about the same time to work $$$O(n \\log^2 MAXN)$$$ solution.\nAt first, notice that it is only enough to check the paths such that all vertices on it is divisible by some prime.\nLet's for each $$$v$$$ calculate the path of the maximum length to pass through it. That means that one part of this path goes down to one child of it and another part goes down to another child.\nFor each vertex we will store the lengths of maximum paths through vertices with values divisible by each prime in $$$a_v$$$. That is $$$O(n \\log MAXN)$$$ memory. To recalc the answer we will store all values of children nodes, sort them and update the answer with two pointers technique.\nDon't forget about the case of $$$n = 1$$$!\nOverall complexity: $$$O(n \\log^2 MAXN)$$$."
         },
         {
             "title": "Solution (PikMike)",

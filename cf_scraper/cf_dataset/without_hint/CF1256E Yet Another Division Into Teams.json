@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1256E - Yet Another Division Into Teams\nLet's sort all students by their programming skills but save the initial indices to restore the answer.\nNow we can understand that we don't need to compose the team of size greater than $$$5$$$ because in this case we can split it into more teams with fewer participants and obtain the same or even less answer.\nNow we can do the standard dynamic programming $$$dp_{i}$$$ — the minimum total diversity of the division if we divided the first $$$i$$$ students (in sorted order). Initially, $$$dp_{0} = 0$$$, all other values of $$$dp$$$ are $$$+\\infty$$$. Because of the fact above, we can do only three transitions ($$$0$$$-indexed):\n$$$dp_{i + 3} = min(dp_{i + 3}, dp_{i} + a_{i + 2} - a_{i})$$$;\n$$$dp_{i + 4} = min(dp_{i + 4}, dp_{i} + a_{i + 3} - a_{i})$$$;\n$$$dp_{i + 5} = min(dp_{i + 5}, dp_{i} + a_{i + 4} - a_{i})$$$.\nThe answer is $$$dp_{n}$$$ and we can restore it by standard carrying parent values (as a parent of the state we can use, for example, the number of participants in the team)."
         },
         {
             "title": "Solution",

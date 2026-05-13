@@ -18,7 +18,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1562B - Scenes From a Memory\nLet's show that if a number has three digits, you can always remove at least one from it to get a number that is not prime. This can be proved by a simple brute-force search of all numbers with three digits, but we'll try to do it without a brute-force search.\nIn fact, if a number contains the digits '1', '4', '6', '8' or '9', then that one digit is the answer, because $$$1$$$, $$$4$$$, $$$6$$$, $$$8$$$ and $$$9$$$ are not prime numbers.\nNow let's see what happens if the number doesn't have those digits. Then, if the number has two identical digits, we have found an answer of size two — the number of two identical digits ($$$22$$$, $$$33$$$, $$$55$$$, or $$$77$$$) is divisible by $$$11$$$. Also, if the digits $$$2$$$ or $$$5$$$ are not at the beginning of the number, we again have found an answer of size two — the number of two digits ending in $$$2$$$ or $$$5$$$ is not prime.\nIf none of the above cases worked, then we find that a three-digit number has one of the following values: $$$237$$$, $$$273$$$, $$$537$$$, $$$573$$$. It is not difficult to see that these numbers have two digits, which form a number, that is divisible by three.\nThus, the maximum answer is two, that is, you can leave no more than two digits in the number. You can find these digits by considering the above cases, or you can just try.\nIt can be shown that such a brute-force solution will work for $$$O(k)$$$.\nAsymptotics: $$$O(k)$$$ per test case."
         },
         {
             "title": "Solution of Additional Problem 1",

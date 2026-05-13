@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1211C - Ice Cream\nIf $$$a_1+a_2+\\dots+a_n \\gt k$$$ or $$$b_1+b_2+\\dots+b_n \\lt k$$$ then the answer is $$$-1$$$. Otherwise, let's initialize the answer $$$res=a_1 \\cdot c_1 + a_2 \\cdot c_2 + \\dots + a_n \\cdot c_n$$$, the number of extra portions to buy is $$$rem=k-(a_1+a_2+\\dots+a_n)$$$.\nNow we have an option in each day to buy at most $$$b_i-a_i$$$ portions with price $$$c_i$$$. Let's sort all such options and apply them in a greedy way until there are $$$rem$$$ extra portions that have been bought.\nHere is the example of a solution in Kotlin:\nimport kotlin.math.*\nfun main() {\nval (n, k) = readLine()!!.split(\" \").map { it.toInt() }\nval a = IntArray(n)\nval b = IntArray(n)\nval c = IntArray(n)\nfor (i in 0 until n) {\nval l = readLine()!!.split(\" \").map { it.toInt() }\na[i] = l[0]\nb[i] = l[1]\nc[i] = l[2]\n}\nprintln(solveIceCream(a, b, c, n, k))\n}\nprivate fun solveIceCream(a: IntArray, b: IntArray, c: IntArray, n: Int, k: Int): Long {\nval sa = a.fold(0L, Long::plus)\nval sb = b.fold(0L, Long::plus)\nif (sa > k || sb < k) return -1\nvar res = a.foldIndexed(0L) { i, acc, av -> acc + av.toLong() * c[i] }\nval e = c.mapIndexed { i, cv -> Extra(cv, b[i] - a[i]) }.sortedBy { it.c }\nvar rem = k - sa\nvar idx = 0\nwhile (rem > 0) {\nval take = min(rem, e[idx].q.toLong())\nrem -= take\nres += e[idx].c * take\nidx++\n}\nreturn res\n}\ndata class Extra(val c: Int, val q: Int)"
         }
     ]
 }

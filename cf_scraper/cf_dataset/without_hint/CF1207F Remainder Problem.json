@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1207F - Remainder Problem\nLet's notice that if we process the queries of type $$$2$$$ naively, then each such query consumes $$$O(\\frac{N}{x})$$$ time (where $$$N$$$ is the size of the array). So queries with large $$$x$$$ can be processed naively.\nFor queries with small $$$x$$$ ($$$x \\le K$$$), we may notice two things:\nthere are only $$$O(K^2)$$$ possible queries;\neach number in the array affects only $$$K$$$ possible queries.\nSo, for small $$$x$$$, we may maintain the exact answer for each query and modify it each time we modify an element in the array.\nIf we process naively all queries with $$$x  \\gt  \\sqrt{N}$$$ and maintain the answers for all queries with $$$x \\le \\sqrt{N}$$$, we will obtain a solution having time complexity $$$O(q \\sqrt{N})$$$. Note that, as in most problems related to sqrt-heuristics, it may be optimal to choose the constant that is not exactly $$$\\sqrt{N}$$$, but something similar to it (but most solutions should pass without tuning the constant)."
         },
         {
             "title": "Solution (BledDest)",

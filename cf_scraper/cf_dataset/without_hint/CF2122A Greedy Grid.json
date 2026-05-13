@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "2122A - Greedy Grid\nIf $$$n = 1$$$ or $$$m = 1$$$, there's only one down/right path, so it is trivially greedy and maximal.\nIf $$$n = m = 2$$$, any path must choose between two neighbors after the first step. Clearly, moving greedily always leads to a maximal path.\nIn all other cases, such a grid does exist. Assuming $$$n \\leq m$$$, start with an $$$n \\times m$$$ grid filled with ones, and modify the top-left $$$2 \\times 3$$$ subgrid as follows: $$$$$$ \\begin{bmatrix} 1 & 2 & 3 \\\\ 3 & 1 & 1 \\end{bmatrix}. $$$$$$ It's easy to verify that in this grid, no greedy path achieves the maximum possible value."
         }
     ]
 }

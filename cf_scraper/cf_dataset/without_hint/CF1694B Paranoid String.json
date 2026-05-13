@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Solution",
-            "content": "Tutorial is loading..."
+            "content": "1694B - Paranoid String\nWe want to show that a binary string $$$T$$$ of length $$$m$$$ is\nparanoid\nif and only if $$$m = 1$$$ or ($$$1  \\lt  m$$$ and $$$S[m] \\neq S[m - 1]$$$).\nIn the case of $$$S[m - 1] = S[m]$$$: We can never delete the last two characters because they will always remain equal. So $$$S$$$ is not\nparanoid\n.\nIn the case of $$$S[m - 1] \\neq S[m]$$$: If $$$m = 2$$$, we can reach our goal by one operation. Otherwise assume that the last character is\n0\n. Now the last three characters are either\n010\nor\n110\n. In the first case perform the operation on $$$[S_{m-2},S_{m-1}]$$$ and in the second case perform the operation on $$$[S_{m-1},S_m]$$$. Then the last two characters will be\n10\nand we can continue this algorithm on the new string until we reach $$$m = 1$$$.\nThe number of\nparanoid\nsubstrings of length $$$1$$$ is equal to $$$n$$$. To count the number of longer substrings, we can fix $$$r$$$ from index $$$2$$$ to $$$n$$$. if $$$S[r] \\neq S[r - 1]$$$ holds, we should add $$$r - 1$$$ to the answer.\ncomplexity: $$$\\mathcal{O}(n)$$$"
         },
         {
             "title": "Implementation",

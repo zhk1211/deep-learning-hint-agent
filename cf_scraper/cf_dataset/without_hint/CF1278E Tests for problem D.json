@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1278E - Tests for problem D\nFor each vertex, we will build the following structure for its children: the segment for the second child is nested in the segment for the first child, the nested for the third child is nested in the segment for the second child, and so on; and the children of different vertices do not intersect at all.\nLet's solve the problem recursively: for each of the children, create a set of segments with endpoints from $$$1$$$ to $$$2k$$$, where $$$k$$$ is the size of the subtree. After that, combine them. To do this, you can use small-to-large technique and change the coordinates of the segments or use the necessary offset in the function call for the next child.\nAfter that, it remains to cross children's segments with the segment of the vertex itself. To do this, you can move the right ends of all segments of the children by $$$1$$$ to the right, and add a segment that starts before the first one and ends immediately after the last one."
         },
         {
             "title": "Solution (Ne0n25)",

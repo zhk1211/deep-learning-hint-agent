@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1477B - Nezzar and Binary String\nThe operations can be described backward:\nIterate days in reverse order and start with $$$f$$$. In $$$i$$$-th day, if there is a strict majority of $$$0$$$s or $$$1$$$s between $$$l_i$$$ and $$$r_i$$$, change\nALL\nelement inside the range to be the majority. Otherwise, declare that the operation failed.\nWe can see that the \"backward\" operation is deterministic, so we can compute the source string from destination string alone and check if the source string computed equal to $$$s$$$.\nTo simulate the operations, We need to support two kind of operations:\nrange query on sum, and\nrange assignment\nWhich can be simulated using e.g. lazy segment tree.\nTime complexity: $$$O((q + n) \\log{n})$$$"
         },
         {
             "title": "Solution",

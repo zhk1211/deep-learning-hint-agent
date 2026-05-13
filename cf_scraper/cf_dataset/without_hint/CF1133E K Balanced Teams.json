@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1133E - K Balanced Teams\nFirstly, let's sort all students in order of non-decreasing their programming skill.\nThen let's calculate the following dynamic programming: $$$dp_{i, j}$$$ is the maximum number of students in at most $$$j$$$ non-empty teams if we consider first $$$i$$$ students.\nHow to do transitions from $$$dp_{i, j}$$$? The first transition is pretty intuitive: just skip the $$$i$$$-th ($$$0$$$-indexed) student. Then we can set $$$dp_{i + 1, j + 1} := max(dp_{i + 1, j + 1}, dp_{i, j})$$$.\nThe second possible transition is to take some team starting from the $$$i$$$-th student.\nThe only assumption we need to do it is the following: take the maximum by number of students team starting from the $$$i$$$-th student is always optimally. Why it is so?\nIf we consider the student with the maximum programming skill in the team, we can take him to this team instad of forming the new team with this student because this is always not worse.\nSo the second transition is the following: let $$$cnt_i$$$ be the number of students in a team if the $$$i$$$-th student is the first in it. We can calculate this part in $$$O(n^2)$$$ naively or in $$$O(n)$$$ using two pointers.\nWe can set $$$dp_{i + cnt_i, j + 1} = max(dp_{i + cnt_i, j + 1}, dp_{i, j} + cnt_i)$$$.\nTime complexity: $$$O(n(n+k))$$$."
         },
         {
             "title": "Solution",

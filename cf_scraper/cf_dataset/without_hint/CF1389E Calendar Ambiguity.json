@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1389E - Calendar Ambiguity\nLet the month, the days in them and the days of the week be numbered $$$0$$$-based.\nTranslate the $$$x$$$-th day of the $$$y$$$-th month to the index of that day in a year; that would be $$$yd + x$$$. Thus, the corresponding day of the week is $$$(yd + x)~mod~w$$$.\nSo we can rewrite the condition for a pair as $$$xd + y \\equiv yd + x~(mod~w)$$$. That's also $$$(xd + y) - (yd + x) \\equiv 0~(mod~w)$$$. Continue with $$$(x - y)(d - 1) \\equiv 0~(mod~w)$$$. So $$$(x - y)(d - 1)$$$ should be divisible by $$$w$$$. $$$d - 1$$$ is fixed and some prime divisors of $$$w$$$ might have appeared in it already. If we remove them from $$$w$$$ then $$$(x - y)$$$ should just be divisible by the resulting number. So we can divide $$$w$$$ by $$$gcd(w, d - 1)$$$ and obtain that $$$w'$$$.\nNow we should just count the number of pairs $$$(x, y)$$$ such that $$$x - y$$$ is divisible by $$$w'$$$. We know that the difference $$$x - y$$$ should be from $$$1$$$ to $$$min(d, m)$$$. So we can fix the difference and add the number of pairs for that difference. That would be $$$mn - k$$$ for a difference $$$k$$$. Finally, the answer is $$$\\sum \\limits_{i=1}^{min(d, m) / w'} mn - i \\cdot w'$$$. Use the formula for the sum of arithmetic progression to solve that in $$$O(1)$$$.\nOverall complexity: $$$O(\\log(w + d))$$$ per testcase."
         },
         {
             "title": "Solution (pikmike)",

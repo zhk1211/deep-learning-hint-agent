@@ -9,7 +9,7 @@
     "solutions": [
         {
             "title": "Tutorial",
-            "content": "Tutorial is loading..."
+            "content": "1293A - ConneR and the A.R.C. Markland-N\nTeam Grimoire+あま猫 - Xiorc\nSince there's only $$$k$$$ closed restaurants, in the worst case we'll only have to walk for $$$k$$$ staircases only (one such case would be $$$s = n$$$ and all the restaurants from floor $$$s-k+1$$$ to $$$s$$$ are closed).\nTherefore, a brute force solution is possible: try out every distance $$$x$$$ from $$$0$$$ to $$$k$$$. For each, determine if either $$$s-x$$$ or $$$s+x$$$ is within range $$$[1, n]$$$ and not being in the closed list.\nThe check of an element being a list or not can be done easily by a built-in function in most programming languages, for C++ it would be the \"\nfind\n\" function with linear time complexity. Of course one would love to check with\nset\n/\nTreeSet\n, but for this problem it's an overkill.\nTime complexity: $$$\\mathcal{O}(k^2)$$$."
         },
         {
             "title": "Solution (Akikaze, C++)",
