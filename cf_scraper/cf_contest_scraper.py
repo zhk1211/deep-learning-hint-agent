@@ -855,7 +855,7 @@ def process_contest(contest_url, processed_tutorial_urls):
 if __name__ == "__main__":
 	contests_to_scrape = [
 		f"https://codeforces.com/contest/{i}"
-		for i in range(1721, 999, -1)
+		for i in range(983, 982, -1)
 	]
 
 	processed_tutorial_urls = set()

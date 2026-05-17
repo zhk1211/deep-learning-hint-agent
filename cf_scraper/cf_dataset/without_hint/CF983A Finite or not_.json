@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nYou are given several queries. Each query consists of three integers $ p $ , $ q $ and $ b $ . You need to answer whether the result of $ p/q $ in notation with base $ b $ is a finite fraction.\n\nA fraction in notation with base $ b $ is finite if it contains finite number of numerals after the decimal point. It is also possible that a fraction has zero numerals after the decimal point.\n\nInput Format\nThe first line contains a single integer $ n $ ( $ 1 \\le n \\le 10^5 $ ) — the number of queries.\n\nNext $ n $ lines contain queries, one per line. Each line contains three integers $ p $ , $ q $ , and $ b $ ( $ 0 \\le p \\le 10^{18} $ , $ 1 \\le q \\le 10^{18} $ , $ 2 \\le b \\le 10^{18} $ ). All numbers are given in notation with base $ 10 $ .\n\nOutput Format\nFor each question, in a separate line, print Finite if the fraction is finite and Infinite otherwise.\n\nExamples\nSample 1\nInput\n2\n6 12 10\n4 3 10\nOutput\nFinite\nInfinite\n\nSample 2\nInput\n4\n1 1 2\n9 36 2\n4 12 3\n3 5 4\nOutput\nFinite\nFinite\nFinite\nInfinite\n\nNote\n$ \\frac{6}{12} = \\frac{1}{2} = 0,5_{10} $\n\n$ \\frac{4}{3} = 1,(3)_{10} $\n\n$ \\frac{9}{36} = \\frac{1}{4} = 0,01_2 $\n\n$ \\frac{4}{12} = \\frac{1}{3} = 0,1_3 $"
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "tutorial",
+            "content": "983A - Finite or not?\nFirst, if $$$p$$$ and $$$q$$$ are not coprime, divide them on $$$\\gcd(p,q)$$$. Fraction is finite if and only if there is integer $$$k$$$ such that $$$q \\mid p \\cdot b^k$$$. Since $$$p$$$ and $$$q$$$ are being coprime now, $$$q \\mid b^k \\Rightarrow$$$ all prime factors of $$$q$$$ are prime factors of $$$b$$$. Now we can do iterations $$$q = q \\div \\gcd(b,q)$$$ while $$$\\gcd(q,b) \\ne 1$$$. If $$$q \\ne 1$$$ after iterations, there are prime factors of $$$q$$$ which are not prime factors of $$$b \\Rightarrow$$$ fraction is\nInfinite\n, else fraction is\nFinite\n. But this solution works in $$$O(nlog^210^{18})$$$. Let's add $$$b=\\gcd(b,q)$$$ in iterations and name iterations when $$$\\gcd(b,q)$$$ changes iterations of the first type and when it doesn't change — iterations of the second type. Iterations of second type works summary in $$$O(\\log10^{18})$$$. Number of iterations of the first type is $$$O(\\log10^{18})$$$ too but on each iteration $$$b$$$ decreases twice. Note that number of iterations in Euclid's algorithm is equal to number of this decreases. So iterations of first type works in $$$O(\\log10^{18})$$$ summary. Total time complexity is $$$O(n\\log10^{18})$$$\nSolution"
+        }
+    ]
+}
