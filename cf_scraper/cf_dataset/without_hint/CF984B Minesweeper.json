@@ -1,0 +1,15 @@
+{
+    "statement": [
+        {
+            "title": "Statement",
+            "content": "Description\nOne day Alex decided to remember childhood when computers were not too powerful and lots of people played only default games. Alex enjoyed playing Minesweeper that time. He imagined that he saved world from bombs planted by terrorists, but he rarely won.\n\nAlex has grown up since then, so he easily wins the most difficult levels. This quickly bored him, and he thought: what if the computer gave him invalid fields in the childhood and Alex could not win because of it?\n\nHe needs your help to check it.\n\nA Minesweeper field is a rectangle $ n \\times m $ , where each cell is either empty, or contains a digit from $ 1 $ to $ 8 $ , or a bomb. The field is valid if for each cell:\n\n- if there is a digit $ k $ in the cell, then exactly $ k $ neighboring cells have bombs.\n- if the cell is empty, then all neighboring cells have no bombs.\n\nTwo cells are neighbors if they have a common side or a corner (i. e. a cell has at most $ 8 $ neighboring cells).\n\nInput Format\nThe first line contains two integers $ n $ and $ m $ ( $ 1 \\le n, m \\le 100 $ ) — the sizes of the field.\n\nThe next $ n $ lines contain the description of the field. Each line contains $ m $ characters, each of them is \".\" (if this cell is empty), \"\\*\" (if there is bomb in this cell), or a digit from $ 1 $ to $ 8 $ , inclusive.\n\nOutput Format\nPrint \"YES\", if the field is valid and \"NO\" otherwise.\n\nYou can choose the case (lower or upper) for each letter arbitrarily.\n\nExamples\nSample 1\nInput\n3 3\n111\n1*1\n111\nOutput\nYES\n\nSample 2\nInput\n2 4\n*.*.\n1211\nOutput\nNO\n\nNote\nIn the second example the answer is \"NO\" because, if the positions of the bombs are preserved, the first line of the field should be \\*2\\*1.\n\nYou can read more about Minesweeper in <a>Wikipedia's article</a>."
+        }
+    ],
+    "hints": [],
+    "solutions": [
+        {
+            "title": "tutorial",
+            "content": "984B - Minesweeper\nLet's make two-dimensional array $$$d[n][m]$$$. For each cell $$$i,j$$$ if it has bomb in it we add $$$1$$$ in $$$d[g][h]$$$ where $$$g,h$$$ is neighboring cell for $$$i,j$$$. Now $$$d[i][j]$$$ is a number of bombs in neighboring cells of $$$i,j$$$ and we can check validity of field according to the condition of the problem:\nIf there is a number $$$k$$$ in the cell, then exacly $$$k$$$ of neighboring cells have bombs.\nOtherwise, if cell has no bomb, then neighboring cells have no bombs.\nSolution"
+        }
+    ]
+}
