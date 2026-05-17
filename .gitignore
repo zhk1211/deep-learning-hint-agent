@@ -224,3 +224,25 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# model weights
+qwen-coder-7b/
+cf_hint_lora_model/
+cf_hint_lora_model_budgeted/
+checkpoint-*/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+
+# datasets / generated files
+multi_turn_hints.jsonl
+multi_turn_hints_budgeted.jsonl
+
+# logs / cache
+wandb/
+runs/
+__pycache__/
+.cache/
+.DS_Store
