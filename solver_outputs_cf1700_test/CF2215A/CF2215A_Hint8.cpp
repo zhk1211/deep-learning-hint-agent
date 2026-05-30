@@ -1,0 +1,429 @@
+// Hint8
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        long long p, q;
+        cin >> n >> k >> p >> q;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // For each element, we can reduce it to min(a[i] % p, a[i] % q)
+        // but only if we can cover it with an interval of length >= k.
+        // We can apply operations multiple times, but the best we can do
+        // for an element is to reduce it to its minimum possible value
+        // under mod p or mod q. However, we can only apply operations
+        // on intervals of length >= k. So we need to select a set of
+        // disjoint or overlapping intervals? Actually we can apply
+        // operations arbitrarily many times. The key observation:
+        // We can reduce any element to its minimum possible value
+        // if we can cover it with some interval of length >= k.
+        // But we can also chain intervals: if we reduce some elements,
+        // we might be able to reduce others later. However, the operation
+        // is modulo, which is non-increasing. So we can think of it as
+        // we want to apply mod p or mod q to some elements, but we can
+        // only apply to contiguous segments of length >= k.
+        // Since we can apply operations multiple times, we can effectively
+        // choose any set of elements to reduce, as long as every element
+        // we reduce is part of some interval of length >= k that we apply.
+        // But we can also apply to overlapping intervals. The optimal
+        // strategy: we can reduce all elements in some prefix/suffix?
+        // Actually, we can reduce any element if there exists an interval
+        // of length >= k containing it that we can apply. But we can
+        // apply multiple intervals. The problem reduces to: we can
+        // reduce a subset of elements to their minimum possible value
+        // (min(a[i]%p, a[i]%q)) if we can cover them with intervals
+        // of length >= k. Since we can apply operations in any order,
+        // we can cover any set of elements as long as the gaps between
+        // consecutive reduced elements are not too large? Wait, we can
+        // apply an interval that covers both reduced and unreduced elements.
+        // The operation sets a_i = a_i % m for all i in [l,r]. If we apply
+        // to an interval, we reduce all elements in it. So we cannot
+        // selectively reduce only some elements in an interval; we reduce
+        // all. But we can apply multiple intervals. The goal is to minimize
+        // the sum. So we want to reduce as many elements as possible,
+        // but we might be forced to reduce some elements that are already
+        // small, which might not be beneficial? Actually reducing an element
+        // never increases it, so it's always beneficial or neutral.
+        // So we want to apply operations to cover as many elements as possible
+        // with intervals of length >= k. But we can apply operations
+        // multiple times, so we can cover the whole array if we want,
+        // by applying overlapping intervals. However, there is a catch:
+        // we can only choose m from {p,q}. For each element, the best
+        // we can do is min(a[i]%p, a[i]%q). But if we apply an interval,
+        // we must choose one m for the whole interval. So we might not
+        // achieve the individual minimums for all elements in that interval
+        // simultaneously. We can apply multiple intervals with different m.
+        // So we can achieve the individual minimum for each element if we
+        // can cover each element with an interval where we choose the
+        // optimal m for that element. But intervals can overlap, and we
+        // can apply them in any order. The final value of an element is
+        // the result of applying a sequence of modulo operations. Since
+        // modulo is idempotent in the sense that (x % m) % m = x % m,
+        // and if we apply different moduli, the order matters. But we can
+        // always achieve the minimum of the two moduli if we apply the
+        // one that gives the smaller result last. However, we must apply
+        // to intervals of length >= k. So we need to assign to each element
+        // a final value that is either a[i]%p or a[i]%q, and we need to
+        // be able to achieve this assignment by a sequence of interval
+        // operations. The key insight from hints: we can greedily decide.
+        // Hint 5: If we have chosen the first interval, how can we greedily
+        // decide what to do next? Hint 6: Greedy. Hint 7: Can you make the
+        // first interval shorter? Hint 8: Enumerate all intervals of length k
+        // and take the minimum.
+        // This suggests we can fix the first interval of length exactly k,
+        // and then greedily extend or something. Let's think.
+        // We can always reduce the whole array to min(a[i]%p, a[i]%q) if we
+        // can apply intervals of length >= k covering everything. But we
+        // might not be able to achieve the individual minimums simultaneously
+        // if we have to use the same m for a long interval. However, we can
+        // use multiple intervals. The problem is similar to: we can choose
+        // for each element whether to apply mod p or mod q, but we can only
+        // switch between p and q at boundaries of intervals of length >= k?
+        // Actually, we can apply an interval with m=p, then later apply
+        // another interval with m=q that overlaps. The final value of an
+        // element will be the result of the last operation applied to it.
+        // Since we can apply operations in any order, we can effectively
+        // choose for each element which modulo operation is applied last.
+        // But we must ensure that the set of elements where p is applied last
+        // can be covered by intervals of length >= k where we use p, and
+        // similarly for q. However, we can also apply p then q then p again,
+        // but that's redundant. The optimal strategy: we partition the array
+        // into segments where we apply a certain sequence. Actually, we can
+        // think of it as: we want to assign each element a final value
+        // v_i in {a[i]%p, a[i]%q}. We can achieve this assignment iff
+        // there is no contiguous block of elements assigned p (or q) that
+        // has length < k, unless it's at the boundaries? Wait, we can
+        // apply intervals of length >= k. If we want to apply p to a set
+        // of elements, we can cover them with intervals of length >= k.
+        // We can cover any set as long as the maximal contiguous segments
+        // of elements we want to apply p to have length >= k? Not exactly,
+        // because we can apply p to a larger interval that includes some
+        // elements we don't want to apply p to, but then we can later apply
+        // q to those elements to override. So we can always achieve any
+        // assignment? Let's test: Suppose we want to apply p to a single
+        // element, but k=2. We cannot apply an interval of length 1 with p.
+        // But we can apply an interval of length 2 that includes that element
+        // and its neighbor, setting both to p-mod. Then we can apply q to
+        // the neighbor using another interval of length >=2 that covers the
+        // neighbor but not the first element? If we apply q to an interval
+        // covering the neighbor, it might also cover the first element if
+        // we are not careful. But we can choose intervals strategically.
+        // For example, n=2, k=2, we can apply p to [1,2], then apply q to
+        // [1,2]? That would set both to q-mod. To get p on first and q on
+        // second, we could apply p to [1,2], then apply q to [2,3] but n=2.
+        // So we cannot. So there are restrictions.
+        // Let's analyze the possibilities. We have two operations: mod p
+        // and mod q. We can apply them to intervals of length >= k.
+        // The final value of a[i] is a[i] % m1 % m2 ... where the sequence
+        // of moduli applied to i is the sequence of operations whose intervals
+        // include i. Since p < q, note that x % q % p is not necessarily
+        // equal to x % p. For example, x=10, p=3, q=4: 10%4=2, 2%3=2;
+        // 10%3=1. So order matters. But we can choose the order.
+        // We want to minimize sum. For each element, the minimum possible
+        // value is min(a[i]%p, a[i]%q). Can we always achieve this minimum
+        // for all elements simultaneously? Not always, as the n=2, k=2
+        // example shows: a=[10,10], p=3, q=4. min for each is 1 (10%3=1)
+        // and 2 (10%4=2). Can we get sum=3? If we apply p to [1,2], both
+        // become 1, sum=2. If we apply q to [1,2], both become 2, sum=4.
+        // If we apply p to [1,2] then q to [1,2], both become 2. If we
+        // apply q then p, both become 1. So we can get sum=2, which is even
+        // better than sum of individual minimums (1+2=3). So we can sometimes
+        // do better by using the same modulus on multiple elements.
+        // So the problem is more complex: we can choose for each interval
+        // a modulus, and the final value of an element is the result of
+        // applying the sequence of moduli from the intervals covering it.
+        // Since we can apply operations in any order, we can think of the
+        // process as: we have a set of intervals with assigned moduli.
+        // The final value of a[i] is a[i] % m_{last} where m_{last} is the
+        // modulus of the last interval covering i in the order we apply.
+        // But we can choose the order. So we can decide for each element
+        // which modulus is applied last. However, the set of elements that
+        // share the same last modulus must be coverable by intervals of
+        // length >= k with that modulus, but we can also have overlapping
+        // intervals with different moduli. Actually, if we want p to be
+        // the last for a set S, we need to apply a set of intervals with
+        // modulus p that cover S, and we must apply them after any intervals
+        // with modulus q that cover S. We can apply q intervals first, then
+        // p intervals. So we can achieve any assignment where the elements
+        // assigned p can be covered by p-intervals, and elements assigned q
+        // can be covered by q-intervals, but these coverings can overlap.
+        // However, if we apply p-intervals last, they will overwrite any
+        // previous q-intervals on the covered elements. So the elements
+        // that end up with p are exactly those covered by the union of
+        // p-intervals applied last. The elements that end up with q are
+        // those not covered by any p-interval applied last, but covered
+        // by some q-interval applied before? Actually, if an element is
+        // not covered by any p-interval last, its last operation could be
+        // a q-interval or no operation. So we can think of it as: we choose
+        // a set of disjoint? Not necessarily disjoint. We can apply a
+        // p-interval that covers some elements, and we can apply q-intervals
+        // on other parts. But we can also apply p-intervals on top of
+        // q-intervals. The optimal strategy likely involves using only
+        // one modulus for the whole array, or splitting into two parts
+        // where we use different moduli. Because if we interleave, we might
+        // not gain much. Let's consider the effect of applying both moduli
+        // to the same element. The final value is either a[i]%p or a[i]%q
+        // or a[i]%p%q or a[i]%q%p. Since p<q, a[i]%q%p = a[i]%p (because
+        // a[i]%q < q, and p<q, but a[i]%q could be >= p, so a[i]%q%p is
+        // not necessarily a[i]%p). Actually, (x % q) % p is the remainder
+        // of x modulo p after first reducing modulo q. This is always
+        // <= x % p? Not necessarily. Example x=7, p=3, q=5: 7%5=2, 2%3=2;
+        // 7%3=1. So 2 > 1. So applying q then p gives a larger value than
+        // applying p directly. So to minimize, we want to apply the smaller
+        // modulus last if it gives a smaller result. But we might not be
+        // able to apply p to a single element if k>1. So we might have to
+        // apply p to a larger interval, affecting neighbors.
+        // This suggests a dynamic programming or greedy approach.
+        // Let's look at the hints: "Hint 1: What values can each element
+        // end up with?" Possible values: a[i], a[i]%p, a[i]%q, a[i]%p%q,
+        // a[i]%q%p. But since we can apply operations multiple times,
+        // we can also get a[i]%p%q%p etc., but modulo is idempotent.
+        // Actually, the set of possible values is finite. But we can
+        // always achieve a[i]%p by applying p last, and a[i]%q by applying
+        // q last. We can also achieve a[i]%p%q by applying p then q last.
+        // But note that a[i]%p%q = a[i]%p if a[i]%p < q, which is always
+        // true since p<q and a[i]%p < p < q. So a[i]%p%q = a[i]%p.
+        // Similarly, a[i]%q%p is not necessarily a[i]%p. So the only
+        // interesting combinations are applying q then p. Applying p then q
+        // is the same as just p. So the possible final values for an element
+        // are: a[i] (no op), a[i]%q (q last), a[i]%p (p last), and
+        // a[i]%q%p (q then p last). But wait, we could also apply p then q
+        // then p again, but that's just p last. So the set is {a[i], a[i]%q,
+        // a[i]%p, a[i]%q%p}. Since a[i]%q%p <= a[i]%p? Not always, as the
+        // example showed 7%5%3=2 > 7%3=1. So a[i]%p might be smaller.
+        // So for each element, the minimum possible value is
+        // min(a[i]%p, a[i]%q%p). But can we achieve a[i]%q%p? That requires
+        // applying q then p. So the element must be covered by a q-interval
+        // and later a p-interval. The p-interval must be applied last.
+        // So if we want to achieve a[i]%q%p for some element, we need to
+        // have a p-interval covering it that is applied after a q-interval.
+        // But we can just apply p directly to get a[i]%p, which might be
+        // smaller. So a[i]%q%p is only useful if it is smaller than a[i]%p?
+        // But we saw it can be larger. So the minimum for a single element
+        // is min(a[i]%p, a[i]%q%p). However, a[i]%q%p is the remainder when
+        // a[i] is divided by p after first taking mod q. Since p<q,
+        // a[i]%q%p = (a[i] % q) % p. This is always <= a[i] % p? Let's check:
+        // For any x, x % q is some number between 0 and q-1. Then (x%q)%p
+        // is the remainder modulo p. Since x%q could be larger than x%p?
+        // Actually, x = k*q + r, with 0<=r<q. Then x%p = (k*q + r)%p.
+        // While (x%q)%p = r%p. There is no general inequality.
+        // Example: x=10, p=3, q=4: 10%4=2, 2%3=2; 10%3=1. So 2>1.
+        // Example: x=8, p=3, q=7: 8%7=1, 1%3=1; 8%3=2. So 1<2.
+        // So sometimes q then p gives smaller. So we need to consider
+        // both possibilities.
+        // This is getting complicated. Let's reconsider the hints.
+        // Hint 3: Try to use some prefix sums.
+        // Hint 4: How to calculate the answer?
+        // Hint 5: If we have chosen the first interval, how can we greedily
+        // decide what to do next?
+        // Hint 6: Greedy.
+        // Hint 7: Can you make the first interval shorter?
+        // Hint 8: Enumerate all intervals of length k and take the minimum.
+        // This strongly suggests that the optimal strategy involves applying
+        // exactly one interval of length k, or maybe a few intervals, and
+        // we can compute the result using prefix sums.
+        // Let's think about the operation: we can apply modulo to an interval
+        // of length at least k. What if we apply it to the whole array?
+        // Then we can reduce all elements to a[i]%m for some m. We can do
+        // this for both p and q, and take the minimum sum. But we can also
+        // apply different moduli to different parts. For example, we could
+        // apply p to a prefix of length >=k, and q to a suffix of length >=k,
+        // and they might overlap. But if they overlap, the last one applied
+        // dominates. So we can partition the array into three parts: a prefix
+        // where we apply p last, a suffix where we apply q last, and a middle
+        // where we apply something else? Actually, we can apply p to some
+        // interval, then q to another interval that overlaps. The overlapping
+        // region gets the last applied modulus. So we can achieve any
+        // assignment where the set of elements with p last is a union of
+        // intervals of length >=k? Not exactly, because we can apply p to
+        // an interval, then q to a subinterval, leaving p on the ends.
+        // So we can have p on two ends and q in the middle, as long as the
+        // p-intervals are length >=k and the q-interval is length >=k.
+        // But we can also apply multiple intervals. The key is that we can
+        // apply operations in any order, so we can design the final pattern
+        // by choosing which modulus is applied last to each element.
+        // The constraint is that the set of elements where p is applied last
+        // must be coverable by a set of disjoint intervals of length >=k?
+        // Actually, if we apply p last to a set S, we must have applied
+        // p-intervals that cover S after all q-intervals. We can apply
+        // one p-interval that covers S if S is contiguous and length >=k.
+        // If S is not contiguous, we can apply multiple p-intervals.
+        // But we can also apply a large p-interval that covers S and some
+        // other elements, but then those other elements would also get p last,
+        // unless we later apply q to them. But if we apply q later, then
+        // those elements get q last. So we can "carve out" holes from a
+        // p-interval by applying q-intervals later. But q-intervals must
+        // have length >=k. So we can have a p-interval with a hole of length
+        // >=k where q is applied last. This suggests that the pattern of
+        // p-last elements can be any set such that its complement's
+        // contiguous segments have length >=k? Not exactly.
+        // Let's think differently: Since we can apply operations any number
+        // of times, we can always achieve the following: For each element,
+        // we can independently choose to reduce it to a[i]%p or a[i]%q,
+        // provided that if we choose p for some element, we must also choose
+        // p for at least k-1 other elements in a contiguous block? No,
+        // because we can apply p to a large interval and then q to parts.
+        // Actually, consider we want to achieve a specific assignment
+        // f: {1..n} -> {p, q} meaning the last modulus applied.
+        // Can we achieve any assignment? Suppose we want f(i)=p for i in S,
+        // f(i)=q for i not in S. We can first apply q to the whole array
+        // (if n>=k). Then apply p to each maximal contiguous segment of S
+        // that has length >=k. But what if S has a segment of length <k?
+        // We cannot apply p to just that segment because interval length
+        // must be >=k. We could apply p to a larger interval that includes
+        // that segment and some elements where we want q, but then we would
+        // set those to p. To fix that, we would need to apply q again to
+        // those elements, but that would require a q-interval of length >=k
+        // covering them. This might be possible if the "q" elements we
+        // accidentally set to p can be covered by a q-interval of length >=k.
+        // So the condition for an assignment to be achievable is that
+        // every element with f(i)=p belongs to some interval of length >=k
+        // that is contained in S? Not necessarily, because we can use
+        // overlapping intervals. Actually, it's known that with operations
+        // that can be overwritten, the achievable assignments are those
+        // where the set of elements with a given value can be formed by
+        // unions of intervals of length >=k, but since we can overwrite,
+        // we can effectively "paint" with p using a brush of length >=k,
+        // and then paint over with q using a brush of length >=k. This is
+        // equivalent to: we can choose any set S for p, as long as the
+        // complement of S does not contain any contiguous segment of length
+        // <k? Wait, if we paint p on some intervals, the unpainted parts
+        // (which get q if we painted q first everywhere) must be coverable
+        // by q-intervals? Actually, if we first paint q everywhere, then
+        // paint p on some intervals, the final p-regions are exactly the
+        // intervals we painted p on. Those intervals must have length >=k.
+        // So S must be a union of intervals of length >=k. But we can also
+        // paint p first, then q on some intervals. Then the final q-regions
+        // are intervals of length >=k, and the p-regions are the rest.
+        // So the achievable assignments are exactly those where either
+        // the p-set is a union of intervals of length >=k, or the q-set
+        // is a union of intervals of length >=k. But we can also do more
+        // complex sequences: p, then q, then p again. That would allow
+        // p-set to be a union of intervals of length >=k, minus some
+        // intervals of length >=k where q was painted over, plus some
+        // intervals of length >=k where p was painted again. This is
+        // equivalent to: the final p-set can be any set that can be
+        // formed by taking a union of intervals of length >=k, then
+        // subtracting a union of intervals of length >=k, then adding
+        // a union of intervals of length >=k, etc. Since we can do this
+        // arbitrarily many times, the set of achievable p-sets is closed
+        // under these operations. In fact, it's known that with a brush
+        // of length L, you can achieve any set that doesn't have a gap
+        // of length < L? Let's test: n=5, k=3. Can we achieve p-set =
+        // {1,5}? That has gaps of length 3 (positions 2,3,4). If we paint
+        // q everywhere, then paint p on [1,3] and [3,5]? That would make
+        // p on 1,2,3,4,5. Then paint q on [2,4]? That would make q on
+        // 2,3,4, leaving p on 1,5. The q-interval [2,4] has length 3 >=k.
+        // So yes, we can achieve p on 1 and 5. What about p-set = {1,4}?
+        // Gap of length 2 (positions 2,3). Can we? Paint q everywhere.
+        // Paint p on [1,3] -> p on 1,2,3. Paint q on [2,4]? That would
+        // make q on 2,3,4, leaving p on 1. Then we need p on 4. We could
+        // paint p on [4,5]? But then 5 gets p. To remove p from 5, paint q
+        // on [5,5]? But length 1 <3. So we cannot. What if we start with
+        // p everywhere? Then paint q on [2,3]? Length 2 <3. So no.
+        // So it seems we cannot have a gap of length <k between p-elements
+        // if we want them to be isolated? Actually, the condition might be
+        // that the distance between any two p-elements must be at least k?
+        // Or more precisely, the p-set can be any set such that between
+        // any two p-elements, the number of consecutive q-elements is
+        // either 0 or >=k? In the example {1,4}, the gap is 2 and 3,
+        // which is <k=3, so not allowed. In {1,5}, gap is 3, allowed.
+        // What about p-set = {1,2,4,5}? Gap between 2 and 4 is 1 (position 3).
+        // Can we achieve? Paint p on [1,5] -> all p. Paint q on [3,3]?
+        // Length 1 <3. So no. Paint q on [2,4]? That would make q on 2,3,4,
+        // leaving p on 1,5. Not {1,2,4,5}. So we cannot have a single q
+        // in the middle. So it seems that the q-elements must form intervals
+        // of length >=k, or be at the boundaries? Actually, if we paint
+        // p first everywhere, then paint q on some intervals, those intervals
+        // must have length >=k. So the q-set is a union of intervals of
+        // length >=k. The p-set is the complement. So if we only do p then q,
+        // the p-set can be anything whose complement is a union of >=k
+        // intervals. That means the p-set can have gaps of length >=k,
+        // but also can have gaps of length <k if they are at the ends?
+        // Complement of a union of >=k intervals: the gaps between these
+        // intervals are the p-regions. Those gaps can be any length,
+        // including <k. For example, if we paint q on [2,4] (length 3),
+        // then p-set is {1,5}. The gap between p-elements is the q-interval
+        // of length 3. So the p-elements are separated by >=k. But what
+        // if we paint q on [1,3] and [4,6]? Then p-set is empty in between?
+        // Actually, if we paint q on [1,3] and [4,6] with n=6, k=3, then
+        // p-set is empty. If we paint q on [1,3] only, p-set is {4,5,6}
+        // which is length 3. So the p-set can be a single interval of any
+        // length, or multiple intervals separated by q-intervals of length
+        // >=k. So the p-set can have gaps of length >=k, but the p-intervals
+        // themselves can be of any length (including <k)? Wait, if we paint
+        // p first everywhere, then paint q on some intervals of length >=k,
+        // the remaining p-regions are the complement. Those p-regions can
+        // be of length <k. For example, n=4, k=3. Paint p everywhere.
+        // Paint q on [2,4] (length 3). Then p-set = {1}, length 1 <k.
+        // So we can have a p-interval of length 1. So the constraint is
+        // only on the q-intervals we paint over: they must be >=k.
+        // But we can also do q first then p. That would give q-regions
+        // of any length, and p-regions of length >=k.
+        // And we can do more layers. So in general, we can achieve any
+        // assignment where either the p-set is a union of intervals of
+        // length >=k, or the q-set is a union of intervals of length >=k,
+        // or both? Actually, by alternating, we can achieve any assignment
+        // where the set of elements with a given value can be formed by
+        // starting from the whole array and repeatedly taking unions of
+        // >=k intervals or complements. This might allow any assignment
+        // except those where there is an isolated element of one type
+        // surrounded by the other type with gaps <k on both sides?
+        // Let's test: n=5, k=3. Can we achieve p-set = {2}? That is a
+        // single p at position 2. Try: Paint q everywhere. Paint p on [1,3]
+        // -> p on 1,2,3. Paint q on [1,1]? No, length 1. Paint q on [3,5]?
+        // That would make q on 3,4,5, leaving p on 1,2. Not {2}. Paint q
+        // on [1,2]? Length 2 <3. Paint q on [1,3]? That would remove all p.
+        // So maybe impossible. What if we start with p everywhere? Paint q
+        // on [1,1]? No. Paint q on [1,3]? Then p on 4,5. Paint p on [2,4]?
+        // Then p on 2,3,4; q on 1,5. Not {2}. It seems {2} is impossible.
+        // So the condition might be: every maximal contiguous segment of
+        // p (or q) must have length >=k, unless it touches the boundary?
+        // In {1,5}, the p-segments are {1} and {5}, both length 1, but they
+        // touch boundaries. So boundaries might be exempt. In {2}, it is
+        // length 1 and does not touch boundary (since n=5, boundaries are
+        // 1 and 5). So maybe the rule is: any p-segment that does not include
+        // an endpoint must have length >=k? Let's check {1,4} in n=5, k=3:
+        // p-segments: {1} (touches left end), {4} (does not touch right end
+        // because 5 is not p? Actually {4} is length 1, does not touch
+        // right end because 5 is not p. So it violates. And we found it
+        // impossible. What about p-set = {1,2,4}? Segments: {1,2} length 2
+        // touches left; {4} length 1, does not touch right (since 5 is not p).
+        // Is it possible? Try: Paint q everywhere. Paint p on [1,3] -> p on
+        // 1,2,3. Paint q on [3,5] -> q on 3,4,5, leaving p on 1,2. We want
+        // p on 4. So paint p on [4,5]? But length 2 <3. Paint p on [2,4]?
+        // Then p on 2,3,4; q on 1,5. Not {1,2,4}. Paint p on [1,4]? Then
+        // p on 1,2,3,4. Paint q on [3,5]? Then q on 3,4,5, p on 1,2.
+        // Still no. So likely impossible. So the condition seems plausible:
+        // A set S can be the p-set iff every maximal contiguous segment of
+        // S that does not include 1 or n has length >=k. Similarly for q-set.
+        // But wait, we can also have both p and q segments of length >=k
+        // by alternating. So the achievable assignments are those where
+        // the array is partitioned into alternating p and q segments,
+        // and any segment that is not at the boundary must have length >=k.
+        // Boundary segments can be any length (including 0). This is a
+        // common pattern in such interval painting problems.
+        // Let's verify with the sample: n=3, k=2, p=10, q=20, a=[31,41,59].
+        // They achieved sum=11 by applying m=10 to [1,3]. That makes all
+        // a[i]%10: 1,1,9 -> sum=11. Could we do better? If we apply q=20:
+        // 31%20=11, 41%20=1, 59%20=19 -> sum=31. If we apply p to [1,2]
+        // and q to [3,3]? But [3,3] length 1 <2, so not allowed directly.
+        // But we could apply p to [1,3] then q to [3,3]? No, q interval
+        // must be >=2. So we cannot isolate index 3 for q. So the best is
+        // all p. The condition says: we can have p-segment of length 3
+        // (touches both boundaries, so any length ok). So valid.
+        // Sample 3: n=4, k=3, p=3, q=4, a=[1,2,3,4]. Output 3.
+        // They did: apply m=4 to [1,4] -> [1,2,3,0]; then m=3 to [2,4] ->
+        // [1,2,0,0]. Sum=3. Here final p-set (m=3 last) is {2,3,4}?
+        // Actually last operation was m=3 on [2,4], so elements 2,3,4 get
+        // mod 3: a[2]=2%3=2, a[3]=3%3=0, a[4

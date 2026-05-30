@@ -1,0 +1,373 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+The snails are climbing a tree. The tree height is $ h $ meters, and snails start at position $ 0 $ .
+
+Each snail has two attributes $ a $ and $ b $ ( $ a > b $ ). Starting from the $ 1 $ -st day, one snail climbs the tree like this: during the daylight hours of the day, he climbs up $ a $ meters; during the night, the snail rests, and he slides down $ b $ meters. If on the $ n $ -th day, the snail reaches position $ h $ for the first time (that is, the top of the tree), he will finish climbing, and we say that the snail spends $ n $ days climbing the tree. Note that on the last day of climbing, the snail doesn't necessarily climb up $ a $ meters, in case his distance to the top is smaller than $ a $ .
+
+Unfortunately, you don't know the exact tree height $ h $ at first, but you know that $ h $ is a positive integer. There are $ q $ events of two kinds.
+
+- Event of type $ 1 $ : a snail with attributes $ a $ , $ b $ comes and claims that he spent $ n $ days climbing the tree. If this message contradicts previously adopted information (i. e. there is no tree for which all previously adopted statements and this one are true), ignore it. Otherwise, adopt it.
+- Event of type $ 2 $ : a snail with attributes $ a $ , $ b $ comes and asks you how many days he will spend if he climbs the tree. You can only give the answer based on the information you have adopted so far. If you cannot determine the answer precisely, report that.
+
+You need to deal with all the events in order.
+
+Input Format
+Each test contains multiple test cases. The first line contains a single integer $ t $ ( $ 1 \le t \le 10^4 $ ) — the number of test cases. Then follows their description.
+
+The first line of each test case contains one integer $ q $ ( $ 1\le q \le 2\cdot 10^5 $ ) — the number of events.
+
+For the following $ q $ lines, the first integer of each line is either $ 1 $ or $ 2 $ , denoting the event type.
+
+If the event type is $ 1 $ , then three integers $ a $ , $ b $ , and $ n $ ( $ 1\le a,b,n \le 10^9 $ , $ a>b $ ) follow.
+
+If the event type is $ 2 $ , then two integers $ a $ and $ b $ ( $ 1\le a,b \le 10^9 $ , $ a>b $ ) follow.
+
+It is guaranteed that the sum of $ q $ over all test cases does not exceed $ 2\cdot 10^5 $ .
+
+Output Format
+For each test case, output $ q $ integers in one line, one for each event, in order. Specifically,
+
+- for each event of type $ 1 $ , if you adopt the message, output $ 1 $ ; if you ignore it, output $ 0 $ ;
+- for each event of type $ 2 $ , output an integer denoting the number of days that the snail will spend. If you cannot determine it, output $ -1 $ .
+
+Examples
+Sample 1
+Input
+5
+3
+1 3 2 5
+2 4 1
+2 3 2
+3
+1 6 5 1
+2 3 1
+2 6 2
+3
+1 4 2 2
+1 2 1 3
+2 10 2
+9
+1 7 3 6
+1 2 1 8
+2 5 1
+1 10 9 7
+1 8 1 2
+1 10 5 8
+1 10 7 7
+2 7 4
+1 9 4 2
+9
+1 2 1 6
+1 8 5 6
+1 4 2 7
+2 9 1
+1 5 1 4
+1 5 2 7
+1 7 1 9
+1 9 1 4
+2 10 8
+Output
+1 2 5
+1 -1 1
+1 0 1
+1 0 -1 0 0 0 1 8 0
+1 0 0 1 0 0 0 0 1
+
+Note
+In the first test case, we can determine $ h=7 $ through the first message, so we know the second snail and the third snail need to spend $ 2 $ and $ 5 $ days respectively to reach the top.
+
+Let's show how the second snail climbs:
+
+- During the daylight hours of the $ 1 $ st day: climbs up $ 4 $ meters, now at position $ 4 $ .
+- During the night of the $ 1 $ st day: slides down $ 1 $ meters, now at position $ 3 $ .
+- During the daylight hours of the $ 2 $ nd day: climbs up $ 4 $ meters, now at position $ 7 $ (reaches the top).
+
+In the third test case, the second snail's message contradicts the first snail's, because the second snail says he spent $ 3 $ days, and he can climb at most $ 1+1+2=4 $ meters in the first $ 3 $ days. However, the first snail only needs $ 1 $ day to climb $ 4 $ meters.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+The main idea is to that for each $$$a,b,n$$$, the possible $$$L$$$ is a interval $$$[l,r]$$$. We will show how to calculate that.
+In the first $$$n-1$$$ days, the snail will climb $$$(n-1)\cdot (a-b)$$$ meters. And in the daytime of the $$$n$$$-th day, the snail will climb $$$a$$$ meters. So after $$$n$$$ days, the snail climbs at most $$$(n-1)\cdot (a-b) + a$$$ meters, which means $$$L \le (n-1)\cdot (a-b) + a$$$. Also, the snail can not reach $$$L$$$ before $$$n$$$ days, which means $$$L \gt (n-2)\cdot (a-b) + a$$$. So $$$L \in [(n-2)\cdot (a-b) + a + 1 , (n-1)\cdot (a-b) + a]$$$. $$$n=1$$$ is a special case, where $$$L \in [1,a]$$$ .
+Now after each operation $$$1$$$, we can maintain a possible interval $$$[L_{min} , L_{max}]$$$. When a snail comes, we let the new $$$[L_{min}',L_{max}']$$$ be $$$[L_{min},L_{max}] \cap [l,r]$$$, where $$$[l,r]$$$ is the possible interval for the new snail. If the new interval is empty, we ignore this information, otherwise adopt it.
+Now let's focus on another problem: for a fixed $$$L,a,b$$$, how to calculate the number of days the snail needs to climb? We can solve the equation $$$(n-2)(a-b) + a \lt L \le (n-1)(a-b) + a$$$, and get $$$n - 2 \lt \frac{L - a}{a - b} \le n - 1$$$, which means $$$n$$$ equals to $$$\lceil \frac{L-a}{a-b} \rceil + 1$$$. Still, special judge for $$$L \le a$$$, where $$$n=1$$$ in this case.
+Then, for each query of type $$$2$$$, we just calculate the number of days we need for $$$L_{min}$$$ and $$$L_{max}$$$. If they are the same, output that number. Otherwise output $$$-1$$$.
+
+#include
+<
+bits
+/
+stdc
+++.
+h
+>
+using
+namespace
+std
+;
+typedef
+long
+long
+ll
+;
+void
+solve
+()
+{
+int
+q
+;
+scanf
+(
+"%d"
+,&
+q
+);
+ll L
+=
+1
+,
+R
+=
+1e18
+;
+while
+(
+q
+--)
+{
+int
+op
+;
+scanf
+(
+"%d"
+,&
+op
+)
+;
+if
+(
+op
+==
+1
+)
+{
+int
+a
+,
+b
+,
+n
+;
+scanf
+(
+"%d%d%d"
+,&
+a
+,&
+b
+,&
+n
+);
+ll ql
+=
+1LL
+*(
+n
+-
+2
+)*(
+a
+-
+b
+)
++
+a
++
+1
+,
+qr
+=
+1LL
+*(
+n
+-
+1
+)*(
+a
+-
+b
+)
++
+a
+;
+if
+(
+n
+==
+1
+)
+ql
+=
+1
+,
+qr
+=
+a
+;
+if
+(
+ql
+>
+R
+||
+qr
+<
+L
+)
+{
+puts
+(
+"0"
+);
+}
+else
+L
+=
+max
+(
+L
+,
+ql
+)
+,
+R
+=
+min
+(
+R
+,
+qr
+)
+,
+puts
+(
+"1"
+);
+}
+else
+{
+int
+a
+,
+b
+;
+scanf
+(
+"%d%d"
+,&
+a
+,&
+b
+);
+ll ans1
+=
+max
+(
+1LL
+,(
+L
+-
+b
+-
+1
+)
+/
+(
+a
+-
+b
+)
++
+1
+)
+,
+ans2
+=
+max
+(
+1LL
+,(
+R
+-
+b
+-
+1
+)
+/
+(
+a
+-
+b
+)
++
+1
+);
+if
+(
+ans1
+==
+ans2
+)
+printf
+(
+"%lld\n"
+,
+ans1
+);
+else
+puts
+(
+"-1"
+);
+}
+}
+return
+;
+}
+int
+main
+()
+{
+int
+t
+;
+scanf
+(
+"%d"
+,&
+t
+);
+while
+(
+t
+--)
+solve
+();
+}
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

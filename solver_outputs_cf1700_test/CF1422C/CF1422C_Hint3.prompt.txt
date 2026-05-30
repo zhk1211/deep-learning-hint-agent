@@ -1,0 +1,62 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Sometimes it is not easy to come to an agreement in a bargain. Right now Sasha and Vova can't come to an agreement: Sasha names a price as high as possible, then Vova wants to remove as many digits from the price as possible. In more details, Sasha names some integer price $ n $ , Vova removes a non-empty substring of (consecutive) digits from the price, the remaining digits close the gap, and the resulting integer is the price.
+
+For example, is Sasha names $ 1213121 $ , Vova can remove the substring $ 1312 $ , and the result is $ 121 $ .
+
+It is allowed for result to contain leading zeros. If Vova removes all digits, the price is considered to be $ 0 $ .
+
+Sasha wants to come up with some constraints so that Vova can't just remove all digits, but he needs some arguments supporting the constraints. To start with, he wants to compute the sum of all possible resulting prices after Vova's move.
+
+Help Sasha to compute this sum. Since the answer can be very large, print it modulo $ 10^9 + 7 $ .
+
+Input Format
+The first and only line contains a single integer $ n $ ( $ 1 \le n < 10^{10^5} $ ).
+
+Output Format
+In the only line print the required sum modulo $ 10^9 + 7 $ .
+
+Examples
+Sample 1
+Input
+107
+Output
+42
+
+Sample 2
+Input
+100500100500
+Output
+428101984
+
+Note
+Consider the first example.
+
+Vova can choose to remove $ 1 $ , $ 0 $ , $ 7 $ , $ 10 $ , $ 07 $ , or $ 107 $ . The results are $ 07 $ , $ 17 $ , $ 10 $ , $ 7 $ , $ 1 $ , $ 0 $ . Their sum is $ 42 $ .
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+Try to understand the problem: if the price is $$$107$$$ , then the resulting prices are $$$7$$$ , $$$17$$$ , $$$10$$$ , $$$107$$$.
+
+**Hint 2**
+Count how many times each digit will be included in the sum.
+
+**Hint 3**
+If the part to the left is deleted, then the place of the digit will change.
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

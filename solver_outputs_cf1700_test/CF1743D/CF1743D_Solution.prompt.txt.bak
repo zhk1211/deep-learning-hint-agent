@@ -1,0 +1,493 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+You are given a string $ s $ consisting of $ n $ characters. Each character of $ s $ is either 0 or 1.
+
+A substring of $ s $ is a contiguous subsequence of its characters.
+
+You have to choose two substrings of $ s $ (possibly intersecting, possibly the same, possibly non-intersecting — just any two substrings). After choosing them, you calculate the value of the chosen pair of substrings as follows:
+
+- let $ s_1 $ be the first substring, $ s_2 $ be the second chosen substring, and $ f(s_i) $ be the integer such that $ s_i $ is its binary representation (for example, if $ s_i $ is 11010, $ f(s_i) = 26 $ );
+- the value is the bitwise OR of $ f(s_1) $ and $ f(s_2) $ .
+
+Calculate the maximum possible value you can get, and print it in binary representation without leading zeroes.
+
+Input Format
+The first line contains one integer $ n $ — the number of characters in $ s $ .
+
+The second line contains $ s $ itself, consisting of exactly $ n $ characters 0 and/or 1.
+
+All non-example tests in this problem are generated randomly: every character of $ s $ is chosen independently of other characters; for each character, the probability of it being 1 is exactly $ \frac{1}{2} $ .
+
+This problem has exactly $ 40 $ tests. Tests from $ 1 $ to $ 3 $ are the examples; tests from $ 4 $ to $ 40 $ are generated randomly. In tests from $ 4 $ to $ 10 $ , $ n = 5 $ ; in tests from $ 11 $ to $ 20 $ , $ n = 1000 $ ; in tests from $ 21 $ to $ 40 $ , $ n = 10^6 $ .
+
+Hacks are forbidden in this problem.
+
+Output Format
+Print the maximum possible value you can get in binary representation without leading zeroes.
+
+Examples
+Sample 1
+Input
+5
+11010
+Output
+11111
+
+Sample 2
+Input
+7
+1110010
+Output
+1111110
+
+Sample 3
+Input
+4
+0000
+Output
+0
+
+Note
+In the first example, you can choose the substrings 11010 and 101. $ f(s_1) = 26 $ , $ f(s_2) = 5 $ , their bitwise OR is $ 31 $ , and the binary representation of $ 31 $ is 11111.
+
+In the second example, you can choose the substrings 1110010 and 11100.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1743D - Problem with Random Tests
+The first observation we need is that we can choose two prefixes of $$$s$$$ as the substrings used in forming the results. This can be proved easily: suppose we chose a substring which does not contain the leftmost character of $$$s$$$; if we expand it to the left, the answer won't become worse. So, it is optimal to choose two prefixes of $$$s$$$ as the substrings.
+Furthermore, one of these prefixes must be $$$s$$$ itself: if the leftmost index of
+1
+is $$$i$$$, the length of the answer won't exceed $$$n - i + 1$$$, but the only way to have a
+1
+in the $$$(n-i+1)$$$-th bit of the answer is to choose a prefix of $$$s$$$ where the $$$(n-i+1)$$$-th character (from the right) is
+1
+; and there is only one such prefix of $$$s$$$, which is $$$s$$$ itself.
+So, now we can solve the problem in $$$O(n^2)$$$ — try to combine all prefixes of $$$s$$$ with $$$s$$$ itself, and choose the one that yields the best answer. To speed this up, we need to somehow cut down on the number of prefixes of $$$s$$$ we check.
+Let's look at the first block of
+1
+'s in $$$s$$$. The next character after this block is
+0
+; since we take $$$s$$$ as one of the substring, in order to get
+1
+instead of
+0
+in the corresponding position of the answer, we need to choose a prefix which has
+1
+in that position. This
+1
+represents one of the
+1
+'s from the first block of
+1
+'s, since only one of them can shift to that position. So, we need to check only the prefixes such that, by using them, we shift some character
+1
+from the first block to the position of the first
+0
+after this block. Since the tests are random, the expected length of the first block of
+1
+'s is $$$O(1)$$$ (furthermore, even the probabiliy that its length is $$$20$$$ or bigger is about $$$10^{-6}$$$), so the expected number of prefixes we need to check is also $$$O(1)$$$. Thus, the expected runtime of our solution is $$$O(n)$$$.
+
+Solution (BledDest)
+#include
+<
+bits
+/
+stdc
+++.
+h
+>
+using
+namespace
+std
+;
+char
+buf
+[
+1000043
+];
+string
+normalize
+(
+const
+string
+&
+v
+)
+{
+int
+cnt
+=
+0
+;
+while
+(
+cnt
+<
+v
+.
+size
+()
+&&
+v
+[
+cnt
+]
+==
+'0'
+)
+cnt
+++;
+if
+(
+cnt
+==
+v
+.
+size
+())
+return
+"0"
+;
+return
+v
+.
+substr
+(
+cnt
+,
+int
+(
+v
+.
+size
+())
+-
+cnt
+);
+}
+string
+operator
+|(
+const
+string
+&
+a
+,
+const
+string
+&
+b
+)
+{
+int
+sz
+=
+max
+(
+a
+.
+size
+(),
+b
+.
+size
+());
+string
+ans
+(
+sz
+,
+'0'
+);
+for
+(
+int
+i
+=
+0
+;
+i
+<
+a
+.
+size
+();
+i
+++)
+if
+(
+a
+[
+i
+]
+==
+'1'
+)
+ans
+[
+i
++
+sz
+-
+int
+(
+a
+.
+size
+())]
+=
+'1'
+;
+for
+(
+int
+i
+=
+0
+;
+i
+<
+b
+.
+size
+();
+i
+++)
+if
+(
+b
+[
+i
+]
+==
+'1'
+)
+ans
+[
+i
++
+sz
+-
+int
+(
+b
+.
+size
+())]
+=
+'1'
+;
+return
+normalize
+(
+ans
+);
+}
+bool
+better
+(
+const
+string
+&
+a
+,
+const
+string
+&
+b
+)
+{
+if
+(
+a
+.
+size
+()
+!=
+b
+.
+size
+())
+return
+a
+.
+size
+()
+>
+b
+.
+size
+();
+return
+a
+>
+b
+;
+}
+int
+main
+()
+{
+int
+n
+;
+scanf
+(
+"%d"
+,
+&
+n
+);
+string
+s
+;
+scanf
+(
+"%s"
+,
+buf
+);
+s
+=
+buf
+;
+string
+ans
+=
+s
+|
+s
+;
+int
+pos1
+=
+s
+.
+find
+(
+"1"
+);
+if
+(
+pos1
+!=
+string
+::
+npos
+)
+{
+int
+pos2
+=
+s
+.
+find
+(
+"0"
+,
+pos1
+);
+if
+(
+pos2
+!=
+string
+::
+npos
+)
+{
+int
+cur
+=
+pos1
+;
+int
+not_needed
+=
+0
+;
+while
+(
+true
+)
+{
+if
+(
+cur
+==
+n
+||
+(
+s
+[
+cur
+]
+==
+'1'
+&&
+cur
+>
+pos2
+))
+break
+;
+string
+nw
+=
+s
+|
+s
+.
+substr
+(
+pos1
+,
+n
+-
+pos1
+-
+not_needed
+);
+if
+(
+better
+(
+nw
+,
+ans
+))
+ans
+=
+nw
+;
+cur
+++;
+not_needed
+++;
+}
+}
+}
+puts
+(
+ans
+.
+c_str
+());
+}
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

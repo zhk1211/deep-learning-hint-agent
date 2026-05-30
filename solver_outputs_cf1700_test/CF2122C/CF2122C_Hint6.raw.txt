@@ -1,0 +1,68 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<pair<int, int>> pts(n);
+        vector<int> idx_x(n), idx_y(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> pts[i].first >> pts[i].second;
+            idx_x[i] = i;
+            idx_y[i] = i;
+        }
+
+        // sort indices by x coordinate
+        sort(idx_x.begin(), idx_x.end(), [&](int i, int j) {
+            return pts[i].first < pts[j].first;
+        });
+        // sort indices by y coordinate
+        sort(idx_y.begin(), idx_y.end(), [&](int i, int j) {
+            return pts[i].second < pts[j].second;
+        });
+
+        // sets: X_l = first n/2 in x-order, X_r = last n/2
+        // Y_l = first n/2 in y-order, Y_r = last n/2
+        vector<bool> in_X_l(n, false), in_Y_l(n, false);
+        for (int i = 0; i < n / 2; ++i) {
+            in_X_l[idx_x[i]] = true;
+            in_Y_l[idx_y[i]] = true;
+        }
+
+        // Partition points into 4 groups based on membership in X_l and Y_l
+        // We want to pair points from group A (X_l & Y_l) with group D (X_r & Y_r)
+        // and group B (X_l & Y_r) with group C (X_r & Y_l)
+        vector<int> A, B, C, D;
+        for (int i = 0; i < n; ++i) {
+            bool xl = in_X_l[i];
+            bool yl = in_Y_l[i];
+            if (xl && yl) A.push_back(i);
+            else if (xl && !yl) B.push_back(i);
+            else if (!xl && yl) C.push_back(i);
+            else D.push_back(i);
+        }
+
+        // Pair A with D, B with C
+        vector<pair<int, int>> ans;
+        for (size_t i = 0; i < A.size(); ++i) {
+            ans.emplace_back(A[i], D[i]);
+        }
+        for (size_t i = 0; i < B.size(); ++i) {
+            ans.emplace_back(B[i], C[i]);
+        }
+
+        // Output pairs (1-indexed)
+        for (auto &p : ans) {
+            cout << p.first + 1 << ' ' << p.second + 1 << '\n';
+        }
+    }
+    return 0;
+}
+```

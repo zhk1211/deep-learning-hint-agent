@@ -1,0 +1,57 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    
+    // Maximum possible XOR value is less than 2*n
+    int max_xor = 1;
+    while (max_xor <= 2 * n) max_xor <<= 1;
+    max_xor = min(max_xor, 2 * n + 1);
+    
+    // Precompute perfect squares up to max_xor
+    vector<int> squares;
+    for (int i = 0; i * i < max_xor; ++i) {
+        squares.push_back(i * i);
+    }
+    
+    long long total_subarrays = (long long)n * (n + 1) / 2;
+    long long odd_div_subarrays = 0;
+    
+    vector<int> freq(max_xor, 0);
+    freq[0] = 1;
+    int pref_xor = 0;
+    
+    for (int i = 0; i < n; ++i) {
+        pref_xor ^= a[i];
+        for (int sq : squares) {
+            int target = pref_xor ^ sq;
+            if (target < max_xor) {
+                odd_div_subarrays += freq[target];
+            }
+        }
+        freq[pref_xor]++;
+    }
+    
+    cout << total_subarrays - odd_div_subarrays << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    
+    return 0;
+}
+```

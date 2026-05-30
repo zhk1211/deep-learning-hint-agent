@@ -1,0 +1,439 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    string s;
+    cin >> s;
+    s = " " + s; // 1-indexed
+
+    // Find leaves (excluding root 1)
+    vector<int> leaves;
+    for (int i = 2; i <= n; i++) {
+        if (adj[i].size() == 1) {
+            leaves.push_back(i);
+        }
+    }
+
+    int cnt0 = 0, cnt1 = 0, cntQ = 0;
+    for (int v : leaves) {
+        if (s[v] == '0') cnt0++;
+        else if (s[v] == '1') cnt1++;
+        else cntQ++;
+    }
+
+    int root_val = -1; // 0 or 1, -1 if ?
+    if (s[1] == '0') root_val = 0;
+    else if (s[1] == '1') root_val = 1;
+
+    int otherQ = 0;
+    for (int i = 2; i <= n; i++) {
+        if (adj[i].size() != 1 && s[i] == '?') {
+            otherQ++;
+        }
+    }
+
+    if (root_val != -1) {
+        // Root is fixed
+        // Iris wants to maximize non-zero weight leaves.
+        // Weight non-zero iff leaf value != root value.
+        // Iris will set ? leaves to opposite of root, Dora will set them to root.
+        // They alternate, Iris first.
+        // Let x = number of ? leaves.
+        // Iris gets ceil(x/2) of them, Dora gets floor(x/2).
+        int x = cntQ;
+        int iris_turns = (x + 1) / 2;
+        int dora_turns = x / 2;
+        int ans;
+        if (root_val == 0) {
+            // non-zero if leaf = 1
+            ans = cnt1 + iris_turns;
+        } else {
+            // non-zero if leaf = 0
+            ans = cnt0 + iris_turns;
+        }
+        cout << ans << "\n";
+    } else {
+        // Root is ?
+        // Iris will set root to something, then game continues.
+        // But Iris moves first, she can set root or a leaf.
+        // We need to analyze optimal play.
+        // If there are no other ? (only leaves and root), special case.
+        if (otherQ == 0) {
+            // Only root and leaves have ?
+            // Iris can set root to 0 or 1, then Dora sets a leaf, etc.
+            // Let's compute both scenarios.
+            // If Iris sets root to 0:
+            //   non-zero leaves = leaves with 1.
+            //   Iris will set ? leaves to 1, Dora to 0.
+            //   Iris gets ceil(cntQ/2) of ? leaves.
+            //   ans0 = cnt1 + ceil(cntQ/2)
+            // If Iris sets root to 1:
+            //   ans1 = cnt0 + ceil(cntQ/2)
+            // Iris will choose max.
+            int ans0 = cnt1 + (cntQ + 1) / 2;
+            int ans1 = cnt0 + (cntQ + 1) / 2;
+            cout << max(ans0, ans1) << "\n";
+        } else {
+            // There are other ? vertices (non-leaf, non-root).
+            // The game is more complex.
+            // Key insight: Iris can force the root to be set to the value that benefits her,
+            // but Dora can also influence.
+            // Actually, with other ? present, the parity of total ? matters.
+            // Let total ? = 1 (root) + cntQ (leaves) + otherQ.
+            // Iris wants to maximize, Dora minimize.
+            // It turns out the answer is:
+            // max( cnt0, cnt1 ) + (cntQ + (otherQ % 2 == 1 ? 1 : 0)) / 2
+            // Wait, need to derive carefully.
+            // From hints: weight non-zero iff root != leaf.
+            // Iris can decide root value if she wants, but Dora can also set root if Iris doesn't.
+            // Since Iris goes first, she can set root immediately.
+            // If she sets root to 0, then game reduces to fixed root 0 with remaining ?.
+            // But Dora will then play optimally.
+            // Let's compute value if root is set to 0 by Iris on first move:
+            //   Then Iris used one move, remaining ? = cntQ + otherQ.
+            //   Now it's Dora's turn. In the fixed root game, the player who moves first (now Dora) wants to minimize.
+            //   For fixed root 0, the number of non-zero leaves = cnt1 + number of ? leaves set to 1.
+            //   Dora will set ? leaves to 0, Iris to 1.
+            //   Since Dora moves first on the remaining ?, she gets ceil((cntQ+otherQ)/2) moves? No, careful:
+            //   The game is on all remaining ? vertices, not just leaves.
+            //   But setting non-leaf ? doesn't directly affect leaf count, only leaf ? matter.
+            //   However, players can waste moves on non-leaf ?.
+            //   The optimal strategy: they will first set the leaf ? because those directly affect score.
+            //   After leaf ? are exhausted, they set other ? which don't affect score.
+            //   So the order: leaf ? are contested, other ? are just filler.
+            //   So effectively, the number of moves each gets on leaf ? depends on who goes first and total number of leaf ?.
+            //   But the presence of other ? changes who gets the first move on leaf ?.
+            //   Let's analyze: Iris sets root to 0. Remaining ? = L (leaf ?) + O (other ?).
+            //   Dora's turn. They will alternate setting leaf ? until none left.
+            //   Dora wants to minimize leaves with 1, so she sets leaf ? to 0; Iris sets to 1.
+            //   The number of leaf ? set to 1 = number of Iris's turns among the first L moves.
+            //   Since Dora starts, the sequence of turns on leaf ?: D, I, D, I, ...
+            //   So Iris gets floor(L/2) leaf ? set to 1.
+            //   Then remaining O moves don't matter.
+            //   So total non-zero leaves = cnt1 + floor(L/2).
+            // If Iris sets root to 1 on first move:
+            //   Similarly, non-zero leaves = cnt0 + floor(L/2).
+            // So Iris can achieve max(cnt0, cnt1) + floor(L/2) by setting root optimally.
+            // But wait, Iris might not set root first; she could set a leaf ? to force Dora to set root?
+            // Let's see if Iris can do better by not setting root first.
+            // Suppose Iris sets a leaf ? to 1. Then Dora might set root to 0 to minimize.
+            // This could lead to different counts.
+            // We need to consider the full game tree.
+            // Known result from editorial: answer = max(cnt0, cnt1) + (cntQ + (otherQ % 2)) / 2.
+            // Let's test with sample 4: n=6, edges: 1-2,2-3,3-4,5-3,3-6, s=?0????
+            // Leaves: 4,5,6? Actually 1 is root. Leaves: 4,5,6? Check degrees: 4 connected to 3 (deg1), 5 to 3 (deg1), 6 to 3 (deg1). Also 2 connected to 1 and 3 (deg2). So leaves: 4,5,6.
+            // s: 1:?, 2:0, 3:?, 4:?, 5:?, 6:?
+            // cnt0=0, cnt1=0, cntQ=3 (leaves 4,5,6). otherQ: vertex 3 is ? and not leaf (deg3). So otherQ=1.
+            // Formula: max(0,0) + (3 + (1%2))/2 = 0 + (3+1)/2 = 2. Sample output: 2. Matches.
+            // Sample 5: n=5, edges: 1-2,1-3,1-4,1-5, s=11?1?
+            // Leaves: 2,3,4,5. s[1]=1 (root fixed), s[2]=1, s[3]=?, s[4]=1, s[5]=?.
+            // cnt0=0, cnt1=2 (vertices 2,4), cntQ=2 (3,5). root=1.
+            // Fixed root formula: ans = cnt0 + iris_turns = 0 + ceil(2/2)=1. Sample output: 1. Matches.
+            // Sample 6: n=2, edge 2-1, s=??
+            // Leaves: 2. cnt0=0,cnt1=0,cntQ=1. otherQ=0. root=?.
+            // otherQ=0 case: ans = max(cnt1+ceil(1/2), cnt0+ceil(1/2)) = max(1,1)=1? But sample output is 0.
+            // Wait, sample 6 output is 0. Let's re-check.
+            // n=2, root=1, leaf=2. s[1]='?', s[2]='?'.
+            // Iris first. She can set root to 0 or 1, or leaf to 0 or 1.
+            // If she sets root to 0, then Dora sets leaf. Dora wants to minimize non-zero weight.
+            // Weight non-zero if leaf != root. If root=0, Dora will set leaf=0 -> weight 0.
+            // So score 0.
+            // If Iris sets root to 1, Dora sets leaf=1 -> weight 0.
+            // If Iris sets leaf to 0, Dora sets root. Dora will set root=0 -> weight 0.
+            // If Iris sets leaf to 1, Dora sets root=1 -> weight 0.
+            // So final score 0.
+            // My formula for otherQ=0 gave 1. That's wrong.
+            // Why? Because when root is ?, Iris doesn't necessarily get ceil(cntQ/2) leaves set to her choice.
+            // In the otherQ=0 case, total ? = 1 (root) + cntQ (leaves).
+            // Iris moves first. If she sets root, then Dora sets a leaf, then Iris sets leaf, etc.
+            // If she sets root to 0, remaining ? = cntQ leaves. Dora's turn.
+            // Dora will set leaf to 0. Then Iris sets leaf to 1, etc.
+            // Number of leaves set to 1 = floor(cntQ/2). Not ceil.
+            // So ans0 = cnt1 + floor(cntQ/2).
+            // Similarly ans1 = cnt0 + floor(cntQ/2).
+            // For sample 6: cnt0=0,cnt1=0,cntQ=1. floor(1/2)=0. ans=0. Correct.
+            // So otherQ=0 case should use floor, not ceil.
+            // But wait, in sample 2: n=4, edges: 1-2,3-2,2-4, s=???0
+            // Leaves: 3,4? Let's check: 1 connected to 2; 2 connected to 1,3,4; 3 connected to 2; 4 connected to 2. Leaves: 3 and 4? But 4 has value 0, so leaf 4 is fixed. Leaf 3 is ?. Also root 1 is ?. Other vertices: 2 is ? and not leaf (deg3). So otherQ=1 (vertex 2). cnt0=1 (vertex 4), cnt1=0, cntQ=1 (vertex 3). root=?.
+            // This falls into otherQ>0 case. Formula gives: max(1,0) + (1 + (1%2))/2 = 1 + (2)/2 = 2? But sample output is 1.
+            // So my formula for otherQ>0 is also wrong.
+            // Let's re-evaluate carefully.
+
+            // We need to compute the game value properly.
+            // Let's denote:
+            // L = number of ? leaves
+            // O = number of ? non-leaves (excluding root)
+            // R = 1 if root is ? else 0
+            // Fixed leaves: 0-count = A, 1-count = B.
+            // Score = number of leaves with value != root value.
+            // Players alternate setting ? to 0/1. Iris maximizes, Dora minimizes.
+            // This is a finite perfect-information game. We can compute the minimax value.
+
+            // Key observation: The only thing that matters for a leaf is whether its final value equals root.
+            // Non-leaf ? don't directly affect score, but they consume moves.
+            // So the game is about who gets to set the root and the leaves.
+            // Since Iris wants to maximize leaves different from root, she wants root to be opposite of the majority of leaves she can set.
+            // Dora wants root to equal the majority of leaves she can set.
+
+            // Let's think in terms of control over root and leaves.
+            // The game ends when all ? are filled.
+            // Total number of moves = R + L + O.
+            // Iris moves on turns 1,3,5,... Dora on 2,4,6,...
+
+            // Consider the root. If Iris sets root, she chooses its value. If Dora sets root, she chooses.
+            // The player who sets root can decide the "target" for leaves.
+            // After root is set, the remaining game is about setting leaves to match or not match root.
+            // The player who moves first after root is set will have advantage on leaves.
+
+            // We can brute force over who sets root and when, but we need a closed form.
+
+            // Let's analyze the game as a combinatorial game.
+            // There are three types of ?: root, leaves, others.
+            // Others are "neutral" moves that don't affect score. They just change the turn parity.
+            // So the presence of O changes who gets the first move on the important pieces (root and leaves).
+
+            // Let's denote the state by (r, l, o) where r=1 if root ?, l=number of leaf ?, o=number of other ?.
+            // But we also have fixed leaves A and B.
+            // The value of the game V(r, l, o, A, B) = final score under optimal play.
+            // Since A and B are just constants, we can think of the base score if all ? were set to some default.
+            // Actually, we can think of the game as: Iris wants to maximize (number of leaves != root), Dora minimize.
+            // This is equivalent to: Iris wants to set leaves to 1-root, Dora wants to set leaves to root.
+            // Root value is chosen by whoever sets it.
+
+            // Let's consider the order of moves. Players can choose any ?.
+            // It's a standard result that in such games, the optimal strategy is to first set the root, then the leaves, then others.
+            // Because setting others early just gives the opponent more information/control.
+            // So we can assume players will only set others when no root or leaves left.
+            // Thus the game reduces to: first, players decide who sets the root and what value, then they set leaves.
+            // The number of moves spent on root and leaves is R + L.
+            // The player who moves first on the root+leaves sequence is Iris if O is even? Wait, total moves before root+leaves are exhausted: if they play optimally, they might set others to change turn parity.
+            // Actually, players can use O moves to change who gets to set the root or leaves.
+            // This is a classic "turn stealing" using neutral moves.
+
+            // Let's formalize: There are R+L important moves. There are O neutral moves.
+            // The game is equivalent to: players alternate taking moves. They can either take an important move (if any left) or a neutral move.
+            // Neutral moves don't affect score.
+            // This is a game of "who gets to make the last important move" or "who gets to set the root".
+            // Since Iris wants to maximize, Dora minimize.
+
+            // Let's analyze the value based on who sets the root.
+            // Suppose Iris sets the root. She will choose value v. Then the remaining game is on L leaves and O others, with Dora to move.
+            // Dora will then try to minimize leaves != v.
+            // In that subgame, Dora moves first. The number of leaf ? is L. Dora wants to set leaves to v, Iris to 1-v.
+            // They will alternate setting leaves. Dora gets ceil(L/2) leaves set to v? Wait, Dora moves first, so she takes the 1st, 3rd, 5th... leaf moves.
+            // So Dora sets ceil(L/2) leaves, Iris sets floor(L/2) leaves.
+            // Thus leaves set to v = ceil(L/2) (by Dora), leaves set to 1-v = floor(L/2) (by Iris).
+            // So total leaves != v = (fixed leaves != v) + floor(L/2).
+            // Iris will choose v to maximize this: max( (A + floor(L/2)) if v=1, (B + floor(L/2)) if v=0 ) = max(A, B) + floor(L/2).
+            // So if Iris sets root, score = max(A, B) + floor(L/2).
+
+            // Suppose Dora sets the root. She will choose v to minimize leaves != v.
+            // After she sets root, it's Iris's turn on the remaining L leaves and O others.
+            // Iris moves first on leaves. She will set leaves to 1-v, Dora to v.
+            // Iris gets ceil(L/2) leaves, Dora gets floor(L/2).
+            // Leaves != v = (fixed leaves != v) + ceil(L/2).
+            // Dora will choose v to minimize this: min( A + ceil(L/2), B + ceil(L/2) ) = min(A, B) + ceil(L/2).
+            // So if Dora sets root, score = min(A, B) + ceil(L/2).
+
+            // Now, who gets to set the root? It depends on the total number of moves and the order.
+            // The players can choose to set root or leaves or others.
+            // The game is a race to set the root. The player who sets the root is the one who decides to take it.
+            // Since Iris wants to maximize, she will set the root if doing so gives a higher score than letting Dora set it.
+            // But Dora can also preemptively set the root.
+            // This is a classic "first player can choose" scenario, but the presence of neutral moves allows the second player to potentially force who sets the root.
+
+            // Let's consider the total number of moves N = R + L + O.
+            // The game ends after N moves.
+            // The root is just one of the ?. Players can take it at any time.
+            // If a player takes the root, they choose its value and the game continues with the other player to move.
+            // This is equivalent to a game where players can either take the root (and get the corresponding payoff) or take a leaf/other.
+            // Taking a leaf when root is not set is risky because the root value is unknown, but players can assume optimal future play.
+            // Actually, if root is not set, setting a leaf to 0 or 1 is a commitment. The opponent can then set root to the same value to nullify it.
+            // So it's never optimal to set a leaf before the root is set, unless forced.
+            // Therefore, the game will first have a phase where players either set the root or set neutral moves to change turn parity.
+            // Eventually, someone sets the root, then leaves are set.
+
+            // So the game reduces to: players alternate. On your turn, you can either:
+            // - Set the root (if available) and get the corresponding payoff (with the opponent moving first on the rest).
+            // - Set a neutral move (if available) to pass the turn.
+            // - Set a leaf (if no neutral moves and root is set? but if root not set, setting leaf is bad).
+            // So effectively, it's a game of "who sets the root" with neutral moves as "pass".
+
+            // Let R=1 (root ?). Let O = number of neutral moves.
+            // Iris moves first.
+            // If Iris sets root immediately, payoff = max(A,B) + floor(L/2).
+            // If Iris passes (by setting a neutral), then Dora faces the same choice but with one less neutral move.
+            // Dora can set root, giving payoff = min(A,B) + ceil(L/2).
+            // Or Dora can pass, etc.
+            // This is a minimax on a chain of moves.
+
+            // Let's define f(k) = value of game when there are k neutral moves left, root is still ?, and it's Iris's turn.
+            // Actually, the number of leaves L is fixed. The only state is (turn, remaining_neutral).
+            // But also, if all neutral moves are exhausted, players must set root or leaves.
+            // If no neutral moves left, and root is ?, the player to move must either set root or set a leaf.
+            // Setting a leaf before root is suboptimal, so they will set root.
+            // So if no neutral moves, the player to move sets root.
+
+            // Let's compute the base values:
+            // If Iris sets root: V_I = max(A,B) + floor(L/2).
+            // If Dora sets root: V_D = min(A,B) + ceil(L/2).
+
+            // Note that V_I >= V_D always? Let's check: max(A,B) >= min(A,B), but floor(L/2) <= ceil(L/2). So not necessarily.
+            // Example: A=0, B=0, L=1. V_I = 0 + 0 = 0. V_D = 0 + 1 = 1. So V_D > V_I.
+            // So Iris might prefer Dora to set root! That's interesting.
+
+            // So the game is: Iris can choose to set root (get V_I) or pass (if neutral available). If she passes, Dora gets to choose.
+            // Dora will choose the option that minimizes the final score.
+            // So we can compute recursively.
+
+            // Let's define state as (turn, o) where turn=0 for Iris, 1 for Dora, o = number of neutral moves left.
+            // Value = final score.
+            // If o == 0:
+            //   If turn == 0 (Iris): she must set root -> V_I.
+            //   If turn == 1 (Dora): she must set root -> V_D.
+            // If o > 0:
+            //   If turn == 0: Iris can either set root (get V_I) or use a neutral (move to turn=1, o-1). She will choose max(V_I, value(1, o-1)).
+            //   If turn == 1: Dora can either set root (get V_D) or use a neutral (move to turn=0, o-1). She will choose min(V_D, value(0, o-1)).
+
+            // This is a simple DP. Since O can be up to 1e5, we can find pattern.
+            // Let's compute small o:
+            // o=0: I: V_I, D: V_D.
+            // o=1: I: max(V_I, V_D). D: min(V_D, V_I) = V_I? Wait, min(V_D, V_I) = min(V_D, V_I). Since V_I and V_D are just numbers.
+            // Let's denote a = V_I, b = V_D.
+            // o=0: I: a, D: b.
+            // o=1: I: max(a, value(D,0)) = max(a, b). D: min(b, value(I,0)) = min(b, a).
+            // o=2: I: max(a, value(D,1)) = max(a, min(b, a)) = a (since a >= min(b,a) always). D: min(b, value(I,1)) = min(b, max(a,b)) = b.
+            // o=3: I: max(a, value(D,2)) = max(a, b). D: min(b, value(I,2)) = min(b, a).
+            // Pattern: for even o, I gets a, D gets b. For odd o, I gets max(a,b), D gets min(a,b).
+            // Let's verify:
+            // o=0 (even): I: a.
+            // o=1 (odd): I: max(a,b).
+            // o=2 (even): I: a.
+            // o=3 (odd): I: max(a,b).
+            // So if O is even, Iris can force a. If O is odd, Iris gets max(a,b).
+            // But wait, this is if Iris is to move at the start. The initial state is Iris's turn with O neutral moves.
+            // So initial value = (O % 2 == 0) ? a : max(a, b).
+
+            // Let's test with sample 2: A=cnt0=1, B=cnt1=0, L=cntQ=1, O=otherQ=1.
+            // a = max(1,0) + floor(1/2) = 1 + 0 = 1.
+            // b = min(1,0) + ceil(1/2) = 0 + 1 = 1.
+            // O=1 (odd) -> max(1,1)=1. Sample output: 1. Matches!
+
+            // Sample 4: A=0, B=0, L=3, O=1.
+            // a = 0 + floor(3/2) = 1.
+            // b = 0 + ceil(3/2) = 2.
+            // O=1 odd -> max(1,2)=2. Sample output: 2. Matches!
+
+            // Sample 6: A=0, B=0, L=1, O=0.
+            // a = 0 + 0 = 0.
+            // b = 0 + 1 = 1.
+            // O=0 even -> a = 0. Sample output: 0. Matches!
+
+            // Sample 3: n=5, edges: 1-2,1-3,2-4,2-5, s=?1?01
+            // Leaves: 3,4,5? Let's list: 1 connected to 2,3; 2 connected to 1,4,5; 3 leaf; 4 leaf; 5 leaf.
+            // s: 1:?, 2:1, 3:?, 4:0, 5:1.
+            // Leaves: 3 (?), 4 (0), 5 (1). So A=cnt0=1 (vertex 4), B=cnt1=1 (vertex 5), L=cntQ=1 (vertex 3).
+            // Other ?: vertex 1 is root (?), vertex 2 is fixed 1 (not leaf). So O=0.
+            // Root is ?, so R=1.
+            // a = max(1,1) + floor(1/2) = 1 + 0 = 1.
+            // b = min(1,1) + ceil(1/2) = 1 + 1 = 2.
+            // O=0 even -> a = 1. Sample output: 1. Matches!
+
+            // Sample 1: all fixed, root=0. A=2 (leaves 2,4? Wait, sample 1: n=4, edges 1-2,1-3,4-1, s=0101.
+            // Leaves: 2,3,4? 1 is root. 2:0, 3:1, 4:1? s: 0,1,0,1 for vertices 1,2,3,4. So leaves: 2 (0), 3 (0? wait s[3]=0? Actually s[3] is third char: '0'? Let's see: "0101" -> indices: 1:0, 2:1, 3:0, 4:1. Leaves: 2 (1), 3 (0), 4 (1). Root=0. Non-zero if leaf=1. Leaves with 1: 2 and 4 -> 2. Output 2. Our fixed root formula: root=0, cnt1=2, cntQ=0 -> ans=2. Correct.
+
+            // So the logic seems solid.
+
+            // Now, what if root is fixed? We already handled that.
+            // If root is ?, we compute a and b as above, then apply O parity.
+            // But wait, what if there are other ? that are not leaves and not root? That's O.
+            // We need to count O correctly: any vertex i (2..n) that is not a leaf and s[i]=='?'.
+            // Also, root is separate.
+
+            // Let's double-check the definition of leaf: vertex 1 is never leaf. Leaves are vertices with degree 1 except root.
+            // In the tree, degree 1 means leaf.
+
+            // Edge case: n=2. Root 1, leaf 2. Works.
+
+            // Let's test another case: root fixed, but there are other ? non-leaves. Does that affect the fixed root formula?
+            // In fixed root, the game is: Iris and Dora set ? leaves and ? others. Root is fixed.
+            // The score is number of leaves != root.
+            // Iris wants to maximize, Dora minimize.
+            // They will only care about leaf ?. Other ? are neutral moves.
+            // So it's the same subgame on leaves with neutral moves.
+            // Let L = leaf ?, O = other ?.
+            // Iris moves first. She wants to set leaves to 1-root, Dora to root.
+            // If they only had leaves, Iris would get ceil(L/2) leaves set to her choice.
+            // But with O neutral moves, the parity of who moves first on leaves can change.
+            // Let's analyze: state (turn, L, O). Turn 0=Iris.
+            // If L=0: score = fixed leaves != root.
+            // If L>0:
+            //   Iris can either set a leaf (to 1-root) -> move to (turn=1, L-1, O) with that leaf fixed.
+            //   Or use a neutral -> move to (turn=1, L, O-1).
+            // Dora similarly.
+            // This is again a game where neutral moves act as "pass".
+            // The base values without neutral: Iris gets ceil(L/2) leaves set to 1-root.
+            // Let's define f(L, turn) without neutrals: if turn=0, Iris gets ceil(L/2); if turn=1, Dora gets ceil(L/2) leaves set to root, so Iris gets floor(L/2).
+            // With neutrals, we can use the same DP as before.
+            // Let a = ceil(L/2), b = floor(L/2). (These are the number of leaves Iris gets to set to 1-root, given she moves first or second on leaves).
+            // Then the game with O neutrals starting with Iris: value = (O % 2 == 0) ? a : max(a, b)? Wait, careful.
+            // In the root game, we had a and b as final scores. Here, the score is (fixed != root) + (number of ? leaves set to 1-root).
+            // Let base = fixed != root.
+            // If Iris moves first on leaves, she gets a = ceil(L/2) leaves set to 1-root.
+            // If Dora moves first on leaves, Iris gets b = floor(L/2) leaves set to 1-root.
+            // So total score = base + (Iris's leaves).
+            // The game with neutrals: Iris can choose to set a leaf (move to Dora's turn with L-1) or use neutral.
+            // This is exactly the same structure: Iris wants to maximize, Dora minimize.
+            // The base values if no neutrals: if Iris's turn, score = base + a; if Dora's turn, score = base + b.
+            // Then with O neutrals, the starting value (Iris's turn) = (O % 2 == 0) ? base + a : max(base + a, base + b) = base + max(a, b) (since a >= b).
+            // So if O is odd, Iris gets base + a (since max(a,b)=a). If O is even, she also gets base + a? Wait:
+            // O even -> base + a. O odd -> base + max(a,b) = base + a. So in both cases, Iris gets base + a!
+            // That means neutral moves don't help Dora in the fixed root case? Let's check.
+            // If O=0: Iris gets base + a.
+            // If O=1: Iris can use neutral, then Dora can either use neutral (but O=0 now) or set leaf. Actually, let's recompute carefully.
+            // We need to re-derive the DP for fixed root with neutrals.
+
+            // Let state: (turn, l, o). Score = number of leaves != root at the end.
+            // Base case: l=0: score = base.
+            // If l>0:
+            //   turn=0 (Iris):
+            //     Option 1: set a leaf to 1-root. Then score = value(1, l-1, o).
+            //     Option 2: if o>0, use neutral: score = value(1, l, o-1).
+            //     Iris chooses max.
+            //   turn=1 (Dora):
+            //     Option 1: set a leaf to root. Score = value(0, l-1, o).
+            //     Option 2: if o>0, use neutral: score = value(0, l, o-1).
+            //     Dora chooses min.
+
+            // Let's compute small l, o.
+            // Let f(l, o) = value when Iris's turn, g(l, o) = value when Dora's turn.
+            // f(0, o) = base, g(0, o) = base.
+            // f(l, 0) = ? If no neutrals, Iris must set leaf: f(l,0) = g(l-1,0). And g(l,0) = f(l-1,0).
+            // So f(l,0) = base + ceil(l/2), g(l,0) = base + floor(l/2).
+            // Now with o>0:
+            // f(l,o) = max( g(l-1,o), g(l,o-1) ) if o>0.
+            // g(l,o) = min( f(l-1,o), f(l,o-1) ) if o>0.
+
+            // Let's test l=1, o=1.
+            // f(1,1) = max( g(0,1), g(1,0) ). g(0,1) = base. g(1,0) = base + floor(1/2) = base.
+            // So f(1,1) = base.
+            // But base + a with a=ceil(1/2)=1 would be base+1. So Iris gets base, not base+1. So neutrals do matter!
+            // My previous assumption that a and b are the only factors was wrong because the ability to set leaves changes the count.
+            // Let's recompute properly.
+
+            // We need to solve this game for fixed root with L leaf ? and O other ?.
+            // This is a standard game. Let's find the formula.
+            // Let's denote the game value as V(L, O) for Iris's turn.
+            // We can compute small values to find pattern.
+            // base = fixed != root. Let's set base=0 for simplicity, then add later.
+            // f(l,o) = max( g(l-1,o

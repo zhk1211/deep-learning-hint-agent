@@ -1,0 +1,147 @@
+// Hint8
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<pair<int,int>> ops;
+    vector<int> a(n+1);
+    iota(a.begin(), a.end(), 0);
+    
+    // We'll use a recursive-like approach with a stack
+    // We want to reduce all numbers > 2 to 1 using ceil division
+    // Strategy: repeatedly take the largest number x > 2, and use y = ceil(sqrt(x))
+    // Divide all numbers from y+1 to x-1 by x (they become 1 in one step)
+    // Then divide x by y repeatedly until x becomes 1
+    
+    vector<int> big;
+    for (int i = 3; i <= n; i++) big.push_back(i);
+    
+    while (!big.empty()) {
+        int x = big.back();
+        big.pop_back();
+        if (x <= 2) continue;
+        int y = (int)ceil(sqrt(x));
+        // Ensure y <= x-1, and y >= 2
+        if (y > x-1) y = x-1;
+        if (y < 2) y = 2;
+        
+        // Divide all numbers from y+1 to x-1 by x
+        for (int i = y+1; i < x; i++) {
+            ops.push_back({i, x});
+            // After this, a[i] becomes 1
+        }
+        // Now divide x by y repeatedly until x becomes 1
+        int cur = x;
+        while (cur > 1) {
+            ops.push_back({x, y});
+            cur = (cur + y - 1) / y;
+        }
+        // Now x is 1, and we need to process numbers from 3 to y that are still > 2
+        // But we already removed them from big? Actually we need to add them back if they are > 2
+        // Better approach: process in order, and after reducing x, we might have new numbers to reduce
+        // Actually the standard solution: process numbers from n down to 3, using the current largest as x
+        // and y = ceil(sqrt(x)). After reducing x to 1, we continue with the next largest.
+        // But we must ensure we don't miss numbers that were skipped (y+1 to x-1 are already 1).
+        // The numbers from 3 to y are still > 1, so we need to process them later.
+        // Since we process in decreasing order, we can just push y to the stack if y > 2.
+        if (y > 2) {
+            big.push_back(y);
+            // sort big in descending order? We can just use a priority queue or sort later.
+            // For simplicity, we'll use a set or sort at the end, but since we only add y which is <= sqrt(x),
+            // and we process in descending order, we can just sort big each iteration or use a multiset.
+            // To keep it simple, we'll use a vector and sort descending each time, but that might be O(n sqrt n log n)?
+            // Actually total operations are small, we can just use a priority queue.
+        }
+    }
+    
+    // But the above approach is messy. Let's implement the standard solution:
+    // We'll keep an array and simulate, but we need to output operations.
+    // Standard solution from editorial:
+    // For n > 2, we repeatedly take the largest element > 2, say x, and y = ceil(sqrt(x)).
+    // We apply operation (i, x) for i from y+1 to x-1, then apply (x, y) until x becomes 1.
+    // We do this until only 1s and one 2 remain.
+    
+    // Let's redo cleanly:
+    ops.clear();
+    vector<int> vals(n+1);
+    iota(vals.begin(), vals.end(), 0);
+    
+    // We'll use a set of indices with value > 2, sorted by value descending
+    set<pair<int,int>, greater<pair<int,int>>> st; // {value, index}
+    for (int i = 3; i <= n; i++) {
+        st.insert({vals[i], i});
+    }
+    
+    while (!st.empty()) {
+        auto it = st.begin();
+        int x = it->second;
+        int val_x = it->first;
+        st.erase(it);
+        if (val_x <= 2) continue;
+        
+        int y_val = (int)ceil(sqrt(val_x));
+        // find index with value y_val (or the smallest value >= y_val? Actually we need an index with value y_val)
+        // Since we have all numbers from 1 to n initially, and we only change values to 1 or 2,
+        // the value y_val exists at index y_val initially, but it might have been changed.
+        // We need to find an index whose current value is y_val. Since we only reduce numbers,
+        // the value y_val might not exist if it was already reduced. But we can just use the index y_val
+        // if its value is still y_val, or we can use any index with value >= y_val?
+        // Actually the standard solution: we use y = index of ceil(sqrt(x)), but we need its current value.
+        // Since we process in decreasing order, when we process x, all numbers > x are already 1 or 2.
+        // Numbers between y+1 and x-1 are still their original values (since we haven't processed them yet,
+        // except we might have reduced some of them if they were used as y in previous steps? 
+        // Actually we process from largest to smallest, so when we process x, all numbers > x are already processed.
+        // Numbers < x are untouched except possibly reduced if they were used as y? But y is always <= sqrt(x) < x,
+        // so y is smaller than x. When we process x, we haven't processed y yet (since y < x), so y's value is still y.
+        // So we can just use index y = ceil(sqrt(x)) and its value is y.
+        int y = (int)ceil(sqrt(val_x));
+        if (y > x-1) y = x-1;
+        if (y < 2) y = 2;
+        // y is an index, and its current value is y (since we haven't changed it yet)
+        
+        // First, apply operations for i from y+1 to x-1 with x
+        for (int i = y+1; i < x; i++) {
+            if (vals[i] != 1) { // might already be 1 from previous steps? Actually no, because we haven't processed i yet if i > y and i < x.
+                ops.push_back({i, x});
+                vals[i] = 1;
+                // remove i from set if present
+                st.erase({i, i}); // originally value was i, but now it's 1, so we remove it
+            }
+        }
+        // Now apply operations on x with y until x becomes 1
+        int cur = vals[x];
+        while (cur > 1) {
+            ops.push_back({x, y});
+            cur = (cur + vals[y] - 1) / vals[y];
+        }
+        vals[x] = 1;
+        // x is now 1, removed from set already
+        
+        // Now we need to process y if y > 2 and its value is still > 2? 
+        // But y's value is still y (since we only used it as divisor, its value doesn't change).
+        // So if y > 2, we need to process it later. It's already in the set if y > 2.
+        // But we might have removed it? We didn't remove y from set. So it's still there.
+    }
+    
+    // After processing, we should have all 1s except possibly one 2 at index 2.
+    // But we might have reduced 2 as well? We never process 2 because we only process > 2.
+    // So index 2 remains 2.
+    
+    cout << ops.size() << "\n";
+    for (auto &p : ops) {
+        cout << p.first << " " << p.second << "\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

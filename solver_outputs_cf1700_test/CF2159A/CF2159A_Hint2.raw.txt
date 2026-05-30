@@ -1,0 +1,86 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(const vector<int>& idx) {
+    cout << "? " << idx.size();
+    for (int i : idx) cout << " " << i;
+    cout << endl;
+    int res;
+    cin >> res;
+    if (res == -1) exit(0);
+    return res;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    
+    // Find first pair
+    int first_val = -1;
+    for (int i = 2; i <= m; ++i) {
+        int r = query({1, i});
+        if (r != 0) {
+            first_val = r;
+            a[1] = a[i] = r;
+            break;
+        }
+    }
+    
+    // Find remaining pairs
+    for (int i = 2; i <= m; ++i) {
+        if (a[i] != 0) continue;
+        vector<int> known;
+        for (int j = 1; j < i; ++j) {
+            if (a[j] != 0) known.push_back(j);
+        }
+        // Query with all known elements
+        int base = query(known);
+        known.push_back(i);
+        int with_i = query(known);
+        if (with_i != base) {
+            a[i] = with_i;
+            // Find the other occurrence of this value
+            for (int j = i + 1; j <= m; ++j) {
+                if (a[j] == 0) {
+                    vector<int> check = {i, j};
+                    int r = query(check);
+                    if (r == with_i) {
+                        a[j] = with_i;
+                        break;
+                    }
+                }
+            }
+        } else {
+            // a[i] is a new value, find its pair later
+            // Actually we can find it now by querying with each unknown
+            for (int j = i + 1; j <= m; ++j) {
+                if (a[j] == 0) {
+                    int r = query({i, j});
+                    if (r != 0) {
+                        a[i] = a[j] = r;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    cout << "!";
+    for (int i = 1; i <= m; ++i) cout << " " << a[i];
+    cout << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

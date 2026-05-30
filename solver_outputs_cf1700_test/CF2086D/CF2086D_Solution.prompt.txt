@@ -1,0 +1,90 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+You would like to construct a string $ s $ , consisting of lowercase Latin letters, such that the following condition holds:
+
+- For every pair of indices $ i $ and $ j $ such that $ s_{i} = s_{j} $ , the difference of these indices is even, that is, $ |i - j| \bmod 2 = 0 $ .
+
+Constructing any string is too easy, so you will be given an array $ c $ of $ 26 $ numbers — the required number of occurrences of each individual letter in the string $ s $ . So, for every $ i \in [1, 26] $ , the $ i $ -th letter of the Latin alphabet should occur exactly $ c_i $ times.
+
+Your task is to count the number of distinct strings $ s $ that satisfy all these conditions. Since the answer can be huge, output it modulo $ 998\,244\,353 $ .
+
+Input Format
+Each test consists of several test cases. The first line contains a single integer $ t $ ( $ 1 \le t \le 10^{4} $ )— the number of test cases. The description of test cases follows.
+
+Each test case contains $ 26 $ integers $ c_{i} $ ( $ 0 \le c_{i} \le 5 \cdot 10^{5} $ )— the elements of the array $ c $ .
+
+Additional constraints on the input data:
+
+- The sum of $ c_{i} $ for every test case is positive;
+- The sum of $ c_{i} $ over all test cases does not exceed $ 5 \cdot 10^{5} $ .
+
+Output Format
+For each test case, print one integer — the number of suitable strings $ s $ , taken modulo $ 998\,244\,353 $ .
+
+Examples
+Sample 1
+Input
+5
+2 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+3 1 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 1 0
+0 0 0 0 0 0 0 0 0 0 0 0 1 0 3 0 0 0 0 0 0 0 0 0 0 0
+1 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 233527 233827
+Output
+4
+960
+0
+1
+789493841
+
+Note
+In the first test case, there are $ 4 $ suitable strings: "abak", "akab", "baka" and "kaba".
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+2086D - Even String
+From the statement, it follows that all identical letters in $$$s$$$ must be positioned either at even indices or at odd indices simultaneously.
+Let's examine how the ways to construct the string $$$s$$$ are formed:
+A subset of letters that we take for the odd positions (the remaining letters will be at the even positions);
+The number of ways to create a string with a fixed subset of letters at the odd positions.
+Let $$$S$$$ denote the sum of the array $$$c$$$. We also denote $$$odd = \lceil\frac{S}{2}\rceil$$$ as the number of odd positions, and $$$even = \lfloor\frac{S}{2}\rfloor$$$ as the number of even positions.
+For now, let's ignore the second point and calculate how many ways there are to distribute the letters such that we can create at least one suitable string $$$s$$$. That is, we need to count the number of ways to choose a set of letters that will occupy the odd positions. This resembles a modification of the classical
+knapsack problem
+, which can be solved using dynamic programming. Let $$$\text{dp}[i]$$$ denote the number of ways to take a subset of letters such that the number of letters taken equals $$$i$$$. The base case of the dynamic programming is $$$\text{dp}[i] = 0$$$, and the entire dynamic can be computed using two nested loops:
+dp[0] = 1;
+for (int i = 0; i < 26; i++){
+if (c[i] == 0){
+continue;
+}
+for (int j = s; j >= 0; j--){
+if (j + c[i] <= s){
+dp[j + c[i]] = (dp[j + c[i]] + dp[j]) % MOD;
+}
+}
+}
+The number we're interested in will be in $$$\text{dp}[odd]$$$.
+Now we need to understand what to do with point $$$2$$$. Notice that if we have fixed a subset of letters $$$X$$$ at the odd positions, then the number of ways to create the string is equal to the product of the multinomial coefficients:
+$$$$$$ \frac{odd!}{\prod_{i \in X} c_{i}!} \cdot \frac{even!}{\prod_{i \notin X} c_{i}!}$$$$$$
+Notice that this product is a constant, meaning it does not depend on the specific subset $$$X$$$:
+$$$$$$ \frac{odd! \cdot even!}{\prod_{i = 0}^{26} c_{i}!} $$$$$$
+Thus, the answer to the entire problem is simply the product:
+$$$$$$ \frac{odd! \cdot even!}{\prod_{i = 0}^{26} c_{i}!} \cdot \text{dp}[odd] $$$$$$
+The total complexity complexity is $$$O(S \cdot 26)$$$.
+
+[code block omitted]
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

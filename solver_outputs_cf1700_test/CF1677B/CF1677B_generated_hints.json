@@ -1,0 +1,4 @@
+[
+  "**Hint 1**\nFor the answers of columns, we can observe that since there are only $$$n \\cdot m$$$ students in total, no students will leave, and every time a new student entering the meeting hall, all columns will move one step to the right circularly, so the answer will not decrease. If the $$$i$$$-th student is a serious student, for all the previous students with subscript $$$j$$$ where $$$0 \\lt j \\lt i$$$, and $$$j \\% m = i \\% m$$$ are naughty students, the answer in the column will increase by $$$1$$$.",
+  "**Hint 2**\nFor the answer of rows, we can transfer it from the answer of $$$i-m$$$, which is equivalent to adding a new row to the answer of $$$i-m$$$. Suppose the last serious student is the $$$j$$$-th student. If $$$i-j \\lt m$$$, the answer will increase by $$$1$$$, otherwise the answer will be the same as that of when the $$$i-m$$$ student enters the meeting hall."
+]

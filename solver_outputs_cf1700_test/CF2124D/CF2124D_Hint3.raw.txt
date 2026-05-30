@@ -1,0 +1,352 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        if (k == 1) {
+            cout << "YES\n";
+            continue;
+        }
+
+        if (k == n) {
+            bool ok = true;
+            for (int i = 0; i < n / 2; ++i) {
+                if (a[i] != a[n - 1 - i]) {
+                    ok = false;
+                    break;
+                }
+            }
+            cout << (ok ? "YES" : "NO") << "\n";
+            continue;
+        }
+
+        // We can delete any element that is not among the (k-1) smallest or (k-1) largest
+        // in the whole array? Actually, the operation allows deleting the k-th smallest
+        // in a subarray of length >= k. This means we can delete any element that has
+        // at least k-1 elements <= it and at least k-1 elements >= it in the whole array?
+        // More precisely, we can delete an element if there exist at least k-1 elements
+        // less than or equal to it and at least k-1 elements greater than or equal to it
+        // in the remaining array. But we can delete elements in any order.
+        // The key observation: we can delete any element that is not among the (k-1) smallest
+        // or (k-1) largest values in the current array. By repeatedly deleting such elements,
+        // we can reduce the array to its (k-1) smallest and (k-1) largest elements.
+        // However, we can also delete elements from the middle if they satisfy the condition.
+        // The final palindrome must be formed by a subset of the original elements.
+        // It turns out we can keep any elements we want as long as we can match them
+        // symmetrically, and we can delete the rest if they are "deletable".
+        // A simpler characterization: we can delete an element if there are at least k-1
+        // elements to its left or right? No.
+        // Let's think: to delete a_i, we need a subarray of length >= k containing a_i
+        // where a_i is the k-th smallest. This means there are exactly k-1 elements in the
+        // subarray that are <= a_i (including a_i itself if ties? "k-th smallest" means
+        // if sorted, the element at position k. If there are duplicates, the k-th smallest
+        // is the element at index k after sorting. So a_i must be the k-th element in sorted order.
+        // So there must be at least k-1 elements in the subarray that are <= a_i,
+        // and at least k-1 elements that are >= a_i? Actually, if a_i is the k-th smallest,
+        // then there are exactly k-1 elements strictly smaller? No, with duplicates,
+        // the k-th smallest could have some equal elements before it. The condition is:
+        // number of elements in subarray strictly less than a_i <= k-1,
+        // and number of elements <= a_i >= k.
+        // So a_i is deletable if we can find a subarray of length >= k containing a_i
+        // such that the count of elements <= a_i is at least k, and the count of elements
+        // < a_i is at most k-1. This is always possible if there are at least k-1 elements
+        // in the whole array that are <= a_i and at least k-1 elements that are >= a_i?
+        // Not exactly, because the subarray must be contiguous.
+        // However, we can always choose a subarray that includes a_i and enough elements
+        // on both sides if the array is long enough. But we can delete elements one by one.
+        // The known solution for this problem: we can delete any element that is not among
+        // the first (k-1) or last (k-1) elements of the sorted array? No.
+        // Let's look at the hints: "Can we erase any element we want?" "How can we erase elements?"
+        // "Consider a two-pointer approach."
+        // The two-pointer approach suggests we can match elements from the ends.
+        // Actually, we can always delete elements from the middle if they are not needed
+        // for the palindrome. The condition for being able to delete an element is that
+        // there are at least k-1 elements to its left or at least k-1 elements to its right
+        // in the current array? Let's test: if we have a subarray of length >= k,
+        // we can pick the k-th smallest. If we want to delete a specific element,
+        // we can include it in a subarray with k-1 other elements that are all <= it
+        // (or all >= it) to make it the k-th smallest? Actually, if we take a subarray
+        // consisting of a_i and k-1 elements that are all <= a_i, then a_i will be the
+        // largest among them, so it will be the k-th smallest if there are exactly k-1
+        // elements <= it? But if there are duplicates, it could be tied. The k-th smallest
+        // is well-defined: sort the subarray, pick the k-th element. If we have a_i and
+        // k-1 elements all <= a_i, then in sorted order, a_i will be at position >= k
+        // (since there are at least k elements <= a_i). It could be exactly k if the
+        // k-1 elements are strictly less, or if some are equal, it might be earlier?
+        // Actually, if we have a_i and k-1 elements all <= a_i, then the number of elements
+        // <= a_i is at least k. The k-th smallest could be a_i or something smaller.
+        // To guarantee a_i is the k-th smallest, we need exactly k-1 elements strictly less
+        // than a_i, or we need to control duplicates. But we can choose the subarray
+        // appropriately. The problem allows us to select any i such that a_i is the k-th smallest.
+        // So if there are multiple candidates, we can pick the one we want.
+        // This suggests we can delete any element that is not "extreme" in the current array.
+        // Specifically, if we have at least k elements, we can always delete the k-th smallest
+        // of the whole array? No, the subarray must be contiguous.
+        // Let's think differently: we can simulate the process with two pointers.
+        // We want to form a palindrome. We can match elements from the outside in.
+        // If a[l] == a[r], we can keep them and move pointers inward.
+        // If they don't match, we need to delete one of them. Can we delete a[l]?
+        // We can delete a[l] if there exists a subarray starting at l of length >= k
+        // where a[l] is the k-th smallest. That means there are at least k-1 elements
+        // to the right of l (including l) that are >= a[l]? Actually, if we take subarray
+        // from l to l+k-1, then a[l] is the first element. For it to be the k-th smallest,
+        // we need all other k-1 elements to be >= a[l]? No, if they are all >= a[l],
+        // then a[l] is the smallest, so it would be the 1st smallest, not k-th.
+        // To be k-th smallest, we need exactly k-1 elements <= a[l] in the subarray.
+        // So if we take subarray from l to l+k-1, we need a[l] to be the largest among them?
+        // Actually, if a[l] is the maximum of those k elements, then it is the k-th smallest
+        // (since there are k-1 elements smaller or equal). So we need a[l] >= all other elements
+        // in that subarray. That means we can delete a[l] if there are k-1 elements to its right
+        // that are all <= a[l]. Similarly, we can delete a[r] if there are k-1 elements to its left
+        // that are all <= a[r]. But wait, the subarray doesn't have to start at l; it just has to
+        // contain l. So we could also include elements to the left of l if they exist.
+        // But if we are at the left end, there are no elements to the left.
+        // So to delete the leftmost element, we need a subarray starting at l of length >= k
+        // where a[l] is the k-th smallest. As argued, that requires a[l] to be the maximum
+        // of that subarray (or at least, there are k-1 elements <= a[l]).
+        // So a[l] must be >= the next k-1 elements. Similarly for the rightmost element.
+        // This gives a greedy two-pointer approach:
+        // While l < r:
+        //   if a[l] == a[r]: l++, r--
+        //   else if we can delete a[l] (i.e., there exists some index i >= l such that
+        //     we can form a subarray containing l where a[l] is k-th smallest):
+        //     actually, we can just check if the maximum of the next k-1 elements is <= a[l]?
+        //     But we can also delete elements from the middle first to make it possible.
+        // This seems complicated.
+
+        // Let's look for a known solution. The problem is Codeforces Round 933 (Div. 3) or similar?
+        // Actually, it's from Codeforces Round 933 (Div. 3) Problem D? No, it's 1945C? No.
+        // Searching memory: There's a problem "Palindrome Game" or "Make It Palindrome".
+        // The key insight: We can delete any element that is not among the smallest k-1
+        // or largest k-1 elements of the original array? Let's test with examples.
+        // Example 4: n=5, k=4, a=[5,2,4,3,1]. Sorted: [1,2,3,4,5]. k-1=3.
+        // Smallest 3: 1,2,3. Largest 3: 3,4,5. The element 4 is in both? Actually, 3 is in both.
+        // The array has 5,2,4,3,1. Can we form a palindrome? Output is NO.
+        // If we could keep any elements except the extremes? We need to form a palindrome.
+        // The only way to form a palindrome is to have matching pairs. We can delete elements
+        // to leave a palindrome. What palindromes can we form? We can try to keep some elements.
+        // If we keep 5 and 5? There's only one 5. Keep 2 and 2? Only one 2. Keep 4 and 4? Only one 4.
+        // Keep 3 and 3? Only one 3. Keep 1 and 1? Only one 1. So we can only keep at most one element
+        // as the center. But we need to delete the rest. Can we delete all but one? We need to delete
+        // 4 elements. k=4, so we can only delete if we have a subarray of length >=4 where the target
+        // is the 4th smallest. To delete an element, it must be the 4th smallest in some subarray of
+        // length >=4. That means it must be the largest in that subarray (since 4th smallest out of 4
+        // is the maximum). So we can only delete an element if there are 3 other elements <= it in a
+        // contiguous subarray containing it. In [5,2,4,3,1], can we delete 5? We need 3 elements <=5
+        // contiguous with 5. The only elements are 2,4,3,1 all <=5, but they are not all contiguous
+        // with 5? The subarray [5,2,4,3] has length 4, elements 5,2,4,3. Sorted: 2,3,4,5. The 4th
+        // smallest is 5. So we can delete 5! Then array becomes [2,4,3,1]. Now can we delete 1?
+        // Subarray [2,4,3,1] length 4, sorted: 1,2,3,4. 4th smallest is 4, not 1. To delete 1,
+        // we need a subarray where 1 is the 4th smallest, i.e., the maximum. But 1 is the minimum,
+        // so impossible. Can we delete 2? Need subarray where 2 is max, impossible. So we are stuck
+        // with [2,4,3,1] which is not palindrome. Could we have done different deletions?
+        // Maybe delete 3 first? [5,2,4,3,1] -> delete 3? Subarray [2,4,3,1] length 4, sorted: 1,2,3,4,
+        // 4th smallest is 4. So 3 is not 4th smallest. Subarray [5,2,4,3] sorted: 2,3,4,5, 4th is 5.
+        // So 3 cannot be deleted initially. So only 5 can be deleted first. Then we get [2,4,3,1].
+        // Next, can we delete 4? Subarray [2,4,3,1] length 4, sorted: 1,2,3,4, 4th is 4. So yes,
+        // we can delete 4! Then array becomes [2,3,1]. Now k=4 but array length is 3 < k, so no more
+        // deletions. Not palindrome. What if we delete 2? [2,4,3,1] -> subarray [2,4,3,1] 4th is 4,
+        // so 2 cannot be deleted. Delete 3? 4th is 4, no. Delete 1? 4th is 4, no. So only 4 can be
+        // deleted. After deleting 4, we get [2,3,1]. Not palindrome. So NO. Matches example.
+
+        // Example 5: n=8, k=5, a=[4,7,1,2,3,1,3,4]. Output NO.
+        // k=5, so to delete an element, it must be the 5th smallest in a subarray of length >=5,
+        // i.e., the maximum of that subarray. So we can only delete elements that are the maximum
+        // of some contiguous subarray of length 5 containing them. This means we can delete
+        // "peaks" that have at least 4 elements <= them around.
+        // The two-pointer approach from hints: we can try to match from ends.
+        // If ends don't match, we must delete one of them. But we can only delete an end if
+        // it is the maximum of a subarray of length k starting from that end? Actually, to delete
+        // the leftmost element, we need a subarray starting at l of length k where a[l] is the max.
+        // So a[l] must be >= all next k-1 elements. Similarly for rightmost.
+        // So we can greedily check: while l < r, if a[l] == a[r], move both. Else, if a[l] is
+        // deletable (i.e., a[l] >= max of next k-1 elements), delete it (l++). Else if a[r] is
+        // deletable, delete it (r--). Else, impossible.
+        // But wait, we might also delete from the middle first to make an end deletable later?
+        // The hints say "Consider a two-pointer approach." So likely the greedy works.
+        // Let's test on example 5: a=[4,7,1,2,3,1,3,4], k=5.
+        // l=0 (4), r=7 (4). They match! So l=1, r=6.
+        // l=1 (7), r=6 (3). Not match. Can we delete 7? Need subarray of length 5 starting at l=1:
+        // [7,1,2,3,1] max is 7, so yes, 7 is deletable. Delete 7 -> l=2.
+        // Now l=2 (1), r=6 (3). Not match. Can we delete 1? Subarray starting at l=2 length 5:
+        // [1,2,3,1,3] max is 3, so 1 is not max, cannot delete. Can we delete 3 at r=6?
+        // Subarray ending at r=6 length 5: [2,3,1,3,?] actually from index 2 to 6: [1,2,3,1,3]
+        // max is 3, so 3 is max? Wait, the subarray is [1,2,3,1,3], max is 3. The element at r=6
+        // is 3, which is the max. So we can delete it? But the subarray must contain r=6, and we
+        // need r to be the k-th smallest (max). In [1,2,3,1,3], sorted: 1,1,2,3,3. The 5th smallest
+        // is 3. There are two 3's. The problem says we can select any i where a_i is the k-th smallest.
+        // So we can select the 3 at index 6. So yes, we can delete a[r]. Then r=5.
+        // Now l=2 (1), r=5 (1). Match! l=3, r=4.
+        // l=3 (2), r=4 (3). Not match. Can we delete 2? Subarray from l=3 length 5: [2,3] not enough
+        // length, array is [1,2,3,1] after deletions? Wait, we had original array, we deleted 7 and 3.
+        // Current array: indices 0,2,3,4,5? Actually, we deleted index 1 (7) and index 6 (3).
+        // Remaining: [4,1,2,3,1,4]? Wait, original: [4,7,1,2,3,1,3,4]. Delete index 1: [4,1,2,3,1,3,4].
+        // Delete index 6 (which was originally 3 at position 6, now after first deletion, it's at
+        // index 5? Let's track carefully. Better to think in terms of the original array and we can
+        // delete any element that is "deletable" in the current array. The two-pointer on the original
+        // array with the condition that we can skip elements if they are deletable might work.
+        // But the greedy two-pointer on the original array without actually modifying might be:
+        // We have pointers i=0, j=n-1. While i<j:
+        //   if a[i]==a[j]: i++, j--
+        //   else if a[i] is deletable: i++
+        //   else if a[j] is deletable: j--
+        //   else: NO
+        // But what does "deletable" mean in the context of the original array? It should mean
+        // that in the current remaining array, the element can be deleted. But the current remaining
+        // array depends on which elements we have already deleted. However, if we only delete from
+        // the ends, the remaining array is a contiguous subarray of the original? Not necessarily,
+        // because we might delete from both ends, leaving a contiguous middle? Actually, if we only
+        // delete from the ends (by moving pointers inward), the remaining array is always a contiguous
+        // subarray of the original. But in our example, we deleted index 1 (not an end initially,
+        // but after matching the first and last, the ends became 7 and 3, and we deleted 7 which was
+        // the left end of the remaining subarray). So we are always deleting the current leftmost or
+        // rightmost element. So the remaining array is always a contiguous subarray of the original.
+        // So we can just work with the original array and maintain l and r as the current bounds.
+        // Then "deletable" for a[l] means there exists a subarray within [l, r] of length >= k
+        // containing l, where a[l] is the k-th smallest. Since we are only deleting from ends,
+        // the subarray can be chosen as [l, l+k-1] (if r-l+1 >= k). For a[l] to be k-th smallest
+        // in [l, l+k-1], it must be the maximum of that subarray. So condition: r - l + 1 >= k
+        // and a[l] >= max(a[l+1 ... l+k-1]). Similarly for a[r]: r - l + 1 >= k and
+        // a[r] >= max(a[r-k+1 ... r-1]).
+        // Let's test this greedy on example 5:
+        // l=0, r=7. a[0]==a[7]=4 -> l=1, r=6.
+        // l=1, r=6. a[1]=7, a[6]=3. r-l+1=6 >=5.
+        // Check a[1] deletable: max of a[2..5] = max(1,2,3,1)=3. 7 >= 3 -> yes, l=2.
+        // Now l=2, r=6. a[2]=1, a[6]=3. r-l+1=5 >=5.
+        // Check a[2] deletable: max of a[3..6] = max(2,3,1,3)=3. 1 >= 3? No.
+        // Check a[6] deletable: max of a[2..5] = max(1,2,3,1)=3. a[6]=3 >= 3? Yes, so r=5.
+        // Now l=2, r=5. a[2]=1, a[5]=1 -> match, l=3, r=4.
+        // l=3, r=4. a[3]=2, a[4]=3. r-l+1=2 < k=5, so cannot delete any. Not match -> NO.
+        // Matches example output NO.
+
+        // Example 6: n=5, k=4, a=[1,2,1,2,2]. Output YES.
+        // Greedy:
+        // l=0, r=4. a[0]=1, a[4]=2. r-l+1=5 >=4.
+        // a[0] deletable? max of a[1..3] = max(2,1,2)=2. 1 >= 2? No.
+        // a[4] deletable? max of a[1..3] = 2. a[4]=2 >= 2? Yes. r=3.
+        // l=0, r=3. a[0]=1, a[3]=2. r-l+1=4 >=4.
+        // a[0] deletable? max of a[1..3] = max(2,1,2)=2. 1 >= 2? No.
+        // a[3] deletable? max of a[0..2] = max(1,2,1)=2. a[3]=2 >= 2? Yes. r=2.
+        // l=0, r=2. a[0]=1, a[2]=1 -> match, l=1, r=1. Loop ends. YES.
+        // Matches.
+
+        // Example 7: n=3, k=3, a=[1,2,2]. Output NO.
+        // l=0, r=2. a[0]=1, a[2]=2. r-l+1=3 >=3.
+        // a[0] deletable? max of a[1..2] = max(2,2)=2. 1 >= 2? No.
+        // a[2] deletable? max of a[0..1] = max(1,2)=2. a[2]=2 >= 2? Yes. r=1.
+        // l=0, r=1. a[0]=1, a[1]=2. r-l+1=2 < k=3. Cannot delete. Not match -> NO.
+        // Matches.
+
+        // Example 8: n=4, k=4, a=[2,1,2,2]. Output YES.
+        // l=0, r=3. a[0]=2, a[3]=2 -> match, l=1, r=2.
+        // l=1, r=2. a[1]=1, a[2]=2. r-l+1=2 < k=4. Cannot delete. Not match -> NO?
+        // But output is YES. So our greedy fails here!
+        // Let's analyze example 8: n=4, k=4, a=[2,1,2,2]. Output YES.
+        // How can we make palindrome? We can delete one element? k=4, so we need subarray of length >=4.
+        // The whole array length is 4. We can perform operation on the whole array.
+        // Subarray [2,1,2,2] sorted: 1,2,2,2. The 4th smallest is 2. There are three 2's.
+        // We can select any of them. If we delete the 2 at index 2 (0-indexed? a=[2,1,2,2],
+        // indices 0:2, 1:1, 2:2, 3:2). If we delete index 2, we get [2,1,2] which is palindrome!
+        // Or delete index 3 -> [2,1,2] palindrome. Or delete index 0 -> [1,2,2] not palindrome.
+        // So we can delete a middle 2. In our greedy two-pointer, we started with l=0, r=3.
+        // They matched (2 and 2), so we moved to l=1, r=2. Then we had 1 and 2, and we couldn't
+        // delete because subarray length < k. But we could have deleted a middle element *before*
+        // moving the pointers? Actually, the operation deletes an element, and we can choose any
+        // subarray of length >= k. We don't have to only delete from the ends. We can delete from
+        // the middle to make the ends match. In this case, the ends already match, but after moving
+        // inward, the new ends don't match. However, we could have deleted one of the matching ends
+        // instead of keeping them? But if we delete an end, we lose the match. The goal is to form
+        // a palindrome. We can choose which elements to keep. The two-pointer approach assumes we
+        // want to keep matching ends. But here, keeping the outer 2's forces the inner to be 1 and 2,
+        // which don't match. If we instead delete one of the outer 2's, we can get [1,2,2] which is
+        // not palindrome. But we can delete the inner 2? Wait, the operation is performed on the
+        // whole array. We can delete the 2 at index 2, leaving [2,1,2] which is palindrome.
+        // In our greedy, we kept the outer 2's and then got stuck. So the greedy of always keeping
+        // matching ends is not optimal because we might want to delete one of the matching ends
+        // to allow a better inner match? But if we delete a matching end, we lose that pair.
+        // In [2,1,2,2], if we keep the outer 2's, we need the inner to be palindrome, which is [1,2].
+        // Not palindrome. If we delete one outer 2, we have [1,2,2] not palindrome. But we can delete
+        // a middle 2 to get [2,1,2]. So we kept one outer 2 and the inner 1 and the other outer 2?
+        // Actually, [2,1,2] uses indices 0,1,3. So we deleted index 2. The outer elements are 0 and 3,
+        // which are both 2. They match. The inner is 1. So we did keep the outer match! We just deleted
+        // the *other* 2 that was also at the end? Wait, original: [2,1,2,2]. Indices 0 and 3 are both 2.
+        // They match. Index 1 is 1, index 2 is 2. If we delete index 2, we get [2,1,2]. The outer
+        // elements are still 0 and 3 (now at positions 0 and 2). They match. So we kept the outer match.
+        // In our greedy, we moved l and r inward when they matched. That means we committed to keeping
+        // both a[l] and a[r]. But in the successful scenario, we kept a[0] and a[3], and we also kept
+        // a[1], but we deleted a[2]. Our greedy moved l to 1 and r to 2 after matching 0 and 3.
+        // Then we were considering a[1] and a[2] as the new ends. But a[2] was deleted in the successful
+        // scenario. So our greedy incorrectly assumed that once ends match, we must keep both and move
+        // inward. But actually, we might need to delete one of the matching ends? No, we didn't delete
+        // the matching ends; we deleted a different element that was between them. But after moving
+        // pointers inward, the new "ends" are a[1] and a[2]. In the successful scenario, a[2] is deleted,
+        // so the new end would be a[1] and a[3] (which is 2). But our greedy already passed a[3] and
+        // won't consider it again. So the greedy fails because it doesn't allow deleting an element
+        // that is not at the current ends but is inside the current interval.
+        // So the two-pointer approach must allow deleting *any* element, not just the ends.
+        // But the hints say "Consider a two-pointer approach." Maybe the two-pointer is used
+        // differently: we can match elements from the ends, but we can also delete elements that
+        // are "deletable" from the middle. How to incorporate that?
+
+        // Let's rethink: What elements can we delete? We can delete an element if there exists
+        // a subarray of length >= k containing it where it is the k-th smallest.
+        // This is equivalent to: there exist at least k-1 elements in the array that are <= it,
+        // and at least k-1 elements that are >= it? Not exactly, because the subarray must be
+        // contiguous. But since we can delete elements one by one, we can change the array.
+        // However, note that deleting an element only removes it; it doesn't change the relative
+        // order of others. So if an element initially has at least k-1 elements <= it and at least
+        // k-1 elements >= it in the whole array, can we always delete it? We can choose a subarray
+        // that includes it and enough elements on both sides. But we might need to delete other
+        // elements first to make those elements contiguous? Actually, the subarray must be contiguous
+        // in the *current* array. If we delete elements in between, we can bring the required elements
+        // closer. So maybe we can delete any element that is not among the (k-1) smallest or (k-1)
+        // largest in the *multiset* of the original array? Let's test example 8: a=[2,1,2,2], k=4.
+        // k-1=3. Smallest 3: 1,2,2. Largest 3: 2,2,2. The element 1 is in the smallest 3 but not
+        // in the largest 3. The element 2 is in both. We want to delete a 2. 2 is in both, so it
+        // should be deletable. 1 is only in smallest, so maybe not deletable? But we don't need to
+        // delete 1. So this condition would say 2 is deletable, 1 is not. That matches: we can delete
+        // a 2. What about example 4: [5,2,4,3,1], k=4, k-1=3. Smallest 3: 1,2,3. Largest 3: 3,4,5.
+        // 5 is only in largest, 1 is only in smallest, 2 is only in smallest, 4 is only in largest,
+        // 3 is in both. So only 3 is deletable? But earlier we found we could delete 5 first, then 4.
+        // 5 is only in largest, but we deleted it! So that condition is not correct.
+
+        // Let's analyze the operation more carefully. We select a subarray of length >= k.
+        // We sort it and pick the k-th smallest. This is equivalent to picking an element that has
+        // exactly k-1 elements in the subarray that are <= it (with ties broken arbitrarily).
+        // In other words, the element must be the k-th order statistic of the subarray.
+        // If we want to delete a specific element x, we need to find a subarray containing x
+        // such that the number of elements in the subarray strictly less than x is <= k-1,
+        // and the number of elements <= x is >= k. This is possible if we can surround x with
+        // enough elements that are <= x and enough that are >= x? Actually, if we take a subarray
+        // consisting of x and k-1 elements that are all <= x, then the number of elements <= x is
+        // at least k (including x itself). The number of elements strictly less than x could be
+        // anywhere from 0 to k-1. If it's exactly k-1, then x is the k-th smallest. If it's less,
+        // then x is at a position < k, so it's not the k-th smallest. To make x the k-th smallest,
+        // we need exactly k-1 elements <= x? No, we need the k-th element in sorted order to be x.
+        // If there are multiple copies of x, the k-th smallest could be x even if there are more
+        // than k elements <= x. For example, subarray [2,2,2,2] with k=2. Sorted: 2,2,2,2. The 2nd
+        // smallest is 2. So we can delete any 2. Here, number of elements <=2 is 4 >=2, number of
+        // elements <2 is 0 <=1. So condition: count(<x) <= k-1 and count(<=x) >= k.
+        // So to delete x, we need to find a contiguous subarray containing x where the number of
+        // elements strictly less than x is at most k-1, and the number of elements <= x is at least k.
+        // This is equivalent to: there exists a subarray containing x of length L >= k such that
+        // if we remove all elements > x, we are left with at least k elements, and if we remove all
+        // elements equal to x? Actually, we just need that x is not too small in the subarray.
+        // Another perspective: x is deletable if we can find a subarray where x is not among the
+        // smallest k-1 elements. That is, there are at most k-1 elements strictly less than x.
+        // And also the subarray has length >= k. So we need to find a contiguous subarray containing
+        // x of length >= k where the number of elements < x is <= k-1.
+        // This is always possible if there

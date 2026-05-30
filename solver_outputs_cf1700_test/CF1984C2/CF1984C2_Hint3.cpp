@@ -1,0 +1,144 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // Compute prefix sums
+        vector<long long> pref(n + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            pref[i + 1] = pref[i] + a[i];
+        }
+        
+        // Find minimum prefix sum and its first occurrence
+        long long min_pref = pref[0];
+        int min_pos = 0;
+        for (int i = 1; i <= n; ++i) {
+            if (pref[i] < min_pref) {
+                min_pref = pref[i];
+                min_pos = i;
+            }
+        }
+        
+        // If minimum prefix sum is >= 0, answer is 2^n
+        if (min_pref >= 0) {
+            long long ans = 1;
+            for (int i = 0; i < n; ++i) {
+                ans = (ans * 2) % MOD;
+            }
+            cout << ans << '\n';
+            continue;
+        }
+        
+        // Count how many times min_pref occurs
+        int cnt_min = 0;
+        for (int i = 0; i <= n; ++i) {
+            if (pref[i] == min_pref) {
+                cnt_min++;
+            }
+        }
+        
+        // The first occurrence of min_pref
+        int first_min = -1;
+        for (int i = 0; i <= n; ++i) {
+            if (pref[i] == min_pref) {
+                first_min = i;
+                break;
+            }
+        }
+        
+        // Count positions before first_min where prefix sum > min_pref
+        // Actually we need positions i (1-indexed) before first_min where pref[i] > min_pref
+        // For each such position, we have a choice (option 1 or 2) that doesn't affect the ability to reach min_pref
+        // But careful: the choices after first_min are forced? Let's derive.
+        
+        // We need to count the number of ways to achieve maximum final value.
+        // Maximum final value = pref[n] - 2 * min_pref (since we can flip at the minimum prefix sum to get absolute value effect)
+        // Actually, the maximum final value is pref[n] - 2 * min_pref if min_pref < 0.
+        // To achieve this, we must apply option 2 at some subset of indices where prefix sum equals min_pref.
+        // Specifically, we must apply option 2 at least once at the first occurrence of min_pref? 
+        // Let's think: The process: start c=0. For each i, we either add a_i or set c = |c + a_i|.
+        // The effect of option 2 is that if c + a_i < 0, it becomes positive. This is equivalent to: we can "reset" the running sum to its absolute value.
+        // The maximum final value is achieved by ensuring that the running sum never goes below min_pref (or we flip it to positive when it hits min_pref).
+        // Actually, the maximum possible final value is pref[n] - 2 * min_pref. To achieve it, we must apply option 2 at some index i where the running sum before adding a_i is such that after adding a_i we get exactly min_pref, and then we flip it to -min_pref.
+        // More precisely, we need to apply option 2 at the first time the running sum would become min_pref. But we can also apply it at later occurrences of min_pref? 
+        // Let's analyze: Suppose we never use option 2. Then c = pref[n]. If we use option 2 at some index i, it's equivalent to: if the current sum before i is S, then after option 2, c = |S + a_i|. This is the same as if we replaced the prefix sum from i onward by adding a flip.
+        // It is known that the maximum final value is pref[n] - 2 * min_pref, and it's achieved by applying option 2 at some index i where pref[i] = min_pref. But we can apply option 2 at multiple such indices? If we apply at the first occurrence, the running sum becomes -min_pref, and later occurrences of min_pref won't happen because the sum is now higher. So we only need to apply option 2 at the first occurrence of min_pref. However, we might also apply option 2 at later occurrences if we didn't apply at the first? But if we skip the first, the sum goes below min_pref? Actually min_pref is the minimum prefix sum, so if we don't flip at the first occurrence, the sum will become min_pref and then continue, possibly going even lower? No, min_pref is the absolute minimum, so after that point the sum increases or stays same? It could go lower? Wait, min_pref is the minimum over all prefix sums, so it cannot go lower than min_pref. So if we don't flip at the first occurrence, the sum becomes min_pref, and then later it might increase. But then we could flip at a later occurrence of min_pref? But if we flip later, the sum before flipping would be something > min_pref? Actually, if we don't flip at the first min_pref, the running sum will be exactly min_pref after that index. Then later, if we add positive numbers, it increases. If we then encounter another index where prefix sum equals min_pref, that means the sum went down again to min_pref. So we could flip there. But flipping later would yield a different final value? Let's compute: If we flip at the first occurrence, final = pref[n] - 2*min_pref. If we flip at a later occurrence, say at index j where pref[j] = min_pref, then before j the sum is min_pref (since we didn't flip earlier), after flipping it becomes -min_pref, and then we add the remaining elements. The final value = (pref[n] - pref[j]) + (-min_pref) = pref[n] - pref[j] - min_pref. Since pref[j] = min_pref, this equals pref[n] - 2*min_pref. So flipping at any occurrence of min_pref gives the same maximum final value! But wait, is that always true? What if there are multiple occurrences? If we flip at the first, the sum becomes -min_pref, and later we might encounter another min_pref? No, because min_pref is negative, -min_pref is positive, and the prefix sums from that point are shifted by -2*min_pref, so they won't equal min_pref again. So if we flip at the first, we cannot flip again at a later min_pref because the condition won't occur. But if we don't flip at the first, the sum stays min_pref, and later we might hit min_pref again. So we have choices: we can choose to flip at any subset of occurrences of min_pref? But if we flip at one, the later occurrences won't be min_pref anymore. So we can flip at exactly one occurrence of min_pref, or we can flip at none? If we flip at none, final = pref[n], which is less than maximum if min_pref < 0. So to achieve maximum, we must flip at exactly one occurrence of min_pref. But wait, the sample 1: a = [2, -5, 3, -3]. Prefix sums: 0, 2, -3, 0, -3. min_pref = -3. Occurrences at indices 2 and 4 (1-indexed). The note says: "we have to take absolute value at indices 2 or 4, or both, resulting in 3 ways." Both? That means we can flip at both? Let's check: If we flip at index 2: after a_2 = -5, c = |2-5| = 3. Then a_3=3 -> c=6, a_4=-3 -> c=3 or |3|? If we also flip at index 4: c = |6-3| = 3. So flipping at both gives final 3. If we flip only at 2: final = 3. If we flip only at 4: start c=0, a1=2 -> c=2, a2=-5 -> if we don't flip, c = -3, a3=3 -> c=0, a4=-3 -> flip: c = |0-3| = 3. So flipping at both also works? But wait, if we flip at index 2, then at index 4, the sum before index 4 is 6, adding -3 gives 3, absolute is 3. So flipping at both is possible. But according to our reasoning, if we flip at index 2, the running sum becomes 3, and later prefix sums are shifted. The original prefix sum at index 4 was -3, but after flipping at index 2, the new "prefix sum" at index 4 would be? Let's track: after flipping at index 2, c = 3. Then we add a3=3 -> c=6. Then we add a4=-3 -> c=3. The condition for flipping at index 4 is that we choose option 2. But does it change the value? It doesn't, because 3 is already positive. So flipping at index 4 after flipping at index 2 is redundant but allowed. So we can flip at any subset of occurrences of min_pref? But if we flip at an earlier occurrence, the later occurrences are no longer min_pref (they become something else), but we can still choose option 2 there, it just doesn't change the value. So the number of ways to achieve maximum is: for each index i where the running sum before adding a_i (if we never flipped) would be such that pref[i] = min_pref? Actually, we need to consider the decision tree.
+
+Let's formalize: We want to count the number of sequences of choices (option 1 or 2) such that the final c is maximum. The maximum final value is M = pref[n] - 2 * min_pref (if min_pref < 0). To achieve M, we must ensure that the minimum value ever attained by the running sum (before absolute value) is exactly min_pref, and we must flip at some point to turn that minimum into -min_pref. Actually, the process with option 2 can be seen as: we can choose to "reset" the sum to its absolute value at any step. The final value is pref[n] plus twice the sum of all min_pref values that we "flipped"? Not exactly.
+
+Alternative approach: Dynamic programming. But n up to 2e5, sum 3e5, so O(n) per test case is needed.
+
+Observation: The maximum final value is always pref[n] - 2 * min_pref if min_pref < 0, else pref[n]. To achieve it, we must apply option 2 at least once at some index i where the running sum before option 2 equals min_pref. But we can also apply option 2 at other indices, as long as it doesn't reduce the final value. Actually, applying option 2 never decreases the current c, and it can only increase it or keep it same. So applying option 2 at any index cannot hurt the final value? Wait, if we apply option 2 when c + a_i is positive, it does nothing. If we apply it when c + a_i is negative, it makes it positive, which increases c. So applying option 2 can only increase c or leave it unchanged. Therefore, to maximize the final value, we should apply option 2 whenever it would increase c? But wait, if we apply option 2 early, it might prevent a later negative sum that could be flipped for even more gain? Actually, the maximum final value is fixed: M = pref[n] - 2 * min_pref. If we apply option 2 at a point where c + a_i is not the minimum, we might get a smaller final value? Let's test: a = [2, -5, 3, -3]. min_pref = -3. M = pref[4] - 2*(-3) = (-3) + 6 = 3. If we apply option 2 at index 1: c = |0+2| = 2 (no change). Then index 2: c = |2-5| = 3. Then index 3: c = 3+3=6, index 4: c = |6-3|=3. Final = 3. If we apply option 2 at index 3: c after 1:2, after 2: -3 (if we didn't flip), after 3: | -3+3 | = 0, after 4: |0-3|=3. Final = 3. So it seems we can apply option 2 at any index and still get M? Not always. Consider a = [-1, -2, -3]. pref: 0, -1, -3, -6. min_pref = -6. M = -6 - 2*(-6) = 6. If we apply option 2 at index 1: c = | -1 | = 1. Then index 2: c = |1-2| = 1. Index 3: c = |1-3| = 2. Final = 2, not 6. So applying option 2 at index 1 reduces the final value. Why? Because flipping early prevents the sum from going down to -6, so we lose the opportunity to flip a larger negative. So to achieve M, we must NOT flip at indices that would prevent the sum from reaching min_pref. We must allow the sum to go down to min_pref, and then flip at some occurrence of min_pref. After flipping, we can flip again anywhere, but it won't change the value because the sum will be positive. So the condition to achieve M is: we must choose option 1 for all indices before the first occurrence of min_pref? Not exactly: we can choose option 2 at some indices before the first min_pref as long as it doesn't increase the sum above what it would be? Actually, if we flip before the first min_pref, we might increase the sum, and then later when we add negative numbers, the minimum might not be as low as min_pref. So we must ensure that the running sum before adding a_i at the first min_pref index is exactly the same as if we never flipped. That means we cannot flip at any index before the first min_pref where the sum would become positive? Wait, if we flip when the sum is negative, it becomes positive, which changes the trajectory. So to preserve the ability to hit min_pref at the first occurrence, we must not flip at any index before that where the sum is negative? Actually, the sum before the first min_pref is always >= min_pref? The first min_pref is the first time the prefix sum reaches the absolute minimum. Before that, the prefix sum is > min_pref. So if we flip at some index before the first min_pref, we might increase the sum, and then the subsequent additions might not bring it down to min_pref. So we must not flip at any index before the first min_pref if that flip would increase the sum. But flipping only increases the sum if the current c + a_i is negative. So if at some index i before first_min, we have c + a_i < 0, flipping would make it positive, thus increasing c and preventing the later drop to min_pref. Therefore, to achieve M, we must NOT flip at any index i < first_min where c + a_i < 0. But what if c + a_i >= 0? Then flipping does nothing, so it's safe. So for indices before first_min, we can flip only if c + a_i >= 0 (i.e., the prefix sum up to i is >= 0? Actually, c before adding a_i is the prefix sum up to i-1 (if no flips). But if we never flipped before, c = pref[i-1]. Then c + a_i = pref[i]. So flipping at i does nothing if pref[i] >= 0. If pref[i] < 0, flipping would increase c, which we must avoid. So before first_min, we can only flip at indices where pref[i] >= 0. But wait, first_min is the first index where pref equals min_pref (which is negative). So all indices before first_min have pref > min_pref. Some of them might be negative. For example, a = [2, -5, 3, -3]. pref: 0, 2, -3, 0, -3. first_min = 2 (1-indexed). Before index 2, we have index 1: pref[1]=2 >=0, so flipping at index 1 is safe (does nothing). So we can flip at index 1. What about index 3? pref[3]=0 >=0, safe. Index 4: pref[4]=-3, but index 4 is after first_min? Actually first_min is 2, so index 4 is after. After first_min, we have already passed the minimum. If we flipped at first_min, the sum becomes positive, and later flips are safe. If we didn't flip at first_min, the sum is min_pref, and later we might encounter another min_pref. So the choices are more complex.
+
+Let's think in terms of DP. Let dp[i] be the number of ways to process first i elements and achieve the maximum possible final value from the suffix? Or we can think backwards.
+
+Another perspective: The process is equivalent to: we start with c=0. At each step, we can either add a_i or set c = |c + a_i|. This is equivalent to: we can choose a set of indices S where we apply option 2. The final value is determined by S. We want to count S that maximize the final value.
+
+Let's simulate the effect of S. Let f(S) be the final value. We want to find all S such that f(S) = max_T f(T). It is known that the maximum is M = pref[n] - 2 * min_pref (if min_pref < 0). And the sets S that achieve this are exactly those that contain at least one index i where the running sum before i (given the choices in S before i) equals min_pref, and no index in S before that point increases the sum. More precisely, consider the first time the running sum would hit min_pref if we never used option 2. That happens at index first_min. If we use option 2 at some index j < first_min where pref[j] < 0, then the running sum increases, and the minimum becomes higher, so we can't achieve M. So any S that achieves M must not contain any j < first_min with pref[j] < 0. For j < first_min with pref[j] >= 0, option 2 does nothing, so they can be in S or not freely. Now, at index first_min, we have two cases: either we include first_min in S or not. If we include it, we flip the sum to -min_pref, and then for all subsequent indices, any option 2 does nothing because the sum will be >= -min_pref > 0? Actually, after flipping at first_min, the sum becomes -min_pref > 0. Then we add the remaining elements. The prefix sums from first_min onward are shifted by -2*min_pref. Since min_pref is the global minimum, the shifted prefix sums will all be >= -min_pref? Let's check: original pref after first_min are >= min_pref. Shifted: pref[i] - 2*min_pref >= min_pref - 2*min_pref = -min_pref > 0. So all future c + a_i will be positive. Thus option 2 at any later index does nothing. So if we include first_min in S, we can freely choose option 1 or 2 for all later indices. If we do NOT include first_min in S, then at first_min we just add a_i and c becomes min_pref. Then we continue. The next time the running sum could be min_pref again is at some later index where pref equals min_pref. At that index, we again have the choice to flip or not. If we flip there, we get the same effect: sum becomes -min_pref, and all later flips are harmless. If we never flip at any occurrence of min_pref, the final value is pref[n], which is less than M. So to achieve M, we must flip at exactly one occurrence of min_pref? But wait, what if we flip at multiple occurrences? If we flip at first_min, later occurrences are no longer min_pref, but we can still choose option 2 there; it just does nothing. So that's allowed. If we don't flip at first_min, but flip at a later occurrence, then after that flip, the sum becomes -min_pref, and any later occurrences of min_pref in the original sequence won't be min_pref anymore. So we can flip at exactly one "effective" occurrence (the first one we choose to flip), and all other choices are free (they don't change the value). But we must also ensure that before that effective flip, we didn't flip at any index where pref < 0 (because that would increase the sum and prevent reaching min_pref). However, if we choose to flip at a later occurrence, say at index j > first_min, then before j, we must not have flipped at any index where the running sum would become negative? Actually, before j, the running sum is exactly the original prefix sum (since we didn't flip at any min_pref). But we might have flipped at some indices where pref >= 0? Those don't change the sum. What about indices between first_min and j where pref < 0? The original pref at those indices is >= min_pref. Some might be negative. If we flip at such an index, we would increase the sum, and then we might not hit min_pref at j. So we must not flip at any index i < j where the running sum before i (which is the original pref[i-1] if no flips) plus a_i is negative. That is, we must not flip at any i < j with pref[i] < 0. So the condition is: if we decide to make our effective flip at index j (where pref[j] = min_pref), then for all i < j, we can only choose option 2 if pref[i] >= 0. For i >= j, we can choose option 2 freely (since after the effective flip, the sum is positive, so option 2 does nothing). Also, we can choose to not flip at j but flip at a later min_pref, etc. But note: if we choose to flip at j, we don't have to flip at later min_pref occurrences, but we can still choose option 2 there (it does nothing). So the number of ways for a fixed effective flip index j is: 2^{number of indices i < j with pref[i] >= 0} * 2^{number of indices i > j}? Wait, for i < j, we can choose option 2 only if pref[i] >= 0. For i < j with pref[i] < 0, we MUST choose option 1. So the number of choices for i < j is 2^{count of i < j with pref[i] >= 0}. For i = j, we MUST choose option 2 (to make it effective). For i > j, we can choose either option freely, so 2^{n - j} ways. But wait, what if there are multiple occurrences of min_pref? If we choose j as the effective flip, we are forcing that we did NOT flip at any earlier min_pref. But for earlier min_pref indices, they have pref = min_pref < 0, so they fall into the "pref[i] < 0" category, so we must choose option 1 there. That's consistent. So the number of ways for a fixed j (which is an index where pref[j] = min_pref) is: 2^{count of i < j with pref[i] >= 0} * 2^{n - j}. But wait, we also have the possibility of flipping at multiple min_pref? If we flip at j, we can also flip at later min_pref? Yes, but those later flips are after j, so they are included in the 2^{n-j} factor. So that's fine.
+
+But is it possible to achieve M without flipping at any min_pref? No, because then final = pref[n] < M. So we must flip at at least one min_pref. And if we flip at more than one min_pref, the first one is the effective one, and the others are harmless. So the sets S that achieve M are exactly those that contain at least one index i with pref[i] = min_pref, and for all indices i before the first such index in S, if pref[i] < 0 then i is not in S. In other words, if we let k be the first index in S such that pref[k] = min_pref, then for all i < k, if pref[i] < 0, i not in S. For i < k with pref[i] >= 0, they can be in S or not. For i > k, any i can be in S or not. Also, what about indices i > k that are min_pref? They can be in S or not. So the total number of valid S is sum over all min_pref indices k of (2^{count of i < k with pref[i] >= 0} * 2^{n - k}). But wait, this sum double-counts sets that have multiple min_pref indices? Let's check: If a set S contains multiple min_pref indices, say k1 < k2, then in the sum over k, it will be counted when k = k1 (since k1 is the first min_pref in S). It will not be counted for k = k2 because for k2 to be the first min_pref in S, we would need k1 not in S, but in this set k1 is in S. So no double-counting. So the sum is correct.
+
+But is that all? What about indices i < k where pref[i] >= 0? They can be freely chosen. What about indices i < k where pref[i] < 0 but not min_pref? They must be option 1. So the formula seems correct.
+
+Let's test on sample 1: a = [2, -5, 3, -3]. pref: 0, 2, -3, 0, -3. min_pref = -3. Indices with min_pref: i=2 (pref[2]=-3) and i=4 (pref[4]=-3). Note: pref[0]=0 is not min_pref. So k can be 2 or 4.
+
+For k=2: count of i < 2 with pref[i] >= 0: i=1: pref[1]=2 >=0 -> count=1. Also i=0? i is index from 1 to n? The choices are at indices 1..n. So we consider i from 1 to k-1. For k=2, i=1 only. pref[1]=2 >=0, so count=1. Then 2^{1} * 2^{4-2} = 2 * 2^2 = 2 * 4 = 8.
+For k=4: i < 4: i=1,2,3. pref[1]=2 >=0, pref[2]=-3 <0, pref[3]=0 >=0. So count of >=0 is 2 (i=1,3). Then 2^{2} * 2^{4-4} = 4 * 1 = 4.
+Total = 12. Matches sample.
+
+Sample 2: all positive? a = [1,4,3,4,1,4,3,4]. pref all >=0. min_pref = 0 at i=0. But min_pref >=0, so answer is 2^n = 256. Matches.
+
+Sample 3: -1 -2 -3. pref: 0, -1, -3, -6. min_pref = -6 at i=3. Only one min_pref. k=3. i<3: i=1: pref[1]=-1 <0, i=2: pref[2]=-3 <0. Count of >=0 is 0. 2^0 * 2^{3-3} = 1. Answer 1. Matches.
+
+Sample 4: -1000000000 1000000000 1000000000 1000000000. pref: 0, -1e9, 0, 1e9, 2e9. min_pref = -1e9 at i=1. Only one min_pref. k=1. i<1: none, count=0. 2^0 * 2^{4-1} = 2^3 = 8. Matches.
+
+Sample 5: 1 9 8 4. pref: 0,1,10,18,22. min_pref=0 >=0, answer 16. Matches.
+
+So the formula works.
+
+But wait, is there any case where we can achieve M by flipping at an index that is not a min_pref? Suppose we flip at some index i where pref[i] > min_pref but still negative. Then the sum increases, and the new minimum might be higher, so final value might be less than M. Could it still equal M? Let's test: a = [-5, 10, -5]. pref: 0, -5, 5, 0. min_pref = -5 at i=1. M = 0 - 2*(-5) = 10. If we flip at i=1: c = | -5 | = 5, then +10=15, then -5=10. Final 10. If we flip at i=2: after i=1: c=-5 (no flip), i=2: c = | -5+10 | = 5, i=3: c = 5-5=0. Final 0. Not M. If we flip at i=3: c after i=1: -5, i=2: 5, i=3: |5-5|=0. Final 0. So only flipping at min_pref works. What if there are multiple negative prefix sums but not all min? Flipping at a non-min negative gives a smaller final value. So indeed, we must flip at a min_pref.
+
+But wait, what if min_pref occurs at index 0? pref[0]=0. If min_pref >=0, then the minimum is 0 (since pref[0]=0). Then M = pref[n] - 0 = pref[n]. We can achieve this by never flipping, or flipping at indices where it doesn't change anything (i.e., when c + a_i >= 0). But if min_pref = 0, then all pref[i] >= 0. So flipping at any index does nothing. So all 2^n ways work. Our formula for min_pref < 0 doesn't apply. So we handle min_pref >= 0 separately.
+
+Now, is there any edge case where min_pref < 0 but there are multiple min_pref and some of them are at index 0? No, index 0 is 0, so min_pref < 0 means index 0 is not min_pref.
+
+So the algorithm:
+1. Compute prefix sums pref[0..n].
+2. Find min_pref = min(pref).
+3. If min_pref >= 0: output 2^n mod MOD.
+4. Else:
+   a. Find all indices i (1..n) such that pref[i] == min_pref.
+   b. For each such i, compute count of j in [1, i-1] with pref[j] >= 0.
+   c. Answer = sum over i of (2^{count} * 2^{n-i}) mod MOD.
+   d. We can compute this efficiently by precomputing powers of 2, and prefix counts of pref[j] >= 0.
+
+But wait: What about the case where we flip at an index i that is min_pref, but we also flipped at some earlier index j where pref[j] < 0 but flipping there didn't increase the sum? Is that possible? Flipping at j where pref[j] < 0 means c + a_j < 0, so flipping makes it positive, thus increasing c. So it always increases the sum. So we must not flip there. So our condition is correct.
+
+But is there any scenario where flipping at a negative pref[j] that is not min_pref still allows reaching min_pref later? Suppose we flip at j, the sum becomes positive. Then later we add negative numbers, the sum might go down to min_pref again? But min_pref is the absolute minimum of the original prefix sums. If we flip at j, the new trajectory is different. Could the new minimum be exactly min_pref? Let's test: a = [2, -3, 1, -2]. pref: 0,2,-1,0,-2. min_pref = -2 at i=4. M = -2 - 2*(-2) = 2. If we flip at i=2 (pref[2]=-1): c after i=1:2, i=2: |2-3|=1. Then i=3: 1+1=2, i=4: |2-2|=0. Final 0, not 2. If we flip at i=4: c after i=1:2, i=2: -1, i=3:0, i=4: |0-2|=2. Final 2. So flipping at i=2 ruined it. What if we flip at i=2 and also at i=4? i=1:2, i=2: flip -> 1, i=3: 2, i=4: flip -> |2-2|=0. Still 0. So no.
+
+Another test: a = [-1, 2, -2]. pref: 0,-1,1,-1. min_pref = -1 at i=1 and i=3. M = -1 - 2*(-1) = 1. If we flip at i=2 (pref[2]=1 >=0, safe). If we flip at i=1: c = |-1|=1, then i=2: 1+2=3, i=3: |3-2|=1. Final 1. If we flip at i=3: i=1: -1 (no flip), i=2: 1, i=3: |1-2|=1. Final 1. So both work. What if we flip at i=1 and i=3? i=1: flip ->1, i=2:3, i=3: flip -> |3-2|=1. Works. So our formula: min_pref indices: 1 and 3. For i=1: count of j<1 with pref[j]>=0: none, 2^0 * 2^{3-1}=4. For i=3: j<3: j=1: pref[1]=-1 <0, j=2: pref[2]=1 >=0 -> count=1. 2^1 * 2^{0}=2. Total 6. Let's enumerate all 2^3=8 choices and see which give final 1:
+Indices: 1,2,3. Option 2 at a subset.
+- {}: c = -1+2-2 = -1
+- {1}: c = |-1|=1, +2=3, -2=1 -> 1
+- {2}: c = -1, | -1+2 |=1, -2=-1 -> -1
+- {3}: c = -1+2=1, |1-2|=1 -> 1
+- {1,2}: c = |-1|=1, |1+2|=3, -2=1 -> 1
+- {1,3}: c = |-1|=1, +2=3, |3-2|=1 -> 1
+- {2,3}: c = -1, | -1+2 |=1, |1-2|=1 -> 1
+- {1,2,3}: c = |-1|=1, |1+2|=3, |3-2|=1 -> 1
+So the ones that give 1 are all except {} and {2}. That's 6.

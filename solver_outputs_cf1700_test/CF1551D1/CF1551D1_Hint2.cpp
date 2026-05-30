@@ -1,0 +1,236 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m, k;
+        cin >> n >> m >> k;
+        
+        int total = n * m / 2;
+        int vertical = total - k;
+        
+        bool possible = false;
+        
+        // Check if we can fill with k horizontal and (total - k) vertical
+        // Horizontal dominoes cover 2 cells in the same row
+        // Vertical dominoes cover 2 cells in the same column
+        
+        // For each row, we can place horizontal dominoes in pairs of columns
+        // For each column, we can place vertical dominoes in pairs of rows
+        
+        // If n is even, we can fill rows completely with horizontal dominoes
+        // If m is even, we can fill columns completely with vertical dominoes
+        
+        // Key observation: we can always fill an even-by-even board with all horizontal or all vertical
+        // For odd dimensions, we need to be careful
+        
+        // Case 1: n is even
+        if (n % 2 == 0) {
+            // We can place horizontal dominoes in rows
+            // Each row can have at most m/2 horizontal dominoes
+            // We need k horizontal dominoes
+            // The remaining cells must be filled with vertical dominoes
+            // Vertical dominoes require pairs of rows, which is fine since n is even
+            
+            // Maximum horizontal dominoes possible: n * (m/2) = total
+            // But we also need to ensure vertical dominoes can be placed
+            // Vertical dominoes need even number of cells in each column
+            // If we place k horizontal dominoes, they cover 2k cells
+            // The remaining cells: n*m - 2k must be filled with vertical dominoes
+            // Vertical dominoes cover 2 cells in the same column
+            // So each column must have an even number of remaining cells
+            
+            // After placing horizontal dominoes, each row has some cells covered
+            // The uncovered cells in each column must be even
+            // Since n is even, if we place horizontal dominoes in pairs of rows? No.
+            
+            // Simpler: We can always achieve any k that is even? Let's think.
+            // Actually, we can place horizontal dominoes in any even number per row?
+            // Each horizontal domino covers 2 adjacent cells in a row.
+            // If we place h horizontal dominoes in a row, they cover 2h cells, leaving m-2h cells.
+            // These remaining cells in that row must be filled by vertical dominoes, which extend to the next row.
+            // So the pattern of horizontal dominoes in one row affects the next row.
+            
+            // Known solution: For even n, we can achieve any k such that k <= n*(m/2) and k has the same parity as something?
+            // Let's derive properly.
+            
+            // We can tile the board row by row.
+            // If n is even, we can pair rows: row 1 with row 2, row 3 with row 4, etc.
+            // In each pair of rows, we can place some horizontal dominoes in the top row and some in the bottom row,
+            // but the vertical dominoes must connect them.
+            // Actually, we can think of it as: we can independently decide for each column whether it has a vertical domino
+            // or two horizontal dominoes (one in each row of the pair).
+            // For a pair of rows (2 rows, m columns), we can place at most m horizontal dominoes (m/2 in each row? No, m total? 
+            // Actually, in 2 rows, total cells = 2m. We can place horizontal dominoes in both rows.
+            // Maximum horizontal dominoes in 2 rows = m (if we place them in all columns, each column gets two horizontal cells? No, 
+            // horizontal domino covers two adjacent cells in the same row. So in one row, max horizontal = m/2.
+            // In two rows, max horizontal = m.
+            // And we can achieve any even number of horizontal dominoes in these two rows? 
+            // Let's test: m=4, two rows. Can we have 0 horizontal? Yes, all vertical (2 vertical dominoes per column? Actually 4 columns, 
+            // each column has 2 cells, so 4 vertical dominoes). Can we have 2 horizontal? Yes, place one horizontal in top row covering cols 1-2,
+            // one horizontal in bottom row covering cols 3-4, and verticals in the rest. Can we have 1 horizontal? No, because vertical dominoes 
+            // require pairs of cells in a column. If we place one horizontal in top row, it leaves one cell in that row's column? 
+            // Actually, if we place a horizontal domino in top row covering cols 1-2, then in col 1, top cell is covered, bottom cell must be 
+            // covered by a vertical domino, so col 1 bottom cell is paired with col 1 top? But top is already covered. So vertical domino would 
+            // need to go from bottom cell to somewhere else? No, vertical domino covers two cells in the same column. So if top cell of col 1 is 
+            // covered by horizontal, the bottom cell of col 1 cannot be covered by a vertical domino because it would need the top cell. 
+            // So the bottom cell must be covered by a horizontal domino as well. Thus, horizontal dominoes in a pair of rows must come in pairs 
+            // of columns? Actually, if we place a horizontal domino in the top row covering columns j and j+1, then the cells below them 
+            // (row 2, columns j and j+1) must also be covered by horizontal dominoes (either one horizontal covering both, or two separate? 
+            // They are adjacent, so one horizontal can cover them). So horizontal dominoes in a pair of rows must be placed in both rows 
+            // in the same columns. Thus, the number of horizontal dominoes in a pair of rows must be even (since each "column pair" gives 
+            // two horizontal dominoes, one in each row). So for each pair of rows, the number of horizontal dominoes is even and at most m.
+            // Since n is even, there are n/2 pairs of rows. So total horizontal dominoes k must be even? Not necessarily, because we can 
+            // have different pairs with different counts, but each pair contributes an even number, so total k is even.
+            // But wait, what if m is odd? Then m is odd, but n*m is even, so n must be even. Then m is odd. In a pair of rows, m is odd.
+            // Can we place an odd number of horizontal dominoes in a pair of rows? Let's see: m=3. Two rows. Total cells=6. 
+            // Can we have 1 horizontal? If we place one horizontal in top row covering cols 1-2, then bottom row cols 1-2 must be horizontal? 
+            // That would be 2 horizontal dominoes. If we place one horizontal in top row covering cols 2-3, similar. 
+            // What about placing horizontal only in one row? Then the other row must have verticals. But verticals require pairs in a column.
+            // If top row has a horizontal covering cols 1-2, then col 1 top is covered, col 2 top is covered. Bottom row col 1 and col 2 are free.
+            // They can be covered by a horizontal domino (cols 1-2 bottom) -> that's another horizontal. Or they could be covered by verticals?
+            // Vertical would need to pair bottom col 1 with top col 1, but top col 1 is already covered. So impossible. 
+            // So horizontal dominoes must be paired in rows. Thus, in a pair of rows, the number of horizontal dominoes is even.
+            // Therefore, if n is even, k must be even? But sample: 4 4 2 -> YES (k=2 even). 2 3 0 -> YES (k=0 even). 2 4 2 -> YES (k=2 even).
+            // 5 2 2 -> n=5 odd, m=2 even, k=2 -> YES. So parity condition depends on which dimension is even.
+            
+            // Let's analyze properly.
+            // Consider the board colored like a chessboard. Each domino covers one black and one white cell.
+            // Horizontal domino covers two cells of different colors in the same row.
+            // Vertical domino covers two cells of different colors in the same column.
+            // The total number of black cells equals total white cells = nm/2.
+            // This doesn't give a parity condition on k.
+            
+            // Another approach: The number of horizontal dominoes k can be anything as long as we can partition the board.
+            // Known solution from similar problems (e.g., CF 1499C? Actually it's a known problem: "Domino" or something).
+            // The condition is: 
+            // If n is even, we can achieve any k such that k is even? No, sample 4 4 2 (even n, even m, k=2 even) YES.
+            // What about 4 4 1? n=4 even, m=4 even, k=1 odd. Is it possible? Let's test: total dominoes = 8. k=1 horizontal, 7 vertical.
+            // Can we place 1 horizontal and 7 vertical on 4x4? Probably not, because vertical dominoes require pairs in columns. 
+            // If we have an odd number of horizontal dominoes, the remaining cells in each row might have odd counts? 
+            // Let's try to construct: place one horizontal in top left corner (covers (1,1) and (1,2)). Then we need to fill the rest with verticals.
+            // Column 1: (1,1) covered, (2,1), (3,1), (4,1) free. We can place verticals: (2,1)-(3,1) and (4,1) is left alone? No, (4,1) needs a partner.
+            // So it seems impossible. So for even n, k must be even? But sample 2 4 2: n=2 even, m=4 even, k=2 even -> YES. 
+            // What about 2 4 1? n=2 even, m=4 even, k=1 odd. Total dominoes=4. 1 horizontal, 3 vertical. 
+            // Try: place horizontal at (1,1)-(1,2). Then column 1: (1,1) covered, (2,1) free. Column 2: (1,2) covered, (2,2) free. 
+            // We need to cover (2,1) and (2,2) with verticals? They are in different columns, vertical must be in same column. 
+            // So (2,1) must pair with (1,1) but (1,1) is taken. So impossible. Thus k must be even when n is even? 
+            // But wait, what if m is odd? n even, m odd. Example: 2 3 0 -> YES (k=0 even). 2 3 1? n=2, m=3, total=3. k=1 horizontal, 2 vertical.
+            // Try: place horizontal at (1,1)-(1,2). Then column 1: (1,1) covered, (2,1) free. Column 2: (1,2) covered, (2,2) free. 
+            // Column 3: (1,3) free, (2,3) free. We can place vertical at column 3: (1,3)-(2,3). But what about (2,1) and (2,2)? 
+            // They are adjacent, can we place a horizontal? That would be another horizontal, making k=2. So k=1 impossible. 
+            // So for n even, k must be even? Let's check sample: 2 17 16 -> n=2 even, m=17 odd, k=16 even -> YES. 
+            // So for n even, k must be even? But wait, what if n is odd? Then m must be even (since n*m even). 
+            // Sample: 3 2 3 -> n=3 odd, m=2 even, k=3 odd -> YES. So when n is odd, k can be odd? 
+            // Let's analyze n odd, m even. Total dominoes = n*m/2. Since m is even, we can fill each row with horizontal dominoes? 
+            // Each row has m cells, m even, so we can place m/2 horizontal dominoes per row. 
+            // If we place all horizontal, k = n*(m/2). Since n is odd, n*(m/2) is odd * (m/2). m/2 could be anything. 
+            // In sample 3 2 3: n=3, m=2, m/2=1, so max horizontal = 3*1=3. k=3 is max, so YES.
+            // What about 3 2 2? n=3, m=2, total=3. k=2 horizontal, 1 vertical. Is it possible? 
+            // Try: place horizontals in two rows, and one vertical in the remaining cells? 
+            // Row 1: horizontal covering (1,1)-(1,2). Row 2: horizontal covering (2,1)-(2,2). Row 3: cells (3,1) and (3,2) free. 
+            // They can be covered by a horizontal? That would be 3 horizontals. To have 2 horizontals and 1 vertical, we need to cover 
+            // two cells with a vertical. But vertical requires cells in the same column. If we leave column 1 of row 2 and row 3 free, 
+            // we can place a vertical there. Then row 2 column 2 and row 3 column 2 must be covered by something. 
+            // Let's try: Row 1: horizontal (1,1)-(1,2). Row 2: (2,1) free, (2,2) horizontal with (2,3)? No m=2. 
+            // So row 2: we can place horizontal (2,1)-(2,2) or leave for vertical. 
+            // If we want 2 horizontals, we can place one horizontal in row 1, one horizontal in row 2? Then row 3 has two cells free, 
+            // they must be covered by a horizontal? That would be 3 horizontals. 
+            // To get a vertical, we need to leave two cells in the same column free in different rows. 
+            // Suppose we place horizontal in row 1: (1,1)-(1,2). Then we leave row 2 column 1 and row 3 column 1 for a vertical. 
+            // Then row 2 column 2 and row 3 column 2 must be covered. They are in different rows, same column? No, column 2. 
+            // They can be covered by a vertical? That would be another vertical. So we would have 1 horizontal and 2 verticals. 
+            // That's k=1, not 2. To get k=2, we need two horizontals. If we place horizontals in row 1 and row 2, then row 3 cells must be horizontal? 
+            // So k=2 seems impossible for 3x2. Let's test 3 2 1: k=1 horizontal, 2 verticals. Possible as above. 
+            // So for n odd, m even, what are the possible k? 
+            // We can think of it as: we can place horizontal dominoes in full rows. Each full row of horizontals uses m/2 horizontals. 
+            // If we have an odd number of rows, we can fill some rows entirely with horizontals, and the remaining rows must be paired for verticals. 
+            // Since verticals require pairs of rows, the number of rows not filled with horizontals must be even. 
+            // So if we fill r rows with horizontals, then n - r must be even, and those n - r rows will be filled with verticals. 
+            // The number of horizontals k = r * (m/2). Since n is odd, r must be odd? Because n - r even => r odd. 
+            // So k = odd * (m/2). So k must be a multiple of (m/2) and have the same parity as (m/2) times odd? Actually, r can be any odd number from 1 to n. 
+            // So k can be (m/2), 3*(m/2), 5*(m/2), ..., up to n*(m/2). 
+            // In sample 3 2 3: m/2=1, so k can be 1, 3. k=3 works. k=1 works? 3 2 1 should be YES. Let's check if sample has 3 2 1? No. 
+            // But wait, is that the only way? Can we mix horizontals and verticals in the same row? 
+            // If n is odd and m is even, we can also have some rows partially filled with horizontals and verticals? 
+            // Consider 3x4. n=3, m=4. Can we have k=2? Total dominoes=6. k=2 horizontals, 4 verticals. 
+            // Try: place two horizontals in row 1? That would be 2 horizontals in row 1 (covering all 4 cells). Then row 2 and 3 must be verticals. 
+            // Row 2 and 3 have 4 columns, we can place 4 verticals (each column one vertical). That works. So k=2 works. 
+            // Here m/2=2, r=1 gives k=2. r=3 gives k=6. So k=2,6 are possible. What about k=4? r=2 would give k=4, but r=2 is even, then n-r=1 odd, cannot fill with verticals. 
+            // Can we achieve k=4 by mixing? Suppose we don't fill entire rows with horizontals. 
+            // Let's try to construct 3x4 with k=4. Total=6, so 4 horizontal, 2 vertical. 
+            // Place horizontals in row 1: two horizontals (covers all 4 cells). Row 2: we need two more horizontals? That would be 4 horizontals in rows 1 and 2, leaving row 3 with 4 cells. 
+            // Row 3 must be filled with horizontals? That would be 6 horizontals. 
+            // What if we place horizontals in row 1: one horizontal (covers 2 cells), leaving 2 cells in row 1. Those 2 cells must be covered by verticals into row 2. 
+            // Then row 2 will have some cells covered by verticals from row 1, and some free. We can place horizontals in row 2. 
+            // This is getting complicated. But there is a known result: 
+            // The answer is YES if and only if:
+            // - k <= n * (m/2) (obviously)
+            // - (n * m / 2 - k) <= m * (n/2) (vertical condition)
+            // - and some parity condition: 
+            //   If n is even, then k must be even? Or more precisely, the number of vertical dominoes must be even? 
+            // Let's look at the parity of the number of vertical dominoes. 
+            // Each vertical domino covers two cells in the same column. So in each column, the number of cells covered by vertical dominoes must be even. 
+            // The total number of cells covered by vertical dominoes is 2 * (total - k). 
+            // In each column, the number of cells covered by vertical dominoes is even, so the sum over columns is even, which is always true. 
+            // But also, the number of vertical dominoes in each column is an integer. 
+            // If we consider the board row by row, the number of horizontal dominoes in each row can be anything, but the vertical dominoes connect rows. 
+            // There is a known necessary and sufficient condition: 
+            // Let h = k (number of horizontal dominoes). Let v = total - k (vertical dominoes).
+            // We can achieve it iff:
+            // 1. h <= n * floor(m/2) (since each row can have at most floor(m/2) horizontals)
+            // 2. v <= m * floor(n/2) (each column can have at most floor(n/2) verticals)
+            // 3. If n is even, then h can be anything? No, sample 4 4 2 works, but what about 4 4 1? Let's check condition 2: v = 7, m * floor(n/2) = 4 * 2 = 8, so v <= 8 holds. Condition 1: h=1 <= 4*2=8 holds. So conditions 1 and 2 are not enough.
+            // So there is a parity condition.
+            // Let's analyze the parity condition properly.
+            // Consider the number of horizontal dominoes in each row. Let h_i be the number of horizontal dominoes in row i.
+            // Then sum h_i = k.
+            // In row i, the horizontal dominoes cover 2*h_i cells. The remaining m - 2*h_i cells in that row must be covered by vertical dominoes.
+            // A vertical domino covers one cell in row i and one cell in row i+1 (or i-1). So the number of vertical dominoes that have a cell in row i is equal to the number of uncovered cells in row i.
+            // Let v_i be the number of vertical dominoes that occupy a cell in row i. Then v_i = m - 2*h_i.
+            // Note that a vertical domino occupies one cell in row i and one in row i+1, so it contributes to v_i and v_{i+1}.
+            // Therefore, v_i must equal v_{i+1} for all i where vertical dominoes connect rows? Actually, the vertical dominoes between row i and i+1 must be exactly the number of vertical dominoes that have a cell in row i and row i+1.
+            // Let x_i be the number of vertical dominoes that connect row i and row i+1. Then x_i = v_i = v_{i+1}? Not exactly, because a vertical domino connecting row i and i+1 uses one cell in row i and one in row i+1. So the number of such dominoes is exactly the number of cells in row i that are covered by vertical dominoes going down, which must equal the number of cells in row i+1 covered by vertical dominoes going up. So x_i = v_i (if all vertical cells in row i go to row i+1) but row i could also have vertical dominoes going to row i-1. So v_i = x_{i-1} + x_i, with x_0 = x_n = 0.
+            // Then we have: v_i = m - 2*h_i.
+            // And v_i = x_{i-1} + x_i.
+            // This implies that v_i must have the same parity as something? 
+            // From v_i = x_{i-1} + x_i, we can solve for x_i. 
+            // Summing v_i for i=1 to n: sum v_i = 2 * sum x_i = 2 * (total vertical dominoes) = 2v.
+            // Also sum v_i = n*m - 2k = 2v, consistent.
+            // The recurrence: x_i = v_i - x_{i-1}. With x_0 = 0.
+            // Then x_1 = v_1.
+            // x_2 = v_2 - x_1 = v_2 - v_1.
+            // x_3 = v_3 - x_2 = v_3 - v_2 + v_1.
+            // In general, x_i = sum_{j=1}^i (-1)^{i-j} v_j.
+            // We need x_n = 0.
+            // So the condition is: sum_{j=1}^n (-1)^{n-j} v_j = 0.
+            // Or equivalently, sum_{j=1}^n (-1)^j v_j = 0 (depending on n parity).
+            // v_j = m - 2*h_j.
+            // So sum (-1)^j (m - 2*h_j) = 0 => m * sum (-1)^j - 2 sum (-1)^j h_j = 0.
+            // If n is even, sum_{j=1}^n (-1)^j = 0. So the condition becomes -2 sum (-1)^j h_j = 0 => sum (-1)^j h_j = 0.
+            // That means the alternating sum of h_j must be 0. Since h_j are integers, this implies that the total number of horizontal dominoes k = sum h_j must be even? Not necessarily, but if we consider h_j can be anything, the alternating sum being 0 is a constraint.
+            // If n is odd, sum_{j=1}^n (-1)^j = -1 (if n odd, starting with j=1: -1+1-1... = -1). So m * (-1) - 2 sum (-1)^j h_j = 0 => 2 sum (-1)^j h_j = -m => sum (-1)^j h_j = -m/2. Since m is even (because n odd, n*m even => m even), m/2 is integer. So this gives a condition on the alternating sum of h_j.
+            // This seems complicated to check for all possible h_j. But we can choose h_j to satisfy these conditions as long as k is within bounds and some parity condition holds.
+            // There is a known simpler condition: 
+            // If n is even, k can be any even number? Let's test: n=2, m=3, k=1? n even, m odd. k=1 odd. Is it possible? We already reasoned no. So k must be even when n is even? But what about n=2, m=4, k=1? No. So for even n, k must be even? 
+            // But wait, what if n is even and m is even? Then k must be even? Sample 4 4 2 (even). What about 4 4 0? YES. 4 4 4? Let's check: total=8, k=4 horizontal, 4 vertical. Is it possible? 4x4 board. We can place 4 horizontals in two rows, and verticals in the other two rows? But n=4 even, we can pair rows. If we place horizontals in rows 1 and 2, and verticals in rows 3 and 4? But verticals need to connect rows 3 and 4, that's fine. But rows 1 and 2 are filled with horizontals, so they don't interact with rows 3 and 4. That works. So k=4 works. What about k=6? 6 horizontal, 2 vertical. Place horizontals in rows 1,2,3 and verticals in row 4? But row 4 alone cannot have verticals; verticals need pairs of rows. So we must pair rows for verticals. If we have 6 horizontals, that's 12 cells covered by horizontals, leaving 4 cells for verticals. Those 4 cells must be in two columns and two rows? Actually, verticals need pairs in the same column. So the remaining cells must be in even numbers in each column. If we place horizontals in rows 1,2,3, then row 4 has m cells free. If m=4, row 4 has 4 cells free. They can be covered by 2 horizontals? That would increase k. So to have verticals, we need to leave some cells in multiple rows. For k=6, we can leave 4 cells in two rows and two columns. For example, leave column 1 and 2 in rows 3 and 4 free, and fill the rest with horizontals. Then we can place two verticals in columns 1 and 2 connecting rows 3 and 4. That works. So k=6 works. What about k=1? We already suspect no. k=3? 3 horizontal, 5 vertical. Try to construct: 4x4. We need 3 horizontals. Place them in row 1: one horizontal (cols 1-2). Row 2: one horizontal (cols 3-4). Row 3: one horizontal (cols 1-2). Then remaining cells: row 1: cols 3-4 free; row 2: cols 1-2 free; row 3: cols 3-4 free; row 4: all 4 free. We need to cover these with verticals. Can we pair them? Row 1 col 3 with row 2 col 3? But row 2 col 3 is covered by horizontal. So no. It seems difficult. So likely k must be even when n is even.
+            // Let's check sample: 2 3 0 (k=0 even) YES. 2 4 2 (k=2 even) YES. 4 4 2 (k=2 even) YES. 5 2 2 (n odd, m even, k=2 even) YES. 3 2 3 (n odd, m even, k=3 odd) YES. 2 17 16 (n even, m odd, k=16 even) YES. 2 1 1 (n=2 even, m=1 odd, k=1 odd) NO. 1 2 0 (n=1 odd, m=2 even, k=0 even) NO? Sample: 1 2 0 -> NO. Wait, sample has 1 2 0 output NO. But n=1, m=2, total=1. k=0 horizontal means 1 vertical. But vertical requires two cells in the same column. n=1, so no two cells in a column. So impossible. So condition: vertical dominoes require n >= 2? Actually, vertical domino needs two cells in the same column, so n must be at least 2. So if n=1, we can only have horizontal dominoes. So k must be total = m/2. In sample 1 2 0, m=2, total=1, so k must be 1. But k=0, so NO. So that's a special case.
+            // Similarly, if m=1, we can only have vertical dominoes, so k must be 0. Sample 2 1 1: n=2, m=1, total=1, k=1 horizontal impossible because m=1, horizontal needs two cells in a row. So NO.
+            // So we need to handle the cases where one dimension is 1.
+            // General known solution for this problem (CF Round #1462? Actually it's from Codeforces problem "Domino" or similar):
+            // The answer is YES if and only if:
+            // - If n is even:
+            //   - k must be even? Actually, we can achieve any k from 0 to n*(m/2) with the same parity as something? Let's think about the alternating sum condition.
+            //   For even n, we need sum (-1)^j h_j = 0. This implies that the sum of h_j for odd j equals the sum of h_j for even j. So k = sum h_j = 2 * sum_{odd} h_j, so k must be even. So for even n, k must be even. Is that sufficient? Also we need k <= n*(m/2) and (total - k) <= m*(n/2). But total - k = vertical. m*(n/2) is the maximum verticals possible (each column can have at most n/2 verticals). Since n is even, n/2 is integer. So condition: k <= n*(m/2) and total - k <= m*(n/2). But total = n*m/2. So total - k <= m*(n/2) => n*m/2 - k <= n*m/2 => k >= 0, which is always true. So the only condition for even n is k even and k <= n*(m/2)? But wait, what if m is odd? n even, m odd. Then m/2 is floor(m/2). n*(m/2) is the max horizontals? Actually, each row can have at most floor(m/2) horizontals. So max horizontals = n * floor(m/2). But total dominoes = n*m/2. Since m is odd, n*m/2 = n*(m-1)/2 + n/2 = n*floor(m/2) + n/2. So max horizontals is less than total. The remaining must be verticals. So condition k <= n*floor(m/2) is necessary. Also verticals = total - k. Max verticals = m*floor(n/2) = m*(n/2) (since n even). So total - k <= m*n/2 => k >= 0, always true. So for even n, the conditions are: k <= n * (m/2) (integer division) and k % 2 == 0. But wait, sample 2 3 0: n=2 even, m=3 odd, floor(m/2)=1, n*1=2. k=0 <=2 and even -> YES. 2 3 2? k=2 even, <=2 -> YES? Is 2 3 2 possible? n=2, m=3, total=3. k=2 horizontal, 1 vertical. Try: row 1: horizontal (1,1)-(1,2), row 2: horizontal (2,2)-(2,3)? Then column 1: (1,1) covered, (2,1) free. Column 2: (1,2) covered, (2,2) covered. Column 3: (1,3) free, (2,3) covered. Free cells: (2,1) and (1,3). They are not in the same column, so cannot be covered by a vertical. So maybe another arrangement: row 1: horizontal (1,1)-(1,2), row 2: horizontal (2,1)-(2,2). Then column 3: (1,3) and (2,3) free, can be vertical. That works! So 2 3 2 is YES. So condition holds.
+            // What about 2 3 1? k=1 odd, so NO. Correct.
+            // Now if n is odd:
+            // Then m must be even (since n*m even). We can use a symmetric argument by swapping n and m, and considering vertical dominoes instead of horizontal? But careful: k is the number of horizontal dominoes. If we swap, horizontal becomes vertical. So we can reduce to the even case by swapping? 
+            // If n is odd, m is even. We can consider the board rotated by 90 degrees? Then n' = m (even), m' = n (odd). In the rotated board, horizontal dominoes become vertical and vice versa. So the number of horizontal dominoes in the rotated board is total - k. So the condition for the rotated board (which has even number of rows) is: total - k must be even? Because in the rotated board, the number of rows is even, so the number of horizontal dominoes (which is total - k) must be even. So total - k even => k has the same parity as total. total = n*m/2. Since n odd, m even, total = odd * even / 2 = odd * (m/2). So parity of total is parity of (m/2). So k must have the same parity as m/2. Also, the maximum horizontal dominoes in the rotated board is m' * floor(n'/2) = n * floor(m/2)? Wait, rotated board: rows = m (even), columns = n (odd). Max horizontal in rotated board = rows * floor(columns/2) = m * floor(n/2). But horizontal in rotated board corresponds to vertical in original. So max vertical in original = m * floor(n/2). So total - k <= m * floor(n/2) => k >= total - m * floor(n/2). Also, max horizontal in original = n * floor(m/2) (since m even, floor(m/2) = m/2). So k <= n * (m/2). So conditions for odd n:
+            // - k <= n * (m/2)
+            // - k

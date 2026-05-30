@@ -1,0 +1,132 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+        
+        // DSU for connected components
+        vector<int> parent(n * m);
+        vector<int> sz(n * m, 1);
+        iota(parent.begin(), parent.end(), 0);
+        
+        function<int(int)> find = [&](int x) {
+            return parent[x] == x ? x : parent[x] = find(parent[x]);
+        };
+        
+        auto unite = [&](int x, int y) {
+            x = find(x);
+            y = find(y);
+            if (x == y) return;
+            if (sz[x] < sz[y]) swap(x, y);
+            parent[y] = x;
+            sz[x] += sz[y];
+        };
+        
+        // Directions: up, down, left, right
+        const int dx[] = {-1, 1, 0, 0};
+        const int dy[] = {0, 0, -1, 1};
+        
+        auto idx = [&](int i, int j) {
+            return i * m + j;
+        };
+        
+        // Build DSU
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (grid[i][j] == '#') {
+                    for (int k = 0; k < 4; ++k) {
+                        int ni = i + dx[k];
+                        int nj = j + dy[k];
+                        if (ni >= 0 && ni < n && nj >= 0 && nj < m && grid[ni][nj] == '#') {
+                            unite(idx(i, j), idx(ni, nj));
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Precompute component sizes for each cell (only for '#')
+        // We'll use a map to avoid double counting when summing components
+        // For rows and columns we need to sum unique components touching them.
+        
+        // For each row, compute:
+        // F_r = number of '.' in row r
+        // R_r = sum of sizes of unique components touching row r (including r-1, r, r+1)
+        vector<int> row_dots(n, 0);
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (grid[i][j] == '.') row_dots[i]++;
+            }
+        }
+        
+        // For each column, compute:
+        // F_c = number of '.' in column c
+        // C_c = sum of sizes of unique components touching column c (including c-1, c, c+1)
+        vector<int> col_dots(m, 0);
+        for (int j = 0; j < m; ++j) {
+            for (int i = 0; i < n; ++i) {
+                if (grid[i][j] == '.') col_dots[j]++;
+            }
+        }
+        
+        // Precompute for each row the sum of unique component sizes touching it
+        vector<int> row_comp_sum(n, 0);
+        for (int i = 0; i < n; ++i) {
+            unordered_set<int> comps;
+            for (int r = max(0, i-1); r <= min(n-1, i+1); ++r) {
+                for (int j = 0; j < m; ++j) {
+                    if (grid[r][j] == '#') {
+                        comps.insert(find(idx(r, j)));
+                    }
+                }
+            }
+            for (int comp : comps) {
+                row_comp_sum[i] += sz[comp];
+            }
+        }
+        
+        // Precompute for each column the sum of unique component sizes touching it
+        vector<int> col_comp_sum(m, 0);
+        for (int j = 0; j < m; ++j) {
+            unordered_set<int> comps;
+            for (int c = max(0, j-1); c <= min(m-1, j+1); ++c) {
+                for (int i = 0; i < n; ++i) {
+                    if (grid[i][c] == '#') {
+                        comps.insert(find(idx(i, c)));
+                    }
+                }
+            }
+            for (int comp : comps) {
+                col_comp_sum[j] += sz[comp];
+            }
+        }
+        
+        int ans = 0;
+        // Try each row
+        for (int i = 0; i < n; ++i) {
+            int cur = row_dots[i] + row_comp_sum[i];
+            ans = max(ans, cur);
+        }
+        // Try each column
+        for (int j = 0; j < m; ++j) {
+            int cur = col_dots[j] + col_comp_sum[j];
+            ans = max(ans, cur);
+        }
+        
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

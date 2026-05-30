@@ -1,0 +1,321 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+We are given a rooted tree consisting of $ n $ vertices numbered from $ 1 $ to $ n $ . The root of the tree is the vertex $ 1 $ and the parent of the vertex $ v $ is $ p_v $ .
+
+There is a number written on each vertex, initially all numbers are equal to $ 0 $ . Let's denote the number written on the vertex $ v $ as $ a_v $ .
+
+For each $ v $ , we want $ a_v $ to be between $ l_v $ and $ r_v $ $ (l_v \leq a_v \leq r_v) $ .
+
+In a single operation we do the following:
+
+- Choose some vertex $ v $ . Let $ b_1, b_2, \ldots, b_k $ be vertices on the path from the vertex $ 1 $ to vertex $ v $ (meaning $ b_1 = 1 $ , $ b_k = v $ and $ b_i = p_{b_{i + 1}} $ ).
+- Choose a non-decreasing array $ c $ of length $ k $ of nonnegative integers: $ 0 \leq c_1 \leq c_2 \leq \ldots \leq c_k $ .
+- For each $ i $ $ (1 \leq i \leq k) $ , increase $ a_{b_i} $ by $ c_i $ .
+
+What's the minimum number of operations needed to achieve our goal?
+
+Input Format
+The first line contains an integer $ t $ $ (1\le t\le 1000) $ — the number of test cases. The description of the test cases follows.
+
+The first line of each test case contains a single integer $ n $ $ (2\le n\le 2 \cdot 10^5) $ — the number of the vertices in the tree.
+
+The second line of each test case contains $ n - 1 $ integers, $ p_2, p_3, \ldots, p_n $ $ (1 \leq p_i < i) $ , where $ p_i $ denotes the parent of the vertex $ i $ .
+
+The $ i $ -th of the following $ n $ lines contains two integers $ l_i $ and $ r_i $ $ (1 \le l_i \le r_i \le 10^9) $ .
+
+It is guaranteed that the sum of $ n $ over all test cases doesn't exceed $ 2 \cdot 10^5 $ .
+
+Output Format
+For each test case output the minimum number of operations needed.
+
+Examples
+Sample 1
+Input
+4
+2
+1
+1 5
+2 9
+3
+1 1
+4 5
+2 4
+6 10
+4
+1 2 1
+6 9
+5 6
+4 5
+2 4
+5
+1 2 3 4
+5 5
+4 4
+3 3
+2 2
+1 1
+Output
+1
+2
+2
+5
+
+Note
+In the first test case, we can achieve the goal with a single operation: choose $ v = 2 $ and $ c = [1, 2] $ , resulting in $ a_1 = 1, a_2 = 2 $ .
+
+In the second test case, we can achieve the goal with two operations: first, choose $ v = 2 $ and $ c = [3, 3] $ , resulting in $ a_1 = 3, a_2 = 3, a_3 = 0 $ . Then, choose $ v = 3, c = [2, 7] $ , resulting in $ a_1 = 5, a_2 = 3, a_3 = 7 $ .
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1693B - Fake Plastic Trees
+Lemma 1. You won't perform the operation on a particular vertex more than once. Because you could merge the operations.
+Lemma 2. If you perform the operation on some vertex $$$v$$$, you can do it with $$$c_k = r_v$$$. If there is another operation that helps this vertex, you can cut the operation into two pieces and merge one with the operation that starts at $$$v$$$. And you can just increase $$$c_k$$$ if it's not equal to $$$r_v$$$.
+Define $$$dp_v$$$ as the minimum number of operations needed to satisfy the conditions on the vertices in the subtree of vertex $$$v$$$.
+We claim that there is a way to achieve our goal with minimum number of operations in which for each vertex $$$v$$$ there are exactly $$$dp_v$$$ operations done in the subtree of vertex $$$v$$$.
+Imagine there is a vertex $$$v$$$ that there are more than $$$dp_v$$$ operations on vertices in the subtree of vertex $$$v$$$. We can instead satisfy the subtree by $$$dp_v$$$ operations and make sure that we perform the operation on vertex $$$p_v$$$.
+Denote $$$mx_v$$$ as the maximum value that vertex $$$v$$$ can pass to its ancestors if exactly $$$dp_v$$$ operations are performed in the subtree of vertex $$$v$$$.
+We need to perform the operation on a vertex $$$v$$$ if and only if $$$\sum_\limits{u | p_u = v}{mx_u}  \lt  l_v$$$.
+If we need to perform the operation on vertex $$$v$$$ then $$$mx_v = r_v$$$, otherwise $$$mx_v = min(r_v, \sum_\limits{u | p_u = v}{mx_u})$$$.
+Time complexity: $$$\mathcal{O}(n)$$$
+
+Implementation
+# include <bits/stdc++.h>
+using
+namespace
+std
+;
+typedef
+long
+long
+ll
+;
+const
+int
+N
+=
+2e5
++
+10
+;
+int
+t
+,
+n
+,
+l
+[
+N
+],
+r
+[
+N
+],
+ans
+;
+vector
+<int>
+adj
+[
+N
+];
+ll DFS
+(
+int
+v
+){
+ll sum
+=
+0
+;
+for
+(
+int
+u
+:
+adj
+[
+v
+]){
+sum
++=
+DFS
+(
+u
+);
+}
+if
+(
+sum
+<
+ll
+(
+l
+[
+v
+])){
+++
+ans
+;
+return
+r
+[
+v
+];
+}
+return
+min
+(
+ll
+(
+r
+[
+v
+]),
+sum
+);
+}
+int
+main
+(){
+ios
+::
+sync_with_stdio
+(
+0
+);
+cin
+.
+tie
+(
+0
+);
+cout
+.
+tie
+(
+0
+);
+cin
+>>
+t
+;
+while
+(
+t
+--){
+cin
+>>
+n
+;
+for
+(
+int
+i
+=
+2
+;
+i
+<=
+n
+;
+++
+i
+){
+int
+par
+;
+cin
+>>
+par
+;
+adj
+[
+par
+].
+push_back
+(
+i
+);
+}
+for
+(
+int
+i
+=
+1
+;
+i
+<=
+n
+;
+++
+i
+){
+cin
+>>
+l
+[
+i
+]
+>>
+r
+[
+i
+];
+}
+ans
+=
+0
+;
+DFS
+(
+1
+);
+cout
+<<
+ans
+<<
+"\n"
+;
+for
+(
+int
+i
+=
+1
+;
+i
+<=
+n
+;
+++
+i
+){
+adj
+[
+i
+].
+clear
+();
+}
+}
+return
+0
+;
+}
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

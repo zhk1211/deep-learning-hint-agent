@@ -1,0 +1,99 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    
+    vector<int> depth(n + 1, 0);
+    vector<int> parent(n + 1, 0);
+    vector<int> order;
+    order.reserve(n);
+    queue<int> q;
+    q.push(1);
+    parent[1] = -1;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        order.push_back(u);
+        for (int v : adj[u]) {
+            if (v != parent[u]) {
+                parent[v] = u;
+                depth[v] = depth[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    
+    vector<int> leaf_depth;
+    for (int u = 2; u <= n; u++) {
+        if (adj[u].size() == 1) {
+            leaf_depth.push_back(depth[u]);
+        }
+    }
+    
+    int max_depth = *max_element(leaf_depth.begin(), leaf_depth.end());
+    vector<int> cnt(max_depth + 2, 0);
+    for (int d : leaf_depth) {
+        cnt[d]++;
+    }
+    
+    vector<int> suffix_sum(max_depth + 2, 0);
+    suffix_sum[max_depth] = cnt[max_depth];
+    for (int d = max_depth - 1; d >= 0; d--) {
+        suffix_sum[d] = suffix_sum[d + 1] + cnt[d];
+    }
+    
+    vector<int> prefix_sum(max_depth + 2, 0);
+    prefix_sum[0] = cnt[0];
+    for (int d = 1; d <= max_depth; d++) {
+        prefix_sum[d] = prefix_sum[d - 1] + cnt[d];
+    }
+    
+    vector<int> keep(n + 1, 0);
+    vector<int> min_leaf_depth(n + 1, 1e9);
+    vector<int> max_leaf_depth(n + 1, -1);
+    
+    for (int i = n - 1; i >= 0; i--) {
+        int u = order[i];
+        if (adj[u].size() == 1 && u != 1) {
+            min_leaf_depth[u] = depth[u];
+            max_leaf_depth[u] = depth[u];
+        } else {
+            for (int v : adj[u]) {
+                if (v != parent[u]) {
+                    min_leaf_depth[u] = min(min_leaf_depth[u], min_leaf_depth[v]);
+                    max_leaf_depth[u] = max(max_leaf_depth[u], max_leaf_depth[v]);
+                }
+            }
+        }
+    }
+    
+    int best = 0;
+    for (int d = 0; d <= max_depth; d++) {
+        int cur = suffix_sum[d];
+        if (d > 0) cur += prefix_sum[d - 1];
+        best = max(best, cur);
+    }
+    
+    cout << leaf_depth.size() - best << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

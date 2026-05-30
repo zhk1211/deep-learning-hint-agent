@@ -1,0 +1,44 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, m, q;
+    cin >> n >> m >> q;
+    vector<int> a(n), b(m);
+    for (int i = 0; i < n; i++) cin >> a[i];
+    for (int i = 0; i < m; i++) cin >> b[i];
+    sort(a.rbegin(), a.rend());
+    sort(b.rbegin(), b.rend());
+    vector<long long> pa(n + 1), pb(m + 1);
+    for (int i = 0; i < n; i++) pa[i + 1] = pa[i] + a[i];
+    for (int i = 0; i < m; i++) pb[i + 1] = pb[i] + b[i];
+    vector<pair<int, int>> ans(n + m + 1);
+    int l = 0, r = 0;
+    for (int i = 1; i <= n + m; i++) {
+        if (l < n && r < m) {
+            if (a[l] < b[r]) r++;
+            else l++;
+        } else if (l == n) r++;
+        else if (r == m) l++;
+        ans[i] = {l, r};
+    }
+    for (int i = 0; i < q; i++) {
+        int x, y, z;
+        cin >> x >> y >> z;
+        l = ans[z].first, r = ans[z].second;
+        if (l > x) cout << pa[x] + pb[z - x] << '\n';
+        else if (r > y) cout << pa[z - y] + pb[y] << '\n';
+        else cout << pa[l] + pb[r] << '\n';
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}
+```

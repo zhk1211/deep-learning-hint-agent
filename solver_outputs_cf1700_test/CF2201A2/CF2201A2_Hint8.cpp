@@ -1,0 +1,55 @@
+// Hint8
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+
+    vector<int> stk;
+    stk.reserve(n);
+    vector<ll> dp(n);
+    ll ans = 0;
+    ll sum_dp = 0;
+
+    for (int i = 0; i < n; ++i) {
+        while (!stk.empty() && a[stk.back()] <= a[i]) {
+            int idx = stk.back();
+            stk.pop_back();
+            if (!stk.empty()) {
+                sum_dp -= dp[idx];
+            } else {
+                sum_dp -= dp[idx];
+            }
+        }
+
+        if (stk.empty()) {
+            dp[i] = 1LL * (i + 1) * a[i];
+        } else {
+            int j = stk.back();
+            dp[i] = dp[j] + 1LL * (i - j) * a[i];
+        }
+
+        stk.push_back(i);
+        sum_dp += dp[i];
+        ans += sum_dp;
+    }
+
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

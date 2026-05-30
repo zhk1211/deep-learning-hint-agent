@@ -1,0 +1,50 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n), b(m);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int i = 0; i < m; ++i) cin >> b[i];
+
+        // Count frequencies of elements in a
+        unordered_map<int, int> freq_a;
+        for (int x : a) freq_a[x]++;
+
+        // Determine for each b whether it is "Alice's number"
+        // i.e., all elements of a divide it
+        // We can check by iterating over distinct a values
+        vector<int> distinct_a;
+        for (auto& p : freq_a) distinct_a.push_back(p.first);
+
+        int alice_count = 0;
+        for (int y : b) {
+            bool all_divide = true;
+            for (int x : distinct_a) {
+                if (y % x != 0) {
+                    all_divide = false;
+                    break;
+                }
+            }
+            if (all_divide) alice_count++;
+        }
+
+        // If there is at least one Alice number, Alice wins
+        // Otherwise Bob wins
+        if (alice_count > 0) {
+            cout << "Alice\n";
+        } else {
+            cout << "Bob\n";
+        }
+    }
+    return 0;
+}
+```

@@ -1,0 +1,47 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<string> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        string ans = "-1";
+        // Try all possible strings that differ from a[0] in at most one position
+        for (int pos = 0; pos < m; ++pos) {
+            for (char c = 'a'; c <= 'z'; ++c) {
+                string s = a[0];
+                s[pos] = c;
+                bool ok = true;
+                for (int i = 0; i < n; ++i) {
+                    int diff = 0;
+                    for (int j = 0; j < m; ++j) {
+                        if (s[j] != a[i][j]) diff++;
+                    }
+                    if (diff > 1) {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (ok) {
+                    ans = s;
+                    goto done;
+                }
+            }
+        }
+        // Also check the original string a[0] itself (already covered in loop when c == a[0][pos])
+        done:
+        cout << ans << '\n';
+    }
+    return 0;
+}

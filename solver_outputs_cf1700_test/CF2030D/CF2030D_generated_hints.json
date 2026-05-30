@@ -1,0 +1,6 @@
+[
+  "**Hint 1**\nThrough a series of swaps, we can swap an element from position $$$i$$$ to position $$$j$$$ (WLOG, assume $$$i \\lt j$$$) if there is no such $$$k$$$ such that $$$i \\leq k \\lt j$$$ such that $$$s_k = \\texttt{L}$$$ and $$$s_{k+1} = \\texttt{R}$$$.",
+  "**Hint 2**\nIf $$$i$$$ is included in at least one interval, then it must be good. We can use difference array to find the number of intervals that include $$$i$$$.",
+  "**Hint 3**\nNotice that when we update $$$i$$$, we can only potentially toggle indices $$$i$$$ and $$$i-1$$$ from good to bad (or vice versa).",
+  "**Hint 4**\nWe can keep all bad indices in a set. Notice that when we update $$$i$$$, we can only potentially toggle indices $$$i$$$ and $$$i-1$$$ from good to bad (or vice versa). For example, if $$$s_i = \\texttt{L}$$$, $$$s_i = \\texttt{R}$$$, $$$d_i \\gt 0$$$ and index $$$i$$$ is not in the bad set, then we will insert it. After each query, if the bad set is empty, then the answer is \"YES\"."
+]

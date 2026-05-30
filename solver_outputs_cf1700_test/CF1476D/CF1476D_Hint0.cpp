@@ -1,0 +1,52 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    
+    vector<int> left(n + 1, 0), right(n + 1, 0);
+    
+    for (int i = 0; i < n; ++i) {
+        if (s[i] == 'L') {
+            left[i + 1] = left[i] + 1;
+        } else {
+            left[i + 1] = 0;
+        }
+    }
+    
+    for (int i = n - 1; i >= 0; --i) {
+        if (s[i] == 'R') {
+            right[i] = right[i + 1] + 1;
+        } else {
+            right[i] = 0;
+        }
+    }
+    
+    vector<int> ans(n + 1);
+    for (int i = 0; i <= n; ++i) {
+        int l = left[i];
+        int r = right[i];
+        ans[i] = l + r + 1;
+    }
+    
+    for (int i = 0; i <= n; ++i) {
+        cout << ans[i] << " \n"[i == n];
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    
+    return 0;
+}

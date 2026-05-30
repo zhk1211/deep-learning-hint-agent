@@ -1,0 +1,49 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        long long ans = 0;
+        for (int i = 0; i < n; ++i) {
+            // subarrays of length 1 and 2 are always good
+            // we will check up to length 4, because any subarray of length >= 5
+            // is guaranteed to contain a bad triple
+            for (int j = i; j < n && j - i + 1 <= 4; ++j) {
+                bool good = true;
+                // check all triples in current subarray
+                for (int k = i; k <= j && good; ++k) {
+                    for (int l = k + 1; l <= j && good; ++l) {
+                        for (int m = l + 1; m <= j && good; ++m) {
+                            int d1 = abs(a[k] - a[l]) + abs(k - l);
+                            int d2 = abs(a[l] - a[m]) + abs(l - m);
+                            int d3 = abs(a[k] - a[m]) + abs(k - m);
+                            if (d3 == d1 + d2 || d1 == d2 + d3 || d2 == d1 + d3) {
+                                good = false;
+                            }
+                        }
+                    }
+                }
+                if (good) {
+                    ++ans;
+                } else {
+                    break; // once a bad triple is found, extending further will also contain it
+                }
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

@@ -1,0 +1,71 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n);
+        for (int i = 0; i < n; i++) {
+            cin >> p[i];
+        }
+        
+        vector<int> q(n);
+        vector<int> pos(n + 1);
+        for (int i = 0; i < n; i++) {
+            pos[p[i]] = i;
+        }
+        
+        vector<int> big, small;
+        for (int i = 1; i <= n; i++) {
+            if (i > n / 2) big.push_back(i);
+            else small.push_back(i);
+        }
+        
+        vector<int> state(n, 0); // 0: not decided, 1: big, 2: small
+        for (int i = 1; i < n - 1; i++) {
+            if (p[i] > p[i - 1] && p[i] > p[i + 1]) {
+                state[i] = 1; // local max in p, assign big q
+            } else if (p[i] < p[i - 1] && p[i] < p[i + 1]) {
+                state[i] = 2; // local min in p, assign small q
+            }
+        }
+        
+        // Assign big numbers to local maxima of p
+        sort(big.rbegin(), big.rend());
+        sort(small.begin(), small.end());
+        
+        int big_ptr = 0, small_ptr = 0;
+        for (int i = 0; i < n; i++) {
+            if (state[i] == 1) {
+                q[i] = big[big_ptr++];
+            } else if (state[i] == 2) {
+                q[i] = small[small_ptr++];
+            }
+        }
+        
+        // Assign remaining numbers to remaining positions
+        for (int i = 0; i < n; i++) {
+            if (state[i] == 0) {
+                if (big_ptr < (int)big.size()) {
+                    q[i] = big[big_ptr++];
+                } else {
+                    q[i] = small[small_ptr++];
+                }
+            }
+        }
+        
+        for (int i = 0; i < n; i++) {
+            cout << q[i] << " \n"[i == n - 1];
+        }
+    }
+    
+    return 0;
+}
+```

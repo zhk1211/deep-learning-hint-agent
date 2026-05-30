@@ -1,0 +1,40 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m, k;
+    cin >> n >> m >> k;
+    --k;
+
+    vector<int> x(m), y(m);
+    for (int i = 0; i < m; ++i) {
+        cin >> x[i] >> y[i];
+        --x[i]; --y[i];
+    }
+
+    const int INF = 1e9;
+    vector<int> dp(n, INF);
+    dp[k] = 0;
+
+    for (int i = 0; i < m; ++i) {
+        int a = x[i], b = y[i];
+        int da = dp[a], db = dp[b];
+        int new_da = min(da + 1, db);
+        int new_db = min(db + 1, da);
+        dp[a] = new_da;
+        dp[b] = new_db;
+    }
+
+    for (int i = 0; i < n; ++i) {
+        if (dp[i] >= INF) cout << -1;
+        else cout << dp[i];
+        if (i + 1 < n) cout << ' ';
+    }
+    cout << '\n';
+
+    return 0;
+}

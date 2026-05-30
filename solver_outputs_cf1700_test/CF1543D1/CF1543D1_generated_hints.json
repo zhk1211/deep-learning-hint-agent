@@ -1,0 +1,6 @@
+[
+  "**Hint 1**\nWhat is the $$$k$$$-itwise XOR operation when $$$k=2$$$ ?",
+  "**Hint 2**\nIf the original password was $$$x$$$, what will be the password after $$$i$$$ queries ?",
+  "**Hint 3**\nHow can we make queries such that if the original password was $$$x$$$, then the $$$x$$$-th query will be equal to the current password ?",
+  "**Hint 4**\nWe are not done yet. We can't afford to calculate the value of each query naively in $$$\\mathcal{O}(n)$$$ because this will time out. To handle this, we need to maintain a prefix XOR whose value will be $$$p=q_1\\oplus q_2\\oplus \\ldots \\oplus q_{i-1} \\oplus q_i$$$ after $$$i$$$ queries. For the $$$i+1$$$-th query, find $$$q_{i+1}=p\\oplus i$$$ and update $$$p=p\\oplus q_{i+1}$$$."
+]

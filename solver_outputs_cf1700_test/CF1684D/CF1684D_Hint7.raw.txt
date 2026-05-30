@@ -1,0 +1,99 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        long long total_damage = 0;
+        for (int i = 0; i < n; ++i) {
+            total_damage += a[i];
+        }
+
+        // We want to choose up to k traps to jump over.
+        // If we jump over trap i, we avoid a[i] damage, but we also avoid the bonus damage
+        // that would have been added to all subsequent traps.
+        // The bonus damage avoided by jumping over trap i is exactly (n - 1 - i),
+        // because there are (n - 1 - i) traps after i, and each would have received +1 bonus
+        // if we had jumped over this trap.
+        // So the total damage avoided by jumping over trap i is a[i] + (n - 1 - i).
+        // We want to maximize the total avoided damage by selecting up to k traps.
+        // However, note that the bonus damage stacks: if we jump over multiple traps,
+        // the bonus damage avoided for a later trap is the number of jumped traps before it.
+        // But the formula a[i] + (n - 1 - i) works because we are considering the effect
+        // of jumping over trap i in isolation, assuming no other jumps.
+        // When we jump over multiple traps, the total avoided damage is the sum of
+        // (a[i] + number of jumped traps after i). This is equivalent to sorting
+        // the values a[i] + (n - 1 - i) in descending order and taking the top k,
+        // because the bonus part (number of jumped traps after i) is exactly accounted for
+        // by the fact that if we jump over traps with larger (n - 1 - i), they contribute
+        // more to the bonus avoidance for earlier jumps.
+        // Let's verify: Suppose we choose a set S of indices to jump.
+        // Total damage = sum_{i not in S} (a[i] + number of jumped traps before i).
+        // = sum_{i=1..n} a[i] - sum_{i in S} a[i] + sum_{i not in S} (number of jumped traps before i).
+        // The last term equals sum_{j in S} (number of traps after j that are not jumped).
+        // = sum_{j in S} ( (n - j) - (number of jumped traps after j) ).
+        // So total damage = total_a - sum_{i in S} a[i] + sum_{j in S} (n - j) - sum_{j in S} (number of jumped traps after j).
+        // The last term is sum_{j in S} (number of jumped traps after j) = sum_{j in S} (|S| - 1 - (number of jumped traps before j))? Not exactly.
+        // Actually, sum_{j in S} (number of jumped traps after j) = C(|S|, 2) because each pair of jumped traps (i < j) contributes 1 to the count for i.
+        // So total damage = total_a - sum_{i in S} a[i] + sum_{i in S} (n - i) - C(|S|, 2).
+        // = total_a - sum_{i in S} (a[i] + i - n) - C(|S|, 2).
+        // = total_a - sum_{i in S} (a[i] + i) + |S| * n - C(|S|, 2).
+        // To minimize damage, we want to maximize sum_{i in S} (a[i] + i) for a given |S|.
+        // But we can choose up to k traps, and |S| can be from 0 to k.
+        // So we can compute for each possible size s (0 <= s <= k), the maximum sum of (a[i] + i) over s elements.
+        // Then damage = total_a - max_sum + s * n - s*(s-1)/2.
+        // We take the minimum over s.
+        // Since n up to 2e5, we can sort the values (a[i] + i) descending, compute prefix sums, and try all s.
+
+        vector<long long> vals(n);
+        for (int i = 0; i < n; ++i) {
+            vals[i] = a[i] + i; // i is 0-indexed, so i = original index - 1.
+            // In the formula we had a[i] + i (1-indexed). With 0-indexed, i becomes i+1.
+            // Let's adjust: original 1-indexed position is i+1.
+            // So a[i] + (i+1) = a[i] + i + 1.
+            // But the formula derived used 1-indexed. Let's re-derive with 0-indexed to be safe.
+            // Let positions be 0..n-1.
+            // Total damage = sum_{i not in S} (a[i] + number of jumped traps before i).
+            // = total_a - sum_{i in S} a[i] + sum_{i not in S} (number of jumped traps before i).
+            // The last term = sum_{j in S} (number of traps after j that are not jumped).
+            // = sum_{j in S} ( (n - 1 - j) - (number of jumped traps after j) ).
+            // So total damage = total_a - sum_{i in S} a[i] + sum_{j in S} (n - 1 - j) - sum_{j in S} (number of jumped traps after j).
+            // sum_{j in S} (number of jumped traps after j) = C(|S|, 2).
+            // So total damage = total_a - sum_{i in S} a[i] + sum_{i in S} (n - 1 - i) - C(|S|, 2).
+            // = total_a - sum_{i in S} (a[i] + i - (n - 1)) - C(|S|, 2).
+            // = total_a - sum_{i in S} (a[i] + i) + |S| * (n - 1) - C(|S|, 2).
+            // To minimize, maximize sum_{i in S} (a[i] + i).
+            // So we can use vals[i] = a[i] + i (0-indexed i).
+            // Then for a given s = |S|, damage = total_a - max_sum_s + s * (n - 1) - s*(s-1)/2.
+            // We'll try s from 0 to k.
+        }
+
+        sort(vals.begin(), vals.end(), greater<long long>());
+        vector<long long> pref(n + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            pref[i + 1] = pref[i] + vals[i];
+        }
+
+        long long ans = total_damage; // s = 0
+        for (int s = 1; s <= k; ++s) {
+            long long max_sum = pref[s];
+            long long damage = total_damage - max_sum + 1LL * s * (n - 1) - 1LL * s * (s - 1) / 2;
+            if (damage < ans) ans = damage;
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

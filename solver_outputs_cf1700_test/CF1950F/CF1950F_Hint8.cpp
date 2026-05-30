@@ -1,0 +1,81 @@
+// Hint8
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+
+        // total vertices
+        int n = a + b + c;
+
+        // Check necessary condition: c == a + 1
+        if (c != a + 1) {
+            cout << -1 << '\n';
+            continue;
+        }
+
+        // If no internal nodes (a=0, b=0), only root exists
+        if (a == 0 && b == 0) {
+            cout << 0 << '\n';
+            continue;
+        }
+
+        // We build the tree level by level.
+        // Start with root (level 0). It can be either degree 2 or 1.
+        // We'll simulate the process using a queue of nodes to be placed.
+        // But we can compute height directly.
+
+        // The minimum height is achieved by placing all 2-children nodes as high as possible,
+        // then filling the rest with 1-children nodes.
+
+        // We'll simulate level by level.
+        // At each level we have some number of "slots" (nodes that need children).
+        // Initially we have 1 slot (the root).
+        // We'll use a and b to fill slots.
+        // We want to minimize height, so we should use 2-children nodes first to increase slots faster.
+
+        int height = 0;
+        int slots = 1; // nodes in current level that need children
+        while (slots > 0) {
+            // If no more nodes to place, break
+            if (a == 0 && b == 0) break;
+
+            // Next level slots
+            int next_slots = 0;
+
+            // First use 2-children nodes as much as possible
+            int use2 = min(slots, a);
+            a -= use2;
+            slots -= use2;
+            next_slots += 2 * use2;
+
+            // Then use 1-children nodes for remaining slots
+            int use1 = min(slots, b);
+            b -= use1;
+            slots -= use1;
+            next_slots += 1 * use1;
+
+            // If there are still slots left but no nodes to fill them, impossible
+            // (but we already checked c == a+1, so it should be fine)
+            if (slots > 0) {
+                // This shouldn't happen if c == a+1, but just in case
+                height = -1;
+                break;
+            }
+
+            slots = next_slots;
+            height++;
+        }
+
+        cout << height << '\n';
+    }
+
+    return 0;
+}

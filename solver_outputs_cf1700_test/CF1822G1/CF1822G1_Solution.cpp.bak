@@ -1,0 +1,47 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAX_VAL = 1000000;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+
+    vector<int> cnt(MAX_VAL + 1, 0);
+
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+            cnt[a[i]]++;
+        }
+
+        long long ans = 0;
+
+        for (int i = 0; i < n; ++i) {
+            int x = a[i];
+            // b = 1 case
+            ans += 1LL * (cnt[x] - 1) * (cnt[x] - 2);
+
+            // b >= 2 case
+            for (int b = 2; 1LL * x * b * b <= MAX_VAL; ++b) {
+                ans += 1LL * cnt[x * b] * cnt[x * b * b];
+            }
+        }
+
+        cout << ans << '\n';
+
+        // clear counts
+        for (int i = 0; i < n; ++i) {
+            cnt[a[i]]--;
+        }
+    }
+
+    return 0;
+}

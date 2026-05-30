@@ -1,0 +1,50 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1e9 + 7;
+const int MAX_VAL = 63;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // dp[mask] = number of subsequences with AND exactly mask
+        vector<long long> dp(MAX_VAL + 1, 0);
+        dp[MAX_VAL] = 1; // empty subsequence has AND = 63 (all ones in 6 bits)
+
+        for (int x : a) {
+            vector<long long> new_dp = dp;
+            for (int mask = 0; mask <= MAX_VAL; ++mask) {
+                if (dp[mask] > 0) {
+                    int new_mask = mask & x;
+                    new_dp[new_mask] = (new_dp[new_mask] + dp[mask]) % MOD;
+                }
+            }
+            dp = move(new_dp);
+        }
+
+        // Remove empty subsequence
+        dp[MAX_VAL] = (dp[MAX_VAL] - 1 + MOD) % MOD;
+
+        long long ans = 0;
+        for (int mask = 0; mask <= MAX_VAL; ++mask) {
+            if (__builtin_popcount(mask) == k) {
+                ans = (ans + dp[mask]) % MOD;
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int i = 0; i < n; ++i) cin >> b[i];
+        
+        vector<int> cnt(n + 1, 0);
+        int i = n - 1, j = n - 1;
+        bool ok = true;
+        
+        while (i >= 0) {
+            // Move rightmost duplicate elements of b into reserve
+            while (j > 0 && b[j] == b[j - 1]) {
+                cnt[b[j]]++;
+                j--;
+            }
+            if (j >= 0 && a[i] == b[j]) {
+                i--;
+                j--;
+            } else if (cnt[a[i]] > 0) {
+                cnt[a[i]]--;
+                i--;
+            } else {
+                ok = false;
+                break;
+            }
+        }
+        cout << (ok ? "YES" : "NO") << '\n';
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    solve();
+    return 0;
+}

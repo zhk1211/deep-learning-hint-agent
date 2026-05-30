@@ -1,0 +1,47 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAXN = 500005;
+int a[MAXN], L[MAXN], R[MAXN], stk[MAXN];
+int n;
+
+int build_cartesian() {
+    int top = 0;
+    for (int i = 1; i <= n; ++i) {
+        int k = top;
+        while (k > 0 && a[stk[k]] < a[i]) --k;
+        if (k) R[stk[k]] = i;
+        if (k < top) L[i] = stk[k+1];
+        stk[++k] = i;
+        top = k;
+    }
+    return stk[1];
+}
+
+int dfs(int u) {
+    if (!u) return 0;
+    int l = dfs(L[u]);
+    int r = dfs(R[u]);
+    return max(l, r) + 1;
+}
+
+void solve() {
+    cin >> n;
+    for (int i = 1; i <= n; ++i) {
+        cin >> a[i];
+        L[i] = R[i] = 0;
+    }
+    int root = build_cartesian();
+    int depth = dfs(root);
+    cout << n - depth << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}

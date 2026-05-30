@@ -1,0 +1,42 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m, k;
+        cin >> n >> m >> k;
+        
+        int total = n * m / 2;
+        int max_horizontal = (m / 2) * n;
+        
+        if (k > max_horizontal) {
+            cout << "NO\n";
+            continue;
+        }
+        
+        if (n % 2 == 0) {
+            if (k % 2 == 0) {
+                cout << "YES\n";
+            } else {
+                cout << "NO\n";
+            }
+        } else {
+            int min_horizontal = m / 2;
+            if (k < min_horizontal) {
+                cout << "NO\n";
+            } else if ((k - min_horizontal) % 2 == 0) {
+                cout << "YES\n";
+            } else {
+                cout << "NO\n";
+            }
+        }
+    }
+    
+    return 0;
+}

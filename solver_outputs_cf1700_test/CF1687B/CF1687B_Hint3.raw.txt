@@ -1,0 +1,399 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n, m;
+    cin >> n >> m;
+    
+    // We need to find the minimum capacity (minimum spanning forest value)
+    // when all edges are functional.
+    // We can query the maximum capacity for any subset of edges.
+    // The maximum capacity of a subset is the value of the maximum spanning forest
+    // of the graph induced by that subset.
+    // The minimum capacity of the full graph is the value of the minimum spanning forest.
+    
+    // We can find the edges of the minimum spanning forest by using queries
+    // to determine the order of edges by weight.
+    // Since we can query maximum capacity, we can find the maximum spanning forest
+    // of the whole graph, which gives us the edges sorted by weight descending.
+    // But we need minimum spanning forest.
+    
+    // Actually, we can find the weight of each edge by using queries.
+    // If we query with all edges except one, the difference between the total
+    // maximum capacity and that query tells us something about the edge's weight.
+    // But maximum capacity is not simply sum of weights.
+    
+    // Let's think differently: The maximum capacity of a set of edges is the
+    // value of the maximum spanning forest. If we sort edges by weight descending,
+    // Kruskal's algorithm builds the maximum spanning forest.
+    // We can find the edges in the maximum spanning forest by querying.
+    
+    // We can find the edges of the maximum spanning forest by starting with empty set
+    // and adding edges one by one in some order, checking if the maximum capacity increases.
+    // But we don't know the order.
+    
+    // We can find the weights of all edges by querying all edges except one.
+    // Let total_max = maximum capacity with all edges.
+    // For each edge i, query with all edges except i. Let this be val_i.
+    // If edge i is not in the maximum spanning forest, then removing it doesn't change
+    // the maximum capacity, so val_i = total_max.
+    // If edge i is in the maximum spanning forest, removing it reduces the maximum capacity
+    // by some amount. But what amount? It's not simply its weight.
+    
+    // Alternative approach: We can find the minimum spanning forest by querying
+    // the maximum capacity of subsets? No, maximum capacity is always the maximum spanning forest.
+    
+    // Wait, the problem says: "The maximum (or minimum) capacity of a railway system is defined
+    // as the maximum (or minimum) value among all of the currently functional system's full spanning forests."
+    // So for a given subset of edges, the simulator returns the MAXIMUM capacity.
+    // We want the MINIMUM capacity when all edges are functional.
+    // That is the value of the MINIMUM spanning forest of the whole graph.
+    
+    // How to find the minimum spanning forest using queries that give maximum spanning forest?
+    // We can find the maximum spanning forest of the whole graph, but that's not the minimum.
+    
+    // Idea: If we flip the weights? No, we can't change the simulator.
+    
+    // Let's think about Kruskal's algorithm for minimum spanning forest:
+    // Sort edges by weight ascending, add if they connect different components.
+    // The value is sum of weights of edges in the MSF.
+    
+    // We can find the edges of the MSF by determining their relative order.
+    // We can use queries to compare weights of edges.
+    // How? If we have a set of edges, the maximum capacity is the value of the maximum spanning forest.
+    // If we take two edges, the maximum capacity of the set containing both is max(weight1, weight2) if they
+    // don't form a cycle? Actually, for two edges, the maximum spanning forest is just the heavier edge
+    // if they share a vertex? No, if they are disjoint, both can be in the forest.
+    // This seems complicated.
+    
+    // Let's reconsider the hints:
+    // Hint 1: Use Kruskal's algorithm.
+    // Hint 2: Can you solve the problem using only one query?
+    // Hint 3: The value of the graph consisting of the edges whose lengths are less than or equal to x
+    // is the sum of the lengths of the edges in the minimum full spanning forest of the graph.
+    
+    // Hint 3 is interesting: For a threshold x, consider the subgraph of edges with length <= x.
+    // The value of this subgraph (which is the sum of lengths of edges in its minimum full spanning forest?)
+    // Wait, "the value of the graph consisting of the edges whose lengths are less than or equal to x
+    // is the sum of the lengths of the edges in the minimum full spanning forest of the graph."
+    // That phrasing is ambiguous. It might mean: If we take all edges with length <= x, and compute
+    // the minimum spanning forest of that subgraph, its value is something.
+    // But we can only query maximum capacity, not minimum.
+    
+    // Maybe we can use the maximum capacity to find the minimum spanning forest?
+    // Consider the complement: If we take edges with length > x, the maximum capacity of that set
+    // might relate to the minimum spanning forest of the whole graph.
+    
+    // Let's think about the relationship between maximum and minimum spanning forests.
+    // For a given graph, the maximum spanning forest can be found by Kruskal's with edges sorted descending.
+    // The minimum spanning forest by Kruskal's with edges sorted ascending.
+    // If we could query the minimum capacity, we could just ask for the whole graph.
+    // But we can only query maximum capacity.
+    
+    // What if we invert the weights? We can't change the simulator, but we can query subsets.
+    // Is there a way to simulate minimum spanning forest using maximum capacity queries?
+    // Suppose we assign a new weight to each edge: w_i' = C - l_i for some large C.
+    // Then the maximum spanning forest with w' corresponds to the minimum spanning forest with l.
+    // But we can't change the simulator's internal weights.
+    
+    // However, we can query any subset. The simulator returns the maximum capacity of that subset
+    // based on the original lengths l_i. So for a subset S, it returns the value of the maximum spanning forest
+    // of the graph induced by S, using original lengths.
+    
+    // We want the minimum spanning forest of the whole graph.
+    // Notice that the minimum spanning forest of the whole graph is also the maximum spanning forest
+    // of the graph if we consider a different ordering? No.
+    
+    // Let's think about the structure: The minimum spanning forest is the set of edges that are
+    // the "lightest" possible to maintain connectivity. The maximum spanning forest is the "heaviest".
+    // They are generally different.
+    
+    // But maybe we can find the minimum spanning forest by querying maximum capacity of certain subsets
+    // and using the fact that the maximum capacity function is submodular or something.
+    
+    // Let's read Hint 3 carefully: "The value of the graph consisting of the edges whose lengths are less than or equal to x is the sum of the lengths of the edges in the minimum full spanning forest of the graph."
+    // This might be a known property: For a graph, if you take all edges with weight <= x, the value of the
+    // minimum spanning forest of that subgraph is equal to the sum over components of something?
+    // Actually, there is a known formula: The sum of weights of the minimum spanning forest can be computed
+    // by integrating the number of connected components over weight thresholds.
+    // Specifically, if we let f(x) be the number of connected components in the subgraph of edges with weight <= x,
+    // then the sum of weights in the MSF is integral of (f(x) - 1) dx? Something like that.
+    // But we don't have f(x) directly.
+    
+    // Wait, the problem is interactive and we have a limit of 2m queries.
+    // We can query any subset and get the maximum capacity.
+    // What if we query subsets that are prefixes of edges sorted by weight?
+    // But we don't know the weights.
+    
+    // We can find the weights of all edges by querying all edges except one.
+    // Let's analyze that:
+    // Let S be the set of all edges. Query S gives total_max = maximum spanning forest of whole graph.
+    // For each edge i, query S \ {i} gives val_i.
+    // If edge i is not in the maximum spanning forest of S, then removing it doesn't change the max forest,
+    // so val_i = total_max.
+    // If edge i is in the maximum spanning forest of S, then removing it forces the max forest to drop edge i
+    // and possibly replace it with a lighter edge that restores connectivity? Actually, the maximum spanning forest
+    // of S \ {i} will be the same as the maximum spanning forest of S but without edge i, and if i was a bridge
+    // in the forest, the forest might split into two components, and we lose the weight of i. If i was not a bridge
+    // in the forest, then there is another edge that can replace it to keep the same connectivity, but that edge
+    // must be lighter (since we are maximizing). So the new max forest value will be total_max - l_i + l_j,
+    // where l_j is the weight of the replacement edge, which is the heaviest edge that reconnects the two components.
+    // This is complicated.
+    
+    // But maybe we can find the minimum spanning forest by a different approach.
+    // Consider the following: The minimum capacity of the whole graph is the answer we want.
+    // Can we find it by querying the maximum capacity of the whole graph? No, that gives the maximum capacity.
+    
+    // Let's think about the relationship between maximum and minimum spanning forests.
+    // For a connected graph, the maximum spanning tree and minimum spanning tree are generally different.
+    // But there is a known fact: If you take the maximum spanning forest, and then for each edge not in it,
+    // you can't say much about the minimum.
+    
+    // Maybe we can use the fact that the sum of the maximum capacity and the minimum capacity over all edges
+    // is constant? No.
+    
+    // Let's reconsider Hint 2: "Can you solve the problem using only one query?"
+    // If we could solve it with one query, what would that query be? We would ask for the whole graph,
+    // but that gives maximum capacity, not minimum. So there must be a way to get minimum from maximum?
+    // Unless the graph is special? No, the problem is general.
+    
+    // Wait, the problem statement: "Kanako wants to know the minimum capacity of the system with all tracks functional."
+    // The simulator returns the maximum capacity for a given subset.
+    // Is it possible that the minimum capacity of the whole graph is equal to the maximum capacity of some subset?
+    // No, the minimum capacity is the minimum over all full spanning forests, the maximum capacity is the maximum.
+    // They are different.
+    
+    // Let's read the problem again: "The maximum (or minimum) capacity of a railway system is defined as the maximum (or minimum) value among all of the currently functional system's full spanning forests."
+    // So for a given set of functional tracks, there are many full spanning forests (spanning forests that preserve connectivity).
+    // The capacity of the system is either the maximum or the minimum value among those forests.
+    // The simulator returns the MAXIMUM capacity.
+    // We want the MINIMUM capacity of the system with all tracks functional.
+    
+    // So we want the value of the MINIMUM spanning forest of the whole graph.
+    // The simulator gives the MAXIMUM spanning forest of any subset we query.
+    
+    // How to find the minimum spanning forest using a maximum spanning forest oracle?
+    // This is a known problem: finding minimum spanning tree using a maximum spanning tree oracle.
+    // It can be done by querying the maximum spanning forest of the graph with all edges, and then
+    // somehow deducing the minimum.
+    
+    // Let's think about the relationship between the maximum and minimum spanning forests.
+    // Consider the cycle property: For any cycle, the heaviest edge is not in the minimum spanning forest,
+    // and the lightest edge is not in the maximum spanning forest.
+    // So the maximum spanning forest contains the heaviest edges, while the minimum contains the lightest.
+    
+    // If we take the whole graph, the maximum spanning forest is some set of edges.
+    // The minimum spanning forest is another set.
+    // Can we find the minimum by querying subsets that exclude certain edges?
+    
+    // Suppose we sort edges by weight ascending: e1, e2, ..., em.
+    // The minimum spanning forest can be built by Kruskal's: start with empty, add edges in order if they connect different components.
+    // The maximum spanning forest is built by adding edges in descending order.
+    
+    // If we could find the sorted order of edges by weight, we could compute the minimum spanning forest
+    // without any further queries, because we know the graph structure? But we don't know the graph structure!
+    // We only know n and m, but not which stations are connected by which edges.
+    // So we need to discover both the weights and the connections.
+    
+    // But wait, the simulator returns a single number: the maximum capacity of the subset.
+    // That number depends on both the weights and the connectivity.
+    // Can we recover the full graph structure and weights with 2m queries?
+    // There are m edges, each with two endpoints and a weight. That's a lot of information.
+    // 2m queries might be enough to find the minimum spanning forest without knowing the full graph.
+    
+    // Let's think about the minimum spanning forest: It is a forest that connects the graph in the same way
+    // as the whole graph, with minimum total weight.
+    // The value we want is the sum of weights of edges in that forest.
+    
+    // Consider the following: If we query the whole graph, we get the maximum spanning forest value.
+    // If we query the whole graph minus one edge, we get some value.
+    // Can we use these to find the minimum spanning forest?
+    
+    // There is a known technique: To find the minimum spanning tree, you can use a maximum spanning tree oracle
+    // by complementing the weights. But we don't know the weights to complement them.
+    
+    // What if we query subsets that are all edges except those with weight > x? But we don't know x.
+    
+    // Let's think about the number of queries: 2m. We can query each edge individually?
+    // If we query a single edge, the maximum capacity is just its length (if it's a single edge, the only full spanning forest is that edge itself, value = length). So we can find the length of each edge by querying the subset containing only that edge!
+    // Wait, is that true? If we query a subset with only one edge, say edge i, then the graph has only that edge.
+    // The full spanning forest of that graph is just that edge (if it connects two stations, it's a tree on those two vertices, and the other vertices are isolated). The value is the length of that edge.
+    // So we can get the weight of every edge with m queries!
+    // Then we know all weights. But we still don't know the connections.
+    // However, if we know all weights, we can sort edges by weight.
+    // Then we can build the minimum spanning forest if we can determine connectivity.
+    // But we don't know which edges connect which vertices.
+    // Can we determine connectivity using the remaining m queries?
+    
+    // We have m queries left. We can query subsets of edges to learn about connectivity.
+    // For example, if we query a set of edges, the maximum capacity is the value of the maximum spanning forest
+    // of that set. If we know the weights of all edges, we can deduce which edges are in the maximum spanning forest
+    // of that set, and that tells us about cycles and connectivity.
+    
+    // But we want the minimum spanning forest, not the maximum.
+    // If we know all weights and the graph structure, we can compute the minimum spanning forest offline.
+    // So the problem reduces to: Learn the graph structure (endpoints of each edge) using at most m additional queries,
+    // given that we can query any subset and get the maximum spanning forest value.
+    
+    // Is it possible to learn the graph structure with m queries?
+    // We have n <= 200, m <= 500.
+    // We can query subsets and use the maximum spanning forest value to infer which edges form cycles, etc.
+    // But the maximum spanning forest value is just a number. It doesn't directly tell us which edges are used.
+    
+    // However, we can use the following: If we have a set of edges, the maximum spanning forest value is the sum of weights of edges in the maximum spanning forest. If we know all weights, we can determine which edges are in the maximum spanning forest by checking if removing an edge decreases the total value. But that would require many queries.
+    
+    // Let's think differently: The minimum capacity of the whole graph is the answer. We don't necessarily need the full graph structure; we just need the value of the minimum spanning forest.
+    // Can we compute the minimum spanning forest value using only the weights and some clever queries?
+    
+    // Consider the following: The minimum spanning forest value can be computed if we know, for each weight threshold, the number of connected components in the subgraph of edges with weight <= threshold.
+    // Specifically, if we sort edges by weight ascending: w1 <= w2 <= ... <= wm.
+    // Let G_k be the graph with edges {e1,...,ek}. Let c_k be the number of connected components in G_k.
+    // Then the minimum spanning forest value is sum_{k=1}^m w_k * (c_{k-1} - c_k), where c_0 = n.
+    // This is a known formula.
+    // So if we can find the number of connected components for each prefix of edges sorted by weight, we can compute the answer.
+    // How to find the number of connected components of a subset of edges using the maximum capacity oracle?
+    // For a given subset S, the maximum capacity is the value of the maximum spanning forest of S.
+    // Does that tell us the number of connected components? Not directly.
+    // But note: The maximum spanning forest of a graph with c components has exactly n - c edges.
+    // Its value is the sum of the weights of those n - c edges.
+    // If we know the weights of all edges, we can't directly get c from the value because we don't know which edges are in the forest.
+    
+    // However, if we choose the subset S to be exactly the set of edges with weight <= x, then the maximum spanning forest of S is something. But we don't know x.
+    
+    // Wait, we can find the weights of all edges by querying each edge individually. That takes m queries.
+    // Then we have the weights. We can sort the edges by weight.
+    // Now we want to find the number of connected components for each prefix.
+    // How to find the number of connected components of a set of edges using the maximum capacity oracle?
+    // If we query the set S, we get the maximum spanning forest value V_max(S).
+    // The maximum spanning forest consists of the heaviest edges that form a forest with the same connectivity as S.
+    // The number of edges in the maximum spanning forest is n - c, where c is the number of connected components in S.
+    // But we don't know how many edges are in the maximum spanning forest just from its total value, because edges have different weights.
+    // However, if we know the weights of all edges, we might be able to deduce which edges are in the maximum spanning forest by using the fact that the maximum spanning forest is the one that maximizes the sum of weights. If we know the sorted weights, we can simulate Kruskal's algorithm mentally if we knew the connectivity. But we don't.
+    
+    // Alternative: We can use the remaining m queries to find the minimum spanning forest directly by building it.
+    // We can find the minimum spanning forest by Kruskal's algorithm: we need to know, for each edge in increasing order of weight, whether adding it connects two different components.
+    // We can determine this by querying the maximum capacity of the set of edges we have so far plus the new edge, and comparing it to the maximum capacity of the set without the new edge? But we need to know the maximum capacity of the current forest. However, the maximum capacity of a forest is just the sum of its edges. But if we have a set of edges that is a forest, its maximum capacity is the sum of its edges (since it's already a forest, the only full spanning forest is itself). If we add an edge that creates a cycle, the maximum capacity will increase by the weight of the new edge minus the weight of the lightest edge on the cycle? Actually, for maximum spanning forest, if we add an edge to a forest, the new maximum spanning forest will drop the lightest edge on the cycle to keep it a forest. So the value changes in a predictable way if we know the weights.
+    
+    // But we don't know the cycle structure.
+    
+    // Let's think about a simpler approach: We can find the minimum spanning forest by querying the maximum capacity of the whole graph? No.
+    
+    // Wait, maybe we can find the minimum spanning forest by querying the maximum capacity of the whole graph and then somehow transforming it? There is a known duality: The minimum spanning tree is the maximum spanning tree of the graph with weights negated. But we can't negate weights in queries.
+    
+    // What if we query the complement of each edge? That is, for each edge i, query all edges except i. We have m queries left after finding weights. That would be 2m total.
+    // Let's analyze what information we get from querying S \ {i} for each i.
+    // Let total_max = max capacity of all edges.
+    // For each i, let val_i = max capacity of all edges except i.
+    // If edge i is not in the maximum spanning forest of the whole graph, then val_i = total_max.
+    // If edge i is in the maximum spanning forest, then val_i < total_max.
+    // Moreover, the difference total_max - val_i is the weight of edge i minus the weight of the heaviest edge that can replace it to reconnect the two components? Actually, if we remove edge i from the maximum spanning forest, the forest splits into two components. To form a new maximum spanning forest on the remaining edges, we need to find the heaviest edge that connects these two components. Let that replacement edge have weight w_j. Then the new max forest value is total_max - l_i + w_j. So total_max - val_i = l_i - w_j.
+    // This doesn't directly give us l_i unless w_j = 0 (no replacement), which happens if edge i is a bridge in the max forest (i.e., its removal disconnects the components and there is no other edge between them). In that case, val_i = total_max - l_i.
+    // So if edge i is a bridge in the max forest, we can recover its weight from the difference. But we already know the weight from single-edge queries.
+    
+    // This seems to give information about the maximum spanning forest, not the minimum.
+    
+    // Let's reconsider the problem statement: "Kanako wants to know the minimum capacity of the system with all tracks functional."
+    // Maybe the minimum capacity is simply the maximum capacity of some subset? No.
+    
+    // Let's look at the sample:
+    // n=5, m=4
+    // Queries:
+    // ? 0000 -> 0
+    // ? 1110 -> 5
+    // ? 1111 -> 9
+    // ? 1101 -> 7
+    // Answer: ! 7
+    // The graph has edges with lengths 1,2,3,4? The note says "satisfying l_i = i", so lengths are 1,2,3,4.
+    // The sample output shows queries and responses.
+    // Let's analyze the sample graph: It's a graph with 5 vertices and 4 edges, lengths 1,2,3,4.
+    // The note has an image, but we can't see it. However, we can deduce from the queries.
+    // Query 0000 -> 0: empty graph, max capacity 0.
+    // Query 1110 -> edges 1,2,3 active, edge 4 inactive. Max capacity = 5.
+    // Query 1111 -> all edges active. Max capacity = 9.
+    // Query 1101 -> edges 1,2,4 active, edge 3 inactive. Max capacity = 7.
+    // The answer is 7, which is the minimum capacity with all tracks functional.
+    // So the minimum capacity of the whole graph is 7.
+    // The maximum capacity of the whole graph is 9.
+    // The minimum capacity is not the maximum capacity of any subset queried? They queried 1101 and got 7, which is the answer. But that subset is missing edge 3. So the minimum capacity of the whole graph (all 4 edges) equals the maximum capacity of the subset without edge 3. Is that a coincidence?
+    // Let's check: The whole graph has edges 1,2,3,4. Its minimum capacity is 7. The subset {1,2,4} has maximum capacity 7. So the minimum capacity of the whole graph equals the maximum capacity of some subset where we removed one edge? In this case, removing edge 3 gave a subset whose maximum capacity is the minimum capacity of the whole graph.
+    // Is it always true that the minimum capacity of the whole graph is equal to the maximum capacity of the whole graph minus something? Or is it equal to the maximum capacity of the graph with the heaviest edge removed? No, edge 3 has length 3, edge 4 has length 4. Removing edge 4 (subset 1110) gave max capacity 5, not 7. Removing edge 3 gave 7.
+    // So the minimum capacity is the maximum capacity of the graph without some edge.
+    
+    // Let's think: The minimum spanning forest of the whole graph is formed by taking the lightest edges that connect the components. The maximum spanning forest of the whole graph is formed by taking the heaviest edges.
+    // In the sample, the minimum spanning forest value is 7, the maximum is 9.
+    // Notice that 7 = 1+2+4? That's edges 1,2,4. So the minimum spanning forest consists of edges 1,2,4. The maximum spanning forest consists of edges 2,3,4? 2+3+4=9. So the maximum spanning forest uses edges 2,3,4.
+    // The minimum spanning forest uses edges 1,2,4. The subset {1,2,4} has maximum capacity 7, which is exactly the value of its own maximum spanning forest (which is itself, since it's a forest). So the minimum spanning forest of the whole graph is a forest, and its maximum capacity is just its sum. So if we can find which edges are in the minimum spanning forest, we can just query that subset and get the answer.
+    // But how to find the minimum spanning forest?
+    
+    // We can find the minimum spanning forest by Kruskal's algorithm if we can test connectivity.
+    // We have m queries to find weights (by querying each edge alone).
+    // Then we have m queries left. We can use them to test connectivity for Kruskal's algorithm.
+    // How to test if adding an edge connects two different components?
+    // Suppose we have a current forest F (which is a set of edges that we know are in the minimum spanning forest so far).
+    // We want to add edge e. We need to know if e connects two different components in F.
+    // If we query the set F ∪ {e}, the maximum capacity of this set is the value of the maximum spanning forest of that set.
+    // Since F is a forest, its maximum capacity is just the sum of its edges.
+    // When we add e, if e connects two different components, the new graph is still a forest, so its maximum capacity is sum(F) + l_e.
+    // If e creates a cycle, then the maximum spanning forest will drop the lightest edge on that cycle. The new maximum capacity will be sum(F) + l_e - min_weight_on_cycle.
+    // So if we know sum(F) and we query F ∪ {e}, we can tell if e connects different components by checking if the returned value equals sum(F) + l_e.
+    // But we don't know sum(F) unless we have been tracking it. We can track it by building F incrementally.
+    // However, we need to know the weights of all edges first. We can get them with m queries.
+    // Then we sort edges by weight ascending.
+    // We start with F = empty. sum(F) = 0.
+    // For each edge e in sorted order:
+    //   Query F ∪ {e}. Let val = response.
+    //   If val == sum(F) + l_e, then e connects two different components, so we add e to F, sum(F) += l_e.
+    //   Else, e creates a cycle, so we skip it.
+    // At the end, F is the minimum spanning forest, and sum(F) is the answer.
+    // This uses m queries for the weights, and at most m queries for the Kruskal steps (one per edge). Total <= 2m.
+    // This works!
+    
+    // Let's verify with the sample:
+    // Weights: l1=1, l2=2, l3=3, l4=4.
+    // Sorted: e1(1), e2(2), e3(3), e4(4).
+    // Start F = {}, sum=0.
+    // e1: query {e1} -> should return 1. 1 == 0+1, so add e1. sum=1.
+    // e2: query {e1,e2} -> max capacity? The graph has edges 1 and 2. If they are disjoint, max capacity = 1+2=3. If they share a vertex, max capacity = max(1,2)=2? Actually, if they share a vertex, they form a path of length 3? No, a spanning forest on three vertices with two edges sharing a vertex: the forest can include both edges if they don't form a cycle. Two edges sharing a vertex is a tree on three vertices, so it's a forest. The maximum spanning forest would include both edges if they are both present? Wait, the maximum spanning forest maximizes the sum of weights. If both edges are present and they don't form a cycle, the only full spanning forest is the graph itself (since it's already a forest). So the value is the sum of all edges. So if e1 and e2 are disjoint or share a vertex, as long as they don't form a cycle, the max capacity is 1+2=3. If they form a cycle (i.e., they are parallel edges between the same two vertices), then the max capacity is max(1,2)=2. So the query result tells us if they form a cycle. In the sample, we don't know the graph, but let's assume they don't form a cycle. Then val=3. 3 == 1+2, so add e2. sum=3.
+    // e3: query {e1,e2,e3}. If adding e3 creates a cycle, the max capacity will be sum(F) + l3 - min_weight_on_cycle. If it doesn't create a cycle, val = 3+3=6. In the sample, the query 1110 (edges 1,2,3) gave 5. So val=5. 5 != 6, so e3 creates a cycle. We skip e3.
+    // e4: query {e1,e2,e4}. In sample, 1101 gave 7. sum(F)=3, l4=4, sum+4=7. val=7, so add e4. sum=7.
+    // Final answer 7. Correct!
+    
+    // So the algorithm is:
+    // 1. For each edge i from 1 to m, query the subset with only edge i (string with '1' at position i, '0' elsewhere). This gives the weight l_i.
+    // 2. Store edges with their indices and weights. Sort by weight ascending.
+    // 3. Initialize current forest as empty set of edge indices. current_sum = 0.
+    // 4. For each edge in sorted order:
+    //    a. Create query string with '1' at positions of all edges in current forest plus this edge.
+    //    b. Query and get response val.
+    //    c. If val == current_sum + weight of this edge, then add this edge to current forest, current_sum += weight.
+    // 5. Output current_sum as the answer.
+    
+    // This uses exactly m + (number of edges processed) <= 2m queries.
+    // But wait: In step 1, we query each edge individually. That's m queries.
+    // In step 4, we query for each edge in sorted order. That's m queries.
+    // Total 2m. Perfect.
+    
+    // However, we must be careful: The graph may not be connected. The minimum spanning forest will have n - c edges, where c is the number of connected components. Our algorithm will naturally find it because we start with empty and add edges that don't create cycles. This is exactly Kruskal's algorithm. The condition val == current_sum + l_e correctly identifies when adding e does not create a cycle in the current forest. Why? Because the current forest F is a forest. The graph F ∪ {e} is a forest if and only if e connects two different components of F. In that case, the maximum spanning forest of F ∪ {e} is the graph itself (since it's a forest), so its value is sum(F) + l_e. If e connects two vertices in the same component of F, then F ∪ {e} contains a cycle. The maximum spanning forest of this graph will be F plus e minus the lightest edge on that cycle. Since we are adding edges in increasing order of weight, the lightest edge on the cycle is at most l_e? Actually, the lightest edge on the cycle could be any edge in the cycle. But note: In our algorithm, we are building the minimum spanning forest by adding edges in increasing weight. The current forest F consists of edges that are all lighter than or equal to e? Not necessarily, because we might have skipped some lighter edges that created cycles. But all edges in F are lighter than e? Since we process in ascending order, all edges in F have weight <= l_e. So the lightest edge on the cycle could be one of the edges in F, which has weight <= l_e. Therefore, the maximum spanning forest value will be sum(F) + l_e - min_cycle_weight. Since min_cycle_weight <= l_e, this value is >= sum(F). It could be equal to sum(F) if min_cycle_weight == l_e? But if min_cycle_weight == l_e, then the cycle consists of edges all with weight l_e? But we process edges in ascending order, so if there are multiple edges with the same weight, we might add some and skip others. However, if min_cycle_weight == l_e, then val = sum(F). But sum(F) != sum(F) + l_e (since l_e > 0). So the condition val == sum(F) + l_e will be false. So it correctly identifies cycle creation.
+    
+    // But wait: What if the cycle's lightest edge is exactly l_e and we have multiple edges of the same weight? Then val = sum(F) + l_e - l_e = sum(F). That is not equal to sum(F) + l_e. So we correctly skip. So the condition works.
+    
+    // However, there is a subtlety: The maximum spanning forest of F ∪ {e} might not be unique if there are multiple edges with the same weight. But the value is unique. The condition val == sum(F) + l_e holds if and only if e does not create a cycle. Because if e creates a cycle, the maximum spanning forest must drop at least one edge from the cycle to break it. Since all edges in the cycle have weight <= l_e (because F has edges <= l_e, and e has weight l_e), the dropped edge has weight <= l_e. So the new sum is sum(F) + l_e - dropped_weight <= sum(F) + l_e. It could be equal only if dropped_weight = 0, impossible. So val < sum(F) + l_e. Thus the condition is exact.
+    
+    // So the algorithm is correct.
+    
+    // Let's implement it.
+    
+    // Read n, m.
+    // We'll store weights in an array of size m.
+    // For i=0..m-1:
+    //   create string s of m '0's, set s[i]='1', query, get weight.
+    // Then create vector of pairs (weight, index).
+    // Sort by weight.
+    // current_forest_indices: vector of indices (or we can keep a boolean array).
+    // current_sum = 0.
+    // For each (weight, idx) in sorted order:
+    //

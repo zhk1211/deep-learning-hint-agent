@@ -1,0 +1,30 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        long long d, k;
+        cin >> d >> k;
+        
+        // Find maximum z such that (k*z, k*z) is within distance d
+        // (k*z)^2 + (k*z)^2 <= d^2
+        // 2 * k^2 * z^2 <= d^2
+        // z <= d / (k * sqrt(2))
+        long long z = (long long)(d / (k * sqrt(2.0)));
+        
+        // Check if (k*z, k*(z+1)) is within the circle
+        if ((k*z)*(k*z) + (k*(z+1))*(k*(z+1)) <= d*d) {
+            cout << "Ashish\n";
+        } else {
+            cout << "Utkarsh\n";
+        }
+    }
+    
+    return 0;
+}

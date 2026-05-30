@@ -1,0 +1,58 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    vector<ll> a(n);
+    for (int i = 0; i < n; i++) cin >> a[i];
+    
+    vector<ll> pref(2 * n + 1, 0);
+    for (int i = 0; i < 2 * n; i++) {
+        pref[i + 1] = pref[i] + a[i % n];
+    }
+    
+    auto get_sum = [&](ll l, ll r) -> ll {
+        if (l > r) return 0;
+        ll block_l = (l - 1) / n;
+        ll block_r = (r - 1) / n;
+        if (block_l == block_r) {
+            ll start = (l - 1) % n;
+            ll end = (r - 1) % n;
+            return pref[block_l + end + 1] - pref[block_l + start];
+        }
+        ll total = 0;
+        // first block
+        ll start = (l - 1) % n;
+        total += pref[block_l + n] - pref[block_l + start];
+        // last block
+        ll end = (r - 1) % n;
+        total += pref[block_r + end + 1] - pref[block_r];
+        // full blocks in between
+        if (block_l + 1 <= block_r - 1) {
+            ll full_blocks = block_r - block_l - 1;
+            total += full_blocks * pref[n];
+        }
+        return total;
+    };
+    
+    while (q--) {
+        ll l, r;
+        cin >> l >> r;
+        cout << get_sum(l, r) << '\n';
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

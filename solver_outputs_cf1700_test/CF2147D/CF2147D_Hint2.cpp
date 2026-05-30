@@ -1,0 +1,69 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // Count frequencies of each value
+        map<int, int> freq;
+        for (int x : a) {
+            freq[x]++;
+        }
+        
+        // Collect distinct values in descending order
+        vector<int> vals;
+        for (auto &p : freq) {
+            vals.push_back(p.first);
+        }
+        sort(vals.rbegin(), vals.rend());
+        
+        long long alice = 0, bob = 0;
+        int turn = 0; // 0 for Alice, 1 for Bob
+        
+        for (int v : vals) {
+            int cnt = freq[v];
+            // If v is odd, the player who gets this move can take all occurrences
+            // If v is even, the player who gets this move will take all occurrences,
+            // but the next player will get the same number of occurrences at v-1 (which is odd)
+            if (v % 2 == 1) {
+                // odd: current player takes all
+                if (turn == 0) alice += cnt;
+                else bob += cnt;
+                turn ^= 1;
+            } else {
+                // even: current player takes all, then the same player will also get v-1 (odd)
+                // Actually, after taking v, v becomes v-1 (odd). The next turn, the other player
+                // will be forced to take v-1? Wait, let's think carefully.
+                // If current player takes x even, they get cnt points, and array now has cnt copies of x-1 (odd).
+                // The next player can choose x-1 (odd) and get cnt points.
+                // So both get cnt points from this value chain.
+                // But who gets the even and who gets the odd depends on turn.
+                if (turn == 0) {
+                    alice += cnt; // Alice takes even
+                    bob += cnt;   // Bob takes odd
+                } else {
+                    bob += cnt;   // Bob takes even
+                    alice += cnt; // Alice takes odd
+                }
+                // turn remains the same? Actually after two moves, turn flips twice, so same as before.
+                // turn stays the same.
+            }
+        }
+        
+        cout << alice << ' ' << bob << '\n';
+    }
+    
+    return 0;
+}

@@ -1,0 +1,168 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        string n_str;
+        cin >> n_str;
+        int n_int = stoi(n_str);
+        int len = (int)n_str.size();
+        
+        vector<pair<int, int>> ans;
+        // a from 1 to 10000
+        for (int a = 1; a <= 10000; ++a) {
+            // length of s = len * a
+            // b must be less than len * a to have non-empty result
+            // result string length = len * a - b
+            // result string is prefix of repeated n_str
+            // we need to check if this prefix equals the integer n_int * a - b
+            // n_int * a - b must be positive and have exactly len * a - b digits
+            // also b <= min(10000, n_int * a)
+            
+            int s_len = len * a;
+            // b can be at most min(10000, n_int * a)
+            int max_b = min(10000, n_int * a);
+            // b must be < s_len to have non-empty result
+            if (max_b >= s_len) max_b = s_len - 1;
+            
+            // We'll try possible lengths of result: res_len = s_len - b
+            // res_len ranges from 1 to s_len - 1 (since b >= 1)
+            // But we can iterate over b, but that's up to 10000, and a up to 10000 -> 1e8 too large.
+            // Instead, note that result string is prefix of repeated n_str.
+            // The integer value of that prefix must equal n_int * a - b.
+            // Let res_len = s_len - b, so b = s_len - res_len.
+            // Then we need: value(prefix of length res_len) == n_int * a - (s_len - res_len)
+            // => value(prefix) == n_int * a - len * a + res_len
+            // => value(prefix) == a * (n_int - len) + res_len
+            // Also constraints: 1 <= b <= min(10000, n_int * a) and b < s_len
+            // b = s_len - res_len => 1 <= s_len - res_len <= min(10000, n_int * a)
+            // => res_len <= s_len - 1 and res_len >= s_len - min(10000, n_int * a)
+            // Also res_len >= 1.
+            
+            // We can iterate over possible res_len? res_len up to s_len which can be 10000*len up to 10000*3=30000.
+            // But we can compute the prefix value efficiently.
+            // Since n_str is short (len <= 3), we can precompute repeated string up to max needed length.
+            // Max s_len = 10000 * 3 = 30000. We can build a string of that length.
+            
+            // Build repeated n_str up to s_len
+            string repeated;
+            while ((int)repeated.size() < s_len) repeated += n_str;
+            repeated.resize(s_len);
+            
+            // Now for each possible res_len, check condition.
+            // But res_len can be up to 30000, and a up to 10000 -> 3e8 too large.
+            // We need smarter approach.
+            
+            // Observe: value(prefix of length res_len) = a * (n_int - len) + res_len
+            // Let diff = n_int - len. Then value = a * diff + res_len.
+            // Since n_int <= 100 and len <= 3, diff is small (could be negative, zero, positive).
+            // For a given a, res_len determines b. We can solve for res_len?
+            // value is an integer with res_len digits.
+            // The prefix of length res_len is just the first res_len characters of repeated.
+            // We can compute its integer value. But we can also check if it matches the formula.
+            
+            // Alternative: Since len is small (1,2,3), we can precompute all possible prefixes and their values.
+            // For each a, we can iterate over possible b? b up to 10000, a up to 10000 -> 1e8, borderline but maybe ok in C++ with optimizations? 1e8 operations might be too slow for 1 second.
+            // We need better.
+            
+            // Let's analyze the equation: value(prefix of length L) = n_int * a - (len * a - L) = a*(n_int - len) + L.
+            // Let D = n_int - len.
+            // So value = a*D + L.
+            // Also L = len * a - b.
+            // b = len*a - L.
+            // Constraints: 1 <= b <= min(10000, n_int*a) and b < len*a => L >= 1.
+            // So L in [max(1, len*a - min(10000, n_int*a)), len*a - 1].
+            
+            // For a fixed a, L must be such that the prefix of length L equals a*D + L.
+            // Since L is the number of digits of the value, and value = a*D + L, we have:
+            // 10^{L-1} <= a*D + L < 10^L.
+            // Also the prefix of length L is determined by repeated n_str.
+            // We can compute the prefix value directly: it's formed by taking the first L characters of repeated n_str.
+            // Since n_str is short, we can compute this value quickly using modular arithmetic or string to integer conversion.
+            
+            // But we can iterate over L? L up to 30000, a up to 10000 -> 3e8.
+            // However, note that for a given a, the possible L range is limited by b <= 10000, so L >= len*a - 10000.
+            // That means L is in a window of size at most 10000. So total pairs (a, L) to check is sum over a of min(10000, len*a) which is about 10000 * 10000 = 1e8 worst case? Actually a goes to 10000, for each a, window size is at most 10000, so total checks ~ 10000 * 10000 / 2 = 5e7. That might be acceptable in C++ with simple operations.
+            
+            // Let's implement: for each a, compute L_min and L_max, then for each L in that range, check if the prefix matches.
+            // To check quickly, we can precompute the repeated string up to max possible length (30000) and then for each L, we can get the substring and convert to integer. Converting to integer each time might be slow. We can precompute an array of prefix values? But L varies.
+            // Since len <= 3, the repeated string is periodic with period len. We can compute the value of prefix of length L using the fact that it's just a number formed by repeating n_str.
+            // Let n_val = integer value of n_str. Let len = number of digits.
+            // The prefix of length L consists of q = L / len full repetitions and r = L % len remainder.
+            // The value = n_val * (10^{len*q} - 1) / (10^{len} - 1) * 10^r + (first r digits of n_str as integer).
+            // This can be computed with big integers? But n_val up to 100, L up to 30000, value can be huge (up to 10^30000), cannot fit in standard integer types. We need to compare as strings or use big integers? But the equation value = a*D + L also involves a*D + L which is at most 10000*100 + 30000 = 1,030,000, which is small! Wait, that's interesting.
+            
+            // Wait! The correct answer n_int * a - b is at most 100 * 10000 = 1,000,000. So the correct answer is at most 1,000,000. That means the value of the prefix must be at most 1,000,000. Therefore, L (the length of the prefix) can be at most 7 (since 10^7 = 10,000,000 > 1,000,000). So L <= 7.
+            // This is a crucial observation! The result string length is at most 7 because the correct answer is small.
+            // Let's verify: n_int <= 100, a <= 10000, so n_int * a <= 1,000,000. b >= 1, so n_int * a - b <= 999,999. So the correct answer has at most 6 digits (actually up to 6 digits for 999,999, but could be 7 if n_int*a = 1,000,000 and b=0, but b>=1, so max is 999,999 -> 6 digits). Wait, n_int * a can be 100 * 10000 = 1,000,000. b >= 1, so max correct answer is 999,999 (6 digits). But if n_int=100, a=10000, b=1, answer=999999 (6 digits). So L <= 6. However, if n_int=1, a=10000, b=1, answer=9999 (4 digits). So L is small.
+            // Therefore, the result string length L = len * a - b is at most 6 (or maybe 7 if n_int*a could be 1,000,000 and b=0, but b>=1). So L <= 6.
+            // That means len * a - b <= 6 => b >= len * a - 6.
+            // Also b <= min(10000, n_int * a).
+            // So for a given a, b must be in [max(1, len*a - 6), min(10000, n_int*a, len*a - 1)].
+            // This range is at most 6 values! So we can just iterate over a from 1 to 10000, and for each a, iterate over the few possible b values (at most 6), and check if the resulting string matches the correct answer.
+            // Total operations: 10000 * 6 = 60000, very fast.
+            
+            // Let's double-check: Is it possible that the result string is longer than 6 but still equals a small number? No, because if the string has more digits, its integer value would be at least 10^{L-1}, which for L>=7 is >= 1,000,000. But the correct answer is < 1,000,000. So it's impossible. The only exception is if the string has leading zeros, but the problem says the string is formed by repeating n, and n >= 1, so no leading zeros. So L must be <= 6.
+            
+            // Therefore, we can solve by iterating a from 1 to 10000, compute L = len * a - b, but we iterate b in the small range.
+            // For each a, we need to find b such that:
+            // 1 <= b <= min(10000, n_int * a)
+            // b < len * a (so L >= 1)
+            // and the string formed by removing last b characters from repeated n_str (length len*a) equals the integer n_int * a - b.
+            // Since L <= 6, we can just compute the prefix string of length L and convert to integer, and compare.
+            
+            // To avoid building the full repeated string of length up to 30000 for each a, we can just compute the prefix of length L directly from n_str. Since L <= 6, we can easily generate it.
+            
+            // Algorithm:
+            // For each a from 1 to 10000:
+            //   max_b = min(10000, n_int * a);
+            //   min_b = max(1, len * a - 6);
+            //   if min_b > max_b or min_b >= len * a: continue;
+            //   for b from min_b to min(max_b, len * a - 1):
+            //       L = len * a - b;
+            //       if L < 1 or L > 6: continue; // already ensured
+            //       // generate prefix of length L from repeated n_str
+            //       string prefix;
+            //       for (int i = 0; i < L; ++i) prefix += n_str[i % len];
+            //       int val = stoi(prefix);
+            //       if (val == n_int * a - b) {
+            //           ans.push_back({a, b});
+            //       }
+            
+            // That's it.
+            
+            int max_a = 10000;
+            for (int a = 1; a <= max_a; ++a) {
+                int max_b = min(10000, n_int * a);
+                int min_b = max(1, len * a - 6);
+                if (min_b > max_b) continue;
+                int upper_b = min(max_b, len * a - 1);
+                for (int b = min_b; b <= upper_b; ++b) {
+                    int L = len * a - b;
+                    if (L < 1 || L > 6) continue;
+                    string prefix;
+                    for (int i = 0; i < L; ++i) {
+                        prefix += n_str[i % len];
+                    }
+                    int val = stoi(prefix);
+                    if (val == n_int * a - b) {
+                        ans.push_back({a, b});
+                    }
+                }
+            }
+        }
+        
+        cout << ans.size() << '\n';
+        for (auto &p : ans) {
+            cout << p.first << ' ' << p.second << '\n';
+        }
+    }
+    return 0;
+}
+```

@@ -1,0 +1,49 @@
+// Hint10
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    cin >> n;
+    vector<long long> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+
+    if (n == 1) {
+        cout << a[0] << "\n";
+        return 0;
+    }
+
+    // Precompute prefix maximums of a[i] + i
+    vector<long long> pref_max(n);
+    pref_max[0] = a[0] + 0;
+    for (int i = 1; i < n; ++i) {
+        pref_max[i] = max(pref_max[i - 1], a[i] + i);
+    }
+
+    // Precompute suffix maximums of a[i] + (n - 1 - i)
+    vector<long long> suff_max(n);
+    suff_max[n - 1] = a[n - 1] + 0;
+    for (int i = n - 2; i >= 0; --i) {
+        suff_max[i] = max(suff_max[i + 1], a[i] + (n - 1 - i));
+    }
+
+    long long ans = LLONG_MAX;
+    for (int i = 0; i < n; ++i) {
+        long long cand = a[i]; // x must be at least a[i] to kill the first monster
+        if (i > 0) {
+            cand = max(cand, pref_max[i - 1] - i + 1);
+        }
+        if (i < n - 1) {
+            cand = max(cand, suff_max[i + 1] - (n - 1 - i) + 1);
+        }
+        ans = min(ans, cand);
+    }
+
+    cout << ans << "\n";
+    return 0;
+}

@@ -1,0 +1,86 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+CQXYM found a rectangle $ A $ of size $ n \times m $ . There are $ n $ rows and $ m $ columns of blocks. Each block of the rectangle is an obsidian block or empty. CQXYM can change an obsidian block to an empty block or an empty block to an obsidian block in one operation.
+
+A rectangle $ M $ size of $ a \times b $ is called a portal if and only if it satisfies the following conditions:
+
+- $ a \geq 5,b \geq 4 $ .
+- For all $ 1 < x < a $ , blocks $ M_{x,1} $ and $ M_{x,b} $ are obsidian blocks.
+- For all $ 1 < x < b $ , blocks $ M_{1,x} $ and $ M_{a,x} $ are obsidian blocks.
+- For all $ 1<x<a,1<y<b $ , block $ M_{x,y} $ is an empty block.
+- $ M_{1, 1}, M_{1, b}, M_{a, 1}, M_{a, b} $ can be any type.
+
+Note that the there must be $ a $ rows and $ b $ columns, not $ b $ rows and $ a $ columns.Note that corners can be any type
+
+CQXYM wants to know the minimum number of operations he needs to make at least one sub-rectangle a portal.
+
+Input Format
+The first line contains an integer $ t $ ( $ t \geq 1 $ ), which is the number of test cases.
+
+For each test case, the first line contains two integers $ n $ and $ m $ ( $ 5 \le n \le 400 $ , $ 4 \le m \le 400 $ ).
+
+Then $ n $ lines follow, each line contains $ m $ characters $ 0 $ or $ 1 $ . If the $ j $ -th character of $ i $ -th line is $ 0 $ , block $ A_{i,j} $ is an empty block. Otherwise, block $ A_{i,j} $ is an obsidian block.
+
+It is guaranteed that the sum of $ n $ over all test cases does not exceed $ 400 $ .
+
+It is guaranteed that the sum of $ m $ over all test cases does not exceed $ 400 $ .
+
+Output Format
+Output $ t $ answers, and each answer in a line.
+
+Examples
+Sample 1
+Input
+1
+5 4
+1000
+0000
+0110
+0000
+0001
+Output
+12
+
+Sample 2
+Input
+1
+9 9
+001010001
+101110100
+000010011
+100000001
+101010101
+110001111
+000001111
+111100000
+000110000
+Output
+5
+
+Note
+In the first test case, the final portal is like this:
+
+```
+<pre class="verbatim"><br></br>1110<br></br>1001<br></br>1001<br></br>1001<br></br>0111<br></br>
+```
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+Think about how many rectangles can be portals.
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

@@ -1,0 +1,97 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<string> grid(n);
+        for (int i = 0; i < n; i++) {
+            cin >> grid[i];
+        }
+        
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
+        bool ok = true;
+        
+        for (int i = 0; i < n && ok; i++) {
+            for (int j = 0; j < m && ok; j++) {
+                if (grid[i][j] == '*' && !visited[i][j]) {
+                    // collect all cells of this component
+                    vector<pair<int,int>> comp;
+                    queue<pair<int,int>> q;
+                    q.push({i, j});
+                    visited[i][j] = true;
+                    
+                    while (!q.empty()) {
+                        auto [x, y] = q.front(); q.pop();
+                        comp.push_back({x, y});
+                        // 8-directional connectivity for component detection
+                        for (int dx = -1; dx <= 1; dx++) {
+                            for (int dy = -1; dy <= 1; dy++) {
+                                if (dx == 0 && dy == 0) continue;
+                                int nx = x + dx, ny = y + dy;
+                                if (nx >= 0 && nx < n && ny >= 0 && ny < m && grid[nx][ny] == '*' && !visited[nx][ny]) {
+                                    visited[nx][ny] = true;
+                                    q.push({nx, ny});
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (comp.size() != 3) {
+                        ok = false;
+                        break;
+                    }
+                    
+                    // check if these 3 cells form an L-shape
+                    // L-shape: exactly one cell has two neighbors in the component (the corner),
+                    // the other two have exactly one neighbor in the component.
+                    // Also, the bounding box must be 2x2.
+                    int min_x = n, max_x = -1, min_y = m, max_y = -1;
+                    for (auto [x, y] : comp) {
+                        min_x = min(min_x, x);
+                        max_x = max(max_x, x);
+                        min_y = min(min_y, y);
+                        max_y = max(max_y, y);
+                    }
+                    if (max_x - min_x != 1 || max_y - min_y != 1) {
+                        ok = false;
+                        break;
+                    }
+                    
+                    // count neighbors within component for each cell
+                    int cnt1 = 0, cnt2 = 0;
+                    for (auto [x, y] : comp) {
+                        int neigh = 0;
+                        for (auto [nx, ny] : comp) {
+                            if (abs(x - nx) + abs(y - ny) == 1) neigh++;
+                        }
+                        if (neigh == 1) cnt1++;
+                        else if (neigh == 2) cnt2++;
+                    }
+                    if (cnt1 != 2 || cnt2 != 1) {
+                        ok = false;
+                        break;
+                    }
+                    
+                    // check that no other '*' touches this L-shape by edge or corner
+                    // we already know the component is isolated (size 3), but we need to ensure
+                    // no other '*' is adjacent to any cell of this L-shape.
+                    // Since we used 8-connectivity for component, if there were another '*'
+                    // adjacent by edge or corner, it would have been included in the component.
+                    // So this check is automatically satisfied.
+                }
+            }
+        }
+        
+        cout << (ok ? "YES" : "NO") << '\n';
+    }
+    
+    return 0;
+}

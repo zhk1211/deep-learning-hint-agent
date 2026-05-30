@@ -1,0 +1,64 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+There is a street with $ n $ sights, with sight number $ i $ being $ i $ miles from the beginning of the street. Sight number $ i $ has beauty $ b_i $ . You want to start your morning jog $ l $ miles and end it $ r $ miles from the beginning of the street. By the time you run, you will see sights you run by (including sights at $ l $ and $ r $ miles from the start). You are interested in the $ 3 $ most beautiful sights along your jog, but every mile you run, you get more and more tired.
+
+So choose $ l $ and $ r $ , such that there are at least $ 3 $ sights you run by, and the sum of beauties of the $ 3 $ most beautiful sights minus the distance in miles you have to run is maximized. More formally, choose $ l $ and $ r $ , such that $ b_{i_1} + b_{i_2} + b_{i_3} - (r - l) $ is maximum possible, where $ i_1, i_2, i_3 $ are the indices of the three maximum elements in range $ [l, r] $ .
+
+Input Format
+The first line contains a single integer $ t $ ( $ 1 \leq t \leq 10^5 $ ) — the number of test cases.
+
+The first line of each test case contains a single integer $ n $ ( $ 3 \leq n \leq 10^5 $ ).
+
+The second line of each test case contains $ n $ integers $ b_i $ ( $ 1 \leq b_i \leq 10^8 $ ) — beauties of sights $ i $ miles from the beginning of the street.
+
+It's guaranteed that the sum of all $ n $ does not exceed $ 10^5 $ .
+
+Output Format
+For each test case output a single integer equal to the maximum value $ b_{i_1} + b_{i_2} + b_{i_3} - (r - l) $ for some running range $ [l, r] $ .
+
+Examples
+Sample 1
+Input
+4
+5
+5 1 4 2 3
+4
+1 1 1 1
+6
+9 8 7 6 5 4
+7
+100000000 1 100000000 1 100000000 1 100000000
+Output
+8
+1
+22
+299999996
+
+Note
+In the first example, we can choose $ l $ and $ r $ to be $ 1 $ and $ 5 $ . So we visit all the sights and the three sights with the maximum beauty are the sights with indices $ 1 $ , $ 3 $ , and $ 5 $ with beauties $ 5 $ , $ 4 $ , and $ 3 $ , respectively. So the total value is $ 5 + 4 + 3 - (5 - 1) = 8 $ .
+
+In the second example, the range $ [l, r] $ can be $ [1, 3] $ or $ [2, 4] $ , the total value is $ 1 + 1 + 1 - (3 - 1) = 1 $ .
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1826D - Running Miles
+There is a fairly straightforward solution using DP, but I'll leave that for the comment section and present a very short and simple solution.
+First we need to notice, that at two of the maximums are at the ends of $$$[l, r]$$$, otherwise we can move one of the boundaries closer to the other and improve the answer.
+Using this observation we can reduce the problem to the following: choose three indices $$$l  \lt  m  \lt  r$$$, such that $$$b_l + b_m + b_r - (r - l)$$$ is maximum.
+Now, let's iterate over the middle index $$$m$$$ and rewrite the function as $$$b_m + (b_l + l) + (b_r - r)$$$. We can see, that values in the braces are pretty much independent — on of them depends only on the index $$$l$$$ and the second one depends only on the index $$$r$$$. So, for a given $$$m$$$ we can choose the numbers $$$l$$$ and $$$r$$$ greedily! To make it fast enough we can precalculate the prefix maximum for the array $$$b_l + l$$$ and the suffix maximum for array $$$b_r - r$$$. This results in a $$$O(n)$$$ time complexity solution.
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

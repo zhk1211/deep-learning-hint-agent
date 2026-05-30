@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+bool check(int k, const string& s, int n) {
+    vector<int> diff(n + 1, 0);
+    int cur = 0;
+    for (int i = 0; i < n; ++i) {
+        cur += diff[i];
+        char c = s[i];
+        if (cur & 1) {
+            c ^= 1; // flip '0' <-> '1'
+        }
+        if (c == '0') {
+            if (i + k > n) return false;
+            ++cur;
+            --diff[i + k];
+        }
+    }
+    return true;
+}
+
+void solve() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        string s;
+        cin >> n >> s;
+        int ans = 1;
+        for (int k = n; k >= 1; --k) {
+            if (check(k, s, n)) {
+                ans = k;
+                break;
+            }
+        }
+        cout << ans << '\n';
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    solve();
+    return 0;
+}

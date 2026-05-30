@@ -1,0 +1,177 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int INF = 1e9;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+
+        // Precompute prefix sums for fast queries of number of 1's in a subrectangle
+        vector<vector<int>> pref(n + 1, vector<int>(m + 1, 0));
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 1; j <= m; ++j) {
+                pref[i][j] = pref[i-1][j] + pref[i][j-1] - pref[i-1][j-1] + (grid[i-1][j-1] == '1');
+            }
+        }
+
+        auto get_sum = [&](int r1, int c1, int r2, int c2) {
+            return pref[r2][c2] - pref[r1-1][c2] - pref[r2][c1-1] + pref[r1-1][c1-1];
+        };
+
+        int ans = INF;
+
+        // Iterate over top and bottom rows of the portal
+        for (int top = 1; top <= n; ++top) {
+            for (int bot = top + 4; bot <= n; ++bot) {
+                // We'll maintain best value for left side up to current column
+                vector<int> best(m + 1, INF);
+                // For each column as right border, find best left border
+                for (int right = 4; right <= m; ++right) {
+                    int left = right - 3;
+                    // Cost to make the vertical borders (excluding corners) for columns left and right
+                    // between top+1 and bot-1
+                    int cost_vert = (bot - top - 1) - get_sum(top+1, left, bot-1, left) +
+                                    (bot - top - 1) - get_sum(top+1, right, bot-1, right);
+                    // Cost to make the horizontal border for row top between left+1 and right-1
+                    int cost_top_row = (right - left - 1) - get_sum(top, left+1, top, right-1);
+                    // Cost to make the horizontal border for row bot between left+1 and right-1
+                    int cost_bot_row = (right - left - 1) - get_sum(bot, left+1, bot, right-1);
+                    // Cost to make the interior empty
+                    int cost_interior = get_sum(top+1, left+1, bot-1, right-1);
+
+                    int current_cost = cost_vert + cost_top_row + cost_bot_row + cost_interior;
+                    // Update best for this left column (as left border of a portal ending at this right)
+                    // Actually we want to consider all left borders <= right-3
+                    // We'll maintain best value for a given left border as we move right
+                    // But we need to consider left border fixed, right border varying.
+                    // Let's restructure: for each left, we compute cost for right and update answer.
+                    // However, we can also do: for each right, we consider all left <= right-3.
+                    // We can maintain an array best_left where best_left[l] is the minimal cost
+                    // for a portal with left border l and right border up to current right-1?
+                    // Actually, we can precompute for each left the cost of vertical borders and top/bot rows
+                    // that depend only on left, and then add right-dependent parts.
+
+                    // Let's do: for each left, we keep a running minimum of (cost for left side + top/bot rows for left)
+                    // plus interior cost from left+1 to right-1? That's tricky because interior depends on both.
+
+                    // Alternative: iterate over left, then right. Since n,m <= 400, O(n^2 * m) is 400^3 = 64e6, borderline.
+                    // We can optimize by precomputing prefix sums and doing O(1) per rectangle.
+                    // Total rectangles: O(n^2 * m^2) is too big.
+                    // We need O(n^2 * m) or O(n * m^2). Let's aim for O(n^2 * m).
+                    // For fixed top and bot, we can compute for each column the cost to make it a vertical border,
+                    // and the cost to make the top/bot rows between two columns.
+                    // We can precompute arrays:
+                    // vert_cost[c] = cost to make column c vertical border between top+1 and bot-1
+                    // top_cost[c] = cost to make cell (top, c) a border? Actually top row border is horizontal.
+                    // Let's define:
+                    // For a fixed top and bot, we want to choose left and right (right - left >= 3).
+                    // Total cost = vert_cost[left] + vert_cost[right] + (cost to make top row from left+1 to right-1 all 1)
+                    // + (cost to make bot row from left+1 to right-1 all 1) + (cost to make interior empty).
+                    // We can precompute prefix sums of top row and bot row to get the cost of making a segment all 1.
+                    // Also prefix sums of interior to get cost of making it all 0.
+                    // Then for each right, we need min over left <= right-3 of:
+                    // vert_cost[left] + cost_top_row(left+1, right-1) + cost_bot_row(left+1, right-1) + cost_interior(left+1, right-1)
+                    // But cost_top_row(left+1, right-1) = (right - left - 1) - (pref_top[right-1] - pref_top[left])
+                    // This can be split into parts depending only on left and parts depending on right.
+                    // Let's expand:
+                    // cost_top_row = (right - left - 1) - (top_sum[right-1] - top_sum[left])
+                    // = right - left - 1 - top_sum[right-1] + top_sum[left]
+                    // Similarly cost_bot_row = right - left - 1 - bot_sum[right-1] + bot_sum[left]
+                    // cost_interior = interior_sum[right-1] - interior_sum[left] (where interior_sum is prefix sum of interior 1's)
+                    // vert_cost[left] = (bot - top - 1) - (col_sum_left[bot-1] - col_sum_left[top])? Actually we can precompute column sums.
+                    // Let's define:
+                    // col1[c] = number of 1's in column c between top+1 and bot-1.
+                    // vert_cost[c] = (bot - top - 1) - col1[c].
+                    // top_row[c] = grid[top-1][c-1] == '1' ? 1 : 0
+                    // bot_row[c] = grid[bot-1][c-1] == '1' ? 1 : 0
+                    // interior[c] = number of 1's in column c between top+1 and bot-1? No, interior is 2D.
+                    // We need interior 1's in the rectangle (top+1..bot-1, left+1..right-1).
+                    // We can use 2D prefix sum for that, but we want to split into left and right parts.
+                    // Let interior_pref[r][c] be prefix sum of grid over rows top+1..bot-1? Actually we can precompute for fixed top and bot:
+                    // For each column c, let inside_col[c] = number of 1's in column c between top+1 and bot-1.
+                    // Then interior_sum(left+1, right-1) = sum_{c=left+1}^{right-1} inside_col[c].
+                    // So cost_interior = sum_{c=left+1}^{right-1} inside_col[c].
+                    // Now total cost for given left, right:
+                    // C(left, right) = vert_cost[left] + vert_cost[right] 
+                    // + (right - left - 1) - (top_sum[right-1] - top_sum[left])
+                    // + (right - left - 1) - (bot_sum[right-1] - bot_sum[left])
+                    // + (interior_sum[right-1] - interior_sum[left])
+                    // where top_sum is prefix sum of top_row, bot_sum of bot_row, interior_sum of inside_col.
+                    // Simplify:
+                    // C = vert_cost[left] + vert_cost[right] 
+                    // + 2*(right - left - 1) 
+                    // - top_sum[right-1] + top_sum[left]
+                    // - bot_sum[right-1] + bot_sum[left]
+                    // + interior_sum[right-1] - interior_sum[left]
+                    // Group terms depending on left:
+                    // left_terms = vert_cost[left] - 2*left + top_sum[left] + bot_sum[left] - interior_sum[left]
+                    // right_terms = vert_cost[right] + 2*(right - 1) - top_sum[right-1] - bot_sum[right-1] + interior_sum[right-1]
+                    // Then C = left_terms + right_terms.
+                    // Note: left_terms does not depend on right, right_terms does not depend on left.
+                    // So for each right, we want min over left <= right-3 of left_terms.
+                    // We can maintain a running minimum of left_terms as we increase right.
+
+                    // Let's implement this.
+                }
+            }
+        }
+
+        // Re-implement with the derived formula
+        ans = INF;
+        for (int top = 1; top <= n; ++top) {
+            for (int bot = top + 4; bot <= n; ++bot) {
+                int height = bot - top - 1; // number of inner rows
+                vector<int> vert_cost(m + 1);
+                vector<int> top_row(m + 1), bot_row(m + 1);
+                vector<int> inside_col(m + 1);
+                for (int c = 1; c <= m; ++c) {
+                    // vertical border cost for column c (excluding corners)
+                    int ones = get_sum(top+1, c, bot-1, c);
+                    vert_cost[c] = height - ones;
+                    // top and bottom rows
+                    top_row[c] = (grid[top-1][c-1] == '1') ? 1 : 0;
+                    bot_row[c] = (grid[bot-1][c-1] == '1') ? 1 : 0;
+                    // interior column ones
+                    inside_col[c] = ones; // same as vertical ones, because interior is between top+1 and bot-1
+                }
+                // prefix sums
+                vector<int> pref_top(m + 1, 0), pref_bot(m + 1, 0), pref_inside(m + 1, 0);
+                for (int c = 1; c <= m; ++c) {
+                    pref_top[c] = pref_top[c-1] + top_row[c];
+                    pref_bot[c] = pref_bot[c-1] + bot_row[c];
+                    pref_inside[c] = pref_inside[c-1] + inside_col[c];
+                }
+                // compute left_terms for each column
+                vector<int> left_terms(m + 1);
+                for (int left = 1; left <= m; ++left) {
+                    left_terms[left] = vert_cost[left] - 2*left + pref_top[left] + pref_bot[left] - pref_inside[left];
+                }
+                // maintain minimum of left_terms for left <= current - 3
+                int min_left = INF;
+                for (int right = 4; right <= m; ++right) {
+                    int left = right - 3;
+                    min_left = min(min_left, left_terms[left]);
+                    if (min_left != INF) {
+                        int right_terms = vert_cost[right] + 2*(right - 1) - pref_top[right-1] - pref_bot[right-1] + pref_inside[right-1];
+                        ans = min(ans, min_left + right_terms);
+                    }
+                }
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

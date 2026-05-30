@@ -1,0 +1,47 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        long long ans = 0;
+        for (int i = 0; i < n; ++i) {
+            for (int j = i; j < n; ++j) {
+                if (j - i >= 4) break;
+                bool good = true;
+                for (int k = i; k <= j; ++k) {
+                    for (int l = k + 1; l <= j; ++l) {
+                        for (int m = l + 1; m <= j; ++m) {
+                            int d1 = abs(a[k] - a[m]) + abs(k - m);
+                            int d2 = abs(a[k] - a[l]) + abs(k - l);
+                            int d3 = abs(a[l] - a[m]) + abs(l - m);
+                            if (d1 == d2 + d3) {
+                                good = false;
+                                break;
+                            }
+                        }
+                        if (!good) break;
+                    }
+                    if (!good) break;
+                }
+                if (good) ++ans;
+                else break;
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

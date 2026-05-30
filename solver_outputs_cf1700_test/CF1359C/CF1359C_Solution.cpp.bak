@@ -1,0 +1,33 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int T;
+    cin >> T;
+    while (T--) {
+        long long h, c, t;
+        cin >> h >> c >> t;
+        
+        if (h + c - 2 * t >= 0) {
+            cout << 2 << '\n';
+        } else {
+            long long a = h - t;
+            long long b = 2 * t - c - h;
+            long long k = 2 * (a / b) + 1;
+            
+            long long val1 = abs((k / 2) * c + ((k + 1) / 2) * h - t * k);
+            long long val2 = abs(((k + 2) / 2) * c + ((k + 3) / 2) * h - t * (k + 2));
+            
+            if (val1 * (k + 2) <= val2 * k)
+                cout << k << '\n';
+            else
+                cout << k + 2 << '\n';
+        }
+    }
+    
+    return 0;
+}

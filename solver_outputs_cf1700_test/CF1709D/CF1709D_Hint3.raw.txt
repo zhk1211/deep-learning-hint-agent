@@ -1,0 +1,164 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(m + 1);
+    for (int i = 1; i <= m; ++i) {
+        cin >> a[i];
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        int xs, ys, xf, yf, k;
+        cin >> xs >> ys >> xf >> yf >> k;
+
+        // Check column difference
+        if (abs(ys - yf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // Check row difference
+        if (abs(xs - xf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // The robot can move up to the top row n, but must avoid blocked cells.
+        // The highest reachable row in the start column is n.
+        // The highest reachable row in the finish column is n.
+        // However, when moving horizontally, the robot must stay above the blocked cells
+        // in the columns it passes through.
+        // Since the robot moves in steps of k, the rows it can be at are congruent to xs mod k.
+        // The maximum row it can reach in any column is the largest row <= n that is
+        // congruent to xs mod k and > a[col].
+        // Actually, the robot can move up as much as it wants (up to n) as long as it doesn't
+        // hit a blocked cell. Since it starts at xs, it can move up to any row r such that
+        // r >= xs, r <= n, and r ≡ xs (mod k). Similarly, it can move down to any row r
+        // such that r <= xs, r > a[ys], and r ≡ xs (mod k).
+        // For the horizontal movement, the robot must be at a row that is > a[col] for all
+        // columns between ys and yf inclusive. The robot can adjust its row before moving
+        // horizontally. The best strategy is to go as high as possible (up to n) to clear
+        // the blocked cells. The maximum row it can reach in any column is the largest
+        // row <= n that is ≡ xs (mod k). Let's call this max_row.
+        // But we also need to ensure that max_row > max(a[col]) for col between ys and yf.
+        // However, we can also move down after moving horizontally, so we just need some
+        // row r that is reachable (r ≡ xs mod k, r > a[col] for all intermediate columns)
+        // and from which we can reach the finish cell.
+        // Since we can move up/down freely in steps of k, the set of reachable rows in any
+        // column is all rows congruent to xs mod k that are > a[col] and <= n.
+        // So the condition is: there exists a row r such that:
+        // r ≡ xs (mod k)
+        // r > max_{col between ys and yf} a[col]
+        // r <= n
+        // and also r must be reachable from xs (i.e., r >= xs or we can move down? Actually,
+        // we can move down from xs to any row > a[ys] that is ≡ xs mod k. So r can be less
+        // than xs as long as r > a[ys]. But to clear the highest blocked cell, we want r as
+        // high as possible. The maximum possible r is n - ((n - xs) % k + k) % k? Actually,
+        // the largest row <= n with r ≡ xs (mod k) is: n - ((n - xs) % k + k) % k.
+        // Let max_reach = n - ((n - xs) % k + k) % k.
+        // But wait, we can also move down from xs. The minimum row we can be at is the
+        // smallest row > a[ys] that is ≡ xs (mod k). But we want to maximize the row to
+        // clear blocked cells, so we should go as high as possible. So the best row to
+        // traverse horizontally is max_reach.
+        // However, we must also be able to reach the finish cell from that row. The finish
+        // cell is at (xf, yf). We need xf ≡ xs (mod k) (already checked) and xf > a[yf].
+        // Also, we need to be able to go from the horizontal traversal row down to xf.
+        // That means the horizontal traversal row must be >= xf (since we can only move
+        // down, not up? Actually we can move up as well, but if we are at max_reach, we
+        // can move down to xf if max_reach >= xf and they are congruent mod k. But we
+        // could also move up from a lower row. However, if we choose a row lower than
+        // max_reach, we might not clear the highest blocked cell. So the necessary and
+        // sufficient condition is: max_reach > max_blocked, where max_blocked is the
+        // maximum of a[col] for col between min(ys, yf) and max(ys, yf) inclusive.
+        // But wait: what if xs itself is already > max_blocked? Then we don't need to
+        // move up. But max_reach is always >= xs, so if xs > max_blocked, then max_reach
+        // > max_blocked automatically. So the condition max_reach > max_blocked works.
+        // However, we also need to ensure that we can actually reach the finish row xf
+        // from the horizontal traversal row. Since we can move down from max_reach to
+        // any row congruent to xs mod k that is > a[yf] and <= max_reach, we just need
+        // xf <= max_reach and xf > a[yf]. But xf > a[yf] is given. And xf <= max_reach
+        // is equivalent to xf <= n - ((n - xs) % k + k) % k. But since xf ≡ xs (mod k)
+        // and xf <= n, this is always true? Actually, max_reach is the largest number
+        // <= n congruent to xs mod k. Since xf is also <= n and congruent to xs mod k,
+        // we have xf <= max_reach by definition. So that's automatically satisfied.
+        // So the only extra condition is max_reach > max_blocked.
+
+        // But wait: what if the start column or finish column has a blocked cell that
+        // prevents moving up to max_reach? The start cell is at xs > a[ys]. We can move
+        // up from xs to max_reach as long as all intermediate rows are unblocked. But
+        // the column only has blocked cells at rows 1..a[ys]. Since xs > a[ys], all rows
+        // above xs are unblocked. So we can move up freely.
+        // Similarly, in the finish column, we can move down from max_reach to xf as long
+        // as xf > a[yf], which is given.
+        // So the only potential problem is the horizontal movement across columns between
+        // ys and yf. The robot moves horizontally at some row r. It must be that r >
+        // a[col] for all col in the range. So we need some r ≡ xs (mod k) with r >
+        // max_blocked and r <= n. The maximum such r is max_reach. So we just need
+        // max_reach > max_blocked.
+
+        // However, there is a catch: the robot moves in steps of k. When moving
+        // horizontally, it moves exactly k cells left or right per command. So it will
+        // visit columns at intervals of k. But the condition r > a[col] must hold for
+        // all columns it passes through, not just the ones it stops at? The problem says:
+        // "If a robot attempts to move into a blocked cell or outside the grid, it explodes."
+        // So if it moves left by k, it will pass through k cells. If any of those cells
+        // is blocked, it explodes. So we need r > a[col] for every column between ys and
+        // yf, not just the ones that are multiples of k apart. Because the robot moves
+        // cell by cell when executing the command k times? Actually, the problem says:
+        // "it executes each received command k times. So if you tell it to move up, for
+        // example, it will move up k times (k cells)." This means it moves one cell at a
+        // time, k times. So it will visit every intermediate cell. Therefore, the row r
+        // must be strictly greater than a[col] for all columns from min(ys, yf) to
+        // max(ys, yf) inclusive.
+
+        // So we need to query the maximum of a[col] in the range [min(ys, yf), max(ys, yf)].
+        // Since m up to 2e5 and q up to 2e5, we can use a segment tree or sparse table
+        // for range maximum queries. Sparse table is O(1) per query after O(m log m)
+        // preprocessing, which is fine.
+
+        // Build sparse table for array a (1-indexed)
+        int LOG = 0;
+        while ((1 << LOG) <= m) ++LOG;
+        vector<vector<int>> st(LOG, vector<int>(m + 1));
+        for (int i = 1; i <= m; ++i) {
+            st[0][i] = a[i];
+        }
+        for (int j = 1; j < LOG; ++j) {
+            for (int i = 1; i + (1 << j) - 1 <= m; ++i) {
+                st[j][i] = max(st[j - 1][i], st[j - 1][i + (1 << (j - 1))]);
+            }
+        }
+        auto query_max = [&](int l, int r) {
+            if (l > r) swap(l, r);
+            int len = r - l + 1;
+            int j = 31 - __builtin_clz(len);
+            return max(st[j][l], st[j][r - (1 << j) + 1]);
+        };
+
+        int max_blocked = query_max(ys, yf);
+        // max_reach = largest number <= n with same remainder as xs mod k
+        // Since xs <= n, we can compute:
+        int rem = xs % k;
+        int max_reach = n - ((n - rem) % k + k) % k;
+        // Actually simpler: max_reach = xs + ((n - xs) / k) * k;
+        // But careful with integer division: (n - xs) / k * k + xs
+        max_reach = xs + (n - xs) / k * k;
+
+        if (max_reach > max_blocked) {
+            cout << "YES\n";
+        } else {
+            cout << "NO\n";
+        }
+    }
+
+    return 0;
+}
+```

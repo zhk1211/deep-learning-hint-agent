@@ -1,0 +1,76 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m, k;
+        cin >> n >> m >> k;
+        
+        int total = n * m / 2;
+        int vertical = total - k;
+        
+        bool possible = false;
+        
+        // Case 1: n is even
+        if (n % 2 == 0) {
+            // We can fill each column pair with horizontal dominoes
+            // Maximum horizontal dominoes: (n/2) * m
+            // Minimum horizontal dominoes: 0, but must be even in each row pair? Actually any k works as long as k <= (n/2)*m and k has same parity as something?
+            // With n even, we can place horizontal dominoes in pairs of columns.
+            // For each pair of rows, we can place 0 to m horizontal dominoes.
+            // So k can be any integer from 0 to (n/2)*m, but must have the same parity as (n/2)*m? No, we can adjust.
+            // Actually, we can place horizontal dominoes in any even number per row? Let's think.
+            // If n is even, we can fill the board entirely with horizontal dominoes: k = n*m/2.
+            // We can also replace two horizontal dominoes with two vertical ones (forming a 2x2 block).
+            // So k can be any value with the same parity as (n*m/2) ? No, because we can change by 2.
+            // So k must have the same parity as (n*m/2) if we only do swaps of 2? But we can also have odd number of horizontal dominoes?
+            // Let's test: n=2, m=3, k=1. n even. Can we place 1 horizontal and 2 vertical? Total 3 dominoes.
+            // 2x3 board: place one horizontal in top row, then we need to fill the rest. Top row: 3 cells, one horizontal covers 2, leaves 1 cell. That cell must be covered by a vertical domino, which goes into bottom row. Then bottom row has 2 cells left, which can be one horizontal. So k=1 works? But 1 horizontal, 2 vertical. Yes, it works.
+            // So parity constraint? For n even, k can be anything from 0 to (n/2)*m? Let's check n=2, m=3: max horizontal = 3. k=1 works, k=3 works, k=2 works? 2 horizontal, 1 vertical: top row two horizontal? That would cover 4 cells, but top row only has 3. So we need to place horizontal dominoes possibly in both rows. For k=2: place one horizontal in top row, one horizontal in bottom row. Then remaining cells: top row 1 cell, bottom row 1 cell, they are adjacent vertically, so one vertical. Works. So k=2 works. So all k from 0 to 3 work? k=0: all vertical, works. So for n even, any k works as long as k <= (n/2)*m? But wait, k=1 works, k=3 works. So no parity constraint.
+            // Actually, if n is even, we can always achieve any k from 0 to n*m/2? Let's test n=2, m=4: max horizontal = 4. k=1? Top row: place one horizontal, leaves 2 cells. They can be covered by two vertical dominoes? But vertical dominoes go into bottom row. Bottom row would then have 2 cells covered by verticals, leaving 2 cells, which can be one horizontal. So total horizontal = 2 (top one and bottom one). So k=1 is impossible? Wait, we got k=2. Can we get k=1? To get exactly one horizontal, we need the other 3 to be vertical. Total dominoes = 4. One horizontal covers 2 cells in a row. The remaining 6 cells must be covered by 3 vertical dominoes. Each vertical covers one cell in top row and one in bottom row. So top row: horizontal covers 2 cells, verticals cover 3 cells? That would be 5 cells in top row, but top row only has 4. So impossible. So k=1 is impossible for n=2, m=4. So there is a constraint.
+            // Let's analyze: In each row, the number of cells covered by horizontal dominoes must be even (since each horizontal covers 2 cells in the same row). The remaining cells in that row are covered by vertical dominoes. Since vertical dominoes cover exactly one cell per row, the number of vertical-covered cells in a row is just the number of vertical dominoes that have a cell in that row. But each vertical domino spans two rows. So if n is even, we can pair rows into n/2 pairs. In each pair of rows, the number of vertical dominoes must be the same in both rows? Actually, a vertical domino occupies one cell in the top row of the pair and one in the bottom row. So in a pair of rows, the number of vertical dominoes is exactly the number of cells in the top row that are not covered by horizontal dominoes. So if we let h_i be the number of horizontal dominoes in row i, then the number of vertical dominoes starting in row i (if i is the top row of a pair) is m - 2*h_i. But since vertical dominoes go into row i+1, the number of vertical dominoes in row i+1 is also m - 2*h_i. Then the number of horizontal dominoes in row i+1 must be (m - (m - 2*h_i)) / 2 = h_i. So in each pair of rows, the number of horizontal dominoes must be the same in both rows. So total horizontal dominoes k = sum over pairs (2 * h_pair). So k must be even. Wait, in n=2, m=3, k=1 is odd, but we found it works? Let's re-examine n=2, m=3, k=1. Total cells=6, dominoes=3. One horizontal, two vertical. Top row: horizontal covers 2 cells, leaving 1 cell. That cell is covered by a vertical domino, which goes to bottom row. Bottom row: that vertical covers 1 cell, leaving 2 cells, which must be covered by a horizontal domino. So we have two horizontal dominoes! So k=2, not 1. So k=1 is impossible for n=2, m=3. So my earlier thought was wrong. So for n even, k must be even? Let's check n=4, m=4, k=2 (sample says YES). 2 is even. k=3? n=4, m=4, total=8. k=3 horizontal, 5 vertical. Is it possible? Let's see: n even, we can pair rows (1,2) and (3,4). In each pair, horizontal dominoes must be equal in both rows. So total horizontal = 2*(h1 + h3). So k must be even. So for n even, k must be even. Also, maximum horizontal per pair is m, so total max horizontal = (n/2)*m. So condition: k % 2 == 0 and k <= (n/2)*m.
+            if (k % 2 == 0 && k <= (n / 2) * m) {
+                possible = true;
+            }
+        }
+        // Case 2: n is odd, then m must be even (since n*m even)
+        else {
+            // n odd, m even.
+            // We can fill the first row entirely with horizontal dominoes? Actually, if n is odd, we can place horizontal dominoes in the first row to make the remaining rows even.
+            // Let's place some horizontal dominoes in the first row. Each horizontal covers 2 cells. The remaining cells in the first row will be covered by vertical dominoes, which go into the second row.
+            // After placing vertical dominoes from row 1 to row 2, row 2 will have some cells covered. Then rows 2 to n (even number of rows) can be treated as the even case.
+            // Let h1 be the number of horizontal dominoes in the first row. Then the number of vertical dominoes starting in row 1 is m - 2*h1. These vertical dominoes occupy m - 2*h1 cells in row 2.
+            // The remaining cells in row 2 are m - (m - 2*h1) = 2*h1, which must be covered by horizontal dominoes in row 2? Not necessarily, they could be covered by vertical dominoes going to row 3. But we have rows 2..n, which is even. We can pair rows (2,3), (4,5), ..., (n-1,n). In each pair, the number of horizontal dominoes must be the same in both rows. So total horizontal dominoes in rows 2..n is even. Let that be 2 * H_rest. Then total horizontal k = h1 + 2*H_rest.
+            // Also, the number of vertical dominoes from row 1 to row 2 is m - 2*h1. These vertical dominoes are part of the total vertical count. The remaining vertical dominoes are within the even rows.
+            // We need to check if there exists h1 (0 <= h1 <= m/2) such that k - h1 is even and non-negative, and also the remaining horizontal dominoes can be placed in the even rows.
+            // The even rows have total cells = (n-1)*m. They can accommodate at most ((n-1)/2)*m horizontal dominoes (since they are paired). So we need k - h1 <= ((n-1)/2)*m.
+            // Also, k - h1 >= 0.
+            // So we need to find h1 in [0, m/2] such that:
+            // (k - h1) % 2 == 0
+            // 0 <= k - h1 <= ((n-1)/2)*m
+            // Since m is even, m/2 is integer.
+            // We can just check if there exists such h1. Since m <= 100, we can loop over h1.
+            possible = false;
+            for (int h1 = 0; h1 <= m / 2; ++h1) {
+                int rem_k = k - h1;
+                if (rem_k < 0) continue;
+                if (rem_k % 2 != 0) continue;
+                if (rem_k <= ((n - 1) / 2) * m) {
+                    possible = true;
+                    break;
+                }
+            }
+        }
+        
+        cout << (possible ? "YES" : "NO") << '\n';
+    }
+    
+    return 0;
+}
+```

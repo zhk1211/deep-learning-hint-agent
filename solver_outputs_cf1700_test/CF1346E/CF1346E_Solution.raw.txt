@@ -1,0 +1,38 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n, m, k;
+    cin >> n >> m >> k;
+    --k;
+    
+    const int INF = 1e9;
+    vector<int> dp(n, INF);
+    dp[k] = 0;
+    
+    for (int i = 0; i < m; ++i) {
+        int x, y;
+        cin >> x >> y;
+        --x; --y;
+        
+        int sx = dp[x];
+        int sy = dp[y];
+        
+        dp[x] = min(sx + 1, sy);
+        dp[y] = min(sy + 1, sx);
+    }
+    
+    for (int i = 0; i < n; ++i) {
+        if (dp[i] >= INF) cout << -1;
+        else cout << dp[i];
+        if (i + 1 < n) cout << ' ';
+    }
+    cout << '\n';
+    
+    return 0;
+}
+```

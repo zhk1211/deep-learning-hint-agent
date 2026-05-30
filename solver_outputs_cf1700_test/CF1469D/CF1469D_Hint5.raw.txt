@@ -1,0 +1,101 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<pair<int,int>> ops;
+    vector<int> a(n+1);
+    iota(a.begin(), a.end(), 0);
+    
+    // We'll use a recursive/iterative approach:
+    // We maintain a set of "active" numbers that are not 1 or 2.
+    // The idea: repeatedly take the largest element x, and use y = ceil(sqrt(x)) to reduce it.
+    // Actually, we can just simulate the process described in hints.
+    
+    // We'll work with a list of numbers > 2.
+    vector<int> big;
+    for (int i = 3; i <= n; i++) big.push_back(i);
+    
+    while (!big.empty()) {
+        int x = big.back();
+        big.pop_back();
+        // find y = ceil(sqrt(x))
+        int y = (int)ceil(sqrt(x));
+        // We'll divide x by y repeatedly until x becomes 1.
+        // But we also need to handle numbers between y+1 and x-1.
+        // According to hints: divide all elements from y+1 to x-1 on x in one step.
+        // But we are processing from largest to smallest.
+        // Let's just do: for each i from y+1 to x-1, we do operation (i, x) -> a_i becomes ceil(i/x)=1.
+        // Then we repeatedly do (x, y) until x becomes 1.
+        // However, we must ensure y is still > 1? y could be 2 or 1.
+        // If y == 1, we can't divide by 1 (ceil(x/1)=x, no change). So we need y >= 2.
+        // Since x >= 3, sqrt(x) >= sqrt(3) > 1.7, ceil is at least 2. So y >= 2.
+        
+        // First, reduce all numbers from y+1 to x-1 to 1 using x.
+        for (int i = y+1; i < x; i++) {
+            ops.push_back({i, x});
+            // a[i] becomes 1, we don't need to track it further.
+        }
+        // Now reduce x using y.
+        // We need to repeatedly do x = ceil(x/y).
+        int cur = x;
+        while (cur > 1) {
+            ops.push_back({x, y});
+            cur = (cur + y - 1) / y;
+        }
+        // After this, x becomes 1. y might still be > 2, but it's already in big if y > 2.
+        // We need to ensure y is processed later if y > 2.
+        // Since we popped x, and y <= sqrt(x) < x, y is still in big if y > 2.
+        // But we might have already processed y? No, because we process from largest to smallest.
+        // However, we might have removed some numbers from big by the loop above (y+1 to x-1).
+        // We need to remove those from big as well. Since big is a vector and we pop from back,
+        // we can just rebuild big or use a set. But n <= 2e5, sum n <= 2e5, so O(n log n) is fine.
+        // Let's use a set for active numbers > 2.
+    }
+    
+    // Let's reimplement with a set for clarity.
+    ops.clear();
+    set<int> active;
+    for (int i = 3; i <= n; i++) active.insert(i);
+    
+    while (!active.empty()) {
+        int x = *active.rbegin();
+        active.erase(x);
+        int y = (int)ceil(sqrt(x));
+        // y is at least 2.
+        // Reduce all numbers in (y, x) to 1 using x.
+        auto it = active.upper_bound(y);
+        while (it != active.end() && *it < x) {
+            int val = *it;
+            ops.push_back({val, x});
+            it = active.erase(it);
+        }
+        // Now reduce x using y.
+        int cur = x;
+        while (cur > 1) {
+            ops.push_back({x, y});
+            cur = (cur + y - 1) / y;
+        }
+        // y might be > 2 and still in active, it will be processed later.
+    }
+    
+    // Output
+    cout << ops.size() << "\n";
+    for (auto &p : ops) {
+        cout << p.first << " " << p.second << "\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

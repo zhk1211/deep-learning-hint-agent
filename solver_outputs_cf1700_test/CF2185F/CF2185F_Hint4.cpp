@@ -1,0 +1,306 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, q;
+        cin >> n >> q;
+        int m = 1 << n;
+        vector<int> a(m);
+        for (int i = 0; i < m; ++i) {
+            cin >> a[i];
+        }
+
+        // Precompute for each position and each round the opponent's XOR and the winner's position
+        // We'll simulate the tournament bottom-up using a segment-tree-like structure
+        // For each node in the tournament tree, store:
+        // - winner position (index in original array)
+        // - XOR of all cows in the subtree
+        // - list of cows in the subtree in order from bottom to top (only needed for final answer)
+        // But we need to answer queries efficiently.
+        // Instead, we can precompute for each cow the path it takes and the opponents it faces.
+        // Since n <= 18, we can simulate the tournament for each query? No, q up to 2e5.
+        // We need O(n) per query or O(1) after O(n 2^n) precomputation.
+        // Observe: The tournament structure is fixed. The only thing that changes is the skill of one cow.
+        // The outcome of a match depends on the XOR-sum of the two stacks.
+        // The XOR-sum of a stack is the XOR of all cows in it.
+        // When we change one cow's skill, it affects the XOR-sums of all stacks containing it.
+        // The tournament is a complete binary tree of height n.
+        // Each leaf is a cow. Internal nodes represent matches.
+        // For a query (b, c), we change leaf b's value to c.
+        // We need to know how many cows end up above cow b in the final stack.
+        // The final stack is the root. The order is determined by the sequence of wins.
+        // When a stack wins, it jumps on top of the loser. So the winner's cows end up above the loser's cows.
+        // Thus, the final order from bottom to top is: the sequence of losers in the order they were defeated,
+        // with the ultimate winner at the very top.
+        // More precisely, if we label each internal node with the winner, the final stack is built by
+        // a post-order traversal? Actually, the process: winner jumps on top of loser.
+        // So if A beats B, the new stack has B on bottom, A on top. Then if this combined stack beats C,
+        // the new stack has C on bottom, then B, then A on top. So the final order from bottom to top is
+        // the sequence of losing stacks in the order they were defeated, and the final winner on top.
+        // Therefore, the number of cows above a given cow is the number of cows that were in stacks that
+        // defeated the stack containing this cow, plus the cows in its own stack that are above it.
+        // But wait: when a stack loses, all its cows end up below the winner's cows.
+        // If a cow is in a stack that loses at some round, it will be below all cows of the stack that beat it,
+        // and also below any cows that later beat that combined stack, etc.
+        // So the cows above a given cow are exactly the cows that are in the "winning path" above it.
+        // Actually, the final stack is a linear order. The cow's position from the top is determined by
+        // the rounds it survives. If it loses at round k, then all cows from the stack that beat it
+        // (and any stacks that beat that stack later) will be above it.
+        // This suggests we can compute for each cow the set of cows that end up above it.
+        // But we need to answer queries quickly.
+
+        // Alternative perspective: The tournament is a binary tree. Each leaf is a cow.
+        // For each internal node, the winner is the child with the larger XOR-sum (left wins tie).
+        // The final stack order is obtained by: for each internal node, the loser's subtree cows
+        // are placed below the winner's subtree cows. So the order is a specific permutation of the leaves.
+        // This permutation depends only on the XOR-sums of the subtrees.
+        // Changing one leaf's value changes the XOR-sums along the path to the root.
+        // This can change the winners at some internal nodes on that path.
+        // However, the number of cows above cow b is simply the number of leaves that appear before it
+        // in the final permutation? No, "above" means closer to the top. The top is the last element
+        // in the stack (the one that was jumped on top). The bottom is the first element.
+        // In the final stack, the order from bottom to top is the order of cows as they appear in the line.
+        // The problem says: "The winning stack will jump on top of the losing stack".
+        // So if we have stacks from left to right, after a round, the new stacks are formed by
+        // the winners, and they contain the loser's cows at the bottom and winner's cows on top.
+        // So the relative order within a stack is preserved: the original bottom cows stay at the bottom,
+        // and the cows that were on top stay on top. When a winner jumps on top of a loser,
+        // the loser's entire stack goes to the bottom, and the winner's stack goes on top.
+        // Therefore, the final stack from bottom to top is: the cows of the ultimate loser of the first round?
+        // Let's trace: Round 1: stacks are single cows. Winners jump on losers.
+        // So after round 1, each new stack has: [loser, winner] from bottom to top.
+        // Round 2: adjacent stacks fight. The winner jumps on top of the loser.
+        // So if stack1 = [L1, W1] and stack2 = [L2, W2], and stack1 wins, new stack = [L2, W2, L1, W1].
+        // So the order is: all cows of the losing stack (in their original order), then all cows of the winning stack.
+        // This is exactly the concatenation of the two stacks, with the loser first, then winner.
+        // Thus, the final stack is a permutation of the original array, and it can be built by
+        // recursively: for a node, the order is loser's order followed by winner's order.
+        // This is a deterministic process given the winners at each node.
+        // The winners are determined by comparing XOR-sums of the subtrees.
+        // So the final permutation is a function of the XOR-sums of all subtrees.
+        // Changing one leaf changes the XOR-sums on the path to the root.
+        // This may flip some winners on that path.
+        // We need to compute the number of cows above the queried cow in the final stack.
+        // That is equivalent to: the number of cows that appear after this cow in the final stack order
+        // (since top is last). So we need the index of this cow in the final permutation.
+        // But the final permutation can be built in O(2^n) time, which is too slow per query.
+        // We need a faster way to compute the position of a specific cow after changing one value.
+
+        // Let's analyze the effect of changing a leaf. The tournament tree has height n.
+        // For each node, we can precompute its XOR-sum and the winner (left or right child).
+        // When we change a leaf, we update the XOR-sums along the path. At each node on the path,
+        // the winner might change if the updated XOR-sum of the child changes the comparison.
+        // However, the winner at a node depends only on the XOR-sums of its two children.
+        // The left child wins if XOR_left >= XOR_right? Actually, left-most stack wins in case of tie.
+        // The problem says: "The stack with the higher skill level will win the match, with the left-most stack winning in case of a tie."
+        // So left wins if XOR_left >= XOR_right.
+        // So the winner is determined by comparing the two XOR-sums.
+        // If we change a leaf, the XOR-sum of the subtree containing it changes.
+        // This can affect the winner at the parent, which then affects the XOR-sum of the parent
+        // (since the parent's XOR-sum is just XOR of children, regardless of winner? Wait!
+        // The skill level of the new stack is the XOR-sum of all cows in it. That is simply the XOR of the two children's XOR-sums.
+        // Because XOR is associative and commutative. The XOR-sum of the combined stack is XOR_left ^ XOR_right.
+        // This is true regardless of who wins! The winner just determines the order, but the XOR-sum of the combined stack is always the XOR of the two.
+        // So the XOR-sum at each node is simply the XOR of the leaves in its subtree.
+        // This is independent of the winners! The winners only affect the order, not the XOR-sums.
+        // Therefore, the XOR-sum of any subtree is fixed and can be precomputed from the initial array.
+        // When we change a leaf's value, the XOR-sums along the path change, but they are still just the XOR of leaves.
+        // So we can easily update the XOR-sums by XORing the old value and XORing the new value along the path.
+        // The winners at each node are determined by comparing the (possibly updated) XOR-sums of the left and right subtrees.
+        // So the tournament outcome (who beats whom) is completely determined by the XOR-sums of the subtrees.
+        // And the XOR-sums only depend on the leaf values.
+        // This is a crucial observation: The winners are determined solely by the XOR-sums of the subtrees,
+        // which are just the XOR of the leaves in those subtrees.
+        // Therefore, the entire tournament structure (who wins at each node) is a function of the leaf values.
+        // And changing one leaf only affects the XOR-sums on the path from that leaf to the root.
+        // So we can compute the winners at all nodes for the original array, and then for a query,
+        // we can update the XOR-sums along the path and recompute the winners at those nodes.
+        // But we need the final position of the queried cow. How to compute that efficiently?
+
+        // Let's think about the final permutation. It is built by: at each node, the order is loser's order followed by winner's order.
+        // This is a recursive definition. The final permutation is a specific ordering of the leaves.
+        // We can precompute for the original array the final permutation? But it changes per query.
+        // However, note that the winners only change on the path from the leaf to the root.
+        // Nodes not on this path have unchanged XOR-sums, so their winners remain the same.
+        // The final permutation is determined by the winners at all nodes.
+        // If we change a winner at some node, it swaps the order of the two subtrees at that node:
+        // originally, the order was loser then winner. If the winner flips, the new order is the other child's order then this child's order.
+        // This is a big change. But we only need the position of one specific cow.
+        // The cow b is a leaf. Its position in the final stack is determined by the sequence of winners
+        // on the path from the leaf to the root, and also by the sizes of the subtrees that are placed below it.
+        // Specifically, consider the path from leaf b to the root. At each node on this path, the cow b is in either the left or right subtree.
+        // At each such node, if the subtree containing b wins, then the cows of the other subtree are placed below b.
+        // If the subtree containing b loses, then the cows of the other subtree are placed above b.
+        // Wait: Let's verify. At a node, we have two children: left (L) and right (R).
+        // Suppose b is in L. If L wins, then the combined stack is: R's cows (bottom), then L's cows (top).
+        // So b is in the top part. The cows from R are below b. So b has |R| cows below it from this match.
+        // If L loses, then R wins, combined stack: L's cows (bottom), then R's cows (top).
+        // So b is in the bottom part. The cows from R are above b. So b has |R| cows above it from this match.
+        // This is true for each node on the path! At each node, the other subtree's cows either all go below b (if b's side wins)
+        // or all go above b (if b's side loses).
+        // Moreover, the relative order within b's own subtree is determined recursively.
+        // So the total number of cows above b is the sum over nodes on the path from b to the root
+        // of the size of the other subtree, but only for those nodes where b's subtree loses.
+        // If b's subtree wins at a node, the other subtree goes below, contributing 0 to "above".
+        // Also, within b's own subtree, there may be cows above b due to matches lower down.
+        // But those are already accounted for when we consider the path from b to the root?
+        // Actually, the recursive structure: b's final position is determined by the outcomes at all ancestors.
+        // At each ancestor, if b's side loses, all cows from the other side are above b.
+        // If b's side wins, all cows from the other side are below b.
+        // The cows within b's own subtree that are above b are determined by the matches inside that subtree.
+        // But those matches are exactly the nodes on the path from b to the root that are inside that subtree.
+        // So if we sum over all nodes on the path from b to the root, for each node, if the child containing b loses,
+        // we add the size of the other child. This gives the total number of cows above b.
+        // Let's test this with the example.
+        // Example 1: n=2, cows: 1 3 5 7. b=1 (first cow). Original values.
+        // XORs: leaf1=1, leaf2=3, leaf3=5, leaf4=7.
+        // Round 1: (1,2): left XOR=1, right=3 -> right wins. So node1: left loses, right wins.
+        // (3,4): left=5, right=7 -> right wins.
+        // Round 2: left stack (from 1,2) XOR = 1^3=2, right stack (3,4) XOR = 5^7=2. Tie -> left wins.
+        // So root: left wins, right loses.
+        // Path for b=1 (leaf 1): leaf1 is left child of node1. Node1 is left child of root.
+        // At node1: b is in left. Left loses -> other side (right) size=1 goes above b. So +1.
+        // At root: b is in left (via node1). Left wins -> other side (right) size=2 goes below. So +0.
+        // Total above = 1. Matches sample output 1.
+        // For b=4 (leaf 4) with potion changing to 8: new a[4]=8.
+        // XORs: leaf1=1, leaf2=3, leaf3=5, leaf4=8.
+        // Node1: left=1, right=3 -> right wins. (b not here)
+        // Node2: left=5, right=8 -> right wins. b is in right.
+        // At node2: b in right, right wins -> other side (left) size=1 goes below. +0.
+        // Root: left XOR=1^3=2, right XOR=5^8=13. Right wins. b is in right.
+        // At root: b in right, right wins -> other side (left) size=2 goes below. +0.
+        // Total above = 0. Matches sample.
+        // So the formula works: For a given cow b, the number of cows above it in the final stack is
+        // the sum over all ancestors of b (including the root) of:
+        // if the child containing b loses at that ancestor, add the size of the sibling subtree.
+        // Otherwise add 0.
+        // This is a beautiful and simple property!
+
+        // Therefore, to answer a query (b, c), we need to:
+        // 1. Update the leaf value a[b] to c.
+        // 2. Update the XOR-sums along the path from b to the root.
+        // 3. Recompute the winners at each node on the path (since XOR-sums changed).
+        // 4. Compute the sum of sizes of sibling subtrees where b's side loses.
+        // Since n <= 18, the path length is at most 18. We can do this per query in O(n) time.
+        // With q up to 2e5, total O(q n) = 3.6e6 operations, well within limits.
+
+        // We need to represent the tournament tree. We can use an array of size 2m (m = 2^n) for the XOR-sums.
+        // Leaves are at indices m to 2m-1 (0-indexed). Internal nodes 1 to m-1.
+        // For each node, we need to know the winner (left or right child). We can store a boolean: true if left wins, false if right wins.
+        // But we only need the winners on the path for the query. We can recompute them on the fly from the XOR-sums.
+        // However, we also need to know the winners for the original array to answer queries? Actually, each query is independent:
+        // we temporarily change a[b] to c, compute answer, then revert. So we can just simulate the path update and compute the sum.
+        // We don't need to store winners globally; we can just compute them at each step.
+
+        // Let's design the tree:
+        // Let m = 1 << n.
+        // We'll store XOR values in a vector<int> xorv(2*m);
+        // Leaves: xorv[m + i] = a[i] for i in [0, m-1].
+        // Build initial tree bottom-up: for i from m-1 down to 1: xorv[i] = xorv[2*i] ^ xorv[2*i+1].
+        // For a query (b, c): b is 1-indexed. Let pos = b - 1.
+        // We need to temporarily change leaf value.
+        // We can compute the answer by walking up from the leaf to the root, keeping track of the current node's XOR-sum and the winner.
+        // But we need the XOR-sums of siblings, which are stored in the tree. If we update the leaf, we must update the path.
+        // Since we need to revert, we can just compute the new XOR-sums on the fly without modifying the tree, or we can modify and revert.
+        // Modifying and reverting is O(n) per query, which is fine.
+        // Let's do: store original a. For each query, update the leaf in the tree, propagate up, compute answer, then revert.
+        // To revert, we can either restore from a backup or recompute from original a. Since n is small, we can just recompute the path from scratch after restoring the leaf? But we need the original XOR-sums for other queries. We can keep the tree with original values, and for each query, we make a copy of the path? Better: just update the tree in place, then revert by setting the leaf back to original a[b] and updating the path again. That's 2 * n operations per query. O(q n) is fine.
+
+        // However, we need to be careful: the winner at a node depends on the XOR-sums of its children.
+        // The rule: left wins if xorv[left] >= xorv[right], else right wins.
+        // So we can compute the winner on the fly.
+
+        // Algorithm per query:
+        // 1. Set leaf value: int idx = m + pos; xorv[idx] = c;
+        // 2. Propagate up: for i = idx/2; i >= 1; i /= 2: xorv[i] = xorv[2*i] ^ xorv[2*i+1];
+        // 3. Now compute answer: start at leaf, go up to root.
+        //    ans = 0;
+        //    current_node = idx;
+        //    while current_node > 1:
+        //        parent = current_node / 2;
+        //        sibling = current_node ^ 1; // the other child
+        //        // determine if current_node's side won or lost at parent.
+        //        // left child is 2*parent, right is 2*parent+1.
+        //        bool left_wins = (xorv[2*parent] >= xorv[2*parent+1]);
+        //        bool i_am_left = (current_node == 2*parent);
+        //        bool i_won = (i_am_left && left_wins) || (!i_am_left && !left_wins);
+        //        if (!i_won) {
+        //            // my side lost, so sibling's cows go above me.
+        //            // The size of sibling's subtree is the number of leaves in it.
+        //            // We can precompute subtree sizes. For a node at depth d from bottom (leaf depth 0), size = 2^d.
+        //            // Alternatively, we can compute size based on the level.
+        //            // The level of a node can be determined by its index: the height from leaf.
+        //            // We can precompute an array size_of[node] = number of leaves in subtree.
+        //            // Since m is power of two, size_of[node] = m / (highest power of two dividing node? Actually, for a complete binary tree stored in array, the size of subtree at node i is the number of leaves in that subtree. We can compute it as: let k = __builtin_ctz(i) ? No.
+        //            // Simpler: precompute an array sz[2*m] where sz[m+i] = 1 for leaves, and sz[i] = sz[2*i] + sz[2*i+1].
+        //            // Then we can just add sz[sibling].
+        //        }
+        //        current_node = parent;
+        //    }
+        // 4. Output ans.
+        // 5. Revert: set xorv[idx] = original a[pos]; propagate up again.
+
+        // This is O(n) per query. Total time O((m + q) * n). m <= 262144, q <= 2e5, n <= 18. So about 8e6 operations, very fast.
+
+        // Let's implement.
+
+        int m = 1 << n;
+        vector<int> xorv(2 * m);
+        vector<int> sz(2 * m);
+        // Initialize leaves
+        for (int i = 0; i < m; ++i) {
+            xorv[m + i] = a[i];
+            sz[m + i] = 1;
+        }
+        // Build tree
+        for (int i = m - 1; i >= 1; --i) {
+            xorv[i] = xorv[2 * i] ^ xorv[2 * i + 1];
+            sz[i] = sz[2 * i] + sz[2 * i + 1];
+        }
+
+        // Process queries
+        while (q--) {
+            int b, c;
+            cin >> b >> c;
+            --b; // 0-indexed
+            int pos = b;
+            int idx = m + pos;
+            int old_val = a[pos];
+            // Update to c
+            xorv[idx] = c;
+            for (int i = idx / 2; i >= 1; i /= 2) {
+                xorv[i] = xorv[2 * i] ^ xorv[2 * i + 1];
+            }
+            // Compute answer
+            int ans = 0;
+            int cur = idx;
+            while (cur > 1) {
+                int parent = cur / 2;
+                int sibling = cur ^ 1;
+                int left_xor = xorv[2 * parent];
+                int right_xor = xorv[2 * parent + 1];
+                bool left_wins = (left_xor >= right_xor);
+                bool i_am_left = (cur == 2 * parent);
+                bool i_won = (i_am_left && left_wins) || (!i_am_left && !left_wins);
+                if (!i_won) {
+                    ans += sz[sibling];
+                }
+                cur = parent;
+            }
+            cout << ans << '\n';
+            // Revert
+            xorv[idx] = old_val;
+            for (int i = idx / 2; i >= 1; i /= 2) {
+                xorv[i] = xorv[2 * i] ^ xorv[2 * i + 1];
+            }
+        }
+    }
+    return 0;
+}

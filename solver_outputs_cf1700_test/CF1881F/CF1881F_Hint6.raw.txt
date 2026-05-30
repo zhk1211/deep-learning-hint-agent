@@ -1,0 +1,71 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> marked(k);
+    for (int i = 0; i < k; ++i) {
+        cin >> marked[i];
+        --marked[i];
+    }
+    vector<vector<int>> adj(n);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        --u; --v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    if (k == 1) {
+        cout << 0 << '\n';
+        return;
+    }
+    vector<int> dist(n, -1);
+    queue<int> q;
+    q.push(marked[0]);
+    dist[marked[0]] = 0;
+    int far = marked[0];
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : adj[u]) {
+            if (dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                q.push(v);
+                if (find(marked.begin(), marked.end(), v) != marked.end() && dist[v] > dist[far]) {
+                    far = v;
+                }
+            }
+        }
+    }
+    fill(dist.begin(), dist.end(), -1);
+    q.push(far);
+    dist[far] = 0;
+    int max_dist = 0;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : adj[u]) {
+            if (dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                q.push(v);
+                if (find(marked.begin(), marked.end(), v) != marked.end()) {
+                    max_dist = max(max_dist, dist[v]);
+                }
+            }
+        }
+    }
+    cout << (max_dist + 1) / 2 << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

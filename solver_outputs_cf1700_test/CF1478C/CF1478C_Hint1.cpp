@@ -1,0 +1,97 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<ll> d(2 * n);
+    for (int i = 0; i < 2 * n; ++i) {
+        cin >> d[i];
+    }
+    sort(d.begin(), d.end());
+    
+    // Check that each value appears exactly twice
+    for (int i = 0; i < 2 * n; i += 2) {
+        if (d[i] != d[i + 1]) {
+            cout << "NO\n";
+            return;
+        }
+    }
+    
+    // Remove duplicates
+    vector<ll> vals;
+    for (int i = 0; i < 2 * n; i += 2) {
+        vals.push_back(d[i]);
+    }
+    
+    // Now vals has n elements, sorted, corresponding to d_i for positive a_i (since symmetric)
+    // Let a_1 < a_2 < ... < a_n be positive, and a_{i+n} = -a_i.
+    // Then d_i for a positive a_i is sum_{j=1..n} (|a_i - a_j| + |a_i + a_j|)
+    // For a_i > a_j > 0: |a_i - a_j| + |a_i + a_j| = (a_i - a_j) + (a_i + a_j) = 2*a_i
+    // For a_i < a_j: |a_i - a_j| + |a_i + a_j| = (a_j - a_i) + (a_i + a_j) = 2*a_j
+    // For i=j: |a_i - a_i| + |a_i + a_i| = 0 + 2*a_i = 2*a_i
+    // So d_i = sum_{j=1..n} 2*max(a_i, a_j) = 2 * (i * a_i + sum_{j=i+1..n} a_j)
+    // Let S_i = sum_{j=i..n} a_j, then d_i = 2 * (i * a_i + S_{i+1}) = 2 * (S_i + (i-1)*a_i)
+    // We can compute a_i from d_i and S_{i+1}.
+    
+    // We have d_i values sorted in increasing order? Actually d_i for larger a_i should be larger.
+    // Since a_i are distinct positive, d_i strictly increasing.
+    // Check that vals is strictly increasing.
+    for (int i = 1; i < n; ++i) {
+        if (vals[i] == vals[i - 1]) {
+            cout << "NO\n";
+            return;
+        }
+    }
+    
+    // Now compute a_i from largest to smallest.
+    vector<ll> a(n);
+    ll sum_rest = 0; // S_{i+1}
+    for (int i = n - 1; i >= 0; --i) {
+        // d_i = 2 * (i * a_i + sum_rest)
+        // d_i must be even
+        if (vals[i] % 2 != 0) {
+            cout << "NO\n";
+            return;
+        }
+        ll half = vals[i] / 2;
+        // half = i * a_i + sum_rest
+        // i * a_i = half - sum_rest
+        ll i_times_a = half - sum_rest;
+        if (i_times_a <= 0) {
+            cout << "NO\n";
+            return;
+        }
+        if (i_times_a % (i + 1) != 0) { // i is index, count is i+1
+            cout << "NO\n";
+            return;
+        }
+        a[i] = i_times_a / (i + 1);
+        // Check that a_i is positive and distinct (strictly increasing)
+        if (i < n - 1 && a[i] >= a[i + 1]) {
+            cout << "NO\n";
+            return;
+        }
+        sum_rest += a[i];
+    }
+    // Also check a[0] > 0
+    if (a[0] <= 0) {
+        cout << "NO\n";
+        return;
+    }
+    cout << "YES\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

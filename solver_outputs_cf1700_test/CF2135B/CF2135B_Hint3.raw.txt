@@ -1,0 +1,100 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+ll query(char dir, ll k) {
+    cout << "? " << dir << " " << k << endl;
+    ll res;
+    cin >> res;
+    if (res == -1) exit(0);
+    return res;
+}
+
+void answer(ll X, ll Y) {
+    cout << "! " << X << " " << Y << endl;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<pair<ll, ll>> pts(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> pts[i].first >> pts[i].second;
+    }
+
+    const ll V = 2'000'000'000LL;
+
+    // Move to bottom-left corner
+    ll d1 = query('L', V);
+    ll d2 = query('L', V);
+    ll d3 = query('D', V);
+    ll d4 = query('D', V);
+
+    // After these moves, the robot is at (X - 2V, Y - 2V)
+    // The distances returned are min_i |x_i - (X - 2V)| + |y_i - (Y - 2V)|
+    // But since V is huge, the anchor points are far to the top-right relative to the robot.
+    // For any anchor point (x_i, y_i), the distance is (x_i - (X - 2V)) + (y_i - (Y - 2V)) = (x_i + y_i) - (X + Y) + 4V.
+    // The minimum distance will be achieved by the anchor point with minimum (x_i + y_i).
+    // Let S_min = min_i (x_i + y_i). Then the returned distance is S_min - (X + Y) + 4V.
+    // So we can compute X + Y = S_min + 4V - d4.
+
+    ll S_min = LLONG_MAX;
+    for (auto &p : pts) {
+        S_min = min(S_min, p.first + p.second);
+    }
+    ll sum_XY = S_min + 4 * V - d4;
+
+    // Now move to top-right corner
+    // Current position is (X - 2V, Y - 2V). We need to go to (X + 2V, Y + 2V).
+    // Move right 4V and up 4V.
+    ll d5 = query('R', 4 * V);
+    ll d6 = query('U', 4 * V);
+
+    // Now robot is at (X + 2V, Y + 2V).
+    // For any anchor point (x_i, y_i), the distance is (X + 2V - x_i) + (Y + 2V - y_i) = (X + Y) - (x_i + y_i) + 4V.
+    // The minimum distance is achieved by the anchor point with maximum (x_i + y_i).
+    // Let S_max = max_i (x_i + y_i). Then d6 = (X + Y) - S_max + 4V.
+    // We already know X + Y, but we can also compute it again for verification, though not needed.
+
+    // Now move to bottom-right corner to get X - Y.
+    // Current position is (X + 2V, Y + 2V). Move down 4V and left 4V? Wait, we want (X + 2V, Y - 2V).
+    // Actually we can just move down 4V.
+    ll d7 = query('D', 4 * V);
+    // Now at (X + 2V, Y - 2V).
+    // Distance to anchor point (x_i, y_i): |x_i - (X + 2V)| + |y_i - (Y - 2V)|.
+    // Since V is huge, x_i < X + 2V and y_i > Y - 2V typically? Not necessarily.
+    // But we can consider the anchor point that minimizes this distance.
+    // For any anchor point, the distance is (X + 2V - x_i) + (y_i - (Y - 2V)) = (X - Y) - (x_i - y_i) + 4V.
+    // The minimum distance is achieved by the anchor point with maximum (x_i - y_i).
+    // Let D_max = max_i (x_i - y_i). Then d7 = (X - Y) - D_max + 4V.
+    // So X - Y = D_max - 4V + d7.
+
+    ll D_max = LLONG_MIN;
+    for (auto &p : pts) {
+        D_max = max(D_max, p.first - p.second);
+    }
+    ll diff_XY = D_max - 4 * V + d7;
+
+    // Now solve for X and Y
+    // X + Y = sum_XY
+    // X - Y = diff_XY
+    ll X = (sum_XY + diff_XY) / 2;
+    ll Y = sum_XY - X;
+
+    answer(X, Y);
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

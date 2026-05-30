@@ -1,0 +1,52 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+
+    vector<int> order(m);
+    iota(order.begin(), order.end(), 0);
+
+    auto query = [&](const string& s) -> int {
+        cout << "? " << s << endl;
+        int res;
+        cin >> res;
+        return res;
+    };
+
+    // Find the length of each edge by querying with only that edge active
+    vector<int> len(m);
+    for (int i = 0; i < m; ++i) {
+        string s(m, '0');
+        s[i] = '1';
+        len[i] = query(s);
+    }
+
+    // Sort edges by length
+    sort(order.begin(), order.end(), [&](int i, int j) {
+        return len[i] < len[j];
+    });
+
+    // Kruskal-like process
+    string cur(m, '0');
+    int cur_val = 0;
+    for (int idx : order) {
+        string nxt = cur;
+        nxt[idx] = '1';
+        int val = query(nxt);
+        if (val == cur_val + len[idx]) {
+            // edge is part of the minimum full spanning forest
+            cur = nxt;
+            cur_val = val;
+        }
+    }
+
+    cout << "! " << cur_val << endl;
+    return 0;
+}
+```

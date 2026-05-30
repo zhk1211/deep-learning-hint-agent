@@ -1,0 +1,83 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n), b(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    for (int i = 0; i < n; ++i) cin >> b[i];
+    int m;
+    cin >> m;
+    vector<int> x(m);
+    for (int i = 0; i < m; ++i) cin >> x[i];
+
+    // Check if any b[i] > a[i] -> impossible
+    for (int i = 0; i < n; ++i) {
+        if (b[i] > a[i]) {
+            cout << "NO\n";
+            return;
+        }
+    }
+
+    // Count available razors
+    map<int, int> razor_count;
+    for (int val : x) razor_count[val]++;
+
+    // We need to process segments where b[i] != a[i] and we need to cut with b[i]
+    // We'll use a stack to maintain needed cuts
+    stack<int> st;
+    for (int i = 0; i < n; ++i) {
+        // We only care about positions where a[i] != b[i]
+        // For those, we need a razor of size b[i] to cover it
+        // The razor must be applied on a segment that includes this position
+        // The segment's left bound can be extended left as long as b[j] <= b[i] and we haven't hit a larger b
+        // Actually, we can think of it as: we process left to right, maintaining a monotonic stack of needed b values
+        // When we see a new b[i] that is larger than the top of stack, we might need a new razor for it
+        // But we also need to consider that a razor can cover multiple positions with same b value if they are contiguous in the "needed" sense
+        // Standard solution: for each i where a[i] != b[i], we push b[i] onto stack if it's greater than current top,
+        // and we pop from stack while top > b[i]. Then we check if we need a new razor of size b[i].
+        // However, we must also consider that razors can be used on segments that include positions where a[i] == b[i] (already correct) as long as b[i] <= razor size.
+        // But those positions don't require a cut, they just can be part of a segment.
+        // The typical approach: we only consider positions where a[i] != b[i]. We maintain a stack of needed b values.
+        // When we encounter a needed b[i], we pop from stack all values > b[i] (they can't be covered by a razor of size b[i] because min would reduce them too much? Actually, if we use a razor of size x on a segment, it sets a_i = min(a_i, x). So if we have a needed cut of size b[i], we must use a razor of exactly b[i] (since b[i] <= a[i], and we want to reduce a[i] to b[i]). If we use a razor larger than b[i], it won't reduce a[i] enough. If we use a razor smaller, it would reduce too much. So we need exactly b[i].
+        // So for each needed b[i], we need a razor of size b[i]. But one razor can cover a contiguous segment of needed positions with the same b value, provided there is no larger b in between that would be over-reduced? Actually, if we apply a razor of size x on [l, r], it sets all a_i in that range to min(a_i, x). For positions where we need b[i] < x, they would become x, which is > b[i], so they wouldn't be reduced enough. So we cannot include positions that need a smaller b in a segment cut with a larger razor. Conversely, we can include positions that need a larger b? No, because if we cut with x, and a position needs b[i] > x, then min(a_i, x) = x < b[i], so it would be reduced too much. So a razor of size x can only be applied on a segment where for all i in [l, r], b[i] >= x? Wait, if b[i] > x, then after cut a_i becomes <= x < b[i], which is too small. So we cannot include positions with b[i] > x. If b[i] == x, it's perfect. If b[i] < x, then min(a_i, x) could be x if a_i >= x, but we need a_i to become b[i] which is < x. So if we apply razor x, a_i becomes min(a_i, x). If a_i >= x, it becomes x, which is > b[i], so not reduced enough. If a_i < x, it stays a_i, which might already be b[i] if a_i == b[i]. But if a_i > b[i] and b[i] < x, then a_i might be > x or between b[i] and x. In any case, applying razor x won't reduce it to b[i] because the min with x will be at least x if a_i >= x, or a_i if a_i < x. Since b[i] < x, we can't achieve b[i] with a razor of size x unless a_i was already b[i]. So we cannot include positions that need a cut to a value different from x. Therefore, a razor of size x can only be used on a segment where for all i, either a[i] == b[i] (already correct) or b[i] == x (needs cut to x). But wait, if a[i] == b[i] and b[i] > x, then applying razor x would reduce a[i] to x, ruining it. So we cannot include positions where b[i] > x. If a[i] == b[i] and b[i] <= x, then applying razor x leaves it unchanged (since min(b[i], x) = b[i]). So we can include positions with b[i] <= x that are already correct. But we also must not include positions with b[i] < x that need a cut? Actually, if a[i] > b[i] and b[i] < x, applying razor x won't fix it, so we shouldn't include them. So the segment for razor x can only contain positions where b[i] >= x? Let's check: if b[i] > x, applying x reduces a[i] to <= x < b[i], bad. If b[i] == x, good. If b[i] < x, then if a[i] == b[i], applying x does nothing (good). If a[i] > b[i], applying x leaves a[i] = min(a[i], x). Since a[i] > b[i] and b[i] < x, a[i] could be > x, then becomes x > b[i], not reduced enough. Or a[i] could be between b[i] and x, then becomes a[i] > b[i], still not reduced enough. So we cannot include positions that need a cut to b[i] < x. Therefore, a razor of size x can only be applied on a segment where for all i, b[i] >= x, and for those with b[i] > x, they must already be correct (a[i] == b[i]). But wait, if b[i] > x and a[i] == b[i], applying x would reduce it to x, which is < b[i], so it would ruin it. So we cannot include positions with b[i] > x at all! Thus, a razor of size x can only be applied on a segment where b[i] <= x for all i, and for positions with b[i] < x, they must already be correct (a[i] == b[i]), and for positions with b[i] == x, they can be either correct or need a cut. But if we apply razor x on a segment containing a position with b[i] < x that is already correct, it's fine because min(a[i], x) = a[i] (since a[i] = b[i] < x). So the condition is: the segment must not contain any position with b[i] > x. And it must not contain any position that needs a cut to a value different from x. So essentially, we can only use razor x on a contiguous block where the "needed" cuts (where a[i] != b[i]) all have b[i] == x, and there is no b[i] > x in between. Also, we can extend over positions with b[i] < x that are already correct.
+
+        // The typical solution uses a stack of needed b values from left to right, ignoring positions where a[i] == b[i] (unless they have b[i] > current needed? Actually, we only push needed b[i] when a[i] != b[i]. We maintain a stack of these needed values in increasing order? Let's recall the standard solution for this problem (Codeforces 1695C? Actually it's 1695B? No, it's "Haircut" problem, maybe 1779D? I remember a similar problem: "Boris and His Amazing Haircut" from Codeforces Round #819 (Div. 1 + Div. 2) problem C? Actually it's 1779D? Let's think: There's a problem "Haircut" where you have razors and you need to cut hair. The solution: check if b[i] > a[i] -> NO. Then, we only consider positions where a[i] != b[i]. We need to use razors of size b[i] for those positions. We can use one razor for multiple positions if they are "connected" without a larger b in between. Specifically, we can process from left to right, maintaining a set/map of available razors. We also maintain a stack of needed b values. When we encounter a needed b[i], we pop from stack all values > b[i]. If the stack is empty or stack.top() != b[i], we need a new razor of size b[i]. We then push b[i] onto stack. This works because the stack represents the "active" needed cuts that are currently "open" and can be covered by a single razor if they are the same. When we see a larger b, it breaks the segment for smaller b's. When we see a smaller b, it can be covered by the same razor as the larger one? No, smaller b cannot be covered by a razor of larger size because that would over-reduce the larger b positions? Wait, if we have a segment with needed cuts of sizes 5 and 3, can we use a razor of size 5 on the whole segment? For the position needing 3, applying razor 5 would set a_i = min(a_i, 5). Since a_i > 3 (needs cut), a_i could be >5, then becomes 5, which is >3, not reduced enough. So we cannot use razor 5 to fix a position needing 3. So we need separate razors for different needed values, unless the smaller value is already correct? But we only consider positions where a[i] != b[i], so they all need cuts. So we cannot cover a needed 3 with a razor 5. Therefore, when we see a needed b[i] that is smaller than the previous needed, the previous larger needed cannot be covered by the same razor, so we must "close" the larger needed. That's why we pop from stack all > b[i]. Then if the top is not b[i], we need a new razor for b[i]. This is the standard greedy approach.
+
+        // Let's implement that.
+    }
+
+    stack<int> stk;
+    for (int i = 0; i < n; ++i) {
+        if (a[i] == b[i]) continue;
+        int val = b[i];
+        while (!stk.empty() && stk.top() < val) {
+            stk.pop();
+        }
+        if (stk.empty() || stk.top() != val) {
+            // need a razor of size val
+            if (razor_count[val] == 0) {
+                cout << "NO\n";
+                return;
+            }
+            razor_count[val]--;
+            stk.push(val);
+        }
+    }
+
+    cout << "YES\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

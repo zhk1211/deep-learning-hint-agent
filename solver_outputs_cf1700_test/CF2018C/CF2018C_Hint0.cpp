@@ -1,0 +1,101 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    
+    vector<int> depth(n + 1, 0);
+    vector<int> parent(n + 1, 0);
+    vector<int> order;
+    order.reserve(n);
+    queue<int> q;
+    q.push(1);
+    parent[1] = -1;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        order.push_back(u);
+        for (int v : adj[u]) {
+            if (v != parent[u]) {
+                parent[v] = u;
+                depth[v] = depth[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    
+    vector<int> leaf_depths;
+    for (int u = 2; u <= n; ++u) {
+        if (adj[u].size() == 1) {
+            leaf_depths.push_back(depth[u]);
+        }
+    }
+    
+    if (leaf_depths.empty()) {
+        cout << 0 << '\n';
+        return;
+    }
+    
+    int max_depth = *max_element(leaf_depths.begin(), leaf_depths.end());
+    vector<int> cnt(max_depth + 1, 0);
+    for (int d : leaf_depths) {
+        cnt[d]++;
+    }
+    
+    vector<int> subtree_leaf_count(n + 1, 0);
+    for (int i = order.size() - 1; i >= 0; --i) {
+        int u = order[i];
+        if (adj[u].size() == 1 && u != 1) {
+            subtree_leaf_count[u] = 1;
+        } else {
+            int sum = 0;
+            for (int v : adj[u]) {
+                if (v != parent[u]) {
+                    sum += subtree_leaf_count[v];
+                }
+            }
+            subtree_leaf_count[u] = sum;
+        }
+    }
+    
+    vector<int> operations_needed(max_depth + 1, 0);
+    for (int d = 1; d <= max_depth; ++d) {
+        operations_needed[d] = operations_needed[d - 1] + cnt[d];
+    }
+    
+    int ans = INT_MAX;
+    for (int d = 1; d <= max_depth; ++d) {
+        int total_removed = 0;
+        for (int u = 2; u <= n; ++u) {
+            if (depth[u] == d && adj[u].size() == 1) {
+                continue;
+            }
+            if (depth[u] == d) {
+                total_removed += subtree_leaf_count[u];
+            }
+        }
+        int current = operations_needed[d - 1] + total_removed;
+        ans = min(ans, current);
+    }
+    
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

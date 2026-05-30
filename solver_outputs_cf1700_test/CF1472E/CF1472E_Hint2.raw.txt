@@ -1,0 +1,202 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Friend {
+    int h, w, id;
+};
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<Friend> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i].h >> a[i].w;
+        a[i].id = i;
+    }
+    
+    // We will create a list of "normalized" friends where h <= w
+    // For each friend we consider both orientations, but we only need to store
+    // the one with smaller height (and larger width) because if someone can be
+    // in front of us, they must have strictly smaller height and width in some orientation.
+    // Actually we can just sort by h, and keep track of minimum w seen so far.
+    
+    vector<int> ans(n, -1);
+    
+    // We'll sort by height, and for equal heights we need to be careful.
+    // We want to find a friend with strictly smaller height and strictly smaller width.
+    // So we process in increasing height, and maintain the minimum width seen so far
+    // among all friends with strictly smaller height.
+    
+    // To handle equal heights, we can group by height.
+    // For each group, we first update answers using the best from previous groups,
+    // then we update the best with current group.
+    
+    vector<pair<int,int>> sorted; // (h, index)
+    for (int i = 0; i < n; ++i) {
+        sorted.emplace_back(a[i].h, i);
+    }
+    sort(sorted.begin(), sorted.end());
+    
+    int min_w = INT_MAX;
+    int min_w_id = -1;
+    
+    int i = 0;
+    while (i < n) {
+        int cur_h = sorted[i].first;
+        vector<int> cur_group;
+        while (i < n && sorted[i].first == cur_h) {
+            cur_group.push_back(sorted[i].second);
+            ++i;
+        }
+        
+        // For each friend in current group, check if we have a candidate from previous groups
+        for (int idx : cur_group) {
+            int w1 = a[idx].w;
+            // We need someone with height < cur_h and width < w1
+            // But we also need to consider the other orientation: we can lie down.
+            // So we need someone with height < cur_h and width < a[idx].h as well.
+            // Actually the condition is: there exists j such that
+            // (h_j < h_i and w_j < w_i) OR (w_j < h_i and h_j < w_i)
+            // This is equivalent to: there exists j with min(h_j, w_j) < min(h_i, w_i) and max(h_j, w_j) < max(h_i, w_i)
+            // Wait, is that true? Let's check.
+            // Suppose we orient each friend so that h <= w. Then the condition becomes:
+            // We can place j in front of i if (after possibly rotating i or j) we have
+            // h_j' < h_i' and w_j' < w_i'.
+            // If we force both to have h <= w, then we can only compare directly if we don't rotate.
+            // But we are allowed to rotate either. So we can always rotate j to have h_j <= w_j,
+            // and rotate i to have h_i <= w_i. Then we need h_j < h_i and w_j < w_i.
+            // Is that sufficient? Suppose j has (h_j, w_j) with h_j <= w_j, and i has (h_i, w_i) with h_i <= w_i.
+            // If h_j < h_i and w_j < w_i, then we can place j in front of i without rotating anyone.
+            // What if we need to rotate one? The condition says: 
+            // (h_j < h_i and w_j < w_i) OR (w_j < h_i and h_j < w_i).
+            // If we have normalized both, then h_j <= w_j and h_i <= w_i.
+            // The second condition becomes: w_j < h_i and h_j < w_i.
+            // But since h_j <= w_j and h_i <= w_i, if h_j < h_i and w_j < w_i, it's already covered.
+            // Could there be a case where normalized comparison fails but rotating works?
+            // Example: i = (3, 5) normalized to (3,5). j = (4,2) normalized to (2,4).
+            // Normalized: j=(2,4), i=(3,5). 2<3 and 4<5 -> works.
+            // Another: i=(5,3) normalized to (3,5). j=(4,4) normalized to (4,4). 4<3 false. But can we rotate?
+            // Original: j=(4,4), i=(5,3). Condition 1: 4<5 and 4<3 false. Condition 2: 4<5 and 4<3 false. So no.
+            // What about i=(5,4) normalized (4,5), j=(3,6) normalized (3,6). 3<4 true, 6<5 false. Rotate?
+            // Original: j=(3,6), i=(5,4). Cond1: 3<5 and 6<4 false. Cond2: 6<5 false. So no.
+            // It seems that if we normalize both to have h <= w, then the condition is exactly:
+            // h_j < h_i and w_j < w_i.
+            // Proof: Suppose there exists an orientation where j fits in front of i.
+            // Then there exist orientations with dimensions (a_j, b_j) and (a_i, b_i) such that a_j < a_i and b_j < b_i.
+            // We can always swap a and b if a > b to make a <= b. This operation preserves the strict inequalities?
+            // If we swap both, a_j < a_i and b_j < b_i still hold. If we swap only one, we might break.
+            // But we can choose orientations for both independently. So we can just choose the orientation for j
+            // that has smaller first dimension, and for i that has smaller first dimension.
+            // Actually, we want to minimize the first dimension for i to make it easier for j to be smaller?
+            // Wait, we need a_j < a_i and b_j < b_i. If we set a_i = min(h_i, w_i), b_i = max(h_i, w_i),
+            // and a_j = min(h_j, w_j), b_j = max(h_j, w_j), then if there exists any orientation that works,
+            // does it imply a_j < a_i and b_j < b_i? Not necessarily.
+            // Counterexample: i = (10, 2), j = (3, 9).
+            // Normalized: i=(2,10), j=(3,9). 3<2 false.
+            // But can we orient? Try j=(3,9), i=(10,2): Cond1: 3<10 and 9<2 false. Cond2: 9<10 and 3<2 false.
+            // Try j=(9,3), i=(10,2): Cond1: 9<10 and 3<2 false. Cond2: 3<10 and 9<2 false.
+            // Try j=(3,9), i=(2,10): Cond1: 3<2 false. Cond2: 9<2 false.
+            // So no.
+            // Another: i=(5,5), j=(4,6) normalized j=(4,6), i=(5,5). 4<5 true, 6<5 false.
+            // Can we orient? j=(4,6), i=(5,5): Cond1: 4<5 and 6<5 false. Cond2: 6<5 false.
+            // j=(6,4), i=(5,5): Cond1: 6<5 false. Cond2: 4<5 and 6<5 false.
+            // So no.
+            // It seems the normalized comparison is necessary and sufficient.
+            // Let's test the sample: 
+            // Test 1: (3,4) norm=(3,4); (5,4) norm=(4,5); (3,3) norm=(3,3).
+            // For i=1 (3,4): need h<3 and w<4. None.
+            // i=2 (4,5): need h<4 and w<5. (3,4) has 3<4 and 4<5 -> works. (3,3) has 3<4 and 3<5 -> works. Output 3.
+            // i=3 (3,3): need h<3 and w<3. None.
+            // Matches sample: -1 3 -1.
+            // Test 2: (1,3)->(1,3); (2,2)->(2,2); (3,1)->(1,3). All have min=1 or 2. No one has both smaller.
+            // Output -1 -1 -1. Matches.
+            // Test 3: (2,2)->(2,2); (3,1)->(1,3); (6,3)->(3,6); (5,4)->(4,5).
+            // i=1 (2,2): need h<2,w<2 -> none.
+            // i=2 (1,3): need h<1,w<3 -> none.
+            // i=3 (3,6): need h<3,w<6. (2,2) has 2<3,2<6 -> works. (1,3) has 1<3,3<6 -> works. Output 2.
+            // i=4 (4,5): need h<4,w<5. (2,2) works, (1,3) works. Output 2.
+            // Matches sample: -1 -1 2 2.
+            // Test 4: (2,2)->(2,2); (2,3)->(2,3); (1,1)->(1,1); (4,4)->(4,4).
+            // i=1 (2,2): need h<2,w<2. (1,1) works -> output 3.
+            // i=2 (2,3): need h<2,w<3. (1,1) works -> output 3.
+            // i=3 (1,1): need h<1,w<1 -> none.
+            // i=4 (4,4): need h<4,w<4. (2,2) works, (2,3) works, (1,1) works -> output 3.
+            // Matches sample: 3 3 -1 3.
+            // So the normalized approach works!
+            
+            int h_i = min(a[idx].h, a[idx].w);
+            int w_i = max(a[idx].h, a[idx].w);
+            
+            // We need someone with normalized height < h_i and normalized width < w_i.
+            // Since we process in increasing order of original height? Wait, we sorted by original height.
+            // But we need to compare normalized heights. So we should sort by normalized height.
+            // Let's change the sorting to normalized height.
+        }
+    }
+    
+    // Let's redo with normalized sorting.
+    vector<tuple<int,int,int>> norm_friends; // (min_hw, max_hw, id)
+    for (int i = 0; i < n; ++i) {
+        int h = a[i].h, w = a[i].w;
+        if (h > w) swap(h, w);
+        norm_friends.emplace_back(h, w, i);
+    }
+    sort(norm_friends.begin(), norm_friends.end());
+    
+    // Now we process in increasing order of min_hw.
+    // We need to maintain the minimum max_hw seen so far among all friends with strictly smaller min_hw.
+    // But careful: we need strictly smaller min_hw AND strictly smaller max_hw.
+    // If we just keep the minimum max_hw, we can check if that minimum max_hw < current max_hw.
+    // However, we also need to output the index of that friend.
+    
+    // We'll group by min_hw.
+    vector<int> ans2(n, -1);
+    int min_max_hw = INT_MAX;
+    int min_max_hw_id = -1;
+    
+    int j = 0;
+    while (j < n) {
+        int cur_min = get<0>(norm_friends[j]);
+        vector<int> cur_group;
+        while (j < n && get<0>(norm_friends[j]) == cur_min) {
+            cur_group.push_back(j);
+            ++j;
+        }
+        
+        // For each in current group, try to find answer from previous groups
+        for (int idx : cur_group) {
+            int max_hw = get<1>(norm_friends[idx]);
+            int id = get<2>(norm_friends[idx]);
+            if (min_max_hw < max_hw) {
+                ans2[id] = min_max_hw_id + 1; // 1-indexed
+            }
+        }
+        
+        // Update min_max_hw with current group
+        for (int idx : cur_group) {
+            int max_hw = get<1>(norm_friends[idx]);
+            int id = get<2>(norm_friends[idx]);
+            if (max_hw < min_max_hw) {
+                min_max_hw = max_hw;
+                min_max_hw_id = id;
+            }
+        }
+    }
+    
+    for (int i = 0; i < n; ++i) {
+        cout << ans2[i] << (i+1==n ? '\n' : ' ');
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

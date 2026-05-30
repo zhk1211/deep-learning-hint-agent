@@ -1,0 +1,31 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        long long a, b;
+        cin >> a >> b;
+        
+        long long ans = LLONG_MAX;
+        // Try all possible final leg lengths m from 1 up to about sqrt(max(a,b)) + some margin
+        // Actually we need to consider m up to roughly 2*sqrt(max(a,b)) to be safe
+        long long limit = (long long)sqrt(max(a, b)) * 2 + 5;
+        for (long long m = 1; m <= limit; ++m) {
+            // moves to increase legs to m: m - 1
+            long long moves = m - 1;
+            // jumps needed in x and y directions
+            long long jumps_x = (a + m - 1) / m;
+            long long jumps_y = (b + m - 1) / m;
+            moves += jumps_x + jumps_y;
+            ans = min(ans, moves);
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

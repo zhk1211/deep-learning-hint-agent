@@ -1,0 +1,6 @@
+[
+  "**Hint 1**\nIf you perform the operation on some vertex $$$v$$$, you can do it with $$$c_k = r_v$$$. If there is another operation that helps this vertex, you can cut the operation into two pieces and merge one with the operation that starts at $$$v$$$. And you can just increase $$$c_k$$$ if it's not equal to $$$r_v$$$.",
+  "**Hint 2**\nYou won't perform the operation on a particular vertex more than once.",
+  "**Hint 3**\nImagine there is a vertex $$$v$$$ that there are more than $$$dp_v$$$ operations on vertices in the subtree of vertex $$$v$$$. We can instead satisfy the subtree by $$$dp_v$$$ operations and make sure that we perform the operation on vertex $$$p_v$$$.",
+  "**Hint 4**\nDefine $$$dp_v$$$ as the minimum number of operations needed to satisfy the conditions on the vertices in the subtree of vertex $$$v$$$."
+]

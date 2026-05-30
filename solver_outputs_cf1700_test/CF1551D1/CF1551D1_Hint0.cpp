@@ -1,0 +1,27 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m, k;
+        cin >> n >> m >> k;
+        int total = n * m / 2;
+        bool possible = false;
+        if (n % 2 == 0 && m % 2 == 0) {
+            possible = (k % 2 == 0 && k <= total - n / 2);
+        } else if (n % 2 == 0 && m % 2 == 1) {
+            possible = (k % 2 == 0 && k <= total - n / 2);
+        } else if (n % 2 == 1 && m % 2 == 0) {
+            int min_h = m / 2;
+            possible = (k >= min_h && (k - min_h) % 2 == 0);
+        }
+        cout << (possible ? "YES" : "NO") << '\n';
+    }
+    return 0;
+}

@@ -1,0 +1,158 @@
+// Hint5
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const ll INF = 1e18;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<ll>> h(n, vector<ll>(n));
+        for (int i = 0; i < n; ++i)
+            for (int j = 0; j < n; ++j)
+                cin >> h[i][j];
+        vector<ll> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int j = 0; j < n; ++j) cin >> b[j];
+
+        // We will try all 4 possibilities for parity of row/col increments
+        // Let x_i = 0/1 whether we increment row i, y_j = 0/1 whether we increment column j
+        // Condition: h[i][j] + x_i + y_j != h[i][j+1] + x_i + y_{j+1}  => y_j != y_{j+1} if h[i][j] == h[i][j+1]
+        // Similarly for rows: x_i != x_{i+1} if h[i][j] == h[i+1][j]
+        // So we have constraints on x_i, y_j based on equal adjacent heights.
+        // Also we can choose x_i, y_j to minimize sum a_i*x_i + b_j*y_j.
+        // This is a 2-coloring problem on a bipartite graph? Actually constraints are between x_i and x_{i+1} or y_j and y_{j+1} only if equal.
+        // But x_i and y_j are independent except through costs? No, they are independent because constraints only involve x's with x's and y's with y's.
+        // Wait: condition involves x_i and y_j together? h[i][j] + x_i + y_j != h[i][j+1] + x_i + y_{j+1} => y_j != y_{j+1} if h[i][j] == h[i][j+1].
+        // So x_i cancels out. Similarly for rows, y_j cancels out. So x and y are completely independent!
+        // Thus we can solve for rows and columns separately.
+        // For rows: we need to assign x_i in {0,1} such that for any adjacent cells in same column with equal height, x_i != x_{i+1}.
+        // This is a graph with vertices rows, edges between i and i+1 if there exists j with h[i][j] == h[i+1][j].
+        // We need to check if this graph is bipartite. If not, impossible -> -1.
+        // If bipartite, each connected component has two possible assignments (swap 0/1). We want to minimize sum a_i * x_i.
+        // This is a classic minimum weight bipartite assignment: for each component, compute cost of assigning 0 to one part and 1 to the other, and take min.
+        // Same for columns with costs b_j.
+        // Total answer = min cost rows + min cost columns.
+
+        // Build row graph
+        vector<vector<int>> row_adj(n);
+        for (int i = 0; i < n - 1; ++i) {
+            bool edge = false;
+            for (int j = 0; j < n; ++j) {
+                if (h[i][j] == h[i+1][j]) {
+                    edge = true;
+                    break;
+                }
+            }
+            if (edge) {
+                row_adj[i].push_back(i+1);
+                row_adj[i+1].push_back(i);
+            }
+        }
+
+        vector<int> row_color(n, -1);
+        bool possible = true;
+        ll row_cost = 0;
+        for (int i = 0; i < n; ++i) {
+            if (row_color[i] == -1) {
+                // BFS to color component
+                queue<int> q;
+                q.push(i);
+                row_color[i] = 0;
+                vector<int> comp;
+                while (!q.empty()) {
+                    int u = q.front(); q.pop();
+                    comp.push_back(u);
+                    for (int v : row_adj[u]) {
+                        if (row_color[v] == -1) {
+                            row_color[v] = row_color[u] ^ 1;
+                            q.push(v);
+                        } else if (row_color[v] == row_color[u]) {
+                            possible = false;
+                        }
+                    }
+                }
+                if (!possible) break;
+                // compute cost for two assignments
+                ll cost0 = 0, cost1 = 0;
+                for (int u : comp) {
+                    if (row_color[u] == 0) {
+                        cost0 += a[u]; // if we assign 1 to color 0? Wait: x_i = 1 means we hire worker i, cost a_i.
+                        // We need to decide mapping from color to {0,1}. Let's say color 0 -> x=1, color 1 -> x=0 gives cost0.
+                        // Or color 0 -> x=0, color 1 -> x=1 gives cost1.
+                    } else {
+                        cost1 += a[u];
+                    }
+                }
+                // Actually careful: if we assign x=1 to color 0, then cost = sum_{u in color0} a_u.
+                // If we assign x=1 to color 1, cost = sum_{u in color1} a_u.
+                // So we have two costs: cost0 = sum_{u in color0} a_u, cost1 = sum_{u in color1} a_u.
+                // But we computed cost0 as sum of a_u for color0, cost1 for color1.
+                // So min cost for this component is min(cost0, cost1).
+                row_cost += min(cost0, cost1);
+            }
+        }
+        if (!possible) {
+            cout << "-1\n";
+            continue;
+        }
+
+        // Build column graph
+        vector<vector<int>> col_adj(n);
+        for (int j = 0; j < n - 1; ++j) {
+            bool edge = false;
+            for (int i = 0; i < n; ++i) {
+                if (h[i][j] == h[i][j+1]) {
+                    edge = true;
+                    break;
+                }
+            }
+            if (edge) {
+                col_adj[j].push_back(j+1);
+                col_adj[j+1].push_back(j);
+            }
+        }
+
+        vector<int> col_color(n, -1);
+        ll col_cost = 0;
+        for (int j = 0; j < n; ++j) {
+            if (col_color[j] == -1) {
+                queue<int> q;
+                q.push(j);
+                col_color[j] = 0;
+                vector<int> comp;
+                while (!q.empty()) {
+                    int u = q.front(); q.pop();
+                    comp.push_back(u);
+                    for (int v : col_adj[u]) {
+                        if (col_color[v] == -1) {
+                            col_color[v] = col_color[u] ^ 1;
+                            q.push(v);
+                        } else if (col_color[v] == col_color[u]) {
+                            possible = false;
+                        }
+                    }
+                }
+                if (!possible) break;
+                ll cost0 = 0, cost1 = 0;
+                for (int u : comp) {
+                    if (col_color[u] == 0) cost0 += b[u];
+                    else cost1 += b[u];
+                }
+                col_cost += min(cost0, cost1);
+            }
+        }
+        if (!possible) {
+            cout << "-1\n";
+            continue;
+        }
+
+        cout << row_cost + col_cost << "\n";
+    }
+    return 0;
+}

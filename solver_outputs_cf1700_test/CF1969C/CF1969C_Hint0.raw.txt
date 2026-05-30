@@ -1,0 +1,93 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long INF = 1e18;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // dp[i][j] = min sum for prefix up to i, with j operations used,
+        // and the last element is a[i] (not changed after its final value is set)
+        // We'll use a 2D DP with dimensions (n) x (k+1), initialized to INF.
+        vector<vector<long long>> dp(n, vector<long long>(k + 1, INF));
+        
+        // Base: first element, 0 operations
+        dp[0][0] = a[0];
+        // For first element, we can also change it to something? No neighbor to copy from initially.
+        // But we can change it later? Actually operation replaces an element with neighbor's value.
+        // For first element, we can only change it if we change it to a[1]'s value, but that requires an operation.
+        // In DP, we consider sequences of operations. We'll handle transitions.
+        
+        // Precompute prefix minimums for optimization? Not needed with k <= 10.
+        // We can do O(n * k^2) DP.
+        
+        for (int i = 1; i < n; ++i) {
+            // Option 1: no operation on i, just keep a[i]
+            for (int j = 0; j <= k; ++j) {
+                if (dp[i-1][j] != INF) {
+                    dp[i][j] = min(dp[i][j], dp[i-1][j] + a[i]);
+                }
+            }
+            
+            // Option 2: perform operations to extend a segment of equal values
+            // We can change a[i] to a[i-1], and maybe a[i-1] was already changed, etc.
+            // More generally, we can choose a segment [L, R] and make all elements equal to some value
+            // by propagating. The minimal sum for a segment is (length) * min_value in segment.
+            // But operations are limited. Actually, to make a contiguous segment all equal to the minimum,
+            // we need (length - 1) operations if we start from the minimum and spread out.
+            // However, we can also make them equal to a value that is not the minimum, but that would be suboptimal.
+            // So for a segment of length len, we can achieve sum = len * min_val with (len - 1) operations.
+            // But we can also do partial segments.
+            
+            // DP transition: we consider the last segment that we make uniform.
+            // For each i, we try to form a segment ending at i of length L (1 <= L <= i+1),
+            // using (L-1) operations, and the value is the minimum in that segment.
+            // Then dp[i][j] = min over L: dp[i-L][j-(L-1)] + L * min_val.
+            // This is O(n * k * n) naive, but k <= 10, n <= 3e5, so we need O(n * k^2) or similar.
+            // We can optimize by iterating L from 1 to k+1 (since L-1 <= k).
+            // Because if we use more than k operations in one segment, it's impossible.
+            // So L <= k+1.
+            
+            for (int L = 2; L <= k+1 && L <= i+1; ++L) {
+                int start = i - L + 1;
+                // compute min in a[start..i]
+                long long min_val = a[start];
+                for (int pos = start; pos <= i; ++pos) {
+                    if (a[pos] < min_val) min_val = a[pos];
+                }
+                int ops = L - 1;
+                for (int j = ops; j <= k; ++j) {
+                    if (start == 0) {
+                        if (j == ops) {
+                            dp[i][j] = min(dp[i][j], L * min_val);
+                        }
+                    } else {
+                        if (dp[start-1][j-ops] != INF) {
+                            dp[i][j] = min(dp[i][j], dp[start-1][j-ops] + L * min_val);
+                        }
+                    }
+                }
+            }
+        }
+        
+        long long ans = INF;
+        for (int j = 0; j <= k; ++j) {
+            ans = min(ans, dp[n-1][j]);
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

@@ -1,0 +1,44 @@
+// Hint5
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<long long> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    
+    const long long INF = 1e18;
+    vector<vector<long long>> dp(n + 1, vector<long long>(k + 1, INF));
+    dp[0][0] = 0;
+    
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j <= k; ++j) {
+            if (dp[i][j] == INF) continue;
+            long long mn = a[i];
+            for (int d = 0; d <= k - j && i + d < n; ++d) {
+                mn = min(mn, a[i + d]);
+                dp[i + d + 1][j + d] = min(dp[i + d + 1][j + d], dp[i][j] + mn * (d + 1));
+            }
+        }
+    }
+    
+    long long ans = INF;
+    for (int j = 0; j <= k; ++j) {
+        ans = min(ans, dp[n][j]);
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

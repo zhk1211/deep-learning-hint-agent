@@ -1,0 +1,88 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1'000'000'007;
+
+long long modpow(long long a, long long b) {
+    long long res = 1;
+    a %= MOD;
+    while (b) {
+        if (b & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        b >>= 1;
+    }
+    return res;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        if (k == 0) {
+            cout << 1 << '\n';
+            continue;
+        }
+
+        long long total = modpow(2, n);
+        long long even_parity = modpow(2, n - 1);
+        long long odd_parity = (total - even_parity + MOD) % MOD;
+
+        // dp[i][0] : And > Xor in processed higher bits
+        // dp[i][1] : And == Xor in processed higher bits
+        vector<long long> dp0(2, 0), dp1(2, 0);
+        dp0[1] = 1; // initially equal
+
+        for (int i = 0; i < k; ++i) {
+            dp1[0] = dp1[1] = 0;
+            // transition for bit i
+            // case 1: And bit = 0, Xor bit = 0
+            // number of ways: choose even number of 1s -> even_parity
+            // if previous state was equal (1), new state equal (1)
+            // if previous state was greater (0), new state greater (0)
+            long long ways00 = even_parity;
+            dp1[1] = (dp1[1] + dp0[1] * ways00) % MOD;
+            dp1[0] = (dp1[0] + dp0[0] * ways00) % MOD;
+
+            // case 2: And bit = 1, Xor bit = 1
+            // number of ways: choose odd number of 1s, but all must be 1 -> only possible if n is odd
+            // if n is odd, odd number of 1s means all 1s -> 1 way
+            // if n is even, odd number of 1s cannot have all 1s -> 0 ways
+            long long ways11 = (n % 2 == 1) ? 1 : 0;
+            if (ways11 > 0) {
+                dp1[1] = (dp1[1] + dp0[1] * ways11) % MOD;
+                dp1[0] = (dp1[0] + dp0[0] * ways11) % MOD;
+            }
+
+            // case 3: And bit = 1, Xor bit = 0
+            // number of ways: choose even number of 1s, all must be 1 -> only possible if n is even
+            // if n is even, even number of 1s means all 1s -> 1 way
+            // if n is odd, even number of 1s cannot have all 1s -> 0 ways
+            long long ways10 = (n % 2 == 0) ? 1 : 0;
+            if (ways10 > 0) {
+                // if previous state was equal, now And > Xor -> state 0
+                dp1[0] = (dp1[0] + dp0[1] * ways10) % MOD;
+                // if previous state was greater, remains greater
+                dp1[0] = (dp1[0] + dp0[0] * ways10) % MOD;
+            }
+
+            // case 4: And bit = 0, Xor bit = 1
+            // number of ways: choose odd number of 1s, not all 1 -> odd_parity - (n%2==1?1:0)
+            long long ways01 = (odd_parity - (n % 2 == 1 ? 1 : 0) + MOD) % MOD;
+            // if previous state was equal, now And < Xor -> invalid, skip
+            // if previous state was greater, remains greater
+            dp1[0] = (dp1[0] + dp0[0] * ways01) % MOD;
+
+            swap(dp0, dp1);
+        }
+
+        long long ans = (dp0[0] + dp0[1]) % MOD;
+        cout << ans << '\n';
+    }
+    return 0;
+}

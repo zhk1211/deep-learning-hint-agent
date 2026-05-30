@@ -1,0 +1,241 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+In fact, the problems E1 and E2 do not have much in common. You should probably think of them as two separate problems.
+
+You are given an integer array $ a[1 \ldots n] = [a_1, a_2, \ldots, a_n] $ .
+
+Let us consider an empty [deque](https://tinyurl.com/pfeucbux) (double-ended queue). A deque is a data structure that supports adding elements to both the beginning and the end. So, if there are elements $ [3, 4, 4] $ currently in the deque, adding an element $ 1 $ to the beginning will produce the sequence $ [\color{red}{1}, 3, 4, 4] $ , and adding the same element to the end will produce $ [3, 4, 4, \color{red}{1}] $ .
+
+The elements of the array are sequentially added to the initially empty deque, starting with $ a_1 $ and finishing with $ a_n $ . Before adding each element to the deque, you may choose whether to add it to the beginning or to the end.
+
+For example, if we consider an array $ a = [3, 7, 5, 5] $ , one of the possible sequences of actions looks like this:
+
+$ \quad $ 1.add $ 3 $ to the beginning of the deque:deque has a sequence $ [\color{red}{3}] $ in it; $ \quad $ 2.add $ 7 $ to the end of the deque:deque has a sequence $ [3, \color{red}{7}] $ in it; $ \quad $ 3.add $ 5 $ to the end of the deque:deque has a sequence $ [3, 7, \color{red}{5}] $ in it; $ \quad $ 4.add $ 5 $ to the beginning of the deque:deque has a sequence $ [\color{red}{5}, 3, 7, 5] $ in it;Find the minimal possible number of inversions in the deque after the whole array is processed.
+
+An inversion in sequence $ d $ is a pair of indices $ (i, j) $ such that $ i < j $ and $ d_i > d_j $ . For example, the array $ d = [5, 3, 7, 5] $ has exactly two inversions — $ (1, 2) $ and $ (3, 4) $ , since $ d_1 = 5 > 3 = d_2 $ and $ d_3 = 7 > 5 = d_4 $ .
+
+Input Format
+The first line contains an integer $ t $ ( $ 1 \leq t \leq 1000 $ ) — the number of test cases.
+
+The next $ 2t $ lines contain descriptions of the test cases.
+
+The first line of each test case description contains an integer $ n $ ( $ 1 \le n \le 2 \cdot 10^5 $ ) — array size. The second line of the description contains $ n $ space-separated integers $ a_i $ ( $ -10^9 \le a_i \le 10^9 $ ) — elements of the array.
+
+It is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \cdot 10^5 $ .
+
+Output Format
+Print $ t $ lines, each line containing the answer to the corresponding test case. The answer to a test case should be a single integer — the minimal possible number of inversions in the deque after executing the described algorithm.
+
+Examples
+Sample 1
+Input
+6
+4
+3 7 5 5
+3
+3 2 1
+3
+3 1 2
+4
+-1 2 2 -1
+4
+4 5 1 3
+5
+1 3 1 3 2
+Output
+2
+0
+1
+0
+1
+2
+
+Note
+One of the ways to get the sequence $ [5, 3, 7, 5] $ in the deque, containing only two inversions, from the initial array $ [3, 7, 5, 5] $ (the first sample test case) is described in the problem statement.
+
+Also, in this example, you could get the answer of two inversions by simply putting each element of the original array at the end of the deque. In this case, the original sequence $ [3, 7, 5, 5] $ , also containing exactly two inversions, will be in the deque as-is.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1579E2 - Array Optimization by Deque
+Let's process the array elements one by one.
+For the first element, it doesn't matter which side of the deque we add it to, the result of its addition will be the same — there will be a sequence of one element (equal to the first array element) in the deque.
+Now let's consider adding the $$$i$$$th element of an array into the deck. First $$$i = 2$$$ will be considered, then $$$i = 3$$$, and so on up to $$$i = n$$$. Let us describe the general algorithm for choosing the side of the dec for each step. Note that if the elements $$$[d_1, \ldots, d_{i - 1}]$$$ now lie in the deck, then all final sequences that can be obtained in the deck from the current state can be broken down into pairs of the form $$$$$$[\ldots, \color{red}{a_i}, \color{blue}{d_1, \ldots, d_{i - 1}}, \ldots]\,$$$$$$ $$$$$$[\ldots, \color{blue}{d_1, \ldots, d_{i - 1}}, \color{red}{a_i}, \ldots]\text{,}$$$$$$ where the beginning and the end of the final sequences hidden behind "$$$\ldots$$$" are obtained by the same sequences of all the following choices and, respectively, coincide.
+Note that since the prefix and suffix hidden behind the dots completely coincide in the two sequences under consideration, as well as the set of numbers in the central part coincides, the numbers of inversions also coincide:
+inside the prefix and inside the suffix;
+between elements of the prefix and elements of the suffix;
+between elements of the prefix or suffix and elements of the central part.
+The difference between the number of inversions in the first and second sequence consists only of the difference between the number of inversions in their central part. So, we can determine at the stage of adding $$$a_i$$$ to the deque, which direction of its addition is guaranteed not to lead to the optimal answer and choose the opposite one.
+If $$$a_i$$$ is added to the beginning of the deque, the number of inversions in the central part will increase by the number of elements in the deque strictly smaller than $$$a_i$$$, and if we add it to the end of the deque, it will increase by the number of elements in the deque strictly larger than $$$a_i$$$. Let us make a choice such that the number of inversions increases by the minimum of these two values.
+To quickly find the number of elements smaller or larger than $$$a_i$$$, we will store all already processed array elements in a structure that supports the element order search operation, such as
+__gnu_pbds::tree
+. Besides using this structure specifically, you can
+write any balanced binary search tree (such as a Cartesian tree);
+sort all numbers in the input array and compress them to values $$$[1, n]$$$, preserving the "$$$\le$$$" relation, then build a segment tree on them, storing in the node $$$[l, r)$$$ the number of array numbers already processed by the deque with values between $$$l$$$ and $$$r$$$.
+Requests to update and get an order in such structures take $$$\mathcal{O}(\log n)$$$ time, and the construction takes at worst $$$\mathcal{O}(n \log n)$$$, so the time complexity of the algorithm is $$$\mathcal{O}(n \log n)$$$.
+
+#include
+<
+bits
+/
+stdc
+++.
+h
+>
+#include
+<ext/pb_ds/assoc_container.hpp>
+using
+namespace
+std
+;
+using
+namespace
+__gnu_pbds
+;
+typedef
+pair
+<
+int
+,
+int
+>
+node
+;
+typedef
+tree
+<
+node
+,
+null_type
+,
+less
+<node>
+,
+rb_tree_tag
+,
+tree_order_statistics_node_update
+>
+ordered_set
+;
+int
+main
+()
+{
+int
+t
+;
+cin
+>>
+t
+;
+while
+(
+t
+--)
+{
+int
+n
+;
+cin
+>>
+n
+;
+ordered_set s
+;
+long
+long
+cnt
+=
+0
+;
+for
+(
+int
+i
+=
+0
+;
+i
+<
+n
+;
+i
+++)
+{
+int
+a
+;
+cin
+>>
+a
+;
+int
+less
+=
+s
+.
+order_of_key
+(
+node
+(
+a
+,
+0
+)),
+greater
+=
+i
+-
+s
+.
+order_of_key
+(
+node
+(
+a
+,
+n
+));
+cnt
++=
+min
+(
+less
+,
+greater
+);
+s
+.
+insert
+(
+node
+(
+a
+,
+i
+));
+}
+cout
+<<
+cnt
+<<
+'\n'
+;
+}
+}
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

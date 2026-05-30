@@ -1,0 +1,80 @@
+// Hint8
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // We will choose k traps to jump over.
+        // If we jump over trap i, we avoid a_i damage but also avoid the bonus damage
+        // that would have been added to all subsequent traps.
+        // The total damage if we jump over a set S of traps:
+        // sum_{i not in S} a_i + sum_{i not in S} (number of jumped traps before i)
+        // = sum_{i=1..n} a_i - sum_{i in S} a_i + sum_{i not in S} (number of jumped traps before i)
+        // The second term can be rewritten: each jumped trap j contributes 1 to all non-jumped traps after j.
+        // So total damage = sum a_i - sum_{i in S} a_i + sum_{j in S} (number of non-jumped traps after j)
+        // = sum a_i - sum_{i in S} a_i + sum_{j in S} ( (n - j) - (number of jumped traps after j) )
+        // = sum a_i - sum_{i in S} a_i + sum_{j in S} (n - j) - sum_{j in S} (number of jumped traps after j)
+        // The last sum is just the number of pairs (j1, j2) with j1 < j2 both in S, which is C(|S|, 2).
+        // So total damage = sum a_i - sum_{i in S} (a_i + (n - i)) + C(|S|, 2) + |S|*(n - |S|)? Wait, let's re-derive carefully.
+        
+        // Alternative simpler derivation:
+        // Total damage = sum_{i not in S} (a_i + bonus_i)
+        // bonus_i = number of jumped traps with index < i.
+        // So total damage = sum_{i not in S} a_i + sum_{i not in S} bonus_i.
+        // sum_{i not in S} bonus_i = sum_{j in S} (number of non-jumped traps after j)
+        // = sum_{j in S} ( (n - j) - (number of jumped traps after j) )
+        // = sum_{j in S} (n - j) - sum_{j in S} (number of jumped traps after j)
+        // The second sum is exactly the number of pairs (j1, j2) with j1 < j2 both in S, which is C(|S|, 2) if we sort S.
+        // So total damage = sum a_i - sum_{j in S} a_j + sum_{j in S} (n - j) - C(|S|, 2)
+        // = sum a_i - sum_{j in S} (a_j + j - n) - C(|S|, 2)
+        // Wait: n - j = -(j - n). Let's keep it as (n - j).
+        // So we want to minimize damage, which is equivalent to maximizing:
+        // sum_{j in S} (a_j + (n - j)) - C(|S|, 2)
+        // But |S| can be up to k. We can choose any subset of size up to k.
+        // However, the term C(|S|, 2) depends only on the size of S, not which elements.
+        // So for a fixed size m (0 <= m <= k), we want to pick m traps that maximize sum of (a_j + (n - j)).
+        // Then we subtract C(m, 2) and subtract from total sum a_i.
+        // So answer = sum a_i - max_{0<=m<=k} [ max_{S, |S|=m} sum_{j in S} (a_j + n - j) - m*(m-1)/2 ].
+        
+        // Let's define value v_j = a_j + (n - j). Note that n - j is the number of traps after j (including j? Actually traps after j: indices j+1..n, count = n - j).
+        // We want to pick up to k traps with largest v_j.
+        // But wait: is it always optimal to pick the largest v_j regardless of m? Because the term -C(m,2) is concave, we might not want to pick all k if the marginal benefit is less than the penalty.
+        // However, we can just compute for each m from 0 to k the sum of the m largest v_j, subtract m*(m-1)/2, and take the max.
+        // Since n up to 2e5, k up to n, sum n over test cases 2e5, we can sort v_j descending and compute prefix sums.
+        
+        vector<long long> v(n);
+        for (int i = 0; i < n; ++i) {
+            // i is 0-indexed, so trap index = i+1, n - (i+1) = n - i - 1
+            v[i] = a[i] + (n - i - 1);
+        }
+        sort(v.begin(), v.end(), greater<long long>());
+        
+        long long total_a = 0;
+        for (int x : a) total_a += x;
+        
+        long long max_gain = 0; // gain = sum_{j in S} v_j - C(|S|,2)
+        long long sum_v = 0;
+        for (int m = 1; m <= k; ++m) {
+            sum_v += v[m-1];
+            long long gain = sum_v - 1LL * m * (m - 1) / 2;
+            if (gain > max_gain) max_gain = gain;
+        }
+        // m=0 gives gain 0, already covered by max_gain initialized to 0.
+        
+        long long ans = total_a - max_gain;
+        cout << ans << '\n';
+    }
+    return 0;
+}

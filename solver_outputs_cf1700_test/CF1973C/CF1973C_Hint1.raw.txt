@@ -1,0 +1,85 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> p[i];
+        }
+
+        vector<int> q(n);
+        vector<int> idx(n);
+        iota(idx.begin(), idx.end(), 0);
+        sort(idx.begin(), idx.end(), [&](int i, int j) {
+            return p[i] < p[j];
+        });
+
+        vector<int> big, small;
+        for (int i = 0; i < n; ++i) {
+            if (i < n / 2) small.push_back(idx[i]);
+            else big.push_back(idx[i]);
+        }
+
+        sort(big.begin(), big.end(), [&](int i, int j) {
+            return p[i] < p[j];
+        });
+        sort(small.begin(), small.end(), [&](int i, int j) {
+            return p[i] < p[j];
+        });
+
+        vector<int> vals(n);
+        int cur = n;
+        for (int i : big) {
+            vals[i] = cur--;
+        }
+        cur = 1;
+        for (int i : small) {
+            vals[i] = cur++;
+        }
+
+        vector<int> pos_in_big(n, -1);
+        for (int i = 0; i < (int)big.size(); ++i) {
+            pos_in_big[big[i]] = i;
+        }
+
+        vector<int> q_vals(n);
+        for (int i = 0; i < n; ++i) {
+            q_vals[i] = vals[i];
+        }
+
+        vector<int> big_sorted = big;
+        sort(big_sorted.begin(), big_sorted.end());
+
+        vector<int> small_sorted = small;
+        sort(small_sorted.begin(), small_sorted.end());
+
+        vector<int> big_vals, small_vals;
+        for (int i : big_sorted) big_vals.push_back(vals[i]);
+        for (int i : small_sorted) small_vals.push_back(vals[i]);
+
+        sort(big_vals.rbegin(), big_vals.rend());
+        sort(small_vals.begin(), small_vals.end());
+
+        for (int i = 0; i < (int)big_sorted.size(); ++i) {
+            q_vals[big_sorted[i]] = big_vals[i];
+        }
+        for (int i = 0; i < (int)small_sorted.size(); ++i) {
+            q_vals[small_sorted[i]] = small_vals[i];
+        }
+
+        for (int i = 0; i < n; ++i) {
+            cout << q_vals[i] << " \n"[i == n - 1];
+        }
+    }
+    return 0;
+}
+```

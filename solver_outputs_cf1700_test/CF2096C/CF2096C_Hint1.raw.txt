@@ -1,0 +1,183 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long INF = 1e18;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<long long>> h(n, vector<long long>(n));
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                cin >> h[i][j];
+            }
+        }
+        vector<long long> a(n), b(n);
+        for (int i = 0; i < n; i++) cin >> a[i];
+        for (int j = 0; j < n; j++) cin >> b[j];
+        
+        // We need to assign each row and column a parity (0 or 1) of increments
+        // such that for every adjacent pair (i,j)-(i,j+1) and (i,j)-(i+1,j)
+        // the resulting heights are different.
+        // Let x_i be 0/1 for row i, y_j be 0/1 for column j.
+        // Condition: h[i][j] + x_i + y_j != h[i][j+1] + x_i + y_{j+1}
+        // => (y_j - y_{j+1}) != (h[i][j+1] - h[i][j]) mod 2? Actually mod 2.
+        // Since x_i cancels, we need y_j != y_{j+1} if h[i][j] and h[i][j+1] have same parity,
+        // else y_j == y_{j+1} if they have different parity.
+        // Similarly for columns: x_i != x_{i+1} if h[i][j] and h[i+1][j] have same parity,
+        // else x_i == x_{i+1}.
+        // This gives constraints on parity variables.
+        // We can model as 2-SAT or bipartite graph coloring.
+        // Variables: rows 0..n-1, columns n..2n-1.
+        // For each adjacent pair in a row: if same parity -> y_j != y_{j+1}, else y_j == y_{j+1}.
+        // For each adjacent pair in a column: if same parity -> x_i != x_{i+1}, else x_i == x_{i+1}.
+        // We can build a graph with edges labeled 0 (same) or 1 (different).
+        // Then check bipartiteness. If not bipartite, impossible.
+        // If bipartite, we have two possible assignments (flip all colors).
+        // For each assignment, we compute cost: sum of a_i for rows with x_i=1 + sum of b_j for cols with y_j=1.
+        // Take min cost.
+        
+        int N = 2 * n;
+        vector<vector<pair<int, int>>> adj(N); // (neighbor, type) type 0: same, 1: different
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n - 1; j++) {
+                int u = n + j;
+                int v = n + j + 1;
+                if ((h[i][j] % 2 + 2) % 2 == (h[i][j+1] % 2 + 2) % 2) {
+                    // need different
+                    adj[u].push_back({v, 1});
+                    adj[v].push_back({u, 1});
+                } else {
+                    // need same
+                    adj[u].push_back({v, 0});
+                    adj[v].push_back({u, 0});
+                }
+            }
+        }
+        for (int j = 0; j < n; j++) {
+            for (int i = 0; i < n - 1; i++) {
+                int u = i;
+                int v = i + 1;
+                if ((h[i][j] % 2 + 2) % 2 == (h[i+1][j] % 2 + 2) % 2) {
+                    adj[u].push_back({v, 1});
+                    adj[v].push_back({u, 1});
+                } else {
+                    adj[u].push_back({v, 0});
+                    adj[v].push_back({u, 0});
+                }
+            }
+        }
+        
+        vector<int> color(N, -1);
+        bool possible = true;
+        long long ans = INF;
+        
+        function<void(int, int, vector<int>&, bool&)> dfs = [&](int u, int c, vector<int>& comp, bool& ok) {
+            color[u] = c;
+            comp.push_back(u);
+            for (auto& e : adj[u]) {
+                int v = e.first;
+                int type = e.second;
+                int expected = type == 0 ? c : (c ^ 1);
+                if (color[v] == -1) {
+                    dfs(v, expected, comp, ok);
+                } else if (color[v] != expected) {
+                    ok = false;
+                }
+            }
+        };
+        
+        for (int i = 0; i < N; i++) {
+            if (color[i] == -1) {
+                vector<int> comp;
+                bool ok = true;
+                dfs(i, 0, comp, ok);
+                if (!ok) {
+                    possible = false;
+                    break;
+                }
+                // For this component, we can choose to flip all colors.
+                // Compute cost for both assignments.
+                long long cost0 = 0, cost1 = 0;
+                for (int u : comp) {
+                    if (u < n) { // row
+                        if (color[u] == 0) cost0 += a[u];
+                        else cost1 += a[u];
+                    } else { // column
+                        int col = u - n;
+                        if (color[u] == 0) cost0 += b[col];
+                        else cost1 += b[col];
+                    }
+                }
+                // We can also flip: if we flip, cost0 and cost1 swap.
+                // But we need to consider the global assignment: we can independently flip each component.
+                // Actually, the two assignments for this component are (color as is) and (color flipped).
+                // The costs are cost0 and cost1.
+                // We can choose the minimum for this component and add to total.
+                // But wait: the global assignment is just the combination of choices per component.
+                // So we can take min(cost0, cost1) for each component and sum.
+                // However, we need to ensure that the final assignment is consistent? 
+                // Since components are independent, we can choose per component.
+                // So total min cost = sum over components of min(cost0, cost1).
+                // But we need to output a single number for the whole graph.
+                // Let's just compute total cost for both global colorings? 
+                // Actually, the graph may have multiple components. We can flip each component independently.
+                // So the minimum total cost is sum of min(cost0, cost1) over components.
+                // We'll accumulate.
+                // But careful: we need to compute the total cost for the whole assignment.
+                // We can just compute total cost for the assignment we have (color array) and also for the flipped version of each component.
+                // Since components are independent, the minimum total cost is sum of min(cost0, cost1).
+                // We'll do that.
+                // However, we need to output a single integer. Let's just compute total cost for the current coloring,
+                // and also consider flipping all colors? No, because we can flip per component.
+                // So we'll compute total cost for the current coloring, and then for each component we can decide to flip or not.
+                // The minimum total cost is sum of min(cost0, cost1).
+                // We'll just compute that sum.
+                // But we need to be careful: the current coloring might not be the one that gives min for each component.
+                // So we'll just compute the sum of min(cost0, cost1) over all components.
+                // Let's do that after processing all components.
+                // For now, just store component info.
+            }
+        }
+        
+        if (!possible) {
+            cout << -1 << '\n';
+            continue;
+        }
+        
+        // Now compute total cost for the assignment we have (color array).
+        // But we can flip each component independently. So we need to recompute per component.
+        // Let's re-traverse components and compute min cost sum.
+        fill(color.begin(), color.end(), -1);
+        long long total_min = 0;
+        for (int i = 0; i < N; i++) {
+            if (color[i] == -1) {
+                vector<int> comp;
+                bool ok = true;
+                dfs(i, 0, comp, ok);
+                long long cost0 = 0, cost1 = 0;
+                for (int u : comp) {
+                    if (u < n) {
+                        if (color[u] == 0) cost0 += a[u];
+                        else cost1 += a[u];
+                    } else {
+                        int col = u - n;
+                        if (color[u] == 0) cost0 += b[col];
+                        else cost1 += b[col];
+                    }
+                }
+                total_min += min(cost0, cost1);
+            }
+        }
+        cout << total_min << '\n';
+    }
+    return 0;
+}
+```

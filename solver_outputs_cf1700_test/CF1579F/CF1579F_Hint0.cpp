@@ -1,0 +1,99 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, d;
+        cin >> n >> d;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // Check if all zeros already
+        bool all_zero = true;
+        for (int x : a) {
+            if (x == 1) {
+                all_zero = false;
+                break;
+            }
+        }
+        if (all_zero) {
+            cout << 0 << '\n';
+            continue;
+        }
+
+        // We will simulate the process by tracking distances to the nearest 0
+        // in the "shifted" sense. The operation a_i = a_i & a_{(i - d) mod n}
+        // means that a 1 becomes 0 if the element d steps to the left is 0.
+        // This is equivalent to: in each step, a 1 survives only if the element
+        // d steps left is also 1. So the number of steps a 1 survives is the
+        // distance to the nearest 0 along the "backward" jumps of size d.
+        // Since the graph of indices with edges i -> (i - d) mod n consists of
+        // cycles, we can process each cycle separately.
+        
+        vector<bool> visited(n, false);
+        int max_steps = 0;
+        bool possible = true;
+
+        for (int i = 0; i < n; ++i) {
+            if (!visited[i]) {
+                // Traverse the cycle
+                vector<int> cycle;
+                int cur = i;
+                while (!visited[cur]) {
+                    visited[cur] = true;
+                    cycle.push_back(cur);
+                    cur = (cur - d + n) % n;
+                }
+                // Check if cycle has any 0
+                bool has_zero = false;
+                for (int idx : cycle) {
+                    if (a[idx] == 0) {
+                        has_zero = true;
+                        break;
+                    }
+                }
+                if (!has_zero) {
+                    possible = false;
+                    break;
+                }
+                // Duplicate the cycle to handle wrap-around distances
+                int m = cycle.size();
+                vector<int> vals(2 * m);
+                for (int j = 0; j < m; ++j) {
+                    vals[j] = a[cycle[j]];
+                    vals[j + m] = a[cycle[j]];
+                }
+                // Find max consecutive 1s in the duplicated cycle
+                int cur_len = 0;
+                int max_len = 0;
+                for (int j = 0; j < 2 * m; ++j) {
+                    if (vals[j] == 1) {
+                        cur_len++;
+                        max_len = max(max_len, cur_len);
+                    } else {
+                        cur_len = 0;
+                    }
+                }
+                // If the whole cycle is 1s, max_len would be 2*m, but we already
+                // checked has_zero, so max_len < 2*m.
+                max_steps = max(max_steps, max_len);
+            }
+        }
+
+        if (!possible) {
+            cout << -1 << '\n';
+        } else {
+            cout << max_steps << '\n';
+        }
+    }
+
+    return 0;
+}

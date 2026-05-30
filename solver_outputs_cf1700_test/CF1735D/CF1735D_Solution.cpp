@@ -1,0 +1,58 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> cards(n, vector<int>(k));
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < k; ++j) {
+            cin >> cards[i][j];
+        }
+    }
+
+    // Map each card to its index for O(1) lookup
+    map<vector<int>, int> idx;
+    for (int i = 0; i < n; ++i) {
+        idx[cards[i]] = i;
+    }
+
+    vector<int> set_count(n, 0);
+
+    // For each pair of cards, find the third card that completes the set
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            vector<int> third(k);
+            for (int f = 0; f < k; ++f) {
+                if (cards[i][f] == cards[j][f]) {
+                    third[f] = cards[i][f];
+                } else {
+                    // The third value is the one not present among 0,1,2
+                    third[f] = 3 - cards[i][f] - cards[j][f];
+                }
+            }
+            auto it = idx.find(third);
+            if (it != idx.end()) {
+                int t = it->second;
+                if (t > j) { // ensure each set is counted exactly once per central card
+                    set_count[i]++;
+                    set_count[j]++;
+                    set_count[t]++;
+                }
+            }
+        }
+    }
+
+    long long ans = 0;
+    for (int i = 0; i < n; ++i) {
+        long long s = set_count[i];
+        ans += s * (s - 1) / 2;
+    }
+
+    cout << ans << '\n';
+    return 0;
+}

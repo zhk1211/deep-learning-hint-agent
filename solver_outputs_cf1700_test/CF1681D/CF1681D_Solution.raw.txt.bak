@@ -1,0 +1,43 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    long long x;
+    cin >> n >> x;
+    
+    queue<long long> q;
+    unordered_map<long long, int> dist;
+    
+    dist[x] = 0;
+    q.push(x);
+    
+    while (!q.empty()) {
+        long long cur = q.front();
+        q.pop();
+        
+        string s = to_string(cur);
+        if ((int)s.size() == n) {
+            cout << dist[cur] << endl;
+            return 0;
+        }
+        
+        vector<bool> used(10, false);
+        for (char c : s) {
+            int d = c - '0';
+            if (d > 1 && !used[d]) {
+                used[d] = true;
+                long long nxt = cur * d;
+                if (!dist.count(nxt)) {
+                    dist[nxt] = dist[cur] + 1;
+                    q.push(nxt);
+                }
+            }
+        }
+    }
+    
+    cout << -1 << endl;
+    return 0;
+}
+```

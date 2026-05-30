@@ -1,0 +1,78 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+void solve() {
+    int n;
+    ll k, c;
+    cin >> n >> k >> c;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    // First DFS from node 1 to find farthest node and distances
+    vector<ll> dist(n + 1, -1);
+    auto dfs = [&](auto&& self, int u, int p, ll d) -> void {
+        dist[u] = d;
+        for (int v : adj[u]) {
+            if (v != p) {
+                self(self, v, u, d + k);
+            }
+        }
+    };
+    dfs(dfs, 1, 0, 0);
+    int far1 = 1;
+    for (int i = 1; i <= n; ++i) {
+        if (dist[i] > dist[far1]) far1 = i;
+    }
+
+    // Second DFS from far1 to get distances from one endpoint of diameter
+    vector<ll> d1(n + 1, -1);
+    dfs(dfs, far1, 0, 0);
+    int far2 = far1;
+    for (int i = 1; i <= n; ++i) {
+        d1[i] = dist[i];
+        if (dist[i] > dist[far2]) far2 = i;
+    }
+
+    // Third DFS from far2 to get distances from the other endpoint
+    vector<ll> d2(n + 1, -1);
+    dfs(dfs, far2, 0, 0);
+    for (int i = 1; i <= n; ++i) {
+        d2[i] = dist[i];
+    }
+
+    // Now compute max profit
+    ll ans = 0;
+    // We need distance from original root (1) to each node to compute operation cost
+    // We already have dist from first DFS (from 1) stored in a separate array? 
+    // Actually we overwrote dist in second DFS. Let's recompute dist from 1.
+    vector<ll> d0(n + 1, -1);
+    dfs(dfs, 1, 0, 0);
+    for (int i = 1; i <= n; ++i) {
+        d0[i] = dist[i];
+    }
+
+    for (int i = 1; i <= n; ++i) {
+        ll max_dist = max(d1[i], d2[i]);
+        ll cost = (d0[i] / k) * c; // number of operations = distance / k
+        ans = max(ans, max_dist - cost);
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

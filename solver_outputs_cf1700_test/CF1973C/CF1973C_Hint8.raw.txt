@@ -1,0 +1,190 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> p[i];
+        }
+
+        vector<int> q(n);
+        vector<int> pos(n + 1);
+        for (int i = 0; i < n; ++i) {
+            pos[p[i]] = i;
+        }
+
+        // We want to maximize number of local maxima in a_i = p_i + q_i.
+        // The maximum possible score is n/2 - 1.
+        // Strategy: assign large q to small p and small q to large p in an alternating pattern.
+        // Specifically, we want local maxima at positions where p_i is relatively small.
+        // We can achieve this by pairing the smallest n/2 elements of p with the largest n/2 elements of q,
+        // and the largest n/2 elements of p with the smallest n/2 elements of q.
+        // Then we arrange them so that local maxima occur at the positions of the small p's.
+
+        vector<int> small_p, large_p;
+        for (int i = 1; i <= n / 2; ++i) {
+            small_p.push_back(i);
+        }
+        for (int i = n / 2 + 1; i <= n; ++i) {
+            large_p.push_back(i);
+        }
+
+        // We will assign q values: large q (n/2+1 .. n) to small p, small q (1 .. n/2) to large p.
+        // To get local maxima at small p positions, we need a_i > a_{i-1} and a_i > a_{i+1}.
+        // We can achieve this by placing small p at odd indices (1-indexed) and large p at even indices,
+        // but the given p is arbitrary. So we need to sort positions based on p values.
+
+        // We'll create an ordering of indices: first all positions of small p, then all positions of large p.
+        // But we need to interleave them to create peaks and valleys.
+        // Actually, we can sort indices by p value, then assign q in decreasing order to the first half,
+        // and increasing order to the second half? Let's think.
+
+        // Known solution from editorial: 
+        // Let's split numbers 1..n into two halves: small (1..n/2) and large (n/2+1..n).
+        // For each position i, if p_i is small, we want it to be a local maximum, so we assign a large q.
+        // If p_i is large, we want it to be a local minimum, so we assign a small q.
+        // To ensure the inequalities, we need to order the assignments carefully.
+        // We can sort the indices of small p by their p values, and assign q from n down to n/2+1 in that order.
+        // Similarly, sort indices of large p by their p values, and assign q from 1 to n/2 in that order.
+        // Then, because small p get large q, their sums will be high, and because we sorted by p, the sums will be increasing among small p positions, creating peaks? Not exactly.
+
+        // Let's follow the hints: The hints suggest considering specific patterns of p.
+        // The final hint implies we should pair the smallest p with the largest q, etc.
+        // A known construction: 
+        // - Find positions of elements 1..n/2 (small p). These will be peaks.
+        // - Find positions of elements n/2+1..n (large p). These will be valleys.
+        // - Sort the peaks by their p values in increasing order.
+        // - Sort the valleys by their p values in increasing order.
+        // - Assign q values n, n-1, ..., n/2+1 to the peaks in that order.
+        // - Assign q values 1, 2, ..., n/2 to the valleys in that order.
+        // This guarantees that for each peak, its sum is greater than its neighbors (which are valleys with small q and large p, but wait, valleys have large p and small q, so their sum might be comparable).
+        // Let's test with p = [1,2,3,4]. n=4. small p = {1,2} at indices 0,1. large p = {3,4} at indices 2,3.
+        // peaks sorted by p: indices 0 (p=1), 1 (p=2). Assign q: 4,3.
+        // valleys sorted by p: indices 2 (p=3), 3 (p=4). Assign q: 1,2.
+        // q = [4,3,1,2] -> a = [5,5,4,6]. Local maxima? a1=5, a2=5 (not > a1), a3=4. No local max. Score 0. But sample output is [2,4,1,3] with score 1.
+        // So that construction fails.
+
+        // Alternative: We want peaks at positions where p is small. But we need a_i > a_{i-1} and a_i > a_{i+1}.
+        // If we assign large q to small p, and small q to large p, then a_i = p_i + q_i.
+        // For a peak at i, we need p_i + q_i > p_{i-1} + q_{i-1} and > p_{i+1} + q_{i+1}.
+        // If i-1 and i+1 are valleys (large p, small q), then p_{i-1} is large, q_{i-1} is small. Their sum might still be large because p is large.
+        // To ensure peak, we need q_i - q_{i-1} > p_{i-1} - p_i. Since p_{i-1} - p_i could be up to n-1, we need q_i - q_{i-1} to be large.
+        // So we should assign the largest q to the smallest p, and the smallest q to the largest p, and also order them so that differences are maximized.
+
+        // Let's look at sample 1: n=4, p=[1,2,3,4]. q=[2,4,1,3]. a=[3,6,4,7]. Peak at index 2 (value 6). 
+        // p: 1(small),2(small),3(large),4(large). q: 2(small),4(large),1(small),3(large).
+        // Notice that peaks are at indices with small p and large q? Index 2 has p=2 (small), q=4 (large). Index 4 has p=4 (large), q=3 (large) but it's not a peak because a_3=4 < a_4=7 but a_4 is last, so not considered.
+        // Actually peak is at index 2 (1-indexed). p_2=2 (small), q_2=4 (large). Valleys: index 1: p=1(small), q=2(small) -> sum=3; index 3: p=3(large), q=1(small) -> sum=4; index 4: p=4(large), q=3(large) -> sum=7.
+        // So peaks have small p and large q, but valleys have either small p & small q, or large p & small q, or large p & large q? Not consistent.
+
+        // Let's think about the maximum possible score. The maximum number of local maxima in an array of length n is n/2 - 1 (alternating high-low-high...). Can we always achieve this? The hints suggest yes.
+        // The known solution from Codeforces Round #802 (Div. 2) Problem C "Helping the Nature" or similar? Actually this is problem "Fox And Permutation" or something? I recall a problem: given p, find q to maximize local maxima of p+q. The solution: 
+        // We want to make peaks at positions where p_i is in the first half (1..n/2). We can achieve n/2 - 1 peaks.
+        // Algorithm:
+        // 1. Create an array of pairs (p_i, i). Sort by p_i.
+        // 2. For the first n/2 elements (smallest p), we will assign them the largest q values, but in a specific order: we want the peaks to be at these positions. To ensure they are peaks, we need to arrange the q values such that the sums at these positions are strictly greater than their neighbors. Since the neighbors will be from the second half (largest p) and will get the smallest q, we can do it by assigning q in decreasing order to the first half sorted by their original indices? Or by p values?
+        // Let's examine sample 2: n=4, p=[4,3,1,2]. Output q=[3,1,4,2]. a=[7,4,5,4]. Peaks: index 1 (a=7) and index 3 (a=5). Score 2 = n/2 - 1? n/2=2, n/2-1=1. Wait, score is 2? Let's check: a = [7,4,5,4]. Local maxima: i=2? 1-indexed: i=2: a1=7, a2=4, a3=5 -> 4 is not >7. i=3: a2=4, a3=5, a4=4 -> 5>4 and 5>4, so yes. So only one peak at i=3. Score 1. But sample output says "3 1 4 2" and note says "In the first example...". Sample 2 output is "3 1 4 2". Let's compute a: p=[4,3,1,2], q=[3,1,4,2] -> a=[7,4,5,4]. Local max at i=3 (value 5). Score 1. So max score is 1. n/2 - 1 = 1. So max score = n/2 - 1? For n=4, n/2 - 1 = 1. For n=6, n/2 - 1 = 2. Sample 3: n=6, p=[6,5,1,4,2,3], q=[2,5,1,4,3,6]? Wait sample output is "2 5 1 4 3 6". a = [8,10,2,8,5,9]. Local maxima? i=2: a1=8, a2=10, a3=2 -> 10>8 and 10>2 -> peak. i=3: 2 not >10. i=4: a3=2, a4=8, a5=5 -> 8>2 and 8>5 -> peak. i=5: 5 not >8. So peaks at 2 and 4. Score 2 = n/2 - 1. Sample 4: n=8, output has score 3 = 4-1. So max score is indeed n/2 - 1.
+
+        // So we need to achieve n/2 - 1 peaks. How?
+        // The idea: We want peaks at positions where p_i <= n/2. There are exactly n/2 such positions. We can make all of them peaks except the first and last? Actually we can make peaks at all of them except possibly the ones at the boundaries? But boundaries cannot be peaks by definition (1 < i < n). So we can have at most n/2 - 1 peaks if we make every other small-p position a peak? Wait, we have n/2 small p's. If we place them such that they are separated by large p's, we can make all small p's peaks except those at ends. But the array is fixed p, we cannot move them. However, we can choose q to make certain positions peaks. The known construction:
+        // - We want to make positions with p_i in {1, ..., n/2} as peaks, and positions with p_i in {n/2+1, ..., n} as valleys.
+        // - To do this, we assign q values as follows:
+        //   * For positions with p_i <= n/2, we assign q from {n/2+1, ..., n} in increasing order of p_i? Or decreasing?
+        //   * For positions with p_i > n/2, we assign q from {1, ..., n/2} in increasing order of p_i?
+        // Let's test on sample 1: p=[1,2,3,4]. Small p: indices 0 (p=1), 1 (p=2). Large p: indices 2 (p=3), 3 (p=4).
+        // If we assign to small p: q from {3,4} in increasing order of p_i? p_i order: 1,2 -> assign 3,4? Then q at index0=3, index1=4.
+        // To large p: q from {1,2} in increasing order of p_i? p_i order: 3,4 -> assign 1,2? Then q at index2=1, index3=2.
+        // q = [3,4,1,2] -> a = [4,6,4,6]. Peaks? i=2: a1=4, a2=6, a3=4 -> peak. i=3: a2=6, a3=4, a4=6 -> 4 not >6. So one peak. Score 1. But sample output is [2,4,1,3] which also gives score 1. So this works.
+        // Test on sample 2: p=[4,3,1,2]. Small p: indices 2 (p=1), 3 (p=2). Large p: indices 0 (p=4), 1 (p=3).
+        // Small p sorted by p: index2 (1), index3 (2). Assign q from {3,4} in increasing order: index2=3, index3=4.
+        // Large p sorted by p: index1 (3), index0 (4). Assign q from {1,2} in increasing order: index1=1, index0=2.
+        // q = [2,1,3,4] -> a = [6,4,4,6]. Peaks? i=2: a1=6, a2=4, a3=4 -> no. i=3: a2=4, a3=4, a4=6 -> no. Score 0. But we need score 1. So this fails.
+        // What if we assign in decreasing order? Small p: assign 4,3 -> index2=4, index3=3. Large p: assign 2,1 -> index1=2, index0=1. q = [1,2,4,3] -> a = [5,5,5,5]. Score 0.
+        // So that simple assignment doesn't work for sample 2.
+
+        // Let's analyze sample 2 successful q: [3,1,4,2]. p=[4,3,1,2]. Small p: 1,2 at indices 2,3. Large p: 3,4 at indices 1,0.
+        // q at small p: index2=4, index3=2. q at large p: index1=1, index0=3.
+        // Notice that at small p positions, q values are 4 and 2 (not both from {3,4}). At large p, q are 1 and 3 (not both from {1,2}).
+        // So the halves are mixed.
+
+        // Let's think differently. We want a_i to be peaks at some positions. The sum a_i = p_i + q_i. Since q is a permutation, the set of sums is {p_i + q_i}. We can think of sorting positions by p_i, then assigning q in a way that creates a "mountain" shape.
+        // Another known solution: 
+        // 1. Make an array of indices 0..n-1. Sort indices by p[i].
+        // 2. For the first n/2 indices (smallest p), assign q values n, n-2, n-4, ... (decreasing by 2) starting from n? Or something like that.
+        // Let's look at sample 3: n=6, p=[6,5,1,4,2,3]. Output q=[2,5,1,4,3,6].
+        // p sorted: values 1,2,3,4,5,6 at indices 2,4,5,3,1,0.
+        // q at those indices: index2=1, index4=3, index5=6, index3=4, index1=5, index0=2.
+        // Not clear.
+
+        // Let's search memory: This is Codeforces Round 802 Div. 2 Problem C? Actually it's "Helping the Nature" is different. This is problem "C. Helping the Nature"? No.
+        // Wait, I recall a problem: "Permutation Operations" or something. But there's a problem "C. Qpwoeirut" or similar? No.
+        // Let's think about the constraints and the hints. Hints 2-8 are about specific p patterns. They suggest that we can always achieve n/2 - 1 peaks, and the construction might involve pairing the smallest p with the largest q, but with a specific ordering based on the positions to ensure the peaks are at the right places.
+
+        // Let's derive: We want peaks at positions where p_i is small. Suppose we decide that the set of peak positions will be exactly the positions of the n/2 smallest p values, except possibly the first and last if they are among them? Actually we can choose any n/2 - 1 peaks. The maximum possible is n/2 - 1. So we want to achieve that.
+        // Let S be the set of indices with p_i <= n/2. |S| = n/2. We want to make all indices in S except maybe the smallest and largest index in S? No, we can make peaks at all interior indices of S if we can ensure that between any two peaks there is a valley. But S indices might be adjacent. If two small p are adjacent, can we make both peaks? No, because a peak requires strictly greater than neighbors. If two adjacent positions both have high sums, they can't both be peaks. So we need to ensure that peaks are separated by at least one valley. Since we have n/2 small p and n/2 large p, we can interleave them if the small p and large p alternate in the array. But they might not. However, we can still choose a subset of small p to be peaks such that no two are adjacent, and we can make the others valleys by assigning them small q? But we only have n/2 small q to assign. If we assign small q to some small p, they become valleys, but then we need large q for large p to make them peaks? That would exceed the number of large q.
+
+        // Let's reconsider: We have exactly n/2 large q (n/2+1..n) and n/2 small q (1..n/2). We want to assign large q to positions that will be peaks, and small q to positions that will be valleys. But peaks must have a_i > neighbors. If we assign large q to a position, its sum is at least (p_i + n/2+1). If we assign small q to neighbors, their sum is at most (p_j + n/2). So if p_i is small and p_j is large, the difference could be small. We need p_i + large_q > p_j + small_q. Since large_q - small_q >= 1, we need p_j - p_i < large_q - small_q. The maximum difference large_q - small_q is n-1 (if large_q=n, small_q=1). But we can't always guarantee that for all neighbors.
+
+        // Let's look at the successful constructions in samples.
+        // Sample 1: p=[1,2,3,4]. q=[2,4,1,3]. Peaks at index 2 (p=2, q=4). Valleys: index1 (p=1, q=2), index3 (p=3, q=1), index4 (p=4, q=3). Notice that the peak has p=2 (small), q=4 (large). Its left neighbor has p=1 (smaller) but q=2 (small), so sum=3 < 6. Right neighbor has p=3 (larger) but q=1 (small), sum=4 < 6. So peak works because q difference compensates p difference.
+        // Sample 2: p=[4,3,1,2]. q=[3,1,4,2]. Peak at index 3 (p=1, q=4). Left neighbor: index2 (p=3, q=1) sum=4 < 5. Right neighbor: index4 (p=2, q=2) sum=4 < 5. Works.
+        // Sample 3: p=[6,5,1,4,2,3]. q=[2,5,1,4,3,6]. Peaks at index2 (p=5, q=5? Wait index2 is 1-indexed: p_2=5, q_2=5? Actually q=[2,5,1,4,3,6] so q_2=5. p_2=5 -> sum=10. Left: p_1=6, q_1=2 -> sum=8. Right: p_3=1, q_3=1 -> sum=2. So peak. Index4: p_4=4, q_4=4 -> sum=8. Left: p_3=1, q_3=1 -> sum=2. Right: p_5=2, q_5=3 -> sum=5. Peak. So peaks at indices 2 and 4. These are positions with p=5 and p=4, which are > n/2? n=6, n/2=3. So p=5 and 4 are large p! But they are peaks. Valleys are at small p? p_3=1 (small) with q=1 (small) sum=2; p_5=2 (small) with q=3 (large?) q=3 is small? n/2=3, so 3 is exactly n/2, which is small? Usually small is 1..n/2. So 3 is small. So here peaks are at large p, valleys at small p. That contradicts the earlier idea.
+        // Let's check sample 4: n=8, p=[1,2,4,5,7,6,8,3], q=[5,4,8,2,7,1,6,3]. a=[6,6,12,7,14,7,14,6]. Peaks at indices 3 (p=4, q=8), 5 (p=7, q=7), 7 (p=8, q=6). p values: 4 (small? n/2=4, so 4 is small), 7 (large), 8 (large). So peaks can be both small and large.
+
+        // So the rule is not simply "small p are peaks". 
+
+        // Let's think about the necessary and sufficient condition for a_i to be a peak: a_i > a_{i-1} and a_i > a_{i+1}. This is equivalent to p_i + q_i > p_{i-1} + q_{i-1} and > p_{i+1} + q_{i+1}. 
+        // We can choose q arbitrarily. The problem is to maximize the count of such i.
+
+        // There is a known greedy construction: 
+        // 1. Sort the indices by p_i.
+        // 2. Assign q values in a "zigzag" manner: to the first n/2 indices (smallest p), assign the largest n/2 q values but in reverse order? Or assign them in such a way that the sums are increasing? 
+        // Let's try to find a pattern by analyzing the samples.
+
+        // Sample 1: p = [1,2,3,4]. Sorted indices by p: [0,1,2,3]. q = [2,4,1,3]. If we sort indices by p, the q values in that order: index0->2, index1->4, index2->1, index3->3. So q sequence: 2,4,1,3. Not sorted.
+        // Sample 2: p = [4,3,1,2]. Sorted indices: [2,3,1,0] (p=1,2,3,4). q in that order: index2=4, index3=2, index1=1, index0=3 -> sequence: 4,2,1,3.
+        // Sample 3: p = [6,5,1,4,2,3]. Sorted indices: [2,4,5,3,1,0] (p=1,2,3,4,5,6). q: index2=1, index4=3, index5=6, index3=4, index1=5, index0=2 -> sequence: 1,3,6,4,5,2.
+        // Sample 4: p = [1,2,4,5,7,6,8,3]. Sorted indices: [0,1,7,2,3,5,4,6] (p=1,2,3,4,5,6,7,8). q: index0=5, index1=4, index7=3, index2=8, index3=2, index5=1, index4=7, index6=6 -> sequence: 5,4,3,8,2,1,7,6.
+
+        // Notice that in all samples, the q values assigned to the sorted-by-p indices seem to follow a pattern: they are a permutation of 1..n. Maybe we can assign q such that the sums a_i are strictly increasing for the first half and strictly decreasing for the second half? That would create a single peak at the boundary, not multiple.
+
+        // Another idea: We want to create an alternating sequence of high and low sums. We can decide which positions will be "high" (peaks) and which "low" (valleys). Since we need n/2 - 1 peaks, we need n/2 - 1 highs and the rest lows. But we have n positions. The maximum number of peaks in any array is n/2 - 1 (if we alternate high-low-high-... and the first and last are low). So we can aim for that pattern: low, high, low, high, ..., low. That means peaks are at even indices (2,4,6,...) if 1-indexed. So we want to make positions 2,4,6,... peaks, and positions 1,3,5,... valleys. Can we always achieve that by choosing q? We need to assign q such that for even i, a_i > a_{i-1} and a_i > a_{i+1}. For odd i (except first and last), a_i < a_{i-1} and a_i < a_{i+1}. This is a system of inequalities. We have freedom to permute q. This is similar to constructing a permutation q such that p+q has a specific shape.
+
+        // Let's try to construct q to satisfy: a_1 < a_2 > a_3 < a_4 > ... < a_n? Actually for n=4, pattern: a1 < a2 > a3 < a4. But a4 is last, so no condition on a4 except a3 < a4. In sample 1, a=[3,6,4,7] -> 3<6>4<7. Works. Sample 2: a=[7,4,5,4] -> 7>4<5>4? That's high, low, high, low. But peaks are at 1 and 3? Actually 7>4 and 5>4, so peaks at 1 and 3. But index 1 is not allowed (1 < i < n). So only index 3 is peak. So pattern is high, low, high, low. That gives peaks at 1 and 3, but 1 is invalid. So score 1. Sample 3: a=[8,10,2,8,5,9] -> 8<10>2<8>5<9? Actually 8<10>2<8>5<9. Peaks at 2 and 4. Valleys at 3 and 5? 2 is valley, 5 is valley? 2<8 and 5<9, so yes. Pattern: low, high, low, high, low, high. But last is high, but not a peak because no right neighbor. So peaks at 2 and 4. Score 2. Sample 4: a=[6,6,12,7,14,7,14,6] -> 6<12>7<14>7<14>6. Peaks at 3,5,7. Pattern: low, low? Actually a1=6, a2=6 (not low<high), but a2=6 is not > a1, so a2 is not peak. Then a3=12 > a2 and > a4, peak. a4=7 < a3 and < a5? a5=14 > a4, so a4 is valley. a5=14 > a4 and > a6, peak. a6=7 < a5 and < a7, valley. a7=14 > a6 and > a8, peak. a8=6 < a7. So pattern: a1=6, a2=6 (equal, not strictly less), but we don't care about a2 being valley as long as it's not a peak. The inequalities for valleys don't have to be strict? Actually for a valley we don't have a requirement; we only need peaks. So we just need to ensure that at chosen peak positions, the inequalities hold. The other positions can be anything as long as they don't accidentally become peaks. But we want to maximize peaks, so we want to prevent unintended peaks.
+
+        // So the strategy: Choose a set of positions to be peaks. The maximum size is n/2 - 1. We can choose positions 2,4,6,..., n-2? For n=6, positions 2,4. For n=8, positions 2,4,6? But sample 4 has peaks at 3,5,7. So odd positions. So we can choose either even or odd positions, depending on p.
+
+        // Let's think about a known solution for this problem. I recall a Codeforces problem: "C. Qpwoeirut" or "C. Permutation Operations"? No, it's "C. Helping the Nature" is different. There's a problem "C. Fox And Names"? No.
+        // Let's search memory: There's a problem "C. Maximum Score" or something. Actually this is from Codeforces Round #802 (Div. 2) Problem C "Helping the Nature"? No, that's about making all elements zero. 
+        // Wait, I remember a problem: "C. Qpwoeirut" is about making an array alternating. No.
+        // Let's think: The problem statement says "Fox loves permutations" and "Cat". This is from Codeforces Round #802 (Div. 2) Problem C? No, that round had "A. The Enchanted Equation", "B. Palindromic Numbers", "C. Helping the Nature", "D. River Locks", "E. Sereja and Brackets". Not this.
+        // Maybe it's from a different round. "Fox" and "Cat" are typical characters in Codeforces problems by author "Fox" or something. There's a problem "C. Fox And Card Game"? No.
+        // Let's ignore the source and solve it.
+
+        // Let's try to derive an algorithm that always achieves n/2 - 1 peaks.
+        // Consider the sorted order of p. Let the sorted indices be i_1, i_2, ..., i_n where p_{i_1} < p_{i_2} < ... < p_{i_n}.
+        // We want to assign q to these positions. The sums will be s_k = p_{i_k} + q_{i_k}.
+        // We want to create peaks in the original array order. The original order is not sorted by p. So we need to assign q such that when we map back to original indices, the peaks appear at the desired positions.
+        // This seems complicated.
+
+        // Alternative approach: We can decide the set of peaks based on the positions of the smallest n/2 elements. Let S be the set of indices where p_i <= n/2. |S| = n/2. We can try to make all elements of S peaks, except possibly the first and last if they are in S. But as we saw in sample 3, peaks were at large p. So that's not necessary.
+
+        // Let's analyze the sums. We have two sets of q: large Q_L = {n/2+1, ..., n} and small Q_S = {1, ..., n/2}. We have two sets of p: small P_S = {1, ..., n/2} and large P_L = {n/2+1, ..., n}. 
+        // If we pair P_S with Q_L, the sums are in [1 + n/2+1, n/2 + n] = [n/2+2, 3n/2]. If we pair P_L with Q_S, sums are in [n/2+1 + 1, n + n/2] = [n/2+2, 3n/2]. So the ranges overlap completely. So we can't separate them by magnitude alone.
+        // However, if we pair the smallest p with the largest q, we get sums that are roughly n+1. If we pair the largest p with the smallest q, we also get sums roughly n+1. So the sums can be very close.
+
+        // Let's look at the differences. Suppose we want a peak at i. We need (p_i + q_i) - (p_{i-1} + q_{i-1}) > 0 and similarly for i+1. This is equivalent to q_i - q_{i-1} > p_{i-1} - p_i. So if p_{i-1} > p_i, the RHS is positive, so we need q_i > q_{i-1} by at least that difference plus one. If p_{i-1} < p_i, RHS is negative, so q_i can be less than q_{i-1} as long as the difference is not too negative? Actually inequality: q_i - q_{i-1} > p_{i-1} - p_i. If p_{i-1} < p_i, then RHS is negative, so q_i - q_{i-1} can be negative, but we need it to be greater than a negative number, which is easily satisfied. So the hard case is when the neighbor has a larger p. So to make a peak at i, we need q_i to be sufficiently larger than q at neighbors that have larger p. 
+
+        // This suggests that we should assign the largest q to positions that have small p and whose neighbors have large p. But we don't know the neighbors in advance.
+
+        // Let's think about a greedy assignment: We want to maximize the number of peaks. The maximum is n/2 - 1. Can we always achieve it by making peaks at positions 2,4,6,..., n-2? Let's try to construct q for an arbitrary p to achieve that pattern.
+        // We want: for even i (2 <= i <= n-2), a_i > a_{i-1} and a_i > a_{i+1}. For odd i (3 <= i <= n-1), we don't care as long as they are not peaks. But to be safe, we can try to make a_{odd} < a_{even} and a_{odd} < a_{even-2}? Actually we just need a_{i-1} < a_i and a_{i+1} < a_i for even i. So we need a_{odd} < a_{even} for adjacent pairs. So we need a_1 < a_2, a_3 < a

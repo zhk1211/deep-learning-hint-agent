@@ -1,0 +1,288 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> p[i];
+        }
+        
+        // Find longest prefix that matches 1,2,3...
+        int pref = 0;
+        for (int i = 0; i < n; ++i) {
+            if (p[i] == i + 1) pref++;
+            else break;
+        }
+        
+        // Find longest suffix that matches n, n-1, ...
+        int suff = 0;
+        for (int i = n - 1; i >= 0; --i) {
+            if (p[i] == n - (n - 1 - i)) suff++;
+            else break;
+        }
+        
+        // Count elements that are already in correct position for ascending
+        int asc = 0;
+        for (int i = 0; i < n; ++i) {
+            if (p[i] == i + 1) asc++;
+        }
+        
+        // Count elements that are already in correct position for descending
+        int desc = 0;
+        for (int i = 0; i < n; ++i) {
+            if (p[i] == n - i) desc++;
+        }
+        
+        // First wins if he can force ascending before Second forces descending
+        // Second wins if he can force descending before First forces ascending
+        // Otherwise Tie
+        
+        // First's needed moves: n - asc (elements not in ascending position)
+        // Second's needed moves: n - desc (elements not in descending position)
+        
+        // But they can also use the rearrange operation to win instantly if all needed elements are blue.
+        // The game is about who can color their needed elements first.
+        
+        // Actually, the key insight from hints: rearrange only useful for instant win.
+        // So players will only color elements, and the first to have all their needed elements colored wins.
+        // But they can also skip.
+        
+        // Let's analyze: First wants to color all elements that are not in ascending position.
+        // Second wants to color all elements that are not in descending position.
+        // They take turns. First goes first.
+        
+        // If First's required moves <= Second's required moves, First might win?
+        // But Second can also color elements that First needs? No, they color independently.
+        // Actually, they color elements of the permutation. Once an element is blue, it stays blue.
+        // Both players can see which elements are blue.
+        // First wants a set A = {i | p[i] != i+1} to be blue.
+        // Second wants a set B = {i | p[i] != n-i} to be blue.
+        // They can color one red element per turn.
+        // First wins if all A become blue, Second wins if all B become blue.
+        // If both become blue at the same time? The one whose turn it is wins? Actually, the game ends when a player achieves their goal.
+        // If First completes A on his turn, he wins immediately, even if B is also complete.
+        // Similarly for Second.
+        
+        // So it's a race to complete their set.
+        // Let a = |A|, b = |B|.
+        // First needs a moves, Second needs b moves.
+        // But they can also color elements that are in the intersection.
+        // Let c = |A ∩ B|.
+        // First can color elements from A \ B, Second from B \ A, and both can color from intersection.
+        // The optimal strategy: First will prioritize coloring elements that only he needs (A \ B).
+        // Second will prioritize coloring elements that only he needs (B \ A).
+        // If one finishes their exclusive set, they can start coloring intersection elements.
+        // The intersection elements help both.
+        
+        // Let's denote:
+        // a_only = a - c
+        // b_only = b - c
+        // common = c
+        
+        // First needs a_only + common, Second needs b_only + common.
+        // First moves first.
+        
+        // If a <= b_only? Actually, we need to simulate the race.
+        // First will first color a_only elements. Second will first color b_only elements.
+        // After a_only turns of First and b_only turns of Second, if First finishes a_only before Second finishes b_only,
+        // then First can start coloring common. But Second might also be coloring common.
+        
+        // Let's think in terms of turns.
+        // Turn order: 1, 2, 1, 2, ...
+        // First wants to complete a_only + common.
+        // Second wants to complete b_only + common.
+        
+        // If a_only + common <= b_only, then First can win on his turn before Second even finishes b_only?
+        // Not exactly, because Second might color common elements that First needs.
+        // Actually, if First only needs a_only + common, and Second needs b_only + common.
+        // If a_only + common <= b_only, then First's total needed is less than or equal to Second's exclusive needed.
+        // First can just color his needed elements, ignoring Second. Since First goes first, he will finish his set on his turn number (a_only + common).
+        // Second's turn number to finish b_only is at least b_only (if he colors one per turn).
+        // Since a_only + common <= b_only, First finishes before Second finishes b_only, so Second never gets to color common? Wait, Second might color common elements if he wants, but he should focus on b_only to win faster.
+        // If Second colors common, he helps First, so he won't do that unless forced.
+        // So Second will only color b_only. First will color a_only then common.
+        // First wins if a_only + common <= b_only.
+        
+        // Similarly, if b_only + common < a_only, Second wins? Let's check: Second goes second.
+        // If b_only + common < a_only, then Second's total needed is less than First's exclusive needed.
+        // Second will color b_only then common. First will color a_only.
+        // Second finishes on his turn number (b_only + common). First's turn to finish a_only is a_only.
+        // Since b_only + common < a_only, Second finishes before First finishes a_only.
+        // But careful: First goes first. If b_only + common == a_only - 1? Let's simulate.
+        // Suppose a_only = 3, b_only = 1, common = 1. Then b_only + common = 2, a_only = 3.
+        // Turn 1: First colors a_only (a_only left=2)
+        // Turn 2: Second colors b_only (b_only left=0)
+        // Turn 3: First colors a_only (a_only left=1)
+        // Turn 4: Second colors common (common left=0) -> Second wins!
+        // So Second wins if b_only + common < a_only? Actually, in this case b_only+common=2 < a_only=3, and Second won on turn 4.
+        // What if b_only+common == a_only? a_only=2, b_only=1, common=1 -> b_only+common=2, a_only=2.
+        // Turn 1: First colors a_only (a_only left=1)
+        // Turn 2: Second colors b_only (b_only left=0)
+        // Turn 3: First colors a_only (a_only left=0) -> First wins! Because First finishes a_only on turn 3, before Second can color common.
+        // So Second wins if b_only + common < a_only.
+        // But wait, what if b_only + common == a_only? Then First wins.
+        // So condition for Second win: b_only + common < a_only.
+        
+        // What about the case where neither condition holds?
+        // Then it's a race for the common elements after both finish their exclusive sets.
+        // After a_only turns of First and b_only turns of Second, both have finished their exclusive sets.
+        // The remaining common elements are c.
+        // Now it's First's turn if a_only <= b_only? Actually, turns taken: First has taken a_only turns, Second has taken b_only turns.
+        // The next turn is: if a_only <= b_only, then after Second's b_only-th turn, it's First's turn? Let's track.
+        // Initially turn 1: First.
+        // After First's a_only-th turn, he has taken a_only turns. The turn number is 2*a_only - 1 if a_only <= b_only? Better to think in terms of remaining common.
+        // At the start, common = c.
+        // First will color a_only elements, Second will color b_only elements.
+        // They both ignore common until their exclusive sets are done.
+        // The player who finishes their exclusive set first will start coloring common.
+        // If a_only < b_only, then First finishes a_only on his turn number a_only. At that point, Second has taken a_only - 1 turns (since First goes first, after First's a_only-th turn, Second has taken a_only - 1 turns).
+        // So Second still has b_only - (a_only - 1) exclusive elements left.
+        // Then First starts coloring common. Second continues coloring his exclusive.
+        // First will color common elements, Second will color his exclusive.
+        // This continues until either Second finishes exclusive and joins coloring common, or common runs out.
+        // Let's simulate this race.
+        
+        // Actually, we can think of it as: both players need to color their total sets. The total number of turns needed if they don't interfere is a for First, b for Second.
+        // But they share common elements. The one who colors a common element gets it for both? No, coloring an element makes it blue for both. So if First colors a common element, it counts for both First and Second.
+        // So it's a game of Chicken? They both want to avoid coloring common because it helps the opponent.
+        // So they will only color common if they have nothing else to color (i.e., their exclusive set is empty).
+        // Thus, the game proceeds in two phases:
+        // Phase 1: Both color their exclusive elements.
+        // Phase 2: When one runs out of exclusive, they start coloring common. The other continues exclusive until done, then also colors common.
+        
+        // Let's denote:
+        // a_only = a - c
+        // b_only = b - c
+        // common = c
+        
+        // First moves first.
+        // We can determine the winner by checking who finishes their total set first, assuming optimal play.
+        
+        // If a_only + common <= b_only: First wins (he finishes before Second finishes exclusive)
+        // Else if b_only + common < a_only: Second wins
+        // Else: it's a tie? Or someone still wins?
+        // Let's analyze the else case: a_only + common > b_only and b_only + common >= a_only.
+        // This means both have to color some common elements after their exclusive sets.
+        // Let's find who finishes first.
+        
+        // Let's simulate the turns.
+        // Let first_exclusive = a_only, second_exclusive = b_only.
+        // Turn counter: first_turn = 1, second_turn = 2, etc.
+        // We can just simulate the process because n up to 5e5, but sum n 5e5, so O(n) per test case is fine.
+        // But we can also derive formula.
+        
+        // Actually, we can just simulate the optimal play:
+        // remaining_A = a_only, remaining_B = b_only, remaining_common = common.
+        // turn = 0 (0 for First, 1 for Second)
+        // while true:
+        //   if turn == 0:
+        //     if remaining_A > 0: remaining_A--
+        //     else if remaining_common > 0: remaining_common--
+        //     else: // nothing to color, skip? But skipping doesn't help, so they would color something? Actually if no exclusive and no common, they already won? Wait, if remaining_A == 0 and remaining_common == 0, First already won.
+        //   else:
+        //     if remaining_B > 0: remaining_B--
+        //     else if remaining_common > 0: remaining_common--
+        //     else: // Second won
+        //   Check win conditions:
+        //   if remaining_A == 0 and remaining_common == 0: First wins
+        //   if remaining_B == 0 and remaining_common == 0: Second wins
+        //   turn ^= 1
+        // This simulation will run at most a_only + b_only + common <= n steps, which is fine.
+        
+        // But wait, is it always optimal to color exclusive first? Yes, because coloring common helps opponent.
+        // Could a player skip? Skipping would only delay, so never optimal.
+        // Could a player rearrange? Rearranging only helps if they can win instantly. That means if all elements not in their desired order are already blue. That's exactly the condition that remaining_A == 0 and remaining_common == 0 for First, or remaining_B == 0 and remaining_common == 0 for Second. But they can only rearrange on their turn. So if at the start of their turn, their win condition is met, they can rearrange and win. In our simulation, we check win condition after their move? Actually, they can rearrange instead of coloring. So if at the start of their turn, their needed set is already all blue, they win immediately. In our simulation, we color then check. But if they can win without coloring, they would do it at the start. So we should check win condition at the beginning of the turn as well.
+        
+        // Let's adjust simulation:
+        // At start of First's turn: if remaining_A == 0 and remaining_common == 0 -> First wins.
+        // Otherwise, First must make a move: color an element from remaining_A if >0, else from remaining_common if >0, else (shouldn't happen because then he would have won).
+        // Then check if after his move, he wins? Actually, after coloring, if his needed set becomes empty, he wins immediately? The rules say: "The first player wins if the permutation is sorted in ascending order." This can happen after a color change or after a rearrange. So if after his color change, the permutation becomes sorted? No, coloring doesn't change the permutation, it just changes colors. The permutation only changes when someone rearranges. So the win condition is: at the moment the permutation is sorted. But the permutation is only sorted when someone uses the rearrange operation. So a player can only win by using the rearrange operation when the permutation is already sorted? Wait, the permutation is initially given. The elements are fixed in positions. The colors indicate which elements are "locked". The rearrange operation allows swapping blue elements arbitrarily. So the permutation can become sorted if the set of blue elements includes all elements that are out of place for the desired order. So a player can win on their turn if the current set of blue elements is a superset of the elements that need to be moved to achieve their desired order. They can then rearrange the blue elements to sort the permutation and win.
+        
+        // So the win condition is: at the start of a player's turn, if the set of blue elements contains all indices i where p[i] != desired[i], then they can rearrange and win.
+        // In our simulation, the set of blue elements is exactly the elements that have been colored so far. Initially empty.
+        // First's desired: p[i] == i+1 for all i. So the set of indices that need to be blue for First to win is A = {i | p[i] != i+1}.
+        // Second's desired: p[i] == n-i for all i. Set B = {i | p[i] != n-i}.
+        // So First wins if A ⊆ Blue. Second wins if B ⊆ Blue.
+        // Our simulation tracks how many elements from A and B are still red.
+        // remaining_A = |A \ Blue|, remaining_B = |B \ Blue|, remaining_common = |(A ∩ B) \ Blue|.
+        // Actually, A = A_only ∪ common, B = B_only ∪ common.
+        // So if remaining_A == 0 and remaining_common == 0, then A ⊆ Blue.
+        // So the simulation is correct.
+        
+        // Let's implement the simulation per test case. O(n) is fine.
+        
+        // Compute sets:
+        // A: indices where p[i] != i+1
+        // B: indices where p[i] != n-i
+        // We can just count a_only, b_only, common.
+        
+        // But careful: n up to 5e5, sum n 5e5, so O(n) per test case is acceptable.
+        // We can just simulate the turns using the counts.
+        
+        int a_only = 0, b_only = 0, common = 0;
+        for (int i = 0; i < n; ++i) {
+            bool inA = (p[i] != i + 1);
+            bool inB = (p[i] != n - i);
+            if (inA && inB) common++;
+            else if (inA) a_only++;
+            else if (inB) b_only++;
+        }
+        
+        int remA = a_only, remB = b_only, remC = common;
+        int turn = 0; // 0: First, 1: Second
+        int winner = -1; // 0: First, 1: Second, 2: Tie
+        
+        // We'll simulate until someone wins or we reach a cycle? But the game ends after finite moves because each turn a red element becomes blue, and there are at most n elements. So at most n turns.
+        // Actually, they can skip, but skipping doesn't help, so we assume they always color if possible. If no red elements remain that they need? Then they can't win, but the game might end in draw after 100^500 turns. However, if they have no needed elements, they already won? Actually, if remA==0 and remC==0, First already won. So if they can't color anything, it means their needed set is already blue, so they would have won. So the simulation will terminate with a win before running out of moves.
+        
+        while (true) {
+            // Check win at start of turn
+            if (turn == 0) {
+                if (remA == 0 && remC == 0) {
+                    winner = 0;
+                    break;
+                }
+                // First's move
+                if (remA > 0) {
+                    remA--;
+                } else if (remC > 0) {
+                    remC--;
+                } else {
+                    // Nothing to color? Should not happen because then he would have won.
+                    // But just in case, skip? Actually, if remA==0 and remC==0, he won. So this else is unreachable.
+                }
+                // Check win after move? Actually, win is achieved by rearranging, which can be done instead of coloring. So if after coloring, his condition is met, he can rearrange and win on the same turn? The rules: "On their turn, the player can do one of three actions: rearrange, change color, skip." So they can only do one action. If they choose to change color, they cannot also rearrange that turn. So they would only win on a future turn when they choose rearrange. But if they color the last needed element, then on their next turn they can rearrange and win. However, the opponent gets a turn in between. So coloring the last needed element doesn't win immediately; you have to wait until your next turn to rearrange, and the opponent might win on their turn.
+                // So win condition should be checked at the start of the turn, before making a move. Because if at the start of your turn the condition is met, you can use the rearrange action to win immediately.
+                // So we check at start of turn.
+            } else {
+                if (remB == 0 && remC == 0) {
+                    winner = 1;
+                    break;
+                }
+                // Second's move
+                if (remB > 0) {
+                    remB--;
+                } else if (remC > 0) {
+                    remC--;
+                }
+            }
+            turn ^= 1;
+        }
+        
+        if (winner == 0) cout << "First\n";
+        else if (winner == 1) cout << "Second\n";
+        else cout << "Tie\n";
+    }
+    
+    return 0;
+}
+```

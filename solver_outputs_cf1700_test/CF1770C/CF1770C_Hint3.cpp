@@ -1,0 +1,60 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // Check for duplicates
+        sort(a.begin(), a.end());
+        bool dup = false;
+        for (int i = 1; i < n; ++i) {
+            if (a[i] == a[i - 1]) {
+                dup = true;
+                break;
+            }
+        }
+        if (dup) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // Check small primes up to n/2 + 1
+        bool possible = true;
+        for (int p = 2; p <= n / 2 + 1; ++p) {
+            bool is_prime = true;
+            for (int d = 2; d * d <= p; ++d) {
+                if (p % d == 0) {
+                    is_prime = false;
+                    break;
+                }
+            }
+            if (!is_prime) continue;
+
+            vector<int> cnt(p, 0);
+            for (long long x : a) {
+                int rem = (x % p + p) % p;
+                cnt[rem]++;
+            }
+            int mn = *min_element(cnt.begin(), cnt.end());
+            if (mn >= 2) {
+                possible = false;
+                break;
+            }
+        }
+
+        cout << (possible ? "YES" : "NO") << '\n';
+    }
+    return 0;
+}

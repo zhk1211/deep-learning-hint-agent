@@ -1,0 +1,88 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<long long> a(n);
+        long long sum = 0;
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+            sum += a[i];
+        }
+        
+        if (sum % n != 0) {
+            cout << "No\n";
+            continue;
+        }
+        
+        long long target = sum / n;
+        vector<int> give(n), receive(n);
+        bool possible = true;
+        map<int, int> balance; // net count of each power
+        
+        for (int i = 0; i < n; ++i) {
+            if (a[i] == target) {
+                continue;
+            }
+            long long diff = a[i] - target;
+            bool found = false;
+            // Try to represent diff as 2^x - 2^y with x != y
+            // diff > 0: a[i] > target, give 2^x, receive 2^y, diff = 2^x - 2^y
+            // diff < 0: a[i] < target, give 2^y, receive 2^x, diff = -(2^x - 2^y) => target - a[i] = 2^x - 2^y
+            long long abs_diff = abs(diff);
+            // Find x such that 2^x is the smallest power of two > abs_diff
+            // Actually we need 2^x - 2^y = abs_diff, with 2^y = 2^x - abs_diff, and 2^y must be a power of two.
+            // So 2^x > abs_diff, and 2^x - abs_diff is a power of two.
+            // Also x and y must be distinct.
+            for (int x = 0; x < 31; ++x) {
+                long long p = 1LL << x;
+                if (p <= abs_diff) continue;
+                long long rem = p - abs_diff;
+                if (rem > 0 && (rem & (rem - 1)) == 0) {
+                    int y = __builtin_ctzll(rem);
+                    if (x != y) {
+                        if (diff > 0) {
+                            // give 2^x, receive 2^y
+                            balance[x]++;
+                            balance[y]--;
+                        } else {
+                            // give 2^y, receive 2^x
+                            balance[y]++;
+                            balance[x]--;
+                        }
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (!found) {
+                possible = false;
+                break;
+            }
+        }
+        
+        if (!possible) {
+            cout << "No\n";
+            continue;
+        }
+        
+        bool ok = true;
+        for (auto &p : balance) {
+            if (p.second != 0) {
+                ok = false;
+                break;
+            }
+        }
+        cout << (ok ? "Yes\n" : "No\n");
+    }
+    return 0;
+}
+```

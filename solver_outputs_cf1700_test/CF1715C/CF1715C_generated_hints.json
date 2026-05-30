@@ -1,0 +1,7 @@
+[
+  "**Hint 1**\nHow to solve the problem without changes?",
+  "**Hint 2**\nWhat changes do not affect the answer?",
+  "**Hint 3**\nWe need to somehow find \"joints\" and the number of segments, that overlap them.",
+  "**Hint 4**\nThe number of segments, that overlap some joint is equal to the number of all subsegments, that begin before this joint and end after this joint.",
+  "**Hint 5**\nHow we should apply changes? In fact, it's worth just checking if there are any neighboring joints for the position of the changing number, subtracting the number of subsegments, that overlap these joints, and then doing similar operations after setting a new value for the number."
+]

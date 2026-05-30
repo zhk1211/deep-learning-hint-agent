@@ -1,0 +1,86 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, a, b;
+    cin >> n >> a >> b;
+    --a; --b;
+    vector<vector<int>> g(n);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        --u; --v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+
+    // Find the first vertex painted blue: the midpoint on the path from a to b
+    // that is closest to a (or the one where they meet)
+    vector<int> parent(n, -1);
+    vector<int> dist_a(n, -1);
+    queue<int> q;
+    q.push(a);
+    dist_a[a] = 0;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : g[u]) {
+            if (dist_a[v] == -1) {
+                dist_a[v] = dist_a[u] + 1;
+                parent[v] = u;
+                q.push(v);
+            }
+        }
+    }
+
+    // Reconstruct path from a to b
+    vector<int> path;
+    int cur = b;
+    while (cur != -1) {
+        path.push_back(cur);
+        cur = parent[cur];
+    }
+    reverse(path.begin(), path.end());
+    // path[0] = a, path.back() = b
+
+    int dist = path.size() - 1; // distance between a and b
+    int meet = path[dist / 2]; // the vertex where they meet (first blue)
+    // Actually, the first blue is the vertex where P_A arrives first and then P_B.
+    // The meeting point is the vertex on the path at distance ceil(dist/2) from a.
+    // But the editorial says the first blue is the vertex where P_A arrives earlier.
+    // Let's take the vertex at distance (dist+1)/2 from a (0-indexed).
+    int steps_to_meet = (dist + 1) / 2;
+    int r = path[steps_to_meet];
+
+    // Now compute the eccentricity of r (max distance from r)
+    vector<int> dist_r(n, -1);
+    queue<int> qr;
+    qr.push(r);
+    dist_r[r] = 0;
+    int maxd = 0;
+    while (!qr.empty()) {
+        int u = qr.front(); qr.pop();
+        for (int v : g[u]) {
+            if (dist_r[v] == -1) {
+                dist_r[v] = dist_r[u] + 1;
+                maxd = max(maxd, dist_r[v]);
+                qr.push(v);
+            }
+        }
+    }
+
+    int ans = 2 * (n - 1) - maxd + steps_to_meet;
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

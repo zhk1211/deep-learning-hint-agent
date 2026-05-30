@@ -1,0 +1,88 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+    while (T--) {
+        long long h, c, t;
+        cin >> h >> c >> t;
+
+        if (t == h) {
+            cout << 1 << "\n";
+            continue;
+        }
+        if (2 * t <= h + c) {
+            cout << 2 << "\n";
+            continue;
+        }
+
+        // We are in the case where t > (h+c)/2, so odd number of cups is better.
+        // For odd number of cups 2k+1, temperature = ((k+1)*h + k*c) / (2k+1)
+        // We want to find k >= 0 minimizing |((k+1)*h + k*c)/(2k+1) - t|
+        // Let f(k) = ((k+1)*h + k*c)/(2k+1)
+        // f(k) is decreasing with k, limit is (h+c)/2 as k -> infinity.
+        // We can solve for k such that f(k) >= t, i.e., ((k+1)*h + k*c) >= t*(2k+1)
+        // => (k+1)*h + k*c >= 2k*t + t
+        // => k*h + h + k*c >= 2k*t + t
+        // => k*(h + c - 2*t) >= t - h
+        // Since h + c - 2*t < 0 (because t > (h+c)/2), dividing flips inequality:
+        // k <= (t - h) / (h + c - 2*t)
+        // Let k0 = floor((t - h) / (h + c - 2*t))
+        // Then k0 is the largest integer with f(k) >= t.
+        // We should check k0 and k0+1.
+
+        long long num = t - h;
+        long long den = h + c - 2 * t; // negative
+        long long k0 = num / den; // floor division, since den < 0, num <= 0? Actually t <= h so t-h <=0, den <0, so num/den >=0.
+        // But careful: C++ division truncates towards zero. For negative den, we want floor.
+        // Since num <= 0 and den < 0, num/den is positive or zero. Truncation towards zero is fine because both negative? Actually num <=0, den <0, so num/den >=0. Floor of positive is same as truncation.
+        // But to be safe, we can use floor division manually.
+        // Actually, let's compute k0 = (t - h) / (h + c - 2*t) using integer math.
+        // Since den < 0, we can write k0 = (h - t) / (2*t - h - c) because (t-h)/(h+c-2t) = (h-t)/(2t-h-c).
+        long long k0_alt = (h - t) / (2 * t - h - c);
+        // This is floor of the positive division.
+        long long k0_val = k0_alt;
+
+        // Check k = k0_val and k = k0_val + 1
+        long long best_k = 0;
+        long double best_diff = fabsl(((long double)(h + c) / 2.0L) - t); // actually we know 2 is worse than odd? We'll compare.
+        // But we already handled t <= (h+c)/2 case, so odd is better. We'll just check odd candidates.
+
+        auto calc_temp = [&](long long k) -> long double {
+            return (long double)((k + 1) * h + k * c) / (2 * k + 1);
+        };
+
+        for (long long k : {k0_val, k0_val + 1}) {
+            if (k < 0) continue;
+            long double diff = fabsl(calc_temp(k) - t);
+            if (diff < best_diff) {
+                best_diff = diff;
+                best_k = k;
+            } else if (fabsl(diff - best_diff) < 1e-18L && 2 * k + 1 < 2 * best_k + 1) {
+                best_k = k;
+            }
+        }
+
+        // Also check 2 cups? But we already handled t <= (h+c)/2, so 2 cups gives (h+c)/2 which is <= t, and since t > (h+c)/2, the odd cups give temperature > (h+c)/2, so 2 cups is worse. But just in case, we can compare with 2.
+        long double diff2 = fabsl((long double)(h + c) / 2.0L - t);
+        if (diff2 < best_diff) {
+            best_diff = diff2;
+            best_k = -1; // meaning 2 cups
+        } else if (fabsl(diff2 - best_diff) < 1e-18L && 2 < 2 * best_k + 1) {
+            best_k = -1;
+        }
+
+        if (best_k == -1) {
+            cout << 2 << "\n";
+        } else {
+            cout << 2 * best_k + 1 << "\n";
+        }
+    }
+    return 0;
+}
+```

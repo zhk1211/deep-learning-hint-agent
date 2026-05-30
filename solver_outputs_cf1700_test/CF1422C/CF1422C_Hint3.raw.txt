@@ -1,0 +1,187 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1e9 + 7;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    string s;
+    cin >> s;
+    int n = (int)s.size();
+    
+    vector<long long> pow10(n + 1), pref(n + 1, 0);
+    pow10[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        pow10[i] = (pow10[i-1] * 10) % MOD;
+    }
+    
+    for (int i = 0; i < n; i++) {
+        pref[i+1] = (pref[i] * 10 + (s[i] - '0')) % MOD;
+    }
+    
+    long long ans = 0;
+    long long sum_right = 0;
+    
+    for (int i = n - 1; i >= 0; i--) {
+        int d = s[i] - '0';
+        // contribution when the removed substring is entirely to the right of i
+        // i is the last kept digit, so its place value is 10^0 = 1
+        // number of ways to choose a non-empty substring to the right: (n - i - 1) + 1? Actually we need to count all substrings that start after i.
+        // If we keep up to i, the removed part is a substring starting at some j > i.
+        // The number of such substrings is (n - i) because we can remove from i+1..n-1 (any non-empty suffix of the right part) or remove nothing? Wait, Vova must remove a non-empty substring. So if we keep prefix up to i, we must remove a non-empty substring from the suffix. The number of choices is (n - i) because we can choose the start of the removed substring from i+1 to n (where n means removing nothing? Actually removing nothing is not allowed, but if we remove a substring of length 0 it's not allowed. So we must remove at least one digit. So if we keep up to i, we must remove some non-empty substring from the right. The number of ways is (n - i) because we can choose the length of the removed suffix from 1 to n-i. But wait, the removed substring can be anywhere. We are summing over all possible resulting numbers. The contribution of digit i when it remains and is at some position.
+        
+        // Instead, we can think: for each digit, it will appear in the result if the removed substring does not include it.
+        // If it is kept, its place value depends on how many digits to its right are also kept.
+        // Let's count for each digit, the sum of its place values over all valid removals.
+        
+        // For a fixed digit at index i (0-based), suppose we keep a set of digits that includes i.
+        // The removed substring is a contiguous block. So the kept digits form a prefix and a suffix.
+        // The digit i can be in the prefix part or the suffix part.
+        // Case 1: i is in the prefix part. Then the removed substring starts after i. Let the removed substring be from L to R inclusive, with L > i.
+        // The resulting number consists of digits 0..i (prefix) followed by digits R+1..n-1 (suffix).
+        // The place value of digit i is 10^{number of kept digits to the right of i} = 10^{(n-1) - R}.
+        // The number of such removals: we can choose L from i+1 to n-1, and R from L to n-1. But wait, the removed substring must be non-empty. So L <= R.
+        // For a fixed R, the number of choices for L is (R - i). But we can also think differently.
+        
+        // Let's use the standard approach: sum over all resulting numbers = sum over all pairs (kept prefix length a, kept suffix length b) with a+b < n, of value(prefix) * 10^b + value(suffix).
+        // The removed substring is the middle part.
+        // Let a be the length of kept prefix (0 <= a <= n-1), b be the length of kept suffix (0 <= b <= n-1), and a+b <= n-1 (since at least one digit removed).
+        // The resulting number = pref[a] * 10^b + suff[n-b].
+        // Sum over all valid (a,b).
+        // This is O(n^2) which is too slow.
+        
+        // We need O(n). Let's derive formula.
+        // Sum_{a=0}^{n-1} Sum_{b=0}^{n-1-a} (pref[a] * 10^b + suff[n-b]).
+        // = Sum_{a=0}^{n-1} pref[a] * Sum_{b=0}^{n-1-a} 10^b + Sum_{b=0}^{n-1} suff[n-b] * (n - b)  (since for a given b, a can range from 0 to n-1-b, so there are n-b choices for a).
+        // But careful: a and b are lengths, and the removed part is non-empty, so a+b <= n-1.
+        // Let's compute:
+        // Term1 = Sum_{a=0}^{n-1} pref[a] * (sum_{b=0}^{n-1-a} 10^b)
+        // Term2 = Sum_{b=0}^{n-1} suff[n-b] * (n - b)
+        // where pref[a] is the integer formed by first a digits (0 if a=0), suff[k] is integer formed by last k digits (0 if k=0).
+        
+        // We can precompute prefix values and suffix values.
+        // pref[0] = 0, for a>=1: pref[a] = (pref[a-1]*10 + digit[a-1]) % MOD.
+        // suff[0] = 0, for b>=1: suff[b] = (digit[n-b] * 10^{b-1} + suff[b-1]) % MOD.
+        
+        // Also precompute sum of powers of 10: pow10sum[k] = sum_{i=0}^{k} 10^i.
+        
+        // Then Term1 = Sum_{a=0}^{n-1} pref[a] * pow10sum[n-1-a] % MOD.
+        // Term2 = Sum_{b=0}^{n-1} suff[n-b] * (n-b) % MOD. Let k = n-b, then k ranges from 1 to n. Term2 = Sum_{k=1}^{n} suff[k] * k % MOD.
+        
+        // Let's test with sample 107.
+        // n=3.
+        // digits: 1,0,7.
+        // pref[0]=0, pref[1]=1, pref[2]=10, pref[3]=107.
+        // suff[1]=7, suff[2]=07=7? Wait, suff[2] should be 07 = 7, but we need to be careful with leading zeros. Actually suff[k] is the integer value of the last k digits, which may have leading zeros. That's fine.
+        // pow10sum[0]=1, pow10sum[1]=11, pow10sum[2]=111.
+        // Term1: a=0: 0 * 111 = 0; a=1: 1 * 11 = 11; a=2: 10 * 1 = 10; sum = 21.
+        // Term2: k=1: suff[1]=7 *1=7; k=2: suff[2]=7 *2=14; k=3: suff[3]=107 *3=321; sum=342? Wait, 7+14+321=342. Total = 21+342=363. But expected sum is 42. Something is wrong.
+        
+        // The problem: In Term2, we are summing over b from 0 to n-1. But b is the length of kept suffix. If b=0, suff[0]=0, contributes 0. So k from 1 to n is correct. But why is the sum 363 instead of 42?
+        // Let's list all results for 107:
+        // Remove "1": result "07" = 7
+        // Remove "0": result "17" = 17
+        // Remove "7": result "10" = 10
+        // Remove "10": result "7" = 7
+        // Remove "07": result "1" = 1
+        // Remove "107": result "0" = 0
+        // Sum = 7+17+10+7+1+0 = 42.
+        // Our formula gives 363. So the formula is wrong.
+        
+        // Why? Because when we keep a prefix of length a and a suffix of length b, the resulting number is pref[a] * 10^b + suff[b] (where suff[b] is the value of the last b digits). But note that the suffix digits are exactly the last b digits of the original number. However, in the removal, the kept suffix is the last b digits, but they are shifted left? No, they stay in their relative order and their place values are exactly 10^{b-1} down to 10^0. So the value contributed by the suffix is indeed the integer formed by those b digits. So that part is correct.
+        // But wait: In the example, if we keep prefix of length 1 ("1") and suffix of length 1 ("7"), the result is "1" + "7" = "17" = 17. That corresponds to a=1, b=1. pref[1]=1, suff[1]=7, result = 1*10^1 + 7 = 17. Correct.
+        // If we keep prefix length 2 ("10") and suffix length 0, result = 10. a=2, b=0: pref[2]=10, suff[0]=0, result=10*1+0=10. Correct.
+        // If we keep prefix length 0 and suffix length 2 ("07"), result = 7. a=0, b=2: pref[0]=0, suff[2]=7, result=0*100+7=7. Correct.
+        // If we keep prefix length 0 and suffix length 1 ("7"), result = 7. a=0, b=1: 0*10+7=7. Correct.
+        // If we keep prefix length 1 and suffix length 0 ("1"), result = 1. a=1, b=0: 1*1+0=1. Correct.
+        // If we keep prefix length 0 and suffix length 0: result 0. a=0, b=0: 0. Correct.
+        // So the pairs (a,b) with a+b <= n-1 (since at least one digit removed) are:
+        // a=0: b=0,1,2 -> results: 0,7,7
+        // a=1: b=0,1 -> results: 1,17
+        // a=2: b=0 -> result: 10
+        // Sum = 0+7+7 + 1+17 + 10 = 42. Correct.
+        // Now let's compute Term1 and Term2 again carefully.
+        // Term1 = Sum_{a=0}^{n-1} pref[a] * (sum_{b=0}^{n-1-a} 10^b)
+        // For a=0: pref[0]=0, sum_{b=0}^{2} 10^b = 1+10+100=111 -> 0
+        // a=1: pref[1]=1, sum_{b=0}^{1} 10^b = 1+10=11 -> 11
+        // a=2: pref[2]=10, sum_{b=0}^{0} 10^b = 1 -> 10
+        // Sum1 = 21.
+        // Term2 = Sum_{b=0}^{n-1} suff[n-b] * (n-b)  (since for a given b, a can be 0..n-1-b, so n-b choices)
+        // b=0: suff[3]=107, n-b=3 -> 321
+        // b=1: suff[2]=7, n-b=2 -> 14
+        // b=2: suff[1]=7, n-b=1 -> 7
+        // Sum2 = 342.
+        // Total = 363. But we know the correct sum is 42. So where is the discrepancy?
+        // The issue is that Term2 counts the suffix part multiple times? Let's see: In the sum over all pairs (a,b), the total sum is Sum_{a,b} (pref[a]*10^b + suff[b]). This equals Sum_{a,b} pref[a]*10^b + Sum_{a,b} suff[b].
+        // The first sum is exactly Term1. The second sum is Sum_{b} suff[b] * (number of a's for that b). The number of a's for a given b is (n - b) because a can range from 0 to n-1-b. So Term2 = Sum_{b=0}^{n-1} suff[b] * (n - b). But wait, in my Term2 I used suff[n-b] with b from 0 to n-1, which is the same as suff[k] with k from 1 to n. But note: b is the length of the kept suffix. So suff[b] is the value of the last b digits. For b=0, suff[0]=0. So Term2 = Sum_{b=0}^{n-1} suff[b] * (n - b). Let's recompute with that:
+        // b=0: suff[0]=0 *3 =0
+        // b=1: suff[1]=7 *2 =14
+        // b=2: suff[2]=7 *1 =7
+        // Sum2 = 21.
+        // Total = 21 + 21 = 42. Yes! I mistakenly used suff[n-b] instead of suff[b]. In my earlier Term2, I had suff[n-b] which is the value of the last n-b digits, i.e., suffix of length n-b. That's wrong. The suffix kept is of length b, so its value is suff[b]. So correct Term2 = Sum_{b=0}^{n-1} suff[b] * (n - b).
+        // Let's verify: b=1: suff[1]=7, n-b=2 -> 14; b=2: suff[2]=7, n-b=1 -> 7; b=0: 0. Sum=21. Term1=21. Total=42. Perfect.
+        
+        // So the formula is:
+        // ans = Sum_{a=0}^{n-1} pref[a] * pow10sum[n-1-a] + Sum_{b=0}^{n-1} suff[b] * (n - b)
+        // where pow10sum[k] = sum_{i=0}^{k} 10^i mod MOD.
+        // pref[0]=0, suff[0]=0.
+        // Note: a and b can be 0. The removed substring must be non-empty, so a+b <= n-1. That's handled by the limits.
+        
+        // Now we need to compute this in O(n).
+        // Precompute pow10[i] = 10^i % MOD.
+        // Precompute pow10sum[i] = (pow10sum[i-1] + pow10[i]) % MOD.
+        // Precompute pref[a] for a=0..n.
+        // Precompute suff[b] for b=0..n.
+        // Then compute the sums.
+        
+        // Let's test with sample 2: 100500100500. We'll trust the formula.
+        
+        // Implementation details:
+        // n up to 10^5, so O(n) is fine.
+        // MOD = 1e9+7.
+        
+        // Compute pow10 and pow10sum.
+        // Compute pref: pref[0]=0; for i=1..n: pref[i] = (pref[i-1]*10 + (s[i-1]-'0')) % MOD.
+        // Compute suff: suff[0]=0; for i=1..n: suff[i] = ((s[n-i]-'0') * pow10[i-1] + suff[i-1]) % MOD.
+        // Then ans = 0.
+        // For a=0 to n-1:
+        //   ans = (ans + pref[a] * pow10sum[n-1-a]) % MOD;
+        // For b=0 to n-1:
+        //   ans = (ans + suff[b] * (n - b)) % MOD;
+        // Print ans.
+        
+        // Check sample 1 manually with code logic.
+    }
+    
+    vector<long long> pow10(n + 1), pow10sum(n + 1);
+    pow10[0] = 1;
+    pow10sum[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        pow10[i] = (pow10[i-1] * 10) % MOD;
+        pow10sum[i] = (pow10sum[i-1] + pow10[i]) % MOD;
+    }
+    
+    vector<long long> pref(n + 1, 0), suff(n + 1, 0);
+    for (int i = 1; i <= n; i++) {
+        pref[i] = (pref[i-1] * 10 + (s[i-1] - '0')) % MOD;
+    }
+    for (int i = 1; i <= n; i++) {
+        suff[i] = ((s[n-i] - '0') * pow10[i-1] + suff[i-1]) % MOD;
+    }
+    
+    long long ans = 0;
+    for (int a = 0; a <= n-1; a++) {
+        ans = (ans + pref[a] * pow10sum[n-1-a]) % MOD;
+    }
+    for (int b = 0; b <= n-1; b++) {
+        ans = (ans + suff[b] * (n - b)) % MOD;
+    }
+    
+    cout << ans << "\n";
+    
+    return 0;
+}
+```

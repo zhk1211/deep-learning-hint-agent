@@ -1,0 +1,111 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+
+        vector<vector<int>> id(n, vector<int>(m, 0));
+        int cur = 0;
+        bool ok = true;
+
+        auto neighbors = [&](int r, int c) {
+            vector<pair<int,int>> res;
+            for (int dr = -1; dr <= 1; ++dr) {
+                for (int dc = -1; dc <= 1; ++dc) {
+                    if (dr == 0 && dc == 0) continue;
+                    int nr = r + dr, nc = c + dc;
+                    if (nr >= 0 && nr < n && nc >= 0 && nc < m && grid[nr][nc] == '*') {
+                        res.emplace_back(nr, nc);
+                    }
+                }
+            }
+            return res;
+        };
+
+        for (int i = 0; i < n && ok; ++i) {
+            for (int j = 0; j < m && ok; ++j) {
+                if (grid[i][j] != '*' || id[i][j] != 0) continue;
+                auto nb = neighbors(i, j);
+                if (nb.size() != 2) {
+                    ok = false;
+                    break;
+                }
+                int r1 = nb[0].first, c1 = nb[0].second;
+                int r2 = nb[1].first, c2 = nb[1].second;
+                // Check if the two neighbors are adjacent (share a side)
+                if (abs(r1 - r2) + abs(c1 - c2) != 1) {
+                    ok = false;
+                    break;
+                }
+                // The three cells must form an L-shape: the center cell has exactly two neighbors,
+                // and those two neighbors are adjacent to each other.
+                // Also check that the two neighbors do not have extra neighbors outside this L.
+                // But we can just mark them and later verify no cell is left unmarked.
+                // However, we must ensure that the L-shape does not touch another L-shape.
+                // We'll mark with a new id.
+                ++cur;
+                id[i][j] = cur;
+                id[r1][c1] = cur;
+                id[r2][c2] = cur;
+            }
+        }
+
+        if (!ok) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // Check that all '*' cells are marked
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (grid[i][j] == '*' && id[i][j] == 0) {
+                    ok = false;
+                    break;
+                }
+            }
+            if (!ok) break;
+        }
+
+        if (!ok) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // Check that no two different L-shapes touch by edge or corner.
+        // For each '*' cell, check its 8 neighbors. If neighbor is '*' and has different id, fail.
+        for (int i = 0; i < n && ok; ++i) {
+            for (int j = 0; j < m && ok; ++j) {
+                if (grid[i][j] != '*') continue;
+                for (int dr = -1; dr <= 1; ++dr) {
+                    for (int dc = -1; dc <= 1; ++dc) {
+                        if (dr == 0 && dc == 0) continue;
+                        int nr = i + dr, nc = j + dc;
+                        if (nr >= 0 && nr < n && nc >= 0 && nc < m && grid[nr][nc] == '*') {
+                            if (id[i][j] != id[nr][nc]) {
+                                ok = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (!ok) break;
+                }
+            }
+        }
+
+        cout << (ok ? "YES" : "NO") << '\n';
+    }
+    return 0;
+}
+```

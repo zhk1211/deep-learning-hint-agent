@@ -1,0 +1,94 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // We want to find the maximum number of wins we can get
+        // by choosing a subset of opponents with sum of a_i <= m.
+        // Since a_i <= 1000, we can use a greedy approach: sort and take smallest.
+        vector<int> sorted_a = a;
+        sort(sorted_a.begin(), sorted_a.end());
+        
+        int wins = 0;
+        long long sum = 0;
+        for (int i = 0; i < n; ++i) {
+            if (sum + sorted_a[i] <= m) {
+                sum += sorted_a[i];
+                wins++;
+            } else {
+                break;
+            }
+        }
+        
+        // If we can win against all opponents, place is 1.
+        if (wins == n) {
+            cout << 1 << '\n';
+            continue;
+        }
+        
+        // Now we need to determine our place.
+        // The opponents have base wins: opponent i (1-indexed) has i-1 wins from other opponents.
+        // If we beat opponent i, they get i-1 wins, else they get i wins.
+        // Our total wins = wins.
+        // We need to count how many opponents have strictly more wins than us.
+        // Let x = wins.
+        // For opponent i:
+        //   if we beat them: their wins = i-1
+        //   else: their wins = i
+        // We want to know if we can achieve a place better than n - x + 1.
+        // The key insight: we can possibly replace one of our chosen wins with the opponent at index x+1
+        // if that opponent was not originally chosen and we can afford it by dropping the largest chosen.
+        // This can improve our place by 1.
+        
+        // Standard approach: check if we can beat opponent wins+1 (0-indexed wins).
+        // If we can, our place is n - wins; else n - wins + 1.
+        // But careful: if wins == 0, we cannot beat opponent 1? Actually we check opponent index = wins.
+        // Opponent index wins (0-indexed) corresponds to opponent number wins+1.
+        // Their base wins without us: wins.
+        // If we beat them, they have wins wins, same as us, so we tie and place improves.
+        
+        int place;
+        if (wins > 0 && a[wins] <= m) {
+            // We can potentially beat opponent wins+1 by adjusting our set.
+            // But we need to check if we can actually include them.
+            // We already have a set of size wins with sum <= m.
+            // We need to see if we can replace the largest in our set with a[wins] and still sum <= m.
+            // Since we took the smallest wins elements, the largest is sorted_a[wins-1].
+            // If we replace it with a[wins], the new sum = sum - sorted_a[wins-1] + a[wins].
+            // If this <= m, we can achieve beating opponent wins+1.
+            long long new_sum = sum - sorted_a[wins-1] + a[wins];
+            if (new_sum <= m) {
+                place = n - wins;
+            } else {
+                place = n - wins + 1;
+            }
+        } else {
+            // Cannot beat opponent wins+1.
+            place = n - wins + 1;
+        }
+        
+        // Edge case: if wins == 0, we cannot beat opponent 1 (index 0) because a[0] might be > m.
+        // The formula above handles it: if wins == 0, condition wins > 0 is false, so place = n - 0 + 1 = n+1.
+        // But wait, if wins == 0, our place is n+1? Let's check: we have 0 wins, all opponents have at least 0 wins.
+        // Opponent 1 has 0 wins if we don't beat them? Actually opponent 1 has 0 wins from others, and if we lose to them, they have 1 win.
+        // So all opponents have at least 1 win, we have 0, so place = n+1. Correct.
+        
+        cout << place << '\n';
+    }
+    
+    return 0;
+}
+```

@@ -1,0 +1,43 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        long long ans = 0;
+        for (int i = 0; i < n; ++i) {
+            int limit = min(n, i + 5);
+            for (int j = i; j < limit; ++j) {
+                bool good = true;
+                for (int k = i; k < j; ++k) {
+                    for (int l = k + 1; l < j; ++l) {
+                        int d1 = abs(a[k] - a[l]) + abs(k - l);
+                        int d2 = abs(a[k] - a[j]) + abs(k - j);
+                        int d3 = abs(a[l] - a[j]) + abs(l - j);
+                        if (d2 == d1 + d3 || d1 == d2 + d3 || d3 == d1 + d2) {
+                            good = false;
+                            break;
+                        }
+                    }
+                    if (!good) break;
+                }
+                if (!good) break;
+                ++ans;
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

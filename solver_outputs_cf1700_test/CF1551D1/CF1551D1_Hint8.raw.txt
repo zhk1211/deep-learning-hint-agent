@@ -1,0 +1,41 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m, k;
+        cin >> n >> m >> k;
+        
+        int total = n * m / 2;
+        int vertical = total - k;
+        
+        bool possible = false;
+        
+        // Check if k horizontal dominoes are possible
+        if (k <= (n * (m / 2))) {
+            // Check parity conditions
+            if (n % 2 == 0) {
+                // n even: horizontal dominoes must be even
+                if (k % 2 == 0) possible = true;
+            } else {
+                // n odd: we must fill first row with horizontal dominoes
+                int min_horizontal = m / 2;
+                if (k >= min_horizontal) {
+                    int remaining_k = k - min_horizontal;
+                    if (remaining_k % 2 == 0) possible = true;
+                }
+            }
+        }
+        
+        cout << (possible ? "YES" : "NO") << '\n';
+    }
+    
+    return 0;
+}
+```

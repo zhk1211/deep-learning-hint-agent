@@ -1,0 +1,69 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    string s;
+    cin >> n >> s;
+
+    // Remove leading zeros to find the first '1'
+    int first_one = -1;
+    for (int i = 0; i < n; ++i) {
+        if (s[i] == '1') {
+            first_one = i;
+            break;
+        }
+    }
+
+    if (first_one == -1) {
+        cout << "0\n";
+        return 0;
+    }
+
+    // The first substring is the whole string from first_one
+    string a = s.substr(first_one);
+    int m = a.size();
+
+    // Find the first zero in a
+    int first_zero = -1;
+    for (int i = 0; i < m; ++i) {
+        if (a[i] == '0') {
+            first_zero = i;
+            break;
+        }
+    }
+
+    if (first_zero == -1) {
+        // All ones, answer is just a
+        cout << a << "\n";
+        return 0;
+    }
+
+    // We need to choose a second substring of length m - first_zero
+    // that starts somewhere in [0, first_zero] to maximize OR
+    int len = m - first_zero;
+    string best = a; // start with a itself
+
+    // We only need to check starting positions from 0 to first_zero
+    // but we can limit to first_zero+1 candidates
+    for (int start = 0; start <= first_zero; ++start) {
+        string b = s.substr(first_one + start, len);
+        string cur = a;
+        for (int i = 0; i < len; ++i) {
+            if (b[i] == '1') {
+                cur[first_zero + i] = '1';
+            }
+        }
+        if (cur > best) {
+            best = cur;
+        }
+    }
+
+    cout << best << "\n";
+    return 0;
+}
+```

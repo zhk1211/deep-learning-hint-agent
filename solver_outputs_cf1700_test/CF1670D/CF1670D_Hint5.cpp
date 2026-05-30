@@ -1,0 +1,41 @@
+// Hint5
+#include <bits/stdc++.h>
+using namespace std;
+
+long long max_triangles(long long k) {
+    if (k == 0) return 0;
+    long long a = k / 3;
+    long long r = k % 3;
+    long long base = 3 * a * (a + 1);
+    if (r == 1) {
+        base += 2 * a + 1;
+    } else if (r == 2) {
+        base += 2 * a + 1 + 2 * a + 2;
+    }
+    return base;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        long long n;
+        cin >> n;
+        long long lo = 0, hi = 1;
+        while (max_triangles(hi) < n) {
+            hi *= 2;
+        }
+        while (lo < hi) {
+            long long mid = lo + (hi - lo) / 2;
+            if (max_triangles(mid) >= n) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        cout << lo << '\n';
+    }
+    return 0;
+}

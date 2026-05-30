@@ -1,0 +1,59 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int q;
+        cin >> q;
+        ll low = 1, high = 4e18; // inclusive range for h
+        while (q--) {
+            int type;
+            cin >> type;
+            if (type == 1) {
+                ll a, b, n;
+                cin >> a >> b >> n;
+                // constraints from this snail
+                ll L, R;
+                if (n == 1) {
+                    L = 1;
+                    R = a;
+                } else {
+                    L = (n - 2) * (a - b) + a + 1;
+                    R = (n - 1) * (a - b) + a;
+                }
+                if (L > high || R < low) {
+                    cout << "0 ";
+                } else {
+                    low = max(low, L);
+                    high = min(high, R);
+                    cout << "1 ";
+                }
+            } else {
+                ll a, b;
+                cin >> a >> b;
+                // compute possible days for this snail given current [low, high]
+                // days = max(1, ceil((h - a) / (a - b)) + 1)
+                // we need min and max possible days
+                auto days = [&](ll h) -> ll {
+                    if (h <= a) return 1;
+                    return (h - a + (a - b) - 1) / (a - b) + 1;
+                };
+                ll d_low = days(low);
+                ll d_high = days(high);
+                if (d_low == d_high) {
+                    cout << d_low << " ";
+                } else {
+                    cout << "-1 ";
+                }
+            }
+        }
+        cout << "\n";
+    }
+    return 0;
+}

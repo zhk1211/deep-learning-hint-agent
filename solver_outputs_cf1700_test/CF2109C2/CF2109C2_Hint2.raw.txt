@@ -1,0 +1,86 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    string resp;
+    
+    // Step 1: mul 9
+    cout << "mul 9" << endl;
+    cin >> resp;
+    if (resp == "-1") exit(0);
+    
+    // Step 2: digit
+    cout << "digit" << endl;
+    cin >> resp;
+    if (resp == "-1") exit(0);
+    
+    // Step 3: digit
+    cout << "digit" << endl;
+    cin >> resp;
+    if (resp == "-1") exit(0);
+    
+    // Now x is a single digit (1-9)
+    // We need to reach n using at most 1 more command (since we used 3)
+    // We can use add, mul, div, or digit.
+    // Since x is a single digit d, we can try to reach n.
+    
+    // If n is already equal to x, we are done.
+    // But we don't know x. We can try to make x equal to n.
+    // Since we have one command left, we can try to add (n - d) but we don't know d.
+    // However, we can use the fact that we can try commands and see if they succeed.
+    // We can attempt to add (n - 1), (n - 2), ..., (n - 9) but we only have one command.
+    // Instead, we can use mul or div to reach n.
+    // Since x is a single digit, we can try to multiply by something to get n.
+    // But n can be up to 1e9, and x is at most 9, so mul n/x works if n is divisible by x.
+    // We don't know x, but we can try all possible x (1..9) and see which command succeeds.
+    // However, we only have one command left. We need a deterministic way.
+    
+    // Alternative: After two digits, x is the digital root of original x (unless original x was 0, but x>=1).
+    // Actually, after mul 9, x becomes 9*x_original. Then digit gives sum of digits of 9*x_original, which is a multiple of 9.
+    // Then second digit gives sum of digits of that multiple of 9, which is 9 (since it's a multiple of 9 and less than 10? Actually sum of digits of a multiple of 9 is 9 unless it's 0, but x>=1 so it's 9).
+    // Wait: If original x is such that 9*x has digit sum that is a multiple of 9, and then digit again gives 9.
+    // Let's check: For any positive integer x, 9*x is a multiple of 9. The sum of digits of a multiple of 9 is a multiple of 9. If that sum is >9, it could be 18, 27, etc. Then second digit gives sum of digits of that number, which is again a multiple of 9. But could it be 18? Sum of digits of 18 is 9. Sum of digits of 27 is 9. In fact, repeatedly applying digit sum eventually yields 9 for any positive multiple of 9. So after two digits, x becomes 9.
+    // Let's verify: x=1 -> mul 9 -> 9 -> digit -> 9 -> digit -> 9. x=2 -> 18 -> digit -> 9 -> digit -> 9. x=1234 -> mul 9 -> 11106 -> digit -> 9 -> digit -> 9. Yes, after two digits, x is always 9.
+    // So after step 3, x = 9.
+    
+    // Now we have x = 9, and we need to reach n using at most 1 command.
+    // We can use add, mul, div, or digit.
+    // If n == 9, we are done.
+    // Otherwise, we can try to add (n - 9). But n - 9 might be negative if n < 9. But n >= 1.
+    // If n < 9, we can try div. For example, if n=5, we can do div? 9 is not divisible by anything to get 5.
+    // We can do digit? digit on 9 gives 9.
+    // So we need a different approach for n != 9.
+    
+    // Actually, we have 4 commands total. We used 3. We have 1 left.
+    // But we can also use the fact that we can try commands that might fail, and we get feedback.
+    // However, we only have one command left. We need to make x equal to n in one command.
+    // Since x=9, we can try:
+    // - add (n - 9): if n >= 9, this works if n-9 is within [-1e18, 1e18] and result in [1, 1e18]. n up to 1e9, so n-9 is fine. Result is n, which is in range. So add n-9 will succeed and set x = n.
+    // - if n < 9, we cannot add negative to get n because 9 + (n-9) = n, but n-9 is negative. The add command allows negative y. The condition is that res = x+y must be in [1, 1e18]. If n >= 1, then res = n is in range. So add n-9 should work even if n < 9, because y can be negative. The only restriction is res in [1, 1e18]. So add n-9 will always succeed as long as n is between 1 and 1e18. n is up to 1e9, so it's fine.
+    // Wait, the problem says: "add y" with -10^18 <= y <= 10^18. res = x + y. If 1 <= res <= 10^18, success. So if we do add (n - 9), res = 9 + n - 9 = n. Since 1 <= n <= 10^9, it's within range. So it will always succeed.
+    // So we can just do add (n - 9) and then answer.
+    
+    long long y = (long long)n - 9;
+    cout << "add " << y << endl;
+    cin >> resp;
+    if (resp == "-1") exit(0);
+    
+    cout << "!" << endl;
+    cin >> resp;
+    if (resp == "-1") exit(0);
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

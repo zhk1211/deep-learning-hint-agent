@@ -1,0 +1,91 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+You have an array $ a_1, a_2, \dots, a_n $ where $ a_i = i $ .
+
+In one step, you can choose two indices $ x $ and $ y $ ( $ x \neq y $ ) and set $ a_x = \left\lceil \frac{a_x}{a_y} \right\rceil $ (ceiling function).
+
+Your goal is to make array $ a $ consist of $ n - 1 $ ones and $ 1 $ two in no more than $ n + 5 $ steps. Note that you don't have to minimize the number of steps.
+
+Input Format
+The first line contains a single integer $ t $ ( $ 1 \le t \le 1000 $ ) — the number of test cases.
+
+The first and only line of each test case contains the single integer $ n $ ( $ 3 \le n \le 2 \cdot 10^5 $ ) — the length of array $ a $ .
+
+It's guaranteed that the sum of $ n $ over test cases doesn't exceed $ 2 \cdot 10^5 $ .
+
+Output Format
+For each test case, print the sequence of operations that will make $ a $ as $ n - 1 $ ones and $ 1 $ two in the following format: firstly, print one integer $ m $ ( $ m \le n + 5 $ ) — the number of operations; next print $ m $ pairs of integers $ x $ and $ y $ ( $ 1 \le x, y \le n $ ; $ x \neq y $ ) ( $ x $ may be greater or less than $ y $ ) — the indices of the corresponding operation.
+
+It can be proven that for the given constraints it's always possible to find a correct sequence of operations.
+
+Examples
+Sample 1
+Input
+2
+3
+4
+Output
+2
+3 2
+3 2
+3
+3 4
+4 2
+4 2
+
+Note
+In the first test case, you have array $ a = [1, 2, 3] $ . For example, you can do the following:
+
+1. choose $ 3 $ , $ 2 $ : $ a_3 = \left\lceil \frac{a_3}{a_2} \right\rceil = 2 $ and array $ a = [1, 2, 2] $ ;
+2. choose $ 3 $ , $ 2 $ : $ a_3 = \left\lceil \frac{2}{2} \right\rceil = 1 $ and array $ a = [1, 2, 1] $ .
+
+You've got array with $ 2 $ ones and $ 1 $ two in $ 2 $ steps.In the second test case, $ a = [1, 2, 3, 4] $ . For example, you can do the following:
+
+1. choose $ 3 $ , $ 4 $ : $ a_3 = \left\lceil \frac{3}{4} \right\rceil = 1 $ and array $ a = [1, 2, 1, 4] $ ;
+2. choose $ 4 $ , $ 2 $ : $ a_4 = \left\lceil \frac{4}{2} \right\rceil = 2 $ and array $ a = [1, 2, 1, 2] $ ;
+3. choose $ 4 $ , $ 2 $ : $ a_4 = \left\lceil \frac{2}{2} \right\rceil = 1 $ and array $ a = [1, 2, 1, 1] $ .
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+Let's use recursion. Try to find a way to make array $$$[1, x]$$$ consist of $$$x - 1$$$ ones and $$$1$$$ two.
+
+**Hint 2**
+Consider $$$x = 100000$$$ . How many divisions do we need to perform to get rid of this element?
+
+**Hint 3**
+What should we choose as $$$y$$$? Answer: $$$y \approx \sqrt{x}$$$ .
+
+**Hint 4**
+How many elements will we need to divide on $$$y$$$? Answer: $$$\sqrt{x} - 1$$$.
+
+**Hint 5**
+Try to divide all elements from $$$y + 1$$$ to $$$x$$$ on $$$x$$$ in one step.
+
+**Hint 6**
+We have made all elements except one equal to $$$1$$$ in $$$\sqrt{x} - 1$$$ steps. How many divisions are left to get rid of the last element?
+
+**Hint 7**
+How many divisions are left to get rid of the last element?
+
+**Hint 8**
+Answer: $$$\sqrt{x} - 1$$$.
+
+**Hint 9**
+If we divide all elements from $$$y + 1$$$ to $$$x$$$ on $$$x$$$, we will get all elements equal to $$$1$$$ except one. What is this element?
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

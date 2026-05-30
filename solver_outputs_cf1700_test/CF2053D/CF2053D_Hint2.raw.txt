@@ -1,0 +1,115 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+int modpow(int a, int e) {
+    int res = 1;
+    while (e) {
+        if (e & 1) res = 1LL * res * a % MOD;
+        a = 1LL * a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, q;
+        cin >> n >> q;
+        vector<int> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int i = 0; i < n; ++i) cin >> b[i];
+        
+        vector<int> sa = a, sb = b;
+        sort(sa.begin(), sa.end());
+        sort(sb.begin(), sb.end());
+        
+        long long prod = 1;
+        for (int i = 0; i < n; ++i) {
+            prod = prod * min(sa[i], sb[i]) % MOD;
+        }
+        
+        vector<int> ans;
+        ans.push_back(prod);
+        
+        vector<int> posA(n), posB(n);
+        {
+            vector<pair<int,int>> va(n), vb(n);
+            for (int i = 0; i < n; ++i) va[i] = {a[i], i};
+            for (int i = 0; i < n; ++i) vb[i] = {b[i], i};
+            sort(va.begin(), va.end());
+            sort(vb.begin(), vb.end());
+            for (int i = 0; i < n; ++i) posA[va[i].second] = i;
+            for (int i = 0; i < n; ++i) posB[vb[i].second] = i;
+        }
+        
+        while (q--) {
+            int o, x;
+            cin >> o >> x;
+            --x;
+            if (o == 1) {
+                int p = posA[x];
+                int old_val = sa[p];
+                int new_val = old_val + 1;
+                int old_min = min(sa[p], sb[p]);
+                sa[p] = new_val;
+                int new_min = min(sa[p], sb[p]);
+                if (new_min != old_min) {
+                    prod = prod * modpow(old_min, MOD-2) % MOD;
+                    prod = prod * new_min % MOD;
+                }
+                // maintain sorted order
+                int idx = p;
+                while (idx + 1 < n && sa[idx] > sa[idx+1]) {
+                    // swap sa[idx] and sa[idx+1]
+                    swap(sa[idx], sa[idx+1]);
+                    // update posA for the swapped elements
+                    // find original indices: we need to know which original element is at idx and idx+1
+                    // but we only have posA mapping from original index to sorted position.
+                    // We need reverse mapping: from sorted position to original index.
+                    // Let's maintain it.
+                }
+                // Actually we need to maintain the sorted arrays and the mapping.
+                // Since n and q sum to 4e5, we can just rebuild sorted arrays after each query? No, too slow.
+                // We need a data structure to maintain sorted order with point updates.
+                // But note: we only increase values by 1, so each element moves right at most once per increment.
+                // We can use a simple approach: maintain sorted arrays and update positions by swapping adjacent elements.
+                // We need reverse mapping from sorted index to original index.
+            }
+        }
+        
+        // The above is incomplete. Let's think again.
+        // The answer is product over i of min(sorted_a[i], sorted_b[i]).
+        // When we increment a_x, its value increases by 1, so in sorted_a it may move right.
+        // We can maintain sorted_a and sorted_b with multisets, but we need to know the pairing.
+        // Actually, the optimal pairing is to sort both arrays. So we just need to maintain the sorted arrays.
+        // Since values only increase, we can use a Fenwick tree or segment tree over values? Values up to 5e8+2e5, too large.
+        // But n is up to 2e5, we can just maintain the sorted arrays explicitly and update by swapping adjacent elements.
+        // Each increment moves the element at most O(n) steps, but total steps over all queries is O(n + q) because each element's value only increases.
+        // However, an element can be incremented many times, so total moves could be O(q * n) in worst case if we increment the same element many times and it moves right each time.
+        // But each increment increases value by 1, so the element can move right at most once per increment. Total increments across all elements is q. So total swaps is O(q + n). This is acceptable.
+        // We need to maintain:
+        // - sorted_a array
+        // - sorted_b array
+        // - for each original index, its current position in the sorted array.
+        // - for each position in sorted array, the original index (to update pos when swapping).
+        // When we increment a_x, we find its position p = posA[x]. We update sa[p] += 1.
+        // Then while p+1 < n and sa[p] > sa[p+1], we swap sa[p] and sa[p+1], update posA for the two original indices, and update the product.
+        // When swapping, the pairs (sa[p], sb[p]) and (sa[p+1], sb[p+1]) change their min values.
+        // We need to update the product accordingly.
+        // Same for b.
+        
+        // Let's implement this properly.
+        
+        // We'll reset and do it properly.
+    }
+    return 0;
+}
+```

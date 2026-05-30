@@ -1,0 +1,51 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m, k, q;
+        cin >> n >> m >> k >> q;
+        
+        vector<int> xs(q), ys(q);
+        for (int i = 0; i < q; i++) {
+            cin >> xs[i] >> ys[i];
+        }
+        
+        vector<bool> ux(n + 1, false), uy(m + 1, false);
+        int cx = 0, cy = 0;
+        long long ans = 1;
+        
+        for (int i = q - 1; i >= 0; i--) {
+            bool fl = false;
+            if (!ux[xs[i]]) {
+                ux[xs[i]] = true;
+                cx++;
+                fl = true;
+            }
+            if (!uy[ys[i]]) {
+                uy[ys[i]] = true;
+                cy++;
+                fl = true;
+            }
+            if (fl) {
+                ans = ans * k % MOD;
+            }
+            if (cx == n || cy == m) {
+                break;
+            }
+        }
+        
+        cout << ans << '\n';
+    }
+    
+    return 0;
+}
+```

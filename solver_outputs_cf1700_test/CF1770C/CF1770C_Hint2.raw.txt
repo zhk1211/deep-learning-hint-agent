@@ -1,0 +1,59 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // Check if all elements are distinct
+        sort(a.begin(), a.end());
+        bool distinct = true;
+        for (int i = 1; i < n; ++i) {
+            if (a[i] == a[i - 1]) {
+                distinct = false;
+                break;
+            }
+        }
+        if (!distinct) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // Check modulo small primes
+        bool possible = true;
+        vector<int> primes = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47};
+        for (int p : primes) {
+            vector<int> cnt(p, 0);
+            for (long long x : a) {
+                cnt[x % p]++;
+            }
+            bool all_covered = true;
+            for (int r = 0; r < p; ++r) {
+                if (cnt[r] < 2) {
+                    all_covered = false;
+                    break;
+                }
+            }
+            if (all_covered) {
+                possible = false;
+                break;
+            }
+        }
+
+        cout << (possible ? "YES" : "NO") << '\n';
+    }
+
+    return 0;
+}
+```

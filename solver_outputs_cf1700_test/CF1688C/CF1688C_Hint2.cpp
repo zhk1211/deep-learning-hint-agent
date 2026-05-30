@@ -1,0 +1,40 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int T;
+    cin >> T;
+    while (T--) {
+        int n;
+        cin >> n;
+        vector<string> t(2 * n);
+        for (int i = 0; i < 2 * n; ++i) {
+            cin >> t[i];
+        }
+        string s;
+        cin >> s;
+        
+        vector<int> cnt(26, 0);
+        for (char c : s) {
+            cnt[c - 'a']++;
+        }
+        for (const string& str : t) {
+            for (char c : str) {
+                cnt[c - 'a']--;
+            }
+        }
+        
+        string ans;
+        for (int i = 0; i < 26; ++i) {
+            if (cnt[i] % 2 != 0) {
+                ans += char('a' + i);
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

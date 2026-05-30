@@ -1,0 +1,69 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+int64_t gcd(int64_t a, int64_t b) {
+    while (b) {
+        a %= b;
+        swap(a, b);
+    }
+    return a;
+}
+
+int64_t lcm(int64_t a, int64_t b) {
+    return a / gcd(a, b) * b;
+}
+
+int shift(const string& s) {
+    int n = s.size();
+    for (int i = 1; i <= n; ++i) {
+        bool ok = true;
+        for (int j = 0; j < n; ++j) {
+            if (s[j] != s[(j + i) % n]) {
+                ok = false;
+                break;
+            }
+        }
+        if (ok) return i;
+    }
+    return n;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    vector<int> p(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> p[i];
+        --p[i];
+    }
+    vector<bool> used(n, false);
+    int64_t ans = 1;
+    for (int i = 0; i < n; ++i) {
+        if (used[i]) continue;
+        string ss;
+        int cur = i;
+        while (!used[cur]) {
+            used[cur] = true;
+            ss += s[cur];
+            cur = p[cur];
+        }
+        if (ss.empty()) continue;
+        int ln = shift(ss);
+        ans = lcm(ans, ln);
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

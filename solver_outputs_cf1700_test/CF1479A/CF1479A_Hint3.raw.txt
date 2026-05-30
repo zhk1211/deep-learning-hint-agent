@@ -1,0 +1,38 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(int i) {
+    cout << "? " << i << endl;
+    int x;
+    cin >> x;
+    return x;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    
+    if (n == 1) {
+        cout << "! 1" << endl;
+        return 0;
+    }
+    
+    int l = 1, r = n;
+    
+    while (l < r) {
+        int mid = (l + r) / 2;
+        int a_mid = query(mid);
+        int a_mid1 = query(mid + 1);
+        
+        if (a_mid < a_mid1) {
+            r = mid;
+        } else {
+            l = mid + 1;
+        }
+    }
+    
+    cout << "! " << l << endl;
+    return 0;
+}
+```

@@ -1,0 +1,53 @@
+// Hint6
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> S(m);
+        for (int i = 0; i < m; ++i) {
+            cin >> S[i];
+        }
+
+        vector<int> a(n + 1, -1);
+        vector<bool> used(n + 1, false);
+        int ptr = m - 1;
+
+        bool possible = true;
+        for (int i = 1; i <= n; ++i) {
+            if (a[i] != -1) continue;
+            // Find the largest element in S that is not used yet
+            while (ptr >= 0 && used[S[ptr]]) {
+                --ptr;
+            }
+            if (ptr < 0) {
+                possible = false;
+                break;
+            }
+            int val = S[ptr];
+            used[val] = true;
+            // Assign val to all multiples of i
+            for (int j = i; j <= n; j += i) {
+                if (a[j] == -1) {
+                    a[j] = val;
+                }
+            }
+        }
+
+        if (!possible) {
+            cout << "-1\n";
+        } else {
+            for (int i = 1; i <= n; ++i) {
+                cout << a[i] << " \n"[i == n];
+            }
+        }
+    }
+    return 0;
+}

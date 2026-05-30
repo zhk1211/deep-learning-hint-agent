@@ -1,0 +1,64 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(n), b(m);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    for (int i = 0; i < m; ++i) cin >> b[i];
+    
+    // Compute LIS of a
+    vector<int> dp;
+    for (int x : a) {
+        auto it = lower_bound(dp.begin(), dp.end(), x);
+        if (it == dp.end()) dp.push_back(x);
+        else *it = x;
+    }
+    int lis_a = dp.size();
+    
+    // We will construct c by placing b elements in descending order before elements of a
+    // that are part of some LIS? Actually, the known solution: sort b descending,
+    // then merge with a such that we maintain relative order of a, and insert b elements
+    // in a way that doesn't increase LIS beyond LIS(a).
+    // The trick: For each position in a, we can insert all b elements that are >= a[i] 
+    // and < previous threshold? Let's recall the standard solution:
+    // Sort b in descending order. Then we output elements of b that are >= current a[i] 
+    // before a[i], but we need to be careful.
+    // Actually, the known solution from Codeforces Round #793 (Div. 2) problem C:
+    // Sort b in descending order. Then use two pointers to merge a and sorted b.
+    // We output all b elements that are >= a[i] before a[i], but we must ensure
+    // we don't output the same b element twice.
+    
+    sort(b.begin(), b.end(), greater<int>());
+    vector<int> c;
+    c.reserve(n + m);
+    int j = 0;
+    for (int i = 0; i < n; ++i) {
+        while (j < m && b[j] >= a[i]) {
+            c.push_back(b[j]);
+            ++j;
+        }
+        c.push_back(a[i]);
+    }
+    while (j < m) {
+        c.push_back(b[j]);
+        ++j;
+    }
+    
+    for (int i = 0; i < n + m; ++i) {
+        cout << c[i] << " \n"[i == n + m - 1];
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

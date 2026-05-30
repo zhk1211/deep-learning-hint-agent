@@ -1,0 +1,113 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1'000'000'007;
+
+long long modpow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+
+        long long pow2_n = modpow(2, n);
+        long long pow2_n_minus_1 = modpow(2, n - 1);
+
+        // ways_even: number of subsets of n elements with even size
+        long long ways_even = pow2_n_minus_1;
+        // ways_odd: number of subsets of n elements with odd size
+        long long ways_odd = pow2_n_minus_1;
+
+        // If n is odd, even and odd subsets are equal: 2^{n-1}
+        // If n is even, even subsets = 2^{n-1}, odd subsets = 2^{n-1} as well? Wait:
+        // Actually total subsets = 2^n. Even subsets = 2^{n-1} always.
+        // Odd subsets = 2^{n-1} always.
+        // So both are 2^{n-1}.
+
+        // dp[i] = number of ways for first i bits (from most significant to least)
+        // such that AND >= XOR up to this bit (considering bits from MSB down to current)
+        // We process bits from 0 (LSB) to k-1 (MSB) or vice versa.
+        // Let's process from bit 0 to k-1, building the result.
+        // Actually easier: process bits independently? No, because of the >= condition.
+        // We need to consider the first bit where AND > XOR, then the rest can be anything.
+        
+        // Let's define DP state: we process bits from most significant (k-1) down to 0.
+        // State 0: AND == XOR so far (tight)
+        // State 1: AND > XOR already (loose)
+        // For each bit, we consider the possible values of the bit for all n numbers.
+        // The bit of AND is 1 iff all n numbers have bit 1.
+        // The bit of XOR is 1 iff odd number of numbers have bit 1.
+        
+        // For a single bit:
+        // Case A: AND bit = 1, XOR bit = 1 -> impossible because AND=1 means all bits 1, so number of 1s = n (parity depends on n).
+        //   If n is odd, XOR=1. If n is even, XOR=0.
+        // Case B: AND bit = 1, XOR bit = 0 -> possible if n is even (all bits 1 -> n even -> XOR=0).
+        // Case C: AND bit = 0, XOR bit = 0 -> possible if number of 1s is even (could be 0 to n, but not all 1s if n even? Actually if all 1s and n even, AND=1, so that's case B. So here we need even number of 1s but not all 1s if n even? Wait: if all 1s and n even, AND=1, XOR=0, so that's case B. So for AND=0, XOR=0, we need even number of 1s and not all 1s (if n even). If n odd, all 1s gives AND=1, XOR=1, so not this case anyway. So number of ways: (number of subsets of n with even size) - (1 if n even else 0).
+        // Case D: AND bit = 0, XOR bit = 1 -> possible if number of 1s is odd (and not all 1s? If n odd, all 1s gives AND=1, XOR=1, so not this case. If n even, all 1s gives AND=1, XOR=0, so not this case. So just odd number of 1s.)
+        
+        // Let's compute ways for each bit:
+        // ways_and1_xor0: only possible if n even, then exactly 1 way (all bits 1).
+        long long ways_and1_xor0 = (n % 2 == 0) ? 1 : 0;
+        
+        // ways_and0_xor0: even number of 1s, excluding the all-1s case if n even.
+        long long even_subsets = pow2_n_minus_1; // 2^{n-1}
+        long long ways_and0_xor0 = even_subsets;
+        if (n % 2 == 0) {
+            ways_and0_xor0 = (even_subsets - 1 + MOD) % MOD; // exclude all 1s
+        }
+        
+        // ways_and0_xor1: odd number of 1s.
+        long long odd_subsets = pow2_n_minus_1; // 2^{n-1}
+        long long ways_and0_xor1 = odd_subsets;
+        // No exclusion needed because all 1s gives AND=1, not AND=0.
+        
+        // Now DP over bits from MSB to LSB.
+        // dp[0] = 1 (tight), dp[1] = 0 (loose)
+        long long dp0 = 1, dp1 = 0;
+        
+        for (int bit = 0; bit < k; ++bit) {
+            long long new_dp0 = 0, new_dp1 = 0;
+            
+            // From tight state:
+            // If we choose bits such that AND bit == XOR bit, we stay tight.
+            // That happens in cases: AND=0,XOR=0 and AND=1,XOR=0 (if possible).
+            // AND=1,XOR=1 never happens.
+            // AND=0,XOR=1 gives AND < XOR at this bit, so invalid for tight (since we need AND >= XOR, and this is the first differing bit, AND < XOR would violate).
+            // So from tight, we can only go to tight if we pick AND bit == XOR bit.
+            // ways_tight = ways_and0_xor0 + ways_and1_xor0
+            long long ways_tight = (ways_and0_xor0 + ways_and1_xor0) % MOD;
+            new_dp0 = (new_dp0 + dp0 * ways_tight) % MOD;
+            
+            // From tight, if we pick AND bit > XOR bit, we go to loose.
+            // AND > XOR means AND=1, XOR=0. That's ways_and1_xor0.
+            new_dp1 = (new_dp1 + dp0 * ways_and1_xor0) % MOD;
+            
+            // From loose state:
+            // We can pick any combination for this bit, because AND is already > XOR in higher bits.
+            // Total ways per bit: 2^n (each number can be 0 or 1 independently).
+            new_dp1 = (new_dp1 + dp1 * pow2_n) % MOD;
+            
+            dp0 = new_dp0;
+            dp1 = new_dp1;
+        }
+        
+        // After processing all k bits, the total valid arrays are those in tight or loose state.
+        long long ans = (dp0 + dp1) % MOD;
+        cout << ans << '\n';
+    }
+    return 0;
+}

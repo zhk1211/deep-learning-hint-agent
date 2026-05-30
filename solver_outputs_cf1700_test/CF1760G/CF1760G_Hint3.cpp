@@ -1,0 +1,82 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, a, b;
+    cin >> n >> a >> b;
+    vector<vector<pair<int, int>>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w});
+    }
+
+    // BFS/DFS from a to all nodes, recording XOR values
+    vector<int> xor_from_a(n + 1, -1);
+    queue<int> q;
+    q.push(a);
+    xor_from_a[a] = 0;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto [v, w] : adj[u]) {
+            if (xor_from_a[v] == -1 && v != b) {
+                xor_from_a[v] = xor_from_a[u] ^ w;
+                q.push(v);
+            }
+        }
+    }
+
+    // BFS/DFS from b to all nodes, recording XOR values
+    vector<int> xor_from_b(n + 1, -1);
+    q.push(b);
+    xor_from_b[b] = 0;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto [v, w] : adj[u]) {
+            if (xor_from_b[v] == -1) {
+                xor_from_b[v] = xor_from_b[u] ^ w;
+                q.push(v);
+            }
+        }
+    }
+
+    // Check if we can reach b directly from a without teleport
+    if (xor_from_a[b] == 0) {
+        cout << "YES\n";
+        return;
+    }
+
+    // Collect all XOR values from a (excluding b)
+    unordered_set<int> reachable_from_a;
+    for (int i = 1; i <= n; i++) {
+        if (xor_from_a[i] != -1 && i != b) {
+            reachable_from_a.insert(xor_from_a[i]);
+        }
+    }
+
+    // Check if any node reachable from b (except b itself) has XOR value that matches
+    // a reachable XOR from a
+    for (int i = 1; i <= n; i++) {
+        if (i != b && xor_from_b[i] != -1) {
+            if (reachable_from_a.count(xor_from_b[i])) {
+                cout << "YES\n";
+                return;
+            }
+        }
+    }
+
+    cout << "NO\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

@@ -1,0 +1,76 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        long long min_val = 0, max_val = 0;
+        long long cur_min = 0, cur_max = 0;
+        
+        for (int i = 0; i < n; ++i) {
+            long long x = a[i];
+            long long new_min = min({cur_min + x, cur_max + x, abs(cur_min + x), abs(cur_max + x)});
+            long long new_max = max({cur_min + x, cur_max + x, abs(cur_min + x), abs(cur_max + x)});
+            cur_min = new_min;
+            cur_max = new_max;
+        }
+        long long k = cur_max;
+        
+        vector<long long> suf_max(n + 1, 0);
+        suf_max[n] = 0;
+        for (int i = n - 1; i >= 0; --i) {
+            suf_max[i] = max(0LL, suf_max[i + 1] + a[i]);
+        }
+        
+        vector<long long> dp_min(n + 1), dp_max(n + 1);
+        dp_min[0] = dp_max[0] = 0;
+        
+        long long ans = 1;
+        bool first = true;
+        
+        for (int i = 0; i < n; ++i) {
+            long long x = a[i];
+            long long ndp_min = min({dp_min[i] + x, dp_max[i] + x, abs(dp_min[i] + x), abs(dp_max[i] + x)});
+            long long ndp_max = max({dp_min[i] + x, dp_max[i] + x, abs(dp_min[i] + x), abs(dp_max[i] + x)});
+            
+            if (first) {
+                if (ndp_max == k) {
+                    ans = (ans * 2) % MOD;
+                }
+                if (ndp_min == k && ndp_max != k) {
+                    ans = (ans * 1) % MOD;
+                }
+                if (ndp_min != k && ndp_max != k) {
+                    ans = 0;
+                }
+            } else {
+                long long ways = 0;
+                if (dp_min[i] + x == k || dp_max[i] + x == k) ways++;
+                if (abs(dp_min[i] + x) == k || abs(dp_max[i] + x) == k) ways++;
+                ans = (ans * ways) % MOD;
+            }
+            
+            dp_min[i + 1] = ndp_min;
+            dp_max[i + 1] = ndp_max;
+            
+            if (first && (ndp_min != ndp_max)) first = false;
+        }
+        
+        cout << ans % MOD << "\n";
+    }
+    return 0;
+}

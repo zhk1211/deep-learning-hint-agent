@@ -1,0 +1,37 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+        }
+        
+        auto f = [](int rating, int x) {
+            if (rating < x) return rating + 1;
+            if (rating > x) return rating - 1;
+            return rating;
+        };
+        
+        int dp0 = 0, dp1 = -n, dp2 = -n;
+        for (int x : a) {
+            dp2 = max(f(dp1, x), f(dp2, x));
+            dp1 = max(dp1, dp0);
+            dp0 = f(dp0, x);
+        }
+        
+        cout << max(dp1, dp2) << '\n';
+    }
+    
+    return 0;
+}
+```

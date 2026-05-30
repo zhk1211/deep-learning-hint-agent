@@ -1,0 +1,55 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        string n_str;
+        cin >> n_str;
+        int n_int = stoi(n_str);
+        int len = (int)n_str.size();
+
+        vector<pair<int, int>> ans;
+
+        // a from 1 to 10000
+        for (int a = 1; a <= 10000; ++a) {
+            // The correct answer is n*a - b, which must be positive => b < n*a
+            // Also b <= min(10000, a * n_int)
+            // The string length after operations: len * a - b
+            // This length must be > 0 and <= 6 (from hints, small length)
+            // Actually we can just iterate over possible lengths L = len*a - b
+            // L must be between 1 and min(6, len*a)
+            int maxL = min(6, len * a);
+            for (int L = 1; L <= maxL; ++L) {
+                int b = len * a - L;
+                if (b < 1 || b > min(10000, a * n_int)) continue;
+                // Now we need to check if the first L digits of n_str repeated a times
+                // equal to the integer n_int * a - b
+                // Build the repeated string prefix of length L
+                string repeated;
+                while ((int)repeated.size() < L) {
+                    repeated += n_str;
+                }
+                string prefix = repeated.substr(0, L);
+                // Convert to integer
+                long long val = stoll(prefix);
+                if (val == (long long)n_int * a - b) {
+                    ans.emplace_back(a, b);
+                }
+            }
+        }
+
+        cout << ans.size() << '\n';
+        for (auto &p : ans) {
+            cout << p.first << ' ' << p.second << '\n';
+        }
+    }
+
+    return 0;
+}
+```

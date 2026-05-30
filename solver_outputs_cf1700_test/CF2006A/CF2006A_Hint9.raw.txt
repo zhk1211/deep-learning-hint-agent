@@ -1,0 +1,82 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<int>> adj(n + 1);
+        for (int i = 0; i < n - 1; i++) {
+            int u, v;
+            cin >> u >> v;
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+        string s;
+        cin >> s;
+        s = " " + s; // 1-indexed
+
+        vector<int> leaf(n + 1, 0);
+        for (int i = 2; i <= n; i++) {
+            if (adj[i].size() == 1) leaf[i] = 1;
+        }
+
+        int root_val = -1; // -1: ?, 0: 0, 1: 1
+        if (s[1] == '0') root_val = 0;
+        else if (s[1] == '1') root_val = 1;
+
+        int cnt0 = 0, cnt1 = 0, cntq_leaf = 0;
+        for (int i = 2; i <= n; i++) {
+            if (leaf[i]) {
+                if (s[i] == '0') cnt0++;
+                else if (s[i] == '1') cnt1++;
+                else cntq_leaf++;
+            }
+        }
+
+        int ans = 0;
+        if (root_val != -1) {
+            // root is fixed
+            if (root_val == 0) {
+                ans = cnt1 + (cntq_leaf + 1) / 2;
+            } else {
+                ans = cnt0 + (cntq_leaf + 1) / 2;
+            }
+        } else {
+            // root is ?
+            int cntq_other = 0;
+            for (int i = 2; i <= n; i++) {
+                if (!leaf[i] && s[i] == '?') cntq_other++;
+            }
+            // Iris wants to maximize, Dora minimize
+            // If cnt0 != cnt1, Iris can force root to be the opposite of the majority
+            if (cnt0 != cnt1) {
+                int majority = (cnt0 > cnt1) ? 0 : 1;
+                // Iris will set root to 1 - majority
+                if (majority == 0) {
+                    ans = cnt1 + (cntq_leaf + 1) / 2;
+                } else {
+                    ans = cnt0 + (cntq_leaf + 1) / 2;
+                }
+            } else {
+                // cnt0 == cnt1
+                // The game on root and leaves is symmetric
+                // If cntq_other is odd, Iris gets to set the last ? leaf
+                if (cntq_other % 2 == 1) {
+                    ans = cnt0 + (cntq_leaf + 1) / 2;
+                } else {
+                    ans = cnt0 + cntq_leaf / 2;
+                }
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

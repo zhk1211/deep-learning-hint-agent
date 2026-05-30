@@ -1,0 +1,43 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int i = 0; i < n; ++i) cin >> b[i];
+
+        vector<int> freq(n + 1, 0);
+        int i = n - 1, j = n - 1;
+        bool ok = true;
+        while (j >= 0) {
+            if (i >= 0 && a[i] == b[j]) {
+                --i;
+                --j;
+            } else if (j + 1 < n && b[j] == b[j + 1]) {
+                ++freq[b[j]];
+                --j;
+            } else if (freq[b[j]] > 0) {
+                --freq[b[j]];
+                --j;
+            } else if (i >= 0) {
+                ++freq[a[i]];
+                --i;
+            } else {
+                ok = false;
+                break;
+            }
+        }
+        cout << (ok ? "YES" : "NO") << '\n';
+    }
+    return 0;
+}
+```

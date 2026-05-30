@@ -1,0 +1,79 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int i = 0; i < n; ++i) cin >> b[i];
+
+        vector<int> freq(n + 1, 0);
+        for (int x : a) freq[x]++;
+        for (int x : b) freq[x]--;
+
+        bool ok = true;
+        for (int i = 1; i <= n; ++i) {
+            if (freq[i] != 0) {
+                ok = false;
+                break;
+            }
+        }
+        if (!ok) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // We simulate the reverse operation:
+        // In reverse, we can take an element from b and match it with a,
+        // but we can "delay" matching if we have a matching element later.
+        // We use a pointer in a from right to left, and a multiset (or frequency map)
+        // to store elements from b that we have seen but not yet matched.
+        vector<int> cnt(n + 1, 0);
+        int j = n - 1; // pointer in a (from right)
+        for (int i = n - 1; i >= 0; --i) {
+            if (i < n - 1 && b[i] == b[i + 1]) {
+                // we can use this duplicate later
+                cnt[b[i]]++;
+            } else {
+                // try to match b[i] with a[j]
+                while (j >= 0 && a[j] != b[i]) {
+                    if (cnt[a[j]] > 0) {
+                        cnt[a[j]]--;
+                        j--;
+                    } else {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (!ok) break;
+                if (j >= 0 && a[j] == b[i]) {
+                    j--;
+                } else {
+                    ok = false;
+                    break;
+                }
+            }
+        }
+        // consume remaining a's if they are in cnt
+        while (j >= 0) {
+            if (cnt[a[j]] > 0) {
+                cnt[a[j]]--;
+                j--;
+            } else {
+                ok = false;
+                break;
+            }
+        }
+
+        cout << (ok ? "YES" : "NO") << '\n';
+    }
+    return 0;
+}

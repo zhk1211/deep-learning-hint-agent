@@ -1,0 +1,80 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1000000007;
+
+inline int add(int a, int b) {
+    return (a + b >= MOD ? a + b - MOD : a + b);
+}
+
+inline int mul(int a, int b) {
+    return 1LL * a * b % MOD;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        sort(a.begin(), a.end());
+        vector<int> b = a;
+        b.erase(unique(b.begin(), b.end()), b.end());
+        int k = (int)b.size();
+        
+        vector<int> cnt(k);
+        for (int i = 0; i < k; ++i) {
+            cnt[i] = upper_bound(a.begin(), a.end(), b[i]) - lower_bound(a.begin(), a.end(), b[i]);
+        }
+        
+        if (k < m) {
+            cout << 0 << '\n';
+            continue;
+        }
+        
+        using ipair = pair<int, int>;
+        stack<ipair> S1, S2;
+        auto push = [&](stack<ipair>& S, int x) {
+            int prod = mul(x, S.empty() ? 1 : S.top().second);
+            S.emplace(x, prod);
+        };
+        
+        for (int j = 0; j < m; ++j) {
+            push(S1, cnt[j]);
+        }
+        
+        int ans = 0;
+        for (int j = m; j <= k; ++j) {
+            if (b[j - 1] - b[j - m] == m - 1) {
+                int prod1 = S1.empty() ? 1 : S1.top().second;
+                int prod2 = S2.empty() ? 1 : S2.top().second;
+                ans = add(ans, mul(prod1, prod2));
+            }
+            
+            if (S2.empty()) {
+                while (!S1.empty()) {
+                    push(S2, S1.top().first);
+                    S1.pop();
+                }
+            }
+            S2.pop();
+            if (j < k) {
+                push(S1, cnt[j]);
+            }
+        }
+        
+        cout << ans << '\n';
+    }
+    
+    return 0;
+}
+```

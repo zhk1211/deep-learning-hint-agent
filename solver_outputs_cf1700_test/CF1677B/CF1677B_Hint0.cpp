@@ -1,0 +1,112 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        string s;
+        cin >> s;
+        int total = n * m;
+        
+        vector<int> col_good(m, 0);
+        int good_cols = 0;
+        
+        vector<int> row_has_one(n, 0);
+        int good_rows = 0;
+        
+        vector<int> ans(total);
+        
+        int last_one = -1;
+        
+        for (int i = 0; i < total; ++i) {
+            int col = i % m;
+            if (s[i] == '1') {
+                if (!col_good[col]) {
+                    col_good[col] = 1;
+                    ++good_cols;
+                }
+                last_one = i;
+            }
+            
+            int row = i / m;
+            if (s[i] == '1' && !row_has_one[row]) {
+                row_has_one[row] = 1;
+                ++good_rows;
+            }
+            
+            if (last_one != -1 && i - last_one < m) {
+                ans[i] = good_cols + good_rows;
+            } else {
+                ans[i] = good_cols + good_rows;
+            }
+        }
+        
+        vector<int> row_good(total, 0);
+        vector<int> last_one_in_window(total, -1);
+        int last = -1;
+        for (int i = 0; i < total; ++i) {
+            if (s[i] == '1') last = i;
+            last_one_in_window[i] = last;
+        }
+        
+        vector<int> row_ans(total, 0);
+        vector<int> col_ans(total, 0);
+        
+        vector<int> col_flag(m, 0);
+        int col_cnt = 0;
+        for (int i = 0; i < total; ++i) {
+            int c = i % m;
+            if (s[i] == '1' && !col_flag[c]) {
+                col_flag[c] = 1;
+                ++col_cnt;
+            }
+            col_ans[i] = col_cnt;
+        }
+        
+        vector<int> row_flag(n, 0);
+        int row_cnt = 0;
+        for (int i = 0; i < total; ++i) {
+            int r = i / m;
+            if (s[i] == '1' && !row_flag[r]) {
+                row_flag[r] = 1;
+                ++row_cnt;
+            }
+            row_ans[i] = row_cnt;
+        }
+        
+        vector<int> res(total);
+        vector<int> last_one_pos(total, -1);
+        int last_pos = -1;
+        for (int i = 0; i < total; ++i) {
+            if (s[i] == '1') last_pos = i;
+            last_one_pos[i] = last_pos;
+        }
+        
+        for (int i = 0; i < total; ++i) {
+            int cols = col_ans[i];
+            int rows = 0;
+            if (last_one_pos[i] != -1 && i - last_one_pos[i] < m) {
+                rows = row_ans[i];
+            } else {
+                if (i >= m) {
+                    rows = row_ans[i - m];
+                } else {
+                    rows = 0;
+                }
+            }
+            res[i] = cols + rows;
+        }
+        
+        for (int i = 0; i < total; ++i) {
+            cout << res[i] << " \n"[i == total - 1];
+        }
+    }
+    return 0;
+}

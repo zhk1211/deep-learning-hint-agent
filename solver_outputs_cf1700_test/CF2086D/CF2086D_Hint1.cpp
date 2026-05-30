@@ -1,0 +1,73 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+const int MAXN = 500000;
+
+vector<long long> fact, invfact;
+
+long long modpow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+void precompute() {
+    fact.resize(MAXN + 1);
+    invfact.resize(MAXN + 1);
+    fact[0] = 1;
+    for (int i = 1; i <= MAXN; i++) {
+        fact[i] = fact[i-1] * i % MOD;
+    }
+    invfact[MAXN] = modpow(fact[MAXN], MOD - 2);
+    for (int i = MAXN; i >= 1; i--) {
+        invfact[i-1] = invfact[i] * i % MOD;
+    }
+}
+
+long long nCr(int n, int r) {
+    if (r < 0 || r > n) return 0;
+    return fact[n] * invfact[r] % MOD * invfact[n-r] % MOD;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    precompute();
+    int t;
+    cin >> t;
+    while (t--) {
+        vector<int> c(26);
+        int total = 0;
+        int odd_count = 0;
+        for (int i = 0; i < 26; i++) {
+            cin >> c[i];
+            total += c[i];
+            if (c[i] % 2 == 1) odd_count++;
+        }
+        if (odd_count > 1) {
+            cout << 0 << '\n';
+            continue;
+        }
+        int even_positions = total / 2;
+        int odd_positions = total - even_positions;
+        long long ways = 1;
+        for (int i = 0; i < 26; i++) {
+            if (c[i] == 0) continue;
+            if (c[i] % 2 == 0) {
+                ways = ways * nCr(even_positions, c[i]/2) % MOD;
+                even_positions -= c[i]/2;
+            } else {
+                ways = ways * nCr(even_positions, c[i]/2) % MOD;
+                even_positions -= c[i]/2;
+            }
+        }
+        cout << ways << '\n';
+    }
+    return 0;
+}

@@ -1,0 +1,35 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+const int MAXN = 1000000;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    cin >> n;
+
+    vector<long long> dp(n + 1, 0);
+    vector<long long> sum(n + 1, 0);
+    vector<int> divs(n + 1, 0);
+
+    for (int i = 1; i <= n; ++i) {
+        for (int j = i; j <= n; j += i) {
+            divs[j]++;
+        }
+    }
+
+    dp[0] = 1;
+    sum[0] = 1;
+
+    for (int i = 1; i <= n; ++i) {
+        dp[i] = (sum[i - 1] + divs[i] - 1) % MOD;
+        sum[i] = (sum[i - 1] + dp[i]) % MOD;
+    }
+
+    cout << dp[n] % MOD << "\n";
+    return 0;
+}

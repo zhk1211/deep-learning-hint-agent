@@ -1,0 +1,133 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+[Mass Hysteria](https://hearthstone.blizzard.com/en-us/cards/50071-mass-hysteria) (Hearthstone)
+
+$ \color{white}{\text{You are sus}} $
+
+Franklin is plotting a Christmas attack where he casts the spell Mass Hysteria on a village of elves.
+
+There are $ n $ elves numbered $ 1 $ to $ n $ , where elf $ i $ has a health value of $ h_i $ and an attack value of $ a_i $ . Initially, $ h_i=a_i $ for all $ i $ , and all $ a_i $ are distinct. Elf $ i $ is alive if and only if its health is positive (i.e., $ h_i>0 $ ).
+
+When Franklin casts Mass Hysteria, the following process is repeated:
+
+- Choose a pair of distinct living elves $ x $ and $ y $ ( $ h_x,h_y>0 $ ) such that elf $ x $ has not attacked before. If no such pair exists, terminate the process.
+- Then, elf $ x $ attacks elf $ y $ , decreasing $ h_y $ by $ a_x $ . Additionally, due to recoil, $ h_x $ is decreased by $ a_y $ . Note that $ a_x $ and $ a_y $ remain unchanged.
+
+The process will repeat until it is impossible to choose a valid pair of elves. It can be shown that Mass Hysteria terminates after at most $ n $ iterations.
+
+Given an integer $ m $ , construct a valid sequence of attacks such that exactly $ m $ elves are alive when the process ends; or determine that no such sequence exists.
+
+Input Format
+Each test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \le t \le 10^4 $ ). The description of the test cases follows.
+
+The first line of each test case contains two integers $ n $ and $ m $ ( $ 2\le n\le 2\cdot 10^5, 0\le m\le n $ ) — the number of elves in the village and the number of elves to be left alive.
+
+The second line contains $ n $ integers $ a_1,a_2,\ldots,a_n $ ( $ 1\le a_i\le 10^9 $ ) — the initial attack and health values of the elves.
+
+It is guaranteed that all $ a_i $ are distinct.
+
+It is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\cdot 10 ^ 5 $ .
+
+Output Format
+For each test case, if it is impossible for exactly $ m $ elves to remain alive, print $ -1 $ .
+
+Otherwise, output a valid sequence of attacks as follows:
+
+- On the first line, output an integer $ k $ ( $ 0\le k\le n $ ) — the number of iterations in Mass Hysteria.
+- Then $ k $ lines follow, the $ i $ -th line containing two integers $ x_i $ and $ y_i $ ( $ 1\leq x_i,y_i\leq n $ , $ x_i\neq y_i $ ), indicating that elf $ x_i $ attacks elf $ y_i $ in the $ i $ -th iteration.
+
+The sequence must satisfy all of the following conditions:
+
+- Immediately before the $ i $ -th iteration, both elves $ x_i $ and $ y_i $ are alive and elf $ x_i $ has not attacked in any previous iteration.
+- After the $ k $ -th iteration, exactly $ m $ elves are alive and there does not exist a pair of distinct living elves $ x $ and $ y $ such that elf $ x $ has not attacked before.
+
+If there are multiple answers, you may output any of them. Any valid sequence satisfying the above conditions will be accepted.
+
+Examples
+Sample 1
+Input
+7
+4 2
+1 4 2 3
+2 2
+6 7
+3 0
+1 2 3
+3 1
+1 2 3
+3 2
+1 2 3
+4 1
+2 3 4 5
+6 0
+998244353 1000000000 314159265 676767677 999999999 987654321
+Output
+2
+3 1
+2 4
+-1
+2
+3 2
+1 3
+2
+1 2
+3 2
+-1
+2
+1 4
+4 2
+4
+3 1
+2 5
+6 1
+4 2
+
+Note
+In the first test case, one possible sequence of attacks is shown below:
+
+\# $ x $ $ y $ Health values after attackElves that have attacked0—— $ [1, 4, 2, 3] $ $ [] $ 1 $ 3 $ $ 1 $ $ [-1, 4, 1, 3] $ $ [3] $ 2 $ 2 $ $ 4 $ $ [-1, 1, 1, -1] $ $ [2, 3] $ After $ 2 $ iterations, only elves $ 2 $ and $ 3 $ are alive. Since both of them have already attacked, no further valid attack is possible, and Mass Hysteria terminates.
+
+In the second test case, the only possible choices for $ (x,y) $ in the first iteration are $ (1,2) $ or $ (2,1) $ . In either case, elf $ 1 $ ends up with $ -1 $ health, so it is impossible for both elves to remain alive at the end. Note that Mass Hysteria will last at least one iteration as there exists a valid $ (x,y) $ for the first iteration.
+
+In the sixth test case, only elf $ 3 $ is alive after all attacks. Even though elf $ 3 $ has not attacked before, Mass Hysteria terminates since there is no other elf it can attack.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+2178D - Xmas or Hysteria
+Note that in each attack, at least one elf dies. The elf with smaller attack value must die, as its health is always at most its attack, which in turn is less than the other elf's attack.
+Consider the elves that survive at the end. They each must attack once, and since they survived, each elf they attacked must have died. Furthermore, each target elf can only be attacked by one surviving elf, as they will die immediately upon being attacked. Therefore, for every surviving elf, there must be a corresponding dead elf. This means that no more than $$$\lfloor n/2 \rfloor$$$ elves can survive, so if $$$2m  \gt  n$$$, output $$$-1$$$.
+Now, suppose $$$2m \le n$$$. $$$m$$$ elves survive and they attack $$$m$$$ smaller
+target
+elves, which die. We need the $$$n - 2m$$$
+leftover
+elves to die. How can we do this?
+We can sort the leftover elves from left to right. Then, each leftover elf attacks the larger elf immediately after it from left to right. This causes all leftover elves to die except for the largest. If there is a target elf which dies ($$$m  \gt  0$$$), we can also kill the largest elf — let it attack a larger target elf before that target elf is attacked by some larger surviving elf. This will kill the largest leftover elf, while allowing the target elf it attacks to still be alive for the larger surviving elf.
+This idea solves the problem for $$$0  \lt  m \le \lfloor n/2 \rfloor$$$ — a construction always exists in this case. One clean way to implement this is by sorting all elves by their size, letting the largest $$$m$$$ elves be the surviving elves, the next largest $$$m$$$ elves be the target elves, and the remaining (smallest) $$$n-2m$$$ elves be the leftover elves. Each leftover elf attacks the elf to its right, and then each surviving elf attacks a different target elf. In the end, every surviving elf has attacked.
+For $$$m = 0$$$, the idea to kill the leftover elves is not sufficient because the largest leftover elf has no one larger to attack and thus will not die. To kill the largest elf, we need some elves to attack it; all of them will die. We can then deal with the remaining elves using the same idea for the leftover elves above.
+To implement the $$$m = 0$$$ case, sort the elves. Iterate through the elves in decreasing order from the second-largest elf until their sum reaches the largest elf's health; save these elves to attack the largest elf at the end. Each remaining smaller elf should attack the (larger) elf to its right and die in the process; then let the saved elves should attack the largest elf so that all elves die.
+If all other elves attacking the largest elf is not sufficient to kill the largest elf (i.e., the sum of all elves except the largest is less than the largest elf), there is no way to kill the largest elf. In this case it is not possible for $$$0$$$ elves to survive, so output $$$-1$$$.
+This solves the problem in all cases in $$$\mathcal{O}(n \log n)$$$.
+
+Implementation
+Python
+,
+C++
+(by
+Auchenai01
+)
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

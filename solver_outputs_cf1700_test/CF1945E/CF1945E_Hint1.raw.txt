@@ -1,0 +1,74 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, x;
+        cin >> n >> x;
+        vector<int> p(n + 1);
+        int pos_x = -1;
+        for (int i = 1; i <= n; ++i) {
+            cin >> p[i];
+            if (p[i] == x) pos_x = i;
+        }
+
+        // simulate binary search
+        int l = 1, r = n + 1;
+        while (r - l > 1) {
+            int m = (l + r) / 2;
+            if (p[m] <= x) l = m;
+            else r = m;
+        }
+        // after loop, p[l] should be x
+        if (p[l] == x) {
+            cout << "0\n";
+            continue;
+        }
+
+        // we need at most 2 swaps
+        // first swap: put x at position l
+        // but we must ensure binary search still finds it
+        // if we just swap pos_x and l, the binary search path might change
+        // because the element at l (which was p[l]) moves to pos_x
+        // we need to check if after swap, the binary search still ends at l
+        // if not, we do a second swap to fix
+
+        vector<pair<int,int>> ops;
+        // swap pos_x and l
+        swap(p[pos_x], p[l]);
+        ops.push_back({pos_x, l});
+        pos_x = l; // x is now at l
+
+        // simulate again
+        l = 1, r = n + 1;
+        while (r - l > 1) {
+            int m = (l + r) / 2;
+            if (p[m] <= x) l = m;
+            else r = m;
+        }
+        if (p[l] == x) {
+            cout << ops.size() << "\n";
+            for (auto [i, j] : ops) cout << i << " " << j << "\n";
+            continue;
+        }
+
+        // need second swap: swap pos_x (which is l) with the position where x should be
+        // but x is already at l, so we need to swap l with the position that binary search ends at
+        // actually after first swap, binary search ends at some l' != l
+        // we need to swap l and l' to put x at l'
+        int new_l = l;
+        swap(p[pos_x], p[new_l]);
+        ops.push_back({pos_x, new_l});
+
+        cout << ops.size() << "\n";
+        for (auto [i, j] : ops) cout << i << " " << j << "\n";
+    }
+    return 0;
+}
+```

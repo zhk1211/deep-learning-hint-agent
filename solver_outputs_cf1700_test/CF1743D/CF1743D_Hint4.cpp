@@ -1,0 +1,71 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    string s;
+    cin >> n >> s;
+    
+    // Find first '1' in the string
+    int first_one = -1;
+    for (int i = 0; i < n; i++) {
+        if (s[i] == '1') {
+            first_one = i;
+            break;
+        }
+    }
+    
+    // If no '1', answer is 0
+    if (first_one == -1) {
+        cout << "0\n";
+        return 0;
+    }
+    
+    // The first substring should be the whole string s
+    // We need to find the best second substring (a prefix of s) to maximize OR
+    
+    // Find the first zero after first_one
+    int first_zero = -1;
+    for (int i = first_one; i < n; i++) {
+        if (s[i] == '0') {
+            first_zero = i;
+            break;
+        }
+    }
+    
+    // If no zero after first_one, answer is all ones (length n - first_one)
+    if (first_zero == -1) {
+        cout << string(n - first_one, '1') << "\n";
+        return 0;
+    }
+    
+    // The length of the second substring should be n - first_one
+    int len = n - first_one;
+    // We'll try all possible starting positions for the second substring
+    // The second substring must start at some position >= first_one
+    // and its length is len
+    
+    string best = s.substr(first_one);
+    
+    // We only need to consider starting positions from first_one to first_zero
+    // because after first_zero, the prefix of zeros won't help
+    for (int start = first_one; start <= first_zero; start++) {
+        string candidate(len, '0');
+        for (int i = 0; i < len; i++) {
+            char c1 = s[first_one + i];
+            char c2 = (start + i < n) ? s[start + i] : '0';
+            candidate[i] = (c1 == '1' || c2 == '1') ? '1' : '0';
+        }
+        if (candidate > best) {
+            best = candidate;
+        }
+    }
+    
+    cout << best << "\n";
+    
+    return 0;
+}

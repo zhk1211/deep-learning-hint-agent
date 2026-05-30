@@ -1,0 +1,5 @@
+[
+  "**Hint 1**\nLet $$$p[x]$$$ be the position of $$$x$$$ in permutation $$$a$$$. What is the only possible position for $$$0$$$ in permutation $$$b$$$?",
+  "**Hint 2**\nFor every interval $$$[l,r]$$$ ($$$l \\le p[0] < p[1] \\le r$$$), $$$MEX([b_l,...,b_r])$$$ must be at least $$$2$$$. For every other interval, $$$MEX([b_l,...,b_r])$$$ cannot exceed $$$2$$$. What is the only position for $$$1$$$ which satisfies both of these constraints?",
+  "**Hint 3**\nIf $$$p[2] \\in [l,r]$$$, the answer gets multiplied by $$$$(r-l+1)-2$$$. Otherwise, the current interval is extended to include $$$p[2]$$$. After processing $$$0,1, ..., k-2$$$ and $$$k-1$$$, the algorithm for processing $$$k$$$ is very similar to the one presented earlier."
+]

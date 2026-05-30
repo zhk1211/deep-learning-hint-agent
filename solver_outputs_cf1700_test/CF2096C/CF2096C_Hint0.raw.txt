@@ -1,0 +1,148 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const ll INF = 1e18;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<ll>> h(n, vector<ll>(n));
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                cin >> h[i][j];
+        vector<ll> a(n), b(n);
+        for (int i = 0; i < n; i++) cin >> a[i];
+        for (int j = 0; j < n; j++) cin >> b[j];
+
+        // We need to assign each row and column a parity (0 or 1) of increments.
+        // Let x_i = 0/1 for row i, y_j = 0/1 for column j.
+        // Condition: h[i][j] + x_i + y_j != h[i][j+1] + x_i + y_{j+1}
+        // => (y_j - y_{j+1}) != (h[i][j+1] - h[i][j]) mod 2? Actually mod 2 difference.
+        // Since x_i cancels, we get: y_j - y_{j+1} != h[i][j+1] - h[i][j] (mod 2)
+        // Similarly for columns: x_i - x_{i+1} != h[i+1][j] - h[i][j] (mod 2)
+        // So constraints only depend on parity differences.
+        // Let d_row[i][j] = (h[i][j+1] - h[i][j]) & 1
+        // Then we require y_j != y_{j+1} if d_row[i][j] == 0, else y_j == y_{j+1}? Wait:
+        // y_j - y_{j+1} mod 2 != d mod 2.
+        // If d is even (0 mod 2), then y_j - y_{j+1} must be odd => y_j != y_{j+1}.
+        // If d is odd (1 mod 2), then y_j - y_{j+1} must be even => y_j == y_{j+1}.
+        // So for each adjacent pair in a row, we get a constraint on y_j and y_{j+1}: either equal or not equal.
+        // Similarly for columns: x_i and x_{i+1} must be equal or not equal based on vertical differences.
+
+        // We can model this as 2-SAT or bipartite graph coloring? Variables are boolean.
+        // Constraints are of form (var1 == var2) or (var1 != var2). This is exactly 2-coloring with some edges equality, some inequality.
+        // We can solve by building a graph with two types of edges.
+        // But we also have costs: we want to choose assignment (x_i, y_j) to minimize sum of a_i * x_i + b_j * y_j.
+        // This is a minimum weight assignment satisfying constraints.
+        // Since constraints only relate variables of same type? Wait: row constraints involve only y's, column constraints involve only x's.
+        // There is no constraint mixing x and y! Because h[i][j] + x_i + y_j compared to neighbor: x cancels for horizontal, y cancels for vertical.
+        // So the problem decomposes into independent problems for rows (x) and columns (y).
+        // For rows: we need to assign x_i in {0,1} to satisfy vertical constraints.
+        // For columns: assign y_j in {0,1} to satisfy horizontal constraints.
+        // Then total cost = min over valid assignments of sum a_i x_i + sum b_j y_j.
+        // If either is impossible, answer -1.
+
+        // Let's verify: Is there any cross constraint? No, because each adjacency is either within a row (only y's involved) or within a column (only x's involved).
+        // So we can solve separately.
+
+        // For columns (y):
+        // Build graph with n nodes. For each row i, for each j from 0 to n-2:
+        //   diff = (h[i][j+1] - h[i][j]) & 1;
+        //   if diff == 0 -> y_j != y_{j+1}
+        //   else -> y_j == y_{j+1}
+        // If there are conflicting constraints (e.g., both equal and not equal between same pair), impossible.
+        // Since constraints are consistent across rows? They must all agree, otherwise impossible.
+        // So we can just check for each adjacent pair (j, j+1) across all rows: if any row says equal and another says not equal -> impossible.
+        // Then we have a set of required equalities/inequalities. This forms components where variables are fixed relative to each other.
+        // Each component has two possible assignments (flip all bits). We need to pick one to minimize sum of b_j y_j.
+        // This is a classic bipartite minimum weight assignment: for each connected component, compute cost if we set a root to 0, and cost if set to 1, take min.
+
+        // Same for rows (x) with vertical constraints.
+
+        auto solve_side = [&](const vector<ll>& cost, bool is_row) -> ll {
+            // is_row: true if we are solving for x (rows), false for y (columns)
+            // Constraints: for each adjacent pair (k, k+1) we have required relation: 0 for !=, 1 for ==
+            // We'll collect constraints from all relevant adjacencies.
+            int m = cost.size();
+            vector<vector<pair<int,int>>> adj(m); // to, relation (0: !=, 1: ==)
+            bool possible = true;
+            if (is_row) {
+                // vertical constraints: for each column j, for each i from 0 to n-2
+                for (int j = 0; j < n; j++) {
+                    for (int i = 0; i < n-1; i++) {
+                        int diff = (h[i+1][j] - h[i][j]) & 1;
+                        int rel = (diff == 0) ? 0 : 1; // 0 means !=, 1 means ==
+                        // add constraint between i and i+1
+                        adj[i].push_back({i+1, rel});
+                        adj[i+1].push_back({i, rel});
+                    }
+                }
+            } else {
+                // horizontal constraints: for each row i, for each j from 0 to n-2
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < n-1; j++) {
+                        int diff = (h[i][j+1] - h[i][j]) & 1;
+                        int rel = (diff == 0) ? 0 : 1;
+                        adj[j].push_back({j+1, rel});
+                        adj[j+1].push_back({j, rel});
+                    }
+                }
+            }
+
+            // Check consistency and build components
+            vector<int> color(m, -1);
+            ll total_cost = 0;
+            for (int i = 0; i < m; i++) {
+                if (color[i] == -1) {
+                    // BFS/DFS to assign colors and check consistency
+                    vector<int> comp;
+                    queue<int> q;
+                    color[i] = 0;
+                    q.push(i);
+                    comp.push_back(i);
+                    bool ok = true;
+                    while (!q.empty()) {
+                        int u = q.front(); q.pop();
+                        for (auto [v, rel] : adj[u]) {
+                            int expected = rel ? color[u] : (1 - color[u]);
+                            if (color[v] == -1) {
+                                color[v] = expected;
+                                q.push(v);
+                                comp.push_back(v);
+                            } else if (color[v] != expected) {
+                                ok = false;
+                            }
+                        }
+                    }
+                    if (!ok) return INF;
+                    // compute cost for this component for both assignments
+                    ll cost0 = 0, cost1 = 0;
+                    for (int u : comp) {
+                        if (color[u] == 0) cost0 += cost[u];
+                        else cost1 += cost[u];
+                    }
+                    // if we flip all bits in component, cost0 and cost1 swap
+                    // So min cost for component is min(cost0, cost1)
+                    total_cost += min(cost0, cost1);
+                }
+            }
+            return total_cost;
+        };
+
+        ll cost_rows = solve_side(a, true);
+        ll cost_cols = solve_side(b, false);
+        if (cost_rows >= INF || cost_cols >= INF) {
+            cout << -1 << '\n';
+        } else {
+            cout << cost_rows + cost_cols << '\n';
+        }
+    }
+    return 0;
+}
+```

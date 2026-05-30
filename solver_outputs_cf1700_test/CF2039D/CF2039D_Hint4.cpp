@@ -1,0 +1,187 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> S(m);
+        for (int i = 0; i < m; ++i) {
+            cin >> S[i];
+        }
+
+        // If 1 is not in S, impossible because a_1 must divide all a_i
+        if (S[0] != 1) {
+            cout << -1 << '\n';
+            continue;
+        }
+
+        vector<int> a(n + 1);
+        a[1] = S.back(); // largest element for a_1
+
+        // For each position i, we need a_i such that a_1 % a_i == 0
+        // and a_i is in S. To maximize lexicographically, we want largest possible.
+        // a_i must divide a_1.
+        // We can precompute divisors of a_1 that are in S.
+        vector<int> divs;
+        for (int x : S) {
+            if (a[1] % x == 0) {
+                divs.push_back(x);
+            }
+        }
+
+        // For i from 2 to n, pick largest divisor that works.
+        // Condition: for any j < i, a_gcd(i,j) != gcd(a_i, a_j).
+        // By hint, it's enough to ensure for all divisors d of i (d < i), a_d does not divide a_i.
+        // Because if a_d divides a_i, then for pair (d, i), a_gcd(d,i)=a_d, gcd(a_d,a_i)=a_d -> violation.
+        // Conversely, if for all proper divisors d of i, a_d does not divide a_i, then condition holds for all pairs.
+        // Proof: suppose violation for (i,j) with g=gcd(i,j). Then a_g divides both a_i and a_j, so a_g divides a_i.
+        // Since g divides i and g < i (if i != j), we have a proper divisor g of i with a_g | a_i, contradiction.
+        // So condition reduces to: for each i>1, for every divisor d of i with d < i, a_i is NOT a multiple of a_d.
+        // Since a_i must divide a_1, we just need to avoid picking a_i that is a multiple of any a_d (d|i, d<i).
+        // To maximize lexicographically, we try largest possible divisor of a_1 from divs that is not a multiple of any a_d.
+        // We can maintain for each value v in divs whether it's forbidden (i.e., multiple of some a_d for d|i).
+        // Since n up to 1e5, sum n 3e5, we can do sieve-like approach.
+
+        // Precompute multiples: for each value v in divs, we can mark its multiples in divs as forbidden when v is used.
+        // But careful: forbidden depends on i. We need to know for current i, which values are forbidden.
+        // We can maintain an array 'bad' of size n+1, initially 0. When we set a_d = v, we mark all multiples of v in S as bad.
+        // Then for i, we pick the largest element in divs that is not bad.
+        // But we must only consider divisors d of i. So we need to apply the "bad" marks only from divisors of i.
+        // We can process i from 1 to n. For each i, we first set a_i (for i=1 already set). Then for each multiple k of i (k <= n), we will later need to consider that a_i might forbid some values for a_k.
+        // So we can do: after setting a_i, for each multiple k of i (k > i), we mark all multiples of a_i in S as forbidden for k.
+        // But that's too slow if we do it naively. Instead, we can maintain for each position k a set of forbidden values, but that's heavy.
+        // Alternative: Since a_i divides a_1, and a_1 is fixed, the number of divisors of a_1 is small (<= 128 for n<=1e5? Actually max divisors for n<=1e5 is 128 for 83160). So divs size is small.
+        // We can maintain for each value v in divs, the smallest index i where it became forbidden? Not exactly.
+        // Better: For each i, we need to check all divisors d of i (d < i). For each such d, a_d is already chosen. We need to avoid any value that is a multiple of a_d.
+        // Since divs size is small, we can just iterate over divisors d of i, and for each, mark multiples of a_d in a boolean array (size n+1) temporarily, then pick largest unmarked in divs.
+        // But doing this for each i might be O(n * tau(n) * |divs|) which could be large if tau(n) ~ 128 and |divs| ~ 128, n=1e5 -> 1e5*128*128 ~ 1.6e9 too high.
+        // However, sum n over test cases 3e5, and average tau(n) is small (~ log n). Also |divs| is at most number of divisors of a_1, which is at most 128. But we can optimize.
+
+        // Observe: The condition "a_i is not a multiple of a_d" for d|i. Since a_d divides a_1, a_i also divides a_1. So a_i is a multiple of a_d iff a_d divides a_i.
+        // We can precompute for each value v in divs, the set of values in divs that are multiples of v.
+        // Then for each i, we need to avoid the union of multiples of a_d for all d|i, d<i.
+        // We can maintain an array 'ban' of size n+1 (or size of max element in S) that counts how many times each value is banned. When we set a_d = v, we increment ban for all multiples of v in divs. When we finish processing all multiples of d? No, the ban is permanent for all future indices that have d as divisor.
+        // Actually, the ban from a_d applies to any i that is a multiple of d. So we can process i from 1 to n, and maintain a "current ban count" for each value in divs. When we move to i, we add bans from all divisors d of i (d < i) that we haven't added yet? But we set a_d when we processed d. So we can just, when we set a_d, we push its ban effect to all multiples of d. But we can do it lazily: for each i, we consider all divisors d of i. For each d, if d < i, we need to apply the ban from a_d. But we can apply it once when we set a_d, and store it in a way that we can query for i.
+        // Since we process i in increasing order, we can maintain an array 'ban_cnt' for each value in divs. Initially 0. When we set a_d = v, we will increment ban_cnt for all multiples of v in divs. But this ban should only affect indices i that are multiples of d. So we need to decrement when we leave the scope? No, the ban is permanent for all multiples of d. So if we just increment globally, it will affect even indices that are not multiples of d. That's incorrect.
+        // So we need a way to apply ban only to multiples of d. We can use a difference array over the multiples? Or we can process i and for each i, we look at its divisors d. For each d, we need to know a_d. We can just, for each i, iterate over divisors d of i (d < i), and for each, we mark the multiples of a_d as forbidden temporarily for this i. Since the number of divisors of i is small on average, and we only need to do this for i where we actually need to pick a_i, maybe it's acceptable if we optimize.
+        // But we can do better: The condition only depends on the set of a_d for d|i. Since a_1 is fixed, and a_i must divide a_1, we can think of the poset of divisors of a_1. The condition is that for any d|i, a_i is not a multiple of a_d. This is equivalent to: a_i is not in the ideal generated by {a_d : d|i, d<i} in the divisor lattice of a_1.
+        // Since the lattice is small (at most 128 elements), we can represent each value by its bitmask of prime exponents? But a_1 can be up to n=1e5, its divisors are just numbers. We can precompute for each divisor v of a_1, the set of divisors of a_1 that are multiples of v. This is a DAG. The condition says a_i must not be in the union of upward closures of a_d for d|i, d<i.
+        // We can maintain for each divisor v of a_1, the "earliest" index i where it becomes forbidden? Not exactly.
+
+        // Alternative approach: Since we want lexicographically largest, we can try to set a_i as large as possible. The largest possible is a_1 itself. Can we set a_i = a_1? Only if for all d|i, d<i, a_d does not divide a_1. But a_d always divides a_1 (since a_d is in divs). So a_1 is a multiple of a_d for any d. Thus a_i = a_1 is forbidden if there exists any proper divisor d of i. So a_i = a_1 is only allowed if i has no proper divisors >1, i.e., i=1 or i is prime? Wait, i=1 is already set. For i>1, i always has divisor 1, and a_1 divides a_1, so a_1 is always a multiple of a_1. Thus a_i = a_1 is forbidden for all i>1. So a_i < a_1 for all i>1.
+        // Next largest is the largest proper divisor of a_1 in S. Let's call it v2. When is v2 allowed? It is allowed if for all d|i, d<i, a_d does not divide v2. Since a_1 divides v2? No, v2 divides a_1. So a_1 does not divide v2 (unless v2=a_1). So a_1 is not a problem. But other a_d might divide v2. So we need to check.
+
+        // Given the small size of divs, we can do the following:
+        // Precompute divisors of a_1 that are in S: divs (sorted decreasing? S is increasing, so divs is increasing. We want largest, so we can reverse divs to decreasing order).
+        // For each i from 2 to n:
+        //   Find all divisors d of i with d < i.
+        //   For each such d, let v = a_d. Mark all multiples of v in divs as forbidden (we can use a boolean array of size |divs| or a bitset).
+        //   Then pick the first (largest) element in divs that is not forbidden.
+        //   If none, then impossible.
+        //   Set a_i = chosen value.
+        //   Clear the forbidden marks for next i (or just use a local array/bitset and reset).
+        // Since sum of n is 3e5, and number of divisors of i is at most 128, and |divs| <= 128, worst-case operations per i: 128 * 128 = 16384. For 3e5, that's 4.9e9, too high.
+        // But average number of divisors is much smaller (around log n). Also |divs| is number of divisors of a_1, which is at most 128 but typically much smaller. Still might be borderline.
+        // We can optimize: Instead of iterating over all divisors of i each time, we can maintain the forbidden set incrementally.
+        // Idea: Process i from 1 to n. When we set a_i, we know it will affect all multiples of i. We can push the "ban" to multiples of i. For each multiple k of i (k <= n), we can add a ban from a_i. But we need to apply this ban only when we process k. We can store for each k a list of banned values? That would be too much memory.
+        // Instead, we can process i and maintain a "current ban mask" for each value in divs? But bans are specific to i.
+        // Notice that the condition only cares about divisors of i. We can precompute for each i the list of its divisors. Then for each i, we need to union the multiples of a_d for d|i, d<i. We can do this union efficiently using bitsets if |divs| <= 128. 128 bits = two 64-bit integers. We can precompute for each value v in divs a bitset of which indices in divs are multiples of v. Then for each i, we start with an empty bitset, and for each divisor d of i (d<i), we OR the bitset of a_d. Then we find the first zero bit in the bitset (from highest index to lowest). The index corresponds to the largest allowed value.
+        // Complexity: For each i, we iterate over divisors of i. Number of divisors total over all i up to n is O(n log n). For n=1e5, sum_{i=1}^n tau(i) ~ n log n ~ 1e5 * 12 = 1.2e6. For each divisor, we do a bitset OR (two 64-bit operations). Then we find the first zero bit (can use __builtin_clz or loop). This is very fast. Sum over test cases n=3e5, total divisor iterations ~ 3e5 * log(3e5) ~ 3e5 * 12 = 3.6e6. Each iteration does a couple of bitwise operations. This will easily pass in 1 second.
+
+        // Let's implement this bitset approach.
+
+        // First, find a_1 = S.back() (largest element).
+        // Build divs: all elements of S that divide a_1, in decreasing order (so index 0 is largest).
+        vector<int> divs;
+        for (int i = m - 1; i >= 0; --i) {
+            if (a[1] % S[i] == 0) {
+                divs.push_back(S[i]);
+            }
+        }
+        // If divs is empty (shouldn't happen because 1 is in S and divides a_1), but just in case.
+        if (divs.empty()) {
+            cout << -1 << '\n';
+            continue;
+        }
+        int D = divs.size();
+        // Map value to index in divs
+        unordered_map<int, int> val_to_idx;
+        for (int i = 0; i < D; ++i) {
+            val_to_idx[divs[i]] = i;
+        }
+
+        // Precompute for each index idx in divs, a bitset (as unsigned long long or two) of which indices are multiples of divs[idx].
+        // Since D <= 128, we can use two 64-bit integers: low (0-63), high (64-127).
+        vector<uint64_t> ban_low(D, 0), ban_high(D, 0);
+        for (int i = 0; i < D; ++i) {
+            int v = divs[i];
+            for (int j = 0; j < D; ++j) {
+                if (divs[j] % v == 0) {
+                    if (j < 64) {
+                        ban_low[i] |= (1ULL << j);
+                    } else {
+                        ban_high[i] |= (1ULL << (j - 64));
+                    }
+                }
+            }
+        }
+
+        // Precompute divisors for each i up to n.
+        vector<vector<int>> divisors(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            for (int j = i; j <= n; j += i) {
+                divisors[j].push_back(i);
+            }
+        }
+
+        // Now fill a
+        bool possible = true;
+        for (int i = 2; i <= n; ++i) {
+            uint64_t cur_low = 0, cur_high = 0;
+            for (int d : divisors[i]) {
+                if (d == i) continue; // only proper divisors
+                int idx = val_to_idx[a[d]];
+                cur_low |= ban_low[idx];
+                cur_high |= ban_high[idx];
+            }
+            // Find the first zero bit from highest index (D-1 down to 0)
+            // Since divs is decreasing, index 0 is largest, index D-1 is smallest.
+            // We want largest value, so we want smallest index that is not banned.
+            int chosen_idx = -1;
+            // Check indices 0..63
+            for (int idx = 0; idx < D; ++idx) {
+                bool banned;
+                if (idx < 64) {
+                    banned = (cur_low >> idx) & 1;
+                } else {
+                    banned = (cur_high >> (idx - 64)) & 1;
+                }
+                if (!banned) {
+                    chosen_idx = idx;
+                    break;
+                }
+            }
+            if (chosen_idx == -1) {
+                possible = false;
+                break;
+            }
+            a[i] = divs[chosen_idx];
+        }
+
+        if (!possible) {
+            cout << -1 << '\n';
+        } else {
+            for (int i = 1; i <= n; ++i) {
+                cout << a[i] << " \n"[i == n];
+            }
+        }
+    }
+    return 0;
+}

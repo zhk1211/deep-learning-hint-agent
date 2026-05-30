@@ -1,0 +1,13 @@
+[
+  "**Hint 1**\nLet's use recursion. Try to find a way to make array $$$[1, x]$$$ consist of $$$x - 1$$$ ones and $$$1$$$ two.",
+  "**Hint 2**\nConsider $$$x = 100000$$$ . How many divisions do we need to perform to get rid of this element?",
+  "**Hint 3**\nWhat should we choose as $$$y$$$? Answer: $$$y \\approx \\sqrt{x}$$$ .",
+  "**Hint 4**\nHow many elements will we need to divide on $$$y$$$? Answer: $$$\\sqrt{x} - 1$$$.",
+  "**Hint 5**\nTry to divide all elements from $$$y + 1$$$ to $$$x$$$ on $$$x$$$ in one step.",
+  "**Hint 6**\nWe have made all elements except one equal to $$$1$$$ in $$$\\sqrt{x} - 1$$$ steps. How many divisions are left to get rid of the last element?",
+  "**Hint 7**\nHow many divisions are left to get rid of the last element?",
+  "**Hint 8**\nAnswer: $$$\\sqrt{x} - 1$$$.",
+  "**Hint 9**\nIf we divide all elements from $$$y + 1$$$ to $$$x$$$ on $$$x$$$, we will get all elements equal to $$$1$$$ except one. What is this element?",
+  "**Hint 10**\nAnswer: $$$1$$$.",
+  "**Hint 11**\nRecursively solve the problem for the segments $$$($$$\\sqrt{x}$$$, $$$x$$$]$$$, $$$($$$\\sqrt{\\sqrt{x}}$$$, $$$\\sqrt{x}$$$]$$$, ...."
+]

@@ -1,0 +1,62 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    long long m;
+    cin >> n >> m;
+    
+    vector<long long> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    
+    sort(a.begin(), a.end());
+    
+    long long total_download = 0;
+    for (long long x : a) total_download += x;
+    
+    // We need to find the maximum number of adjacent pairs (i, i+1) in the watching order
+    // such that a_i + a_{i+1} <= m. This is equivalent to finding the maximum matching
+    // in a "circular" sense? Actually, we can reorder arbitrarily.
+    // The maximum number of such pairs is n - (minimum number of "breaks").
+    // A break happens when we cannot pair two adjacent videos.
+    // This is equivalent to: we can form a chain where each adjacent pair sums <= m.
+    // The maximum length of such a chain is the answer for the number of good pairs.
+    // We can use two pointers: try to pair smallest with largest possible.
+    
+    int l = 0, r = n - 1;
+    int pairs = 0;
+    while (l < r) {
+        if (a[l] + a[r] <= m) {
+            ++pairs;
+            ++l;
+            --r;
+        } else {
+            --r;
+        }
+    }
+    
+    // The number of good adjacent pairs is at most n-1, and we achieved 'pairs' pairs.
+    // Each good pair saves 1 minute (since we can download the next while watching the previous).
+    // Total time = total_download + n (watching) - (number of good pairs).
+    // Actually, watching takes n minutes, downloading takes total_download minutes.
+    // Overlap: for each good pair, we save 1 minute because we can download the next video
+    // while watching the current one. Also, we can start downloading the first video immediately,
+    // so no initial waiting? The total time is: download time + watch time - overlaps.
+    // Overlaps = number of times we can download while watching.
+    // If we have a chain of k videos where each adjacent pair is good, we can overlap k-1 times.
+    // So total overlaps = number of good adjacent pairs.
+    // But we can also possibly overlap the very first download with nothing? No.
+    // So answer = total_download + n - pairs.
+    
+    long long ans = total_download + n - pairs;
+    cout << ans << '\n';
+    
+    return 0;
+}
+```

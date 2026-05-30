@@ -1,0 +1,126 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+        
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
+        bool ok = true;
+        
+        // Directions for 8 neighbors
+        int dx[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int dy[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
+        
+        for (int i = 0; i < n && ok; ++i) {
+            for (int j = 0; j < m && ok; ++j) {
+                if (grid[i][j] == '*' && !visited[i][j]) {
+                    // Find all cells of this component
+                    vector<pair<int,int>> comp;
+                    queue<pair<int,int>> q;
+                    q.push({i, j});
+                    visited[i][j] = true;
+                    
+                    while (!q.empty()) {
+                        auto [x, y] = q.front(); q.pop();
+                        comp.push_back({x, y});
+                        // Only 4-directional connectivity for component
+                        for (int d = 0; d < 4; ++d) {
+                            int nx = x + dx[d*2]; // dx[0], dx[2], dx[4], dx[6] are up, right, down, left
+                            int ny = y + dy[d*2];
+                            if (nx >= 0 && nx < n && ny >= 0 && ny < m && grid[nx][ny] == '*' && !visited[nx][ny]) {
+                                visited[nx][ny] = true;
+                                q.push({nx, ny});
+                            }
+                        }
+                    }
+                    
+                    // Component must have exactly 3 cells
+                    if (comp.size() != 3) {
+                        ok = false;
+                        break;
+                    }
+                    
+                    // Check if these 3 cells form an L-shape
+                    // An L-shape has one "elbow" cell that has two neighbors in the component
+                    // The other two cells have only one neighbor (the elbow)
+                    // Also, the cells must be in a 2x2 block
+                    int min_x = n, max_x = -1, min_y = m, max_y = -1;
+                    for (auto [x, y] : comp) {
+                        min_x = min(min_x, x);
+                        max_x = max(max_x, x);
+                        min_y = min(min_y, y);
+                        max_y = max(max_y, y);
+                    }
+                    if (max_x - min_x > 1 || max_y - min_y > 1) {
+                        ok = false;
+                        break;
+                    }
+                    
+                    // Count neighbors within component for each cell
+                    int elbow_count = 0;
+                    for (auto [x, y] : comp) {
+                        int cnt = 0;
+                        for (int d = 0; d < 4; ++d) {
+                            int nx = x + dx[d*2];
+                            int ny = y + dy[d*2];
+                            if (nx >= 0 && nx < n && ny >= 0 && ny < m && grid[nx][ny] == '*') {
+                                // Check if this neighbor is in the component
+                                for (auto [cx, cy] : comp) {
+                                    if (cx == nx && cy == ny) {
+                                        cnt++;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (cnt == 2) elbow_count++;
+                    }
+                    if (elbow_count != 1) {
+                        ok = false;
+                        break;
+                    }
+                    
+                    // Check that no cell of this component touches another '*' from a different component
+                    // by edge or corner
+                    for (auto [x, y] : comp) {
+                        for (int d = 0; d < 8; ++d) {
+                            int nx = x + dx[d];
+                            int ny = y + dy[d];
+                            if (nx >= 0 && nx < n && ny >= 0 && ny < m && grid[nx][ny] == '*') {
+                                // Check if (nx, ny) is in the component
+                                bool in_comp = false;
+                                for (auto [cx, cy] : comp) {
+                                    if (cx == nx && cy == ny) {
+                                        in_comp = true;
+                                        break;
+                                    }
+                                }
+                                if (!in_comp) {
+                                    ok = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!ok) break;
+                    }
+                }
+            }
+        }
+        
+        cout << (ok ? "YES" : "NO") << '\n';
+    }
+    
+    return 0;
+}

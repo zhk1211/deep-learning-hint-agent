@@ -1,0 +1,392 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, q;
+        cin >> n >> q;
+        vector<int> p(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> p[i];
+        }
+        string s;
+        cin >> s;
+
+        // diff array for intervals [l, r] where l..r is a maximal segment with no "LR" inside
+        vector<int> diff(n + 1, 0);
+        int l = 0;
+        for (int i = 0; i < n - 1; ++i) {
+            if (s[i] == 'L' && s[i + 1] == 'R') {
+                // segment ends at i
+                int r = i;
+                // interval [l, r]
+                diff[l]++;
+                diff[r + 1]--;
+                l = i + 1;
+            }
+        }
+        // last segment
+        diff[l]++;
+        diff[n]--;
+
+        vector<int> cover(n);
+        int cur = 0;
+        for (int i = 0; i < n; ++i) {
+            cur += diff[i];
+            cover[i] = cur;
+        }
+
+        // check if each position i is "good": p[i] is in the range of its segment
+        // we need to know for each position the segment boundaries
+        // we can compute segment id for each position
+        vector<int> seg_id(n);
+        int id = 0;
+        for (int i = 0; i < n; ++i) {
+            seg_id[i] = id;
+            if (i < n - 1 && s[i] == 'L' && s[i + 1] == 'R') {
+                id++;
+            }
+        }
+        int total_seg = id + 1;
+        vector<int> seg_l(total_seg), seg_r(total_seg);
+        id = 0;
+        l = 0;
+        for (int i = 0; i < n; ++i) {
+            if (i < n - 1 && s[i] == 'L' && s[i + 1] == 'R') {
+                seg_l[id] = l;
+                seg_r[id] = i;
+                id++;
+                l = i + 1;
+            }
+        }
+        seg_l[id] = l;
+        seg_r[id] = n - 1;
+
+        // count bad positions: positions where p[i] is not in [seg_l[seg_id[i]]+1, seg_r[seg_id[i]]+1]
+        int bad = 0;
+        vector<int> is_bad(n, 0);
+        for (int i = 0; i < n; ++i) {
+            int sid = seg_id[i];
+            int left_val = seg_l[sid] + 1;
+            int right_val = seg_r[sid] + 1;
+            if (p[i] < left_val || p[i] > right_val) {
+                is_bad[i] = 1;
+                bad++;
+            }
+        }
+
+        // process queries
+        while (q--) {
+            int idx;
+            cin >> idx;
+            idx--; // 0-indexed
+
+            // flip s[idx]
+            // only flips at positions 1..n-2 matter (since s[0]='R', s[n-1]='L' fixed)
+            // flipping s[idx] changes the segment boundaries around idx
+            // we need to update bad count efficiently
+
+            // We'll maintain the segments dynamically using a set of boundaries
+            // But given constraints, we can recompute affected parts locally.
+            // Since each query flips one character, we can update the segments and bad count in O(1) amortized.
+            // However, simpler: maintain a set of "LR" occurrences.
+            // We'll use a set of indices i where s[i]=='L' and s[i+1]=='R'.
+            // Initially build this set.
+            // Then for each query, flip s[idx], update the set, and update bad count for affected positions.
+
+            // We'll implement this approach.
+
+            // But we need to handle the initial state and queries.
+            // Let's restart with a clean approach using set of boundaries.
+
+            // Actually, we can just recompute the whole thing? No, O(n) per query is too slow.
+            // We'll use the set of boundaries.
+
+            // We'll store boundaries as indices i (0..n-2) where s[i]=='L' and s[i+1]=='R'.
+            // Then segments are [prev_boundary+1, boundary] with boundaries at these i and also -1 and n-1.
+            // For each segment, we need to know if all p values are within [l+1, r+1].
+            // We can maintain a segment tree or just count bad positions per segment.
+            // Since only one character changes, at most two boundaries change, affecting at most three segments.
+            // We can maintain for each segment the number of bad positions.
+            // Then total bad = sum over segments of bad counts.
+            // When boundaries change, we recompute bad counts for the affected segments.
+
+            // Let's implement this.
+
+            // We'll need to map position to segment quickly. We can use a set of boundaries and lower_bound.
+
+            // Let's code it from scratch inside the query loop using this idea.
+
+            // But we already have initial state. Let's just build the set and segment bad counts.
+
+            // We'll redo the initialization using this dynamic approach.
+
+            // Actually, we can just use the initial diff approach to compute initial bad, then update.
+            // But updating diff is messy. Let's use the set approach.
+
+            // We'll clear and re-implement inside test case.
+
+            // Let's restart the test case logic with the set approach.
+
+            // We'll re-read p and s, then build:
+            set<int> bounds; // indices i where s[i]=='L' && s[i+1]=='R'
+            for (int i = 0; i < n - 1; ++i) {
+                if (s[i] == 'L' && s[i + 1] == 'R') {
+                    bounds.insert(i);
+                }
+            }
+
+            // function to get segment id for a position
+            // segments are numbered by their left boundary index + 1
+            // We'll maintain an array seg_bad_count for each segment.
+            // Number of segments = bounds.size() + 1.
+            // We'll assign segment id to each position initially.
+            vector<int> pos_seg(n);
+            vector<int> seg_left, seg_right;
+            int seg_cnt = 0;
+            int prev = -1;
+            for (auto b : bounds) {
+                seg_left.push_back(prev + 1);
+                seg_right.push_back(b);
+                for (int i = prev + 1; i <= b; ++i) {
+                    pos_seg[i] = seg_cnt;
+                }
+                seg_cnt++;
+                prev = b;
+            }
+            seg_left.push_back(prev + 1);
+            seg_right.push_back(n - 1);
+            for (int i = prev + 1; i < n; ++i) {
+                pos_seg[i] = seg_cnt;
+            }
+            seg_cnt++;
+
+            vector<int> seg_bad(seg_cnt, 0);
+            for (int i = 0; i < n; ++i) {
+                int sid = pos_seg[i];
+                int l = seg_left[sid] + 1;
+                int r = seg_right[sid] + 1;
+                if (p[i] < l || p[i] > r) {
+                    seg_bad[sid]++;
+                }
+            }
+            int total_bad = accumulate(seg_bad.begin(), seg_bad.end(), 0);
+
+            // process queries
+            // We need to handle flipping s[idx].
+            // Since s[0] and s[n-1] are fixed, idx is between 1 and n-2.
+            // We'll write a lambda to update.
+            // When flipping, we need to check if a boundary is created or destroyed at idx-1 and idx.
+            // Because s[idx] changes, the pairs (idx-1, idx) and (idx, idx+1) may change.
+
+            // We'll process each query:
+            // But we need to output after each query.
+            // We'll just do it inside the loop.
+
+            // Let's write the update logic.
+
+            // We'll need to update bounds set, then recompute affected segments.
+            // Affected positions are those in segments that change.
+            // When a boundary is added/removed, segments merge/split.
+            // We can just recompute the bad count for the new segments covering the affected range.
+            // The affected range is from the left boundary before the change to the right boundary after the change.
+            // We can find the leftmost and rightmost positions affected.
+
+            // We'll do this:
+            // - Determine the range of positions that might change segment assignment.
+            // - Remove the old segments covering that range from total_bad.
+            // - Update bounds set.
+            // - Rebuild segments in that range.
+            // - Compute new bad counts for those segments and add to total_bad.
+            // - Update pos_seg for those positions.
+
+            // Since only one character flips, the affected range is small (at most 3 segments).
+
+            // Let's implement.
+
+            // We'll need to find the left boundary of the leftmost affected segment.
+            // Before flipping, the boundaries are in bounds set.
+            // The character at idx changes. The pairs (idx-1, idx) and (idx, idx+1) are relevant.
+            // We'll collect the boundaries that might be removed or added.
+            // We'll find the leftmost position that could change segment: it's the start of the segment containing idx-1 (or idx if idx-1 is boundary?).
+            // Actually, the segment boundaries are at indices in bounds.
+            // If we flip s[idx], the boundaries at idx-1 and idx might appear/disappear.
+            // The segments affected are those that contain idx-1, idx, idx+1.
+            // We can find the segment containing idx-1 and the segment containing idx+1.
+            // Their left boundaries are the ones we need.
+
+            // We'll do:
+            auto it_left = bounds.lower_bound(idx - 1);
+            int left_boundary = -1;
+            if (it_left != bounds.begin()) {
+                left_boundary = *prev(it_left);
+            }
+            int left_start = left_boundary + 1;
+
+            auto it_right = bounds.lower_bound(idx);
+            int right_boundary = n - 1;
+            if (it_right != bounds.end()) {
+                right_boundary = *it_right;
+            }
+            int right_end = right_boundary;
+
+            // The affected range is [left_start, right_end].
+            // Remove old segments covering this range.
+            // We can iterate over positions in this range, subtract their bad contribution from total_bad and seg_bad.
+            // But we need to know which segments they belong to. We have pos_seg.
+            // We'll just loop over the range and decrement seg_bad[pos_seg[i]] and total_bad if is_bad.
+            // But we need to know if a position is bad. We can recompute on the fly or store is_bad array.
+            // We'll store is_bad array.
+
+            // Actually, we didn't store is_bad. We can recompute badness when removing/adding.
+            // Let's store is_bad array for quick removal.
+
+            vector<int> is_bad_arr(n, 0);
+            for (int i = 0; i < n; ++i) {
+                int sid = pos_seg[i];
+                int l = seg_left[sid] + 1;
+                int r = seg_right[sid] + 1;
+                if (p[i] < l || p[i] > r) {
+                    is_bad_arr[i] = 1;
+                }
+            }
+            // Recompute total_bad and seg_bad using is_bad_arr? We already have seg_bad from earlier, but we can recompute to be safe.
+            // Let's recompute seg_bad and total_bad from scratch using is_bad_arr.
+            fill(seg_bad.begin(), seg_bad.end(), 0);
+            total_bad = 0;
+            for (int i = 0; i < n; ++i) {
+                if (is_bad_arr[i]) {
+                    seg_bad[pos_seg[i]]++;
+                    total_bad++;
+                }
+            }
+
+            // Now process queries.
+            while (q--) {
+                int idx;
+                cin >> idx;
+                idx--;
+
+                // Flip s[idx]
+                s[idx] = (s[idx] == 'L') ? 'R' : 'L';
+
+                // Determine affected range
+                auto it_l = bounds.lower_bound(idx - 1);
+                int left_b = -1;
+                if (it_l != bounds.begin()) {
+                    left_b = *prev(it_l);
+                }
+                int l_start = left_b + 1;
+
+                auto it_r = bounds.lower_bound(idx);
+                int right_b = n - 1;
+                if (it_r != bounds.end()) {
+                    right_b = *it_r;
+                }
+                int r_end = right_b;
+
+                // Remove old bad counts for positions in [l_start, r_end]
+                for (int i = l_start; i <= r_end; ++i) {
+                    if (is_bad_arr[i]) {
+                        seg_bad[pos_seg[i]]--;
+                        total_bad--;
+                    }
+                }
+
+                // Update bounds set
+                // Check pair (idx-1, idx)
+                if (idx - 1 >= 0) {
+                    if (s[idx - 1] == 'L' && s[idx] == 'R') {
+                        bounds.insert(idx - 1);
+                    } else {
+                        bounds.erase(idx - 1);
+                    }
+                }
+                // Check pair (idx, idx+1)
+                if (idx + 1 < n) {
+                    if (s[idx] == 'L' && s[idx + 1] == 'R') {
+                        bounds.insert(idx);
+                    } else {
+                        bounds.erase(idx);
+                    }
+                }
+
+                // Rebuild segments in [l_start, r_end]
+                // Find new boundaries in this range
+                vector<int> new_bounds;
+                auto it = bounds.lower_bound(l_start);
+                while (it != bounds.end() && *it <= r_end) {
+                    new_bounds.push_back(*it);
+                    ++it;
+                }
+
+                // Rebuild segments
+                int cur_l = l_start;
+                for (int b : new_bounds) {
+                    // segment [cur_l, b]
+                    for (int i = cur_l; i <= b; ++i) {
+                        pos_seg[i] = seg_cnt; // temporary, we'll reassign later
+                    }
+                    // We need to assign a segment id. We can reuse existing seg_bad slots or create new.
+                    // Since we removed old bad counts, we can just create new segments and add to seg_bad.
+                    // But seg_bad size might need to increase. We'll just push_back new segments.
+                    seg_left.push_back(cur_l);
+                    seg_right.push_back(b);
+                    seg_bad.push_back(0);
+                    for (int i = cur_l; i <= b; ++i) {
+                        pos_seg[i] = seg_cnt;
+                        int l_val = cur_l + 1;
+                        int r_val = b + 1;
+                        if (p[i] < l_val || p[i] > r_val) {
+                            is_bad_arr[i] = 1;
+                            seg_bad[seg_cnt]++;
+                            total_bad++;
+                        } else {
+                            is_bad_arr[i] = 0;
+                        }
+                    }
+                    seg_cnt++;
+                    cur_l = b + 1;
+                }
+                // last segment [cur_l, r_end]
+                if (cur_l <= r_end) {
+                    seg_left.push_back(cur_l);
+                    seg_right.push_back(r_end);
+                    seg_bad.push_back(0);
+                    for (int i = cur_l; i <= r_end; ++i) {
+                        pos_seg[i] = seg_cnt;
+                        int l_val = cur_l + 1;
+                        int r_val = r_end + 1;
+                        if (p[i] < l_val || p[i] > r_val) {
+                            is_bad_arr[i] = 1;
+                            seg_bad[seg_cnt]++;
+                            total_bad++;
+                        } else {
+                            is_bad_arr[i] = 0;
+                        }
+                    }
+                    seg_cnt++;
+                }
+
+                // Note: we didn't remove the old segments from seg_left, seg_right, seg_bad.
+                // But we don't use them anymore because pos_seg points to new segments.
+                // The old segments are still in the vectors but their indices are not referenced.
+                // This is fine, memory is O(n + q) total.
+
+                if (total_bad == 0) {
+                    cout << "YES\n";
+                } else {
+                    cout << "NO\n";
+                }
+            }
+        }
+    }
+    return 0;
+}
+```

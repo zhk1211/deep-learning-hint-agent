@@ -1,0 +1,254 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long INF = 1e18;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<long long>> h(n, vector<long long>(n));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                cin >> h[i][j];
+            }
+        }
+        vector<long long> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int j = 0; j < n; ++j) cin >> b[j];
+
+        // We will try all 4 possibilities for the parity pattern of (row + col) mod 2
+        // For each parity, we decide whether rows/cols with that parity are increased or not.
+        // Actually, the condition is that adjacent cells have different heights.
+        // Let x_i = 1 if we hire row i, else 0.
+        // Let y_j = 1 if we hire col j, else 0.
+        // Then new height H[i][j] = h[i][j] + x_i + y_j.
+        // Condition: H[i][j] != H[i][j+1] => h[i][j] + x_i + y_j != h[i][j+1] + x_i + y_{j+1}
+        // => h[i][j] + y_j != h[i][j+1] + y_{j+1}
+        // Similarly for vertical: h[i][j] + x_i != h[i+1][j] + x_{i+1}
+        // So the condition separates: horizontal condition only involves y's, vertical only involves x's.
+        // Horizontal: for each row i, for each j, we need h[i][j] + y_j != h[i][j+1] + y_{j+1}
+        // => y_j - y_{j+1} != h[i][j+1] - h[i][j].
+        // Since y_j, y_{j+1} are 0 or 1, the difference can be -1, 0, 1.
+        // So for each adjacent pair of columns (j, j+1), we have a forbidden difference.
+        // Similarly for rows.
+
+        // We can solve for x and y independently! Because constraints don't mix x and y.
+        // So we can find min cost to choose x satisfying vertical constraints, and min cost to choose y satisfying horizontal constraints.
+        // Then answer is sum of these two minimums, if both are possible.
+
+        // Let's solve for y (columns). We have n columns, each can be 0 or 1.
+        // For each row i, for each j from 0 to n-2:
+        // y_j - y_{j+1} != D where D = h[i][j+1] - h[i][j].
+        // D can be anything, but y_j - y_{j+1} is in {-1,0,1}.
+        // So if D is not in {-1,0,1}, then the condition is automatically satisfied regardless of y.
+        // If D == 0, then we must have y_j - y_{j+1} != 0 => y_j != y_{j+1}.
+        // If D == 1, then we must have y_j - y_{j+1} != 1 => not (y_j=1 and y_{j+1}=0).
+        // If D == -1, then we must have y_j - y_{j+1} != -1 => not (y_j=0 and y_{j+1}=1).
+
+        // So for each adjacent pair (j, j+1), we gather constraints from all rows.
+        // If any row gives D=0, then we require y_j != y_{j+1}.
+        // If any row gives D=1, then we forbid (1,0).
+        // If any row gives D=-1, then we forbid (0,1).
+        // If multiple constraints conflict (e.g., require y_j != y_{j+1} and also forbid both (0,1) and (1,0)), then impossible.
+
+        // We can model this as 2-SAT or simply DP on a line since graph is a path.
+        // For columns: we have variables y_0..y_{n-1} with constraints between adjacent.
+        // We can compute min cost to assign 0/1 to each column satisfying constraints.
+        // DP: dp[i][val] = min cost for first i+1 columns ending with y_i = val.
+        // Similarly for rows.
+
+        auto solve_line = [&](const vector<long long>& cost, const vector<vector<int>>& constraints) -> long long {
+            // constraints[i][0] = constraint between i and i+1:
+            // 0: no constraint
+            // 1: must be different (y_i != y_{i+1})
+            // 2: forbid (1,0)
+            // 3: forbid (0,1)
+            // 4: impossible (both forbid and must be different, or both forbids)
+            int m = cost.size();
+            vector<array<long long, 2>> dp(m, {INF, INF});
+            dp[0][0] = 0;
+            dp[0][1] = cost[0];
+            for (int i = 0; i < m - 1; ++i) {
+                int c = constraints[i][0];
+                for (int cur = 0; cur < 2; ++cur) {
+                    if (dp[i][cur] == INF) continue;
+                    for (int nxt = 0; nxt < 2; ++nxt) {
+                        bool ok = true;
+                        if (c == 1) {
+                            if (cur == nxt) ok = false;
+                        } else if (c == 2) {
+                            if (cur == 1 && nxt == 0) ok = false;
+                        } else if (c == 3) {
+                            if (cur == 0 && nxt == 1) ok = false;
+                        } else if (c == 4) {
+                            ok = false;
+                        }
+                        if (ok) {
+                            long long add = (nxt == 1) ? cost[i+1] : 0;
+                            dp[i+1][nxt] = min(dp[i+1][nxt], dp[i][cur] + add);
+                        }
+                    }
+                }
+            }
+            long long ans = min(dp[m-1][0], dp[m-1][1]);
+            return ans;
+        };
+
+        // Build constraints for columns
+        vector<vector<int>> col_constraints(n-1, vector<int>(1, 0));
+        bool possible = true;
+        for (int j = 0; j < n-1; ++j) {
+            int mask = 0; // bit0: require diff, bit1: forbid (1,0), bit2: forbid (0,1)
+            for (int i = 0; i < n; ++i) {
+                long long diff = h[i][j+1] - h[i][j];
+                if (diff == 0) {
+                    mask |= 1; // require diff
+                } else if (diff == 1) {
+                    mask |= 2; // forbid (1,0)
+                } else if (diff == -1) {
+                    mask |= 4; // forbid (0,1)
+                }
+                // else diff outside [-1,1], no constraint
+            }
+            if (mask & 1) {
+                // require different
+                if ((mask & 2) && (mask & 4)) {
+                    // require diff but both (1,0) and (0,1) forbidden -> impossible
+                    possible = false;
+                    break;
+                }
+                // if require diff, then we cannot have both same, but we also have forbids.
+                // If forbid (1,0) is present, then (1,0) not allowed, but require diff means we need either (1,0) or (0,1). So we must have (0,1).
+                // Similarly if forbid (0,1) present, we must have (1,0).
+                // If both forbids absent, just require diff.
+                if (mask & 2) {
+                    // forbid (1,0), require diff => must be (0,1)
+                    col_constraints[j][0] = 3; // forbid (0,1)? Wait: we want to force (0,1). We can represent as forbid (1,0) and forbid (0,0) and forbid (1,1). But simpler: we can set constraint to force (0,1). Let's encode: 5: force (0,1), 6: force (1,0).
+                    // Actually we can just set constraint to forbid everything except (0,1).
+                    // We'll handle force separately.
+                    // Let's use: 5 = force (0,1), 6 = force (1,0).
+                    col_constraints[j][0] = 5;
+                } else if (mask & 4) {
+                    // forbid (0,1), require diff => must be (1,0)
+                    col_constraints[j][0] = 6;
+                } else {
+                    col_constraints[j][0] = 1; // require diff
+                }
+            } else {
+                // no require diff
+                if ((mask & 2) && (mask & 4)) {
+                    // both (1,0) and (0,1) forbidden -> only (0,0) and (1,1) allowed, i.e., must be same
+                    col_constraints[j][0] = 7; // force same
+                } else if (mask & 2) {
+                    // forbid (1,0)
+                    col_constraints[j][0] = 2;
+                } else if (mask & 4) {
+                    // forbid (0,1)
+                    col_constraints[j][0] = 3;
+                } else {
+                    col_constraints[j][0] = 0; // no constraint
+                }
+            }
+        }
+
+        // Build constraints for rows
+        vector<vector<int>> row_constraints(n-1, vector<int>(1, 0));
+        for (int i = 0; i < n-1; ++i) {
+            int mask = 0;
+            for (int j = 0; j < n; ++j) {
+                long long diff = h[i+1][j] - h[i][j];
+                if (diff == 0) {
+                    mask |= 1;
+                } else if (diff == 1) {
+                    mask |= 2;
+                } else if (diff == -1) {
+                    mask |= 4;
+                }
+            }
+            if (mask & 1) {
+                if ((mask & 2) && (mask & 4)) {
+                    possible = false;
+                    break;
+                }
+                if (mask & 2) {
+                    row_constraints[i][0] = 5;
+                } else if (mask & 4) {
+                    row_constraints[i][0] = 6;
+                } else {
+                    row_constraints[i][0] = 1;
+                }
+            } else {
+                if ((mask & 2) && (mask & 4)) {
+                    row_constraints[i][0] = 7;
+                } else if (mask & 2) {
+                    row_constraints[i][0] = 2;
+                } else if (mask & 4) {
+                    row_constraints[i][0] = 3;
+                } else {
+                    row_constraints[i][0] = 0;
+                }
+            }
+        }
+
+        if (!possible) {
+            cout << -1 << '\n';
+            continue;
+        }
+
+        // Now solve for rows and columns with DP that handles force constraints.
+        auto solve_line_ext = [&](const vector<long long>& cost, const vector<vector<int>>& constraints) -> long long {
+            int m = cost.size();
+            vector<array<long long, 2>> dp(m, {INF, INF});
+            dp[0][0] = 0;
+            dp[0][1] = cost[0];
+            for (int i = 0; i < m - 1; ++i) {
+                int c = constraints[i][0];
+                for (int cur = 0; cur < 2; ++cur) {
+                    if (dp[i][cur] == INF) continue;
+                    for (int nxt = 0; nxt < 2; ++nxt) {
+                        bool ok = true;
+                        if (c == 1) { // require diff
+                            if (cur == nxt) ok = false;
+                        } else if (c == 2) { // forbid (1,0)
+                            if (cur == 1 && nxt == 0) ok = false;
+                        } else if (c == 3) { // forbid (0,1)
+                            if (cur == 0 && nxt == 1) ok = false;
+                        } else if (c == 4) { // impossible
+                            ok = false;
+                        } else if (c == 5) { // force (0,1)
+                            if (!(cur == 0 && nxt == 1)) ok = false;
+                        } else if (c == 6) { // force (1,0)
+                            if (!(cur == 1 && nxt == 0)) ok = false;
+                        } else if (c == 7) { // force same
+                            if (cur != nxt) ok = false;
+                        }
+                        if (ok) {
+                            long long add = (nxt == 1) ? cost[i+1] : 0;
+                            dp[i+1][nxt] = min(dp[i+1][nxt], dp[i][cur] + add);
+                        }
+                    }
+                }
+            }
+            long long ans = min(dp[m-1][0], dp[m-1][1]);
+            return ans;
+        };
+
+        long long row_cost = solve_line_ext(a, row_constraints);
+        long long col_cost = solve_line_ext(b, col_constraints);
+
+        if (row_cost >= INF/2 || col_cost >= INF/2) {
+            cout << -1 << '\n';
+        } else {
+            cout << row_cost + col_cost << '\n';
+        }
+    }
+    return 0;
+}
+```

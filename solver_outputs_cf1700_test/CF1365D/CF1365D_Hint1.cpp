@@ -1,0 +1,95 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+const int dx[] = {1, -1, 0, 0};
+const int dy[] = {0, 0, 1, -1};
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<string> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+
+    // If there are no good people, we can just block everything around bad people
+    // but the standard approach works anyway.
+
+    // Step 1: Block all empty cells adjacent to any bad person
+    bool possible = true;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (a[i][j] == 'B') {
+                for (int d = 0; d < 4; ++d) {
+                    int ni = i + dx[d], nj = j + dy[d];
+                    if (ni >= 0 && ni < n && nj >= 0 && nj < m) {
+                        if (a[ni][nj] == 'G') {
+                            possible = false; // bad person adjacent to good person -> impossible
+                        } else if (a[ni][nj] == '.') {
+                            a[ni][nj] = '#';
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (!possible) {
+        cout << "No\n";
+        return;
+    }
+
+    // Step 2: Check if all good people can reach (n-1, m-1)
+    // BFS/DFS from (n-1, m-1) on the modified grid (treat # as wall)
+    vector<vector<bool>> vis(n, vector<bool>(m, false));
+    queue<pair<int,int>> q;
+    if (a[n-1][m-1] != '#') {
+        vis[n-1][m-1] = true;
+        q.push({n-1, m-1});
+    }
+
+    while (!q.empty()) {
+        auto [x, y] = q.front(); q.pop();
+        for (int d = 0; d < 4; ++d) {
+            int nx = x + dx[d], ny = y + dy[d];
+            if (nx >= 0 && nx < n && ny >= 0 && ny < m && !vis[nx][ny] && a[nx][ny] != '#') {
+                vis[nx][ny] = true;
+                q.push({nx, ny});
+            }
+        }
+    }
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (a[i][j] == 'G' && !vis[i][j]) {
+                cout << "No\n";
+                return;
+            }
+        }
+    }
+
+    // Step 3: Check if any bad person can reach (n-1, m-1)
+    // Actually, if we blocked all adjacent cells, they shouldn't be able to,
+    // but we must verify because a bad person might have been initially at (n-1,m-1) or reachable via other bad persons?
+    // The problem says: "none of the bad people are able to" escape.
+    // So we must ensure no bad person can reach the exit.
+    // We can reuse the same BFS result: if a bad person is visited, then they can reach.
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (a[i][j] == 'B' && vis[i][j]) {
+                cout << "No\n";
+                return;
+            }
+        }
+    }
+
+    cout << "Yes\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}

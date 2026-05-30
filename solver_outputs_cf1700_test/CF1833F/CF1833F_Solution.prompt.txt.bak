@@ -1,0 +1,571 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Ira loves Spanish flamenco dance very much. She decided to start her own dance studio and found $ n $ students, $ i $ th of whom has level $ a_i $ .
+
+Ira can choose several of her students and set a dance with them. So she can set a huge number of dances, but she is only interested in magnificent dances. The dance is called magnificent if the following is true:
+
+- exactly $ m $ students participate in the dance;
+- levels of all dancers are pairwise distinct;
+- levels of every two dancers have an absolute difference strictly less than $ m $ .
+
+For example, if $ m = 3 $ and $ a = [4, 2, 2, 3, 6] $ , the following dances are magnificent (students participating in the dance are highlighted in red): $ [\color{red}{4}\color{black}, 2,\color{red}{2}\color{black},\color{red}{3}\color{black}, 6] $ , $ [\color{red}{4}\color{black}, \color{red}{2}\color{black}, 2, \color{red}{3}\color{black}, 6] $ . At the same time dances $ [\color{red}{4}\color{black}, 2, 2, \color{red}{3}\color{black}, 6] $ , $ [4, \color{red}{2}\color{black}, \color{red}{2}\color{black}, \color{red}{3}\color{black}, 6] $ , $ [\color{red}{4}\color{black}, 2, 2, \color{red}{3}\color{black}, \color{red}{6}\color{black}] $ are not magnificent.
+
+In the dance $ [\color{red}{4}\color{black}, 2, 2, \color{red}{3}\color{black}, 6] $ only $ 2 $ students participate, although $ m = 3 $ .
+
+The dance $ [4, \color{red}{2}\color{black}, \color{red}{2}\color{black}, \color{red}{3}\color{black}, 6] $ involves students with levels $ 2 $ and $ 2 $ , although levels of all dancers must be pairwise distinct.
+
+In the dance $ [\color{red}{4}\color{black}, 2, 2, \color{red}{3}\color{black}, \color{red}{6}\color{black}] $ students with levels $ 3 $ and $ 6 $ participate, but $ |3 - 6| = 3 $ , although $ m = 3 $ .
+
+Help Ira count the number of magnificent dances that she can set. Since this number can be very large, count it modulo $ 10^9 + 7 $ . Two dances are considered different if the sets of students participating in them are different.
+
+Input Format
+The first line contains a single integer $ t $ ( $ 1 \le t \le 10^4 $ ) — number of testcases.
+
+The first line of each testcase contains integers $ n $ and $ m $ ( $ 1 \le m \le n \le 2 \cdot 10^5 $ ) — the number of Ira students and the number of dancers in the magnificent dance.
+
+The second line of each testcase contains $ n $ integers $ a_1, a_2, \ldots, a_n $ ( $ 1 \le a_i \le 10^9 $ ) — levels of students.
+
+It is guaranteed that the sum of $ n $ over all testcases does not exceed $ 2 \cdot 10^5 $ .
+
+Output Format
+For each testcase, print a single integer — the number of magnificent dances. Since this number can be very large, print it modulo $ 10^9 + 7 $ .
+
+Examples
+Sample 1
+Input
+9
+7 4
+8 10 10 9 6 11 7
+5 3
+4 2 2 3 6
+8 2
+1 5 2 2 3 1 3 3
+3 3
+3 3 3
+5 1
+3 4 3 10 7
+12 3
+5 2 1 1 4 3 5 5 5 2 7 5
+1 1
+1
+3 2
+1 2 3
+2 2
+1 2
+Output
+5
+2
+10
+0
+5
+11
+1
+2
+1
+
+Note
+In the first testcase, Ira can set such magnificent dances: $ [\color{red}{8}\color{black}, 10, 10, \color{red}{9}\color{black}, \color{red}{6}\color{black}, 11, \color{red}{7}\color{black}] $ , $ [\color{red}{8}\color{black}, \color{red}{10}\color{black}, 10, \color{red}{9}\color{black}, 6, 11, \color{red}{7}\color{black}] $ , $ [\color{red}{8}\color{black}, 10, \color{red}{10}\color{black}, \color{red}{9}\color{black}, 6, 11, \color{red}{7}\color{black}] $ , $ [\color{red}{8}\color{black}, 10, \color{red}{10}\color{black}, \color{red}{9}\color{black}, 6, \color{red}{11}\color{black}, 7] $ , $ [\color{red}{8}\color{black}, \color{red}{10}\color{black}, 10, \color{red}{9}\color{black}, 6, \color{red}{11}\color{black}, 7] $ .
+
+The second testcase is explained in the statements.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1833F - Ira and Flamenco
+Reformulate the definition of
+magnificent
+dance. A dance $$$[x_1, x_2, \ldots, x_m]$$$ is called
+magnificent
+if there exists such a non-negative integer $$$d$$$ that $$$[x_1 - d, x_2 - d, \ldots, x_m - d]$$$ forms a permutation.
+Let's build an array $$$b$$$ such that it is sorted, all the numbers in it are unique and each number from $$$a$$$ occurs in $$$b$$$. For each element $$$b_i$$$, set $$$c_i$$$ as its number of occurrences in the array $$$a$$$. This process is called coordinate compression. For example, if $$$a = [4, 1, 2, 2, 3]$$$, then $$$b = [1, 2, 3, 4]$$$, $$$ c = [1, 2, 1, 1]$$$.
+Let the constructed array $$$b$$$ has length $$$k$$$. In every
+magnificent
+dance there is a dancer with a minimum
+level
+. Let's fix this minimal
+level
+in the array $$$b$$$, let its index be $$$i$$$, then the desired
+magnificent
+dance exists if $$$i + m \le k$$$ and $$$b_{i + m} = b_i + m - 1$$$.
+If the desired
+magnificent
+dance exists, the number of such dances must be added to the answer, which is equal to $$$c_i \cdot c_{i + 1} \cdot \ldots \cdot c_{i + m}$$$. How to quickly calculate such a number?
+Let's build prefix products $$$p_i = c_1 \cdot c_2 \cdot \ldots \cdot p_{i - 1}$$$. Then by Fermat's small theorem $$$c_i \cdot c_{i + 1} \cdot \ldots \cdot c_{i + m} = p_{i + m} \cdot p_i^{(10^9 + 7) - 2}$$$. Time complexity is $$$O(n \log C)$$$.
+Let's build a segment tree on a product modulo. Time complexity is $$$O(n \log n)$$$ and we don't use that the module is prime.
+We will use the idea of building a queue on two stacks, but we will support prefix products modulo in these stacks. Time complexity is $$$O(n)$$$ and we don't use that the module is prime.
+
+/*
+         `)
+        _ \
+      (( }/  ,_
+      )))__ /
+     (((---'
+       \ '
+        )|____.---- )
+       / \ `       (
+      / ' \ `      )
+     /  '  \  `   /
+    /   '       _/
+   /   _!____.-'
+  /_.-'/    \
+     |`_    |`_
+*/
+#include
+<
+bits
+/
+stdc
+++.
+h
+>
+using
+namespace
+std
+;
+typedef
+pair
+<
+int
+,
+int
+>
+ipair
+;
+const
+int
+MAXN
+=
+200200
+;
+const
+int
+MAXK
+=
+MAXN
+;
+const
+int
+MOD
+=
+1000000007
+;
+inline
+int
+add
+(
+int
+a
+,
+int
+b
+)
+{
+return
+(
+a
++
+b
+>=
+MOD
+?
+a
++
+b
+-
+MOD
+:
+a
++
+b
+);
+}
+inline
+int
+mul
+(
+int
+a
+,
+int
+b
+)
+{
+return
+1LL
+*
+a
+*
+b
+%
+MOD
+;
+}
+int
+n
+,
+m
+,
+k
+;
+int
+arr
+[
+MAXN
+],
+brr
+[
+MAXN
+],
+cnt
+[
+MAXK
+];
+void
+build
+()
+{
+sort
+(
+arr
+,
+arr
++
+n
+);
+memcpy
+(
+brr
+,
+arr
+,
+sizeof
+(
+int
+)
+*
+n
+);
+k
+=
+unique
+(
+arr
+,
+arr
++
+n
+)
+-
+arr
+;
+for
+(
+int
+j
+=
+0
+;
+j
+<
+k
+;
+++
+j
+)
+cnt
+[
+j
+]
+=
+upper_bound
+(
+brr
+,
+brr
++
+n
+,
+arr
+[
+j
+])
+-
+lower_bound
+(
+brr
+,
+brr
++
+n
+,
+arr
+[
+j
+]);
+}
+inline
+void
+push
+(
+stack
+<ipair>
+&
+S
+,
+int
+x
+)
+{
+S
+.
+emplace
+(
+x
+,
+mul
+(
+x
+,
+S
+.
+empty
+()
+?
+1
+:
+S
+.
+top
+().
+second
+));
+}
+int
+solve
+()
+{
+if
+(
+k
+<
+m
+)
+return
+0
+;
+stack
+<ipair>
+S1
+,
+S2
+;
+for
+(
+int
+j
+=
+0
+;
+j
+<
+m
+;
+++
+j
+)
+push
+(
+S1
+,
+cnt
+[
+j
+]);
+int
+ans
+=
+0
+;
+for
+(
+int
+j
+=
+m
+;
+j
+<=
+k
+;
+++
+j
+)
+{
+if
+(
+arr
+[
+j
+-
+1
+]
+-
+arr
+[
+j
+-
+m
+]
+==
+m
+-
+1
+)
+ans
+=
+add
+(
+ans
+,
+mul
+(
+S1
+.
+empty
+()
+?
+1
+:
+S1
+.
+top
+().
+second
+,
+S2
+.
+empty
+()
+?
+1
+:
+S2
+.
+top
+().
+second
+));
+if
+(
+S2
+.
+empty
+())
+{
+for
+(;
+!
+S1
+.
+empty
+();
+S1
+.
+pop
+())
+push
+(
+S2
+,
+S1
+.
+top
+().
+first
+);
+}
+S2
+.
+pop
+();
+push
+(
+S1
+,
+cnt
+[
+j
+]);
+}
+return
+ans
+;
+}
+int
+main
+()
+{
+int
+t
+;
+cin
+>>
+t
+;
+while
+(
+t
+--)
+{
+cin
+>>
+n
+>>
+m
+;
+for
+(
+int
+i
+=
+0
+;
+i
+<
+n
+;
+++
+i
+)
+cin
+>>
+arr
+[
+i
+];
+build
+();
+cout
+<<
+solve
+()
+<<
+endl
+;
+}
+}
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

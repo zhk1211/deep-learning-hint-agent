@@ -1,0 +1,198 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int dx[] = {1, -1, 0, 0};
+const int dy[] = {0, 0, 1, -1};
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<string> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    
+    // If there are no good persons, we can just block all bad persons or do nothing
+    // but we still need to check if we can block bad persons without trapping good ones.
+    // Actually, if no good persons, we can always block all bad persons by surrounding them,
+    // but we must ensure we don't block the exit if a bad person can reach it? 
+    // Wait: condition: all good escape, no bad escape. If no good, we can just block all bad.
+    // But we can also block the exit if no good? The problem says "all good people are able to escape",
+    // if there are no good people, it's vacuously true. So we can block everything.
+    // However, we must be careful: we can only block empty cells. We can block the exit.
+    // So if no good, answer is always Yes? Not exactly: if a bad person is already at exit? 
+    // But exit is (n,m) which is empty initially. Bad person cannot be there initially.
+    // So yes, if no good, we can just block all adjacent empty cells of bad persons.
+    // But we can also just block the exit if a bad person can reach it? Actually we can block
+    // any empty cell. So we can always prevent bad from escaping by blocking around them.
+    // However, we must not block good persons. So if there are good persons, we need to ensure
+    // they can reach exit, and bad cannot.
+    
+    // Standard solution: first, if there is any bad person adjacent to a good person, impossible.
+    // Then, we can block all empty cells adjacent to bad persons (to prevent them from moving).
+    // But we must not block cells that are needed for good persons to escape.
+    // So we do: for each bad person, mark all adjacent empty cells as walls (if they are not already
+    // walls or persons). Then check if all good persons can reach (n-1, m-1) via BFS.
+    // Also need to check if any bad person can reach exit after blocking? Actually if we block
+    // all adjacent cells of bad persons, they cannot move at all, so they cannot reach exit.
+    // But what if a bad person is already at exit? Not possible because exit is empty.
+    // However, we must also consider that blocking adjacent cells might trap good persons.
+    // So we do BFS from each good person to exit. If any good person cannot reach exit, No.
+    // Also, if a good person is already at exit, it's fine.
+    // But wait: what if a bad person is adjacent to exit? We block that adjacent cell, so exit
+    // might become blocked? No, we block the adjacent cell, not the exit itself. But if the exit
+    // is adjacent to a bad person, we block the exit? No, we block empty cells adjacent to bad.
+    // If exit is adjacent to bad, and exit is empty, we would block exit? That would prevent good
+    // from escaping. But we can choose not to block exit if it would trap good. The problem says
+    // we can replace some empty cells with walls. We don't have to block all adjacent cells.
+    // The standard solution: we can always block all four neighbors of every bad person, unless
+    // that neighbor is a good person (then impossible) or unless that neighbor is the exit?
+    // Actually, if we block exit, good cannot escape. So we should not block exit if there are
+    // good persons. But if there are no good persons, we can block exit.
+    // The editorial solution: first, if any bad person is adjacent to a good person, print No.
+    // Then, for every bad person, turn all its adjacent empty cells into walls.
+    // Then, check if all good persons can reach (n-1, m-1) using BFS/DFS.
+    // If yes, print Yes, else No.
+    // This works because: if a bad person is adjacent to exit, we would turn exit into wall,
+    // which might block good persons. But if there is a good person, and a bad person adjacent
+    // to exit, then turning exit into wall would trap good. However, is there a way to avoid
+    // blocking exit? Maybe we can block other cells to prevent bad from reaching exit without
+    // blocking exit. But the editorial solution says it's always optimal to block all adjacent
+    // cells of bad persons. Let's test: Suppose bad is at (n-1, m-2) and exit at (n-1, m-1).
+    // Good is somewhere else. If we block (n-1, m-1) (exit), good cannot escape. But we could
+    // instead block (n-1, m-2) itself? No, we cannot block a cell with a person. So we must block
+    // the exit? Actually, we can block the cell between bad and exit? There is no cell between,
+    // they are adjacent. The only way to prevent bad from moving to exit is to block exit or
+    // block all other paths? But bad is already adjacent to exit, so it can move to exit in one
+    // step. To prevent that, we must block the exit cell itself. But if we block exit, good cannot
+    // escape. So if there is a good person, this situation is impossible. The editorial solution
+    // would turn exit into wall, then good cannot reach exit, so output No. That is correct.
+    // What if there is no good person? Then we can block exit, and output Yes. That is also correct.
+    // So the simple algorithm works.
+    
+    // Check adjacent bad and good
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (a[i][j] == 'B') {
+                for (int k = 0; k < 4; ++k) {
+                    int ni = i + dx[k];
+                    int nj = j + dy[k];
+                    if (ni >= 0 && ni < n && nj >= 0 && nj < m) {
+                        if (a[ni][nj] == 'G') {
+                            cout << "No\n";
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Turn adjacent empty cells of bad persons into walls
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (a[i][j] == 'B') {
+                for (int k = 0; k < 4; ++k) {
+                    int ni = i + dx[k];
+                    int nj = j + dy[k];
+                    if (ni >= 0 && ni < n && nj >= 0 && nj < m) {
+                        if (a[ni][nj] == '.') {
+                            a[ni][nj] = '#';
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // BFS from exit to see which cells can reach exit
+    vector<vector<bool>> vis(n, vector<bool>(m, false));
+    queue<pair<int,int>> q;
+    if (a[n-1][m-1] != '#') {
+        vis[n-1][m-1] = true;
+        q.push({n-1, m-1});
+    }
+    while (!q.empty()) {
+        auto [x, y] = q.front(); q.pop();
+        for (int k = 0; k < 4; ++k) {
+            int nx = x + dx[k];
+            int ny = y + dy[k];
+            if (nx >= 0 && nx < n && ny >= 0 && ny < m && !vis[nx][ny] && a[nx][ny] != '#') {
+                vis[nx][ny] = true;
+                q.push({nx, ny});
+            }
+        }
+    }
+    
+    // Check if all good persons can reach exit
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (a[i][j] == 'G' && !vis[i][j]) {
+                cout << "No\n";
+                return;
+            }
+        }
+    }
+    
+    // Also need to check if any bad person can reach exit? 
+    // After blocking adjacent cells, bad persons are surrounded by walls, so they cannot move.
+    // But what if a bad person was already at a cell that can reach exit without moving?
+    // They are blocked by walls around them, so they cannot move. But if they are already at exit?
+    // Not possible. So no need to check.
+    // However, consider a bad person that is not adjacent to any empty cell? Then we didn't block
+    // anything, but they might still be able to move if there is a path? Actually, if a bad person
+    // has an adjacent empty cell, we turned it into wall. If it has no adjacent empty cell, it's
+    // already trapped. So they cannot move. So they cannot reach exit.
+    // But wait: what if a bad person is adjacent to another bad person? We don't block that.
+    // They can move through each other? Yes, they can travel through cells with 'B' or 'G'.
+    // So if two bad persons are adjacent, they can move through each other. But we didn't block
+    // the cells between them. So a bad person could potentially move through another bad person
+    // to reach an empty cell that we didn't block? But we blocked all empty cells adjacent to
+    // ANY bad person. So if a bad person moves to another bad person's cell, the adjacent empty
+    // cells of that cell are also blocked (because that cell also has a bad person, and we blocked
+    // its adjacent empty cells). So they still cannot reach any empty cell. They are confined to
+    // the set of cells containing 'B' and 'G' that are connected. But can they reach exit?
+    // Exit is empty initially, but we might have turned it into wall if it was adjacent to a bad
+    // person. If exit was not adjacent to any bad person, it remains empty. Could a bad person
+    // reach exit through a chain of other bad persons? Suppose exit is at (n-1,m-1). Bad person at
+    // (n-1,m-2) and another bad person at (n-1,m-3). They are adjacent. We blocked all empty cells
+    // adjacent to each bad person. For the bad at (n-1,m-2), its adjacent empty cells include
+    // (n-1,m-1) if it was empty. So we turned (n-1,m-1) into wall. So exit is blocked. Good.
+    // What if exit is not adjacent to any bad person, but there is a path of bad persons leading
+    // to exit? For a bad person to reach exit, there must be a sequence of adjacent cells with
+    // 'B' or 'G' from a bad person to exit. But exit is empty. So the last step must be from a
+    // cell with a person to the exit. That means the exit is adjacent to that person. If that
+    // person is bad, we blocked exit. If that person is good, we didn't block exit, but then
+    // a bad person could move through good persons? Yes, they can move through 'G' cells.
+    // So if there is a good person adjacent to exit, and a bad person can reach that good person
+    // via a path of 'B' and 'G' cells, then the bad person could reach exit. But we didn't block
+    // the good person's cell. So we need to check if any bad person can reach exit after our
+    // modifications. The editorial solution does this: after turning adjacent empty cells into walls,
+    // we do BFS from exit and check if any bad person is visited. If yes, then No.
+    // Let's add that check.
+    
+    // Check if any bad person can reach exit
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (a[i][j] == 'B' && vis[i][j]) {
+                cout << "No\n";
+                return;
+            }
+        }
+    }
+    
+    cout << "Yes\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

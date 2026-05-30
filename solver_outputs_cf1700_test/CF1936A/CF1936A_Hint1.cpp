@@ -1,0 +1,341 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int ask(int a, int b, int c, int d) {
+    cout << "? " << a << " " << b << " " << c << " " << d << endl;
+    char res;
+    cin >> res;
+    if (res == '<') return -1;
+    if (res == '=') return 0;
+    return 1;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    
+    // Find index of maximum element (n-1)
+    int max_idx = 0;
+    for (int i = 1; i < n; i++) {
+        int cmp = ask(max_idx, max_idx, i, i);
+        if (cmp < 0) {
+            max_idx = i;
+        }
+    }
+    
+    // Now max_idx points to the element n-1
+    // We need to find the element that maximizes XOR with n-1
+    // That is the element with the most significant bit different from n-1
+    // Since n-1 has all bits 1 up to its highest bit, the best partner is the one
+    // that has the highest possible bit set where n-1 has 0, but n-1 has all 1s
+    // Actually, to maximize XOR with n-1, we want an element that is as small as possible
+    // in the highest bit where n-1 has 1? Wait, n-1 is all ones in binary up to log2(n-1).
+    // XOR with n-1 flips all bits. So to maximize, we want the element that is the complement
+    // of n-1 in the relevant bits. But we don't know the values, only comparisons.
+    
+    // Alternative approach: find the element that gives maximum OR with max_idx?
+    // Actually, we can find the element that is the "best partner" for max_idx.
+    // Since max_idx is n-1, its OR with any x is n-1. So OR doesn't help.
+    
+    // We need a different strategy.
+    // Let's find the maximum element first (done).
+    // Then find the second maximum? Or find the element that maximizes XOR with max.
+    
+    // Known trick: to find max XOR pair, find max element, then find the element
+    // that maximizes XOR with it by comparing (max | x) vs (max | y) - but they are equal.
+    // Instead, we can find the element that has the highest bit where max has 0.
+    // But max is n-1, all bits 1. So no bit is 0.
+    
+    // Wait, the permutation is 0..n-1. So max is n-1. The maximum XOR with n-1 is
+    // achieved by 0 if n is power of 2? Actually, n-1 XOR x is maximized when x is
+    // the bitwise NOT of n-1 within the bit-length. But x is in [0, n-1].
+    // The maximum possible XOR value is the smallest power of two > n-1, minus 1.
+    // That is achieved by x = (that power of two - 1) XOR (n-1). But x might be > n-1.
+    // So we need to find the best x in the range.
+    
+    // Let's think differently. We can find the maximum element, then find the element
+    // that gives the maximum OR with something? No.
+    
+    // Another known solution for this problem:
+    // 1. Find the index of the maximum element (n-1) using n-1 queries.
+    // 2. Find the index of the element that maximizes XOR with max_idx.
+    //    To do this, we can maintain a candidate set. Start with all indices except max_idx.
+    //    We can compare pairs using queries of the form (max_idx | a) vs (max_idx | b) - but they are equal.
+    //    Instead, we can compare (a | b) vs (max_idx | something) - not sure.
+    
+    // Let's recall the actual solution from Codeforces problem "XOR Pair" or similar.
+    // The problem is Codeforces Round #728 (Div. 2) Problem D? No.
+    // Actually, it's from Codeforces Round #647 (Div. 2) Problem D? No.
+    // It's "XOR Pair" or "Guess the Maximum XOR"? 
+    // I remember a problem: find max XOR pair with queries (a|b) vs (c|d).
+    // Solution: Find the maximum element. Then find the element that maximizes XOR with it
+    // by finding the element that has the highest bit different from max.
+    // Since max is n-1, its binary is all ones up to the highest bit. So any element
+    // will have XOR with max = (n-1) XOR x = (n-1) - x? No, XOR is not subtraction.
+    // Actually, (n-1) XOR x = (n-1) ^ x. Since n-1 is all ones in the lower bits,
+    // this is equivalent to bitwise NOT of x in those bits. So the value is (2^k - 1) - x,
+    // where 2^k is the smallest power of two > n-1. So to maximize, we want the smallest x.
+    // But x is in [0, n-1] except max_idx. So the smallest element gives the max XOR with n-1.
+    // Wait, is that true? Let's test: n=4, n-1=3 (11). x=0 -> 3^0=3. x=1 -> 2. x=2 -> 1.
+    // So indeed, the smallest element gives max XOR with n-1.
+    // But is that always true? n=5, n-1=4 (100). x=0 -> 4. x=1 -> 5. x=2 -> 6. x=3 -> 7.
+    // Here, the smallest element (0) gives 4, but 3 gives 7. So not smallest.
+    // So my assumption is wrong.
+    
+    // Let's think: n-1 in binary: if n is power of 2, n-1 is all ones, then XOR with x is
+    // (n-1) - x. So smallest x gives max. If n is not power of 2, n-1 has some zeros in higher bits.
+    // The maximum XOR with n-1 is achieved by the element that has the highest bit where n-1 has 0,
+    // and then the rest bits as opposite as possible.
+    
+    // So we need to find the element that maximizes XOR with max_idx.
+    // How to find it with queries?
+    // We can find the element that has the highest bit different from max_idx.
+    // Since we can compare ORs, we can compare (max_idx | a) vs (max_idx | b) - but they are equal to max_idx.
+    // So we need another way.
+    
+    // Let's search for the solution online in my memory.
+    // I recall a solution: 
+    // 1. Find the maximum element (n-1) by comparing (i|i) vs (j|j).
+    // 2. Find the element that maximizes XOR with max_idx by maintaining a candidate.
+    //    Start with candidate = 0 (or any index != max_idx).
+    //    For each other index i != max_idx, candidate:
+    //      Compare (candidate | max_idx) vs (i | max_idx) -> they are equal.
+    //      Instead, compare (candidate | candidate) vs (i | max_idx)? No.
+    //      Actually, we can compare (candidate | something) vs (i | something).
+    //      The trick: to find which of a and b gives larger XOR with max_idx,
+    //      we can compare (a | b) vs (max_idx | something)? Not sure.
+    
+    // Let's derive: We want to compare (max_idx ^ a) and (max_idx ^ b).
+    // We cannot directly query XOR. But we can query OR.
+    // Note that (max_idx | a) = max_idx | a. Since max_idx is n-1, max_idx | a = max_idx.
+    // So that doesn't help.
+    
+    // Maybe we don't need to find max_idx first. Another approach:
+    // Find the two indices that maximize XOR directly.
+    // Consider the highest bit where the two numbers differ. 
+    // We can find the maximum element, then find the element that has the highest bit not set in max.
+    // But how to find that element?
+    
+    // Let's think about the properties of OR:
+    // If we have two numbers a and b, a|b tells us about the union of their set bits.
+    // To find which of a and b has a higher bit set, we can compare (a|b) with (a|a) or something.
+    // Actually, if we want to know if a has a higher bit than b, we can compare (a|b) with (b|b).
+    // If (a|b) > (b|b), then a has a higher bit than b.
+    
+    // So we can find the maximum element by tournament: compare (i|j) with (i|i) etc.
+    // But we already did that with (i|i) vs (j|j) - that's just comparing i and j directly.
+    
+    // Now, to find the best partner for max_idx, we want to find the element that has the highest bit
+    // that is 0 in max_idx. Since max_idx = n-1, its highest bit is the highest power of 2 <= n-1.
+    // The bits above that are 0. So we want an element that has a bit set in those higher positions.
+    // But all elements are < n, so they don't have bits above the highest bit of n-1.
+    // So the highest bit where they can differ is the highest bit of n-1.
+    // Actually, n-1 has that bit set. So to maximize XOR, we want an element that has that bit 0,
+    // and then the next bits as opposite as possible.
+    // So we want an element that is as small as possible? No, we saw n=5: max=4 (100), best partner=3 (011) gives 7.
+    // 3 has the highest bit (bit 2) 0, while 4 has it 1. So we want an element that has the highest bit 0.
+    // In general, we want an element that has the highest bit different from max_idx.
+    // Since max_idx has the highest bit set (because it's the maximum), we want an element that has that bit 0.
+    // Among those, we want the one that maximizes the remaining bits.
+    
+    // So we can first find the maximum element (done).
+    // Then we need to find the element that has the highest bit of max_idx equal to 0, and among those,
+    // the one that gives the maximum OR with something? 
+    // Actually, we can find the element that maximizes XOR with max_idx by comparing pairs of candidates.
+    // Suppose we have two candidates a and b. We want to know which gives larger XOR with max_idx.
+    // Note that (max_idx ^ a) > (max_idx ^ b) iff the highest bit where they differ is set in (max_idx ^ a).
+    // This is equivalent to: the highest bit where a and b differ, that bit in max_idx is different from that bit in a?
+    // Let's analyze: Let k be the highest bit where a and b differ. Then max_idx ^ a and max_idx ^ b differ at bit k
+    // if max_idx's bit k is 0? Actually, (max_idx ^ a) and (max_idx ^ b) differ at bit k iff a and b differ at bit k.
+    // The value of that bit in max_idx ^ a is (max_idx_k XOR a_k). Similarly for b.
+    // Since a_k != b_k, one of them is 1 and the other 0. So the one with 1 at bit k will be larger.
+    // So (max_idx ^ a) > (max_idx ^ b) iff (max_idx_k XOR a_k) = 1, i.e., a_k != max_idx_k.
+    // So the comparison depends on the bit k where a and b differ, and we want a_k to be opposite to max_idx_k.
+    // But we don't know max_idx_k. However, we know max_idx is the maximum, so its highest bit is 1.
+    // For bits below that, we don't know.
+    
+    // This suggests we can find the best partner by building it bit by bit from highest to lowest.
+    // But we have limited queries.
+    
+    // Let's search my memory for the exact solution.
+    // I recall a Codeforces problem: "D. Xor-Pair" or something. 
+    // The solution: 
+    // 1. Find the index of the maximum element (n-1) using n-1 queries.
+    // 2. Find the index of the element that maximizes XOR with max_idx. 
+    //    To do this, we can find the element that has the highest bit different from max_idx.
+    //    Actually, we can find the element that gives the maximum value of (max_idx | x) - but that's constant.
+    //    Wait, maybe we can find the element that gives the maximum value of (max_idx ^ x) by comparing
+    //    (x | y) vs (max_idx | something)? No.
+    
+    // Let's think of a different approach: 
+    // We can find the maximum element, then find the minimum element? 
+    // The maximum XOR is often between max and min? Not always.
+    
+    // Another idea: The maximum XOR pair can be found by considering the maximum element and the element
+    // that is the "complement" in the set. We can find the element that maximizes the OR with max_idx?
+    // But max_idx | x = max_idx for all x, so no.
+    
+    // Let's look at the hints: "Consider queries of the form ? x x y y"
+    // That's just comparing x and y directly. So we can find the maximum element easily.
+    // The second hint might be: "Consider queries of the form ? a b c d where a, b, c, d are not necessarily distinct."
+    // We already used that.
+    
+    // Maybe we can find the maximum XOR pair by finding the maximum and the second maximum?
+    // No, max XOR is not necessarily between max and second max.
+    
+    // Let's try to derive a method to compare (max_idx ^ a) and (max_idx ^ b) using OR queries.
+    // We want to know which is larger. 
+    // Consider the highest bit where a and b differ. Let that bit be k.
+    // Then (max_idx ^ a) and (max_idx ^ b) differ at bit k. 
+    // The one with 1 at bit k is larger. That one is the one where a_k != max_idx_k.
+    // So we need to know max_idx_k. But we don't know it.
+    // However, we can determine the relative order of (max_idx ^ a) and (max_idx ^ b) by comparing
+    // (a | max_idx) and (b | max_idx)? They are equal.
+    // What about comparing (a | b) and (max_idx | something)? 
+    // Note that (a | b) has bit k set. (max_idx | a) has bit k set if max_idx_k=1 or a_k=1.
+    // Not directly helpful.
+    
+    // Let's consider comparing (a | b) with (max_idx | a) or something.
+    // Actually, we can compare (a | b) with (max_idx | max_idx) = max_idx.
+    // If (a | b) > max_idx, then a or b has a bit higher than max_idx, which is impossible since max_idx is n-1.
+    // So (a | b) <= max_idx always.
+    
+    // Maybe we can find the element that maximizes XOR with max_idx by finding the element that
+    // has the highest bit not set in max_idx. But max_idx has all bits set up to its highest bit.
+    // So the only bits not set are those above the highest bit. No element has those bits set.
+    // So the highest bit where any element differs from max_idx is the highest bit of max_idx itself.
+    // So we want an element that has that bit 0. That means we want an element that is < 2^{k} where k is the highest bit of max_idx.
+    // In other words, we want an element that is less than the highest power of two <= max_idx.
+    // Let msb = 1 << (31 - __builtin_clz(max_idx)). Then we want an element in [0, msb-1].
+    // Among those, we want the one that maximizes XOR with max_idx. Since max_idx has bit k=1, and bits below are whatever,
+    // XOR with max_idx will have bit k=1 for elements with bit k=0, and bit k=0 for elements with bit k=1.
+    // So to maximize, we definitely want bit k=1 in the result, so we want an element with bit k=0.
+    // So we restrict to elements < msb. Among those, we want to maximize the remaining bits.
+    // The remaining bits of max_idx ^ x for x < msb: max_idx has some bits set, some not.
+    // We want to choose x to maximize the XOR. This is equivalent to choosing x to be the bitwise NOT of max_idx
+    // within the lower k bits. That is, x = (msb - 1) ^ max_idx. But x might not be in the permutation.
+    // So we need to find the element that is closest to that ideal x.
+    
+    // How to find that element with queries? We can find the maximum element among those < msb.
+    // But we don't know msb. We can find the maximum element overall (done). Then we can find the maximum element
+    // among those that are less than something? We can compare elements.
+    
+    // Actually, we can find the element that gives the maximum XOR with max_idx by maintaining a candidate
+    // and comparing it with others using a special query.
+    // Let's think: we want to compare (max_idx ^ a) and (max_idx ^ b).
+    // Consider the query: ? a max_idx b max_idx
+    // This compares (a | max_idx) vs (b | max_idx). Since max_idx is all ones in its bits, (a | max_idx) = max_idx | a.
+    // But max_idx is n-1, so max_idx | a = max_idx. So always equal. Not useful.
+    
+    // What about ? a b max_idx max_idx? That compares (a|b) vs max_idx. Since max_idx is maximum, (a|b) <= max_idx.
+    // If (a|b) < max_idx, then both a and b are < max_idx. If (a|b) = max_idx, then one of them might be max_idx or they together cover all bits.
+    // Not directly giving XOR comparison.
+    
+    // Let's search for the known solution. I remember now: 
+    // The solution is to find the maximum element, then find the element that maximizes the OR with the maximum element?
+    // No, that's constant.
+    // Wait, I think the problem is "XOR Pair" from Codeforces Round #647 (Div. 2) Problem D? Actually, there is a problem
+    // "Guess the Maximum XOR" or similar. 
+    // Let me think: There is a problem where you can ask queries of the form (a|b) vs (c|d) and you need to find max XOR pair.
+    // The solution: 
+    // 1. Find the index of the maximum element (n-1) by comparing (i|i) vs (j|j). Takes n-1 queries.
+    // 2. Find the index of the element that maximizes XOR with max_idx. 
+    //    To do this, we can find the element that has the highest bit different from max_idx.
+    //    We can do this by finding the maximum element among those that are not max_idx? No.
+    //    Actually, we can find the element that gives the maximum value of (max_idx ^ x) by comparing
+    //    (x | y) vs (max_idx | something)? 
+    //    Let's consider comparing (a | b) vs (a | c). If (a | b) > (a | c), then b has a bit set that c doesn't, and that bit is not set in a.
+    //    So b has a bit that is 0 in a and 1 in b, while c has 0 there. This means b might be better for XOR with a?
+    //    Actually, if we want to maximize a ^ x, we want x to have bits set where a has 0. So if b has a bit set that a doesn't, and c doesn't have it, then b is better than c for that bit.
+    //    So we can use a query: ? a b a c. This compares (a|b) vs (a|c). 
+    //    If (a|b) > (a|c), then b has some bit set that c doesn't, and that bit is not in a. So b is "more complementary" to a than c in terms of that bit.
+    //    But this only tells us about the highest bit where they differ. It's like comparing b and c with a mask of bits not in a.
+    //    So we can find the element that maximizes the "complement" to a by doing a tournament: 
+    //    Start with candidate = 0 (or any index != a). For each other index i != a, compare ? a candidate a i.
+    //    If <, then i is better (i has a higher bit not in a than candidate). If >, candidate remains. If =, they are equal in bits not in a, so either is fine.
+    //    This will find the element that has the highest bit not in a. But is that the one that maximizes XOR with a?
+    //    Let's test: a = max_idx. We want to maximize a ^ x. The highest bit where a and x differ will dominate.
+    //    The query ? a x a y compares (a|x) vs (a|y). Since a is max, a|x = a for all x? No! a is n-1, but a|x is not necessarily a if x has bits that a doesn't have? But a has all bits up to its highest bit set. x < n, so x cannot have bits higher than a's highest bit. So a|x = a always. So ? a x a y will always return '='. So that doesn't work.
+    
+    //    Wait, a is not necessarily n-1? But we found max_idx = n-1. So a is n-1. Then a|x = n-1 for all x. So the query ? a x a y is useless.
+    
+    //    So the trick of using ? a b a c only works if a is not the maximum element. So we need a different a.
+    
+    //    What if we don't find the maximum element first? Maybe we can find the maximum XOR pair directly by finding two elements that are "complements" in some sense.
+    
+    // Let's think of another approach: 
+    // We can find the maximum element (n-1). Then we can find the minimum element? 
+    // The maximum XOR is often between max and min? Not always, but maybe we can find the element that maximizes XOR with max by comparing (x | y) vs (max | something)? 
+    
+    // I recall a solution from a similar problem: 
+    // 1. Find the maximum element.
+    // 2. Find the element that maximizes XOR with it by doing: 
+    //    candidate = 0
+    //    for i in 1..n-1:
+    //        if ask(candidate, max_idx, i, max_idx) == '<': candidate = i
+    //    But as we said, that always returns '='.
+    
+    //    Wait, maybe the query is ? candidate max_idx i max_idx? That's the same.
+    
+    //    What if we use ? candidate i max_idx max_idx? That compares (candidate|i) vs max_idx.
+    //    If (candidate|i) < max_idx, then both candidate and i are missing some bit that max_idx has.
+    //    If (candidate|i) = max_idx, then together they cover all bits of max_idx.
+    //    This might help to find a pair that together cover all bits, which might maximize XOR? Not necessarily.
+    
+    // Let's search my memory for the exact problem. I think it's Codeforces Round #728 (Div. 2) Problem D: "Tree Array"? No.
+    // Maybe it's from a recent contest: Codeforces Round 948 (Div. 2) Problem D? I'm not sure.
+    
+    // Let's try to derive a solution with the given hints. The hint says: "Consider queries of the form ? x x y y". That's just comparing x and y. So we can find the maximum element easily. The next hint might be: "Consider queries of the form ? a b c d where a, b, c, d are not necessarily distinct." We already used that.
+    
+    // Maybe the solution is:
+    // 1. Find the maximum element (n-1). Let its index be mx.
+    // 2. Find the element that maximizes XOR with mx. To do this, we can find the element that has the highest bit not set in mx. But mx has all bits set up to its highest bit. So we want an element that has the highest bit of mx set to 0. That means we want an element that is < 2^k where 2^k is the highest power of two <= mx. How to find such an element? We can find the maximum element among those that are < 2^k. But we don't know 2^k. However, we can find the maximum element overall, then the maximum element among the rest? No.
+    
+    //    Actually, we can find the maximum element, then find the maximum element among those that are not max? That's just the second maximum. But that might not be the best XOR partner.
+    
+    // Let's test with n=5: p = [0,1,2,3,4]. max=4. Best partner=3. 3 is the second maximum. 
+    // n=6: p = [0,1,2,3,4,5]. max=5 (101). Best partner? 5^2=7, 5^3=6, 5^4=1, 5^0=5, 5^1=4. Max is 7 with 2. 2 is not the second maximum (4). So second maximum doesn't always work.
+    
+    // n=7: max=6 (110). Best partner? 6^1=7, 6^0=6, 6^2=4, 6^3=5, 6^4=2, 6^5=3. Max is 7 with 1. 1 is small.
+    // n=8: max=7 (111). Best partner? 7^0=7, 7^1=6, ... max is 7 with 0. 0 is minimum.
+    
+    // So the best partner can be anywhere.
+    
+    // Let's think about the bitwise approach. We want to find the maximum XOR pair. We can find the maximum element, then we want to find the element that has the highest bit different from max. Since max has the highest bit set, we want an element with that bit 0. Among those, we want the one that has the next highest bit different, etc. This is exactly like finding the maximum XOR pair in a binary trie. We can simulate the binary trie using queries? 
+    
+    // We have the ability to compare ORs. Can we use OR to simulate bitwise operations?
+    // Note that (a|b) tells us the union of bits. If we want to know if a has a particular bit set, we can compare (a|b) with (b|b) for some b that has that bit set? But we don't know the bits.
+    
+    // However, we can find the maximum element. Then we can find the element that has the highest bit different from max by doing a tournament among all elements except max, using a custom comparator that tells us which of two elements is "better" for XOR with max.
+    // How to define that comparator using queries?
+    // We want to compare (max ^ a) and (max ^ b). 
+    // Consider the highest bit where a and b differ. Let it be k. 
+    // Then (max ^ a) > (max ^ b) iff (max_k ^ a_k) = 1, i.e., a_k != max_k.
+    // So we need to know max_k. But we don't know max_k. However, we know max is the maximum element, so its highest bit is 1. For bits below, we don't know.
+    // But we can determine the relative order of a and b in terms of XOR with max by using a query that involves max and some other elements?
+    
+    // Let's consider the query: ? a max b max. As said, always '='.
+    // What about ? a b max max? That compares (a|b) vs max. 
+    // If (a|b) < max, then both a and b are missing some bit that max has. 
+    // If (a|b) = max, then together they have all bits of max.
+    // This doesn't directly compare XORs.
+    
+    // What about ? a b a max? Compares (a|b) vs (a|max) = max. So it's the same as ? a b max max.
+    
+    // Let's think differently. Maybe we don't need to find max first. 
+    // We can find the maximum XOR pair by finding two elements that together have all bits set? 
+    // The maximum XOR value is the maximum possible value of (a ^ b). That value has some highest bit.
+    // The pair that achieves it will have that bit set in exactly one of them.
+    // So we can try to find the highest bit that can be set in the XOR result.
+    // We can do a binary search on the answer? But we can't query XOR directly.
+    
+    // Another idea: The maximum XOR pair must involve the maximum element? Is that true?
+    // Let's check: n=5, max=4, best pair (3,4) includes max. n=6, max=5, best pair (2,5) includes max. n=7, max=6, best pair (1,6) includes max. n=8, max=7, best pair (0,7) includes max. 
+    // Is it always true that the maximum XOR pair includes the maximum element?
+    // Suppose n=9, p = [0,1,2,3,4,5,6,7,8]. max=8 (1000). Best partner? 8^7=15, 8^6=14, 8^5=13, 8^4=12, 8^3=11, 8^2=10, 8^1=9, 8^0=8. Max is 15 with 7. Includes max.
+    // What about a case where max is not in the max XOR pair? 
+    // Consider n=10, max=9 (1001). Best partner? 9^6=15 (1111), 9^7=14, 9^5=12, 9^4=13, 9^3=10, 9^2=11, 9^1=8, 9^0=9, 9^8=1. Max is 15 with 6. Includes max.
+    // Consider n=11, max=10 (1010). Best partner? 10^5=15 (1111), 10^4=14, 10^7=13, 10^6=12, 10^3=9, 10^2=8, 10^1=11, 10^0=10, 10^8=2, 10^9=3. Max is 15 with 5. Includes max.
+    // It seems the maximum XOR pair always includes the maximum element? Let's try to find a counterexample.
+    // We want a and b such that a^b > max^anything. Since max is the largest number, it has the highest bit set. For a^b to be larger than max^something, a^b must have a higher bit than max's highest bit? But max has the highest bit among all numbers, so a^b cannot have a higher bit than max's highest bit. The maximum possible XOR value is (next power of 2) - 1. That value has the same highest bit as max if max is not a power of 2 minus 1? Actually, if max = 2^k - 1, then max XOR 0 = 2^k - 1, which is the maximum possible. If max is not 2^k - 1, then the maximum XOR value is (2^{k+1} - 1) where 2^k <= max < 2^{k+1}. That value has bit k set. max also has bit k set. So the maximum XOR value has bit k set. To get bit k set in the XOR, exactly one of the two numbers must have bit k set. Since max has bit k set, if we don't include max, we need another number with bit k set. There might be another number with bit k set. For example, n=6, max=5 (101), another number with bit 2 set is 4 (100). The pair (4, something) could potentially give a high XOR. Let's check: 4^2=6, 4^3=7, 4^1=5, 4^0=4. The maximum is 7 with 3. But 5^2=7 also. So max is still in a max pair. What about n=12, max=11 (1011). Numbers with bit 3 set: 8,9,10,11. Could a pair without 11 give max XOR? Let's check 10^5=15, 10^4=14, 10^7=13, 10^6=12, 10^3=9, etc. 11^4=15, 11^5=14, 11^6=13, 11^7=12. So 10^5=15 and 11^4=15. Both include a number with bit 3 set. But does any pair without a number having bit 3 set give 15? The numbers without bit 3 set are 0-7. The max XOR among them is 7^0=7? Actually, 7^0=7, 7^1=6, etc. Max is 7. So 15 is only achieved with one number having bit 3 set. So the maximum XOR pair must include at least one number with the highest bit set. But it might not include the maximum element if there is another number with the same highest bit that pairs better. In the n=12 example, 10 and 5 give 15, while 11 and 4 also give 15. So max is not strictly necessary, but there is always a max XOR pair that includes the maximum element? In this case, 11 is in a max pair (11,4). Is it always true that the maximum element is part of some maximum XOR pair? I think yes, because if you have a pair (a,b) that maximizes XOR, and a < max, then consider (max, b). Since max > a, max has the same highest bit as a (if a has the highest bit) or higher. Actually, if a doesn't have the highest bit, then max has a higher bit, so max^b will have that higher bit set, making it larger than a^b, contradiction. So a must have the highest bit. Then max also has the highest bit. Could max^b be less than a^b? Let's see: a and max both have the highest bit set. The XOR with b will have the highest bit 0 if b also has it set, or 1 if b doesn't. Since a^b is maximal, it must have the highest bit 1 (otherwise we could flip it by choosing a different a). So b must not have the highest bit set. Then max^b also has the highest bit 1. Now, for the remaining bits, max is >= a. Could max^b be smaller than a^b? Suppose a=10 (1010), max=11 (1011), b=5 (0101). a^b = 15 (1111), max^b = 14 (1110). So max^b < a^b. So the maximum XOR pair does not necessarily include the maximum element! In this case, the max XOR is 15 achieved by (10,

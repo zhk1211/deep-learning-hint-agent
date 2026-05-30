@@ -1,0 +1,63 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+const int INF = 1e9;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+        
+        vector<vector<int>> pref(n + 1, vector<int>(m + 1, 0));
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 1; j <= m; ++j) {
+                pref[i][j] = pref[i-1][j] + pref[i][j-1] - pref[i-1][j-1] + (grid[i-1][j-1] - '0');
+            }
+        }
+        
+        auto sum = [&](int r1, int c1, int r2, int c2) {
+            return pref[r2][c2] - pref[r1-1][c2] - pref[r2][c1-1] + pref[r1-1][c1-1];
+        };
+        
+        int ans = INF;
+        
+        for (int l = 1; l <= m; ++l) {
+            for (int r = l + 3; r <= m; ++r) {
+                vector<int> best(n + 1, INF);
+                int cur = 0;
+                for (int i = 1; i <= n; ++i) {
+                    if (i >= 5) {
+                        int top = i - 4;
+                        int cost = 0;
+                        cost += (r - l - 1) - sum(top, l + 1, top, r - 1);
+                        cost += (r - l - 1) - sum(i, l + 1, i, r - 1);
+                        cost += sum(top + 1, l, i - 1, l);
+                        cost += sum(top + 1, r, i - 1, r);
+                        cost += sum(top + 1, l + 1, i - 1, r - 1);
+                        ans = min(ans, cost + best[top]);
+                    }
+                    
+                    int cost = 0;
+                    cost += (r - l - 1) - sum(i, l + 1, i, r - 1);
+                    cost += sum(i, l, i, l) + sum(i, r, i, r);
+                    cur += cost;
+                    best[i] = min(best[i-1], cur - cost);
+                }
+            }
+        }
+        
+        cout << ans << '\n';
+    }
+    
+    return 0;
+}

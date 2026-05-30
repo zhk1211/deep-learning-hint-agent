@@ -1,0 +1,99 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+const int MAXN = 500000;
+
+vector<long long> fact, invfact;
+
+long long modpow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+void init_factorials(int n) {
+    fact.resize(n + 1);
+    invfact.resize(n + 1);
+    fact[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        fact[i] = fact[i - 1] * i % MOD;
+    }
+    invfact[n] = modpow(fact[n], MOD - 2);
+    for (int i = n - 1; i >= 0; i--) {
+        invfact[i] = invfact[i + 1] * (i + 1) % MOD;
+    }
+}
+
+long long nCr(int n, int r) {
+    if (r < 0 || r > n) return 0;
+    return fact[n] * invfact[r] % MOD * invfact[n - r] % MOD;
+}
+
+void solve() {
+    vector<int> c(26);
+    int total = 0;
+    for (int i = 0; i < 26; i++) {
+        cin >> c[i];
+        total += c[i];
+    }
+    
+    int odd_positions = (total + 1) / 2;
+    int even_positions = total / 2;
+    
+    // dp[i] = number of ways to choose a subset of letters with sum i for odd positions
+    vector<long long> dp(odd_positions + 1, 0);
+    dp[0] = 1;
+    
+    for (int i = 0; i < 26; i++) {
+        if (c[i] == 0) continue;
+        int cnt = c[i];
+        for (int s = odd_positions; s >= cnt; s--) {
+            dp[s] = (dp[s] + dp[s - cnt]) % MOD;
+        }
+    }
+    
+    long long ans = 0;
+    for (int odd_sum = 0; odd_sum <= odd_positions; odd_sum++) {
+        if (dp[odd_sum] == 0) continue;
+        int even_sum = total - odd_sum;
+        if (even_sum != even_positions) continue;
+        
+        long long ways_choose = dp[odd_sum];
+        long long ways_arrange_odd = fact[odd_positions];
+        long long ways_arrange_even = fact[even_positions];
+        
+        for (int i = 0; i < 26; i++) {
+            if (c[i] > 0) {
+                ways_arrange_odd = ways_arrange_odd * invfact[c[i]] % MOD;
+                ways_arrange_even = ways_arrange_even * invfact[c[i]] % MOD;
+            }
+        }
+        
+        long long total_ways = ways_choose * ways_arrange_odd % MOD * ways_arrange_even % MOD;
+        ans = (ans + total_ways) % MOD;
+    }
+    
+    cout << ans << "\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    init_factorials(MAXN);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    
+    return 0;
+}
+```

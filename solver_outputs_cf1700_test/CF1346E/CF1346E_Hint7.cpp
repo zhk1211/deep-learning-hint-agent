@@ -1,0 +1,37 @@
+// Hint7
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m, k;
+    cin >> n >> m >> k;
+    --k;
+
+    const int INF = 1e9;
+    vector<int> dp(n, INF);
+    dp[k] = 0;
+
+    for (int i = 0; i < m; ++i) {
+        int x, y;
+        cin >> x >> y;
+        --x; --y;
+
+        int dx = dp[x], dy = dp[y];
+        int ndx = min(dx + 1, dy);
+        int ndy = min(dy + 1, dx);
+
+        dp[x] = ndx;
+        dp[y] = ndy;
+    }
+
+    for (int i = 0; i < n; ++i) {
+        if (dp[i] >= INF) cout << -1;
+        else cout << dp[i];
+        cout << " \n"[i == n - 1];
+    }
+
+    return 0;
+}

@@ -1,0 +1,111 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    vector<pair<int,int>> edges(n - 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        edges[i] = {u, v};
+    }
+    
+    // Find a vertex of degree 2
+    int center = -1;
+    for (int i = 1; i <= n; i++) {
+        if (adj[i].size() == 2) {
+            center = i;
+            break;
+        }
+    }
+    
+    if (center == -1) {
+        cout << "NO\n";
+        return;
+    }
+    
+    // We have a vertex of degree 2, let its neighbors be a and b
+    int a = adj[center][0];
+    int b = adj[center][1];
+    
+    // We will direct edges to achieve exactly n good pairs.
+    // The construction: make center a source? Actually we need exactly n good pairs.
+    // Known construction: direct edges away from center along the tree,
+    // but with a specific orientation for the two branches.
+    // Let's root the tree at center. Direct all edges away from center,
+    // except for the edge between center and one of its neighbors? 
+    // Wait, we need exactly n good pairs. 
+    // The known solution: pick center of degree 2. Direct edge center->a, b->center,
+    // and for all other edges, direct away from the path a-center-b.
+    // More precisely: root tree at center. For subtree of a (excluding center),
+    // direct edges away from a. For subtree of b, direct edges towards b.
+    // Then the good pairs count = n.
+    
+    // Let's implement this orientation.
+    // We'll do a DFS from a avoiding center, direct edges away from a.
+    // From b avoiding center, direct edges towards b.
+    // The edge center-a: center -> a
+    // The edge center-b: b -> center
+    
+    vector<pair<int,int>> directed;
+    // We'll store directed edges as (from, to)
+    
+    // Direct edge center->a
+    directed.push_back({center, a});
+    // Direct edge b->center
+    directed.push_back({b, center});
+    
+    // DFS from a, away from center
+    function<void(int,int)> dfs_away = [&](int u, int p) {
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            if (v == center) continue; // already handled
+            directed.push_back({u, v});
+            dfs_away(v, u);
+        }
+    };
+    
+    // DFS from b, towards b
+    function<void(int,int)> dfs_towards = [&](int u, int p) {
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            if (v == center) continue;
+            directed.push_back({v, u});
+            dfs_towards(v, u);
+        }
+    };
+    
+    dfs_away(a, center);
+    dfs_towards(b, center);
+    
+    // Now we have directed all edges. But we must output the edges in the original order? 
+    // The problem says "print n-1 pairs of integers u_i and v_i separated by spaces — the edges directed from u_i to v_i."
+    // The edges can be printed in any order. So we can just output our directed edges.
+    // However, we must ensure we output exactly the edges of the tree, each exactly once.
+    // Our directed list has exactly n-1 edges? Let's check: we added center->a, b->center, 
+    // then all edges in a's component (excluding center) and b's component (excluding center).
+    // Since center has degree 2, the tree is partitioned into these two components plus center.
+    // So total edges = 2 + (size of a's component - 1) + (size of b's component - 1) = n-1. Correct.
+    
+    cout << "YES\n";
+    for (auto &e : directed) {
+        cout << e.first << " " << e.second << "\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

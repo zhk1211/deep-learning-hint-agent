@@ -1,0 +1,72 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Utkarsh is forced to play yet another one of Ashish's games. The game progresses turn by turn and as usual, Ashish moves first.
+
+Consider the 2D plane. There is a token which is initially at $ (0,0) $ . In one move a player must increase either the $ x $ coordinate or the $ y $ coordinate of the token by exactly $ k $ . In doing so, the player must ensure that the token stays within a (Euclidean) distance $ d $ from $ (0,0) $ .
+
+In other words, if after a move the coordinates of the token are $ (p,q) $ , then $ p^2 + q^2 \leq d^2 $ must hold.
+
+The game ends when a player is unable to make a move. It can be shown that the game will end in a finite number of moves. If both players play optimally, determine who will win.
+
+Input Format
+The first line contains a single integer $ t $ ( $ 1 \leq t \leq 100 $ ) — the number of test cases.
+
+The only line of each test case contains two space separated integers $ d $ ( $ 1 \leq d \leq 10^5 $ ) and $ k $ ( $ 1 \leq k \leq d $ ).
+
+Output Format
+For each test case, if Ashish wins the game, print "Ashish", otherwise print "Utkarsh" (without the quotes).
+
+Examples
+Sample 1
+Input
+5
+2 1
+5 2
+10 3
+25 4
+15441 33
+Output
+Utkarsh
+Ashish
+Utkarsh
+Utkarsh
+Ashish
+
+Note
+In the first test case, one possible sequence of moves can be
+
+$ (0, 0) \xrightarrow{\text{Ashish }} (0, 1) \xrightarrow{\text{Utkarsh }} (0, 2) $ .
+
+Ashish has no moves left, so Utkarsh wins.
+
+![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1451D/00adebe318fd60c39c1fde9564efcda9489c81f2.png)
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1451D - Circle Game
+Key Idea:
+Let $$$z$$$ be the maximum integer such that the point $$$(kz, kz)$$$ is within the circle. If the point $$$(kz, k(z+1))$$$ is also within the circle, player 1 wins. Otherwise player 2 wins.
+Solution:
+Regardless of what move player 1 makes, player 2 can force the token to be at some point on the line $$$x = y$$$ at the end of his turn (if player 1 moves up, player 2 can move right and vice versa).
+Case 1: $$$(kz, k(z+1))$$$ lies outside the circle
+Player 2 can guarantee his victory in this fashion as player 1 will not have any moves left after reaching the point $$$(kz, kz)$$$. Player 2 wins.
+Case 2: $$$(kz, k(z+1))$$$ lies within the circle
+After player 1 makes his first move, player 2 finds himself in the same situation as player 1 did in the previous case. That is, player 1 can ensure that they reach either $$$(kz, k(z+1))$$$ or $$$(k(z+1), kz)$$$ in the same way. Points $$$(k(z+1), k(z+1))$$$ and $$$(kz, k(z+2))$$$ do not lie within the circle as by definition
+$$$d^2 \lt k^2(z+1)^2 + k^2(z+1)^2 \lt k^2z^2 + k^2(z+2)^2$$$.
+Thus player 2 will not have any moves left and player 1 wins.
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

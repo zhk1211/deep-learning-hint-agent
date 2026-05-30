@@ -1,0 +1,84 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Kavi has $ 2n $ points lying on the $ OX $ axis, $ i $ -th of which is located at $ x = i $ .
+
+Kavi considers all ways to split these $ 2n $ points into $ n $ pairs. Among those, he is interested in good pairings, which are defined as follows:
+
+Consider $ n $ segments with ends at the points in correspondent pairs. The pairing is called good, if for every $ 2 $ different segments $ A $ and $ B $ among those, at least one of the following holds:
+
+- One of the segments $ A $ and $ B $ lies completely inside the other.
+- $ A $ and $ B $ have the same length.
+
+Consider the following example:
+
+![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1528B/41a58a6a051949b924acfc162dd6465703f68210.png) $ A $ is a good pairing since the red segment lies completely inside the blue segment.
+
+$ B $ is a good pairing since the red and the blue segment have the same length.
+
+$ C $ is not a good pairing since none of the red or blue segments lies inside the other, neither do they have the same size.
+
+Kavi is interested in the number of good pairings, so he wants you to find it for him. As the result can be large, find this number modulo $ 998244353 $ .
+
+Two pairings are called different, if some two points are in one pair in some pairing and in different pairs in another.
+
+Input Format
+The single line of the input contains a single integer $ n $ $ (1\le n \le 10^6) $ .
+
+Output Format
+Print the number of good pairings modulo $ 998244353 $ .
+
+Examples
+Sample 1
+Input
+1
+Output
+1
+
+Sample 2
+Input
+2
+Output
+3
+
+Sample 3
+Input
+3
+Output
+6
+
+Sample 4
+Input
+100
+Output
+688750769
+
+Note
+The good pairings for the second example are:
+
+![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1528B/26cefe71c208095e0e610c498701d052b950b5a2.png)In the third example, the good pairings are:
+
+![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1528B/4bfe3f3beac587d75fee5d30f6490c2823b90e1d.png)
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+Denote $$$x$$$ as the point matched with the point $$$1$$$. Notice that each point $$$p$$$ $$$(x \lt p \le 2n)$$$ belongs to a segment with length equal to $$$[1 , x]$$$'s length.
+
+**Hint 2**
+What should $$$x$$$ be in order for $$$dp_n$$$ to be calculated in linear time?
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

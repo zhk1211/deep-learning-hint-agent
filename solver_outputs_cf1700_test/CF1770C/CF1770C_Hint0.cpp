@@ -1,0 +1,49 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // Check if there exists a prime p such that all a_i are congruent modulo p
+        // If yes, then for any x, a_i + x will all be congruent modulo p, so gcd >= p > 1
+        // Otherwise, by CRT we can find x such that all a_i + x are pairwise coprime
+        bool possible = true;
+        // Since n <= 100, we can check all pairs of differences
+        // If for some prime p, all a_i % p are equal, then impossible
+        // We only need to check primes up to n/2? Actually up to n, because if all a_i are distinct mod p,
+        // then p must be <= n. But we can just check all primes up to 100 (since n <= 100)
+        vector<int> primes = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
+        for (int p : primes) {
+            if (p > n) break; // if p > n, by pigeonhole principle, not all can be same mod p unless n < p, but then they could be all same? Actually if p > n, it's possible all are same mod p, but we need to check. However, if p > n, we can still check. But to be safe, check all primes up to 100.
+            // Actually we should check all primes up to 100, because n <= 100.
+            // But if p > n, it's still possible that all a_i are congruent mod p. So we check all primes up to 100.
+            // Since a_i up to 1e18, we take modulo p.
+            int rem = a[0] % p;
+            bool all_same = true;
+            for (int i = 1; i < n; ++i) {
+                if (a[i] % p != rem) {
+                    all_same = false;
+                    break;
+                }
+            }
+            if (all_same) {
+                possible = false;
+                break;
+            }
+        }
+        cout << (possible ? "YES" : "NO") << '\n';
+    }
+    return 0;
+}

@@ -1,0 +1,68 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n), b(m);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int i = 0; i < m; ++i) cin >> b[i];
+
+        int max_val = *max_element(a.begin(), a.end());
+        max_val = max(max_val, *max_element(b.begin(), b.end()));
+
+        vector<int> freq_a(max_val + 1, 0);
+        for (int x : a) freq_a[x]++;
+
+        vector<int> freq_b(max_val + 1, 0);
+        for (int y : b) freq_b[y]++;
+
+        // Count of b elements that have at least one divisor in a
+        vector<bool> has_div(max_val + 1, false);
+        for (int x = 1; x <= max_val; ++x) {
+            if (freq_a[x] > 0) {
+                for (int mult = x; mult <= max_val; mult += x) {
+                    has_div[mult] = true;
+                }
+            }
+        }
+
+        long long alice_moves = 0;
+        long long bob_moves = 0;
+        for (int y = 1; y <= max_val; ++y) {
+            if (freq_b[y] > 0) {
+                if (has_div[y]) {
+                    alice_moves += freq_b[y];
+                } else {
+                    bob_moves += freq_b[y];
+                }
+            }
+        }
+
+        // Alice can only play on numbers that have a divisor in a.
+        // Bob can only play on numbers that do NOT have a divisor in a.
+        // The game is independent on each b element: Alice can remove a b if it has a divisor,
+        // Bob can remove a b if it has no divisor.
+        // Since Alice goes first, she will try to force Bob to run out of moves.
+        // The game reduces to: Alice has A moves, Bob has B moves.
+        // Players alternate, Alice starts. On your turn, you must use one of your own moves.
+        // If you have no moves, you lose.
+        // This is equivalent to: if A > B, Alice wins; if A <= B, Bob wins.
+        // Because Alice can always play her moves, and Bob his, until one runs out.
+        // Since Alice starts, she wins if she has strictly more moves than Bob.
+
+        if (alice_moves > bob_moves) {
+            cout << "Alice\n";
+        } else {
+            cout << "Bob\n";
+        }
+    }
+    return 0;
+}

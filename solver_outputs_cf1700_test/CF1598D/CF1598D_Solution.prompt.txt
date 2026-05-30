@@ -1,0 +1,80 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Monocarp is the coach of the Berland State University programming teams. He decided to compose a problemset for a training session for his teams.
+
+Monocarp has $ n $ problems that none of his students have seen yet. The $ i $ -th problem has a topic $ a_i $ (an integer from $ 1 $ to $ n $ ) and a difficulty $ b_i $ (an integer from $ 1 $ to $ n $ ). All problems are different, that is, there are no two tasks that have the same topic and difficulty at the same time.
+
+Monocarp decided to select exactly $ 3 $ problems from $ n $ problems for the problemset. The problems should satisfy at least one of two conditions (possibly, both):
+
+- the topics of all three selected problems are different;
+- the difficulties of all three selected problems are different.
+
+Your task is to determine the number of ways to select three problems for the problemset.
+
+Input Format
+The first line contains a single integer $ t $ ( $ 1 \le t \le 50000 $ ) — the number of testcases.
+
+The first line of each testcase contains an integer $ n $ ( $ 3 \le n \le 2 \cdot 10^5 $ ) — the number of problems that Monocarp have.
+
+In the $ i $ -th of the following $ n $ lines, there are two integers $ a_i $ and $ b_i $ ( $ 1 \le a_i, b_i \le n $ ) — the topic and the difficulty of the $ i $ -th problem.
+
+It is guaranteed that there are no two problems that have the same topic and difficulty at the same time.
+
+The sum of $ n $ over all testcases doesn't exceed $ 2 \cdot 10^5 $ .
+
+Output Format
+Print the number of ways to select three training problems that meet either of the requirements described in the statement.
+
+Examples
+Sample 1
+Input
+2
+4
+2 4
+3 4
+2 1
+1 3
+5
+1 5
+2 4
+3 3
+4 2
+5 1
+Output
+3
+10
+
+Note
+In the first example, you can take the following sets of three problems:
+
+- problems $ 1 $ , $ 2 $ , $ 4 $ ;
+- problems $ 1 $ , $ 3 $ , $ 4 $ ;
+- problems $ 2 $ , $ 3 $ , $ 4 $ .
+
+Thus, the number of ways is equal to three.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1598D - Training Session
+There are many different ways to solve this problem, but, in my opinion, the easiest one is to count all possible triples and subtract the number of bad triples.
+The first part is easy — the number of ways to choose $$$3$$$ elements out of $$$n$$$ is just $$$\frac{n \cdot (n - 1) \cdot (n - 2)}{6}$$$. The second part is a bit tricky.
+What does it mean that the conditions in the statements are not fulfilled? There is a pair of problems with equal difficulty, and there is a pair of problems with the same topic. Since all problems in the input are different, it means that every bad triple has the following form: $$$[(x_a, y_a), (x_b, y_a), (x_a, y_b)]$$$ — i. e. there exists a problem such that it shares the difficulty with one of the other two problems, and the topic with the remaining problem of the triple.
+This observation allows us to calculate the number of bad triples as follows: we will iterate on the "central" problem (the one that shares the topic with the second problem and the difficulty with the third problem). If we pick $$$(x_a, y_a)$$$ as the "central" problem, we need to choose the other two. Counting ways to choose the other problems is easy if we precalculate the number of problems for each topic/difficulty: let $$$cntT_x$$$ be the number of problems with topic $$$x$$$, and $$$cntD_y$$$ be the number of problems with difficulty $$$y$$$; then, if we pick the problem $$$(x, y)$$$ as the "central one", there are $$$cntT_x - 1$$$ ways to choose a problem that shares the topic with it, and $$$cntD_y - 1$$$ ways to choose a problem that has the same difficulty — so, we have to subtract $$$(cntT_x - 1)(cntD_y - 1)$$$ from the answer for every problem $$$(x, y)$$$.
+
+[code block omitted]
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

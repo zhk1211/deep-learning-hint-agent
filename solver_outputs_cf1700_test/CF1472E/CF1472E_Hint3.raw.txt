@@ -1,0 +1,88 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Friend {
+    int h, w, id;
+};
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<Friend> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i].h >> a[i].w;
+        a[i].id = i;
+    }
+    
+    // We will create two copies: one with (h,w) as given, one with swapped (w,h)
+    // This simulates the two possible orientations.
+    vector<Friend> v;
+    v.reserve(2 * n);
+    for (int i = 0; i < n; ++i) {
+        v.push_back({a[i].h, a[i].w, i});
+        v.push_back({a[i].w, a[i].h, i});
+    }
+    
+    // Sort by height ascending, and if equal, by width ascending.
+    sort(v.begin(), v.end(), [](const Friend& x, const Friend& y) {
+        if (x.h != y.h) return x.h < y.h;
+        return x.w < y.w;
+    });
+    
+    // We'll maintain the minimum width seen so far for each height group.
+    // Since we process in increasing height, we can keep track of the best candidate
+    // (with smallest width) among all friends with strictly smaller height.
+    // We also need to output the original index.
+    vector<int> ans(n, -1);
+    
+    // We'll iterate through sorted v, but we need to handle equal heights carefully.
+    // For a given height, we cannot use friends of the same height (needs strictly smaller).
+    // So we process in groups of equal height.
+    int i = 0;
+    int m = v.size();
+    // best_w: minimum width among all processed (strictly smaller height)
+    // best_id: original index of that friend
+    int best_w = INT_MAX;
+    int best_id = -1;
+    
+    while (i < m) {
+        int cur_h = v[i].h;
+        // First, for all friends with this height, try to assign answer using best_w so far.
+        int j = i;
+        while (j < m && v[j].h == cur_h) {
+            int idx = v[j].id;
+            if (ans[idx] == -1) {
+                if (best_w < v[j].w) {
+                    ans[idx] = best_id + 1; // 1-based index
+                }
+            }
+            ++j;
+        }
+        // Now update best_w with this group (since they will be strictly smaller height for later groups)
+        for (int k = i; k < j; ++k) {
+            if (v[k].w < best_w) {
+                best_w = v[k].w;
+                best_id = v[k].id;
+            }
+        }
+        i = j;
+    }
+    
+    for (int i = 0; i < n; ++i) {
+        cout << ans[i] << (i + 1 == n ? '\n' : ' ');
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

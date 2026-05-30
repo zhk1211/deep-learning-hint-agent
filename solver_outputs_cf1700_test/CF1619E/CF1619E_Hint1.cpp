@@ -1,0 +1,51 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        vector<int> freq(n + 1, 0);
+        for (int x : a) {
+            if (x <= n) freq[x]++;
+        }
+
+        vector<long long> ans(n + 1, -1);
+        long long ops = 0;
+        vector<int> extra;
+
+        for (int i = 0; i <= n; ++i) {
+            if (i > 0 && freq[i - 1] == 0) {
+                if (extra.empty()) break;
+                int j = extra.back();
+                extra.pop_back();
+                ops += (i - 1 - j);
+                freq[i - 1] = 1;
+            }
+
+            ans[i] = ops + freq[i];
+
+            if (i < n) {
+                for (int k = 0; k < freq[i] - 1; ++k) {
+                    extra.push_back(i);
+                }
+            }
+        }
+
+        for (int i = 0; i <= n; ++i) {
+            cout << ans[i] << " \n"[i == n];
+        }
+    }
+    return 0;
+}

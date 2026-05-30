@@ -1,0 +1,230 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    string s;
+    cin >> s;
+    s = " " + s; // 1-indexed
+
+    vector<int> deg(n + 1);
+    for (int i = 1; i <= n; i++) deg[i] = adj[i].size();
+    // leaves except root
+    vector<int> leaves;
+    for (int i = 2; i <= n; i++) {
+        if (deg[i] == 1) leaves.push_back(i);
+    }
+
+    int leaf0 = 0, leaf1 = 0, leafQ = 0;
+    for (int v : leaves) {
+        if (s[v] == '0') leaf0++;
+        else if (s[v] == '1') leaf1++;
+        else leafQ++;
+    }
+
+    int root_val = -1; // 0 or 1 or -1 for ?
+    if (s[1] == '0') root_val = 0;
+    else if (s[1] == '1') root_val = 1;
+
+    // count non-leaf non-root '?' nodes
+    int otherQ = 0;
+    for (int i = 2; i <= n; i++) {
+        if (deg[i] != 1 && s[i] == '?') otherQ++;
+    }
+
+    if (root_val != -1) {
+        // root fixed
+        // Iris wants to maximize non-zero weight leaves
+        // weight non-zero iff leaf value != root value
+        // Iris will set ? leaves to opposite of root, Dora will set to same as root
+        // Iris goes first on ? leaves
+        int iris_turns = (leafQ + 1) / 2;
+        int dora_turns = leafQ / 2;
+        int ans;
+        if (root_val == 0) {
+            ans = leaf1 + iris_turns;
+        } else {
+            ans = leaf0 + iris_turns;
+        }
+        cout << ans << "\n";
+    } else {
+        // root is '?'
+        // Game: Iris first, Dora second. They can choose root, leaves, or other nodes.
+        // According to hints, if leaf0 != leaf1, Iris will color root to maximize.
+        // If leaf0 == leaf1, the one who colors root loses advantage, so they color other nodes first.
+        // The final answer depends on parity of otherQ.
+        if (leaf0 != leaf1) {
+            // Iris will color root to the value that gives more opposite leaves
+            // She can do it on her first move (if she wants) or later.
+            // Actually, optimal: Iris colors root to the value that maximizes (fixed leaves opposite + half of leafQ)
+            // But Dora will then color leaves to minimize.
+            // Let's compute if Iris sets root to 0 or 1.
+            auto calc = [&](int rv) {
+                int base = (rv == 0 ? leaf1 : leaf0);
+                // Iris and Dora play on leafQ leaves
+                int iris_turns = (leafQ + 1) / 2;
+                return base + iris_turns;
+            };
+            int ans = max(calc(0), calc(1));
+            cout << ans << "\n";
+        } else {
+            // leaf0 == leaf1
+            // The player who colors root will be at a disadvantage because the other will then set leaves to match root.
+            // So they will avoid coloring root until forced.
+            // They will color other '?' nodes first.
+            // The number of otherQ determines who is forced to color root.
+            // If otherQ is odd, Iris makes the last move on other nodes, then Dora must color root (or leaf?).
+            // Actually, after otherQ moves, it's the next player's turn.
+            // Let's simulate: total moves on other nodes = otherQ.
+            // After they are exhausted, the turn goes to the player who would move next.
+            // If otherQ is even, Iris starts the phase of coloring root/leaves.
+            // If otherQ is odd, Dora starts that phase.
+            // In the phase with root and leafQ leaves, the first player to move will color root? 
+            // Actually, they can choose root or leaf. But optimal: the one who colors root loses advantage.
+            // So they will color leaves first. The root will be colored last.
+            // The number of leafQ leaves: they will be colored alternatingly.
+            // The player who colors root is the one who makes the move when only root remains.
+            // Total items in this phase: root + leafQ. They will color leaves first, root last.
+            // So the player who makes the (leafQ + 1)-th move in this phase colors root.
+            // If leafQ is even, the first player in this phase colors root? Let's check:
+            // Moves: 1: leaf, 2: leaf, ... leafQ: leaf, leafQ+1: root.
+            // If leafQ is even, leafQ+1 is odd -> first player colors root.
+            // If leafQ is odd, leafQ+1 is even -> second player colors root.
+            // The player who colors root will set it to some value, then the other player will have set half of leafQ leaves.
+            // Actually, after root is set, the remaining leaves? No, all leaves are already set before root.
+            // Wait, the order: they first color all leaves, then root. So when root is colored, all leaves are already fixed.
+            // The player who colors root will choose the value that minimizes the score (if Dora) or maximizes (if Iris).
+            // But since leaf0 == leaf1 initially, and leafQ leaves are set by both players, the final count of 0/1 leaves will be equal? 
+            // Let's analyze: leaf0 == leaf1. leafQ leaves are colored by both players alternating.
+            // The first player to move in leaf phase will color (leafQ+1)/2 leaves, the second leafQ/2.
+            // They will try to force the final difference.
+            // But the root setter will then choose root to make as many leaves as possible have weight zero (i.e., same as root).
+            // This is a known game: the score will be determined by parity.
+            // From the hints: when leaf0 == leaf1, the first to color root loses advantage.
+            // The final answer is: if the player who colors root is Iris, she will try to maximize, Dora minimize.
+            // Let's compute based on who colors root.
+            // We can just simulate the game with optimal play.
+            // Actually, we can use the fact: the score is determined by the parity of otherQ and leafQ.
+            // Let's derive:
+            // After otherQ moves, the turn is:
+            bool iris_first_in_phase = (otherQ % 2 == 0);
+            // In the phase, there are leafQ leaves and 1 root.
+            // They will color leaves first, then root.
+            // The player who colors root is:
+            bool iris_colors_root;
+            if (leafQ % 2 == 0) {
+                // even leaves -> leafQ moves, then root is (leafQ+1)-th move
+                // if iris_first_in_phase, then moves: 1(I),2(D),..., leafQ(D if leafQ even? leafQ even: last leaf by D, then root by I)
+                // Actually: if leafQ even, leafQ moves: I, D, I, D,... last is D. Then root is I.
+                iris_colors_root = iris_first_in_phase;
+            } else {
+                // leafQ odd: last leaf by first player, then root by second player
+                iris_colors_root = !iris_first_in_phase;
+            }
+            // Now, simulate the leaf coloring phase.
+            // Initially leaf0 == leaf1. Let diff = leaf0 - leaf1 = 0.
+            // Iris wants to maximize final non-zero leaves, Dora minimize.
+            // They alternate setting ? leaves to 0 or 1.
+            // After all leaves are set, root is set by iris_colors_root.
+            // The player setting root will choose value to make as many leaves as possible have weight zero (i.e., leaf value == root value).
+            // So if root setter is Iris, she will choose root to maximize non-zero? Wait: weight non-zero iff leaf != root.
+            // Iris wants to maximize non-zero, so she wants leaf != root. She will set root to the minority leaf value.
+            // Dora wants to minimize non-zero, so she will set root to the majority leaf value.
+            // So after leaves are set, let cnt0, cnt1 be number of 0 and 1 leaves.
+            // If Iris sets root, she will choose root = (cnt0 >= cnt1 ? 1 : 0) to make non-zero = max(cnt0, cnt1).
+            // If Dora sets root, she will choose root = (cnt0 >= cnt1 ? 0 : 1) to make non-zero = min(cnt0, cnt1).
+            // The leaf coloring game: Iris and Dora alternate, Iris wants to maximize the final value (max(cnt0,cnt1) if she sets root, or min(cnt0,cnt1) if Dora sets root).
+            // This is a standard game. We can compute the outcome.
+            // Let's denote the target function f(cnt0, cnt1) = (iris_colors_root ? max(cnt0,cnt1) : min(cnt0,cnt1)).
+            // Initially cnt0 = leaf0, cnt1 = leaf1, with leaf0 == leaf1.
+            // They add leafQ moves, each adding 1 to either cnt0 or cnt1.
+            // Iris moves first in this phase if iris_first_in_phase.
+            // We can compute the final cnt0, cnt1 after optimal play.
+            // Since leaf0 == leaf1, let base = leaf0.
+            // Let a = number of moves for Iris in leaf phase, b = number of moves for Dora.
+            int iris_leaf_moves, dora_leaf_moves;
+            if (iris_first_in_phase) {
+                iris_leaf_moves = (leafQ + 1) / 2;
+                dora_leaf_moves = leafQ / 2;
+            } else {
+                dora_leaf_moves = (leafQ + 1) / 2;
+                iris_leaf_moves = leafQ / 2;
+            }
+            // Iris wants to maximize f, Dora wants to minimize f.
+            // They can choose to increment cnt0 or cnt1.
+            // This is a zero-sum game. We can find the value by considering that Iris will try to increase the difference, Dora will try to decrease it.
+            // Since base is equal, the final cnt0 and cnt1 will be base + something.
+            // Let's analyze: Iris can always ensure that the final difference |cnt0 - cnt1| is at least something.
+            // Actually, the game is symmetric. The optimal play: Iris will always increase the currently smaller count? Or larger?
+            // Let's think: f depends on max or min.
+            // If Iris sets root (wants max), she wants the larger count to be as large as possible. She will always add to the larger count.
+            // Dora wants to minimize max, so she will add to the smaller count to balance.
+            // If Dora sets root (wants min), Iris wants to maximize min, so she will add to the smaller count. Dora wants to minimize min, so she will add to the larger count.
+            // In both cases, the optimal moves are: Iris adds to the count that benefits her, Dora adds to the opposite.
+            // We can simulate greedily: keep track of cnt0, cnt1, and for each move, the player chooses optimally.
+            // Since leafQ can be up to 1e5, we can simulate in O(leafQ) per test case, but sum of n is 2e5, so O(n) total is fine.
+            // However, we can also compute directly.
+            // Let's just simulate the leaf phase with a simple loop.
+            int cnt0 = leaf0, cnt1 = leaf1;
+            bool iris_turn = iris_first_in_phase;
+            for (int i = 0; i < leafQ; i++) {
+                if (iris_turn) {
+                    // Iris move
+                    if (iris_colors_root) {
+                        // Iris wants to maximize max(cnt0,cnt1) at the end
+                        // She should increase the larger one
+                        if (cnt0 >= cnt1) cnt0++;
+                        else cnt1++;
+                    } else {
+                        // Iris wants to maximize min(cnt0,cnt1) at the end
+                        // She should increase the smaller one
+                        if (cnt0 <= cnt1) cnt0++;
+                        else cnt1++;
+                    }
+                } else {
+                    // Dora move
+                    if (iris_colors_root) {
+                        // Dora wants to minimize max(cnt0,cnt1)
+                        // She should increase the smaller one
+                        if (cnt0 <= cnt1) cnt0++;
+                        else cnt1++;
+                    } else {
+                        // Dora wants to minimize min(cnt0,cnt1)
+                        // She should increase the larger one
+                        if (cnt0 >= cnt1) cnt0++;
+                        else cnt1++;
+                    }
+                }
+                iris_turn = !iris_turn;
+            }
+            int ans;
+            if (iris_colors_root) {
+                ans = max(cnt0, cnt1);
+            } else {
+                ans = min(cnt0, cnt1);
+            }
+            cout << ans << "\n";
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

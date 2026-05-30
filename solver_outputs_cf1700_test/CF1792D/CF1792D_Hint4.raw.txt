@@ -1,0 +1,75 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<vector<int>> a(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                cin >> a[i][j];
+                --a[i][j]; // 0-indexed
+            }
+        }
+        
+        // Compute inverse permutations for each a_j
+        vector<vector<int>> inv(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                inv[i][a[i][j]] = j;
+            }
+        }
+        
+        // For each inverse, we want to store the sequence of positions of 0,1,...,m-1
+        // Actually we need to find the longest prefix of a_i that matches some inverse's prefix
+        // We'll store all inverses as strings of length m (values 0..m-1) and sort them
+        vector<vector<int>> inv_seqs(n);
+        for (int i = 0; i < n; ++i) {
+            inv_seqs[i] = inv[i];
+        }
+        sort(inv_seqs.begin(), inv_seqs.end());
+        
+        // For each a_i, we want to find the longest common prefix with any inverse
+        vector<int> ans(n);
+        for (int i = 0; i < n; ++i) {
+            // We want to find the inverse that matches the longest prefix of a_i
+            // a_i is a permutation, we need to check prefixes of a_i
+            // The condition: for a given k, we need an inverse q such that q[0]=a_i[0], q[1]=a_i[1], ..., q[k-1]=a_i[k-1]
+            // We can binary search on k, but m <= 10, so we can just try all k from m down to 0
+            int best = 0;
+            // We'll try to find the longest prefix match using lower_bound on the sorted inverses
+            // We can construct a prefix vector and use equal_range
+            vector<int> prefix;
+            for (int k = 1; k <= m; ++k) {
+                prefix.push_back(a[i][k-1]);
+                // Check if there exists an inverse with this prefix
+                auto it = lower_bound(inv_seqs.begin(), inv_seqs.end(), prefix);
+                if (it != inv_seqs.end()) {
+                    // Check if the first k elements match
+                    bool ok = true;
+                    for (int x = 0; x < k; ++x) {
+                        if ((*it)[x] != prefix[x]) {
+                            ok = false;
+                            break;
+                        }
+                    }
+                    if (ok) best = k;
+                }
+            }
+            ans[i] = best;
+        }
+        
+        for (int i = 0; i < n; ++i) {
+            cout << ans[i] << " \n"[i == n-1];
+        }
+    }
+    return 0;
+}
+```

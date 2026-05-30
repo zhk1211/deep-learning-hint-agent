@@ -1,0 +1,65 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int T;
+    cin >> T;
+    while (T--) {
+        long long h, c, t;
+        cin >> h >> c >> t;
+        
+        if (t == h) {
+            cout << 1 << "\n";
+            continue;
+        }
+        if (2 * t <= h + c) {
+            cout << 2 << "\n";
+            continue;
+        }
+        
+        // We need odd number of cups: 2k+1 cups, k >= 1
+        // Temperature = ((k+1)*h + k*c) / (2k+1)
+        // We want this close to t.
+        // Solve for k: ((k+1)*h + k*c) = t*(2k+1)
+        // => k*(h + c - 2t) = t - h
+        // => k = (t - h) / (h + c - 2t)
+        // Since h + c - 2t < 0 (because 2t > h+c), and t - h <= 0, k >= 0.
+        // Let numerator = h - t, denominator = 2*t - h - c (both positive)
+        long long num = h - t;
+        long long den = 2 * t - h - c;
+        long long k = num / den;
+        
+        // Check k and k+1
+        long long best_k = -1;
+        long double best_diff = 1e18;
+        for (long long cand : {k, k + 1}) {
+            if (cand < 0) continue;
+            long long cups = 2 * cand + 1;
+            long double temp = (long double)((cand + 1) * h + cand * c) / cups;
+            long double diff = fabsl(temp - t);
+            if (diff < best_diff) {
+                best_diff = diff;
+                best_k = cand;
+            } else if (diff == best_diff && cups < 2 * best_k + 1) {
+                best_k = cand;
+            }
+        }
+        
+        // Also compare with 2 cups
+        long double temp2 = (long double)(h + c) / 2.0;
+        long double diff2 = fabsl(temp2 - t);
+        long long cups2 = 2;
+        if (diff2 < best_diff) {
+            cout << cups2 << "\n";
+        } else if (diff2 == best_diff && cups2 < 2 * best_k + 1) {
+            cout << cups2 << "\n";
+        } else {
+            cout << 2 * best_k + 1 << "\n";
+        }
+    }
+    return 0;
+}

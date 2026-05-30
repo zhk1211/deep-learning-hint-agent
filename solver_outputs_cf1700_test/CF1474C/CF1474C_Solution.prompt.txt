@@ -1,0 +1,96 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+You found a useless array $ a $ of $ 2n $ positive integers. You have realized that you actually don't need this array, so you decided to throw out all elements of $ a $ .
+
+It could have been an easy task, but it turned out that you should follow some rules:
+
+1. In the beginning, you select any positive integer $ x $ .
+2. Then you do the following operation $ n $ times:
+- select two elements of array with sum equals $ x $ ;
+- remove them from $ a $ and replace $ x $ with maximum of that two numbers.
+
+For example, if initially $ a = [3, 5, 1, 2] $ , you can select $ x = 6 $ . Then you can select the second and the third elements of $ a $ with sum $ 5 + 1 = 6 $ and throw them out. After this operation, $ x $ equals $ 5 $ and there are two elements in array: $ 3 $ and $ 2 $ . You can throw them out on the next operation.
+
+Note, that you choose $ x $ before the start and can't change it as you want between the operations.
+
+Determine how should you behave to throw out all elements of $ a $ .
+
+Input Format
+The first line contains a single integer $ t $ ( $ 1 \leq t \leq 1000 $ ) — the number of test cases.
+
+The first line of each test case contains the single integer $ n $ ( $ 1 \leq n \leq 1000 $ ).
+
+The second line of each test case contains $ 2n $ integers $ a_1, a_2, \dots, a_{2n} $ ( $ 1 \leq a_i \leq 10^6 $ ) — the initial array $ a $ .
+
+It is guaranteed that the total sum of $ n $ over all test cases doesn't exceed $ 1000 $ .
+
+Output Format
+For each test case in the first line print YES if it is possible to throw out all elements of the array and NO otherwise.
+
+If it is possible to throw out all elements, print the initial value of $ x $ you've chosen. Print description of $ n $ operations next. For each operation, print the pair of integers you remove.
+
+Examples
+Sample 1
+Input
+4
+2
+3 5 1 2
+3
+1 1 8 8 64 64
+2
+1 1 2 4
+5
+1 2 3 4 5 6 7 14 3 11
+Output
+YES
+6
+1 5
+2 3
+NO
+NO
+YES
+21
+14 7
+3 11
+5 6
+2 4
+3 1
+
+Note
+The first test case was described in the statement.
+
+In the second and third test cases, we can show that it is impossible to throw out all elements of array $ a $ .
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1474C - Array Destruction
+Hint $$$1$$$: How does $$$x$$$ changes after each operation?
+Hint $$$2$$$: Suppose, that you know $$$x$$$. What pairs of elements can you throw out now?
+Hint $$$3$$$: Suppose, that you did some operations. Note, that if you have integer $$$b$$$ that is greater or equal to $$$x$$$ and $$$b$$$ is still in array $$$a$$$, you can't remove $$$b$$$ from $$$a$$$, thus you can't throw out all elements of $$$a$$$.
+Hint $$$4$$$: You don't know $$$x$$$ only before the first operation and $$$n \leq 1000$$$.
+Solution:
+Since all integers are positive, $$$x = c + d \rightarrow c, d  \lt  x$$$, thus $$$x$$$ decreaces after each operation.
+Suppose that we have integers $$$a_i \leq a_j \leq a_k$$$ in our array. If we throw out $$$a_i + a_j = x$$$, $$$x$$$ becomes equal $$$a_j \leq a_k$$$ and we can't throw out $$$a_k$$$ any time later. So, we should throw out the biggest element of array on each operation.
+If we know $$$x$$$ and the biggest element of array, we can easily determine the second element we throw out on this operation.
+We can try all possibilities of the second element of array we throw out on the first operation. $$$x$$$ will become equal the biggest element of initial array. After that we put all other elements in multiset $$$S$$$ and just simulate opertations by taking $$$max$$$ from $$$S$$$ and $$$x - max$$$ (if it doesn't exists, we can't throw out all elements) and replacing $$$x$$$ with $$$max$$$.
+Total time complexity: $$$\mathcal{O}(n^2 \cdot \log{n})$$$.
+There is also a solution without set, that runs in $$$\mathcal{O}(n^2 + maxA)$$$.
+
+Solution with set
+Solution without set
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

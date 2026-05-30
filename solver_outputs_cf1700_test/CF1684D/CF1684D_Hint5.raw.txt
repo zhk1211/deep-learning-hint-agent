@@ -1,0 +1,130 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        long long total_base = 0;
+        for (long long x : a) total_base += x;
+
+        // We want to choose up to k traps to jump over.
+        // If we jump over trap i, we avoid paying a[i] + (number of jumps before i).
+        // But the bonus damage from jumping over i affects all later traps.
+        // Equivalent: total damage = sum of all a[i] + sum_{i not jumped} (number of jumps before i).
+        // If we jump over a set S of size m <= k, total damage = sum a[i] + sum_{i not in S} (number of jumps before i).
+        // The second term is sum_{j=1..m} (n - pos_j) where pos_j are the positions of jumped traps (1-indexed).
+        // Because each jump adds 1 to all later traps.
+        // So total damage = sum a[i] + sum_{j=1..m} (n - pos_j).
+        // We want to minimize this, so we want to maximize the reduction from not jumping.
+        // If we jump over trap i, we avoid a[i] but we also cause (n - i) extra damage to later traps.
+        // Actually, if we jump over trap i, we save a[i] but we add (n - i) to total damage (since all later traps get +1).
+        // So net change if we jump over trap i = -a[i] + (n - i).
+        // We want to choose up to k traps with the smallest net change (most negative) to minimize total.
+        // Wait: total damage = sum a[i] + sum_{jumped i} (n - i).
+        // Because each jumped trap i adds (n - i) to the sum over later traps.
+        // So we start with sum a[i], then for each jumped trap i we add (n - i).
+        // We want to minimize sum a[i] + sum_{i in S} (n - i).
+        // So we should pick up to k traps with the smallest (n - i) values? But we also have the option to not jump.
+        // Actually, we can also think: total damage = sum a[i] + sum_{i in S} (n - i).
+        // To minimize, we want to pick S (size <= k) that minimizes sum_{i in S} (n - i).
+        // But wait, is that correct? Let's test with sample 2: n=4, a=[5,10,11,5], k=1.
+        // sum a = 31. n-i for i=1..4: 3,2,1,0. If we pick i=3, n-i=1, total=32? But answer is 21.
+        // Something is wrong. Let's re-derive.
+
+        // Let's think carefully.
+        // Let x_i = 1 if we jump over trap i, else 0.
+        // Damage from trap i if we go through it: a_i + sum_{j < i} x_j.
+        // Total damage = sum_{i: x_i=0} (a_i + sum_{j < i} x_j).
+        // = sum_{i} a_i - sum_{i: x_i=1} a_i + sum_{i: x_i=0} sum_{j < i} x_j.
+        // The double sum = sum_{j} x_j * (number of i > j with x_i=0).
+        // = sum_{j} x_j * ( (n - j) - (number of jumped traps after j) ).
+        // This is messy.
+
+        // Alternative: total damage = sum_{i} a_i + sum_{i: x_i=0} (sum_{j < i} x_j).
+        // The second term is the total bonus damage.
+        // Bonus damage = sum_{j} x_j * (number of non-jumped traps after j).
+        // Let m = sum x_i <= k.
+        // If we jump over traps at positions p_1 < p_2 < ... < p_m.
+        // Then bonus damage = sum_{t=1..m} (n - p_t - (m - t)).
+        // Because after p_t, there are (n - p_t) traps total, but (m - t) of them are also jumped.
+        // So bonus = sum_{t=1..m} (n - p_t - m + t).
+        // Total damage = sum a_i + bonus.
+        // We want to minimize this.
+        // We can choose any m <= k and any positions.
+
+        // Let's rewrite bonus:
+        // bonus = sum_{t=1..m} (n - m + t - p_t) = m*(n - m) + sum_{t=1..m} t - sum_{t=1..m} p_t.
+        // sum_{t=1..m} t = m(m+1)/2.
+        // So bonus = m*(n - m) + m(m+1)/2 - sum p_t.
+        // Total damage = sum a_i + m*(n - m) + m(m+1)/2 - sum p_t.
+        // We want to minimize this over m <= k and choice of m positions.
+        // For a fixed m, we want to maximize sum p_t (since it's subtracted).
+        // So we should pick the m largest indices among all traps? But we also have the option to not jump some traps even if we can.
+        // Wait, we can choose any m <= k. For a given m, to minimize total damage, we should pick the m traps with the largest indices (to maximize sum p_t).
+        // But is that always optimal? Let's check sample 2: n=4, a=[5,10,11,5], k=1.
+        // m=1: we want to pick the largest index, which is 4. sum p_t = 4.
+        // Total damage = sum a (31) + 1*(4-1) + 1*2/2 - 4 = 31 + 3 + 1 - 4 = 31. But answer is 21.
+        // So picking largest index is not always best. Why? Because we also have the base damage a_i that we avoid if we jump.
+        // In our derivation, we subtracted sum a_i for jumped traps? No, we didn't! We started with sum a_i and then added bonus.
+        // But if we jump over trap i, we don't pay a_i. So total damage should subtract a_i for jumped traps.
+        // Let's correct: total damage = sum_{i not jumped} a_i + bonus.
+        // = sum a_i - sum_{jumped} a_i + bonus.
+        // So total damage = sum a_i - sum_{t=1..m} a_{p_t} + m*(n - m) + m(m+1)/2 - sum p_t.
+        // = sum a_i + m*(n - m) + m(m+1)/2 - sum_{t=1..m} (a_{p_t} + p_t).
+        // We want to minimize this. For a fixed m, we want to maximize sum (a_{p_t} + p_t).
+        // So we should pick the m traps with the largest (a_i + i) values (using 1-indexed positions).
+        // Let's test sample 2: n=4, a=[5,10,11,5], k=1.
+        // a_i + i: 5+1=6, 10+2=12, 11+3=14, 5+4=9.
+        // Max is 14 at i=3. m=1: total = 31 + 1*(4-1) + 1 - 14 = 31 + 3 + 1 - 14 = 21. Correct!
+        // Sample 3: n=7, a=[8,2,5,15,11,2,8], k=5.
+        // sum a = 8+2+5+15+11+2+8 = 51.
+        // a_i + i: 9, 4, 8, 19, 16, 8, 15.
+        // We can pick up to 5. Let's try m=5: pick top 5: 19 (i=4), 16 (i=5), 15 (i=7), 9 (i=1), 8 (i=3) and 8 (i=6) - we need 5, so pick 19,16,15,9,8 (i=3). Sum = 19+16+15+9+8 = 67.
+        // m=5: total = 51 + 5*(7-5) + 5*6/2 - 67 = 51 + 10 + 15 - 67 = 9. Correct!
+        // Sample 4: n=6, a=[1,2,3,4,5,6], k=3.
+        // sum a = 21.
+        // a_i+i: 2,4,6,8,10,12.
+        // Try m=3: pick 12,10,8 -> sum=30.
+        // total = 21 + 3*(6-3) + 3*4/2 - 30 = 21 + 9 + 6 - 30 = 6. Correct!
+        // Sample 5: n=1, a=[7], k=1.
+        // sum a=7. a_i+i=8. m=1: total = 7 + 1*(1-1) + 1 - 8 = 0. Correct!
+
+        // So the algorithm: compute sum a_i. For each i from 1 to n, compute val = a_i + i.
+        // Sort these values in descending order.
+        // For m from 0 to k, compute candidate = sum_a + m*(n - m) + m*(m+1)/2 - sum of top m vals.
+        // Take the minimum candidate.
+        // Since n up to 2e5, k up to n, we can precompute prefix sums of sorted vals and try all m.
+
+        vector<long long> vals(n);
+        for (int i = 0; i < n; ++i) {
+            vals[i] = a[i] + (i + 1);
+        }
+        sort(vals.begin(), vals.end(), greater<long long>());
+
+        vector<long long> pref(n + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            pref[i + 1] = pref[i] + vals[i];
+        }
+
+        long long ans = total_base; // m=0
+        for (int m = 1; m <= k; ++m) {
+            long long candidate = total_base + 1LL * m * (n - m) + 1LL * m * (m + 1) / 2 - pref[m];
+            if (candidate < ans) ans = candidate;
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

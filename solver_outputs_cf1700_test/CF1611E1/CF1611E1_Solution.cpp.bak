@@ -1,0 +1,56 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> color(n, -1);
+    deque<int> q;
+    for (int i = 0; i < k; ++i) {
+        int x;
+        cin >> x;
+        --x;
+        color[x] = 0;
+        q.push_back(x);
+    }
+    color[0] = 1;
+    q.push_back(0);
+    vector<vector<int>> g(n);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        --u; --v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    while (!q.empty()) {
+        int v = q.front();
+        q.pop_front();
+        for (int u : g[v]) {
+            if (color[u] == -1) {
+                color[u] = color[v];
+                q.push_back(u);
+            }
+        }
+    }
+    for (int v = 1; v < n; ++v) {
+        if (g[v].size() == 1 && color[v] == 1) {
+            cout << "YES";
+            return;
+        }
+    }
+    cout << "NO";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+        cout << "\n";
+    }
+    return 0;
+}

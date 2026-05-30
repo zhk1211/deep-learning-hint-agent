@@ -1,0 +1,124 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    string s;
+    cin >> s;
+    s = " " + s; // 1-indexed
+
+    // Find leaves (excluding root 1)
+    vector<int> leaves;
+    for (int i = 2; i <= n; i++) {
+        if (adj[i].size() == 1) {
+            leaves.push_back(i);
+        }
+    }
+
+    int cnt0 = 0, cnt1 = 0, cntQ = 0;
+    for (int v : leaves) {
+        if (s[v] == '0') cnt0++;
+        else if (s[v] == '1') cnt1++;
+        else cntQ++;
+    }
+
+    int root_val = -1; // 0 or 1 if fixed, -1 if '?'
+    if (s[1] == '0') root_val = 0;
+    else if (s[1] == '1') root_val = 1;
+
+    // Count total '?' in non-leaf non-root nodes
+    int otherQ = 0;
+    for (int i = 2; i <= n; i++) {
+        if (adj[i].size() > 1 && s[i] == '?') {
+            otherQ++;
+        }
+    }
+
+    if (root_val != -1) {
+        // Root is fixed
+        // Iris wants to maximize leaves with weight != 0
+        // Weight != 0 iff leaf value != root value
+        if (root_val == 0) {
+            // Iris wants leaf = 1, Dora wants leaf = 0
+            // Iris will set ? to 1, Dora to 0
+            // They alternate, Iris first
+            // Total ? leaves = cntQ
+            // Iris gets ceil(cntQ/2) of them as 1
+            int iris_gets = (cntQ + 1) / 2;
+            cout << cnt1 + iris_gets << "\n";
+        } else {
+            // root_val == 1
+            // Iris wants leaf = 0
+            int iris_gets = (cntQ + 1) / 2;
+            cout << cnt0 + iris_gets << "\n";
+        }
+    } else {
+        // Root is '?'
+        // Both players can decide root value when they fill it
+        // The game: Iris first, they fill ? nodes including root and leaves and others
+        // Optimal play: Iris will try to set root to the value that gives her advantage
+        // But Dora can counter by setting root to opposite if she gets the chance
+        // Since Iris goes first, she can immediately set root to her preferred value
+        // However, there might be other ? nodes; the order matters.
+        // Key insight from hints: Iris will fill root first if it's '?'
+        // So Iris chooses root value optimally.
+        // After root is set, the game reduces to the fixed root case with remaining ? nodes.
+        // But Iris used her first move to set root, so Dora moves next.
+        // So the number of moves left for Iris on leaf ? nodes changes.
+        // Let's simulate: Iris sets root to 0 or 1, then Dora moves next.
+        // We need to compute the final score for both choices and Iris picks max.
+        
+        // If Iris sets root to 0:
+        // Then remaining ? nodes: cntQ leaf ? + otherQ non-leaf ? (root already set)
+        // Total ? left = cntQ + otherQ
+        // Moves alternate: Dora moves next (since Iris just moved)
+        // Iris wants leaf = 1, Dora wants leaf = 0
+        // Among leaf ?, Iris will get floor(cntQ/2) if total ? is even? Wait, careful.
+        // After Iris sets root, it's Dora's turn. The sequence of moves on the remaining ? nodes:
+        // Turn 1: Dora, Turn 2: Iris, Turn 3: Dora, ...
+        // So Iris gets every second move starting from move 2.
+        // Number of moves Iris gets among leaf ?: ceil(cntQ/2) if she moves first on them, but now Dora moves first.
+        // Actually, the players can choose any ? node, not just leaves. They will prioritize leaves because that's what affects score directly (after root is fixed).
+        // Both will play optimally on leaves first. So the game on leaf ? nodes is a separate subgame with Dora moving first.
+        // Iris gets floor(cntQ/2) leaf ? to set to 1 (since Dora moves first, Dora gets ceil(cntQ/2) to set to 0).
+        // Wait: total leaf ? = cntQ. Dora moves first, so Dora gets ceil(cntQ/2), Iris gets floor(cntQ/2).
+        // But there are also other ? nodes. If otherQ > 0, players might use moves on them, delaying leaf decisions.
+        // However, since both play optimally, they will only touch other ? nodes if forced, but they can always choose leaf ? nodes.
+        // The presence of other ? nodes doesn't change the number of moves each player gets on leaf ? nodes, because they can always pick a leaf ? if available.
+        // The only effect is if the total number of ? nodes (including other) is odd/even, it might change who gets the last move, but since they can choose any, they will prioritize leaves.
+        // So the allocation of leaf ? is determined solely by who moves first on the leaf ? pool.
+        // After root is set, Dora moves first on the remaining ? nodes. So Dora gets ceil(cntQ/2) of leaf ?, Iris gets floor(cntQ/2).
+        // Thus if root=0, Iris score = cnt1 (already 1) + floor(cntQ/2).
+        
+        // Similarly, if Iris sets root to 1:
+        // Iris wants leaf = 0. Dora wants leaf = 1.
+        // Dora moves first on remaining ?. Dora gets ceil(cntQ/2) to set to 1, Iris gets floor(cntQ/2) to set to 0.
+        // Score = cnt0 + floor(cntQ/2).
+        
+        // Iris will choose the root value that gives max of these two.
+        int score0 = cnt1 + cntQ / 2; // floor(cntQ/2)
+        int score1 = cnt0 + cntQ / 2;
+        cout << max(score0, score1) << "\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

@@ -1,0 +1,72 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(vector<int> &v) {
+    cout << "? " << v.size();
+    for (int x : v) cout << " " << x;
+    cout << endl;
+    int res;
+    cin >> res;
+    return res;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    vector<int> pos0;
+    for (int i = 1; i <= m; i++) {
+        vector<int> q = {i};
+        int r = query(q);
+        if (r == 0) {
+            pos0.push_back(i);
+        } else {
+            a[i] = r;
+        }
+    }
+    if (pos0.empty()) {
+        cout << "!";
+        for (int i = 1; i <= m; i++) cout << " " << a[i];
+        cout << endl;
+        return;
+    }
+    vector<int> unknown = pos0;
+    vector<int> known;
+    for (int i = 1; i <= m; i++) if (a[i] != 0) known.push_back(i);
+    vector<int> freq(n + 1, 0);
+    for (int i : known) freq[a[i]]++;
+    vector<int> missing;
+    for (int x = 1; x <= n; x++) {
+        if (freq[x] == 0) missing.push_back(x);
+        else if (freq[x] == 1) {
+            for (int i : known) if (a[i] == x) { missing.push_back(x); break; }
+        }
+    }
+    sort(missing.begin(), missing.end());
+    missing.erase(unique(missing.begin(), missing.end()), missing.end());
+    int idx = 0;
+    for (int i : unknown) {
+        vector<int> q = {i};
+        for (int j : known) q.push_back(j);
+        int r = query(q);
+        if (r == 0) {
+            a[i] = missing[idx++];
+        } else {
+            a[i] = r;
+        }
+    }
+    cout << "!";
+    for (int i = 1; i <= m; i++) cout << " " << a[i];
+    cout << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}

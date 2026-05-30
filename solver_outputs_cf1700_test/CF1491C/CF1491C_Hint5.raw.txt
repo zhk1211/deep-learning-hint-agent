@@ -1,0 +1,84 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<long long> S(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> S[i];
+        }
+
+        vector<long long> extra(n + 1, 0);
+        long long ans = 0;
+
+        for (int i = 0; i < n; ++i) {
+            // carry over extra passes from previous trampolines
+            if (i > 0) {
+                extra[i] += extra[i - 1];
+            }
+
+            long long cur = S[i] - 1; // how many times we need to reduce it to 1
+            long long need = max(0LL, cur - extra[i]);
+
+            ans += need;
+
+            // distribute the extra jumps to the right
+            // jumps from this trampoline: total = need + min(extra[i], cur)
+            long long total_jumps = need + min(extra[i], cur);
+
+            // each jump from i lands at i + S[i] - k, where k is the jump number
+            // but we can simulate the effect by adding 1 to positions i+2 .. i+S[i]
+            // but careful: S[i] can be large, we only need to update up to n
+            if (total_jumps > 0) {
+                int start = i + 2;
+                int end = min(n, i + (int)S[i]);
+                if (start <= end) {
+                    extra[start] += 1;
+                    if (end + 1 <= n) extra[end + 1] -= 1;
+                }
+                // if S[i] is huge, the extra beyond n is wasted
+                // also, if total_jumps > S[i]-1, the extra beyond S[i]-1 just goes to i+1?
+                // Actually, when S[i] becomes 1, further jumps from i will go to i+1
+                // But we only count jumps that actually happen from i while S[i] > 1
+                // The total_jumps is exactly the number of times we jump from i while S[i] > 1
+                // After S[i] becomes 1, no more jumps from i (since we only start passes on i if S[i]>1)
+                // Wait: extra[i] includes passes that start earlier and land on i.
+                // When we land on i, we jump immediately. So if extra[i] > cur, the excess passes
+                // will land on i when S[i] is already 1, and then they will jump to i+1.
+                // But those jumps are not from i with S[i]>1, they are from i with S[i]=1.
+                // Our total_jumps formula only accounts for jumps while S[i] > 1.
+                // The excess passes (extra[i] - cur) will just pass through i and go to i+1.
+                // So we need to forward those excess passes to i+1.
+                if (extra[i] > cur) {
+                    long long pass_through = extra[i] - cur;
+                    // they go to i+1
+                    if (i + 1 < n) {
+                        extra[i + 1] += pass_through;
+                        if (i + 2 <= n) extra[i + 2] -= pass_through;
+                    }
+                }
+            } else {
+                // total_jumps == 0, but extra[i] might be > 0 and cur == 0
+                // then all extra[i] passes just pass through to i+1
+                if (extra[i] > 0) {
+                    if (i + 1 < n) {
+                        extra[i + 1] += extra[i];
+                        if (i + 2 <= n) extra[i + 2] -= extra[i];
+                    }
+                }
+            }
+        }
+
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

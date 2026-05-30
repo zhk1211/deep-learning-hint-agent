@@ -1,0 +1,71 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<int> depth(n + 1), parent(n + 1);
+    vector<int> order;
+    function<void(int, int)> dfs = [&](int u, int p) {
+        parent[u] = p;
+        order.push_back(u);
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            depth[v] = depth[u] + 1;
+            dfs(v, u);
+        }
+    };
+    dfs(1, 0);
+    vector<int> leaf_depths;
+    for (int u = 2; u <= n; ++u) {
+        if (adj[u].size() == 1) {
+            leaf_depths.push_back(depth[u]);
+        }
+    }
+    sort(leaf_depths.begin(), leaf_depths.end());
+    int L = leaf_depths.size();
+    if (L == 1) {
+        cout << 0 << '\n';
+        return;
+    }
+    int target = leaf_depths[0];
+    vector<int> cnt(n + 1, 0);
+    for (int d : leaf_depths) {
+        if (d == target) continue;
+        cnt[d]++;
+    }
+    vector<int> keep(n + 1, 1);
+    reverse(order.begin(), order.end());
+    for (int u : order) {
+        if (u == 1) continue;
+        if (cnt[depth[u]] > 0 && keep[u]) {
+            keep[u] = 0;
+            cnt[depth[u]]--;
+        }
+    }
+    int ans = 0;
+    for (int u = 2; u <= n; ++u) {
+        if (!keep[u]) ans++;
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

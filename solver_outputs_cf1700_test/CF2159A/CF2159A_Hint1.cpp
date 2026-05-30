@@ -1,0 +1,448 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(vector<int> idx) {
+    cout << "? " << idx.size();
+    for (int x : idx) cout << " " << x;
+    cout << endl;
+    int res;
+    cin >> res;
+    if (res == -1) exit(0);
+    return res;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    vector<int> pos[n + 1];
+    
+    // Find pairs using queries of size 2
+    for (int i = 1; i <= m; i++) {
+        if (a[i] != 0) continue;
+        // find partner for i
+        bool found = false;
+        for (int j = i + 1; j <= m; j++) {
+            if (a[j] != 0) continue;
+            int res = query({i, j});
+            if (res > 0) {
+                a[i] = a[j] = res;
+                pos[res].push_back(i);
+                pos[res].push_back(j);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            // i is the second occurrence of some number
+            // we need to find which number
+            // collect all indices that are not yet assigned
+            vector<int> unassigned;
+            for (int k = 1; k <= m; k++) {
+                if (a[k] == 0) unassigned.push_back(k);
+            }
+            // query with i and all unassigned except i
+            vector<int> q = {i};
+            for (int k : unassigned) if (k != i) q.push_back(k);
+            int res = query(q);
+            a[i] = res;
+            pos[res].push_back(i);
+            // the other occurrence is already assigned? Actually we need to find it.
+            // But we can find it by querying i with each unassigned? That would be too many queries.
+            // Better approach: after finding all pairs via size-2 queries, we can fill the rest.
+        }
+    }
+    
+    // Actually the above logic is flawed. Let's use a better strategy.
+    // We'll find all pairs by querying consecutive indices.
+    // But we need a systematic approach.
+    
+    // Reset and use proper algorithm:
+    fill(a.begin(), a.end(), 0);
+    for (int i = 1; i <= n; i++) pos[i].clear();
+    
+    // Step 1: Find all numbers by querying pairs (1,2), (3,4), ... 
+    // But they might not be pairs. So we need to find pairs.
+    // We can find all numbers by querying all indices together? No, MAD of all is n.
+    
+    // Let's use the hint: MAD of a sequence where every element is the same is that element.
+    // So if we query two indices and get x > 0, then both are x.
+    
+    // We can find all pairs by querying (1,2), (1,3), ... (1, 2n). 
+    // If query(1, j) returns x > 0, then a[1] = a[j] = x.
+    // Then we can remove 1 and j, and continue with the next unassigned index.
+    // This takes at most 2n queries.
+    
+    vector<bool> used(m + 1, false);
+    for (int i = 1; i <= m; i++) {
+        if (used[i]) continue;
+        // find partner for i
+        bool paired = false;
+        for (int j = i + 1; j <= m; j++) {
+            if (used[j]) continue;
+            int res = query({i, j});
+            if (res > 0) {
+                a[i] = a[j] = res;
+                pos[res].push_back(i);
+                pos[res].push_back(j);
+                used[i] = used[j] = true;
+                paired = true;
+                break;
+            }
+        }
+        if (!paired) {
+            // i is the second occurrence of some number already found
+            // We need to determine which number.
+            // We can query i with all used indices that have their pair already? 
+            // Actually, if i is unpaired, it means its partner is already used and assigned.
+            // So we can find its value by querying i with one index from each known number.
+            // But we can do it more efficiently: query i with all indices of a candidate set.
+            // Since we know all numbers that have been fully paired, we can test each.
+            for (int val = 1; val <= n; val++) {
+                if (pos[val].size() == 2) {
+                    // query i with one occurrence of val
+                    int res = query({i, pos[val][0]});
+                    if (res == val) {
+                        a[i] = val;
+                        pos[val].push_back(i);
+                        used[i] = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    // Now we have all assignments, but some numbers might have >2 occurrences? No, exactly twice.
+    // But we might have assigned some numbers three times if we didn't check properly.
+    // Actually, the above loop might assign a number to i even if its pair was already found,
+    // but then we would have three occurrences. We need to ensure we only assign if pos[val].size() < 2.
+    // Let's fix: when we find a pair via query(i,j), we set both. 
+    // If i doesn't find a partner, it means its partner is already assigned. 
+    // We then find which value it is by querying with one index of each value that has exactly 1 occurrence so far.
+    // But wait: if a value has 2 occurrences, query(i, pos[val][0]) will return val if a[i] == val, else 0.
+    // So we can find it.
+    
+    // However, the above algorithm might exceed query limit if we do O(n^2) queries in the second part.
+    // In worst case, we do (2n-1) + (2n-3) + ... = O(n^2) queries for pairing, which is too much (n up to 300, n^2=90000, sum n^2 <= 1e5, but 3n = 900, so O(n^2) is too large).
+    // We need a more efficient way.
+    
+    // Better approach: 
+    // 1. Query all indices from 1 to 2n one by one? No.
+    // Let's use the fact that we can query larger sets.
+    // We can find all numbers by querying sets of size n? 
+    // Actually, we can find the pairs by binary search or divide and conquer.
+    // But simpler: we can find the value of each index by querying it with a set of known indices.
+    // We can first find one pair by querying (1,2), (1,3)... until we get a positive response. That takes at most 2n queries.
+    // Then we have one known number. Then we can find all other occurrences of that number by querying each unknown index with the known index. That takes at most 2n queries per number? That would be O(n^2) again.
+    
+    // Let's think differently: We can find all numbers by querying the whole set? MAD of all is n.
+    // We can find the positions of n by querying subsets.
+    // Actually, we can find the two positions of each number x by binary searching on the array.
+    // For a fixed x, we can find its first occurrence by querying a prefix: if we query indices 1..mid and some known occurrences of numbers > x? Not straightforward.
+    
+    // Alternative: We can determine the entire sequence by querying all pairs (i, i+1) for i=1..2n-1. 
+    // If we get a positive response, we know a[i]=a[i+1]. 
+    // But if we get 0, we don't know the values.
+    // However, we can then use these adjacent queries to deduce the sequence? Not directly.
+    
+    // Let's use the hint: MAD of a sequence where every element is the same is that element.
+    // So if we query a set of indices and get x, then all elements in that set that are not x must appear at most once, and x appears at least twice.
+    // We can use this to find pairs.
+    
+    // Efficient approach (from editorial):
+    // We can find all pairs by querying (1,2), (1,3), ..., (1,2n). This takes 2n-1 queries.
+    // For each j, if query(1,j) returns x>0, then a[1]=a[j]=x. We mark them.
+    // After this, a[1] is determined. If a[1] is still unknown, it means a[1] is unique among the ones we queried? Actually, if a[1] never returned positive with any j, then a[1] must be the second occurrence of some number whose first occurrence is not 1. But we queried all j, so if a[1] = x, then there is some other index k with a[k]=x. When we queried (1,k), we would get x. So a[1] must be paired with some j. Thus a[1] is always found.
+    // Then we remove 1 and its partner. Now we have a new "first" unassigned index. We repeat.
+    // This takes (2n-1) + (2n-3) + ... + 1 = n^2 queries. For n=300, n^2=90000, which is within sum n^2 <= 1e5, but 3n = 900, so n^2 is 100 times larger. The limit is 3n queries, not n^2. So this is not allowed.
+    
+    // We need to use larger queries to reduce the number.
+    // We can find all numbers by querying the whole set? MAD of all is n. Not helpful.
+    // We can find the positions of n by querying sets of size n+1? 
+    
+    // Let's think about divide and conquer:
+    // We can find all pairs by recursively splitting the array.
+    // Query the left half. If MAD > 0, then there is a pair in the left half. We can then recurse.
+    // But we need to identify the exact pairs.
+    
+    // Another idea: We can find the value of each index by querying it with a set of all other indices except one? 
+    // If we query all indices except i, the MAD is the maximum number that appears at least twice. Since all numbers appear twice, removing i makes the partner of a[i] appear only once. So the MAD will be the maximum number that still has two occurrences. That is n if a[i] != n, else n-1 (if n's partner is removed). So we can determine if a[i] == n by checking if MAD of all except i is n or n-1. But we don't know n-1? Actually, we can find n's positions by this method: for each i, query all except i. If the answer is n, then a[i] != n. If the answer is less than n, then a[i] = n. This would take 2n queries to find both n's. Then we can remove them and find n-1, etc. That would be O(n^2) queries again.
+    
+    // We need to do it in 3n queries. 
+    // Observation: We can find all pairs by querying sets of size 3? 
+    // If we query three indices and get x>0, then at least two of them are x. But we don't know which two.
+    
+    // Let's use the following strategy (from solution):
+    // We can find the pairs by querying (i, i+1) for i=1..2n-1. This gives us some pairs directly if adjacent.
+    // But we can also query (i, i+2) etc.
+    // Actually, we can determine the entire sequence by querying all triples? Not sure.
+    
+    // Let's search for a known solution: 
+    // One known solution uses the fact that we can find the value of an element by querying it with a set of elements that contains all numbers except one.
+    // But we can do it in 2n queries: 
+    // First, find the two positions of n. We can do this by querying the whole set without one element. 
+    // For i from 1 to 2n:
+    //   Query all indices except i. Let the answer be x.
+    //   If x != n, then a[i] = n. (Because removing i makes n appear only once, so MAD drops to next highest duplicate, which is n-1 if n-1 still has two, etc. Actually, if we remove one n, the other n is still there? Wait, if we remove one occurrence of n, the other occurrence of n is still present, so n still appears once. But MAD requires at least twice. So n no longer appears twice, so MAD becomes the maximum number that still appears at least twice. That could be n-1 if both n-1 are present, or lower. So if x < n, then the removed index was an n. If x == n, then the removed index was not n, because n still appears twice.)
+    // So we can identify both n's with 2n queries. But we only have 3n queries total, so 2n for n is too much.
+    
+    // We can find both n's in n+1 queries? 
+    // Query the first half and second half? 
+    // If we query a set S, and get MAD = n, then S contains both n's. Otherwise, it contains at most one n.
+    // We can binary search to find one n: query a prefix. If MAD = n, then both n's are in the prefix. Else, at most one. 
+    // We can find the first n by binary search in log(2n) ~ 9 queries. Then we can find the second n similarly. That's about 18 queries for n. Then we can remove them and find n-1, etc. Total queries ~ 18n, which is > 3n for n=300 (5400 > 900). Not good.
+    
+    // We need a more efficient method.
+    
+    // Let's think about the hint: "What is the MAD value of a sequence where every element is the same?" 
+    // It is that element. So if we can construct a set where all elements are the same, we can identify that element.
+    // How to construct such a set? We don't know the elements.
+    
+    // Another idea: We can find all pairs by querying sets of size 2n-1? 
+    // If we query all indices except i and j, the MAD is the maximum number that appears twice. 
+    // If a[i] and a[j] are the two occurrences of some number x, then x appears 0 times in the set, so MAD might be less than x. 
+    // This could help identify pairs.
+    
+    // Let's try to find an algorithm that uses 3n queries.
+    // We can first find all numbers by querying (1,2), (1,3), ..., (1, n+1). 
+    // Actually, we can find the value of a[1] by querying it with increasing sets.
+    // But we need a systematic approach.
+    
+    // I recall a solution: 
+    // 1. Find the two positions of 1. 
+    //    We can query all indices. MAD = n. 
+    //    Then we can query all indices except one. If the answer drops, that index is n. 
+    //    But we want 1.
+    //    Actually, we can find 1 by querying sets of size 2. If we query two indices and get 1, they are both 1.
+    //    But we don't know which pairs are 1.
+    //    We can find 1 by querying all pairs? That's O(n^2).
+    
+    // Let's look at the constraints: sum of n^2 <= 1e5. This suggests that an O(n^2) algorithm might be acceptable if the constant is small? But 3n is the query limit, not time limit. The time limit is 1 second, and sum n^2 <= 1e5 means we can do O(n^2) operations, but queries are limited to 3n. So we cannot make O(n^2) queries.
+    
+    // We must make at most 3n queries.
+    // So we need to determine the sequence with about 3 queries per element on average.
+    
+    // Let's think about a divide and conquer approach that uses the MAD of halves.
+    // Suppose we split the array into two halves of size n. 
+    // Query left half: MAD = L. Query right half: MAD = R.
+    // If L > 0, then there is a pair in the left half. 
+    // We can then recurse on the left half to find pairs.
+    // But we need to identify the exact pairs, not just know there is a pair.
+    // If we query a set and get MAD = x, we know that x appears at least twice in that set, and no number > x appears twice.
+    // We can then try to find the positions of x within that set by splitting further.
+    // This is similar to finding a duplicate in an array using MAD queries.
+    // We can find one pair in about 2*log(2n) queries? 
+    // For a set S with MAD = x, we can split S into two halves S1 and S2. 
+    // Query S1: if MAD(S1) == x, then both x's are in S1. Else if MAD(S2) == x, both in S2. Else, one in each.
+    // We can recursively find the two positions of x. This takes O(log n) queries per number.
+    // Once we find the two positions of x, we can remove them and continue with the remaining set.
+    // Total queries: for each number, we spend O(log n) queries to find its pair. n numbers -> O(n log n) queries. For n=300, log n ~ 9, so ~2700 queries, which is less than 3n=900? 2700 > 900. So still too many.
+    
+    // We need O(1) queries per number on average.
+    
+    // Let's think differently: We can find all pairs by querying (i, i+1) for i=1..2n-1. This gives us some pairs directly if they are adjacent. But what if no pairs are adjacent? Then all queries return 0. We get no information.
+    // But we can then query (i, i+2) etc. That would be O(n^2) queries.
+    
+    // Maybe we can find the sequence by querying sets of size n? 
+    // If we query the first n indices, we get some MAD. 
+    // If we then add one more index and remove one, we can track changes.
+    // This is like sliding window. 
+    // Suppose we know the multiset of the first n indices. We can compute the MAD of that set. 
+    // When we move the window by one, we add a new index and remove an old one. 
+    // We can query the new window. The change in MAD can tell us the values of the added and removed elements? 
+    // But we don't know the multiset initially.
+    
+    // Let's consider an easier solution: 
+    // We can determine the entire sequence by querying all possible pairs? No, too many queries.
+    
+    // Wait, the problem might be simpler: We can just ask "? 2 i j" for all i<j? That's O(n^2) queries, not allowed.
+    
+    // Let's read the hint again: "What is the MAD value of a sequence where every element is the same?" 
+    // This suggests that if we can find a set of indices that all have the same value, we can identify that value.
+    // How to find such a set? We can try to find two indices with the same value by querying pairs until we get a positive response. That takes at most 2n queries in the worst case? Actually, if we query (1,2), (1,3), ..., (1,2n), we will eventually find a match for 1 if 1's partner is among them. But if 1's partner is not there? It is there because we query all. So we always find a match for 1. That takes at most 2n-1 queries. Then we know a[1] and its partner. Then we can remove them and repeat with the next unassigned index. That would be O(n^2) queries as analyzed.
+    
+    // But maybe we can do it in 3n queries by not repeating from scratch each time. 
+    // After finding a[1] and its partner, we have some information about other indices. 
+    // When we queried (1, j) for all j, we got answers. For j that returned 0, we know a[j] != a[1]. 
+    // For j that returned x > 0, we know a[j] = x. So we actually find all occurrences of a[1] in one go! 
+    // Because if a[1] = x, then for any j with a[j] = x, query(1,j) returns x. 
+    // So by querying (1, j) for all j, we find all indices that have value x. 
+    // But wait, there are exactly two occurrences of x. So we will find exactly one j (other than 1) that returns x. 
+    // So we find the pair for 1. 
+    // What about other indices? For j != 1 and j != partner, query(1,j) returns 0 if a[j] != x. 
+    // But if a[j] = y != x, query(1,j) returns 0 because the set {x, y} has no duplicates. 
+    // So we don't learn y. 
+    // So after this, we only know the two positions of x. 
+    // Then we can remove those two positions and pick a new "pivot" from the remaining. 
+    // We then query the pivot with all remaining indices. This takes (remaining - 1) queries. 
+    // Total queries = (2n-1) + (2n-3) + ... + 1 = n^2. 
+    // So this is O(n^2) queries.
+    
+    // But the problem allows 3n queries. So there must be a way to reuse the queries.
+    // Notice that when we query (1, j) for all j, we are essentially querying all pairs involving 1. 
+    // If we keep track of all these answers, we can later use them? 
+    // For example, if we later pick a new pivot k, we already know the result of query(1, k) from the first round. 
+    // But we need query(k, j) for j not yet assigned. We don't have those.
+    
+    // Maybe we can find all pairs by querying a set of size 3? 
+    // If we query (i, j, k) and get x, then at least two of them are x. 
+    // We can then query (i, j) to see if they are the pair. If yes, we know. If not, then (i,k) or (j,k) is the pair. 
+    // This uses 2 queries to find a pair among 3 indices. 
+    // We can partition the 2n indices into groups of 3 and find pairs. 
+    // But pairs might not be in the same group. 
+    // We can shuffle? No, we don't control the sequence.
+    
+    // Another idea: We can find all numbers by querying the whole set and then removing elements one by one.
+    // Let's think about the process of finding the maximum number.
+    // We can find the two positions of n by doing a binary search with queries of size about n.
+    // Actually, we can find one position of n in O(log n) queries by binary search on the array:
+    // Query a prefix. If MAD == n, then both n's are in the prefix. Else, at most one.
+    // We can find the first n by binary search. Then we can find the second n by searching the rest.
+    // This takes about 2*log(2n) queries per number. For n numbers, that's 2n log(2n) queries, too many.
+    
+    // But we can find all numbers simultaneously? 
+    // We can do a divide and conquer that splits the array and queries each part. 
+    // For a segment, if MAD == 0, then all elements in that segment are distinct. 
+    // If MAD > 0, then there is at least one pair. 
+    // We can recursively split until we isolate pairs. 
+    // This is like finding all duplicates in an array with a MAD oracle.
+    // How many queries does this take? 
+    // At each level of the recursion tree, we query each segment. The total number of segments across all levels is O(n). 
+    // But we only need to query segments that have MAD > 0? 
+    // Actually, if we query a segment and get 0, we know all elements are distinct, so we don't need to split further. 
+    // But we still need to assign values to them. How do we know their values? 
+    // If a segment has all distinct elements, we cannot tell their values just from MAD=0. 
+    // We need to combine with other information.
+    
+    // Maybe we can determine the values by querying them together with known elements.
+    // Suppose we have already identified some pairs. We can use those known elements to identify unknown ones.
+    // For an unknown index i, we can query i with a known element x. If the answer is x, then a[i] = x. 
+    // If the answer is 0, then a[i] != x. 
+    // So if we have a set of known elements representing all numbers, we can identify any unknown index by querying it with each known number? That would take O(n) queries per unknown index.
+    
+    // But we can do better: we can query i with a set of known elements that contains all numbers except one? 
+    // If we have a set S of indices that contains exactly one occurrence of each number from 1 to n, then for any unknown index i, query(S ∪ {i}) will return a[i] if a[i] is the duplicate (since S already has one of each, adding i creates a duplicate of a[i]). 
+    // So if we can build such a set S, we can identify all remaining indices in one query each!
+    // How to build S? We need one occurrence of each number. 
+    // We can find one occurrence of each number by finding pairs and taking one from each pair.
+    // But finding pairs is the original problem.
+    
+    // This suggests a two-phase approach:
+    // Phase 1: Find one occurrence of each number. 
+    // Phase 2: Use that set to identify the second occurrences.
+    // How to find one occurrence of each number efficiently?
+    
+    // We can find one occurrence of each number by querying the whole array? 
+    // If we take the first occurrence of each number in the array, we don't know which they are.
+    // But we can find them by a greedy approach: 
+    // Initialize S = empty. 
+    // For i = 1 to 2n:
+    //   Query S ∪ {i}. If the answer is 0, then a[i] is not in S, so we add i to S. 
+    //   If the answer > 0, then a[i] is already in S, so we skip it (this is the second occurrence).
+    // This way, we build a set S containing exactly one occurrence of each number. 
+    // How many queries? We query for each i from 1 to 2n. That's 2n queries. 
+    // But wait, we need to query S ∪ {i} each time. S grows up to size n. 
+    // So we make 2n queries, each of size up to n+1. Total queries = 2n. 
+    // After this, we have S, a set of n indices that are all distinct and cover all numbers 1..n.
+    // But we don't know which index corresponds to which number! 
+    // We only know that they are all distinct. We don't know their values.
+    // So we cannot use S to identify the second occurrences because we don't know the values of elements in S.
+    
+    // We need to also determine the values of the elements in S.
+    // How to find the value of an element in S? 
+    // We can query it with another element? But we don't know any values.
+    // We can find the value of an element by querying it with a set of known elements? Circular.
+    
+    // But we can determine the values in S by using the second occurrences! 
+    // Actually, if we have S (one of each), and we have the remaining indices T (the second occurrences), 
+    // we can pair them up by querying each t in T with S. 
+    // For a given t, if we query S ∪ {t}, the answer will be a[t] (since S has one of each, adding t creates a duplicate of a[t]). 
+    // So we can find the value of t in one query! 
+    // Then we know a[t]. But we still don't know which element in S has that value. 
+    // However, we now know that a[t] = x. We also know that there is exactly one element in S with value x. 
+    // We can find it by querying t with subsets of S? That would take more queries.
+    
+    // Alternatively, we can build S while also recording the values? 
+    // When we add i to S, we don't know its value. But later, when we process the second occurrence t of the same value, we will learn the value. Then we can go back and assign that value to the element in S that pairs with t. But how do we know which element in S pairs with t? We need to find the match.
+    
+    // We can modify the process: 
+    // When we encounter a second occurrence t (i.e., query(S ∪ {t}) > 0), the answer is the value x. 
+    // We now know a[t] = x. We also know that there is some s in S with a[s] = x. 
+    // We can find s by binary search on S? S is a set of indices. We can query subsets of S with t to find which one is x.
+    // Since |S| <= n, we can find s in O(log n) queries by splitting S. 
+    // Then we can remove s from S (since we now know its value and it's paired with t). 
+    // Then we continue. 
+    // This way, we process each second occurrence with O(log n) queries to find its partner in S. 
+    // Total queries: 2n to build S and identify second occurrences, plus O(n log n) to find partners. 
+    // For n=300, 2n + n log n ~ 600 + 300*9 = 3300, which is > 900. Still too many.
+    
+    // We need to find partners in O(1) queries.
+    // Can we find the partner in S without binary search? 
+    // If we maintain S as a list, we could just query t with each element of S until we find the match? That's O(n) queries per t, worse.
+    
+    // But notice: when we query S ∪ {t} and get x, we know that t's partner is in S. 
+    // If we remove one element from S and query again, we can see if the answer changes. 
+    // But we want to avoid O(|S|) queries.
+    
+    // Maybe we can build S in a smarter way so that we know the values? 
+    // What if we build S by querying adjacent elements? 
+    // Let's try to find one occurrence of each number by taking the first element, then the next element that is different from all previous. 
+    // But we can't check "different from all previous" without queries.
+    
+    // Another approach: We can find all pairs by querying (i, i+1) for all i. This gives us some pairs. 
+    // Then we can use those known pairs to find others.
+    // Suppose we find a pair (i, i+1) with value x. Then we know x. 
+    // We can then query x with other unknown indices to find if they are x. 
+    // But we need to find all numbers.
+    
+    // Let's think about the problem as a graph where we need to find edges between identical numbers.
+    // We have 2n vertices, and n edges (each connecting the two occurrences of a number).
+    // We can query any set of vertices and get the maximum label of an edge that has both endpoints in the set (or 0 if no such edge).
+    // This is exactly the problem of finding all edges in a graph where each edge has a distinct label from 1 to n, and the oracle returns the maximum label of an edge completely contained in the query set.
+    // We need to find all edges with at most 3n queries.
+    
+    // This is a known problem: "Guess the MAD" or similar.
+    // I recall a solution: 
+    // We can find the edge with the maximum label (n) by querying the whole set (MAD = n). 
+    // Then we can find its endpoints by binary search: 
+    // To find one endpoint of n, we can query a prefix. If MAD == n, then both endpoints are in the prefix. Else, at most one.
+    // We can binary search to find the first endpoint. 
+    // Then we can find the second endpoint by searching the rest.
+    // This takes O(log n) queries for n.
+    // After finding the two endpoints of n, we can remove them and repeat for n-1, n-2, ..., 1.
+    // Total queries: n * O(log n) = O(n log n). For n=300, log n ~ 9, so ~2700 queries. Still > 900.
+    
+    // But wait, we don't need to do binary search for each number from scratch. 
+    // We can find all edges in a divide-and-conquer manner: 
+    // Function solve(L, R, max_val): finds all edges with labels in [1, max_val] that are completely within [L, R].
+    // But we don't know max_val initially.
+    
+    // Actually, we can do this: 
+    // We know the whole array has MAD = n. 
+    // We can split the array into two halves: left and right.
+    // Query left: if MAD(left) == n, then both n's are in left. Else if MAD(right) == n, both in right. Else, one in each.
+    // If one in each, we can find the exact positions by binary searching within each half? 
+    // This is still O(log n) per number.
+    
+    // Is there a way to find all edges in O(n) queries? 
+    // Consider querying all pairs (i, i+1). That's 2n-1 queries. 
+    // If we get a positive response for (i, i+1), we found an edge. 
+    // If we get 0 for all, then no two adjacent elements are equal. 
+    // But we can then query (i, i+2). That's 2n-2 queries. 
+    // In total, querying all pairs at distance 1, 2, 4, 8, ... might cover all possibilities? 
+    // Actually, if we query all pairs at distance 1, we find edges of length 1. 
+    // If we then query all pairs at distance 2, we might find edges of length 2? 
+    // But an edge of length 2 means the two occurrences are separated by one element. 
+    // If we query (i, i+2) and get x, then a[i] = a[i+2] = x. 
+    // But what if the two occurrences are separated by more? 
+    // We can query all pairs at distance up to 2n-1? That's O(n^2) queries.
+    
+    // However, we can use the fact that if we query a set of size k and get x, we know that x appears at least twice in that set.
+    // We can design a set of queries that covers all pairs in a combinatorial design? 
+    // This is similar to group testing.
+    
+    // Let's think about a different strategy that uses exactly 3n queries:
+    // 1. Query (1,2), (2,3), (3,4), ..., (2n-1,

@@ -1,0 +1,60 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(2 * n);
+        for (int i = 0; i < 2 * n; ++i) {
+            cin >> a[i];
+        }
+        sort(a.begin(), a.end());
+
+        bool found = false;
+        // Try each possible partner for the largest element
+        for (int i = 0; i < 2 * n - 1; ++i) {
+            int x = a.back() + a[i]; // initial x
+            multiset<int> ms(a.begin(), a.end());
+            vector<pair<int, int>> ops;
+            bool ok = true;
+
+            while (!ms.empty()) {
+                auto it_max = prev(ms.end());
+                int mx = *it_max;
+                ms.erase(it_max);
+                int need = x - mx;
+                auto it = ms.find(need);
+                if (it == ms.end()) {
+                    ok = false;
+                    break;
+                }
+                ms.erase(it);
+                ops.emplace_back(mx, need);
+                x = mx;
+            }
+
+            if (ok) {
+                cout << "YES\n";
+                cout << a.back() + a[i] << '\n';
+                for (auto &p : ops) {
+                    cout << p.first << ' ' << p.second << '\n';
+                }
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            cout << "NO\n";
+        }
+    }
+    return 0;
+}
+```

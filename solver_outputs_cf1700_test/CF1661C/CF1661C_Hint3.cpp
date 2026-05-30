@@ -1,0 +1,50 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<ll> h(n);
+        ll mx = 0;
+        for (int i = 0; i < n; ++i) {
+            cin >> h[i];
+            mx = max(mx, h[i]);
+        }
+        
+        auto check = [&](ll days, ll target) -> bool {
+            ll odd = (days + 1) / 2;
+            ll even = days / 2;
+            for (int i = 0; i < n; ++i) {
+                ll need = target - h[i];
+                ll use_even = min(need / 2, even);
+                need -= use_even * 2;
+                even -= use_even;
+                if (need > odd) return false;
+                odd -= need;
+            }
+            return true;
+        };
+        
+        auto min_days = [&](ll target) -> ll {
+            ll lo = 0, hi = 1e18;
+            while (lo < hi) {
+                ll mid = lo + (hi - lo) / 2;
+                if (check(mid, target)) hi = mid;
+                else lo = mid + 1;
+            }
+            return lo;
+        };
+        
+        ll ans = min(min_days(mx), min_days(mx + 1));
+        cout << ans << '\n';
+    }
+    return 0;
+}

@@ -1,0 +1,218 @@
+// Hint8
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long INF = 1e18;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<long long>> h(n, vector<long long>(n));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                cin >> h[i][j];
+            }
+        }
+        vector<long long> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int j = 0; j < n; ++j) cin >> b[j];
+        
+        // We need to assign each row a parity (0 or 1) and each column a parity (0 or 1)
+        // such that for every cell (i,j), h[i][j] + row_parity[i] + col_parity[j] has the property
+        // that adjacent cells (horizontally or vertically) have different values.
+        // This is equivalent to: for every adjacent pair, the parity of (row_parity[i] + col_parity[j]) 
+        // must be opposite to the parity of the neighbor's sum, unless the base heights differ appropriately.
+        // Actually, we can think of it as: we want to choose x_i in {0,1} for rows and y_j in {0,1} for columns
+        // such that for every adjacent pair (i,j) and (i,j+1): h[i][j] + x_i + y_j != h[i][j+1] + x_i + y_{j+1}
+        // => (h[i][j] - h[i][j+1]) != (y_{j+1} - y_j) mod 2? Actually, since x_i cancels, we need:
+        // h[i][j] + y_j != h[i][j+1] + y_{j+1}  => (h[i][j] - h[i][j+1]) mod 2 != (y_{j+1} - y_j) mod 2.
+        // Similarly for vertical: h[i][j] + x_i != h[i+1][j] + x_{i+1} => (h[i][j] - h[i+1][j]) mod 2 != (x_{i+1} - x_i) mod 2.
+        // This suggests a 2-coloring constraint on a bipartite graph of rows and columns.
+        // Let's define variables: for each row i, we have a boolean choice: use row operation (x_i=1) or not (x_i=0).
+        // For each column j, similarly y_j.
+        // For each adjacent horizontal pair (i,j)-(i,j+1), we require: (h[i][j] + x_i + y_j) % 2 != (h[i][j+1] + x_i + y_{j+1}) % 2
+        // => (h[i][j] + y_j) % 2 != (h[i][j+1] + y_{j+1}) % 2
+        // => y_j XOR y_{j+1} = (h[i][j] % 2) XOR (h[i][j+1] % 2) XOR 1.
+        // So for each row i, the relation between y_j and y_{j+1} is fixed independent of i! That means all rows must agree on the relation between y_j and y_{j+1}.
+        // If there is any row where the required relation differs, it's impossible.
+        // Similarly, for vertical: x_i XOR x_{i+1} = (h[i][j] % 2) XOR (h[i+1][j] % 2) XOR 1, must be consistent across all columns.
+        // Also, we have a relation between x_i and y_j? Actually, no direct constraint between a specific x_i and y_j, except through the graph connectivity?
+        // Wait, the constraints only involve differences between same-type variables (rows with rows, columns with columns). There is no equation linking x_i and y_j directly.
+        // However, the choice of x_i and y_j together affects the final heights, but the parity constraints only force relative parities within rows and within columns.
+        // But is that sufficient? Let's check: if we satisfy all horizontal and vertical parity constraints, does that guarantee no adjacent equal heights?
+        // The condition is: h[i][j] + x_i + y_j != h[i][j+1] + x_i + y_{j+1}  => h[i][j] + y_j != h[i][j+1] + y_{j+1}.
+        // This is a condition on the values mod 2? Actually, it's a condition on the actual integer values, not just parity. But wait, we only add 0 or 1 to each row/column.
+        // The difference between adjacent cells after operations is (h[i][j] - h[i][j+1]) + (y_j - y_{j+1}). Since y_j, y_{j+1} are 0 or 1, the difference changes by at most 1 in absolute value.
+        // The condition is that this difference is not zero. So we need to avoid making them equal.
+        // This is not just a parity condition; it's about the exact values. However, note that the initial heights can be large (up to 1e9). The operations add at most 1 to each cell.
+        // So if initially |h[i][j] - h[i][j+1]| >= 2, then no matter what we do, the difference will be at least 1, so they can never become equal.
+        // If the initial difference is 1, then adding 1 to one of them could make them equal if we add to the smaller one and not the larger one.
+        // If the initial difference is 0, then we must add 1 to exactly one of them to make them different.
+        // So the problem reduces to: we have a grid, and we can add 1 to entire rows/columns. We want to avoid adjacent equalities.
+        // This is a classic problem: we can think of it as assigning a parity to each row and column, but also we need to consider the magnitude.
+        // Actually, because we only add 0 or 1, the final value mod 2 is (h[i][j] + x_i + y_j) mod 2.
+        // If two adjacent cells have different parity, they are definitely not equal. If they have the same parity, they could be equal only if their difference is 0 mod 2 and the actual difference is 0.
+        // But since we only add 0/1, the difference in the additions is at most 1. So if initial difference is 0 and we add the same amount to both, they remain equal. If we add 1 to one and 0 to the other, they become different.
+        // If initial difference is 1, and we add 1 to the smaller one and 0 to the larger one, they become equal (difference 0). If we add 1 to the larger one and 0 to the smaller one, difference becomes 2. If we add 1 to both or 0 to both, difference remains 1.
+        // So the condition for equality after operations is:
+        // For horizontal: h[i][j] + x_i + y_j == h[i][j+1] + x_i + y_{j+1}  <=>  h[i][j] + y_j == h[i][j+1] + y_{j+1}.
+        // This can happen in two cases:
+        // 1. h[i][j] == h[i][j+1] and y_j == y_{j+1}
+        // 2. h[i][j] == h[i][j+1] + 1 and y_j == 0, y_{j+1} == 1 (i.e., we add 1 to the smaller one? Wait: if h[i][j] = h[i][j+1] + 1, then h[i][j] is larger. For equality, we need h[i][j] + y_j = h[i][j+1] + y_{j+1} => (h[i][j+1]+1) + y_j = h[i][j+1] + y_{j+1} => 1 + y_j = y_{j+1}. Since y_j, y_{j+1} in {0,1}, the only solution is y_j=0, y_{j+1}=1.
+        // 3. h[i][j] + 1 == h[i][j+1] and y_j == 1, y_{j+1} == 0.
+        // So equality occurs iff (h[i][j] - h[i][j+1], y_j - y_{j+1}) is one of: (0,0), (1,-1), (-1,1).
+        // We want to avoid these.
+        // Similarly for vertical: equality iff (h[i][j] - h[i+1][j], x_i - x_{i+1}) in {(0,0), (1,-1), (-1,1)}.
+        // This is a 2-SAT-like condition? But we also have costs.
+        // Notice that the conditions only involve differences of y's and differences of x's. There is no condition linking x and y directly.
+        // So the problem decomposes into independent problems on rows and columns? Not quite, because the costs are separate, but the choices of x and y are independent except they both affect the grid. However, the constraints are all within rows (for y) and within columns (for x). There is no constraint that involves both an x and a y. So we can choose x and y independently to satisfy the row constraints and column constraints respectively, and then the whole grid will be beautiful.
+        // Wait, is that true? Let's check: The horizontal constraint involves only y_j and y_{j+1} (and h[i][j], h[i][j+1]). It does not involve x_i. So for each row i, we have constraints on the y variables. These constraints must be satisfied for all rows simultaneously. So the y assignment must satisfy the constraints for every row. Similarly, the x assignment must satisfy the constraints for every column.
+        // Since x and y are independent, we can solve for the minimum cost to choose x satisfying all column constraints, and minimum cost to choose y satisfying all row constraints, and sum them up. But wait: is there any global constraint linking x and y? The problem statement doesn't have any. So the answer is simply min_cost_rows + min_cost_columns, if both are possible. Otherwise -1.
+        // Let's verify with the sample.
+        // Sample 1: n=2, grid:
+        // 1 2
+        // 2 1
+        // Row constraints for y:
+        // Row 0: h[0][0]=1, h[0][1]=2 => diff = -1. To avoid equality, we need (y0 - y1) not equal to 1 (since (-1,1) gives equality). So y0 - y1 != 1 => y0 <= y1. Also (0,0) gives equality? diff=-1, so (0,0) gives diff -1 !=0, so no equality. (1,-1) gives diff -2 !=0. So only forbidden is y0=1, y1=0. So y0 <= y1.
+        // Row 1: h[1][0]=2, h[1][1]=1 => diff = 1. Forbidden: (1,-1) gives equality? diff=1, (1,-1) gives 1 + (1 - 0?) Wait: formula: equality if (diff, y_j - y_{j+1}) in {(0,0), (1,-1), (-1,1)}. Here diff=1, so forbidden is (1,-1) i.e., y0 - y1 = -1 => y0=0, y1=1. So y0 >= y1.
+        // Combining: y0 <= y1 and y0 >= y1 => y0 = y1. So y0=y1. Both 0 or both 1. Costs for columns: b=[100,100]. Min cost for y0=y1=0 is 0, for y0=y1=1 is 200. So min cost columns = 0.
+        // Column constraints for x:
+        // Col 0: h[0][0]=1, h[1][0]=2 => diff = -1. Forbidden: x0 - x1 = 1 => x0=1, x1=0. So x0 <= x1.
+        // Col 1: h[0][1]=2, h[1][1]=1 => diff = 1. Forbidden: x0 - x1 = -1 => x0=0, x1=1. So x0 >= x1.
+        // Thus x0=x1. Min cost rows: a=[100,100], so 0. Total 0. Matches sample.
+        // Sample 2: n=4. We'll trust the decomposition.
+        // Sample 3: n=3. Let's test if decomposition gives -1.
+        // Grid:
+        // 1 2 2
+        // 2 2 1
+        // 2 1 1
+        // Row constraints for y:
+        // Row 0: h[0]=[1,2,2]. Diffs: h[0][0]-h[0][1] = -1 => forbidden y0-y1=1 => y0<=y1. h[0][1]-h[0][2] = 0 => forbidden y1-y2=0 => y1!=y2.
+        // Row 1: [2,2,1]. Diffs: 0 => y0!=y1. 1 => forbidden y1-y2=-1 => y1>=y2.
+        // Row 2: [2,1,1]. Diffs: 1 => y0>=y1. 0 => y1!=y2.
+        // Combine:
+        // From row0: y0<=y1, y1!=y2.
+        // From row1: y0!=y1, y1>=y2.
+        // From row2: y0>=y1, y1!=y2.
+        // y0<=y1 and y0>=y1 => y0=y1. But row1 says y0!=y1. Contradiction. So impossible. Matches sample.
+        // So the decomposition is correct!
+        // Now we need to solve: given a set of constraints on y_0..y_{n-1} (each 0/1) of the form:
+        // For each row i and each adjacent pair j, j+1:
+        // Let d = h[i][j] - h[i][j+1].
+        // If d == 0: y_j != y_{j+1}
+        // If d == 1: (y_j, y_{j+1}) != (0,1)  =>  not (y_j=0 and y_{j+1}=1)  =>  y_j >= y_{j+1}  (since if y_j=0 then y_{j+1} must be 0; if y_j=1 then y_{j+1} can be 0 or 1)  =>  y_j >= y_{j+1}
+        // If d == -1: (y_j, y_{j+1}) != (1,0)  =>  y_j <= y_{j+1}
+        // If |d| >= 2: no constraint (always safe).
+        // Similarly for x with columns.
+        // So we have a set of constraints on a line of boolean variables: each adjacent pair has either "!=", "<=", ">=", or no constraint.
+        // We need to find an assignment minimizing sum of costs (a_i for x_i=1, b_j for y_j=1). This is a classic problem solvable with DP.
+        // Since constraints are only between adjacent variables, we can do DP on the line.
+        // For y: we have variables y_0..y_{n-1}. We need to satisfy constraints between y_j and y_{j+1} for j=0..n-2.
+        // The constraints are derived from all rows. For a fixed j, we look at all rows i. For each row, we get a constraint on (y_j, y_{j+1}) as above.
+        // We need to satisfy all of them simultaneously. So we can combine them: if any row says "!=" and another says "<=", we need to check consistency.
+        // Actually, we can determine the set of allowed transitions (y_j, y_{j+1}) from the intersection of allowed pairs over all rows.
+        // For a given j, allowed pairs are those (u,v) in {0,1}^2 that satisfy all row constraints for that j.
+        // If the allowed set is empty, impossible.
+        // Then we can do DP: dp[j][v] = min cost to assign y_0..y_j with y_j = v, satisfying constraints up to j.
+        // Similarly for x.
+        // Complexity: O(n) per test case, sum n <= 1000, so very fast.
+        
+        // Let's implement a function that given n, a vector of constraints for each adjacent pair (allowed transitions), and costs array, returns min cost or -1.
+        // But we need to build the allowed transitions from the grid.
+        // For y: constraints from rows.
+        // For each j in 0..n-2:
+        //   allowed = {00,01,10,11} initially.
+        //   For each row i:
+        //     d = h[i][j] - h[i][j+1]
+        //     if d == 0: remove 00 and 11
+        //     if d == 1: remove 01
+        //     if d == -1: remove 10
+        //     if |d| >= 2: do nothing
+        //   If allowed empty -> impossible.
+        // Similarly for x: constraints from columns.
+        // For each i in 0..n-2:
+        //   allowed = {00,01,10,11}
+        //   For each column j:
+        //     d = h[i][j] - h[i+1][j]
+        //     same removals.
+        
+        auto solve_line = [&](int n, const vector<array<int, 4>>& allowed_transitions, const vector<long long>& cost) -> long long {
+            // allowed_transitions[j] is a 4-bit mask: bit 0 for (0,0), bit 1 for (0,1), bit 2 for (1,0), bit 3 for (1,1).
+            // Actually easier: store as vector<vector<bool>> allowed(2, vector<bool>(2)) for each j.
+            // But we can just use DP.
+            vector<long long> dp(2, INF);
+            // base case: y_0 can be 0 or 1, no constraints on its own.
+            dp[0] = 0;
+            dp[1] = cost[0];
+            for (int j = 0; j < n-1; ++j) {
+                vector<long long> ndp(2, INF);
+                int mask = allowed_transitions[j];
+                for (int u = 0; u < 2; ++u) {
+                    if (dp[u] == INF) continue;
+                    for (int v = 0; v < 2; ++v) {
+                        int bit = (u<<1) | v; // 0:00, 1:01, 2:10, 3:11
+                        if (mask & (1<<bit)) {
+                            ndp[v] = min(ndp[v], dp[u] + (v ? cost[j+1] : 0));
+                        }
+                    }
+                }
+                dp = move(ndp);
+            }
+            long long ans = min(dp[0], dp[1]);
+            return (ans >= INF ? -1 : ans);
+        };
+        
+        // Build y constraints
+        vector<array<int, 4>> y_trans(n-1);
+        for (int j = 0; j < n-1; ++j) {
+            int mask = 0b1111; // all 4 transitions allowed
+            for (int i = 0; i < n; ++i) {
+                long long d = h[i][j] - h[i][j+1];
+                if (d == 0) {
+                    mask &= ~(0b0001); // 00
+                    mask &= ~(0b1000); // 11
+                } else if (d == 1) {
+                    mask &= ~(0b0010); // 01
+                } else if (d == -1) {
+                    mask &= ~(0b0100); // 10
+                }
+                // else |d|>=2: no change
+            }
+            y_trans[j] = mask;
+        }
+        
+        // Build x constraints
+        vector<array<int, 4>> x_trans(n-1);
+        for (int i = 0; i < n-1; ++i) {
+            int mask = 0b1111;
+            for (int j = 0; j < n; ++j) {
+                long long d = h[i][j] - h[i+1][j];
+                if (d == 0) {
+                    mask &= ~(0b0001);
+                    mask &= ~(0b1000);
+                } else if (d == 1) {
+                    mask &= ~(0b0010);
+                } else if (d == -1) {
+                    mask &= ~(0b0100);
+                }
+            }
+            x_trans[i] = mask;
+        }
+        
+        long long cost_y = solve_line(n, y_trans, b);
+        long long cost_x = solve_line(n, x_trans, a);
+        
+        if (cost_y == -1 || cost_x == -1) {
+            cout << -1 << '\n';
+        } else {
+            cout << cost_x + cost_y << '\n';
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,79 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+ll solve_case(int n, vector<int>& h) {
+    int mx = *max_element(h.begin(), h.end());
+    ll lo = 0, hi = 1e18;
+    ll ans = hi;
+    while (lo <= hi) {
+        ll mid = (lo + hi) / 2;
+        ll odd_days = (mid + 1) / 2;
+        ll even_days = mid / 2;
+        ll need_odd = 0, need_even = 0;
+        bool ok = true;
+        for (int x : h) {
+            ll diff = mx - x;
+            ll take_even = min(even_days, diff / 2);
+            diff -= take_even * 2;
+            even_days -= take_even;
+            need_odd += diff;
+            if (need_odd > odd_days) {
+                ok = false;
+                break;
+            }
+        }
+        if (ok && need_odd <= odd_days) {
+            ans = mid;
+            hi = mid - 1;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    // Also check mx+1
+    {
+        int mx2 = mx + 1;
+        ll lo2 = 0, hi2 = 1e18;
+        while (lo2 <= hi2) {
+            ll mid = (lo2 + hi2) / 2;
+            ll odd_days = (mid + 1) / 2;
+            ll even_days = mid / 2;
+            ll need_odd = 0, need_even = 0;
+            bool ok = true;
+            for (int x : h) {
+                ll diff = mx2 - x;
+                ll take_even = min(even_days, diff / 2);
+                diff -= take_even * 2;
+                even_days -= take_even;
+                need_odd += diff;
+                if (need_odd > odd_days) {
+                    ok = false;
+                    break;
+                }
+            }
+            if (ok && need_odd <= odd_days) {
+                ans = min(ans, mid);
+                hi2 = mid - 1;
+            } else {
+                lo2 = mid + 1;
+            }
+        }
+    }
+    return ans;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> h(n);
+        for (int i = 0; i < n; ++i) cin >> h[i];
+        cout << solve_case(n, h) << '\n';
+    }
+    return 0;
+}

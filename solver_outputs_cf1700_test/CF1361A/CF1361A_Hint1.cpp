@@ -1,0 +1,58 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < m; i++) {
+        int a, b;
+        cin >> a >> b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+
+    vector<int> t(n + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> t[i];
+    }
+
+    // Check if the desired assignment is valid:
+    // For each vertex, the set of colors of its neighbors must contain all colors 1..t[i]-1,
+    // and must NOT contain t[i].
+    for (int u = 1; u <= n; u++) {
+        vector<bool> seen(t[u] + 1, false);
+        for (int v : adj[u]) {
+            if (t[v] == t[u]) {
+                cout << -1 << '\n';
+                return 0;
+            }
+            if (t[v] < t[u]) {
+                seen[t[v]] = true;
+            }
+        }
+        for (int c = 1; c < t[u]; c++) {
+            if (!seen[c]) {
+                cout << -1 << '\n';
+                return 0;
+            }
+        }
+    }
+
+    // Build order: sort vertices by desired topic, breaking ties arbitrarily.
+    vector<int> order(n);
+    iota(order.begin(), order.end(), 1);
+    sort(order.begin(), order.end(), [&](int a, int b) {
+        return t[a] < t[b];
+    });
+
+    for (int i = 0; i < n; i++) {
+        cout << order[i] << (i + 1 == n ? '\n' : ' ');
+    }
+
+    return 0;
+}

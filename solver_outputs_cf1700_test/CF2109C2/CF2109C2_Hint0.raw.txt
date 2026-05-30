@@ -1,0 +1,406 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    string resp;
+    
+    // Strategy: use digit operation to get sum of digits of x,
+    // then adjust to reach n using at most 4 commands total.
+    // Since x is unknown but in [1, 1e9], we can use digit to get S(x) <= 81.
+    // Then we can multiply/add to reach n.
+    
+    // First, get S(x) using digit command
+    cout << "digit" << endl;
+    cin >> resp;
+    // Now x = S(x), which is between 1 and 81
+    
+    // We need to reach n. We can use mul and add.
+    // Since we have 3 commands left, we can do:
+    // mul k, add d, then check.
+    // But we don't know current x. We can try to make x become n by:
+    // If n is small, we can just add/subtract.
+    // Better: use mul to get close, then add.
+    
+    // Since x is in [1, 81], we can compute k = n / x (integer division)
+    // But we don't know x. However, we can try to multiply by something
+    // that works for all possible x? No.
+    
+    // Alternative: use digit again? No, we need to reach n.
+    // We can use the fact that we can try commands and see if they succeed.
+    // If we do "mul y" and it fails (returns 0), x stays same.
+    // We can try to find x by binary search? But limited commands.
+    
+    // Actually, we can use the following trick:
+    // We can make x become 1 by dividing by itself? We don't know x.
+    // But we can do: add a large number to make x big, then divide?
+    
+    // Let's think: we have 4 commands total. We used 1 (digit). 3 left.
+    // We can do: mul something, then add something, then check.
+    // But we need to know x to choose mul.
+    
+    // Wait, we can use the fact that after digit, x is small (<=81).
+    // We can try to make x become n by:
+    // - If n <= 81, we can just add (n - x). But we don't know x.
+    //   We can try adding numbers from -80 to 80? Only 3 commands left.
+    
+    // Better: we can use mul to amplify x to something >= n, then div to get n?
+    // Or we can use mul to get a number that has n as a divisor.
+    
+    // Another idea: we can use "add" with a large number to make x become something
+    // that we know, then adjust. For example, add 1e9 - x? We don't know x.
+    
+    // Let's use the property: we can try commands and see if they fail.
+    // We can try to multiply by a number that makes x * y = n for some possible x.
+    // But x is unknown.
+    
+    // Actually, we can do this: after digit, x is in [1, 81].
+    // We can try to make x become 1 by dividing by x? We don't know x.
+    // But we can do: add (1 - x)? We don't know x.
+    
+    // Wait, we can use "div" command: if we do "div y", it succeeds only if y divides x.
+    // Since x is small, we can try to divide by something that might work.
+    
+    // Let's think differently: we have 4 commands. We can use them to:
+    // 1. digit -> x = S(x) (small)
+    // 2. mul 10^9? That might overflow? x <= 81, 81 * 10^9 = 8.1e10 > 1e18? No, 8.1e10 < 1e18.
+    //    Actually 81 * 10^9 = 81,000,000,000 < 1e18. So we can multiply by large numbers.
+    // 3. add something to reach n.
+    // But we need to know x to know what to add.
+    
+    // We can use the fact that we can do "add" with negative numbers.
+    // If we do "add -x", it fails if x - x <= 0? Actually x - x = 0, which is not in [1, 1e18], so fails.
+    // So we can't easily zero it.
+    
+    // Let's try to find x by using "mul" and "add" to create a situation where we can deduce x.
+    // But we only have 3 commands left.
+    
+    // Alternative approach: we can make x become a known value by using digit repeatedly?
+    // If we do digit multiple times, eventually x becomes a single digit (1-9).
+    // But we only have 4 commands total. If we do digit twice, we have 2 commands left.
+    // After two digits, x is S(S(original x)). S(original x) <= 81, so S(S(x)) <= S(81)=9.
+    // So x becomes a single digit 1-9. Then we can multiply by something to reach n?
+    // But we still don't know which digit.
+    
+    // We can try to make x become 1 by doing "div x"? We don't know x.
+    // But if x is a single digit, we can try dividing by 2,3,4,...9? Only one command left.
+    
+    // Let's think: we have 4 commands. We can do:
+    // 1. digit
+    // 2. digit (now x in 1-9)
+    // 3. mul something
+    // 4. add something
+    // Then answer.
+    // But we need to choose mul and add such that for any possible x (1-9), the result is n.
+    // That means we need a function f(x) = (x * a) + b = n for all x in [1,9]? Impossible unless a=0.
+    
+    // So we need to know x. How to know x with few commands?
+    // We can use the fact that "div y" returns 1 if y divides x. We can test divisibility.
+    // Since x is small (<=81 after one digit, or <=9 after two digits), we can try to divide by primes?
+    // But we have limited commands.
+    
+    // Wait, we can use "add" with a large number to make x become something that we can then divide.
+    // For example, add 10^18 - 100? That might overflow? x + (1e18 - 100) > 1e18 if x > 100.
+    // But x <= 81, so x + 1e18 - 100 <= 1e18 - 19, which is <= 1e18. So it succeeds!
+    // Then x becomes 1e18 - 100 + x. Then we can divide by something?
+    
+    // Actually, we can make x become a known large number by adding a constant that makes it independent of x?
+    // No, x still affects the result.
+    
+    // Let's try a different strategy: we can use the fact that we can try commands and they might fail.
+    // We can try to guess x by attempting to divide by numbers. If we do "div 2" and it succeeds, x is even.
+    // We can binary search x? But only 3 commands left after digit.
+    
+    // Maybe we don't need digit. We can directly manipulate x to become n.
+    // Since x is up to 1e9, and n is up to 1e9, we can try to add (n - x). But we don't know x.
+    // However, we can try to add a number that makes x become something we can then multiply/divide to get n.
+    
+    // Consider: we can do "mul 0"? No, y >= 1.
+    // We can do "add 1e18 - x"? We don't know x.
+    
+    // Let's think about the properties of the operations.
+    // We have 4 commands. We can use them to:
+    // - digit: reduces x to <=81.
+    // - add: can add large numbers.
+    // - mul: can multiply by large numbers.
+    // - div: can divide if divisible.
+    
+    // Idea: we can make x become 1 by doing:
+    // digit -> x = S(x) (<=81)
+    // add 1e18 - 100? Let's say we add C = 1e18 - 100. Then x becomes C + x.
+    // Then we can do div (C + x)? No, we don't know x.
+    
+    // Wait, we can do: digit, then add a huge number to make x become a number that ends with the digits of x.
+    // Then we can divide by something that depends on n.
+    
+    // Another idea: we can use the fact that we can do "mul" and "add" to create a linear function.
+    // If we do mul a, then add b, we get a*x + b.
+    // We want a*x + b = n. We don't know x, but we know x is in [1, 81] after one digit.
+    // We can choose a and b such that for all possible x, a*x+b = n? Only if a=0.
+    // So we need to know x.
+    
+    // How to know x with one more command? We can do "digit" again to get S(x) which is <=9.
+    // Then we have 2 commands left. We still don't know x exactly.
+    
+    // But wait: after two digits, x is in [1, 9]. We can then do "mul 0"? No.
+    // We can do "add something" to make it a known value? If we add a large number, x becomes large + small.
+    // We can then do "div large" to get 1? Not exactly.
+    
+    // Let's try: after two digits, x in [1,9]. We do "add 1e18 - 10". Then x becomes 1e18 - 10 + x.
+    // Then we do "div 1e18 - 10"? That division only succeeds if 1e18-10 divides that number.
+    // But 1e18-10 + x divided by 1e18-10 is 1 with remainder x. So it fails unless x=0.
+    // So not good.
+    
+    // What if we do: digit, digit, then we have x in [1,9]. We want to reach n.
+    // We can try to multiply x by something to get n, then add the remainder.
+    // But we don't know x. However, we can try all possible multipliers? We have 2 commands left.
+    // We can do: mul k, then add d. We need k*x + d = n.
+    // For each possible x (1..9), we can choose k and d such that k*x + d = n.
+    // But k and d must be the same for all x? No, we can choose k and d after we know x?
+    // But we don't know x when we issue the commands. We have to issue commands without knowing x.
+    // So we need a single pair (k, d) that works for all x in [1,9]? Impossible.
+    
+    // Unless we can make x become a specific value by using the failure of commands.
+    // For example, we can try to divide by a number. If it fails, x remains unchanged.
+    // We can use this to test x.
+    
+    // Let's use the 4 commands to determine x exactly, then use the answer command.
+    // But we only have 4 commands total, and answering doesn't count.
+    // So we can use up to 4 commands to manipulate x, and then we must answer.
+    // We don't need to make x equal to n before answering? The problem says:
+    // "When you have determined that x is equal to n, output a line ..."
+    // It doesn't say x must be n at the time of answering. It says you have determined that x equals n.
+    // But the jury checks if n equals x at the time of "!". So x must be n when you answer.
+    // So we must actually transform x to n.
+    
+    // Let's re-read: "You have to make x equal to n using at most 4 commands."
+    // And: "When you have determined that x is equal to n, output a line ..."
+    // So we must make x become n, then output "!".
+    
+    // So we need to transform x to n in <=4 steps.
+    
+    // Let's think about the operations. We can do digit to reduce x to <=81.
+    // Then we can do mul and add to reach n.
+    // If we know x after digit, we can compute the required mul and add.
+    // But we don't know x. However, we can try to make x become a value that we can then easily turn into n.
+    
+    // What if we do: digit, then mul 0? Not allowed.
+    // What if we do: digit, then add a huge number to make x become a number that has n as a divisor?
+    // For example, we want to make x become a multiple of n, then divide by something to get n.
+    
+    // Let's try: we have x after digit (<=81). We want to reach n.
+    // We can do: mul n, then div x? But we don't know x.
+    // If we do mul n, x becomes x*n. Then we want to divide by x to get n. But we don't know x.
+    // However, we can do "div x" only if we know x. We don't.
+    
+    // But we can do: mul n, then we have x*n. Then we can do digit? That would give S(x*n), not n.
+    
+    // Another idea: we can use the fact that we can do "add" with negative numbers to subtract.
+    // If we do digit, we get S(x). Then we can do add (n - S(x))? We don't know S(x).
+    // But we can try to add a number that makes x become n regardless of S(x)?
+    // If we do "add (n - 1)", then if S(x)=1, x becomes n. But if S(x)=2, x becomes n+1.
+    // So not good.
+    
+    // Let's consider using "div" to reduce x to 1. If we can make x become 1, then we can just mul n.
+    // How to make x become 1? We can do digit until x is a single digit (1-9). Then we can try to divide by that digit.
+    // But we don't know the digit. However, we can try to divide by 2,3,4,...9? We only have a few commands.
+    // If we do digit twice, we have 2 commands left. We can try "div 2", if it fails, try "div 3", etc.
+    // But we only have 2 commands left, so we can only try 2 divisors. If x is not divisible by those, we fail.
+    // But we can choose divisors that cover all possibilities? For example, if we do "div 6" and "div 8", we might not cover 5,7.
+    
+    // What if we do: digit, digit, then we have x in [1,9]. Then we do "add 1e18 - 10". Then x becomes 1e18 - 10 + x.
+    // Then we do "div 1e18 - 10 + 1"? That would give 1 if x=1, but for other x it might not divide.
+    
+    // Let's think about a different initial approach. Maybe we don't need digit.
+    // We can directly add a large number to x to make it a known value?
+    // If we add C such that C + x is a constant we know? No, x varies.
+    
+    // Wait, we can use the fact that x is up to 1e9. We can try to multiply by 1e9 to make it large, then add something.
+    // But we don't know x.
+    
+    // Let's look at the sample: in first test case, they did add -10 (failed), add 1, mul 10. That worked because they knew x=9? No, they didn't know. They just tried to add -10, which failed, so x remained 9. Then add 1 made it 10, mul 10 made it 100.
+    // So they used the failure of "add -10" to keep x unchanged, then added 1 to get 10, then multiplied by 10.
+    // But how did they know to add -10? They didn't know x=9. They just tried a command that would fail for x=9? Actually, if x was something else, add -10 might succeed or fail. They relied on the fact that x is unknown but they can try commands and see the response.
+    
+    // In the second test case: digit (x became 10), div 2 (x became 5). They didn't know x=1234, but digit made it 10, then div 2 made it 5.
+    // So they used digit to reduce x to a small number, then divided by 2. But how did they know to divide by 2? They didn't know x became 10. They just tried div 2 and it worked.
+    
+    // So the strategy is: we can try commands that might work for the current x, and based on the response, we can deduce something? But the interactor is non-adaptive, so x is fixed. We can't change our commands based on responses? We can! We read the response after each command. So we can adapt.
+    
+    // So we can do:
+    // 1. digit -> x becomes S(x). We read "1".
+    // Now x is in [1, 81]. We don't know exactly.
+    // 2. We can try to divide by some number y. If it succeeds, x becomes x/y. If it fails, x remains.
+    // We can use this to test if y divides x.
+    // Since x <= 81, we can try to find x by testing divisibility by primes? But we only have 3 commands left.
+    
+    // Actually, we can use the following: we want to reach n. If n is small, we can just try to add/subtract to reach n.
+    // But we don't know x.
+    
+    // Let's think about a general solution that works for any n and any x.
+    // We have 4 commands. We can use them to:
+    // - Reduce x to a small number (digit)
+    // - Then make x become 1 by dividing by itself? We don't know itself.
+    // - Then multiply by n.
+    
+    // How to make x become 1? If we can make x become a number that we know, we can divide by that number.
+    // For example, we can do: digit, then add a huge number H such that H + x is a multiple of something?
+    
+    // Consider: we do digit -> x in [1,81].
+    // Then we do: add 1e18 - 81. Then x becomes 1e18 - 81 + x, which is in [1e18 - 80, 1e18].
+    // Then we do: div 1e18 - 81 + x? We don't know x.
+    
+    // What if we do: digit, then mul 1e9? x becomes x * 1e9, which is <= 81e9 < 1e18.
+    // Then we do: add (n - x*1e9)? We don't know x.
+    
+    // Wait, we can use the fact that we can try multiple "div" commands to reduce x to 1.
+    // Since x <= 81 after digit, we can try dividing by 2, 3, 5, 7, etc. But we only have 3 commands left.
+    // However, we can combine operations: we can do "mul" to make x larger, then "div" to reduce it.
+    
+    // Let's try a different tactic: we can make x become 0? No, x must be >=1.
+    
+    // Let's look for a pattern: we want to reach n. We can do:
+    // 1. digit
+    // 2. mul n
+    // Now x = S(x) * n. We want to get n. So we need to divide by S(x). But we don't know S(x).
+    // However, we can try to divide by numbers that might be S(x). Since S(x) <= 81, we can try to divide by 2, 3, 4, ... but we only have 2 commands left.
+    // If we do "div 2" and it fails, we can try "div 3", etc. But we can only try 2 divisions.
+    // What if we do "div" with a product? For example, "div 6" tries to divide by 6. If S(x) is 6, it works. But if S(x) is 8, it fails.
+    // We need a way to divide by S(x) without knowing it.
+    
+    // What if we do: digit, then mul n, then digit again? That would give S(S(x)*n), not n.
+    
+    // Another idea: we can use the fact that we can add a large number to make x become a number that ends with many zeros, then divide by something.
+    
+    // Let's think about the properties of S(x). S(x) is the sum of digits. For x up to 1e9, S(x) <= 81.
+    // After digit, x is in [1, 81].
+    // We can then do: add 1e18 - 100. This succeeds because x <= 81, so x + 1e18 - 100 <= 1e18 - 19 < 1e18.
+    // Now x = 1e18 - 100 + x_old. Let's call this new x = M + d, where M = 1e18 - 100, d = x_old (1..81).
+    // Now we can do: div M? M = 1e18 - 100. Does M divide M + d? Only if d = 0. So fails.
+    // What if we do: div 1? Always succeeds, but x remains same.
+    
+    // What if we do: add something else? We want to make x a multiple of n.
+    // Suppose we want x to become n. We can try to make x become a multiple of n, then divide by something to get n.
+    // If we do: digit, then mul n, then x = S(x)*n. Then we want to divide by S(x). We don't know S(x).
+    // But we can try to make S(x) equal to 1 by doing digit again? If we do digit again, x becomes S(S(x)*n). That's not 1.
+    
+    // Wait, we can do: digit, digit. Then x is in [1,9]. Then we can do: mul n, then div x? We don't know x.
+    // But if x is a single digit, we can try to divide by that digit. We have 2 commands left after two digits.
+    // We can do: mul n, then try div 2, if fails try div 3, etc. But we only have one command left after mul n.
+    // So we can only try one divisor. If we guess wrong, we fail.
+    
+    // What if we do: digit, digit, then we have x in [1,9]. Then we do: add 1e18 - 10. Then x becomes 1e18 - 10 + x.
+    // Then we do: div 1e18 - 9? That would give 1 if x=1, but for x=2, it's (1e18 - 8) / (1e18 - 9) which is not integer.
+    
+    // Let's try to find a sequence that works for any x.
+    // Consider: we want to reach n. We can do:
+    // 1. digit -> x = S(x) (1..81)
+    // 2. mul 1e9 -> x = S(x) * 1e9 (<= 81e9)
+    // 3. add (n - (x mod something))? We don't know x.
+    
+    // Maybe we can use the fact that we can do "add" with a negative number to subtract, and if it fails, x remains.
+    // For example, we can try to subtract x by adding -x. But we don't know x.
+    // However, we can try a range of subtractions. Since x <= 81 after digit, we can try to add -1, -2, -3, ... until we succeed? But we only have 3 commands left.
+    
+    // Wait, we can do: digit, then we know x <= 81. We want to make x become n.
+    // If n is also <= 81, we can try to add (n - x). We don't know x, but we can try adding a number that might work.
+    // For example, if we want to reach n=5, we can try add -1 (if x=6, it becomes 5), add -2 (if x=7), etc. But we can only try 3 additions.
+    // So we can't cover all 81 possibilities.
+    
+    // But we can use multiplication to amplify the differences.
+    // Suppose we do: digit, then mul 1e9. Now x = S(x)*1e9.
+    // Then we want to add something to get n. But n is up to 1e9, so we need to add a negative number to reduce from ~1e9*S(x) to n.
+    // That would require adding about -1e9*S(x) + n. Since S(x) is unknown, we don't know how much to add.
+    
+    // What if we do: digit, then mul n? x = S(x)*n.
+    // Then we want to divide by S(x). We don't know S(x).
+    // But we can try to make S(x) become a known value by doing something before.
+    
+    // Let's think about the following sequence:
+    // 1. digit -> x = S(x) (call it s)
+    // 2. add 1e18 - 100 -> x = 1e18 - 100 + s
+    // 3. div 1e18 - 100 + 1? No.
+    
+    // What if we do:
+    // 1. digit -> s
+    // 2. mul 1e9 -> s * 1e9
+    // 3. add 1e18 - 1e9? That would make it 1e18 + (s-1)*1e9, which might overflow if s>1.
+    // Actually, s*1e9 + 1e18 - 1e9 = 1e18 + (s-1)*1e9. For s>=2, this is > 1e18, so fails. So only works if s=1.
+    
+    // We can use the failure to detect s=1. If we do "add 1e18 - 1e9" and it fails, we know s != 1. But we don't know s.
+    
+    // Let's try to design a strategy that uses the responses to narrow down x.
+    // Since we have 4 commands, we can do a binary search on x? x is up to 1e9, but we only have 4 commands, so we can't test 1e9 values.
+    // But after digit, x is in [1, 81]. We can binary search 81 with 4 commands? 2^4=16, not enough.
+    // But we can use the fact that we can do operations that change x, and we can observe the result only through success/failure.
+    
+    // Actually, we can use "div" to test if x is divisible by certain numbers. Since x <= 81, we can test divisibility by 2, 3, 5, 7. That covers many numbers.
+    // But we need to reach n, not just guess x.
+    
+    // Let's consider that we can make x become n in one step if we know x. So if we can determine x exactly with 3 commands, we can use the 4th to set it to n.
+    // How to determine x (after digit) with 3 commands?
+    // We can do:
+    // - "div 2" -> if success, x is even; else odd.
+    // - "div 3" -> if success, x divisible by 3; else not.
+    // - "div 5" -> etc.
+    // But we only have 3 commands, and we need to change x to n, so we can't use all 3 for testing.
+    
+    // What if we use the fact that we can do "add" and "mul" to create a function that maps x to n regardless of x?
+    // Is there a function f(x) = (x * a + b) / c (with possible intermediate operations) that equals n for all x in [1,81]?
+    // No, because it's not constant.
+    
+    // But wait, we can use the "digit" operation again. If we do digit twice, x becomes S(S(original x)). S(original x) <= 81, so S(S(x)) <= S(81) = 9. So x becomes a single digit 1-9.
+    // Then we have 2 commands left. We need to turn a single digit into n.
+    // If we can turn any single digit into n with 2 commands, we win.
+    // Can we? We have 2 commands: we can do mul a, then add b. We need a*d + b = n for all d in [1,9]? No, we can choose a and b after we know d? But we don't know d.
+    // However, we can use the fact that we can try a command and it might fail. If we do "mul a" and it fails, x remains d. Then we can try a different mul.
+    // So we can try different multipliers for different d.
+    // For example, we want to reach n. We can try "mul n". If d * n <= 1e18, it succeeds. d <= 9, n <= 1e9, so d*n <= 9e9 < 1e18, so it always succeeds.
+    // Then x = d*n. Then we want to divide by d. We can try "div 2", if it fails, try "div 3", etc. But we only have one command left.
+    // So we can only try one divisor. If we guess wrong, we fail.
+    
+    // But what if we do: digit, digit, then we have d in [1,9]. Then we do: add (n - d)? We don't know d.
+    // However, we can try to add a number that makes x become n for all d? No.
+    
+    // Let's think about a different initial transformation. Maybe we don't need to reduce x to a single digit. We can use the fact that we can do "mul 0" is not allowed, but we can do "mul 1" which does nothing.
+    
+    // Consider the following: we want to make x become n. We can do:
+    // 1. add 1e18 - 1e9 -> if x <= 1e9, then x + 1e18 - 1e9 <= 1e18, so it succeeds. x becomes 1e18 - 1e9 + x.
+    //    If x > 1e9, it fails. But x is initially <= 1e9, so it always succeeds.
+    //    Now x is around 1e18.
+    // 2. div x? We don't know x.
+    
+    // Wait, we can use the fact that we can do "digit" at any time. If we do "digit" on a huge number, we get the sum of its digits.
+    // For example, if we make x = 1e18 - 1e9 + x_old, the sum of digits of that number is something we can compute? It depends on x_old.
+    // 1e18 - 1e9 = 999999999000000000? Actually, 1e18 is 1 followed by 18 zeros. 1e18 - 1e9 = 999999999000000000? Let's compute: 1e18 = 1000000000000000000. Subtract 1e9 = 1000000000 gives 999999999000000000? No: 1000000000000000000 - 1000000000 = 999999999999000000? I'm bad at this.
+    // Actually, 1e18 = 10^18. 10^18 - 10^9 = 999999999000000001? No.
+    // Let's not rely on specific digit sums.
+    
+    // Let's look for a solution online or think of a standard trick.
+    // This is a Codeforces problem. The medium version allows 4 commands. The easy version probably allowed more.
+    // The key is to use the "digit" operation to reduce x to a small number, then use a combination of mul and add to reach n, but we need to know x.
+    // How to know x with few commands? We can use the fact that we can do "div" to test divisibility, and we can do "add" to test if x is in a certain range? No, add only tells us if the result is in [1, 1e18].
+    
+    // Wait, we can use "add" with a negative number to test if x > some value. For example, "add -1e9". If x > 1e9, then x - 1e9 >= 1, so it succeeds. If x <= 1e9, it fails (result <= 0). So we can test if x > 1e9.
+    // But x is initially <= 1e9, so "add -1e9" would always fail (since x <= 1e9, x - 1e9 <= 0). So that doesn't help.
+    
+    // What if we do "add 1e18 - 1e9"? As above, it succeeds for all x <= 1e9. Then x becomes 1e18 - 1e9 + x.
+    // Now x is huge. Then we can do "div 1e18 - 1e9"? That would give 1 + x/(1e18-1e9)? Not integer.
+    
+    // Let's try a different approach: we can make x become 0? No.
+    
+    // Maybe we can use the fact that we can do "mul" by a number that makes x * y overflow for some x, but not for others. That could tell us something about x.
+    // For example, if we do "mul 1e18", then if x > 1, it overflows. If x = 1, it succeeds. So we can test if x = 1.
+    // After digit, x in [1,81]. If we do "mul 1e18", it succeeds only if x = 1 (since 1*1e18 = 1e18 <= 1e18). For x >= 2, 2*1e18 > 1e18, so fails.
+    // So we can test if x = 1 with one command.
+    // If it succeeds, x becomes 1e18. Then we can do "div n"? No, we want to reach n.
+    // If x = 1, we can just do "mul n" to get n. But we used one command to test, so we have 3 left. We can do: digit (1), mul 1e18 (test if x=1). If success, x=1e18, then we need to get to n. We can do "div 1e18/n"? Not necessarily integer.
+    // Actually, if x=1, we can just do "add n-1" to get n. But we don't know if x=1 until we test.
+    
+    // Let's design a decision tree. After digit, x = s in [1,81].
+    // We have 3 commands left.
+    // We can try to make x become n by doing: mul a, add b. We need a*s + b = n.
+    // We can choose a and b based on s? But we don't know s.
+    // However, we can try a sequence that works for all s? No

@@ -1,0 +1,88 @@
+// Hint6
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+
+    // f[i] = rating after processing first i elements (0..i-1) without skips
+    vector<int> f(n + 1, 0);
+    for (int i = 0; i < n; ++i) {
+        f[i + 1] = f[i];
+        if (a[i] > f[i + 1]) f[i + 1]++;
+        else if (a[i] < f[i + 1]) f[i + 1]--;
+    }
+
+    // g[i] = rating after processing suffix from i to n-1 (i is 0-indexed)
+    // g[n] = 0
+    vector<int> g(n + 1, 0);
+    for (int i = n - 1; i >= 0; --i) {
+        g[i] = g[i + 1];
+        if (a[i] > g[i]) g[i]++;
+        else if (a[i] < g[i]) g[i]--;
+    }
+
+    // We need max possible rating after skipping some interval [l, r] (1-indexed, l<=r)
+    // After skipping, rating = f[l-1] + (some effect from suffix? No, the rating after skip is just f[l-1] then we continue from g[r] but starting from x = f[l-1]).
+    // Actually, if we skip [l, r], final rating = result of applying suffix starting from r+1 with initial rating = f[l-1].
+    // Let h(start_val, start_idx) be final rating after processing suffix from start_idx with initial start_val.
+    // We can precompute something? Observe that the process is monotonic in a certain sense.
+    // Key idea from hints: binary search on answer k. Check if we can achieve >= k.
+    // To achieve >= k, we need some interval [l, r] such that f[l-1] >= g[r+1] (where g is defined differently? Let's check hint 2: "f_{l-1} >= g_{r+1}").
+    // Let's define g'[i] = minimum initial rating needed to achieve final rating >= k after processing suffix from i.
+    // Then condition: f[l-1] >= g'[r+1].
+    // We can binary search k and check existence of such l <= r.
+
+    // Alternative: compute dp as in hint 3: final answer = max(dp[n][1], dp[n][2]).
+    // Let's try to understand dp approach.
+    // dp[i][0] = max rating after processing first i elements without any skip (so = f[i]).
+    // dp[i][1] = max rating after processing first i elements with exactly one skip interval that ends before or at i.
+    // dp[i][2] = max rating after processing first i elements with skip interval already finished (i.e., we are after the skip).
+    // But hint says final answer is max(dp[n][1], dp[n][2]).
+    // Let's derive transitions.
+
+    // We'll compute dp0[i] = rating without skips (f[i]).
+    // dp1[i] = max rating after processing first i elements, where we have started a skip but not yet finished (i.e., we are currently inside the skip interval).
+    // dp2[i] = max rating after processing first i elements, where we have finished the skip interval.
+
+    // Base: dp0[0] = 0, dp1[0] = -inf, dp2[0] = -inf.
+    // For i from 1 to n:
+    // dp0[i] = update(dp0[i-1], a[i-1])
+    // dp1[i] = max(dp1[i-1], dp0[i-1])  // we can start skip at i (so skip includes i), and while skipping rating doesn't change.
+    // dp2[i] = max(update(dp2[i-1], a[i-1]), update(dp1[i-1], a[i-1])) // we can end skip before i, so at i we process normally from either state.
+    // But careful: dp1[i] means we are skipping the i-th contest. So rating remains same as before skip started.
+    // If we start skip at i, rating before skip is dp0[i-1]. So dp1[i] = max(dp1[i-1], dp0[i-1]).
+    // If we are in dp2, we process normally. So dp2[i] = max(update(dp2[i-1], a[i-1]), update(dp1[i-1], a[i-1])).
+    // update(x, val): if val > x then x+1; else if val < x then x-1; else x.
+    // Finally answer = max(dp2[n], dp1[n])? But dp1[n] means we end while skipping, which is allowed (skip till end). So max(dp1[n], dp2[n]).
+    // Let's test with sample.
+
+    auto update = [&](int x, int val) {
+        if (val > x) return x + 1;
+        if (val < x) return x - 1;
+        return x;
+    };
+
+    const int INF = 1e9;
+    vector<int> dp0(n + 1, 0), dp1(n + 1, -INF), dp2(n + 1, -INF);
+    dp0[0] = 0;
+    for (int i = 1; i <= n; ++i) {
+        int val = a[i - 1];
+        dp0[i] = update(dp0[i - 1], val);
+        dp1[i] = max(dp1[i - 1], dp0[i - 1]);
+        dp2[i] = max(update(dp2[i - 1], val), update(dp1[i - 1], val));
+    }
+    cout << max(dp1[n], dp2[n]) << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}

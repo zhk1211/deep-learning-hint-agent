@@ -1,0 +1,77 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1'000'000'007;
+
+long long modpow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        if (k == 0) {
+            cout << 1 << '\n';
+            continue;
+        }
+        long long total = modpow(2, n);
+        long long ways_same;
+        if (n % 2 == 1) {
+            // n is odd: for each bit, AND = XOR happens when all bits are 1 or even number of 1s (including 0)
+            // Actually for odd n, AND=1 iff all 1, XOR=1 iff odd number of 1s -> all 1 is odd count, so AND=1 and XOR=1.
+            // AND=0 and XOR=0: number of subsets with even number of 1s (including 0) = 2^{n-1}.
+            // So total ways for a bit to have AND = XOR: 1 (all 1) + 2^{n-1} (even count, excluding all 1? Wait all 1 is odd count, so even count is exactly 2^{n-1} subsets)
+            // So ways_same = 2^{n-1} + 1.
+            ways_same = (modpow(2, n - 1) + 1) % MOD;
+        } else {
+            // n is even: AND=1 iff all 1, XOR=1 iff odd number of 1s. All 1 is even count? n even -> all 1 is even count, so XOR=0.
+            // So AND=1 and XOR=1 never happens.
+            // AND=0 and XOR=0: subsets with even number of 1s, excluding the all-1 subset (since that gives AND=1, XOR=0).
+            // Number of even subsets = 2^{n-1}. Exclude all-1 subset -> 2^{n-1} - 1.
+            ways_same = (modpow(2, n - 1) - 1 + MOD) % MOD;
+        }
+        // For each bit independently, we need AND >= XOR.
+        // Since bits are independent, we can consider the most significant bit where AND and XOR differ.
+        // Let dp[i] = number of ways for i bits such that AND >= XOR.
+        // We can compute using combinatorics: for the first k-1 bits, they can be anything (total^{k-1}),
+        // and for the highest bit we need AND > XOR, or if equal, we recurse.
+        // Actually we can compute directly: answer = sum_{i=0}^{k-1} (ways_same^i * ways_greater * total^{k-1-i}) + ways_same^k.
+        // where ways_greater = number of ways for a bit such that AND > XOR.
+        // For a single bit, AND > XOR means AND=1 and XOR=0.
+        // AND=1 iff all bits are 1. XOR=0 iff even number of 1s.
+        // So AND=1 and XOR=0 happens iff all bits are 1 AND n is even (since all 1 gives even count).
+        // If n is odd, all 1 gives odd count -> XOR=1, so AND=1 and XOR=0 never happens.
+        long long ways_greater;
+        if (n % 2 == 0) {
+            ways_greater = 1; // all 1
+        } else {
+            ways_greater = 0;
+        }
+        long long ans = 0;
+        long long cur = 1;
+        for (int i = 0; i < k; i++) {
+            // i bits of equality, then one bit of greater, then remaining bits anything
+            long long rem = k - 1 - i;
+            long long add = cur * ways_greater % MOD * modpow(total, rem) % MOD;
+            ans = (ans + add) % MOD;
+            cur = cur * ways_same % MOD;
+        }
+        ans = (ans + cur) % MOD; // all bits equal
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

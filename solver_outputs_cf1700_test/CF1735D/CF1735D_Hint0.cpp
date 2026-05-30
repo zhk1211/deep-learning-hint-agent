@@ -1,0 +1,53 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> cards(n, vector<int>(k));
+    map<vector<int>, int> idx;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < k; ++j) {
+            cin >> cards[i][j];
+        }
+        idx[cards[i]] = i;
+    }
+
+    vector<vector<int>> sets_with(n);
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            vector<int> third(k);
+            for (int t = 0; t < k; ++t) {
+                if (cards[i][t] == cards[j][t]) {
+                    third[t] = cards[i][t];
+                } else {
+                    third[t] = 3 - cards[i][t] - cards[j][t];
+                }
+            }
+            auto it = idx.find(third);
+            if (it != idx.end()) {
+                int l = it->second;
+                if (l > j) {
+                    sets_with[i].push_back(l);
+                    sets_with[j].push_back(l);
+                    sets_with[l].push_back(i);
+                    sets_with[l].push_back(j);
+                }
+            }
+        }
+    }
+
+    long long ans = 0;
+    for (int i = 0; i < n; ++i) {
+        int sz = sets_with[i].size();
+        if (sz >= 2) {
+            ans += 1LL * sz * (sz - 1) / 2;
+        }
+    }
+    cout << ans / 2 << "\n";
+    return 0;
+}

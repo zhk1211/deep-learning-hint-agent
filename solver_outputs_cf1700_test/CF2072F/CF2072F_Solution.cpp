@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        int N = n - 1;
+        for (int j = 1; j <= n; ++j) {
+            int r = j - 1;
+            if ((r & N) == r) {
+                cout << k;
+            } else {
+                cout << 0;
+            }
+            if (j < n) cout << ' ';
+        }
+        cout << '\n';
+    }
+    return 0;
+}

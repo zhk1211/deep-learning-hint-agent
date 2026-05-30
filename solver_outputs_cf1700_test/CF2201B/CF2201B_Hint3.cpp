@@ -1,0 +1,41 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        if (k < n || k > 2 * n - 1) {
+            cout << "NO\n";
+            continue;
+        }
+        if (k == 2 * n) {
+            cout << "NO\n";
+            continue;
+        }
+        cout << "YES\n";
+        vector<int> a(2 * n);
+        int pairs_2 = k - n;
+        int pairs_1 = n - pairs_2;
+        int idx = 0;
+        for (int i = 1; i <= pairs_1; ++i) {
+            a[idx++] = i;
+            a[idx++] = i;
+        }
+        for (int i = pairs_1 + 1; i <= n; ++i) {
+            a[idx++] = i;
+        }
+        for (int i = pairs_1 + 1; i <= n; ++i) {
+            a[idx++] = i;
+        }
+        for (int i = 0; i < 2 * n; ++i) {
+            cout << a[i] << " \n"[i == 2 * n - 1];
+        }
+    }
+    return 0;
+}

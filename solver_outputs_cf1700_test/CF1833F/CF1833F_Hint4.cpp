@@ -1,0 +1,58 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1e9 + 7;
+
+long long modpow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        sort(a.begin(), a.end());
+        vector<pair<int, int>> comp;
+        for (int x : a) {
+            if (comp.empty() || comp.back().first != x) {
+                comp.push_back({x, 1});
+            } else {
+                comp.back().second++;
+            }
+        }
+        int k = comp.size();
+        vector<long long> pref(k + 1, 1);
+        for (int i = 0; i < k; ++i) {
+            pref[i + 1] = pref[i] * comp[i].second % MOD;
+        }
+        long long ans = 0;
+        int l = 0;
+        for (int r = 0; r < k; ++r) {
+            while (comp[r].first - comp[l].first >= m) {
+                ++l;
+            }
+            if (r - l + 1 >= m) {
+                long long ways = pref[r + 1] * modpow(pref[l], MOD - 2) % MOD;
+                ans = (ans + ways) % MOD;
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

@@ -1,0 +1,86 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<ll> d(m);
+    for (int i = 0; i < m; ++i) {
+        cin >> d[i];
+    }
+    sort(d.begin(), d.end());
+    
+    // Check that each value appears exactly twice
+    for (int i = 0; i < m; i += 2) {
+        if (d[i] != d[i+1]) {
+            cout << "NO\n";
+            return;
+        }
+    }
+    
+    // Now we have n distinct values, each repeated twice
+    // Let's extract the unique values in increasing order
+    vector<ll> vals;
+    for (int i = 0; i < m; i += 2) {
+        vals.push_back(d[i]);
+    }
+    
+    // We'll reconstruct a_n, a_{n-1}, ..., a_1
+    // Let S = sum_{j=1}^{n} a_j (positive ones)
+    // d_{2n} corresponds to the largest a (a_n)
+    // d_{2n} = 2 * n * a_n
+    // But we need to check divisibility and consistency
+    
+    vector<ll> a(n);
+    ll sum_positive = 0;
+    
+    // Process from largest to smallest
+    for (int i = n - 1; i >= 0; --i) {
+        // The current d value for this a_i is vals[i]
+        // d_i = 2 * (i+1) * a_i + 2 * sum_{j=i+1}^{n-1} a_j
+        // Actually, careful: vals is sorted ascending, so vals[n-1] is largest
+        // Let's re-index: let b[0] < b[1] < ... < b[n-1] be the unique d values
+        // b[k] corresponds to a_{k+1} (1-indexed)
+        // Formula: b[k] = 2 * (k+1) * a_{k+1} + 2 * sum_{j=k+2}^{n} a_j
+        // We can compute a_{k+1} = (b[k] - 2 * sum_{j=k+2}^{n} a_j) / (2 * (k+1))
+        
+        ll num = vals[i] - 2 * sum_positive;
+        ll den = 2 * (i + 1);
+        if (num <= 0 || num % den != 0) {
+            cout << "NO\n";
+            return;
+        }
+        a[i] = num / den;
+        sum_positive += a[i];
+    }
+    
+    // Check that all a_i are distinct and positive
+    // Since we constructed them in increasing order? Actually we constructed from largest to smallest,
+    // but we need to ensure a_1 < a_2 < ... < a_n and all > 0
+    for (int i = 0; i < n; ++i) {
+        if (a[i] <= 0) {
+            cout << "NO\n";
+            return;
+        }
+        if (i > 0 && a[i] <= a[i-1]) {
+            cout << "NO\n";
+            return;
+        }
+    }
+    
+    cout << "YES\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

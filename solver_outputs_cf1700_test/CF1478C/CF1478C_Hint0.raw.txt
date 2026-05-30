@@ -1,0 +1,77 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<ll> d(2 * n);
+    for (int i = 0; i < 2 * n; ++i) {
+        cin >> d[i];
+    }
+    sort(d.begin(), d.end());
+    
+    // Check that each value appears exactly twice
+    for (int i = 0; i < 2 * n; i += 2) {
+        if (d[i] != d[i + 1]) {
+            cout << "NO\n";
+            return;
+        }
+    }
+    
+    // Remove duplicates
+    d.erase(unique(d.begin(), d.end()), d.end());
+    if ((int)d.size() != n) {
+        cout << "NO\n";
+        return;
+    }
+    
+    // Now d has n distinct values, sorted
+    // We'll reconstruct the positive elements of a: x1 < x2 < ... < xn
+    // d_i corresponds to sum of absolute differences for a_i and its negative counterpart
+    // For the largest positive element x_n, its d value is 2 * n * x_n
+    // For x_{n-1}, d = 2*(n-1)*x_{n-1} + 2*sum_{j>n-1} x_j
+    // In general: d_i = 2 * i * x_i + 2 * sum_{j=i+1..n} x_j
+    
+    vector<ll> x(n);
+    ll sum = 0;
+    for (int i = n - 1; i >= 0; --i) {
+        // d[i] = 2 * (i+1) * x_i + 2 * sum
+        // Note: i is 0-indexed, but the formula uses 1-indexed position
+        ll pos = i + 1; // 1-indexed position among positives
+        ll val = d[i] - 2 * sum;
+        if (val <= 0 || val % (2 * pos) != 0) {
+            cout << "NO\n";
+            return;
+        }
+        x[i] = val / (2 * pos);
+        sum += x[i];
+    }
+    
+    // Check that all x_i are distinct and positive
+    for (int i = 0; i < n; ++i) {
+        if (x[i] <= 0) {
+            cout << "NO\n";
+            return;
+        }
+        if (i > 0 && x[i] <= x[i - 1]) {
+            cout << "NO\n";
+            return;
+        }
+    }
+    
+    cout << "YES\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

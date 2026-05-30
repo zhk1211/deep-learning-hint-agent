@@ -1,0 +1,26 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<pair<long long, int>> a(n);
+        for (int i = 0; i < n; ++i) {
+            long long x, y;
+            cin >> x >> y;
+            a[i] = {x + y, i + 1};
+        }
+        sort(a.begin(), a.end());
+        for (int i = 0; i < n / 2; ++i) {
+            cout << a[i].second << ' ' << a[n - 1 - i].second << '\n';
+        }
+    }
+    return 0;
+}

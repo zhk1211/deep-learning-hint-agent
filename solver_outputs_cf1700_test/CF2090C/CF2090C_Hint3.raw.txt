@@ -1,0 +1,269 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int INF = 1e9;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int q;
+    cin >> q;
+    while (q--) {
+        int n;
+        cin >> n;
+        vector<int> t(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> t[i];
+        }
+
+        // Precompute table cells and their distances
+        // Tables are indexed by (x, y) where table occupies:
+        // (3x+1,3y+1), (3x+1,3y+2), (3x+2,3y+1), (3x+2,3y+2)
+        // Distance from (0,0) to a cell (r,c) is r+c (Manhattan distance)
+        // For a table at (x,y), the four cells have distances:
+        // (3x+1)+(3y+1) = 3x+3y+2
+        // (3x+1)+(3y+2) = 3x+3y+3
+        // (3x+2)+(3y+1) = 3x+3y+3
+        // (3x+2)+(3y+2) = 3x+3y+4
+        // The minimum distance to reach that table is 3x+3y+2 (to cell (3x+1,3y+1))
+        // But the guest must end on a table cell, so distance = min over cells of table.
+        // Actually the distance to a table is the minimum distance to any of its cells.
+        // So distance = 3x+3y+2.
+        // We'll generate tables sorted by distance, then by x, then by y.
+        // Since n <= 50000, max distance needed is about O(n). We can generate up to some limit.
+        // The maximum table index (x or y) needed: distance = 3x+3y+2 <= 4*n? Actually hint says x1 <= x0 <= 4n.
+        // We'll generate tables with distance up to, say, 4*n + 10.
+        // But we need to generate them in order of (distance, x, y).
+        // We can iterate over sum s = x+y, then x from 0 to s, y = s-x.
+        // distance = 3s+2.
+        // So increasing s gives increasing distance.
+        // For same s, smaller x gives smaller x, and then y = s-x.
+        // So we can just generate in order of s, then x.
+
+        vector<pair<int,int>> tables; // (x,y) of table
+        int max_s = (4 * n + 10) / 3 + 5;
+        for (int s = 0; s <= max_s; ++s) {
+            for (int x = 0; x <= s; ++x) {
+                int y = s - x;
+                tables.emplace_back(x, y);
+            }
+        }
+        // Now tables are sorted by distance (3s+2), then x, then y.
+
+        // State: for each table, we need to know:
+        // - occupied cells (4 bits)
+        // - whether table is completely unoccupied (for type 0)
+        // We'll use arrays indexed by table index in the generated order.
+        // But number of tables could be up to ~ (max_s+1)*(max_s+2)/2.
+        // max_s ~ 4*50000/3 ~ 66666, so tables ~ 2.2e9 - too large!
+        // We need a smarter way. We only need to track tables that might be used.
+        // Since n <= 50000, at most 50000 tables will be used.
+        // We can maintain a set of candidate tables for type 0 and type 1.
+        // But we need to find the "nearest" according to rules.
+        // We can maintain pointers/indices for the next candidate for each type.
+        // For type 1: nearest vacant table cell (any free cell in a table).
+        // For type 0: nearest table that is completely unoccupied.
+        // We can iterate through tables in order, and maintain the smallest index that satisfies condition.
+        // Since we process guests sequentially, we can keep two pointers: ptr0 and ptr1.
+        // ptr0 points to the smallest index (in sorted tables) that is completely unoccupied.
+        // ptr1 points to the smallest index that has at least one free cell.
+        // When a guest arrives, we take the appropriate pointer, find the table, choose the specific cell according to tie-breaking (smallest x, then y among cells of that table? Wait: the problem says: "If there are multiple table cells at the same distance, the guests choose the cell with the smallest x, and if there are still ties, they choose among those the cell with the smallest y."
+        // But note: the distance to a table is the minimum distance to any of its cells. However, if multiple tables have the same minimum distance, we compare tables by the cell that achieves that minimum? Actually: "If there are multiple table cells at the same distance, the guests choose the cell with the smallest x, and if there are still ties, they choose among those the cell with the smallest y."
+        // This means we compare individual cells, not tables. But the minimum distance to a table is achieved at cell (3x+1,3y+1) with distance 3x+3y+2. The other cells have larger distances. So for a given table, the nearest cell is (3x+1,3y+1). If multiple tables have the same minimum distance, we compare the coordinates of that nearest cell. Since (3x+1,3y+1) has x = 3x+1, y = 3y+1, comparing by x then y is equivalent to comparing by table x then table y. So our table ordering (by distance, then x, then y) matches the tie-breaking for the nearest cell.
+        // However, for type 1, the guest can choose any free cell in the table, not necessarily the nearest one? "In their last step, they must move to a neighboring by side a free table cell." The distance is defined as the smallest number of steps needed to reach the table cell. So they will choose the cell that minimizes distance. If multiple cells in the same table have the same distance? Actually the distances to cells of a table are different: 3x+3y+2, 3x+3y+3, 3x+3y+3, 3x+3y+4. So the minimum is unique: (3x+1,3y+1). So they always aim for that cell if it's free. If it's occupied, they might choose another cell in the same table? But the distance to that other cell is larger, so they would prefer a different table with a free cell at smaller distance. So for type 1, they always pick the table with the smallest distance to its nearest free cell. Since the nearest free cell in a table is always (3x+1,3y+1) if free, else the next nearest? Actually if (3x+1,3y+1) is occupied, the next nearest cells are (3x+1,3y+2) and (3x+2,3y+1) with distance +1. So the distance to that table becomes 3x+3y+3. This might be larger than another table's distance. So we need to consider the actual minimum distance among free cells of a table.
+        // This complicates the pointer approach because the distance to a table changes as cells get occupied.
+        // We need a data structure that can give the table with the smallest current minimum distance to a free cell, considering tie-breaking.
+        // Since n is only 50000, we can perhaps maintain a set of tables with their current best distance and free cells.
+        // But number of tables could be large. However, we only ever occupy at most n tables. The tables we consider are only those that could be candidates. The maximum distance we ever need is bounded by O(n). We can generate tables on the fly up to a certain distance, and maintain them in a priority queue or set.
+        // Let's think differently: The distance to a table cell (r,c) is r+c. The cells are of the form (3x+1,3y+1), (3x+1,3y+2), (3x+2,3y+1), (3x+2,3y+2). So the distances are 3(x+y)+2, 3(x+y)+3, 3(x+y)+3, 3(x+y)+4.
+        // For a table with sum s = x+y, the possible distances are 3s+2, 3s+3, 3s+4.
+        // As cells get occupied, the minimum available distance for that table increases.
+        // We can think of each table as having a state: which of the 4 cells are free.
+        // Initially all 4 free -> min distance = 3s+2.
+        // If (1,1) occupied -> min distance becomes 3s+3 (if either (1,2) or (2,1) free).
+        // If both (1,2) and (2,1) occupied -> min distance becomes 3s+4 (if (2,2) free).
+        // If all occupied -> table full.
+        // For type 0, we need a completely unoccupied table -> all 4 cells free -> min distance = 3s+2.
+        // So type 0 always picks a table with all cells free, and the distance is 3s+2.
+        // For type 1, we need the table with the smallest min distance among its free cells.
+        // Since distances are of the form 3s+2, 3s+3, 3s+4, we can group tables by their current min distance.
+        // We can maintain a set of tables for each possible distance value? But distances can go up to ~200000.
+        // Alternatively, we can maintain a priority queue of tables keyed by (min_distance, x, y) for type 1, and similarly for type 0 (but type 0 only needs completely free tables, so key is (3s+2, x, y)).
+        // When a table's state changes, we update its key in the PQ. Since we need to update keys, we can use a set (balanced BST) or we can use a PQ with lazy deletion.
+        // Since n=50000, total operations ~50000, we can afford O(log N) per operation.
+        // We need to generate tables as needed. We can start with an empty set and add tables when their distance might become the minimum.
+        // The minimum distance will only increase. We can keep a "next_s" pointer and add tables with sum s as we need them.
+        // Specifically, we can maintain a variable next_s = 0, and when the PQ for type 1 becomes empty or the top has distance > 3*next_s+2, we add tables with sum = next_s, then increment next_s.
+        // But we also need to handle type 0: it only uses completely free tables. We can maintain a separate PQ/set for type 0, or just a pointer since type 0 always picks the smallest s with a completely free table, and within same s, smallest x. Since type 0 guests don't occupy cells that break the "completely free" condition of other tables? Actually type 0 guest occupies one cell of a completely free table, making it no longer completely free. So that table is removed from type 0 candidates. Type 1 guests can also occupy cells in completely free tables, removing them from type 0 candidates.
+        // So we can maintain a set of completely free tables, sorted by (distance, x, y). Since distance = 3s+2, and s = x+y, ordering by distance then x then y is equivalent to ordering by s then x then y.
+        // We can just maintain a set of pairs (s, x) for completely free tables. Or we can use a pointer: we can iterate s from 0 upwards, and for each s, iterate x from 0 to s, and if the table is completely free, we use it. Since we only need to find the first completely free table, we can just keep a pointer that scans through tables in order. But tables can become completely free? No, they only become occupied, never free again. So the pointer only moves forward. We can maintain an index into the generated tables list for type 0. But we need to generate tables up to the needed distance. Since type 0 might need a table with larger s if smaller s tables are partially occupied by type 1 guests. So we can generate tables on the fly.
+        // Let's design:
+        // We'll generate tables in order of (s, x). We'll assign each table an ID.
+        // We'll maintain an array for each table: occupancy mask (4 bits), and whether it's completely free.
+        // We'll maintain a priority queue for type 1: elements are (min_distance, x, y, table_id). But min_distance can change. We can use a set (std::set) with custom comparator, and update by erasing and inserting.
+        // Since we only need the minimum, we can use a priority queue with lazy deletion: push new states, and when popping, check if the state matches the current actual state of the table.
+        // For type 0, we can maintain a pointer next_table_id that scans through all tables in order. We'll maintain a list of all tables generated so far. When a type 0 guest arrives, we advance next_table_id until we find a table that is completely free. Since tables only become non-free, this pointer never goes back.
+        // But we need to generate tables ahead of time up to the maximum possible distance we might need. The maximum distance is bounded by the maximum number of guests. Each guest occupies one cell. The worst-case distance: if all guests are type 1, they might fill tables in increasing distance order. The maximum distance is roughly O(n). Specifically, each table has 4 cells, so n guests occupy at most n cells, so they can fill at most n tables partially. The maximum s such that the number of tables with sum <= s is >= n. Number of tables with sum <= s is (s+1)(s+2)/2. For n=50000, s ~ sqrt(2n) ~ 316. So s is at most about 316. Then distance = 3s+2 ~ 950. That's small! Wait, but type 0 guests require completely free tables. If many type 0 guests come, they each take a new table. So they might need up to n tables. So s can be up to ~316. So the maximum s is around 316. That means we can easily generate all tables up to s=400. Number of tables ~ 400*401/2 ~ 80,000. That's very manageable!
+        // Let's verify: n=50000, each type 0 guest takes a new completely free table. So they will use tables with increasing s. The number of tables with sum <= s is (s+1)(s+2)/2. For s=315, that's 316*317/2 = 50086. So s=315 is enough for 50000 tables. So max s <= 315. Distance = 3*315+2 = 947. So we can just precompute all tables up to s=350 (to be safe) at the start of each test case. That's only ~60k tables. We can store them in an array.
+        // Then we can maintain for each table: mask (0-15), and a boolean completely_free.
+        // For type 1, we need to quickly find the table with smallest current min distance. Since the number of tables is small (~60k), we could just scan? 60k * 50000 = 3e9, too slow.
+        // We need a faster way. We can maintain a set of tables for each possible distance. The distances are integers from 2 to ~1000. We can have an array of sets (or lists) for each distance, storing table indices that currently have that min distance. Since distance only increases for a table, we can maintain a pointer to the current minimum distance that has non-empty set. When a table's min distance changes, we move it to the new distance's set.
+        // Alternatively, we can use a priority queue of (min_distance, x, y, table_id) with lazy deletion. Since each table's state changes at most 4 times, total pushes = O(tables * 4) = 240k. That's very efficient.
+        // For type 0, we can just maintain a pointer to the next completely free table in the precomputed sorted order. Since tables are generated in order of (s, x), we can just iterate through the array of tables. We'll keep an index next_free_table = 0. When a type 0 guest comes, we advance next_free_table until we find a table with completely_free == true. Since tables only become non-free, this pointer only moves forward. Total advances <= number of tables.
+        // So algorithm:
+        // Precompute all tables with s from 0 to MAX_S (say 350). For each s, for x from 0 to s, y = s-x. Store in a vector tables: {x, y}. Also compute distance = 3*s+2 (initial min distance).
+        // Initialize:
+        //   vector<int> mask(tables.size(), 0); // 0 means all free (bits: 0=free, 1=occupied). We'll use 1 for occupied.
+        //   vector<bool> completely_free(tables.size(), true);
+        //   priority_queue for type 1: elements tuple(min_dist, x, y, table_id), using greater<> for min-heap.
+        //   Push all tables initially with min_dist = 3*(x+y)+2.
+        //   next_free_table = 0.
+        // For each guest:
+        //   if t_i == 0:
+        //     while next_free_table < tables.size() && !completely_free[next_free_table]) next_free_table++;
+        //     table_id = next_free_table;
+        //     // The guest will occupy the cell (3x+1, 3y+1) because that's the nearest and the table is completely free.
+        //     // But wait: type 0 guest: "they walk to the nearest table cell that belongs to a completely unoccupied table."
+        //     // The nearest cell in that table is (3x+1,3y+1). So they occupy that cell.
+        //     // Update mask: set bit for cell (1,1). We need mapping from (x,y) to cell coordinates.
+        //     // We'll define cell indices: 0: (1,1), 1: (1,2), 2: (2,1), 3: (2,2)
+        //     // Occupying cell 0.
+        //     mask[table_id] |= 1;
+        //     completely_free[table_id] = false;
+        //     // Now the table's min distance might change. It was 3s+2, now cell 0 occupied, so next min is 3s+3 (if cell 1 or 2 free). We need to push new state to PQ.
+        //     // Compute new min distance for this table.
+        //     // We'll write a function to compute min distance from mask.
+        //     // Push (new_min_dist, x, y, table_id) to PQ.
+        //     // Output the cell: (3x+1, 3y+1)
+        //   else (t_i == 1):
+        //     // Pop from PQ until we find a table whose current min distance matches the top's min_dist and the table still has a free cell that achieves that distance.
+        //     // Actually we need to be careful: the PQ stores the min distance at the time of push. If the table's state changed, the old entry is stale. We can check by comparing the top's min_dist with the actual current min distance of that table. If they differ, pop and continue.
+        //     // Also, we need to ensure that the table actually has a free cell. If mask == 15, it's full, so we shouldn't consider it. We can just not push when full.
+        //     // When we find a valid table, we need to choose which cell to occupy. The guest chooses the cell with smallest distance, then smallest x, then smallest y.
+        //     // The cells and their distances from (0,0):
+        //     // cell 0: (3x+1,3y+1) dist = 3x+3y+2
+        //     // cell 1: (3x+1,3y+2) dist = 3x+3y+3
+        //     // cell 2: (3x+2,3y+1) dist = 3x+3y+3
+        //     // cell 3: (3x+2,3y+2) dist = 3x+3y+4
+        //     // Tie-breaking: among cells with the same distance, smaller x, then smaller y.
+        //     // For distance 3x+3y+3, cell 1 has x=3x+1, cell 2 has x=3x+2. So cell 1 is preferred.
+        //     // So the order of preference for the guest is: cell 0, then cell 1, then cell 2, then cell 3.
+        //     // So we just check cells in order 0,1,2,3 and pick the first free one.
+        //     // Occupy that cell, update mask.
+        //     // If the table is not full, compute new min distance and push to PQ.
+        //     // Output the chosen cell coordinates.
+        //
+        // This seems correct and efficient.
+
+        const int MAX_S = 350;
+        struct Table {
+            int x, y;
+        };
+        vector<Table> tables;
+        for (int s = 0; s <= MAX_S; ++s) {
+            for (int x = 0; x <= s; ++x) {
+                int y = s - x;
+                tables.push_back({x, y});
+            }
+        }
+        int T = tables.size();
+        vector<int> mask(T, 0);
+        vector<bool> completely_free(T, true);
+
+        // Priority queue for type 1: (min_dist, x, y, id)
+        // We'll use a tuple and greater.
+        using PQElem = tuple<int, int, int, int>;
+        priority_queue<PQElem, vector<PQElem>, greater<PQElem>> pq;
+
+        // Initialize PQ with all tables
+        for (int i = 0; i < T; ++i) {
+            int s = tables[i].x + tables[i].y;
+            int min_dist = 3 * s + 2;
+            pq.emplace(min_dist, tables[i].x, tables[i].y, i);
+        }
+
+        int next_free_table = 0;
+
+        // Helper to get current min distance of a table given its mask
+        auto get_min_dist = [&](int id) -> int {
+            if (mask[id] == 15) return INF; // full
+            int s = tables[id].x + tables[id].y;
+            // check cells in order 0,1,2,3
+            if (!(mask[id] & 1)) return 3 * s + 2; // cell 0 free
+            if (!(mask[id] & 2) || !(mask[id] & 4)) return 3 * s + 3; // cell 1 or 2 free
+            return 3 * s + 4; // cell 3 free
+        };
+
+        // Helper to get chosen cell coordinates and update mask
+        auto occupy_cell = [&](int id) -> pair<int,int> {
+            int x = tables[id].x, y = tables[id].y;
+            // check cells in order 0,1,2,3
+            if (!(mask[id] & 1)) {
+                mask[id] |= 1;
+                completely_free[id] = false;
+                return {3*x+1, 3*y+1};
+            }
+            if (!(mask[id] & 2)) {
+                mask[id] |= 2;
+                completely_free[id] = false;
+                return {3*x+1, 3*y+2};
+            }
+            if (!(mask[id] & 4)) {
+                mask[id] |= 4;
+                completely_free[id] = false;
+                return {3*x+2, 3*y+1};
+            }
+            // cell 3
+            mask[id] |= 8;
+            completely_free[id] = false;
+            return {3*x+2, 3*y+2};
+        };
+
+        for (int i = 0; i < n; ++i) {
+            if (t[i] == 0) {
+                // Find next completely free table
+                while (next_free_table < T && !completely_free[next_free_table]) {
+                    next_free_table++;
+                }
+                // It's guaranteed that a completely free table exists because we have enough tables.
+                int id = next_free_table;
+                // Occupy cell 0 (the nearest)
+                mask[id] |= 1;
+                completely_free[id] = false;
+                // Push new state to PQ
+                int new_dist = get_min_dist(id);
+                if (new_dist != INF) {
+                    pq.emplace(new_dist, tables[id].x, tables[id].y, id);
+                }
+                cout << 3*tables[id].x+1 << " " << 3*tables[id].y+1 << "\n";
+            } else {
+                // Type 1
+                int id, x, y, dist;
+                do {
+                    auto top = pq.top(); pq.pop();
+                    dist = get<0>(top);
+                    x = get<1>(top);
+                    y = get<2>(top);
+                    id = get<3>(top);
+                    // Check if this entry is stale
+                    if (mask[id] == 15) continue; // full
+                    int actual_dist = get_min_dist(id);
+                    if (actual_dist != dist) continue;
+                    break;
+                } while (true);
+                // Occupy the best cell
+                auto [cx, cy] = occupy_cell(id);
+                cout << cx << " " << cy << "\n";
+                // Push new state if not full
+                if (mask[id] != 15) {
+                    int new_dist = get_min_dist(id);
+                    pq.emplace(new_dist, tables[id].x, tables[id].y, id);
+                }
+            }
+        }
+    }
+    return 0;
+}
+```

@@ -1,0 +1,97 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+const int MAXN = 500000;
+
+vector<long long> fact, inv_fact;
+
+long long mod_pow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+void precompute_factorials(int n) {
+    fact.resize(n + 1);
+    inv_fact.resize(n + 1);
+    fact[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        fact[i] = fact[i - 1] * i % MOD;
+    }
+    inv_fact[n] = mod_pow(fact[n], MOD - 2);
+    for (int i = n - 1; i >= 0; i--) {
+        inv_fact[i] = inv_fact[i + 1] * (i + 1) % MOD;
+    }
+}
+
+long long nCr(int n, int r) {
+    if (r < 0 || r > n) return 0;
+    return fact[n] * inv_fact[r] % MOD * inv_fact[n - r] % MOD;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+
+    vector<vector<int>> test_cases(t, vector<int>(26));
+    int total_sum = 0;
+    for (int i = 0; i < t; i++) {
+        for (int j = 0; j < 26; j++) {
+            cin >> test_cases[i][j];
+            total_sum += test_cases[i][j];
+        }
+    }
+
+    precompute_factorials(total_sum);
+
+    for (auto &c : test_cases) {
+        int sum_all = 0;
+        int odd_sum = 0;
+        int even_sum = 0;
+        vector<int> non_zero;
+        for (int i = 0; i < 26; i++) {
+            sum_all += c[i];
+            if (c[i] > 0) {
+                non_zero.push_back(c[i]);
+            }
+        }
+
+        int odd_positions = (sum_all + 1) / 2;
+        int even_positions = sum_all / 2;
+
+        // dp[i][j] = number of ways using first i letters to get sum j in odd positions
+        vector<long long> dp(odd_positions + 1, 0);
+        dp[0] = 1;
+        for (int cnt : non_zero) {
+            for (int j = odd_positions; j >= cnt; j--) {
+                dp[j] = (dp[j] + dp[j - cnt]) % MOD;
+            }
+        }
+
+        long long ways_to_choose_odd = dp[odd_positions];
+
+        long long arrange_odd = fact[odd_positions];
+        long long arrange_even = fact[even_positions];
+
+        long long denominator = 1;
+        for (int i = 0; i < 26; i++) {
+            if (c[i] > 0) {
+                denominator = denominator * inv_fact[c[i]] % MOD;
+            }
+        }
+
+        long long ans = ways_to_choose_odd * arrange_odd % MOD * arrange_even % MOD * denominator % MOD;
+        cout << ans << '\n';
+    }
+
+    return 0;
+}

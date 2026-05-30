@@ -1,0 +1,48 @@
+// Hint8
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1e9 + 7;
+const int MAX_VAL = 63;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // dp[mask] = number of subsequences with AND exactly equal to mask
+        vector<long long> dp(64, 0);
+        dp[63] = 1; // empty subsequence has AND = 63 (all bits set)
+
+        for (int x : a) {
+            vector<long long> new_dp = dp;
+            for (int mask = 0; mask < 64; ++mask) {
+                int new_mask = mask & x;
+                new_dp[new_mask] = (new_dp[new_mask] + dp[mask]) % MOD;
+            }
+            dp = move(new_dp);
+        }
+
+        long long ans = 0;
+        for (int mask = 0; mask < 64; ++mask) {
+            if (__builtin_popcount(mask) == k) {
+                ans = (ans + dp[mask]) % MOD;
+            }
+        }
+        // subtract the empty subsequence if it was counted
+        if (k == __builtin_popcount(63)) {
+            ans = (ans - 1 + MOD) % MOD;
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

@@ -1,0 +1,32 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> b(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> b[i];
+        }
+        
+        long long ans = LLONG_MIN;
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                for (int k = j + 1; k < n; ++k) {
+                    long long sum = (long long)b[i] + b[j] + b[k];
+                    long long dist = k - i;
+                    ans = max(ans, sum - dist);
+                }
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

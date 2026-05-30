@@ -1,0 +1,46 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+char query(int a, int b, int c, int d) {
+    cout << "? " << a << " " << b << " " << c << " " << d << endl;
+    char res;
+    cin >> res;
+    return res;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        int mx = 0;
+        for (int i = 1; i < n; i++) {
+            char c = query(mx, mx, i, i);
+            if (c == '<') mx = i;
+        }
+        vector<int> v;
+        int best = 0;
+        v.push_back(0);
+        for (int i = 1; i < n; i++) {
+            char c = query(best, mx, i, mx);
+            if (c == '<') {
+                best = i;
+                v.clear();
+                v.push_back(i);
+            } else if (c == '=') {
+                v.push_back(i);
+            }
+        }
+        int mn = v[0];
+        for (int i = 1; i < (int)v.size(); i++) {
+            char c = query(mn, mn, v[i], v[i]);
+            if (c == '>') mn = v[i];
+        }
+        cout << "! " << mx << " " << mn << endl;
+    }
+    return 0;
+}

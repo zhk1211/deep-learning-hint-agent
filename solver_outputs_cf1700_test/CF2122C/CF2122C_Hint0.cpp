@@ -1,0 +1,31 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<pair<int, int>> pts(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> pts[i].first >> pts[i].second;
+        }
+        
+        vector<int> idx(n);
+        iota(idx.begin(), idx.end(), 0);
+        
+        sort(idx.begin(), idx.end(), [&](int i, int j) {
+            return pts[i].first + pts[i].second < pts[j].first + pts[j].second;
+        });
+        
+        for (int i = 0; i < n / 2; ++i) {
+            cout << idx[i] + 1 << ' ' << idx[n - 1 - i] + 1 << '\n';
+        }
+    }
+    return 0;
+}

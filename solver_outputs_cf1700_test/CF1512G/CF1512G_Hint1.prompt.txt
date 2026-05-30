@@ -1,0 +1,69 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Let us denote by $ d(n) $ the sum of all divisors of the number $ n $ , i.e. $ d(n) = \sum\limits_{k | n} k $ .
+
+For example, $ d(1) = 1 $ , $ d(4) = 1+2+4=7 $ , $ d(6) = 1+2+3+6=12 $ .
+
+For a given number $ c $ , find the minimum $ n $ such that $ d(n) = c $ .
+
+Input Format
+The first line contains one integer $ t $ ( $ 1 \le t \le 10^4 $ ). Then $ t $ test cases follow.
+
+Each test case is characterized by one integer $ c $ ( $ 1 \le c \le 10^7 $ ).
+
+Output Format
+For each test case, output:
+
+- "-1" if there is no such $ n $ that $ d(n) = c $ ;
+- $ n $ , otherwise.
+
+Examples
+Sample 1
+Input
+12
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+39
+691
+Output
+1
+-1
+2
+3
+-1
+5
+4
+7
+-1
+-1
+18
+-1
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+If $$$n \le d(n)$$$, then $$$n \le {10}^7$$$.
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

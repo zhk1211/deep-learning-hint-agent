@@ -1,0 +1,124 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, q;
+        cin >> n >> q;
+        vector<int> p(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            cin >> p[i];
+        }
+        string s;
+        cin >> s;
+        s = " " + s; // 1-indexed
+
+        // pos[x] = index of value x in p
+        vector<int> pos(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            pos[p[i]] = i;
+        }
+
+        // We need to check if for every x from 1 to n-1,
+        // the segment [pos[x], pos[x+1]] (or [pos[x+1], pos[x]]) is "connected"
+        // via allowed swaps. The condition for a segment [l, r] to be sortable
+        // is that there is no "blocked" boundary inside.
+        // A boundary between i and i+1 is blocked if s[i] != 'R' or s[i+1] != 'L'.
+        // Actually, the known condition: the array is sortable iff for every i from 1 to n-1,
+        // the maximum position of values 1..i is <= i, OR something like that?
+        // Let's derive:
+        // We can swap i and i+1 if s[i]=='R' and s[i+1]=='L'? Wait:
+        // Operation: if s_i = 'L', swap p_i and p_{i-1}. So to swap across boundary (i, i+1),
+        // we need s_{i+1} = 'L' (swap i+1 with i) OR s_i = 'R' (swap i with i+1).
+        // So the boundary between i and i+1 is "open" if s[i]=='R' or s[i+1]=='L'.
+        // If both are false, i.e., s[i]=='L' and s[i+1]=='R', then no swap can cross that boundary.
+        // So the array is partitioned into blocks separated by "blocked" boundaries.
+        // Within a block, we can arbitrarily permute? Actually, with these swaps, we can achieve any permutation
+        // within a connected component (since swaps generate the full symmetric group on the component).
+        // So the condition for being able to sort is: for every x, the positions of 1..x must form a contiguous segment
+        // in the "block" decomposition? More precisely, the set of positions of values 1..x must be exactly a union of whole blocks.
+        // Equivalent: for every x, the maximum position among 1..x minus the minimum position among 1..x + 1 == x?
+        // Actually, if the set of positions of 1..x is exactly some interval [L, R], then R-L+1 = x.
+        // And this interval must not be split by a blocked boundary.
+        // But we can check a simpler condition: For each boundary i (between i and i+1), if it is blocked,
+        // then the set of values on the left side must be exactly {1..i}. Because if there is a value > i on the left,
+        // it needs to cross to the right, which is impossible. Similarly, if there is a value <= i on the right,
+        // it needs to cross left.
+        // So the condition is: for every blocked boundary i, max_{j=1..i} p_j <= i and min_{j=i+1..n} p_j > i.
+        // Since p is a permutation, max_{1..i} p_j <= i is equivalent to {p_1..p_i} = {1..i}.
+        // So we just need to check if for every blocked boundary i, the prefix of length i contains exactly the values 1..i.
+        // This can be checked by maintaining the maximum value in the prefix up to i.
+        // Let pref_max[i] = max(p_1..p_i). The condition is pref_max[i] == i.
+        // So the array is sortable iff for all i where boundary i is blocked, pref_max[i] == i.
+
+        // We'll maintain the number of blocked boundaries that violate the condition.
+        // A boundary i is blocked if s[i]=='L' and s[i+1]=='R' (since s[1]='R', s[n]='L' by problem statement, but we still check).
+        // Actually, the problem guarantees s[1]='R' and s[n]='L', so boundaries 1 and n-1? Wait, boundary i is between i and i+1.
+        // For i=1: s[1]='R', s[2] can be anything. Blocked if s[1]=='L' and s[2]=='R' -> false because s[1]='R'. So boundary 1 is never blocked.
+        // For i=n-1: s[n-1] can be anything, s[n]='L'. Blocked if s[n-1]=='L' and s[n]=='R' -> false because s[n]='L'. So boundary n-1 is never blocked.
+        // So only internal boundaries 2..n-2 can be blocked.
+
+        vector<int> pref_max(n + 1, 0);
+        for (int i = 1; i <= n; ++i) {
+            pref_max[i] = max(pref_max[i-1], p[i]);
+        }
+
+        auto is_blocked = [&](int i) -> bool {
+            // boundary between i and i+1
+            return (s[i] == 'L' && s[i+1] == 'R');
+        };
+
+        int bad_count = 0;
+        for (int i = 1; i < n; ++i) {
+            if (is_blocked(i) && pref_max[i] != i) {
+                ++bad_count;
+            }
+        }
+
+        while (q--) {
+            int idx;
+            cin >> idx;
+            // flip s[idx]
+            // boundaries affected: idx-1 (between idx-1 and idx) and idx (between idx and idx+1)
+            // We need to update bad_count for these boundaries.
+
+            auto update = [&](int i) {
+                if (i < 1 || i >= n) return; // boundary i must be in 1..n-1
+                bool was_blocked = (s[i] == 'L' && s[i+1] == 'R');
+                if (was_blocked && pref_max[i] != i) {
+                    --bad_count;
+                }
+                // after flip, we will recompute
+            };
+
+            // remove old contributions
+            update(idx - 1);
+            update(idx);
+
+            // flip
+            s[idx] = (s[idx] == 'L' ? 'R' : 'L');
+
+            // add new contributions
+            auto add = [&](int i) {
+                if (i < 1 || i >= n) return;
+                bool now_blocked = (s[i] == 'L' && s[i+1] == 'R');
+                if (now_blocked && pref_max[i] != i) {
+                    ++bad_count;
+                }
+            };
+
+            add(idx - 1);
+            add(idx);
+
+            cout << (bad_count == 0 ? "YES" : "NO") << '\n';
+        }
+    }
+    return 0;
+}
+```

@@ -1,0 +1,101 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+void solve() {
+    int n, m, q;
+    cin >> n >> m >> q;
+    vector<ll> a(n), b(m);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    for (int i = 0; i < m; ++i) cin >> b[i];
+    sort(a.rbegin(), a.rend());
+    sort(b.rbegin(), b.rend());
+    vector<ll> prefA(n + 1, 0), prefB(m + 1, 0);
+    for (int i = 0; i < n; ++i) prefA[i + 1] = prefA[i] + a[i];
+    for (int i = 0; i < m; ++i) prefB[i + 1] = prefB[i] + b[i];
+    
+    // Precompute best sum for each possible total count k (0..n+m) without restrictions
+    int maxK = n + m;
+    vector<ll> bestSum(maxK + 1, 0);
+    // We'll use two pointers: i from A, j from B
+    // Actually we can precompute by considering all possible splits
+    // For each k, we want max over i in [max(0, k-m), min(k, n)] of prefA[i] + prefB[k-i]
+    // Since arrays are sorted descending, the function f(i) = prefA[i] + prefB[k-i] is concave?
+    // Not necessarily concave, but we can compute using two pointers because as k increases, optimal i is non-decreasing.
+    // Let's compute best i for each k using monotonicity.
+    vector<int> optI(maxK + 1, 0);
+    int curI = 0;
+    for (int k = 0; k <= maxK; ++k) {
+        int low = max(0, k - m);
+        int high = min(k, n);
+        // start from previous optimal i, but ensure it's within bounds
+        if (curI < low) curI = low;
+        if (curI > high) curI = high;
+        // try to increase i while it improves sum
+        while (curI + 1 <= high) {
+            ll curVal = prefA[curI] + prefB[k - curI];
+            ll nextVal = prefA[curI + 1] + prefB[k - (curI + 1)];
+            if (nextVal >= curVal) {
+                ++curI;
+            } else {
+                break;
+            }
+        }
+        // also try to decrease i if needed (should not happen due to monotonicity, but just in case)
+        while (curI - 1 >= low) {
+            ll curVal = prefA[curI] + prefB[k - curI];
+            ll prevVal = prefA[curI - 1] + prefB[k - (curI - 1)];
+            if (prevVal >= curVal) {
+                --curI;
+            } else {
+                break;
+            }
+        }
+        optI[k] = curI;
+        bestSum[k] = prefA[curI] + prefB[k - curI];
+    }
+    
+    // Answer queries
+    while (q--) {
+        int x, y, z;
+        cin >> x >> y >> z;
+        // We need to choose exactly z cards, at most x from A, at most y from B.
+        // The feasible i (number from A) must satisfy: 0 <= i <= x, 0 <= z-i <= y => max(0, z-y) <= i <= min(x, z)
+        int low = max(0, z - y);
+        int high = min(x, z);
+        if (low > high) {
+            cout << 0 << "\n";
+            continue;
+        }
+        // We need max over i in [low, high] of prefA[i] + prefB[z-i]
+        // Since bestSum[z] is the global maximum for total z, if optI[z] is within [low, high], answer is bestSum[z].
+        // Otherwise, the maximum will be at one of the boundaries low or high, because the function is unimodal?
+        // Actually, f(i) = prefA[i] + prefB[z-i] is concave? Let's check: second difference = (a[i+1]-a[i]) - (b[z-i]-b[z-i-1]).
+        // Since a and b are sorted descending, a[i] is non-increasing, b[j] is non-increasing.
+        // The sequence of differences a[i] - b[z-i] is non-increasing? Not necessarily, but f(i) is concave if a is concave and b is concave? Not guaranteed.
+        // However, we can just evaluate at boundaries and also at optI[z] if it's inside, because the maximum of a function that is first increasing then decreasing (unimodal) on an interval is at one of the boundaries or the peak.
+        // Is f(i) unimodal? Let's test: f(i+1)-f(i) = a[i+1] - b[z-i-1]. Since a is non-increasing and b is non-increasing, as i increases, a[i+1] decreases, and b[z-i-1] increases (because index decreases). So the difference strictly decreases. Thus f(i) is concave (differences decreasing) => unimodal.
+        // So the maximum over [low, high] is at one of the endpoints or the global peak if inside.
+        ll ans = 0;
+        if (optI[z] >= low && optI[z] <= high) {
+            ans = bestSum[z];
+        } else {
+            ans = max(prefA[low] + prefB[z - low], prefA[high] + prefB[z - high]);
+        }
+        cout << ans << "\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

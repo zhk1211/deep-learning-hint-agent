@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+    while (T--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        vector<int> freq(n + 1, 0);
+        int mx = 0;
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+            freq[a[i]]++;
+            if (freq[a[i]] > mx) mx = freq[a[i]];
+        }
+        int cnt = 0;
+        for (int i = 1; i <= n; ++i) {
+            if (freq[i] == mx) cnt++;
+        }
+        int ans = (n - cnt) / (mx - 1) - 1;
+        cout << ans << '\n';
+    }
+    return 0;
+}

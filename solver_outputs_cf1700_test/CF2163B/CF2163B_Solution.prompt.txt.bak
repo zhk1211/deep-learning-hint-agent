@@ -1,0 +1,342 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+You are given a permutation $ ^{\text{∗}} $ $ p $ of every integer from $ 1 $ to $ n $ . You also own a binary $ ^{\text{†}} $ string $ s $ of size $ n $ where $ s_i = \mathtt{0} $ for all $ 1 \le i \le n $ . You may do the following operation at most $ 5 $ times:
+
+- Choose any two integers $ l $ and $ r $ such that $ 1 \le l \le r \le n $ . Then, for every $ i $ such that $ l < i < r $ and $ \min(p_l, p_r) < p_i < \max(p_l, p_r) $ hold at the same time, you will set $ s_i $ to $ \mathtt{1} $ .
+
+You are also given a binary string $ x $ of size $ n $ . After performing operations, it must hold for every $ 1 \le i \le n $ that if $ x_i = \mathtt{1} $ , then $ s_i = \mathtt{1} $ . Note that if $ x_i = \mathtt{0} $ , then $ s_i $ can have any value.
+
+Figure out any sequence of at most $ 5 $ operations such that the aforementioned condition is satisfied, or report that it is impossible to do so. Note that you do not have to minimize the number of operations you make.
+
+$ ^{\text{∗}} $ A permutation $ p $ of every integer from $ 1 $ to $ n $ is a sequence of elements from $ 1 $ to $ n $ such that every element appears exactly once.
+
+$ ^{\text{†}} $ A string $ b $ of size $ m $ is considered binary if and only if $ b_i = \mathtt{0} $ or $ b_i = \mathtt{1} $ for all $ 1 \le i \le m $ .
+
+Input Format
+Each test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \le t \le 10^4 $ ). The description of the test cases follows.
+
+The first line of each test case contains a single integer $ n $ ( $ 3 \le n \le 2 \cdot 10^5 $ ) — the size of the array.
+
+The second line contains exactly $ n $ integers $ p_1, p_2, \ldots, p_n $ ( $ 1 \le p_i \le n $ , the elements of $ p $ are pairwise distinct) — where $ p_i $ is the $ i $ -th element of the permutation.
+
+The third line contains a single binary string $ x $ of size $ n $ .
+
+It is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \cdot 10^5 $ .
+
+Output Format
+For each test case, if it is impossible to perform operations such that the constraint is satisfied, output $ -1 $ .
+
+Otherwise, output an integer $ 0 \le k \le 5 $ , the number of operations. On the $ i $ -th of the next $ k $ lines, output two integers $ 1 \le l_i \le r_i \le n $ , the bounds of the $ i $ -th operation that is performed. If there are multiple correct solutions, output any of them.
+
+Examples
+Sample 1
+Input
+6
+3
+1 2 3
+010
+5
+3 4 2 1 5
+11111
+6
+1 3 2 4 6 5
+001100
+6
+6 2 3 4 5 1
+110110
+5
+2 1 4 3 5
+00000
+5
+2 5 3 1 4
+00100
+Output
+1
+1 3
+-1
+2
+1 5
+2 6
+-1
+0
+1
+2 4
+
+Note
+In the first example, $ p = [1, 2, 3] $ , and $ x = \mathtt{010} $ . We can perform a single operation, with $ l = 1 $ and $ r = 3 $ . After the operation, we set $ s_2 $ to $ \mathtt{1} $ since $ l < 2 < r $ and $ \min(p_l, p_r) < p_2 = 2 < \max(p_l, p_r) $ hold at the same time. As a result, $ s = \mathtt{010} $ .
+
+In the second example, it can be shown that there does not exist a correct sequence of at most $ 5 $ operations, so we output $ -1 $ .
+
+In the third example, $ p = [1, 3, 2, 4, 6, 5] $ and $ x = \mathtt{001100} $ . After performing an operation for $ l = 1 $ and $ r = 5 $ , then $ s = \mathtt{011100} $ . If we also perform an operation for $ l = 2 $ and $ r = 6 $ , then $ s $ will remain the same. The string $ s = \mathtt{011100} $ is valid, because for every position where $ x $ has a $ \mathtt{1} $ , then $ s $ also has a $ \mathtt{1} $ at that position.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+Let the position of integer $$$x$$$ in the permutation $$$p$$$ be denoted by $$$pos_x$$$.
+Let's see for which indices $$$i$$$ we can never set $$$s_i$$$ to $$$1$$$, even with an infinite number of operations. First of all, in an operation $$$(l, r)$$$, we only consider indices $$$i$$$ such that $$$l \lt i \lt r$$$. This means that we can never set $$$s_1$$$ or $$$s_n$$$ to $$$1$$$. In addition, we only consider indices $$$i$$$ such that $$$p_i$$$ is between $$$p_l$$$ and $$$p_r$$$, but not equal to those. This means that we can never set $$$s_{pos_1}$$$ or $$$s_{pos_n}$$$ to $$$1$$$. In general, if $$$x_1 = 1$$$, $$$x_n = 1$$$, $$$x_{pos_1} = 1$$$, or $$$x_{pos_n} = 1$$$, it is impossible to solve the problem.
+Now I will show that the problem is always solvable for any binary string $$$x$$$ such that $$$x_1 = x_n = x_{pos_1} = x_{pos_n} = 0$$$, within $$$5$$$ operations.
+WLOG, assume $$$pos_1 \lt pos_n$$$. It is natural to think about using $$$pos_1$$$ and $$$pos_n$$$ as endpoints for our operations. For example, by using the operations $$$(1, pos_1)$$$ and $$$(1, pos_n)$$$, we will have set $$$s_i = 1$$$ for every $$$1 \lt i \lt pos_1$$$. Likewise, with the operations $$$(pos_1, n)$$$ and $$$(pos_n, n)$$$, we will have set $$$s_i = 1$$$ for every $$$pos_n \lt i \lt n$$$. By using the operation $$$(pos_1, pos_n)$$$, we have set $$$s_i = 1$$$ for every $$$pos_1 \lt i \lt pos_n$$$.
+With these $$$5$$$ operations, we have finally set $$$s_i = 1$$$ for every $$$i$$$ in $$$(1, pos_1) \cup (pos_1, pos_n) \cup (pos_n, n)$$$, which guarantees we have solved the problem.
+
+Implementation
+#include
+<
+bits
+/
+stdc
+++.
+h
+>
+using
+namespace
+std
+;
+void
+solve
+()
+{
+int
+n
+;
+cin
+>>
+n
+;
+vector
+<int>
+a
+(
+n
++
+1
+);
+int
+mn
+=
+1
+,
+mx
+=
+1
+;
+for
+(
+int
+i
+=
+1
+;
+i
+<=
+n
+;
+i
+++)
+{
+cin
+>>
+a
+[
+i
+];
+if
+(
+a
+[
+i
+]
+<
+a
+[
+mn
+])
+mn
+=
+i
+;
+if
+(
+a
+[
+i
+]
+>
+a
+[
+mx
+])
+mx
+=
+i
+;
+}
+string
+t
+;
+cin
+>>
+t
+;
+t
+=
+" "
++
+t
+;
+if
+(
+t
+[
+1
+]
+==
+'1'
+||
+t
+[
+n
+]
+==
+'1'
+)
+{
+cout
+<<
+-
+1
+<<
+"\n"
+;
+return
+;
+}
+if
+(
+t
+[
+mn
+]
+==
+'1'
+||
+t
+[
+mx
+]
+==
+'1'
+)
+{
+cout
+<<
+-
+1
+<<
+"\n"
+;
+return
+;
+}
+cout
+<<
+5
+<<
+"\n"
+;
+cout
+<<
+1
+<<
+" "
+<<
+mn
+<<
+"\n"
+;
+cout
+<<
+1
+<<
+" "
+<<
+mx
+<<
+"\n"
+;
+cout
+<<
+mn
+<<
+" "
+<<
+n
+<<
+"\n"
+;
+cout
+<<
+mx
+<<
+" "
+<<
+n
+<<
+"\n"
+;
+cout
+<<
+min
+(
+mn
+,
+mx
+)
+<<
+" "
+<<
+max
+(
+mn
+,
+mx
+)
+<<
+"\n"
+;
+}
+int
+main
+()
+{
+int
+t
+;
+cin
+>>
+t
+;
+while
+(
+t
+--)
+solve
+();
+return
+0
+;
+}
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

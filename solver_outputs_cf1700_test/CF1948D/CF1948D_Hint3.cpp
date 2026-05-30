@@ -1,0 +1,36 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        string s;
+        cin >> s;
+        int n = (int)s.size();
+        int ans = 0;
+        
+        for (int len = 2; len <= n; len += 2) {
+            int half = len / 2;
+            int ok = 0;
+            for (int i = 0; i + half < n; ++i) {
+                if (s[i] == '?' || s[i + half] == '?' || s[i] == s[i + half]) {
+                    ok++;
+                } else {
+                    ok = 0;
+                }
+                if (ok >= half) {
+                    ans = len;
+                    break;
+                }
+            }
+            if (ans == len) continue;
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

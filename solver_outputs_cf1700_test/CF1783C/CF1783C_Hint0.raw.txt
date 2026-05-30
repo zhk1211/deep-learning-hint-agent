@@ -1,0 +1,164 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // We want to find the maximum number of wins we can get.
+        // Sort opponents by preparation time.
+        vector<int> sorted_a = a;
+        sort(sorted_a.begin(), sorted_a.end());
+
+        int max_wins = 0;
+        long long sum = 0;
+        for (int i = 0; i < n; ++i) {
+            if (sum + sorted_a[i] <= m) {
+                sum += sorted_a[i];
+                max_wins++;
+            } else {
+                break;
+            }
+        }
+
+        // If we can win against all opponents, place is 1.
+        if (max_wins == n) {
+            cout << 1 << "\n";
+            continue;
+        }
+
+        // Check if we can win against the opponent with index max_wins (0-based).
+        // That opponent originally has max_wins wins (since opponent i wins against all j < i).
+        // If we can beat that specific opponent, we can achieve max_wins wins and tie with them,
+        // effectively taking their place (max_wins+1) but since we tie, we might get better.
+        // Actually, if we have max_wins wins, we tie with the opponent who also has max_wins wins.
+        // The number of people with strictly more wins is n - max_wins.
+        // So our place would be n - max_wins + 1? Wait, let's think.
+        // Opponents: opponent i has i wins (since beats all j < i). So wins = i.
+        // If we get W wins, we beat W opponents. The opponents we beat are some set.
+        // The opponent with index W (0-based) has W wins originally. If we beat them, they still have W wins (they lose to us, but beat all j < W).
+        // So they end up with W wins. We also have W wins. So we tie with them.
+        // The number of people with strictly more wins than W is n - W (those with indices > W).
+        // So our place is (n - W) + 1 = n - W + 1? But if we tie with opponent W, we share the same place.
+        // The place is number of people with strictly more wins + 1. So if we have W wins, and there are n - W people with > W wins, our place is n - W + 1.
+        // But if we can't beat opponent W, we might only get W wins but opponent W still has W wins? Actually, if we don't beat opponent W, we have W wins, opponent W has W wins (since they beat all j < W, and we didn't beat them). So we still tie with them. So place is still n - W + 1.
+        // Wait, the key is: can we achieve W wins while also beating the opponent with index W? If we can, we might be able to get a better place?
+        // Let's analyze: Suppose we get W wins. The opponents we beat are some set of size W. The opponents we lose to are the rest.
+        // The opponent with original index W has W wins if we lose to them. If we beat them, they have W wins (since they lose to us, but beat all j < W). So in both cases, they have W wins.
+        // So our place is determined solely by W: place = n - W + 1? But sample 2: n=3, m=2, a=[1,2,3]. Sorted: [1,2,3]. max_wins = 1 (sum=1). W=1. n - W + 1 = 3 - 1 + 1 = 3. But sample output is 2. So my reasoning is flawed.
+        // Let's recalc sample 2: Opponents: 1,2,3. Wins without us: 1 has 0 wins? Wait, "if opponent i plays against opponent j, he wins if and only if i > j." So opponent 1 beats nobody (0 wins), opponent 2 beats 1 (1 win), opponent 3 beats 1 and 2 (2 wins). So wins: [0,1,2].
+        // We have m=2. We can prepare against opponent 2 (cost 2) and win. So we beat opponent 2. We lose to 1 and 3. Our wins = 1.
+        // Opponent 1: beats nobody? Actually opponent 1 loses to 2 and 3, and loses to us? We didn't prepare against 1, so we lose to 1. So opponent 1 beats us. Opponent 1 also beats? Opponent 1 vs 2: 1<2 so 1 loses. Opponent 1 vs 3: loses. So opponent 1 wins only against us. So opponent 1 has 1 win.
+        // Opponent 2: beats 1, loses to 3, loses to us (we prepared). So opponent 2 has 1 win.
+        // Opponent 3: beats 1 and 2, and beats us (we didn't prepare). So opponent 3 has 3 wins.
+        // Wins: us=1, opp1=1, opp2=1, opp3=3. Sorted wins: 3,1,1,1. Places: opp3 gets 1st (1 person has >3? 0, so place 1). The three with 1 win: number of people with strictly more wins = 1 (opp3). So their place = 1+1=2. So we get 2nd place.
+        // According to formula n - W + 1: n=3, W=1 => 3-1+1=3. That's wrong. Because n is number of opponents, but total participants = n+1. So total participants = 4. Number of people with strictly more wins than us: opp3 has 3 wins > 1. So 1 person. Place = 1+1=2. So place = (number of people with strictly more wins) + 1. Number of people with strictly more wins = count of opponents who have > W wins. Opponent i has i wins originally, but if we beat them, their wins might change? Actually, if we beat opponent i, they lose one win (against us), so their total wins become i - 1? Wait, no: opponent i originally beats all j < i. If we beat opponent i, they still beat all j < i, but they lose to us. So their wins = (i) - 1? Let's check: opponent i beats i opponents? No, opponent i beats opponents 1..i-1, so i-1 wins. Wait, indices are 1..n. Opponent i beats all j < i, so there are i-1 such opponents. So opponent i has i-1 wins originally. In sample 2: opponent 1 has 0 wins, opponent 2 has 1 win, opponent 3 has 2 wins. Yes.
+        // So opponent i has i-1 wins without us. If we beat opponent i, they lose that match, so their wins become i-1 (still, because they didn't gain a win from us). Actually, if we beat them, they don't get a win against us. So their total wins = (i-1) + 0 = i-1. If we lose to them, they get a win against us, so their total wins = (i-1) + 1 = i.
+        // So opponent i's final wins = (i-1) + (1 if we lose to them else 0).
+        // We have W wins. We beat some set S of size W. For i in S, opponent i's wins = i-1. For i not in S, opponent i's wins = i.
+        // We want to minimize our place = 1 + number of participants with strictly more wins than W.
+        // Participants with > W wins: some opponents. Which opponents can have > W wins?
+        // For i not in S: wins = i. So if i > W, they have > W wins.
+        // For i in S: wins = i-1. So if i-1 > W, i.e., i > W+1, they have > W wins.
+        // Also, could there be opponents with wins exactly W? Yes, if i = W and i not in S, then wins = W. If i = W+1 and i in S, then wins = W. So they tie with us.
+        // So the number of people with strictly more wins = number of i such that (i not in S and i > W) + (i in S and i > W+1).
+        // We want to minimize this count. We can choose S of size W (with sum a_i <= m) to minimize this count.
+        // Notice that if we can include the opponent with index W+1 (1-based) in S, then that opponent's wins become (W+1)-1 = W, so they don't have > W wins. If we don't include them, they have W+1 wins, which is > W. So including the opponent with index W+1 is beneficial to reduce the count of >W.
+        // Similarly, including any opponent with index > W+1 reduces their wins from i to i-1, but i-1 might still be > W if i-1 > W, i.e., i > W+1. So including them doesn't change the fact that they have > W wins (unless i = W+1). So only the opponent with index W+1 matters for crossing the threshold.
+        // Also, if we include opponent with index W, their wins become W-1, which is < W, so they are not > W anyway. If we don't include them, their wins = W, which is not > W. So opponent W never has > W wins.
+        // Therefore, the number of people with > W wins is exactly: (number of opponents with index > W) minus (1 if we beat opponent W+1 else 0). Because all opponents with index > W have wins >= W+1 originally. If we beat opponent W+1, their wins become W, so they drop from >W to =W. Opponents with index > W+1 still have > W wins even if we beat them (since i-1 >= W+1). So the count of >W is (n - W) - (1 if we beat opponent W+1 else 0).
+        // Wait, check: n - W is the number of opponents with index > W. If we beat opponent W+1, we subtract 1. So count = n - W - beat_W+1.
+        // Our place = 1 + count = n - W + 1 - beat_W+1.
+        // We want to minimize place, so we want to maximize W, and also if possible, beat opponent W+1 to subtract 1.
+        // But W is limited by m. We can find the maximum possible W (max_wins) as done.
+        // However, maybe we can achieve a better place by choosing a slightly smaller W but beating opponent W+1? Let's see: place = n - W + 1 - beat_W+1. If we decrease W by 1, n - W increases by 1, so place increases by 1, but if we can then beat the new W+1 (which was the old W), we subtract 1, so net change 0. So it might not improve. But if we can't beat opponent max_wins+1 with max_wins, maybe we can achieve max_wins and still beat max_wins+1 by swapping some opponent? Wait, max_wins is the maximum number of wins we can get. Can we get max_wins wins and also include opponent max_wins+1 in the set? That would require sum of a_i for max_wins opponents including that specific one <= m. If we can, then we can achieve place = n - max_wins + 1 - 1 = n - max_wins. If we can't, place = n - max_wins + 1.
+        // But is it possible that by taking W = max_wins - 1, we can beat opponent (max_wins) and get place = n - (max_wins-1) + 1 - 1 = n - max_wins + 1? That's the same as max_wins without beating max_wins+1. So no improvement.
+        // What if we take W = max_wins, but we cannot beat max_wins+1, so place = n - max_wins + 1. Could we take W = max_wins + 1? No, because max_wins is maximum possible.
+        // So the optimal strategy: try to achieve max_wins wins. If we can also beat opponent max_wins+1 (1-based index) within the same m, we get place = n - max_wins. Otherwise, place = n - max_wins + 1.
+        // But wait, is it always possible to achieve max_wins wins while also beating a specific opponent? We need to check if there exists a set of max_wins opponents with sum <= m that includes opponent max_wins+1.
+        // Since we sorted by a_i, the minimal sum to get max_wins wins is the sum of the smallest max_wins a_i. If that set already includes opponent max_wins+1, then we can. If not, we can try to replace the largest element in that set with opponent max_wins+1, and see if the sum is still <= m. Because we want to include that specific opponent while keeping the total sum minimal.
+        // So algorithm:
+        // 1. Find max_wins: sort a, take smallest until sum > m.
+        // 2. If max_wins == n: place = 1.
+        // 3. Else, let target = a[max_wins] (0-based index max_wins, which corresponds to opponent max_wins+1). Check if we can form a set of max_wins opponents including this target with sum <= m.
+        //    The minimal sum to get max_wins wins including target is: sum of smallest max_wins-1 elements (excluding target if it's among them) + target.
+        //    Actually, we can just take the smallest max_wins elements overall. If target is among them, then we already can. If not, the smallest max_wins elements are the first max_wins in sorted order. The largest among them is sorted_a[max_wins-1]. We can try to swap it with target. The new sum = (sum of first max_wins) - sorted_a[max_wins-1] + target. If this <= m, then we can include target and still get max_wins wins.
+        //    But wait, what if target is smaller than some elements we included? Then it would have been included already. So target must be >= sorted_a[max_wins-1] (since it's not in the first max_wins). So swapping increases sum. So we just check if sum_first_max_wins - sorted_a[max_wins-1] + a[max_wins] <= m.
+        //    However, we must be careful: the target opponent is the one with original index max_wins+1. But we sorted a, so we lost original indices. We need the a_i of the opponent with index max_wins+1. That is simply a[max_wins] in the original array (0-based). Because opponent indices are 1..n, so opponent max_wins+1 has original index max_wins in 0-based. So target = original_a[max_wins].
+        //    So we need the original array a.
+        // 4. If we can include target, place = n - max_wins. Else place = n - max_wins + 1.
+        // Let's test with samples.
+        // Sample 1: n=4, m=401, a=[100,100,200,1]. Sorted: [1,100,100,200]. max_wins: 1+100+100+200=401 <=401, so max_wins=4. n=4, max_wins==n -> place=1. Correct.
+        // Sample 2: n=3, m=2, a=[1,2,3]. Sorted: [1,2,3]. max_wins: 1 <=2, 1+2=3>2, so max_wins=1. target = original_a[1] = a[1] = 2. First max_wins sum = 1. largest in that set = 1. New sum = 1 - 1 + 2 = 2 <=2. So we can include target. place = n - max_wins = 3 - 1 = 2. Correct.
+        // Sample 3: n=5, m=0, a=[1,1,1,1,1]. Sorted: [1,1,1,1,1]. max_wins: sum=0, max_wins=0. target = original_a[0] = 1. First max_wins sum = 0. largest = none? max_wins=0, so we can't include any. But we need to check if we can get 0 wins and beat opponent 1? Actually, if max_wins=0, place = n - 0 + 1? Let's think: W=0. Opponents with >0 wins: all opponents except possibly opponent 1 if we beat them? If we beat opponent 1, their wins become 0. But we have 0 wins, so we tie with them. Number of people with >0 wins = n - 1 (if we beat opponent 1) or n (if we don't). So place = 1 + (n - beat_1). To minimize place, we want to beat opponent 1 if possible. Can we? We need a_1 <= m. Here m=0, a_1=1, so no. So place = 1 + n = 6. Our formula: max_wins=0. target = a[0]=1. Can we include target in a set of size 0? No, set size 0 cannot include anything. So we cannot beat opponent 1. Then place = n - max_wins + 1 = 5 - 0 + 1 = 6. Correct.
+        // Sample 4: n=4, m=0, a=[0,1,1,1]. Sorted: [0,1,1,1]. max_wins: 0 <=0, so max_wins=1? Wait, sum=0, take first element 0 <=0, so max_wins=1. Actually, we can take the 0-cost opponent. So max_wins=1. target = original_a[1] = a[1] = 1. First max_wins sum = 0. largest = 0. New sum = 0 - 0 + 1 = 1 > 0. So cannot include target. place = n - max_wins + 1 = 4 - 1 + 1 = 4. Correct.
+        // Sample 5: n=4, m=4, a=[1,2,2,1]. Sorted: [1,1,2,2]. max_wins: 1+1+2=4 <=4, 1+1+2+2=6>4, so max_wins=3. target = original_a[3]? Wait, max_wins=3, so target index = max_wins = 3 (0-based), original_a[3] = a[3] = 1. First max_wins sum = 1+1+2=4. largest in that set = 2. New sum = 4 - 2 + 1 = 3 <=4. So can include target. place = n - max_wins = 4 - 3 = 1. Correct.
+        // So the logic works.
+
+        // Edge case: max_wins = 0. Then target index = 0. We check if we can include target in a set of size 0. That's impossible unless we consider that we can have 0 wins but still beat opponent 1? Actually, if we beat opponent 1, we have 1 win, not 0. So to have 0 wins, we cannot beat anyone. So we cannot include target. So place = n - 0 + 1 = n+1. But wait, if a[0] = 0, then we can beat opponent 1 for free, giving us 1 win. So max_wins would be at least 1. So max_wins=0 only if all a_i > m. Then we cannot beat anyone. So place = n+1. Formula gives n - 0 + 1 = n+1. Correct.
+
+        // Implementation:
+        // Compute max_wins and sum of smallest max_wins elements.
+        // If max_wins == n: place = 1.
+        // Else:
+        //   target = a[max_wins]; // original array, 0-based index max_wins
+        //   if max_wins == 0:
+        //       can_beat_target = false;
+        //   else:
+        //       sum_smallest = sum of first max_wins elements in sorted_a.
+        //       largest_in_set = sorted_a[max_wins-1];
+        //       if (sum_smallest - largest_in_set + target <= m) can_beat_target = true;
+        //       else can_beat_target = false;
+        //   if (can_beat_target) place = n - max_wins;
+        //   else place = n - max_wins + 1;
+
+        // But wait, what if target is already in the smallest max_wins set? Then sum_smallest already includes target, so we don't need to swap. Our condition sum_smallest - largest_in_set + target <= m would be sum_smallest - largest_in_set + target. Since target <= largest_in_set (because it's in the set), this sum is <= sum_smallest <= m. So it will be true. So it works.
+
+        // Let's code it.
+
+        vector<int> orig_a = a;
+        sort(a.begin(), a.end());
+        int w = 0;
+        long long s = 0;
+        for (int i = 0; i < n; ++i) {
+            if (s + a[i] <= m) {
+                s += a[i];
+                w++;
+            } else break;
+        }
+
+        if (w == n) {
+            cout << 1 << "\n";
+            continue;
+        }
+
+        int target = orig_a[w]; // opponent w+1
+        bool can = false;
+        if (w > 0) {
+            long long sum_w = 0;
+            for (int i = 0; i < w; ++i) sum_w += a[i];
+            long long new_sum = sum_w - a[w-1] + target;
+            if (new_sum <= m) can = true;
+        }
+        // if w == 0, can remains false
+
+        int place;
+        if (can) place = n - w;
+        else place = n - w + 1;
+
+        cout << place << "\n";
+    }
+    return 0;
+}
+```

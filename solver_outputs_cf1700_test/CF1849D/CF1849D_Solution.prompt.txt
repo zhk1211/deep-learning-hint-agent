@@ -1,0 +1,226 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+You are given an array of $ n $ integers, where each integer is either $ 0 $ , $ 1 $ , or $ 2 $ . Initially, each element of the array is blue.
+
+Your goal is to paint each element of the array red. In order to do so, you can perform operations of two types:
+
+- pay one coin to choose a blue element and paint it red;
+- choose a red element which is not equal to $ 0 $ and a blue element adjacent to it, decrease the chosen red element by $ 1 $ , and paint the chosen blue element red.
+
+What is the minimum number of coins you have to spend to achieve your goal?
+
+Input Format
+The first line contains one integer $ n $ ( $ 1 \le n \le 2 \cdot 10^5 $ ).
+
+The second line contains $ n $ integers $ a_1, a_2, \dots, a_n $ ( $ 0 \le a_i \le 2 $ ).
+
+Output Format
+Print one integer — the minimum number of coins you have to spend in order to paint all elements red.
+
+Examples
+Sample 1
+Input
+3
+0 2 0
+Output
+1
+
+Sample 2
+Input
+4
+0 0 1 1
+Output
+2
+
+Sample 3
+Input
+7
+0 1 0 0 1 0 2
+Output
+4
+
+Note
+In the first example, you can paint all elements red with having to spend only one coin as follows:
+
+1. paint the $ 2 $ -nd element red by spending one coin;
+2. decrease the $ 2 $ -nd element by $ 1 $ and paint the $ 1 $ -st element red;
+3. decrease the $ 2 $ -nd element by $ 1 $ and paint the $ 3 $ -rd element red.
+
+In the second example, you can paint all elements red spending only two coins as follows:
+
+1. paint the $ 4 $ -th element red by spending one coin;
+2. decrease the $ 4 $ -th element by $ 1 $ and paint the $ 3 $ -rd element red;
+3. paint the $ 1 $ -st element red by spending one coin;
+4. decrease the $ 3 $ -rd element by $ 1 $ and paint the $ 2 $ -nd element red.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1849D - Array Painting
+Suppose we used a second operation as follows: we decreased a red element $$$x$$$, and painted another element $$$y$$$ red. Let's then say that $$$x$$$ is the
+parent
+of $$$y$$$.
+Furthermore, let's say that the element $$$x$$$
+controls
+the element $$$y$$$ if one of the two conditions applies:
+$$$x$$$ is the parent of $$$y$$$;
+$$$x$$$ controls the parent of $$$y$$$.
+Now, suppose we used coins to paint some elements red. For each of those elements, there exists a segment of red elements which it controls. So, the problem can actually be reformulated as follows: we want to split the given array into the minimum number of segments so that each segment can be painted using one coin. Let's call a segment of the array
+good
+if it can be painted using only one coin.
+To continue with our solution, we need the following property: if a segment is
+good
+, then its every subsegment is also good. This is kinda intuitive, but if you are interested in a formal proof, you can read the following paragraph.
+Formal proof:
+there are two main cases we need to consider: either the element that
+controls
+the main segment belongs to the subsegment we analyze, or it does not. In the first case, the proof is simple: we can paint all elements of the subsegment red using just one coin in the same way as we painted the whole segment, by starting from the element that controls it. In the second case, it is a bit more difficult, but instead of the element controlling the main segment, we can either start from the leftmost element of the subsegment, or from the rightmost element of the subsegment — depending on whether this subsegment is to the right or to the left of the element controlling the whole segment. This starting element will be painted red by spending a coin, and every other element of the subsegment can be painted red in the same way we painted the whole segment.
+Since if a segment is good, its every subsegment is also good, we can use the following greedy approach to solve the problem: start with the segment which contains only the first element of the array, and expand it to the right until it becomes bad. When the segment is no longer good, we need to start a new segment, which we will again expand to the right until it becomes bad, and so on. Then each element of the array will be considered only once. If we design a way to determine if the segment is still good when we add a new element to it in $$$O(1)$$$, our solution will work in $$$O(n)$$$.
+All that's left is to analyze how to check if the segment is good. There are multiple ways to do this. The way used in the model solution employs the following ideas:
+there cannot be any zeroes in the middle of the segment, since if we start painting red from the left of that zero, we cannot reach the elements to the right of that zero, and vice versa;
+if there are no zeroes in the middle, and at least one of the endpoints is not zero, the segment is good because we can just start from that endpoint and expand to the other endpoint;
+if there are no zeroes in the middle, and there is at least one element equal to $$$2$$$, we can start by painting that element red and expand to the left and to the right of it until we arrive at the borders of the segment;
+and if there are zeroes at both endpoints, but all other elements are $$$1$$$'s, it's easy to see that paining the whole segment using only one coin is impossible: the sum of elements on the segment is $$$k-2$$$, where $$$k$$$ is the length of the segment, but we need to paint at least $$$k-1$$$ elements red without spending coins.
+All of these ideas allow us to verify that the segment is good using just a couple if-statements.
+Solution complexity: $$$O(n)$$$.
+
+Solution (BledDest)
+n
+=
+int
+(
+input
+())
+a
+=
+list
+(
+map
+(
+int
+,
+input
+().
+split
+()))
+ans
+=
+0
+l
+=
+0
+while
+l
+<
+n
+:
+r
+=
+l
++
+1
+hasTwo
+=
+(
+a
+[
+l
+]
+==
+2
+)
+hasMiddleZero
+=
+False
+while
+r
+<
+n
+:
+if
+r
+-
+1
+>
+l
+and
+a
+[
+r
+-
+1
+]
+==
+0
+:
+hasMiddleZero
+=
+True
+if
+a
+[
+r
+]
+==
+2
+:
+hasTwo
+=
+True
+good
+=
+(
+not
+hasMiddleZero
+)
+and
+(
+hasTwo
+or
+a
+[
+l
+]
+!=
+0
+or
+a
+[
+r
+]
+!=
+0
+)
+if
+not
+good
+:
+break
+r
++=
+1
+l
+=
+r
+    ans
++=
+1
+print
+(
+ans
+)
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

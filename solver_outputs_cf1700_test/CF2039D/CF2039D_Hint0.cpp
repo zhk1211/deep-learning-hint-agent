@@ -1,0 +1,259 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> S(m);
+        for (int i = 0; i < m; ++i) {
+            cin >> S[i];
+        }
+
+        // If n == 1, any element works, lexicographically largest is the max in S
+        if (n == 1) {
+            cout << S.back() << '\n';
+            continue;
+        }
+
+        // Check if 1 is in S
+        bool has_one = binary_search(S.begin(), S.end(), 1);
+
+        // If 1 is not in S, impossible for n > 1
+        if (!has_one) {
+            cout << "-1\n";
+            continue;
+        }
+
+        // We need to assign a[1] = max element in S
+        // For i > 1, we need a[i] such that for any j < i, condition holds.
+        // The condition is: a[gcd(i,j)] != gcd(a[i], a[j]).
+        // Known construction: set a[1] = max(S), and for all i > 1, set a[i] = 1.
+        // Check if this works.
+        // For any pair (i,j) with i<j:
+        //   If gcd(i,j) = 1, then a[1] = max(S) must not equal gcd(a[i], a[j]).
+        //   Since a[i] = a[j] = 1, gcd(1,1) = 1. So we need max(S) != 1.
+        //   If max(S) == 1, then S = {1}, but then n>1 fails because a[1]=1, gcd(1,1)=1.
+        //   So max(S) must be > 1.
+        //   If gcd(i,j) > 1, then a[gcd(i,j)] = 1 (since gcd(i,j) > 1 => index > 1).
+        //   gcd(a[i], a[j]) = gcd(1,1) = 1. So 1 != 1? That's a problem!
+        //   Wait: if gcd(i,j) > 1, then a[gcd(i,j)] = 1, and gcd(a[i],a[j]) = 1, so they are equal -> violation.
+        // So the simple construction fails.
+
+        // Let's think differently.
+        // We need a[1] = some value, and for i>1, a[i] must be chosen such that for all j, condition holds.
+        // The condition is: a[gcd(i,j)] != gcd(a[i], a[j]).
+        // Notice that if we set a[i] = 1 for all i>1, then for any pair with gcd(i,j) > 1, we get a[gcd(i,j)] = 1 and gcd(1,1)=1 -> violation.
+        // So we cannot set all a[i>1] = 1.
+        // What if we set a[i] = something else?
+        // Let's analyze the condition more deeply.
+        // For any i, j, let g = gcd(i,j). Then we need a[g] != gcd(a[i], a[j]).
+        // In particular, for i=1, j>1: g=1, so a[1] != gcd(a[1], a[j]) = gcd(a[1], a[j]).
+        // Since gcd(a[1], a[j]) divides a[1], the only way a[1] != gcd(a[1], a[j]) is if gcd(a[1], a[j]) < a[1].
+        // That means a[j] must NOT be a multiple of a[1]. Actually, gcd(a[1], a[j]) = a[1] iff a[1] divides a[j].
+        // So we need a[1] does NOT divide a[j] for all j>1.
+        // Also, for any pair i,j with i,j > 1, let g = gcd(i,j). If g=1, then a[1] != gcd(a[i], a[j]).
+        // If g>1, then a[g] != gcd(a[i], a[j]).
+        // This suggests a recursive structure.
+
+        // Let's try to construct lexicographically largest.
+        // We want a[1] as large as possible. So a[1] = max(S).
+        // Then for any j>1, we need a[1] does not divide a[j]. So a[j] cannot be a multiple of a[1].
+        // Since all elements are <= n, and a[1] is max, the only multiple of a[1] in S could be a[1] itself (if a[1]*2 > n).
+        // But if a[1]*2 <= n and that multiple is in S, we cannot use it for any j>1.
+        // But we might need to use it if S is small? We'll see.
+
+        // Let's consider the condition for i,j > 1 with g = gcd(i,j) > 1.
+        // We need a[g] != gcd(a[i], a[j]).
+        // If we set a[i] = a[j] = x, then gcd(x,x) = x, so we need a[g] != x.
+        // So if we use the same value for multiple indices, we must ensure that for any g that is gcd of two indices with that value, a[g] is different.
+        // This is tricky.
+
+        // Alternative approach: Since n <= 1e5, maybe we can assign a[i] based on the prime factorization of i?
+        // There is a known solution for this problem: 
+        // We can set a[1] = max(S). For i > 1, we set a[i] = 1, EXCEPT when i is prime? No.
+
+        // Let's search for a pattern.
+        // Consider the condition: a[gcd(i,j)] != gcd(a[i], a[j]).
+        // If we set a[i] = 1 for all i that are not 1, then for any pair with gcd>1, a[gcd] = 1, gcd(1,1)=1 -> violation.
+        // So we need to break the symmetry.
+
+        // What if we set a[i] = 1 for all i except 1, but then for some i we set a[i] = something else?
+        // For i=2, if we set a[2] = x (x != 1), then for j=4, gcd(2,4)=2, a[2]=x, gcd(a[2],a[4]) = gcd(x, a[4]). We need x != gcd(x, a[4]).
+        // If a[4]=1, gcd(x,1)=1, so we need x != 1, which is true. So a[2]=x, a[4]=1 works for pair (2,4).
+        // But what about pair (2,3)? gcd(2,3)=1, a[1]=max, gcd(a[2],a[3]) = gcd(x,1)=1, need max != 1, so max>1.
+        // Pair (4,6): gcd(4,6)=2, a[2]=x, gcd(a[4],a[6]) = gcd(1,1)=1, need x != 1, ok.
+        // So if we set a[1]=max, a[2]=x (x>1, x != max, and max does not divide x), and all other a[i]=1, does it work?
+        // Check pair (2,2) not allowed (i<j).
+        // Check pair (1,2): a[1]=max, gcd(max, x) must be != max => max does not divide x. ok.
+        // Check pair (1,4): a[1]=max, gcd(max, 1)=1 != max. ok.
+        // Check pair (2,4): a[2]=x, gcd(x,1)=1 != x. ok.
+        // Check pair (2,6): a[2]=x, gcd(x,1)=1 != x. ok.
+        // Check pair (3,6): gcd(3,6)=3, a[3]=1, gcd(1,1)=1, so a[3]=1 and gcd=1 -> violation! Because a[3]=1 and gcd(1,1)=1.
+        // So a[3] cannot be 1 if there exists j such that gcd(3,j)=3 and a[j]=1.
+        // In fact, for any i>1, if we set a[i]=1, then for any multiple j of i, gcd(i,j)=i, a[i]=1, gcd(a[i],a[j]) = gcd(1, a[j]). If a[j]=1, then gcd=1, violation.
+        // So if we set a[i]=1, we cannot set any multiple j to 1.
+        // That means the set of indices with value 1 must be "gcd-free" in the sense that no two indices have gcd equal to an index that also has value 1.
+        // More precisely, if a[i]=1 and a[j]=1, then gcd(i,j) must not be an index k with a[k]=1.
+        // This is impossible if we have more than one index with value 1, because for any two numbers, their gcd is at least 1, and if both are >1, gcd could be 1 or >1. If gcd=1, then a[1] is involved, not 1. If gcd>1, then that gcd index has value 1? Not necessarily, we could set a[gcd] to something else.
+        // So we can have multiple 1s if we ensure that for any pair of 1s, their gcd is either 1 or an index that does NOT have value 1.
+        // But if we have many 1s, their gcds will eventually hit some index that also has 1? Not necessarily if we carefully choose which indices get 1.
+
+        // Let's think about assigning values to indices based on their smallest prime factor or something.
+
+        // Another idea: The condition must hold for all pairs. This is a strong condition.
+        // Let's try to see if there is a known solution from the problem "Shohag and GCD" or similar.
+        // I recall a problem: "a[gcd(i,j)] != gcd(a[i], a[j])". The solution often involves setting a[i] = 1 for all i except 1, and a[1] = something, but that fails as we saw.
+        // Maybe we can set a[i] = 1 for all i that are not prime powers? No.
+
+        // Let's analyze small n manually.
+        // n=2: indices 1,2. Condition: a[1] != gcd(a[1], a[2]). So a[1] does not divide a[2]. Lexicographically largest: a[1] = max(S), a[2] = max element in S that is not a multiple of a[1]. If none, -1.
+        // n=3: indices 1,2,3. Conditions:
+        // (1,2): a[1] != gcd(a[1], a[2]) => a[1] ∤ a[2]
+        // (1,3): a[1] != gcd(a[1], a[3]) => a[1] ∤ a[3]
+        // (2,3): a[1] != gcd(a[2], a[3]) (since gcd(2,3)=1)
+        // So we need a[1] not dividing a[2], a[3], and a[1] != gcd(a[2], a[3]).
+        // Lexicographically largest: a[1] = max(S). Then we want a[2] as large as possible, then a[3].
+        // a[2] can be max available not multiple of a[1]. a[3] can be max available not multiple of a[1] and such that gcd(a[2], a[3]) != a[1].
+        // This seems doable but for large n it's complex.
+
+        // Let's look for a pattern in the sample: n=6, S={3,4,6}, output: 6 4 4 3 4 3
+        // a = [6,4,4,3,4,3]
+        // Check conditions:
+        // (1,2): a[1]=6, gcd(6,4)=2 !=6 ok
+        // (1,3): gcd(6,4)=2 !=6
+        // (1,4): gcd(6,3)=3 !=6
+        // (1,5): gcd(6,4)=2 !=6
+        // (1,6): gcd(6,3)=3 !=6
+        // (2,3): gcd(2,3)=1, a[1]=6, gcd(4,4)=4 !=6 ok
+        // (2,4): gcd(2,4)=2, a[2]=4, gcd(4,3)=1 !=4 ok
+        // (2,5): gcd(2,5)=1, a[1]=6, gcd(4,4)=4 !=6 ok
+        // (2,6): gcd(2,6)=2, a[2]=4, gcd(4,3)=1 !=4 ok
+        // (3,4): gcd(3,4)=1, a[1]=6, gcd(4,3)=1 !=6 ok
+        // (3,5): gcd(3,5)=1, a[1]=6, gcd(4,4)=4 !=6 ok
+        // (3,6): gcd(3,6)=3, a[3]=4, gcd(4,3)=1 !=4 ok
+        // (4,5): gcd(4,5)=1, a[1]=6, gcd(3,4)=1 !=6 ok
+        // (4,6): gcd(4,6)=2, a[2]=4, gcd(3,3)=3 !=4 ok
+        // (5,6): gcd(5,6)=1, a[1]=6, gcd(4,3)=1 !=6 ok
+        // All good.
+        // Notice that a[1]=6, a[2]=4, a[3]=4, a[4]=3, a[5]=4, a[6]=3.
+        // Values used: 6,4,3. 6 is max. 4 and 3 are not multiples of 6.
+        // Also, a[2]=a[3]=a[5]=4, a[4]=a[6]=3.
+        // Indices with 4: 2,3,5. Their pairwise gcds: gcd(2,3)=1, gcd(2,5)=1, gcd(3,5)=1. All gcds are 1, so condition involves a[1]=6, and gcd(4,4)=4 !=6. So it's fine.
+        // Indices with 3: 4,6. gcd(4,6)=2, a[2]=4, gcd(3,3)=3 !=4. ok.
+        // So the strategy seems to be: assign a[1] = max(S). Then partition the remaining indices into groups such that within each group, all pairwise gcds are 1 (so that the condition only checks against a[1]), and assign the same value to all indices in a group. The value must not be a multiple of a[1], and must be such that for any two indices from different groups, their gcd might be >1, and then a[gcd] must not equal gcd of their values.
+        // This looks like we can assign values based on the smallest prime factor? Or maybe we can assign a[i] = 1 for all i that are not 1, but then we need to break the gcd condition by using different values for indices that have common gcd > 1.
+
+        // Let's think differently: The condition a[gcd(i,j)] != gcd(a[i], a[j]) is equivalent to saying that the function f(i) = a[i] is not a "gcd-morphism" to itself in a certain way.
+        // There is a known construction: set a[1] = max(S). For i > 1, set a[i] = 1 if i is not a prime power? No.
+
+        // Let's search for "lexicographically largest array a_i in S such that a_{gcd(i,j)} != gcd(a_i, a_j)".
+        // I think I've seen this problem before. It might be from a recent Codeforces round.
+        // The solution: 
+        // If 1 is not in S, then answer is -1 (for n>1).
+        // Otherwise, we can construct as follows:
+        // Let the elements of S be sorted. We will assign a[1] = max(S).
+        // For the rest, we want to assign values such that for any i,j > 1, if gcd(i,j) > 1, then a[gcd(i,j)] is not equal to gcd(a[i], a[j]).
+        // One way: assign a[i] = 1 for all i that are not multiples of some number? No.
+
+        // Let's analyze the condition for i,j > 1 with g = gcd(i,j) > 1.
+        // If we set a[i] = 1 for all i > 1, then for any such pair, a[g] = 1, gcd(1,1)=1 -> violation.
+        // So we need to ensure that for any g > 1 that appears as gcd of two indices > 1, a[g] != 1.
+        // But g can be any number > 1 that is not prime? Actually, for any g > 1, we can find i=2g, j=3g, then gcd(i,j)=g. So every g > 1 appears as gcd of two numbers > 1.
+        // Therefore, for every g > 1, we must have a[g] != 1 if we set a[2g]=1 and a[3g]=1.
+        // So if we want to use 1 for many indices, we cannot set a[g]=1 for any g > 1.
+        // That means the only index that can have value 1 is possibly index 1? But index 1 is already taken by max(S) which is >1 (since 1 is in S and max(S) > 1 for n>1? Actually max(S) could be 1 if S={1}, but then n>1 fails as we saw).
+        // So if we use 1, we can only use it for indices that are never the gcd of two other indices that also have value 1? But as argued, every g > 1 is gcd of some pair > 1. So if we set any index > 1 to 1, then we can find another index > 1 also set to 1 such that their gcd is that index? Not necessarily: if we set a[2]=1, and we want to avoid a[gcd(2,4)] = a[2]=1 and gcd(a[2],a[4])=1, we need a[4] != 1. So we can set a[2]=1, but then we cannot set any multiple of 2 to 1. Similarly, if we set a[3]=1, we cannot set any multiple of 3 to 1. But we can set a[2]=1 and a[3]=1 because gcd(2,3)=1, so condition involves a[1], not a[2] or a[3]. So we can have multiple 1s as long as they are pairwise coprime? But then their multiples cannot be 1. This suggests we can assign 1 to all prime indices? Let's check: if we set a[p]=1 for all primes p, then for any two primes p<q, gcd(p,q)=1, so condition is a[1] != gcd(1,1)=1 => a[1] != 1, which is true if max(S)>1. What about composite numbers? If we set a[composite] = something else, say x, then for a prime p and composite c that is a multiple of p, gcd(p,c)=p, a[p]=1, gcd(1, x) = 1, so we need 1 != 1 -> violation! So if a[p]=1, then for any multiple c of p, we must have a[c] such that gcd(1, a[c]) != 1, but gcd(1, anything)=1, so it's impossible. Therefore, if we set any index > 1 to 1, we cannot have any multiple of that index with any value, because gcd(1, any value)=1, and a[gcd] = a[index] = 1, so 1 == 1 violation.
+        // Conclusion: We cannot set any index i > 1 to 1 if there exists another index j > 1 such that gcd(i,j) = i (i.e., i divides j). Because then a[i]=1, gcd(a[i],a[j]) = gcd(1, a[j]) = 1, so a[i] == 1 == gcd, violation.
+        // So if we set a[i]=1 for some i>1, then i cannot divide any other index j>1. But for any i>1, i divides 2i, and 2i <= n for i <= n/2. So if n >= 4, then for i=2, 2 divides 4, so a[2] cannot be 1. For i=3, 3 divides 6, etc. The only indices that do not divide any other index > 1 are those > n/2. So we can only set a[i]=1 for i > n/2. But then for two such indices i,j > n/2, gcd(i,j) could be >1? For example, n=10, i=6, j=8, gcd=2, a[2] is not 1 (since 2 <= n/2), so a[2] != 1, and gcd(a[6],a[8]) = gcd(1,1)=1, so we need a[2] != 1, which is true. So it might work if we set a[i]=1 for all i > n/2, and carefully assign other values.
+        // But we want lexicographically largest, so we want larger values earlier. So we probably don't want to use 1 at all if we can use larger values.
+
+        // Let's look at the sample again: S={3,4,6}, n=6. Output uses 6,4,3. No 1.
+        // So maybe we can avoid 1 entirely if S has enough elements.
+        // The condition that 1 must be in S for n>1 is necessary? Let's check: If 1 is not in S, can we still have a solution? For n=2, S={2}, output -1 in sample. For n=2, if S={2,3} and 1 not in S, can we do a=[3,2]? Check: a[1]=3, gcd(3,2)=1 !=3 ok. So for n=2, 1 is not necessary. But sample 3: n=2, S={2} gives -1. Why? Because a=[2,2] is the only array, and a[1]=2, gcd(2,2)=2 -> violation. So if S has only one element and it's not 1, then for n>1, the only array is all that element, and then a[1] = x, gcd(x,x)=x -> violation. So if m=1 and x>1, impossible for n>1. If m>1, maybe possible without 1.
+        // Let's test n=3, S={2,3}. Can we find an array? Lexicographically largest: a[1]=3. Then a[2] cannot be multiple of 3, so a[2]=2. a[3] cannot be multiple of 3, so a[3]=2. Check: (2,3): a[1]=3, gcd(2,2)=2 !=3 ok. (1,2): gcd(3,2)=1 !=3 ok. (1,3): gcd(3,2)=1 !=3 ok. So [3,2,2] works! And 1 is not in S. So the condition "1 must be in S" is false for n>1 if m>1.
+        // So the earlier deduction that 1 is necessary was based on the assumption that we set many 1s, but we don't have to.
+
+        // Let's re-evaluate: The problem is to find lexicographically largest array.
+        // We can try to construct greedily: for i from 1 to n, assign the largest possible value from S that doesn't conflict with already assigned values.
+        // But checking conflicts might be expensive.
+
+        // Let's think about the structure of the condition.
+        // For any i, j, let g = gcd(i,j). We need a[g] != gcd(a[i], a[j]).
+        // This is equivalent to: For any g, and any i,j such that gcd(i,j)=g, we have a[g] != gcd(a[i], a[j]).
+        // In particular, for any g, if we consider all multiples of g, say i = g*x, j = g*y with gcd(x,y)=1, then gcd(i,j)=g.
+        // So the condition must hold for all pairs of multiples of g that are coprime when divided by g.
+
+        // This suggests that if we set a[i] based on the "core" of i after removing some factor? 
+        // Another perspective: Let's define b[i] = a[i]. The condition is that the function a is not a "gcd-homomorphism" in a specific way.
+        // There is a known trick: Set a[1] = max(S). For i > 1, set a[i] = 1 if i is not a multiple of the smallest prime factor? No.
+
+        // Let's try to find a pattern by brute force for small n and S to see the lexicographically largest.
+        // Since I can't run code, I'll try to reason.
+        // For n=3, S={2,3}, we got [3,2,2].
+        // For n=3, S={2,3,4}, lexicographically largest? a[1]=4. Then a[2] cannot be multiple of 4, so max is 3. a[3] cannot be multiple of 4, max is 3. Check: (2,3): a[1]=4, gcd(3,3)=3 !=4 ok. So [4,3,3] works.
+        // What about n=4, S={2,3,4}? Try a[1]=4. a[2] max not multiple of 4: 3. a[3] max not multiple of 4: 3. a[4] max not multiple of 4: 3. Check pairs:
+        // (2,4): gcd(2,4)=2, a[2]=3, gcd(a[2],a[4]) = gcd(3,3)=3, so a[2]=3 == 3 -> violation!
+        // So [4,3,3,3] fails because of (2,4).
+        // To fix, we need a[4] such that gcd(a[2], a[4]) != a[2]. Since a[2]=3, we need gcd(3, a[4]) != 3, so a[4] cannot be a multiple of 3. In S, multiples of 3: 3. So a[4] cannot be 3. Available: 2. So try a[4]=2.
+        // Check (2,4): a[2]=3, gcd(3,2)=1 !=3 ok.
+        // Check (1,4): a[1]=4, gcd(4,2)=2 !=4 ok.
+        // Check (3,4): gcd(3,4)=1, a[1]=4, gcd(3,2)=1 !=4 ok.
+        // So [4,3,3,2] works. Is it lexicographically largest? Could a[2] be 4? No, multiple of a[1]=4. Could a[3] be 4? No. So [4,3,3,2] seems max.
+        // What about a[2]=3, a[3]=2, a[4]=3? That would be [4,3,2,3]. Check (2,4): a[2]=3, gcd(3,3)=3 -> violation. So no.
+        // So for n=4, S={2,3,4}, answer [4,3,3,2].
+
+        // Notice that a[4] is 2, which is smaller than a[2]=3. So the array is not non-increasing.
+
+        // Let's try n=5, S={2,3,4}. We want lexicographically largest.
+        // a[1]=4.
+        // a[2]: max not multiple of 4: 3.
+        // a[3]: max not multiple of 4: 3.
+        // a[4]: cannot be 3 because of (2,4) as before, so 2.
+        // a[5]: max not multiple of 4: 3. Check pairs with 5: (1,5): gcd(4,3)=1 !=4 ok. (2,5): gcd(2,5)=1, a[1]=4, gcd(3,3)=3 !=4 ok. (3,5): gcd(3,5)=1, a[1]=4, gcd(3,3)=3 !=4 ok. (4,5): gcd(4,5)=1, a[1]=4, gcd(2,3)=1 !=4 ok.
+        // So [4,3,3,2,3] works? Check (2,4) already ok. (3,4): gcd(3,4)=1, a[1]=4, gcd(3,2)=1 !=4 ok. (2,3): gcd(2,3)=1, a[1]=4, gcd(3,3)=3 !=4 ok.
+        // So [4,3,3,2,3] seems valid. Is there a better one? Could a[3] be 4? No. Could a[4] be 3? No, because of (2,4). Could a[5] be 4? No. So this seems max.
+
+        // Let's try n=6, S={3,4,6} as in sample. Output: [6,4,4,3,4,3].
+        // Our greedy approach: a[1]=6.
+        // a[2]: max not multiple of 6: 4.
+        // a[3]: max not multiple of 6: 4.
+        // a[4]: check with (2,4): a[2]=4, so a[4] cannot be multiple of 4? Wait, condition: a[gcd(2,4)] = a[2] = 4, gcd(a[2],a[4]) = gcd(4, a[4]). We need 4 != gcd(4, a[4]). This means gcd(4, a[4]) != 4, so a[4] cannot be a multiple of 4. In S, multiples of 4: 4. So a[4] cannot be 4. Max available not multiple of 6 and not multiple of 4: 3. So a[4]=3.
+        // a[5]: max not multiple of 6: 4. Check with (2,5): gcd(2,5)=1, a[1]=6, gcd(4,4)=4 !=6 ok. (3,5): gcd(3,5)=1, a[1]=6, gcd(4,4)=4 !=6 ok. (4,5): gcd(4,5)=1, a[1]=6, gcd(3,4)=1 !=6 ok. So a[5]=4 works.
+        // a[6]: max not multiple of 6: 4. Check with (2,6): gcd(2,6)=2, a[2]=4, gcd(4, a[6]). Need 4 != gcd(4, a[6]) => a[6] not multiple of 4. So a[6] cannot be 4. Max available: 3. Check (3,6): gcd(3,6)=3, a[3]=4, gcd(4,3)=1 !=4 ok. (4,6): gcd(4,6)=2, a[2]=4, gcd(3,3)=3 !=4 ok. (1,6): gcd(6,3)=3 !=6 ok. So a[6]=3 works.
+        // Result: [6,4,4,3,4,3] matches sample!
+
+        // So the greedy strategy seems to work: For i from 1 to n, assign a[i] to the largest element in S that does not cause a violation with any j < i.
+        // But checking all j < i is O(n^2) which is too slow for n=1e5.
+        // We need an efficient way to check validity.
+
+        // Let's analyze the condition when assigning a[i] given a[1..i-1].
+        // For each j < i, let g = gcd(i,j). We need a[g] != gcd(a[i], a[j]).
+        // Since g <= j < i, a[g] is already assigned.
+        // So for a candidate value x for a[i], we need for all j < i: a[gcd(i,j)] != gcd(x, a[j]).
+        // This is a lot of conditions. But maybe we can simplify.
+
+        // Notice that if we set a[i] = x, then for any j, gcd(x, a[j]) is a divisor of x.
+        // The condition a[g] != gcd(x, a[j]) means that for each divisor d of x, if there is some j with gcd(i,j)=g and gcd(x, a[j])=d, then we must have a[g] != d.
+        // This seems complicated.
+
+        // Let's look at the pattern in the greedy assignments we did:
+        // For i=1: max(S).
+        // For i>1: we avoided multiples of a[1] (since a[1] != gcd(a[1], a[i]) => a[1] does not divide a[i]).
+        // Also, for i having a divisor g (like i=4, g=2), we avoided multiples of a[g] (since a[g] != gcd(a[g], a[i]) => a[g] does not divide a[i]).
+        // In general, it seems that for any i, a[i] must not be a multiple of a[g] for any proper divisor g of i? Let's check:
+        // For i=4, proper divisors: 1,2. a[1]=6, a[2]=4. We avoided multiples of 6 and multiples of 4. Indeed, a[4]=3 is not a multiple of 6 or 4.
+        // For i=6, proper divisors: 1,2,3. a[1]=6, a[2]=4, a[3]=4. We avoided multiples of 6, 4, 4. a[6]=3 is not a multiple of 6 or 4.
+        // For i=5, proper divisors: 1. a[1]=6. Avoid multiples of 6. a[5]=4 is not a multiple of 6.
+        // For i=2, proper divisor: 1. a[1]=6. Avoid multiples of 6. a[2]=4 ok.
+        // For i=3, proper divisor: 1. a[1]=6. Avoid multiples of 6. a[3]=4 ok.
+        // So it seems the condition reduces to: For each i, a[i] must not be a multiple of a[d] for any proper divisor d of i (including 1).
+        // Is that sufficient? Let's test with a counterexample.
+        // Suppose we have a[1]=6, a[2]=4, a[3]=4, a[4]=3, a[5]=4, a[6]=3 as before.
+        // Check pair (4,6): gcd(4,6)=2, a[2]=4, gcd(a[4],a[6]) = gcd(3,3)=3. 4 != 3 ok. But note: 3 is not a multiple of a[2]=4,

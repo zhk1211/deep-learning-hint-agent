@@ -1,0 +1,321 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k, p, q;
+        cin >> n >> k >> p >> q;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // For each element, we can reduce it to min(a[i] % p, a[i] % q)
+        // but only if we can cover it with an interval of length >= k.
+        // We want to minimize sum, so we want to apply the operation to as many
+        // elements as possible, but we can only apply it to elements that are
+        // part of some chosen interval of length >= k.
+        // Actually, we can apply multiple operations, and they can overlap.
+        // The key observation: we can reduce an element to its minimum possible
+        // value (which is min(a[i] % p, a[i] % q)) if and only if there exists
+        // some interval of length >= k that contains it and we choose to apply
+        // the operation there. Since we can apply operations multiple times,
+        // we can cover any set of elements that can be covered by a union of
+        // intervals of length >= k. But we can also apply operations sequentially,
+        // so we can reduce any element that is within distance < k from some
+        // other reduced element? Actually, we can apply an operation on an interval
+        // of length exactly k, and then another overlapping, etc.
+        // The problem reduces to: we can reduce a subset of elements to their
+        // minimum possible values, provided that the distance between any two
+        // consecutive reduced elements is at most k-1? Not exactly.
+        // Let's think: we can apply an operation on any interval of length >= k.
+        // If we want to reduce a set of indices, we can cover them with intervals
+        // of length >= k. The only restriction is that we cannot reduce an isolated
+        // element that is far from others? Actually, we can always reduce a single
+        // element by choosing an interval of length k that contains it, and then
+        // we can reduce that element. But wait, the operation applies modulo to
+        // the whole interval. If we choose an interval that contains other elements,
+        // they also get reduced. That might be beneficial or not. But we want to
+        // minimize sum, so reducing other elements is also good. So we can always
+        // reduce any element by picking an interval of length k that contains it,
+        // and we don't care if other elements get reduced because that only helps.
+        // However, there is a catch: if we reduce an element, it might become larger?
+        // No, modulo operation always yields a value less than the divisor, and since
+        // a_i >= 1, a_i % m < m <= a_i? Not necessarily: if a_i < m, then a_i % m = a_i.
+        // So modulo never increases the value. So reducing more elements is always better.
+        // Therefore, we can simply reduce every element to its minimum possible value
+        // by applying operations that cover the whole array? But we need intervals of
+        // length at least k. If n >= k, we can just apply one operation on [1, n] with
+        // m = p or q? But we can only choose one m per operation. We want to reduce each
+        // element to min(a_i % p, a_i % q). Can we achieve that for all elements?
+        // We can apply operation with m=p on the whole array, then with m=q on the whole array.
+        // But after first operation, a_i becomes a_i % p. Then second operation with m=q
+        // gives (a_i % p) % q. That might not be the same as a_i % q. So order matters.
+        // We need to be careful: we can apply operations in any order, and we can choose
+        // different intervals. The goal is to make each a_i as small as possible.
+        // The minimum possible value for a_i is min(a_i % p, a_i % q, (a_i % p) % q, (a_i % q) % p).
+        // But since p < q, (a_i % q) % p = a_i % p because p < q? Actually, if p < q, then
+        // a_i % q is less than q, and then modulo p gives something. But a_i % p is already
+        // less than p. So (a_i % q) % p could be smaller than a_i % p? Example: a_i=10, p=3, q=4.
+        // a_i % p = 1, a_i % q = 2, (a_i % q) % p = 2 % 3 = 2. So min is 1.
+        // Another example: a_i=7, p=3, q=5. a_i%p=1, a_i%q=2, (a_i%q)%p=2%3=2, (a_i%p)%q=1%5=1.
+        // So min is 1. It seems min is always a_i % p? Not necessarily: if a_i % p > a_i % q?
+        // Since p < q, a_i % p can be larger than a_i % q? Example: a_i=5, p=3, q=4. a_i%p=2, a_i%q=1.
+        // So min is 1. Can we achieve 1? We can apply m=q on [i,i] if k=1? But k can be >1.
+        // If we apply m=q on an interval containing i, we get a_i % q = 1. Then if we later apply m=p,
+        // it becomes 1 % 3 = 1. So we can achieve a_i % q. But if we apply m=p first, we get 2, then m=q gives 2%4=2.
+        // So order matters. We can choose the order per element? No, operations affect intervals.
+        // But we can apply operations on different intervals. For example, we can apply m=q on a large interval
+        // to reduce some elements to a_i % q, and then apply m=p on another interval that might overlap.
+        // The final value of an element is the result of a sequence of modulo operations.
+        // Since modulo by m reduces the value to less than m, and p < q, the best we can do for an element
+        // is to eventually apply modulo by the smaller one? Actually, we can apply both in some order.
+        // The minimum possible value for a_i is min(a_i % p, a_i % q). Because if we apply p then q, we get
+        // (a_i % p) % q. Since a_i % p < p < q, (a_i % p) % q = a_i % p. If we apply q then p, we get
+        // (a_i % q) % p. This could be smaller than both? Let's check: a_i % q < q, and then modulo p.
+        // Since p < q, (a_i % q) % p could be less than a_i % p? Example: a_i=10, p=3, q=4.
+        // a_i%p=1, a_i%q=2, (a_i%q)%p=2%3=2. Not smaller. Another: a_i=8, p=3, q=7. a_i%p=2, a_i%q=1, (a_i%q)%p=1%3=1.
+        // So min is 1. Can we get 0? Only if a_i is multiple of p or q. So min is min(a_i % p, a_i % q).
+        // Is it always achievable? We can apply m=q on an interval to get a_i % q, then if we want a_i % p instead,
+        // we can apply m=p on a possibly different interval. But if we apply m=p after m=q, we get (a_i % q) % p.
+        // That might be larger than a_i % p? Actually, (a_i % q) % p <= a_i % q, but could be > a_i % p?
+        // Example: a_i=5, p=3, q=4. a_i%p=2, a_i%q=1. (a_i%q)%p=1%3=1. So 1 < 2. So it's smaller.
+        // So applying q then p can give a value <= a_i % p. So the minimum possible is indeed min(a_i % p, a_i % q).
+        // But wait, what if we apply p then q then p? That doesn't help because after p, value < p, then q does nothing,
+        // then p does nothing. So the minimum is min(a_i % p, a_i % q).
+        // So each element can be reduced to min(a_i % p, a_i % q) if we can apply the appropriate operation on it.
+        // But we have the constraint that operations must be on intervals of length >= k.
+        // If we want to reduce an element to a_i % q, we need to apply m=q on some interval containing it.
+        // If we want a_i % p, we need to apply m=p on some interval containing it.
+        // We can apply both operations on overlapping intervals. The final value of an element depends on the
+        // sequence of operations applied to it. Since we can choose intervals arbitrarily, we can effectively
+        // decide for each element independently which modulo to apply last? Not exactly, because an operation
+        // affects a contiguous interval. But we can always apply an operation on a large interval, then apply
+        // another operation on a smaller interval to "fix" some elements. For example, we can apply m=q on the
+        // whole array, then apply m=p on some subintervals to change those elements to (value % p). But if we
+        // apply m=p on an interval, it will affect all elements in that interval. If some of them were already
+        // reduced to a_i % q and we want to keep them that way, applying m=p might change them to (a_i % q) % p,
+        // which could be different. So we need to be careful.
+        // Let's think differently: The operations are modulo by p or q. Since p < q, modulo by q reduces numbers
+        // to < q, modulo by p reduces to < p. The best we can hope for an element is to be < p, and specifically
+        // min(a_i % p, a_i % q). Note that a_i % q is already < q, but might be >= p. If a_i % q < p, then
+        // a_i % q is also a possible value after modulo p? Actually, if a_i % q < p, then (a_i % q) % p = a_i % q.
+        // So we can achieve a_i % q by applying q then p? No, applying p after q would leave it unchanged if it's < p.
+        // So we can achieve a_i % q by just applying q and then if we apply p later, it stays the same.
+        // If a_i % q >= p, then applying p after q would reduce it further to (a_i % q) % p, which is < p.
+        // That might be smaller than a_i % p? Let's check: a_i % p is the remainder when dividing by p.
+        // (a_i % q) % p is the remainder of (a_i % q) divided by p. Since a_i % q = a_i - t*q,
+        // (a_i % q) % p = (a_i - t*q) % p = (a_i % p - (t*q) % p) % p. This could be smaller or larger.
+        // But we can also just apply p directly to get a_i % p. So the minimum is min(a_i % p, a_i % q, (a_i % q) % p).
+        // But wait, can we achieve (a_i % q) % p without also affecting other elements? We can apply q on a large interval,
+        // then apply p on a subinterval. So we can achieve for some elements: a_i % q (if we don't apply p on them),
+        // and for others: (a_i % q) % p (if we apply p on them). Also we can apply p first on some interval, then q later?
+        // If we apply p first, we get a_i % p. Then applying q gives (a_i % p) % q = a_i % p because a_i % p < p < q.
+        // So that doesn't change. So applying p first and then q leaves it as a_i % p.
+        // So the possible final values for an element are:
+        // - a_i (if no operation applied)
+        // - a_i % p (by applying p at some point, and maybe q later but no effect)
+        // - a_i % q (by applying q at some point, and no p after)
+        // - (a_i % q) % p (by applying q then p)
+        // Note that a_i % p and (a_i % q) % p are both < p. The minimum among these is the best.
+        // Let best[i] = min({a_i % p, a_i % q, (a_i % q) % p}).
+        // But wait, is (a_i % p) % q ever smaller? No, because a_i % p < p < q, so it's just a_i % p.
+        // So best[i] = min(a_i % p, a_i % q, (a_i % q) % p).
+        // Actually, since p < q, a_i % q could be larger than a_i % p? Yes, e.g., a_i=10, p=3, q=4: a_i%p=1, a_i%q=2.
+        // So best[i] = min(1, 2, 2%3=2) = 1.
+        // Another example: a_i=7, p=3, q=5: a_i%p=1, a_i%q=2, (2)%3=2 -> min=1.
+        // Another: a_i=5, p=3, q=4: a_i%p=2, a_i%q=1, (1)%3=1 -> min=1.
+        // So best[i] is always min(a_i % p, a_i % q) because (a_i % q) % p >= min(a_i % p, a_i % q)? Not necessarily.
+        // Consider a_i=8, p=5, q=6. a_i%p=3, a_i%q=2, (2)%5=2. min=2.
+        // Consider a_i=11, p=4, q=7. a_i%p=3, a_i%q=4, (4)%4=0. min=0. Here (a_i%q)%p = 0 is smaller than both a_i%p=3 and a_i%q=4.
+        // So best[i] can be (a_i % q) % p, which is smaller than min(a_i%p, a_i%q).
+        // So we need to consider all three.
+        // But can we always achieve best[i] for any element independently? We need to assign each element a final value
+        // that is one of these, and we need to achieve it via a sequence of interval operations.
+        // The operations are: we can choose intervals of length >= k and apply m=p or m=q.
+        // This is equivalent to: we can apply a set of "p-modulo" intervals and "q-modulo" intervals.
+        // The final value of an element is the result of applying these modulos in the order they are performed.
+        // Since modulo operations are not commutative, order matters. But we can choose the order of operations.
+        // We can think of it as: we first apply all q-modulo operations, then all p-modulo operations? Or vice versa?
+        // If we apply a p-modulo after a q-modulo, it reduces the value further. If we apply q-modulo after p-modulo,
+        // it has no effect because the value is already < p < q. So the only way to get a value < p is to have the
+        // last modulo applied be p (or no modulo at all, but then value >= p? Actually a_i could be < p initially).
+        // If the last modulo is q, the value is < q but could be >= p.
+        // So to achieve a value < p, the last operation on that element must be p-modulo.
+        // To achieve a value that is exactly a_i % q (and >= p), the last operation must be q-modulo, and no p-modulo after.
+        // To achieve (a_i % q) % p, the last operation is p-modulo, and before that there was a q-modulo.
+        // So we can think of the process as: we can choose a set of elements that receive p-modulo as their last operation,
+        // and a set that receive q-modulo as their last operation (and no p after). But we can also have elements that
+        // receive no operation (value = a_i). But we want to minimize sum, so we would never leave an element unoperated
+        // if we can reduce it, unless we are forced to because of interval length constraints.
+        // So the problem reduces to: we can apply a set of intervals of length >= k with label p or q.
+        // The effect on an element depends on the labels of intervals covering it and their order.
+        // Since we can choose the order arbitrarily, we can assume we first apply all q-intervals, then all p-intervals.
+        // Why? Because if we apply a p-interval before a q-interval, the q-interval would have no effect (since values < p < q).
+        // So it's never beneficial to apply q after p. So we can assume all q-intervals are applied first, then all p-intervals.
+        // Then the final value of an element is:
+        // - If it is covered by at least one q-interval, its value becomes a_i % q.
+        // - Then, if it is covered by at least one p-interval, its value becomes (previous value) % p.
+        //   If it was covered by q, previous value is a_i % q, so final = (a_i % q) % p.
+        //   If it was not covered by q, previous value is a_i, so final = a_i % p.
+        // - If it is covered by neither, final = a_i.
+        // So we can decide for each element whether it gets:
+        // 0: no operation -> a_i
+        // 1: only p -> a_i % p
+        // 2: only q -> a_i % q
+        // 3: q then p -> (a_i % q) % p
+        // But we have constraints: the set of elements that get p (either only p or q then p) must be coverable by
+        // a union of intervals of length >= k, where each interval applies p. Similarly, the set of elements that get q
+        // (either only q or q then p) must be coverable by a union of intervals of length >= k applying q.
+        // However, note that if an element gets q then p, it is covered by both a q-interval and a p-interval.
+        // The p-intervals and q-intervals can be chosen independently. We can apply multiple intervals of each type.
+        // The only restriction is that each interval must have length >= k.
+        // So we need to choose two sets S_p and S_q (the elements that are covered by at least one p-interval and at least one q-interval, respectively).
+        // Then the final value of element i is:
+        // if i in S_p and i in S_q: (a_i % q) % p
+        // else if i in S_p: a_i % p
+        // else if i in S_q: a_i % q
+        // else: a_i
+        // We want to minimize sum of final values.
+        // We can choose S_p and S_q arbitrarily, subject to: S_p can be covered by intervals of length >= k (with label p),
+        // and S_q can be covered by intervals of length >= k (with label q). Since intervals can overlap and we can use
+        // multiple intervals, the condition for a set S to be "coverable" by intervals of length >= k is that
+        // the maximum gap between consecutive elements of S is at most k-1? Actually, if we have a set of indices,
+        // we can cover them with intervals of length >= k if and only if there is no isolated element that is
+        // more than k-1 away from any other element? Wait, we can always cover a single element by an interval of length k
+        // that contains it, as long as n >= k. But if n < k, we cannot apply any operation because interval length must be >= k.
+        // So if n < k, we cannot do any operation. So answer is sum a_i.
+        // If n >= k, we can cover any single element by choosing an interval of length k that includes it.
+        // But we have to be careful: if we want to cover a set S, we can just take each element and cover it with
+        // an interval of length k. However, these intervals might overlap and affect other elements. But we don't care
+        // if other elements get covered because that only reduces their values further (which is good). So we can
+        // always cover any subset S by simply covering each element individually with an interval of length k.
+        // But wait: if we cover an element with a p-interval, we might accidentally cover a neighboring element that
+        // we wanted to keep as only q or untouched. But covering it with p would change its value to something involving p.
+        // That might be worse? Actually, if we cover an element with p, its value becomes either a_i % p or (a_i % q) % p.
+        // Is that always <= its value if we didn't cover it with p? If we didn't cover it with p, its value would be
+        // either a_i or a_i % q. Since a_i % p <= a_i, and (a_i % q) % p <= a_i % q, applying p never increases the value.
+        // So accidentally covering extra elements with p is always beneficial or neutral. Similarly, covering extra elements
+        // with q is always beneficial or neutral because a_i % q <= a_i, and if they later get p, it's still <=.
+        // Therefore, we can always expand our intervals to cover more elements without penalty. This means we can
+        // essentially cover any element we want, and we can cover the whole array if we want. The only restriction is
+        // that each operation must be on an interval of length >= k. But we can just apply one operation on the whole array
+        // if n >= k. So if n >= k, we can apply p on the whole array and q on the whole array. Then every element gets
+        // q then p? If we apply q on whole array then p on whole array, every element gets (a_i % q) % p.
+        // Is that always the minimum possible sum? Not necessarily, because for some elements, a_i % q might be smaller
+        // than (a_i % q) % p? No, (a_i % q) % p <= a_i % q. So applying p after q always reduces or keeps same.
+        // So applying both on the whole array gives sum of (a_i % q) % p. But wait, what if for some element,
+        // a_i % p is smaller than (a_i % q) % p? Example: a_i=10, p=3, q=4. a_i%p=1, (a_i%q)%p = 2%3=2. So 1 < 2.
+        // So applying both gives 2, but we could get 1 by applying only p. So applying q first and then p might not be optimal.
+        // So we need to decide for each element whether to apply q before p or not.
+        // But if we apply p on the whole array, we can't avoid applying p on elements that we wanted to keep as a_i % q.
+        // However, we can apply p on a subset of the array by choosing intervals that don't cover those elements.
+        // But intervals must have length >= k. So we might be forced to cover some elements we don't want to.
+        // This is the core constraint: we can choose intervals of length >= k, but they might cover unwanted elements.
+        // Since covering unwanted elements with p is only bad if we wanted them to be a_i % q and (a_i % q) % p > a_i % q?
+        // But (a_i % q) % p <= a_i % q, so it's never worse. So applying p on an element that already had q is never worse.
+        // Wait, is it possible that a_i % q < (a_i % q) % p? No, modulo p always gives a number less than p, but a_i % q
+        // could be less than p. If a_i % q < p, then (a_i % q) % p = a_i % q. So it's equal. If a_i % q >= p, then
+        // (a_i % q) % p < p <= a_i % q. So it's strictly smaller. So applying p after q never increases the value.
+        // So if we apply q on an element, we can always apply p on it later without penalty. Therefore, the only
+        // reason not to apply p on an element is if we didn't apply q on it and we want to keep it as a_i (no operation)
+        // or we want to apply only q? But applying only q gives a_i % q. Applying p after q gives (a_i % q) % p <= a_i % q.
+        // So applying p after q is always at least as good as only q. So we should always apply p after q if we can.
+        // What about applying only p? That gives a_i % p. Applying q then p gives (a_i % q) % p. Which is smaller?
+        // It depends. So for each element, we have two reasonable options:
+        // Option A: apply p (possibly after q? but if we apply p, we can also apply q before it if that helps).
+        // Option B: apply nothing (keep a_i).
+        // But wait, we can also apply only q and then not p? But as argued, applying p after q is never worse.
+        // So if we decide to apply q, we should also apply p. So the only decision is whether to apply p or not.
+        // If we apply p, we can also choose to apply q before it or not. So the final value if we apply p is
+        // min(a_i % p, (a_i % q) % p). Let's call this val_p[i] = min(a_i % p, (a_i % q) % p).
+        // If we don't apply p, we can still apply q? But if we apply q without p, we get a_i % q. But we could also
+        // apply p after and get <= a_i % q. So if we are willing to apply q, we might as well apply p too.
+        // However, applying p requires covering the element with a p-interval. If we cannot cover it with a p-interval
+        // without covering other elements that we want to keep as a_i? But keeping as a_i is never better than applying p?
+        // Actually, a_i % p <= a_i, so applying p is always better or equal. So we would never want to keep an element as a_i.
+        // The only exception is if we cannot apply p because of the interval length constraint? But if n >= k, we can always
+        // apply p on the whole array. So we can always reduce every element to at most a_i % p. So we should always apply p
+        // on everything? But wait, if we apply p on everything, we get a_i % p. But we might get even smaller by applying q
+        // before p on some elements. So the optimal strategy is: apply q on some intervals, then apply p on everything.
+        // Since applying p on everything is always possible (if n >= k) and never worsens anything, we can just do that.
+        // Then the problem reduces to: we can apply q on some intervals of length >= k. After that, we apply p on the whole array.
+        // The final value of element i is:
+        // - If it was covered by some q-interval: (a_i % q) % p
+        // - Else: a_i % p
+        // We want to minimize the sum. So we want to apply q to those elements where (a_i % q) % p < a_i % p.
+        // Let delta[i] = a_i % p - (a_i % q) % p. If delta[i] > 0, we want to apply q to element i.
+        // If delta[i] <= 0, we don't want to apply q (or it doesn't matter).
+        // But we can only apply q on intervals of length >= k. So we need to choose a set of intervals of length >= k
+        // to apply q, such that we cover a subset of elements with positive delta. We want to maximize the sum of delta
+        // over covered elements (since that reduces the sum). But we can also cover elements with non-positive delta;
+        // covering them doesn't hurt (since (a_i % q) % p <= a_i % p? Wait, if delta[i] <= 0, then (a_i % q) % p >= a_i % p.
+        // Is that possible? Let's check: a_i % p is the remainder mod p. (a_i % q) % p is the remainder of (a_i % q) mod p.
+        // Since a_i % q < q, and p < q, it's possible that (a_i % q) % p > a_i % p?
+        // Example: a_i=7, p=3, q=5. a_i%p=1, a_i%q=2, (2)%3=2. So 2 > 1. So delta = -1.
+        // So applying q before p can actually increase the final value! So we must be careful: if we apply q on an element
+        // with negative delta, we make it worse. So we cannot just apply q everywhere.
+        // Therefore, we need to choose a set of q-intervals to cover exactly the elements with positive delta, and avoid
+        // covering elements with negative delta. But intervals have length >= k, so we might be forced to cover some
+        // negative delta elements if we want to cover a cluster of positive delta elements.
+        // This becomes a classic problem: we have an array of "benefits" delta[i] (can be positive, negative, or zero).
+        // We can choose any number of intervals of length >= k. Each chosen interval applies q to all its elements.
+        // The total benefit is the sum of delta[i] for elements covered by at least one chosen interval.
+        // We want to maximize total benefit. Then the answer is sum(a_i % p) - max_benefit.
+        // But wait: is it allowed to apply q multiple times? Yes, but applying q multiple times doesn't change anything
+        // because after first q, value is a_i % q, and another q gives (a_i % q) % q = a_i % q. So no effect.
+        // So we can assume each element is covered by q at most once (or we just care about coverage).
+        // So the problem: given array delta[0..n-1], choose a set of intervals of length >= k to maximize sum of delta over covered indices.
+        // This is a standard DP or greedy problem.
+        // Let's check the constraints: sum n <= 1e5, so O(n) or O(n log n) per test case is fine.
+        // We can solve this with DP: dp[i] = maximum benefit we can get from prefix up to i, with some state about the last chosen interval.
+        // Since intervals can overlap, we can think of it as: we can start an interval at any l, and it must have length >= k.
+        // We can also have multiple intervals. The covered set is the union of these intervals.
+        // This is equivalent to: we can mark some elements as covered. The condition for a set of covered elements to be valid
+        // is that every maximal contiguous segment of covered elements has length >= k? Not exactly, because we can cover
+        // a segment of length < k by using a larger interval that extends beyond the segment? But if we extend beyond,
+        // we cover additional elements. So if we want to cover a set S, we can always cover it by taking each connected component
+        // of S and covering it with a single interval that exactly spans that component, provided the component length >= k.
+        // If a component has length < k, we cannot cover it without also covering some adjacent elements. So we would have to
+        // extend the interval to length at least k, which means we must cover some additional elements on the left or right.
+        // So the condition is: we can choose a set of intervals of length >= k. The union of these intervals is some set U.
+        // U can be any set such that every connected component of U has length >= k? Not necessarily, because we could have
+        // two intervals that overlap, creating a larger component. But if we have a component of length < k, it must be
+        // covered by an interval that extends outside the component, meaning the component is not maximal; the actual covered
+        // set would include those outside elements. So in any valid covered set U, every maximal contiguous block of U
+        // must have length >= k. Conversely, any set U with the property that every maximal contiguous block has length >= k
+        // can be covered by taking each block as an interval (since its length >= k). So the condition is exactly:
+        // the covered set U is a union of disjoint intervals, each of length >= k. (They can be adjacent, but then they merge
+        // into a larger interval, which is also >= k). So U is a set where every connected component has length >= k.
+        // Therefore, we need to choose a set U of indices such that every contiguous segment in U has length >= k,
+        // to maximize sum_{i in U} delta[i].
+        // This is a classic DP: dp[i] = max benefit considering prefix up to i.
+        // We can either not cover i, then dp[i] = dp[i-1].
+        // Or we can end a covered segment at i. The segment must have length >= k. So we can start the segment at j <= i - k + 1.
+        // Then we cover [j, i]. The benefit is sum_{t=j}^i delta[t] + dp[j-1].
+        // So dp[i] = max(dp[i-1], max_{j <= i - k + 1} (dp[j-1] + sum_{t=j}^i delta[t])).
+        // This is O(n^2) naive, but we can optimize.
+        // Let pref[i] = sum_{t=0}^{i} delta[t] (with pref[-1]=0).
+        // Then sum_{t=j}^i delta[t] = pref[i] - pref[j-1].
+        // So dp[i] = max(dp[i-1], pref[i] + max_{j <= i - k + 1} (dp[j-1] - pref[j-1])).
+        // Let best[j] = dp[j-1] - pref[j-1] for j from 1 to n (with dp[-1]=0, pref[-1]=0).
+        // Then for each i, we need max_{j <= i - k + 1} best[j].
+        // We can maintain the maximum of best[j] as we iterate i.
+        // Specifically, we can keep a running maximum of best[j] for j up to i - k + 1.
+        // As i increases, the upper bound increases, so we can just update the max.
+        // Let's define arrays 0-indexed.
+        // Let a[0..n-1] be delta.
+        // pref[0] = delta[0], pref[i] = pref[i-1] + delta[i].
+        // dp[i] = max benefit for prefix up to index i (inclusive).
+        // dp[-1] = 0.
+        // For i from 0 to n-1:
+        //   dp[i] = dp[i-1] (if i>0 else 0)
+        //   if i >= k-1: // we can have a segment ending at i of length at least k
+        //       // j can be from 0 to i-k+1
+        //       // we need max_{j=0..i-k+1} ( (

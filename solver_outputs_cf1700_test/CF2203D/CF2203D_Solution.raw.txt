@@ -1,0 +1,52 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        int N = n + m;
+        vector<int> cnt(N + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            int x;
+            cin >> x;
+            cnt[x]++;
+        }
+        vector<int> b(m);
+        for (int i = 0; i < m; ++i) {
+            cin >> b[i];
+        }
+        vector<int> c(N + 1, 0);
+        for (int i = 1; i <= N; ++i) {
+            if (cnt[i]) {
+                for (int j = i; j <= N; j += i) {
+                    c[j] += cnt[i];
+                }
+            }
+        }
+        int A = 0, B = 0, C = 0;
+        for (int y : b) {
+            if (c[y] == n) A++;
+            else if (c[y] == 0) B++;
+            else C++;
+        }
+        if (C % 2 == 1) {
+            if (B > A) cout << "Bob\n";
+            else cout << "Alice\n";
+        } else {
+            if (A > B) cout << "Alice\n";
+            else cout << "Bob\n";
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    solve();
+    return 0;
+}
+```

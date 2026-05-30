@@ -1,0 +1,460 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<int>> adj(n + 1);
+        for (int i = 0; i < n - 1; i++) {
+            int u, v;
+            cin >> u >> v;
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+        string s;
+        cin >> s;
+        s = " " + s; // 1-indexed
+        
+        vector<int> leaf;
+        for (int i = 2; i <= n; i++) {
+            if (adj[i].size() == 1) {
+                leaf.push_back(i);
+            }
+        }
+        
+        int cnt0 = 0, cnt1 = 0, cntQ = 0;
+        for (int v : leaf) {
+            if (s[v] == '0') cnt0++;
+            else if (s[v] == '1') cnt1++;
+            else cntQ++;
+        }
+        
+        int root_val = -1; // 0 or 1 if fixed, -1 if ?
+        if (s[1] == '0') root_val = 0;
+        else if (s[1] == '1') root_val = 1;
+        
+        int ans = 0;
+        if (root_val != -1) {
+            // Root is fixed
+            if (root_val == 0) {
+                ans = cnt1 + (cntQ + 1) / 2;
+            } else {
+                ans = cnt0 + (cntQ + 1) / 2;
+            }
+        } else {
+            // Root is ?
+            // First, consider the case where Iris colors root first
+            // She will choose the value that gives max score
+            int score_if_root0 = cnt1 + (cntQ + 1) / 2;
+            int score_if_root1 = cnt0 + (cntQ + 1) / 2;
+            // But if Iris colors root, Dora will then color leaves optimally.
+            // Actually, the game: Iris first, she can color root or leaf.
+            // The optimal play is more subtle.
+            // According to hints, if root is ?, the first player may color root.
+            // Let's analyze the game.
+            // We have cnt0, cnt1, cntQ leaves, and root is ?.
+            // Total number of ? is totalQ = cntQ + (s[1]=='?'?1:0)
+            // But we only care about leaves and root.
+            // The game: players take turns choosing any ? vertex and setting 0/1.
+            // Iris wants to maximize non-zero weight leaves.
+            // Weight of leaf v is non-zero iff s[1] != s[v].
+            // So Iris wants to maximize number of leaves with value != root.
+            // Dora wants to minimize that.
+            
+            // If root is ?, it's a special vertex.
+            // Let's denote L = number of leaves.
+            // We have fixed leaves: a = cnt0, b = cnt1.
+            // And q = cntQ leaves are ?.
+            // Root is ?.
+            
+            // The game: total moves = q + 1 (if root is ?).
+            // Iris moves first.
+            // She can choose to set root or a leaf.
+            
+            // Let's think: if Iris sets root to 0, then the game reduces to root fixed to 0,
+            // and remaining ? leaves = q, but now it's Dora's turn.
+            // In the fixed root scenario with q leaves ?, the score is:
+            // if root=0: score = cnt1 + ceil(q/2) because Iris will get half of the ? leaves rounded up? Wait.
+            // In fixed root game, the players only color leaves. Iris wants to set leaf != root, Dora wants leaf == root.
+            // So Iris will try to set ? leaves to 1 (if root=0), Dora will set to 0.
+            // Since Iris goes first in that subgame? Actually after Iris sets root, it's Dora's turn.
+            // So in the leaf-coloring subgame, Dora moves first.
+            // Number of ? leaves = q. Players alternate, Dora first.
+            // Dora wants to minimize leaves != root, i.e., she wants leaves == root.
+            // Iris wants leaves != root.
+            // So Dora will set leaf to root value, Iris to opposite.
+            // With Dora first, she gets ceil(q/2) moves, Iris gets floor(q/2) moves.
+            // So leaves != root = (Iris moves) = floor(q/2) if root=0? Wait: if root=0, Iris wants 1.
+            // Dora sets 0, Iris sets 1. So number of 1s = Iris moves = floor(q/2).
+            // Total non-zero = cnt1 + floor(q/2).
+            // But if Iris sets root to 1, then Dora first in leaf game: Dora sets 1, Iris sets 0.
+            // Non-zero = cnt0 + floor(q/2).
+            
+            // However, Iris might not set root first. She could set a leaf first.
+            // If she sets a leaf, she can choose value to be opposite of what she anticipates root will be?
+            // This is a game of perfect information.
+            // Let's analyze the game tree.
+            // States: (root_fixed?, root_val, a, b, q, turn)
+            // But we can simplify.
+            
+            // The weight of a leaf is non-zero iff its value != root value.
+            // So the final score = number of leaves with value != root.
+            // Let x = number of leaves with value 0, y = number of leaves with value 1.
+            // If root = 0, score = y; if root = 1, score = x.
+            // Iris chooses root value if she plays there, but Dora can also choose root if Iris doesn't.
+            
+            // Total leaves = L = a + b + q.
+            // Iris wants to maximize max(x, y) if she controls root? Not exactly.
+            // Actually, the final root value is determined by whoever sets it.
+            // The game ends when all ? are filled.
+            // This is a finite impartial game? But with different goals.
+            
+            // Let's consider the parity of total moves.
+            // Total ? = q + 1 (including root). Iris moves first.
+            // If total ? is odd, Iris makes the last move.
+            // If total ? is even, Dora makes the last move.
+            
+            // The root is a special vertex because its value affects all leaves.
+            // It's a classic game: players assign values to root and leaves.
+            // We can think of it as: Iris wants to maximize the difference between the number of leaves different from root and those same? No, just maximize count of leaves != root.
+            
+            // Let's denote the final root value R (0 or 1).
+            // Then score = (if R=0: y; if R=1: x).
+            // Iris wants to maximize this, Dora minimize.
+            
+            // Suppose Iris can force a certain outcome.
+            // Let's analyze the game as a combinatorial game.
+            // We can consider the "difference" in moves.
+            
+            // Alternative approach from hints:
+            // Hint 7: When there are equal numbers of 0 and 1 in the leaf nodes, the first to colour the root may lose the advantage of being the first.
+            // This suggests that if cnt0 == cnt1, the game might be different.
+            
+            // Let's derive the optimal play.
+            // We have fixed leaves: a zeros, b ones.
+            // q leaves are ?.
+            // Root is ?.
+            
+            // If Iris colors root first:
+            // She chooses R = 0 or 1 to maximize the eventual score given that Dora moves next on leaves.
+            // If she chooses R=0: Dora will then play on leaves. Dora wants to minimize y (leaves=1).
+            // Dora will set ? leaves to 0, Iris will set to 1.
+            // Moves on leaves: q leaves, Dora first. Dora gets ceil(q/2) moves, Iris gets floor(q/2).
+            // So y = b + floor(q/2). Score = y.
+            // If she chooses R=1: similarly, x = a + floor(q/2). Score = x.
+            // So Iris will choose R to maximize max(a, b) + floor(q/2).
+            // So if Iris colors root first, score = max(a, b) + floor(q/2).
+            
+            // If Iris does NOT color root first, she colors a leaf.
+            // She can set a leaf to 0 or 1. Then Dora moves.
+            // This gets complicated. But maybe Iris's optimal move is always to color root first?
+            // Let's check if coloring a leaf first can give a better score.
+            
+            // Suppose Iris colors a leaf. She can choose its value.
+            // After her move, q becomes q-1, and either a or b increases by 1.
+            // Then it's Dora's turn. Dora can now choose to color root or another leaf.
+            // If Dora colors root, she will choose R to minimize the score, then Iris moves on remaining leaves.
+            // This is a minimax problem.
+            
+            // Let's define a function f(a, b, q, turn) where turn = 0 for Iris, 1 for Dora, and root is still ?.
+            // But we also need to know if root is already colored. So state: (root_fixed, R, a, b, q, turn).
+            // Since n up to 1e5, we need O(1) per test case.
+            
+            // Let's analyze the game more carefully.
+            // The game is symmetric with respect to 0 and 1 if we swap a and b.
+            // Let's denote the "advantage".
+            
+            // Consider the total number of moves on leaves: q.
+            // The root move is a single move that can be taken by either player.
+            // The player who colors root decides R, and then the remaining game is just on leaves with that R fixed.
+            // In the leaf-only game with fixed R, the score is determined by how many ? leaves the maximizing player (Iris) can turn into the opposite of R.
+            // If R=0, Iris wants 1s, Dora wants 0s.
+            // If Iris moves first on leaves, she gets ceil(q/2) 1s.
+            // If Dora moves first on leaves, Iris gets floor(q/2) 1s.
+            
+            // So the value of coloring root is: the player who colors root chooses R, and then the leaf game starts with the other player moving first.
+            
+            // Initially, it's Iris's turn. She can either:
+            // 1. Color root: she chooses R, then Dora moves first on q leaves.
+            //    Score = max( (if R=0: b + floor(q/2)), (if R=1: a + floor(q/2)) ) = max(a, b) + floor(q/2).
+            // 2. Color a leaf: she changes a or b, q decreases by 1. Then it's Dora's turn with root still ?.
+            
+            // If Iris colors a leaf, she can choose to increment a or b.
+            // She will choose the one that leads to a better final score.
+            // Then Dora faces state (a', b', q-1) with root ? and it's Dora's turn.
+            // Dora can then either color root or color a leaf.
+            
+            // Let's analyze Dora's options when it's her turn with root ?.
+            // Dora wants to minimize the final score.
+            // She can:
+            // 1. Color root: she chooses R to minimize, then Iris moves first on leaves.
+            //    If Dora chooses R=0: Iris first on leaves -> Iris gets ceil(q/2) 1s. Score = b + ceil(q/2).
+            //    If R=1: Score = a + ceil(q/2).
+            //    Dora will choose min(a, b) + ceil(q/2).
+            // 2. Color a leaf: she can change a or b, q decreases by 1, then Iris's turn with root ?.
+            
+            // This is a minimax with states. Notice that the game is essentially about who gets to color root and who gets the first move on leaves.
+            // The total number of moves is q + 1. The root move is just one of them.
+            // The players can choose to take the root move at any time.
+            
+            // Let's think in terms of "control". The player who colors root gets to set R, but then gives the opponent the first move on leaves.
+            // The first move on leaves gives an advantage of ceil(q/2) vs floor(q/2) i.e., one extra leaf if q is odd.
+            
+            // Let's denote the value of the game from state (a, b, q, turn, root_colored_flag).
+            // We can try to find a closed form.
+            
+            // Observe that the game is determined by the parity of q and the difference between a and b.
+            // Let's simulate small values to find pattern.
+            // But we can also use the hints: Hint 7 says when a == b, the first to color root may lose advantage.
+            
+            // Let's analyze the case when Iris colors root first: score = max(a,b) + floor(q/2).
+            // If Iris instead colors a leaf, she can try to increase the max or affect the parity.
+            
+            // Suppose Iris increments the larger of a,b? Or the smaller?
+            // She wants to maximize the final score. The final score will be either from Dora coloring root or from Iris coloring root later.
+            
+            // Let's consider the game as a sequence of moves. Since all leaves are symmetric except their current fixed values, the only state is (a, b, q).
+            // The root is a special move.
+            
+            // Let's define V(a, b, q) as the score when it's Iris's turn, root is ?, and there are a zeros, b ones, q question leaves.
+            // Similarly, U(a, b, q) for Dora's turn.
+            
+            // Iris's turn:
+            // V(a,b,q) = max(
+            //     max(a,b) + floor(q/2),   // color root
+            //     max( V(a+1,b,q-1), V(a,b+1,q-1) )   // color leaf (if q>0)
+            // )
+            // Dora's turn:
+            // U(a,b,q) = min(
+            //     min(a,b) + ceil(q/2),    // color root
+            //     min( U(a+1,b,q-1), U(a,b+1,q-1) )   // color leaf (if q>0)
+            // )
+            
+            // Base cases: when q=0, no leaf moves. If root is still ?, then the player whose turn it is must color root.
+            // So V(a,b,0) = max(a,b) + floor(0/2) = max(a,b)
+            // U(a,b,0) = min(a,b) + ceil(0/2) = min(a,b)
+            
+            // We can try to compute these recurrences. Since q can be up to n, we need O(1).
+            // Notice that the recurrences only depend on a, b, q. The difference d = a - b might be important.
+            
+            // Let's try to see if the optimal strategy is to always color root immediately unless some condition.
+            // Let's compute V and U for small q.
+            
+            // For q=0:
+            // V(a,b,0) = max(a,b)
+            // U(a,b,0) = min(a,b)
+            
+            // For q=1:
+            // V(a,b,1) = max(
+            //     max(a,b) + floor(1/2) = max(a,b) + 0 = max(a,b),
+            //     max( V(a+1,b,0), V(a,b+1,0) ) = max( max(a+1,b), max(a,b+1) ) = max(a,b) + 1
+            // )
+            // So V(a,b,1) = max(a,b) + 1. (Iris will color leaf to increase max)
+            
+            // U(a,b,1) = min(
+            //     min(a,b) + ceil(1/2) = min(a,b) + 1,
+            //     min( U(a+1,b,0), U(a,b+1,0) ) = min( min(a+1,b), min(a,b+1) ) = min(a,b)
+            // )
+            // So U(a,b,1) = min(a,b). (Dora will color leaf to keep min low)
+            
+            // For q=2:
+            // V(a,b,2) = max(
+            //     max(a,b) + floor(2/2) = max(a,b) + 1,
+            //     max( V(a+1,b,1), V(a,b+1,1) ) = max( max(a+1,b)+1, max(a,b+1)+1 ) = max(a,b) + 2
+            // )
+            // So V(a,b,2) = max(a,b) + 2.
+            
+            // U(a,b,2) = min(
+            //     min(a,b) + ceil(2/2) = min(a,b) + 1,
+            //     min( U(a+1,b,1), U(a,b+1,1) ) = min( min(a+1,b), min(a,b+1) ) = min(a,b)
+            // )
+            // So U(a,b,2) = min(a,b).
+            
+            // For q=3:
+            // V(a,b,3) = max(
+            //     max(a,b) + floor(3/2) = max(a,b) + 1,
+            //     max( V(a+1,b,2), V(a,b+1,2) ) = max( max(a+1,b)+2, max(a,b+1)+2 ) = max(a,b) + 3
+            // )
+            // So V(a,b,3) = max(a,b) + 3.
+            
+            // U(a,b,3) = min(
+            //     min(a,b) + ceil(3/2) = min(a,b) + 2,
+            //     min( U(a+1,b,2), U(a,b+1,2) ) = min( min(a+1,b), min(a,b+1) ) = min(a,b)
+            // )
+            // So U(a,b,3) = min(a,b).
+            
+            // Pattern: For Iris's turn, V(a,b,q) = max(a,b) + q if q is odd? Wait:
+            // q=0: max
+            // q=1: max+1
+            // q=2: max+2
+            // q=3: max+3
+            // So V(a,b,q) = max(a,b) + q for all q? Check q=0: max+0, yes.
+            // For Dora's turn, U(a,b,q):
+            // q=0: min
+            // q=1: min
+            // q=2: min
+            // q=3: min
+            // So U(a,b,q) = min(a,b) for all q? Check q=1: min(a,b) vs min(a,b)+1, min wins. q=2: min(a,b) vs min(a,b)+1, min wins. q=3: min(a,b) vs min(a,b)+2, min wins.
+            // So U(a,b,q) = min(a,b) always.
+            
+            // Let's test q=4:
+            // V(a,b,4) = max( max+2, max(V(a+1,b,3), V(a,b+1,3)) ) = max( max+2, max(max(a+1,b)+3, max(a,b+1)+3) ) = max( max+2, max+4 ) = max+4.
+            // U(a,b,4) = min( min+2, min(U(a+1,b,3), U(a,b+1,3)) ) = min( min+2, min(min(a+1,b), min(a,b+1)) ) = min( min+2, min ) = min.
+            // So pattern holds.
+            
+            // By induction, it seems:
+            // If it's Iris's turn and root is ?, she can always achieve max(a,b) + q by coloring leaves appropriately, and coloring root gives only max(a,b) + floor(q/2), which is worse for q>=1. So she will never color root first? But wait, our recurrence assumed she can color leaf and then the game continues with Dora's turn. But we found U(a,b,q) = min(a,b). That means if Iris colors a leaf, Dora will then face state with min(a,b) and can force the final score to be min(a,b). But that would be terrible for Iris if min(a,b) is small!
+            // Let's re-evaluate: In the recurrence for V, we said V(a,b,q) = max( color_root, max(V(a+1,b,q-1), V(a,b+1,q-1)) ). But V(a+1,b,q-1) is the score when it's Iris's turn again? No! After Iris colors a leaf, it becomes Dora's turn. So the next state is U, not V!
+            // I made a mistake: After Iris colors a leaf, it's Dora's turn. So the recurrence should be:
+            // V(a,b,q) = max( color_root_score, max( U(a+1,b,q-1), U(a,b+1,q-1) ) )
+            // Similarly, U(a,b,q) = min( color_root_score, min( V(a+1,b,q-1), V(a,b+1,q-1) ) )
+            
+            // Let's recompute with correct turn order.
+            
+            // Define:
+            // V(a,b,q): Iris's turn, root ?
+            // U(a,b,q): Dora's turn, root ?
+            
+            // Base: q=0, no leaf moves. The player must color root.
+            // V(a,b,0) = max(a,b) + floor(0/2) = max(a,b)
+            // U(a,b,0) = min(a,b) + ceil(0/2) = min(a,b)
+            
+            // For q>=1:
+            // Iris options:
+            // 1. Color root: score = max(a,b) + floor(q/2)   (since then Dora first on q leaves)
+            // 2. Color leaf: she can choose to make a+1 or b+1, then q-1 leaves left, Dora's turn. So score = max( U(a+1,b,q-1), U(a,b+1,q-1) )
+            
+            // Dora options:
+            // 1. Color root: score = min(a,b) + ceil(q/2)   (since then Iris first on q leaves)
+            // 2. Color leaf: score = min( V(a+1,b,q-1), V(a,b+1,q-1) )
+            
+            // Let's compute small q with this corrected recurrence.
+            
+            // q=0:
+            // V0 = max(a,b)
+            // U0 = min(a,b)
+            
+            // q=1:
+            // V1 = max( max(a,b) + floor(1/2)=max, max(U0(a+1,b,0), U0(a,b+1,0)) = max( min(a+1,b), min(a,b+1) ) )
+            // min(a+1,b) = if a+1 <= b? Actually min(a+1,b) = b if b <= a+1 else a+1. But simpler: min(a+1,b) = min(a,b) + (a < b ? 1 : 0)? Let's just keep symbolic.
+            // Similarly min(a,b+1) = min(a,b) + (b < a ? 1 : 0).
+            // So max of those two: if a == b, min(a+1,b)=a, min(a,b+1)=a, max=a. If a > b, min(a+1,b)=b, min(a,b+1)=b+1? Wait: if a > b, then a >= b+1. min(a+1,b)=b. min(a,b+1): since a > b, b+1 <= a? Not necessarily: if a = b+1, then b+1 = a, so min(a,b+1)=a. If a > b+1, min(a,b+1)=b+1. So it's messy.
+            // Let's use d = a - b.
+            // We can try to find pattern by assuming specific values.
+            
+            // Let a=2, b=1.
+            // q=0: V=2, U=1.
+            // q=1:
+            // V1 = max( 2 + 0 = 2, max( U(3,1,0), U(2,2,0) ) = max( min(3,1)=1, min(2,2)=2 ) = 2 ) -> V1=2.
+            // U1 = min( 1 + 1 = 2, min( V(3,1,0), V(2,2,0) ) = min( max(3,1)=3, max(2,2)=2 ) = 2 ) -> U1=2.
+            
+            // a=2, b=2.
+            // q=0: V=2, U=2.
+            // q=1:
+            // V1 = max( 2+0=2, max( U(3,2,0), U(2,3,0) ) = max( min(3,2)=2, min(2,3)=2 ) = 2 ) -> V1=2.
+            // U1 = min( 2+1=3, min( V(3,2,0), V(2,3,0) ) = min( max(3,2)=3, max(2,3)=3 ) = 3 ) -> U1=3? Wait min(3,3)=3. So U1=3.
+            
+            // a=1, b=3.
+            // q=0: V=3, U=1.
+            // q=1:
+            // V1 = max( 3+0=3, max( U(2,3,0), U(1,4,0) ) = max( min(2,3)=2, min(1,4)=1 ) = 2 ) -> V1=3.
+            // U1 = min( 1+1=2, min( V(2,3,0), V(1,4,0) ) = min( max(2,3)=3, max(1,4)=4 ) = 3 ) -> U1=2.
+            
+            // a=0, b=0.
+            // q=0: V=0, U=0.
+            // q=1:
+            // V1 = max( 0+0=0, max( U(1,0,0), U(0,1,0) ) = max( min(1,0)=0, min(0,1)=0 ) = 0 ) -> V1=0.
+            // U1 = min( 0+1=1, min( V(1,0,0), V(0,1,0) ) = min( max(1,0)=1, max(0,1)=1 ) = 1 ) -> U1=1.
+            
+            // Let's compute q=2 for some cases.
+            // a=2, b=1.
+            // q=2:
+            // V2 = max( max(2,1)+1=3, max( U(3,1,1), U(2,2,1) ) )
+            // Need U(3,1,1) and U(2,2,1).
+            // Compute U(3,1,1):
+            //   U(3,1,1) = min( min(3,1)+1=2, min( V(4,1,0), V(3,2,0) ) = min( max(4,1)=4, max(3,2)=3 ) = 3 ) -> min(2,3)=2.
+            // U(2,2,1):
+            //   U(2,2,1) = min( min(2,2)+1=3, min( V(3,2,0), V(2,3,0) ) = min(3,3)=3 ) -> min(3,3)=3.
+            // So max(U(3,1,1), U(2,2,1)) = max(2,3)=3.
+            // V2 = max(3, 3) = 3.
+            
+            // U2 for a=2,b=1:
+            // U2 = min( min(2,1)+ceil(2/2)=1+1=2, min( V(3,1,1), V(2,2,1) ) )
+            // Need V(3,1,1) and V(2,2,1).
+            // V(3,1,1) = max( max(3,1)+0=3, max( U(4,1,0), U(3,2,0) ) = max( min(4,1)=1, min(3,2)=2 ) = 2 ) -> max(3,2)=3.
+            // V(2,2,1) = max( max(2,2)+0=2, max( U(3,2,0), U(2,3,0) ) = max(2,2)=2 ) -> max(2,2)=2.
+            // min(V(3,1,1), V(2,2,1)) = min(3,2)=2.
+            // U2 = min(2, 2) = 2.
+            
+            // So for a=2,b=1,q=2: V=3, U=2.
+            
+            // Now, what is the initial state? Iris's turn with root ?, a=cnt0, b=cnt1, q=cntQ.
+            // We need V(a,b,q).
+            
+            // Let's try to find a general formula.
+            // Notice that the game is symmetric if we swap a and b and swap players? Not exactly.
+            
+            // Let's think about the game in terms of "who gets to decide root" and "how many leaf moves each player gets".
+            // Total leaf moves = q. Root move = 1.
+            // The sequence of moves: Iris, Dora, Iris, Dora, ...
+            // The root move can be taken by any player on their turn.
+            // If a player takes root move, they set R, and then the remaining leaf moves are played with the other player starting.
+            // The leaf moves are just assigning 0/1 to leaves. The player who wants to maximize score (Iris if R=0 wants 1s, if R=1 wants 0s) will try to set leaves to the opposite of R, while the other tries to set to R.
+            // So if there are k leaf moves remaining, and it's player P's turn, the number of "successful" leaf assignments for Iris is:
+            // If P = Iris: ceil(k/2)
+            // If P = Dora: floor(k/2)
+            // This is because they alternate, and Iris wants opposite, Dora wants same.
+            
+            // So the game reduces to: There is a special move (root) that sets R and also determines who starts the leaf sequence.
+            // The players can also make leaf moves before the root is set. But a leaf move before root is set: the player assigns a value to a leaf, but since root is unknown, they don't know if it will be same or opposite? However, they can choose the value. This is equivalent to just increasing a or b by 1. The leaf move doesn't immediately score, but it changes the fixed counts.
+            
+            // Let's denote the state as (a, b, q). The game ends when q=0 and root is set. But root must be set by someone.
+            // Actually, the game ends when all ? are filled. The root ? is just one of them.
+            // So total moves = q + 1. Iris moves on moves 1, 3, 5, ... Dora on 2, 4, 6, ...
+            // The root move is just one of these moves. The player who makes the root move chooses R. The leaf moves made before the root move just increment a or b. The leaf moves made after the root move are played with known R.
+            
+            // Let's consider the sequence of all moves. Suppose the root move happens at move m (1-indexed). Then:
+            // - Moves 1..m-1 are leaf moves. They are made by alternating players starting with Iris.
+            // - Move m is root move by the player whose turn it is.
+            // - Moves m+1..q+1 are leaf moves with known R, starting with the other player.
+            
+            // The total number of leaf moves before root is m-1. After root is q - (m-1) = q - m + 1.
+            // Let k = q - m + 1 be the number of leaf moves after root.
+            // The player who moves first after root is the opponent of the one who made move m.
+            // So if Iris makes root move (m odd), then Dora starts the after-root leaf moves.
+            // If Dora makes root move (m even), then Iris starts the after-root leaf moves.
+            
+            // The final score will be:
+            // If R=0: score = (number of 1s among fixed leaves after all moves) = b + (1s added before root) + (1s added after root).
+            // If R=1: score = a + (0s added before root) + (0s added after root).
+            
+            // But note: before root, players don't know R, so they choose values strategically. They can choose to increment a or b.
+            // After root, with R known, the player who wants to maximize score will choose the opposite of R, the minimizer will choose R.
+            
+            // Let's analyze the game as a whole. Both players know the optimal strategies.
+            // This is a finite perfect information game. We can solve it with minimax.
+            // But we need O(1) formula.
+            
+            // Let's try to see the pattern from our recurrence V(a,b,q).
+            // We computed:
+            // a=2,b=1: V(0)=2, V(1)=2, V(2)=3.
+            // a=2,b=2: V(0)=2, V(1)=2, V(2)=? Let's compute V(2,2,2).
+            // V(2,2,2) = max( max(2,2)+1=3, max( U(3,2,1), U(2,3,1) ) )
+            // Need U(3,2,1) and U(2,3,1). By symmetry, they are equal.
+            // U(3,2,1): a=3,b=2,q=1.
+            // U(3,2,1) = min( min(3,2)+1=3, min( V(4,2,0), V(3,3,0) ) = min( max(4,2)=4, max(3,3)=3 ) = 3 ) -> min(3,3)=3.
+            // So max(U...)=3. V(2,2,2)=max(3,3)=3.
+            
+            // a=1,b=3: V(0)=3, V(1)=3, V(2)=? 
+            // V(1,3,2) = max( max(1,3)+1=4, max( U(2,3,1), U(1,4,1) ) )
+            // U(2,3,1): a=2,b=3,q=1.
+            //   U(2,3,1) = min( min(2,3)+1=3, min( V(3,3,0), V(2,4,0) ) = min( max(3,3)=3, max(2,4)=4 ) = 3 ) -> min(3,3)=3.
+            // U(1,4,1): a=1,b=4,q=1.
+            //   U(1,4,1) = min( min(1,4)+1=2, min( V(2,4,0), V(1,5,0)

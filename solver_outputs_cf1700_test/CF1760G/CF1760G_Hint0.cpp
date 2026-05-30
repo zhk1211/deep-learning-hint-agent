@@ -1,0 +1,113 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, a, b;
+    cin >> n >> a >> b;
+    vector<vector<pair<int,int>>> adj(n+1);
+    for (int i = 0; i < n-1; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w});
+    }
+    
+    // BFS/DFS from b to compute xor from b to all nodes, but we cannot go through a
+    // Actually we need xor from b to all nodes without passing through a
+    vector<int> xor_from_b(n+1, -1);
+    queue<int> q;
+    xor_from_b[b] = 0;
+    q.push(b);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto [v, w] : adj[u]) {
+            if (v == a) continue; // do not go through a
+            if (xor_from_b[v] == -1) {
+                xor_from_b[v] = xor_from_b[u] ^ w;
+                q.push(v);
+            }
+        }
+    }
+    
+    // Now compute xor from a to all nodes, but we stop when we hit b? Actually we can go anywhere except b? 
+    // We can teleport from any node except b. So we can go from a to some node u (u != b), then teleport to some node v (v != b), then go from v to b.
+    // The xor path: a -> u (xor = X), teleport to v, then v -> b (xor = Y). We need X ^ Y = 0 => X = Y.
+    // So we need to find if there exists a node u reachable from a (without passing through b? Actually we can pass through b? No, if we reach b we must have xor 0, but we are not allowed to enter b unless xor becomes 0. So we cannot pass through b during the first part. So we must avoid b in the first part.)
+    // Similarly, in the second part, we start from v and go to b, we cannot pass through a? Actually we can, but we already teleported, so it's fine. But we already computed xor_from_b without passing through a. That's correct because the path from v to b should not pass through a? Actually it can pass through a, but if it passes through a, then the xor from v to b would be xor(v->a) ^ xor(a->b). But we are not allowed to enter b from a unless xor is 0. However, if we teleport to v and then go to b, we might pass through a. But if we pass through a, we would have to enter a with some xor, then leave a to b, but we are not allowed to enter b unless xor becomes 0. That's fine as long as the final xor is 0. So the path from v to b can pass through a. But our computed xor_from_b avoids a, so it might miss some paths. However, if there is a path from v to b that goes through a, then the xor from v to b is xor(v->a) ^ xor(a->b). But we can also consider v = a? No, we cannot teleport to b, but we can teleport to a? Yes, we can teleport to any vertex except b. So we could teleport to a. Then we need xor from a to b to be 0. That is a special case: if xor from a to b is 0, we can just go directly without teleport? Actually we can go directly from a to b if the xor becomes 0 when entering b. That means we need a path from a to b such that the xor of the path is 0. But we can also teleport to a and then go to b? That would be the same as going from a to b directly. So we need to check if there is a path from a to b with xor 0. But we can also go from a to some u, teleport to v, and go v->b. The xor condition is X = Y.
+    // To cover all possibilities, we can compute xor from a to all nodes without passing through b (since we cannot enter b in the first part). And we already have xor from b to all nodes without passing through a. But wait, the second part (v->b) can pass through a. So our xor_from_b that avoids a might not include paths that go through a. However, if a path from v to b goes through a, then the xor is xor(v->a) ^ xor(a->b). But we can also consider v = a. So we need to check if there is any node v (including a) such that the xor from v to b (allowing passing through a) equals some xor from a to u (avoiding b). But we can simplify: we can compute xor from a to all nodes without passing through b, and also compute xor from b to all nodes without any restriction? Actually, if we compute xor from b to all nodes without any restriction, then the path from v to b might go through a, but that's fine because we are allowed to pass through a in the second part. However, if we compute xor from b to all nodes without restriction, then for v = a, xor(b->a) is the xor of the path from b to a. But we need xor(v->b) which is the same as xor(b->v) because tree paths are unique and xor is symmetric. So we can just compute xor from b to all nodes (without any restriction). Then we need to find if there exists u (reachable from a without passing through b) and v (any node except b) such that xor_from_a[u] == xor_from_b[v]. But wait, we can also have u = a? Yes, we can teleport immediately from a. So u can be a. And v can be any node except b. Also, we can have the direct path: if xor_from_b[a] == 0, then we can go directly from a to b without teleport? Actually, if xor_from_b[a] == 0, that means the xor of the path from a to b is 0. Then we can just walk from a to b and win. But our condition with teleport would also catch that: if we set u = a, and v = a, then xor_from_a[a] = 0, xor_from_b[a] = 0, so 0 == 0, but we cannot teleport to b, but we can teleport to a? Teleporting to a is allowed (since a != b). Then we would go from a to b with xor 0. That works. So it's covered.
+    // However, we must ensure that in the first part we do not pass through b. So we compute xor_from_a avoiding b.
+    // In the second part, we can pass through a, so we compute xor_from_b without any restriction.
+    // But wait: if we compute xor_from_b without restriction, then for some v, the path from v to b might go through a. That's allowed. But then we need to ensure that v != b. So we just check all v != b.
+    // Also, we need to ensure that u != b? Actually u is reachable from a without passing through b, so u cannot be b because we avoid b. So u is automatically not b.
+    // So algorithm:
+    // 1. Compute xor_from_a: BFS/DFS from a, but do not go to b.
+    // 2. Compute xor_from_b: BFS/DFS from b, no restrictions.
+    // 3. Check if xor_from_b[a] == 0 -> YES (direct path)
+    // 4. Collect all xor_from_a values for nodes reachable from a (excluding b). Put them in a set.
+    // 5. For each node v != b, if xor_from_b[v] is in the set, then YES.
+    // 6. Otherwise NO.
+    
+    vector<int> xor_from_a(n+1, -1);
+    queue<int> qa;
+    xor_from_a[a] = 0;
+    qa.push(a);
+    while (!qa.empty()) {
+        int u = qa.front(); qa.pop();
+        for (auto [v, w] : adj[u]) {
+            if (v == b) continue;
+            if (xor_from_a[v] == -1) {
+                xor_from_a[v] = xor_from_a[u] ^ w;
+                qa.push(v);
+            }
+        }
+    }
+    
+    // Compute xor_from_b without restrictions
+    vector<int> xor_from_b_all(n+1, -1);
+    queue<int> qb;
+    xor_from_b_all[b] = 0;
+    qb.push(b);
+    while (!qb.empty()) {
+        int u = qb.front(); qb.pop();
+        for (auto [v, w] : adj[u]) {
+            if (xor_from_b_all[v] == -1) {
+                xor_from_b_all[v] = xor_from_b_all[u] ^ w;
+                qb.push(v);
+            }
+        }
+    }
+    
+    if (xor_from_b_all[a] == 0) {
+        cout << "YES\n";
+        return;
+    }
+    
+    unordered_set<int> s;
+    for (int i = 1; i <= n; i++) {
+        if (xor_from_a[i] != -1) {
+            s.insert(xor_from_a[i]);
+        }
+    }
+    
+    for (int i = 1; i <= n; i++) {
+        if (i == b) continue;
+        if (xor_from_b_all[i] != -1 && s.count(xor_from_b_all[i])) {
+            cout << "YES\n";
+            return;
+        }
+    }
+    
+    cout << "NO\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

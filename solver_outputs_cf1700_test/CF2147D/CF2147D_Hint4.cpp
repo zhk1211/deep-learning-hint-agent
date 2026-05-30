@@ -1,0 +1,153 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        map<int, int> freq;
+        for (int x : a) {
+            freq[x]++;
+        }
+
+        vector<int> odd_freqs;
+        for (auto &p : freq) {
+            if (p.first % 2 == 1) {
+                odd_freqs.push_back(p.second);
+            }
+        }
+
+        sort(odd_freqs.rbegin(), odd_freqs.rend());
+
+        long long alice = 0, bob = 0;
+        bool alice_turn = true;
+
+        for (int f : odd_freqs) {
+            if (alice_turn) {
+                alice += f;
+            } else {
+                bob += f;
+            }
+            alice_turn = !alice_turn;
+        }
+
+        // Even numbers: each even number x contributes x/2 points to each player
+        // because they will be decremented in pairs of moves (odd x -> even x-1 -> odd x-2 ...)
+        // Actually, for even numbers, the optimal play is to never pick them directly.
+        // They will be reduced only when odd numbers become even and then zero.
+        // But the total points from even numbers are split equally (or almost equally).
+        // Let's compute total points from all numbers.
+        // Total points = sum of a_i.
+        // The game ends when all are zero.
+        // Each move picks some x > 0, earns freq[x] points, and decreases all those x by 1.
+        // This is equivalent to: each number a_i contributes a_i points total, distributed among moves.
+        // The order of moves determines who gets points.
+        // The optimal strategy: Alice wants to maximize her points, Bob wants to maximize his.
+        // According to hints, picking odd numbers is good, picking even is bad.
+        // The game reduces to: players take turns picking an odd frequency from sorted odd frequencies.
+        // The even numbers' points are split: half to Alice, half to Bob (with Alice getting the extra if odd total).
+        // Let's verify with examples.
+        // Example 1: a = [2,1,1]. Odd freqs: 1 appears twice -> freq=2. Even: 2 appears once -> freq=1.
+        // Sorted odd freqs: [2]. Alice takes 2. Bob gets 0 from odd.
+        // Even total points = 2. Split: Alice gets 1, Bob gets 1? But example says Alice 3, Bob 1.
+        // Wait, total points = 2+1+1=4. Alice 3, Bob 1. So Alice got 3, Bob 1.
+        // My odd distribution: Alice 2, Bob 0. Even split: Alice 1, Bob 1 -> total Alice 3, Bob 1. Correct.
+        // Example 2: [3,3,3,5,5]. Odd: 3 appears 3 times, 5 appears 2 times. Sorted odd freqs: [3,2].
+        // Alice takes 3, Bob takes 2. Even: none. Total points = 3+3+3+5+5=19. Alice 3+? Wait, total points 19.
+        // But output says 10 9. So Alice 10, Bob 9.
+        // My odd: Alice 3, Bob 2. That's 5 points. Remaining 14 points from even? But there are no even numbers initially.
+        // However, when odd numbers are decreased, they become even. The points from those even numbers are earned when they are picked as even? But hint says it's bad to pick even.
+        // Actually, the process: we only pick odd numbers. When we pick an odd number x, we get freq[x] points, and x becomes x-1 (even). Then later, that even number might become odd again after further decrements? No, if we never pick even, how do they decrease?
+        // Wait, the rule: player must choose a value x>0 that appears in the array at least once. They can choose even numbers too. But hint says it's bad to choose even. So optimal play: players only choose odd numbers. But then even numbers never get chosen, so they remain? No, the game ends when all elements are zero. If we never choose even numbers, they will never decrease. So we must eventually choose them.
+        // Let's re-read hints: "One can intuitively see that it is bad to choose x even." "This however is not true for odd numbers since after picking x=1 the opposite player cannot pick x=0."
+        // So picking even is bad, but sometimes forced? Actually, if all remaining numbers are even, you have to pick an even number.
+        // Let's analyze: Suppose we have an even number 2. If Alice picks 2, she gets 1 point, it becomes 1. Then Bob can pick 1 and get 1 point. So total points from that 2: Alice 1, Bob 1. If Alice instead does something else? If there are other numbers, maybe she can force Bob to pick the 2? But Bob will also avoid picking even if possible.
+        // The optimal strategy likely involves only picking odd numbers until none remain, then players are forced to pick even numbers. But picking an even number x gives the opponent a chance to pick x-1 (odd) on the next turn.
+        // Let's think in terms of the sorted odd frequencies. The hints say: "Let the frequencies of the odd numbers (sorted) be f0 >= f1 >= ... >= fk." This suggests the game reduces to just these frequencies.
+        // Perhaps the total points a player gets is determined solely by the sorted odd frequencies, and the even numbers' points are split evenly? But example 2 has no even numbers initially, yet total points 19, Alice 10, Bob 9. My odd frequencies: 3 and 2. If Alice takes 3, Bob takes 2, that's 5 points. The remaining 14 points come from the numbers as they decrease. How are they distributed?
+        // Let's simulate example 2 optimally: a = [3,3,3,5,5].
+        // Move 1: Alice picks x=5 (freq=2). Array becomes [3,3,3,4,4]. Alice +2.
+        // Move 2: Bob picks x=3 (freq=3). Array becomes [2,2,2,4,4]. Bob +3.
+        // Move 3: Alice picks x=4? That's even. If she picks 4 (freq=2), array becomes [2,2,2,3,3], Alice +2.
+        // Move 4: Bob picks x=3 (freq=2), array becomes [2,2,2,2,2], Bob +2.
+        // Move 5: Alice picks x=2 (freq=5), array becomes [1,1,1,1,1], Alice +5.
+        // Move 6: Bob picks x=1 (freq=5), array becomes [0,0,0,0,0], Bob +5.
+        // Total: Alice = 2+2+5 = 9, Bob = 3+2+5 = 10. But output says Alice 10, Bob 9. So this play is not optimal for Alice; she got 9 instead of 10.
+        // Let's try another sequence:
+        // Move 1: Alice picks x=3 (freq=3). Array [2,2,2,5,5]. Alice +3.
+        // Move 2: Bob picks x=5 (freq=2). Array [2,2,2,4,4]. Bob +2.
+        // Move 3: Alice picks x=4 (freq=2). Array [2,2,2,3,3]. Alice +2.
+        // Move 4: Bob picks x=3 (freq=2). Array [2,2,2,2,2]. Bob +2.
+        // Move 5: Alice picks x=2 (freq=5). Array [1,1,1,1,1]. Alice +5.
+        // Move 6: Bob picks x=1 (freq=5). Bob +5.
+        // Alice = 3+2+5=10, Bob=2+2+5=9. This matches output.
+        // So Alice's optimal first move was to pick the odd number with the highest frequency? Here odd frequencies: 3 (for 3) and 2 (for 5). Sorted: 3, 2. Alice took 3, Bob took 2. Then the rest of the game played out.
+        // Notice that after the odd frequencies are exhausted, the remaining numbers are all even. Then players are forced to pick even numbers. But picking an even number x gives the opponent the odd number x-1. So the sequence of moves from that point is deterministic: players will alternate picking the current maximum even number, which then becomes odd, and the opponent picks that odd, etc.
+        // In example 2, after Alice and Bob took the odd frequencies, the array became all 2s. Then Alice picked 2 (even), got 5 points, array became all 1s. Bob picked 1 (odd), got 5 points. So the even number 2 gave 5 to Alice and 5 to Bob. Split equally.
+        // What if there were multiple even numbers? They would be reduced in descending order. Each even number x will eventually be picked by someone, and then x-1 will be picked by the opponent. So each even number contributes its frequency to both players equally (if total number of such moves is even) or with Alice getting one extra move if odd? But the total points from an even number x is x * freq[x]. The process of reducing it to zero involves alternating moves. Since x is even, the number of moves to reduce it to zero is x. The first move on x (when it's even) gives freq points to the player who picks it, then x-1 (odd) gives freq to the opponent, then x-2 (even) gives freq to the first player, etc. So the points are split: if x is even, there are x moves, half even, half odd. The player who picks the even number gets the points from all even numbers in that chain? Actually, the chain: x (even) -> x-1 (odd) -> x-2 (even) -> ... -> 1 (odd) -> 0. The moves alternate. The player who makes the first move on this chain gets the points for x, x-2, x-4, ... (all even numbers in the chain). The opponent gets x-1, x-3, ... (all odd numbers). Since x is even, there are x/2 even numbers and x/2 odd numbers. So each player gets (x/2)*freq points from this chain, regardless of who starts? Wait, if Alice starts the chain, she gets the evens, Bob gets the odds. Total points Alice = (x/2)*freq, Bob = (x/2)*freq. So it's equal.
+        // But what if there are multiple different even numbers? They form independent chains. However, players can choose which even number to pick. The optimal play might involve picking the largest even number to force the opponent into a smaller one? But since all chains give equal points to both players, the order might not matter for the total split. However, the total number of moves might affect who gets the last move.
+        // Let's think globally. The game is equivalent to: we have frequencies of each number. A move consists of picking a number x that currently has positive frequency, adding freq[x] to the player's score, and then moving that frequency to x-1. This is exactly the process of "eating" the numbers from top to bottom. The total points any player gets is the sum over all numbers of the points earned when that number is picked. The order of picks determines who gets which x.
+        // This is a classic game where the optimal strategy is to sort the frequencies of odd numbers and take turns picking the largest. The even numbers' points are split equally. But wait, in example 1, the even number 2 contributed 1 point to Alice and 1 to Bob. Total points 4, Alice 3, Bob 1. The odd frequency was 2 (for 1). Alice took that odd frequency (2 points), Bob got 0 from odd. Then even split 1-1. So Alice total = 2+1=3, Bob=0+1=1. Correct.
+        // Example 3: [9,9,9,9]. All odd. Frequencies: 9 appears 4 times. Sorted odd freqs: [4]. Alice takes 4. Bob gets 0 from odd. Then what about the rest? The numbers are 9, odd. After Alice picks 9, they become 8 (even). Then Bob is forced to pick an even number? Let's simulate optimally:
+        // Move 1: Alice picks 9 (freq=4), gets 4, array becomes [8,8,8,8].
+        // Move 2: Bob picks 8 (freq=4), gets 4, array becomes [7,7,7,7].
+        // Move 3: Alice picks 7 (freq=4), gets 4, array becomes [6,6,6,6].
+        // ... This continues alternating. Total moves = 9. Alice gets moves 1,3,5,7,9 (5 moves), Bob gets 2,4,6,8 (4 moves). Each move gives 4 points. Alice total = 5*4=20, Bob=4*4=16. This matches output.
+        // In this case, the odd frequency was 4, Alice took it. Then the remaining even numbers were picked in descending order, alternating. The total points from the chain starting at 8 (even) down to 1: there are 8 numbers, 4 even, 4 odd. Bob started the even chain (he picked 8), so Bob got the evens (8,6,4,2) and Alice got the odds (7,5,3,1). Each gives 4 points. So Bob got 4*4=16, Alice got 4*4=16 from the chain. Plus Alice's initial 4 from the odd 9 gives Alice 20, Bob 16. So the odd frequency 4 was taken by Alice, and then the rest split equally.
+        // So the pattern: The game proceeds in phases. First, players take turns picking the available odd numbers, in decreasing order of their frequencies. After all odd numbers are picked (i.e., all numbers become even), the remaining game is deterministic: players will alternate picking the current maximum number, which will be even, then odd, etc. The points from this even phase are split equally: each even number x contributes x/2 * freq[x] to each player? But careful: the even phase includes all numbers that are even at the start of the phase. But some numbers might have been reduced from odd numbers picked earlier. Actually, after the odd-picking phase, every number in the array is even (because we only decreased odd numbers by 1, making them even, and even numbers were untouched). Then the remaining game is just reducing all these even numbers to zero. The total points remaining is the sum of all numbers in the array at that point. Since all are even, the total points will be split equally: half to Alice, half to Bob, with Alice getting the extra point if the total is odd? But wait, in example 3, after Alice picked 9, the array became all 8s. Total remaining points = 8*4 = 32. Half is 16 each. Alice got 16, Bob got 16. Plus Alice's initial 4 gives 20, 16. So the remaining points were split equally.
+        // In example 2, after the odd-picking phase (Alice took 3, Bob took 5? Actually Alice took 3, Bob took 5), the array became all 2s. Total remaining points = 2*5 = 10. Split equally: 5 each. Alice total = 3 (odd) + 5 = 8? But we got Alice 10. Wait, in the optimal play we found, Alice took 3 (freq=3), Bob took 5 (freq=2). Then array became [2,2,2,4,4]? No, let's re-simulate:
+        // Start: [3,3,3,5,5]
+        // Alice picks 3: array [2,2,2,5,5], Alice +3.
+        // Bob picks 5: array [2,2,2,4,4], Bob +2.
+        // Now array has 2,2,2,4,4. All even? 2 and 4 are even. Total remaining points = 2*3 + 4*2 = 6+8=14. Split equally? 7 each. Then Alice total = 3+7=10, Bob=2+7=9. Yes, that matches.
+        // So the remaining points after the odd-picking phase are split equally.
+        // But how do we know which odd frequencies are picked in the odd-picking phase? The hints say: "Let the frequencies of the odd numbers (sorted) be f0 >= f1 >= ... >= fk." And the players take turns picking them. So Alice gets f0, f2, f4, ... and Bob gets f1, f3, f5, ...
+        // Then the remaining points (which come from the even numbers and the reduced odd numbers) are split equally.
+        // But wait: What if there are even numbers initially? They are not picked in the odd-picking phase. They just sit there. Their points will be part of the "remaining points" that are split equally. But is that always true? Consider an initial even number, say 2. If we never pick it during the odd phase, it remains 2. In the even phase, it will be reduced. The points from it will be split equally. So yes, all even numbers' points are split equally.
+        // What about odd numbers that are not picked in the odd phase? All odd numbers are picked in the odd phase because we pick all available odd numbers in decreasing frequency order until no odd numbers remain. But wait, after picking an odd number, it becomes even. So it's no longer odd. So we only pick each odd number once. The order of picking is by their frequency, from largest to smallest. This is the optimal strategy according to the hints.
+        // Let's test with a case where there are multiple odd numbers with different frequencies. Example: a = [5,5,5,3,3]. Frequencies: 5:3, 3:2. Sorted odd freqs: [3,2]. Alice takes 3 (freq of 5), Bob takes 2 (freq of 3). Then remaining array: after Alice picks 5, 5s become 4s. Array: [4,4,4,3,3]. Bob picks 3, 3s become 2s. Array: [4,4,4,2,2]. Total remaining points = 4*3 + 2*2 = 12+4=16. Split equally: 8 each. Alice total = 3+8=11, Bob=2+8=10. Total points = 5*3+3*2=15+6=21. 11+10=21. Correct.
+        // What if there is an odd number with frequency larger than others, but picking it first might not be optimal? The hints say sort by frequency descending, so that's optimal.
+        // Let's try to prove: The game is a zero-sum game? No, total points are fixed. It's a constant-sum game. Players want to maximize their own points. The odd-picking phase is a game where players choose an odd number and get its frequency. The order of choosing matters because after an odd number is picked, it becomes even and its remaining points go to the "even pool" which is split equally. So by picking an odd number, you remove its frequency from the odd pool and add its (x-1) value to the even pool. The even pool is split equally. So the net effect of picking an odd number x with frequency f is: you gain f points immediately, and you add (x-1)*f points to the even pool, which will be split equally. So your net gain relative to opponent is f + (x-1)*f/2 - (x-1)*f/2 = f. The opponent's net gain from this action is 0 from the immediate pick, but they get half of the even pool. Wait, if you pick x, you get f, and the even pool increases by (x-1)*f. Half of that even pool goes to you, half to opponent. So your total expected gain from this pick is f + (x-1)*f/2, opponent gets (x-1)*f/2. The difference is f. So regardless of x, picking an odd number gives you an advantage of f points over the opponent. Therefore, to maximize your total advantage, you want to pick odd numbers with the largest f. Since players alternate, the optimal strategy is to sort odd frequencies descending and take turns. This is a classic greedy game.
+        // What about picking an even number during the odd phase? If you pick an even number x with frequency f, you get f points, and it becomes x-1 (odd). Then the opponent can pick that odd number on their next turn and get f points, and it becomes x-2 (even), adding to the even pool. So by picking an even number, you give the opponent an immediate f points, and the rest is split. Your net gain: f (immediate) + (x-2)*f/2 (half of remaining even pool). Opponent gets f (from picking x-1) + (x-2)*f/2. The difference is 0. So picking an even number gives no advantage; it just gives the opponent an equal opportunity. Therefore, it's never strictly better to pick an even number if an odd number is available. If no odd numbers are available, you are forced to pick an even number, which starts the even phase. In the even phase, all remaining numbers are even. The first player to move in the even phase picks an even number, giving the opponent an odd number, etc. The total points from the even phase are split equally because the total sum of points in the even phase is S, and the game from that point is symmetric: each even number x contributes x moves, alternating. The total number of moves in the even phase is sum of x for all numbers. Since all x are even, the total number of moves is even? Not necessarily: sum of even numbers is even. So the total number of moves in the even phase is even. Therefore, the player who starts the even phase will get exactly half the points, and the other gets half. So the even phase points are split equally. Thus, the final scores are:
+        // Alice = sum_{i even} f_i + (total_points - sum_{all odd} f_i) / 2? Wait, total_points = sum of all a_i. The odd-picking phase gives points equal to the frequencies of the odd numbers picked. The sum of all odd frequencies is sum_{x odd} freq[x]. But not all odd frequencies are picked in the odd phase? Actually, every odd number present initially will be picked exactly once in the odd phase, because we pick all odd numbers in descending frequency order until no odd numbers remain. So the total points earned in the odd phase is exactly the sum of frequencies of all initially odd numbers. Let O = sum_{x odd} freq[x]. These points are distributed among Alice and Bob according to the sorted order: Alice gets the 1st, 3rd, 5th, ... largest frequencies; Bob gets the 2nd, 4th, 6th, ...
+        // The remaining points, which is total_points - O, come from the even phase and are split equally: half to Alice, half to Bob. Since total_points - O is the sum of all even numbers initially plus the sum of (x-1) for all odd numbers (since each odd x becomes x-1 after being picked). Note that total_points - O = sum_{x even} x*freq[x] + sum_{x odd} (x-1)*freq[x]. This sum is always even? Let's check: total_points - O = sum a_i - number of odd elements? Actually, O = number of odd elements (since each odd element contributes 1 to the frequency of its value). So total_points - O = sum (a_i) - count_odd. This is not necessarily even. But the split is half and half, with Alice getting the extra 1 if odd? In example 1: total_points=4, O=2 (two 1s). total_points - O = 2. Split equally: 1 each. In example 2: total_points=19, O=5 (three 3s and two 5s). total_points - O = 14. Split equally: 7 each. In example 3: total_points=36, O=4 (four 9s). total_points - O = 32. Split equally: 16 each. So it seems the remaining points are always even? Let's check: total_points - O = sum a_i - count_odd. sum a_i and count_odd have the same parity? sum a_i mod 2 = (count_odd * 1 + count_even * 0) mod 2 = count_odd mod 2. So sum a_i - count_odd is even. Yes, always even. So the split is exact.
+        // Therefore, the algorithm:
+        // 1. Compute frequency of each number.
+        // 2. Collect frequencies of all odd numbers.
+        // 3. Sort these frequencies in descending order.
+        // 4. Alice gets sum of frequencies at even indices (0-based), Bob gets sum at odd indices.
+        // 5. Compute total_points = sum of all a_i.
+        // 6. remaining = (total_points - sum of all odd frequencies) / 2.
+        // 7. Alice += remaining, Bob += remaining.
+        // Output Alice and Bob.
+
+        // Let's test with a custom case: a = [2,2]. total=4, O=0. Sorted odd freqs: empty. Alice odd=0, Bob odd=0. remaining = 4/2=2. Alice=2, Bob=2. Let's simulate: Alice must pick 2 (even), gets 2, array becomes [1,1]. Bob picks 1, gets 2. Alice 2, Bob 2. Correct.
+        // a = [1]. total=1, O=1. Sorted odd: [1]. Alice gets 1, Bob 0. remaining = (1-1)/2=0. Alice=1, Bob=0. Simulate: Alice picks 1, gets 1, array [0]. Game ends. Alice 1, Bob 0. Correct.
+        // a = [3]. total=3, O=1. Sorted odd: [1]. Alice gets 1. remaining = (3-1)/2=1. Alice=1+1=2, Bob=1. Simulate: Alice picks 3, gets 1, array [2]. Bob picks 2, gets 1, array [1]. Alice picks 1, gets 1. Alice total 2, Bob 1. Correct.
+        // a = [3,3]. total=6, O=2. Sorted odd: [2]. Alice gets 2. remaining = (6-2)/2=2. Alice=2+2=4, Bob=2. Simulate: Alice picks 3, gets 2, array [2,2]. Bob picks 2, gets 2, array [1,1]. Alice picks 1, gets 2. Alice 4, Bob 2. Correct.
+
+        // So the solution is straightforward.
+
+        long long total = accumulate(a.begin(), a.end(), 0LL);
+        long long odd_sum = 0;
+        for (int f : odd_freqs) odd_sum += f;
+
+        long long remaining = (total - odd_sum) / 2;
+        alice += remaining;
+        bob += remaining;
+
+        cout << alice << " " << bob << "\n";
+    }
+    return 0;
+}

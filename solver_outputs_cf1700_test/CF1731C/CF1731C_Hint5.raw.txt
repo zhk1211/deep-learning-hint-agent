@@ -1,0 +1,48 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    
+    // Maximum possible XOR value is less than 2*n
+    int max_xor = 2 * n;
+    
+    // Count subarrays with XOR equal to perfect squares
+    long long odd_count = 0;
+    vector<int> freq(max_xor + 1, 0);
+    freq[0] = 1;
+    int pref = 0;
+    
+    for (int i = 0; i < n; ++i) {
+        pref ^= a[i];
+        // Check all perfect squares up to max_xor
+        for (int k = 0; k * k <= max_xor; ++k) {
+            int sq = k * k;
+            int need = pref ^ sq;
+            if (need <= max_xor) {
+                odd_count += freq[need];
+            }
+        }
+        freq[pref]++;
+    }
+    
+    long long total = (long long)n * (n + 1) / 2;
+    cout << total - odd_count << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

@@ -1,0 +1,39 @@
+// Hint9
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m, k;
+    cin >> n >> m >> k;
+    --k;
+
+    vector<int> x(m), y(m);
+    for (int i = 0; i < m; ++i) {
+        cin >> x[i] >> y[i];
+        --x[i];
+        --y[i];
+    }
+
+    const int INF = 1e9;
+    vector<int> dp(n, INF);
+    dp[k] = 0;
+
+    for (int i = 0; i < m; ++i) {
+        int u = x[i], v = y[i];
+        int du = dp[u], dv = dp[v];
+        dp[u] = min(du + 1, dv);
+        dp[v] = min(dv + 1, du);
+    }
+
+    for (int i = 0; i < n; ++i) {
+        if (dp[i] >= INF) cout << -1;
+        else cout << dp[i];
+        if (i + 1 < n) cout << ' ';
+    }
+    cout << '\n';
+
+    return 0;
+}

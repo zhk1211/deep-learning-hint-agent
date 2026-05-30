@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<long long> b(n);
+        long long sumB = 0;
+        for (int i = 0; i < n; ++i) {
+            cin >> b[i];
+            sumB += b[i];
+        }
+
+        long long coeff = 1LL * n * (n + 1) / 2;
+        if (sumB % coeff != 0) {
+            cout << "NO\n";
+            continue;
+        }
+
+        long long S = sumB / coeff;
+        vector<long long> a(n);
+        bool ok = true;
+
+        for (int i = 0; i < n; ++i) {
+            int prev = (i + n - 1) % n;
+            long long num = S - b[i] + b[prev];
+            if (num % n != 0) {
+                ok = false;
+                break;
+            }
+            a[i] = num / n;
+            if (a[i] <= 0 || a[i] > 1000000000) {
+                ok = false;
+                break;
+            }
+        }
+
+        if (!ok) {
+            cout << "NO\n";
+        } else {
+            cout << "YES\n";
+            for (int i = 0; i < n; ++i) {
+                cout << a[i] << " \n"[i == n - 1];
+            }
+        }
+    }
+    return 0;
+}

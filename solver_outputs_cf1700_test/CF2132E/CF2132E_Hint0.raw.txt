@@ -1,0 +1,59 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+void solve() {
+    int n, m, q;
+    cin >> n >> m >> q;
+    vector<ll> a(n), b(m);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    for (int i = 0; i < m; ++i) cin >> b[i];
+    sort(a.rbegin(), a.rend());
+    sort(b.rbegin(), b.rend());
+    vector<ll> pref_a(n + 1, 0), pref_b(m + 1, 0);
+    for (int i = 0; i < n; ++i) pref_a[i + 1] = pref_a[i] + a[i];
+    for (int i = 0; i < m; ++i) pref_b[i + 1] = pref_b[i] + b[i];
+    
+    while (q--) {
+        int x, y, z;
+        cin >> x >> y >> z;
+        // We need to choose k from a, z-k from b
+        // k <= x, z-k <= y => k >= z-y
+        // Also 0 <= k <= z, k <= n, z-k <= m
+        int L = max({0, z - y, z - m});
+        int R = min({x, z, n});
+        if (L > R) {
+            cout << 0 << '\n';
+            continue;
+        }
+        // We want to maximize pref_a[k] + pref_b[z-k]
+        // This is concave? Actually a and b are sorted descending, so pref_a is concave (differences decreasing)
+        // We can ternary search on k, but careful: integer domain, and function is sum of two concave functions -> concave
+        // So ternary search works.
+        auto val = [&](int k) -> ll {
+            return pref_a[k] + pref_b[z - k];
+        };
+        int lo = L, hi = R;
+        while (hi - lo > 2) {
+            int m1 = lo + (hi - lo) / 3;
+            int m2 = hi - (hi - lo) / 3;
+            if (val(m1) < val(m2)) lo = m1;
+            else hi = m2;
+        }
+        ll ans = 0;
+        for (int k = lo; k <= hi; ++k) ans = max(ans, val(k));
+        cout << ans << '\n';
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}
+```

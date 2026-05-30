@@ -1,0 +1,49 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int N = 5e5 + 7;
+
+int n, m;
+int ans[N];
+int last[N];
+vector<int> G[N];
+vector<int> in[N];
+
+int main() {
+    scanf("%d %d", &n, &m);
+    for (int i = 1; i <= m; ++i) {
+        int u, v;
+        scanf("%d %d", &u, &v);
+        G[u].push_back(v);
+        G[v].push_back(u);
+    }
+    for (int i = 1; i <= n; ++i) {
+        int color;
+        scanf("%d", &color);
+        if (color > n) {
+            puts("-1");
+            return 0;
+        }
+        in[color].push_back(i);
+    }
+    vector<int> result;
+    for (int i = 1; i <= n; ++i) {
+        for (auto u : in[i]) {
+            for (auto v : G[u])
+                last[ans[v]] = u;
+            ans[u] = 1;
+            while (last[ans[u]] == u)
+                ++ans[u];
+            if (ans[u] != i) {
+                puts("-1");
+                return 0;
+            }
+            result.push_back(u);
+        }
+    }
+    for (int i = 0; i < n; ++i)
+        printf("%d%c", result[i], i == n - 1 ? '\n' : ' ');
+    return 0;
+}
+```

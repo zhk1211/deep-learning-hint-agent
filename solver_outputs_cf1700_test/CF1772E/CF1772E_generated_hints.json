@@ -1,0 +1,6 @@
+[
+  "**Hint 1**\nIt makes no sense to use the first type of operation if it does not lead to an instant win, because the opponent can return the previous state of the array with their next move.",
+  "**Hint 2**\nThe winner is the one who has time to color \"their\" elements in blue first.",
+  "**Hint 3**\nTo win, the first player needs to have time to paint $$$a+c$$$ elements, and they have no more than $$$b$$$ moves to do it, because otherwise the second player can prevent the win of the first player.",
+  "**Hint 4**\nSo the winning condition for the first player is $$$a+c \\le b$$$. Similarly, for the second player, with the only difference that they have $$$1$$$ move less (because they go second), which means the condition is $$$b+c \\lt a$$$."
+]

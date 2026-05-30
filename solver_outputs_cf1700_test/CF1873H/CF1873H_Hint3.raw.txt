@@ -1,0 +1,108 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, a, b;
+    cin >> n >> a >> b;
+    --a; --b;
+    vector<vector<int>> g(n);
+    for (int i = 0; i < n; ++i) {
+        int u, v;
+        cin >> u >> v;
+        --u; --v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    
+    if (a == b) {
+        cout << "NO\n";
+        return;
+    }
+    
+    // Find the cycle in the graph (since n edges, n nodes, exactly one cycle)
+    vector<int> parent(n, -1);
+    vector<int> color(n, 0); // 0=unvisited, 1=visiting, 2=visited
+    vector<int> cycle;
+    int cycle_start = -1, cycle_end = -1;
+    
+    function<bool(int, int)> dfs_cycle = [&](int u, int p) -> bool {
+        color[u] = 1;
+        for (int v : g[u]) {
+            if (v == p) continue;
+            if (color[v] == 1) {
+                cycle_start = v;
+                cycle_end = u;
+                return true;
+            }
+            parent[v] = u;
+            if (color[v] == 0 && dfs_cycle(v, u)) return true;
+        }
+        color[u] = 2;
+        return false;
+    };
+    
+    dfs_cycle(0, -1);
+    
+    vector<bool> in_cycle(n, false);
+    if (cycle_start != -1) {
+        for (int v = cycle_end; v != cycle_start; v = parent[v]) {
+            in_cycle[v] = true;
+        }
+        in_cycle[cycle_start] = true;
+    }
+    
+    // Find entry node of Valeriu (b) into the cycle
+    // BFS from b to find the first cycle node
+    vector<int> dist_b(n, -1);
+    queue<int> q;
+    dist_b[b] = 0;
+    q.push(b);
+    int entry_b = -1;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        if (in_cycle[u]) {
+            entry_b = u;
+            break;
+        }
+        for (int v : g[u]) {
+            if (dist_b[v] == -1) {
+                dist_b[v] = dist_b[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    
+    // BFS from a to find distance to entry_b
+    vector<int> dist_a(n, -1);
+    dist_a[a] = 0;
+    q.push(a);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : g[u]) {
+            if (dist_a[v] == -1) {
+                dist_a[v] = dist_a[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    
+    if (dist_b[entry_b] < dist_a[entry_b]) {
+        cout << "YES\n";
+    } else {
+        cout << "NO\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

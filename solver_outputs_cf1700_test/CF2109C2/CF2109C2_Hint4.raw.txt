@@ -1,0 +1,67 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    string resp;
+    
+    // Step 1: mul 9
+    cout << "mul 9" << endl;
+    cin >> resp;
+    // Step 2: digit
+    cout << "digit" << endl;
+    cin >> resp;
+    // Step 3: digit
+    cout << "digit" << endl;
+    cin >> resp;
+    
+    // After two digits, x becomes S(S(9*x))
+    // For any x in [1, 1e9], S(9*x) is at most 9*9=81 (since 9*x <= 9e9, sum of digits <= 81)
+    // Then S(S(9*x)) is at most S(81)=9, and at least 1.
+    // Actually, 9*x is a multiple of 9, so its digit sum is a multiple of 9.
+    // S(9*x) is a multiple of 9 between 9 and 81.
+    // Then S(S(9*x)) is S(multiple of 9) which is 9 (since 9,18,27,36,45,54,63,72,81 all have digit sum 9).
+    // So after two digits, x = 9.
+    
+    // Now we have x = 9, we need to reach n.
+    // We have one command left.
+    // We can use add, mul, div, or digit.
+    // Since n can be up to 1e9, we need to get from 9 to n in one operation.
+    // Options:
+    // - add (n-9): works if 1 <= n <= 1e18 and n-9 in range.
+    // - mul (n/9): works if n is multiple of 9 and n/9 in [1,1e18] and result <= 1e18.
+    // - div: not useful.
+    // - digit: would give 9 again.
+    // So we can try add (n-9) if n >= 9, else we need another approach.
+    // But n can be less than 9? n >= 1.
+    // If n < 9, we can't add negative to get smaller because add with negative might fail if result < 1.
+    // However, we can use mul with a fraction? No, mul only positive integer.
+    // We could have used a different sequence.
+    // Let's think: after two digits we have 9. If n < 9, we need to reduce 9 to n.
+    // We can't add negative because 9 + (n-9) = n, if n<9 then n-9 is negative, and result n is >=1, so add would be successful!
+    // Wait: add y where y = n - 9. If n < 9, y is negative, but result is n which is in [1, 1e18], so add succeeds.
+    // So add n-9 always works for any n in [1, 1e9] because result is n, which is in range.
+    // But we must ensure y is within [-1e18, 1e18]. n-9 is within [-1e9, 1e9], so fine.
+    
+    long long y = n - 9;
+    cout << "add " << y << endl;
+    cin >> resp;
+    
+    // Now x should be n.
+    cout << "!" << endl;
+    cin >> resp;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

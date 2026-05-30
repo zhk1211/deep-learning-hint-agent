@@ -1,0 +1,63 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, d;
+        cin >> n >> d;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        int g = gcd(n, d);
+        int L = n / g;
+        int ans = 0;
+        bool impossible = false;
+
+        for (int start = 0; start < g; ++start) {
+            // First pass: check if the whole cycle is all ones
+            bool all_ones = true;
+            int idx = start;
+            for (int i = 0; i < L; ++i) {
+                if (a[idx] == 0) {
+                    all_ones = false;
+                    break;
+                }
+                idx = (idx + d) % n;
+            }
+            if (all_ones) {
+                impossible = true;
+                break;
+            }
+
+            // Second pass: find the maximum run of consecutive 1s in the circular cycle
+            idx = start;
+            int cur = 0, mx = 0;
+            for (int i = 0; i < 2 * L; ++i) {
+                if (a[idx] == 1) {
+                    ++cur;
+                    if (cur > mx) mx = cur;
+                } else {
+                    cur = 0;
+                }
+                idx = (idx + d) % n;
+            }
+            if (mx > ans) ans = mx;
+        }
+
+        if (impossible) {
+            cout << -1 << '\n';
+        } else {
+            cout << ans << '\n';
+        }
+    }
+    return 0;
+}
+```

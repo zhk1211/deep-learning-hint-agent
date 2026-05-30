@@ -1,0 +1,27 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        ll x, y;
+        cin >> x >> y;
+        ll ans = 0;
+        // k from 1 to sqrt(x)
+        for (ll k = 1; k * k <= x; ++k) {
+            // b > k, b <= y, b <= x/k - 1
+            ll max_b = min(y, x / k - 1);
+            if (max_b > k) {
+                ans += max_b - k;
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

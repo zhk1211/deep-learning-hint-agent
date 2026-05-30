@@ -1,0 +1,163 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+
+    vector<int> u(m), v(m), w(m);
+    // We don't know the actual edges yet, but we will find lengths via queries.
+
+    // Step 1: Find the length of each edge.
+    // We query with all edges except one, and compare to the max capacity with all edges.
+    // First, get the max capacity with all edges.
+    string all_ones(m, '1');
+    cout << "? " << all_ones << endl;
+    int max_all;
+    cin >> max_all;
+
+    vector<int> len(m);
+    for (int i = 0; i < m; ++i) {
+        string q(m, '1');
+        q[i] = '0';
+        cout << "? " << q << endl;
+        int resp;
+        cin >> resp;
+        // The edge i contributes max_all - resp to the max capacity.
+        // Actually, the max capacity of the full spanning forest is the sum of edges in the maximum spanning forest.
+        // If we remove edge i, the max capacity drops by the length of edge i if it was part of the maximum spanning forest,
+        // otherwise it drops by 0. But wait, we need the minimum capacity, which is the minimum spanning forest.
+        // The problem statement: "maximum capacity" is defined as the maximum value among all full spanning forests.
+        // So the simulator returns the MAXIMUM spanning forest value.
+        // We want the MINIMUM capacity (minimum spanning forest value) with all tracks functional.
+        // So we need to find the minimum spanning forest.
+        // The hints suggest using Kruskal's algorithm.
+        // We can find the lengths of edges by querying the max capacity with all edges, and with one edge removed.
+        // The difference is the length of that edge if it is in the maximum spanning forest? Not necessarily.
+        // Actually, the maximum spanning forest is formed by taking edges in decreasing order of length.
+        // If we remove an edge, the max spanning forest might change.
+        // But we can find the lengths by a different method: query with only that edge? No, we need to find lengths.
+        // Let's think: The max capacity of the whole graph is the sum of edges in the maximum spanning forest.
+        // If we query with all edges except i, the max capacity is the sum of edges in the maximum spanning forest of the graph without edge i.
+        // The difference max_all - resp is the contribution of edge i to the maximum spanning forest.
+        // But that contribution is exactly the length of edge i if it is in the maximum spanning forest, otherwise 0.
+        // However, we need the actual lengths of all edges to compute the minimum spanning forest.
+        // We can find the lengths by sorting edges by their contribution? Not exactly.
+        // Alternative: We can find the lengths by querying with only that edge? But we can only query with a subset.
+        // The hint says: "The value of the graph consisting of the edges whose lengths are less than or equal to x is the sum of the lengths of the edges in the minimum full spanning forest of the graph."
+        // That suggests we can find the minimum spanning forest by querying with edges up to certain lengths.
+        // But we don't know the lengths.
+        // Another approach: We can find the lengths by using the fact that the maximum capacity of a set of edges is the sum of the edges in the maximum spanning forest.
+        // If we query with a single edge, the max capacity is its length if it connects two different components? Actually, a single edge's max capacity is its length (since the full spanning forest of a single edge is just that edge, if it connects two vertices; if it's a self-loop? No self-loops).
+        // So we can find the length of each edge by querying with only that edge set to 1.
+        // But we have only 2m queries. We can do m queries to find each length.
+        // Let's check: query with string having only 1 at position i, 0 elsewhere.
+        // The max capacity of a single edge is its length (since it's a forest).
+        // So we can get all lengths in m queries.
+        // Then we have m queries left to find the minimum spanning forest.
+        // But how to find the minimum spanning forest using queries?
+        // We can use Kruskal's algorithm: sort edges by length ascending.
+        // We need to know if adding an edge connects two different components in the minimum spanning forest.
+        // We can query the max capacity of the current forest plus this edge.
+        // But the simulator returns the MAXIMUM capacity, not minimum.
+        // Wait, the problem: "The device will then tell Kanako the maximum capacity of the system in the simulated state."
+        // So it always returns the maximum spanning forest value.
+        // We want the minimum capacity of the whole system.
+        // How can we use the maximum capacity to find the minimum spanning forest?
+        // Hint 3: "The value of the graph consisting of the edges whose lengths are less than or equal to x is the sum of the lengths of the edges in the minimum full spanning forest of the graph."
+        // This is a known property: For a graph, if you take all edges with length <= x, the value of the maximum spanning forest of that subgraph is exactly the sum of lengths of edges in the minimum spanning forest that have length <= x.
+        // Actually, it's a property of matroids: The maximum weight independent set in the truncated matroid.
+        // More precisely, if you take the edges with length <= x, the maximum spanning forest of that subgraph will include all edges of the minimum spanning forest that are <= x, and possibly some others? No, the maximum spanning forest of the subgraph with edges <= x is exactly the set of edges that are in the minimum spanning forest and have length <= x? Not exactly.
+        // Let's recall: In Kruskal's for minimum spanning tree, we process edges in increasing order. The set of edges chosen up to length x forms a spanning forest of the graph with edges <= x. That forest is exactly the minimum spanning forest of the whole graph restricted to edges <= x. Moreover, the total weight of that forest is the sum of lengths of those edges.
+        // But the simulator gives the MAXIMUM spanning forest of the subgraph. For a subgraph with edges <= x, the maximum spanning forest will take the largest edges first. That is not the same as the minimum spanning forest.
+        // However, there is a duality: The maximum spanning forest of the graph with edges <= x is actually the same as the minimum spanning forest of the graph if we negate weights? Not directly.
+        // Let's think differently: We can find the minimum spanning forest by querying the maximum capacity of the whole graph? No.
+        // Wait, the problem asks for the minimum capacity of the system with all tracks functional. That is the value of the minimum spanning forest.
+        // We can find the minimum spanning forest by using Kruskal's algorithm, but we need to know the connectivity.
+        // We can query the maximum capacity of a set of edges. How does that help with minimum spanning forest?
+        // Consider we have a set of edges S. The maximum capacity of S is the sum of edges in the maximum spanning forest of S.
+        // If we take the whole graph, the maximum capacity is the sum of edges in the maximum spanning forest.
+        // The minimum capacity is the sum of edges in the minimum spanning forest.
+        // They are different.
+        // But hint 3 says: "The value of the graph consisting of the edges whose lengths are less than or equal to x is the sum of the lengths of the edges in the minimum full spanning forest of the graph."
+        // This suggests that if we query with all edges <= x, the simulator returns the sum of lengths of edges in the minimum spanning forest that are <= x? But the simulator returns the MAXIMUM capacity, not the minimum. So there is a contradiction unless the maximum capacity of the subgraph with edges <= x equals the sum of edges in the minimum spanning forest that are <= x.
+        // Is that true? Let's test: Suppose we have a triangle with edges lengths 1, 2, 3. The minimum spanning tree has edges 1 and 2, sum=3. The maximum spanning tree has edges 3 and 2, sum=5.
+        // Now take x=2. The subgraph with edges <=2 has edges 1 and 2. The maximum spanning forest of this subgraph is the edge 2 (since it's the largest), sum=2. The minimum spanning forest of the whole graph restricted to edges <=2 would be edges 1 and 2? But the minimum spanning forest of the whole graph includes both 1 and 2. The sum of edges in the minimum spanning forest that are <=2 is 1+2=3. But the maximum spanning forest of the subgraph is 2. So they are not equal.
+        // So hint 3 must be interpreted differently. Maybe "value" in hint 3 refers to the minimum capacity? But the simulator returns maximum capacity.
+        // Let's re-read the problem statement carefully: "The maximum (or minimum) capacity of a railway system is defined as the maximum (or minimum) value among all of the currently functional system's full spanning forest."
+        // So the simulator can tell the maximum capacity. Kanako wants the minimum capacity.
+        // The hints: "Use Kruskal's algorithm." "Can you solve the problem using only one query?" "The value of the graph consisting of the edges whose lengths are less than or equal to x is the sum of the lengths of the edges in the minimum full spanning forest of the graph." "Try to find a relationship between the value of the graph and the existence of some edge."
+        // There is a known technique: To find the minimum spanning tree using queries that return the maximum spanning tree, you can use the fact that the maximum spanning tree of the graph with edges <= x is actually the complement? No.
+        // Let's search memory: There is a problem "Railway System" from Codeforces Round #??? (maybe 1687B). The solution is: First, find the length of each edge by querying with only that edge. Then sort edges by length. Then build the minimum spanning forest by adding edges in increasing order, and querying with the current set plus the new edge. If the increase in the maximum capacity equals the length of the new edge, then the edge is part of the maximum spanning forest of that set? Wait, we want the minimum spanning forest. But we are querying the maximum capacity. How does that help?
+        // Actually, the key is: For any set of edges, the maximum capacity is the sum of edges in the maximum spanning forest. If we add an edge e to a set S, the maximum capacity of S ∪ {e} is either the same as S (if e is not in the maximum spanning forest of S ∪ {e}) or increases by the length of e (if e is in the maximum spanning forest). But we want to build the minimum spanning forest. If we process edges in increasing order, and we maintain a set T (initially empty). When considering edge e, we query the maximum capacity of T ∪ {e}. If the result is max_capacity(T) + length(e), then e is part of the maximum spanning forest of T ∪ {e}. But since we are adding edges in increasing order, the maximum spanning forest of T ∪ {e} will actually be the minimum spanning forest? No.
+        // Let's think: If we have a set of edges, the maximum spanning forest takes the largest edges. If we add edges in increasing order, the new edge is the smallest so far. It will only be included in the maximum spanning forest if it connects two components that are not connected by any larger edges. But since we are adding smaller edges, the larger edges are already in T. So the maximum spanning forest of T ∪ {e} will include e only if e is necessary for connectivity among the larger edges? That doesn't make sense.
+        // Wait, the standard solution for this problem (I recall it) is: 
+        // 1. Find the length of each edge by querying with only that edge (m queries).
+        // 2. Sort edges by length.
+        // 3. Initialize the answer as 0, and a set of edges S = empty.
+        // 4. For each edge in increasing order of length:
+        //      Query the maximum capacity of S ∪ {e}.
+        //      If the result is max_capacity(S) + length(e), then this edge is part of the minimum spanning forest? Actually, it's the opposite: if the result is max_capacity(S) + length(e), then e is part of the maximum spanning forest of S ∪ {e}. But since we are adding edges in increasing order, the maximum spanning forest of S ∪ {e} will prefer larger edges. So e will only be added if it doesn't create a cycle with larger edges. That means e is not in the minimum spanning forest? Let's test with the triangle example: edges 1,2,3. Sorted: 1,2,3.
+        //      Start S empty, max=0.
+        //      Add edge 1: query S∪{1} -> max=1. 1 == 0+1, so condition true. We add 1 to S? If we do, S={1}, max=1.
+        //      Add edge 2: query S∪{2} -> max of {1,2} is 2 (since max spanning forest takes 2). 2 == 1+2? No, 1+2=3. So condition false. So we don't add 2 to S? But then S remains {1}.
+        //      Add edge 3: query S∪{3} -> max of {1,3} is 3. 3 == 1+3? No, 1+3=4. So condition false.
+        //      Final S={1}, sum=1. But the minimum spanning tree is {1,2} sum=3. So that doesn't work.
+        // What if we do the opposite: if the increase is NOT equal to length, then add? For edge 2: increase is 1 (from 1 to 2), not equal to 2, so we add? Then S={1,2}, max=2? Actually max of {1,2} is 2. Then edge 3: query {1,2,3} -> max=5. Increase from 2 to 5 is 3, equal to length 3, so we don't add? Then S={1,2}, sum=3. That gives the minimum spanning tree!
+        // Let's check: The condition to include an edge in the minimum spanning forest is: when added to the current set S (which contains edges already in the minimum spanning forest), the maximum capacity of S ∪ {e} is NOT equal to max_capacity(S) + length(e). Wait, in the example, for edge 1: max(empty)=0, max({1})=1, increase=1 == length, so we did NOT add? But we added it in the second scenario? Let's re-evaluate:
+        // Actually, we want to build the minimum spanning forest. We process edges in increasing order. We maintain a set MST (initially empty). For each edge e, we query the maximum capacity of MST ∪ {e}. Let prev = max_capacity(MST), curr = max_capacity(MST ∪ {e}). If curr == prev + length(e), then e is part of the maximum spanning forest of MST ∪ {e}. Since MST contains only edges smaller than e (because we process in increasing order), the maximum spanning forest of MST ∪ {e} will include e if and only if e connects two different components of MST. But wait, if e connects two components, then adding e increases the maximum spanning forest by exactly length(e) because e is the largest edge in the set so far (since we add in increasing order). So curr = prev + length(e) means e connects two components. That is exactly the condition for Kruskal's algorithm to add an edge to the minimum spanning forest! Because in Kruskal's for minimum spanning tree, we add an edge if it connects two different components. So if curr == prev + length(e), then e connects two components, so we should add it to the minimum spanning forest. But in the triangle example, for edge 1: prev=0, curr=1, 1==0+1, so we add edge 1. For edge 2: prev=1 (MST={1}), curr=max({1,2})=2. 2 == 1+2? No, 1+2=3. So curr != prev + length(e). That means edge 2 does not connect two components? But it does: vertices 2 and 3 (assuming triangle 1-2, 2-3, 1-3). Actually, with edges 1 and 2, if edge 1 connects 1-2, edge 2 connects 2-3, then edge 2 does connect a new vertex. Why did the max capacity only increase by 1? Because the maximum spanning forest of {1,2} takes the largest edge, which is 2, and drops 1. So the max capacity goes from 1 to 2, increase of 1, not 2. So the condition curr == prev + length(e) fails. That means edge 2 is not the largest edge in the new set? But it is the largest (2 > 1). So why isn't the increase equal to 2? Because the previous max capacity was 1 (from edge 1). When we add edge 2, the new max spanning forest is just edge 2 (value 2). So the increase is 1. But if edge 2 connected two components, the new max spanning forest would be edge 1 and edge 2? No, the maximum spanning forest takes the largest edges without forming cycles. Since edge 2 is larger than edge 1, and they form a cycle? Wait, if edge 1 connects 1-2, and edge 2 connects 2-3, they don't form a cycle. The maximum spanning forest of {1,2} should include both edges because they don't form a cycle and we want maximum weight. The maximum spanning forest of two edges that don't form a cycle is both edges. So max({1,2}) should be 1+2=3. But in my earlier thought, I said max({1,2}) is 2. That's wrong! The maximum spanning forest of a graph with edges 1-2 (length 1) and 2-3 (length 2) is both edges, sum=3. So curr would be 3, prev=1, increase=2 == length(2). So condition holds. So edge 2 would be added. Then for edge 3: suppose edge 3 connects 1-3 (length 3). MST={1,2}, max=3. Query {1,2,3}: max spanning forest takes edges 3 and 2 (largest two without cycle), sum=5. Increase=2, not equal to 3. So condition fails, edge 3 not added. Final MST={1,2}, sum=3. Correct.
+        // So the condition to add an edge to the minimum spanning forest is: when added to the current MST (which contains edges already selected), the maximum capacity increases by exactly the length of the edge. That means the edge is part of the maximum spanning forest of the new set, which implies it connects two different components (since we process in increasing order, the new edge is the largest so far, so it will be included in the max spanning forest if it doesn't form a cycle). So this is exactly Kruskal's algorithm but using the maximum capacity query to test connectivity.
+        // Therefore, the algorithm:
+        // 1. Find the length of each edge by querying with only that edge (string with '1' at i, '0' elsewhere). This gives the length directly.
+        // 2. Sort edges by length.
+        // 3. Initialize MST set as empty, and its max capacity = 0.
+        // 4. For each edge in increasing order:
+        //      Query max capacity of MST ∪ {e}.
+        //      If the result == current_max + length(e), then add e to MST, update current_max = result.
+        // 5. The answer is current_max (which is the sum of lengths of edges in the minimum spanning forest).
+        // We have used m queries for lengths, and at most m queries for building MST (one per edge). Total <= 2m.
+        // This matches the hints.
+
+    // Let's implement.
+    vector<int> order(m);
+    iota(order.begin(), order.end(), 0);
+    
+    // First, get lengths.
+    vector<int> length(m);
+    for (int i = 0; i < m; ++i) {
+        string q(m, '0');
+        q[i] = '1';
+        cout << "? " << q << endl;
+        cin >> length[i];
+    }
+
+    // Sort edges by length.
+    sort(order.begin(), order.end(), [&](int i, int j) {
+        return length[i] < length[j];
+    });
+
+    string current_set(m, '0');
+    int current_max = 0;
+    for (int idx : order) {
+        // try adding this edge
+        string next_set = current_set;
+        next_set[idx] = '1';
+        cout << "? " << next_set << endl;
+        int resp;
+        cin >> resp;
+        if (resp == current_max + length[idx]) {
+            // add to MST
+            current_set = next_set;
+            current_max = resp;
+        }
+    }
+
+    cout << "! " << current_max << endl;
+
+    return 0;
+}
+```

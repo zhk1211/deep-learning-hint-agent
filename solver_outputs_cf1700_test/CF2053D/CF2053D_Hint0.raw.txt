@@ -1,0 +1,75 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+int modpow(int a, int e) {
+    int res = 1;
+    while (e) {
+        if (e & 1) res = 1LL * res * a % MOD;
+        a = 1LL * a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, q;
+        cin >> n >> q;
+        vector<int> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int i = 0; i < n; ++i) cin >> b[i];
+        
+        vector<int> sa = a, sb = b;
+        sort(sa.begin(), sa.end());
+        sort(sb.begin(), sb.end());
+        
+        int ans = 1;
+        for (int i = 0; i < n; ++i) {
+            ans = 1LL * ans * min(sa[i], sb[i]) % MOD;
+        }
+        
+        cout << ans;
+        
+        while (q--) {
+            int o, x;
+            cin >> o >> x;
+            --x;
+            if (o == 1) {
+                int old_val = a[x];
+                ++a[x];
+                int pos = upper_bound(sa.begin(), sa.end(), old_val) - sa.begin() - 1;
+                int old_min = min(sa[pos], sb[pos]);
+                ++sa[pos];
+                int new_min = min(sa[pos], sb[pos]);
+                if (old_min != new_min) {
+                    ans = 1LL * ans * modpow(old_min, MOD - 2) % MOD;
+                    ans = 1LL * ans * new_min % MOD;
+                }
+            } else {
+                int old_val = b[x];
+                ++b[x];
+                int pos = upper_bound(sb.begin(), sb.end(), old_val) - sb.begin() - 1;
+                int old_min = min(sa[pos], sb[pos]);
+                ++sb[pos];
+                int new_min = min(sa[pos], sb[pos]);
+                if (old_min != new_min) {
+                    ans = 1LL * ans * modpow(old_min, MOD - 2) % MOD;
+                    ans = 1LL * ans * new_min % MOD;
+                }
+            }
+            cout << ' ' << ans;
+        }
+        cout << '\n';
+    }
+    return 0;
+}
+```

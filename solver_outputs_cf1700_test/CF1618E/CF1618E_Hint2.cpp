@@ -1,0 +1,62 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<ll> b(n);
+        ll sum = 0;
+        for (int i = 0; i < n; ++i) {
+            cin >> b[i];
+            sum += b[i];
+        }
+        
+        if (n == 1) {
+            cout << "YES\n" << b[0] << "\n";
+            continue;
+        }
+        
+        ll total = (ll)n * (n + 1) / 2;
+        if (sum % total != 0) {
+            cout << "NO\n";
+            continue;
+        }
+        ll S = sum / total;
+        
+        vector<ll> a(n);
+        bool ok = true;
+        for (int i = 0; i < n; ++i) {
+            int prev = (i - 1 + n) % n;
+            ll diff = b[prev] - b[i];
+            ll val = S + diff;
+            if (val <= 0 || val % n != 0) {
+                ok = false;
+                break;
+            }
+            a[i] = val / n;
+            if (a[i] < 1 || a[i] > 1000000000) {
+                ok = false;
+                break;
+            }
+        }
+        
+        if (!ok) {
+            cout << "NO\n";
+        } else {
+            cout << "YES\n";
+            for (int i = 0; i < n; ++i) {
+                cout << a[i] << (i + 1 == n ? '\n' : ' ');
+            }
+        }
+    }
+    return 0;
+}

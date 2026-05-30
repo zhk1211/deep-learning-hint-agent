@@ -1,0 +1,48 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        sort(a.begin(), a.end(), greater<int>());
+
+        long long alice = 0, bob = 0;
+        int turn = 0; // 0 for Alice, 1 for Bob
+
+        for (int i = 0; i < n; ++i) {
+            int val = a[i];
+            if (val % 2 == 1) {
+                // odd
+                if (turn == 0) {
+                    alice += (val + 1) / 2;
+                } else {
+                    bob += val / 2;
+                }
+                turn ^= 1;
+            } else {
+                // even
+                if (turn == 0) {
+                    alice += val / 2;
+                } else {
+                    bob += val / 2;
+                }
+            }
+        }
+
+        cout << alice << ' ' << bob << '\n';
+    }
+
+    return 0;
+}

@@ -1,0 +1,64 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+int ask(int a, int b, int c, int d) {
+    cout << "? " << a << " " << b << " " << c << " " << d << endl;
+    char res;
+    cin >> res;
+    if (res == '<') return -1;
+    if (res == '=') return 0;
+    return 1;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    
+    // Find index of maximum element using n-1 queries
+    int max_idx = 0;
+    for (int i = 1; i < n; i++) {
+        int res = ask(max_idx, max_idx, i, i);
+        if (res < 0) {
+            max_idx = i;
+        }
+    }
+    
+    // Now find the index that maximizes XOR with max_idx
+    // We'll maintain a candidate set, starting with all indices except max_idx
+    vector<int> candidates;
+    for (int i = 0; i < n; i++) {
+        if (i != max_idx) candidates.push_back(i);
+    }
+    
+    int best = candidates[0];
+    for (int i = 1; i < (int)candidates.size(); i++) {
+        int c = candidates[i];
+        // Compare (p_best | p_max) vs (p_c | p_max)
+        int res = ask(best, max_idx, c, max_idx);
+        if (res < 0) {
+            best = c;
+        } else if (res == 0) {
+            // If equal, we need to break tie by comparing the elements themselves
+            // (p_best | p_best) vs (p_c | p_c)
+            int res2 = ask(best, best, c, c);
+            if (res2 > 0) {
+                best = c;
+            }
+        }
+    }
+    
+    cout << "! " << max_idx << " " << best << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

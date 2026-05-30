@@ -1,0 +1,66 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> x(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> x[i];
+        }
+
+        int best_a = x[0];
+        int best_l = 1, best_r = 1;
+        int max_gain = 0;
+
+        int i = 0;
+        while (i < n) {
+            int j = i;
+            while (j < n && x[j] == x[i]) {
+                ++j;
+            }
+            int val = x[i];
+            int cnt = j - i;
+
+            int cur = 0;
+            int min_pref = 0;
+            int best_start = 0;
+            int local_best = 0;
+            int local_l = 0, local_r = 0;
+
+            for (int k = 0; k < cnt; ++k) {
+                cur += 1;
+                if (cur - min_pref > local_best) {
+                    local_best = cur - min_pref;
+                    local_l = best_start;
+                    local_r = k;
+                }
+                if (cur < min_pref) {
+                    min_pref = cur;
+                    best_start = k + 1;
+                }
+            }
+
+            if (local_best > max_gain) {
+                max_gain = local_best;
+                best_a = val;
+                best_l = i + local_l + 1;
+                best_r = i + local_r + 1;
+            }
+
+            i = j;
+        }
+
+        cout << best_a << ' ' << best_l << ' ' << best_r << '\n';
+    }
+
+    return 0;
+}
+```

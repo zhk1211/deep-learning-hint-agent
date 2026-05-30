@@ -1,0 +1,92 @@
+// Hint6
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+void solve() {
+    int n;
+    ll k, c;
+    cin >> n >> k >> c;
+    vector<vector<int>> adj(n);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        --u; --v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    vector<ll> down(n, 0);
+    function<void(int, int)> dfs1 = [&](int u, int p) {
+        ll best = 0;
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            dfs1(v, u);
+            best = max(best, down[v] + k);
+        }
+        down[u] = best;
+    };
+    dfs1(0, -1);
+
+    vector<ll> up(n, 0);
+    function<void(int, int)> dfs2 = [&](int u, int p) {
+        ll mx1 = -1, mx2 = -1;
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            ll val = down[v] + k;
+            if (val > mx1) {
+                mx2 = mx1;
+                mx1 = val;
+            } else if (val > mx2) {
+                mx2 = val;
+            }
+        }
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            ll use = mx1;
+            if (down[v] + k == mx1) use = mx2;
+            up[v] = max(up[u] + k, max(use, 0LL));
+            dfs2(v, u);
+        }
+    };
+    dfs2(0, -1);
+
+    ll ans = 0;
+    for (int i = 0; i < n; ++i) {
+        ll dist = max(down[i], up[i]);
+        ll profit = dist - c * i; // distance from root 0 to i is i edges, cost = c * i
+        // Actually we need distance from root 0 to i in terms of number of edges.
+        // We can compute depth in a separate DFS or use BFS.
+        // Let's compute depth array.
+    }
+
+    // We need depth from root 0 to each node.
+    vector<int> depth(n, 0);
+    function<void(int, int)> dfs_depth = [&](int u, int p) {
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            depth[v] = depth[u] + 1;
+            dfs_depth(v, u);
+        }
+    };
+    dfs_depth(0, -1);
+
+    ans = 0;
+    for (int i = 0; i < n; ++i) {
+        ll dist = max(down[i], up[i]);
+        ll profit = dist - c * depth[i];
+        ans = max(ans, profit);
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

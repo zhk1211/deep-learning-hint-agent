@@ -1,0 +1,47 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        long long a, b;
+        cin >> a >> b;
+        if (a > b) swap(a, b);
+        
+        long long ans = LLONG_MAX;
+        // Try all possible final leg lengths m from 1 to about sqrt(b) + some margin
+        // Actually we can try m up to 100000 because b <= 1e9, but we can be smarter
+        // We'll iterate m from 1 to min(100000LL, b) but also consider large m via division
+        for (long long m = 1; m * m <= b + 100000; ++m) {
+            long long moves = (m - 1); // increases to reach length m
+            moves += (a + m - 1) / m;  // jumps in x direction
+            moves += (b + m - 1) / m;  // jumps in y direction
+            ans = min(ans, moves);
+        }
+        // Also consider m around b / k for small k
+        for (long long k = 1; k * k <= b + 100000; ++k) {
+            long long m = b / k;
+            if (m >= 1) {
+                long long moves = (m - 1);
+                moves += (a + m - 1) / m;
+                moves += (b + m - 1) / m;
+                ans = min(ans, moves);
+            }
+            m = b / k + 1;
+            if (m >= 1) {
+                long long moves = (m - 1);
+                moves += (a + m - 1) / m;
+                moves += (b + m - 1) / m;
+                ans = min(ans, moves);
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

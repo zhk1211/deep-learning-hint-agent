@@ -1,0 +1,53 @@
+// Hint5
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<vector<int>> a(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                cin >> a[i][j];
+            }
+        }
+
+        // Binary search on answer l
+        int low = 1, high = min(n, m), ans = 1;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            // Build binary matrix: 1 if a[i][j] >= mid, else 0
+            vector<vector<int>> pref(n + 1, vector<int>(m + 1, 0));
+            for (int i = 0; i < n; ++i) {
+                for (int j = 0; j < m; ++j) {
+                    pref[i + 1][j + 1] = (a[i][j] >= mid) + pref[i][j + 1] + pref[i + 1][j] - pref[i][j];
+                }
+            }
+
+            bool ok = false;
+            for (int i = 0; i + mid <= n && !ok; ++i) {
+                for (int j = 0; j + mid <= m && !ok; ++j) {
+                    int sum = pref[i + mid][j + mid] - pref[i][j + mid] - pref[i + mid][j] + pref[i][j];
+                    if (sum == mid * mid) {
+                        ok = true;
+                    }
+                }
+            }
+
+            if (ok) {
+                ans = mid;
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

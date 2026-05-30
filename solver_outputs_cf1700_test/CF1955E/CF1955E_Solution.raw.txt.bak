@@ -1,0 +1,43 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    string s;
+    cin >> n >> s;
+    for (int k = n; k >= 1; --k) {
+        vector<int> end(n + 1, 0);
+        int cnt = 0;
+        bool ok = true;
+        for (int i = 0; i < n; ++i) {
+            cnt -= end[i];
+            int cur = (s[i] - '0') ^ (cnt & 1);
+            if (cur == 0) {
+                if (i + k <= n) {
+                    ++end[i + k];
+                    ++cnt;
+                } else {
+                    ok = false;
+                    break;
+                }
+            }
+        }
+        if (ok) {
+            cout << k << '\n';
+            return;
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

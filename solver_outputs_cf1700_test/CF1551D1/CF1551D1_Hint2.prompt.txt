@@ -1,0 +1,65 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+The only difference between this problem and D2 is that you don't have to provide the way to construct the answer in this problem, but you have to do it in D2.
+
+There's a table of $ n \times m $ cells ( $ n $ rows and $ m $ columns). The value of $ n \cdot m $ is even.
+
+A domino is a figure that consists of two cells having a common side. It may be horizontal (one of the cells is to the right of the other) or vertical (one of the cells is above the other).
+
+You need to find out whether it is possible to place $ \frac{nm}{2} $ dominoes on the table so that exactly $ k $ of them are horizontal and all the other dominoes are vertical. The dominoes cannot overlap and must fill the whole table.
+
+Input Format
+The first line contains one integer $ t $ ( $ 1 \le t \le 10 $ ) — the number of test cases. Then $ t $ test cases follow.
+
+Each test case consists of a single line. The line contains three integers $ n $ , $ m $ , $ k $ ( $ 1 \le n,m \le 100 $ , $ 0 \le k \le \frac{nm}{2} $ , $ n \cdot m $ is even) — the number of rows, columns and horizontal dominoes, respectively.
+
+Output Format
+For each test case output "YES", if it is possible to place dominoes in the desired way, or "NO" otherwise.
+
+You may print each letter in any case (YES, yes, Yes will all be recognized as positive answer, NO, no and nO will all be recognized as negative answer).
+
+Examples
+Sample 1
+Input
+8
+4 4 2
+2 3 0
+3 2 3
+1 2 0
+2 4 2
+5 2 2
+2 17 16
+2 1 1
+Output
+YES
+YES
+YES
+NO
+YES
+NO
+YES
+NO
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+How many horizontal and vertical dominoes should be on the table?
+
+**Hint 2**
+Can you make the number of horizontal and vertical dominoes on the table odd or even?
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

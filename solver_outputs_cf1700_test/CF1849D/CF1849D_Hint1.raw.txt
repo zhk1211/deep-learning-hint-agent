@@ -1,0 +1,50 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    
+    int coins = 0;
+    int i = 0;
+    while (i < n) {
+        if (a[i] == 0) {
+            ++i;
+            continue;
+        }
+        // start a segment of non-zero
+        int j = i;
+        while (j < n && a[j] != 0) {
+            ++j;
+        }
+        // segment [i, j-1] is all non-zero
+        bool has_two = false;
+        for (int k = i; k < j; ++k) {
+            if (a[k] == 2) {
+                has_two = true;
+                break;
+            }
+        }
+        if (has_two) {
+            // one coin can paint the whole segment
+            ++coins;
+        } else {
+            // all ones: need ceil(len/2) coins
+            int len = j - i;
+            coins += (len + 1) / 2;
+        }
+        i = j;
+    }
+    
+    cout << coins << '\n';
+    return 0;
+}
+```

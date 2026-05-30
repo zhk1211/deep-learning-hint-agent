@@ -1,0 +1,99 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> a(k, vector<int>(n));
+    for (int i = 0; i < k; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cin >> a[i][j];
+        }
+    }
+    if (k == 1) {
+        cout << "YES\n";
+        return;
+    }
+    vector<int> order;
+    // Try to deduce order from first two screenshots
+    int p1 = -1, p2 = -1;
+    for (int i = 1; i < n; ++i) {
+        if (a[0][i] == a[1][0]) p1 = i;
+        if (a[1][i] == a[0][0]) p2 = i;
+    }
+    // Build candidate order from first screenshot, inserting a[0][0] at possible positions
+    vector<int> base(a[0].begin() + 1, a[0].end());
+    auto check = [&](const vector<int>& cand) -> bool {
+        for (int i = 0; i < k; ++i) {
+            int author = a[i][0];
+            int idx = find(cand.begin(), cand.end(), author) - cand.begin();
+            vector<int> view;
+            view.push_back(author);
+            for (int j = 0; j < n; ++j) {
+                if (cand[j] != author) view.push_back(cand[j]);
+            }
+            for (int j = 0; j < n; ++j) {
+                if (view[j] != a[i][j]) return false;
+            }
+        }
+        return true;
+    };
+    // Case 1: a[0][0] is before a[1][0] in true order
+    if (p1 != -1) {
+        vector<int> cand = base;
+        cand.insert(cand.begin() + (p1 - 1), a[0][0]);
+        if (check(cand)) {
+            cout << "YES\n";
+            return;
+        }
+    }
+    // Case 2: a[0][0] is after a[1][0] in true order
+    if (p2 != -1) {
+        vector<int> cand = base;
+        cand.insert(cand.begin() + (p2 - 1), a[0][0]);
+        if (check(cand)) {
+            cout << "YES\n";
+            return;
+        }
+    }
+    // If neither worked, try to deduce from any pair where authors are not first in each other's lists
+    for (int i = 0; i < k; ++i) {
+        for (int j = i + 1; j < k; ++j) {
+            int ai = a[i][0], aj = a[j][0];
+            int pos_i_in_j = -1, pos_j_in_i = -1;
+            for (int x = 1; x < n; ++x) {
+                if (a[j][x] == ai) pos_i_in_j = x;
+                if (a[i][x] == aj) pos_j_in_i = x;
+            }
+            if (pos_i_in_j != -1 && pos_j_in_i != -1) {
+                // Build candidate from i's view
+                vector<int> cand(a[i].begin() + 1, a[i].end());
+                cand.insert(cand.begin() + (pos_j_in_i - 1), ai);
+                if (check(cand)) {
+                    cout << "YES\n";
+                    return;
+                }
+                // Build candidate from j's view
+                cand = vector<int>(a[j].begin() + 1, a[j].end());
+                cand.insert(cand.begin() + (pos_i_in_j - 1), aj);
+                if (check(cand)) {
+                    cout << "YES\n";
+                    return;
+                }
+            }
+        }
+    }
+    cout << "NO\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

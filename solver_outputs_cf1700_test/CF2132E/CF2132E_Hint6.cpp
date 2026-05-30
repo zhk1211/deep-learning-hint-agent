@@ -1,0 +1,53 @@
+// Hint6
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+void solve() {
+    int n, m, q;
+    cin >> n >> m >> q;
+    vector<ll> a(n), b(m);
+    for (int i = 0; i < n; i++) cin >> a[i];
+    for (int i = 0; i < m; i++) cin >> b[i];
+    sort(a.rbegin(), a.rend());
+    sort(b.rbegin(), b.rend());
+    vector<ll> prefA(n + 1, 0), prefB(m + 1, 0);
+    for (int i = 0; i < n; i++) prefA[i + 1] = prefA[i] + a[i];
+    for (int i = 0; i < m; i++) prefB[i + 1] = prefB[i] + b[i];
+
+    while (q--) {
+        int x, y, z;
+        cin >> x >> y >> z;
+        int L = max(0, z - y);
+        int R = min(x, z);
+        ll ans = 0;
+        // ternary search on number of cards taken from A
+        while (R - L > 2) {
+            int m1 = L + (R - L) / 3;
+            int m2 = R - (R - L) / 3;
+            ll f1 = prefA[m1] + prefB[z - m1];
+            ll f2 = prefA[m2] + prefB[z - m2];
+            if (f1 < f2) {
+                L = m1;
+            } else {
+                R = m2;
+            }
+        }
+        for (int i = L; i <= R; i++) {
+            ans = max(ans, prefA[i] + prefB[z - i]);
+        }
+        cout << ans << "\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

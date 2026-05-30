@@ -1,0 +1,88 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Stanley has decided to buy a new desktop PC made by the company "Monoblock", and to solve captcha on their website, he needs to solve the following task.
+
+The awesomeness of an array is the minimum number of blocks of consecutive identical numbers in which the array could be split. For example, the awesomeness of an array
+
+- $ [1, 1, 1] $ is $ 1 $ ;
+- $ [5, 7] $ is $ 2 $ , as it could be split into blocks $ [5] $ and $ [7] $ ;
+- $ [1, 7, 7, 7, 7, 7, 7, 7, 9, 9, 9, 9, 9, 9, 9, 9, 9] $ is 3, as it could be split into blocks $ [1] $ , $ [7, 7, 7, 7, 7, 7, 7] $ , and $ [9, 9, 9, 9, 9, 9, 9, 9, 9] $ .
+
+You are given an array $ a $ of length $ n $ . There are $ m $ queries of two integers $ i $ , $ x $ . A query $ i $ , $ x $ means that from now on the $ i $ -th element of the array $ a $ is equal to $ x $ .
+
+After each query print the sum of awesomeness values among all subsegments of array $ a $ . In other words, after each query you need to calculate $\sum\limits_{l = 1}^n \sum\limits_{r = l}^n g(l, r), $ where $ g(l, r) $ is the awesomeness of the array $ b = [a_l, a_{l + 1}, \ldots, a_r] $.
+
+Input Format
+In the first line you are given with two integers $ n $ and $ m $ ( $ 1 \leq n, m \leq 10^5 $ ).
+
+The second line contains $ n $ integers $ a_1, a_2, \ldots, a_n $ ( $ 1 \le a_i \le 10^9 $ ) — the array $ a $ .
+
+In the next $ m $ lines you are given the descriptions of queries. Each line contains two integers $ i $ and $ x $ ( $ 1 \leq i \leq n $ , $ 1 \leq x \leq 10^9 $ ).
+
+Output Format
+Print the answer to each query on a new line.
+
+Examples
+Sample 1
+Input
+5 5
+1 2 3 4 5
+3 2
+4 2
+3 1
+2 1
+2 2
+Output
+29
+23
+35
+25
+35
+
+Note
+After the first query $ a $ is equal to $ [1, 2, 2, 4, 5] $ , and the answer is $ 29 $ because we can split each of the subsegments the following way:
+
+1. $ [1; 1] $ : $ [1] $ , 1 block;
+2. $ [1; 2] $ : $ [1] + [2] $ , 2 blocks;
+3. $ [1; 3] $ : $ [1] + [2, 2] $ , 2 blocks;
+4. $ [1; 4] $ : $ [1] + [2, 2] + [4] $ , 3 blocks;
+5. $ [1; 5] $ : $ [1] + [2, 2] + [4] + [5] $ , 4 blocks;
+6. $ [2; 2] $ : $ [2] $ , 1 block;
+7. $ [2; 3] $ : $ [2, 2] $ , 1 block;
+8. $ [2; 4] $ : $ [2, 2] + [4] $ , 2 blocks;
+9. $ [2; 5] $ : $ [2, 2] + [4] + [5] $ , 3 blocks;
+10. $ [3; 3] $ : $ [2] $ , 1 block;
+11. $ [3; 4] $ : $ [2] + [4] $ , 2 blocks;
+12. $ [3; 5] $ : $ [2] + [4] + [5] $ , 3 blocks;
+13. $ [4; 4] $ : $ [4] $ , 1 block;
+14. $ [4; 5] $ : $ [4] + [5] $ , 2 blocks;
+15. $ [5; 5] $ : $ [5] $ , 1 block;
+
+which is $ 1 + 2 + 2 + 3 + 4 + 1 + 1 + 2 + 3 + 1 + 2 + 3 + 1 + 2 + 1 = 29 $ in total.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1715C - Monoblock
+Let us introduce another definition for the beauty  — beauty of the array $$$a$$$ is a number of such positions (indexes) $$$i  \lt  n$$$, that $$$a_i \neq a_{i + 1}$$$, plus $$$1$$$. Let's call "joints" places where two adjacent different numbers exist in the array.
+Now consider the problem from the angle of these joints: if $$$f(joint)$$$ is equal to the number of segments, that overlap this joint, then the sum of beauty over all subsegments is equal to the sum of $$$f(joint)$$$ over all joints. To get a clearer understanding, consider the following
+example
+: $$$[1, 7, 7, 9, 9, 9] = [1] + [7, 7] + [9, 9, 9]$$$ ("$$$+$$$" is basically a joint). There are 5 segments, which contain first joint ($$$[1:2], [1:3], [1:4], [1:5], [1:6]$$$), and there are 9 such for the second joint ($$$[1:4], [1:5], [1, 6], [2:4], [2:5], [2:6], [3:4], [3:5], [3:6]$$$), $$$14$$$ in total. After adding the number of subsegments, we get the answer: $$$\frac{6 \cdot 7}{2} = 21, 21 + 14 = 35$$$.
+From this the solution is derived, apart from change requests: iterate over the array, find "joints", comparing adjacent numbers, if $$$a_i$$$ is different from $$$a_{i + 1}$$$, that we must add $$$i \cdot (n - i)$$$ to the answer, that is how many possible beginnings of subsegments from the left multiplied by the number of possible ends from the right.
+How we should apply changes? In fact, it's worth just checking if there are any neighboring joints for the position of the changing number, subtracting the number of subsegments, that overlap these joints, and then doing similar operations after setting a new value for the number.
+For a better understanding and more details, we suggest you look over the authors' solutions.
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

@@ -1,0 +1,66 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1e9 + 7;
+
+long long modpow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = (res * a) % MOD;
+        a = (a * a) % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        sort(a.begin(), a.end());
+
+        // compress values and count frequencies
+        vector<pair<int, int>> comp; // value, count
+        for (int x : a) {
+            if (comp.empty() || comp.back().first != x) {
+                comp.push_back({x, 1});
+            } else {
+                comp.back().second++;
+            }
+        }
+
+        int k = comp.size();
+        vector<long long> pref(k + 1, 1);
+        for (int i = 0; i < k; ++i) {
+            pref[i + 1] = (pref[i] * comp[i].second) % MOD;
+        }
+
+        long long ans = 0;
+        int j = 0;
+        for (int i = 0; i < k; ++i) {
+            while (j < k && comp[j].first - comp[i].first < m) {
+                ++j;
+            }
+            // now [i, j-1] is the maximal window with difference < m
+            int len = j - i;
+            if (len >= m) {
+                // product of counts from i to i+m-1
+                long long prod = (pref[i + m] * modpow(pref[i], MOD - 2)) % MOD;
+                ans = (ans + prod) % MOD;
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

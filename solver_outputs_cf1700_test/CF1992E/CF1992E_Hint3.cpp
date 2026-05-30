@@ -1,0 +1,50 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        string n_str;
+        cin >> n_str;
+        int n_int = stoi(n_str);
+        int len = (int)n_str.size();
+        
+        vector<pair<int, int>> ans;
+        // a from 1 to 10000
+        for (int a = 1; a <= 10000; a++) {
+            // length of s = len * a
+            // we need b <= min(10000, a * n_int) and b < len * a (so result non-empty)
+            // result string length = len * a - b
+            // result string must equal the integer n_int * a - b
+            // Since n_int <= 100, a <= 10000, n_int*a <= 1e6, so result integer has at most 7 digits
+            // len*a - b <= 7 (actually len*a - b <= 6 because n_int*a - b < 1e6? but we can just check up to 10)
+            // We'll iterate over possible result lengths L = len*a - b, where 1 <= L <= min(10, len*a)
+            int maxL = min(10, len * a);
+            for (int L = 1; L <= maxL; L++) {
+                int b = len * a - L;
+                if (b < 1 || b > 10000 || b > a * n_int) continue;
+                // Construct the expected string from s by taking first L characters
+                // s = n_str repeated a times, but we only need first L chars
+                string res_str;
+                for (int i = 0; i < L; i++) {
+                    res_str += n_str[i % len];
+                }
+                // Convert to integer
+                long long res_val = stoll(res_str);
+                if (res_val == (long long)n_int * a - b) {
+                    ans.emplace_back(a, b);
+                }
+            }
+        }
+        cout << ans.size() << '\n';
+        for (auto &p : ans) {
+            cout << p.first << ' ' << p.second << '\n';
+        }
+    }
+    return 0;
+}

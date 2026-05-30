@@ -1,0 +1,51 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, q;
+    cin >> n >> q;
+    vector<long long> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+
+    const int MAX_BIT = 60;
+    vector<long long> queries(q);
+    for (int i = 0; i < q; ++i) {
+        cin >> queries[i];
+    }
+
+    for (int qi = 0; qi < q; ++qi) {
+        long long k = queries[qi];
+        long long ans = 0;
+        vector<long long> cur = a;
+        for (int bit = MAX_BIT; bit >= 0; --bit) {
+            long long need = 0;
+            long long mask = (1LL << bit) - 1;
+            for (int i = 0; i < n; ++i) {
+                if (!(cur[i] & (1LL << bit))) {
+                    long long to_add = (1LL << bit) - (cur[i] & mask);
+                    need += to_add;
+                    if (need > k) break;
+                }
+            }
+            if (need <= k) {
+                k -= need;
+                ans |= (1LL << bit);
+                for (int i = 0; i < n; ++i) {
+                    if (!(cur[i] & (1LL << bit))) {
+                        long long to_add = (1LL << bit) - (cur[i] & mask);
+                        cur[i] += to_add;
+                    }
+                }
+            }
+        }
+        cout << ans << '\n';
+    }
+
+    return 0;
+}

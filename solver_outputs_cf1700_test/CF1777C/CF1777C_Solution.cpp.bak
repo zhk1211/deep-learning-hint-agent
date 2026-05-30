@@ -1,0 +1,60 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAXM = 100000;
+vector<int> factors[MAXM + 5];
+
+void init() {
+    for (int i = 1; i <= MAXM; i++) {
+        for (int j = i; j <= MAXM; j += i) {
+            factors[j].push_back(i);
+        }
+    }
+}
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    sort(a.begin(), a.end());
+    vector<int> freq(m + 5, 0);
+    int cnt = 0;
+    int j = 0;
+    int ans = INT_MAX;
+    for (int i = 0; i < n; i++) {
+        for (int x : factors[a[i]]) {
+            if (x > m) break;
+            if (freq[x]++ == 0) {
+                cnt++;
+            }
+        }
+        while (cnt == m) {
+            ans = min(ans, a[i] - a[j]);
+            for (int x : factors[a[j]]) {
+                if (x > m) break;
+                if (--freq[x] == 0) {
+                    cnt--;
+                }
+            }
+            j++;
+        }
+    }
+    if (ans == INT_MAX) ans = -1;
+    cout << ans << "\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    init();
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

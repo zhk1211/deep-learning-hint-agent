@@ -1,0 +1,60 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+        
+        // Check necessary condition: c must be a + 1
+        if (c != a + 1) {
+            cout << -1 << '\n';
+            continue;
+        }
+        
+        // If no vertices with children, only one vertex (c=1)
+        if (a == 0 && b == 0) {
+            cout << 0 << '\n';
+            continue;
+        }
+        
+        // Build tree level by level
+        // Start with root (level 0), it has 2 children if a>0, else 1 child
+        int height = 0;
+        int nodes_at_current_level = 1; // root
+        int remaining_a = a;
+        int remaining_b = b;
+        
+        while (nodes_at_current_level > 0) {
+            height++;
+            int next_level_nodes = 0;
+            
+            // Process nodes at current level
+            for (int i = 0; i < nodes_at_current_level; i++) {
+                if (remaining_a > 0) {
+                    // Use a 2-child node
+                    remaining_a--;
+                    next_level_nodes += 2;
+                } else if (remaining_b > 0) {
+                    // Use a 1-child node
+                    remaining_b--;
+                    next_level_nodes += 1;
+                }
+                // If no children left, this node is a leaf (c already accounted for)
+            }
+            
+            nodes_at_current_level = next_level_nodes;
+        }
+        
+        cout << height << '\n';
+    }
+    
+    return 0;
+}
+```

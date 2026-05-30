@@ -1,0 +1,65 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAXN = 1e5 + 5;
+vector<bool> comp(MAXN);
+vector<int> primes;
+
+void sieve() {
+    for (int i = 2; i * i < MAXN; i++) {
+        if (!comp[i]) {
+            for (int j = i * i; j < MAXN; j += i) {
+                comp[j] = true;
+            }
+        }
+    }
+    for (int i = 2; i < MAXN; i++) {
+        if (!comp[i]) {
+            primes.push_back(i);
+        }
+    }
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> p(n + 1, 0);
+    
+    for (auto it = primes.rbegin(); it != primes.rend(); ++it) {
+        int prime = *it;
+        if (prime > n) continue;
+        vector<int> cycle;
+        for (int i = prime; i <= n; i += prime) {
+            if (!p[i]) {
+                cycle.push_back(i);
+            }
+        }
+        if (cycle.empty()) continue;
+        for (size_t i = 0; i < cycle.size(); i++) {
+            p[cycle[i]] = cycle[(i + 1) % cycle.size()];
+        }
+    }
+    
+    for (int i = 1; i <= n; i++) {
+        if (!p[i]) {
+            p[i] = i;
+        }
+    }
+    
+    for (int i = 1; i <= n; i++) {
+        cout << p[i] << (i == n ? '\n' : ' ');
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    sieve();
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

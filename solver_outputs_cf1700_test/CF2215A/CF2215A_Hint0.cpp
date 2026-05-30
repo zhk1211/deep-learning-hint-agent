@@ -1,0 +1,205 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        long long p, q;
+        cin >> n >> k >> p >> q;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // We can apply modulo operations with p and q.
+        // The key observation: we can reduce any element to its value modulo p, modulo q, or modulo gcd(p,q).
+        // Actually, we can apply operations on intervals of length >= k.
+        // We can think of it as: we can independently reduce each element to some value,
+        // but with the constraint that we can only apply mod operations on intervals of length >= k.
+        // However, we can always apply mod p or mod q on the whole array if n >= k.
+        // If n < k, we cannot apply any operation at all.
+        
+        long long g = gcd(p, q);
+        
+        if (n < k) {
+            // No operation possible
+            long long sum = 0;
+            for (long long x : a) sum += x;
+            cout << sum << '\n';
+            continue;
+        }
+        
+        // If n >= k, we can apply operations on the whole array.
+        // We can reduce each element to its value modulo p, modulo q, or modulo g.
+        // But can we achieve modulo g for all elements?
+        // Since we can apply mod p and mod q on the whole array, we can first apply mod p, then mod q, etc.
+        // Actually, by applying mod p and mod q repeatedly, we can reduce any number to its remainder modulo g.
+        // Because the set of achievable remainders for a number x is exactly the set of numbers that can be obtained
+        // by repeatedly taking modulo p or q. This is known to be the remainder modulo g.
+        // More precisely, for any x, we can achieve x % g.
+        // Proof: We can apply mod p to get x % p, then mod q to get (x % p) % q, etc.
+        // The set of possible values is exactly the set of numbers congruent to x modulo g that are less than max(p,q).
+        // But the minimum possible value is x % g.
+        // However, we must also consider that we can apply operations on subintervals of length >= k.
+        // This might allow us to reduce some elements more than others.
+        // But note that if we can apply mod p on the whole array, we can also apply mod p on any suffix/prefix of length >= k.
+        // This gives us the ability to independently reduce each element? Not exactly.
+        // Let's think: we want to minimize the sum. For each element, the minimum we can achieve individually is a[i] % g.
+        // Can we achieve a[i] % g for all i simultaneously?
+        // We need to check if there is any restriction due to the interval length constraint.
+        // Since we can apply operations on the whole array (length n >= k), we can reduce all elements to a[i] % p first.
+        // Then we can apply mod q on the whole array, which reduces each element to (a[i] % p) % q.
+        // But this might not give a[i] % g for all i. For example, p=4, q=6, g=2. a[i]=5. 5%4=1, 1%6=1, but 5%2=1. Works.
+        // Another example: p=6, q=10, g=2. a[i]=7. 7%6=1, 1%10=1, 7%2=1. Works.
+        // Is it always true that (x % p) % q = x % g? Not necessarily. For x=8, p=6, q=10: 8%6=2, 2%10=2, 8%2=0. So 2 != 0.
+        // So we cannot simply apply mod p then mod q on the whole array to get x % g.
+        // But we can apply mod p on some elements and mod q on others? We need to use intervals.
+        // We can apply mod p on the whole array, then mod q on a suffix of length >= k, etc.
+        // This is equivalent to: we can choose for each position a sequence of mod operations, but the operations must be applied on intervals of length >= k.
+        // This is a classic problem: we have two operations (mod p and mod q) that can be applied on intervals of length >= k.
+        // We want to minimize the sum.
+        // Notice that the operations are "modulo", which is not linear.
+        // However, we can think in terms of DP or greedy.
+        // Let's analyze the effect of mod p and mod q.
+        // For any number x, applying mod p gives x % p, applying mod q gives x % q.
+        // If we apply mod p then mod q, we get (x % p) % q.
+        // The set of achievable values for x is the set of numbers that can be reached by a sequence of mod p and mod q.
+        // This set is exactly the set of numbers y such that y = x % p or y = (x % p) % q or y = x % q or y = (x % q) % p, etc.
+        // Actually, it's known that the set of possible remainders is exactly the set of numbers that are congruent to x modulo g and are less than max(p,q).
+        // But we can also achieve x % g? Not always. For x=8, p=6, q=10, g=2. The possible values: 8%6=2, 8%10=8, 2%10=2, 8%6=2. So only 2 and 8. 0 is not achievable.
+        // So we cannot always achieve x % g.
+        // Wait, but we can apply mod p on a subsegment, then mod q on another subsegment that overlaps, etc.
+        // This might allow more reductions.
+        // Let's think differently: we can apply mod p on any interval of length >= k. This means we can reduce any element to a[i] % p if we can cover it with an interval of length >= k.
+        // Since n >= k, we can cover the whole array. So we can reduce all elements to a[i] % p.
+        // Similarly, we can reduce all elements to a[i] % q.
+        // Can we reduce some elements to a[i] % p and others to a[i] % q? Yes, by applying mod p on some intervals and mod q on others.
+        // But we cannot independently choose for each element because intervals must have length >= k.
+        // This is similar to: we have an array, we can apply an operation that sets a range of length >= k to a[i] % p (or % q).
+        // We want to minimize the sum.
+        // Since the operations are idempotent? Applying mod p twice is same as once.
+        // Also, applying mod p after mod q might further reduce.
+        // Let's consider the effect of applying mod p and mod q in different orders.
+        // For a single element, the minimum we can achieve is min(x % p, x % q, (x % p) % q, (x % q) % p).
+        // But is that always achievable with interval constraints?
+        // If we can apply mod p on the whole array, then mod q on a suffix of length >= k, we can get different values for different positions.
+        // Let's formalize: we have a set of operations. Each operation is (l, r, m) with m in {p,q} and r-l+1 >= k.
+        // We can apply any sequence.
+        // This is equivalent to: we can assign to each position a sequence of mod operations, but the sequences must be "consistent" with interval applications.
+        // Actually, if we consider the final value at each position, it is obtained by taking the original a[i] and applying some mod operations in some order.
+        // The order of operations on overlapping intervals matters.
+        // However, note that if we apply mod p on an interval, then mod q on a subinterval, the elements in the subinterval get both mods, while others only get mod p.
+        // So we can achieve different sequences for different positions.
+        // The constraint is that the set of positions that receive a particular operation must form an interval of length >= k.
+        // This is a covering problem.
+        // Let's think about the minimum possible value for each element individually, ignoring the interval constraint.
+        // For a single element x, what is the minimum value we can get by any sequence of mod p and mod q?
+        // We can apply mod p and mod q in any order, any number of times.
+        // Since mod p reduces the number to < p, and mod q to < q.
+        // The set of reachable values is the set of numbers y such that y = x mod p or y = x mod q, or y = (x mod p) mod q, etc.
+        // It is known that the minimum reachable value is x % g, where g = gcd(p,q).
+        // Proof: The set of reachable values is exactly the set of numbers that are congruent to x modulo g and are less than max(p,q).
+        // The minimum such number is x % g.
+        // But wait, is x % g always reachable? For x=8, p=6, q=10, g=2. x%g=0. Can we reach 0?
+        // 8 -> mod 6 -> 2 -> mod 10 -> 2. We cannot get 0.
+        // So the minimum reachable is not always x%g. It's the smallest number in the set of numbers congruent to x mod g that are < max(p,q).
+        // For x=8, the numbers congruent to 0 mod 2 and <10 are 0,2,4,6,8. But can we reach 0? No, because to get 0 we need a multiple of p or q? Actually, if we apply mod p we get x%p, which is 2. Then mod q gives 2%10=2. So we only get 2 and 8.
+        // So the reachable set is not all numbers congruent to x mod g.
+        // Let's characterize the reachable set for a single element.
+        // We have two operations: f_p(x) = x % p, f_q(x) = x % q.
+        // We can apply any sequence. The set of reachable values is the orbit of x under the semigroup generated by f_p and f_q.
+        // Since f_p and f_q are idempotent and commute? f_p(f_q(x)) = (x % q) % p. f_q(f_p(x)) = (x % p) % q. These are not necessarily equal.
+        // But note that f_p(f_q(x)) = x % q % p. Since p and q may not be multiples, this is not symmetric.
+        // However, we can observe that after applying any modulo, the value is less than the modulus.
+        // So the maximum value we can ever have is max(p,q)-1.
+        // The reachable set is finite.
+        // We can compute the minimum reachable value for a given x by BFS? But x up to 1e9, p,q up to 1e9. Not feasible.
+        // But maybe we don't need the exact minimum for each element independently, because the interval constraint might force us to apply the same operation to many elements.
+        // Let's reconsider the problem with the interval constraint.
+        // We can apply mod p on any interval of length >= k. This means we can reduce any element to a[i] % p, provided we can cover it with an interval of length >= k.
+        // Since n >= k, we can cover the whole array. So we can achieve a[i] % p for all i.
+        // Similarly, we can achieve a[i] % q for all i.
+        // Can we achieve a mix? For example, some elements to a[i] % p, some to a[i] % q.
+        // Suppose we apply mod p on [1, n], then mod q on [1, n-1]. Then a_n becomes a[n] % p, and a_1..a_{n-1} become (a[i] % p) % q.
+        // So we can get different values.
+        // In fact, we can apply operations on any intervals of length >= k. This is similar to: we can choose a set of disjoint intervals? Not necessarily disjoint, they can overlap.
+        // But note that the order matters. If we apply mod p then mod q on the same element, it's like applying a combined operation.
+        // Let's think about the final value of each element as a function of the original value and the sequence of mod operations applied to it.
+        // Since operations are applied on intervals, the sequence of mod operations applied to an element is determined by the intervals that cover it, in the order they are applied.
+        // We can choose the order of operations arbitrarily.
+        // This is equivalent to: we can assign to each element a word over the alphabet {p, q} (the sequence of mods applied), with the constraint that the set of elements that share a common prefix of operations must form an interval of length >= k? Not exactly.
+        // Actually, if we apply an operation on an interval, all elements in that interval get that operation at that time.
+        // So the sequence of operations applied to an element is the sequence of operations whose intervals contain that element, in chronological order.
+        // We can choose the intervals and their order.
+        // This is similar to: we can partition the array into segments, and apply a sequence of operations to each segment? But intervals can overlap.
+        // Let's consider the effect of applying mod p on the whole array, then mod q on a suffix. This gives two different sequences: for prefix, only mod p; for suffix, mod p then mod q.
+        // So we can have two types of elements.
+        // Can we have three types? Apply mod p on whole, mod q on [2, n], mod p on [3, n]. Then we get: a1: mod p; a2: mod p, mod q; a3..an: mod p, mod q, mod p.
+        // So we can have many types, as long as the sets of elements with the same sequence form intervals? Actually, the set of elements that have a particular sequence is exactly the intersection of intervals where we applied those operations. Since intervals are contiguous, the set of elements that receive a particular sequence is an interval (possibly empty). Moreover, if we consider the sequences as we move from left to right, they change only when an interval starts or ends. So the array is partitioned into contiguous blocks, where each block has the same sequence of operations.
+        // The number of blocks is at most 2 * (number of operations) + 1.
+        // But we can apply an arbitrary number of operations. However, we only care about the final value.
+        // Notice that applying mod p twice is redundant. So we can assume each modulus is applied at most once per element? Not necessarily, because applying mod p, then mod q, then mod p again might further reduce the value. For example, x=10, p=6, q=10: 10%6=4, 4%10=4, 4%6=4. No change. But x=15, p=6, q=10: 15%6=3, 3%10=3, 3%6=3. No change. What about x=20, p=6, q=10: 20%6=2, 2%10=2. So applying mod p after mod q doesn't help if we already applied mod p before? Actually, if we apply mod p first, we get x%p < p. Then applying mod q gives (x%p)%q. Applying mod p again gives ((x%p)%q)%p. Is this smaller than (x%p)%q? Not necessarily. For x=8, p=6, q=10: 8%6=2, 2%10=2, 2%6=2. For x=14, p=6, q=10: 14%6=2, 2%10=2. For x=14, p=10, q=6: 14%10=4, 4%6=4. So it seems that once we apply a mod, the value becomes less than that modulus. Applying another mod with a larger modulus doesn't change it. Applying a mod with a smaller modulus might reduce it further. So the only useful sequences are those where the moduli are applied in decreasing order? But p < q, so p is smaller. So applying mod p after mod q might reduce further: (x % q) % p can be smaller than x % q. Applying mod q after mod p: (x % p) % q = x % p because x % p < p < q, so no change. So the only useful sequences are: (nothing), (mod q), (mod p), (mod q then mod p). Because mod p then mod q is same as mod p. Mod p then mod p is same as mod p. Mod q then mod q is same as mod q. Mod q then mod p then mod q? (x % q % p) % q = x % q % p because it's < p < q. So no further reduction. Mod p then mod q then mod p? (x % p) % q % p = x % p % p = x % p. So no.
+        // Therefore, for any element, the possible final values are:
+        // 1. x (no operation)
+        // 2. x % q
+        // 3. x % p
+        // 4. (x % q) % p
+        // Note that x % p is always <= (x % q) % p? Not necessarily. x=8, p=6, q=10: x%p=2, (x%q)%p=8%10%6=8%6=2. Same. x=15, p=6, q=10: 15%6=3, 15%10=5, 5%6=5. So x%p=3, (x%q)%p=5. So x%p is smaller.
+        // So the minimum for a single element is min(x, x % q, x % p, (x % q) % p).
+        // But wait, can we achieve (x % p) % q? That's just x % p because x % p < p < q. So it's the same as x % p.
+        // So the set of possible values is {x, x % q, x % p, (x % q) % p}.
+        // Is it possible to achieve something else by applying mod p on a subsegment after mod q on a larger segment? That's exactly (x % q) % p.
+        // So the minimum possible value for an element, if we can apply any sequence of operations on it independently, is min(x, x % p, x % q, (x % q) % p).
+        // But we have the interval constraint: we can only apply operations on intervals of length >= k.
+        // This means we cannot independently choose the sequence for each element; the sequences must be "compatible" with interval operations.
+        // However, we can always apply mod p on the whole array (if n >= k) to get x % p for all elements.
+        // We can also apply mod q on the whole array to get x % q for all.
+        // Can we get (x % q) % p for some elements and x % p for others?
+        // To get (x % q) % p for an element, we need to apply mod q then mod p on that element.
+        // To get x % p for another, we need to apply only mod p.
+        // We can do this by applying mod q on the whole array, then mod p on a suffix of length >= k.
+        // Then the prefix gets only mod q (value x % q), the suffix gets mod q then mod p (value (x % q) % p).
+        // But we want some elements to have x % p (only mod p). To get that, we would need to apply mod p on some elements without mod q.
+        // We can apply mod p on the whole array first, then mod q on a prefix? That would give prefix: mod p then mod q = mod p (since x%p < p < q), so value x%p. Suffix: only mod p, value x%p. So all get x%p.
+        // To get a mix of x%p and (x%q)%p, we can apply mod q on a prefix, then mod p on the whole array. Then prefix gets mod q then mod p = (x%q)%p, suffix gets only mod p = x%p.
+        // So we can have a prefix with (x%q)%p and suffix with x%p, or vice versa.
+        // Can we have three different values? For example, some with x%q, some with x%p, some with (x%q)%p?
+        // To get x%q, we need only mod q. To get x%p, only mod p. To get (x%q)%p, both.
+        // Suppose we apply mod q on [1, n], then mod p on [2, n]. Then a1 gets mod q (x%q), a2..an get mod q then mod p ((x%q)%p).
+        // To also get x%p, we would need an element that gets mod p but not mod q. But if we apply mod p on [2, n], those elements already got mod q. So they get both.
+        // If we apply mod p on [1, n] first, then mod q on [1, n-1], then a1..a_{n-1} get mod p then mod q = mod p (x%p), a_n gets mod p (x%p). All get x%p.
+        // If we apply mod q on [1, n-1], then mod p on [2, n], then a1 gets mod q (x%q), a2..a_{n-1} get mod q then mod p ((x%q)%p), a_n gets mod p (x%p). So we have three different values!
+        // Check: a1: only mod q -> x%q. a2..a_{n-1}: mod q then mod p -> (x%q)%p. a_n: only mod p -> x%p.
+        // Is this valid? Intervals: [1, n-1] length n-1 >= k? We need n-1 >= k. And [2, n] length n-1 >= k. So if n-1 >= k, we can do this.
+        // So we can achieve a partition of the array into up to three segments with different sequences.
+        // Can we achieve more? By applying more operations, we can create more segments. But as argued, the only useful sequences are: none, q, p, qp. (where qp means mod q then mod p).
+        // So the possible sequences for an element are: empty (value x), q (x%q), p (x%p), qp ((x%q)%p).
+        // Note that p is always better than empty because x%p <= x. q is better than empty. qp is better than q? Not necessarily: x=15, p=6, q=10: x%q=5, (x%q)%p=5. Same. x=8: x%q=8, (x%q)%p=2. So qp is better. x=5: x%q=5, (x%q)%p=5. So qp <= q always? Actually, (x%q)%p <= x%q because modulo p reduces. So qp is always <= q. So q is dominated by qp? Not exactly, because to get qp we need to apply both operations, which might force other elements to also get both? But if we can apply q on some and qp on others, we might prefer qp for those where it's smaller. But qp is always <= q, so we would never choose q over qp if we can choose freely. However, due to interval constraints, we might be forced to have some elements with q if we want others with qp? Let's see: to get qp on a segment, we need to apply q then p on that segment. To get q on another segment, we need to apply q but not p. This is possible by applying q on a larger interval, then p on a subinterval. The subinterval gets qp, the rest of the larger interval gets q. So we can have q and qp together. But qp is always <= q, so we would prefer qp everywhere if possible. But can we make the whole array qp? Yes, apply q on whole, then p on whole. That gives qp for all. So we can always achieve qp for all elements if n >= k. So the minimum sum using only qp for all is sum of (a[i] % q) % p.
+        // But wait, is (a[i] % q) % p always <= a[i] % p? Not necessarily. Example: a=15, p=6, q=10: a%p=3, (a%q)%p=5. So a%p is smaller. So we might prefer p for some elements.
+        // So we have two main candidates for each element: p (value a[i] % p) and qp (value (a[i] % q) % p). Also possibly q (a[i] % q) but qp is always <= q, so q is never better than qp. However, q might be useful if we cannot apply p on that element? But we can always apply p on the whole array. So q is not needed.
+        // What about empty? a[i] % p <= a[i], so empty is never better than p.
+        // So the only two values we need to consider for each element are: v_p = a[i] % p, and v_qp = (a[i] % q) % p.
+        // We want to assign to each element either v_p or v_qp, but with the constraint that the assignment must be realizable by interval operations.
+        // What assignments are realizable?
+        // We can apply a sequence of operations. Each operation is mod p or mod q on an interval of length >= k.
+        // Let's think of the final sequence for each element as a string over {p, q}. As argued, the only useful strings are "p" and "qp". (Also "q" but it's dominated by "qp", and empty is dominated by "p".)
+        // Can we have an element with sequence "p" and another with "qp"? Yes, as shown: apply q on [1, n-1], then p on [2, n]. Then a1 gets "q" (but we said "q" is not useful, but we can instead apply q on [1, n], then p on [2, n]? That gives a1: "q", others: "qp". To get "p" on a_n, we need an element that gets "p" without "q". In the example with three segments, we had a1: "q", middle: "qp", a_n: "p". But "q" is not better than "qp", so we could just make a1 also "qp" by extending the p interval to cover it. So we can have a prefix of "qp" and a suffix of "p", or vice versa.
+        // Can we have "p" and "qp" interleaved? For example, p, qp, p? To get p, qp, p, we would need operations that give: first segment only p, second segment q then p, third segment only p. This would require: apply q on the middle segment, then p on all three? But if we apply p on all three, the first and third get p, the middle gets q then p. But we also need the middle to get q before p. So we apply q on the middle segment, then p on the whole array. That works! The middle segment is an interval of length >= k? It must be. So if we have a contiguous block of length >= k that we want to be "qp", and the rest "p", we can do it by applying q on that block, then p on the whole array. But wait, if we apply p on the whole array, the block gets q then p (qp), and the rest get p (since they didn't get q). So we can have any single contiguous block of "qp" of length >= k, and the rest "p". Can we have multiple blocks of "qp"? Suppose we want two blocks of "qp" separated by "p". We could apply q on the first block, then q on the second block, then p on the whole array. But applying q on the second block after the first doesn't affect the first block because they are disjoint? Actually, if we apply q on the first block, then q on the second block, then p on the whole array, the first block gets q (from first) then p -> qp. The second block gets q (from second) then p -> qp. The rest get p. So we can have multiple disjoint blocks of "qp", as long as each block has length >= k? Wait, the operation that applies q must be on an interval of length >= k. So each block we want to be "qp" must be of length >= k, because we need to apply q on exactly that block (or a superset) without affecting the "p" regions? But if we apply q on a larger interval that covers both the block and some "p" regions, those "p" regions would become "qp" as well. So to keep them as "p", we must apply q exactly on the blocks we want to be "qp", and those blocks must have length >= k. So we can have any set of disjoint intervals of length >= k that we apply q on, and then apply p on the whole array. The elements in those intervals become "qp", the rest become "p".
+        // Can we have "qp" blocks of length < k? If we want a block of length < k to be "qp", we would need to apply q on an interval of length >= k that contains it. But then the surrounding elements would also get q, making them "qp" if we later apply p. So we cannot isolate a "qp" block of length < k without also making some neighbors "qp". However, we might not care if those neighbors become "qp" if it doesn't increase the sum? But we want to minimize the sum, so we might want to make some elements "p" and others "qp". If making a small block "qp" forces a larger block to be "qp", that might be suboptimal if those neighbors prefer "p". So the optimal assignment will consist of some elements being "p" and some being "qp", and the set of "qp" elements must be a union of intervals of length >= k? Actually, if we apply q on several intervals, the set of elements that receive q is a union of those intervals. Then we apply p on the whole array. So the "qp" set is exactly the union of the q-intervals. Each q-interval must have length >= k. They can be disjoint or overlapping, but overlapping just merges them. So the "qp" set is a union of disjoint intervals, each of length >= k. (They could be adjacent, effectively merging into a larger interval.)
+        // Is it possible to have "qp" elements that are not covered by any q-interval of length >= k? No, because to get "qp", the element must receive q at some point. The operation that applies q must be on an interval of length >= k. So the element must belong to some q-interval of length >= k. Therefore, the set of "qp" elements is exactly a union of intervals of length >= k (the q-intervals). And we can choose any such union by applying q on those intervals, then p on the whole array.
+        // But wait: what if we apply p first, then q on some intervals? Then the elements that get q become "pq". But "pq" is the same as "p" because p < q, so x % p % q = x % p. So that doesn't create "qp". To get "qp", we must apply q before p. So the order is: apply q on some intervals, then apply p on the whole array (or on a superset). The p application must cover everything we want to reduce to either "p" or "qp". If we don't apply p on some elements, they remain "q" or original. But "q" is >= "qp", and original is >= "p". So we should always apply p on the whole array at the end to minimize. So the optimal strategy is: choose a set of disjoint intervals of length >= k, apply q on them, then apply p on the whole array. This yields "qp" on those intervals and "p" elsewhere.
+        // Is there any other strategy that could yield a different assignment? What if we apply p on some intervals instead of the whole array? That would leave some elements as "q" or original, which is worse. What if we apply multiple rounds? As argued, the only useful sequences are "p" and "qp". So the final value of each element is either v_p or v_qp. And the set of elements with v_qp must be a union of intervals of length >= k (the q-intervals). The elements with v_p are the rest.
+        // But wait: could we have an element with value v_qp that is not in a q-interval of length >= k? Suppose we apply q on an interval of length >= k, then p on a smaller interval that doesn't cover the whole q-interval. Then the part of the q-interval that gets p becomes "qp", the part that doesn't get p remains "q". But "q" is worse than "qp", so we would just apply p on the whole q-interval. So we can assume p is applied everywhere.
+        // Could we have an element with v_p that is inside a q-interval? If we apply q on an interval, then p on the whole array, all elements in the q-interval become "qp". So they cannot be "p". So "p" elements are exactly those not covered by any q-interval.
+        // Therefore, the problem reduces to: we have an array. For each index i, we have two possible values: v_p[i] = a[i] % p, and v_qp[i] = (a[i] % q) % p. We want to choose a set of disjoint intervals, each of length >= k, and assign v_qp to elements in these intervals, and v_p to the rest, to minimize the total sum.
+        // But wait: is it always optimal to apply p on the whole array? What if for some element, v_p > v_qp? Then we want that element to be in a q-interval. If v_p <= v_qp, we want it to be "p". So we want to cover some elements with q-intervals to change them from v_p to v_qp, but only if v_qp < v_p. If v_qp >= v_p, we don't want to cover them.
+        // So we can think of it as: we start with all elements as "p" (sum = sum v_p). We can choose some intervals of length >= k to "upgrade" to "qp", which changes the value from v_p to v_qp. The change in sum for index i is delta[i] = v_qp[i] - v_p[i]. We want to choose a set of disjoint intervals of length >= k to minimize the total sum, i.e., we want to include intervals where the sum of delta is negative (since we want to reduce the sum). But we can only include intervals of length >= k. So we want to find a set of disjoint intervals of length >= k that minimizes the sum of delta over the covered indices. Since we can choose any number of such intervals, we can just take all intervals where the sum of delta is negative? But they must be disjoint and length >= k. This is a classic DP: maximum reduction (or minimum sum) by selecting disjoint intervals of length >= k with weights.
+        // However, note that the intervals we choose are exactly the q-intervals. They must be disjoint? In our construction, we applied q on several intervals. If they overlap, their union is a larger interval. So we can assume they are disjoint (we can merge overlapping ones). So we are selecting a set of disjoint intervals, each of length >= k.
+        // But wait: is it allowed to have a q-interval that is not of length >= k? The operation requires length >= k. So each q-interval must have length >= k. So yes.
+        // So the problem is: given array delta[i] = (a[i] % q) % p - a[i] % p, we want to choose a set of disjoint subarrays of length >= k such that

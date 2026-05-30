@@ -1,0 +1,250 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    
+    while (t--) {
+        long long n;
+        cin >> n;
+        
+        // Strategy: use at most 4 commands to reach n from unknown x
+        // We'll use: mul 9, digit, add something, mul something, etc.
+        // Key insight: after mul 9 and digit, x becomes S(9*x) = 9*S(x) if no carry? Actually S(9*x) has property that it's a multiple of 9.
+        // But we need a general method.
+        
+        // We can do: digit -> x becomes S(x) which is at most 81 (since x <= 1e9, max digits sum = 81)
+        // Then we can adjust to n.
+        
+        // Let's try: digit (1 command), then we have a small number <= 81.
+        // Then we can add/subtract to get to a divisor/multiple of n.
+        // But we need exactly n.
+        
+        // Better: use mul 9, then digit -> x becomes S(9*x). Since 9*x <= 9e9, S(9*x) <= 81.
+        // Actually S(9*x) is always a multiple of 9? Not necessarily, but often.
+        // Let's think: we want to reach n. We can do:
+        // 1. digit -> x = S(x) (small)
+        // 2. add something to make it a divisor of n or something.
+        // 3. mul something to reach n.
+        // 4. if needed, another operation.
+        
+        // But we have exactly 4 commands. Let's try a fixed sequence:
+        // Command 1: digit -> x = S(x) (1..81)
+        // Command 2: add (n - x) -> if successful, x = n, then we are done. But n can be up to 1e9, x is small, so n - x is large positive, addition works if result <= 1e18. It will work.
+        // Then we can answer !.
+        // That's only 2 commands! But wait: what if after digit, x is already n? Then add 0? But add 0 is allowed? y can be 0? Constraints: -1e18 <= y <= 1e18, so yes add 0 is allowed. But we can just check if x == n after digit? We don't know x. We can just do add (n - something) but we don't know x.
+        // We need to know x to add exactly n - x. But we don't know x!
+        // So we need a way to set x to a known value.
+        
+        // Alternative: use mul 9, then digit -> x becomes S(9*x). But we still don't know x.
+        // However, we can force x to become 0? No, x >= 1.
+        
+        // Let's think differently: we can use div to test if x is divisible by something.
+        // But we need to reach n exactly.
+        
+        // Consider: we can do mul 0? No, mul y requires y >= 1.
+        // We can do add -x? But we don't know x.
+        
+        // Actually, we can use digit to reduce x to a small number, then we can try to add something to make it a known value? No.
+        
+        // Wait, the problem is interactive, but the interactor is non-adaptive. x is fixed.
+        // We can use commands to get information? The only feedback is "1" or "0" for success.
+        // We can binary search? But only 4 commands.
+        
+        // Let's read the hint: "Apply mul 9". Why? Because S(9*x) has a special property: it is always 9 if x is not a multiple of 9? No.
+        // Actually, the sum of digits of 9*x is always a multiple of 9. And for x up to 1e9, 9*x <= 9e9, so S(9*x) <= 9*10 = 90? Actually max 9*9=81? 9,999,999,999? 9e9 is 9,000,000,000, sum=9. Max sum for 9*x is when x=111,111,111 -> 999,999,999 -> sum=81. So S(9*x) is in [9,81] and is a multiple of 9. So it's one of 9,18,27,36,45,54,63,72,81.
+        // So after mul 9 and digit, x becomes a known multiple of 9 between 9 and 81.
+        // But we still don't know which one.
+        
+        // However, we can then do: add something to make it a specific number? No.
+        // But we can do: div y. If we choose y that divides some of these numbers, we can get different results.
+        // For example, if we do div 9, then x becomes S(9*x)/9, which is between 1 and 9. Still unknown.
+        
+        // Maybe we can do: mul 9, digit, then add something to make it exactly n? But we don't know the current x.
+        
+        // Wait, we can use the fact that we can try commands and see if they succeed. We can design a sequence that works for any x.
+        // For example: 
+        // 1. mul 9 -> x = 9*x_old (if <=1e18, which it is since x_old<=1e9, 9*x_old<=9e9<1e18, so always succeeds)
+        // 2. digit -> x = S(9*x_old) which is a multiple of 9 between 9 and 81.
+        // Now we have a small number. We want to reach n.
+        // We can do: add (n - x). But we don't know x. However, we can try different values? No, we only have 2 commands left.
+        // But we can do: add something that makes x become a number that we can then multiply to n.
+        // For instance, if we do: add (9 - x)? We don't know x.
+        
+        // Alternative: after digit, we have x in {9,18,...,81}. We can do: div 9 -> x becomes S(9*x_old)/9, which is in {1,2,...,9}. Still unknown.
+        // Then we can do: add (n - x)? Still unknown.
+        
+        // Maybe we can use the fact that we can do mul by a large number to get to n? For example, if we do mul (n/x) but we don't know x.
+        
+        // Let's think differently: we can make x equal to 1? How? If we do digit repeatedly, eventually x becomes a single digit? But we only have 4 commands.
+        // From x <= 1e9, digit gives <=81, digit again gives <=17 (max S(81)=9, S(99)=18? Actually max 81 -> 9, but if x=79 -> 16, 89->17, 99->18). So two digits give a number <=17. Three digits give <=9. Four digits give <=9. So we can get to a single digit in at most 4 commands. But we need to reach n, which can be up to 1e9. From a single digit, we can multiply by something to reach n? Only if n is a multiple of that digit. Not always.
+        
+        // But we can do: digit, digit, digit, digit -> x becomes a single digit d (1..9). Then we can do mul (n/d) if d divides n. But what if d does not divide n? Then mul fails, and we can't reach n.
+        // So that doesn't work for all n.
+        
+        // Let's reconsider the hint: "Apply mul 9". Maybe the trick is that S(9*x) is always 9? No, it's not always 9. For x=1, 9*1=9, S=9. For x=2, 18->9. For x=3, 27->9. For x=4, 36->9. For x=5, 45->9. For x=6, 54->9. For x=7, 63->9. For x=8, 72->9. For x=9, 81->9. For x=10, 90->9. For x=11, 99->18. So it's not always 9. But wait, 9*x for x up to 1e9: the sum of digits of 9*x is always a multiple of 9, but not always 9. However, if we do mul 9 and then digit, we get a multiple of 9. Then if we do mul 9 again? But we can't because x might be large? Actually after digit, x <=81, so mul 9 gives <=729, then digit gives <=24 (since 7+2+9=18, max 6+9+9=24? 699? 6+9+9=24). So we can reduce further.
+        
+        // Maybe we can force x to become exactly 9? How? If we do mul 9, digit, mul 9, digit... eventually we might get to 9? Let's test: start with any x. mul 9 -> 9x, digit -> S(9x). If S(9x) is not 9, we can mul 9 again? But we only have 4 commands total.
+        
+        // Let's try a specific sequence that works for all x and n:
+        // Command 1: digit -> x = S(x) (1..81)
+        // Command 2: mul 9 -> x = 9*S(x) (9..729)
+        // Command 3: digit -> x = S(9*S(x)) (9..24) actually max S(729)=18, S(699)=24? 699 is not 9*S(x) because S(x)<=81, 9*81=729, max sum 7+2+9=18. So x is in 9..18 and multiple of 9? S(9*y) is multiple of 9. So x in {9,18}.
+        // Command 4: div 9 -> if x=9, result=1; if x=18, result=2. So x becomes 1 or 2.
+        // Now we have x=1 or 2. We need to reach n. We have used 4 commands, so we must answer !. But we don't know if x is 1 or 2, and we need x to equal n. So this only works if n is 1 or 2. Not general.
+        
+        // We need to reach n after at most 4 commands. So the last command before ! must make x equal to n. That means we need to know x before the last command, or the last command works for both possibilities.
+        
+        // What if we do: digit, mul 9, digit, add (n - x)? But we don't know x. However, we can try add (n - 9) and if it fails (returns 0), then x was 18, so we can try add (n - 18)? But we only have one command left. We can't try both.
+        
+        // But we can do: after digit, mul 9, digit, we have x in {9,18}. Then we can do: add (n - 9). If x=9, it succeeds and x becomes n. If x=18, then n - 9 + 18 = n + 9, which might be >1e18? No, n<=1e9, so n+9 <= 1e9+9 < 1e18, so addition would succeed! But then x becomes n+9, not n. So we can't just add n-9 because it would succeed for both but give wrong result for x=18.
+        
+        // Wait, the add command succeeds if 1 <= x+y <= 1e18. For x=18, y=n-9, x+y = n+9. Since n>=1, n+9 >=10, and n<=1e9 so n+9 <= 1e9+9 < 1e18. So it will always succeed! So we can't use success/failure to distinguish.
+        
+        // What about mul? If we do mul something, it might fail for one and succeed for the other.
+        // For example, if we want to reach n, we can do: mul (n/x). But we don't know x. If we try mul (n/9) and x=9, it succeeds if n is multiple of 9? Actually mul y: res = x*y must be <=1e18. If x=9, y=n/9, then res = n, which is <=1e9, so succeeds. If x=18, y=n/9, res = 18*(n/9) = 2n. 2n <= 2e9 < 1e18, so also succeeds! So again both succeed.
+        
+        // What if we try mul (n/18)? If x=18, res = n, succeeds. If x=9, res = 9*(n/18) = n/2. This might not be integer? But mul y requires y integer, and we can only send integer y. If n is not divisible by 18, we can't send n/18 exactly. But we can send floor(n/18)? Then res = 9*floor(n/18) which might not equal n. And it will succeed as long as res <=1e18, which it will. So again both succeed.
+        
+        // So we need an operation that fails for one case. Division: div y fails if y does not divide x.
+        // If we do div 9: x=9 -> success, x=1; x=18 -> success, x=2. Both succeed.
+        // If we do div 18: x=9 -> fails (0), x=18 -> success (1). So we can distinguish!
+        // So sequence: 
+        // 1. digit
+        // 2. mul 9
+        // 3. digit -> x in {9,18}
+        // 4. div 18 -> if success (1), then x was 18, now x=1. If fail (0), then x was 9, remains 9.
+        // But after this, we have used 4 commands. We still need to reach n. We can't do any more commands.
+        // So this only works if after these 4 commands, x equals n. That means n must be either 1 (if x was 18) or 9 (if x was 9). Not general.
+        
+        // We need to reach n in at most 4 commands total. So the 4th command must make x = n.
+        // So we need a sequence of 3 commands that leaves x in a state where we can, with one final command, turn it into n regardless of which state it is, or we need to know the state and act accordingly.
+        // But we can't act accordingly because we can't change the 4th command based on the result of the 3rd? Actually we can! The interaction is sequential: we send command 1, get response, send command 2, get response, send command 3, get response, send command 4, get response. So we can read the response of command 3 and then decide command 4!
+        // So we can use command 3 to probe x, and then command 4 to set it to n.
+        // But we only have 4 commands total. So we can do: command 1, command 2, command 3 (probe), command 4 (fix).
+        // Let's design:
+        // After some commands, we want x to be one of a few known values. Then we use a command that fails for some and succeeds for others, telling us which value it is. Then we use the last command to add/mul/div to reach n.
+        // But we need to ensure that after the probing command, x is still in a state that we can fix to n with one command.
+        
+        // Let's try to get x to be either 1 or 2 after 2 commands? Then probe with div 2: if x=2, success -> x=1; if x=1, fail -> x=1. So after probe, x is always 1! Then we can use last command to go from 1 to n: mul n -> x=n. That works! But we need to get x to be 1 or 2 in 2 commands.
+        // How to get x to 1 or 2 in 2 commands?
+        // Start with unknown x (1..1e9).
+        // Command 1: digit -> x = S(x) (1..81)
+        // Command 2: ? We need to turn this into either 1 or 2.
+        // If we do digit again: x = S(S(x)) (1..17) (max S(81)=9, S(79)=16, S(89)=17, S(99)=18? Actually 99 is not possible because S(x)<=81, so max S(x)=81, S(81)=9. Wait, S(x) can be 79? 79 is possible if x=79? But x after first digit is S(original x). Original x <= 1e9, so max S(original x) = 81 (for 999,999,999? 9*9=81). So S(x) is between 1 and 81. Then S(S(x)) is between 1 and 17 (since max 79->16, 89->17, 81->9, 80->8). So after two digits, x is in [1,17]. Not necessarily 1 or 2.
+        // We need a command that reduces the set to {1,2}. What about div something? If we do div 9 after first digit? x after first digit is 1..81. div 9: if x is multiple of 9, it succeeds and x becomes x/9 (1..9). If not, it fails and x stays. So we get either a number in 1..9 (if multiple of 9) or the original number (not multiple of 9). That's many possibilities.
+        
+        // Alternative: use mul 9 after first digit? Then x = 9*S(x) (9..729). Then digit: x = S(9*S(x)) which is multiple of 9 and between 9 and 18? Actually max S(729)=18, min S(9)=9. So x in {9,18}. That's two possibilities! And we did it in 3 commands: digit, mul 9, digit. That's 3 commands. Then we have one command left. We need to go from {9,18} to n in one command. Can we?
+        // If we know whether x=9 or 18, we could add (n-9) or add (n-18). But we don't know. We could probe with div 18: if success, x=18 -> x=1; if fail, x=9 -> x=9. Then we have x in {1,9}. Then we need another command to reach n. But we only have 4 commands total, and we just used the 4th to probe. So we need 5 commands: digit, mul 9, digit, div 18, add/mul to n. Too many.
+        
+        // What if we combine probing and fixing in one command? For example, we want a command that works for both 9 and 18 and results in n. That means we need an operation f such that f(9) = n and f(18) = n. Is that possible?
+        // f could be: add y. Then 9+y = n and 18+y = n => y = n-9 and y = n-18 => n-9 = n-18 => 9=0 impossible.
+        // f could be: mul y. Then 9*y = n and 18*y = n => y = n/9 and y = n/18 => n/9 = n/18 => n=0 impossible.
+        // f could be: div y. Then 9/y = n and 18/y = n => 9/y = 18/y => 9=18 impossible.
+        // So no single command can map both 9 and 18 to the same n (unless n=0, but n>=1).
+        
+        // So we need to know which one it is. But we only have 4 commands. We used 3 to get to {9,18}. We have 1 left. We can't both probe and fix.
+        // Unless the probing itself also fixes it? For example, if we do a command that fails for one and succeeds for the other, and if it succeeds, it becomes n, and if it fails, we are left with the other value, but then we have no commands left to fix it. So that only works if the failure case already equals n. That is, we need n to be either 9 or 18. Not general.
+        
+        // So we need a different approach that uses at most 4 commands total and works for any n.
+        
+        // Let's think about the properties of digit. After one digit, x <= 81. After two digits, x <= 17. After three digits, x <= 9. After four digits, x <= 9. So if we do digit four times, x becomes a single digit d (1..9). Then we have used 4 commands. We need x to equal n. So this only works if n is a single digit. Not general.
+        
+        // But we can do other operations. What if we do: add something to make x a specific number, then mul to n?
+        // For example, we want to set x to 1. How to set x to 1? We can do div x if we know x. But we don't.
+        // We can do: digit, digit, digit -> x in 1..9. Then we can do div x? But we don't know x. If we do div 2, it might fail.
+        // But we can do: after three digits, x is a single digit d. Then we can do mul (n/d) if d divides n. But what if d doesn't divide n? Then mul fails, and we can't reach n.
+        // So we need a way to make x a divisor of n, or make n a multiple of x.
+        
+        // What if we first set x to a value that divides n? We can try to make x = 1, because 1 divides everything. How to make x=1?
+        // We can do: digit, digit, digit -> x in 1..9. Then we need to turn it into 1. We can do div x? But we don't know x. If we do div 9, and x=9, it becomes 1; if x=3, div 9 fails; etc.
+        // But we can use the fact that we can try multiple div commands? No, only 4 total.
+        
+        // Let's consider the following sequence:
+        // 1. digit -> x = S(x) (1..81)
+        // 2. digit -> x = S(S(x)) (1..17)
+        // 3. digit -> x = S(S(S(x))) (1..9)
+        // Now x is a single digit d.
+        // 4. We need to reach n. We can do: add (n - d). This will succeed because n-d could be negative? If n < d, then n-d < 0, so x + (n-d) = n. But wait, if n-d < 0, then x+y = d + (n-d) = n. But the add command requires 1 <= res <= 1e18. If n < 1, but n>=1. So if n < d, then n could be 1 and d=9, then n-d = -8, x+y = 9-8=1, which is >=1, so it succeeds! Actually, the condition is 1 <= x+y <= 1e18. So if n >=1, then x+y = n is always >=1. And n <= 1e9 <= 1e18. So add (n - d) will ALWAYS succeed, regardless of whether n-d is negative or positive, as long as the result n is in [1,1e18]. Since n is given as 1..1e9, it's always in range. So add (n - d) will always succeed and set x to n!
+        // But wait: we don't know d! We don't know what x is after three digits. So we don't know what y to add. We need to know d to compute y = n - d.
+        // So we need to know d. But we can't know d without probing.
+        // However, we have used 3 commands. We have 1 command left. We can't probe and then add.
+        // Unless we can determine d from the responses? The responses to digit are always 1. So no info.
+        
+        // What if we do only 2 digits? Then x in 1..17. Still too many possibilities.
+        
+        // We need a way to force x to a known value without knowing it.
+        // Is there a sequence of operations that always results in the same final value regardless of initial x?
+        // For example, if we do mul 0? Not allowed.
+        // If we do digit enough times, eventually x becomes a single digit, but it could be different digits.
+        // What about: mul 9, digit, mul 9, digit, ... does it converge to 9? Let's test: start with any x. mul 9 -> 9x, digit -> S(9x). If S(9x) is not 9, then mul 9 again -> 9*S(9x), digit -> S(9*S(9x)). Does this eventually become 9? For x=11: 9*11=99, S=18. Then 9*18=162, S=9. So after two cycles, we get 9. For x=111: 9*111=999, S=27. 9*27=243, S=9. For x=1111: 9*1111=9999, S=36. 9*36=324, S=9. It seems that after at most 2 cycles of (mul 9, digit), we get 9. But wait, what if S(9x) is 18? Then 9*18=162, S=9. What if S(9x) is 27? 9*27=243, S=9. What if S(9x) is 81? 9*81=729, S=18. Then next cycle: 9*18=162, S=9. So indeed, starting from any x, if we do mul 9, digit, mul 9, digit, we end up with 9? Let's check x=1: 9*1=9, S=9. Then mul 9 -> 81, digit -> 9. So yes, after two (mul 9, digit) pairs, we get 9. But wait, we need to do mul 9, digit, mul 9, digit. That's 4 commands. After that, x=9. Then we have no commands left to reach n. So we need n=9. Not general.
+        
+        // But what if we do mul 9, digit, mul 9, digit, and then we have x=9. But we used 4 commands. We can't do anything else. So this only works if n=9.
+        
+        // What if we do only one (mul 9, digit) and then something else? After mul 9, digit, x is a multiple of 9 between 9 and 81. That's 9 values. Too many.
+        
+        // Let's think about using div to reduce possibilities. After first digit, x in 1..81. If we do div 9, then if x is multiple of 9, it becomes x/9 (1..9); if not, it stays x (1..81 but not multiple of 9). That's still many.
+        
+        // Maybe we can use the fact that we can do add with negative numbers to force a specific value? For example, if we do add -x, we get 0, but 0 is not allowed (res must be >=1). So add -x fails if x is the current value? Actually, if we do add -x, res = 0, which is not in [1,1e18], so it fails and x remains unchanged. So we can't use that to set to 0.
+        
+        // What about add (1 - x)? That would set x to 1 if successful. But we don't know x. If we try add (1 - x), it will succeed if 1 >=1, which is true. But we don't know x, so we can't compute 1-x.
+        
+        // We need a command that doesn't depend on x but results in a known value. The only command that doesn't take a parameter is "digit". But digit's result depends on x.
+        
+        // Is there a way to make x equal to a known value using a combination of commands that are independent of x? For instance, if we do mul 9, then digit, then div 9? That gives S(9x)/9. That is not constant.
+        
+        // Let's reconsider the problem constraints: t up to 5000, n up to 1e9. We need a solution that works for all n.
+        // Maybe we can use the fact that we can send commands and get success/failure to learn x, and then use the remaining commands to set it to n. With 4 commands, we can afford to use 2 or 3 to learn x, and 1 or 2 to set it.
+        // How many bits of information can we get per command? Each command gives 1 bit (success/failure). So with 4 commands, we can distinguish at most 16 cases. But x can be up to 1e9, so we can't fully learn x.
+        // However, we don't need to learn x exactly; we only need to force it to n. We can design a sequence that works for all x.
+        
+        // Let's think about a sequence that always results in n after 4 commands, regardless of x.
+        // Suppose we do:
+        // 1. digit -> x = a (1..81)
+        // 2. mul 9 -> x = 9a (9..729)
+        // 3. digit -> x = S(9a) = b (9..18, multiple of 9)
+        // Now x is either 9 or 18.
+        // 4. We need to reach n. We can do: add (n - 9) if we know x=9, or add (n - 18) if x=18. But we don't know.
+        // However, we can do a command that works for both? No.
+        // But what if we do: div 9? Then if x=9 -> 1; if x=18 -> 2. Then we have x in {1,2}. Then we need a 5th command to reach n. So not enough.
+        
+        // What if we change step 2 and 3? Instead of mul 9, we do mul something else?
+        // After digit, x in 1..81. If we do mul 10, then digit? 10*x, S(10*x) = S(x) because adding 0 doesn't change sum. So digit after mul 10 gives S(x) again. That doesn't help.
+        // If we do mul 2? Then x in 2..162. digit gives S(2x). Not constant.
+        
+        // Let's try to get x to a set of size 2 after 2 commands, then use the 3rd command to probe and the 4th to fix.
+        // After 2 commands, we want x in {A, B} with A and B known. Then command 3: a command that fails for A and succeeds for B (or vice versa), and changes the value to something that allows command 4 to reach n.
+        // Ideally, after command 3, x should be the same regardless of whether it was A or B, so that command 4 can be fixed.
+        // For example, if we can make command 3 turn A into C and B into C (if success) or leave A as A (if fail). Then after command 3, x is either C (if success) or A (if fail). Then we need command 4 to handle both cases. That's still two cases.
+        // But if we can make command 3 turn both A and B into the SAME value C, then we only have one case. How? If command 3 is "div something" that divides both A and B? If A and B share a common divisor d, then div d will succeed for both and give A/d and B/d. Those are different unless A=B. So not same.
+        // If command 3 is "add something" that makes both equal? For example, if we add (C - A) to A, we get C. But if we add the same to B, we get B + C - A = C + (B-A). To make that equal to C, we need B=A. So no.
+        // If command 3 is "mul something": mul y gives A*y and B*y. To be equal, need A=B.
+        // So we can't merge two different values into one with a single command.
+        
+        // But what if after command 3, we have two possible values, but command 4 can handle both because it's the same command and works for both? That means we need a command f such that f(A') = n and f(B') = n. As we saw, that's impossible for add/mul/div unless A'=B'.
+        // Unless the command is "digit"? digit(A') = S(A'), digit(B') = S(B'). For these to both equal n, we need S(A') = S(B') = n. So if we can make A' and B' have the same digit sum n, then digit works. But n is given, we can't choose it.
+        
+        // So we need a different strategy.
+        
+        // Let's think about using the fact that we can do "add" with a large number to force x to become something specific? No.
+        
+        // Maybe we can use the fact that the initial x is unknown but fixed. We can try to make x equal to n by doing operations that depend on n but not on x, and hope that for any x, the result is n. Is that possible?
+        // For example, can we do: mul 0? Not allowed.
+        // Can we do: add (n - x)? We don't know x.
+        // Can we do: div x? We don't know x.
+        
+        // What about: digit, then mul n, then div something? No.
+        
+        // Let's consider the possibility of using the "digit" command multiple times to reduce x to a single digit, and then use the remaining commands to adjust to n. But we only have 4 commands. If we use 3 digits, we have 1 command left. That one command must turn a single digit d into n. That means we need an operation f such that f(d) = n. f can be add (n-d), mul (n/d), div (d/n) not possible. So if we know d, we can do add (n-d). But we don't know d. However, we can try all possible d? No, we only have one command.
+        // But wait, we can use the 3rd command to probe d, and the 4th to fix? That would be: command 1: digit, command 2: digit, command 3: probe, command 4: fix. But after 2 digits, x is in 1..17. That's 17 possibilities. We can't probe 17 possibilities with one command (only 1 bit).
+        
+        // What if we use command 1: digit, command 2: mul 9, command 3: digit -> x in {9,18}. That's 2 possibilities. Then command 4: we need to reach n. We can't do it in one command if we don't know which one. But we can use command 3 to probe? No, command 3 is the one that gives {9,18}. We need to probe after that, but we have no commands left.
+        
+        // So we need to get to a single possibility after 3 commands, or have the 4th command work for both.
+        
+        // What if we do

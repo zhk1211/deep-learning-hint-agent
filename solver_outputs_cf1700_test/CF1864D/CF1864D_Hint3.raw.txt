@@ -1,0 +1,54 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+
+        // We maintain three arrays for the current row:
+        // diag1[j] - effect from diagonal with slope 1 (top-left to bottom-right)
+        // diag2[j] - effect from diagonal with slope -1 (top-right to bottom-left)
+        // col[j]   - vertical effect (straight down)
+        vector<int> diag1(2 * n, 0), diag2(2 * n, 0), col(n, 0);
+        int ans = 0;
+
+        for (int i = 0; i < n; ++i) {
+            vector<int> cur(n, 0);
+            // prefix sum of effects on current row
+            int pref = 0;
+            for (int j = 0; j < n; ++j) {
+                // add effects from diagonals
+                pref ^= diag1[i + j];
+                pref ^= diag2[i - j + n];
+                cur[j] = pref ^ col[j];
+                // determine if we need to flip at (i, j)
+                int val = grid[i][j] - '0';
+                if ((val ^ cur[j]) == 1) {
+                    ++ans;
+                    // apply operation at (i, j)
+                    // update vertical effect
+                    col[j] ^= 1;
+                    // update diagonal effects
+                    diag1[i + j] ^= 1;
+                    diag2[i - j + n] ^= 1;
+                    // also update current prefix for this row
+                    pref ^= 1;
+                }
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

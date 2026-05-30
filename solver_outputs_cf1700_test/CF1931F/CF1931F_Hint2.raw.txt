@@ -1,0 +1,125 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> a(k, vector<int>(n));
+    for (int i = 0; i < k; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cin >> a[i][j];
+        }
+    }
+    if (k == 1) {
+        cout << "YES\n";
+        return;
+    }
+    vector<int> order;
+    // Find two screenshots with different first elements to deduce relative order
+    int idx1 = 0, idx2 = -1;
+    for (int i = 1; i < k; ++i) {
+        if (a[i][0] != a[0][0]) {
+            idx2 = i;
+            break;
+        }
+    }
+    if (idx2 == -1) {
+        // All screenshots have same author, just check consistency of remaining
+        vector<int> base(a[0].begin() + 1, a[0].end());
+        for (int i = 1; i < k; ++i) {
+            if (vector<int>(a[i].begin() + 1, a[i].end()) != base) {
+                cout << "NO\n";
+                return;
+            }
+        }
+        cout << "YES\n";
+        return;
+    }
+    // Build candidate order from idx1 and idx2
+    // Remove first element from both
+    vector<int> v1(a[idx1].begin() + 1, a[idx1].end());
+    vector<int> v2(a[idx2].begin() + 1, a[idx2].end());
+    // Find position of a[idx1][0] in v2
+    int pos1 = -1;
+    for (int i = 0; i < n - 1; ++i) {
+        if (v2[i] == a[idx1][0]) {
+            pos1 = i;
+            break;
+        }
+    }
+    // Find position of a[idx2][0] in v1
+    int pos2 = -1;
+    for (int i = 0; i < n - 1; ++i) {
+        if (v1[i] == a[idx2][0]) {
+            pos2 = i;
+            break;
+        }
+    }
+    // Two possible orders: insert a[idx1][0] before or after a[idx2][0] in v2
+    vector<vector<int>> candidates;
+    // Candidate 1: insert a[idx1][0] right before a[idx2][0] in v2
+    {
+        vector<int> cand = v2;
+        cand.insert(cand.begin() + pos1, a[idx1][0]);
+        candidates.push_back(cand);
+    }
+    // Candidate 2: insert a[idx1][0] right after a[idx2][0] in v2
+    if (pos1 + 1 < n) {
+        vector<int> cand = v2;
+        cand.insert(cand.begin() + pos1 + 1, a[idx1][0]);
+        candidates.push_back(cand);
+    }
+    // Also consider inserting a[idx2][0] into v1 similarly
+    {
+        vector<int> cand = v1;
+        cand.insert(cand.begin() + pos2, a[idx2][0]);
+        candidates.push_back(cand);
+    }
+    if (pos2 + 1 < n) {
+        vector<int> cand = v1;
+        cand.insert(cand.begin() + pos2 + 1, a[idx2][0]);
+        candidates.push_back(cand);
+    }
+    // Remove duplicates
+    sort(candidates.begin(), candidates.end());
+    candidates.erase(unique(candidates.begin(), candidates.end()), candidates.end());
+    bool ok = false;
+    for (auto &base : candidates) {
+        // base is the order of all participants except the author of screenshot 0?
+        // Actually base is the full order of all n participants? No, base has size n-1? Wait.
+        // v1 and v2 have size n-1, after insertion they have size n.
+        // So base is a candidate for the full order of all participants.
+        // Check all screenshots
+        bool valid = true;
+        for (int i = 0; i < k && valid; ++i) {
+            int author = a[i][0];
+            // Build expected view: author first, then base without author
+            vector<int> expected;
+            expected.push_back(author);
+            for (int x : base) {
+                if (x != author) expected.push_back(x);
+            }
+            if (expected != a[i]) {
+                valid = false;
+            }
+        }
+        if (valid) {
+            ok = true;
+            break;
+        }
+    }
+    cout << (ok ? "YES" : "NO") << "\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

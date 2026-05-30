@@ -1,0 +1,148 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1e9 + 7;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    string s;
+    cin >> s;
+    int n = (int)s.size();
+    
+    vector<long long> pow10(n + 1);
+    pow10[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        pow10[i] = (pow10[i - 1] * 10) % MOD;
+    }
+    
+    vector<long long> pref(n + 1, 0);
+    for (int i = 0; i < n; i++) {
+        pref[i + 1] = (pref[i] * 10 + (s[i] - '0')) % MOD;
+    }
+    
+    long long ans = 0;
+    
+    // Contribution when right part is deleted
+    // For each position i (0-indexed), digit d = s[i]-'0'
+    // If we keep a prefix ending at i, and delete some suffix starting after i,
+    // the digit stays at its original place value (from right: n-1-i).
+    // Number of ways to choose a non-empty substring to delete entirely to the right:
+    // We can delete any substring that starts at some j > i and ends at some k >= j.
+    // The number of such substrings is (len) * (len + 1) / 2 where len = n - 1 - i.
+    // But careful: the deleted substring must be non-empty and contiguous.
+    // Actually, if we keep the prefix up to i, we can delete any suffix substring starting after i.
+    // The number of ways to choose a non-empty substring in the suffix of length L = n - 1 - i is L*(L+1)/2.
+    // But wait: the problem says Vova removes a non-empty substring. The remaining digits close the gap.
+    // If we keep prefix up to i, and delete some substring entirely to the right, the digit at i remains at its original place.
+    // However, we must also consider the case where the deleted substring includes some digits to the left? That's handled separately.
+    
+    for (int i = 0; i < n; i++) {
+        int d = s[i] - '0';
+        long long ways_right = 0;
+        long long L = n - 1 - i;
+        if (L >= 0) {
+            ways_right = (L * (L + 1) / 2) % MOD;
+        }
+        long long place_value = pow10[n - 1 - i];
+        ans = (ans + d * place_value % MOD * ways_right) % MOD;
+    }
+    
+    // Contribution when left part is deleted
+    // For each position i, if we delete a substring that includes some digits to the left of i,
+    // the digit at i will shift left. Specifically, if we delete a substring that starts at some L <= i and ends at some R >= i,
+    // then the digit at i will move to the position that was originally occupied by L-1? Actually, the remaining digits close the gap.
+    // If we delete a substring that covers some prefix up to i, then the digit at i becomes the new most significant digit?
+    // Better approach: count for each digit how many times it appears at each possible place value.
+    // Alternative: sum over all resulting numbers = sum over all ways to choose a non-empty substring to delete.
+    // For each deletion, the resulting number is formed by concatenating the prefix before the deleted part and the suffix after the deleted part.
+    // Let the deleted substring be from index l to r inclusive (0-indexed). The resulting number = prefix[0..l-1] concatenated with suffix[r+1..n-1].
+    // We can compute the sum by iterating over all possible (l, r) but that's O(n^2).
+    // Instead, use contribution of each digit.
+    // A digit at position i will be included in the result if it is not deleted.
+    // Its place value in the result depends on how many digits to its right are deleted.
+    // If we delete a substring that lies entirely to the left of i, the digit's place value doesn't change.
+    // If we delete a substring that lies entirely to the right of i, the digit's place value doesn't change.
+    // If we delete a substring that includes some digits to the left and some to the right? Actually, if the deleted substring covers i, the digit is removed.
+    // So the only way the digit's place value changes is if we delete some digits to its right, but not all? Wait, if we delete a substring that is entirely to the right, the digit's place value remains the same because the number of digits to its right decreases, but the relative order among remaining digits is preserved. Actually, if we delete a substring entirely to the right, the digit's distance from the right end changes. For example, n=107, i=0 (digit '1'). If we delete substring "07" (positions 1-2), the result is "1", place value 10^0. Originally it was 10^2. So place value changes!
+    // So my previous thought was wrong. The place value of a digit depends on how many digits to its right are deleted, regardless of whether the deleted part is contiguous? But the deletion is a single contiguous substring. So if we delete a substring entirely to the right, the number of digits to the right that are removed equals the length of that substring. So the digit shifts right by that many positions? Actually, if we remove digits to the right, the digit moves left in terms of place value? Let's clarify: original number: d_m ... d_1 d_0 (where d_0 is units). If we remove some digits to the right of d_k, then d_k's new position is determined by how many digits to its right remain. If we remove a contiguous block entirely to the right, then all digits to the right of that block are also removed? No, if the block is entirely to the right, it means the block is a suffix of the digits to the right. So all digits to the right of the block are removed, but digits between the digit and the block remain. So the number of digits to the right of our digit decreases by the length of the removed block. So the place value becomes 10^{original_right_count - removed_count}.
+    // This seems complicated.
+    
+    // Let's use the hint: "Count how many times each digit will be included in the sum." and "If the part to the left is deleted, then the place of the digit will change." "What if the part to the right is deleted?"
+    // We can think of each digit's contribution as: digit * 10^{position in the resulting number} * (number of ways this happens).
+    // For a fixed digit at index i (0-indexed from left), and a fixed new position p (0-indexed from right, i.e., 10^p), we need to count how many deletions result in this digit being at that position.
+    // The digit is at position p from the right means there are exactly p digits to its right in the resulting number.
+    // Those p digits must come from the original digits to the right of i. Since we delete a contiguous substring, the remaining digits to the right of i must be a suffix of the original right part? Not necessarily, because if we delete a substring that starts to the left of i and ends to the right of i, then i is deleted. So i must not be deleted. Thus the deleted substring either lies entirely to the left of i, entirely to the right of i, or straddles i? If it straddles i, i is deleted. So i survives only if the deleted substring is entirely to the left or entirely to the right.
+    // Wait, is that true? The deleted substring is contiguous. If it includes i, then i is removed. So for i to survive, the deleted substring must be either entirely to the left of i, or entirely to the right of i. It cannot cross i. So the deletion is either in the prefix before i, or in the suffix after i.
+    // Therefore, the digits to the right of i that remain are exactly the original digits to the right of i, except possibly some contiguous block is removed from them. But since the deletion is entirely to the right, it removes a contiguous substring from the suffix. So the remaining right digits are: some prefix of the original right part, then a gap (the deleted part), then the rest? No, if the deletion is entirely to the right, it removes a contiguous block. The remaining right digits are the original right digits with a contiguous block removed. That means the remaining right digits consist of a prefix of the right part and a suffix of the right part, concatenated.
+    // So the number of digits to the right of i in the result is: (number of digits before the deleted block) + (number of digits after the deleted block). The deleted block can be anywhere in the right part.
+    // This is getting messy. Let's find a smarter way.
+    
+    // Alternative approach: sum over all possible resulting numbers = sum over all pairs (l, r) with 0 <= l <= r < n, not both l=0 and r=n-1? Actually, non-empty substring, so l <= r, and it's a valid deletion. The resulting number is formed by digits [0..l-1] and [r+1..n-1].
+    // We can compute the total sum by iterating over the split point between the prefix and suffix. For a fixed l (start of deletion) and r (end of deletion), the number is prefix[0..l-1] * 10^{n-1-r} + suffix[r+1..n-1].
+    // Sum over all l <= r.
+    // Let's denote L = l, R = r. The number = A * 10^{n-1-R} + B, where A = number formed by digits [0..L-1], B = number formed by digits [R+1..n-1].
+    // We can sum A * 10^{n-1-R} over all valid (L,R) and sum B over all valid (L,R).
+    // For the first part: For each L, A is fixed. For a given L, R can be from L to n-1. So the contribution of A is A * sum_{R=L}^{n-1} 10^{n-1-R}.
+    // For the second part: For each R, B is fixed. For a given R, L can be from 0 to R. So contribution of B is B * (R + 1) because there are (R+1) choices for L.
+    // But wait: is the deletion non-empty? Yes, L <= R, so the substring has at least one digit. That's satisfied.
+    // Also, can we delete the whole string? If L=0 and R=n-1, then the result is empty, which is considered 0. Our formula: A = 0 (prefix empty), B = 0 (suffix empty), number = 0. So it's fine.
+    // So total sum = sum_{L=0}^{n-1} A_L * S_L + sum_{R=0}^{n-1} B_R * (R+1), where A_L = value of prefix [0..L-1] (0 if L=0), B_R = value of suffix [R+1..n-1] (0 if R=n-1), and S_L = sum_{R=L}^{n-1} 10^{n-1-R}.
+    // Let's verify with example: n=107, s="107".
+    // n=3.
+    // L=0: A=0, S_0 = sum_{R=0}^{2} 10^{2-R} = 10^2 + 10^1 + 10^0 = 111. Contribution = 0.
+    // L=1: A = digit[0] = 1. S_1 = sum_{R=1}^{2} 10^{2-R} = 10^1 + 10^0 = 11. Contribution = 1 * 11 = 11.
+    // L=2: A = digits[0..1] = 10. S_2 = sum_{R=2}^{2} 10^{2-R} = 10^0 = 1. Contribution = 10 * 1 = 10.
+    // Sum A part = 21.
+    // Now B part:
+    // R=0: B = suffix[1..2] = 07 = 7. (R+1)=1. Contribution = 7 * 1 = 7.
+    // R=1: B = suffix[2..2] = 7. (R+1)=2. Contribution = 7 * 2 = 14.
+    // R=2: B = 0. Contribution = 0.
+    // Sum B part = 21.
+    // Total = 42. Matches sample!
+    // Great! So this formula works.
+    
+    // Now we need to compute this efficiently for n up to 10^5.
+    // Precompute powers of 10 modulo MOD.
+    // Precompute prefix values A_L for L=0..n: A_0 = 0, A_{i+1} = (A_i * 10 + digit[i]) % MOD.
+    // Precompute suffix values B_R for R=0..n-1: B_R = value of digits[R+1..n-1]. We can compute from right.
+    // Also precompute S_L = sum_{R=L}^{n-1} 10^{n-1-R}. Let k = n-1-R, then as R goes from L to n-1, k goes from n-1-L down to 0. So S_L = sum_{k=0}^{n-1-L} 10^k. We can precompute prefix sums of powers of 10.
+    
+    vector<long long> sum_pow(n + 1, 0);
+    for (int i = 0; i < n; i++) {
+        sum_pow[i + 1] = (sum_pow[i] + pow10[i]) % MOD;
+    }
+    // S_L = sum_{k=0}^{n-1-L} 10^k = sum_pow[n - L]
+    
+    // Compute A_L for L=0..n-1
+    vector<long long> A(n);
+    A[0] = 0;
+    for (int i = 1; i < n; i++) {
+        A[i] = (A[i - 1] * 10 + (s[i - 1] - '0')) % MOD;
+    }
+    // Actually A[L] is prefix of length L.
+    
+    // Compute B_R for R=0..n-1
+    vector<long long> B(n);
+    long long cur = 0;
+    long long mult = 1;
+    for (int i = n - 1; i >= 0; i--) {
+        B[i] = cur;
+        cur = (cur + (s[i] - '0') * mult) % MOD;
+        mult = (mult * 10) % MOD;
+    }
+    
+    long long total = 0;
+    for (int L = 0; L < n; L++) {
+        long long S_L = sum_pow[n - L]; // sum_{k=0}^{n-1-L} 10^k
+        total = (total + A[L] * S_L) % MOD;
+    }
+    for (int R = 0; R < n; R++) {
+        total = (total + B[R] * (R + 1)) % MOD;
+    }
+    
+    cout << total << "\n";
+    return 0;
+}

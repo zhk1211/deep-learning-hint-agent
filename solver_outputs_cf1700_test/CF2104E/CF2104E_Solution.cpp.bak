@@ -1,0 +1,37 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, k;
+    cin >> n >> k;
+    string s;
+    cin >> s;
+
+    vector<vector<int>> nxt(n + 2, vector<int>(k, n));
+    vector<int> d(n + 1, 0);
+
+    for (int i = n - 1; i >= 0; --i) {
+        nxt[i] = nxt[i + 1];
+        int mx = *max_element(nxt[i].begin(), nxt[i].end());
+        d[i] = 1 + d[mx];
+        nxt[i][s[i] - 'a'] = i;
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        string t;
+        cin >> t;
+        int pos = -1;
+        for (char c : t) {
+            pos = nxt[pos + 1][c - 'a'];
+        }
+        cout << d[pos] << '\n';
+    }
+
+    return 0;
+}

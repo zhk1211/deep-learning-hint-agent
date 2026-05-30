@@ -1,0 +1,67 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+// Fenwick tree (Binary Indexed Tree) for coordinate compressed values
+struct Fenwick {
+    int n;
+    vector<int> bit;
+    Fenwick(int n) : n(n), bit(n + 1, 0) {}
+    void add(int idx, int delta) {
+        for (; idx <= n; idx += idx & -idx)
+            bit[idx] += delta;
+    }
+    int sum(int idx) {
+        int res = 0;
+        for (; idx > 0; idx -= idx & -idx)
+            res += bit[idx];
+        return res;
+    }
+    int range_sum(int l, int r) {
+        if (l > r) return 0;
+        return sum(r) - sum(l - 1);
+    }
+};
+
+void solve() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+
+        // Coordinate compression
+        vector<int> vals = a;
+        sort(vals.begin(), vals.end());
+        vals.erase(unique(vals.begin(), vals.end()), vals.end());
+        int m = vals.size();
+        auto comp = [&](int x) {
+            return lower_bound(vals.begin(), vals.end(), x) - vals.begin() + 1;
+        };
+
+        Fenwick bit(m);
+        long long ans = 0;
+        // We process elements one by one, maintaining counts of elements seen so far.
+        // For each new element, we can either put it at front or back.
+        // The number of new inversions if put at back = number of previous elements > current
+        // The number of new inversions if put at front = number of previous elements < current
+        // We choose the minimum and add to answer.
+        for (int i = 0; i < n; ++i) {
+            int idx = comp(a[i]);
+            int less = bit.sum(idx - 1);
+            int greater = bit.range_sum(idx + 1, m);
+            ans += min(less, greater);
+            bit.add(idx, 1);
+        }
+        cout << ans << '\n';
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    solve();
+    return 0;
+}

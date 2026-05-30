@@ -1,0 +1,40 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    long long m;
+    cin >> n >> m;
+    
+    vector<long long> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    
+    sort(a.begin(), a.end());
+    
+    int good_pairs = 0;
+    int left = 0, right = n - 1;
+    while (left < right) {
+        if (a[left] + a[right] <= m) {
+            ++good_pairs;
+            ++left;
+            --right;
+        } else {
+            --right;
+        }
+    }
+    
+    int bad_pairs = n - 1 - good_pairs;
+    long long total_download_time = accumulate(a.begin(), a.end(), 0LL);
+    long long total_watch_time = n;
+    long long total_time = total_download_time + total_watch_time + bad_pairs;
+    
+    cout << total_time << '\n';
+    
+    return 0;
+}

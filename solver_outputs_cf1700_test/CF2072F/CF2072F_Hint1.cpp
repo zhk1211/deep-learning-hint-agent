@@ -1,0 +1,39 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        unsigned int k;
+        cin >> n >> k;
+
+        vector<unsigned int> ans(n);
+        for (int bit = 0; bit < 31; ++bit) {
+            unsigned int bit_val = (k >> bit) & 1;
+            if (bit_val == 0) continue;
+
+            // For each bit, the triangle follows Pascal's triangle modulo 2 (Lucas theorem)
+            // T_{i,j} bit = C(i-1, j-1) mod 2
+            // We need to set the bit in ans[j] if C(n-1, j) mod 2 == 1
+            // Using Lucas: C(n-1, j) mod 2 == 1 iff (j & (n-1)) == j
+            // i.e., j is a submask of (n-1)
+            int mask = n - 1;
+            // iterate over submasks of mask
+            for (int sub = mask; ; sub = (sub - 1) & mask) {
+                ans[sub] |= (1u << bit);
+                if (sub == 0) break;
+            }
+        }
+
+        for (int i = 0; i < n; ++i) {
+            cout << ans[i] << (i + 1 == n ? '\n' : ' ');
+        }
+    }
+    return 0;
+}

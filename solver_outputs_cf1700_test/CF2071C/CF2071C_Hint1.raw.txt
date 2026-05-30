@@ -1,0 +1,97 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, st, en;
+    cin >> n >> st >> en;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    
+    // BFS from en to get distances and parent
+    vector<int> dist(n + 1, -1);
+    vector<int> parent(n + 1, 0);
+    queue<int> q;
+    q.push(en);
+    dist[en] = 0;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : adj[u]) {
+            if (dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                parent[v] = u;
+                q.push(v);
+            }
+        }
+    }
+    
+    // Get path from st to en
+    vector<int> path;
+    int cur = st;
+    while (cur != en) {
+        path.push_back(cur);
+        cur = parent[cur];
+    }
+    path.push_back(en);
+    
+    // Mark vertices on the path
+    vector<bool> on_path(n + 1, false);
+    for (int v : path) on_path[v] = true;
+    
+    // For each vertex on path, collect its subtree (excluding the next vertex on path)
+    vector<vector<int>> subtrees(path.size());
+    for (int i = 0; i < (int)path.size(); i++) {
+        int u = path[i];
+        int forbidden = (i + 1 < (int)path.size()) ? path[i + 1] : -1;
+        // BFS/DFS to collect subtree
+        queue<int> qq;
+        qq.push(u);
+        vector<bool> vis(n + 1, false);
+        vis[u] = true;
+        if (forbidden != -1) vis[forbidden] = true;
+        while (!qq.empty()) {
+            int x = qq.front(); qq.pop();
+            subtrees[i].push_back(x);
+            for (int y : adj[x]) {
+                if (!vis[y]) {
+                    vis[y] = true;
+                    qq.push(y);
+                }
+            }
+        }
+    }
+    
+    // Build permutation: process subtrees in reverse order of path (from en to st)
+    // For each subtree, output vertices in order of decreasing distance from en
+    vector<int> perm;
+    for (int i = (int)path.size() - 1; i >= 0; i--) {
+        // sort vertices in this subtree by distance from en descending
+        sort(subtrees[i].begin(), subtrees[i].end(), [&](int a, int b) {
+            return dist[a] > dist[b];
+        });
+        for (int v : subtrees[i]) {
+            perm.push_back(v);
+        }
+    }
+    
+    for (int i = 0; i < n; i++) {
+        cout << perm[i] << " \n"[i == n - 1];
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

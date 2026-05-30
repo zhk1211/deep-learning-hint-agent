@@ -1,0 +1,176 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        set<int> S;
+        vector<int> b;
+        for (int i = 0; i < n; ++i) {
+            int val = a[i] + (i + 1);
+            // find smallest v in [0, i] such that val - v not in S
+            // we can maintain the current candidate and adjust
+            // but simpler: we know that among i+1 consecutive numbers
+            // ending at val, at most i are taken, so there is a free one.
+            // We can find it by checking from val downwards, but that could be O(n^2).
+            // Better: maintain a set of taken values, and for each i,
+            // we want the largest possible value to insert to maximize lex order.
+            // Actually, to maximize lex order of final sorted descending b,
+            // we want to insert the largest possible value at each step.
+            // The editorial says: choose smallest v such that val - v not in S.
+            // That gives the largest possible inserted value = val - v.
+            // So we want max possible inserted value.
+            // Since we have i+1 candidates: val, val-1, ..., val-i,
+            // and at most i are already in S, there is at least one free.
+            // We can find the largest free by checking from val downwards,
+            // but we can optimize by maintaining a set of used and a pointer.
+            // However, n sum <= 3e5, so O(n log n) with set is fine.
+            // We can just try to insert val, if already present, try val-1, etc.
+            // But worst-case O(n^2) if many collisions. We need better.
+            // We can maintain a set of "blocked" values and use DSU or just
+            // maintain a map/set of intervals. Simpler: use a set of available
+            // values? No, the candidates depend on i.
+            // Alternative: we can process from left to right, and maintain
+            // a set of used values. For each i, we want the largest x in
+            // [val - i, val] not in used. We can find it by starting from val
+            // and going down while used.count(x). To avoid O(n^2), we can use
+            // a DSU to skip used numbers. But values up to 1e9 + 3e5, so DSU
+            // with coordinate compression or map.
+            // Since total n is 3e5, we can use a hash set and while loop,
+            // but worst-case could be O(n^2) if many consecutive used.
+            // However, the editorial's solution uses a set and lower_bound
+            // on something else? Let's think: we want smallest v such that
+            // val - v not in S. That is equivalent to: we want the largest
+            // value x = val - v not in S, with v in [0, i].
+            // So x in [val - i, val]. We can maintain a set of used values.
+            // We can start x = val, and if used, decrement x. To skip,
+            // we can maintain a map<int, int> next_available like DSU.
+            // But we can also note that the set of used values is exactly
+            // the set of elements we have inserted so far. At step i,
+            // we have inserted i elements. The candidates are val, val-1, ..., val-i.
+            // Since there are i+1 candidates and only i used, there is a gap.
+            // We can find the largest gap by maintaining the used set and
+            // checking the maximum value in [val-i, val] not used.
+            // We can do this by keeping a set of used values and using
+            // set::lower_bound to find the first used >= val-i, then iterate
+            // backwards? Not straightforward.
+            // Another approach from editorial: they maintain a set of "available"
+            // values? Actually, they say: "select the smallest integer v (0 <= v <= i-1)
+            // such that a_i + i - v is not present in the set S". This is equivalent
+            // to: we want to insert the largest possible value that is not already in S.
+            // Since we want lexicographically largest b (sorted descending),
+            // we want the inserted values to be as large as possible.
+            // So we can just try to insert val, if it's already in S, try val-1, etc.
+            // To make it fast, we can use a DSU on compressed values.
+            // But there's a simpler observation: the set of values we insert
+            // will be exactly the set of a_i + i - c_i. The final b is sorted
+            // descending. The lexicographically largest b means we want the
+            // largest elements possible. The greedy choice of taking the largest
+            // possible at each step works.
+            // To implement efficiently, we can maintain a set of used values,
+            // and for each i, we start with x = a[i] + (i+1). While S.count(x),
+            // x--. Then insert x. This is O(n^2) worst-case if we have many
+            // consecutive used values. But note that the values we insert are
+            // at most n per test case, and total n is 3e5. The worst-case for
+            // while loop is if we have a long block of consecutive used values.
+            // However, we can maintain a set of intervals of used values, or
+            // use a DSU. Since values can be up to 1e9+3e5, we can use a map
+            // for DSU: map<int, int> parent; but we only need to find the next
+            // available number below a given number. We can maintain a set of
+            // used numbers, and also a set of "free" numbers? Not exactly.
+            // Let's use a set of used numbers, and for each query, we want the
+            // largest number <= val that is not used. We can maintain a set of
+            // used numbers, and also a set of "available" numbers? No.
+            // We can use a set of used numbers and binary search for the first
+            // used number <= val, then check if it's part of a block.
+            // Actually, we can maintain a set of intervals of used numbers.
+            // When we insert x, we merge intervals. To find the largest available
+            // <= val, we can check if val is used. If not, take val. If used,
+            // we need the largest number < val not used. That is exactly the
+            // number just before the start of the used interval containing val.
+            // So we can maintain a set of used intervals (e.g., set<pair<int,int>>)
+            // or a set of used numbers and use set::lower_bound to find the
+            // first used >= something. Let's do: maintain set<int> used.
+            // To find the largest available <= val:
+            // if used.empty() or val < *used.begin(): return val.
+            // auto it = used.upper_bound(val);
+            // if (it == used.begin()) return val;
+            // --it;
+            // if (*it == val) {
+            //   // val is used, we need the largest available < val.
+            //   // We can find the start of the used block containing val.
+            //   // Since we only have individual numbers, we can't easily know
+            //   // the block. But we can maintain a DSU that maps a used number
+            //   // to the next available number below it.
+            // }
+            // DSU approach: map<int, int> next_avail; where next_avail[x] = the
+            // largest available number <= x. Initially empty.
+            // When we need to find available for val:
+            // if val not in next_avail, then val is available, return val.
+            // else, we need to find the available number for val-1, etc.
+            // We can use recursion with path compression.
+            // Since we only go downwards, we can use a map<int, int> parent
+            // where parent[x] = the next candidate to try if x is used.
+            // Actually, we can use a map<int, int> to point to the next available
+            // number below. Let's define a function find(x):
+            // if x not in used, return x;
+            // else return find(x-1);
+            // With path compression: if x is used, we set parent[x] = find(x-1).
+            // We can use a map<int, int> parent.
+            // But we also need to ensure we don't go below val - i.
+            // However, we are guaranteed that there is an available number in
+            // [val - i, val]. So we will find it.
+            // Let's implement this DSU with map.
+
+            int val = a[i] + (i + 1);
+            // find largest x <= val not used, but also x >= val - i.
+            // We can just do:
+            int x = val;
+            map<int, int> nxt; // nxt[x] = next candidate if x is used
+            // Actually, we can maintain a global map for the test case.
+            // But we need to clear it per test case. Since sum n <= 3e5,
+            // we can just use a map and clear it.
+            // Let's declare map<int, int> parent; outside the loop.
+            // We'll use a lambda for find.
+        }
+
+        // Let's restructure: we'll process all i, maintain a set of used values,
+        // and a DSU map to skip used numbers.
+        map<int, int> parent;
+        function<int(int)> find = [&](int x) -> int {
+            if (!S.count(x)) return x;
+            if (parent.count(x)) return parent[x] = find(parent[x]);
+            return parent[x] = find(x - 1);
+        };
+
+        for (int i = 0; i < n; ++i) {
+            int val = a[i] + (i + 1);
+            int x = find(val);
+            // x is the largest available <= val.
+            // But we also have the constraint x >= val - i.
+            // Since we are guaranteed existence, x will satisfy it.
+            S.insert(x);
+            b.push_back(x);
+        }
+
+        // Now b has the inserted elements in the order they were inserted.
+        // We need to sort b in decreasing order.
+        sort(b.begin(), b.end(), greater<int>());
+        for (int i = 0; i < n; ++i) {
+            cout << b[i] << " \n"[i == n - 1];
+        }
+    }
+    return 0;
+}

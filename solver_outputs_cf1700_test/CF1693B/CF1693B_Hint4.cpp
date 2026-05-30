@@ -1,0 +1,40 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<int>> g(n + 1);
+        for (int i = 2; i <= n; ++i) {
+            int p;
+            cin >> p;
+            g[p].push_back(i);
+        }
+        vector<long long> l(n + 1), r(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            cin >> l[i] >> r[i];
+        }
+        int ans = 0;
+        function<long long(int)> dfs = [&](int u) -> long long {
+            long long sum = 0;
+            for (int v : g[u]) {
+                sum += dfs(v);
+            }
+            if (sum < l[u]) {
+                ++ans;
+                return r[u];
+            } else {
+                return min(sum, r[u]);
+            }
+        };
+        dfs(1);
+        cout << ans << '\n';
+    }
+    return 0;
+}

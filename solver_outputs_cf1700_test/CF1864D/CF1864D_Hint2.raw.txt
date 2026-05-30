@@ -1,0 +1,49 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<string> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    
+    vector<int> diag(2 * n, 0); // diagonal prefix sums
+    vector<int> col(n, 0);      // column prefix sums
+    int ans = 0;
+    
+    for (int i = 0; i < n; ++i) {
+        int cur = 0;
+        for (int j = 0; j < n; ++j) {
+            // update current prefix sum from diagonals
+            cur += diag[i + j];
+            // current cell value after previous operations
+            int val = (a[i][j] - '0') ^ (cur & 1) ^ (col[j] & 1);
+            if (val) {
+                ++ans;
+                // apply operation at (i, j)
+                // update column prefix
+                col[j] ^= 1;
+                // update diagonal prefix
+                diag[i + j] ^= 1;
+                // cur is also affected because we just toggled diag[i+j]
+                cur ^= 1;
+            }
+        }
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

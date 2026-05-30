@@ -1,0 +1,45 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<long long> S(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> S[i];
+        }
+
+        vector<long long> extra(n + 1, 0);
+        long long ans = 0;
+
+        for (int i = 0; i < n; ++i) {
+            // carry over extra passes from previous trampolines
+            if (i > 0) extra[i] += extra[i - 1];
+
+            long long cur = S[i] - 1; // needed passes to reduce to 1
+            long long add = max(0LL, cur - extra[i]);
+            ans += add;
+            extra[i + 1] += max(0LL, extra[i] - cur);
+
+            // schedule extra jumps for future positions
+            int start = i + 2;
+            int end = min(n, i + (int)S[i]);
+            if (start <= end) {
+                extra[start]++;
+                if (end + 1 <= n) extra[end + 1]--;
+            }
+        }
+
+        cout << ans << '\n';
+    }
+
+    return 0;
+}
+```

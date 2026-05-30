@@ -1,0 +1,264 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // Check necessary condition: sum of a_i must be n
+        if (accumulate(a.begin(), a.end(), 0LL) != n) {
+            cout << "0\n";
+            continue;
+        }
+
+        // We'll process from the outermost layer to the innermost.
+        // For k from n down to 1, we consider cells with max(i, j) = k or max(i, n+1-j) = k.
+        // Actually, the constraints imply that black cells only appear where i <= j and i <= n+1-j.
+        // So we can think of layers: for each k from 1 to n, the cells with max(i,j)=k or max(i,n+1-j)=k
+        // are exactly the cells on the boundary of the "diamond" shape.
+        // We can maintain how many rows still need black cells.
+
+        vector<int> rows_needed = a;
+        long long ans = 1;
+
+        // We'll iterate k from n down to 1
+        for (int k = n; k >= 1; --k) {
+            // The cells that satisfy max(i,j)=k are:
+            // row k, columns 1..k
+            // column k, rows 1..k-1
+            // The cells that satisfy max(i, n+1-j)=k are:
+            // row k, columns n+1-k .. n
+            // column n+1-k, rows 1..k-1
+            // But due to the condition i <= min(j, n+1-j), only some of these are allowed.
+            // Actually, the allowed cells for a given k are:
+            // - (k, j) for j from k to n+1-k (if k <= n+1-k)
+            // - (i, k) for i from 1 to k-1 (but only if i <= k and i <= n+1-k, which is i <= min(k, n+1-k))
+            // - (i, n+1-k) for i from 1 to k-1 (similarly i <= min(k, n+1-k))
+            // However, note that the two conditions (max(i,j)=k and max(i,n+1-j)=k) together force exactly one black cell
+            // in the set of cells with max(i,j)=k and exactly one in the set with max(i,n+1-j)=k.
+            // These two sets intersect at (k, k) and (k, n+1-k) if k == n+1-k (i.e., n odd and k = (n+1)/2).
+            // But we can handle it by counting the number of ways to place the required black cells in rows
+            // that are "active" at this layer.
+
+            // Let's define the set of rows that have cells in the current layer:
+            // For max(i,j)=k: rows 1..k have cells, but only rows i with i <= min(k, n+1-k) are allowed.
+            // Actually, the condition i <= min(j, n+1-j) means that for a fixed row i, the allowed columns are
+            // j from i to n+1-i. So row i only has cells in layers k where k >= i and k <= n+1-i.
+            // So row i becomes "active" at layer k = i and remains active until layer k = n+1-i.
+            // At each layer k, the rows that are active are those with i <= k and i <= n+1-k, i.e., i <= min(k, n+1-k).
+            // For each such row i, the cells in layer k are:
+            // - if i < k: (i, k) and (i, n+1-k)  (two cells)
+            // - if i == k: (k, k) and (k, n+1-k) (if k != n+1-k, two cells; if k == n+1-k, one cell)
+            // But wait, the conditions say: for each k, exactly one cell with max(i,j)=k and exactly one with max(i,n+1-j)=k.
+            // These are two separate cells (or possibly the same if k == n+1-k and the cell is (k,k)).
+            // So we need to choose two cells (or one if they coincide) from the available cells in layer k,
+            // such that the row counts are satisfied.
+
+            // Let's count how many rows are active at layer k: r = min(k, n+1-k).
+            // For each active row i (1 <= i <= r), the available cells in layer k are:
+            // - If i < k: two cells: (i, k) and (i, n+1-k)
+            // - If i == k: two cells if k != n+1-k: (k, k) and (k, n+1-k); if k == n+1-k, one cell: (k, k)
+            // But note: the two conditions require exactly one cell from the "max(i,j)=k" set and one from "max(i,n+1-j)=k" set.
+            // The "max(i,j)=k" set consists of cells (i, k) for i=1..k and (k, j) for j=1..k-1.
+            // However, due to i <= j, only (i, k) with i <= k and i <= k (always true) and (k, j) with k <= j are allowed,
+            // but j goes up to k, so (k, j) with j >= k means j=k only. So the allowed cells in "max(i,j)=k" are:
+            // (i, k) for i=1..k, but with i <= k (always) and i <= n+1-k? Wait, the condition i <= min(j, n+1-j).
+            // For cell (i, k), j=k, so we need i <= min(k, n+1-k). So only rows i <= min(k, n+1-k) are allowed.
+            // Also (k, k) is allowed if k <= min(k, n+1-k) => k <= n+1-k => 2k <= n+1.
+            // Similarly, "max(i, n+1-j)=k" set: cells (i, n+1-k) for i=1..k with i <= min(n+1-k, k) and (k, n+1-k) if k <= n+1-k.
+            // So indeed, the available cells are exactly as described.
+
+            // Now, we need to choose exactly one cell from the first set and one from the second set.
+            // They could be the same cell only if k == n+1-k and we choose (k,k) for both, but then it's one cell serving both conditions.
+            // So we need to count the number of ways to assign these choices to rows, respecting the remaining row counts.
+
+            // Let's process layers from outermost (k=n) to innermost (k=1).
+            // At layer k, the active rows are i = 1..r where r = min(k, n+1-k).
+            // For each such row i, we know how many black cells it still needs (rows_needed[i-1]).
+            // The cells available in this layer for row i are:
+            // - If i < k: two cells: one in set A (max(i,j)=k) and one in set B (max(i,n+1-j)=k).
+            // - If i == k: if k != n+1-k, two cells: (k,k) in set A, (k, n+1-k) in set B.
+            //              if k == n+1-k, one cell: (k,k) which belongs to both sets.
+            // We must choose exactly one cell for set A and one for set B from the available cells in this layer.
+            // These choices will consume some of the row needs.
+
+            // Let's think dynamically: we can decide for each layer how many of the needed cells in each row are satisfied by this layer.
+            // Since each row i appears in layers from k=i to k=n+1-i, and in each such layer it has at most 2 cells (or 1 at the middle),
+            // we can process rows in increasing order of i, or use a greedy approach.
+
+            // Alternative perspective: The conditions imply that the black cells form a "matching" between rows and columns
+            // with the symmetry constraints. Actually, it's known that such configurations correspond to permutations
+            // with certain properties. But let's derive combinatorially.
+
+            // Let's define for each row i, the number of black cells it needs: a_i.
+            // The allowed columns for row i are j from i to n+1-i.
+            // Also, the conditions max(i,j)=k and max(i,n+1-j)=k mean that if we consider the "outermost" cells,
+            // they must be placed in a specific way.
+
+            // Consider the transformation: for each black cell (i,j), we can map it to two "events":
+            // one at k = max(i,j) and one at k = max(i, n+1-j).
+            // The conditions say that for each k, there is exactly one event of each type.
+            // This is equivalent to saying that the black cells form a set of pairs (i,j) such that
+            // the multiset of max(i,j) is {1,2,...,n} and the multiset of max(i, n+1-j) is also {1,2,...,n}.
+            // Since there are exactly n black cells (sum a_i = n), each black cell contributes one to each multiset.
+            // So we have a bijection between black cells and pairs of values (k1, k2) where k1 = max(i,j), k2 = max(i, n+1-j).
+            // But note that for a given cell (i,j), we have k1 >= i, k2 >= i, and k1 >= j, k2 >= n+1-j.
+            // Also, k1 and k2 are at least max(i, j) and max(i, n+1-j).
+
+            // Let's sort rows by i. For row i, the possible columns are j in [i, n+1-i].
+            // For each such j, the pair (k1, k2) = (max(i,j), max(i, n+1-j)) = (j, n+1-i) if j >= i? Wait:
+            // max(i,j) = j (since j >= i), max(i, n+1-j) = max(i, n+1-j). Since j <= n+1-i, n+1-j >= i, so max(i, n+1-j) = n+1-j.
+            // So (k1, k2) = (j, n+1-j). Interesting! So for a cell in row i, the pair (k1, k2) depends only on j, not on i!
+            // But wait, this is only true if j >= i and j <= n+1-i, which is exactly the allowed range.
+            // So for any allowed cell in row i, k1 = j, k2 = n+1-j.
+            // Thus, the pair (k1, k2) is determined solely by the column j.
+            // And note that k1 + k2 = n+1.
+            // So each black cell corresponds to a column j, and its pair is (j, n+1-j).
+            // The conditions require that the multiset of k1 over all black cells is {1,2,...,n} and similarly for k2.
+            // Since k2 = n+1 - k1, the multiset of k2 is automatically {1,2,...,n} if k1 is {1,2,...,n}.
+            // So the condition reduces to: the set of columns j used by the black cells must be exactly a permutation of 1..n!
+            // But wait, is that true? Let's check: For each black cell (i,j), we have k1 = j (since j >= i). 
+            // But what if j < i? That's not allowed. So indeed, for every black cell, j >= i, so max(i,j) = j.
+            // Therefore, the condition "for each k, exactly one cell with max(i,j)=k" means that the columns j of the black cells
+            // are exactly a permutation of 1..n. Because each k from 1 to n must appear exactly once as max(i,j)=j.
+            // So the set of columns used is {1,2,...,n} with exactly one black cell per column.
+            // Similarly, the condition on max(i, n+1-j) would then be automatically satisfied?
+            // Let's check: max(i, n+1-j) = n+1-j (since j <= n+1-i => n+1-j >= i). So k2 = n+1-j.
+            // As j runs over 1..n, n+1-j runs over 1..n as well. So the second condition is automatically satisfied
+            // if the first is satisfied and all cells satisfy i <= j <= n+1-i.
+            // So the problem reduces to: We need to place exactly one black cell in each column j from 1 to n,
+            // such that the cell in column j is placed in some row i with 1 <= i <= min(j, n+1-j).
+            // And the number of black cells in row i must be exactly a_i.
+            // This is a much simpler formulation!
+
+            // Let's verify with the example: a = [2,2,1,0,0], n=5.
+            // Columns j=1..5. Allowed rows for column j: i <= min(j, 6-j).
+            // j=1: i <= min(1,5)=1 -> row 1 only.
+            // j=2: i <= min(2,4)=2 -> rows 1,2.
+            // j=3: i <= min(3,3)=3 -> rows 1,2,3.
+            // j=4: i <= min(4,2)=2 -> rows 1,2.
+            // j=5: i <= min(5,1)=1 -> row 1 only.
+            // We need row counts: row1:2, row2:2, row3:1, row4:0, row5:0.
+            // We must assign each column to a row within its allowed set, such that row counts match.
+            // This is exactly a matching problem that can be solved greedily because the allowed sets are "prefixes" of rows
+            // when columns are considered in a certain order.
+            // Notice that the allowed rows for column j are 1..min(j, n+1-j). This is a non-decreasing sequence up to the middle,
+            // then non-increasing. Specifically, for j from 1 to ceil(n/2), min(j, n+1-j) = j, so allowed rows are 1..j.
+            // For j from ceil(n/2)+1 to n, min(j, n+1-j) = n+1-j, which decreases.
+            // So the columns are symmetric: column j and column n+1-j have the same allowed row set: 1..min(j, n+1-j).
+            // So we can pair columns j and n+1-j for j < n+1-j.
+            // For each such pair, we have two columns that can be assigned to rows 1..j.
+            // For the middle column (if n odd), it can be assigned to rows 1..(n+1)/2.
+            // We need to assign exactly a_i columns to row i.
+            // This is a classic problem: we have capacities for each row, and we need to assign columns to rows
+            // such that for each prefix of rows, the total capacity is at least the number of columns that must be assigned
+            // to rows within that prefix. And we can fill greedily from the most restricted columns.
+
+            // Let's formalize: We have columns j=1..n. For each j, the set of allowed rows is [1, L_j] where L_j = min(j, n+1-j).
+            // We need to choose a row i_j <= L_j for each j, such that the count of j with i_j = i is exactly a_i.
+            // This is possible iff for every k from 1 to n, the sum of a_i for i=1..k is at least the number of columns j with L_j <= k?
+            // Wait, the condition for existence of such an assignment is: for any subset of rows, the total capacity must be at least
+            // the number of columns that can only be assigned to those rows. By Hall's marriage theorem, since the allowed sets are
+            // nested (they are of the form {1..L_j}), the condition is: for every k, the number of columns with L_j <= k must be <= sum_{i=1}^k a_i.
+            // Because columns with L_j <= k can only be assigned to rows 1..k. And the total capacity of rows 1..k is sum_{i=1}^k a_i.
+            // So we need: for all k, cnt(k) <= pref_a(k), where cnt(k) = number of j such that L_j <= k.
+            // And also sum a_i = n.
+            // Let's compute cnt(k): L_j = min(j, n+1-j). For a given k, L_j <= k means min(j, n+1-j) <= k.
+            // This is equivalent to j <= k or n+1-j <= k => j >= n+1-k.
+            // So the columns with L_j <= k are those with j <= k or j >= n+1-k.
+            // Since k <= n, these two intervals may overlap if k >= n+1-k, i.e., 2k >= n+1.
+            // So cnt(k) = min(k, n+1-k) * 2? Let's compute carefully:
+            // For k < (n+1)/2: j <= k gives k columns, and j >= n+1-k gives k columns (since n+1-k > k, no overlap). Total = 2k.
+            // For k >= (n+1)/2: j <= k gives k columns, j >= n+1-k gives k columns, but they overlap in the middle.
+            // The overlap is from j = n+1-k to k, which has length k - (n+1-k) + 1 = 2k - n.
+            // So total = 2k - (2k - n) = n. Actually, for k >= ceil(n/2), all columns have L_j <= k? Let's check: max L_j is ceil(n/2).
+            // So for k >= ceil(n/2), cnt(k) = n.
+            // So cnt(k) = min(2k, n) for k <= n? But wait, for k > n, it's n. But we only care up to n.
+            // Let's verify: n=5. k=1: cnt=2 (j=1,5). k=2: cnt=4 (j=1,2,4,5). k=3: cnt=5 (all). k=4: cnt=5. k=5: cnt=5.
+            // min(2k, n): k=1:2, k=2:4, k=3:5 -> matches.
+            // So cnt(k) = min(2k, n) for k=1..n? But for k > n, it's n. But we only need up to n.
+            // However, note that for k > n, pref_a(k) = n, so condition holds.
+            // So the necessary and sufficient condition for existence is: for all k=1..n, min(2k, n) <= sum_{i=1}^k a_i.
+            // And sum a_i = n.
+            // Is this condition also sufficient? Since the sets are nested, Hall's condition is exactly that for every k,
+            // the number of columns that can ONLY be assigned to rows 1..k is <= capacity of rows 1..k.
+            // The columns that can only be assigned to rows 1..k are those with L_j <= k. So yes, it's necessary and sufficient.
+            // But wait: Hall's condition for existence of a matching that covers all columns (each column assigned to a distinct row,
+            // but rows can have multiple columns) is: for any subset of columns, the union of their allowed rows has size at least the number of columns.
+            // Since allowed sets are nested, the tightest constraints are for subsets of columns that are exactly those with L_j <= k.
+            // Their union of allowed rows is rows 1..k. So we need k >= number of such columns. But here rows can take multiple columns,
+            // so the capacity is sum_{i=1}^k a_i, not just k. So the condition is sum_{i=1}^k a_i >= cnt(k).
+            // So yes, that's the condition for existence.
+
+            // Now, if the condition holds, how many ways are there to assign the columns to rows?
+            // We can count the number of ways by considering the columns in order of increasing L_j (i.e., from most restricted to least).
+            // The columns with L_j = 1 are j=1 and j=n (if n>1). They must be assigned to row 1.
+            // Then columns with L_j = 2 are j=2 and j=n-1, etc.
+            // In general, for each t from 1 to floor(n/2), we have two columns (t and n+1-t) with L = t.
+            // If n is odd, there is one column with L = ceil(n/2) (the middle column).
+            // We need to assign these columns to rows such that row i gets exactly a_i columns.
+            // Since the allowed sets are prefixes, we can process rows from 1 to n, and at each row i, we have some number of columns
+            // that have L_j >= i and are not yet assigned. But it's easier to process columns in increasing L.
+            // For each t, we have a set of columns that can be assigned to any row >= ? Actually, they can be assigned to rows 1..t.
+            // But we must ensure that row i gets exactly a_i columns. We can think of it as: we have a_i "slots" in row i.
+            // We need to fill these slots with columns, where a column with L_j = t can only go to rows i <= t.
+            // This is equivalent to: we have a sequence of rows, each with a_i slots. We go through columns in increasing L.
+            // For columns with L=t, we can place them in any row i <= t that still has available slots.
+            // The number of ways to do this is the product over t of the number of ways to choose which available slots to use.
+            // But we must be careful: the columns are distinct (they are different j's), so we are assigning distinct columns to slots.
+            // So if at step t, we have c columns to assign, and there are S available slots in rows 1..t, we need to choose c slots
+            // out of S, and then assign the c distinct columns to these slots. The number of ways is P(S, c) = S! / (S-c)!.
+            // But wait: the columns with the same L are symmetric? Actually, columns t and n+1-t are distinct, but they have the same L.
+            // However, they are distinguishable (different j). So yes, we multiply by permutations.
+            // Let's verify with the example: a = [2,2,1,0,0], n=5.
+            // t=1: columns j=1,5 (c=2). Available slots in rows 1..1: row1 has a1=2 slots. So S=2. Ways = P(2,2)=2.
+            // After assigning, row1 slots become 0.
+            // t=2: columns j=2,4 (c=2). Available slots in rows 1..2: row1 has 0, row2 has a2=2, total S=2. Ways = P(2,2)=2.
+            // After assigning, row2 slots become 0.
+            // t=3: column j=3 (c=1). Available slots in rows 1..3: row1 0, row2 0, row3 a3=1, total S=1. Ways = P(1,1)=1.
+            // Total ways = 2*2*1 = 4? But the sample output says 1. So something is wrong.
+
+            // Why did we get 4? Let's list the assignments:
+            // t=1: columns 1 and 5 must go to row1. There are 2 slots in row1, so we assign them: 2! = 2 ways (which column goes to which slot? But slots in the same row are indistinguishable? Wait, the slots are just positions in the row. The row has a_1 cells, but they are not ordered. The black cells in a row are just a set of columns. So if we assign columns 1 and 5 to row1, there is only 1 way: the set of columns in row1 is {1,5}. The order doesn't matter. So we shouldn't multiply by permutations among slots in the same row! Because the slots are indistinguishable. We are just choosing which columns go to which row. So for a row i, if we assign a set of columns to it, the number of ways is 1 for that row. The columns are distinct, but they are just placed in the row; there's no ordering. So when we assign columns to rows, we are partitioning the set of columns into rows with given sizes. The number of ways is the number of ways to choose which columns go to which row, which is a multinomial coefficient. But we also have the restriction that column j can only go to rows i <= L_j.
+            // So we need to count the number of valid partitions of the set of columns {1..n} into rows 1..n with sizes a_i, such that for each column j, its row i satisfies i <= L_j.
+            // This is exactly the number of ways if we process columns in increasing L_j and assign them to rows with available capacity, but since rows are distinguishable and columns are distinguishable, the number of ways is: for each t, we have a set of columns with L_j = t. We need to choose which rows (among 1..t) receive these columns, and how many each row gets, subject to the remaining capacities. This is a multinomial coefficient for each t, but the choices at different t are independent? Not exactly, because the capacities are shared. But we can think of it as: we have a_i slots in row i. We go through columns in some order. For each column, we choose an available slot in an allowed row. Since columns are distinct, the number of ways is the product over columns of the number of available slots at that time. But the order of processing columns matters for the count? If we process columns in increasing L_j, then when we process columns with L_j = t, the available slots are exactly those in rows 1..t that haven't been filled yet. And since all columns with the same L_j are symmetric in their restrictions, the number of ways to assign them is the number of ways to choose which slots they go to, multiplied by the number of ways to assign the distinct columns to those chosen slots. But since slots in the same row are indistinguishable, we should not multiply by permutations among slots in the same row. Actually, if we think of slots as distinct (e.g., we label the a_i slots in row i as slot 1, slot 2, ...), then assigning columns to slots is a bijection. But the problem doesn't distinguish which specific cell in the row is which; it only cares about the set of columns. So if we label slots, we overcount by a factor of a_i! for each row. So we can count the number of ways to assign columns to labeled slots, and then divide by product a_i!.
+            // Alternatively, we can count directly: when we have a set of columns to assign to rows 1..t, we need to choose for each row i <= t how many of these columns it gets (say x_i), such that sum x_i = c (number of columns with L_j = t) and x_i <= remaining capacity of row i. Then the number of ways to choose which specific columns go to which row is: c! / (product x_i!) * (product over i of (remaining capacity choose x_i)?) Wait, no. The columns are distinct. We are partitioning a set of c distinct columns into rows, with row i getting x_i columns. The number of ways to do this partition is c! / (product x_i!). But we also need to consider that the remaining capacity of row i is some number R_i (initially a_i). When we assign x_i columns to row i, we are just choosing which columns go there; the row's capacity decreases. The order of processing t doesn't matter for the final partition. The total number of valid partitions of the whole set of columns into rows with sizes a_i, subject to column j going to row i <= L_j, is exactly the number of ways if we process t from 1 to ceil(n/2) and at each step choose a partition of the new columns into the available rows. But since the columns are distinct, the total number of ways is the product over t of (number of ways to choose which rows get how many of the new columns) * (number of ways to assign the specific columns to those rows). However, the assignments at different t are independent because the sets of columns are disjoint. So the total number of valid assignments is:
+            // For each t from 1 to ceil(n/2):
+            // Let c_t = number of columns with L_j = t. (c_t = 2 for t < (n+1)/2, and 1 if n odd and t = (n+1)/2).
+            // We have remaining capacities R_i for i=1..t. Initially R_i = a_i.
+            // We need to choose nonnegative integers x_i for i=1..t such that sum x_i = c_t and x_i <= R_i.
+            // The number of ways to assign the specific columns to these rows is: c_t! / (product x_i!) * (product over i of (R_i choose x_i)?) No, that's if we first choose which specific columns go to which row, but the columns are already distinct. Actually, if we have a set of c_t distinct columns, and we want to put x_i of them into row i, the number of ways is: c_t! / (product x_i!). Because we just partition the set of columns into groups of sizes x_i. The fact that row i has R_i total capacity doesn't matter for the number of ways to choose which columns go there; it only matters that x_i <= R_i. The remaining R_i - x_i slots will be filled by columns from later t's. So the number of ways to assign the columns at step t, given the choices x_i, is exactly c_t! / (product x_i!). And this is independent of the remaining capacities, as long as x_i <= R_i.
+            // But wait: the rows have capacities, but the slots are indistinguishable. If we just partition the set of columns into rows, the number of ways to assign the entire set of columns to rows with sizes a_i is exactly n! / (product a_i!). But we have the restriction that column j can only go to rows i <= L_j. So we need to count the number of permutations of columns (or assignments) that satisfy i <= L_j for each j. This is equivalent to: we have a set of n distinct items (columns), and we want to assign each to a row i, with exactly a_i items in row i, such that for each item j, its row i satisfies i <= L_j. The number of such assignments is the number of ways to fill the rows in order of increasing i? Let's think differently.
+
+            // Consider the rows from 1 to n. Row i can only contain columns j with L_j >= i. That is, j such that min(j, n+1-j) >= i.
+            // This means j >= i and n+1-j >= i => j <= n+1-i. So row i can only contain columns in the range [i, n+1-i].
+            // So the set of columns available to row i is exactly the interval [i, n+1-i].
+            // Notice that these intervals are nested: for i1 < i2, the interval for i1 contains the interval for i2.
+            // So row 1 can contain any column, row 2 can contain columns 2..n-1, row 3 can contain 3..n-2, etc.
+            // We need to assign exactly a_i columns to row i from its allowed interval, such that each column is assigned to exactly one row.
+            // This is a classic problem: we have intervals of allowed columns for each row, and we need to count the number of ways to assign distinct columns to rows with given capacities.
+            // This can be solved by processing columns from left to right (or right to left) and using combinatorics.
+
+            // Let's process columns from 1 to n. For each column j, it can be assigned to any row i <= min(j, n+1-j). But note that min(j, n+1-j) is the same as the maximum row index that can take column j.
+            // Alternatively, process rows from 1 to n. Row i can take columns from i to n+1-i. As we go from row 1 to row n, the available columns shrink.
+            // We can think of it as: we have a set of columns. We first assign columns to row 1. Row 1 can take any columns, but it must take exactly a_1 columns. After assigning a_1 columns to row 1, the remaining columns are available for rows 2..n. But row 2 can only take columns from 2 to n-1. So any column 1 or n that was not taken by row 1 becomes impossible to assign to any other row! Because row 2..n cannot take column 1 or n. So row 1 MUST take all columns that are outside the interval [2, n-1], i.e., columns 1 and n. Because if row 1 doesn't take them, they can't be taken by anyone else. So row 1 is forced to take columns 1 and n. In general, the columns that are only available to rows 1..i are those with L_j <= i. So row i must take enough columns to cover the "excess" of columns that are not available to rows > i.
+            // This is exactly the Hall condition we derived: sum_{k=1}^i a_k >= cnt(i) = number of columns with L_j <= i.
+            // And the difference sum_{k=1}^i a_k - cnt(i) is the number of columns that are available to rows > i but are assigned to rows <= i. These are "flexible" columns.
+            // Let's formalize: For each i from 1 to n, let S_i = sum_{k=1}^i a_k. Let C_i = cnt(i) = number of columns with L_j <= i.
+            // The condition is S_i >= C_i for all i, and S_n = C_n = n.
+            // The number of ways to assign columns to rows can be computed by considering the "forced" assignments.
+            // For i from 1 to n, the columns with L_j = i are exactly those that become "available" to rows 1..i but not to rows 1..i-1? Actually, columns with L_j = i are available to rows 1..i. They are not available to rows > i. So they MUST be assigned to rows 1..i.
+            // At step i, we have already assigned some columns to rows 1..i-1. The remaining capacity in rows 1..i is S_i - (number of columns already assigned). But we must assign all columns with L_j <= i. The number of such columns is C_i. So the number of columns that have been assigned to rows 1..i after step i must be exactly C_i. This means that at step i, we must assign exactly C_i - C_{i-1} columns to rows 1..i? But wait, columns with L_j = i are exactly C_i - C_{i-1} in number. And they must be assigned to rows 1..i. However, we also might have assigned some columns with L_j < i to rows 1..i-1 already. So at step i, we have a set of new columns (those with L_j = i) that must be assigned to rows 1..i. But we also have some "unass

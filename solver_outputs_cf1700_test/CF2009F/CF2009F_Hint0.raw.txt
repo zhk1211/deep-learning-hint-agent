@@ -1,0 +1,75 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    vector<ll> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    
+    vector<ll> pref(n + 1, 0);
+    for (int i = 0; i < n; ++i) pref[i + 1] = pref[i] + a[i];
+    ll total = pref[n];
+    
+    auto sum_cyclic = [&](ll idx) -> ll {
+        if (idx <= 0) return 0;
+        ll full = idx / n;
+        ll rem = idx % n;
+        return full * total + pref[rem];
+    };
+    
+    auto query = [&](ll l, ll r) -> ll {
+        return sum_cyclic(r) - sum_cyclic(l - 1);
+    };
+    
+    while (q--) {
+        ll l, r;
+        cin >> l >> r;
+        --l; --r;
+        
+        ll block_l = l / n, pos_l = l % n;
+        ll block_r = r / n, pos_r = r % n;
+        
+        if (block_l == block_r) {
+            ll start = (block_l + pos_l) % n;
+            ll len = pos_r - pos_l + 1;
+            ll ans = 0;
+            for (ll i = 0; i < len; ++i) {
+                ans += a[(start + i) % n];
+            }
+            cout << ans << '\n';
+        } else {
+            ll ans = 0;
+            // first block
+            ll start_first = (block_l + pos_l) % n;
+            ll len_first = n - pos_l;
+            for (ll i = 0; i < len_first; ++i) {
+                ans += a[(start_first + i) % n];
+            }
+            // last block
+            ll start_last = block_r % n;
+            ll len_last = pos_r + 1;
+            for (ll i = 0; i < len_last; ++i) {
+                ans += a[(start_last + i) % n];
+            }
+            // middle full blocks
+            if (block_l + 1 <= block_r - 1) {
+                ll full_blocks = block_r - block_l - 1;
+                ans += full_blocks * total;
+            }
+            cout << ans << '\n';
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}
+```

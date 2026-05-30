@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAXA = 100000;
+
+vector<vector<int>> divs(MAXA + 1);
+
+void precompute() {
+    for (int i = 1; i <= MAXA; ++i) {
+        for (int j = i; j <= MAXA; j += i) {
+            divs[j].push_back(i);
+        }
+    }
+}
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    sort(a.begin(), a.end());
+
+    vector<int> freq(m + 1, 0);
+    int cnt = 0;
+    int ans = INT_MAX;
+
+    auto add = [&](int x) {
+        for (int d : divs[x]) {
+            if (d > m) break;
+            if (++freq[d] == 1) ++cnt;
+        }
+    };
+
+    auto remove = [&](int x) {
+        for (int d : divs[x]) {
+            if (d > m) break;
+            if (--freq[d] == 0) --cnt;
+        }
+    };
+
+    int l = 0, r = -1;
+    while (l < n) {
+        while (r + 1 < n && cnt < m) {
+            add(a[++r]);
+        }
+        if (cnt == m) {
+            ans = min(ans, a[r] - a[l]);
+        }
+        remove(a[l]);
+        ++l;
+    }
+
+    if (ans == INT_MAX) ans = -1;
+    cout << ans << "\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    precompute();
+
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

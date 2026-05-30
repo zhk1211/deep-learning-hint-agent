@@ -1,0 +1,60 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<vector<int>> g(n);
+        vector<int> marked(k);
+        for (int i = 0; i < k; ++i) {
+            cin >> marked[i];
+            --marked[i];
+        }
+        for (int i = 0; i < n - 1; ++i) {
+            int u, v;
+            cin >> u >> v;
+            --u; --v;
+            g[u].push_back(v);
+            g[v].push_back(u);
+        }
+
+        if (k == 1) {
+            cout << 0 << '\n';
+            continue;
+        }
+
+        vector<int> d1(n);
+        function<void(int, int)> dfs = [&](int v, int p) {
+            for (int u : g[v]) {
+                if (u != p) {
+                    d1[u] = d1[v] + 1;
+                    dfs(u, v);
+                }
+            }
+        };
+
+        dfs(marked[0], -1);
+        int v2 = marked[0];
+        for (int x : marked) {
+            if (d1[x] > d1[v2]) v2 = x;
+        }
+
+        fill(d1.begin(), d1.end(), 0);
+        dfs(v2, -1);
+        int v3 = marked[0];
+        for (int x : marked) {
+            if (d1[x] > d1[v3]) v3 = x;
+        }
+
+        cout << (d1[v3] + 1) / 2 << '\n';
+    }
+    return 0;
+}
+```

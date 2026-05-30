@@ -1,0 +1,37 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        
+        if (n % 2 == 1) {
+            cout << "Bob\n";
+        } else {
+            if ((n & (n - 1)) == 0) {
+                int cnt = 0;
+                int temp = n;
+                while (temp > 1) {
+                    temp /= 2;
+                    cnt++;
+                }
+                if (cnt % 2 == 0) {
+                    cout << "Alice\n";
+                } else {
+                    cout << "Bob\n";
+                }
+            } else {
+                cout << "Alice\n";
+            }
+        }
+    }
+    
+    return 0;
+}

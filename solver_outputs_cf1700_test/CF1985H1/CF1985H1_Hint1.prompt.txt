@@ -1,0 +1,90 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Easy and hard versions are actually different problems, so read statements of both problems completely and carefully. The only difference between the two versions is the operation.
+
+Alex has a grid with $ n $ rows and $ m $ columns consisting of '.' and '\#' characters. A set of '\#' cells forms a connected component if from any cell in this set, it is possible to reach any other cell in this set by only moving to another cell in the set that shares a common side. The size of a connected component is the number of cells in the set.
+
+In one operation, Alex selects any row $ r $ ( $ 1 \le r \le n $ ) or any column $ c $ ( $ 1 \le c \le m $ ), then sets every cell in row $ r $ or column $ c $ to be '\#'. Help Alex find the maximum possible size of the largest connected component of '\#' cells that he can achieve after performing the operation at most once.
+
+Input Format
+The first line of the input contains a single integer $ t $ ( $ 1 \leq t \leq 10^4 $ ) — the number of test cases.
+
+The first line of each test case contains two integers $ n $ and $ m $ ( $ 1 \le n \cdot m \le 10^6 $ ) — the number of rows and columns of the grid.
+
+The next $ n $ lines each contain $ m $ characters. Each character is either '.' or '\#'.
+
+It is guaranteed that the sum of $ n \cdot m $ over all test cases does not exceed $ 10^6 $ .
+
+Output Format
+For each test case, output a single integer — the maximum possible size of a connected component of '\#' cells that Alex can achieve.
+
+Examples
+Sample 1
+Input
+6
+1 1
+.
+4 2
+..
+#.
+#.
+.#
+3 5
+.#.#.
+..#..
+.#.#.
+5 5
+#...#
+....#
+#...#
+.....
+...##
+6 6
+.#..#.
+#..#..
+.#...#
+#.#.#.
+.#.##.
+###..#
+6 8
+..#....#
+.####.#.
+###.#..#
+.##.#.##
+.#.##.##
+#..##.#.
+Output
+1
+6
+9
+11
+15
+30
+
+Note
+In the second test case, it is optimal for Alex to set all cells in column $ 2 $ to be '\#'. Doing so will lead to the largest connected component of '\#' having a size of $ 6 $ .
+
+In the third test case, it is optimal for Alex to set all cells in row $ 2 $ to be '\#'. Doing so will lead to the largest connected component of '\#' having a size of $ 9 $ .
+
+In the fourth test case, it is optimal for Alex to set all cells in row $ 4 $ to be '\#'. Doing so will lead to the largest connected component of '\#' having a size of $ 11 $ .
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+If we can only select and fill rows, how can we solve the problem?
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

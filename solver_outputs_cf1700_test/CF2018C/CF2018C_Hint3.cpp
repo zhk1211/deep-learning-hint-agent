@@ -1,0 +1,93 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<int> depth(n + 1), parent(n + 1);
+    vector<int> order;
+    function<void(int, int)> dfs = [&](int u, int p) {
+        parent[u] = p;
+        order.push_back(u);
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            depth[v] = depth[u] + 1;
+            dfs(v, u);
+        }
+    };
+    dfs(1, 0);
+    
+    vector<int> max_depth(n + 1, 0);
+    vector<int> deg(n + 1, 0);
+    for (int i = 1; i <= n; ++i) deg[i] = adj[i].size();
+    
+    // Process in reverse order to compute max depth in subtree
+    for (int i = n - 1; i >= 0; --i) {
+        int u = order[i];
+        if (deg[u] == 1 && u != 1) {
+            max_depth[u] = depth[u];
+        }
+        if (parent[u]) {
+            max_depth[parent[u]] = max(max_depth[parent[u]], max_depth[u]);
+        }
+    }
+    
+    // Find the target depth: the minimum max_depth among children of root
+    int target_depth = INT_MAX;
+    for (int v : adj[1]) {
+        target_depth = min(target_depth, max_depth[v]);
+    }
+    
+    // Count nodes to remove
+    int remove_count = 0;
+    for (int i = 1; i <= n; ++i) {
+        if (i == 1) continue;
+        if (depth[i] > target_depth) {
+            remove_count++;
+        } else if (depth[i] == target_depth) {
+            // Keep only if it's a leaf in the final tree
+            // It should have no child with max_depth >= target_depth
+            bool has_child_kept = false;
+            for (int v : adj[i]) {
+                if (v == parent[i]) continue;
+                if (max_depth[v] >= target_depth) {
+                    has_child_kept = true;
+                    break;
+                }
+            }
+            if (has_child_kept) remove_count++;
+        } else {
+            // depth[i] < target_depth
+            // Keep only if it has a child that is kept
+            bool has_child_kept = false;
+            for (int v : adj[i]) {
+                if (v == parent[i]) continue;
+                if (max_depth[v] >= target_depth) {
+                    has_child_kept = true;
+                    break;
+                }
+            }
+            if (!has_child_kept) remove_count++;
+        }
+    }
+    cout << remove_count << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // coordinate compression
+        vector<int> sorted_a = a;
+        sort(sorted_a.begin(), sorted_a.end());
+        sorted_a.erase(unique(sorted_a.begin(), sorted_a.end()), sorted_a.end());
+        int m = (int)sorted_a.size();
+
+        // Fenwick tree
+        vector<int> bit(m + 2, 0);
+        auto add = [&](int idx, int val) {
+            while (idx <= m) {
+                bit[idx] += val;
+                idx += idx & -idx;
+            }
+        };
+        auto sum = [&](int idx) {
+            int s = 0;
+            while (idx > 0) {
+                s += bit[idx];
+                idx -= idx & -idx;
+            }
+            return s;
+        };
+
+        long long total_inv = 0;
+        int processed = 0;
+
+        for (int x : a) {
+            int r = (int)(lower_bound(sorted_a.begin(), sorted_a.end(), x) - sorted_a.begin()) + 1;
+            int less = sum(r - 1);
+            int less_or_equal = sum(r);
+            int greater = processed - less_or_equal;
+            total_inv += min(less, greater);
+            add(r, 1);
+            ++processed;
+        }
+
+        cout << total_inv << '\n';
+    }
+    return 0;
+}

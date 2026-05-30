@@ -1,0 +1,553 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Let $ u $ and $ v $ be two distinct vertices in a directed graph. Let's call the ordered pair $ (u, v) $ good if there exists a path from vertex $ u $ to vertex $ v $ along the edges of the graph.
+
+You are given an undirected tree with $ n $ vertices and $ n - 1 $ edges. Determine whether it is possible to assign a direction to each edge of this tree so that the number of good pairs in it is exactly $ n $ . If it is possible, print any way to direct the edges resulting in exactly $ n $ good pairs.
+
+![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2112D/5e96780aa4a833603401ce38c95583d3dff310ba.png) One possible directed version of the tree for the first test case.
+
+Input Format
+The first line contains one integer $ t $ ( $ 1 \le t \le 10^4 $ ) — the number of test cases.
+
+The first line of each test case contains one integer $ n $ ( $ 2 \le n \le 2 \cdot 10^5 $ ) — the number of vertices in the tree.
+
+The next $ n - 1 $ lines describe the edges. The $ i $ -th line contains two integers $ u_i $ and $ v_i $ ( $ 1 \le u_i, v_i \le n $ ; $ u_i \neq v_i $ ) — the vertices connected by the $ i $ -th edge.
+
+It is guaranteed that the edges in each test case form an undirected tree and that the sum of $ n $ over all test cases does not exceed $ 2 \cdot 10^5 $ .
+
+Output Format
+For each test case, print "NO" (case-insensitive) if it is impossible to direct all edges of the tree and obtain exactly $ n $ good pairs of vertices.
+
+Otherwise, print "YES" (case-insensitive) and then print $ n - 1 $ pairs of integers $ u_i $ and $ v_i $ separated by spaces — the edges directed from $ u_i $ to $ v_i $ .
+
+The edges can be printed in any order. If there are multiple answers, output any.
+
+Examples
+Sample 1
+Input
+4
+5
+1 2
+2 4
+1 3
+3 5
+5
+1 2
+1 3
+1 4
+4 5
+2
+2 1
+4
+3 1
+1 2
+2 4
+Output
+YES
+1 2
+3 1
+3 5
+4 2
+YES
+2 1
+3 1
+4 1
+5 4
+NO
+YES
+1 3
+2 1
+2 4
+
+Note
+The tree from the first test case and its possible directed version are shown in the legend above. In this version, there are exactly $ 5 $ good pairs of vertices: $ (3, 5) $ , $ (3, 1) $ , $ (3, 2) $ , $ (1, 2) $ , and $ (4, 2) $ .
+
+One possible directed version of the tree from the second test case is shown below:
+
+![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2112D/a9d7677ec7ba1046004aa29fc6e4a4dca863d6eb.png)In the presented answer, there are exactly $ 5 $ good pairs of vertices: $ (2, 1) $ , $ (3, 1) $ , $ (4, 1) $ , $ (5, 4) $ , and $ (5, 1) $ .
+
+In the third test case, there are only two directed pairs of vertices, but for any direction of the edge, only one pair will be good.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+2112D - Reachability and Tree
+First, note that for each edge $$$\{u, v\}$$$, when choosing its direction, exactly one pair will be good: either $$$(u, v)$$$ or $$$(v, u)$$$. This means there will always be at least $$$n - 1$$$ good pairs. Therefore, we need one more good pair, or in other words, we need one more path in the tree.
+On the other hand, the only good paths of length $$$1$$$ can only be the edges of the original tree. Thus, an additional good path $$$(u, v)$$$ will have a length of at least $$$2$$$. However, if this path is longer than two, then its "sub-paths" will also be good, and the total number of paths will exceed $$$n$$$.
+Thus, in our graph, there should only be paths consisting of a single edge and exactly one path of length $$$2$$$ of the form $$$u \to r \to v$$$. Next, note that if there is at least one more edge $$$\{r, t\}$$$ coming out of $$$r$$$, then regardless of how we choose its direction, we will have another path: either $$$u \to r \to t$$$ or $$$t \to r \to v$$$. This means that the degree of vertex $$$r$$$ must be exactly $$$2$$$.
+Therefore, if there is no vertex of degree $$$2$$$ in the given tree, then there is definitely no solution.
+It turns out that this condition is sufficient. We can construct the answer as follows:
+Let the vertex of degree two be $$$r$$$. Direct the edges $$$u \to r$$$ and $$$r \to v$$$.
+From vertex $$$u$$$, there is one outgoing arc: let's direct all other edges $$$\{u, t_i\}$$$ from $$$u$$$, i.e., create arcs $$$u \to t_i$$$.
+Into vertex $$$v$$$, there is one incoming arc: let's direct all other edges $$$\{v, s_i\}$$$ into $$$v$$$, i.e., create arcs $$$s_i \to v$$$.
+We will process the neighbors $$$s_i$$$ and $$$t_i$$$ recursively using rules $$$2$$$ and $$$3$$$.
+As a result of this procedure, we can see that we have not created any other paths of length two, since we cannot extend any path $$$(x, y)$$$ of length one, as edges only exit from $$$x$$$ and only enter into $$$y$$$.
+
+Solution (adedalic)
+#include
+<
+bits
+/
+stdc
+++.
+h
+>
+using
+namespace
+std
+;
+#define
+fore
+(
+i
+,
+l
+,
+r
+)
+for
+(
+int
+i
+=
+int
+(
+l
+);
+i
+<
+int
+(
+r
+);
+i
+++)
+#define
+sz
+(
+a
+)
+int
+((
+a
+).
+size
+())
+const
+int
+N
+=
+int
+(
+2e5
+)
++
+5
+;
+int
+n
+;
+vector
+<int>
+g
+[
+N
+];
+inline
+bool
+read
+()
+{
+if
+(!(
+cin
+>>
+n
+))
+return
+false
+;
+fore
+(
+i
+,
+0
+,
+n
+)
+g
+[
+i
+].
+clear
+();
+fore
+(
+i
+,
+0
+,
+n
+-
+1
+)
+{
+int
+u
+,
+v
+;
+cin
+>>
+u
+>>
+v
+;
+u
+--,
+v
+--;
+g
+[
+u
+].
+push_back
+(
+v
+);
+g
+[
+v
+].
+push_back
+(
+u
+);
+}
+return
+true
+;
+}
+vector
+<int>
+used
+;
+vector
+<
+pair
+<
+int
+,
+int
+>>
+ans
+;
+void
+dfs
+(
+int
+v
+,
+bool
+in
+)
+{
+used
+[
+v
+]
+=
+1
+;
+for
+(
+int
+to
+:
+g
+[
+v
+])
+{
+if
+(
+used
+[
+to
+])
+continue
+;
+if
+(
+in
+)
+ans
+.
+emplace_back
+(
+to
+,
+v
+);
+else
+ans
+.
+emplace_back
+(
+v
+,
+to
+);
+dfs
+(
+to
+,
+!
+in
+);
+}
+}
+inline
+void
+solve
+()
+{
+int
+r
+=
+0
+;
+while
+(
+r
+<
+n
+&&
+sz
+(
+g
+[
+r
+])
+!=
+2
+)
+r
+++;
+if
+(
+r
+>=
+n
+)
+{
+cout
+<<
+"NO\n"
+;
+return
+;
+}
+used
+.
+assign
+(
+n
+,
+0
+);
+ans
+.
+clear
+();
+ans
+.
+emplace_back
+(
+r
+,
+g
+[
+r
+][
+0
+]);
+ans
+.
+emplace_back
+(
+g
+[
+r
+][
+1
+],
+r
+);
+used
+[
+r
+]
+=
+1
+;
+dfs
+(
+g
+[
+r
+][
+0
+],
+true
+);
+dfs
+(
+g
+[
+r
+][
+1
+],
+false
+);
+cout
+<<
+"YES\n"
+;
+sort
+(
+ans
+.
+begin
+(),
+ans
+.
+end
+());
+for
+(
+auto
+[
+u
+,
+v
+]
+:
+ans
+)
+cout
+<<
+u
++
+1
+<<
+" "
+<<
+v
++
+1
+<<
+'\n'
+;
+}
+int
+main
+()
+{
+#ifdef
+_DEBUG
+	freopen
+(
+"input.txt"
+,
+"r"
+,
+stdin
+);
+int
+tt
+=
+clock
+();
+#endif
+ios_base
+::
+sync_with_stdio
+(
+false
+);
+cin
+.
+tie
+(
+0
+),
+cout
+.
+tie
+(
+0
+);
+cout
+<<
+fixed
+<<
+setprecision
+(
+15
+);
+int
+t
+;
+cin
+>>
+t
+;
+while
+(
+t
+--)
+{
+read
+();
+solve
+();
+#ifdef
+_DEBUG
+		cerr
+<<
+"TIME = "
+<<
+clock
+()
+-
+tt
+<<
+endl
+;
+tt
+=
+clock
+();
+#endif
+}
+return
+0
+;
+}
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

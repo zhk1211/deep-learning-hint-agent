@@ -1,0 +1,93 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+
+        // Check necessary condition: c == a + 1
+        if (c != a + 1) {
+            cout << -1 << "\n";
+            continue;
+        }
+
+        // If no internal nodes, height is 0
+        if (a == 0 && b == 0) {
+            cout << 0 << "\n";
+            continue;
+        }
+
+        // Compute height
+        // We build the tree level by level.
+        // Start with root (level 0). It can be either degree 2 or degree 1.
+        // We'll simulate the process using a queue of nodes to place.
+        // But we can compute directly:
+        // The height is determined by how many levels we need to place all a+b nodes.
+        // We place nodes with 2 children first (they increase capacity), then nodes with 1 child.
+        // Actually, we can think of it as: we have a number of "slots" for children at each level.
+        // Level 0: 1 slot (the root).
+        // We want to minimize height, so we fill slots with 2-child nodes as much as possible to increase capacity.
+        // If we run out of 2-child nodes, we use 1-child nodes, which don't increase capacity.
+        // The process stops when we have placed all a+b internal nodes and the remaining slots are exactly c leaves.
+
+        int height = 0;
+        int slots = 1; // number of nodes we can place at current level
+        int remaining_a = a;
+        int remaining_b = b;
+
+        while (remaining_a > 0 || remaining_b > 0) {
+            // We will fill the current level's slots with internal nodes.
+            // First use 2-child nodes as much as possible.
+            int use_a = min(slots, remaining_a);
+            remaining_a -= use_a;
+            slots -= use_a;
+            // The used 2-child nodes will create 2*use_a new slots for next level.
+            int new_slots = 2 * use_a;
+
+            // If slots remain, fill with 1-child nodes.
+            int use_b = min(slots, remaining_b);
+            remaining_b -= use_b;
+            slots -= use_b;
+            // 1-child nodes create 1*use_b new slots.
+            new_slots += use_b;
+
+            // After filling, if there are still slots left, they must be leaves.
+            // But we don't place leaves yet; they will be placed at the end.
+            // However, if we have no more internal nodes to place, we break.
+            if (remaining_a == 0 && remaining_b == 0) {
+                // All internal nodes placed. The remaining slots at this level will be leaves.
+                // But we need to ensure that the total leaves match c.
+                // Actually, we already checked c == a+1, so it will match.
+                // The height is the current level (since we placed internal nodes at this level,
+                // and leaves will be at the next level? Wait, careful.)
+                // Let's think: root is at level 0. Its children are at level 1.
+                // If we place a node at level h, its children are at level h+1.
+                // The height is the maximum distance from root to a leaf.
+                // When we finish placing internal nodes, the leaves will be at the next level.
+                // So height = current_level + 1? Let's trace.
+                // We start with slots = 1 at level 0 (the root itself is a slot to be filled? Actually, the root is already a vertex. We need to decide its type.)
+                // Better: simulate levels explicitly.
+                break;
+            }
+
+            // Move to next level
+            slots = new_slots;
+            height++;
+        }
+
+        // After loop, we have placed all internal nodes. The remaining slots will be filled by leaves.
+        // The leaves will be at level height+1 (if we placed internal nodes at level height).
+        // But if we placed the last internal nodes at level height, their children (leaves) are at level height+1.
+        // So the height of the tree is height+1.
+        // Except when a=b=0, handled earlier.
+        cout << height + 1 << "\n";
+    }
+    return 0;
+}

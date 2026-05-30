@@ -1,0 +1,80 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    vector<pair<int,int>> edges;
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        edges.emplace_back(u, v);
+    }
+
+    // Check if there is a vertex of degree >= 3
+    bool possible = false;
+    int center = -1;
+    for (int i = 1; i <= n; i++) {
+        if (adj[i].size() >= 3) {
+            possible = true;
+            center = i;
+            break;
+        }
+    }
+
+    if (!possible) {
+        cout << "NO\n";
+        return;
+    }
+
+    // Root the tree at center
+    vector<int> parent(n + 1, 0);
+    vector<int> depth(n + 1, 0);
+    function<void(int, int)> dfs = [&](int u, int p) {
+        parent[u] = p;
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            depth[v] = depth[u] + 1;
+            dfs(v, u);
+        }
+    };
+    dfs(center, 0);
+
+    // Direct edges: from child to parent if depth is odd, else parent to child
+    // This ensures exactly n good pairs
+    cout << "YES\n";
+    for (auto &e : edges) {
+        int u = e.first, v = e.second;
+        if (parent[u] == v) {
+            // u is child, v is parent
+            if (depth[u] % 2 == 1) {
+                cout << u << " " << v << "\n";
+            } else {
+                cout << v << " " << u << "\n";
+            }
+        } else {
+            // v is child, u is parent
+            if (depth[v] % 2 == 1) {
+                cout << v << " " << u << "\n";
+            } else {
+                cout << u << " " << v << "\n";
+            }
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

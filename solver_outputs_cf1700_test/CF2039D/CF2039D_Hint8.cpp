@@ -1,0 +1,148 @@
+// Hint8
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> S(m);
+        for (int i = 0; i < m; ++i) {
+            cin >> S[i];
+        }
+
+        // We need to assign values to indices 1..n
+        // Condition: for any i|j, a_i does not divide a_j
+        // Lexicographically largest: maximize a_1, then a_2, etc.
+
+        // For each index i, we need to pick a value from S such that
+        // for all divisors d of i, a_d does not divide a_i.
+        // To maximize lexicographically, we try to assign the largest possible value.
+
+        vector<int> a(n + 1, -1);
+        vector<bool> used(m, false); // track which S elements are used (though we can reuse? No, condition is about divisibility, not distinctness. But wait: can we reuse values? If a_i = a_j and i|j, then a_i divides a_j, violation. So if i|j, a_i != a_j. But if i doesn't divide j, they can be equal? Yes, as long as no divisibility chain. But we can reuse values as long as no divisor relation. However, to maximize lexicographically, we might want to reuse large values. But careful: if we assign a large value to a_i, it might restrict choices for multiples of i. Since we process i=1..n, we want to assign the largest possible value to a_i that doesn't violate conditions with its divisors. Since we process in increasing i, all divisors of i are already assigned. So we just need to pick the largest element in S that is not divisible by any a_d for d|i, d<i. Wait: condition is a_d does not divide a_i. So a_i must not be a multiple of a_d. So we need to avoid values that are multiples of any a_d. Also, we need to consider that a_i itself might be a divisor of some future a_j? That will be handled when we process j. So for current i, we just need to pick the largest available value from S that is not a multiple of any a_d (d|i, d<i). But we also need to ensure that we don't run out of values for future indices. However, since we want lexicographically largest, we greedily pick the largest possible at each step. If at some point no value can be assigned, then no solution exists.
+
+        // But wait: is it always optimal to pick the largest possible? Since we process in order, picking a larger value now might restrict future choices more (because it might divide more numbers). But lexicographical order prioritizes earlier indices. So we must maximize a_1 first, then a_2, etc. So greedy is correct: for each i from 1 to n, pick the largest element in S that is not a multiple of any a_d (d|i, d<i). If multiple choices, pick the largest. If none, return -1.
+
+        // However, we need to check if this greedy can fail to find a solution when one exists. Since we only care about divisibility from divisors, and we process in increasing order, the set of forbidden values for a_i depends only on divisors. The choices for later indices depend on a_i. To maximize lexicographically, we must make a_i as large as possible. If there is any valid assignment, there is one with a_i being the largest possible? Not necessarily: maybe picking a slightly smaller value now allows a larger value later, but lexicographically, earlier index dominates. So we must pick the largest possible for a_1, then for a_2 given a_1, etc. So greedy is correct.
+
+        // But we need to efficiently find the largest element in S not divisible by any a_d. Since n up to 1e5, sum n 3e5, we can precompute divisors for each i? Or just iterate over divisors of i. Number of divisors is small (max ~128 for n<=1e5). For each i, we can check all divisors d<i. We need to know which values in S are forbidden: those that are multiples of any a_d. Since S is sorted, we can iterate S from largest to smallest and pick the first that is not a multiple of any a_d. But checking each value against all divisors might be O(m * number of divisors) per i, which could be too slow if m is large. However, sum of n is 3e5, and m <= n. In worst case, m = n = 1e5 per test case, but sum n is 3e5, so total m across test cases <= 3e5. For each i, we might scan many elements of S. If we do this naively, total time could be O(n * m) worst-case, which is 1e10, too slow.
+
+        // We need a faster way. Notice that the forbidden values are multiples of some set of numbers (the a_d's). Since a_d are from S, and S elements are <= n. We can precompute for each value in S whether it is forbidden? But forbidden set changes as we assign a_i. Actually, for a given i, the forbidden values are those x in S such that there exists d|i, d<i, with a_d | x. Since a_d are already chosen, we can maintain a boolean array or something? But we need to query the largest available element in S that is not forbidden. Since S is sorted, we can iterate from the end. But we need to quickly check if a value is forbidden. Forbidden condition: x % a_d == 0 for some divisor d. Since number of divisors is small, we can just check all divisors for each candidate x. But if we test many x's, it could be slow. However, note that if we pick the largest possible, we might only test a few x's before finding one that works? Not necessarily; in worst case, many large values might be forbidden. But total number of checks across all i might be bounded? Let's think: each time we test an element x against divisors of i, we do O(divisors) work. If we test many elements, it could be O(m * divisors) per i. But maybe we can do better.
+
+        // Alternative perspective: The condition a_d does not divide a_i means that for each prime factor? Actually, we can think of assigning values to indices such that on each "divisibility chain", values are strictly decreasing in terms of divisibility? Not exactly.
+
+        // Let's reconsider the problem from hints. Hint 7,8: "Consider a multiple chain i1 < i2 < ... < ik such that i1 divides i2, i2 divides i3, ..., i_{k-1} divides ik. Then we know that we have to put distinct values for all the indices in the multiple chain otherwise one number will be divisible by another which will violate the condition." Wait, distinct values? Not just distinct, but no value divides another. So they must be incomparable under divisibility. In particular, if we have a chain, the values must be such that no one divides the next. But they could be e.g., 6, 4, 3? 6 doesn't divide 4, 4 doesn't divide 3. So they don't have to be distinct, but they cannot be multiples. Actually, if we have a chain i|j|k, we need a_i not divide a_j, and a_j not divide a_k. Also a_i not divide a_k? The condition only requires for pairs (i,j) and (j,k) and (i,k). For (i,k), we need a_{gcd(i,k)} = a_i != gcd(a_i, a_k). Since a_i divides a_i, if a_i divides a_k, then gcd(a_i, a_k)=a_i, violation. So indeed, a_i cannot divide a_k either. So in a chain, no value can divide any later value. So they must be incomparable under divisibility.
+
+        // This suggests we can assign values greedily: for each i, we need to pick a value that is not a multiple of any a_d for d|i. Since we want lexicographically largest, we want the largest possible value. But we also need to ensure that we don't "use up" a value that is needed later? Actually, values can be reused as long as they are not in a divisor relationship. But if we reuse a value, say a_i = x, and later for j multiple of i, we cannot use any multiple of x. So using a large x might restrict many multiples. But lexicographical order forces us to maximize a_i regardless of later indices. So greedy is correct.
+
+        // Now, how to implement efficiently? We can precompute divisors for all numbers up to n. For each i from 1 to n, we have a set of forbidden values: those that are multiples of any a_d (d|i, d<i). Since a_d are already chosen, we can maintain for each value in S a count of "forbidden reasons"? Or we can maintain a boolean array forbidden[1..n] but we need to update it when we assign a_i. When we assign a_i = x, then for all multiples of i (i, 2i, 3i, ...), the value x becomes a divisor that forbids multiples of x. But we process i in increasing order, so when we are at i, we have already processed all divisors. So we can maintain for each index j (future) a list of forbidden values? That seems heavy.
+
+        // Another approach: Since S is sorted, we can iterate from largest to smallest and check if it's valid. To check if a value x is valid for index i, we need to ensure that for all d|i, d<i, a_d does not divide x. Since number of divisors is small, we can just check all divisors. The number of times we check a value x for a given i is at most the number of divisors. If we test many x's, it could be slow. But note that if we test x and it fails because some a_d divides x, then x is a multiple of a_d. Since a_d is already assigned, and a_d <= n, the number of multiples of a_d in S is at most n/a_d. But we might test many large x's that are multiples of small a_d. In worst case, a_1 = 1, then all values are forbidden for all i>1? But 1 might not be in S. If S contains 1, then a_1 could be 1? But if a_1=1, then for any i>1, 1 divides everything, so no value can be assigned because 1 divides all. So if 1 is in S, we must not assign 1 to a_1? Actually, we want lexicographically largest, so a_1 would be the largest element in S. If 1 is the only element, then a_1=1, but then for i=2, a_1=1 divides any a_2, so no solution. So if 1 is in S and m=1, no solution unless n=1. So we need to be careful.
+
+        // Let's think about the greedy choice more systematically. For i=1, we just pick the largest element in S. For i>1, we need to pick the largest element in S that is not a multiple of any a_d for d|i, d<i. Since we process in order, we can maintain for each value in S a "blocked" status? Actually, we can maintain an array `bad` for each value in S? But we need to know for the current i which values are forbidden. The forbidden set depends on i because only divisors of i matter. So we can't just maintain a global forbidden set.
+
+        // However, we can precompute for each value x in S, the set of indices i where x would be forbidden if some divisor is assigned? That seems complicated.
+
+        // Let's consider the constraints: sum n <= 3e5. The number of divisors of i is at most 128 (for n=1e5, max divisors is 128 for 83160). So for each i, we can afford to iterate over all divisors. But we also need to find the largest valid element in S. If we just scan S from largest to smallest, in worst case we might scan many elements. But total scanned elements across all i might be large? Let's analyze: For each i, we scan elements until we find one that is not a multiple of any a_d. The number of scanned elements per i is the number of elements we reject. Each rejection happens because some a_d divides the candidate. Since a_d are fixed, and there are at most 128 divisors, each candidate is rejected due to at least one divisor. Could we have many rejections? Suppose S contains all numbers from 1 to n. For i=2, divisors: 1. a_1 is the largest element, say n. Then we need a_2 not a multiple of a_1. If a_1 = n, then multiples of n in S: only n itself (if n<=n). So we reject n, then pick n-1. So only 1 rejection. For i=3, divisors: 1. a_1 = n, so reject n, pick n-1 (if not used? but we can reuse values? Wait, can a_2 and a_3 both be n-1? Yes, if 2 does not divide 3, they are independent. But condition: for pair (2,3), gcd(2,3)=1, so a_1 != gcd(a_2,a_3). If a_2 = n-1, a_3 = n-1, then gcd(a_2,a_3)=n-1, and a_1 = n. So n != n-1, okay. So we can reuse. So we might pick the same large value for many indices. So rejections are few. In general, the largest few elements might be forbidden by a_1, but once we find one that is not a multiple of a_1, we can use it for many indices. So the number of rejections per i is small. But is there a worst-case where we reject many? Suppose a_1 = 2 (a small number). Then multiples of 2 are many. For i=2, divisors: 1. a_1=2. We need a_2 not a multiple of 2. So we can pick any odd number. The largest odd number might be near n. We scan from largest: if n is even, reject; n-1 odd, accept. So 1 rejection. For i=3, divisors: 1. a_1=2. Again, reject evens, accept largest odd. So few rejections. What if a_1 = 1? Then all numbers are multiples of 1, so every candidate is rejected. Then we would scan all m elements and fail. But that's a quick failure. So in cases where solution exists, rejections are few. In cases where no solution, we might scan many elements but then we output -1. The total scanned elements across all test cases could be up to sum of m per test case, which is <= 3e5. Actually, if we fail at some i, we might scan all remaining elements in S. But we only do that once per test case. So total scanned elements across all i in a test case is at most m + (number of successful assignments * small constant). Since we process i=1..n, and for each i we might scan a few elements, total operations is O(n * divisors + m * something). This should be well within limits.
+
+        // Let's implement: For each i, we have a list of divisors d|i, d<i. We can precompute divisors for all numbers up to n using a sieve-like approach: vector<vector<int>> divs(n+1). For each d from 1 to n, for multiple i = 2*d, 3*d, ... add d to divs[i]. This takes O(n log n) total, which is fine for n=1e5.
+
+        // Then for each i from 1 to n:
+        //   if i==1: just pick largest element in S.
+        //   else:
+        //      iterate through S from largest to smallest (we can maintain a pointer or just loop). But S is sorted ascending. We can iterate from m-1 down to 0.
+        //      For each candidate x = S[j]:
+        //         check if for any d in divs[i], a[d] divides x. Since a[d] is already assigned (d < i).
+        //         If none divide, then a[i] = x; break.
+        //      If no candidate found, output -1.
+        // After assigning a[i], we don't need to mark anything special because future checks will use a[d] directly.
+
+        // But wait: What about the condition for pairs (i,j) where i does not divide j? The hints say it's sufficient to check only divisibility pairs. So our condition (for all d|i, a_d does not divide a_i) is necessary and sufficient? Let's verify: The condition we enforce is: for every i, and every divisor d of i (d < i), a_d does not divide a_i. Is this sufficient to guarantee the original condition for all pairs? According to hints 4-5, if there is a violation for some (i,j), then there is a violation for (g, i) where g = gcd(i,j). Since g divides i, our condition would catch it. So yes, enforcing for all d|i (d<i) that a_d does not divide a_i is sufficient. Also necessary because if d|i, then gcd(d,i)=d, so condition requires a_d != gcd(a_d, a_i). Since a_d divides a_d, if a_d divides a_i, then gcd(a_d, a_i)=a_d, violation. So a_d must not divide a_i. So our condition is exactly equivalent.
+
+        // Therefore, the greedy algorithm is correct.
+
+        // Let's test with sample:
+        // Test 1: n=6, m=3, S={3,4,6}
+        // i=1: pick largest = 6. a[1]=6.
+        // i=2: divisors of 2: 1. Check a[1]=6 divides? 6 divides 6? 6%6=0, so 6 is forbidden. Next largest 4: 6 divides 4? No. So a[2]=4.
+        // i=3: divisors: 1. 6 divides 6? yes, 6 forbidden. 6 divides 4? no, so 4 is allowed? But wait, we need to check all divisors. Only 1. So a[3]=4? But sample output: 6 4 4 3 4 3. So a[3]=4. Good.
+        // i=4: divisors: 1,2. a[1]=6, a[2]=4. Check 6: 6%6=0 (forbidden by 6), 6%4!=0. So 6 forbidden. 4: 4%6!=0, 4%4=0 (forbidden by a[2]=4). So 4 forbidden. 3: 3%6!=0, 3%4!=0. So a[4]=3.
+        // i=5: divisors: 1. 6 forbidden, 4 allowed? 4%6!=0. So a[5]=4.
+        // i=6: divisors: 1,2,3. a[1]=6, a[2]=4, a[3]=4. Check 6: forbidden by 6. 4: forbidden by 4. 3: 3%6!=0, 3%4!=0, 3%4!=0. So a[6]=3.
+        // Output: 6 4 4 3 4 3. Matches sample.
+
+        // Test 2: n=1, m=1, S={1}. i=1: pick 1. Output 1. Matches.
+        // Test 3: n=2, m=1, S={2}. i=1: pick 2. i=2: divisors: 1. a[1]=2 divides 2? yes. No other candidates. Output -1. Matches.
+
+        // So algorithm works on samples.
+
+        // Complexity: Precomputing divisors: O(n log n). For each i, we iterate over candidates. In worst case, we might scan all m candidates for some i, but only when no solution exists. If solution exists, we typically find a candidate quickly. Total candidate checks across all i is at most O(n * (rejections per i)). Rejections per i are bounded by the number of divisors times something? Actually, each candidate is rejected if it's a multiple of some a_d. Since a_d are fixed, the number of multiples of a_d in S is at most n/a_d. But we might test the same candidate multiple times across different i? No, we test candidates for each i independently. However, if we fail at some i, we might test many candidates. But sum of n is 3e5, so even if we test all m candidates for each i, total operations would be sum(n * m) which could be up to 3e5 * 1e5? No, sum n is 3e5, but m <= n. In a single test case, n could be 1e5, m=1e5. If we test all candidates for each i, that's 1e10, too slow. But we only test all candidates when we are about to fail. If we fail at i=2, we test m candidates and then output -1. That's O(m) work. If we fail later, we might have tested many candidates for earlier i's? But for earlier i's we succeeded quickly. So the only expensive case is when we fail at some i and scan all remaining candidates. But we only do that once per test case. So total work per test case is O(n * (divisors + small constant) + m). Since divisors per i is small, this is O(n log n + m). Sum over test cases: O(N log N + M) where N=sum n <= 3e5, M=sum m <= 3e5. This is well within limits.
+
+        // However, we must be careful: for each i, we might iterate over S from largest to smallest. If we do a for loop over j from m-1 down to 0, and for each j we check all divisors of i, that could be O(m * divisors) for that i. If we do this for many i, it's bad. But as argued, we only do full scan when we fail. But what if we have a case where for many i, we need to scan a significant portion of S? For example, suppose a_1 is the smallest element in S, say 2. Then for i=2, we need a value not divisible by 2. The largest such value might be the largest odd number. If S contains all numbers, we might scan from n down to the largest odd, which is about n/2 elements. That's O(n) scan for i=2. Then for i=3, we again might scan O(n) elements? But wait, for i=3, divisors: 1. a_1=2. We again need a value not divisible by 2. We would again scan from n down to the largest odd. But we already know the largest odd is n-1 (if n even). We could just pick it again. But our naive loop would start from n again, check n (even, reject), n-1 (odd, accept). So only 2 checks. Why? Because we start from the largest each time. The largest element is n, we check it, reject, then check n-1, accept. So we don't scan all elements; we stop at the first acceptable. The number of rejections is the number of consecutive largest elements that are multiples of a_1. Since a_1=2, the largest element n might be even, so 1 rejection. If a_1=3, then we reject multiples of 3. The largest element might be a multiple of 3, then the next few might also be multiples? No, multiples of 3 are every third number. So at most 2 rejections before finding a non-multiple. In general, the number of consecutive largest elements that are multiples of a fixed number is at most a_1? Actually, if a_1 is large, say n/2, then multiples of a_1 in S are few. If a_1 is small, the gaps between multiples are small, but we only scan from the top. The top element might be a multiple, the next might not be. So rejections are at most the number of multiples of a_1 that are larger than the largest non-multiple. That's at most a_1? Not exactly. Consider a_1=2, S = all even numbers? Then all elements are multiples of 2, so we would scan all elements and fail. That's a failure case. If S contains both even and odd, the largest odd is at most 1 less than the largest even. So only 1 rejection. So in successful cases, the number of rejections per i is very small (bounded by the maximum gap between non-multiples near the top, which is at most the smallest divisor? Actually, it's bounded by the minimum a_d? Not sure, but empirically it's small). So the total candidate checks is O(n * divisors). This is acceptable.
+
+        // To be safe, we can optimize the candidate selection: we can maintain a pointer to the largest element in S that is not yet known to be forbidden? But forbidden depends on i. However, we can precompute for each value in S its "divisibility" by the a_d's? Not easily.
+
+        // Let's implement the straightforward approach with a small optimization: we can break early if we find a valid candidate. Since S is sorted, we can use a reverse iterator. For each i, we loop over S from largest to smallest, and for each candidate we check all divisors of i. If we find one, assign and break. If we reach the end without finding, output -1.
+
+        // We need to precompute divisors for each i up to n. Since n can be up to 1e5 per test case, but sum n 3e5, we can precompute globally up to 100000? Actually, n can be up to 1e5, but sum n is 3e5, so we can just precompute divisors for each test case up to its n. Or we can precompute once up to 100000 globally. Let's do global precomputation for speed.
+
+        const int MAXN = 100000;
+        static vector<vector<int>> divisors(MAXN + 1);
+        static bool precomputed = false;
+        if (!precomputed) {
+            for (int d = 1; d <= MAXN; ++d) {
+                for (int i = 2 * d; i <= MAXN; i += d) {
+                    divisors[i].push_back(d);
+                }
+            }
+            precomputed = true;
+        }
+
+        // Now process each test case.
+        // We'll store a as vector<int> of size n+1.
+        // For i=1, a[1] = S.back().
+        // For i>1, we iterate.
+
+        vector<int> a(n + 1);
+        a[1] = S.back();
+        bool possible = true;
+        for (int i = 2; i <= n; ++i) {
+            bool found = false;
+            // iterate S from largest to smallest
+            for (int j = m - 1; j >= 0; --j) {
+                int x = S[j];
+                bool ok = true;
+                for (int d : divisors[i]) {
+                    if (d < i && x % a[d] == 0) {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (ok) {
+                    a[i] = x;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                possible = false;
+                break;
+            }
+        }
+
+        if (!possible) {
+            cout << "-1\n";
+        } else {
+            for (int i = 1; i <= n; ++i) {
+                cout << a[i] << " \n"[i == n];
+            }
+        }
+    }
+    return 0;
+}

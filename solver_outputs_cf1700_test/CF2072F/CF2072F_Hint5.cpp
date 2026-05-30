@@ -1,0 +1,31 @@
+// Hint5
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        unsigned int k;
+        cin >> n >> k;
+        vector<unsigned int> ans(n);
+        for (int bit = 0; bit < 31; ++bit) {
+            if ((k >> bit) & 1) {
+                for (int j = 0; j < n; ++j) {
+                    // Check if C(n-1, j) is odd
+                    if ((j & (n - 1 - j)) == 0) {
+                        ans[j] |= (1u << bit);
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < n; ++i) {
+            cout << ans[i] << " \n"[i == n - 1];
+        }
+    }
+    return 0;
+}

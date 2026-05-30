@@ -1,0 +1,54 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        map<int, int> freq;
+        for (int x : a) {
+            if (x % 2 == 1) {
+                freq[x]++;
+            }
+        }
+
+        vector<int> odd_freqs;
+        for (auto& p : freq) {
+            odd_freqs.push_back(p.second);
+        }
+        sort(odd_freqs.rbegin(), odd_freqs.rend());
+
+        long long diff = 0;
+        for (size_t i = 0; i < odd_freqs.size(); ++i) {
+            if (i % 2 == 0) {
+                diff += odd_freqs[i];
+            } else {
+                diff -= odd_freqs[i];
+            }
+        }
+
+        long long total_points = 0;
+        for (int x : a) {
+            total_points += x;
+        }
+
+        long long alice = (total_points + diff) / 2;
+        long long bob = (total_points - diff) / 2;
+
+        cout << alice << " " << bob << "\n";
+    }
+
+    return 0;
+}
+```

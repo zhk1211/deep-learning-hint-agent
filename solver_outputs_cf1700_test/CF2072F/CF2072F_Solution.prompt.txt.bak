@@ -1,0 +1,262 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Monsters are approaching the city, and to protect it, Akito must create a protective field around the city. As everyone knows, protective fields come in various levels. Akito has chosen the field of level $ n $ . To construct the field, a special phrase is required, which is the $ n $ -th row of the Great Magical Triangle, represented as a two-dimensional array. We will call this array $ T $ .
+
+The triangle is defined as follows:
+
+- In the $ i $ -th row, there are $ i $ integers.
+- The single integer in the first row is $ k $ .
+- Let the $ j $ -th element of the $ i $ -th row be denoted as $ T_{i,j} $ . Then $ $$$T_{i,j} = \begin{cases} T_{i-1,j-1} \oplus T_{i-1,j}, &\textrm{if } 1 < j < i \\ T_{i-1,j}, &\textrm{if } j = 1 \\ T_{i-1,j-1}, &\textrm{if } j = i \end{cases} $ $ </li></ul> where $ a \\oplus b $ is the bitwise <a href="https://en.wikipedia.org/wiki/Bitwise_operation#XOR">exclusive "OR"</a>(<span class="tex-font-style-tt">XOR</span>) of the integers $ a $ and $ b $ .<p>Help Akito find the integers in the $ n$$$-th row of the infinite triangle before the monsters reach the city.
+
+Input Format
+The first line contains the integer $ t $ ( $ 1 \le t \le 10^4 $ ) — the number of test cases.
+
+In the only line of each test case, there are two integers $ n $ and $ k $ ( $ 1 \le n \le 10^6,\ 1 \le k < 2^{31} $ ) — the row index that Akito needs and the integer in the first row of the Great Magical Triangle, respectively.
+
+It is guaranteed that the sum of $ n $ across all test cases does not exceed $ 10^6 $ .
+
+Output Format
+For each test case, output $ n $ integers — the elements of the $ n $ -th row of the Great Magical Triangle.
+
+Examples
+Sample 1
+Input
+5
+1 5
+2 10
+3 16
+9 1
+1 52
+Output
+5
+10 10
+16 0 16
+1 0 0 0 0 0 0 0 1
+52
+
+Note
+In the first example, the first row of the Great Magical Triangle is $ [5] $ by definition.
+
+In the second example, $ T_{2,1} = T_{1,1} = 10 $ and $ T_{2,2} = T_{1, 1} = 10 $ .
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+2072F - Goodbye, Banker Life
+Since the value of the $$$i$$$-th bit in $$$a \oplus b$$$ depends only on the $$$i$$$-th bits of the numbers $$$a$$$ and $$$b$$$, we can solve the problem separately for each bit.
+Let $$$a_i$$$ be the $$$i$$$-th bit of the number $$$a$$$. If $$$k_i = 0$$$, then the triangle for the $$$i$$$-th bit will consist only of $$$0$$$s. If $$$k_i = 1$$$, then since $$$\oplus$$$ is the bitwise addition modulo $$$2$$$, we simply obtain Pascal's Triangle, where all values are taken modulo $$$2$$$.
+Now the problem has reduced to finding $$$\binom{n}{r} \mod 2$$$. $$$\binom{n}{r} = \frac{n!}{r! \cdot (n - r)!}$$$, which means the parity of $$$\binom{n}{r}$$$ depends on the power of $$$2$$$ in $$$n!$$$, $$$r!$$$, and $$$(n - r)!$$$. Let $$$c_n$$$ be the power of $$$2$$$ in $$$n!$$$. $$$\binom{n}{r}$$$ will be odd if and only if $$$c_n = c_r + c_{n - r}$$$. It remains to learn how to find the power of $$$2$$$ in $$$n!$$$. We have $$$c_0 = c_1 = 0$$$, and $$$c_n = c_{n - 1} + f(n)$$$, where $$$f(n)$$$ is the maximum $$$m$$$ such that $$$2^m | n$$$.
+Asymptotic complexity: $$$\mathcal{O}(N \log N)$$$ for preprocessing and $$$\mathcal{O}(n)$$$. Here, $$$N$$$ denotes the maximum possible $$$n$$$.
+
+#include
+<
+bits
+/
+stdc
+++.
+h
+>
+using
+namespace
+std
+;
+constexpr
+int64_t
+kMaxN
+=
+1e6
++
+69
+;
+vector
+<int64_t>
+c
+(
+kMaxN
+);
+void
+precalc
+()
+{
+c
+[
+0
+]
+=
+c
+[
+1
+]
+=
+0
+;
+for
+(
+int
+i
+=
+2
+;
+i
+<
+kMaxN
+;
+++
+i
+)
+{
+c
+[
+i
+]
+=
+c
+[
+i
+-
+1
+];
+int
+x
+=
+i
+;
+while
+(
+x
+%
+2
+==
+0
+)
+{
+x
+/=
+2
+,
+c
+[
+i
+]++;
+}
+}
+}
+void
+solve
+()
+{
+int
+n
+,
+k
+;
+cin
+>>
+n
+>>
+k
+;
+--
+n
+;
+for
+(
+int
+i
+=
+0
+;
+i
+<=
+n
+;
+++
+i
+)
+{
+cout
+<<
+k
+*
+(
+c
+[
+n
+]
+==
+c
+[
+i
+]
++
+c
+[
+n
+-
+i
+])
+<<
+" \n"
+[
+i
+==
+n
+];
+}
+}
+int
+main
+()
+{
+ios
+::
+sync_with_stdio
+(
+0
+);
+cin
+.
+tie
+(
+0
+);
+precalc
+();
+int
+tt
+=
+1
+;
+cin
+>>
+tt
+;
+while
+(
+tt
+-->
+0
+)
+{
+solve
+();
+}
+return
+0
+;
+}
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

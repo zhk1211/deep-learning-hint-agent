@@ -1,0 +1,63 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long INF = 1e18;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // dp[i][j] = min sum for prefix up to i, with j operations used,
+        // and the last element is a[i] (not changed to something else from right)
+        // We'll use a 2D DP with dimensions (n) x (k+1)
+        vector<vector<long long>> dp(n, vector<long long>(k + 1, INF));
+        
+        // Base case: first element
+        for (int j = 0; j <= k; ++j) {
+            dp[0][j] = a[0];
+        }
+        
+        for (int i = 1; i < n; ++i) {
+            for (int j = 0; j <= k; ++j) {
+                // Option 1: no operation on i, keep a[i]
+                dp[i][j] = min(dp[i][j], dp[i-1][j] + a[i]);
+                
+                // Option 2: change a[i] to a[i-1] (or further left)
+                // We can change a segment ending at i to some value from left
+                // More generally, we can change a contiguous block of elements
+                // to the value of the leftmost element of the block.
+                // We try all possible lengths L of the block ending at i
+                // that we change to a[i-L] (the element just before the block).
+                // The number of operations needed is L.
+                for (int L = 1; L <= min(i, k - j); ++L) {
+                    // We change a[i-L+1 ... i] to a[i-L]
+                    // The cost added is L * a[i-L]
+                    // The previous state is dp[i-L][j] (since we used L operations)
+                    // But wait, we need to use exactly L operations from state with j operations used.
+                    // So new state uses j+L operations.
+                    if (j + L <= k) {
+                        dp[i][j + L] = min(dp[i][j + L], dp[i - L][j] + (long long)L * a[i - L]);
+                    }
+                }
+            }
+        }
+        
+        long long ans = INF;
+        for (int j = 0; j <= k; ++j) {
+            ans = min(ans, dp[n-1][j]);
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

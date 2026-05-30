@@ -1,0 +1,119 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> a(k, vector<int>(n));
+    for (int i = 0; i < k; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> a[i][j];
+        }
+    }
+    if (k == 1) {
+        cout << "YES\n";
+        return;
+    }
+    vector<int> order;
+    // Try to deduce order from first two screenshots
+    int p1 = -1, p2 = -1;
+    for (int i = 0; i < k; i++) {
+        if (a[i][0] == a[0][0]) p1 = i;
+        if (a[i][0] == a[1][0]) p2 = i;
+    }
+    // Use first two distinct authors
+    int idx1 = 0, idx2 = 1;
+    if (a[0][0] == a[1][0]) {
+        // find two different authors
+        for (int i = 1; i < k; i++) {
+            if (a[i][0] != a[0][0]) {
+                idx2 = i;
+                break;
+            }
+        }
+    }
+    // Build order from idx1's screenshot, inserting idx1's author at correct position relative to idx2's
+    vector<int> base = a[idx1];
+    int author1 = base[0];
+    base.erase(base.begin());
+    vector<int> other = a[idx2];
+    int author2 = other[0];
+    other.erase(other.begin());
+    // Find position of author1 in other
+    int pos = -1;
+    for (int i = 0; i < n-1; i++) {
+        if (other[i] == author1) {
+            pos = i;
+            break;
+        }
+    }
+    if (pos == -1) {
+        // author1 not in other's list (should not happen if consistent)
+        cout << "NO\n";
+        return;
+    }
+    // Try inserting author1 before and after the element at pos in other
+    vector<vector<int>> candidates;
+    // Insert before
+    vector<int> cand1 = other;
+    cand1.insert(cand1.begin() + pos, author1);
+    candidates.push_back(cand1);
+    // Insert after
+    if (pos + 1 <= n-1) {
+        vector<int> cand2 = other;
+        cand2.insert(cand2.begin() + pos + 1, author1);
+        candidates.push_back(cand2);
+    } else {
+        vector<int> cand2 = other;
+        cand2.push_back(author1);
+        candidates.push_back(cand2);
+    }
+    // Also consider that author1 might be at the very beginning or end if pos is at boundaries? Already covered.
+    // For each candidate, check all screenshots
+    bool ok = false;
+    for (auto &ord : candidates) {
+        // ord is full order of length n
+        // Build position map
+        vector<int> posMap(n+1);
+        for (int i = 0; i < n; i++) posMap[ord[i]] = i;
+        bool valid = true;
+        for (int i = 0; i < k; i++) {
+            int author = a[i][0];
+            // Check that relative order of others matches ord
+            int prevPos = -1;
+            for (int j = 1; j < n; j++) {
+                int cur = a[i][j];
+                if (cur == author) {
+                    valid = false;
+                    break;
+                }
+                int curPos = posMap[cur];
+                if (prevPos != -1 && curPos <= prevPos) {
+                    valid = false;
+                    break;
+                }
+                prevPos = curPos;
+            }
+            if (!valid) break;
+            // Also check that author is at position 0 in their own view? Already satisfied by construction.
+        }
+        if (valid) {
+            ok = true;
+            break;
+        }
+    }
+    cout << (ok ? "YES" : "NO") << "\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

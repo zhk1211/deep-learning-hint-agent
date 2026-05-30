@@ -1,0 +1,111 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        string s;
+        cin >> s;
+        vector<int> p(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> p[i];
+            --p[i];
+        }
+
+        vector<bool> visited(n, false);
+        long long ans = 1;
+
+        for (int i = 0; i < n; ++i) {
+            if (!visited[i]) {
+                vector<int> cycle;
+                int cur = i;
+                while (!visited[cur]) {
+                    visited[cur] = true;
+                    cycle.push_back(cur);
+                    cur = p[cur];
+                }
+
+                int len = (int)cycle.size();
+                string orig, cur_str;
+                for (int idx : cycle) orig += s[idx];
+                cur_str = orig;
+
+                long long steps = 1;
+                while (true) {
+                    string nxt(len, ' ');
+                    for (int j = 0; j < len; ++j) {
+                        nxt[j] = cur_str[p[cycle[j]] == cycle[(j+1)%len] ? (j+1)%len : 0]; // wait, need proper mapping
+                    }
+                    // Actually, we need to apply permutation on the cycle indices.
+                    // Let's map cycle positions to 0..len-1.
+                    // The permutation on cycle: for position j in cycle, p[cycle[j]] is the next element in cycle.
+                    // So new string at position j comes from old string at position where p[cycle[j]] is in cycle.
+                    // We can precompute the shift: for each j, find k such that cycle[k] == p[cycle[j]].
+                    // Since it's a cycle, k = (j+1) % len.
+                    // So new_str[j] = old_str[(j+1)%len].
+                    // That means the string rotates by 1 position each operation.
+                    // So we just need to find the smallest k>0 such that rotating orig by k gives orig.
+                    // That is the smallest divisor of len such that the string is periodic with period len/k.
+                    // But we can just simulate up to len steps.
+                    // Let's do it properly:
+                    // Actually, we can just rotate and check.
+                    // But we already started with steps=1 and cur_str = orig.
+                    // Let's rotate and increment steps until we get orig again.
+                    // Since len <= 200, we can just simulate.
+                    // But careful: we need to apply the permutation correctly.
+                    // Let's redo:
+                    // We have cycle indices. The operation on the whole string: new_s[ p[i] ] = s[i]? Wait problem statement: new_i = s_{p_i}.
+                    // So new[i] = s[p[i]]. That means the character at position i comes from position p[i].
+                    // On the cycle, if we follow indices: i -> p[i] -> p[p[i]] -> ...
+                    // So after one operation, the character that was at i moves to the position j such that p[j] = i.
+                    // In a cycle, the character shifts one step along the cycle in the reverse direction? Let's check.
+                    // Suppose cycle is a -> b -> c -> a (p[a]=b, p[b]=c, p[c]=a).
+                    // new[a] = s[p[a]] = s[b].
+                    // new[b] = s[p[b]] = s[c].
+                    // new[c] = s[p[c]] = s[a].
+                    // So the string on the cycle becomes s[b], s[c], s[a] which is a left rotation of (s[a], s[b], s[c]) by 1.
+                    // So indeed, each operation rotates the string on the cycle by 1 position to the left.
+                    // So we need the smallest k>0 such that left rotating orig by k gives orig.
+                    // That is the length of the smallest period of orig.
+                    // We can find it by checking divisors of len.
+                    // But len <= 200, we can just simulate up to len.
+                    // Let's do simulation for clarity.
+                    string rotated = orig;
+                    long long cycle_steps = 1;
+                    // We already have rotated = orig, but we need to apply operation.
+                    // Actually we want the number of operations until it returns to orig.
+                    // So we start with rotated = orig, apply operation, increment steps, check if equal to orig.
+                    // But we can just find the period.
+                    // Let's find the smallest d>0 such that orig == rotate_left(orig, d).
+                    // rotate_left by d means new[i] = orig[(i+d)%len].
+                    // We can just check all d from 1 to len.
+                    long long period = len;
+                    for (int d = 1; d < len; ++d) {
+                        bool ok = true;
+                        for (int j = 0; j < len; ++j) {
+                            if (orig[j] != orig[(j+d)%len]) {
+                                ok = false;
+                                break;
+                            }
+                        }
+                        if (ok) {
+                            period = d;
+                            break;
+                        }
+                    }
+                    cycle_steps = period;
+                }
+                ans = lcm(ans, cycle_steps);
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

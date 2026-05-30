@@ -1,0 +1,67 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Call a permutation $ ^{\text{∗}} $ $ p $ of length $ n $ good if $ \gcd(p_i, i) $ $ ^{\text{†}} $ $ > 1 $ for all $ 2 \leq i \leq n $ . Find a good permutation with the minimum number of fixed points $ ^{\text{‡}} $ across all good permutations of length $ n $ . If there are multiple such permutations, print any of them.
+
+$ ^{\text{∗}} $ A permutation of length $ n $ is an array that contains every integer from $ 1 $ to $ n $ exactly once, in any order.
+
+$ ^{\text{†}} $ $ \gcd(x, y) $ denotes the [greatest common divisor (GCD)](https://en.wikipedia.org/wiki/Greatest_common_divisor) of $ x $ and $ y $ .
+
+$ ^{\text{‡}} $ A fixed point of a permutation $ p $ is an index $ j $ ( $ 1\leq j\leq n $ ) such that $ p_j = j $ .
+
+Input Format
+The first line contains an integer $ t $ ( $ 1 \leq t \leq 10^4 $ ) — the number of test cases.
+
+The only line of each test case contains an integer $ n $ ( $ 2 \leq n \leq 10^5 $ ) — the length of the permutation.
+
+It is guaranteed that the sum of $ n $ over all test cases does not exceed $ 10^5 $ .
+
+Output Format
+For each test case, output on a single line an example of a good permutation of length $ n $ with the minimum number of fixed points.
+
+Examples
+Sample 1
+Input
+4
+2
+3
+6
+13
+Output
+1 2
+1 2 3
+1 4 6 2 5 3
+1 12 9 6 10 8 7 4 3 5 11 2 13
+
+Note
+In the third sample, we construct the permutation
+
+$ i $ $ p_i $ $ \gcd(p_i, i) $ $ 1 $ $ 1 $ $ 1 $ $ 2 $ $ 4 $ $ 2 $ $ 3 $ $ 6 $ $ 3 $ $ 4 $ $ 2 $ $ 2 $ $ 5 $ $ 5 $ $ 5 $ $ 6 $ $ 3 $ $ 3 $ Then we see that $ \gcd(p_i, i) > 1 $ for all $ 2\leq i\leq 6 $ . Furthermore, we see that there are only two fixed points, namely, $ 1 $ and $ 5 $ . It can be shown that it is impossible to build a good permutation of length $ 6 $ with fewer fixed points.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+Step 1
+Let's first find out which values must be fixed points. Clearly if $$$i$$$ is relatively prime to every $$$1\leq j\leq n$$$ with $$$j\neq i$$$, then $$$i$$$ must be a fixed point. This occurs when $$$i=1$$$, or when $$$i$$$ is prime and $$$2\cdot i \gt n$$$, because the smallest number that is not relatively prime to prime $$$i$$$ is $$$2\cdot i$$$.
+Step 2
+Now, let's try to construct $$$p$$$ such that these are the only fixed points. Consider the cycle decomposition of $$$p$$$. If we can ensure that all elements in a cycle, excluding the cycle $$$(1)$$$, share a common divisor greater than $$$1$$$, then $$$p$$$ is good.
+Step 3
+Notice that a fixed point corresponds to a cycle of length $$$1$$$. So we want as few cycles of length $$$1$$$ as possible. The prime $$$i$$$ are the most restrictive. Let's pair all prime $$$i$$$ with $$$2\cdot i$$$, if possible. Now, none of the primes $$$\leq \frac{n}{2}$$$ are fixed points. For the remaining composites, we have a lot more freedom. We can insert them into the cycle with any one of their prime factors; now, the composites are also not fixed points. Then all cycles share a common divisor, namely, the prime in that cycle, so $$$p$$$ is good.
+Step 4
+One systematic way to do this is to partition the elements from $$$1$$$ to $$$n$$$ based on their largest prime divisor. Then, indeed, all of the elements in the cycle containing prime $$$i$$$ are divisible by $$$i$$$, and $$$2\cdot i$$$ has largest prime factor $$$i$$$, so if $$$2\cdot i \leq n$$$, it will be in the cycle containing $$$i$$$.
+
+[code block omitted]
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

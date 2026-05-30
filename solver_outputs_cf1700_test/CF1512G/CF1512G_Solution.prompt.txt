@@ -1,0 +1,74 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Let us denote by $ d(n) $ the sum of all divisors of the number $ n $ , i.e. $ d(n) = \sum\limits_{k | n} k $ .
+
+For example, $ d(1) = 1 $ , $ d(4) = 1+2+4=7 $ , $ d(6) = 1+2+3+6=12 $ .
+
+For a given number $ c $ , find the minimum $ n $ such that $ d(n) = c $ .
+
+Input Format
+The first line contains one integer $ t $ ( $ 1 \le t \le 10^4 $ ). Then $ t $ test cases follow.
+
+Each test case is characterized by one integer $ c $ ( $ 1 \le c \le 10^7 $ ).
+
+Output Format
+For each test case, output:
+
+- "-1" if there is no such $ n $ that $ d(n) = c $ ;
+- $ n $ , otherwise.
+
+Examples
+Sample 1
+Input
+12
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+39
+691
+Output
+1
+-1
+2
+3
+-1
+5
+4
+7
+-1
+-1
+18
+-1
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1512G - Short Task
+Note that $$$n \le d(n) \le {10}^7$$$ ($$${10}^7$$$ is the maximum value of $$$c$$$ in the problem), so it is enough for every $$$n=1..{10}^7$$$ to calculate the value of $$$d(n)$$$.
+To calculate the value of $$$d(n)$$$, you can use the sieve of Eratosthenes and get the solution for $$$\mathcal{O}({10}^7 \log ({10}^7))$$$.
+Also, you can use the linear sieve of Eratosthenes to find the minimum divisor for each $$$n=1..{10}^7 $$$ and use the multiplicativity of the function $$$d(n)$$$:
+$$$d(a \cdot b) = d(a) \cdot d(b)$$$ if $$$gcd(a, b)=1$$$.
+
+[code block omitted]
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

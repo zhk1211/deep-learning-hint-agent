@@ -1,0 +1,39 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        long long total_base = 0;
+        vector<long long> penalty(n);
+        for (int i = 0; i < n; ++i) {
+            total_base += a[i];
+            penalty[i] = a[i] + (n - 1 - i);
+        }
+
+        sort(penalty.begin(), penalty.end(), greater<long long>());
+
+        long long subtract = 0;
+        for (int i = 0; i < k; ++i) {
+            subtract += penalty[i];
+        }
+
+        long long extra = (long long)k * (k - 1) / 2;
+        long long ans = total_base + (long long)k * n - subtract - extra;
+        cout << ans << '\n';
+    }
+
+    return 0;
+}

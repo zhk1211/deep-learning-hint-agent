@@ -1,0 +1,67 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int q;
+        cin >> q;
+        ll low = 1, high = 4e18; // [low, high] possible h
+        bool any = false;
+        while (q--) {
+            int type;
+            cin >> type;
+            if (type == 1) {
+                ll a, b, n;
+                cin >> a >> b >> n;
+                ll L, R;
+                if (n == 1) {
+                    L = 1;
+                    R = a;
+                } else {
+                    L = (n - 2) * (a - b) + a + 1;
+                    R = (n - 1) * (a - b) + a;
+                }
+                if (!any) {
+                    low = L;
+                    high = R;
+                    any = true;
+                    cout << 1 << ' ';
+                } else {
+                    if (L > high || R < low) {
+                        cout << 0 << ' ';
+                    } else {
+                        low = max(low, L);
+                        high = min(high, R);
+                        cout << 1 << ' ';
+                    }
+                }
+            } else {
+                ll a, b;
+                cin >> a >> b;
+                if (!any) {
+                    cout << -1 << ' ';
+                } else {
+                    // compute days for low and high
+                    auto days = [&](ll h) -> ll {
+                        if (h <= a) return 1;
+                        ll diff = a - b;
+                        ll rem = h - a;
+                        return 1 + (rem + diff - 1) / diff;
+                    };
+                    ll d1 = days(low);
+                    ll d2 = days(high);
+                    if (d1 == d2) cout << d1 << ' ';
+                    else cout << -1 << ' ';
+                }
+            }
+        }
+        cout << '\n';
+    }
+    return 0;
+}

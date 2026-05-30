@@ -1,0 +1,97 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, d;
+        cin >> n >> d;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // Check if all zeros initially
+        bool all_zero = true;
+        for (int x : a) {
+            if (x == 1) {
+                all_zero = false;
+                break;
+            }
+        }
+        if (all_zero) {
+            cout << 0 << '\n';
+            continue;
+        }
+        
+        // We will compute the maximum distance from any 1 to the nearest 0
+        // along the cycle defined by steps of size d.
+        // The process is equivalent to: each 1 becomes 0 in the next step
+        // if its "next" element (i + d mod n) is 0. This is like a propagation
+        // of zeros along the reverse direction of the shift.
+        // Actually, a_i becomes a_i & a_{(i - d) mod n} in one step.
+        // So a 1 at position i survives only if both it and the element d steps back are 1.
+        // This means zeros propagate forward by d each step.
+        // We can think of the indices modulo g = gcd(n, d). The array splits into g independent cycles.
+        // In each cycle, we have a circular sequence. A 1 becomes 0 in the next step if it has a 0
+        // at distance d behind it (i.e., previous in the cycle). So zeros "move" forward by one position
+        // in the cycle each step. The number of steps needed for all 1s to become 0 is the maximum
+        // distance from any 1 to the nearest 0 in the direction of propagation (i.e., looking backward
+        // along the cycle). If a cycle has no zeros, it will never become all zeros -> answer -1.
+        
+        int g = gcd(n, d);
+        int ans = 0;
+        vector<bool> visited(n, false);
+        
+        for (int start = 0; start < g; ++start) {
+            if (visited[start]) continue;
+            // collect cycle
+            vector<int> cycle;
+            int cur = start;
+            while (!visited[cur]) {
+                visited[cur] = true;
+                cycle.push_back(a[cur]);
+                cur = (cur + d) % n;
+            }
+            // cycle contains the values in order of the shift direction
+            // The propagation: a_i depends on a_{(i - d) mod n}. In the cycle order we collected,
+            // the "previous" element in terms of dependency is the one before in the cycle.
+            // So we need to find distance from each 1 to the nearest 0 going backwards in the cycle.
+            // To handle circularity, we can duplicate the cycle.
+            int m = cycle.size();
+            bool has_zero = false;
+            for (int x : cycle) if (x == 0) has_zero = true;
+            if (!has_zero) {
+                ans = -1;
+                break;
+            }
+            // duplicate
+            vector<int> doubled = cycle;
+            doubled.insert(doubled.end(), cycle.begin(), cycle.end());
+            // find distances to nearest zero to the left (backward direction)
+            int last_zero = -1;
+            int max_dist = 0;
+            for (int i = 0; i < 2 * m; ++i) {
+                if (doubled[i] == 0) {
+                    last_zero = i;
+                } else {
+                    if (last_zero != -1) {
+                        max_dist = max(max_dist, i - last_zero);
+                    }
+                }
+            }
+            // Also need to consider wrap-around: for the first part before the first zero,
+            // we can use the zero from the second copy. The above loop handles it because we go up to 2m.
+            ans = max(ans, max_dist);
+        }
+        
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

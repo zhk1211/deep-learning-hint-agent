@@ -1,0 +1,85 @@
+// Hint6
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+        
+        // A tree with a+b+c vertices must have exactly a+b+c-1 edges
+        // Also, sum of children = a*2 + b*1 + c*0 = 2a + b
+        // In any rooted tree, sum of children = number of edges = total vertices - 1
+        // So we need 2a + b = a + b + c - 1  =>  a = c - 1
+        if (a != c - 1) {
+            cout << -1 << '\n';
+            continue;
+        }
+        
+        // Now we need to find minimum height
+        // We have a vertices with 2 children, b with 1 child, c leaves
+        // We want to minimize height, so we should place 2-child vertices as high as possible
+        // to create more leaves quickly, and then attach 1-child vertices to leaves.
+        
+        // The process: start with root. We'll build level by level.
+        // At each level, we have some number of "available slots" (leaves that can be expanded).
+        // Initially, we have 1 slot (the root, which is a leaf until we give it children).
+        
+        // We want to use all 'a' 2-child vertices first to minimize height.
+        // Each 2-child vertex consumes 1 slot and creates 2 new slots (net +1 slot).
+        // After placing all 'a' vertices, we have some slots left.
+        // Then we place 'b' 1-child vertices: each consumes 1 slot and creates 1 new slot (net 0).
+        // Finally, the remaining slots must exactly equal 'c', the leaves.
+        
+        // Let's simulate to find height.
+        // We'll keep track of slots at current level, and build next level.
+        
+        int height = 0;
+        int slots = 1; // initially root is a leaf slot
+        
+        // We'll use a and b.
+        // We want to use 2-child vertices as early as possible.
+        
+        while (slots < c) {
+            // We need to expand some slots to get more leaves.
+            // At current height, we have 'slots' leaves.
+            // We can expand up to 'slots' vertices.
+            // First use 2-child vertices if available.
+            int use2 = min(slots, a);
+            a -= use2;
+            slots -= use2;
+            int new_slots = use2 * 2;
+            
+            // If we still have slots and no 2-child left, use 1-child vertices.
+            int use1 = 0;
+            if (slots > 0 && b > 0) {
+                use1 = min(slots, b);
+                b -= use1;
+                slots -= use1;
+                new_slots += use1;
+            }
+            
+            // The new slots become the leaves for the next level.
+            slots += new_slots;
+            height++;
+            
+            // If we couldn't expand any slot but still need more leaves, impossible.
+            if (use2 == 0 && use1 == 0) {
+                height = -1;
+                break;
+            }
+        }
+        
+        // After loop, slots should equal c.
+        if (slots != c) height = -1;
+        
+        cout << height << '\n';
+    }
+    
+    return 0;
+}

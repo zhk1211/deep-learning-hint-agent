@@ -1,0 +1,126 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+An L-shape is a figure on gridded paper that looks like the first four pictures below. An L-shape contains exactly three shaded cells (denoted by \*), which can be rotated in any way.
+
+![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1722F/c4bb8e8c5c94521e87ed2d5ba5ef373384bb7be7.png)You are given a rectangular grid. Determine if it contains L-shapes only, where L-shapes can't touch an edge or corner. More formally:
+
+- Each shaded cell in the grid is part of exactly one L-shape, and
+- no two L-shapes are adjacent by edge or corner.
+
+For example, the last two grids in the picture above do not satisfy the condition because the two L-shapes touch by corner and edge, respectively.
+
+Input Format
+The input consists of multiple test cases. The first line contains an integer $ t $ ( $ 1 \leq t \leq 100 $ ) — the number of test cases. The description of the test cases follows.
+
+The first line of each test case contains two integers $ n $ and $ m $ ( $ 1 \leq n, m \leq 50 $ ) — the number of rows and columns in the grid, respectively.
+
+Then $ n $ lines follow, each containing $ m $ characters. Each of these characters is either '.' or '\*' — an empty cell or a shaded cell, respectively.
+
+Output Format
+For each test case, output "YES" if the grid is made up of L-shape that don't share edges or corners, and "NO" otherwise.
+
+You can output the answer in any case (for example, the strings "yEs", "yes", "Yes" and "YES" will be recognized as a positive answer).
+
+Examples
+Sample 1
+Input
+10
+6 10
+........**
+.**......*
+..*..*....
+.....**...
+...*.....*
+..**....**
+6 10
+....*...**
+.**......*
+..*..*....
+.....**...
+...*.....*
+..**....**
+3 3
+...
+***
+...
+4 4
+.*..
+**..
+..**
+..*.
+5 4
+.*..
+**..
+....
+..**
+..*.
+3 2
+.*
+**
+*.
+2 3
+*..
+.**
+3 2
+..
+**
+*.
+3 3
+.**
+*.*
+**.
+3 3
+..*
+.**
+..*
+Output
+YES
+NO
+NO
+NO
+YES
+NO
+NO
+YES
+NO
+NO
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1722F - L-shapes
+The problem is mainly a tricky implementation problem. Let's denote the
+elbow
+of an L-shape as the square in the middle (the one that is side-adjacent to two other squares). Every elbow is part of exactly one L-shape, and every L-shape has exactly one elbow.
+Iterate through the grid and count the number of side-adjacent neighbors they have. If there is a cell with more than 2, or if there is a cell with exactly two neighbors on opposite sides, then the answer is
+NO
+. Otherwise, if there are exactly 2 neighbors, this cell is an elbow. Mark all three cells of this L-shape with a unique number (say, mark the first one you find with $$$1$$$, the second with $$$2$$$, and so on.) If you ever remark a cell that already has a number, then two elbows are adjacent, and you can output
+NO
+.
+After all elbows are marked, check if all shaded cells have a number. If some don't, then they are not part of an L-shape, so you can output
+NO
+.
+Finally, we should check that L-shapes don't share edge or corner. Just check, for each number, if it is only diagonally adjacent to other numbers equal to it or unshaded cells. If it is diagonally adjacent to other unequal numbers, then the answer is
+NO
+, because two L-shapes share an edge or corner then.
+Otherwise the answer is
+YES
+.
+There are many other solutions, all of which are various ways to check the conditions. The complexity is $$$\mathcal{O}(mn)$$$ per testcase.
+
+[code block omitted]
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

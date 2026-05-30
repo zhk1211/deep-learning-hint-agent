@@ -1,0 +1,61 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n, k;
+    cin >> n >> k;
+    
+    vector<vector<int>> cards(n, vector<int>(k));
+    map<vector<int>, int> idx;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < k; ++j) {
+            cin >> cards[i][j];
+        }
+        idx[cards[i]] = i;
+    }
+    
+    vector<vector<int>> third_card(n, vector<int>(n, -1));
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            vector<int> need(k);
+            for (int f = 0; f < k; ++f) {
+                if (cards[i][f] == cards[j][f]) {
+                    need[f] = cards[i][f];
+                } else {
+                    need[f] = 3 - cards[i][f] - cards[j][f];
+                }
+            }
+            if (idx.count(need)) {
+                int t = idx[need];
+                if (t > j) {
+                    third_card[i][j] = t;
+                    third_card[j][i] = t;
+                }
+            }
+        }
+    }
+    
+    vector<int> set_count(n, 0);
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            if (third_card[i][j] != -1) {
+                set_count[i]++;
+                set_count[j]++;
+                set_count[third_card[i][j]]++;
+            }
+        }
+    }
+    
+    long long ans = 0;
+    for (int i = 0; i < n; ++i) {
+        int c = set_count[i];
+        ans += 1LL * c * (c - 1) / 2;
+    }
+    
+    cout << ans << "\n";
+    return 0;
+}

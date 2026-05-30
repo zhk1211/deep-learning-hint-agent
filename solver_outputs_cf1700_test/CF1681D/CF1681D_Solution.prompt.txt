@@ -1,0 +1,66 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+You are given two integer numbers, $ n $ and $ x $ . You may perform several operations with the integer $ x $ .
+
+Each operation you perform is the following one: choose any digit $ y $ that occurs in the decimal representation of $ x $ at least once, and replace $ x $ by $ x \cdot y $ .
+
+You want to make the length of decimal representation of $ x $ (without leading zeroes) equal to $ n $ . What is the minimum number of operations required to do that?
+
+Input Format
+The only line of the input contains two integers $ n $ and $ x $ ( $ 2 \le n \le 19 $ ; $ 1 \le x < 10^{n-1} $ ).
+
+Output Format
+Print one integer — the minimum number of operations required to make the length of decimal representation of $ x $ (without leading zeroes) equal to $ n $ , or $ -1 $ if it is impossible.
+
+Examples
+Sample 1
+Input
+2 1
+Output
+-1
+
+Sample 2
+Input
+3 2
+Output
+4
+
+Sample 3
+Input
+13 42
+Output
+12
+
+Note
+In the second example, the following sequence of operations achieves the goal:
+
+1. multiply $ x $ by $ 2 $ , so $ x = 2 \cdot 2 = 4 $ ;
+2. multiply $ x $ by $ 4 $ , so $ x = 4 \cdot 4 = 16 $ ;
+3. multiply $ x $ by $ 6 $ , so $ x = 16 \cdot 6 = 96 $ ;
+4. multiply $ x $ by $ 9 $ , so $ x = 96 \cdot 9 = 864 $ .
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1681D - Required Length
+One of the possible approaches to this problem is to try multiplying $$$x$$$ only by the largest digit in it. Unfortunately, this doesn't work quite well, since it gives WA on one of the examples. That example is too big to consider, but a smaller version of it can prove that this is an incorrect solution: let $$$n = 5$$$, $$$x = 403$$$. If we multiply $$$403$$$ by $$$4$$$, we get $$$1612$$$, and there's no way to obtain a number with $$$5$$$ digits using the next action. But, if we multiply $$$403$$$ by $$$3$$$, we get $$$1209$$$, which can then be multiplied by $$$9$$$ to obtain a $$$5$$$-digit number. So, considering only the largest digit is not enough.
+This implies that we somehow need to consider the options that are not optimal locally, but optimal globally (i. e. choose a lower digit right now to obtain a higher digit in the future).
+Let's try to estimate the number of possible integers that can be obtained using these operations to see if we can consider all possible options. The key observation is that each integer we obtain will have the form $$$x \cdot 2^a \cdot 3^b \cdot 5^c \cdot 7^d$$$, since only one-digit primes can be added to the factorization. Since we consider only numbers less than $$$10^{19}$$$, $$$a$$$ is not greater than $$$63$$$, $$$b$$$ is not greater than $$$39$$$, $$$c$$$ is not greater than $$$27$$$, and $$$d$$$ is not greater than $$$22$$$, and the number of reachable integers is about $$$1.5$$$ million (note that this is a very generous bound since not all combinations of $$$(a,b,c,d)$$$ yield an integer less than $$$10^{19}$$$, and not all such integers can be reached with the operations).
+This allows us to use BFS or dynamic programming to calculate the answer.
+
+[code block omitted]
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

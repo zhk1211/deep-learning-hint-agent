@@ -1,0 +1,212 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+You are given an array $ a $ consisting of $ n $ nonnegative integers.
+
+You can swap the elements at positions $ i $ and $ j $ if $ a_i~\mathsf{XOR}~a_j < 4 $ , where $ \mathsf{XOR} $ is the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).
+
+Find the lexicographically smallest array that can be made with any number of swaps.
+
+An array $ x $ is lexicographically smaller than an array $ y $ if in the first position where $ x $ and $ y $ differ, $ x_i < y_i $ .
+
+Input Format
+The first line contains a single integer $ t $ ( $ 1 \leq t \leq 10^4 $ ) — the number of test cases.
+
+The first line of each test case contains a single integer $ n $ ( $ 1 \leq n \leq 2\cdot10^5 $ ) — the length of the array.
+
+The second line of each test case contains $ n $ integers $ a_i $ ( $ 0 \leq a_i \leq 10^9 $ ) — the elements of the array.
+
+It is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \cdot 10^5 $ .
+
+Output Format
+For each test case, output $ n $ integers — the lexicographically smallest array that can be made with any number of swaps.
+
+Examples
+Sample 1
+Input
+4
+4
+1 0 3 2
+5
+2 7 1 5 6
+8
+1 2 1 2 1 2 1 2
+4
+16 4 1 64
+Output
+0 1 2 3
+1 5 2 6 7
+1 1 1 1 2 2 2 2
+16 4 1 64
+
+Note
+For the first test case, you can swap any two elements, so we can produce the sorted array.
+
+For the second test case, you can swap $ 2 $ and $ 1 $ (their $ \mathsf{XOR} $ is $ 3 $ ), $ 7 $ and $ 5 $ (their $ \mathsf{XOR} $ is $ 2 $ ), and $ 7 $ and $ 6 $ (their $ \mathsf{XOR} $ is $ 1 $ ) to get the lexicographically smallest array.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1971G - XOUR
+Note that if $$$a_i~\mathsf{XOR}~a_j  \lt  4$$$, then $$$a_i$$$ and $$$a_j$$$ must share all bits in their binary representation, except for the last $$$2$$$ bits. This is because if they have a mismatch in any greater bit, their $$$\mathsf{XOR}$$$ will include this bit, making its value $$$\geq 2^2=4$$$.
+This means that we can group the numbers by removing the last two bits and putting equal numbers into the same group. In each group, we can order the numbers freely (since we can swap any two of them), so it's optimal to sort the numbers in each group.
+Thus we can just divide the numbers into groups and sort each, solving the problem in $$$\mathcal{O}(n \log n)$$$. There are several ways to implement this: for instead, you can use a
+map
+storing all the groups, and then sort the values in each group. The implementation we used maps each integer to a priority queue, which automatically will sort the numbers in each group.
+
+#include
+<iostream>
+#include
+<algorithm>
+#include
+<vector>
+#include
+<map>
+#include
+<queue>
+using
+namespace
+std
+;
+void
+solve
+()
+{
+int
+n
+;
+cin
+>>
+n
+;
+vector
+<int>
+a
+(
+n
+);
+map
+<
+int
+,
+priority_queue
+<int>
+>
+mp
+;
+for
+(
+int
+i
+=
+0
+;
+i
+<
+n
+;
+i
+++)
+{
+cin
+>>
+a
+[
+i
+];
+mp
+[
+a
+[
+i
+]>>
+2
+].
+push
+(-
+a
+[
+i
+]);
+}
+for
+(
+int
+i
+=
+0
+;
+i
+<
+n
+;
+i
+++)
+{
+cout
+<<
+-
+mp
+[
+a
+[
+i
+]>>
+2
+].
+top
+()
+<<
+" "
+;
+mp
+[
+a
+[
+i
+]>>
+2
+].
+pop
+();
+}
+cout
+<<
+endl
+;
+}
+int32_t
+main
+(){
+int
+t
+=
+1
+;
+cin
+>>
+t
+;
+while
+(
+t
+--)
+{
+solve
+();
+}
+}
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

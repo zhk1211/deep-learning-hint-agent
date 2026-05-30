@@ -1,0 +1,229 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        if (k == 1) {
+            cout << "YES\n";
+            continue;
+        }
+
+        if (k == n) {
+            bool ok = true;
+            for (int i = 0; i < n / 2; ++i) {
+                if (a[i] != a[n - 1 - i]) {
+                    ok = false;
+                    break;
+                }
+            }
+            cout << (ok ? "YES" : "NO") << '\n';
+            continue;
+        }
+
+        // k >= 2 and k < n
+        // We can delete any element that is not the k-th smallest in some subarray of length >= k.
+        // Actually, we can delete any element except possibly some restrictions.
+        // Key observation: we can delete any element if there exists a subarray of length >= k
+        // where that element is the k-th smallest. This is always possible for any element
+        // if k >= 2 and k < n? Let's check.
+        // For k=2, we need an element to be the 2nd smallest in a subarray of length >=2.
+        // That means there must be at least one element <= it and one element >= it in the subarray.
+        // For any element, we can pick a subarray containing it and some smaller and larger elements.
+        // But what if all elements are equal? Then any element is both min and max, so it's the 2nd smallest
+        // in any subarray of length >=2? Actually if all equal, the 2nd smallest is the same value.
+        // So we can delete any element.
+        // For k > 2, we need the element to be the k-th smallest. We can always find a subarray
+        // containing it and k-1 smaller or equal elements and some larger or equal elements.
+        // The only problematic case is when the element is the minimum or maximum and we can't find
+        // enough smaller/larger elements. But since k < n, we can always extend the subarray to include
+        // enough elements on both sides.
+        // Actually, it's known that we can delete any element if k <= (n+1)/2? No.
+        // Let's think: we want to form a palindrome. We can delete elements.
+        // Equivalent to: can we select a subset of indices to keep such that the kept elements form a palindrome,
+        // and the deleted elements can be removed one by one following the operation rules.
+        // The operation allows deleting an element that is the k-th smallest in some subarray of length >= k.
+        // This is possible if the element is not "too extreme" relative to the rest of the array.
+        // But we can delete elements in any order, and the array shrinks.
+        // Key insight from hints: "Can we erase any element we want?" "How can we erase elements?"
+        // The answer is: we can erase any element except possibly when k is large.
+        // Specifically, if k <= (n+1)/2? Let's analyze.
+        // Consider the multiset of values. To delete an element x, we need a subarray of length L >= k
+        // where x is the k-th smallest. That means there are at least k-1 elements <= x in that subarray,
+        // and at least L - k elements >= x. So we need at least k-1 elements <= x and at least 1 element >= x
+        // (since L >= k, L-k >= 0, but if L=k, we need exactly k-1 elements <= x and x is the largest among them?
+        // Wait: k-th smallest means there are exactly k-1 elements strictly smaller? Or <=?
+        // Problem says "k-th smallest number out of the subarray". Usually it means if you sort the subarray,
+        // the element at position k (1-indexed). If there are duplicates, any of the duplicates can be chosen.
+        // So if we have subarray sorted: s1 <= s2 <= ... <= sL. The k-th smallest is s_k.
+        // So we need at least k-1 elements <= x, and at least L-k elements >= x.
+        // To be able to choose x as the k-th smallest, we need to find a subarray where x appears,
+        // and the number of elements <= x is at least k, and the number of elements >= x is at least L - k + 1.
+        // This is always possible if there are enough elements on both sides.
+        // The only elements that might be undeletable are those that are too small (can't find k-1 smaller or equal)
+        // or too large (can't find enough larger or equal).
+        // But since we can choose any subarray, we can include many elements.
+        // Actually, if k > (n+1)/2, there might be restrictions.
+        // Let's think about the final palindrome. We want to keep a palindrome subsequence.
+        // We can delete elements one by one. The order of deletion matters because the array changes.
+        // But there's a known result: if k <= n/2, we can delete any element? Not exactly.
+        // Let's look at sample: n=5, k=4, a=[5,2,4,3,1] -> NO.
+        // n=8, k=5, a=[4,7,1,2,3,1,3,4] -> NO.
+        // n=5, k=4, a=[1,2,1,2,2] -> YES.
+        // n=3, k=3, a=[1,2,2] -> NO.
+        // n=4, k=4, a=[2,1,2,2] -> YES.
+        // Let's analyze the condition.
+        // If k > (n+1)/2, we might not be able to delete the "middle" elements?
+        // Actually, if we want to form a palindrome, we can pair up equal elements from left and right.
+        // The operation allows deleting an element if we can find a subarray of length >= k where it's the k-th smallest.
+        // This is equivalent to: we can delete an element if there are at least k-1 elements <= it and at least 1 element >= it
+        // (if we take L=k) OR we can take larger L.
+        // But we can always take L larger to satisfy the condition, as long as there are enough elements in the array.
+        // The only issue is when the array becomes too small.
+        // We can think in reverse: start from empty array, insert elements to form the original array,
+        // but the operation is reversible? Not exactly.
+        // Alternative approach: The operation allows us to delete any element that is not the "median" in some sense?
+        // Let's find the necessary and sufficient condition.
+        // Consider the multiset of values. If we sort the array, the k-th smallest element of the whole array
+        // might be hard to delete if k is large? But we can choose subarrays.
+        // Actually, there's a known solution: if k == n, we can only delete the whole array if it's already a palindrome?
+        // No, operation requires r-l+1 >= k, so if k=n, we can only choose l=1, r=n. Then we delete the k-th smallest
+        // of the whole array. After deletion, array size becomes n-1. Then we can't do any more operations because
+        // we need subarray length >= n, but array size is n-1. So we can only do one deletion.
+        // So for k=n, we can delete exactly one element: the k-th smallest of the original array.
+        // Then we check if the remaining array is a palindrome.
+        // For k=n-1, we can delete one element from a subarray of length n-1, then array size n-2, etc.
+        // This suggests a greedy or matching approach.
+        // Let's think differently: The operation allows us to delete an element if we can "cover" it with a subarray
+        // of length >= k where it's the k-th smallest. This is possible if the element is not too extreme.
+        // But we can delete elements in any order. The final palindrome is a subsequence of the original array.
+        // We want to know if there exists a palindrome subsequence that can be obtained by valid deletions.
+        // Actually, any subsequence can be obtained if we can delete the other elements in some order.
+        // So the question reduces to: can we delete all elements not in the palindrome?
+        // And we can delete an element if at the moment of deletion, there exists a subarray of length >= k
+        // containing it where it is the k-th smallest.
+        // This is equivalent to: we can delete an element if there are at least k-1 other elements in the current array
+        // that are <= it, and at least 1 element >= it? Not exactly, because the subarray must be contiguous.
+        // But we can always choose a subarray that includes the element and enough others, as long as the array
+        // has enough elements. Contiguity is not a big restriction because we can extend the subarray to include
+        // the whole array if needed. The only restriction is the size of the array at the time of deletion.
+        // So if the current array size is m, we can delete an element x if there exists a subarray of length >= k
+        // containing x, and x is the k-th smallest in that subarray. If we take the whole array as the subarray
+        // (length m), we need m >= k, and x must be the k-th smallest in the whole array.
+        // So if we can make x the k-th smallest of the whole current array, we can delete it.
+        // But we can also choose smaller subarrays. However, if we can't make x the k-th smallest of the whole array,
+        // maybe we can choose a subarray where it is. But if x is the global minimum, it can never be the k-th smallest
+        // for k >= 2 unless there are duplicates? If x is the unique minimum, then in any subarray containing it,
+        // it will be the 1st smallest. So it can only be the k-th smallest if k=1. So for k>=2, the unique minimum
+        // cannot be deleted! Similarly, the unique maximum cannot be deleted if we need it to be the k-th smallest
+        // and k < m? Wait: if x is the maximum, it is the m-th smallest. To be the k-th smallest, we need k = m.
+        // So if we take a subarray of length L, x is the L-th smallest. To be the k-th smallest, we need L = k.
+        // So if x is the unique maximum, we can delete it by choosing a subarray of length exactly k where x is the maximum
+        // (i.e., all other k-1 elements are <= x). That's possible if there are at least k-1 other elements <= x.
+        // Since x is the maximum, all other elements are <= x. So we just need the subarray to have length k and include x.
+        // That's possible if the current array size m >= k and x is not the only element? Actually, we need a subarray
+        // of length k containing x. If m >= k, we can just take any subarray of length k that includes x.
+        // Then x will be the largest in that subarray, so it's the k-th smallest. So the maximum can be deleted!
+        // Wait, check: subarray sorted: s1 <= s2 <= ... <= s_k. x is the largest, so it's s_k, which is the k-th smallest.
+        // So maximum can be deleted if m >= k.
+        // What about the minimum? If x is the unique minimum, in any subarray containing it, it will be s_1.
+        // To be the k-th smallest, we need k=1. So for k>=2, the unique minimum cannot be deleted!
+        // Unless there are duplicates of the minimum. If there are multiple copies of the minimum value,
+        // then one of them could be the 2nd smallest if we have two copies? Actually, if we have two copies of min,
+        // sorted: min, min, ... Then the 2nd smallest is also min. So we can delete a min if there are at least k copies?
+        // Let's formalize: To delete an element x, we need a subarray of length L >= k containing x,
+        // such that the number of elements in the subarray strictly less than x is <= k-1,
+        // and the number of elements <= x is >= k.
+        // Let c_less be the number of elements in the subarray strictly less than x.
+        // Let c_leq be the number of elements <= x.
+        // We need c_less <= k-1 and c_leq >= k.
+        // This means there are at least k elements <= x, and at most k-1 elements strictly less than x.
+        // So there must be at least one element equal to x (which is x itself), and the number of elements < x is at most k-1.
+        // Also, we need L >= k, which is implied by c_leq >= k.
+        // So the condition is: there exists a subarray containing x with at least k elements <= x,
+        // and at most k-1 elements strictly less than x.
+        // This is equivalent to: in the whole current array, let total_less = number of elements < x,
+        // total_leq = number of elements <= x. If we can choose a subarray containing x that includes
+        // at most k-1 elements < x, and at least k elements <= x. Since we can always extend the subarray
+        // to include more elements, we can include all elements if needed. But we need to limit the number of elements < x.
+        // So we need total_less <= k-1? Not necessarily, because we can choose a subarray that excludes some elements < x.
+        // But x is in the subarray, so we can choose a subarray that includes x and some elements on its left and right.
+        // We can avoid including some elements < x by not extending the subarray to include them.
+        // However, if the elements < x are interleaved, we might be forced to include them if we want to include enough elements <= x.
+        // Actually, we can always choose a subarray that contains exactly the elements we want, as long as they are contiguous.
+        // But we can't skip elements. So the condition is: there exists a contiguous subarray containing x,
+        // with at least k elements <= x, and at most k-1 elements < x.
+        // This is possible if and only if we can find a contiguous segment around x that includes enough <= x
+        // but not too many < x. Since x itself is one <= x, we need at least k-1 other elements <= x.
+        // And we need to avoid including more than k-1 elements < x in total.
+        // So if the total number of elements < x in the whole array is <= k-1, we can just take the whole array
+        // (if size >= k) and it will satisfy the condition (since total_less <= k-1, and total_leq >= k because
+        // we need at least k elements <= x; if total_leq < k, we can't delete x anyway).
+        // If total_less > k-1, we must choose a subarray that excludes some elements < x.
+        // This is possible if we can find a contiguous segment containing x that has at most k-1 elements < x.
+        // Since x is fixed, we can expand left and right. The number of elements < x in the segment is the number of
+        // such elements in the chosen range. We want to include as many <= x as possible without exceeding k-1 elements < x.
+        // The maximum number of <= x we can include is: we can include all elements <= x that are between the
+        // (k-1)-th element < x to the left and the (k-1)-th element < x to the right? Actually, we can include
+        // up to k-1 elements < x. So we can take a segment that contains x and at most k-1 elements < x.
+        // To maximize the number of <= x, we should include all elements <= x that lie between the (k-1)-th element < x
+        // on the left and the (k-1)-th element < x on the right? Wait, we want to include x and as many <= x as possible.
+        // The elements < x are the limiting factor. We can include at most k-1 of them.
+        // So we can take a segment that contains x and all elements between the (k-1)-th element < x to the left of x
+        // and the (k-1)-th element < x to the right of x? But we might not need to go that far.
+        // Actually, we can just take the segment from the (k-1)-th element < x to the left of x (or the beginning)
+        // to the (k-1)-th element < x to the right of x (or the end). This segment will contain at most
+        // (k-1) + (k-1) + 1 = 2k-1 elements < x? No, the elements < x are exactly those that are < x.
+        // If we take the segment from the (k-1)-th element < x on the left to the (k-1)-th on the right,
+        // the number of elements < x in that segment is at most (k-1) on the left + (k-1) on the right + possibly x itself?
+        // x is not < x. So total < x in that segment is at most 2k-2. That might exceed k-1.
+        // So we need to be more careful. We want a segment with at most k-1 elements < x.
+        // This is equivalent to: the distance (in terms of elements < x) from x to the boundaries must sum to <= k-1.
+        // Let L be the number of elements < x to the left of x, R to the right.
+        // If we take a segment that includes a elements < x to the left and b elements < x to the right,
+        // then total < x = a + b. We need a + b <= k-1. We also want to include as many <= x as possible.
+        // The number of <= x in that segment is: (a + b) + (number of elements equal to x in the segment).
+        // Since we want at least k elements <= x, we need a + b + (number of x's in segment) >= k.
+        // Since a+b <= k-1, we need at least one x (which we have) and possibly more copies of x.
+        // So if there are enough copies of x, we can satisfy it even with a+b small.
+        // But if x is unique, then we need a+b + 1 >= k => a+b >= k-1.
+        // Combined with a+b <= k-1, we get a+b = k-1.
+        // So for a unique element x, we can delete it iff we can find a segment containing x with exactly k-1 elements < x
+        // and no other copies of x. That means we need to be able to choose a segment that includes exactly k-1 elements < x.
+        // This is possible iff the total number of elements < x is at least k-1, and we can balance left and right
+        // such that a+b = k-1. Since we can choose any a <= L, b <= R, we can achieve any sum between 0 and L+R
+        // as long as we can independently choose a and b? Actually, we can choose any a from 0 to L and b from 0 to R
+        // by taking the segment from the a-th element < x on the left to the b-th element < x on the right.
+        // So we can achieve any sum a+b from 0 to L+R. So we need L+R >= k-1.
+        // So for a unique x, we can delete it iff the total number of elements < x in the current array is >= k-1.
+        // But wait, we also need the segment to have length >= k. The length of the segment is (a + b + number of x's + number of elements > x in between). The number of elements > x doesn't affect the k-th smallest condition directly, but they are part of the subarray. The condition only cares about the sorted order. The presence of elements > x just increases L, making x smaller than the k-th? Actually, if we include elements > x, they will be larger than x in sorted order, so x's position as k-th smallest depends only on the number of elements <= x. Elements > x just increase the total length but don't change the fact that x is the k-th smallest as long as the number of elements <= x is exactly k? Wait: if we have elements > x, they come after x in sorted order. So if we have exactly k elements <= x, then x is the k-th smallest regardless of how many > x there are. So we can include any number of elements > x. So the length condition L >= k is automatically satisfied if we have at least k elements <= x, because we can always include more elements > x to reach length k if needed. But we need the subarray to be contiguous. If we have exactly k elements <= x, the subarray containing them might be shorter than k if there are no elements > x between them? Actually, the subarray must contain all these elements. The length of the subarray is the number of elements from the leftmost to the rightmost included. If we include exactly k elements <= x, and they are contiguous with no > x in between, the length is exactly k. If there are > x in between, the length is > k. Both are fine as long as length >= k. So we don't need to worry about length as long as we have at least k elements <= x in the segment.
+        // So the condition for deleting a unique element x is: there exists a segment containing x with at least k elements <= x and at most k-1 elements < x. Since x is unique, elements <= x are exactly the elements < x plus x itself. So we need the segment to contain x and at most k-1 elements < x, and at least k elements <= x => at least k-1 elements < x. So exactly k-1 elements < x. So we need to be able to choose a segment with exactly k-1 elements < x. This is possible iff the total number of elements < x in the current array is >= k-1, and we can choose a and b such that a+b = k-1, a <= L, b <= R. This is possible iff L+R >= k-1. So if total elements < x >= k-1, we can delete x.
+        // What if there are multiple copies of x? Then we can use other copies of x to satisfy the "<= x" count without needing as many < x. Let c_less be total < x, c_eq be total == x (including the one we want to delete). We need a segment with at most k-1 elements < x, and at least k elements <= x. The number of <= x in the segment is (number of < x in segment) + (number of == x in segment). Let a = number of < x in segment, b = number of == x in segment. We need a <= k-1, and a+b >= k. We want to choose a segment containing our specific x. We can include other copies of x. So we need to be able to achieve some a <= k-1 and b >= k - a. Since we can include up to c_eq copies of x (by extending the segment to include them), we can achieve any b from 1 to c_eq (if they are contiguous? Actually, we can include all copies of x that lie between the left and right boundaries. If the copies of x are scattered, we might be forced to include elements < x or > x between them. But we can always include all copies of x by taking a segment that covers them, but that might also include many elements < x. So it's not trivial.)
+        // This is getting complicated. Let's look for a simpler characterization.
+        // Known solution from Codeforces: The answer is YES if and only if there exist two equal elements at distance <= k-1? Or something like that.
+        // Let's check the samples.
+        // Test 1: 5 3, [5,4,3,4,5] -> palindrome already, YES.
+        // Test 2: 4 1, [1,1,2,1] -> k=1, we can delete any element? With k=1, the 1st smallest is the minimum in the subarray. We can always choose a subarray of length >=1 where the element is the minimum (just take the element itself if it's the minimum, or include a smaller element). Actually, with k=1, we can delete any element because we can always find a subarray where it's the minimum? If we take the subarray consisting of just that element, length=1 >=1, and it's the 1st smallest. So we can delete any element one by one. So we can always reduce to a palindrome (empty array is palindrome). So YES. Matches.
+        // Test 3: 6 6, [2,3,4,5,3,2] -> k=n=6. We can do one operation: delete the k-th smallest of the whole array. The whole array sorted: 2,2,3,3,4,5. The 6th smallest is 5. Delete 5, remaining [2,3,4,3,2] which is palindrome. YES.
+        // Test 4: 5 4, [5,2,4,3,1] -> NO.
+        // Test 5: 8 5, [4,7,1,2,3,1,3,4] -> NO.
+        // Test 6: 5 4, [1,2,1,2,2] -> YES.
+        // Test 7: 3 3, [1,2,2] -> NO.
+        // Test 8: 4 4, [2,1,2,2] -> YES.
+        // Let's analyze test 6: n=5, k=4, a=[1,2,1,2,2]. Output YES. How? We can delete elements to get palindrome. Maybe we can delete the first 1? Let's see if we can delete 1. For k=4, to delete 1 (unique minimum?), there are other 1's? There is another 1 at index 3. So 1 is not unique. We have two 1's. Can we delete a 1? We need a subarray of length >=4 where 1 is the 4th smallest. That means we need at least 3 elements <= 1, and at most 3 elements < 1. Since 1 is the minimum, there are no elements < 1. So we need at least 3 elements <= 1, i.e., at least three 1's. But we only have two 1's. So we cannot delete a 1? Wait, maybe we can delete a 2? Let's check deleting a 2. 2 is not the minimum. There are elements < 2 (the 1's). To delete a 2, we need a subarray where 2 is the 4th smallest. That means we need at most 3 elements < 2, and at least 4 elements <= 2. Elements < 2 are the 1's (two of them). So we have only 2 elements < 2, which is <=3. Elements <= 2 are the 1's and 2's. We have two 1's and three 2's, total 5 elements <=2. So we can take a subarray containing a 2, with at most 3 elements < 2 (which is automatically true since only 2 exist), and at least 4 elements <=2. We can take the whole array (length 5) and any 2 will be the 4th smallest? Let's sort the whole array: 1,1,2,2,2. The 4th smallest is 2. So any 2 is the 4th smallest! So we can delete any 2. After deleting one 2, array size 4, k=4 still. Now array: [1,2,1,2] (if we delete the last 2). Sorted: 1,1,2,2. The 4th smallest is 2. So we can delete another 2. Then we get [1,2,1] which is palindrome. So YES.
+        // Test 7: n=3, k=3, [1,2,2]. k=n=3. We can only do one operation on the whole array. Sorted: 1,2,2. 3rd smallest is 2. Delete one 2, remaining [1,2] which is not palindrome. Can we delete the other 2? No, only one operation. So NO.
+        // Test 8: n=4, k=4, [2,1,2,2]. k=n=4. Whole array sorted: 1,2,2,2. 4th smallest is 2. Delete one 2, remaining [2,1,2] which is palindrome. YES.
+        // Test 4: n=5, k=4, [5,2,4,3,1]. Can we delete something? Let's check if we can delete 5. Elements <5: 1,2,3,4 (four elements). We need a subarray with at most 3 elements <5, and at least 4 elements <=5. Since there are 4 elements <5, we must exclude at least one of them. Can we find a subarray containing 5 with at most 3 elements <5? 5 is at index 1. To include 5 and at most 3 elements <5, we can take subarray from index 1 to some r. If we take r=4, subarray [5,2,4,3] has elements <5: 2,4,3 (three elements). That's exactly 3. Elements <=5: all four. So 5 is the 4th smallest in this subarray! Length=4 >=4. So we can delete 5! After deleting 5, array becomes [2,4,3,1]. Now n=4, k=4. Can we delete something to get palindrome? Sorted: 1,2,3,4. 4th smallest is 4. Delete 4 -> [2,3,1] not palindrome. Delete 1? 1 is minimum. To delete 1 with k=4, we need subarray of length >=4 with 1 as 4th smallest. That requires at least 3 elements <=1, but only one 1 exists. So can't delete 1. Delete 2? Elements <2: 1. We need at most 3 elements <2 (ok, only 1), and at least 4 elements <=2. But we only have 1 and 2 (two elements <=2). So can't delete 2. Delete 3? Elements <3: 1,2. Need at least 4 elements <=3. We have 1,2,3 (three elements). Can't. Delete 4? Elements <4: 1,2,3. Need at least 4 elements <=4. We have all four. So we can delete 4? Subarray must be length >=4, so whole array. 4 is the 4th smallest? Sorted: 1,2,3,4. 4th smallest is 4. So we can delete 4. Then array [2,3,1] not palindrome. So NO. But wait, we could have chosen a different first deletion? Maybe delete something else first? Let's try deleting 1 first? Can we delete 1 with k=4? Need subarray length >=4 where 1 is 4th smallest. That requires at least 3 elements <=1. Only one 1 exists. So no. Delete 2? Elements <2: 1. Need at least 4 elements <=2. We have 1 and 2 (two). No. Delete 3? Elements <3: 1,2. Need at least 4 elements <=3. We have 1,2,3 (three). No. Delete 4? Elements <4: 1,2,3. Need at least 4 elements <=4. We have 1,2,3,4 (four). So we can delete 4. Subarray? We need a subarray of length >=4 containing 4 with at most 3 elements <4. 4 is at index 3. If we take subarray [5,2,4,3] (indices 1-4), elements <4: 2,3 (two). That's <=3. Elements <=4: 5? 5 is not <=4. So elements <=4 are 2,4,3 (three). That's only 3, need 4. So not enough. What about [2,4,3,1]? Elements <4: 2,3,1 (three). Elements <=4: 2,4,3,1 (four). So 4 is the 4th smallest? Sorted: 1,2,3,4. Yes, 4 is 4th smallest. So we can delete 4 from subarray [2,4,3,1] (indices 2-5). Then array becomes [5,2,3,1]. Then n=4, k=4. Sorted: 1,2,3,5. 4th smallest is 5. Delete 5 -> [2,3,1] not palindrome. Delete 1? Need 4 elements <=1, only one. No. Delete 2? Need 4 elements <=2, only 1,2. No. Delete 3? Need 4 elements <=3, only 1,2,3. No. So NO. What if we delete 5 first? We already saw we can delete 5 from [5,2,4,3] (indices 1-4). Then array [2,4,3,1]. Then we can delete 4 from [2,4,3,1] -> [2,3,1] not palindrome. Or delete 1? No. Delete 2? No. Delete 3? No. So NO. So test 4 is NO.
+        // Test 5: 8 5, [4,7,1,2,3,1,3,4]. Let's see if we can ever get a palindrome. Maybe we can delete 7? Elements <7: 1,1,2,3,3,4,4 (seven). Need subarray with at most 4 elements <7, and at least 5 elements <=7. 7 is at index 2. Can we find a subarray containing 7 with at most 4 elements <7? If we take subarray [4,7,1,2,3] (indices 1-5), elements <7: 4,1,2,3 (four). Elements <=7: all five. So 7 is the 5th smallest? Sorted: 1,2,3,4,7. Yes, 7 is 5th smallest. So we can delete 7. Array becomes [4,1,2,3,1,3,4] (n=7, k=5). Now can we get palindrome? Maybe we can delete 2? Elements <2: 1,1 (two). Need at most 4 elements <2, at least 5 elements <=2. We have 1,1,2 (three <=2). Not enough. Delete 3? Elements <3: 1,1,2 (three). Need at least 5 elements <=3. We have 1,1,2,3,3 (five). So we can delete a 3. Need subarray with at most 4 elements <3. We have three <3 total, so any subarray containing a 3 and all elements will have three <3, which is <=4. We need at least 5 elements <=3. We have exactly five. So we can take the whole array (length 7) and delete a 3. Which 3? The 3 at index 4 or 6? Let's delete the first 3 (index 4 in original? After deleting 7, array: indices: 1:4, 2:1, 3:2, 4:3, 5:1, 6:3, 7

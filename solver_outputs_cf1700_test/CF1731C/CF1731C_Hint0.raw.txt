@@ -1,0 +1,65 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // A number has an odd number of divisors iff it is a perfect square.
+        // We need subarrays with XOR that is NOT a perfect square.
+        // Total subarrays = n*(n+1)/2.
+        // Count subarrays with XOR being a perfect square, subtract from total.
+
+        long long total = (long long)n * (n + 1) / 2;
+        long long bad = 0;
+
+        // Maximum possible XOR value: n <= 2e5, a_i <= n.
+        // The maximum XOR of any subarray is less than 2^18 = 262144.
+        // Perfect squares up to that: 0^2, 1^2, ..., 512^2 = 262144.
+        // We'll count subarrays with XOR equal to any perfect square.
+
+        vector<int> squares;
+        for (int i = 0; i * i <= 2 * n; ++i) {
+            squares.push_back(i * i);
+        }
+
+        // Prefix XOR array
+        vector<int> pref(n + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            pref[i + 1] = pref[i] ^ a[i];
+        }
+
+        // Frequency map for prefix XORs
+        // Max prefix XOR value is less than 2^18 = 262144
+        const int MAX_VAL = 1 << 18; // 262144
+        vector<int> freq(MAX_VAL, 0);
+        freq[0] = 1; // prefix XOR 0 before any element
+
+        for (int i = 1; i <= n; ++i) {
+            int current = pref[i];
+            for (int sq : squares) {
+                int target = current ^ sq;
+                if (target < MAX_VAL) {
+                    bad += freq[target];
+                }
+            }
+            freq[current]++;
+        }
+
+        cout << total - bad << '\n';
+    }
+
+    return 0;
+}
+```

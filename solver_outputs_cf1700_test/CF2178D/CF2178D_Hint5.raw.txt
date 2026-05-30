@@ -1,0 +1,79 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<pair<int,int>> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i].first;
+        a[i].second = i + 1;
+    }
+    sort(a.begin(), a.end());
+    
+    if (m == n) {
+        cout << -1 << "\n";
+        return;
+    }
+    if (m == 0) {
+        cout << n - 1 << "\n";
+        for (int i = 0; i < n - 1; i++) {
+            cout << a[i].second << " " << a[n-1].second << "\n";
+        }
+        return;
+    }
+    
+    vector<int> alive;
+    for (int i = 0; i < n; i++) {
+        if (a[i].first > a[n-1].first - a[i].first) {
+            alive.push_back(i);
+        }
+    }
+    int min_alive = alive.size();
+    if (m < min_alive) {
+        cout << -1 << "\n";
+        return;
+    }
+    
+    vector<int> order;
+    vector<bool> used(n, false);
+    for (int i = 0; i < n; i++) {
+        if (a[i].first > a[n-1].first - a[i].first) {
+            order.push_back(i);
+            used[i] = true;
+        }
+    }
+    int need = m - min_alive;
+    for (int i = n - 2; i >= 0 && need > 0; i--) {
+        if (!used[i]) {
+            order.push_back(i);
+            used[i] = true;
+            need--;
+        }
+    }
+    order.push_back(n - 1);
+    used[n-1] = true;
+    
+    vector<pair<int,int>> attacks;
+    for (int i = 0; i < (int)order.size() - 1; i++) {
+        attacks.push_back({order[i], order.back()});
+    }
+    
+    cout << attacks.size() << "\n";
+    for (auto &p : attacks) {
+        cout << a[p.first].second << " " << a[p.second].second << "\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

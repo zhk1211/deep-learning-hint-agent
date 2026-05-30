@@ -1,0 +1,41 @@
+// Hint6
+#include <bits/stdc++.h>
+using namespace std;
+
+long long maxTriangles(long long k) {
+    // k lines: we can split them into three directions as evenly as possible
+    long long a = k / 3;
+    long long b = (k + 1) / 3;
+    long long c = (k + 2) / 3;
+    // maximum triangles = 2*(ab + bc + ca)
+    return 2LL * (a*b + b*c + c*a);
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        long long n;
+        cin >> n;
+        
+        long long lo = 0, hi = 1;
+        // find upper bound
+        while (maxTriangles(hi) < n) {
+            hi *= 2;
+        }
+        
+        while (lo < hi) {
+            long long mid = lo + (hi - lo) / 2;
+            if (maxTriangles(mid) >= n) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        cout << lo << '\n';
+    }
+    return 0;
+}

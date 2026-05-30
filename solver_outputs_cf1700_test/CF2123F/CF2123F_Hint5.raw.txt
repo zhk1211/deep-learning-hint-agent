@@ -1,0 +1,68 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n + 1);
+        vector<bool> used(n + 1, false);
+        p[1] = 1;
+        used[1] = true;
+
+        // Find all primes up to n
+        vector<int> primes;
+        vector<bool> is_prime(n + 1, true);
+        is_prime[0] = is_prime[1] = false;
+        for (int i = 2; i <= n; ++i) {
+            if (is_prime[i]) {
+                primes.push_back(i);
+                for (int j = i * 2; j <= n; j += i) {
+                    is_prime[j] = false;
+                }
+            }
+        }
+
+        // For each prime, build a cycle of numbers whose largest prime factor is that prime
+        for (int prime : primes) {
+            vector<int> cycle;
+            for (int mult = prime; mult <= n; mult += prime) {
+                if (!used[mult]) {
+                    // Check if largest prime factor is prime
+                    int temp = mult;
+                    int largest = 1;
+                    for (int d = 2; d * d <= temp; ++d) {
+                        while (temp % d == 0) {
+                            largest = d;
+                            temp /= d;
+                        }
+                    }
+                    if (temp > 1) largest = temp;
+                    if (largest == prime) {
+                        cycle.push_back(mult);
+                        used[mult] = true;
+                    }
+                }
+            }
+            if (!cycle.empty()) {
+                // Rotate cycle
+                for (size_t i = 0; i < cycle.size(); ++i) {
+                    p[cycle[i]] = cycle[(i + 1) % cycle.size()];
+                }
+            }
+        }
+
+        // Output permutation
+        for (int i = 1; i <= n; ++i) {
+            cout << p[i] << " \n"[i == n];
+        }
+    }
+    return 0;
+}
+```

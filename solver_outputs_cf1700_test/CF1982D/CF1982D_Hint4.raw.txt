@@ -1,0 +1,64 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m, k;
+        cin >> n >> m >> k;
+        vector<vector<long long>> a(n, vector<long long>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                cin >> a[i][j];
+            }
+        }
+        vector<string> type(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> type[i];
+        }
+
+        long long diff = 0;
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (type[i][j] == '0') {
+                    diff += a[i][j];
+                } else {
+                    diff -= a[i][j];
+                }
+            }
+        }
+
+        vector<vector<int>> pref(n + 1, vector<int>(m + 1, 0));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                int val = (type[i][j] == '0' ? 1 : -1);
+                pref[i + 1][j + 1] = pref[i][j + 1] + pref[i + 1][j] - pref[i][j] + val;
+            }
+        }
+
+        int g = 0;
+        for (int i = 0; i + k <= n; ++i) {
+            for (int j = 0; j + k <= m; ++j) {
+                int sum = pref[i + k][j + k] - pref[i][j + k] - pref[i + k][j] + pref[i][j];
+                g = gcd(g, abs(sum));
+            }
+        }
+
+        if (diff == 0) {
+            cout << "YES\n";
+        } else if (g == 0) {
+            cout << "NO\n";
+        } else if (abs(diff) % g == 0) {
+            cout << "YES\n";
+        } else {
+            cout << "NO\n";
+        }
+    }
+    return 0;
+}
+```

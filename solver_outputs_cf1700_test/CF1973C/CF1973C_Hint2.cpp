@@ -1,0 +1,69 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> p[i];
+        }
+
+        vector<int> q(n);
+        vector<int> idx(n);
+        iota(idx.begin(), idx.end(), 0);
+        
+        // Sort indices by p values
+        sort(idx.begin(), idx.end(), [&](int i, int j) {
+            return p[i] < p[j];
+        });
+
+        // We want to assign q values to maximize local maxima.
+        // Strategy: assign largest q to positions with largest p,
+        // but we need to ensure that local maxima occur at positions
+        // where p is large. Actually, we want to create peaks.
+        
+        // Split indices into two halves: first half (small p) and second half (large p)
+        // We'll assign q values from n down to 1.
+        // For positions with large p, we assign large q to make them peaks.
+        // For positions with small p, we assign small q to make them valleys.
+        
+        vector<int> large_p(idx.begin() + n/2, idx.end());
+        vector<int> small_p(idx.begin(), idx.begin() + n/2);
+        
+        // Sort large_p by index to maintain alternating pattern? No, we need to assign q values.
+        // We'll assign q values: for large p positions, assign n, n-1, ..., n/2+1
+        // for small p positions, assign n/2, n/2-1, ..., 1
+        // But we need to order them to maximize peaks. Peaks occur when a_i > a_{i-1} and a_i > a_{i+1}.
+        // If we assign largest q to largest p, then a_i = p_i + q_i will be large.
+        // To make a peak, we need neighbors to be smaller.
+        // So we can place the largest q on positions that are not adjacent? Actually, we can just assign
+        // q values in decreasing order to large p positions sorted by index, and increasing order to small p positions sorted by index.
+        // This ensures that large p positions get large q, and small p positions get small q.
+        
+        // Sort large_p by index
+        sort(large_p.begin(), large_p.end());
+        // Sort small_p by index
+        sort(small_p.begin(), small_p.end());
+        
+        int val = n;
+        for (int i : large_p) {
+            q[i] = val--;
+        }
+        for (int i : small_p) {
+            q[i] = val--;
+        }
+        
+        for (int i = 0; i < n; ++i) {
+            cout << q[i] << " \n"[i == n-1];
+        }
+    }
+    return 0;
+}

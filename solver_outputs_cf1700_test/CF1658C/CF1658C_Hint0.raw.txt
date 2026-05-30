@@ -1,0 +1,46 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> c(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> c[i];
+        }
+        
+        // Check if there is exactly one 1 in c
+        int cnt1 = 0;
+        for (int x : c) cnt1 += (x == 1);
+        if (cnt1 != 1) {
+            cout << "NO\n";
+            continue;
+        }
+        
+        // Rotate c so that the single 1 is at the beginning
+        int pos = find(c.begin(), c.end(), 1) - c.begin();
+        vector<int> a;
+        a.reserve(n);
+        for (int i = 0; i < n; ++i) {
+            a.push_back(c[(pos + i) % n]);
+        }
+        
+        bool ok = true;
+        for (int i = 1; i < n; ++i) {
+            if (a[i] > a[i-1] + 1 || a[i] == 1) {
+                ok = false;
+                break;
+            }
+        }
+        cout << (ok ? "YES" : "NO") << '\n';
+    }
+    return 0;
+}
+```

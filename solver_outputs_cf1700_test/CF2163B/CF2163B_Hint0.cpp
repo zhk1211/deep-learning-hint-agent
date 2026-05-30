@@ -1,0 +1,62 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> p(n);
+    for (int i = 0; i < n; ++i) cin >> p[i];
+    string x;
+    cin >> x;
+
+    vector<int> pos(n + 1);
+    for (int i = 0; i < n; ++i) pos[p[i]] = i;
+
+    vector<int> ones;
+    for (int i = 0; i < n; ++i) if (x[i] == '1') ones.push_back(i);
+
+    if (ones.empty()) {
+        cout << "0\n";
+        return;
+    }
+
+    int L = ones[0], R = ones.back();
+    int min_val = n + 1, max_val = 0;
+    for (int i = L; i <= R; ++i) {
+        min_val = min(min_val, p[i]);
+        max_val = max(max_val, p[i]);
+    }
+
+    int l = pos[min_val], r = pos[max_val];
+    if (l > r) swap(l, r);
+
+    for (int idx : ones) {
+        if (idx < l || idx > r) {
+            cout << "-1\n";
+            return;
+        }
+    }
+
+    vector<pair<int,int>> ops;
+    ops.emplace_back(l + 1, r + 1);
+
+    for (int idx : ones) {
+        if (idx == l || idx == r) continue;
+        if (p[idx] > min_val && p[idx] < max_val) continue;
+        cout << "-1\n";
+        return;
+    }
+
+    cout << ops.size() << "\n";
+    for (auto [a, b] : ops) cout << a << " " << b << "\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}

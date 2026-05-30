@@ -1,0 +1,55 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1e9 + 7;
+const int MAX_VAL = 63;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        vector<long long> freq(MAX_VAL + 1, 0);
+        for (int x : a) {
+            freq[x]++;
+        }
+
+        vector<long long> pow2(n + 1);
+        pow2[0] = 1;
+        for (int i = 1; i <= n; ++i) {
+            pow2[i] = (pow2[i - 1] * 2) % MOD;
+        }
+
+        vector<long long> dp(MAX_VAL + 1, 0);
+        for (int mask = 0; mask <= MAX_VAL; ++mask) {
+            if (freq[mask] == 0) continue;
+            vector<long long> ndp = dp;
+            for (int cur = 0; cur <= MAX_VAL; ++cur) {
+                if (dp[cur] == 0) continue;
+                int nxt = cur & mask;
+                ndp[nxt] = (ndp[nxt] + dp[cur] * ((pow2[freq[mask]] - 1 + MOD) % MOD)) % MOD;
+            }
+            ndp[mask] = (ndp[mask] + (pow2[freq[mask]] - 1 + MOD) % MOD) % MOD;
+            dp = move(ndp);
+        }
+
+        long long ans = 0;
+        for (int mask = 0; mask <= MAX_VAL; ++mask) {
+            if (__builtin_popcount(mask) == k) {
+                ans = (ans + dp[mask]) % MOD;
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

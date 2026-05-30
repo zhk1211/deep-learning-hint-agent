@@ -1,0 +1,51 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+void solve() {
+    int n;
+    ll m;
+    cin >> n >> m;
+    vector<ll> a(n), c(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    for (int i = 0; i < n; ++i) cin >> c[i];
+
+    unordered_map<ll, ll> cnt;
+    for (int i = 0; i < n; ++i) {
+        cnt[a[i]] = c[i];
+    }
+
+    ll ans = 0;
+    for (auto &[x, cx] : cnt) {
+        // consider pair (x, x+1)
+        if (cnt.count(x + 1)) {
+            ll cx1 = cnt[x + 1];
+            ll k1 = min(cx, m / x);
+            ll coins = m - k1 * x;
+            ll k2 = min(cx1, coins / (x + 1));
+            coins = m - (k1 * x + k2 * (x + 1));
+            ll r = min({k1, cx1 - k2, coins});
+            ll petals = (k1 - r) * x + (k2 + r) * (x + 1);
+            ans = max(ans, petals);
+        }
+        // consider only x
+        {
+            ll k = min(cx, m / x);
+            ans = max(ans, k * x);
+        }
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

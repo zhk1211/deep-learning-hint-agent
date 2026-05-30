@@ -1,0 +1,69 @@
+// Hint5
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+
+    vector<int> u(m), v(m), l(m);
+    // We don't know the lengths yet, but we will find them.
+
+    // First, find the length of each edge using queries.
+    // We can find the maximum capacity of the whole graph.
+    string all_one(m, '1');
+    cout << "? " << all_one << endl;
+    int max_capacity;
+    cin >> max_capacity;
+
+    // We will find the edges sorted by length using queries.
+    // We can query with all edges except one to see the difference.
+    vector<pair<int, int>> edges; // (length, index)
+    for (int i = 0; i < m; i++) {
+        string query_str(m, '1');
+        query_str[i] = '0';
+        cout << "? " << query_str << endl;
+        int response;
+        cin >> response;
+        // The length of edge i is max_capacity - response.
+        int len = max_capacity - response;
+        edges.push_back({len, i});
+    }
+
+    // Sort edges by length (Kruskal's algorithm order)
+    sort(edges.begin(), edges.end());
+
+    // Now we will build the minimum spanning forest using Kruskal's algorithm.
+    // We need to know the connectivity. We can query with a set of edges.
+    // We will maintain the current set of edges in the forest.
+    string current_set(m, '0');
+    int current_value = 0;
+
+    for (auto [len, idx] : edges) {
+        // Try adding this edge to the current set.
+        string test_set = current_set;
+        test_set[idx] = '1';
+        cout << "? " << test_set << endl;
+        int test_value;
+        cin >> test_value;
+
+        // If adding this edge increases the value by exactly its length,
+        // it means it connects two different components (Kruskal condition).
+        if (test_value == current_value + len) {
+            current_set[idx] = '1';
+            current_value = test_value;
+        }
+        // Otherwise, it would create a cycle, so we skip it.
+    }
+
+    // The current_value is the minimum capacity of the full spanning forest
+    // when all edges are functional? Wait, we built the minimum spanning forest.
+    // The minimum capacity of the system with all tracks functional is the
+    // value of the minimum full spanning forest. That's exactly current_value.
+    cout << "! " << current_value << endl;
+
+    return 0;
+}

@@ -1,0 +1,52 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(int x, int y) {
+    cout << "? " << x << " " << y << endl;
+    int d;
+    cin >> d;
+    return d;
+}
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    
+    int d1 = query(1, 1);
+    int d2 = query(n, m);
+    
+    int sum1 = d1 + 2;
+    int sum2 = n + m - d2;
+    
+    int d3 = query(1, m);
+    int dif = d3 + 1 - m;
+    
+    auto clamp = [&](int val, int lim) {
+        return max(1, min(val, lim));
+    };
+    
+    int x1 = clamp((sum1 + dif) / 2, n);
+    int y1 = clamp((sum1 - dif) / 2, m);
+    
+    int x2 = clamp((sum2 + dif) / 2, n);
+    int y2 = clamp((sum2 - dif) / 2, m);
+    
+    if (query(x1, y1) == 0) {
+        cout << "! " << x1 << " " << y1 << endl;
+    } else {
+        cout << "! " << x2 << " " << y2 << endl;
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

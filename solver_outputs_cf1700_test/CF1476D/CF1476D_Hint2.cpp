@@ -1,0 +1,54 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    string s;
+    cin >> n >> s;
+    
+    vector<int> left(n + 1, 0), right(n + 1, 0);
+    
+    // left[i] = max alternating sequence length starting at i going left
+    left[0] = 0;
+    for (int i = 1; i <= n; ++i) {
+        if (s[i - 1] == 'L') {
+            left[i] = left[i - 1] + 1;
+        } else {
+            left[i] = 0;
+        }
+    }
+    
+    // right[i] = max alternating sequence length starting at i going right
+    right[n] = 0;
+    for (int i = n - 1; i >= 0; --i) {
+        if (s[i] == 'R') {
+            right[i] = right[i + 1] + 1;
+        } else {
+            right[i] = 0;
+        }
+    }
+    
+    for (int i = 0; i <= n; ++i) {
+        int ans = 1;
+        if (i > 0 && s[i - 1] == 'L') {
+            ans += left[i];
+        }
+        if (i < n && s[i] == 'R') {
+            ans += right[i];
+        }
+        cout << ans << " \n"[i == n];
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

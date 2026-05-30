@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<string> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // Generate all candidates from the first string.
+        vector<string> candidates;
+        candidates.push_back(a[0]);                     // the string itself
+        for (int pos = 0; pos < m; ++pos) {
+            for (char c = 'a'; c <= 'z'; ++c) {
+                if (c == a[0][pos]) continue;
+                string cand = a[0];
+                cand[pos] = c;
+                candidates.push_back(cand);
+            }
+        }
+
+        string answer = "-1";
+        for (const string& cand : candidates) {
+            bool ok = true;
+            for (int i = 0; i < n; ++i) {
+                int diff = 0;
+                for (int j = 0; j < m; ++j) {
+                    if (cand[j] != a[i][j]) ++diff;
+                }
+                if (diff > 1) {
+                    ok = false;
+                    break;
+                }
+            }
+            if (ok) {
+                answer = cand;
+                break;
+            }
+        }
+        cout << answer << '\n';
+    }
+    return 0;
+}

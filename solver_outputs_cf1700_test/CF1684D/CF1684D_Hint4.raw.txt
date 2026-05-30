@@ -1,0 +1,58 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // We will choose k traps to jump over.
+        // If we jump over a trap at position i (0-indexed),
+        // it contributes (a[i] + (n - 1 - i)) to the "savings" compared to not jumping.
+        // Actually, we want to minimize total damage = sum(a) + sum_{i not jumped} (number of jumped traps before i) 
+        // = sum(a) + sum_{i not jumped} (jumps before i).
+        // Equivalent to: total damage = sum(a) + total penalty from jumps.
+        // If we jump over a set S of traps, the penalty for a trap i not in S is the number of jumps before i.
+        // This is equal to: for each jumped trap j, it adds 1 to all traps after j.
+        // So total damage = sum(a) + sum_{j in S} (n - 1 - j).
+        // But wait, if we jump over a trap, we also avoid its base damage a[j].
+        // So total damage = sum_{i not in S} a[i] + sum_{j in S} (n - 1 - j).
+        // = sum(a) - sum_{j in S} a[j] + sum_{j in S} (n - 1 - j).
+        // = sum(a) - sum_{j in S} (a[j] - (n - 1 - j)).
+        // To minimize damage, we want to maximize sum_{j in S} (a[j] - (n - 1 - j)).
+        // So we compute value[i] = a[i] - (n - 1 - i) for each trap.
+        // Choose up to k traps with the largest value[i] (if value[i] > 0, it's beneficial to jump).
+        // But we can jump at most k traps, and we can also choose not to jump if value[i] <= 0.
+        // However, the problem says "no more than k traps", so we can jump fewer if it's worse.
+        // So we take the sum of the top min(k, number of positive values) values.
+        
+        vector<long long> vals(n);
+        for (int i = 0; i < n; ++i) {
+            vals[i] = a[i] - (n - 1 - i);
+        }
+        sort(vals.rbegin(), vals.rend());
+        long long sum_a = accumulate(a.begin(), a.end(), 0LL);
+        long long best_saving = 0;
+        for (int i = 0; i < min(k, n); ++i) {
+            if (vals[i] > 0) {
+                best_saving += vals[i];
+            } else {
+                break;
+            }
+        }
+        long long ans = sum_a - best_saving;
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

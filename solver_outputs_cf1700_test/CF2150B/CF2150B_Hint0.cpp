@@ -1,0 +1,246 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // Check basic necessary condition: sum a_i must be n
+        int sum_a = accumulate(a.begin(), a.end(), 0);
+        if (sum_a != n) {
+            cout << "0\n";
+            continue;
+        }
+
+        // We'll construct the positions of black cells row by row.
+        // The conditions imply a specific structure.
+        // Let's try to reconstruct the grid using the two max conditions.
+        // For each k from 1 to n, there is exactly one cell with max(x,y)=k.
+        // That means the "anti-diagonal" sets: for k, the cell is either (k, y) with y <= k, or (x, k) with x <= k.
+        // Similarly for max(x, n+1-y)=k, which is a diagonal condition.
+
+        // We can think of placing cells in order of k.
+        // Let's maintain available columns for each row.
+        // Actually, we can determine the exact positions uniquely if possible.
+
+        // We'll try to construct the set of black cells.
+        // We'll use two arrays to track which columns are used in the two conditions.
+        // But there is a known solution: the answer is either 0 or 1 or 2 based on some conditions.
+        // Let's analyze.
+
+        // Let's define for each row i, the number of black cells a_i.
+        // The conditions imply that the black cells form a permutation-like structure.
+        // Specifically, for each k, the cell with max(x,y)=k must be either (k, y) with y <= k or (x, k) with x <= k.
+        // And for max(x, n+1-y)=k, it's either (k, y) with n+1-y <= k => y >= n+1-k, or (x, n+1-k) with x <= k.
+
+        // We can try to assign cells greedily from k=1 to n.
+        // We'll maintain sets of available rows for columns? Actually, we can determine the exact cells.
+
+        // Let's create a 2D array? No, n up to 2e5.
+        // We need an O(n) or O(n log n) solution.
+
+        // Let's think differently: The two conditions define two permutations?
+        // For each k, there is a unique cell with max(x,y)=k. Let's call it P[k] = (x, y).
+        // Similarly, Q[k] = (x', y') with max(x', n+1-y')=k.
+        // These two sets of cells must be exactly the same set of m cells? No, the conditions say "there exists exactly one index i such that max(x_i, y_i) = k". That means among the black cells, exactly one satisfies that property. So the black cells are exactly the set of these n cells (since k goes 1..n). So m = n? Wait, the first condition says for each row k, there are exactly a_k black cells. Sum a_k = m. The second condition says for each k in 1..n, there is exactly one black cell with max(x,y)=k. That implies m >= n, because there are n distinct k values, each requiring a distinct black cell. But could a black cell satisfy max(x,y)=k for multiple k? No, max(x,y) is a single number. So we need at least n black cells. Similarly, the third condition requires n distinct black cells (one for each k). So m must be at least n. But sum a_k = m. So m >= n. However, the problem statement example has n=5, a=[2,2,1,0,0], sum=5, so m=5. So m = n always? Let's check: The second condition says "for each k (1<=k<=n), there exists exactly one index i such that max(x_i, y_i) = k". That means the set of black cells must contain exactly one cell with max = k for each k. So there are exactly n black cells. Thus m = n. So sum a_i must be n. If not, answer 0. We already checked that.
+
+        // So m = n. The black cells are exactly n cells.
+        // Now, the two conditions define two permutations? Let's see.
+        // For each k, the cell with max(x,y)=k is unique. Let's denote it as A_k = (r_k, c_k). Since max(r_k, c_k)=k, we have either r_k = k and c_k <= k, or c_k = k and r_k <= k.
+        // Similarly, for each k, the cell with max(x, n+1-y)=k is unique. Denote B_k = (r'_k, c'_k). max(r'_k, n+1-c'_k)=k.
+        // Since the set of black cells is the same, the sets {A_k} and {B_k} are both exactly the set of all black cells. So they are the same set of n cells, just ordered differently.
+        // So we have a bijection between the two conditions.
+
+        // Let's try to construct the grid row by row.
+        // We know each row i has a_i black cells.
+        // Also, for each k, there is exactly one cell with max(x,y)=k. This means if we consider the cells on or below the main diagonal? Actually, max(x,y)=k means the cell is in the union of row k (columns 1..k) and column k (rows 1..k). So the cell is in the "L-shaped" region.
+        // Similarly, max(x, n+1-y)=k means the cell is in row k (columns n+1-k..n) or column n+1-k (rows 1..k).
+
+        // This suggests a constructive approach: we can determine the positions uniquely by processing k from 1 to n.
+        // Let's maintain the number of remaining black cells to place in each row: rem[i] = a_i.
+        // Also, we need to satisfy the max conditions.
+        // For k from 1 to n:
+        // We need to place exactly one black cell that will have max(x,y)=k.
+        // This cell must be either in row k (with column <= k) or in column k (with row <= k).
+        // Similarly, we need to place exactly one black cell that will have max(x, n+1-y)=k.
+        // But these are the same cell? Not necessarily the same k index in the conditions. The cell that satisfies max(x,y)=k might be different from the cell that satisfies max(x, n+1-y)=k. But both are in the set of black cells.
+
+        // Actually, we can think of the two conditions as giving two permutations of the black cells.
+        // Let's define for each black cell (x,y), its "value1" = max(x,y) and "value2" = max(x, n+1-y).
+        // The conditions say that the multiset of value1 over all black cells is exactly {1,2,...,n} (each exactly once), and similarly for value2.
+        // So we have n cells, each with a pair (v1, v2) where v1 and v2 are permutations of 1..n.
+        // Also, the row counts are given.
+
+        // This is reminiscent of constructing a permutation matrix with given row sums, but with additional constraints.
+
+        // Let's try to find a pattern.
+        // Consider the transformation: reflect the grid horizontally? The second condition is symmetric to the first if we reverse columns.
+        // Let y' = n+1-y. Then max(x, n+1-y) = max(x, y'). So the second condition is exactly the first condition on the horizontally flipped grid.
+        // So we have two grids: original and flipped. In both, the set of black cells must have the property that max(x,y) is a permutation.
+        // This means the black cells form a set such that both in original and flipped, the "max" values are 1..n.
+
+        // Let's try to construct greedily.
+        // We'll process rows from 1 to n? Or process k from 1 to n?
+        // Let's try to assign the cell with max(x,y)=k.
+        // For a given k, the possible positions are (k, j) for j=1..k, and (i, k) for i=1..k-1.
+        // We need to choose one of these, and also it must be consistent with the row counts and the other condition.
+
+        // Let's think about the row counts. For row i, we need a_i cells.
+        // Consider the cells with max(x,y)=k. If we choose (k, j) with j<k, then row k gets a cell, column j gets a cell. If we choose (k,k), row k and column k get a cell. If we choose (i,k) with i<k, row i gets a cell, column k gets a cell.
+        // So each choice affects row and column counts.
+
+        // Also, the second condition: max(x, n+1-y)=k. The possible positions are (k, j) with n+1-j <= k => j >= n+1-k, and (i, n+1-k) with i <= k.
+        // So for each k, we have two sets of possible cells (one for each condition). But the same cell must be chosen for some k in the first condition and some k' in the second condition? Actually, each cell has a specific v1 and v2. So if we assign a cell to position (x,y), its v1 = max(x,y) and v2 = max(x, n+1-y). So the cell will be the unique one for v1 and the unique one for v2. So the assignment of cells to (v1, v2) pairs is a bijection.
+
+        // So we can think of it as: we need to choose n cells (x,y) such that:
+        // - Row i has exactly a_i cells.
+        // - The set of v1 = max(x,y) is exactly 1..n.
+        // - The set of v2 = max(x, n+1-y) is exactly 1..n.
+
+        // This is equivalent to: we have a permutation matrix? Not exactly.
+
+        // Let's try to find necessary conditions on a_i.
+        // Since v1 = max(x,y) is a permutation, for each k, there is exactly one cell with max(x,y)=k.
+        // Consider the number of cells in rows 1..k. Since any cell with max(x,y) <= k must have both x<=k and y<=k. So all cells with max <= k are within the k x k top-left subgrid. There are exactly k such cells (since v1 goes 1..k). So the total number of black cells in the first k rows is exactly the number of cells in the k x k subgrid that are black. But wait, the cells with max <= k are exactly those in the k x k subgrid. So the number of black cells in the first k rows and first k columns is exactly k. But we don't know the column distribution.
+        // However, we know the row sums a_i. The number of black cells in the first k rows is sum_{i=1}^k a_i. These cells might have columns > k? If a cell has row <= k but column > k, then its max(x,y) > k. So it would not be counted in the k cells with max <= k. But the total number of cells with max <= k is k. So the number of black cells in the first k rows that have column > k is not constrained directly? Let's analyze.
+
+        // Let S_k = sum_{i=1}^k a_i. This is the total number of black cells in rows 1..k.
+        // Among these, some have column <= k, some have column > k.
+        // The cells with max <= k are exactly those with row <= k and column <= k. There are exactly k such cells.
+        // So the number of black cells in rows 1..k with column <= k is exactly k.
+        // Therefore, the number of black cells in rows 1..k with column > k is S_k - k.
+        // Since the number of cells with column > k in rows 1..k cannot be negative, we must have S_k >= k for all k.
+        // Also, for k=n, S_n = n, so S_n = n, which is consistent.
+        // Similarly, consider the second condition. Let's flip columns: y' = n+1-y. Then the condition is max(x, y') is a permutation. By the same logic, for the flipped grid, the number of black cells in rows 1..k and columns 1..k (in flipped coordinates) is exactly k.
+        // In original coordinates, columns 1..k in flipped correspond to columns n+1-k..n in original.
+        // So the number of black cells in rows 1..k and columns n+1-k..n is exactly k.
+        // Let T_k = number of black cells in rows 1..k and columns n+1-k..n.
+        // We know T_k = k.
+        // But we also know the row sums. The number of black cells in rows 1..k is S_k. Among these, some are in columns n+1-k..n, some are in columns 1..n-k.
+        // So T_k = number of black cells in rows 1..k with column >= n+1-k.
+        // This must equal k.
+        // So we have another condition: for each k, the number of black cells in rows 1..k with column >= n+1-k is exactly k.
+
+        // Let's combine these conditions. They might force a specific structure.
+
+        // Let's try to construct the grid row by row from top to bottom.
+        // We know row 1 has a_1 cells.
+        // For k=1: max(x,y)=1 cell must be (1,1) because max(1,1)=1. So (1,1) must be black.
+        // Also max(x, n+1-y)=1: max(1, n+1-y)=1 => n+1-y <=1 => y >= n. So y=n. Also x<=1 => x=1. So (1,n) must be black? Wait, max(1, n+1-y)=1 implies n+1-y <= 1 => y >= n. Since y<=n, y=n. So (1,n) must be black. But wait, if n>1, then (1,1) and (1,n) are two different cells. But we only have one cell with max(x,y)=1 and one with max(x, n+1-y)=1. They could be the same cell if n=1, but n>=2. So we have two cells: (1,1) and (1,n). But row 1 has a_1 cells. So a_1 must be at least 2? Let's check the example: n=5, a=[2,2,1,0,0]. a_1=2. So row 1 has two cells. They are (1,1) and (1,5) as in the example. So indeed, (1,1) and (1,n) are forced to be black? Let's verify: For k=1, max(x,y)=1 forces (1,1). For max(x, n+1-y)=1 forces (1,n). So these two cells are always black. Thus a_1 >= 2. If a_1 < 2, answer 0. In sample 3: n=2, a=[1,1]. a_1=1 < 2, so answer 0. Correct.
+
+        // What about k=n? max(x,y)=n: possible cells are (n, y) with y<=n, or (x, n) with x<=n. But we already have some cells placed. Similarly max(x, n+1-y)=n: possible cells are (n, y) with y>=1 (since n+1-y <= n => y>=1), or (x, 1) with x<=n. So (n,1) and (n,n) might be forced? Let's see.
+
+        // Let's try to deduce the exact positions by processing k from 1 to n.
+        // We'll maintain the set of available cells? But we can determine the cells row by row.
+
+        // Consider the conditions S_k >= k and T_k = k.
+        // T_k = number of black cells in rows 1..k with column >= n+1-k.
+        // For k=1: T_1 = number of black cells in row 1 with column >= n. That is exactly 1 (the cell (1,n)). So T_1=1, which matches k=1.
+        // For k=2: T_2 = number of black cells in rows 1..2 with column >= n-1. This must be 2.
+        // We already have (1,n) and (1,1) in row 1. (1,1) has column 1 < n-1 (for n>2), so it doesn't count. (1,n) counts. So we need one more black cell in rows 1..2 with column >= n-1. This could be in row 2, column n-1 or n, or in row 1, column n-1. But row 1 already has a_1 cells. If a_1=2, row 1 is full. So the additional cell must be in row 2. So row 2 must have a cell in column >= n-1.
+        // Similarly, S_2 = a_1 + a_2. S_2 >= 2. And the number of black cells in rows 1..2 with column <=2 must be 2 (from the first condition for k=2). We already have (1,1) in column 1. So we need one more in rows 1..2 with column <=2. This could be (2,1) or (2,2) or (1,2). But row 1 is full if a_1=2, so it must be in row 2. So row 2 must have a cell in column <=2.
+
+        // This suggests a pattern: For each row i, the black cells are placed in a contiguous interval? Let's check the example: row 1: columns 1 and 5. row 2: columns 2 and 4. row 3: column 3. So row i has cells at i and n+1-i? In the example, row 1: 1 and 5 (n+1-1=5). row 2: 2 and 4 (n+1-2=4). row 3: 3 (n+1-3=3). So it seems each row i has cells at i and n+1-i, except when i = n+1-i (i.e., the middle row if n odd), then it has only one cell. And the row sums a_i are exactly the number of these positions that are within 1..n. So a_i = 2 for i < n+1-i, and a_i = 1 for i = n+1-i (if n odd), and a_i = 0 for i > n+1-i? But in the example, n=5, rows 4 and 5 have a_i=0. But row 4 would have positions 4 and 2, but 2 is already taken by row 2? Wait, the positions are (i, i) and (i, n+1-i). For i=4, these are (4,4) and (4,2). But (4,2) has max(x,y)=4, and max(x, n+1-y)=max(4, 5+1-2=4)=4. So it would be a valid cell. But in the example, row 4 has 0 cells. So the pattern is not simply that every row gets both symmetric positions. The row sums a_i are given, and we must choose which rows get cells.
+
+        // Let's re-examine the conditions S_k >= k and T_k = k.
+        // S_k = sum_{i=1}^k a_i. We need S_k >= k for all k, and S_n = n.
+        // T_k = number of black cells in rows 1..k with column >= n+1-k. This must equal k.
+        // Let's define for each row i, the number of black cells in that row that are in columns >= n+1-i? Not exactly.
+
+        // Let's try to construct the grid by determining for each row i, which columns are black.
+        // We know that the cells with max(x,y)=k are exactly one per k. This means if we list the black cells sorted by max(x,y), we get a sequence.
+        // Consider the "profile" of the grid. The condition max(x,y)=k means that the black cells form a "staircase" shape? Actually, if we consider the cells with max <= k, they are in the k x k top-left. There are exactly k of them. This is exactly the condition for a permutation matrix? No, a permutation matrix has exactly one 1 in each row and column. Here we have multiple cells per row, but the number of cells in the top-left k x k is k. This is similar to the condition for a Young diagram or something.
+
+        // Let's think about the row sums a_i. Since S_k >= k, and S_n = n, the sequence a_i must satisfy that the prefix sums are at least the index. This is a known condition for something like ballot sequences.
+
+        // Also, from the second condition, if we reverse the columns, we get the same condition on the flipped grid. So the row sums of the flipped grid? The flipped grid has the same row sums a_i, but the columns are reversed. The condition T_k = k means that in the flipped grid, the number of black cells in rows 1..k and columns 1..k is exactly k. So the flipped grid also satisfies the same prefix condition. So the row sums a_i must be such that both the original and the reversed column order satisfy the prefix condition? But the row sums are the same. The condition on the flipped grid is about columns n+1-k..n, which is equivalent to saying that if we define b_i = number of black cells in row i with column <= something? Actually, T_k = k means that for the flipped grid, the number of black cells in the top-left k x k is k. So if we define a'_i = a_i (same row sums), then the condition is that for the flipped grid, the prefix sums S'_k = sum_{i=1}^k a_i >= k? Wait, the condition for the flipped grid is exactly the same as the first condition: for each k, the number of black cells in rows 1..k and flipped columns 1..k is k. But flipped columns 1..k correspond to original columns n+1-k..n. So the number of black cells in rows 1..k and original columns n+1-k..n is k. This is T_k = k. But note that this is an equality, not an inequality. For the first condition, we had S_k >= k, but the number of black cells in rows 1..k and columns 1..k is exactly k (because the cells with max <= k are exactly those in the k x k, and there are k such cells). So actually, the number of black cells in the top-left k x k is exactly k. So we have:
+        // For all k: (number of black cells in rows 1..k and columns 1..k) = k.
+        // Similarly, (number of black cells in rows 1..k and columns n+1-k..n) = k.
+
+        // Let's denote L_k = number of black cells in rows 1..k and columns 1..k. L_k = k.
+        // R_k = number of black cells in rows 1..k and columns n+1-k..n. R_k = k.
+
+        // Now, consider the difference between these. For a given row i, let l_i be the number of black cells in row i with column <= i, and r_i be the number with column >= n+1-i. Also, there might be cells with column between i+1 and n-i. But note that for i > n/2, i > n+1-i, so the intervals [1, i] and [n+1-i, n] overlap. Actually, they overlap when i > n/2. For i <= n/2, they are disjoint.
+
+        // Let's try to determine the positions row by row from top to bottom.
+        // We know row 1: L_1 = 1 means there is exactly 1 black cell in row 1, column 1. So (1,1) is black.
+        // R_1 = 1 means exactly 1 black cell in row 1, column n. So (1,n) is black.
+        // So row 1 must have at least these two cells. If n=2, these are the same cell? No, n>=2, so they are distinct. So a_1 >= 2. If a_1 > 2, then there are additional cells in row 1 with columns between 2 and n-1. But wait, L_1 only counts column 1, R_1 counts column n. So additional cells in row 1 would be in columns 2..n-1. But then for k=2, L_2 = number of black cells in rows 1..2, columns 1..2. We already have (1,1). If row 1 has a cell in column 2, that would count in L_2. But L_2 must be exactly 2. So we need to be careful.
+
+        // Let's try to construct greedily by processing k from 1 to n, and deciding the cell with max(x,y)=k and max(x, n+1-y)=k.
+        // Actually, we can think of the cells as being placed in order of their max(x,y) value.
+        // For k=1: we must place cell with max=1: (1,1). Also cell with max(x, n+1-y)=1: (1,n). So these two are fixed.
+        // For k=2: max(x,y)=2 cell must be either (2,1), (2,2), or (1,2). But (1,1) is already taken, so (1,2) is possible? (1,2) has max=2. But row 1 already has a_1 cells. If a_1=2, then row 1 is full, so (1,2) cannot be used. So the cell must be in row 2: either (2,1) or (2,2).
+        // Similarly, max(x, n+1-y)=2 cell must be either (2,n-1), (2,n), or (1,n-1). (1,n) is taken. If a_1=2, row 1 full, so it must be in row 2: (2,n-1) or (2,n).
+        // So for row 2, we need to place two cells? One for max=2 and one for max(x, n+1-y)=2. They could be the same cell if (2,2) and (2,n-1) are the same? That would require 2 = n-1 => n=3. For n=3, (2,2) is both? max(2,2)=2, max(2, 3+1-2=2)=2. So (2,2) satisfies both. So in that case, one cell serves both conditions. In general, the cell (k, k) has max(x,y)=k and max(x, n+1-y)=max(k, n+1-k). For this to equal k, we need n+1-k <= k => k >= (n+1)/2. So for k >= ceil((n+1)/2), the cell (k,k) satisfies both conditions. Similarly, the cell (k, n+1-k) has max(x,y)=max(k, n+1-k). For this to equal k, we need n+1-k <= k => same condition. And its max(x, n+1-y)=max(k, n+1-(n+1-k))=max(k, k)=k. So (k, n+1-k) also satisfies both when k >= (n+1)/2. For k < (n+1)/2, these are distinct cells.
+
+        // So the construction might be: For each k from 1 to n, we need to assign the cell for max(x,y)=k and for max(x, n+1-y)=k. They might be the same or different.
+        // Also, we have row sums a_i. So we need to choose which rows get how many cells.
+
+        // Let's try to determine the exact set of black cells based on a_i.
+        // Consider the following: For each row i, the possible columns for black cells are constrained. From the max conditions, a cell (i,j) has v1 = max(i,j) and v2 = max(i, n+1-j).
+        // Since v1 and v2 must be a permutation of 1..n, each row i can only have cells with certain v1 and v2.
+        // In particular, for a cell in row i, v1 >= i, and v2 >= i. Also, v1 >= j, v2 >= n+1-j.
+        // So if we consider the set of cells in row i, their v1 values must be distinct and range from i to something? Actually, all cells in the grid have distinct v1 because v1 is a permutation. So in row i, the v1 values of its cells must be a subset of {i, i+1, ..., n} and they must be distinct from v1 of cells in other rows.
+        // Similarly for v2.
+
+        // This suggests that we can determine the cells by matching rows to v1 and v2 values.
+
+        // Let's think of it as: We have n cells. Each cell has a row x, a column y, v1 = max(x,y), v2 = max(x, n+1-y).
+        // We are given the row sums a_x. We need to count the number of sets of cells satisfying these.
+
+        // Notice that v1 and v2 are both >= x. Also, v1 >= y, v2 >= n+1-y.
+        // So y <= v1 and y >= n+1-v2.
+        // So for a given row x, and given v1, v2 assigned to a cell in that row, the column y must satisfy: y <= v1, y >= n+1-v2, and also max(x,y)=v1 => either y=v1 and x<=v1, or x=v1 and y<=v1. But since x is given, if x < v1, then we must have y = v1. If x = v1, then y can be any value <= v1. Similarly, from v2: max(x, n+1-y)=v2. If x < v2, then n+1-y = v2 => y = n+1-v2. If x = v2, then n+1-y <= v2 => y >= n+1-v2.
+
+        // So for a cell in row x, if x < v1, then y must be exactly v1. If x = v1, then y <= v1.
+        // Similarly, if x < v2, then y = n+1-v2. If x = v2, then y >= n+1-v2.
+
+        // Therefore, for a given row x, the possible pairs (v1, v2) for a cell in that row are constrained. Specifically, if x < v1 and x < v2, then we must have v1 = y = n+1-v2, so v1 + v2 = n+1. And also v1 > x, v2 > x.
+        // If x = v1 < v2, then y <= x, and also y = n+1-v2 (since x < v2). So y = n+1-v2 <= x => v2 >= n+1-x. Also v2 > x.
+        // If x = v2 < v1, then y >= n+1-x, and y = v1 (since x < v1). So v1 >= n+1-x, and v1 > x.
+        // If x = v1 = v2, then y <= x and y >= n+1-x. So we need n+1-x <= x => x >= (n+1)/2. And y can be any integer in [n+1-x, x].
+
+        // So each cell's (v1, v2) pair is determined by its row and column, and vice versa.
+
+        // Now, the row sums a_x tell us how many cells are in row x. For each such cell, we need to assign a (v1, v2) pair from the available ones, such that overall v1 is a permutation of 1..n and v2 is a permutation of 1..n.
+
+        // This is equivalent to: We have n rows. Each row x must have a_x cells. Each cell in row x will consume one v1 value and one v2 value from certain sets.
+        // Let's define for each row x, the possible types of cells:
+        // Type A: v1 > x, v2 > x, and v1 + v2 = n+1. Here y = v1 = n+1-v2.
+        // Type B: v1 = x, v2 > x, and v2 >= n+1-x. Here y = n+1-v2 (which is <= x).
+        // Type C: v2 = x, v1 > x, and v1 >= n+1-x. Here y = v1 (which is >= n+1-x).
+        // Type D: v1 = v2 = x, which requires x >= (n+1)/2. Here y can be any in [n+1-x, x].
+
+        // Note that Type B and Type C are symmetric. Type A pairs v1 and v2 such that they sum to n+1, both > x.
+        // Type D is a special case where v1=v2=x.
+
+        // We need to assign to each row x exactly a_x cells, each of one of these types, such that the multiset of v1 is {1..n} and v2 is {1..n}.
+
+        // Let's count the total number of cells of each type across all rows.
+        // Let's denote for each k from 1 to n, we need to assign it as v1 exactly once, and as v2 exactly once.
+        // Consider the pairs (v1, v2). They form a permutation of 1..n for v1 and v2. So we are essentially looking for a permutation matrix? Actually, we are assigning each v1 to a unique v2, and each such pair corresponds to a cell in some row x.
+
+        // Let's analyze the constraints on the row x for a given (v1, v2) pair.
+        // From above, a cell with given (v1, v2) can only be placed in a row x that satisfies:
+        // - x <= v1 and x <= v2.
+        // - If x < v1 and x < v2, then we must have v1 + v2 = n+1 (Type A).
+        // - If x = v1 < v2, then we need v2 >= n+1-x (Type B).
+        // - If x = v2 < v1, then we need v1 >= n+1-x (Type C).
+        // - If x = v1 = v2, then we need x >= (n+1)/2 (Type D).
+
+        // So for a given (v1, v2) pair, the possible rows are:
+        // - If v1 + v2 = n+1 and v1 != v2: then we can have x < min(v1, v2) (Type A). Also we could have x = v1 if v1 < v2 and v2 >= n+1-v1 = v1? Wait, if v1+v2=n+1 and v1<v2, then v2 = n+1-v1. The condition for Type B (x=v1) is v2 >= n+1-x = n+1-v1 = v2, which is true. So x=v1 is allowed. Similarly, x=v2 is allowed for Type C. So actually, if v1+v2=n+1, then any x <= min(v1, v2) is allowed? Let's check: For x < v1 and x < v2, Type A works. For x = v1 < v2, Type B works. For x

@@ -1,0 +1,103 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < m; ++i) {
+        int a, b;
+        cin >> a >> b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+
+    vector<int> t(n + 1);
+    for (int i = 1; i <= n; ++i) {
+        cin >> t[i];
+    }
+
+    // Check if the desired topic assignment is valid
+    for (int u = 1; u <= n; ++u) {
+        // Check that t[u] is at most degree(u) + 1
+        if (t[u] > (int)adj[u].size() + 1) {
+            cout << -1 << '\n';
+            return 0;
+        }
+        // Check that for every neighbor v with t[v] == t[u], we have t[u] <= t[v]? No, the condition is:
+        // The greedy algorithm picks the smallest positive integer not present among neighbors.
+        // So for a vertex u, the set of topics of its neighbors must contain all integers from 1 to t[u]-1,
+        // and must NOT contain t[u].
+        // Also, if some neighbor v has t[v] < t[u], it's fine; if t[v] == t[u], that's invalid because
+        // then u would have a neighbor with the same topic, which violates the condition that the greedy
+        // algorithm would not pick t[u] if it's already present.
+        // But we also need to ensure that for each u, the set of neighbors' topics covers 1..t[u]-1.
+        // We can check this by verifying that for each u, there exists at least one neighbor with topic = k
+        // for each k in [1, t[u]-1]. However, doing this naively is O(n^2). We can do it efficiently by
+        // sorting neighbors by topic or using a set.
+        // Since sum of degrees is 2m, we can for each u collect topics of neighbors, sort and unique them,
+        // then check if they contain 1..t[u]-1 and do not contain t[u].
+        vector<int> neigh_topics;
+        neigh_topics.reserve(adj[u].size());
+        for (int v : adj[u]) {
+            neigh_topics.push_back(t[v]);
+        }
+        sort(neigh_topics.begin(), neigh_topics.end());
+        neigh_topics.erase(unique(neigh_topics.begin(), neigh_topics.end()), neigh_topics.end());
+
+        // Check that t[u] is not present
+        if (binary_search(neigh_topics.begin(), neigh_topics.end(), t[u])) {
+            cout << -1 << '\n';
+            return 0;
+        }
+
+        // Check that all 1..t[u]-1 are present
+        int expected = 1;
+        for (int topic : neigh_topics) {
+            if (topic == expected) {
+                ++expected;
+                if (expected == t[u]) break;
+            } else if (topic > expected) {
+                // missing expected
+                break;
+            }
+        }
+        if (expected != t[u]) {
+            cout << -1 << '\n';
+            return 0;
+        }
+    }
+
+    // If valid, we need to output an ordering of vertices such that the greedy algorithm produces the given topics.
+    // The greedy algorithm processes vertices in some order. When processing a vertex, it looks at already processed
+    // neighbors and picks the smallest topic not present among them.
+    // The condition we checked ensures that for each vertex u, the set of all its neighbors' topics (in the final assignment)
+    // covers 1..t[u]-1 and does not contain t[u]. This is necessary but not sufficient for the existence of an ordering.
+    // However, it is known that if the assignment satisfies these local conditions, then sorting vertices by t[u] ascending
+    // gives a valid order. Let's verify: if we process vertices in increasing order of t[u], then when processing u,
+    // all neighbors v with t[v] < t[u] have already been processed (since we process smaller topics first). Their topics
+    // are exactly the set of all neighbors with topics < t[u]. By the condition, this set contains all integers from 1 to t[u]-1.
+    // Also, no neighbor with topic = t[u] exists. Neighbors with topic > t[u] are not processed yet, so they don't affect the choice.
+    // Thus the greedy algorithm will see exactly the set {1, 2, ..., t[u]-1} among processed neighbors, and will pick t[u].
+    // So sorting by t[u] ascending works. We need to output the vertex indices in that order.
+    // If there are ties (same t[u]), the order among them doesn't matter because they don't have edges between them (otherwise
+    // they would have the same topic, which we already checked is invalid). So any order within same topic is fine.
+
+    vector<int> order(n);
+    iota(order.begin(), order.end(), 1);
+    sort(order.begin(), order.end(), [&](int a, int b) {
+        return t[a] < t[b];
+    });
+
+    for (int i = 0; i < n; ++i) {
+        cout << order[i] << " \n"[i == n - 1];
+    }
+
+    return 0;
+}
+```

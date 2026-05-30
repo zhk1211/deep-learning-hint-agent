@@ -1,0 +1,75 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    string s;
+    cin >> n >> s;
+
+    // Find first '1'
+    int first_one = -1;
+    for (int i = 0; i < n; ++i) {
+        if (s[i] == '1') {
+            first_one = i;
+            break;
+        }
+    }
+
+    if (first_one == -1) {
+        cout << "0\n";
+        return 0;
+    }
+
+    // The first substring will be the prefix starting at first_one
+    string prefix = s.substr(first_one);
+    int m = prefix.size();
+
+    // Find the next zero after the first one
+    int first_zero = -1;
+    for (int i = 1; i < m; ++i) {
+        if (prefix[i] == '0') {
+            first_zero = i;
+            break;
+        }
+    }
+
+    if (first_zero == -1) {
+        // All ones, answer is just prefix
+        cout << prefix << "\n";
+        return 0;
+    }
+
+    // We need to find the best second substring to OR with prefix
+    // The second substring must be of length m - first_zero, starting at some position
+    // in the original string, and we want to maximize the OR result.
+    // Since we only care about the bits from first_zero onwards,
+    // we can try all possible starting positions for the second substring.
+    // The length of the second substring is m - first_zero.
+    int len = m - first_zero;
+    string best = prefix;
+
+    // We only need to consider starting positions from 0 to first_zero in the original string
+    // (relative to first_one). Actually, the second substring can start anywhere from 0 to first_zero
+    // in the prefix (or original string). But we can limit to first_zero + 1 candidates.
+    for (int start = 0; start <= first_zero; ++start) {
+        // Check if we can take a substring of length len starting at start
+        if (start + len > m) break;
+        string cand = prefix;
+        for (int i = 0; i < len; ++i) {
+            if (prefix[start + i] == '1') {
+                cand[first_zero + i] = '1';
+            }
+        }
+        if (cand > best) {
+            best = cand;
+        }
+    }
+
+    cout << best << "\n";
+    return 0;
+}
+```

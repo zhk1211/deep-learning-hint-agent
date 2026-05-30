@@ -1,0 +1,78 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, x;
+        cin >> n >> x;
+        vector<int> p(n + 1);
+        int pos_x = -1;
+        for (int i = 1; i <= n; ++i) {
+            cin >> p[i];
+            if (p[i] == x) pos_x = i;
+        }
+        
+        int l = 1, r = n + 1;
+        while (r - l > 1) {
+            int m = (l + r) / 2;
+            if (p[m] <= x) l = m;
+            else r = m;
+        }
+        
+        if (p[l] == x) {
+            cout << "0\n";
+            continue;
+        }
+        
+        // We need to make p[l] == x after at most 2 swaps.
+        // First, swap x into position l if it's not there.
+        // Then run binary search again to see if it works.
+        // If not, we need one more swap to fix the search path.
+        
+        vector<pair<int,int>> ops;
+        
+        if (pos_x != l) {
+            ops.push_back({pos_x, l});
+            swap(p[pos_x], p[l]);
+            pos_x = l;
+        }
+        
+        // Now p[l] == x. Run binary search again.
+        l = 1, r = n + 1;
+        while (r - l > 1) {
+            int m = (l + r) / 2;
+            if (p[m] <= x) l = m;
+            else r = m;
+        }
+        
+        if (p[l] == x) {
+            // Already works
+            cout << ops.size() << "\n";
+            for (auto [a, b] : ops) cout << a << " " << b << "\n";
+            continue;
+        }
+        
+        // Need one more swap: swap the element that should be at position l
+        // with the current position of x (which is pos_x, but pos_x == l from before? Wait, we swapped x to l, but after binary search l changed.
+        // Actually after the swap, x is at the old l. The new l is some position where p[l] != x.
+        // We need to swap x (which is at old l) with the element at new l.
+        // But careful: old l might equal new l? No, because p[new l] != x, and x is at old l, so they are different.
+        
+        int old_l = pos_x; // This is where x is now
+        int new_l = l;     // This is where binary search ended, and p[new_l] != x
+        
+        ops.push_back({old_l, new_l});
+        swap(p[old_l], p[new_l]);
+        
+        cout << ops.size() << "\n";
+        for (auto [a, b] : ops) cout << a << " " << b << "\n";
+    }
+    
+    return 0;
+}

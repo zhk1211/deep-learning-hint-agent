@@ -1,0 +1,54 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        long long c;
+        cin >> n >> c;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // We'll try to connect everything to node 1 (0-indexed)
+        // We need to consider nodes i >= 2 (1-indexed) i.e., i >= 1 in 0-indexed
+        // Condition to connect component containing 1 with node i:
+        // sum_{k in comp(1)} a_k + a_i >= 1 * i * c  (since 1 is the smallest index)
+        // Actually the condition uses i and j, where i=1, j = node index.
+        // So we need sum >= 1 * j * c = j * c.
+        // Let S be the sum of a in component of 1.
+        // Initially S = a[0].
+        // We can connect node i if S + a[i] >= (i+1) * c.
+        // After connecting, S += a[i].
+        // We can connect in any order, but we want to maximize S early.
+        // Sort candidate nodes by a[i] - (i+1)*c descending? Actually condition is S + a[i] >= (i+1)*c => a[i] - (i+1)*c >= -S.
+        // Since S only increases, we should process nodes with larger a[i] - (i+1)*c first.
+        
+        vector<pair<long long, int>> candidates;
+        for (int i = 1; i < n; ++i) {
+            candidates.emplace_back(a[i] - (i + 1LL) * c, i);
+        }
+        sort(candidates.begin(), candidates.end(), greater<pair<long long, int>>());
+        
+        long long S = a[0];
+        bool ok = true;
+        for (auto &p : candidates) {
+            int i = p.second;
+            if (S + a[i] >= (i + 1LL) * c) {
+                S += a[i];
+            } else {
+                ok = false;
+                break;
+            }
+        }
+        cout << (ok ? "YES" : "NO") << '\n';
+    }
+    return 0;
+}

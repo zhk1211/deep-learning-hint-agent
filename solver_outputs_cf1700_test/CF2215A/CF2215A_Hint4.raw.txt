@@ -1,0 +1,428 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        long long p, q;
+        cin >> n >> k >> p >> q;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // We want to minimize sum. For each element, the best we can achieve
+        // is min(a[i] % p, a[i] % q) if we can apply operation on it.
+        // But we can only apply operations on intervals of length >= k.
+        // So we can reduce any element if we can cover it with such interval.
+        // The only elements we might not be able to reduce are those that
+        // cannot be covered by any interval of length >= k.
+        // That is, if n < k, we cannot do any operation.
+        // If n >= k, we can cover all elements? Actually, we can choose
+        // interval [1, n] if n >= k, so all elements can be reduced.
+        // But wait: we can apply operations multiple times. So if n >= k,
+        // we can reduce every element to its minimum possible value.
+        // However, is there any restriction? The operation sets a_i = a_i % m.
+        // We can apply it multiple times. The minimum we can get for a_i is
+        // min(a_i % p, a_i % q) because applying mod p then mod q might give
+        // something smaller? Actually, (a % p) % q is not necessarily smaller
+        // than a % q. But we can choose m each time. So we can just apply
+        // the better mod once. So minimum is min(a_i % p, a_i % q).
+        // But wait: what if we apply mod p then mod q? Could that be smaller
+        // than both? For example, a=10, p=6, q=4. a%6=4, a%4=2. min is 2.
+        // (10%6)%4 = 4%4=0, which is smaller! So we can achieve smaller by
+        // combining mods. Actually, we can apply mod p and mod q in any order
+        // any number of times. The set of reachable values from x is all
+        // numbers of the form x mod something? Since we can only mod by p or q.
+        // This is like: we can reduce x by subtracting multiples of p or q.
+        // So the reachable values are x mod g where g = gcd(p,q)? Not exactly.
+        // Because we can do x -> x%p -> (x%p)%q -> ... This is equivalent to
+        // x mod something? Actually, the operation is x = x % m. This is not
+        // subtraction, it's remainder. But note that x % m = x - m * floor(x/m).
+        // So we can subtract multiples of m. So we can subtract any combination
+        // of multiples of p and q. Thus we can reduce x by any integer of the
+        // form a*p + b*q. The set of reachable values is x mod g where g = gcd(p,q)?
+        // Wait: if we can subtract any linear combination, we can reduce x to
+        // x % g, but only if we can subtract enough. However, we can only subtract
+        // positive multiples? Actually, x % m is always less than m, so we are
+        // reducing the number. We can't increase. So we can only go down.
+        // Starting from x, we can reach any y <= x such that x ≡ y (mod g)
+        // and y can be obtained by a sequence of mod operations? Is every such y
+        // reachable? Let's test: x=10, p=6, q=4. g=2. x%2=0. Can we reach 0?
+        // 10%6=4, 4%4=0. Yes. What about x=11, p=6, q=4? g=2. 11%2=1. Can we reach 1?
+        // 11%6=5, 5%4=1. Yes. What about x=10, p=5, q=3? g=1. Can we reach 0?
+        // 10%5=0. Yes. Can we reach 1? 10%3=1. Yes. So it seems we can reach
+        // the minimum non-negative residue modulo g, which is x % g.
+        // But is it always true? Consider x=7, p=5, q=3. g=1. x%g=0. Can we reach 0?
+        // 7%5=2, 2%3=2, stuck? 2%5=2, 2%3=2. So we can't reach 0. Wait!
+        // 7%3=1, 1%5=1, 1%3=1. So we can't reach 0. So the minimum is not always x%g.
+        // Let's analyze: The operation is a_i = a_i % m. This means we replace a_i
+        // with the remainder when divided by m. This is a non-increasing operation.
+        // The set of reachable values is the set of numbers that can be obtained
+        // by repeatedly taking remainder with p or q. This is known as the
+        // "modulo reduction" problem. It's not simply gcd.
+        // However, note that we can apply the operation on intervals. We can
+        // apply different operations to different elements independently?
+        // Yes, we can choose intervals and m each time. So we can reduce each
+        // element independently as long as we can cover it with some interval
+        // of length >= k. Since we can do multiple operations, we can just
+        // cover each element individually if we can cover it at all.
+        // But wait: the operation applies to the whole interval. If we want
+        // to reduce a single element to a specific value, we might affect others.
+        // But we can always choose an interval that covers exactly the elements
+        // we want to reduce, and we can do operations in any order. So we can
+        // achieve for each element its individual minimum reachable value,
+        // provided that we can cover it with some interval of length >= k.
+        // However, if n < k, we cannot do any operation, so answer is sum a_i.
+        // If n >= k, we can cover any element? Actually, we can choose interval
+        // [1, n] which covers all elements. So we can reduce all elements.
+        // But can we reduce each element independently to its own minimum?
+        // Suppose we want to reduce element i to v_i. We can do operations
+        // that only affect i? Not necessarily, because intervals have length >= k.
+        // But we can do operations that affect multiple elements, and we can
+        // do them in sequence. The question is: given that we can apply mod p or q
+        // to any interval of length >= k, can we achieve any combination of
+        // individual reachable values? Since we can always apply mod p to the
+        // whole array, that reduces all elements. But we might want some elements
+        // to be reduced by q instead. We can do mod q on a subinterval.
+        // However, if we do mod q on a subinterval, it might affect elements
+        // we already reduced. But since mod is idempotent and order might matter,
+        // we need to see if we can independently minimize each element.
+        // Actually, we can just apply operations to the whole array: first mod p,
+        // then mod q, then mod p, etc. But that applies the same sequence to all.
+        // To get different values for different elements, we need to use intervals.
+        // Consider we want element 1 to be a1%p and element 2 to be a2%q.
+        // We can do: interval [1,1] is not allowed if k>1. So we must use longer
+        // intervals. This might force some elements to undergo extra mods.
+        // So the problem is more complex: we need to choose a set of operations
+        // (intervals and mods) to minimize the sum. This is a typical problem
+        // where we can reduce any element to its minimum possible value if we
+        // can "protect" it from further reductions? Actually, mod only decreases
+        // values. So applying extra mods can only decrease values further.
+        // So if we want to keep an element at a certain value, we must avoid
+        // applying mods that would reduce it further. But we can always apply
+        // mods that don't reduce it (if it's already less than m). So we can
+        // apply mod p to an interval, and elements already < p are unchanged.
+        // So we can independently reduce elements by choosing intervals that
+        // cover the ones we want to reduce, and the others are already small
+        // enough that the mod doesn't affect them. For example, if we want
+        // element i to be reduced by q, we can first reduce it by q (and maybe
+        // others), then later reduce other elements by p. If element i is already
+        // < p, mod p won't change it. So we can achieve independent minima
+        // as long as we can cover each element with some interval of length >= k
+        // at the time we apply its desired mod. Since we can do operations in
+        // any order, we can just do: for each element, if its best mod is m,
+        // we can apply mod m to an interval containing it, and ensure that
+        // interval doesn't ruin others? Actually, we can just apply mod p to
+        // the whole array, then mod q to the whole array, etc. But that might
+        // not give the independent minima. Let's think: The minimum possible
+        // value for an element after any sequence of mod operations (applied
+        // to the whole array) is the eventual stable value after repeatedly
+        // applying mod p and mod q until it stops changing. That is the
+        // "gcd-like" reduction. But we can use intervals to give different
+        // sequences to different elements. So the problem reduces to: we can
+        // assign each element a "final value" that is reachable from a_i via
+        // some sequence of mods, and we can achieve any assignment as long as
+        // we can "implement" it with intervals of length >= k. But since we can
+        // always apply mod p to the whole array, then mod q to a suffix, etc.,
+        // we might be able to achieve any combination? Let's check the sample.
+        // Sample 3: n=4, k=3, p=3, q=4. a=[1,2,3,4]. Output 3.
+        // If we could independently minimize each: 
+        // a1=1: min(1%3=1, 1%4=1) =1.
+        // a2=2: min(2%3=2, 2%4=2)=2.
+        // a3=3: min(3%3=0, 3%4=3)=0.
+        // a4=4: min(4%3=1, 4%4=0)=0.
+        // Sum = 1+2+0+0=3. That matches output. So they achieved independent minima.
+        // How? They did: [1,4] mod 4 -> [1,2,3,0]; then [2,4] mod 3 -> [1,2,0,0].
+        // Note that [2,4] length 3 >= k=3. So they reduced a3 and a4 further.
+        // So it seems we can achieve independent minima if we can cover the
+        // elements we want to reduce with intervals of length >= k, and the
+        // order of operations can be chosen so that earlier operations don't
+        // interfere. In general, we can always reduce an element to its minimum
+        // reachable value by applying a sequence of mods. If we want to reduce
+        // a set of elements to their minima, we can just apply the necessary
+        // mods on intervals that cover them. The only issue is if we need to
+        // reduce an element but we cannot cover it with an interval of length >= k
+        // without including other elements that we don't want to reduce further.
+        // But since mod only decreases values, if we reduce an element further
+        // than its intended minimum, that's even better (smaller sum). So we
+        // don't mind if other elements get reduced more. The only problem is
+        // if we cannot reduce an element at all because we cannot form an interval
+        // of length >= k that contains it? But if n >= k, we can always form
+        // an interval of length exactly k that contains any given element?
+        // Not necessarily for elements near the ends if k > n? But if n >= k,
+        // we can always choose an interval of length k that contains a given
+        // element i, as long as we can shift it. For i from 1 to n, we can
+        // choose l = max(1, i - k + 1) to min(i, n - k + 1). This is possible
+        // if n >= k. So every element can be covered by some interval of length k.
+        // Therefore, if n >= k, we can reduce every element to its absolute
+        // minimum possible value (the minimum reachable via any sequence of mods).
+        // If n < k, we cannot do any operation, so sum is original sum.
+        // So the problem reduces to: for each element, compute the minimum
+        // value it can reach by repeatedly applying x = x % p or x = x % q.
+        // Then sum these minima if n >= k, else sum original.
+        // But wait! Is it always true that we can achieve the absolute minimum
+        // for each element simultaneously? Consider a case where to achieve
+        // the minimum for element 1 we need to apply mod p, but that would
+        // increase the value of element 2? No, mod never increases.
+        // Could applying mod p to element 2 prevent it from reaching its minimum?
+        // Suppose element 2's minimum is achieved by a sequence that starts with
+        // mod q. If we apply mod p first, we might change the starting value,
+        // and the subsequent mod q might not reach the same minimum. But we can
+        // choose the order of operations per element by using intervals.
+        // We can do: for elements that need mod q first, we apply mod q to an
+        // interval containing them. Then for elements that need mod p first,
+        // we apply mod p to an interval containing them. But if an element
+        // needs both, we can apply them in the correct order on an interval
+        // containing it. Since we can do multiple operations, we can simulate
+        // the optimal sequence for each element independently by carefully
+        // choosing intervals. The only restriction is that intervals must have
+        // length >= k. But we can always choose an interval that contains
+        // exactly the elements we want to apply the operation to, plus maybe
+        // some others. The others will also undergo the operation, which might
+        // alter their path. But since we can do operations in any order, we can
+        // first process all elements to their final minima by applying operations
+        // on intervals that cover them, and the extra elements that get operated
+        // on might get reduced further, which is fine. However, could an extra
+        // operation on an element ruin its ability to reach its minimum?
+        // Suppose element A's optimal sequence is: mod q, then mod p.
+        // If we apply mod p to it first (as part of another interval), it becomes
+        // A%p. Then later we apply mod q, then mod p. Will it still reach the
+        // same minimum? Not necessarily. For example, A=10, p=6, q=4.
+        // Optimal: 10%4=2, 2%6=2. Minimum=2.
+        // If we accidentally apply mod 6 first: 10%6=4, then mod 4: 4%4=0.
+        // Then mod 6: 0. So it reached 0, which is even smaller! So it's fine.
+        // What if the accidental mod makes it larger? Mod never makes larger.
+        // So any extra mods can only decrease the value further. So the final
+        // value will be <= the intended minimum. So we can only get smaller sum.
+        // Therefore, we can always achieve at most the sum of individual minima.
+        // But can we achieve exactly the sum of individual minima? We want the
+        // minimum possible sum, so if we can get even smaller, that's better.
+        // So the true minimum sum is the sum of the absolute minimum reachable
+        // values for each element, provided we can apply operations. But wait:
+        // if we can get smaller than the individual minima by "cross-talk"
+        // between elements? No, the individual minimum is the minimum reachable
+        // from that starting value via any sequence of mods. Any sequence of
+        // operations on intervals will apply some sequence of mods to each
+        // element. That sequence is a valid sequence for that element, so the
+        // final value cannot be less than its individual minimum. So the sum
+        // of individual minima is a lower bound. And we can achieve it by
+        // processing each element independently (if n >= k). So the answer is
+        // sum of individual minima if n >= k, else sum of original.
+        // But is it always possible to process each element independently
+        // without interference that forces a suboptimal sequence on some element?
+        // We need to construct a set of intervals that applies the exact optimal
+        // sequence to each element. Since we can do operations in any order,
+        // we can just do: for each step of the optimal sequence, we apply that
+        // mod to all elements that need that step at that time. But different
+        // elements might need different steps at the same time. We can group
+        // them by the operation needed. For each operation (mod p or mod q),
+        // we can apply it to an interval that covers all elements that need it
+        // at that moment. The interval must have length >= k. If the set of
+        // elements needing that operation cannot be covered by a single interval
+        // of length >= k, we might need multiple intervals. But we can always
+        // cover any subset of elements with intervals of length >= k? Not
+        // necessarily. For example, if k=3, and we need to apply mod p to
+        // elements 1 and 3 but not 2. Can we cover {1,3} with intervals of
+        // length >=3? Interval [1,3] covers 1,2,3. That would apply to 2 as well.
+        // So we cannot apply an operation to exactly {1,3} without affecting 2.
+        // This might force element 2 to undergo an extra mod p at that step,
+        // which could alter its sequence. But as argued, extra mods can only
+        // decrease values, so it might make element 2 even smaller than its
+        // intended minimum. That would be fine because we want minimum sum.
+        // However, could it be that element 2's intended minimum is already 0,
+        // and extra mods keep it at 0? That's fine. Could it be that element 2's
+        // intended minimum is not 0, but an extra mod makes it 0, which is smaller?
+        // That's even better. So it seems any extra mods only help.
+        // But wait: what if the extra mod increases the value? Mod never increases.
+        // So it's always non-increasing. So extra mods can only decrease or keep same.
+        // Therefore, we can always just apply the "union" of all needed operations
+        // on the whole array? If we apply mod p to the whole array, then mod q
+        // to the whole array, then mod p, etc., we are applying a fixed sequence
+        // to all elements. That sequence might not be optimal for each element.
+        // But we can choose the sequence to be the "worst-case" that minimizes
+        // everything? Actually, there is a universal sequence that reduces any
+        // number to its minimum? Is there a sequence of mod p and mod q that
+        // when applied to any starting value, yields the minimum reachable value
+        // for that starting value? That would be like the Euclidean algorithm.
+        // If we repeatedly apply mod p and mod q in some order, we eventually
+        // reach a fixed point. But the fixed point depends on the starting value.
+        // For example, with p=5, q=3. Start 7: 7%5=2, 2%3=2, fixed point 2.
+        // Start 8: 8%3=2, 2%5=2, fixed point 2.
+        // Start 10: 10%5=0, fixed point 0.
+        // So different starting values have different fixed points.
+        // If we apply a fixed sequence to all, we might not reach the minimum
+        // for some. For instance, if we always do mod 5 then mod 3, for start 8:
+        // 8%5=3, 3%3=0. That gives 0, which is smaller than 2! So the fixed
+        // sequence might give even smaller values than the "individual optimal"
+        // sequence? But wait, the individual optimal sequence for 8 with p=5,q=3
+        // is: we can do 8%3=2, then 2%5=2, so minimum is 2. But if we do mod 5
+        // first, we get 3, then mod 3 gives 0. So 0 is reachable from 8?
+        // Let's check: 8 -> 8%5=3 -> 3%3=0. Yes, 0 is reachable! So the minimum
+        // reachable from 8 is actually 0, not 2. My earlier manual attempt missed
+        // that sequence. So the minimum reachable value is the value after
+        // applying the best sequence. So we need to compute the true minimum
+        // reachable value for each a_i via any sequence of mod p and mod q.
+        // This is equivalent to: we can subtract any combination of p and q?
+        // No, because mod is not subtraction. But note that x % m = x - m * floor(x/m).
+        // So we can subtract multiples of m. So we can subtract any integer
+        // of the form a*p + b*q with a,b >= 0? Not exactly, because we can only
+        // subtract multiples of p or q at each step, and the amount subtracted
+        // depends on the current value. But effectively, we can reduce x by any
+        // amount that is a multiple of g = gcd(p,q)? Actually, it's known that
+        // the set of reachable values from x by repeatedly taking %p or %q is
+        // exactly the set of numbers y such that y <= x and y ≡ x (mod g) and
+        // y can be obtained by the Euclidean algorithm? Wait, there's a known
+        // result: if you have two numbers p and q, the minimum reachable value
+        // from x by repeatedly taking %p or %q is x % g? But we saw 8 with p=5,q=3
+        // gives 0, and g=1, 8%1=0. So that matches. What about 7 with p=5,q=3?
+        // g=1, 7%1=0. Can we reach 0 from 7? 7%5=2, 2%3=2, stuck. 7%3=1, 1%5=1.
+        // So we cannot reach 0. So 7%1=0 is not reachable. So the minimum is not x%g.
+        // Let's find the true minimum for 7 with p=5,q=3. Reachable: 7, 2, 1.
+        // Minimum is 1. So it's not simply gcd.
+        // So we need to compute the minimum reachable value for each a_i.
+        // This is a classic problem: given two moduli, find the minimum possible
+        // value by repeatedly applying %p or %q. This is equivalent to: we can
+        // replace x with x % p or x % q. This is like the game of reducing a number.
+        // Notice that the operation is deterministic once we choose the modulus.
+        // We can think of it as a directed graph where each number has edges to
+        // x%p and x%q. We want the smallest reachable node from a_i.
+        // Since a_i <= 1e9, we cannot BFS from each a_i. But we can find a pattern.
+        // Observe that if we can reach a number less than min(p,q), then we cannot
+        // reduce it further because %p or %q on a number < p or < q does nothing.
+        // So the minimum reachable value is some number in [0, min(p,q)-1].
+        // Actually, if x < p and x < q, then x%p = x and x%q = x, so it's a sink.
+        // So the minimum reachable value is the smallest sink reachable from x.
+        // How to compute it efficiently? We can use the concept of "modular reduction"
+        // which is similar to Euclidean algorithm. For a given x, we can simulate
+        // the process by always taking the larger modulus? Not exactly.
+        // There's a known approach: the set of reachable values from x is exactly
+        // the set of numbers of the form x % (a*p + b*q) ??? Not sure.
+        // Let's think differently. Since p and q are up to 1e9, but n sum is 1e5,
+        // we can afford O(log max) per element if we find a formula.
+        // Consider the operation: x -> x % p. This is equivalent to subtracting
+        // the largest multiple of p less than or equal to x. So we can think of
+        // it as x = x - k*p. Similarly for q. So we can subtract any combination
+        // of p and q, but with the restriction that we cannot subtract more than
+        // the current value. However, since we can do it repeatedly, we can
+        // effectively subtract any non-negative integer combination of p and q
+        // as long as we don't go negative. But we can also stop early.
+        // Actually, if we can subtract any combination, the minimum we can reach
+        // is x % g, where g = gcd(p,q). But we saw 7 with p=5,q=3: g=1, x%g=0,
+        // but we can't reach 0. Why? Because to subtract 7, we need 7 = 5a + 3b.
+        // Solutions: a=2, b=-1 (not allowed since b negative). a=-1, b=4 (a negative).
+        // So we cannot subtract exactly 7 using non-negative coefficients.
+        // We can only subtract multiples of 5 or 3 one at a time, but we can
+        // do it in steps. The sequence of subtractions is: we can subtract 5
+        // (if we do %5 when x>=5), then from the remainder we can subtract 3, etc.
+        // This is exactly the coin problem with two coins, but we can only use
+        // a coin if the current value is at least the coin? Actually, %p subtracts
+        // the maximum multiple of p, which is floor(x/p)*p. So we subtract a
+        // multiple of p that leaves a remainder < p. So we can subtract any
+        // multiple of p as long as the result is non-negative? Not any multiple,
+        // only the one that makes the remainder < p. But we can do multiple steps.
+        // So effectively, we can subtract any combination of p and q, but we
+        // are forced to reduce below p or q at each step. This is exactly the
+        // process of the Euclidean algorithm. The reachable values are exactly
+        // the numbers that appear during the Euclidean algorithm on x and p,q?
+        // Actually, there is a known result: the minimum reachable value is
+        // x % (p + q - g) or something? No.
+        // Let's analyze the reachable values from x with moduli p and q.
+        // We can model this as: we have two operations: f_p(x) = x % p, f_q(x) = x % q.
+        // We want the minimum value in the orbit of x under these operations.
+        // Since the operations are non-increasing and the state space is finite,
+        // we can just simulate the process greedily? But x up to 1e9, simulation
+        // could take many steps if we just repeatedly apply the operation that
+        // reduces the most? For example, x=1e9, p=2, q=1e9-1. Applying %q reduces
+        // to 1, then %p reduces to 1%2=1. So it's fast. But worst-case could be
+        // like p=2, q=3, x=1e9. Applying %3: 1e9%3=1, then %2: 1. Fast.
+        // What about p=100, q=101, x=1e9? %101 = 1e9%101, then %100, etc.
+        // It seems the number of steps is small because each step reduces the
+        // number significantly? Not necessarily: if p and q are close, like
+        // p=1e5, q=1e5+1, x=1e9. x%q = something, then %p = something smaller.
+        // Actually, the Euclidean algorithm on two numbers takes O(log max) steps.
+        // Here we are not exactly doing Euclidean, but we can choose which mod
+        // to apply. To find the minimum reachable value, we can use BFS on the
+        // remainders? But the state space is large.
+        // However, note that the operations are deterministic and we can just
+        // simulate the process by always applying the mod that gives the smaller
+        // result? But that might not be optimal. For 7, p=5,q=3: if we apply
+        // min(7%5, 7%3) = min(2,1)=1. So we would choose %3 to get 1. Then 1 is
+        // sink. So minimum is 1. That works. What about 8? min(8%5,8%3)=min(3,2)=2.
+        // If we choose %3, we get 2, sink -> 2. But we know we can get 0 by
+        // doing %5 first then %3. So greedy choice of the smaller immediate
+        // remainder does not always yield the global minimum.
+        // So we need a better method.
+        // Let's think about the set of reachable values. For any x, the reachable
+        // values are all numbers of the form x - a*p - b*q that are >= 0 and
+        // can be obtained by a sequence where each subtraction is a multiple of
+        // p or q that leaves a remainder less than the modulus. But actually,
+        // any sequence of %p and %q corresponds to subtracting some multiples.
+        // The key is that after a %p operation, the result is < p. Then if we
+        // apply %q, the result is < q. So the sequence of values is strictly
+        // decreasing until it's < min(p,q). So the minimum reachable value is
+        // some number < min(p,q). Let m = min(p,q). Then any value < m is a sink.
+        // So the minimum reachable value is the smallest number < m that is
+        // reachable. How to find it?
+        // Consider the directed graph where nodes are numbers from 0 to max(a_i).
+        // But we only care about numbers < max(p,q) maybe? Because once a number
+        // is < p and < q, it's a sink. So the only non-sink nodes are those >= p or >= q.
+        // Actually, if a number is >= p, we can apply %p to reduce it to < p.
+        // So from any number >= p, we can jump to a number < p. Similarly for q.
+        // So the reachable sinks from x are: x % p, and then from there we can
+        // apply %q if x%p >= q, etc. So it's a small graph if we consider only
+        // numbers < max(p,q). But max(p,q) can be 1e9, too large.
+        // However, note that the operations are modulo. We can think in terms
+        // of the Euclidean algorithm. There is a known trick: the minimum
+        // reachable value is x % g, where g = gcd(p,q)? But we saw counterexample.
+        // Wait, maybe the minimum reachable value is actually x % g if we allow
+        // subtracting any combination? But we can't subtract arbitrary combinations
+        // because we are forced to take remainders. However, if we can reach
+        // x % g, then that is the absolute minimum possible because any reachable
+        // value must be congruent to x modulo g. So x % g is a lower bound.
+        // Can we always reach x % g? Not always, as 7 with 5,3 shows.
+        // So the minimum is some value >= x % g.
+        // Let's find the condition for being able to reach x % g.
+        // We can reach y from x if there is a sequence of mod operations.
+        // This is equivalent to: there exist non-negative integers a,b such that
+        // x - a*p - b*q = y, and at each step the intermediate values are non-negative.
+        // But since we can do mod operations, the intermediate values are exactly
+        // the remainders. This is similar to the coin problem with the restriction
+        // that we can only use coins of size p or q, but we can only use a coin
+        // if the current amount is at least the coin? Actually, we can use a coin
+        // of size p multiple times in one %p operation: we subtract floor(x/p)*p.
+        // So we can subtract any multiple of p in one step, as long as the result
+        // is < p. So we can subtract k*p where k = floor(x/p). So we can subtract
+        // a large multiple. This is different from subtracting p one by one.
+        // So the set of reachable values is exactly the set of numbers that can
+        // be obtained by repeatedly applying the function: x -> x % p or x % q.
+        // This is known as the "modular reduction" problem. I recall a solution:
+        // we can compute the minimum reachable value by simulating the process
+        // using a priority queue (Dijkstra) on the residues modulo something?
+        // Since p and q can be large, but we only care about numbers up to max(a_i).
+        // However, we can transform the problem: instead of starting from x and
+        // going down, we can start from 0 and go up? Not exactly.
+        // Another perspective: The operations are x -> x % p and x -> x % q.
+        // Notice that if we apply %p then %q, the result is (x % p) % q.
+        // This is not necessarily the same as x % q or x % p.
+        // But we can think of the sequence of mods as a path in the tree of
+        // Euclidean algorithm. Actually, there is a known result: the minimum
+        // value reachable from x is the minimum of x % (a*p + b*q) over all
+        // non-negative a,b? Not sure.
+        // Let's try to find a pattern. For p=5, q=3:
+        // x=0:0
+        // x=1:1
+        // x=2:2
+        // x=3:0 (3%3=0)
+        // x=4:1 (4%3=1)
+        // x=5:0 (5%5=0)
+        // x=6:1 (6%5=1, 1%3=1; or 6%3=0) -> min 0
+        // x=7:1 (7%5=2, 2%3=2; 7%3=1) -> min 1
+        // x=8:0 (8%5=3, 3%3=0) -> min 0
+        //

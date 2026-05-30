@@ -1,0 +1,204 @@
+// Hint7
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> S(m);
+        for (int i = 0; i < m; ++i) {
+            cin >> S[i];
+        }
+
+        // We need to assign values to indices 1..n
+        // Condition: for any i|j, a_i does not divide a_j
+        // Lexicographically largest: maximize a_1, then a_2, etc.
+        // For each index i, we can choose the largest value from S that is not
+        // divisible by any a_d where d|i and d < i, and also does not divide any a_d?
+        // Actually condition: for i|j, a_i does NOT divide a_j.
+        // So when we assign a_i, we must ensure:
+        // - For all d|i, d < i: a_d does NOT divide a_i
+        // - For all multiples k of i, k > i: a_i does NOT divide a_k (but we assign later)
+        // So when assigning a_i, we only need to check divisors d|i, d < i: a_d ∤ a_i.
+        // Also we want lexicographically largest, so we try largest possible value first.
+
+        // But we also need to consider that later assignments might be impossible.
+        // However, if we assign greedily the largest possible value that satisfies
+        // the divisor condition, is it always possible to complete? Not necessarily.
+        // We need to ensure that for each index, there is at least one value that
+        // is not divisible by any assigned divisor. If at some point no value works,
+        // then no solution exists.
+
+        // However, the condition is symmetric in a sense: if we assign a_i, we must
+        // ensure that for all multiples k of i, a_i does not divide a_k. Since we
+        // assign in increasing order of i, we can't check future multiples. But
+        // we can think of it as: when we assign a_i, we forbid all divisors of a_i
+        // from being used in any multiple of i? Actually condition: a_i ∤ a_k for k multiple of i.
+        // So if we assign a_i = x, then for any multiple k of i, a_k cannot be a multiple of x.
+        // This means we must remove all multiples of x from the available set for all multiples of i.
+        // But we assign in order 1..n, so when we are at index i, we have already assigned
+        // all divisors of i. The condition for multiples will be enforced later.
+
+        // To make it work, we can maintain for each index the set of forbidden values
+        // (values that would be divisible by some assigned divisor). Since n <= 1e5,
+        // we can precompute divisors for each i.
+
+        // Let's think differently: The condition "a_i does not divide a_j for i|j"
+        // means that along any chain of divisibility, the values must be strictly
+        // decreasing in terms of divisibility? Actually if i|j, then a_i ∤ a_j.
+        // So a_j cannot be a multiple of a_i. This implies that if we consider the
+        // poset of indices under divisibility, the values assigned must be such that
+        // no value divides another along an edge. This is similar to assigning
+        // values from S such that for any i|j, a_i is not a divisor of a_j.
+
+        // Since we want lexicographically largest, we want a_1 as large as possible.
+        // a_1 has no divisors (except 1 itself, but no smaller index), so a_1 can be
+        // any value from S. To maximize, we pick the largest value in S.
+        // Then for i=2, divisors: 1. We need a_1 ∤ a_2. So a_2 cannot be a multiple of a_1.
+        // We pick the largest value in S that is not a multiple of a_1.
+        // For i=3, divisors: 1. a_1 ∤ a_3. Pick largest not multiple of a_1.
+        // For i=4, divisors: 1,2. a_1 ∤ a_4 and a_2 ∤ a_4. So a_4 cannot be a multiple of a_1 or a_2.
+        // In general, for index i, a_i cannot be a multiple of any a_d for d|i, d<i.
+        // Also, we must ensure that for future multiples, we don't run out of options.
+        // But if we always pick the largest possible value that satisfies the divisor condition,
+        // is it always safe? Not necessarily, because picking a large value might restrict
+        // future choices more than picking a smaller value. However, we want lexicographically
+        // largest, so we must try to make a_i as large as possible. If there are multiple
+        // choices that satisfy the divisor condition, we should pick the largest one that
+        // still allows completing the rest. This is a typical backtracking, but n up to 1e5
+        // makes it impossible.
+
+        // We need a better characterization. From hints: "Consider a multiple chain
+        // i_1 < i_2 < ... < i_k such that i_1 divides i_2, ... Then we know that we have
+        // to put distinct values for all the indices in the multiple chain otherwise one
+        // number will be divisible by another which will violate the condition."
+        // Wait, distinct values? Not exactly: if a_i and a_j are on a chain with i|j,
+        // we need a_i ∤ a_j. They could be equal? If a_i = a_j, then a_i divides a_j
+        // (since x|x), so that violates condition. So indeed, along any chain of divisibility,
+        // all values must be distinct. Moreover, if i|j, then a_i cannot divide a_j,
+        // so a_j cannot be a multiple of a_i. This means that if we consider the values
+        // along a chain, they cannot be such that one divides another. In particular,
+        // if we have a chain of length L, we need L distinct values from S such that
+        // no value divides another along the chain. But the condition is only for
+        // immediate divisibility? Actually if i|j and j|k, then i|k, so a_i ∤ a_k as well.
+        // So the condition applies to all pairs in the chain. So along any chain,
+        // the values must be pairwise non-divisible? Not exactly pairwise: if i|j|k,
+        // we need a_i ∤ a_j, a_j ∤ a_k, and a_i ∤ a_k. So it's a transitive condition:
+        // no value divides any later value in the chain.
+
+        // This suggests that if we consider the longest chain of divisibility in 1..n,
+        // its length is the maximum number of times we can divide by 2? Actually the
+        // longest chain is roughly log2(n). For n=1e5, max chain length is about 17
+        // (since 2^17 = 131072). So the number of distinct values needed along any
+        // chain is at most ~17. But we have m values, m <= n.
+
+        // Another perspective: The condition a_i ∤ a_j for i|j means that if we
+        // look at the prime factorization, maybe we can assign values based on
+        // the exponent of a certain prime? Not sure.
+
+        // Let's re-read hints carefully:
+        // Hint 4-5: The condition is equivalent to: for all i|j, a_i ∤ a_j.
+        // Hint 7: Consider a multiple chain... we have to put distinct values for all
+        // indices in the multiple chain otherwise one number will be divisible by another.
+
+        // So the necessary and sufficient condition is: for every i|j, a_i does not divide a_j.
+        // This is exactly what we have.
+
+        // Now, to construct lexicographically largest: we want to maximize a_1, then a_2, etc.
+        // Since the condition only restricts that a_j is not a multiple of any a_i for i|j,
+        // we can think of it as: when we assign a_i, we are forbidding all multiples of a_i
+        // from being used at any index j that is a multiple of i. But we assign in increasing
+        // order of i. So at step i, we have a set of forbidden values coming from divisors.
+        // We want to pick the largest available value that is not forbidden.
+        // However, we also need to ensure that this choice leaves enough values for future
+        // indices. Since we want lexicographically largest, we should pick the largest
+        // possible value that does not make the rest impossible. This is like a greedy
+        // with checking feasibility.
+
+        // But maybe there's a simpler structure: Since S is a subset of {1..n} and sorted,
+        // and we want lexicographically largest, we might be able to assign values in a
+        // specific pattern. For example, in the sample: n=6, S={3,4,6}. Output: 6 4 4 3 4 3.
+        // Indices: 1:6, 2:4, 3:4, 4:3, 5:4, 6:3.
+        // Check divisibility:
+        // 1|2: a1=6, a2=4 -> 6∤4 ok
+        // 1|3: 6∤4 ok
+        // 1|4: 6∤3 ok
+        // 1|5: 6∤4 ok
+        // 1|6: 6∤3 ok
+        // 2|4: a2=4, a4=3 -> 4∤3 ok
+        // 2|6: 4∤3 ok
+        // 3|6: a3=4, a6=3 -> 4∤3 ok
+        // So it works.
+
+        // Notice that a_1=6 (largest), a_2=4 (largest not multiple of 6? 4 is not multiple of 6, 3 is not multiple of 6, but 4>3 so pick 4). a_3=4 (largest not multiple of 6? 4 again). a_4: divisors 1,2. Forbidden: multiples of a1=6 and a2=4. Multiples of 6 in S: 6 only. Multiples of 4 in S: 4 only. So available: 3. So a4=3. a5: divisors 1. Forbidden multiples of 6: 6. Available: 4,3. Largest 4. a6: divisors 1,2,3. Forbidden multiples of a1=6, a2=4, a3=4. Multiples of 6:6; multiples of 4:4. Available:3. So a6=3.
+
+        // So the greedy strategy of picking the largest value not divisible by any divisor's assigned value worked for this case. But is it always optimal? We need to ensure that we don't get stuck later. If we pick a large value now, we might eliminate many multiples, which could be needed later. But since we want lexicographically largest, we must prioritize earlier indices. If there is any valid completion with a larger value at index i, we should take it. So we can try to assign the largest possible value at each step, and if we later find it impossible, we need to backtrack. But n=1e5, backtracking is too slow.
+
+        // Maybe the condition that S is a subset of {1..n} and we want lexicographically largest forces a specific assignment: we should assign the largest possible value that is not a multiple of any assigned divisor, and this greedy never fails if a solution exists? Let's test with a potential counterexample.
+        // Suppose n=4, S={2,3,4}. Greedy:
+        // a1: largest = 4.
+        // a2: divisors 1. Forbidden multiples of 4: 4. Available: 3,2. Largest 3.
+        // a3: divisors 1. Forbidden multiples of 4: 4. Available: 3,2. Largest 3.
+        // a4: divisors 1,2. Forbidden multiples of a1=4 and a2=3. Multiples of 4:4; multiples of 3:3. Available: 2. So a4=2. Works? Check: 1|4: 4∤2 ok; 2|4: 3∤2 ok. So valid.
+        // What if S={2,4}? n=4.
+        // a1: 4.
+        // a2: forbidden multiples of 4: 4. Available: 2. a2=2.
+        // a3: available: 2. a3=2.
+        // a4: divisors 1,2. Forbidden multiples of 4 and 2. Multiples of 4:4; multiples of 2:2,4. Available: none. So fails. Indeed no solution? Check manually: need a1,a2,a3,a4 from {2,4}. Condition: a1∤a2, a1∤a3, a1∤a4, a2∤a4. If a1=4, then a2,a3,a4 cannot be multiples of 4, so they must be 2. Then a2=2, a4=2, but 2|4 and a2=2 divides a4=2 -> violation. If a1=2, then a2,a3,a4 cannot be multiples of 2, but only 4 is multiple of 2? Actually 2 divides 4, so 4 is multiple of 2. So a2,a3,a4 cannot be 4, so they must be 2? But 2 is multiple of 2? 2 divides 2, so 2 is a multiple of 2. So if a1=2, then a2 cannot be 2 (since 2|2). So a2 must be 4? But 4 is multiple of 2, so also forbidden. So no value for a2. Thus no solution. So greedy correctly failed.
+
+        // Another test: n=6, S={2,3,6}. Greedy:
+        // a1: 6.
+        // a2: forbidden multiples of 6:6. Available:3,2. Largest 3.
+        // a3: available:3,2. Largest 3.
+        // a4: divisors 1,2. Forbidden multiples of 6 and 3. Multiples of 6:6; multiples of 3:3,6. Available:2. a4=2.
+        // a5: divisors 1. Forbidden multiples of 6:6. Available:3,2. Largest 3.
+        // a6: divisors 1,2,3. Forbidden multiples of 6,3,3. Multiples of 6:6; multiples of 3:3,6. Available:2. a6=2.
+        // Check: 2|4: a2=3, a4=2 -> 3∤2 ok; 3|6: a3=3, a6=2 -> 3∤2 ok; 1|6: 6∤2 ok. Works.
+        // What if we had chosen a2=2 instead of 3? Then a2=2, a4: forbidden multiples of 6 and 2 -> multiples of 2:2,6? 2 is multiple of 2, 6 is multiple of 2. So available:3. a4=3. Then a6: divisors 1,2,3. Forbidden multiples of 6,2,3 -> multiples of 2:2,6; multiples of 3:3,6. Available: none. So fails. So greedy picking largest worked.
+
+        // Is it always true that greedy works? Consider that picking a larger value might restrict more multiples (since larger numbers have fewer multiples in S? Actually larger numbers have fewer multiples in general, but within S, it depends. However, if we pick a larger value x, the set of multiples of x in S is a subset of the multiples of any smaller value y that divides x? Not necessarily. But if we pick the largest available, we are minimizing the set of forbidden values for future indices? Actually, if we pick a larger value, it might have fewer multiples in S, so it forbids fewer elements. So picking larger is better for future flexibility. Also, we want lexicographically largest, so picking larger is doubly good. So greedy might be optimal.
+
+        // Let's try to prove: Suppose we have a valid assignment. If at index i we can replace a_i with a larger value x from S that is not a multiple of any a_d (d|i, d<i), and still have a valid assignment for the rest, then we can improve lexicographically. The question is whether such a replacement is always possible if x is available and not forbidden by divisors. The only issue is that x might divide some a_j for j>i, i|j, violating the condition. But if we replace a_i with x, we might need to change some later a_j to avoid being multiples of x. Since x is larger, it might have fewer multiples, so it might be easier to avoid. But we need to ensure we can adjust later assignments without decreasing earlier ones (which we already fixed). This is a typical exchange argument.
+
+        // Given the time constraints and the fact that n sum is 3e5, we can probably implement the greedy with a feasibility check using maximum flow or matching? But that's too complex.
+
+        // Another angle: The condition a_i ∤ a_j for i|j. This is equivalent to saying that for each prime p, the exponent of p in a_i and a_j must satisfy something? Not exactly.
+
+        // Let's think about the structure of indices. The divisibility poset of 1..n. We need to assign values from S such that if i|j, then a_i ∤ a_j. This is like a graph coloring problem where colors are numbers, and we have a directed edge i->j if i|j, and we require that color(i) does not divide color(j). We want lexicographically largest color sequence.
+
+        // Since n is up to 1e5, we can process indices in increasing order. For each i, we need to choose a value from S that is not a multiple of any a_d for d|i. We also need to ensure that this choice leaves a valid assignment for the subtree of multiples of i. This is similar to a game on a tree (the divisibility tree if we consider only prime factors? But divisibility is a DAG, not a tree.)
+
+        // Wait, the condition only involves pairs where one divides the other. This is exactly the condition that the sequence is a "gcd sequence" something? Actually, if we consider the poset, it's exactly that the labels are such that no label divides another along a directed edge. This is equivalent to saying that the labels form an antichain in the divisibility poset of integers? Not exactly, because the indices have their own divisibility structure.
+
+        // Let's reconsider the hints. Hint 7 says: "Consider a multiple chain... we have to put distinct values for all the indices in the multiple chain otherwise one number will be divisible by another which will violate the condition." This suggests that along any chain, values must be distinct. But distinctness is not sufficient; they also must not divide each other. So if we have a chain of length L, we need L values such that no value divides another later in the chain. This is equivalent to saying that the values are strictly decreasing in some sense? Not necessarily decreasing in value, but they cannot be multiples.
+
+        // If we sort S in increasing order, then if we pick values along a chain, they must be such that a smaller value does not divide a larger value? Actually if i|j, we need a_i ∤ a_j. If a_i < a_j, it's possible that a_i divides a_j. If a_i > a_j, it's impossible for a_i to divide a_j (unless a_j=0, but positive integers). So if we ensure that along any chain, the values are strictly decreasing, then automatically a_i > a_j for i|j, so a_i cannot divide a_j. Is that sufficient? If a_i > a_j, can a_i divide a_j? No, because a divisor cannot be larger than the number (unless the number is 0). So if we assign values such that for all i|j, a_i > a_j, then the condition is satisfied. Is this condition also necessary? Not necessarily; we could have a_i < a_j as long as a_i does not divide a_j. For example, a_i=4, a_j=6: 4<6 but 4 does not divide 6. So it's allowed. But if we enforce strictly decreasing along chains, we get a valid assignment. And to make it lexicographically largest, we want a_1 as large as possible, then a_2 as large as possible, etc. If we enforce decreasing along chains, then a_1 must be the maximum, and for any i, a_i must be less than all a_d for d|i. This is a very strong condition. But maybe the lexicographically largest solution always satisfies this decreasing property? Let's check the sample: a = [6,4,4,3,4,3]. Check chains: 1->2->4: 6>4>3 (decreasing). 1->3->6: 6>4>3 (decreasing). 1->5: 6>4. 2->6: 4>3. So indeed, along every divisibility chain, the values are non-increasing? Actually 1->2: 6>4; 1->3: 6>4; 2->4: 4>3; 3->6: 4>3. So it is strictly decreasing along chains? 1->2->4: 6,4,3 decreasing. 1->3->6: 6,4,3 decreasing. But note a_2=4 and a_3=4, they are equal, but 2 does not divide 3, so it's fine. So along any chain, it's strictly decreasing. Is it always strictly decreasing? If we had a_i = a_j for i|j, that would violate because a_i divides a_j. So along any chain, values must be distinct. Could they increase? If a_i < a_j and a_i does not divide a_j, it's allowed. But would the lexicographically largest solution ever have an increase along a chain? Suppose we have a chain 1->2. To maximize a_1, we pick the largest possible. Then for a_2, we want it as large as possible, but it cannot be a multiple of a_1. If we pick a_2 > a_1, it might be possible if a_1 does not divide a_2. But since a_1 is the largest in S, there is no larger value. So a_2 <= a_1. In fact, if we always pick the largest available, we will naturally have a_1 >= a_2 >= ... along any chain? Not necessarily, because for a_2 we might pick a value that is not the absolute largest, but it could still be larger than some other value. But since we process in order 1..n, a_1 is the largest in S. Then for any i>1, the available values are those not divisible by any a_d for d|i. Since a_1 is the maximum, any value not divisible by a_1 is <= a_1. So a_i <= a_1. For a chain 1->i->j, we have a_1 >= a_i and a_i >= a_j? Not necessarily. Could a_i < a_j? If a_i < a_j, then since i|j, we need a_i ∤ a_j. This is possible if a_i does not divide a_j. But would the greedy algorithm ever produce a_i < a_j? Let's test: n=4, S={2,3,6}. Greedy: a1=6. a2: forbidden multiples of 6:6. Available:3,2. Largest 3. a3: available 3,2. Largest 3. a4: divisors 1,2. Forbidden multiples of 6 and 3. Multiples of 6:6; multiples of 3:3,6. Available:2. So a4=2. Chain 1->2->4: 6,3,2 decreasing. Chain 1->3: 6,3 decreasing. So decreasing.
+        // What if S={4,5,6}? n=4. a1=6. a2: forbidden multiples of 6:6. Available:5,4. Largest 5. a3: available 5,4. Largest 5. a4: divisors 1,2. Forbidden multiples of 6 and 5. Multiples of 6:6; multiples of 5:5. Available:4. So a4=4. Chain 1->2->4: 6,5,4 decreasing. So still decreasing.
+        // What if S={2,4,5}? n=4. a1=5. a2: forbidden multiples of 5:5. Available:4,2. Largest 4. a3: available 4,2. Largest 4. a4: divisors 1,2. Forbidden multiples of 5 and 4. Multiples of 5:5; multiples of 4:4. Available:2. a4=2. Chain: 5,4,2 decreasing.
+        // It seems greedy always produces a non-increasing sequence along any chain. Is it possible to have an increase? Suppose we have a chain 1->2. a1 is max. a2 cannot be a multiple of a1. If a1 is not the maximum? But a1 is chosen as max of S. So a2 <= max. Could a2 > a1? Only if a1 is not max, but we chose a1 as max. So a2 <= a1. For a chain 2->4, a2 is chosen as max available not divisible by a1. a4 is chosen as max available not divisible by a1 and a2. Since a2 is one of the forbidden divisors, a4 cannot be a multiple of a2. Could a4 > a2? If a4 > a2, then since a4 is not a multiple of a2, it's possible. But would greedy pick a4 > a2? Let's see: at index 4, the available set is S minus multiples of a1 and a2. If there is a value larger than a2 that is not a multiple of a1 or a2, greedy would pick it. But is that possible? Suppose S={2,3,6}. a1=6, a2=3 (since 3 is largest not multiple of 6). Then for a4, forbidden multiples of 6 and 3: 6 and 3. Available: 2. So a4=2 < a2. What if S={2,4,6}? a1=6, a2=4, a4: forbidden multiples of 6 and 4: 6,4. Available:2. a4=2 < a2. What if S={3,5,6}? a1=6, a2=5, a4: forbidden multiples of 6 and 5: 6,5. Available:3. a4=3 < 5. It seems that because a2 is the largest available after removing multiples of a1, any value larger than a2 would have been a multiple of a1? Not necessarily. Suppose S={4,5,6,7}. a1=7. a2: forbidden multiples of 7:7. Available:6,5,4. Largest 6. So a2=6. a4: divisors 1,2. Forbidden multiples of 7 and 6. Multiples of 7:7; multiples of 6:6. Available:5,4. Largest 5. So a4=5. Here a4=5 < a2=6. What if S={4,6,8,9}? a1=9. a2: forbidden multiples of 9:9. Available:8,6,4. Largest 8. a2=8. a4: forbidden multiples of 9 and 8: 9,8. Available:6,4. Largest 6. a4=6 < 8. So it seems a4 is always <= a2. Could it be >? For a4 > a2, we need a value x > a2 such that x is not a multiple of a1 or a2. But since a2 was chosen as the maximum available after removing multiples of a1, any x > a2 must be a multiple of a1 (otherwise it would have been chosen as a2). So x is a multiple of a1. But then for a4, x is forbidden because it's a multiple of a1. So a4 cannot be > a2. Thus along any chain, the values are non-increasing. And since they cannot be equal (due to condition), they are strictly decreasing. So the greedy assignment naturally produces a strictly decreasing sequence along any divisibility chain.
+
+        // Therefore, the problem reduces to: assign to each index i a value from S such that for every i|j, a_i > a_j. And we want lexicographically largest. This is exactly the condition that the assignment is order-reversing from the divisibility poset to the usual order on integers. And we want to maximize the tuple (a_1, a_2, ..., a_n) lexicographically.
+
+        // This is a known problem: given a DAG (divisibility), assign labels from a set S (sorted decreasingly) to maximize lexicographically, with the constraint that if i->j then label(i) > label(j). This is equivalent to: we want to assign the largest possible labels to the "earliest" indices in topological order? But our order is 1..n, which is a linear extension of the divisibility poset? Actually 1..n is not a topological order of divisibility because 2 does not divide 3, but 2<3. However, the condition only applies when there is a divisibility relation. For indices that are incomparable, there is no constraint. So we can assign them independently as long as we respect the constraints from their divisors.
+
+        // Since we want lexicographically largest in the order 1,2,...,n, we should process indices in that order. For each i, we need to assign a value that is less than all a_d for d|i. To maximize a_i, we should pick the largest available value that is less than min_{d|i} a_d. Also, we must ensure that this choice leaves enough values for the future indices that are multiples of i. But since the constraint is only that a_j < a_i for j multiple of i, we need to reserve smaller values for them. This is similar to scheduling with precedence constraints.
+
+        // Actually, if we only require a_i > a_j for i|j, then the assignment is a linear extension of the partial order reversed. We want to maximize the sequence in lexicographic order of indices 1..n. This is exactly the problem of finding the lexicographically largest topological sort of a DAG where we want to maximize the first element, then second, etc. But here the DAG is the divisibility poset (i->j if i|j). And we have a set of labels S, and we want to assign distinct labels? Wait, are labels required to be distinct? The condition only requires a_i > a_j for i|j. They could be equal if there is no divisibility relation. For example, a_2 and a_3 can be equal because 2 does not divide 3. So labels can repeat. But along any chain, they must be strictly decreasing, so they are distinct along chains. But across incomparable indices, they can be equal.
+
+        // So we have a set S of allowed values. We want to assign each index a value from S such that if i|j then a_i > a_j. We want to maximize the sequence lexicographically.
+
+        // This is equivalent to: we have a pool of values S. We process indices i=1..n. For each i, we must pick a value less than all values assigned to divisors of i. To maximize a_i, we should pick the largest value in S that is less than min_{d|i} a_d. But we also need to ensure that for each multiple j of i, there will be some value available that is less than a_i. This is like we need to maintain a set of available values, and when we assign a_i = x, we effectively "reserve" values less than x for the subtree of multiples of i. But since we process in increasing order of i, when we assign a_i, we haven't assigned its multiples yet. So we need to make sure that we don't use up all small values needed for deep chains.
+
+        // This is reminiscent of the problem where we have a tree and we want to assign values from a set to maximize lexicographically with the condition that parent > child. The greedy strategy of assigning the largest possible value to the root, then recursively to children, works if we sort children appropriately? But here the graph is not a tree; it's the divisibility poset. However, the divisibility poset has a special structure: each number has divisors, and multiples. It's a lattice. But we can still think of it as: we need to assign values such that for each i, a_i is greater than all a_j for j multiple of i. So if we consider the set of multiples of i, they all must get values < a_i. So the number of values strictly less than a_i must be at least the size of the largest chain in the multiples of i? Actually, we need to assign distinct values along any chain. The maximum length of a chain starting from i (including i) is the maximum number of times we can multiply by integers >1 to stay <= n. This is the length of the longest chain in the poset of multiples of i. Let L(i) be the length of the longest chain starting at i (i.e., i = x_1 | x_2 | ... | x_k <= n). Then we need at least L(i) distinct values in S that are <= a_i, and they must be assigned to that chain. Since we want to maximize a_i, we should pick the largest value in S that has at least L(i) values <= it in S? But we also have to share values among different branches.
+
+        // This is getting complicated. Let's look for a simpler pattern.
+
+        // Another idea: Since we want lexicographically largest, and the condition is only a_i > a_j for i|j, we can think of assigning values in decreasing order of S. The largest value in S must go to some index that has no divisors? Actually, if a_i is the maximum value, then for any divisor d of i, we need a_d > a_i, which is impossible since a_i is max. Therefore, the maximum value can only be assigned to indices that have no proper divisors (i.e., i=1). Because if i>1, it has at least divisor 1, and a_1 must be > a_i. So a_1 must be the maximum value in S. This matches our greedy: a_1 = max(S).
+
+        // The second largest value in S: it can be assigned to an index that has no divisor with a larger value? Actually, if we assign the second largest value to some i, then all divisors of i must have larger values. The only larger value is the maximum, which is at 1. So i can be any index such that 1 is its only divisor? That is, i must be prime? Not necessarily, if i=4, divisors are 1,2. If we assign second largest to 4, then a_2 must be > a_4, so a_2 must be the maximum? But maximum is already at 1. So a_2 cannot be maximum because it's taken. So a_2 would have to be something else > second largest, but only maximum is larger. So second largest cannot go to 4 if a_2 is not maximum. So the second largest must go to an index whose only divisor is 1 (i.e., a prime) or to an index that has divisors but those divisors can take values that are not the maximum? But the only value larger than second largest is the maximum. So any divisor of i must take the maximum value. Since maximum is only at 1, the only divisor that can take maximum is 1. So i can only have 1 as a divisor. Thus i must be a prime. So the second largest value must go to a prime index. But there

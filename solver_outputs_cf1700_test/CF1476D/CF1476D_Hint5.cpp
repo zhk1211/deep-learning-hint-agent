@@ -1,0 +1,51 @@
+// Hint5
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    string s;
+    cin >> n >> s;
+    
+    vector<int> left(n + 1, 0), right(n + 1, 0);
+    
+    // left[i] = max cities reachable going left from city i (including i)
+    // right[i] = max cities reachable going right from city i (including i)
+    
+    // Base cases
+    left[0] = 1;
+    for (int i = 1; i <= n; ++i) {
+        if (s[i - 1] == 'L') {
+            left[i] = left[i - 1] + 1;
+        } else {
+            left[i] = 1;
+        }
+    }
+    
+    right[n] = 1;
+    for (int i = n - 1; i >= 0; --i) {
+        if (s[i] == 'R') {
+            right[i] = right[i + 1] + 1;
+        } else {
+            right[i] = 1;
+        }
+    }
+    
+    // For each starting city i, answer = left[i] + right[i] - 1
+    for (int i = 0; i <= n; ++i) {
+        cout << left[i] + right[i] - 1 << (i == n ? '\n' : ' ');
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    
+    return 0;
+}

@@ -1,0 +1,79 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(vector<int> &idx) {
+    cout << "? " << idx.size();
+    for (int x : idx) cout << " " << x;
+    cout << endl;
+    int res;
+    cin >> res;
+    return res;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    vector<int> pos1(n + 1, 0), pos2(n + 1, 0);
+    
+    // Find pairs for numbers 1..n-1
+    for (int v = 1; v < n; v++) {
+        vector<int> unknown;
+        for (int i = 1; i <= m; i++) {
+            if (a[i] == 0) unknown.push_back(i);
+        }
+        // binary search for first occurrence of v
+        int lo = 0, hi = (int)unknown.size() - 1;
+        int first_idx = -1;
+        while (lo <= hi) {
+            int mid = (lo + hi) / 2;
+            vector<int> q = {unknown[0]};
+            for (int i = 1; i <= mid; i++) q.push_back(unknown[i]);
+            int res = query(q);
+            if (res == v) {
+                first_idx = unknown[mid];
+                hi = mid - 1;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        // find second occurrence
+        lo = 0, hi = (int)unknown.size() - 1;
+        int second_idx = -1;
+        while (lo <= hi) {
+            int mid = (lo + hi) / 2;
+            vector<int> q;
+            for (int i = 0; i <= mid; i++) q.push_back(unknown[i]);
+            int res = query(q);
+            if (res == v) {
+                second_idx = unknown[mid];
+                hi = mid - 1;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        a[first_idx] = a[second_idx] = v;
+        pos1[v] = first_idx;
+        pos2[v] = second_idx;
+    }
+    
+    // remaining two positions are n
+    vector<int> rem;
+    for (int i = 1; i <= m; i++) if (a[i] == 0) rem.push_back(i);
+    a[rem[0]] = a[rem[1]] = n;
+    
+    cout << "!";
+    for (int i = 1; i <= m; i++) cout << " " << a[i];
+    cout << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}

@@ -1,0 +1,52 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m, q;
+        cin >> n >> m >> q;
+        vector<long long> a(n), b(m);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int i = 0; i < m; ++i) cin >> b[i];
+
+        sort(a.begin(), a.end(), greater<long long>());
+        sort(b.begin(), b.end(), greater<long long>());
+
+        vector<long long> preA(n + 1, 0), preB(m + 1, 0);
+        for (int i = 0; i < n; ++i) preA[i + 1] = preA[i] + a[i];
+        for (int i = 0; i < m; ++i) preB[i + 1] = preB[i] + b[i];
+
+        int total = n + m;
+        vector<int> bestX(total + 1, 0);
+        int i = 0, j = 0;
+        for (int k = 1; k <= total; ++k) {
+            if (i < n && (j >= m || a[i] >= b[j])) {
+                bestX[k] = bestX[k - 1] + 1;
+                ++i;
+            } else {
+                bestX[k] = bestX[k - 1];
+                ++j;
+            }
+        }
+
+        while (q--) {
+            int x, y, z;
+            cin >> x >> y >> z;
+            int low = max(0, z - y);
+            int high = min(x, z);
+            int x_opt = bestX[z];
+            if (x_opt < low) x_opt = low;
+            if (x_opt > high) x_opt = high;
+            long long ans = preA[x_opt] + preB[z - x_opt];
+            cout << ans << '\n';
+        }
+    }
+    return 0;
+}
+```

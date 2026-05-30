@@ -1,0 +1,89 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+
+        vector<int> p(n + 1);
+        vector<bool> used(n + 1, false);
+
+        // Place 1 at position 1 (fixed point)
+        p[1] = 1;
+        used[1] = true;
+
+        // For each prime > 2, create a cycle of its multiples
+        for (int i = 2; i <= n; ++i) {
+            if (used[i]) continue;
+
+            // Check if i is prime
+            bool is_prime = true;
+            for (int d = 2; d * d <= i; ++d) {
+                if (i % d == 0) {
+                    is_prime = false;
+                    break;
+                }
+            }
+
+            if (is_prime && i > 2) {
+                // Collect all multiples of i that are not used
+                vector<int> multiples;
+                for (int m = i; m <= n; m += i) {
+                    if (!used[m]) {
+                        multiples.push_back(m);
+                    }
+                }
+                if (multiples.empty()) continue;
+
+                // Create a cycle: each points to the next, last points to first
+                for (size_t j = 0; j < multiples.size(); ++j) {
+                    int cur = multiples[j];
+                    int nxt = multiples[(j + 1) % multiples.size()];
+                    p[cur] = nxt;
+                    used[cur] = true;
+                }
+            }
+        }
+
+        // Handle remaining unused numbers (composites and prime 2)
+        // They will form a cycle with 2 as the common divisor
+        vector<int> remaining;
+        for (int i = 2; i <= n; ++i) {
+            if (!used[i]) {
+                remaining.push_back(i);
+            }
+        }
+
+        if (!remaining.empty()) {
+            // Ensure 2 is in the cycle if not used
+            if (!used[2]) {
+                // 2 should be in remaining, but just in case
+                remaining.push_back(2);
+                // remove duplicates if any
+                sort(remaining.begin(), remaining.end());
+                remaining.erase(unique(remaining.begin(), remaining.end()), remaining.end());
+            }
+            // Create a cycle among remaining numbers
+            for (size_t j = 0; j < remaining.size(); ++j) {
+                int cur = remaining[j];
+                int nxt = remaining[(j + 1) % remaining.size()];
+                p[cur] = nxt;
+                used[cur] = true;
+            }
+        }
+
+        // Output the permutation
+        for (int i = 1; i <= n; ++i) {
+            cout << p[i] << " \n"[i == n];
+        }
+    }
+
+    return 0;
+}

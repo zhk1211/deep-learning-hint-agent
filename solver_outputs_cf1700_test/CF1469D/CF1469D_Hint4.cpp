@@ -1,0 +1,84 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<pair<int,int>> ops;
+    vector<int> a(n+1);
+    iota(a.begin(), a.end(), 0);
+    
+    // We'll use a recursive-like approach: repeatedly take the largest element > 2
+    // and divide it by something around sqrt of it.
+    // We'll keep track of elements that are not 1 or 2.
+    // Actually we can just simulate with a set or priority queue.
+    // Since n <= 2e5, we can afford O(n log n) per test case.
+    
+    // We'll maintain a set of indices with values > 2.
+    set<int> big;
+    for (int i = 3; i <= n; ++i) big.insert(i);
+    
+    // We'll also need current values. We'll update them.
+    vector<int> val = a;
+    
+    while (!big.empty()) {
+        int x = *big.rbegin(); // largest index (value = x initially, but may have changed)
+        // Actually we need the current value, which is val[x].
+        // But we inserted indices based on initial values. Since we only reduce values,
+        // an index might drop to <=2 and we should remove it.
+        // So we should check.
+        if (val[x] <= 2) {
+            big.erase(x);
+            continue;
+        }
+        // Choose y = floor(sqrt(val[x])) or something. But we need y such that val[y] is not too large.
+        // The hint says y ≈ sqrt(x). Since initially val[y] = y, we can pick y = ceil(sqrt(val[x])).
+        // But we need y != x and val[y] > 0.
+        int target = (int)ceil(sqrt(val[x]));
+        if (target >= val[x]) target = val[x] - 1; // fallback
+        if (target < 2) target = 2;
+        // Find an index with value close to target. Since we only have indices up to n,
+        // and values are decreasing, we can just use index = target if target <= n and val[target] > 0.
+        // But val[target] might have changed. However, we can just use y = target (the index).
+        // Because initially val[target] = target, and we only divide, so val[target] <= target.
+        // It should still work.
+        int y = target;
+        if (y == x) y = (x > 2 ? x - 1 : 2);
+        // Ensure y is valid
+        if (y < 1 || y > n) y = 2;
+        ops.emplace_back(x, y);
+        val[x] = (val[x] + val[y] - 1) / val[y]; // ceil division
+        if (val[x] <= 2) big.erase(x);
+        // Also if y > 2 and val[y] <= 2, we might remove it, but we don't track y in big necessarily.
+        // Actually we only inserted indices 3..n initially. So y could be in big.
+        if (y >= 3 && val[y] <= 2) big.erase(y);
+    }
+    
+    // Now we have only 1s and 2s. We need exactly one 2 and rest 1s.
+    // Count number of 2s.
+    vector<int> twos;
+    for (int i = 1; i <= n; ++i) if (val[i] == 2) twos.push_back(i);
+    // If we have more than one 2, we need to turn extra 2s into 1s by dividing by 2.
+    // We can keep one 2 (say the first one) and divide others by that 2.
+    if (twos.size() > 1) {
+        int keeper = twos[0];
+        for (int i = 1; i < (int)twos.size(); ++i) {
+            ops.emplace_back(twos[i], keeper);
+            // val[twos[i]] becomes ceil(2/2)=1
+        }
+    }
+    // If we have zero 2s (should not happen because n>=3 and we started with at least one 2? Actually initial array has 2 at index 2, and we never touch index 2? We might have divided 2 by something? We never used index 2 as x because we only took x from big (>=3). So index 2 remains 2. So we always have at least one 2.)
+    
+    cout << ops.size() << '\n';
+    for (auto &p : ops) cout << p.first << ' ' << p.second << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}

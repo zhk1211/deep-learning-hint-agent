@@ -1,0 +1,128 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    int best_l, best_r;
+    long long best_sum;
+    long long pref_sum, suff_sum;
+    int pref_l, suff_r;
+    long long total_sum;
+};
+
+Node combine(const Node& left, const Node& right) {
+    Node res;
+    res.total_sum = left.total_sum + right.total_sum;
+    
+    if (left.pref_sum >= left.total_sum + right.pref_sum) {
+        res.pref_sum = left.pref_sum;
+        res.pref_l = left.pref_l;
+    } else {
+        res.pref_sum = left.total_sum + right.pref_sum;
+        res.pref_l = right.pref_l;
+    }
+    
+    if (right.suff_sum >= right.total_sum + left.suff_sum) {
+        res.suff_sum = right.suff_sum;
+        res.suff_r = right.suff_r;
+    } else {
+        res.suff_sum = right.total_sum + left.suff_sum;
+        res.suff_r = left.suff_r;
+    }
+    
+    if (left.best_sum >= right.best_sum && left.best_sum >= left.suff_sum + right.pref_sum) {
+        res.best_sum = left.best_sum;
+        res.best_l = left.best_l;
+        res.best_r = left.best_r;
+    } else if (right.best_sum >= left.best_sum && right.best_sum >= left.suff_sum + right.pref_sum) {
+        res.best_sum = right.best_sum;
+        res.best_l = right.best_l;
+        res.best_r = right.best_r;
+    } else {
+        res.best_sum = left.suff_sum + right.pref_sum;
+        res.best_l = left.suff_r;
+        res.best_r = right.pref_l;
+    }
+    return res;
+}
+
+Node make_node(int idx, int val) {
+    Node node;
+    node.total_sum = val;
+    node.pref_sum = val;
+    node.pref_l = idx;
+    node.suff_sum = val;
+    node.suff_r = idx;
+    node.best_sum = val;
+    node.best_l = idx;
+    node.best_r = idx;
+    return node;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> x(n);
+    for (int i = 0; i < n; ++i) cin >> x[i];
+    
+    map<int, vector<int>> pos;
+    for (int i = 0; i < n; ++i) {
+        pos[x[i]].push_back(i);
+    }
+    
+    long long global_best = -1e18;
+    int best_a = -1, best_l = -1, best_r = -1;
+    
+    for (auto& [val, indices] : pos) {
+        int m = indices.size();
+        vector<int> arr(m);
+        for (int i = 0; i < m; ++i) {
+            arr[i] = 1;
+        }
+        for (int i = 0; i < m-1; ++i) {
+            int gap = indices[i+1] - indices[i] - 1;
+            arr[i] -= gap;
+        }
+        arr[m-1] -= (n - 1 - indices[m-1]);
+        if (m > 0) {
+            arr[0] -= indices[0];
+        }
+        
+        Node best_node;
+        best_node.best_sum = -1e18;
+        Node cur;
+        bool first = true;
+        for (int i = 0; i < m; ++i) {
+            Node nd = make_node(indices[i], arr[i]);
+            if (first) {
+                cur = nd;
+                first = false;
+            } else {
+                cur = combine(cur, nd);
+            }
+            if (cur.best_sum > best_node.best_sum) {
+                best_node = cur;
+            }
+        }
+        
+        if (best_node.best_sum > global_best) {
+            global_best = best_node.best_sum;
+            best_a = val;
+            best_l = best_node.best_l + 1;
+            best_r = best_node.best_r + 1;
+        }
+    }
+    
+    cout << best_a << " " << best_l << " " << best_r << "\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

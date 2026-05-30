@@ -1,0 +1,85 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        
+        vector<int> a(n), b(m);
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+        }
+        for (int i = 0; i < m; i++) {
+            cin >> b[i];
+        }
+        
+        int max_val = n + m + 1;
+        vector<int> cnt_a(max_val, 0), cnt_b(max_val, 0);
+        
+        for (int x : a) {
+            cnt_a[x]++;
+        }
+        for (int y : b) {
+            cnt_b[y]++;
+        }
+        
+        vector<int> cnt_del(max_val, 0);
+        for (int i = 1; i < max_val; i++) {
+            for (int j = i; j < max_val; j += i) {
+                cnt_del[j] += cnt_a[i];
+            }
+        }
+        
+        int alice_only = 0, bob_only = 0, common = 0;
+        
+        for (int i = 1; i < max_val; i++) {
+            if (cnt_b[i] == 0) continue;
+            if (cnt_del[i] == 0) {
+                bob_only += cnt_b[i];
+            } else if (cnt_del[i] == n) {
+                alice_only += cnt_b[i];
+            }
+        }
+        
+        common = m - alice_only - bob_only;
+        
+        bool turn = false; // false = Alice, true = Bob
+        string winner;
+        
+        while (true) {
+            if (!turn) { // Alice's turn
+                if (common > 0) {
+                    common--;
+                } else if (alice_only > 0) {
+                    alice_only--;
+                } else {
+                    winner = "Bob";
+                    break;
+                }
+            } else { // Bob's turn
+                if (common > 0) {
+                    common--;
+                } else if (bob_only > 0) {
+                    bob_only--;
+                } else {
+                    winner = "Alice";
+                    break;
+                }
+            }
+            turn = !turn;
+        }
+        
+        cout << winner << '\n';
+    }
+    
+    return 0;
+}

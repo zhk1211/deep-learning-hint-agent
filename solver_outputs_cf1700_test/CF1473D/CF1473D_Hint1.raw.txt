@@ -1,0 +1,68 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        string s;
+        cin >> s;
+
+        vector<int> pref(n + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            pref[i + 1] = pref[i] + (s[i] == '+' ? 1 : -1);
+        }
+
+        vector<int> pref_min(n + 1), pref_max(n + 1);
+        pref_min[0] = pref_max[0] = 0;
+        for (int i = 1; i <= n; ++i) {
+            pref_min[i] = min(pref_min[i - 1], pref[i]);
+            pref_max[i] = max(pref_max[i - 1], pref[i]);
+        }
+
+        vector<int> suff_min(n + 2), suff_max(n + 2);
+        suff_min[n + 1] = INT_MAX;
+        suff_max[n + 1] = INT_MIN;
+        for (int i = n; i >= 1; --i) {
+            suff_min[i] = min(suff_min[i + 1], pref[i]);
+            suff_max[i] = max(suff_max[i + 1], pref[i]);
+        }
+
+        while (m--) {
+            int l, r;
+            cin >> l >> r;
+
+            int min1 = pref_min[l - 1];
+            int max1 = pref_max[l - 1];
+
+            int min2 = suff_min[r + 1];
+            int max2 = suff_max[r + 1];
+
+            int delta = pref[r] - pref[l - 1];
+
+            if (r == n) {
+                min2 = INT_MAX;
+                max2 = INT_MIN;
+            }
+
+            int overall_min = min1;
+            int overall_max = max1;
+
+            if (min2 != INT_MAX) {
+                overall_min = min(overall_min, min2 - delta);
+                overall_max = max(overall_max, max2 - delta);
+            }
+
+            int ans = overall_max - overall_min + 1;
+            cout << ans << '\n';
+        }
+    }
+    return 0;
+}
+```

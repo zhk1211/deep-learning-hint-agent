@@ -1,0 +1,44 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<int>> adj(n + 1);
+        for (int i = 2; i <= n; ++i) {
+            int p;
+            cin >> p;
+            adj[p].push_back(i);
+        }
+        vector<int> l(n + 1), r(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            cin >> l[i] >> r[i];
+        }
+
+        int ans = 0;
+        function<ll(int)> dfs = [&](int v) -> ll {
+            ll sum = 0;
+            for (int u : adj[v]) {
+                sum += dfs(u);
+            }
+            if (sum < l[v]) {
+                ++ans;
+                return (ll)r[v];
+            }
+            return min((ll)r[v], sum);
+        };
+
+        dfs(1);
+        cout << ans << '\n';
+    }
+    return 0;
+}

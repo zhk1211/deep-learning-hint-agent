@@ -1,0 +1,49 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    long long x;
+    cin >> n >> x;
+    
+    if (to_string(x).length() == n) {
+        cout << 0 << "\n";
+        return 0;
+    }
+    
+    unordered_set<long long> visited;
+    queue<pair<long long, int>> q;
+    q.push({x, 0});
+    visited.insert(x);
+    
+    while (!q.empty()) {
+        auto [cur, dist] = q.front();
+        q.pop();
+        
+        string s = to_string(cur);
+        if ((int)s.length() == n) {
+            cout << dist << "\n";
+            return 0;
+        }
+        
+        vector<bool> seen_digit(10, false);
+        for (char c : s) {
+            int d = c - '0';
+            if (d > 1 && !seen_digit[d]) {
+                seen_digit[d] = true;
+                long long nxt = cur * d;
+                if (!visited.count(nxt)) {
+                    visited.insert(nxt);
+                    q.push({nxt, dist + 1});
+                }
+            }
+        }
+    }
+    
+    cout << -1 << "\n";
+    return 0;
+}

@@ -1,0 +1,88 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Today Johnny wants to increase his contribution. His plan assumes writing $ n $ blogs. One blog covers one topic, but one topic can be covered by many blogs. Moreover, some blogs have references to each other. Each pair of blogs that are connected by a reference has to cover different topics because otherwise, the readers can notice that they are split just for more contribution. Set of blogs and bidirectional references between some pairs of them is called blogs network.
+
+There are $ n $ different topics, numbered from $ 1 $ to $ n $ sorted by Johnny's knowledge. The structure of the blogs network is already prepared. Now Johnny has to write the blogs in some order. He is lazy, so each time before writing a blog, he looks at it's already written neighbors (the blogs referenced to current one) and chooses the topic with the smallest number which is not covered by neighbors. It's easy to see that this strategy will always allow him to choose a topic because there are at most $ n - 1 $ neighbors.
+
+For example, if already written neighbors of the current blog have topics number $ 1 $ , $ 3 $ , $ 1 $ , $ 5 $ , and $ 2 $ , Johnny will choose the topic number $ 4 $ for the current blog, because topics number $ 1 $ , $ 2 $ and $ 3 $ are already covered by neighbors and topic number $ 4 $ isn't covered.
+
+As a good friend, you have done some research and predicted the best topic for each blog. Can you tell Johnny, in which order he has to write the blogs, so that his strategy produces the topic assignment chosen by you?
+
+Input Format
+The first line contains two integers $ n $ $ (1 \leq n \leq 5 \cdot 10^5) $ and $ m $ $ (0 \leq m \leq 5 \cdot 10^5) $ — the number of blogs and references, respectively.
+
+Each of the following $ m $ lines contains two integers $ a $ and $ b $ ( $ a \neq b $ ; $ 1 \leq a, b \leq n $ ), which mean that there is a reference between blogs $ a $ and $ b $ . It's guaranteed that the graph doesn't contain multiple edges.
+
+The last line contains $ n $ integers $ t_1, t_2, \ldots, t_n $ , $ i $ -th of them denotes desired topic number of the $ i $ -th blog ( $ 1 \le t_i \le n $ ).
+
+Output Format
+If the solution does not exist, then write $ -1 $ . Otherwise, output $ n $ distinct integers $ p_1, p_2, \ldots, p_n $ $ (1 \leq p_i \leq n) $ , which describe the numbers of blogs in order which Johnny should write them. If there are multiple answers, print any.
+
+Examples
+Sample 1
+Input
+3 3
+1 2
+2 3
+3 1
+2 1 3
+Output
+2 1 3
+
+Sample 2
+Input
+3 3
+1 2
+2 3
+3 1
+1 1 1
+Output
+-1
+
+Sample 3
+Input
+5 3
+1 2
+2 3
+4 5
+2 1 2 2 1
+Output
+2 5 1 3 4
+
+Note
+In the first example, Johnny starts with writing blog number $ 2 $ , there are no already written neighbors yet, so it receives the first topic. Later he writes blog number $ 1 $ , it has reference to the already written second blog, so it receives the second topic. In the end, he writes blog number $ 3 $ , it has references to blogs number $ 1 $ and $ 2 $ so it receives the third topic.
+
+Second example: There does not exist any permutation fulfilling given conditions.
+
+Third example: First Johnny writes blog $ 2 $ , it receives the topic $ 1 $ . Then he writes blog $ 5 $ , it receives the topic $ 1 $ too because it doesn't have reference to single already written blog $ 2 $ . Then he writes blog number $ 1 $ , it has reference to blog number $ 2 $ with topic $ 1 $ , so it receives the topic $ 2 $ . Then he writes blog number $ 3 $ which has reference to blog $ 2 $ , so it receives the topic $ 2 $ . Then he ends with writing blog number $ 4 $ which has reference to blog $ 5 $ and receives the topic $ 2 $ .
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1361A - Johnny and Contribution
+We can view blogs as a graph, references as edges, and topics as colors. Now we can reformulate our problem as finding a permutation of vertices such that given in the statement greedy coloring algorithm returns coloring as described in the input.
+Let us start with two observations:
+Observation 1:
+If there is an edge between vertices with the same color, then the answer is $$$-1$$$.
+Observation 2:
+If for a vertex $$$u$$$ with color $$$c$$$ there exist a color $$$c'  \lt  c$$$ such that $$$u$$$ has no edge to any vertex with color $$$c'$$$ then the answer is $$$-1$$$.
+Both observations are rather straightforward to prove, so we skip it. Let us create permutation where vertices are sorted firstly by desired color and secondly by indices. We claim that if there exists any ordering fulfilling given regulations, then this permutation fulfills these too. Let us prove it:
+Let us analyze vertex $$$u$$$ with color $$$c$$$. From observation $$$2$$$ we know that for each color $$$c'  \lt  c$$$ there exist $$$v$$$ with color $$$c'$$$ such that $$$u$$$ and $$$v$$$ are connected by an edge. Because vertices are sorted by colors in our permutation, $$$v$$$ is before $$$u$$$ in ordering. So the greedy algorithm will assign that vertex color $$$k \geq c$$$. From observation $$$1$$$, we now that $$$u$$$ does not have an edge to vertex with color $$$c$$$, so the greedy algorithm has to assign to $$$u$$$ color $$$k \leq c$$$. Combining both inequalities, we reach that greedy must assign color $$$k = c$$$, which completes our proof.
+So now the algorithm is rather straightforward – sort vertices by colors, check if that ordering fulfills given regulations, if so, then write it down, otherwise print $$$-1$$$. This can be implemented in $$$\mathcal{O}(n \log n)$$$ or $$$\mathcal{O}(n)$$$.
+
+[code block omitted]
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

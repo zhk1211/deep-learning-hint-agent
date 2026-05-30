@@ -1,0 +1,42 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int T;
+    cin >> T;
+    while (T--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+        }
+        
+        map<int, int> freq;
+        for (int x : a) freq[x]++;
+        
+        vector<int> counts;
+        for (auto &p : freq) counts.push_back(p.second);
+        sort(counts.rbegin(), counts.rend());
+        
+        int max_freq = counts[0];
+        int cnt_max = 0;
+        for (int c : counts) {
+            if (c == max_freq) cnt_max++;
+            else break;
+        }
+        
+        // The answer is floor((n - cnt_max) / (max_freq - 1)) - 1
+        // Actually derived formula: (n - cnt_max) / (max_freq - 1) - 1
+        // But careful: we want the largest minimum distance.
+        // Let's compute directly.
+        int ans = (n - cnt_max) / (max_freq - 1) - 1;
+        cout << ans << "\n";
+    }
+    
+    return 0;
+}

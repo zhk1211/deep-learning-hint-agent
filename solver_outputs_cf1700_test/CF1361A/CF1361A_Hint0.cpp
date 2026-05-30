@@ -1,0 +1,60 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < m; ++i) {
+        int a, b;
+        cin >> a >> b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+
+    vector<int> t(n + 1);
+    for (int i = 1; i <= n; ++i) {
+        cin >> t[i];
+    }
+
+    // Check feasibility condition: for each vertex, its desired topic must be
+    // at most degree + 1, and all smaller topics must appear among neighbors.
+    for (int u = 1; u <= n; ++u) {
+        vector<bool> seen(t[u] + 1, false);
+        for (int v : adj[u]) {
+            if (t[v] < t[u]) {
+                if (t[v] < (int)seen.size()) {
+                    seen[t[v]] = true;
+                }
+            } else if (t[v] == t[u]) {
+                // Two adjacent vertices cannot have the same topic.
+                cout << -1 << '\n';
+                return 0;
+            }
+        }
+        for (int k = 1; k < t[u]; ++k) {
+            if (!seen[k]) {
+                cout << -1 << '\n';
+                return 0;
+            }
+        }
+    }
+
+    // Order vertices by desired topic, breaking ties arbitrarily.
+    vector<int> order(n);
+    iota(order.begin(), order.end(), 1);
+    sort(order.begin(), order.end(), [&](int a, int b) {
+        return t[a] < t[b];
+    });
+
+    for (int i = 0; i < n; ++i) {
+        cout << order[i] << " \n"[i == n - 1];
+    }
+
+    return 0;
+}

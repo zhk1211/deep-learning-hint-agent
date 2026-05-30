@@ -1,0 +1,12 @@
+[
+  "**Hint 1**\nConsider a formed string. Let's delete the useless part that doesn't contribute to the number of $$$\\tt{01}$$$ and $$$\\tt{10}$$$ substrings.",
+  "**Hint 2**\nThen the weight of a leaf depends on the parity of the length of the string.",
+  "**Hint 3**\nYou can also see that the weight is non-zero if the value of the root is different from the value of the leaf.",
+  "**Hint 4**\nIf the value of the root is already decided, the strategy is quite simple: just fill the values of the leaf nodes with a value different from or equal to the root. It's easy to calculate the answer.",
+  "**Hint 5**\nIf the value of the root has not yet been decided, it seems optimal to fill it first.",
+  "**Hint 6**\nThat's because some values of the leaves have already been decided.",
+  "**Hint 7**\nWhen there are equal numbers of $$$\\tt 0$$$ and $$$\\tt 1$$$ in the leaf nodes, the first to colour the root may lose the advantage of being the first.",
+  "**Hint 8**\nIn this situation, the optimal choice is to colour the unimportant nodes — the nodes that are neither the root nor a leaf.",
+  "**Hint 9**\nIf there is an odd number of $$$\\tt ?$$$ in the unimportant nodes, then Dora will have to colour the root (after filling the $$$\\tt ?$$$ in the unimportant nodes one by one) which will cause Iris to colour the leaves first.",
+  "**Hint 10**\nWhen Dora colours a leaf, Iris can colour another leaf with the opposite colour if there is at least one leaf left; and colour the root with the opposite colour if there is none left."
+]

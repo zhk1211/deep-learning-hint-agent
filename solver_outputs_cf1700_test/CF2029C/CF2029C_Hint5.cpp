@@ -1,0 +1,109 @@
+// Hint5
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // f[i] = rating after processing first i elements (0-indexed, i processed)
+        vector<int> f(n + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            f[i + 1] = f[i];
+            if (a[i] > f[i + 1]) f[i + 1]++;
+            else if (a[i] < f[i + 1]) f[i + 1]--;
+        }
+
+        // g[i] = rating before processing suffix starting at i (0-indexed)
+        // g[n] = 0, g[i] is rating after processing i..n-1 if we start with 0
+        vector<int> g(n + 1, 0);
+        for (int i = n - 1; i >= 0; --i) {
+            g[i] = g[i + 1];
+            if (a[i] > g[i]) g[i]++;
+            else if (a[i] < g[i]) g[i]--;
+        }
+
+        // We need to find max possible rating after skipping some interval [l, r]
+        // If we skip [l, r], final rating = f[l-1] + (something from suffix after r)
+        // Actually the process is: start with 0, go through prefix, then skip, then suffix.
+        // But suffix starts with rating x = f[l-1], not 0.
+        // Let's define h[i][x] = rating after suffix i..n-1 starting with rating x.
+        // We can compute suffix effect efficiently.
+        // Observe that the effect of suffix is monotonic in starting rating.
+        // We can precompute for each suffix the "net change" and the "final rating" as functions of start.
+        // But we can also binary search answer k and check if achievable.
+        
+        // Binary search on answer
+        int lo = 0, hi = n, ans = 0;
+        while (lo <= hi) {
+            int mid = (lo + hi) / 2;
+            // Check if we can achieve rating >= mid
+            // We need to find l <= r such that final rating >= mid
+            // Final rating = result of suffix starting from f[l-1] after skipping up to r.
+            // Let suffix start at r+1 with initial rating f[l-1].
+            // We want this final rating >= mid.
+            // Define for each position i (0..n), the minimum starting rating needed to achieve >= mid after suffix i.
+            // Let need[i] = min start x such that suffix from i with start x ends >= mid.
+            // Then we need f[l-1] >= need[r+1].
+            // We can precompute need array.
+            
+            vector<int> need(n + 1);
+            need[n] = mid; // after empty suffix, need start >= mid
+            for (int i = n - 1; i >= 0; --i) {
+                // We want after processing a[i], rating >= need[i+1]
+                // Let x be start before a[i]. After a[i], rating becomes:
+                // if a[i] > x -> x+1
+                // if a[i] == x -> x
+                // if a[i] < x -> x-1
+                // We need this resulting rating >= need[i+1]
+                // So we find minimal x satisfying this.
+                int req = need[i + 1];
+                // Try x = req - 1, req, req + 1
+                int best = n + 1;
+                for (int dx = -1; dx <= 1; ++dx) {
+                    int x = req + dx;
+                    if (x < 0) continue;
+                    int res = x;
+                    if (a[i] > x) res = x + 1;
+                    else if (a[i] < x) res = x - 1;
+                    if (res >= req) {
+                        best = min(best, x);
+                    }
+                }
+                need[i] = best;
+            }
+            
+            // Now check if exists l <= r such that f[l-1] >= need[r+1]
+            // We can iterate r from 0 to n-1, and keep max f[l-1] for l <= r
+            bool ok = false;
+            int max_f = f[0]; // l=1 -> f[0]
+            for (int r = 0; r < n; ++r) {
+                // r is the end of skipped interval (0-indexed)
+                // need index is r+1
+                if (max_f >= need[r + 1]) {
+                    ok = true;
+                    break;
+                }
+                max_f = max(max_f, f[r + 1]); // for next r, l can be up to r+1
+            }
+            if (ok) {
+                ans = mid;
+                lo = mid + 1;
+            } else {
+                hi = mid - 1;
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

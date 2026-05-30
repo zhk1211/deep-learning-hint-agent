@@ -1,0 +1,58 @@
+// Hint5
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, k;
+    cin >> n >> k;
+    string s;
+    cin >> s;
+
+    vector<array<int, 26>> nxt(n + 2);
+    for (int c = 0; c < 26; ++c) {
+        nxt[n][c] = nxt[n + 1][c] = n + 1;
+    }
+    for (int i = n - 1; i >= 0; --i) {
+        for (int c = 0; c < 26; ++c) {
+            nxt[i][c] = nxt[i + 1][c];
+        }
+        nxt[i][s[i] - 'a'] = i + 1;
+    }
+
+    vector<int> dp(n + 2);
+    dp[n + 1] = 0;
+    for (int i = n; i >= 0; --i) {
+        int mx = 0;
+        for (int c = 0; c < k; ++c) {
+            int pos = nxt[i][c];
+            if (pos == n + 1) {
+                mx = max(mx, 1);
+            } else {
+                mx = max(mx, dp[pos] + 1);
+            }
+        }
+        dp[i] = mx;
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        string t;
+        cin >> t;
+        int cur = 0;
+        for (char ch : t) {
+            cur = nxt[cur][ch - 'a'];
+            if (cur == n + 1) break;
+        }
+        if (cur == n + 1) {
+            cout << 0 << '\n';
+        } else {
+            cout << dp[cur] << '\n';
+        }
+    }
+
+    return 0;
+}

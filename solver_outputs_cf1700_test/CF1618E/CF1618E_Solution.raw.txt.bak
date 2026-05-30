@@ -1,0 +1,46 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using li = long long;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<li> b(n);
+    li sumb = 0;
+    for (int i = 0; i < n; ++i) {
+        cin >> b[i];
+        sumb += b[i];
+    }
+    li d = n * 1LL * (n + 1) / 2;
+    if (sumb % d != 0) {
+        cout << "NO\n";
+        return;
+    }
+    li suma = sumb / d;
+    vector<li> a(n);
+    for (int i = n - 1; i >= 0; --i) {
+        li res = b[i] - b[(i + 1) % n] + suma;
+        if (res % n != 0 || res <= 0) {
+            cout << "NO\n";
+            return;
+        }
+        a[(i + 1) % n] = res / n;
+    }
+    cout << "YES\n";
+    for (int i = 0; i < n; ++i) {
+        cout << a[i] << " \n"[i == n - 1];
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

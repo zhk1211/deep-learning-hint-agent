@@ -1,0 +1,57 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<pair<int, int>> ops;
+    // We'll use a value 'cur' that we repeatedly divide by 2 using ceil division
+    // until it becomes 1. The idea: keep a "large" number (starting from n)
+    // and repeatedly apply x = ceil(x / 2) using the fixed 2.
+    // Meanwhile, all other numbers > 2 are turned into 1 by dividing by n (or the current large).
+    // We'll maintain that position 2 always holds the value 2.
+    // Strategy:
+    // 1. For all i from 3 to n-1 (if any), do op(i, n) to make them 1.
+    // 2. Then repeatedly do op(n, 2) until a_n becomes 1.
+    // But we need to ensure total ops <= n+5.
+    // Actually, we can do: for i=3..n-1: op(i, n) -> 1 step each.
+    // Then we have a_n = n, a_2 = 2. We need to reduce a_n to 1 by dividing by 2.
+    // Number of steps: ceil(log2(n)) <= 18 for n<=2e5. Total ops = (n-3) + log2(n) <= n+5 for n>=3.
+    // But careful: after some ops, a_n changes, so we must use the current value.
+    // We'll just keep track of the current value at position n.
+    // However, we need to output the operations. We'll simulate.
+    // To be safe, we can do: for i=3..n-1: op(i, n) (using original n, but after that a_n might change? Actually a_n only changes when we do op(n,2). So for i=3..n-1, a_n is still n. So it's fine.)
+    // Then we repeatedly do op(n, 2) until a_n becomes 1.
+    // But wait: if n=3, there are no i from 3 to n-1. Then we just do op(3,2) twice? Let's check: a=[1,2,3]. op(3,2): a_3=ceil(3/2)=2. op(3,2): a_3=ceil(2/2)=1. That's 2 ops. Works.
+    // For n=4: i=3 only: op(3,4) -> a_3=ceil(3/4)=1. Then a=[1,2,1,4]. Then op(4,2): a_4=ceil(4/2)=2. op(4,2): a_4=ceil(2/2)=1. Total ops: 1+2=3. Works.
+    // For n=5: i=3,4: op(3,5), op(4,5). Then a_5=5. op(5,2): ceil(5/2)=3. op(5,2): ceil(3/2)=2. op(5,2): ceil(2/2)=1. Total: 2+3=5 <= 5+5=10. Works.
+    // So this simple strategy works within n+5.
+    
+    // Special case: n=3? Already handled.
+    // Let's implement:
+    for (int i = 3; i < n; ++i) {
+        ops.emplace_back(i, n);
+    }
+    // Now reduce a_n to 1 using a_2=2.
+    int cur = n;
+    while (cur > 1) {
+        ops.emplace_back(n, 2);
+        cur = (cur + 1) / 2; // ceil(cur/2)
+    }
+    cout << ops.size() << '\n';
+    for (auto &p : ops) {
+        cout << p.first << ' ' << p.second << '\n';
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

@@ -1,0 +1,135 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<vector<int>> a(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                cin >> a[i][j];
+                --a[i][j]; // 0-indexed
+            }
+        }
+        
+        // For each permutation, compute its inverse
+        vector<vector<int>> inv(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                inv[i][a[i][j]] = j;
+            }
+        }
+        
+        // For each permutation, compute the longest prefix that is a prefix of identity
+        // when composed with some other permutation's inverse.
+        // We'll build a trie over all sequences of the form: for a permutation p,
+        // the sequence of positions of 0,1,2,... in p (i.e., inv[p][k]).
+        // Actually, we want to match a_i * a_j = a_j[a_i[x]].
+        // For a fixed i, we want max k such that for all x < k, a_j[a_i[x]] = x.
+        // This means a_j[a_i[x]] = x => a_j[x] = inv_i[x]? Wait.
+        // Let's derive: we want (a_i * a_j)[x] = x for x=0..k-1.
+        // (a_i * a_j)[x] = a_j[a_i[x]].
+        // So we need a_j[a_i[x]] = x for x=0..k-1.
+        // Let y = a_i[x]. Then x = inv_i[y]. So condition becomes a_j[y] = inv_i[y] for y in {a_i[0],...,a_i[k-1]}.
+        // So we need a_j to match inv_i on the set of first k values of a_i.
+        // Equivalently, we can look at the sequence inv_i[0], inv_i[1], ..., inv_i[m-1].
+        // For a given i, we want the longest prefix of this sequence that appears as a prefix
+        // of some a_j's sequence of values? Wait.
+        // Let's define for each permutation p, the sequence s_p of length m: s_p[k] = p[k] (the value at position k).
+        // We need a_j[a_i[x]] = x => a_j at position a_i[x] equals x.
+        // So for positions y = a_i[0], a_i[1], ..., a_i[k-1], we need a_j[y] = inv_i[y].
+        // This is equivalent to: the sequence of values of a_j at positions given by a_i[0..k-1] equals 0,1,...,k-1.
+        // Another view: consider the permutation inv_i. We want a_j to match inv_i on the first k elements of the sequence of positions? Not exactly.
+        // Let's define for each permutation p, the sequence f(p) where f(p)[x] = p[x] (the value).
+        // We want a_j to have a_j[a_i[x]] = x for x=0..k-1.
+        // This means that if we look at the values of a_j in the order of a_i's first k elements, we get 0..k-1.
+        // So if we precompute for each permutation j the sequence of its values (which is just a_j), we want to find j such that
+        // for x=0..k-1, a_j[a_i[x]] = x.
+        // This is equivalent to: for all y in the set {a_i[0],...,a_i[k-1]}, a_j[y] = inv_i[y].
+        // So we can think of each permutation j as a sequence of length m: a_j[0], a_j[1], ..., a_j[m-1].
+        // For a fixed i, we want the longest prefix of the sequence (inv_i[0], inv_i[1], ..., inv_i[m-1]) that matches
+        // the corresponding positions of some a_j. But the matching is position-wise: we need a_j[pos] = inv_i[pos] for pos = 0..k-1?
+        // Wait, the condition is a_j[a_i[x]] = x for x=0..k-1. The positions involved are a_i[0], a_i[1], ..., a_i[k-1].
+        // These positions are not necessarily 0,1,...,k-1. So it's not simply matching prefixes of a_j with inv_i.
+        // However, we can transform each permutation into a sequence that makes this easier.
+        // Consider the permutation q = a_i. We want a_j such that a_j[q[x]] = x for x=0..k-1.
+        // This means that on the domain of the first k elements of q, a_j acts as the inverse of q.
+        // So if we define for each permutation p the sequence s_p where s_p[x] = p[x], we want a_j to match inv_i on the set of first k elements of a_i.
+        // This is equivalent to: the sequence (a_j[a_i[0]], a_j[a_i[1]], ..., a_j[a_i[k-1]]) equals (0,1,...,k-1).
+        // So for each i, we can form the sequence T_i = (a_i[0], a_i[1], ..., a_i[m-1]) and we want to find j such that a_j restricted to this sequence yields identity.
+        // This is like: we have a set of permutations (a_j). For each i, we want max k such that there exists j with a_j[a_i[x]] = x for all x<k.
+        // We can preprocess all a_j into a trie where we insert the sequence (a_j[0], a_j[1], ..., a_j[m-1])? No, that doesn't match the condition.
+        // Let's rephrase: For a fixed i, we want max k such that the mapping x -> a_i[x] for x<k can be "inverted" by some a_j.
+        // That is, a_j restricted to the set S = {a_i[0],...,a_i[k-1]} is exactly the inverse of a_i on that set.
+        // This means that for each y in S, a_j[y] = inv_i[y].
+        // So if we consider the sequence of pairs (y, inv_i[y]) for y in S, we need a_j to have those values at those positions.
+        // Since S is exactly the first k values of a_i, we can think of it as: we need a_j to match inv_i on the positions given by the first k elements of a_i.
+        // This is equivalent to: the sequence (a_j[a_i[0]], a_j[a_i[1]], ..., a_j[a_i[k-1]]) equals (0,1,...,k-1).
+        // Now, note that a_j is a permutation. For a given j, we can compute the sequence B_j = (a_j[0], a_j[1], ..., a_j[m-1]).
+        // For a given i, we want the longest prefix of (a_i[0], a_i[1], ..., a_i[m-1]) such that when we apply a_j to each element, we get 0,1,2,...
+        // This is exactly the same as: we want the longest prefix of the sequence (a_i[0], a_i[1], ...) that is a prefix of the sequence (inv_j[0], inv_j[1], ...)?
+        // Because a_j[a_i[x]] = x => a_i[x] = inv_j[x]. So a_i[x] = inv_j[x] for x<k.
+        // That is, the sequence a_i[0..k-1] equals the sequence inv_j[0..k-1].
+        // Wow! This is a crucial observation.
+        // Let's verify: (a_i * a_j)[x] = a_j[a_i[x]]. We want this to equal x for x<k.
+        // So a_j[a_i[x]] = x. Apply inv_j to both sides: inv_j[a_j[a_i[x]]] = inv_j[x] => a_i[x] = inv_j[x].
+        // Yes! Because inv_j[a_j[y]] = y. So a_i[x] = inv_j[x].
+        // Therefore, the beauty of a_i * a_j is exactly the length of the longest common prefix of the sequence a_i and the sequence inv_j.
+        // That is, the largest k such that for all x < k, a_i[x] = inv_j[x].
+        // This is beautiful and simple.
+        
+        // So for each i, we need max over j of LCP(a_i, inv_j).
+        // We can build a trie over all sequences inv_j for j=1..n.
+        // Then for each i, we traverse the trie with the sequence a_i and find the maximum depth we can reach.
+        // Since m <= 10, we can also just use a set of strings or a trie with arrays.
+        // The sum of n is up to 5e4, m <= 10, so total characters 5e5, trie is perfectly fine.
+        
+        // Build trie of inv_j sequences.
+        // Each node has an array of 10 children (since values are 0..m-1).
+        // We'll use a vector of nodes.
+        struct Node {
+            array<int, 10> child;
+            Node() {
+                fill(child.begin(), child.end(), -1);
+            }
+        };
+        vector<Node> trie(1); // root at 0
+        
+        for (int j = 0; j < n; ++j) {
+            int node = 0;
+            for (int x = 0; x < m; ++x) {
+                int val = inv[j][x];
+                if (trie[node].child[val] == -1) {
+                    trie[node].child[val] = trie.size();
+                    trie.emplace_back();
+                }
+                node = trie[node].child[val];
+            }
+        }
+        
+        // For each i, compute max LCP with any inv_j
+        for (int i = 0; i < n; ++i) {
+            int node = 0;
+            int ans = 0;
+            for (int x = 0; x < m; ++x) {
+                int val = a[i][x];
+                if (trie[node].child[val] != -1) {
+                    node = trie[node].child[val];
+                    ans = x + 1;
+                } else {
+                    break;
+                }
+            }
+            cout << ans << (i == n-1 ? '\n' : ' ');
+        }
+    }
+    return 0;
+}
+```

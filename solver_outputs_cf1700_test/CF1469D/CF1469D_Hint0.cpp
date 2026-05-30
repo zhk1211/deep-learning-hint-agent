@@ -1,0 +1,111 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<pair<int, int>> ops;
+        // We'll use the value 2 as the special one, and turn all others into 1.
+        // Strategy: repeatedly divide the largest numbers by the second largest
+        // until they become 1. Use a priority queue of (value, index).
+        // But we need at most n+5 operations. A known construction:
+        // For n <= 32, we can just repeatedly apply operation on n with n-1, etc.
+        // For larger n, we pick a "pivot" (like 64 or something) and reduce all numbers > 2 to 1
+        // by repeatedly dividing by the pivot, then reduce the pivot to 1 by dividing by 2.
+        // Actually, the standard solution: 
+        // For n > 2, we can do:
+        // 1. For i from 3 to n-1 (if n>3), do op(i, n) -> a[i] becomes ceil(i/n) = 1 (since i < n).
+        // 2. Then we have a = [1,2,1,1,...,1, n] (with a[n] = n).
+        // 3. Now repeatedly do op(n, 2) until a[n] becomes 1. Each time a[n] = ceil(a[n]/2).
+        // This takes about log2(n) steps. Total steps = (n-3) + log2(n) + maybe a couple extra.
+        // For n up to 2e5, log2(n) <= 18, so total <= n+15, but we need n+5.
+        // We can optimize: instead of reducing all from 3 to n-1, we can use a "proxy" value.
+        // Better known solution:
+        // Use a value x = ceil(sqrt(n)) or something. Actually, the editorial solution:
+        // For n > 2, we can do:
+        // - For all i from 3 to n-1 except i = x, do op(i, n).
+        // - Then repeatedly do op(n, x) until n becomes 1.
+        // - Then repeatedly do op(x, 2) until x becomes 1.
+        // Choose x such that the number of operations to reduce x to 1 using 2 is small.
+        // We can just set x = 2? No.
+        // Let's implement the simple one that works within n+5 for all n up to 2e5.
+        // Actually, the simple method: 
+        // For i = 3 to n-1: op(i, n) -> 1 step each, total n-3 steps.
+        // Then we have n and 2 left. We need to reduce n to 1 using 2.
+        // Number of steps: ceil(log2(n)) + maybe 1.
+        // For n=200000, log2(200000) ~ 18. n-3 + 18 = n+15, which exceeds n+5.
+        // So we need a better method.
+        // Use the "block" method: 
+        // Let k = ceil(sqrt(n)). Then for i from 3 to n-1, if i != k, do op(i, n).
+        // Then we have n and k left (plus 1s and 2). Now reduce n using k: op(n, k) repeatedly until n=1.
+        // Then reduce k using 2: op(k, 2) repeatedly until k=1.
+        // Number of ops: (n-3 - 1) + ceil(log_k(n)) + ceil(log_2(k)).
+        // For n=200000, sqrt(n) ~ 447. log_447(200000) ~ 2 (since 447^2=199809, 447^3~89M). So ~2 steps.
+        // log_2(447) ~ 9. Total = n-4 + 2 + 9 = n+7. Still slightly above n+5 for some n.
+        // We can choose k = 64? Then log_64(200000) ~ 3 (64^3=262144). log_2(64)=6. Total = n-4+3+6 = n+5. Perfect!
+        // For n up to 2e5, we can set a fixed pivot = 64 (or maybe 32? 32^3=32768 < 200000, need 4 steps. 64^3=262144 > 200000, so 3 steps max).
+        // But for n < 64, we need a different pivot. We can just compute pivot = min(n, 64) or something.
+        // Actually, we can dynamically choose pivot = max(2, (int)ceil(sqrt(n))) but adjust to minimize steps.
+        // Let's just use the standard solution from editorial: 
+        // For n <= 32, we can just repeatedly apply op(n, n-1) etc. But simpler: use the same method with pivot = min(n, 64).
+        // Wait, the problem guarantees we can do it in n+5 steps. The known construction:
+        // Let x = 2. For i from 3 to n-1: op(i, n). Then reduce n with 2. That's n+log n steps, too many.
+        // Another construction: 
+        // Let a = n. While a > 1: find the smallest b such that ceil(a/b) <= sqrt(a) or something.
+        // But we can just use the following fixed strategy:
+        // If n <= 32: we can just do op(i, i+1) for i from n-1 down to 3? Not sure.
+        // Let's look at sample: n=4, ops: (3,4), (4,2), (4,2). That's 3 ops = n-1.
+        // For n=3, ops: (3,2), (3,2) = 2 ops = n-1.
+        // So maybe we can achieve n-1 ops? Not always, but we can try to get close.
+        // Actually, the known solution for this problem (CF 1730A? No, it's 1730B? Actually it's "Planar Reflections"? No, it's "Ceil Divisions" from Codeforces Round #1730? Wait, problem name is "Ceil Divisions"? There's a problem "Ceil Divisions" from Codeforces Round #1730 (Div. 2) problem C? Actually it's 1730C? No, it's 1730B? Let me recall: There's a problem "Ceil Divisions" from Codeforces Round #1730 (Div. 2) problem D? No, it's 1730C? I remember a problem "Ceil Divisions" where you need to make array of n-1 ones and 1 two. The solution uses a "proxy" value like 64 or something.
+        // Let's implement the standard solution:
+        // We will use a value k = min(n, 64) (or maybe 32? Let's test: for n=200000, if k=64, steps: (n-4) + reduce n with 64 + reduce 64 with 2. Reduce n with 64: while n>1: n = ceil(n/64). For 200000: 200000/64=3125 -> ceil=3125; 3125/64=48.8 -> 49; 49/64=1 -> 1. So 3 steps. Reduce 64 with 2: 64->32->16->8->4->2->1: 6 steps. Total = n-4 + 3 + 6 = n+5. For n=200000, n+5 = 200005, which is allowed. For smaller n, it's even less.
+        // But we must ensure that for n < 64, we don't use 64. We can set k = min(n, 64) but if n < 64, we might not need a proxy. Actually, if n <= 64, we can just use the simple method: for i=3 to n-1: op(i, n); then reduce n with 2. Steps: (n-3) + ceil(log2(n)). For n=64: 61 + 6 = 67 = n+3. So it's fine. For n=32: 29 + 5 = 34 = n+2. So it's always within n+5. So we can just use the simple method for all n? Wait, for n=200000, simple method gives n+15, which is too many. So we need the proxy method for large n.
+        // So we can set a threshold, say if n > 64, use proxy k = 64; else use simple method (k = 2, but we don't need proxy, just reduce directly with 2).
+        // But wait, for n > 64, we need to leave k untouched initially. So we do: for i=3 to n-1, if i != k, op(i, n). Then we have n and k left. Then reduce n with k, then reduce k with 2.
+        // However, we must also handle the case where k might be 2? If n <= 64, we set k = 2, but then we skip i=3..n-1 except k? That would skip all if k=2? Actually, if k=2, we don't skip any because 2 is not in 3..n-1. So we can just unify: let k = (n > 64 ? 64 : 2). Then for i=3 to n-1: if i != k, op(i, n). Then reduce n with k, then if k != 2, reduce k with 2.
+        // But wait, if n > 64, k=64, we skip i=64. Then we have a[64] = 64. Then we reduce n with 64. Then reduce 64 with 2. That works.
+        // Let's test n=200000: k=64. ops: for i=3..199999 except 64: that's 199997 - 1 = 199996 ops? Actually from 3 to n-1 inclusive: count = n-3 = 199997. Exclude 64: 199996 ops. Then reduce n with 64: 3 ops. Then reduce 64 with 2: 6 ops. Total = 199996+3+6 = 200005 = n+5. Perfect.
+        // For n=65: k=64. ops: i=3..64 except 64? i=3..64 is 62 numbers, exclude 64 -> 61 ops. Then reduce 65 with 64: ceil(65/64)=2 -> 1 step? Actually 65/64=1.015 -> ceil=2. Then 2/64=1 -> 1 step. So 2 steps. Then reduce 64 with 2: 6 steps. Total = 61+2+6 = 69 = n+4. Good.
+        // For n=64: threshold says n<=64, so k=2. ops: i=3..63: 61 ops. Then reduce 64 with 2: 6 steps. Total = 67 = n+3. Good.
+        // So this works.
+        // But we must ensure that when we do op(i, n), a[i] becomes ceil(i/n) = 1 because i < n. Yes.
+        // When we reduce n with k, we repeatedly do op(n, k). Each time a[n] = ceil(a[n]/a[k]). Since a[k] is constant (k or later reduced? Wait, we must do all reductions of n with k BEFORE we reduce k. Because if we reduce k first, a[k] becomes smaller, which would change the division. So order: first do all op(i,n) for i=3..n-1 (i!=k). Then while a[n] > 1, op(n, k). Then while a[k] > 1, op(k, 2). But note: a[2] is always 2. So that's fine.
+        // However, we need to output the sequence of operations. We don't need to actually simulate the array if we know the number of steps. But we can just simulate to be safe, since n is up to 2e5, total ops <= n+5, simulation is O(n) per test case, sum n <= 2e5, so fine.
+        // Let's implement simulation with a vector<int> a of size n+1.
+        vector<int> a(n+1);
+        for (int i = 1; i <= n; ++i) a[i] = i;
+        int k = (n > 64 ? 64 : 2);
+        // Step 1: reduce all except k and 1,2 to 1 using n
+        for (int i = 3; i <= n-1; ++i) {
+            if (i == k) continue;
+            ops.push_back({i, n});
+            a[i] = (a[i] + a[n] - 1) / a[n]; // ceil division
+        }
+        // Step 2: reduce n using k
+        while (a[n] > 1) {
+            ops.push_back({n, k});
+            a[n] = (a[n] + a[k] - 1) / a[k];
+        }
+        // Step 3: if k != 2, reduce k using 2
+        if (k != 2) {
+            while (a[k] > 1) {
+                ops.push_back({k, 2});
+                a[k] = (a[k] + a[2] - 1) / a[2];
+            }
+        }
+        // Output
+        cout << ops.size() << '\n';
+        for (auto &p : ops) {
+            cout << p.first << ' ' << p.second << '\n';
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,112 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1e9 + 7;
+
+long long modpow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n);
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+        }
+        sort(a.begin(), a.end());
+
+        // compress frequencies
+        vector<pair<int, int>> comp;
+        for (int x : a) {
+            if (comp.empty() || comp.back().first != x) {
+                comp.push_back({x, 1});
+            } else {
+                comp.back().second++;
+            }
+        }
+
+        int k = comp.size();
+        vector<long long> fact(n + 1), invfact(n + 1);
+        fact[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            fact[i] = fact[i - 1] * i % MOD;
+        }
+        invfact[n] = modpow(fact[n], MOD - 2);
+        for (int i = n - 1; i >= 0; i--) {
+            invfact[i] = invfact[i + 1] * (i + 1) % MOD;
+        }
+
+        auto nCr = [&](int N, int R) -> long long {
+            if (R < 0 || R > N) return 0;
+            return fact[N] * invfact[R] % MOD * invfact[N - R] % MOD;
+        };
+
+        long long ans = 0;
+        int j = 0;
+        long long prod = 1;
+        for (int i = 0; i < k; i++) {
+            while (j < k && comp[j].first - comp[i].first < m) {
+                prod = prod * comp[j].second % MOD;
+                j++;
+            }
+            // window [i, j-1] has length L = j - i
+            int L = j - i;
+            if (L >= m) {
+                // sum over all subsets of size m from this window
+                // but we need to consider distinct values, so we use the product of frequencies
+                // Actually, we need to choose exactly m distinct values from the window.
+                // Since all values in window are distinct, number of ways to choose m distinct values
+                // and then choose one student from each chosen value is:
+                // sum over all subsets S of size m of product_{v in S} freq[v]
+                // This is exactly the coefficient of x^m in product_{v in window} (1 + freq[v] x)
+                // But we can compute it using DP or combinatorial formula? 
+                // Since window size L can be up to n, we can't do O(L*m) per window.
+                // However, we can maintain the product of (1 + freq[v] x) as we slide the window.
+                // But we need the coefficient of x^m. We can use a segment tree or just recompute?
+                // Since total n over testcases is 2e5, we can afford O(n) per testcase if we use a sliding window
+                // with polynomial multiplication/division? That's tricky.
+                // Alternative: Since we only need the sum of products of m distinct frequencies,
+                // we can use the fact that we are sliding a window over sorted distinct values.
+                // We can maintain the polynomial product using a Fenwick tree? Not straightforward.
+                // Let's think: The window size L is at most m? No, L can be larger than m.
+                // But note that the condition is that max - min < m. Since values are integers,
+                // the number of distinct values in any window of difference < m is at most m.
+                // Because if you have m distinct integers with max - min < m, they must be consecutive integers.
+                // Actually, if you have m distinct integers within a range of length < m, the only way is that they are
+                // exactly m consecutive integers. So L <= m always!
+                // Proof: Suppose we have L distinct integers in [x, x+m-1]. The number of integers in that range is m.
+                // So L <= m. Therefore, the window size is at most m.
+                // So we can just compute the sum of products of all m-element subsets of the frequencies in the window.
+                // Since L <= m, if L == m, there is exactly one subset (the whole window), and the product is just prod.
+                // If L < m, then we can't form a subset of size m, so contribution is 0.
+                // Wait, is it true that L <= m? Let's check: values are distinct, difference < m.
+                // If we have L distinct integers, the minimum difference between max and min is at least L-1.
+                // So L-1 <= max-min < m => L-1 < m => L <= m.
+                // Yes! So the window size is at most m.
+                // Therefore, if L == m, we add prod to answer.
+                if (L == m) {
+                    ans = (ans + prod) % MOD;
+                }
+            }
+            // remove a[i] from prod
+            prod = prod * modpow(comp[i].second, MOD - 2) % MOD;
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

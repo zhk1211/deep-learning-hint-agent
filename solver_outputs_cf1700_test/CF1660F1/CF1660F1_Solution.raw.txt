@@ -1,0 +1,39 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        string s;
+        cin >> s;
+        
+        vector<int> b(n + 1);
+        int bal = n;
+        b[0] = bal;
+        int ans = 0;
+        
+        for (int i = 1; i <= n; ++i) {
+            if (s[i - 1] == '+') {
+                bal += 1;
+            } else {
+                bal -= 1;
+            }
+            b[i] = bal;
+            for (int j = 0; j < i; ++j) {
+                if (b[j] >= b[i] && (b[j] - b[i]) % 3 == 0) {
+                    ++ans;
+                }
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

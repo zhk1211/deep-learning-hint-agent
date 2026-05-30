@@ -1,0 +1,56 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+bool is_prime(int n) {
+    if (n < 2) return false;
+    for (int i = 2; i * i <= n; ++i) {
+        if (n % i == 0) return false;
+    }
+    return true;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        
+        if (n == 1) {
+            cout << "Bob\n";
+            continue;
+        }
+        if (n == 2) {
+            cout << "Bob\n";
+            continue;
+        }
+        if (n % 2 == 1) {
+            cout << "Bob\n";
+            continue;
+        }
+        
+        // n is even and >= 4
+        if ((n & (n - 1)) == 0) {
+            // n is a power of two
+            int exp = 0;
+            int temp = n;
+            while (temp % 2 == 0) {
+                temp /= 2;
+                exp++;
+            }
+            if (exp % 2 == 1) {
+                cout << "Bob\n";
+            } else {
+                cout << "Alice\n";
+            }
+        } else {
+            cout << "Alice\n";
+        }
+    }
+    
+    return 0;
+}

@@ -1,0 +1,6 @@
+[
+  "**Hint 1**\nRead the hints.",
+  "**Hint 2**\nAfter the first time a vertex is painted blue, we can ignore the process of painting vertices red and then painting them blue.",
+  "**Hint 3**\nWe call the first vertex painted blue $$$r$$$. Then it is not difficult to find that $$$P_A$$$ arrived at this vertex earlier than $$$P_B$$$. Considering all subsequent movements of $$$P_B$$$, $$$P_A$$$ can restore these movements one by one after reaching $$$r$$$, then $$$P_B$$$ will pass through all vertices have been painted red.",
+  "**Hint 4**\nIf we know which vertex is $$$r$$$, this will be a classic problem, assuming the distance between the farthest vertex on the tree from $$$r$$$ and $$$r$$$ is $$$d$$$, then the answer is $$$2(n-1)-d$$$. Then we consider the strategies of $$$P_A$$$ and $$$P_B$$$ at this time. The two must be close to each other, and then until the first vertex is painted blue. If another vertex is $$$r$$$, although the value of $$$d$$$ may increase, every time the value of $$$d$$$ increases by $$$1$$$, the time when $$$P_A$$$ and $$$P_B$$$ meet will also increase by at least $$$1$$$, so the answer will not decrease."
+]

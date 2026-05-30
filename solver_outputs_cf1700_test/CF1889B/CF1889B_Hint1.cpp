@@ -1,0 +1,54 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        ll c;
+        cin >> n >> c;
+        vector<ll> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // We will try to connect everything to component of node 1 (0-indexed)
+        // Keep sum of component containing node 1
+        ll sum = a[0];
+        
+        // We need to connect other nodes to this component.
+        // Condition to connect component containing 1 (with sum S) to node i (1-indexed):
+        // S + a_i >= 1 * i * c  =>  a_i >= i*c - S
+        // But we can also connect other components first, which adds their a to S.
+        // Strategy: sort other nodes by i*c - a_i (the "deficit" they need from S)
+        // and greedily connect if current S can cover the deficit.
+        
+        vector<pair<ll, int>> others;
+        for (int i = 1; i < n; ++i) {
+            // i is 0-indexed, node number is i+1
+            ll req = (ll)(i + 1) * c - a[i];
+            others.push_back({req, i});
+        }
+        sort(others.begin(), others.end());
+        
+        bool ok = true;
+        for (auto &p : others) {
+            ll req = p.first;
+            int idx = p.second;
+            if (sum >= req) {
+                sum += a[idx];
+            } else {
+                ok = false;
+                break;
+            }
+        }
+        cout << (ok ? "YES" : "NO") << '\n';
+    }
+    return 0;
+}

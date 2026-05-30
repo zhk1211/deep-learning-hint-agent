@@ -1,0 +1,43 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+
+    vector<pair<int, int>> st; // (value, index where it was added)
+    ll cur = 0, ans = 0;
+
+    for (int i = 0; i < n; ++i) {
+        int x = a[i];
+        // merge
+        while (!st.empty() && st.back().first <= x) {
+            int val = st.back().first;
+            int idx = st.back().second;
+            st.pop_back();
+            int prev_idx = st.empty() ? -1 : st.back().second;
+            // remove contribution of val
+            cur -= 1LL * val * (idx - prev_idx);
+        }
+        int prev_idx = st.empty() ? -1 : st.back().second;
+        st.push_back({x, i});
+        cur += 1LL * x * (i - prev_idx);
+        ans += cur;
+    }
+
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}

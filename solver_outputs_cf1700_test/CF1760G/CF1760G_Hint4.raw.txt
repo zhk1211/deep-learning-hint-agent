@@ -1,0 +1,83 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, a, b;
+    cin >> n >> a >> b;
+    vector<vector<pair<int, int>>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w});
+    }
+    
+    // Find XOR from a to all nodes
+    vector<int> xor_a(n + 1, -1);
+    queue<int> q;
+    q.push(a);
+    xor_a[a] = 0;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto [v, w] : adj[u]) {
+            if (xor_a[v] == -1) {
+                xor_a[v] = xor_a[u] ^ w;
+                q.push(v);
+            }
+        }
+    }
+    
+    // Find XOR from b to all nodes
+    vector<int> xor_b(n + 1, -1);
+    q.push(b);
+    xor_b[b] = 0;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto [v, w] : adj[u]) {
+            if (xor_b[v] == -1) {
+                xor_b[v] = xor_b[u] ^ w;
+                q.push(v);
+            }
+        }
+    }
+    
+    // If a can reach b directly without teleport
+    if (xor_a[b] == 0) {
+        cout << "YES\n";
+        return;
+    }
+    
+    // Collect all XOR values from a to nodes except b
+    set<int> reachable_from_a;
+    for (int i = 1; i <= n; i++) {
+        if (i != b && xor_a[i] != -1) {
+            reachable_from_a.insert(xor_a[i]);
+        }
+    }
+    
+    // Check if any node reachable from b (except b itself) has XOR value that matches
+    for (int i = 1; i <= n; i++) {
+        if (i != b && xor_b[i] != -1) {
+            if (reachable_from_a.count(xor_b[i])) {
+                cout << "YES\n";
+                return;
+            }
+        }
+    }
+    
+    cout << "NO\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

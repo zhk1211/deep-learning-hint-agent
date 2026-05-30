@@ -1,0 +1,65 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+int bpow(int x, int p) {
+    int res = 1;
+    while (p) {
+        if (p % 2) {
+            res = (1LL * res * x) % MOD;
+        }
+        p >>= 1;
+        x = (1LL * x * x) % MOD;
+    }
+    return res;
+}
+
+int fact(int x) {
+    int res = 1;
+    for (int i = 1; i <= x; i++) {
+        res = (1LL * res * i) % MOD;
+    }
+    return res;
+}
+
+void solve() {
+    vector<int> c(26);
+    for (int i = 0; i < 26; i++) {
+        cin >> c[i];
+    }
+    int s = accumulate(c.begin(), c.end(), 0);
+    vector<int> dp(s + 1, 0);
+    dp[0] = 1;
+    for (int i = 0; i < 26; i++) {
+        if (c[i] == 0) continue;
+        for (int j = s; j >= 0; j--) {
+            if (j + c[i] <= s) {
+                dp[j + c[i]] = (dp[j + c[i]] + dp[j]) % MOD;
+            }
+        }
+    }
+    int odd = (s + 1) / 2;
+    int even = s / 2;
+    int ans = dp[odd];
+    ans = (1LL * ans * fact(odd)) % MOD;
+    ans = (1LL * ans * fact(even)) % MOD;
+    for (int i = 0; i < 26; i++) {
+        ans = (1LL * ans * bpow(fact(c[i]), MOD - 2)) % MOD;
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

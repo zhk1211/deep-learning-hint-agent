@@ -1,0 +1,101 @@
+// Hint7
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> p[i];
+        }
+
+        vector<int> idx(n);
+        iota(idx.begin(), idx.end(), 0);
+        sort(idx.begin(), idx.end(), [&](int i, int j) {
+            return p[i] < p[j];
+        });
+
+        vector<int> q(n);
+        int half = n / 2;
+        for (int i = 0; i < half; ++i) {
+            q[idx[i]] = n - i;
+        }
+        for (int i = half; i < n; ++i) {
+            q[idx[i]] = n - i;
+        }
+
+        // The above is a starting point, but we need to adjust to maximize local maxima.
+        // The known optimal construction: assign largest numbers to positions with small p
+        // and smallest numbers to positions with large p, but with a specific pattern.
+        // Let's use the known solution: sort positions by p, then assign q as follows:
+        // For the first half (small p), assign n, n-1, ..., n/2+1 in some order.
+        // For the second half (large p), assign 1, 2, ..., n/2 in some order.
+        // To maximize local maxima, we want a_i = p_i + q_i to have peaks at positions
+        // where p_i is from the larger half and q_i is from the larger half? Actually,
+        // the known construction from editorial: 
+        // Let pos be sorted by p. For i in 0..n-1:
+        // if i < n/2: q[pos[i]] = n - i
+        // else: q[pos[i]] = n/2 - (i - n/2)
+        // But this gives q values from n down to n/2+1 for small p, and n/2 down to 1 for large p.
+        // Let's test with sample 1: p = [1,2,3,4], sorted pos = [0,1,2,3].
+        // i=0: q[0]=4; i=1: q[1]=3; i=2: q[2]=2; i=3: q[3]=1 -> q=[4,3,2,1], a=[5,5,5,5] score 0. Not optimal.
+        // So that's not correct.
+
+        // The correct approach: We want to create peaks at positions where p_i is large.
+        // To make a_i a local maximum, we need a_{i-1} < a_i > a_{i+1}.
+        // If we assign large q to large p, we get large a_i. But we need neighbors to be smaller.
+        // The known solution: 
+        // 1. Find positions of numbers > n/2. These will be the peaks.
+        // 2. Assign the largest q values to these positions.
+        // 3. Assign the remaining q values to the other positions in a way that doesn't create extra peaks.
+        // Specifically, we can sort positions by p, then assign q in a "zigzag" manner.
+
+        // Let's implement the correct solution from editorial:
+        // We want to maximize the number of local maxima. The maximum possible is n/2 - 1.
+        // Construction:
+        // - Split positions into two sets: those with p_i <= n/2 (small) and those with p_i > n/2 (large).
+        // - We will make the large p positions the peaks.
+        // - Sort large p positions by p_i ascending.
+        // - Sort small p positions by p_i ascending.
+        // - Assign q to large p positions: the largest available numbers (n, n-1, ...) in the same order.
+        // - Assign q to small p positions: the smallest available numbers (1, 2, ...) but in reverse order of their p_i.
+        // This ensures that between two peaks, the valley is low enough.
+
+        vector<int> large, small;
+        for (int i = 0; i < n; ++i) {
+            if (p[i] > n/2) large.push_back(i);
+            else small.push_back(i);
+        }
+
+        sort(large.begin(), large.end(), [&](int i, int j) { return p[i] < p[j]; });
+        sort(small.begin(), small.end(), [&](int i, int j) { return p[i] < p[j]; });
+
+        vector<int> q(n);
+        int val = n;
+        for (int i : large) {
+            q[i] = val--;
+        }
+        // For small, assign from 1 upwards, but in reverse order of their p (so that larger small p get smaller q)
+        // Actually, we want the valleys to be as low as possible. If we assign increasing q to increasing small p,
+        // then a_i = p_i + q_i might not be monotonic. The known trick: assign q to small positions in decreasing order of p.
+        // Let's sort small by p descending.
+        sort(small.begin(), small.end(), [&](int i, int j) { return p[i] > p[j]; });
+        val = 1;
+        for (int i : small) {
+            q[i] = val++;
+        }
+
+        // Output
+        for (int i = 0; i < n; ++i) {
+            cout << q[i] << " \n"[i == n-1];
+        }
+    }
+    return 0;
+}

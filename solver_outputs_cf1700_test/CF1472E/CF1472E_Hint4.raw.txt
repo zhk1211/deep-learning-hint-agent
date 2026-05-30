@@ -1,0 +1,86 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Friend {
+    int h, w, id;
+};
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<Friend> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i].h >> a[i].w;
+        a[i].id = i;
+    }
+    
+    // We will create two copies: one with original orientation, one with swapped
+    vector<Friend> v;
+    v.reserve(2 * n);
+    for (int i = 0; i < n; ++i) {
+        v.push_back({a[i].h, a[i].w, i});
+        v.push_back({a[i].w, a[i].h, i});
+    }
+    
+    // Sort by height, then by width
+    sort(v.begin(), v.end(), [](const Friend& x, const Friend& y) {
+        if (x.h != y.h) return x.h < y.h;
+        return x.w < y.w;
+    });
+    
+    // We'll process in order of increasing height.
+    // Keep track of the minimum width seen so far, and the index achieving it.
+    // But we must only consider friends with strictly smaller height.
+    // Since there can be multiple with same height, we need to be careful.
+    
+    vector<int> ans(n, -1);
+    
+    // We'll iterate through v, maintaining prefix minimum width among those with strictly smaller height.
+    // We'll use a pointer to separate "strictly smaller height" from current height.
+    int min_w = INT_MAX;
+    int min_id = -1;
+    int j = 0; // pointer to elements with height < current height
+    
+    for (int i = 0; i < v.size(); ) {
+        int cur_h = v[i].h;
+        // Process all elements with this height
+        int k = i;
+        while (k < v.size() && v[k].h == cur_h) ++k;
+        
+        // For each element in this height group, try to assign answer if possible
+        for (int t = i; t < k; ++t) {
+            int idx = v[t].id;
+            if (ans[idx] == -1 && min_w < v[t].w) {
+                ans[idx] = min_id + 1; // 1-based index
+            }
+        }
+        
+        // After processing, add this height group to the prefix minimum
+        for (int t = i; t < k; ++t) {
+            if (v[t].w < min_w) {
+                min_w = v[t].w;
+                min_id = v[t].id;
+            }
+        }
+        
+        i = k;
+    }
+    
+    for (int i = 0; i < n; ++i) {
+        cout << ans[i] << (i + 1 == n ? '\n' : ' ');
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

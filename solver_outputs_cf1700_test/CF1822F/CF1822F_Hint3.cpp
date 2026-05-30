@@ -1,0 +1,88 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+void solve() {
+    int n;
+    ll k, c;
+    cin >> n >> k >> c;
+    vector<vector<int>> adj(n);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        --u; --v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    
+    // dp1[u] = max distance from u to a leaf in its subtree (when rooted at 0)
+    vector<ll> dp1(n, 0);
+    function<void(int, int)> dfs1 = [&](int u, int p) {
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            dfs1(v, u);
+            dp1[u] = max(dp1[u], dp1[v] + k);
+        }
+    };
+    dfs1(0, -1);
+    
+    // dp2[u] = max distance from u to any leaf (considering the whole tree)
+    vector<ll> dp2(n, 0);
+    function<void(int, int, ll)> dfs2 = [&](int u, int p, ll up_dist) {
+        // up_dist is the max distance from u to a leaf not in u's subtree
+        dp2[u] = max(dp1[u], up_dist);
+        
+        // Find the two largest dp1[v] + k among children
+        ll mx1 = -1, mx2 = -1;
+        int mx1_v = -1;
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            ll val = dp1[v] + k;
+            if (val > mx1) {
+                mx2 = mx1;
+                mx1 = val;
+                mx1_v = v;
+            } else if (val > mx2) {
+                mx2 = val;
+            }
+        }
+        
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            ll best_other = (v == mx1_v) ? mx2 : mx1;
+            ll new_up = max(up_dist, best_other) + k;
+            dfs2(v, u, new_up);
+        }
+    };
+    dfs2(0, -1, 0);
+    
+    // Now we need to find max over all possible roots r of (dp2[r] - c * depth[r])
+    // where depth[r] is the number of operations to move root from 1 to r.
+    vector<int> depth(n, 0);
+    function<void(int, int)> dfs_depth = [&](int u, int p) {
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            depth[v] = depth[u] + 1;
+            dfs_depth(v, u);
+        }
+    };
+    dfs_depth(0, -1);
+    
+    ll ans = 0;
+    for (int i = 0; i < n; ++i) {
+        ans = max(ans, dp2[i] - c * depth[i]);
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

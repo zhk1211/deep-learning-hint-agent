@@ -1,0 +1,106 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, a, b;
+    cin >> n >> a >> b;
+    --a; --b;
+    vector<vector<int>> g(n);
+    for (int i = 0; i < n; ++i) {
+        int u, v;
+        cin >> u >> v;
+        --u; --v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    
+    // Find the cycle in the graph (since n edges, n nodes, exactly one cycle)
+    vector<int> parent(n, -1);
+    vector<int> depth(n, -1);
+    vector<int> cycle;
+    bool found = false;
+    
+    function<void(int, int)> dfs = [&](int u, int p) {
+        parent[u] = p;
+        depth[u] = (p == -1 ? 0 : depth[p] + 1);
+        for (int v : g[u]) {
+            if (v == p) continue;
+            if (depth[v] != -1) {
+                // back edge found, cycle detected
+                if (!found) {
+                    // extract cycle
+                    int cur = u;
+                    while (cur != v) {
+                        cycle.push_back(cur);
+                        cur = parent[cur];
+                    }
+                    cycle.push_back(v);
+                    found = true;
+                }
+            } else {
+                dfs(v, u);
+            }
+        }
+    };
+    
+    dfs(0, -1);
+    
+    // Mark cycle nodes
+    vector<bool> in_cycle(n, false);
+    for (int x : cycle) in_cycle[x] = true;
+    
+    // Find distance from b to the cycle and the entry node
+    vector<int> dist_b(n, -1);
+    queue<int> q;
+    dist_b[b] = 0;
+    q.push(b);
+    int entry_b = -1;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        if (in_cycle[u]) {
+            entry_b = u;
+            break;
+        }
+        for (int v : g[u]) {
+            if (dist_b[v] == -1) {
+                dist_b[v] = dist_b[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    
+    // Distance from a to entry_b
+    vector<int> dist_a(n, -1);
+    dist_a[a] = 0;
+    q.push(a);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : g[u]) {
+            if (dist_a[v] == -1) {
+                dist_a[v] = dist_a[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    
+    int d_a = dist_a[entry_b];
+    int d_b = dist_b[entry_b];
+    
+    if (d_b < d_a) {
+        cout << "YES\n";
+    } else {
+        cout << "NO\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

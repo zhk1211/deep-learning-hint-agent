@@ -1,0 +1,93 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, a, b;
+    cin >> n >> a >> b;
+    --a; --b;
+    vector<vector<int>> g(n);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        --u; --v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+
+    // Find distances from a and b
+    vector<int> da(n, -1), db(n, -1);
+    auto bfs = [&](int s, vector<int>& d) {
+        queue<int> q;
+        q.push(s);
+        d[s] = 0;
+        while (!q.empty()) {
+            int u = q.front(); q.pop();
+            for (int v : g[u]) {
+                if (d[v] == -1) {
+                    d[v] = d[u] + 1;
+                    q.push(v);
+                }
+            }
+        }
+    };
+    bfs(a, da);
+    bfs(b, db);
+
+    // Find the vertex r where they meet: the one that minimizes max(da[i], db[i])
+    // Actually we need the first vertex painted blue: it's the vertex where PA arrives before PB.
+    // The meeting point is the vertex on the path from a to b that is closest to a such that da <= db.
+    // More precisely, r is the vertex on the path from a to b with da[r] <= db[r] and da[r] maximal.
+    // But the hint says: the first vertex painted blue r is the one where PA arrives earlier than PB.
+    // We can find r by moving from a towards b until da <= db.
+    int r = a;
+    int cur = a;
+    while (cur != b) {
+        // find next on path from cur to b
+        for (int v : g[cur]) {
+            if (da[v] == da[cur] + 1 && db[v] == db[cur] - 1) {
+                cur = v;
+                break;
+            }
+        }
+        if (da[cur] <= db[cur]) {
+            r = cur;
+        } else {
+            break;
+        }
+    }
+
+    // Now compute the eccentricity of r: max distance from r to any node
+    vector<int> dr(n, -1);
+    bfs(r, dr);
+    int d = *max_element(dr.begin(), dr.end());
+
+    // Answer formula: 2*(n-1) - d + (da[r])  (the steps to meet)
+    // Actually the total steps = steps to meet + steps to cover rest.
+    // Steps to meet = da[r] (since PA moves first, and they meet at r after da[r] steps of PA)
+    // After meeting, PB can cover the tree in 2*(n-1) - d steps.
+    // But careful: initial painting: a is red, if a==b it's blue.
+    // The formula from hint: answer = 2*(n-1) - d + (da[r]).
+    // However, we must consider that the meeting step count might be different if a==b.
+    if (a == b) {
+        // then r = a, da[r] = 0, but initial vertex is blue immediately.
+        // The formula still holds: 2*(n-1) - d + 0.
+        cout << 2 * (n - 1) - d << '\n';
+        return;
+    }
+
+    int steps_to_meet = da[r];
+    int ans = 2 * (n - 1) - d + steps_to_meet;
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

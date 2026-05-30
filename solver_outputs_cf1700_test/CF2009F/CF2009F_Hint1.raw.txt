@@ -1,0 +1,86 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    vector<ll> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    
+    vector<ll> pref(n + 1, 0);
+    for (int i = 0; i < n; ++i) pref[i + 1] = pref[i] + a[i];
+    ll total = pref[n];
+    
+    auto sum_cycle = [&](ll k) -> ll {
+        if (k <= 0) return 0;
+        ll full = k / n;
+        ll rem = k % n;
+        return full * total + pref[rem];
+    };
+    
+    auto query_prefix = [&](ll idx) -> ll {
+        // idx is 1-indexed position in b
+        ll block = (idx - 1) / n; // 0-indexed block number
+        ll pos_in_block = (idx - 1) % n; // 0-indexed position inside block
+        // block i corresponds to cyclic shift starting at i+1 (1-indexed)
+        // The cyclic shift starting at (block+1) is a[block], a[block+1], ..., a[n-1], a[0], ..., a[block-1]
+        // We need sum of first (pos_in_block+1) elements of this shift
+        ll cnt = pos_in_block + 1;
+        if (block + cnt <= n) {
+            return pref[block + cnt] - pref[block];
+        } else {
+            ll part1 = pref[n] - pref[block];
+            ll part2 = pref[block + cnt - n];
+            return part1 + part2;
+        }
+    };
+    
+    auto range_sum = [&](ll l, ll r) -> ll {
+        // sum of b[l..r] = prefix(r) - prefix(l-1)
+        // But prefix function is not simply sum_cycle because each block is a different cyclic shift.
+        // We need to compute sum of first k elements of b efficiently.
+        // b is concatenation of n blocks, each of length n.
+        // Block i (0-indexed) is cyclic shift starting at a[i].
+        // We can compute sum of first k elements by summing full blocks and then partial block.
+        if (l > r) return 0;
+        auto sum_first_k = [&](ll k) -> ll {
+            if (k <= 0) return 0;
+            ll full_blocks = k / n;
+            ll rem = k % n;
+            // Sum of full blocks: each block sum is total, so full_blocks * total
+            ll ans = full_blocks * total;
+            if (rem > 0) {
+                // The next block index is full_blocks (0-indexed)
+                ll block_idx = full_blocks;
+                // We need sum of first 'rem' elements of cyclic shift starting at a[block_idx]
+                // That shift is a[block_idx], a[block_idx+1], ..., a[n-1], a[0], ..., a[block_idx-1]
+                if (block_idx + rem <= n) {
+                    ans += pref[block_idx + rem] - pref[block_idx];
+                } else {
+                    ans += pref[n] - pref[block_idx];
+                    ans += pref[block_idx + rem - n];
+                }
+            }
+            return ans;
+        };
+        return sum_first_k(r) - sum_first_k(l - 1);
+    };
+    
+    while (q--) {
+        ll l, r;
+        cin >> l >> r;
+        cout << range_sum(l, r) << '\n';
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}
+```

@@ -1,0 +1,112 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int n, m;
+vector<string> grid;
+vector<vector<bool>> visited;
+
+int dx[] = {1, -1, 0, 0};
+int dy[] = {0, 0, 1, -1};
+
+bool valid(int x, int y) {
+    return x >= 0 && x < n && y >= 0 && y < m;
+}
+
+void dfs(int x, int y) {
+    visited[x][y] = true;
+    for (int i = 0; i < 4; i++) {
+        int nx = x + dx[i], ny = y + dy[i];
+        if (valid(nx, ny) && !visited[nx][ny] && grid[nx][ny] != '#') {
+            dfs(nx, ny);
+        }
+    }
+}
+
+void solve() {
+    cin >> n >> m;
+    grid.resize(n);
+    for (int i = 0; i < n; i++) {
+        cin >> grid[i];
+    }
+
+    // If there are no good people, we can always block the exit or do nothing
+    bool hasGood = false;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (grid[i][j] == 'G') hasGood = true;
+        }
+    }
+    if (!hasGood) {
+        cout << "Yes\n";
+        return;
+    }
+
+    // Block all empty cells adjacent to bad people
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (grid[i][j] == 'B') {
+                for (int k = 0; k < 4; k++) {
+                    int ni = i + dx[k], nj = j + dy[k];
+                    if (valid(ni, nj)) {
+                        if (grid[ni][nj] == 'G') {
+                            // A good person is adjacent to a bad person, impossible to separate
+                            cout << "No\n";
+                            return;
+                        }
+                        if (grid[ni][nj] == '.') {
+                            grid[ni][nj] = '#';
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Check if all good people can reach the exit
+    visited.assign(n, vector<bool>(m, false));
+    if (grid[n-1][m-1] != '#') {
+        dfs(n-1, m-1);
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (grid[i][j] == 'G' && !visited[i][j]) {
+                cout << "No\n";
+                return;
+            }
+        }
+    }
+
+    // Also ensure no bad person can reach the exit
+    // Since we blocked adjacent cells, any bad person that could reach the exit would have to go through those blocked cells
+    // But we need to check if any bad person is already at the exit or can reach it via unblocked paths
+    // Actually, we should check if any bad person can reach the exit after blocking
+    visited.assign(n, vector<bool>(m, false));
+    if (grid[n-1][m-1] != '#') {
+        dfs(n-1, m-1);
+    }
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (grid[i][j] == 'B' && visited[i][j]) {
+                cout << "No\n";
+                return;
+            }
+        }
+    }
+
+    cout << "Yes\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

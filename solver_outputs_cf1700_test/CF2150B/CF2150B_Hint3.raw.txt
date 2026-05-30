@@ -1,0 +1,265 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+        }
+        
+        // Check necessary condition: sum of a_i must be n
+        int sum_a = 0;
+        for (int x : a) sum_a += x;
+        if (sum_a != n) {
+            cout << "0\n";
+            continue;
+        }
+        
+        // Check that a_i <= i+1 for all i (since max(x,y)=k implies at most k black cells in first k rows)
+        bool ok = true;
+        for (int i = 0; i < n; i++) {
+            if (a[i] > i + 1) {
+                ok = false;
+                break;
+            }
+        }
+        if (!ok) {
+            cout << "0\n";
+            continue;
+        }
+        
+        // We'll compute the number of ways using DP or combinatorial reasoning.
+        // Let dp[i] be the number of ways to place black cells in rows 1..i satisfying the conditions
+        // for max(x,y) and max(x, n+1-y) restricted to these rows.
+        // Actually we need to consider both diagonals simultaneously.
+        
+        // We can think of the process: for k from 1 to n, we place exactly one cell with max(x,y)=k
+        // and exactly one cell with max(x, n+1-y)=k.
+        // These two cells might be the same or different.
+        
+        // Let's define b_i = number of black cells in row i (given as a_i).
+        // We need to assign each black cell a column such that the max conditions hold.
+        
+        // Key observation: The conditions imply that for each k, there is exactly one black cell
+        // on the "anti-diagonal" x+y = n+1+k? Actually max(x, n+1-y)=k means the cell lies on
+        // the line x = k and y <= n+1-k, or y = n+1-k and x <= k.
+        // Similarly max(x,y)=k means cell on x=k, y<=k or y=k, x<=k.
+        
+        // This is equivalent to: In the grid, consider the cells with x <= y (upper triangle including diagonal)
+        // and x <= n+1-y (left triangle). The intersection is x <= min(y, n+1-y).
+        // The conditions force that all black cells must be in the region where x <= y and x <= n+1-y.
+        // Because if a cell has x > y, then max(x,y)=x > y, but then for k=x, we would have two cells?
+        // Let's analyze: For each k, exactly one cell with max(x,y)=k. If we have a cell with x > y,
+        // then max(x,y)=x. So for k=x, that cell is the one. But then we also need exactly one cell
+        // with max(x, n+1-y)=k. If x > y, it's possible that x > n+1-y or not.
+        // Actually the hints say: only (i,j) with i <= j can be black. Let's trust that.
+        
+        // So all black cells are on or above the main diagonal (i <= j) and on or above the anti-diagonal (i <= n+1-j).
+        // That means i <= j and i <= n+1-j => i <= min(j, n+1-j).
+        // For a given row i, the possible columns are from i to n+1-i.
+        // The number of such columns is (n+1-i) - i + 1 = n+2-2i.
+        // But we also have the condition that for each k, exactly one cell with max(x,y)=k.
+        // This means that if we look at the cells with max(x,y)=k, they are on the boundary of the square [1..k]x[1..k].
+        // Similarly for the other condition.
+        
+        // Let's think differently: The two conditions together mean that the set of black cells
+        // is a permutation matrix? No, because multiple cells per row allowed.
+        
+        // Consider the process of building the grid row by row from top to bottom.
+        // For row i, we need to place a_i black cells in columns from i to n+1-i.
+        // Also, the max conditions impose restrictions on how many cells can be placed in certain columns.
+        
+        // Let's define for each k from 1 to n:
+        // - The cell with max(x,y)=k must be either (k, y) with y <= k, or (x, k) with x <= k.
+        // - The cell with max(x, n+1-y)=k must be either (k, y) with y >= n+1-k, or (x, n+1-k) with x <= k.
+        
+        // Since all black cells have i <= j and i <= n+1-j, the only way to satisfy max(x,y)=k
+        // is to have a cell at (k, k) or (i, k) with i < k? But i < k and i <= k, and also i <= n+1-k?
+        // Actually if i < k and j = k, then max(i,k)=k. So that works.
+        // Similarly for max(x, n+1-y)=k, we can have (k, n+1-k) or (i, n+1-k) with i < k.
+        
+        // This suggests a greedy matching or DP.
+        
+        // Let's define arrays:
+        // For each row i, we have a_i cells to place.
+        // For each column j, let c_j be the number of black cells in column j.
+        // The max conditions imply something about the "profile" of the shape.
+        
+        // Alternative approach: The conditions uniquely determine the number of black cells
+        // in each "L-shaped" region. For each k, consider the set of cells with max(x,y) <= k.
+        // This is a k x k square. The number of black cells in this square is exactly k,
+        // because for each t <= k, there is exactly one cell with max(x,y)=t, and these t cells
+        // are all within the square, and no other cells can be there? Wait, there could be cells
+        // with max(x,y) < t that are also in the square. Actually the condition says:
+        // For each t, exactly one cell has max(x,y)=t. So the total number of cells with max(x,y) <= k
+        // is exactly k. But these cells are not necessarily all distinct? They are distinct cells
+        // because each t gives a different cell (could they overlap? If a cell has max(x,y)=t1 and also =t2,
+        // impossible since max is a single number). So there are exactly k cells in the square [1..k]x[1..k].
+        // Similarly, for the other condition, the number of cells in the region max(x, n+1-y) <= k
+        // is exactly k. This region is a "triangle" shape: x <= k and y >= n+1-k.
+        
+        // So for each k, the number of black cells in the intersection of the kxk square and the whole grid
+        // is k. Also the number of black cells in the anti-diagonal region is k.
+        
+        // Now, the total number of black cells is n (since sum a_i = n).
+        // The condition that for each k, exactly one cell has max(x,y)=k implies that the black cells
+        // form a "chain" from (1,1) to somewhere? Actually, if we sort cells by max(x,y), we get a sequence.
+        // This is similar to a Young diagram or a Dyck path.
+        
+        // Let's consider the rows. Since all cells have i <= j and i <= n+1-j, the shape is symmetric
+        // in some sense. The number of black cells in row i is a_i.
+        // The condition max(x,y)=k gives that the number of black cells in rows 1..k and columns 1..k is k.
+        // Let S_k = sum_{i=1}^k a_i. This is the number of black cells in the first k rows.
+        // These cells must all lie in columns <= something? Since i <= j, a cell in row i has column >= i.
+        // So a cell in the first k rows has column >= its row, but could be > k.
+        // However, the condition says the number of cells in the kxk square is k.
+        // The cells in the first k rows that are also in the first k columns are exactly those with column <= k.
+        // So the number of black cells in rows 1..k with column <= k is k.
+        // But the total number of black cells in rows 1..k is S_k.
+        // Therefore, the number of black cells in rows 1..k with column > k is S_k - k.
+        // These cells must have column > k, but since i <= j, they are in columns j > k.
+        // Also, they are in rows i <= k.
+        
+        // Similarly, for the anti-diagonal condition: For each k, the number of black cells in
+        // rows 1..k and columns n+1-k..n is k.
+        // Let's define the number of black cells in rows 1..k with column >= n+1-k is k.
+        // The total in rows 1..k is S_k. So the number with column < n+1-k is S_k - k.
+        
+        // Now, note that for a cell in row i (i <= k), its column j satisfies i <= j <= n+1-i.
+        // So j is between i and n+1-i.
+        // For k, the columns > k and < n+1-k are the "middle" columns.
+        // The cells in rows 1..k with column > k are exactly those that are not in the kxk square.
+        // The cells in rows 1..k with column < n+1-k are those not in the anti-diagonal region.
+        
+        // These two sets of "outside" cells might overlap. But we know their counts.
+        
+        // Let's define for each k, the number of black cells in the "corner" outside both:
+        // Actually, the intersection of columns > k and columns < n+1-k is possible only if k < n+1-k,
+        // i.e., k < (n+1)/2. For k >= (n+1)/2, the intervals [1..k] and [n+1-k..n] cover all columns,
+        // so the conditions S_k - k = 0? Let's check.
+        
+        // For k >= ceil((n+1)/2), the square [1..k]x[1..k] and the anti-region [1..k]x[n+1-k..n]
+        // together cover all columns from 1 to n? Actually, the union of [1..k] and [n+1-k..n] is all columns
+        // if k >= n+1-k, i.e., 2k >= n+1. So for k >= (n+1)/2, every column is either <= k or >= n+1-k.
+        // Therefore, any cell in rows 1..k must have its column either <= k or >= n+1-k.
+        // But we also have the condition that the number of cells in columns <= k is k, and in columns >= n+1-k is k.
+        // Since total cells in rows 1..k is S_k, we must have S_k <= 2k? Actually, the cells in columns <= k
+        // and columns >= n+1-k might overlap if k >= n+1-k? They overlap in columns that are both <= k and >= n+1-k,
+        // which is the interval [n+1-k, k]. This overlap is non-empty when n+1-k <= k, i.e., k >= (n+1)/2.
+        // So for k >= (n+1)/2, the two sets of columns intersect. The number of cells in the union is
+        // (number in <=k) + (number in >=n+1-k) - (number in the intersection).
+        // But we know the number in <=k is k, in >=n+1-k is k. The total cells in rows 1..k is S_k.
+        // So S_k = 2k - (number in intersection).
+        // The intersection columns are from n+1-k to k. The number of such columns is 2k - n.
+        // But we don't know how many cells are there.
+        
+        // This seems complicated. Let's look for a simpler characterization.
+        
+        // The hints say: only (i,j) with i <= j can be black. And hint 1: what about (1,1)?
+        // (1,1) has max(1,1)=1, so it must be the unique cell with max=1. So (1,1) is always black.
+        // Similarly, (1,n) has max(1, n+1-n)=max(1,1)=1 for the anti-diagonal condition? Wait:
+        // max(x, n+1-y) for (1,n) is max(1, n+1-n)=max(1,1)=1. So (1,n) must be the unique cell with max=1
+        // for the second condition. But we already have (1,1) for the first condition. They could be the same cell
+        // only if n=1? But n>=2, so (1,1) and (1,n) are different. So we have two cells with max=1 for the two conditions?
+        // No, the conditions are separate: For each k, there is exactly one cell with max(x,y)=k.
+        // And for each k, exactly one cell with max(x, n+1-y)=k.
+        // These are two independent sets of cells. They could overlap. For k=1, the first condition gives a cell with max(x,y)=1.
+        // The only cell with max(x,y)=1 is (1,1). So (1,1) must be black.
+        // The second condition for k=1 gives a cell with max(x, n+1-y)=1.
+        // The cells with max(x, n+1-y)=1 are those with x=1 and n+1-y <=1 => y >= n, so (1,n); or y=n and x<=1 => (1,n).
+        // So (1,n) must be black.
+        // So both (1,1) and (1,n) are black. That means a_1 >= 2? In the first example, a_1=2, yes.
+        // In the second test case, n=2, a=[2,0]. (1,1) and (1,2) are black. That works.
+        // In the third, a=[1,1], sum=2=n. But a_1=1, so we cannot have both (1,1) and (1,n) black. So invalid.
+        // So a_1 must be at least 2? Not necessarily, because (1,1) and (1,n) could be the same cell if n=1, but n>=2.
+        // So indeed a_1 >= 2 is required. But wait, what if the cell for the second condition is not (1,n) but something else?
+        // For max(x, n+1-y)=1, we need x<=1 and n+1-y<=1 => x=1, y>=n => y=n. So only (1,n). So yes, a_1 >= 2.
+        // But in the fourth test case, n=4, a=[3,1,0,0]. a_1=3 >=2. So that's fine.
+        
+        // Now, after placing (1,1) and (1,n), what about k=2?
+        // For the first condition, max(x,y)=2. The possible cells are on the boundary of the 2x2 square:
+        // (2,1), (2,2), (1,2). But we already have (1,1) black. The new cell must be one of these.
+        // However, we also have the condition that all black cells have i <= j. So (2,1) is invalid because 2 > 1.
+        // So the only candidates are (2,2) and (1,2).
+        // For the second condition, max(x, n+1-y)=2. The region is x<=2 and n+1-y<=2 => y >= n-1.
+        // So possible cells: (2,n), (2,n-1), (1,n-1). But we already have (1,n). Also i <= n+1-y? Actually the condition
+        // i <= n+1-y is required for all cells? The hint says only (i,j) with i <= j can be black. But wait,
+        // the second condition involves max(x, n+1-y). If a cell has i > n+1-y, then max(i, n+1-j) = i.
+        // That would be the value for the second condition. But the hint says only i <= j. It doesn't say i <= n+1-j.
+        // Let's re-read hint 3: "In general, only (i,j) with i <= j can be black." That's it. It doesn't mention the anti-diagonal.
+        // But from the conditions, we can deduce that i <= n+1-j as well? Let's check the example:
+        // a=[2,2,1,0,0], n=5. Black cells: (1,1), (2,2), (3,3), (2,4), (1,5).
+        // Check i <= j: all satisfy.
+        // Check i <= n+1-j: n+1=6.
+        // (1,1): 1 <= 5? 6-1=5, yes.
+        // (2,2): 2 <= 4? 6-2=4, yes.
+        // (3,3): 3 <= 3? 6-3=3, yes.
+        // (2,4): 2 <= 2? 6-4=2, yes.
+        // (1,5): 1 <= 1? 6-5=1, yes.
+        // So indeed all satisfy i <= n+1-j.
+        // Is it always true? Suppose we have a cell with i > n+1-j. Then max(i, n+1-j) = i.
+        // So this cell would be the one for k=i in the second condition. But then for k=i, we also have the first condition
+        // cell with max(x,y)=i. Could they be the same? If they are the same cell, then max(x,y)=i and max(x, n+1-y)=i.
+        // For a cell (i,j), max(i,j)=i implies j <= i. And max(i, n+1-j)=i implies n+1-j <= i => j >= n+1-i.
+        // So j is between n+1-i and i. But we also have i <= j from hint? Actually if j <= i, then i <= j implies i=j.
+        // So j=i. Then n+1-i <= i => 2i >= n+1. So for i >= (n+1)/2, the cell (i,i) satisfies both max conditions for k=i.
+        // In that case, the two conditions share the same cell. That is allowed! The problem doesn't say the cells for the two conditions
+        // must be distinct. They can be the same cell.
+        // So if i > n+1-j, then the cell could be the one for both conditions if j=i and i >= (n+1)/2.
+        // But if j < i, then max(i,j)=i, so it's the first condition cell for k=i. For the second condition, max(i, n+1-j)=i,
+        // so it's also the second condition cell for k=i. But then we have two different cells? No, it's the same cell.
+        // So a single cell can serve both roles for the same k. That is allowed.
+        // However, if j < i, then i > j, which violates hint 3. So hint 3 says i <= j for all black cells.
+        // Therefore, if a cell has i > n+1-j, then since i <= j, we have n+1-j < i <= j => n+1 < 2j => j > (n+1)/2.
+        // And also i > n+1-j. But i <= j. So it's possible: e.g., n=5, i=3, j=4: i=3 <=4, n+1-j=2, i=3 >2.
+        // Check if (3,4) can be black? In the example, (3,4) is not black. But could it be?
+        // If (3,4) is black, then max(3,4)=4, so it would be the cell for k=4 in the first condition.
+        // For the second condition, max(3, 6-4=2)=3, so it would be the cell for k=3 in the second condition.
+        // So it would serve as the first condition's k=4 and second condition's k=3. That's allowed because they are different k's.
+        // But does it violate anything? The hint says only i <= j can be black. (3,4) satisfies that.
+        // So why is it not in the example? Because the example has a specific a. Maybe it's possible in other configurations.
+        // Let's test if there is any configuration with a cell having i > n+1-j.
+        // Consider n=3. Suppose we try to place black cells. Conditions:
+        // For k=1: first -> (1,1); second -> (1,3).
+        // For k=2: first -> max(x,y)=2. Candidates: (1,2), (2,2), (2,1) but (2,1) invalid by hint. So (1,2) or (2,2).
+        // second -> max(x, n+1-y)=2. n+1=4. Candidates: (1,2) because max(1,4-2=2)=2; (2,3) max(2,4-3=1)=2; (2,2) max(2,4-2=2)=2.
+        // For k=3: first -> max=3: (1,3), (2,3), (3,3), (3,2), (3,1). But (3,2) and (3,1) invalid by hint. So (1,3), (2,3), (3,3).
+        // second -> max=3: (1,1)? max(1,3)=3? Wait n+1-y: for (1,1), n+1-1=3, max(1,3)=3. So (1,1) could be second condition k=3.
+        // Also (2,2): max(2,4-2=2)=2, not 3. (3,3): max(3,4-3=1)=3. (1,2): max(1,4-2=2)=2. (2,1) invalid.
+        // So second condition k=3 candidates: (1,1), (3,3), (1,3)? max(1,4-3=1)=1. No. (2,3): max(2,4-3=1)=2. No.
+        // So only (1,1) and (3,3).
+        // Now, we need to assign exactly one cell for each k for both conditions. They can overlap.
+        // Let's try to construct a valid set.
+        // We must have (1,1) and (1,3) from k=1.
+        // For k=2 first: either (1,2) or (2,2).
+        // For k=2 second: either (1,2), (2,3), or (2,2).
+        // For k=3 first: (1,3) already used? But we can reuse cells? The condition says "there exists exactly one index i such that max(x_i,y_i)=k". It doesn't say the cells for different k must be distinct. So a cell can have max(x,y)=k1 and also max(x,y)=k2? No, max(x,y) is a single number for a given cell. So a cell cannot be the one for two different k in the same condition. But it can be the one for first condition k1 and second condition k2. So (1,3) has max(1,3)=3, so it could be first condition k=3. But it's already used for first condition? No, we need exactly one cell with max=1, one with max=2, one with max=3. They must be distinct cells because max is different. So (1,3) has max=3, so it can be the cell for k=3 in the first condition. But we already placed (1,3) as the second condition k=1? That's fine because it's a different condition. So (1,3) can serve as second condition k=1 and first condition k=3. That's allowed.
+        // So let's try: 
+        // First condition: k=1: (1,1); k=2: (2,2); k=3: (1,3).
+        // Second condition: k=1: (1,3); k=2: (1,2); k=3: (3,3).
+        // Black cells: (1,1), (2,2), (1,3), (1,2), (3,3). Row counts: row1: 3, row2: 1, row3: 1. Sum=5 > n=3. But sum a_i must be n=3. So invalid because total black cells would be 5, but we only have 3 rows? Wait, the total number of black cells is not fixed to n by the conditions? The conditions don't say the total number of black cells is n. They say for each row k, there are a_k black cells. And sum a_i can be anything? But in the input, a_i are given, and sum a_i can be up to n^2? Actually a_i <= n, so sum <= n^2. But the conditions might force sum = n? Let's check: For each k, exactly one cell with max(x,y)=k. There are n such cells (for k=1..n). They are all distinct because max is different. So there are at least n black cells. Similarly, the second condition gives n cells, but they could overlap with the first set. So total black cells is at least n and at most 2n. But in the example, sum a_i = 2+2+1+0+0 = 5 = n. In the second test case, sum=2=n. In the fourth, sum=3+1=4=n. So it seems sum a_i must be exactly n. Is that a necessary condition? Let's see: The first condition gives n distinct cells. The second condition gives n distinct cells. But they can overlap. The total number of distinct black cells is the size of the union. The row sums a_i give the total number of black cells. So total black cells = sum a_i. We have sum a_i >= n (since first condition gives n distinct cells). Also, can sum a_i be > n? Suppose we have a cell that is only in the second set, not in the first. That would increase the total. But is there any constraint that forces sum a_i = n? Let's check the third test case: n=2, a=[1,1], sum=2=n, but output 0. So sum=n is not sufficient. What about a case where sum a_i > n? Could it be valid? Let's test n=2, a=[2,1] sum=3. Is there a valid grid? First condition: k=1: (1,1); k=2: max=2: candidates (1,2), (2,2). Second condition: k=1: (1,2); k=2: max(x, 3-y)=2: candidates (1,1)? max(1,3-1=2)=2; (2,2): max(2,3-2=1)=2. So we need to pick one for each. If we pick first: (1,1) and (2,2); second: (1,2) and (1,1). Then black cells: (1,1), (2,2), (1,2). Row counts: row1: 2, row2: 1. That matches a=[2,1]. So this seems valid! But wait, check conditions: For each k, exactly one cell with max(x,y)=k. k=1: (1,1) ok. k=2: (2,2) ok. For each k, exactly one cell with max(x, n+1-y)=k. k=1: (1,2) ok. k=2: (1,1) ok. All black cells: (1,1), (2,2), (1,2). Row counts: row1: 2, row2: 1. So a=[2,1] should be valid. But the problem statement says a_i are given, and we need to count grids satisfying the conditions. In the sample, there is no test case with sum a_i > n. But is it possible that sum a_i > n? Let's check if there is any hidden constraint. The problem says: "For each row k, there exists exactly a_k indices i such that x_i = k." So the total number of black cells is sum a_k. The conditions don't explicitly force sum a_k = n. However, from the first condition, there are exactly n cells with max(x,y)=1..n. These are n distinct cells. So the total number of black cells is at least n. Could it be more? Yes, if some cells are only used for the second condition. But wait, the second condition also requires exactly n cells with max(x, n+1-y)=1..n. These are also n distinct cells. So the total number of black cells is the size of the union of these two sets. It can be anywhere from n to 2n. So sum a_i can be > n. But in the sample, all valid cases have sum a_i = n? The first sample: sum=5=n. Second: sum=2=n. Fourth: sum=4=n. The invalid ones have sum=n but output 0. So maybe there is an additional constraint that forces sum a_i = n? Let's re-read the problem statement carefully: "Let (x1,y1), (x2,y2), ..., (xm,ym) be the cells colored black. You are given an array a of size n. The following conditions must be satisfied: For each row k, there exists exactly a_k indices i such that x_i = k. For each k, there exists exactly one index i such that max(x_i,y_i)=k. For each k, there exists exactly one index i such that max(x_i, n+1-y_i)=k." It doesn't say m = sum a_k. m is the number of black cells, which is sum a_k. So m can be anything. But wait, the first condition says for each k, exactly one index i with max(x_i,y_i)=k. That means there are exactly n such indices. Since i ranges from 1 to m, these n indices are distinct. So m >= n. Similarly, the second condition gives n distinct indices. So m >= n. But m can be larger. However, in all examples, m=n. Is it a coincidence? Let's test if m > n is possible. Consider n=2, a=[2,1] as above. We found a valid grid: (1,1), (2,2), (1,2). Check: max(x,y): (1,1)->1, (2,2)->2, (1,2)->2. So for k=1, we have (1,1). For k=2, we have two cells with max=2: (2,2) and (1,2). But the condition says "exactly one index i such that max(x_i,y_i)=k". So we cannot have two cells with max=2. So (1,2) and (2,2) both have max=2, violating the condition. So in my proposed set, the first condition fails because there are two cells with max=2. So the cells for the first condition must be exactly the n cells with distinct max values. That means among all black cells, the multiset of max(x,y) must be exactly {1,2,...,n} with no repetitions. So there cannot be any extra black cells that would duplicate a max value. Therefore, every black cell must have a unique max(x,y) value from 1 to n. Similarly, every black cell must have a unique max(x, n+1-y) value from 1 to n. So the black cells are exactly n cells, each assigned a unique k for the first condition and a unique k' for the second condition. So m = n necessarily. Thus sum a_i = n. So the total number of black cells is exactly n. This is a crucial observation! So sum a_i must be n, otherwise answer is 0. The sample third test case has sum=2=n but output 0, so sum=n is necessary but not sufficient.
+
+So we have exactly n black cells. Each black cell corresponds to a unique k in {1..n} for the first condition, and a unique k' in {1..n} for the second condition. So we can think of the black cells as a permutation? Not exactly, because the same cell can have different k and k'. But each cell has a max(x,y) and a max(x, n+1-y). These two values are determined by the cell's coordinates. So for each cell (i,j), let u = max(i,j) and v = max(i, n+1-j). Then the set of black cells must be such that the u values are a permutation of 1..n, and the v values are a permutation of 1..n. And the row counts are given by a_i.
+
+Now, since all cells have i <= j (by hint 3), we have u = j. So max(i,j) = j. Thus the first condition says the set of columns of black cells is exactly {1,2,...,n}? Wait: u = j because i <= j. So max(i,j) = j. So the first condition says that the columns of the black cells are exactly a permutation of 1..n. That is, there is exactly one black cell in each column! Because for each k, there is exactly one cell with max(i,j)=k, which means exactly one cell with column k. So the black cells have distinct columns, and they cover all columns 1..n. So each column has exactly one black cell. Similarly, the second condition: v = max(i, n+1-j). Since i <= j, we don't necessarily have i <= n+1-j. But we can analyze. The second condition says the v values are a permutation of 1..n. So for each k, there is exactly one cell with max(i, n+1-j)=k.
+
+Now, we also have row counts a_i. Since there is exactly one black cell per column, the row counts a_i tell us how many black cells are in each row. And sum a_i = n.
+
+So the problem reduces to: We have an n x n grid. We need to place exactly one black cell in each column. The row counts are given by a_i. Additionally, for each cell (i,j), we must have i <= j (so the cell is on or above the main diagonal). And the values v = max(i, n+1-j) must be a permutation of 1..n.
+
+Let's check the example: n=5, a=[2,2,1,0,0]. Columns 1..5 each have one black cell. Row counts: row1:2, row2:2, row3:1. The black cells given: (1,1) col1, (2,2) col2, (3,3) col3, (2,4) col4, (1,5) col5. Check i <= j: all ok. Check v values:
+(1,1): max(1, 6-1=5)=5
+(2,2): max(2, 6-2=4)=4
+(3,3): max(3, 6-3=3)=3
+(2

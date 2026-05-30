@@ -1,0 +1,64 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+This is the hard version of this problem. The only difference between the easy and hard versions is the constraints on $ k $ and $ m $ . In this version of the problem, you need to output the answer by modulo $ 10^9+7 $ .
+
+You are given a sequence $ a $ of length $ n $ consisting of integers from $ 1 $ to $ n $ . The sequence may contain duplicates (i.e. some elements can be equal).
+
+Find the number of tuples of $ m $ elements such that the maximum number in the tuple differs from the minimum by no more than $ k $ . Formally, you need to find the number of tuples of $ m $ indices $ i_1 < i_2 < \ldots < i_m $ , such that
+
+$ $$$\max(a_{i_1}, a_{i_2}, \ldots, a_{i_m}) - \min(a_{i_1}, a_{i_2}, \ldots, a_{i_m}) \le k. $ $ </p><p>For example, if $ n=4 $ , $ m=3 $ , $ k=2 $ , $ a=\[1,2,4,3\] $ , then there are two such triples ( $ i=1, j=2, z=4 $ and $ i=2, j=3, z=4 $ ). If $ n=4 $ , $ m=2 $ , $ k=1 $ , $ a=\[1,1,1,1\] $ , then all six possible pairs are suitable.</p><p><span class="tex-font-style-bf">As the result can be very large, you should print the value modulo $ 10^9 + 7 $ (the remainder when divided by $ 10^9 + 7$$$).
+
+Input Format
+The first line contains a single integer $ t $ ( $ 1 \le t \le 2 \cdot 10^5 $ ) — the number of test cases. Then $ t $ test cases follow.
+
+The first line of each test case contains three integers $ n $ , $ m $ , $ k $ ( $ 1 \le n \le 2 \cdot 10^5 $ , $ 1 \le m \le 100 $ , $ 1 \le k \le n $ ) — the length of the sequence $ a $ , number of elements in the tuples and the maximum difference of elements in the tuple.
+
+The next line contains $ n $ integers $ a_1, a_2,\ldots, a_n $ ( $ 1 \le a_i \le n $ ) — the sequence $ a $ .
+
+It is guaranteed that the sum of $ n $ for all test cases does not exceed $ 2 \cdot 10^5 $ .
+
+Output Format
+Output $ t $ answers to the given test cases. Each answer is the required number of tuples of $ m $ elements modulo $ 10^9 + 7 $ , such that the maximum value in the tuple differs from the minimum by no more than $ k $ .
+
+Examples
+Sample 1
+Input
+4
+4 3 2
+1 2 4 3
+4 2 1
+1 1 1 1
+1 1 1
+1
+10 4 3
+5 6 1 3 2 9 8 1 2 4
+Output
+2
+6
+1
+20
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1462E2 - Close Tuples (hard version)
+The key idea that allows us to move from the previous version to this one is that the values of the numbers themselves are not important to us. The main idea is to consider all numbers in the interval $$$[x, x + k]$$$.
+Let's also, as in the previous version, iterate over the minimum element $$$x$$$ in the tuple. Now let's find the count of numbers $$$cnt$$$ that lie in the interval $$$[x, x + k]$$$ (this can be done with a binary search, two pointers, or prefix sums using an array of occurrences). Then it remains to add to the answer the number of ways to choose $$$m - 1$$$ numbers from $$$cnt - 1$$$ (we fixed one of the numbers as the minimum). You have to sum these values over all possible values of $$$x$$$ (even the same) because now you are not fixing the value of the minimum element (as in the previous problem), but its index in the sorted array.
+To calculate binomial coefficients quickly, you can pre-compute all factorial values and all $$$\frac{1}{n!}$$$ values by modulo. If you do not know how to calculate the inverse element by modulo, then you could pre-compute the part of Pascal's triangle in $$$\mathcal{O}(nm)$$$.
+
+[code block omitted]
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

@@ -1,0 +1,4 @@
+[
+  "**Hint 1**\nIf $$$\\lfloor \\frac{a}{b} \\rfloor = a~\\mathrm{mod}~b = k$$$, then $$$a$$$ can be written as $$$kb+k$$$ ($$$b \\gt k$$$).",
+  "**Hint 2**\nLet's fix $$$k$$$ ($$$$1 \\leq k \\leq \\sqrt x$$$). You have to find how many $$$b$$$ are there such that $$$b \\gt k$$$, $$$1 \\leq b \\leq y$$$, $$$1 \\leq kb+k \\leq x$$$. The last condition is equivalent to $$$1 \\leq b \\leq x/k-1$$$. Therefore, for any fixed $$$k \\gt 0$$$, the number of special pairs ($$$$a\\leq x$$$$; $$$b \\leq y$$$) is $$$max(0, min(y,x/k-1) - k)$$$."
+]

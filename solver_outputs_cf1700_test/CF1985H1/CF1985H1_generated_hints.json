@@ -1,0 +1,4 @@
+[
+  "**Hint 1**\nIf we can only select and fill rows, how can we solve the problem?",
+  "**Hint 2**\nFor each row $$$r$$$, we need to find the size of the component formed by filling row $$$r$$$ (i.e. the size of the component containing row $$$r$$$ if we set all cells in row $$$r$$$ to be $$$\\texttt{#}$$$). The size of the component containing row $$$r$$$ if we set all cells in row $$$r$$$ to be $$$\\texttt{#}$$$ will be the sum of: The number of $$$\\texttt{.}$$$ in row $$$r$$$ since these cells will be set to $$$\\texttt{#}$$$. Let $$$F_r$$$ denote this value for some row $$$r$$$. The sum of sizes of components containing a cell in either row $$$r-1$$$, $$$r$$$, or $$$r+1$$$ (i.e. components that are touching row $$$r$$$). This is since these components will be part of the component containing row $$$r$$$. Let $$$R_r$$$ denote this value for some row $$$r$$$. The challenge is computing the second term quickly."
+]

@@ -1,0 +1,92 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        long long min_val = 0, max_val = 0;
+        for (int i = 0; i < n; ++i) {
+            long long new_min = min_val + a[i];
+            long long new_max = max_val + a[i];
+            long long abs_min = abs(min_val + a[i]);
+            long long abs_max = abs(max_val + a[i]);
+            min_val = min({new_min, new_max, abs_min, abs_max});
+            max_val = max({new_min, new_max, abs_min, abs_max});
+        }
+        long long k = max_val;
+
+        vector<long long> dp_min(1, 0), dp_max(1, 0);
+        vector<long long> ways_min(1, 1), ways_max(1, 1);
+
+        for (int i = 0; i < n; ++i) {
+            vector<long long> next_dp_min, next_dp_max;
+            vector<long long> next_ways_min, next_ways_max;
+
+            auto add_state = [&](long long val, long long ways) {
+                if (next_dp_min.empty()) {
+                    next_dp_min.push_back(val);
+                    next_dp_max.push_back(val);
+                    next_ways_min.push_back(ways);
+                    next_ways_max.push_back(ways);
+                } else {
+                    if (val < next_dp_min[0]) {
+                        next_dp_min[0] = val;
+                        next_ways_min[0] = ways;
+                    } else if (val == next_dp_min[0]) {
+                        next_ways_min[0] = (next_ways_min[0] + ways) % MOD;
+                    }
+                    if (val > next_dp_max[0]) {
+                        next_dp_max[0] = val;
+                        next_ways_max[0] = ways;
+                    } else if (val == next_dp_max[0]) {
+                        next_ways_max[0] = (next_ways_max[0] + ways) % MOD;
+                    }
+                }
+            };
+
+            for (size_t j = 0; j < dp_min.size(); ++j) {
+                long long val = dp_min[j];
+                long long w = ways_min[j];
+                add_state(val + a[i], w);
+                add_state(abs(val + a[i]), w);
+            }
+            for (size_t j = 0; j < dp_max.size(); ++j) {
+                long long val = dp_max[j];
+                long long w = ways_max[j];
+                if (val == dp_min[0]) continue;
+                add_state(val + a[i], w);
+                add_state(abs(val + a[i]), w);
+            }
+
+            dp_min = move(next_dp_min);
+            dp_max = move(next_dp_max);
+            ways_min = move(next_ways_min);
+            ways_max = move(next_ways_max);
+        }
+
+        long long ans = 0;
+        for (size_t j = 0; j < dp_min.size(); ++j) {
+            if (dp_min[j] == k) ans = (ans + ways_min[j]) % MOD;
+        }
+        for (size_t j = 0; j < dp_max.size(); ++j) {
+            if (dp_max[j] == k && dp_max[j] != dp_min[0]) ans = (ans + ways_max[j]) % MOD;
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

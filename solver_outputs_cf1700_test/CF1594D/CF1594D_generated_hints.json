@@ -1,0 +1,6 @@
+[
+  "**Hint 1**\nIf person $$$A$$$ said in a comment that person $$$B$$$ is a $$$crewmate$$$ then $$$A$$$ and $$$B$$$ belong to the same team (either imposters or crewmates). If person $$$A$$$ said in a comment that person $$$B$$$ is an $$$imposter$$$ then $$$A$$$ and $$$B$$$ belong to different teams.",
+  "**Hint 2**\nBuild a graph, and if person $$$A$$$ said that person $$$B$$$ is an imposter then add edge from $$$A$$$ to $$$B$$$.",
+  "**Hint 3**\nBuild a graph, and if person $$$A$$$ said that person $$$B$$$ is a crewmate then add edge from $$$A$$$ to a fake node and from the same fake node to $$$B$$$.",
+  "**Hint 4**\nFor each component, check if it's bipartite and take the maximum from the two colours. If a component is not bipartite then the answer is $$$-1$$$."
+]

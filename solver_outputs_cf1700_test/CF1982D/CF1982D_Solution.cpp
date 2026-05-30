@@ -1,0 +1,62 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m, k;
+        cin >> n >> m >> k;
+        vector<vector<long long>> a(n, vector<long long>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                cin >> a[i][j];
+            }
+        }
+        vector<string> type(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> type[i];
+        }
+
+        long long diff = 0;
+        vector<vector<int>> pref(n + 1, vector<int>(m + 1, 0));
+        for (int i = 0; i < n; ++i) {
+            int cur = 0;
+            for (int j = 0; j < m; ++j) {
+                if (type[i][j] == '1') {
+                    cur++;
+                    diff += a[i][j];
+                } else {
+                    diff -= a[i][j];
+                }
+                pref[i + 1][j + 1] = pref[i][j + 1] + cur;
+            }
+        }
+
+        if (diff == 0) {
+            cout << "YES\n";
+            continue;
+        }
+
+        int g = 0;
+        for (int i = 0; i <= n - k; ++i) {
+            for (int j = 0; j <= m - k; ++j) {
+                int ones = pref[i + k][j + k] - pref[i + k][j] - pref[i][j + k] + pref[i][j];
+                int f = abs(k * k - 2 * ones);
+                g = gcd(g, f);
+            }
+        }
+
+        if (g == 0 || diff % g != 0) {
+            cout << "NO\n";
+        } else {
+            cout << "YES\n";
+        }
+    }
+
+    return 0;
+}

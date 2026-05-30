@@ -1,0 +1,67 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAXA = 100000;
+
+vector<int> divisors[MAXA + 1];
+
+void precompute() {
+    for (int i = 1; i <= MAXA; ++i) {
+        for (int j = i; j <= MAXA; j += i) {
+            divisors[j].push_back(i);
+        }
+    }
+}
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    sort(a.begin(), a.end());
+    a.erase(unique(a.begin(), a.end()), a.end());
+    n = a.size();
+
+    vector<int> freq(m + 1, 0);
+    int covered = 0;
+    int ans = INT_MAX;
+    int l = 0;
+
+    for (int r = 0; r < n; ++r) {
+        for (int d : divisors[a[r]]) {
+            if (d > m) continue;
+            if (freq[d] == 0) covered++;
+            freq[d]++;
+        }
+
+        while (covered == m) {
+            ans = min(ans, a[r] - a[l]);
+            for (int d : divisors[a[l]]) {
+                if (d > m) continue;
+                freq[d]--;
+                if (freq[d] == 0) covered--;
+            }
+            l++;
+        }
+    }
+
+    if (ans == INT_MAX) cout << -1 << '\n';
+    else cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    precompute();
+
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

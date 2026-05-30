@@ -1,0 +1,76 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAXA = 100000;
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    sort(a.begin(), a.end());
+    
+    vector<int> cnt(m + 1, 0);
+    int covered = 0;
+    int ans = INT_MAX;
+    
+    auto add = [&](int x) {
+        for (int d = 1; d * d <= x; ++d) {
+            if (x % d == 0) {
+                if (d <= m) {
+                    if (cnt[d] == 0) covered++;
+                    cnt[d]++;
+                }
+                int other = x / d;
+                if (other != d && other <= m) {
+                    if (cnt[other] == 0) covered++;
+                    cnt[other]++;
+                }
+            }
+        }
+    };
+    
+    auto remove = [&](int x) {
+        for (int d = 1; d * d <= x; ++d) {
+            if (x % d == 0) {
+                if (d <= m) {
+                    cnt[d]--;
+                    if (cnt[d] == 0) covered--;
+                }
+                int other = x / d;
+                if (other != d && other <= m) {
+                    cnt[other]--;
+                    if (cnt[other] == 0) covered--;
+                }
+            }
+        }
+    };
+    
+    int l = 0;
+    for (int r = 0; r < n; ++r) {
+        add(a[r]);
+        while (covered == m && l <= r) {
+            ans = min(ans, a[r] - a[l]);
+            remove(a[l]);
+            l++;
+        }
+    }
+    
+    if (ans == INT_MAX) cout << -1 << '\n';
+    else cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

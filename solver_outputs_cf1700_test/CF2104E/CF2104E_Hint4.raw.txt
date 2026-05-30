@@ -1,0 +1,76 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, k;
+    cin >> n >> k;
+    string s;
+    cin >> s;
+    int q;
+    cin >> q;
+    vector<string> queries(q);
+    for (int i = 0; i < q; ++i) {
+        cin >> queries[i];
+    }
+
+    // nxt[i][c] = next occurrence of character c starting from position i (0-indexed)
+    // We'll build nxt of size (n+1) x k, where nxt[n][c] = n (meaning not found)
+    vector<vector<int>> nxt(n + 1, vector<int>(k, n));
+    for (int i = n - 1; i >= 0; --i) {
+        for (int c = 0; c < k; ++c) {
+            nxt[i][c] = nxt[i + 1][c];
+        }
+        nxt[i][s[i] - 'a'] = i;
+    }
+
+    // dp[i] = answer for suffix starting at position i (i from 0 to n)
+    // dp[n] = 0 (empty suffix, any string is not a subsequence? Actually if we start after end, we need 0)
+    // We'll compute dp from right to left.
+    vector<int> dp(n + 1, 0);
+    for (int i = n - 1; i >= 0; --i) {
+        int best = n + 1; // large
+        for (int c = 0; c < k; ++c) {
+            int pos = nxt[i][c];
+            if (pos == n) {
+                // character not found, so appending this character makes it unpleasant immediately
+                best = min(best, 1);
+            } else {
+                // we need to go to pos+1 and then add dp[pos+1] more
+                best = min(best, dp[pos + 1] + 1);
+            }
+        }
+        dp[i] = best;
+    }
+
+    // For each query t, we simulate matching it in s, then answer is dp[pos] where pos is the position after matching all of t.
+    // If t is not a subsequence, pos = n (or we stop early) and answer is 0.
+    for (const string& t : queries) {
+        int pos = 0;
+        bool pleasant = true;
+        for (char ch : t) {
+            int c = ch - 'a';
+            if (pos > n) { // shouldn't happen
+                pleasant = false;
+                break;
+            }
+            int nxt_pos = nxt[pos][c];
+            if (nxt_pos == n) {
+                pleasant = false;
+                break;
+            }
+            pos = nxt_pos + 1;
+        }
+        if (!pleasant) {
+            cout << 0 << '\n';
+        } else {
+            cout << dp[pos] << '\n';
+        }
+    }
+
+    return 0;
+}
+```

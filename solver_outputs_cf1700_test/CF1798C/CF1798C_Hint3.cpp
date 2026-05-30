@@ -1,0 +1,39 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<long long> a(n), b(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i] >> b[i];
+        }
+        
+        int ans = 0;
+        int i = 0;
+        while (i < n) {
+            ++ans;
+            long long g = a[i] * b[i];
+            long long l = b[i];
+            int j = i;
+            while (j < n) {
+                g = gcd(g, a[j] * b[j]);
+                l = lcm(l, b[j]);
+                if (g % l != 0) {
+                    break;
+                }
+                ++j;
+            }
+            i = j;
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

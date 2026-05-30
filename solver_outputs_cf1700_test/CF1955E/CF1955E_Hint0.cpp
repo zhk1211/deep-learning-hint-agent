@@ -1,0 +1,40 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        string s;
+        cin >> n >> s;
+        int ans = 1;
+        for (int k = n; k >= 1; --k) {
+            vector<int> diff(n + 1, 0);
+            int cur = 0;
+            bool ok = true;
+            for (int i = 0; i < n; ++i) {
+                cur ^= diff[i];
+                int val = (s[i] - '0') ^ cur;
+                if (val == 0) {
+                    if (i + k > n) {
+                        ok = false;
+                        break;
+                    }
+                    cur ^= 1;
+                    diff[i + k] ^= 1;
+                }
+            }
+            if (ok) {
+                ans = k;
+                break;
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

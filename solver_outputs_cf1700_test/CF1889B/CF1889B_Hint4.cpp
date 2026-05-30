@@ -1,0 +1,53 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        ll c;
+        cin >> n >> c;
+        vector<ll> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // We want to connect everything to component of node 1 (index 0)
+        // For node i (1-indexed i >= 2), we need sum of component >= i * 1 * c = i * c
+        // Initially component sum = a[0]
+        // We can add nodes in some order, each time adding a[i] to component sum
+        // Condition to add node i: current_sum + a[i] >= i * c
+        // Equivalent to a[i] - i * c >= -current_sum
+        // We can sort candidates by a[i] - i * c descending and greedily add if possible
+
+        vector<pair<ll, int>> candidates;
+        for (int i = 1; i < n; ++i) {
+            candidates.emplace_back(a[i] - (i + 1) * c, i);
+        }
+        sort(candidates.begin(), candidates.end(), greater<pair<ll, int>>());
+
+        ll cur = a[0];
+        bool ok = true;
+        for (auto &p : candidates) {
+            int idx = p.second;
+            ll need = (idx + 1) * c;
+            if (cur + a[idx] >= need) {
+                cur += a[idx];
+            } else {
+                ok = false;
+                break;
+            }
+        }
+
+        cout << (ok ? "YES" : "NO") << '\n';
+    }
+
+    return 0;
+}

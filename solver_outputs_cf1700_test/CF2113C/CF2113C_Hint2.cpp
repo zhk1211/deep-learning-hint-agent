@@ -1,0 +1,73 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, m, k;
+    cin >> n >> m >> k;
+    vector<string> grid(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> grid[i];
+    }
+
+    int total_gold = 0;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (grid[i][j] == 'g') {
+                total_gold++;
+            }
+        }
+    }
+
+    if (total_gold == 0) {
+        cout << 0 << '\n';
+        return;
+    }
+
+    // Prefix sums for gold
+    vector<vector<int>> pref(n + 1, vector<int>(m + 1, 0));
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            pref[i + 1][j + 1] = pref[i][j + 1] + pref[i + 1][j] - pref[i][j] + (grid[i][j] == 'g' ? 1 : 0);
+        }
+    }
+
+    auto get_gold = [&](int r1, int c1, int r2, int c2) -> int {
+        if (r1 > r2 || c1 > c2) return 0;
+        r1 = max(0, r1);
+        c1 = max(0, c1);
+        r2 = min(n - 1, r2);
+        c2 = min(m - 1, c2);
+        if (r1 > r2 || c1 > c2) return 0;
+        return pref[r2 + 1][c2 + 1] - pref[r1][c2 + 1] - pref[r2 + 1][c1] + pref[r1][c1];
+    };
+
+    int min_loss = total_gold;
+    // For each possible center (x, y) that is empty
+    for (int x = 0; x < n; ++x) {
+        for (int y = 0; y < m; ++y) {
+            if (grid[x][y] != '.') continue;
+            // The explosion square: rows [x - k, x + k], cols [y - k, y + k]
+            // Boundary: rows x - k, x + k, cols y - k, y + k
+            // Interior: rows [x - k + 1, x + k - 1], cols [y - k + 1, y + k - 1]
+            int loss = 0;
+            // Gold on boundary is collected, interior is lost
+            // Top boundary
+            loss += get_gold(x - k + 1, y - k + 1, x + k - 1, y + k - 1);
+            min_loss = min(min_loss, loss);
+        }
+    }
+
+    cout << total_gold - min_loss << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

@@ -1,0 +1,124 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+This is the easy version of the problem. The only difference is that in this version everyone must give candies to exactly one person and receive candies from exactly one person. Note that a submission cannot pass both versions of the problem at the same time. You can make hacks only if both versions of the problem are solved.
+
+After Zhongkao examination, Daniel and his friends are going to have a party. Everyone will come with some candies.
+
+There will be $ n $ people at the party. Initially, the $ i $ -th person has $ a_i $ candies. During the party, they will swap their candies. To do this, they will line up in an arbitrary order and everyone will do the following exactly once:
+
+- Choose an integer $ p $ ( $ 1 \le p \le n $ ) and a non-negative integer $ x $ , then give his $ 2^{x} $ candies to the $ p $ -th person. Note that one cannot give more candies than currently he has (he might receive candies from someone else before) and he cannot give candies to himself.
+
+Daniel likes fairness, so he will be happy if and only if everyone receives candies from exactly one person. Meanwhile, his friend Tom likes average, so he will be happy if and only if all the people have the same number of candies after all swaps.
+
+Determine whether there exists a way to swap candies, so that both Daniel and Tom will be happy after the swaps.
+
+Input Format
+The first line of input contains a single integer $ t $ ( $ 1\le t\le 1000 $ ) — the number of test cases. The description of test cases follows.
+
+The first line of each test case contains a single integer $ n $ ( $ 2\le n\le 2\cdot 10^5 $ ) — the number of people at the party.
+
+The second line of each test case contains $ n $ integers $ a_1,a_2,\ldots,a_n $ ( $ 1\le a_i\le 10^9 $ ) — the number of candies each person has.
+
+It is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2\cdot 10^5 $ .
+
+Output Format
+For each test case, print "Yes" (without quotes) if exists a way to swap candies to make both Daniel and Tom happy, and print "No" (without quotes) otherwise.
+
+You can output the answer in any case (upper or lower). For example, the strings "yEs", "yes", "Yes", and "YES" will be recognized as positive responses.
+
+Examples
+Sample 1
+Input
+6
+3
+2 4 3
+5
+1 2 3 4 5
+6
+1 4 7 1 5 4
+2
+20092043 20092043
+12
+9 9 8 2 4 4 3 5 1 1 1 1
+6
+2 12 7 16 11 12
+Output
+Yes
+Yes
+No
+Yes
+No
+No
+
+Note
+In the first test case:
+
+- The first person gives $ 1 $ candy to the third person;
+- The second person gives $ 2 $ candies to the first person;
+- The third person gives $ 1 $ candy to the second person.
+
+Then all people have $ 3 $ candies.
+
+In the second test case:
+
+- The fifth person gives $ 4 $ candies to the first person, from now on the first person has $ 5 $ candies;
+- The first person gives $ 2 $ candies to the third person;
+- The third person gives $ 2 $ candies to the fifth person;
+- The fourth person gives $ 2 $ candies to the second person;
+- The second person gives $ 1 $ candy to the fourth person.
+
+Then all people have $ 3 $ candies. Note that at first the first person cannot give $ 2 $ candies to the third person, since he only has $ a_1=1 $ candy. But after the fifth person gives him $ 4 $ candies, he can do this, because he currently has $ 1+4=5 $ candies.
+
+In the third test case, it's impossible for all people to have the same number of candies.
+
+In the fourth test case, the first person gives $ 1024 $ candies to the second person, and the second person gives $ 1024 $ candies to the first person as well.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1868B1 - Candy Party (Easy Version)
+Denote $$$s$$$ as $$$\frac{1}{n}\sum_{i=1}^n a_i$$$. If $$$s$$$ is not an integer, then it will be impossible to make all people have the same number of candies, so the answer is "
+No
+".
+Since a person gives candies to and receives candies from
+exactly one
+person, suppose he gives away $$$2^x$$$ candies and receives $$$2^y$$$ candies, then we get this equation:
+$$$$$$a_i−2^{x_i}+2^{y_i}=s.$$$$$$
+If $$$s=a_i$$$, there is an infinite set of solutions: $$$x_i=y_i$$$.
+Otherwise, $$$s\ne a_i$$$, then we have $$$a_i-s=2^{x_i}-2^{y_i}$$$. For different pairs $$$(x, y)$$$ ($$$x\ne y$$$), the values of $$$2^x - 2^y$$$ are pairwise different, so there will be at most $$$1$$$ solution to this equation.
+Thus, if there exists a possible solution, the number of candies each person receives and gives away is determined for $$$a_i\ne s$$$. If an equation has no solution, then obviously the answer is "
+No
+".
+Otherwise, let's maintain two multisets $$$S$$$ and $$$T$$$. For each person, let's add $$$x_i$$$ to $$$S$$$ and $$$y_i$$$ to $$$T$$$. Omitting the condition "
+one cannot give more candies than currently he has
+" $$$(1)$$$, we can claim that
+the answer is "
+Yes
+" if and only if $$$S=T$$$
+. The proof is left to readers as an exercise. :)
+Now let's think about the condition $$$(1)$$$. Build a directed graph with $$$n$$$ nodes. For two persons $$$i$$$ and $$$j$$$, if person $$$i$$$ gives $$$x \gt 0$$$ candies to person $$$j$$$, then we add an edge from node $$$i$$$ to node $$$j$$$ with weight $$$x$$$. All nodes with $$$a_i\ne s$$$ must have exactly $$$1$$$ in degree and $$$1$$$ out degree. So the graph must consist of several cycles.
+Let's prove that we can always choose a starting point properly for any cycle, so that the condition $$$(1)$$$ is satisfied.
+Pick the largest $$$a_i$$$ in the cycle, and we must have $$$a_i \gt s$$$. Suppose the $$$i$$$-th person gives candies to the $$$j$$$-th person ($$$1\le a_j\le a_i$$$, $$$x_i\ne x_j$$$), then we have:
+$$$$$$ a_i-2^{x_i}+2^{y_i}=s,\tag{2} $$$$$$ $$$$$$ a_j-2^{x_j}+2^{x_i}=s,\tag{3} $$$$$$
+Suppose $$$a_i \lt 2^{x_i}$$$, then we must have $$$y_i \lt x_i$$$, so $$$2^{y_i}\le 2^{x_i}/2$$$. If $$$x_i \lt x_j$$$, that is, $$$2\cdot 2^{x_i}\le 2^{x_j}$$$:
+$$$$$$ \begin{aligned} (2)-(3)&\implies a_i-a_j-2^{x_i}+2^{x_j}+2^{y_i}-2^{x_i}=0\\ &\implies a_i-a_j+\underbrace{(2^{x_j}-2\cdot 2^{x_i})+2^{y_i}}_{ \gt 0}=0\\ &\implies a_i \lt a_j, \end{aligned} $$$$$$
+Similarly we can prove that when $$$x_i \gt x_j$$$, $$$a_j \lt 0$$$. In both cases the condition $$$1\le a_j\le a_i$$$ has been violated. So we proved that $$$a_i-2^{x_i} \gt 0$$$.
+Thus, we proved the the claim. And we can easily add those nodes with $$$a_i=s$$$ into cycles: suppose the node is $$$p$$$, if there is an edge $$$a\to b$$$ with weight $$$w$$$, we add two edge $$$a\to p$$$ and $$$p\to b$$$, both weights are $$$w$$$, and delect the original edge $$$a\to b$$$.
+So we can solve this problem by simply maintaining $$$S$$$ and $$$T$$$, which can be done in $$$\mathcal{O}(n\log V)$$$. $$$\mathcal{O}(n\log^2 V)$$$ solutions can fit in the TL well, too.
+
+[code block omitted]
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

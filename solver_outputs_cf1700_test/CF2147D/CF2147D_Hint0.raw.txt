@@ -1,0 +1,62 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        sort(a.begin(), a.end(), greater<int>());
+
+        long long alice = 0, bob = 0;
+        int turn = 0; // 0 for Alice, 1 for Bob
+
+        for (int i = 0; i < n; ++i) {
+            int val = a[i];
+            if (val == 0) continue;
+            // The number of elements with value >= val is (n - i)
+            int cnt = n - i;
+            // The number of moves we can make on this value before it drops to the next distinct value
+            int next_val = (i + 1 < n) ? a[i + 1] : 0;
+            int diff = val - next_val;
+
+            // Each move gives cnt points
+            // Total points from this value level: diff * cnt
+            // They are distributed alternatingly starting with the current player
+            long long total_points = 1LL * diff * cnt;
+            long long moves = diff;
+
+            // Alice gets ceil(moves/2) moves if turn == 0, else floor(moves/2)
+            long long alice_moves, bob_moves;
+            if (turn == 0) {
+                alice_moves = (moves + 1) / 2;
+                bob_moves = moves / 2;
+            } else {
+                alice_moves = moves / 2;
+                bob_moves = (moves + 1) / 2;
+            }
+
+            alice += alice_moves * cnt;
+            bob += bob_moves * cnt;
+
+            // Update turn: if moves is odd, turn flips
+            if (moves % 2 == 1) {
+                turn ^= 1;
+            }
+        }
+
+        cout << alice << ' ' << bob << '\n';
+    }
+
+    return 0;
+}
+```

@@ -1,0 +1,48 @@
+// Hint5
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        string n_str;
+        cin >> n_str;
+        int n_int = stoi(n_str);
+        int len = (int)n_str.size();
+        
+        vector<pair<int, int>> ans;
+        
+        for (int a = 1; a <= 10000; ++a) {
+            int total_len = len * a;
+            // Build the repeated string for n*a (at most 6 digits needed)
+            string repeated;
+            while ((int)repeated.size() < min(total_len, 7)) {
+                repeated += n_str;
+            }
+            // We only care about b such that total_len - b <= 6 and >= 1
+            // So b from max(1, total_len - 6) to min(10000, total_len - 1, a * n_int)
+            int low_b = max(1, total_len - 6);
+            int high_b = min({10000, total_len - 1, a * n_int});
+            for (int b = low_b; b <= high_b; ++b) {
+                int res_len = total_len - b;
+                if (res_len < 1 || res_len > 6) continue;
+                string sub = repeated.substr(0, res_len);
+                // Check if sub represents the correct integer value
+                if (stoi(sub) == n_int * a - b) {
+                    ans.emplace_back(a, b);
+                }
+            }
+        }
+        
+        cout << ans.size() << '\n';
+        for (auto [a, b] : ans) {
+            cout << a << ' ' << b << '\n';
+        }
+    }
+    
+    return 0;
+}

@@ -1,0 +1,78 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        long long n;
+        int x, y;
+        cin >> n >> x >> y;
+        vector<long long> a(x);
+        for (int i = 0; i < x; ++i) {
+            cin >> a[i];
+        }
+        sort(a.begin(), a.end());
+        
+        long long ans = x - 2; // triangles from chosen vertices alone
+        
+        vector<long long> gaps;
+        for (int i = 0; i < x; ++i) {
+            long long diff;
+            if (i + 1 < x) {
+                diff = a[i+1] - a[i];
+            } else {
+                diff = a[0] + n - a[i];
+            }
+            if (diff > 1) {
+                gaps.push_back(diff);
+            }
+        }
+        
+        // Separate gaps into odd and even
+        vector<long long> odd_gaps, even_gaps;
+        for (long long g : gaps) {
+            if (g % 2 == 1) {
+                odd_gaps.push_back(g);
+            } else {
+                even_gaps.push_back(g);
+            }
+        }
+        
+        // Process odd gaps first (they give more triangles per y used)
+        sort(odd_gaps.begin(), odd_gaps.end());
+        for (long long g : odd_gaps) {
+            long long need = g / 2;
+            if (y >= need) {
+                y -= need;
+                ans += g;
+            } else {
+                ans += 2 * y;
+                y = 0;
+                break;
+            }
+        }
+        
+        if (y > 0) {
+            sort(even_gaps.begin(), even_gaps.end());
+            for (long long g : even_gaps) {
+                long long need = g / 2;
+                if (y >= need) {
+                    y -= need;
+                    ans += g;
+                } else {
+                    ans += 2 * y;
+                    y = 0;
+                    break;
+                }
+            }
+        }
+        
+        cout << ans << '\n';
+    }
+    return 0;
+}

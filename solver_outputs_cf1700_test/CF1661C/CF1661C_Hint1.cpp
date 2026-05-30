@@ -1,0 +1,78 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+ll solve_case(int n, vector<int>& h) {
+    int mx = *max_element(h.begin(), h.end());
+    ll ans = LLONG_MAX;
+    for (int target : {mx, mx + 1}) {
+        ll odd_needed = 0, even_needed = 0;
+        for (int x : h) {
+            ll diff = target - x;
+            even_needed += diff / 2;
+            odd_needed += diff % 2;
+        }
+        // We need to schedule odd_needed odd days and even_needed even days.
+        // Let days = 2*k or 2*k-1.
+        // We can always use extra even days to replace two odd days (since 2 odds = 1 even in terms of total increment, but careful: odd days give +1, even days give +2).
+        // Actually, we can convert two odd days into one even day if we have excess odd days.
+        // We want to minimize total days.
+        // Let total increments needed: odd_needed + 2*even_needed.
+        // We have days: odd days give 1, even days give 2.
+        // Let total days = d. Number of odd days = (d+1)/2, even days = d/2.
+        // We need: odd_days >= odd_needed, even_days >= even_needed, and also we can use even days to cover odd needs by using 2 increments from an even day to cover two +1 needs? No, an even day gives +2 to one tree, cannot split.
+        // So we must satisfy odd_needed with odd days, even_needed with even days.
+        // But we can also use an even day to cover an odd need? No, because even day gives +2, which would overshoot if we only need +1.
+        // However, we can skip days. So we just need to find minimal d such that:
+        // odd_days = ceil(d/2) >= odd_needed
+        // even_days = floor(d/2) >= even_needed
+        // But also we can convert some even days to "two odd days" by skipping? Actually, we can't convert.
+        // Wait, we can use an even day to water a tree that needs +1? That would increase by 2, making it exceed target? No, target is max or max+1, and we only water until all reach target. If we give +2 to a tree that only needs +1, it becomes target+1, which is not allowed because we want exactly target.
+        // So we must exactly meet the needed increments per tree.
+        // Thus odd_needed is the number of trees that need an odd increment (i.e., diff odd). They must get at least one odd day.
+        // even_needed is the total number of +2 increments needed.
+        // We can also use two odd days to give +2 total to one tree? Yes, we can water the same tree on two odd days, each giving +1. That would use two odd days to provide a +2 increment.
+        // So we have flexibility: we can replace one even day with two odd days.
+        // Therefore, we need to find minimal d such that:
+        // Let odd_days = (d+1)/2, even_days = d/2.
+        // We need: odd_days >= odd_needed
+        // and odd_days + 2*even_days >= odd_needed + 2*even_needed (total increments capacity)
+        // But also we cannot use more than odd_needed odd days? No, we can use extra odd days to cover even needs by pairing them.
+        // So the condition is: total capacity >= total needed, and odd_days >= odd_needed.
+        // Because if we have enough odd days, we can always use extra odd days to cover even needs (two odd days = one even day).
+        // So we binary search d, or compute directly.
+        auto check = [&](ll d) -> bool {
+            ll odd_days = (d + 1) / 2;
+            ll even_days = d / 2;
+            if (odd_days < odd_needed) return false;
+            ll total_cap = odd_days + 2 * even_days;
+            ll total_need = odd_needed + 2 * even_needed;
+            return total_cap >= total_need;
+        };
+        ll low = 0, high = 2e14; // safe upper bound
+        while (low < high) {
+            ll mid = (low + high) / 2;
+            if (check(mid)) high = mid;
+            else low = mid + 1;
+        }
+        ans = min(ans, low);
+    }
+    return ans;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> h(n);
+        for (int i = 0; i < n; ++i) cin >> h[i];
+        cout << solve_case(n, h) << '\n';
+    }
+    return 0;
+}

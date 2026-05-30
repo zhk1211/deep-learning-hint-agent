@@ -1,0 +1,56 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Edge {
+    int to;
+    long long w;
+};
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<Edge>> adj(n + 1);
+    for (int i = 0; i < m; ++i) {
+        int a, b;
+        long long d;
+        cin >> a >> b >> d;
+        adj[a].push_back({b, d});
+        adj[b].push_back({a, -d});
+    }
+    vector<long long> pos(n + 1, LLONG_MAX);
+    bool ok = true;
+    for (int i = 1; i <= n && ok; ++i) {
+        if (pos[i] != LLONG_MAX) continue;
+        pos[i] = 0;
+        queue<int> q;
+        q.push(i);
+        while (!q.empty() && ok) {
+            int u = q.front();
+            q.pop();
+            for (auto &e : adj[u]) {
+                int v = e.to;
+                long long w = e.w;
+                if (pos[v] == LLONG_MAX) {
+                    pos[v] = pos[u] + w;
+                    q.push(v);
+                } else if (pos[v] != pos[u] + w) {
+                    ok = false;
+                    break;
+                }
+            }
+        }
+    }
+    cout << (ok ? "YES" : "NO") << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

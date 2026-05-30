@@ -1,0 +1,181 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, q;
+        cin >> n >> q;
+        int m = 1 << n;
+        vector<int> a(m);
+        for (int i = 0; i < m; ++i) {
+            cin >> a[i];
+        }
+
+        // Precompute the winner of each segment for all levels
+        // winner[l][i] = index of the winning stack when starting with segment of length 2^l at position i
+        vector<vector<int>> winner(n + 1);
+        winner[0].resize(m);
+        iota(winner[0].begin(), winner[0].end(), 0);
+
+        for (int l = 1; l <= n; ++l) {
+            int len = 1 << l;
+            int half = 1 << (l - 1);
+            winner[l].resize(m - len + 1);
+            for (int i = 0; i + len <= m; ++i) {
+                int left = winner[l - 1][i];
+                int right = winner[l - 1][i + half];
+                // Compare XOR sums of the two segments
+                // We need the XOR sum of the segment represented by left/right
+                // But left/right are indices of the winning stacks, not the segment start
+                // Actually, winner[l-1][i] gives the index of the winning cow in the segment [i, i+half)
+                // The XOR sum of that segment is the XOR of all a in that segment.
+                // We can precompute prefix XORs to get segment XOR quickly.
+                // But we need to compare the XOR sums of the two segments.
+                // Let's compute segment XOR using prefix XOR.
+            }
+        }
+
+        // We need segment XOR sums quickly
+        vector<int> pref(m + 1, 0);
+        for (int i = 0; i < m; ++i) {
+            pref[i + 1] = pref[i] ^ a[i];
+        }
+        auto seg_xor = [&](int l, int r) {
+            return pref[r] ^ pref[l];
+        };
+
+        // Recompute winner with segment XOR
+        for (int l = 1; l <= n; ++l) {
+            int len = 1 << l;
+            int half = 1 << (l - 1);
+            for (int i = 0; i + len <= m; ++i) {
+                int left = winner[l - 1][i];
+                int right = winner[l - 1][i + half];
+                int left_xor = seg_xor(i, i + half);
+                int right_xor = seg_xor(i + half, i + len);
+                if (left_xor > right_xor || (left_xor == right_xor && left < right)) {
+                    winner[l][i] = left;
+                } else {
+                    winner[l][i] = right;
+                }
+            }
+        }
+
+        // For each query, we need to know how many cows are above the queried cow in the final stack.
+        // The final stack is built by the tournament process.
+        // We can simulate the tournament for each query, but that would be O(q * n) which is acceptable? q up to 2e5, n up to 18, total 3.6e6 operations, fine.
+        // But we need to handle the potion changing a single cow's skill.
+        // Since queries are independent, we can just simulate the tournament for each query with the modified array.
+        // However, we can optimize by noting that only the path from the changed cow to the root is affected.
+        // We can precompute the tournament tree and then for each query, update the leaf and recompute up the tree.
+        // The tree has 2n levels? Actually, the tournament has n rounds, so the tree has n+1 levels (leaves at level 0).
+        // We can store for each node its XOR sum and the index of the winning cow.
+        // Then for a query, we change the leaf, and update ancestors up to the root.
+        // Then we need to find the position of the queried cow in the final stack.
+        // The final stack order is determined by the sequence of wins: the winner's stack goes on top of the loser's stack.
+        // So the final stack is a permutation of the cows. We need the number of cows above the given cow.
+        // We can determine the order by simulating the tournament with the modified skill, but we need the final stack order.
+        // Alternatively, we can compute for each cow its depth in the final stack (number of cows above it).
+        // The final stack is built by repeatedly placing the winner's stack on top of the loser's stack.
+        // This is equivalent to: the winner of the whole tournament is at the top, and the rest are ordered recursively.
+        // We can compute the final order by doing a post-order traversal of the tournament tree: for each match, the winner's subtree comes after the loser's subtree in the stack (since winner jumps on top, so winner's cows are above loser's cows).
+        // Actually, if winner jumps on top of loser, then the final stack from bottom to top is: loser's stack (bottom), then winner's stack (top).
+        // So in the final array (index 0 = bottom, index m-1 = top), the cows from the loser's segment appear first, then cows from the winner's segment.
+        // So we can recursively build the final order: for a match between left segment and right segment, if left wins, order = order(right) followed by order(left); if right wins, order = order(left) followed by order(right).
+        // Then the number of cows above a given cow is (m - 1 - its position in this order).
+        // So we can precompute the tournament tree structure (which side wins for each node) based on the original array, and then for each query, we only need to update the tree along the path from the leaf to the root, and then we can compute the position of the queried cow in the final order.
+        // But recomputing the final order for each query would be O(m) which is too slow (m up to 2^18=262144, q up to 2e5).
+        // We need a faster way to compute the position of a specific cow in the final order after a single leaf change.
+        // Notice that the final order is determined by the outcomes of the matches. The outcomes only depend on the XOR sums of segments.
+        // Changing one cow's skill affects the XOR sums of all segments containing that cow.
+        // The tournament tree has O(n) nodes on the path from leaf to root. For each node on the path, the outcome might flip.
+        // The final order is a permutation that can be built by a recursive function. The position of a cow in the final order can be computed by knowing, for each ancestor match, whether the cow's segment was the winner or loser, and the sizes of the other segments.
+        // Specifically, if we know for each level the outcome of the match that includes the cow, we can compute the offset.
+        // Let's define the tournament tree: leaves are individual cows. Internal nodes represent matches between two segments of equal size.
+        // For a cow at index i, its path to the root goes through n internal nodes. At each level l (1 to n), the cow's segment of size 2^l competes with the adjacent segment. The cow's position in the final order is determined by the sequence of wins/losses along this path.
+        // If at a match, the cow's segment loses, then the other segment's cows will be placed below the cow's segment in the final stack? Wait: winner jumps on top of loser. So if cow's segment loses, the winner (other segment) goes on top, so the loser's cows are at the bottom of the combined stack. So the cows from the other segment are above the cows from the loser segment. So if the cow's segment loses, all cows from the other segment end up above this cow. If the cow's segment wins, then the cows from the other segment end up below this cow.
+        // So the number of cows above the given cow is the sum of sizes of the other segments for those matches where the cow's segment lost.
+        // Because if the cow's segment wins, the other segment's cows go below, so they don't contribute to "above". If the cow's segment loses, the other segment's cows go above.
+        // This is a crucial observation!
+        // Let's verify with the example: Cow 1 in first test case original: matches: level 1: cow 1 vs cow 2, cow 1 loses -> other segment size 1 (cow 2) goes above. Level 2: the segment containing cow 1 (now stack of cows 1,2 with cow 2 on top? Wait, after level 1, the stack is [1,2] with 2 on top. The segment is the left half (cows 1-2) vs right half (cows 3-4). The left half loses? In the example, left half (skill 2) vs right half (skill 2), left wins because tie-breaker. So left half wins. Cow 1 is in left half, so left half wins -> other segment (cows 3-4) goes below. So cows above cow 1: only from level 1 loss: size 1. Answer 1. Correct.
+        // Second query: cow 4 skill changed to 8. Cow 4 is in right half. Level 1: cow 3 vs cow 4, cow 4 wins -> other segment (cow 3) goes below. Level 2: left half (cows 1-2) vs right half (cows 3-4). Right half wins -> other segment (cows 1-2) goes below. So cow 4 never loses a match where the other segment goes above. Answer 0. Correct.
+        // So the answer for a cow is the sum of sizes of the opposing segments for all levels where the cow's segment loses.
+        // The size of the opposing segment at level l is 2^{l-1}.
+        // So we just need to know, for each level l (1..n), whether the match containing the cow's segment is won or lost by that segment.
+        // This depends on the XOR sums of the two segments of size 2^{l-1} that make up the segment of size 2^l containing the cow.
+        // We can precompute the segment XORs for the original array, but after a query, one cow's skill changes, which affects the XOR sums of all segments containing it.
+        // However, we only need to evaluate the matches along the path from the leaf to the root. There are only n levels.
+        // For a query (b, c), we can temporarily change a[b-1] to c, then walk up the tree from the leaf b-1 to the root, recomputing the XOR sums and determining the winner for each match on the path. For matches not on the path, the outcomes remain the same as in the original tournament? Wait, the outcomes of other matches might change if the XOR sum of a segment changes? But the XOR sum of a segment only changes if the segment contains the changed cow. The segments that contain the changed cow are exactly the ancestors of the leaf. The other segments (siblings of these ancestors) do not contain the changed cow, so their XOR sums remain the same. However, the match at an ancestor depends on the XOR sums of its two children. The child that does not contain the changed cow has unchanged XOR sum. The child that contains the changed cow has its XOR sum changed. So we can recompute the winner at each ancestor by comparing the new XOR sum of the changed child with the unchanged XOR sum of the other child.
+        // So we can compute the answer for a query in O(n) time by walking up the tree.
+        // We need to quickly get the XOR sum of any segment in the original array, and also the XOR sum of the segment containing the changed cow after the change.
+        // We can precompute prefix XORs for the original array. For a segment that does not contain the changed cow, its XOR sum is original. For a segment that contains the changed cow, its XOR sum is original XOR old_value XOR new_value.
+        // So we can compute the XOR sum of any segment in O(1) with the prefix XOR array, and if it contains the changed index, we just XOR with (old ^ new).
+        // Then we simulate the n matches on the path.
+        // At each level l (1 to n), we have a segment of size 2^l that contains the cow. Let the segment start at L, end at R (exclusive). The two halves are [L, M) and [M, R) where M = L + 2^{l-1}. The cow is in one of these halves. We compute the XOR sums of both halves (adjusting the one containing the cow). Then determine which half wins based on XOR sum comparison (and tie-breaker: left-most stack wins, i.e., the left half wins if XORs are equal). If the half containing the cow loses, we add 2^{l-1} to the answer.
+        // We need to know the segment boundaries for each level. We can precompute for each index i and each level l the segment start L. Since the tournament is fixed and balanced, the segment of size 2^l containing i is simply aligned to multiples of 2^l. Specifically, L = (i >> l) << l.
+        // So we can compute L = i & ~((1 << l) - 1).
+        // Then M = L + (1 << (l-1)), R = L + (1 << l).
+        // The cow is in the left half if i < M, else in the right half.
+        // We can compute the XOR sums using prefix XORs, and adjust if the half contains i.
+        // This gives an O(n) per query solution. Total time O(q * n). With n <= 18, q <= 2e5, total operations ~3.6e6, well within 1 second.
+        // Let's test with the sample.
+
+        // Precompute prefix XOR for original array
+        vector<int> pref_xor(m + 1, 0);
+        for (int i = 0; i < m; ++i) {
+            pref_xor[i + 1] = pref_xor[i] ^ a[i];
+        }
+
+        auto get_xor = [&](int l, int r, int changed_idx, int old_val, int new_val) {
+            int x = pref_xor[r] ^ pref_xor[l];
+            if (changed_idx >= l && changed_idx < r) {
+                x ^= old_val ^ new_val;
+            }
+            return x;
+        };
+
+        while (q--) {
+            int b, c;
+            cin >> b >> c;
+            --b;
+            int old_val = a[b];
+            int new_val = c;
+            int ans = 0;
+            int idx = b;
+            for (int l = 1; l <= n; ++l) {
+                int L = idx & ~((1 << l) - 1);
+                int M = L + (1 << (l - 1));
+                int R = L + (1 << l);
+                bool in_left = (idx < M);
+                int left_xor = get_xor(L, M, b, old_val, new_val);
+                int right_xor = get_xor(M, R, b, old_val, new_val);
+                bool left_wins;
+                if (left_xor > right_xor) {
+                    left_wins = true;
+                } else if (left_xor < right_xor) {
+                    left_wins = false;
+                } else {
+                    // tie: left-most stack wins. The left-most stack is the left half.
+                    left_wins = true;
+                }
+                if (in_left) {
+                    if (!left_wins) {
+                        ans += (1 << (l - 1));
+                    }
+                } else {
+                    if (left_wins) {
+                        ans += (1 << (l - 1));
+                    }
+                }
+            }
+            cout << ans << '\n';
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,59 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<pair<int, int>>> adj(n + 1);
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        string s;
+        cin >> u >> v >> s;
+        int w = (s == "imposter") ? 1 : 0;
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w});
+    }
+    vector<int> color(n + 1, -1);
+    int ans = 0;
+    for (int i = 1; i <= n; i++) {
+        if (color[i] != -1) continue;
+        queue<int> q;
+        q.push(i);
+        color[i] = 0;
+        vector<int> comp;
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            comp.push_back(u);
+            for (auto [v, w] : adj[u]) {
+                int nc = color[u] ^ w;
+                if (color[v] == -1) {
+                    color[v] = nc;
+                    q.push(v);
+                } else if (color[v] != nc) {
+                    cout << -1 << '\n';
+                    return;
+                }
+            }
+        }
+        int cnt0 = 0, cnt1 = 0;
+        for (int u : comp) {
+            if (color[u] == 0) cnt0++;
+            else cnt1++;
+        }
+        ans += max(cnt0, cnt1);
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

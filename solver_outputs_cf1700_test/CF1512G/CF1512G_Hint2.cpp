@@ -1,0 +1,35 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAX_C = 10000000;
+vector<int> ans(MAX_C + 1, -1);
+
+void precompute() {
+    vector<int> sum_div(MAX_C + 1, 0);
+    for (int i = 1; i <= MAX_C; ++i) {
+        for (int j = i; j <= MAX_C; j += i) {
+            sum_div[j] += i;
+        }
+    }
+    for (int n = 1; n <= MAX_C; ++n) {
+        int s = sum_div[n];
+        if (s <= MAX_C && ans[s] == -1) {
+            ans[s] = n;
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    precompute();
+    int t;
+    cin >> t;
+    while (t--) {
+        int c;
+        cin >> c;
+        cout << ans[c] << '\n';
+    }
+    return 0;
+}

@@ -1,0 +1,67 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    string s;
+    cin >> n >> s;
+
+    // Find first '1'
+    int first_one = -1;
+    for (int i = 0; i < n; ++i) {
+        if (s[i] == '1') {
+            first_one = i;
+            break;
+        }
+    }
+
+    if (first_one == -1) {
+        cout << "0\n";
+        return 0;
+    }
+
+    // s without leading zeros
+    string t = s.substr(first_one);
+    int m = t.size();
+
+    // Find first zero in t
+    int first_zero = -1;
+    for (int i = 0; i < m; ++i) {
+        if (t[i] == '0') {
+            first_zero = i;
+            break;
+        }
+    }
+
+    if (first_zero == -1) {
+        // All ones
+        cout << t << "\n";
+        return 0;
+    }
+
+    // We need to choose a second substring of length m starting at some position
+    // in the original string s, such that when OR-ed with t, we maximize the result.
+    // The second substring must start at some index in [first_one, first_one + first_zero]
+    // because we want to affect the first zero in t.
+    int max_start = first_one + first_zero;
+    string best = t;
+    for (int start = first_one; start <= max_start; ++start) {
+        string cur = t;
+        for (int i = 0; i < m; ++i) {
+            if (start + i < n && s[start + i] == '1') {
+                cur[i] = '1';
+            }
+        }
+        if (cur > best) {
+            best = cur;
+        }
+    }
+
+    cout << best << "\n";
+    return 0;
+}
+```

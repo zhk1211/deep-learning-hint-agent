@@ -1,0 +1,250 @@
+// Hint0
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        vector<long long> b(m);
+        for (int i = 0; i < m; ++i) {
+            cin >> b[i];
+        }
+
+        // dp[i] = min cost to remove prefix of length i
+        // dp[0] = 0
+        const long long INF = 1e18;
+        vector<long long> dp(n + 1, INF);
+        dp[0] = 0;
+
+        // prefix sums of a
+        vector<long long> pref(n + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            pref[i + 1] = pref[i] + a[i];
+        }
+
+        // For each k from 1 to m, we can remove segments with sum <= b[k-1]
+        // cost = m - k
+        // We process k from m down to 1 to allow multiple uses of same k? Actually we can use each k multiple times.
+        // But we can increase k only forward. So we can use k=1, then maybe increase to k=2, etc.
+        // This is like we have stages k=1..m, and we can stay or move forward.
+        // We can think of it as: we start at k=1, and we can do operations at current k, or pay 0 to move to k+1.
+        // This is equivalent to: for each k, we can apply operation type 2 any number of times, but only after we have reached that k.
+        // Since moving k forward is free and irreversible, the optimal strategy is to use some k values in increasing order.
+        // We can compute dp[i] = min cost to remove first i elements, considering we can use any k in some order.
+        // But we can also use the same k multiple times. So for a fixed k, we can do jumps: from j to i if sum(j+1..i) <= b[k-1], cost = m - k.
+        // Since we can use k multiple times, we can do multiple jumps with same cost per jump.
+        // This is like: for each k, we have edges j->i with weight (m-k) if sum <= b[k-1].
+        // And we can also move from k to k+1 with cost 0, meaning we can use later k's after earlier ones.
+        // But note that using a larger k gives smaller cost (m-k), but tighter sum constraint.
+        // Since we can always choose to not increase k and keep using current k, the problem reduces to: we can partition array into segments, each segment assigned a k (the k at which we remove it), with the condition that k is non-decreasing, and sum of segment <= b[k-1]. Cost = sum over segments of (m - k).
+        // We want min total cost.
+        // This is a DP with state (i, k) but n*m <= 3e5, so we can do O(n*m) or similar.
+        // Since n*m <= 3e5, we can iterate over k and update dp.
+        // For each k from 1 to m, we can update dp using current k, and also carry over dp from previous k.
+        // Let dp[i] be min cost to remove first i elements using k up to current.
+        // Initially dp[0]=0, others INF.
+        // For k = 1..m:
+        //   new_dp = dp (we can skip using this k)
+        //   For each i from 0..n-1, if dp[i] != INF, we can try to extend segment from i+1 to j where sum <= b[k-1].
+        //   This is like: for each i, we can update new_dp[j] = min(new_dp[j], dp[i] + (m - k)) for all j such that pref[j] - pref[i] <= b[k-1].
+        //   Since b[k-1] is decreasing with k, we can process efficiently.
+        // But n*m <= 3e5, so total states n*m is small. We can do O(n) per k using two pointers because b[k-1] is decreasing? Actually b is decreasing, so for larger k, b is smaller, so the reachable j from i is smaller. But we can just do a simple O(n) per k using a pointer because for a fixed k, as i increases, the max j also increases (since pref is increasing). So we can use a sliding window: for each i, we find max j such that pref[j] - pref[i] <= b[k-1]. Then we can update range [i+1, j] with dp[i] + cost. But we need min over i for each j. This is a range min update and point query. We can do it with a segment tree or just by maintaining a deque? Since we process k from 1 to m, and we want to update dp for the next k, we can do:
+        // For a fixed k, we want to compute new_dp[j] = min over i < j with sum(i+1..j) <= b[k-1] of dp[i] + cost.
+        // This is a classic DP with monotonic queue: as j increases, the valid i's are a sliding window (i >= some left bound). The left bound increases with j. So we can maintain a min queue of dp[i] for valid i.
+        // Let L[j] be the smallest i such that pref[j] - pref[i] <= b[k-1]. Since pref is increasing, L[j] is non-decreasing with j.
+        // Then new_dp[j] = cost + min_{i in [L[j], j-1]} dp[i].
+        // We can compute this in O(n) per k using a monotonic queue or just a multiset.
+        // Since total n*m <= 3e5, O(n*m) is acceptable even with a multiset (log n), but we can do O(n) with deque.
+        // We'll do for each k:
+        //   compute L[j] for all j=1..n using two pointers.
+        //   then use a deque to maintain min dp[i] for i in sliding window.
+        //   new_dp[j] = min(new_dp[j], cost + min_in_window).
+        //   Also we keep dp[j] as min over previous k.
+        // After processing all k, answer is dp[n] if < INF else -1.
+
+        // Note: we can also use the same k multiple times, which is handled because we update dp in place? Actually if we do in-place update, we might use the same k multiple times in one go? But our transition new_dp[j] = min(dp[i] + cost) uses dp[i] from previous k (or same k if we update in place). If we update in place, we could chain multiple segments with the same k, which is allowed. So we should update dp in place for each k, but we need to be careful not to use updated values within the same k in a way that assumes we increased k. Actually, using the same k multiple times is allowed, so we can do: for each k, we compute new dp values using the dp values before any updates of this k? Or we can allow chaining: if we update dp[j] using dp[i] from the same k, that means we removed segment i+1..j using k, and then later we might remove another segment after j using k again. That's fine. So we can do in-place updates with a sliding window that includes previously updated values of the same k. But careful: the sliding window min should include dp[i] for i < j, which may have been updated in the same k. That corresponds to using k multiple times. So we can just do:
+        // For each k from 1 to m:
+        //   cost = m - k;
+        //   We want to allow transitions using this k, possibly multiple times.
+        //   We can run a DP for this k: let f[i] be min cost to remove first i elements using only k (and previous k's, but we already have dp from previous k's). Actually we want to combine: we can either not use this k (keep dp[i]), or use this k after some previous state (which could be from previous k's or from this k earlier). So we can do a forward DP for this k:
+        //   Initialize a deque for sliding window min of dp.
+        //   We'll iterate j from 1 to n:
+        //       add dp[j-1] to window (since i = j-1 is now valid for future j)
+        //       remove indices from left of window that are < L[j]
+        //       if window not empty, dp[j] = min(dp[j], cost + window.min())
+        //   This automatically allows multiple uses of k because when we update dp[j], we then add dp[j] to window for later j.
+        //   But we must ensure we don't use the same k after moving to a larger k? Actually we process k in increasing order, so after we finish k, we move to k+1. The dp array carries over the best costs using k's up to current. When we process k+1, we can still use segments with k+1, but we cannot go back to k. That's correct because we can only increase k. So the order of processing k from 1 to m is correct.
+        //   However, there is a catch: when we process k, we start with dp from previous k's. But we also want to allow using k after using some previous k's. Our sliding window includes dp[i] that might have been achieved using previous k's. That's correct. And we also include dp[i] that were just updated using the same k, which allows multiple uses of k. So this works.
+
+        // Let's implement:
+        // dp[0] = 0; dp[1..n] = INF.
+        // For k = 1 to m:
+        //   long long cost = m - k;
+        //   long long limit = b[k-1];
+        //   // compute L[j] for j=1..n: smallest i such that pref[j] - pref[i] <= limit.
+        //   // Since pref is increasing, we can use two pointers.
+        //   vector<int> L(n+1);
+        //   int ptr = 0;
+        //   for (int j = 1; j <= n; ++j) {
+        //       while (pref[j] - pref[ptr] > limit) ptr++;
+        //       L[j] = ptr;
+        //   }
+        //   // Now sliding window min over dp[i] for i in [L[j], j-1]
+        //   deque<pair<int, long long>> dq; // (index, dp value)
+        //   // We'll iterate j from 1 to n, and maintain window for i up to j-1.
+        //   // Actually we need to add dp[j-1] to window before computing for j.
+        //   // But we also need to remove indices < L[j].
+        //   // We can maintain the window as we go.
+        //   int left_ptr = 0; // we'll add i's incrementally
+        //   for (int j = 1; j <= n; ++j) {
+        //       // add i = j-1 to window if dp[j-1] != INF
+        //       if (dp[j-1] != INF) {
+        //           while (!dq.empty() && dq.back().second >= dp[j-1]) dq.pop_back();
+        //           dq.push_back({j-1, dp[j-1]});
+        //       }
+        //       // remove indices < L[j]
+        //       while (!dq.empty() && dq.front().first < L[j]) dq.pop_front();
+        //       // update dp[j]
+        //       if (!dq.empty()) {
+        //           dp[j] = min(dp[j], cost + dq.front().second);
+        //       }
+        //   }
+        // }
+        // Answer = dp[n] if dp[n] != INF else -1.
+
+        // Let's test with sample.
+        // Sample 1:
+        // n=4,m=2, a=[9,3,4,3], b=[11,7]
+        // k=1: cost=1, limit=11
+        // L: j=1: pref[1]=9, ptr=0 -> L[1]=0; j=2: pref[2]=12, ptr=0? 12-0=12>11 -> ptr=1? 12-9=3<=11 -> L[2]=1; j=3: pref[3]=16, ptr=1? 16-9=7<=11 -> L[3]=1; j=4: pref[4]=19, ptr=1? 19-9=10<=11 -> L[4]=1.
+        // dp initially [0, INF, INF, INF, INF]
+        // j=1: add dp[0]=0 to dq. L[1]=0, dq min=0. dp[1] = min(INF, 1+0)=1.
+        // j=2: add dp[1]=1 to dq. dq has (0,0), (1,1). L[2]=1, remove index<1 -> remove (0,0). dq min=1. dp[2] = min(INF, 1+1)=2.
+        // j=3: add dp[2]=2. dq: (1,1), (2,2). L[3]=1, no removal. min=1. dp[3]=min(INF, 1+1)=2.
+        // j=4: add dp[3]=2. dq: (1,1), (2,2), (3,2). L[4]=1, min=1. dp[4]=min(INF, 1+1)=2.
+        // k=2: cost=0, limit=7
+        // L: j=1: pref[1]=9>7 -> ptr=1? 9-9=0<=7 -> L[1]=1? Wait, pref[1]-pref[1]=0<=7, so L[1]=1. But i must be < j, so i can be 0? Actually i is the start index of the segment, so segment is from i+1 to j. i can be 0. So L[j] is the smallest i such that sum(i+1..j) <= limit. For j=1, i=0 gives sum=9>7, i=1 gives sum=0<=7, so L[1]=1. But i must be < j, so i=1 is not < j? i=1 is not < 1. So valid i are in [L[j], j-1]. If L[j] > j-1, then no valid i. So for j=1, L[1]=1, window empty, dp[1] remains 1.
+        // Let's recompute L correctly: we want smallest i such that pref[j] - pref[i] <= limit. i can be from 0 to j-1. So we should start ptr=0, and while pref[j] - pref[ptr] > limit, ptr++. But if ptr reaches j, then no valid i. So L[j] = ptr. If ptr == j, then no valid i.
+        // For j=1, limit=7: pref[1]=9, ptr=0: 9-0=9>7 -> ptr=1. 9-9=0<=7, so L[1]=1. Since L[1]=1 > j-1=0, no valid i.
+        // j=2: pref[2]=12, ptr=1: 12-9=3<=7 -> L[2]=1. Valid i: 1. dp[1]=1.
+        // j=3: pref[3]=16, ptr=1: 16-9=7<=7 -> L[3]=1. Valid i: 1,2. dp[1]=1, dp[2]=2.
+        // j=4: pref[4]=19, ptr=1: 19-9=10>7 -> ptr=2: 19-12=7<=7 -> L[4]=2. Valid i: 2,3. dp[2]=2, dp[3]=2.
+        // Now process k=2 with dp from previous: dp = [0,1,2,2,2]
+        // j=1: add dp[0]=0 to dq. L[1]=1, remove <1 -> remove 0. dq empty. dp[1] stays 1.
+        // j=2: add dp[1]=1. dq: (1,1). L[2]=1, no removal. min=1. dp[2] = min(2, 0+1)=1.
+        // j=3: add dp[2]=1 (updated). dq: (1,1), (2,1). L[3]=1, min=1. dp[3] = min(2, 0+1)=1.
+        // j=4: add dp[3]=1. dq: (1,1), (2,1), (3,1). L[4]=2, remove <2 -> remove (1,1). min=1. dp[4] = min(2, 0+1)=1.
+        // Final dp[4]=1. Correct.
+
+        // Sample 2: n=1,m=2, a=[20], b=[19,18]
+        // k=1: cost=1, limit=19. L[1]: pref[1]=20>19 -> ptr=1 -> L[1]=1 >0, no update. dp[1]=INF.
+        // k=2: cost=0, limit=18. L[1]: 20>18 -> ptr=1 -> L[1]=1, no update. dp[1]=INF. Output -1. Correct.
+
+        // Sample 3: n=10,m=2, a=[2 5 2 1 10 3 2 9 9 6], b=[17 9]
+        // Let's trust the algorithm.
+
+        // Complexity: For each k, we do O(n) two pointers and O(n) sliding window. Total O(n*m) which is <= 3e5. Very fast.
+
+        // Edge case: m=1. Then we only have k=1, cost = m-1 = 0. We just need to partition array into segments each sum <= b[0]. The DP will find if possible. If dp[n] != INF, answer 0, else -1. Correct.
+
+        // Implementation details:
+        // Use vector<long long> for dp and pref.
+        // INF = 1e18.
+        // For each test case, we allocate dp and pref of size n+1.
+        // The sliding window: we can use deque storing indices, and we can refer to dp values directly. To maintain min, we pop back while dp[dq.back()] >= dp[i]. Then push i. Then pop front while dq.front() < L[j]. Then min is dp[dq.front()].
+
+        // Let's code it.
+
+        // One more thing: The problem says "You remove a non-empty prefix of array a, such that its sum does not exceed b_k." This means we remove a prefix of the current array a. Our DP models removing segments from the original array in order, which is equivalent because we always remove from the front. So it's correct.
+
+        // Let's write the solution.
+
+        // We need to handle multiple test cases, sum of n*m <= 3e5, so total operations O(total n*m) is fine.
+
+        // We'll read t, then loop.
+
+        // Potential optimization: We can avoid recomputing L for each k if we reuse, but not necessary.
+
+        // Let's implement.
+
+        // Note: b_i > b_{i+1} strictly decreasing.
+
+        // Code:
+
+        int t;
+        cin >> t;
+        while (t--) {
+            int n, m;
+            cin >> n >> m;
+            vector<long long> a(n);
+            for (int i = 0; i < n; ++i) cin >> a[i];
+            vector<long long> b(m);
+            for (int i = 0; i < m; ++i) cin >> b[i];
+
+            vector<long long> pref(n + 1, 0);
+            for (int i = 0; i < n; ++i) pref[i + 1] = pref[i] + a[i];
+
+            const long long INF = 1e18;
+            vector<long long> dp(n + 1, INF);
+            dp[0] = 0;
+
+            for (int k = 1; k <= m; ++k) {
+                long long cost = m - k;
+                long long limit = b[k - 1];
+
+                // compute L[j] for j=1..n
+                vector<int> L(n + 1);
+                int ptr = 0;
+                for (int j = 1; j <= n; ++j) {
+                    while (ptr < j && pref[j] - pref[ptr] > limit) {
+                        ptr++;
+                    }
+                    L[j] = ptr;
+                }
+
+                // sliding window min
+                deque<int> dq;
+                // We'll iterate j from 1 to n
+                // We need to add i = j-1 to dq before processing j
+                // But we also need to remove indices < L[j]
+                // We can maintain the window by adding i as we go.
+                // Actually, we can add i = j-1 at the start of loop for j.
+                // But careful: for j=1, we add i=0.
+                for (int j = 1; j <= n; ++j) {
+                    // add i = j-1
+                    int i = j - 1;
+                    if (dp[i] != INF) {
+                        while (!dq.empty() && dp[dq.back()] >= dp[i]) {
+                            dq.pop_back();
+                        }
+                        dq.push_back(i);
+                    }
+                    // remove out-of-window
+                    while (!dq.empty() && dq.front() < L[j]) {
+                        dq.pop_front();
+                    }
+                    // update dp[j]
+                    if (!dq.empty()) {
+                        long long val = cost + dp[dq.front()];
+                        if (val < dp[j]) dp[j] = val;
+                    }
+                }
+            }
+
+            if (dp[n] == INF) cout << -1 << '\n';
+            else cout << dp[n] << '\n';
+        }
+    }
+
+    return 0;
+}

@@ -1,0 +1,148 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+ll ask(char dir, ll k) {
+    cout << "? " << dir << " " << k << endl;
+    ll res;
+    cin >> res;
+    if (res == -1) exit(0);
+    return res;
+}
+
+void answer(ll X, ll Y) {
+    cout << "! " << X << " " << Y << endl;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<pair<ll, ll>> pts(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> pts[i].first >> pts[i].second;
+    }
+
+    // Step 1: Move to a very far bottom-left to simplify geometry
+    // We'll move left by 2e9 and down by 2e9, but k <= 1e9, so we do two moves.
+    // Actually we can move left by 1e9, down by 1e9, then left by 1e9, down by 1e9.
+    // But we only have 10 moves. Let's do: L 1e9, D 1e9.
+    // After these, the robot is at (X - 1e9, Y - 1e9).
+    // The distance to any anchor point (x_i, y_i) is |x_i - (X - 1e9)| + |y_i - (Y - 1e9)|
+    // Since X, Y, x_i, y_i are in [-1e9, 1e9], X - 1e9 <= 0, Y - 1e9 <= 0.
+    // Also x_i >= -1e9, so x_i - (X - 1e9) >= -1e9 - (1e9 - 1e9) ??? Let's analyze.
+    // Actually X - 1e9 is in [-2e9, 0]. x_i is in [-1e9, 1e9].
+    // So x_i - (X - 1e9) = x_i - X + 1e9. Since x_i - X >= -2e9, this is >= -1e9.
+    // But we want to ensure the robot is to the left and below all anchor points.
+    // If we move left by 2e9 and down by 2e9, then robot is at (X - 2e9, Y - 2e9).
+    // Since X >= -1e9, X - 2e9 <= -1e9. And x_i >= -1e9, so x_i >= X - 2e9? Not necessarily.
+    // Actually X - 2e9 <= -1e9, and x_i >= -1e9, so x_i >= X - 2e9 is true.
+    // Similarly for y. So robot is to the left and below all anchor points.
+    // Then Manhattan distance = (x_i - (X - 2e9)) + (y_i - (Y - 2e9)) = (x_i + y_i) - (X + Y) + 4e9.
+    // So the minimum distance will be achieved by the anchor point with minimum (x_i + y_i).
+    // Let S = min_i (x_i + y_i). Then the answer we get is S - (X + Y) + 4e9.
+    // From this we can compute X + Y.
+
+    // But we can only move by up to 1e9 per move. So we do L 1e9, D 1e9, L 1e9, D 1e9.
+    // That's 4 moves. Then we get d1 = ask('L', 1000000000);
+    // Actually we need to do them sequentially and read responses, but we only care about the last response.
+    // However, we can just do L 1e9, D 1e9, L 1e9, D 1e9 and record the final distance.
+    // But we also need to find X and Y individually. We can do similar for other directions.
+
+    // Better approach: 
+    // Move left by 2e9 (two moves of 1e9), then down by 2e9 (two moves). Then we are at (X-2e9, Y-2e9).
+    // The distance returned is min_i (x_i - (X-2e9) + y_i - (Y-2e9)) = min_i (x_i + y_i) - (X+Y) + 4e9.
+    // Let S = min_i (x_i + y_i). Then dist1 = S - (X+Y) + 4e9.
+    // So X+Y = S + 4e9 - dist1.
+
+    // Similarly, move right by 2e9 and down by 2e9: robot at (X+2e9, Y-2e9).
+    // Distance = min_i ((X+2e9) - x_i + y_i - (Y-2e9)) = min_i (-x_i + y_i) + (X - Y) + 4e9.
+    // Let T = min_i (-x_i + y_i). Then dist2 = T + (X - Y) + 4e9.
+    // So X - Y = dist2 - T - 4e9.
+
+    // Then we can solve for X and Y.
+
+    // But we need to compute S and T from the given points.
+    // S = min(x_i + y_i), T = min(-x_i + y_i).
+
+    // However, we must ensure that after moving, the robot is indeed strictly to the left/below or right/below of all points so that the absolute values resolve as we assumed.
+    // For the first case: robot at (X-2e9, Y-2e9). Since X >= -1e9, X-2e9 <= -1e9. All x_i >= -1e9, so x_i >= X-2e9. Similarly y_i >= Y-2e9. So |x_i - (X-2e9)| = x_i - (X-2e9), |y_i - (Y-2e9)| = y_i - (Y-2e9). Good.
+    // For the second case: robot at (X+2e9, Y-2e9). X <= 1e9, so X+2e9 >= 1e9. All x_i <= 1e9, so x_i <= X+2e9. Thus |x_i - (X+2e9)| = (X+2e9) - x_i. y_i >= Y-2e9 as before. So distance = (X+2e9 - x_i) + (y_i - (Y-2e9)) = -x_i + y_i + (X - Y) + 4e9. Good.
+
+    // So we need to perform:
+    // Move L 1e9, L 1e9, D 1e9, D 1e9 -> get dist1.
+    // Then we are at (X-2e9, Y-2e9). We need to go to (X+2e9, Y-2e9). That requires moving right by 4e9. We can do R 1e9 four times. But we have only 10 moves total. Let's count:
+    // 4 moves to get to bottom-left, then 4 moves to get to bottom-right = 8 moves. Then we have 2 moves left, which is enough to answer.
+    // But we can optimize: after getting dist1, we can move right by 4e9 in two moves? No, max k=1e9, so need 4 moves. Total 8 moves. Acceptable.
+
+    // Alternatively, we can do:
+    // Move L 1e9, D 1e9, L 1e9, D 1e9 -> dist1.
+    // Then move R 1e9, R 1e9, R 1e9, R 1e9 -> dist2.
+    // That's 8 moves.
+
+    // But wait: after the first 4 moves, we are at (X-2e9, Y-2e9). Then we move R 1e9 four times: we end at (X+2e9, Y-2e9). The distance we get after the last move is dist2. We don't need the intermediate distances.
+
+    // So algorithm:
+    // Read n and points.
+    // Compute S = min(x+y), T = min(-x+y).
+    // Perform: ? L 1000000000
+    // ? L 1000000000
+    // ? D 1000000000
+    // ? D 1000000000
+    // Read dist1 after last move.
+    // Perform: ? R 1000000000
+    // ? R 1000000000
+    // ? R 1000000000
+    // ? R 1000000000
+    // Read dist2 after last move.
+    // Compute X+Y = S + 4000000000LL - dist1.
+    // Compute X-Y = dist2 - T - 4000000000LL.
+    // Then X = ((X+Y)+(X-Y))/2, Y = ((X+Y)-(X-Y))/2.
+    // Output ! X Y
+
+    // Check constraints: coordinates up to 1e9, so 4e9 fits in 64-bit.
+
+    const ll K = 1000000000;
+    const ll K4 = 4000000000LL;
+
+    ll S = 4e18, T = 4e18;
+    for (auto &p : pts) {
+        ll x = p.first, y = p.second;
+        S = min(S, x + y);
+        T = min(T, -x + y);
+    }
+
+    // Move to bottom-left
+    ask('L', K);
+    ask('L', K);
+    ask('D', K);
+    ll dist1 = ask('D', K);
+
+    // Move to bottom-right
+    ask('R', K);
+    ask('R', K);
+    ask('R', K);
+    ll dist2 = ask('R', K);
+
+    ll sum_xy = S + K4 - dist1;
+    ll diff_xy = dist2 - T - K4;
+
+    ll X = (sum_xy + diff_xy) / 2;
+    ll Y = (sum_xy - diff_xy) / 2;
+
+    answer(X, Y);
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

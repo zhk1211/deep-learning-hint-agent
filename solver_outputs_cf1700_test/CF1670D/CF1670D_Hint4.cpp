@@ -1,0 +1,38 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        long long n;
+        cin >> n;
+        
+        long long lo = 0, hi = 1e6;
+        while (lo < hi) {
+            long long mid = (lo + hi) / 2;
+            long long k = mid / 3;
+            long long r = mid % 3;
+            long long triangles;
+            if (r == 0) {
+                triangles = 6 * k * k;
+            } else if (r == 1) {
+                triangles = 6 * k * k + 4 * k;
+            } else {
+                triangles = 6 * k * k + 8 * k + 2;
+            }
+            if (triangles >= n) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        cout << lo << '\n';
+    }
+    
+    return 0;
+}

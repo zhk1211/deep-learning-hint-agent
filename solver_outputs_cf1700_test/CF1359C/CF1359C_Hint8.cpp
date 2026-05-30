@@ -1,0 +1,56 @@
+// Hint8
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int T;
+    cin >> T;
+    while (T--) {
+        long long h, c, t;
+        cin >> h >> c >> t;
+        
+        // Case 1: 2 cups (1 hot, 1 cold)
+        double avg2 = (h + c) / 2.0;
+        long long ans = 2;
+        double best_diff = fabs(avg2 - t);
+        
+        // Case 2: 1 cup (only hot)
+        if (fabs((double)h - t) < best_diff) {
+            best_diff = fabs((double)h - t);
+            ans = 1;
+        }
+        
+        // Case 3: odd number of cups > 1: 2*k+1 cups (k+1 hot, k cold)
+        // Temperature = ((k+1)*h + k*c) / (2*k+1)
+        // We want this close to t.
+        // Solve for k: ((k+1)*h + k*c) = t*(2k+1)
+        // => k*(h + c - 2t) = t - h
+        // => k = (t - h) / (h + c - 2t)
+        // Note: h + c - 2t can be zero if t == (h+c)/2, then odd cups never reach t, but we already handled 2 cups.
+        
+        if (h + c != 2 * t) {
+            // k0 is the theoretical real value
+            double k0 = (double)(t - h) / (h + c - 2 * t);
+            // We need integer k >= 0
+            // Check floor and ceil of k0
+            for (long long k : { (long long)floor(k0), (long long)ceil(k0) }) {
+                if (k < 0) continue;
+                long long num = 2 * k + 1;
+                double temp = ((k + 1) * h + k * c) / (double)num;
+                double diff = fabs(temp - t);
+                if (diff < best_diff - 1e-12) {
+                    best_diff = diff;
+                    ans = num;
+                } else if (fabs(diff - best_diff) < 1e-12 && num < ans) {
+                    ans = num;
+                }
+            }
+        }
+        
+        cout << ans << '\n';
+    }
+    return 0;
+}

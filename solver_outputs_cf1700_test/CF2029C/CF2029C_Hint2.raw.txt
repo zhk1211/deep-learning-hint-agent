@@ -1,0 +1,152 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+
+    // f[i] = rating after processing first i elements (0..i-1)
+    vector<int> f(n + 1, 0);
+    for (int i = 0; i < n; ++i) {
+        f[i + 1] = f[i];
+        if (a[i] > f[i + 1]) f[i + 1]++;
+        else if (a[i] < f[i + 1]) f[i + 1]--;
+    }
+
+    // g[i] = rating after processing suffix starting at i (0-indexed)
+    // g[n] = 0
+    vector<int> g(n + 1, 0);
+    for (int i = n - 1; i >= 0; --i) {
+        g[i] = g[i + 1];
+        if (a[i] > g[i]) g[i]++;
+        else if (a[i] < g[i]) g[i]--;
+    }
+
+    // We need max over l<=r of f[l-1] if f[l-1] >= g[r+1] else g[r+1]
+    // Actually final rating = g[r+1] if f[l-1] >= g[r+1] else f[l-1]? Wait.
+    // The process: start with 0, go through prefix, skip [l,r], then suffix.
+    // After prefix we have rating x = f[l-1].
+    // Then we skip, so rating stays x.
+    // Then we process suffix starting at r+1. The suffix function g[r+1] is computed starting from 0.
+    // But we start from x. The effect of suffix with starting rating x is:
+    // final = x + (g[r+1] if x <= g[r+1]? Actually the rating change depends on x.
+    // Let's simulate: we have sequence from r+1 to n-1. Starting rating x.
+    // For each element, if a_i > cur, cur++; if a_i < cur, cur--.
+    // This is equivalent to: final = x + (g[r+1] if we start from 0? Not exactly.
+    // There is known property: if we start from x, final = x + (g[r+1] - something)? 
+    // Actually, the process is monotonic in a certain sense. 
+    // Let's think: define h(x) = final rating after processing suffix starting with rating x.
+    // Then h(x) = x + (g[r+1] if x <= g[r+1]? No.
+    // We can observe that if x >= g[r+1], then final = x. Because g[r+1] is the rating you would have if you started at 0.
+    // If x < g[r+1], then final = g[r+1]. Wait, is that true?
+    // Consider suffix: 3,4. g from 0: 0->1->2. g=2.
+    // Start x=1: 1->2->3. final=3 != g=2.
+    // So not that simple.
+    // Alternative: we can binary search answer k.
+    // Check if we can achieve rating >= k.
+    // We need to find l<=r such that final rating >= k.
+    // Let's compute for each position i the minimum prefix rating needed to end up with >= k after suffix.
+    // Define need[i] = minimum starting rating x such that processing suffix from i yields final >= k.
+    // Then we need f[l-1] >= need[r+1].
+    // We can precompute need[i] for all i.
+    // Then we need to check if there exists l<=r with f[l-1] >= need[r+1].
+    // Since we must skip at least one contest, l<=r.
+    // We can do this by keeping prefix maximums of f and checking.
+
+    auto check = [&](int k) -> bool {
+        // need[i] for i from 0 to n (i is start index of suffix)
+        vector<int> need(n + 1, -1);
+        // Base: need[n] = k (after processing empty suffix, rating is x, we need x >= k)
+        need[n] = k;
+        for (int i = n - 1; i >= 0; --i) {
+            // We want to find minimum x such that after processing a[i], final >= k.
+            // Let x be starting rating.
+            // After a[i], new rating x' = x + (a[i] > x ? 1 : (a[i] < x ? -1 : 0)).
+            // We need x' >= need[i+1].
+            // We can compute need[i] by trying x = need[i+1]-1, need[i+1], need[i+1]+1 maybe.
+            // Since the function is monotonic? Actually, if x increases, x' also increases (non-strict).
+            // So we can binary search x, but n is up to 3e5, total sum 3e5, binary search per element would be O(n log n) per check, too slow.
+            // We need O(n) per check.
+            // Observe that need[i] is either need[i+1]-1, need[i+1], or need[i+1]+1.
+            // Let's test: suppose need[i+1] = v.
+            // We want min x such that after step, rating >= v.
+            // If we start with x, new rating = x + d, where d = 1 if a[i] > x, -1 if a[i] < x, 0 if a[i] == x.
+            // We need x + d >= v.
+            // Case analysis:
+            // If a[i] > x, then x+1 >= v => x >= v-1.
+            // If a[i] == x, then x >= v.
+            // If a[i] < x, then x-1 >= v => x >= v+1.
+            // So need[i] = min x satisfying: (x >= v-1 if a[i] > x) OR (x >= v if a[i] == x) OR (x >= v+1 if a[i] < x).
+            // This is a bit circular because condition depends on x relative to a[i].
+            // We can find need[i] by checking three candidates: v-1, v, v+1.
+            // For each candidate x, compute new rating and check if >= v.
+            // The smallest valid x is need[i].
+            // Since v = need[i+1], we can just test these three.
+            int v = need[i + 1];
+            int best = INT_MAX;
+            for (int x : {v - 1, v, v + 1}) {
+                if (x < 0) continue; // rating can't be negative? Actually rating can be negative? Problem says rating starts at 0, but can decrease? "decrease by 1" so it can go negative. But performance ratings are >=1. However, rating can be negative. So x can be negative. We'll allow.
+                int nx = x;
+                if (a[i] > nx) nx++;
+                else if (a[i] < nx) nx--;
+                if (nx >= v) {
+                    best = min(best, x);
+                }
+            }
+            need[i] = best;
+        }
+        // Now we need to find l<=r such that f[l-1] >= need[r+1].
+        // f is 0-indexed prefix: f[0]=0, f[1] after first, ..., f[n] after all.
+        // need is suffix: need[i] for start index i (0..n).
+        // We need l-1 from 0 to n-1, r+1 from l+1 to n? Actually l<=r so r+1 >= l+1.
+        // So we need indices i = l-1, j = r+1 with 0 <= i < j <= n.
+        // Condition: f[i] >= need[j].
+        // We can iterate i from 0 to n-1, keep track of maximum f[i] seen so far? Wait, we need i < j.
+        // We can precompute prefix max of f up to i, but we need j > i.
+        // Better: iterate j from 1 to n, and keep max f[i] for i < j.
+        int max_f = f[0]; // f[0] = 0
+        for (int j = 1; j <= n; ++j) {
+            // j = r+1, so r = j-1, l-1 can be from 0 to j-2 (since l<=r => l-1 <= r-1 = j-2)
+            // So we need max f[i] for i <= j-2.
+            // We can update max_f with f[j-1] after checking? Let's do:
+            // For current j, valid i are 0..j-2. So before checking, max_f should be max over f[0..j-2].
+            if (max_f >= need[j]) {
+                return true;
+            }
+            // Then update max_f with f[j-1] for next j.
+            if (j - 1 >= 0) {
+                max_f = max(max_f, f[j - 1]);
+            }
+        }
+        return false;
+    };
+
+    // Binary search answer
+    int lo = 0, hi = n; // max possible rating is n (if all a_i > current, increases by 1 each time)
+    int ans = 0;
+    while (lo <= hi) {
+        int mid = (lo + hi) / 2;
+        if (check(mid)) {
+            ans = mid;
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

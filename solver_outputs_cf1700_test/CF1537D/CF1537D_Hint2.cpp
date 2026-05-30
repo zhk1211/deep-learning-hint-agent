@@ -1,0 +1,37 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        if (n % 2 == 1) {
+            cout << "Bob\n";
+        } else {
+            // n is even
+            if ((n & (n - 1)) == 0) {
+                // n is a power of two
+                int cnt = 0;
+                int temp = n;
+                while (temp > 1) {
+                    temp /= 2;
+                    cnt++;
+                }
+                if (cnt % 2 == 1) {
+                    cout << "Bob\n";
+                } else {
+                    cout << "Alice\n";
+                }
+            } else {
+                cout << "Alice\n";
+            }
+        }
+    }
+    return 0;
+}

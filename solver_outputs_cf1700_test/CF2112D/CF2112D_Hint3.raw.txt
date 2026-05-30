@@ -1,0 +1,103 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    vector<pair<int, int>> edges;
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        edges.emplace_back(u, v);
+    }
+    
+    // Find a vertex of degree 2
+    int center = -1;
+    for (int i = 1; i <= n; i++) {
+        if (adj[i].size() == 2) {
+            center = i;
+            break;
+        }
+    }
+    
+    if (center == -1) {
+        cout << "NO\n";
+        return;
+    }
+    
+    // The two neighbors of center
+    int a = adj[center][0];
+    int b = adj[center][1];
+    
+    // We will root the tree at center, and direct edges away from center,
+    // except we need exactly n good pairs.
+    // The construction: direct edges away from center, but for the two branches
+    // starting at a and b, we direct them towards center.
+    // This gives exactly n good pairs.
+    
+    vector<int> parent(n + 1, 0);
+    vector<vector<int>> children(n + 1);
+    
+    // BFS/DFS to build parent-child relationships, treating center as root
+    // but we will not cross the edges center-a and center-b in the tree traversal
+    // Actually we just need to know direction for each edge.
+    // We'll assign directions based on BFS from center.
+    
+    vector<bool> visited(n + 1, false);
+    queue<int> q;
+    q.push(center);
+    visited[center] = true;
+    
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        for (int v : adj[u]) {
+            if (!visited[v]) {
+                visited[v] = true;
+                parent[v] = u;
+                children[u].push_back(v);
+                q.push(v);
+            }
+        }
+    }
+    
+    // Now we have a rooted tree at center.
+    // We need to output directed edges.
+    // For edges not incident to center, direct from parent to child.
+    // For edges (center, a) and (center, b), direct from a to center and b to center.
+    
+    cout << "YES\n";
+    for (auto [u, v] : edges) {
+        if ((u == center && v == a) || (u == a && v == center)) {
+            cout << a << " " << center << "\n";
+        } else if ((u == center && v == b) || (u == b && v == center)) {
+            cout << b << " " << center << "\n";
+        } else {
+            // determine parent-child
+            if (parent[u] == v) {
+                cout << v << " " << u << "\n";
+            } else if (parent[v] == u) {
+                cout << u << " " << v << "\n";
+            } else {
+                // should not happen
+            }
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

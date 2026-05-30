@@ -1,0 +1,43 @@
+// Hint1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+    while (T--) {
+        int n;
+        cin >> n;
+        vector<string> t(2 * n);
+        for (int i = 0; i < 2 * n; ++i) {
+            cin >> t[i];
+        }
+        string s;
+        cin >> s;
+
+        // Count occurrences of each character in all t_i and in s
+        array<int, 26> cnt{};
+        for (const string& str : t) {
+            for (char c : str) {
+                cnt[c - 'a']++;
+            }
+        }
+        for (char c : s) {
+            cnt[c - 'a']++;
+        }
+
+        // The initial character is the one with odd count
+        char init_char = 0;
+        for (int i = 0; i < 26; ++i) {
+            if (cnt[i] % 2 == 1) {
+                init_char = 'a' + i;
+                break;
+            }
+        }
+        cout << init_char << '\n';
+    }
+    return 0;
+}

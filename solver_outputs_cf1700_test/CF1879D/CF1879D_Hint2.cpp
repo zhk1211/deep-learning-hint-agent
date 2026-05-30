@@ -1,0 +1,49 @@
+// Hint2
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    
+    long long ans = 0;
+    
+    for (int bit = 0; bit < 30; ++bit) {
+        vector<int> b(n);
+        for (int i = 0; i < n; ++i) {
+            b[i] = (a[i] >> bit) & 1;
+        }
+        
+        long long sum_len0 = 0, sum_len1 = 0;
+        long long cnt0 = 1, cnt1 = 0;
+        int pref = 0;
+        
+        for (int r = 0; r < n; ++r) {
+            pref ^= b[r];
+            
+            if (pref == 0) {
+                ans = (ans + ((1LL << bit) % MOD) * ((cnt1 * (r + 1) - sum_len1) % MOD)) % MOD;
+                cnt0++;
+                sum_len0 += r + 1;
+            } else {
+                ans = (ans + ((1LL << bit) % MOD) * ((cnt0 * (r + 1) - sum_len0) % MOD)) % MOD;
+                cnt1++;
+                sum_len1 += r + 1;
+            }
+        }
+    }
+    
+    ans = (ans % MOD + MOD) % MOD;
+    cout << ans << '\n';
+    
+    return 0;
+}

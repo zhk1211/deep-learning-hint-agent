@@ -1,0 +1,108 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, d;
+        cin >> n >> d;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // Check if all zeros already
+        bool all_zero = true;
+        for (int x : a) {
+            if (x == 1) {
+                all_zero = false;
+                break;
+            }
+        }
+        if (all_zero) {
+            cout << 0 << '\n';
+            continue;
+        }
+        
+        // We will simulate the process by tracking distances to the nearest 0
+        // in the "shifted" sense. The operation a_i = a_i & a_{(i - d) mod n}
+        // means that a 1 survives only if both it and the element d steps left are 1.
+        // This is equivalent to: a 1 at position i will become 0 in k steps if
+        // the distance to the nearest 0 along the "backward d-jumps" is k.
+        // More precisely, consider the functional graph where each node i points to (i - d) mod n.
+        // This graph consists of cycles. For each cycle, we can find the maximum distance
+        // from a 0 to any 1 along the cycle (going forward in the direction of jumps).
+        // The answer is the maximum such distance over all cycles.
+        // If a cycle has no 0, then answer is -1.
+        
+        vector<int> dist(n, -1);
+        int ans = 0;
+        vector<bool> visited(n, false);
+        
+        for (int i = 0; i < n; ++i) {
+            if (visited[i]) continue;
+            // traverse cycle
+            int cur = i;
+            vector<int> cycle;
+            while (!visited[cur]) {
+                visited[cur] = true;
+                cycle.push_back(cur);
+                cur = (cur - d + n) % n;
+            }
+            // now cycle contains the cycle nodes in order of jumps
+            // We need to find the max distance from a 0 to a 1 along the cycle.
+            // Since the operation goes backward (i depends on i-d), the distance
+            // to a 0 is the number of steps until we hit a 0 when moving forward
+            // along the cycle direction (which is the direction of jumps: i -> (i-d)).
+            // Actually, if we follow the jumps: from i we go to (i-d). So if we start at a 1,
+            // we look how many steps until we see a 0 along this path.
+            // So we can duplicate the cycle to handle wrap-around.
+            int sz = cycle.size();
+            bool has_zero = false;
+            for (int idx : cycle) {
+                if (a[idx] == 0) {
+                    has_zero = true;
+                    break;
+                }
+            }
+            if (!has_zero) {
+                ans = -1;
+                break;
+            }
+            // duplicate cycle
+            vector<int> arr(2 * sz);
+            for (int j = 0; j < sz; ++j) {
+                arr[j] = a[cycle[j]];
+                arr[j + sz] = arr[j];
+            }
+            // find max distance from a 0 to the next 1s until next 0
+            int last_zero = -1;
+            int max_dist = 0;
+            for (int j = 0; j < 2 * sz; ++j) {
+                if (arr[j] == 0) {
+                    last_zero = j;
+                } else {
+                    if (last_zero != -1) {
+                        max_dist = max(max_dist, j - last_zero);
+                    }
+                }
+            }
+            // If the cycle is all 1s, we already handled it.
+            // But we need to consider the case where the distance wraps around.
+            // The duplication handles it because we look for the longest run of 1s
+            // between two zeros. The maximum distance from a 0 to a 1 in that run
+            // is exactly the length of the run. So max_dist is the length of the
+            // longest contiguous block of 1s in the cycle.
+            ans = max(ans, max_dist);
+        }
+        
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

@@ -1,0 +1,162 @@
+// Hint6
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    string s;
+    cin >> s;
+    s = " " + s; // 1-indexed
+
+    vector<int> parent(n + 1, 0);
+    vector<int> order;
+    order.reserve(n);
+    queue<int> q;
+    q.push(1);
+    parent[1] = -1;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        order.push_back(u);
+        for (int v : adj[u]) {
+            if (v != parent[u]) {
+                parent[v] = u;
+                q.push(v);
+            }
+        }
+    }
+
+    vector<int> leaf(n + 1, 0);
+    for (int i = 2; i <= n; i++) {
+        if (adj[i].size() == 1) leaf[i] = 1;
+    }
+
+    int cnt_leaf_0 = 0, cnt_leaf_1 = 0, cnt_leaf_q = 0;
+    for (int i = 2; i <= n; i++) {
+        if (leaf[i]) {
+            if (s[i] == '0') cnt_leaf_0++;
+            else if (s[i] == '1') cnt_leaf_1++;
+            else cnt_leaf_q++;
+        }
+    }
+
+    int cnt_nonleaf_q = 0;
+    for (int i = 1; i <= n; i++) {
+        if (!leaf[i] && s[i] == '?') cnt_nonleaf_q++;
+    }
+
+    if (s[1] != '?') {
+        // root is fixed
+        char root_val = s[1];
+        int ans = 0;
+        if (root_val == '0') {
+            ans = cnt_leaf_1 + (cnt_leaf_q + 1) / 2;
+        } else {
+            ans = cnt_leaf_0 + (cnt_leaf_q + 1) / 2;
+        }
+        cout << ans << "\n";
+        return;
+    }
+
+    // root is '?'
+    // Iris will choose root value optimally
+    // If Iris sets root to 0, she gets cnt_leaf_1 + ceil(cnt_leaf_q/2) if Dora plays optimally on leaves
+    // But Dora will also play on non-leaf '?'s, which can affect the parity of moves on leaf '?'s
+    // Actually, the game: Iris and Dora alternate placing values on '?' vertices.
+    // The root is a '?' and Iris goes first. She can choose to set root immediately or later.
+    // According to hints, it's optimal to fill root first.
+    // So Iris will set root to 0 or 1 on her first move.
+    // Then the remaining game is with root fixed, and the remaining '?' vertices (including leaf and non-leaf) are filled alternately.
+    // But note: after root is set, the remaining '?' vertices are all other '?'s.
+    // The number of leaf '?' is cnt_leaf_q, non-leaf '?' is cnt_nonleaf_q (excluding root).
+    // Total remaining '?' = cnt_leaf_q + cnt_nonleaf_q.
+    // Iris just made a move, so it's Dora's turn.
+    // The game on leaf '?'s: each leaf '?' will eventually be set to 0 or 1.
+    // The players will choose values to minimize/maximize the number of leaves with value different from root.
+    // For a fixed root, the optimal play on leaf '?'s: the player who wants to maximize will set leaf to opposite of root, the minimizer will set to same as root.
+    // Since Dora moves next, she will try to minimize the count of leaves different from root.
+    // The number of leaf '?' is L = cnt_leaf_q.
+    // The sequence of moves on leaf '?'s: Dora and Iris alternate, but they can also play on non-leaf '?'s which are "wasted" moves (they don't affect leaf values directly).
+    // So the effective number of moves on leaf '?'s that each player gets depends on how many non-leaf '?'s are used to skip turns.
+    // This is a classic game: there are L items, players alternate, Dora starts. Dora wants to minimize the number of items set to "opposite", Iris wants to maximize.
+    // Each move, a player picks an unset leaf '?' and sets it to either 0 or 1 (their choice).
+    // Dora will set to same as root, Iris to opposite.
+    // So the number of opposite-set leaves will be the number of moves Iris makes on leaf '?'s.
+    // Iris will make ceil(L/2) moves on leaf '?'s if there are no other '?'s, but with non-leaf '?'s, Iris can use them to waste Dora's turns? Actually, players can choose any '?' vertex.
+    // If a player plays on a non-leaf '?', it doesn't affect leaf values, so it's essentially a pass.
+    // Both players want to optimize the outcome on leaf '?'s. Iris wants to maximize her moves on leaf '?'s, Dora wants to minimize Iris's moves on leaf '?'s.
+    // This is equivalent to: there are L "valuable" moves and K = cnt_nonleaf_q "waste" moves. Total moves = L + K.
+    // Iris just moved (set root), so Dora moves next. Total remaining moves = L + K.
+    // The players will decide which moves to use on leaf '?'s.
+    // Since Dora wants to minimize Iris's leaf moves, she will try to take leaf moves herself (setting to same) or force Iris to waste moves on non-leaf.
+    // This is a known game: the number of leaf moves Iris gets is max(0, ceil((L - K)/2))? Let's analyze.
+    // Actually, the game is impartial in terms of turn order. The players can choose any '?'. The optimal strategy: Dora will always play on a leaf '?' if available and set it to same as root, because that directly reduces potential opposite leaves. Iris will always play on a leaf '?' if available and set to opposite. If no leaf '?' is available, they play on non-leaf '?'.
+    // So the game proceeds: Dora and Iris alternate. Whenever a leaf '?' is available, the player whose turn it is will take it. So the leaf '?'s will be taken in the first L moves of the remaining game, because both players prioritize them.
+    // Thus, the first L moves will be on leaf '?'s. The turn order for these L moves: Dora, Iris, Dora, Iris, ...
+    // So Iris will get exactly ceil(L/2) moves on leaf '?'s? Wait, Dora starts, so moves: 1st Dora, 2nd Iris, 3rd Dora, 4th Iris, ...
+    // Iris gets moves 2,4,6,... which is floor(L/2) moves? Let's check: L=1: Dora takes it, Iris 0. L=2: Dora, Iris -> Iris 1. L=3: Dora, Iris, Dora -> Iris 1. L=4: Dora, Iris, Dora, Iris -> Iris 2. So Iris gets floor(L/2) moves.
+    // But wait, Iris could choose to play on non-leaf '?' instead of leaf '?' to change the parity? If Iris plays on non-leaf, she wastes her turn, then Dora gets to play on leaf. That would reduce Iris's leaf moves further, so Iris won't do that. Dora might want to play on non-leaf to waste her turn? If Dora plays on non-leaf, she gives Iris an extra leaf move, which Dora doesn't want. So both will play on leaf if available.
+    // Therefore, the number of leaf '?' set to opposite (by Iris) is exactly floor(L/2) if Dora starts.
+    // But wait, Iris already moved (set root). So Dora starts the remaining game. So Iris gets floor(L/2) moves on leaf '?'s.
+    // However, if K > 0, the total moves L+K might be odd/even, but the first L moves are leaf moves. So Iris's leaf moves = floor(L/2).
+    // But is it always floor(L/2)? Let's test with sample 2: n=4, edges: 1-2, 3-2, 2-4. s = "???0". Root=1 is '?'. Leaves: 3 and 4? Vertex 4 has value '0', leaf. Vertex 3 is leaf? 3 is connected only to 2, so leaf. Vertex 2 is not leaf (degree 3). So leaves: 3 and 4. s[3]='?', s[4]='0'. cnt_leaf_0=1, cnt_leaf_1=0, cnt_leaf_q=1. cnt_nonleaf_q: vertices 1 and 2 are '?', root is '?', non-leaf '?' is vertex 2. So cnt_nonleaf_q = 1 (vertex 2). Total '?' = 3 (1,2,3). Iris moves first, sets root. Suppose she sets root to 0. Then remaining: leaf '?' at 3, non-leaf '?' at 2. L=1, K=1. Dora's turn. Dora can play on leaf 3 and set to 0 (same as root) -> leaf 3 becomes 0, weight 0. Then Iris plays on non-leaf 2, sets anything. Final leaves: 4 is 0, 3 is 0. Only leaf with non-zero weight? Root=0, leaf=0 -> weight 0. So score 0. But sample output says 1. So my reasoning is wrong. Let's re-evaluate.
+
+    // In sample 2, optimal play gives score 1. Let's see: Iris can set root to 1? If root=1, then leaf 4 is 0 -> different -> weight non-zero. Leaf 3 is '?'. Dora will try to set leaf 3 to 1 (same as root) to make weight zero. Dora moves first after root. She sets leaf 3 to 1. Then leaf 3 weight 0. So only leaf 4 has non-zero weight -> score 1. So Iris should set root to 1. Then score = 1. My formula for root=1: cnt_leaf_0=1, cnt_leaf_q=1. If root=1, Iris wants to maximize leaves different from root, i.e., leaves with 0. Fixed leaf 0 gives 1. Leaf '?' will be set by Dora first: Dora sets to 1 (same) -> 0 opposite leaves from '?'. So total opposite = 1. Score = 1. So Iris chooses root=1. If she chose root=0, fixed leaf 0 gives 0 opposite, leaf '?' Dora sets to 0 -> 0 opposite, score 0. So Iris chooses max. So answer is max over root choices of (fixed opposite + floor(cnt_leaf_q/2)?) Wait, for root=1, fixed opposite = cnt_leaf_0 = 1. Leaf '?' L=1, Dora starts, Iris gets floor(1/2)=0 moves on leaf '?'. So total = 1. For root=0, fixed opposite = cnt_leaf_1 = 0. Leaf '?' Iris gets 0 moves -> total 0. Max = 1. That matches sample 2.
+
+    // But wait, in sample 2, cnt_nonleaf_q=1. Did it affect? In my analysis, Iris got 0 leaf moves regardless of K. But what if K was larger? Could Iris get more leaf moves by using non-leaf '?' to change turn order? Let's think: Iris wants to maximize her leaf moves. She can choose to play on non-leaf '?' instead of leaf '?' to pass her turn, but that would give Dora the next leaf move, which reduces Iris's leaf moves. So Iris won't do that. Dora wants to minimize Iris's leaf moves. Dora can also play on non-leaf '?' to pass, but that would give Iris an extra leaf move, so Dora won't do that. So both play on leaf if available. So the number of leaf moves Iris gets is indeed determined solely by L and who starts. Since Dora starts after root, Iris gets floor(L/2) leaf moves. So K doesn't change the number of leaf moves Iris gets, as long as both play optimally on leaves. But wait, what if L=0? Then all moves are on non-leaf, no effect. So K doesn't matter for the leaf count. But is there any scenario where a player is forced to play on non-leaf because leaf '?' are exhausted? Yes, after L moves, the remaining K moves are on non-leaf. So K doesn't affect the leaf distribution. So the formula for a fixed root is: fixed_opposite + floor(cnt_leaf_q / 2). But sample 1: root fixed? Sample 1 has no '?'. s = "0101". Root=1 is '0'. Leaves: 2,3,4. s[2]='1', s[3]='0', s[4]='1'. cnt_leaf_0=1, cnt_leaf_1=2. Root=0 -> opposite = cnt_leaf_1 = 2. Score = 2. Matches sample output 2.
+
+    // Sample 3: n=5, edges: 1-2,1-3,2-4,2-5. s="?1?01". Root=1 is '?'. Leaves: 3,4,5. s[3]='?', s[4]='0', s[5]='1'. cnt_leaf_0=1, cnt_leaf_1=1, cnt_leaf_q=1. cnt_nonleaf_q: vertices 1 and 2 are '?', root is '?', so non-leaf '?' is vertex 2. cnt_nonleaf_q=1. Iris chooses root. If root=0: fixed opposite = cnt_leaf_1 = 1. Leaf '?' L=1, Iris gets floor(1/2)=0. Total=1. If root=1: fixed opposite = cnt_leaf_0 = 1. Total=1. So max=1. Sample output is 1. Matches.
+
+    // Sample 4: n=6, edges: 1-2,2-3,3-4,5-3,3-6. s="?0????". Root=1 '?'. Leaves: 4,5,6? Let's find leaves: degree 1 vertices except 1. 4 connected to 3 (degree 1) -> leaf. 5 connected to 3 -> leaf. 6 connected to 3 -> leaf. 2 connected to 1 and 3 -> not leaf. 3 connected to 2,4,5,6 -> not leaf. So leaves: 4,5,6. s[4]='?', s[5]='?', s[6]='?'. s[2]='0', s[3]='?'. Root '?'. cnt_leaf_0=0, cnt_leaf_1=0, cnt_leaf_q=3. cnt_nonleaf_q: vertices 1 and 3 are '?' (root and non-leaf). So cnt_nonleaf_q=1 (vertex 3). Iris chooses root. If root=0: fixed opposite = 0. Leaf '?' L=3, Iris gets floor(3/2)=1. Total=1. If root=1: fixed opposite = 0. Total=1. So max=1. But sample output is 2! So my formula is wrong.
+
+    // Sample 4 output is 2. Let's analyze. Tree: 1-2-3-4, and 3-5, 3-6. s: 1:'?', 2:'0', 3:'?', 4:'?', 5:'?', 6:'?'. Leaves: 4,5,6 all '?'. Root '?'. Iris wants to maximize score. Dora minimizes. Iris goes first. She can set root to 0 or 1. Suppose she sets root to 0. Then remaining '?': 3,4,5,6. L=3 leaf '?', K=1 non-leaf '?'. Dora's turn. Dora wants to minimize leaves with value different from root (i.e., leaves with 1). Dora can play on leaf or non-leaf. If Dora plays on leaf, she sets it to 0 (same). Then Iris plays, etc. According to my previous logic, Iris would get floor(3/2)=1 leaf move, so 1 leaf set to 1, score 1. But can Iris do better? What if Iris, on her turn, instead of playing on leaf, plays on non-leaf '?' (vertex 3)? Let's see: Iris sets root=0. Dora's turn. Dora wants to minimize opposite leaves. Dora can play on leaf 4, set to 0. Now leaves left: 5,6 '?'. Iris's turn. If Iris plays on leaf 5, sets to 1. Then Dora plays on leaf 6, sets to 0. Final leaves: 4:0, 5:1, 6:0. Opposite leaves: 1 (leaf 5). Score 1. If Iris instead plays on non-leaf 3 (sets anything), then Dora gets to play on leaf 5, sets to 0. Then Iris plays on leaf 6, sets to 1. Same result: 1 opposite leaf. So Iris still gets 1. So score 1 if root=0. What if Iris sets root=1? Then Dora wants to minimize leaves with 0. Dora plays leaf set to 1. Iris gets 1 leaf move to set to 0. Score 1. So max 1? But sample says 2. So there must be a way for Iris to get 2.
+
+    // Let's reconsider the game. Iris goes first. She doesn't have to set root immediately! The hints say: "If the value of the root has not yet been decided, it seems optimal to fill it first." But maybe that's not always true? Or maybe the definition of weight is more subtle. Let's re-read the weight definition: "the difference between the number of occurrences of 10 and 01 substrings". For a path string, the weight is non-zero if the first and last characters are different? Let's check: Hint 3 says: "You can also see that the weight is non-zero if the value of the root is different from the value of the leaf." Is that always true? Let's test: string "10" -> 10 count 1, 01 count 0 -> weight 1. Root 1, leaf 0 -> different -> non-zero. "01" -> weight -1. Root 0, leaf 1 -> different -> non-zero. "101" -> 10:1, 01:1 -> weight 0. Root 1, leaf 1 -> same -> zero. "010" -> 01:1, 10:1 -> weight 0. Root 0, leaf 0 -> same -> zero. "1010" -> 10:2, 01:1 -> weight 1. Root 1, leaf 0 -> different -> non-zero. "0101" -> 01:2, 10:1 -> weight -1. Root 0, leaf 1 -> different -> non-zero. So indeed, weight is non-zero iff root and leaf have different values? Wait, "101" has root 1, leaf 1, weight 0. "1010" has root 1, leaf 0, weight 1. "10101" -> 10:2, 01:2 -> weight 0. Root 1, leaf 1 -> weight 0. So it seems weight is non-zero exactly when the first and last characters are different. Let's prove: The number of 10 minus 01. In a binary string, the difference between count of 10 and 01 is equal to the difference between the first and last character? Actually, consider transitions. Each 10 contributes +1, each 01 contributes -1. The sum of differences along the string equals the value of the last character minus the first character? Let's check: For a string, define f(i) as value at i. The sum over i of (f(i+1) - f(i))? No. Count of 10 is number of i where f(i)=1, f(i+1)=0. Count of 01 is number where f(i)=0, f(i+1)=1. The difference (10 - 01) = (number of 1->0) - (number of 0->1). This is exactly the net change in the number of 1's? Actually, if we assign +1 for 1 and 0 for 0, then each 1->0 transition decreases the sum by 1, each 0->1 increases by 1. The total change from start to end is (last - first). The number of 1->0 minus 0->1 is exactly first - last? Let's test: "10": first=1, last=0, first-last=1. 10-01=1. "01": first=0, last=1, first-last=-1. 10-01=-1. "101": first=1, last=1, first-last=0. 10-01=0. "1010": first=1, last=0, first-last=1. 10-01=1. So weight = first - last. Wait, in problem statement: weight = count(10) - count(01). For "10110": count(10)=2, count(01)=1, weight=1. First=1, last=0, first-last=1. Yes! So weight = value(root) - value(leaf). So weight is non-zero iff root != leaf. And the score is the number of leaves with value different from root.
+
+    // So the problem reduces to: Iris and Dora assign 0/1 to '?' vertices. Iris wants to maximize the number of leaves with value different from root. Dora wants to minimize that. Root is vertex 1.
+
+    // Now, sample 4: Iris can get score 2. Let's see how. Tree: 1-2-3-4,5,6. s: 1:'?', 2:'0', 3:'?', 4:'?', 5:'?', 6:'?'. Leaves: 4,5,6. Iris goes first. She can choose to set a leaf instead of root? Suppose Iris sets leaf 4 to 1. Then Dora's turn. Dora wants to minimize leaves different from root. Root is still '?'. Dora can set root to 1 (same as leaf 4) to make leaf 4 weight 0. Or set root to 0 to make leaf 4 weight non-zero, but then she can set other leaves to 0. Let's analyze optimal play. This is a game with alternating moves on '?' vertices. The final root value and leaf values determine score. Iris wants max number of leaves != root. Dora wants min.
+
+    // This is a known game: it's equivalent to a game where the root value is chosen by someone? Actually, both players can influence root and leaves. Since Iris goes first, she can set the root to a value, or set a leaf to a value. The hints say: "If the value of the root has not yet been decided, it seems optimal to fill it first." But sample 4 contradicts that if we assume Iris sets root first and gets only 1. So maybe Iris should not set root first? Let's test if Iris sets a leaf first. Suppose Iris sets leaf 4 to 1. Now Dora's turn. Dora can set root to 1, making leaf 4 same as root -> weight 0. Then remaining '?': 3,5,6. Leaves 5,6 '?'. Dora just moved, so Iris's turn. Iris can set leaf 5 to 0 (different from root 1) -> weight non-zero. Dora then sets leaf 6 to 1 -> weight 0. Final: leaf 4:1 (same), leaf 5:0 (diff), leaf 6:1 (same). Score 1. If Dora instead sets root to 0 after Iris sets leaf 4 to 1? Then leaf 4 is 1, root 0 -> diff. Dora would not do that because it gives Iris a point. So Dora sets root to 1. Score 1. What if Iris sets leaf 4 to 0? Dora sets root to 0, then Iris sets leaf 5 to 1, Dora sets leaf 6 to 0 -> score 1. So if Iris sets a leaf first, score 1.
+
+    // What if Iris sets non-leaf vertex 3 first? Iris sets 3 to 0. Dora's turn. Dora can set root to 0 or 1. If Dora sets root to 0, then leaves 4,5,6 are '?'. Iris can set one leaf to 1, Dora sets another to 0, etc. Score 1. If Dora sets root to 1, then Iris can set leaves to 0. Still score 1? Let's see: root=1, leaves '?'. Iris wants leaves 0. Iris sets leaf 4 to 0. Dora sets leaf 5 to 1. Iris sets leaf 6 to 0. Score: leaves 4 and 6 are 0 (diff from root 1) -> score 2! Wait, Dora would not set root to 1 if it leads to score 2. Dora will choose root to minimize score. So Dora will set root to 0. Then Iris gets at most 1. So score 1.
+
+    // How can Iris get 2? Let's look at sample 4 again. Maybe Iris can force a situation where Dora is forced to set root to a value that benefits Iris? Or maybe the parity of total '?' matters. Total '?' = 4 (vertices 1,3,4,5,6). Iris first, then Dora, Iris, Dora. 4 moves total. Iris gets 2 moves, Dora gets 2 moves. Iris can choose which vertices to set. She wants to maximize leaves != root. She can set two leaves to a value, and force root to be the opposite? But Dora controls the other two moves. If Iris sets two leaves to 1, Dora can set root to 1 and the remaining leaf to 1, making all leaves same as root -> score 0. If Iris sets one leaf to 1 and root to 0? Then Dora can set the other two leaves to 0 -> all leaves 0, root 0 -> score 0. So Iris must be strategic.
+
+    // Let's enumerate all possible sequences for sample 4. Vertices: 1:'?', 2:'0', 3:'?', 4:'?', 5:'?', 6:'?'. Leaves: 4,5,6. Iris wants max leaves != root. Dora wants min.
+    // Game tree:
+    // Iris move 1: she can choose any '?'.
+    // Option A: Iris sets root=0. Remaining: 3,4,5,6 '?'. Dora's turn. Dora wants to minimize leaves != 0. Dora can set a leaf to 0. Suppose Dora sets leaf 4=0. Remaining: 3,5,6. Iris turn. Iris can set leaf 5=1. Dora sets leaf 6=0. Score: leaf 5=1 != root 0 -> 1. If Iris instead sets non-leaf 3=1, Dora sets leaf 5=0, Iris sets leaf 6=1 -> score 1. So max 1.
+    // Option B: Iris sets root=1. Dora sets leaf=1. Iris sets leaf=0, Dora sets leaf=1 -> score 1.
+    // Option C: Iris sets leaf 4=1. Dora's turn. Dora can set root=1 (making leaf 4 same). Then remaining: 3,5,6. Iris turn. Iris sets leaf 5=0. Dora sets leaf 6=1. Score 1. If Dora sets root=0 instead, leaf 4=1 != root 0 -> that's 1 point already. Then Dora can set leaf 5=0, Iris sets leaf 6=1 -> score 2? Wait: root=0, leaves: 4=1 (diff), 5=0 (same), 6=1 (diff) -> score 2. But Dora would not choose root=0 if it gives 2. She will choose root=1 to limit to 1. So Dora sets root=1. Score 1.
+    // Option D: Iris sets non-leaf 3=1. Dora's turn. Dora can set root=1. Then leaves 4,5,6 '?'. Iris sets leaf 4=0, Dora sets leaf 5=1, Iris sets leaf 6=0 -> score 2? Wait, after Iris sets leaf 4=0, Dora sets leaf 5=1, then Iris sets leaf 6=0. Leaves: 4=0, 5=1, 6=0. Root=1. Leaves != root: 4 and 6 -> score 2. But Dora would not set root=1 if she can avoid it. Dora could set root=0 instead. If Dora sets root=0, then leaves: Iris will set leaves to 1. Iris sets leaf 4=1, Dora sets leaf 5=0, Iris sets leaf 6=1 -> leaves 4,6=1 != root 0 -> score 2. So either way, score 2? Let's check: If Iris sets 3=1, Dora's turn. Dora wants to minimize score. She can set root=0 or root=1. If root=0: Iris will set leaves to 1. Dora can set a leaf to 0. Total leaves: 3 leaves. Iris gets 2 moves on leaves? Let's count moves: Total '?' initially: 1,3,4,5,6 (5 '?'). Iris move 1: set 3=1. Remaining: 1,4,5,6 (4 '?'). Dora move 2: she can set root=0. Remaining: 4,5,6 (3 '?'). Iris move 3: set leaf 4=1. Dora move 4: set leaf 5=0. Iris move 5: set leaf 6=1. Final: root=0, leaves: 4=1, 5=0, 6=1. Score = 2 (leaves 4 and 6). If Dora move 2 sets root=1: remaining 4,5,6. Iris move 3: set leaf 4=0. Dora move 4: set leaf 5=1. Iris move 5: set leaf 6=0. Score = 2 (leaves 4 and 6). So Dora gets score 2 either way. Can Dora do something else on move 2? Instead of setting root, she could set a leaf. Suppose Dora sets leaf 4=0. Remaining: 1,5,6. Iris move 3: Iris can set root=1. Then leaves 5,6 '?'. Dora move 4: set leaf 5=1. Iris move 5: set leaf 6=0. Final: root=1, leaves: 4=0 (diff), 5=1 (same), 6=0 (diff) -> score 2. If Iris sets root=0 instead: root=0, leaves: 4=0 (same), 5,6 '?'. Dora sets leaf 5=0, Iris sets leaf 6=1 -> score 1. So Iris would choose root=1 to get 2. So if Dora sets leaf 4=0, Iris sets root=1 and gets 2. If Dora sets leaf 4=1, Iris sets root=0 and gets 2? Let's check: Dora sets leaf 4=1. Iris sets root=0. Leaves 5,6 '?'. Dora sets leaf 5=0, Iris sets leaf 6=1 -> root=0, leaves: 4=1 (diff), 5=0 (same), 6=1 (diff) -> score 2. So Dora cannot prevent score 2 if Iris first sets 3=1. So Iris can guarantee score 2! This matches sample output 2.
+
+    // So the optimal first move for Iris is to set a non-leaf '?' (vertex 3) to 1 (or 0, symmetric). Then whatever Dora does, Iris can set root to the opposite value and get 2 leaves different.
+
+    // So the game is more complex. The hints say: "If the value of the root has not yet been decided, it seems optimal to fill it first." But sample 4 shows Iris should NOT fill root first. Why? Because there are already fixed leaves? Hint 6: "That's because some values of the leaves have already been decided." In sample 4, all leaves are '?', but there is a fixed non-leaf '0' at vertex 2. That might affect the parity or something.
+
+    // Let's re-read hints carefully:
+    // Hint 1: Consider a formed string. Let's delete the useless part that doesn't contribute to the number of 01 and 10 substrings.
+    // Hint 2: Then the weight of a leaf depends on the parity of the length of the string.
+    // Hint 3: You can also see that the weight is non-zero if the value of the root is different from the value of the leaf.
+    // Hint 4: If the value of the root is already decided, the strategy is quite simple: just fill the values of the leaf nodes with a value different from or equal to the root. It's easy to calculate the answer.
+    // Hint 5: If the value of the root has not yet been decided, it seems optimal to fill it first.
+    // Hint 6: That's because some values of the leaves have already been decided.
+
+    // Wait, Hint 5 says "it seems optimal to fill it first" but Hint 6 says "That's because some values of the leaves have already been decided." This might be a translation issue. Maybe it means: "If the root is not decided, it seems optimal to fill it first, but that's only because some leaf values are already decided." Actually, in sample 4, no leaf values are decided (all '?'). So maybe the hint implies that if some leaves are already decided, then filling root first is optimal. If no leaves are decided, maybe it's different? But sample 4 has no decided leaves, yet Iris doesn't fill root first. So the hints might be guiding towards a different insight.
+
+    // Let's derive the correct game theory.
+    // We have a tree. The score is the number of leaves with value != root.
+    // Players alternate setting '?' vertices to 0 or 1. Iris maximizes, Dora minimizes.
+    // This is a finite perfect-information game. We can compute the minimax value using DP on the tree, but n up to 1e5, so we need a combinatorial solution.
+
+    // Observe that only the root and leaves matter for the score. Internal nodes' values don't directly affect the score, except they might affect the parity of moves or something? Wait, the weight formula we derived: weight = value(root) - value(leaf). That depends ONLY on root and leaf values! The internal nodes' values do not matter at all. Let's verify: "10110": root=1, leaf=0 -> weight=1. Internal nodes: 0,1,1. If we change an internal node, say the second character to 0: "10010" -> 10 count: positions (1,2) 1->0, (4,5) 1->0 -> 2. 01 count: (3,4) 0->1 -> 1. Weight=1. Same. What if we change to "11110": 10 count: (4,5) 1->0 -> 1. 01 count: 0. Weight=1. Still 1. So indeed, weight = root - leaf. The internal nodes cancel out. So the score is simply the number of leaves with value different from root.
+
+    // Therefore, the game is: we have a set of leaves, each will eventually get

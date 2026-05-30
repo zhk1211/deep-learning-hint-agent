@@ -1,0 +1,191 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+You are given a string $ s $ , consisting of lowercase Latin letters and/or question marks.
+
+A tandem repeat is a string of an even length such that its first half is equal to its second half.
+
+A string $ a $ is a substring of a string $ b $ if $ a $ can be obtained from $ b $ by the deletion of several (possibly, zero or all) characters from the beginning and several (possibly, zero or all) characters from the end.
+
+Your goal is to replace each question mark with some lowercase Latin letter in such a way that the length of the longest substring that is a tandem repeat is maximum possible.
+
+Input Format
+The first line contains a single integer $ t $ ( $ 1 \le t \le 1000 $ ) — the number of testcases.
+
+The only line of each testcase contains a string $ s $ ( $ 1 \le |s| \le 5000 $ ), consisting only of lowercase Latin letters and/or question marks.
+
+The total length of the strings over all testcases doesn't exceed $ 5000 $ .
+
+Output Format
+For each testcase, print a single integer — the maximum length of the longest substring that is a tandem repeat after you replace each question mark in the string with some lowercase Latin letter.
+
+If it's impossible to make any tandem repeat substrings in the string, print $ 0 $ .
+
+Examples
+Sample 1
+Input
+4
+zaabaabz
+?????
+code?????s
+codeforces
+Output
+6
+4
+10
+0
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== OFFICIAL EDITORIAL / SOLUTION ===
+1948D - Tandem Repeats?
+The key idea of the problem is to believe that no algorithms are required to solve the problem. Now, we can start looking for ways to iterate over all substrings so that it doesn't degenerate into $$$O(n^3)$$$.
+One of the ways is the following. How to check if the substring $$$[l; r)$$$ is a tandem repeat? Let $$$d = \frac{r - l}{2}$$$. Then $$$s_i$$$ should match (either be equal or one of them should be a question mark) $$$s_{i + d}$$$ for all $$$i$$$ from $$$l$$$ to $$$l + d$$$ exclusive.
+If you iterate over the left border, then the right border of the substring, a lot of these checks change. However, if you iterate over the length $$$d$$$ first, then over the left border, it becomes much easier. What changes when you go from checking $$$[l; r)$$$ to checking $$$[l + 1; r + 1)$$$? One check is removed: $$$s_l$$$ matches $$$s_{l + d}$$$ is now irrelevant, since $$$l$$$ doesn't belong to the substring anymore. One check is added: $$$s_{l + d}$$$ matches $$$s_r$$$ is required, since $$$r$$$ belongs to the substring now.
+So, the solution can be as follows: maintain the number of successful checks for the current substring $$$[l; r)$$$. If that value is equal to $$$d$$$, then the substring is a tandem repeat, and you can update the answer with its length. Otherwise, subtract the contribution of the check ($$$1$$$ if it's successful, and $$$0$$$ otherwise) for $$$l$$$ and $$$l + d$$$, add the contribution for $$$l + d$$$ and $$$r$$$ and proceed to $$$[l + 1; r + 1)$$$.
+Overall complexity: $$$O(n^2)$$$ per testcase.
+
+Solution (awoo)
+for
+_
+in
+range
+(
+int
+(
+input
+())):
+s
+=
+input
+()
+n
+=
+len
+(
+s
+)
+ans
+=
+0
+for
+d
+in
+range
+(
+1
+,
+n
+// 2 + 1):
+cnt
+=
+0
+for
+i
+in
+range
+(
+n
+-
+d
+):
+cnt
++=
+s
+[
+i
+]
+==
+s
+[
+i
++
+d
+]
+or
+s
+[
+i
+]
+==
+'?'
+or
+s
+[
+i
++
+d
+]
+==
+'?'
+if
+i
+-
+d
+>=
+0
+:
+cnt
+-=
+s
+[
+i
+-
+d
+]
+==
+s
+[
+i
+]
+or
+s
+[
+i
+-
+d
+]
+==
+'?'
+or
+s
+[
+i
+]
+==
+'?'
+if
+i
+-
+d
+>=
+-
+1
+and
+cnt
+==
+d
+:
+ans
+=
+2
+*
+d
+print
+(
+ans
+)
+
+Carefully understand the official editorial/solution and convert it into a complete accepted C++17 solution.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

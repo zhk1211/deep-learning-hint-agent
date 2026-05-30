@@ -1,0 +1,54 @@
+// Hint3
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // Maximum XOR value is less than 2*n
+        int max_xor = 1;
+        while (max_xor <= 2 * n) max_xor <<= 1;
+        max_xor--;
+
+        // Precompute which numbers are perfect squares
+        vector<bool> is_square(max_xor + 1, false);
+        for (int i = 0; i * i <= max_xor; ++i) {
+            is_square[i * i] = true;
+        }
+
+        // Count subarrays with XOR having odd number of divisors (perfect squares)
+        long long odd_count = 0;
+        vector<int> freq(max_xor + 1, 0);
+        freq[0] = 1;
+        int pref = 0;
+
+        for (int i = 0; i < n; ++i) {
+            pref ^= a[i];
+            // Check all perfect squares
+            for (int sq = 0; sq * sq <= max_xor; ++sq) {
+                int target = pref ^ (sq * sq);
+                if (target <= max_xor) {
+                    odd_count += freq[target];
+                }
+            }
+            freq[pref]++;
+        }
+
+        long long total_subarrays = (long long)n * (n + 1) / 2;
+        long long even_count = total_subarrays - odd_count;
+        cout << even_count << '\n';
+    }
+
+    return 0;
+}

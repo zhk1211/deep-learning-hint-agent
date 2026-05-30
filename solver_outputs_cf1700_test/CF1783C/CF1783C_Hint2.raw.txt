@@ -1,0 +1,91 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // We want to find the maximum number of wins we can get
+        // by choosing a subset of opponents with sum <= m.
+        // Sort a copy to pick the smallest times.
+        vector<int> sorted_a = a;
+        sort(sorted_a.begin(), sorted_a.end());
+        
+        int max_wins = 0;
+        long long sum = 0;
+        for (int i = 0; i < n; ++i) {
+            if (sum + sorted_a[i] <= m) {
+                sum += sorted_a[i];
+                max_wins++;
+            } else {
+                break;
+            }
+        }
+        
+        // If we can win against all opponents, place is 1.
+        if (max_wins == n) {
+            cout << 1 << '\n';
+            continue;
+        }
+        
+        // Otherwise, we need to check if we can beat the opponent who would have max_wins wins.
+        // That opponent is the one at index max_wins (0-based) in the original order?
+        // Actually, the opponent with index max_wins (1-based) is the one who would have max_wins wins
+        // if we don't beat them. If we can beat them, we can achieve place max_wins.
+        // Otherwise, place is max_wins + 1.
+        // But careful: we need to check if we can select a set of max_wins opponents including this one.
+        // The opponent we need to beat is the one at position max_wins (0-based index max_wins-1? Let's think).
+        // If we have max_wins wins, we tie with the opponent who also has max_wins wins (since they beat everyone below them).
+        // The opponent with max_wins wins is the one with index max_wins (1-based) because they beat opponents 1..max_wins-1 and lose to others.
+        // So we need to check if we can beat opponent max_wins (1-based index).
+        int opponent_idx = max_wins; // 1-based index of the opponent we need to beat to get place max_wins
+        // We need to see if we can achieve max_wins wins while including opponent_idx.
+        // We already have the sum of the smallest max_wins elements. If opponent_idx is among them, we can just use that set.
+        // If not, we need to replace the largest element in the set with a[opponent_idx-1] and check if sum <= m.
+        bool can_beat = false;
+        long long sum_with_opponent = 0;
+        // We need to pick max_wins opponents including opponent_idx.
+        // The optimal way is to take the smallest max_wins-1 opponents from all except opponent_idx, plus opponent_idx.
+        // We can compute this by taking the smallest max_wins elements, and if opponent_idx is not among them,
+        // we replace the largest of those with opponent_idx.
+        // Since sorted_a contains all, we can find the sum of the smallest max_wins elements.
+        // If a[opponent_idx-1] <= sorted_a[max_wins-1] (the largest in the smallest max_wins), then it's already included or can be included without increasing sum.
+        // Actually, we need to check if we can form a set of size max_wins with sum <= m that includes opponent_idx.
+        // We can do this by taking the smallest max_wins-1 elements from all except opponent_idx, then add opponent_idx.
+        // We can compute this sum efficiently.
+        // Let's find the sum of the smallest max_wins elements from sorted_a.
+        // If a[opponent_idx-1] <= sorted_a[max_wins-1], then the smallest max_wins elements already include a value >= a[opponent_idx-1], so we can just use the smallest max_wins sum.
+        // Otherwise, we need to remove sorted_a[max_wins-1] and add a[opponent_idx-1].
+        long long base_sum = 0;
+        for (int i = 0; i < max_wins; ++i) {
+            base_sum += sorted_a[i];
+        }
+        if (a[opponent_idx-1] <= sorted_a[max_wins-1]) {
+            sum_with_opponent = base_sum;
+        } else {
+            sum_with_opponent = base_sum - sorted_a[max_wins-1] + a[opponent_idx-1];
+        }
+        if (sum_with_opponent <= m) {
+            can_beat = true;
+        }
+        
+        if (can_beat) {
+            cout << max_wins << '\n'; // place is max_wins (since we tie with the max_wins-th opponent)
+        } else {
+            cout << max_wins + 1 << '\n';
+        }
+    }
+    return 0;
+}
+```

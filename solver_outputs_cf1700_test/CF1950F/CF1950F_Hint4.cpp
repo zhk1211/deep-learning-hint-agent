@@ -1,0 +1,76 @@
+// Hint4
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+        
+        // Check necessary condition: c == a + 1
+        if (c != a + 1) {
+            cout << -1 << '\n';
+            continue;
+        }
+        
+        // If there are no vertices with children, height is 0
+        if (a == 0 && b == 0) {
+            cout << 0 << '\n';
+            continue;
+        }
+        
+        // Build the tree level by level
+        // Start with root (level 0)
+        int height = 0;
+        int nodes_at_current_level = 1; // root
+        int next_level_nodes = 0;
+        
+        // First use all 'a' vertices (2 children) as much as possible
+        while (a > 0) {
+            if (nodes_at_current_level == 0) {
+                // Move to next level
+                height++;
+                nodes_at_current_level = next_level_nodes;
+                next_level_nodes = 0;
+            }
+            if (nodes_at_current_level > 0) {
+                int use = min(nodes_at_current_level, a);
+                nodes_at_current_level -= use;
+                next_level_nodes += 2 * use;
+                a -= use;
+            }
+        }
+        
+        // Now use 'b' vertices (1 child)
+        while (b > 0) {
+            if (nodes_at_current_level == 0) {
+                height++;
+                nodes_at_current_level = next_level_nodes;
+                next_level_nodes = 0;
+            }
+            if (nodes_at_current_level > 0) {
+                int use = min(nodes_at_current_level, b);
+                nodes_at_current_level -= use;
+                next_level_nodes += use;
+                b -= use;
+            }
+        }
+        
+        // After placing all internal nodes, the remaining nodes at current level
+        // and next_level_nodes are leaves (c vertices)
+        // The height is the number of edges from root to deepest leaf
+        // If there are nodes in next_level_nodes, they are at height+1
+        if (next_level_nodes > 0) {
+            height++;
+        }
+        
+        cout << height << '\n';
+    }
+    
+    return 0;
+}

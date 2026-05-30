@@ -1,0 +1,92 @@
+// Hint7
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<long long> a(n);
+        long long sum = 0;
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+            sum += a[i];
+        }
+
+        if (sum % n != 0) {
+            cout << "No\n";
+            continue;
+        }
+
+        long long target = sum / n;
+        vector<int> give, receive;
+        bool possible = true;
+
+        for (int i = 0; i < n; ++i) {
+            long long diff = a[i] - target;
+            if (diff == 0) continue;
+
+            // We need to represent diff as 2^x - 2^y with x != y
+            // diff = 2^x - 2^y
+            // If diff > 0: a[i] > target, so gives 2^x and receives 2^y
+            // If diff < 0: a[i] < target, so gives 2^y and receives 2^x
+            bool found = false;
+            if (diff > 0) {
+                // diff = 2^x - 2^y, x > y
+                // Find y such that diff + 2^y is a power of two
+                long long d = diff;
+                // y is the position of the lowest set bit in diff
+                int y = __builtin_ctzll(d);
+                long long two_y = 1LL << y;
+                long long two_x = d + two_y;
+                // Check if two_x is a power of two
+                if ((two_x & (two_x - 1)) == 0 && two_x > 0) {
+                    int x = __builtin_ctzll(two_x);
+                    if (x != y) {
+                        give.push_back(x);
+                        receive.push_back(y);
+                        found = true;
+                    }
+                }
+            } else {
+                // diff < 0
+                long long d = -diff;
+                int y = __builtin_ctzll(d);
+                long long two_y = 1LL << y;
+                long long two_x = d + two_y;
+                if ((two_x & (two_x - 1)) == 0 && two_x > 0) {
+                    int x = __builtin_ctzll(two_x);
+                    if (x != y) {
+                        // Here a[i] < target, so gives 2^y and receives 2^x
+                        give.push_back(y);
+                        receive.push_back(x);
+                        found = true;
+                    }
+                }
+            }
+            if (!found) {
+                possible = false;
+                break;
+            }
+        }
+
+        if (!possible) {
+            cout << "No\n";
+            continue;
+        }
+
+        sort(give.begin(), give.end());
+        sort(receive.begin(), receive.end());
+        if (give == receive) {
+            cout << "Yes\n";
+        } else {
+            cout << "No\n";
+        }
+    }
+    return 0;
+}

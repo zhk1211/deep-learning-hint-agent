@@ -1,0 +1,42 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+
+        vector<int> diag1(2 * n, 0); // slope -1: i + j
+        vector<int> diag2(2 * n, 0); // slope +1: i - j + n
+        vector<int> col(n, 0);
+        int ans = 0;
+
+        for (int i = 0; i < n; ++i) {
+            int cur = 0;
+            for (int j = 0; j < n; ++j) {
+                cur ^= diag1[i + j] ^ diag2[i - j + n] ^ col[j];
+                int val = (grid[i][j] - '0') ^ cur;
+                if (val) {
+                    ++ans;
+                    cur ^= 1;
+                    diag1[i + j] ^= 1;
+                    diag2[i - j + n] ^= 1;
+                    col[j] ^= 1;
+                }
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```
