@@ -53,17 +53,30 @@ During data collection, we encountered several practical issues.
 
 ### Cloudflare and Access Control
 
-Directly scraping Codeforces pages often triggers Cloudflare checks. In practice, we found that Codeforces contest pages and blog pages are not as strictly protected as some other pages. Therefore, the scraper uses a more conservative strategy:
+Directly scraping Codeforces pages often triggers Cloudflare checks. After testing different types of Codeforces pages, we found that **contest pages** and **editorial blog pages** are relatively less strictly protected, while **problem statement pages** are much more aggressively protected.
+
+Therefore, our scraper uses different sources for different parts of the data:
 
 ```text
-open contest page
-find the official editorial / tutorial blog
-extract problem links and problem names
-extract tutorial sections from the blog page
-wait for a suitable interval before the next request
+Codeforces contest page:
+  extract problem links and problem names
+
+Codeforces editorial / blog page:
+  extract official tutorial sections
+
+Luogu mirror page:
+  extract Codeforces problem statements
 ```
 
-Instead of aggressively sending requests, the scraper uses appropriate time intervals to reduce the chance of being blocked.
+This design avoids repeatedly accessing the most strictly protected Codeforces problem-statement pages. For contest pages and blog pages, the scraper still uses random suitable waiting intervals between requests to reduce the chance of triggering Cloudflare checks.
+
+In short, the data collection strategy is:
+
+```text
+use Codeforces for contest metadata and editorials
+use Luogu mirror pages for problem statements
+use conservative request intervals throughout the scraping process
+```
 
 ### Tutorial Loading Problem
 
