@@ -1,0 +1,227 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long INF = 1e18;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<long long>> h(n, vector<long long>(n));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                cin >> h[i][j];
+            }
+        }
+        vector<long long> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int j = 0; j < n; ++j) cin >> b[j];
+
+        // Check if already beautiful
+        bool beautiful = true;
+        for (int i = 0; i < n && beautiful; ++i) {
+            for (int j = 0; j < n - 1; ++j) {
+                if (h[i][j] == h[i][j + 1]) {
+                    beautiful = false;
+                    break;
+                }
+            }
+        }
+        for (int i = 0; i < n - 1 && beautiful; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (h[i][j] == h[i + 1][j]) {
+                    beautiful = false;
+                    break;
+                }
+            }
+        }
+        if (beautiful) {
+            cout << "0\n";
+            continue;
+        }
+
+        // We need exactly n workers (hint: if less than n, impossible)
+        // We can choose any subset of rows and columns, but total must be n.
+        // Let x = number of row workers, y = number of column workers, x + y = n.
+        // For each cell (i,j), new height = h[i][j] + (row i chosen ? 1 : 0) + (col j chosen ? 1 : 0).
+        // Condition: adjacent cells differ.
+        // This is equivalent to: for each edge, the parity of (row/col choices) must differ if original heights are equal.
+        // More precisely, for horizontal edge (i,j)-(i,j+1):
+        // h[i][j] + r_i + c_j != h[i][j+1] + r_i + c_{j+1}  => c_j != c_{j+1} + (h[i][j+1] - h[i][j]).
+        // Since c_j, c_{j+1} are 0/1, this gives constraints on c_j, c_{j+1}.
+        // Similarly for vertical edges.
+        // This forms a 2-SAT or bipartite constraints? Actually variables are binary.
+        // We can try all 2^n assignments? n <= 1000, too large.
+        // But we only need to choose exactly n workers total. That means we choose a set of rows R and columns C with |R|+|C|=n.
+        // Let r_i = 1 if i in R else 0, c_j = 1 if j in C else 0.
+        // Sum r_i + sum c_j = n.
+        // Consider the difference d = sum r_i - sum c_j. Then sum r_i = (n+d)/2, sum c_j = (n-d)/2.
+        // d must have same parity as n.
+        // For each edge, we get a condition: c_j - c_{j+1} = something mod 2? Actually values are 0/1, difference is -1,0,1.
+        // Let's analyze: h[i][j] + r_i + c_j != h[i][j+1] + r_i + c_{j+1} => c_j - c_{j+1} != h[i][j+1] - h[i][j].
+        // Since left side is in {-1,0,1}, right side can be any integer.
+        // If |h[i][j+1] - h[i][j]| > 1, then condition is automatically satisfied regardless of c_j, c_{j+1}.
+        // If difference = 1, then we need c_j - c_{j+1} != 1 => not (c_j=1, c_{j+1}=0).
+        // If difference = -1, then need c_j - c_{j+1} != -1 => not (c_j=0, c_{j+1}=1).
+        // If difference = 0, then need c_j - c_{j+1} != 0 => c_j != c_{j+1}.
+        // Similarly for vertical edges with r_i, r_{i+1}.
+        // So constraints only involve adjacent columns or adjacent rows.
+        // This means columns must form a valid sequence where adjacent columns satisfy these constraints.
+        // Same for rows.
+        // Moreover, rows and columns are independent except for the total sum constraint.
+        // So we can find all valid assignments for rows (binary strings of length n) that satisfy vertical constraints,
+        // and all valid assignments for columns that satisfy horizontal constraints.
+        // Then we need to pick one row assignment and one column assignment such that sum of ones = n.
+        // Since n <= 1000, number of valid assignments could be large? But constraints are local, so we can DP.
+        // Actually, for rows, the constraints only involve adjacent rows. So it's a path graph.
+        // We can compute DP for rows: dpR[i][last] = min cost to assign first i rows, with row i having value last (0/1), and satisfying constraints up to i.
+        // But we also need to know the number of ones used so far? Because total sum of ones in rows + ones in cols = n.
+        // So we need DP that tracks number of ones.
+        // n up to 1000, DP state O(n^2) is 1e6, feasible.
+        // Similarly for columns.
+        // Then we combine: for each possible k (number of ones in rows), we need min cost rows with k ones + min cost cols with (n-k) ones.
+        // If both exist, answer is min over k.
+        // If none, -1.
+
+        // Build row constraints: for i from 0 to n-2, for each j, we have condition on r_i and r_{i+1}.
+        // But condition depends on j? Actually vertical edge (i,j)-(i+1,j): h[i][j] + r_i + c_j != h[i+1][j] + r_{i+1} + c_j => r_i - r_{i+1} != h[i+1][j] - h[i][j].
+        // This condition must hold for all j. So for a given pair (i,i+1), we need r_i, r_{i+1} such that for all j, r_i - r_{i+1} != diff_{i,j} where diff = h[i+1][j] - h[i][j].
+        // If there exists j with diff > 1 or diff < -1, then condition is automatically true for that j.
+        // But we need it true for all j simultaneously.
+        // So for a fixed pair (r_i, r_{i+1}), it is valid if for every j, r_i - r_{i+1} != diff_{i,j}.
+        // Since r_i - r_{i+1} can be -1, 0, 1.
+        // So we can precompute for each adjacent row pair which of the three differences are forbidden.
+        // Similarly for columns.
+
+        // Let's compute allowed transitions for rows.
+        // allowedR[i][r_i][r_{i+1}] = true if assignment (r_i, r_{i+1}) satisfies all j.
+        // We'll do DP: dpR[i][k][last] = min cost for first i+1 rows (0-indexed), ending with row i = last, using k ones.
+        // Initialize dpR[0][last][last] = (last ? a[0] : 0).
+        // Then for i from 1 to n-1, update.
+
+        // Same for columns.
+
+        // Finally combine.
+
+        // Complexity O(n^2) per test case, sum n <= 1000, so total O(N^2) ~ 1e6, fine.
+
+        // Precompute row constraints
+        vector<vector<bool>> row_ok(2, vector<bool>(2, true)); // will reuse for each i
+        // Actually we need for each i from 0 to n-2
+        vector<vector<vector<bool>>> row_trans(n-1, vector<vector<bool>>(2, vector<bool>(2, false)));
+        for (int i = 0; i < n-1; ++i) {
+            for (int r1 = 0; r1 < 2; ++r1) {
+                for (int r2 = 0; r2 < 2; ++r2) {
+                    int diff_r = r1 - r2; // -1, 0, 1
+                    bool ok = true;
+                    for (int j = 0; j < n; ++j) {
+                        long long d = h[i+1][j] - h[i][j];
+                        if (d == diff_r) {
+                            ok = false;
+                            break;
+                        }
+                    }
+                    row_trans[i][r1][r2] = ok;
+                }
+            }
+        }
+
+        // Column constraints
+        vector<vector<vector<bool>>> col_trans(n-1, vector<vector<bool>>(2, vector<bool>(2, false)));
+        for (int j = 0; j < n-1; ++j) {
+            for (int c1 = 0; c1 < 2; ++c1) {
+                for (int c2 = 0; c2 < 2; ++c2) {
+                    int diff_c = c1 - c2;
+                    bool ok = true;
+                    for (int i = 0; i < n; ++i) {
+                        long long d = h[i][j+1] - h[i][j];
+                        if (d == diff_c) {
+                            ok = false;
+                            break;
+                        }
+                    }
+                    col_trans[j][c1][c2] = ok;
+                }
+            }
+        }
+
+        // DP for rows
+        // dpR[i][k][last]
+        vector<vector<vector<long long>>> dpR(n, vector<vector<long long>>(n+1, vector<long long>(2, INF)));
+        // i=0
+        dpR[0][0][0] = 0;
+        dpR[0][1][1] = a[0];
+        for (int i = 1; i < n; ++i) {
+            for (int k = 0; k <= i+1; ++k) {
+                for (int last = 0; last < 2; ++last) {
+                    long long cost = (last ? a[i] : 0);
+                    // previous state
+                    for (int prev = 0; prev < 2; ++prev) {
+                        if (row_trans[i-1][prev][last]) {
+                            int prev_k = k - last;
+                            if (prev_k >= 0 && prev_k <= i) {
+                                if (dpR[i-1][prev_k][prev] < INF) {
+                                    dpR[i][k][last] = min(dpR[i][k][last], dpR[i-1][prev_k][prev] + cost);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // DP for columns
+        vector<vector<vector<long long>>> dpC(n, vector<vector<long long>>(n+1, vector<long long>(2, INF)));
+        dpC[0][0][0] = 0;
+        dpC[0][1][1] = b[0];
+        for (int j = 1; j < n; ++j) {
+            for (int k = 0; k <= j+1; ++k) {
+                for (int last = 0; last < 2; ++last) {
+                    long long cost = (last ? b[j] : 0);
+                    for (int prev = 0; prev < 2; ++prev) {
+                        if (col_trans[j-1][prev][last]) {
+                            int prev_k = k - last;
+                            if (prev_k >= 0 && prev_k <= j) {
+                                if (dpC[j-1][prev_k][prev] < INF) {
+                                    dpC[j][k][last] = min(dpC[j][k][last], dpC[j-1][prev_k][prev] + cost);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Combine
+        long long ans = INF;
+        // min cost for rows with exactly k ones
+        vector<long long> minR(n+1, INF);
+        for (int k = 0; k <= n; ++k) {
+            minR[k] = min(dpR[n-1][k][0], dpR[n-1][k][1]);
+        }
+        vector<long long> minC(n+1, INF);
+        for (int k = 0; k <= n; ++k) {
+            minC[k] = min(dpC[n-1][k][0], dpC[n-1][k][1]);
+        }
+
+        for (int k = 0; k <= n; ++k) {
+            int rem = n - k;
+            if (rem >= 0 && rem <= n) {
+                if (minR[k] < INF && minC[rem] < INF) {
+                    ans = min(ans, minR[k] + minC[rem]);
+                }
+            }
+        }
+
+        if (ans >= INF) cout << "-1\n";
+        else cout << ans << "\n";
+    }
+    return 0;
+}
+```

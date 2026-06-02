@@ -1,0 +1,179 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    vector<pair<int,int>> edges;
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        edges.push_back({u, v});
+    }
+
+    if (n == 2) {
+        cout << "NO\n";
+        return;
+    }
+
+    // find a vertex with degree >= 3
+    int root = -1;
+    for (int i = 1; i <= n; i++) {
+        if (adj[i].size() >= 3) {
+            root = i;
+            break;
+        }
+    }
+
+    if (root == -1) {
+        // tree is a path
+        // n >= 3
+        // we can achieve exactly n good pairs by directing all edges towards one endpoint
+        // pick an endpoint (leaf)
+        int leaf = -1;
+        for (int i = 1; i <= n; i++) {
+            if (adj[i].size() == 1) {
+                leaf = i;
+                break;
+            }
+        }
+        cout << "YES\n";
+        // direct all edges towards leaf
+        vector<int> parent(n + 1, 0);
+        function<void(int,int)> dfs = [&](int u, int p) {
+            parent[u] = p;
+            for (int v : adj[u]) {
+                if (v != p) dfs(v, u);
+            }
+        };
+        dfs(leaf, 0);
+        for (auto &e : edges) {
+            int u = e.first, v = e.second;
+            if (parent[u] == v) cout << u << " " << v << "\n";
+            else cout << v << " " << u << "\n";
+        }
+        return;
+    }
+
+    // root has degree >= 3
+    // we will direct edges such that all edges point away from root, except possibly some subtrees
+    // we need exactly n good pairs
+    // total good pairs = sum over all vertices of (size of reachable set from that vertex)
+    // strategy: make root reachable from all vertices in its subtree? No.
+    // We want exactly n good pairs.
+    // Known fact: maximum good pairs in a tree is n + (n-1) = 2n-1? No.
+    // Let's think: if we direct all edges away from root, then good pairs = n (each vertex can reach itself? No, good pairs are distinct u,v with path u->v)
+    // Actually, if all edges point away from root, then from any vertex you can only reach its descendants.
+    // Number of good pairs = sum_{v} (size of subtree of v) - n (excluding self?) Wait, good pairs are ordered pairs (u,v) with u != v.
+    // If all edges point away from root, then for each vertex u, the set of vertices reachable from u is exactly the subtree rooted at u.
+    // Number of good pairs = sum_{u} (subtree_size[u] - 1) = (sum subtree_size) - n.
+    // sum of subtree sizes in a rooted tree = sum_{u} depth? Actually, sum subtree_size = sum_{u} (number of descendants including itself) = total paths from root? Not exactly.
+    // But we can compute: sum subtree_size = sum_{u} (1 + sum_{v child} subtree_size[v]) = n + sum over edges of something? It's known that sum of subtree sizes = sum_{u} depth[u]? No.
+    // Let's compute for a star with root center and k leaves: root subtree = k+1, each leaf subtree = 1. Sum = (k+1) + k*1 = 2k+1 = 2n-1. Good pairs = sum - n = (2n-1) - n = n-1.
+    // So all edges away from root gives n-1 good pairs for star. We need n.
+    // If we flip one leaf edge to point towards root, then from that leaf you can reach root and then all other leaves? Actually, if leaf->root and root->other leaves, then from that leaf you can reach root and all other leaves. So its reachable set size = n. Good pairs increase.
+    // Let's analyze: we want exactly n good pairs.
+    // For a tree with a vertex of degree >= 3, we can achieve exactly n by making root a "source" for most edges, but flipping exactly one edge? Let's test.
+    // Consider root with degree d >= 3. Let the neighbors be v1, v2, ..., vd.
+    // Direct all edges root -> vi for i=2..d, and direct v1 -> root.
+    // Then from root: can reach v2..vd and their subtrees. From v1: can reach root, and then v2..vd and their subtrees. From any vertex in subtree of vi (i>=2): can only reach its descendants (away from root). From any vertex in subtree of v1 (excluding v1): can reach v1, then root, then others? Wait, if edges in subtree of v1 are directed away from v1? We need to decide orientation inside subtrees.
+    // To maximize or control, we can direct all edges inside any subtree away from the neighbor (i.e., away from root). So inside subtree of vi (i>=2), edges point away from vi. Inside subtree of v1, edges point away from v1? But v1->root, so if we direct edges away from v1, then from a node in v1's subtree, you go to v1, then to root, then to other subtrees. That gives many reachable vertices.
+    // Let's compute good pairs for this orientation:
+    // For any vertex in subtree of vi (i>=2): reachable set = its subtree within that branch. So sum of sizes = sum of subtree sizes in that branch.
+    // For root: reachable set = union of subtrees of v2..vd. Size = 1 + sum_{i>=2} size(subtree_i).
+    // For v1: reachable set = {v1} U {root} U union_{i>=2} subtree_i = whole tree except possibly subtree of v1? Actually, v1 can reach root, and from root can reach v2..vd and their subtrees. Can v1 reach its own descendants? If edges in v1's subtree are directed away from v1, then v1 can reach its descendants. So v1 can reach entire tree. Size = n.
+    // For a vertex x in subtree of v1 (x != v1): can reach v1 (since edges point towards v1? Wait, we said edges in v1's subtree are directed away from v1. That means from v1 to its children. So from x, you cannot go to v1 because edges point away from v1. So x can only reach its own descendants within v1's subtree. So reachable set size = its subtree size within that branch.
+    // So total good pairs = sum_{u} (reachable_size - 1) = (sum reachable_size) - n.
+    // sum reachable_size = (sum over all vertices in subtrees of v2..vd of their subtree sizes) + (root reachable size) + (v1 reachable size = n) + (sum over vertices in subtree of v1 except v1 of their subtree sizes).
+    // Note: sum over all vertices in all branches of their subtree sizes (when rooted at the neighbor) is exactly the sum of subtree sizes in the tree rooted at root? Not exactly.
+    // Let's define sizes: Let S_i = size of subtree rooted at vi when tree is rooted at root. So S_i is number of vertices in that branch (including vi). Sum S_i = n-1.
+    // For branch i (i>=2), if we root at vi and direct away from vi, then sum of subtree sizes within that branch = ? Actually, if we consider the tree rooted at vi, the sum of subtree sizes of all vertices in that branch (with vi as root of that branch) is some value T_i. We know that for any tree, sum of subtree sizes = sum_{v} depth(v) + n? Not exactly. But we can compute T_i recursively.
+    // However, we don't need exact formula; we just need to see if we can get exactly n good pairs.
+    // Let's compute total good pairs for this orientation:
+    // Let T_i = sum of subtree sizes in branch i when rooted at vi and directed away from vi. (including vi itself, whose subtree size = S_i)
+    // Then for branch i (i>=2): contribution to sum reachable_size = T_i.
+    // For branch 1: contribution from vertices except v1 = T_1 - S_1 (since v1's reachable size is n, not S_1). v1 contributes n.
+    // Root contributes R = 1 + sum_{i>=2} S_i.
+    // Total sum = R + n + (T_1 - S_1) + sum_{i>=2} T_i.
+    // Note that sum_{i=1}^d T_i = total sum of subtree sizes if we root the entire tree at root and direct all edges away from root? Let's check: If we root at root and direct all edges away from root, then for each vertex, its subtree size is the number of descendants in that orientation. The sum of those subtree sizes is exactly sum_{i=1}^d T_i + (root's subtree size = n). So total sum in that all-away orientation = n + sum T_i.
+    // Let's denote A = sum_{i=1}^d T_i. Then all-away good pairs = (n + A) - n = A.
+    // Our orientation sum = R + n + (T_1 - S_1) + sum_{i>=2} T_i = (1 + sum_{i>=2} S_i) + n + T_1 - S_1 + (A - T_1) = 1 + sum_{i>=2} S_i + n - S_1 + A = n + 1 + (sum_{i>=2} S_i - S_1) + A.
+    // Good pairs = sum - n = 1 + (sum_{i>=2} S_i - S_1) + A.
+    // We want this to equal n.
+    // So A + 1 + sum_{i>=2} S_i - S_1 = n.
+    // But A = sum T_i. Is there a relation between A and S_i?
+    // For a star: root center, d leaves. S_i = 1 for all i. T_i = 1 (subtree of leaf is just itself). A = d. n = d+1.
+    // Equation: A + 1 + (d-1)*1 - 1 = d + 1 + d - 2 = 2d -1? Wait: sum_{i>=2} S_i = d-1, S_1=1. So A + 1 + (d-1) - 1 = A + d -1 = d + d -1 = 2d -1. n = d+1. So 2d-1 = d+1 => d=2. But we assumed d>=3. So for star, this orientation gives more than n good pairs? Let's test d=3 (n=4): A = 3. Good pairs = 3 + 1 + 2 - 1 = 5? n=4, so 5 != 4. So too many.
+    // We need exactly n. Maybe we can flip more edges or choose different branches.
+    // Let's think differently: The problem hints suggest that the number of good pairs equals n minus number of leaves? Hint 5: "The number of good pairs in the tree is equal to the total number of vertices minus the number of leaves in the tree." That is a key hint! Let's verify: In a directed tree, if we consider the underlying undirected tree, the number of good pairs might relate to leaves. But hint says "in the tree" meaning the directed tree? Actually, it says "Consider the following statement: The number of good pairs in the tree is equal to the total number of vertices minus the number of leaves in the tree." This is likely a property of a certain orientation. Let's test: In the first sample, n=5, leaves in the directed graph? In the directed version, leaves might be vertices with out-degree 0? In the sample, good pairs = 5 = n. Number of leaves? In the directed graph, leaves (out-degree 0) are 2 and 5? Actually, 2 has out-degree 0, 5 has out-degree 0, 4 has out-degree 1? Wait, edges: 1->2, 3->1, 3->5, 4->2. Out-degrees: 1:1, 2:0, 3:2, 4:1, 5:0. Leaves (out-degree 0) = 2 and 5 => 2 leaves. n - leaves = 5 - 2 = 3, not 5. So that statement is not about out-degree leaves. Maybe leaves of the underlying tree? Underlying tree leaves: 4,5,2? Actually tree: 1-2, 2-4, 1-3, 3-5. Leaves: 4,5. That's 2 leaves. n - leaves = 3. Not 5.
+    // Maybe the statement is a hint for a specific construction: If we direct all edges towards a single vertex? Then good pairs = n? Let's test: direct all edges towards a leaf. Then that leaf has in-degree n-1, out-degree 0. Other vertices have out-degree 1 towards the leaf. Then from any vertex you can reach the leaf? Actually, if all edges point towards the leaf, then from any vertex you can follow edges to the leaf. So from any vertex u, you can reach the leaf. Can you reach other vertices? If all edges point towards the leaf, then the graph is a tree directed towards the leaf. In such a graph, from any vertex u, the only reachable vertices are those on the path from u to the leaf. So reachable set size = distance from u to leaf + 1. Total good pairs = sum (distance) = ? For a path graph, if we direct all edges towards one endpoint, good pairs = n? Let's test n=3 path: 1-2-3. Direct 1->2, 2->3? That's towards 3. Reachable: from 1: {1,2,3} size 3; from 2: {2,3} size 2; from 3: {3} size 1. Good pairs = (3-1)+(2-1)+(1-1) = 2+1+0=3 = n. Yes! For a path, directing all edges towards one leaf gives exactly n good pairs. For a general tree, if we direct all edges towards a leaf, what happens? The graph becomes a directed tree with all edges pointing towards that leaf. Then from any vertex, the reachable set is the path to that leaf. The number of good pairs = sum_{v} (depth of v in this rooted tree) where root is the leaf? Actually, if we root at the leaf, then each vertex has a unique path to the root. The reachable set size of v is the number of vertices on the path from v to root (including v). That is exactly the depth of v (with root depth 1). So total good pairs = sum_{v} (depth(v) - 1) = sum depth(v) - n. Sum of depths in a rooted tree can vary. For a star with center and leaves, if we direct all edges towards one leaf, say center->leaf and other leaves->center? Wait, all edges towards a leaf: we need to orient every edge towards that leaf. In a star, if we pick a leaf L as target, then the edge center-L must be center->L. The other edges from other leaves to center must be leaf->center. Then from another leaf, you go to center, then to L. So reachable set size = 3 (leaf, center, L). From center: reachable set size = 2 (center, L). From L: size 1. Good pairs = (3-1)+(2-1)+(1-1) + ... for n=4 star: leaves=3, center=1. n=4. Good pairs = 2+1+0+? Wait, other leaves also have size 3. So total = 2 + 1 + 2 + 2 = 7? That's >4. So not n.
+    // So directing all edges towards a leaf gives n only for a path? Let's check: For a path, sum of depths = n(n+1)/2? Actually, if root is leaf, depths are 1,2,...,n. Sum = n(n+1)/2. Good pairs = n(n+1)/2 - n = n(n-1)/2. For n=3, that's 3. For n=4, that's 6. But we got 3 for n=3. Wait, for n=4 path, good pairs would be 6, not 4. So my earlier calculation for n=3 gave 3, which equals n. For n=4, it would be 6 != 4. So directing towards a leaf gives n only for n=3? Actually, for n=2, good pairs = 1 != 2. So that's not general.
+    // Let's re-read hint 5: "The number of good pairs in the tree is equal to the total number of vertices minus the number of leaves in the tree." This might be a property of a specific orientation that achieves exactly n good pairs. If good pairs = n, then n = n - leaves => leaves = 0. Impossible. So maybe the statement is: "The number of good pairs in the tree is equal to the total number of vertices minus the number of leaves in the tree" is a false statement, and we need to think about it? The hint says "Consider the following statement: ... Think about the statement in the previous hint." So it's a statement to consider, maybe it's true for some orientation? Or maybe it's a clue that the number of good pairs is at most n? Actually, hint 10: "What is the maximum number of good pairs of vertices in a tree with n vertices and n-1 edges?" The maximum might be something like n + something. But we need exactly n.
+    // Let's analyze the problem from scratch.
+    // We have an undirected tree. We need to assign directions to edges to get exactly n good pairs.
+    // A good pair (u,v) means there is a directed path from u to v.
+    // In a directed tree (a tree with directed edges, but underlying graph is a tree), the directed graph is a DAG. The number of good pairs is the number of pairs (u,v) such that v is reachable from u.
+    // Since the underlying graph is a tree, there is at most one path between any two vertices. So if we direct edges, the reachability is determined by the orientation along the unique path.
+    // For a path from u to v to be directed from u to v, all edges on the path must be oriented in the direction from u to v.
+    // So good pairs correspond to pairs (u,v) such that the unique path is directed from u to v.
+    // This is equivalent to: In the directed tree, if we consider the underlying tree, the orientation defines a partial order? Actually, it's a set of directed paths.
+    // Another perspective: If we pick a root arbitrarily, the orientation of each edge is either towards the root or away from the root. The reachability between two vertices depends on the directions along the path.
+    // Let's root the tree at some vertex, say 1. For each edge, we decide if it points towards the root or away from the root. Then for any two vertices u and v, let L = LCA(u,v). The path from u to v goes u up to L, then down to v. For u to reach v, all edges on the u->L path must be directed towards L (i.e., upwards), and all edges on the L->v path must be directed away from L (downwards). So u can reach v iff the path from u to L is entirely "up" and from L to v is entirely "down".
+    // So the orientation can be described by labeling each edge as "up" (towards root) or "down" (away from root). Then u can reach v iff every edge on the path from u to L is up, and every edge on the path from L to v is down.
+    // This is equivalent to: There exists a vertex L such that u is in the "up-subtree" of L (i.e., all edges from u to L are up) and v is in the "down-subtree" of L (all edges from L to v are down). But L is the LCA.
+    // Actually, if we define for each vertex a state: we can think of the tree as having some edges up, some down. This partitions the tree into components? Not exactly.
+    // Let's think about the number of good pairs. We want exactly n.
+    // Consider a leaf. If a leaf has out-degree 0, then it cannot reach any other vertex. If it has in-degree 0, then no other vertex can reach it. The number of good pairs might be related to leaves.
+    // Let's try to find a construction that yields exactly n good pairs for any tree with n>=3, except maybe some small cases.
+    // Sample 1: n=5, tree: 1-2, 2-4, 1-3, 3-5. Output orientation: 1->2, 3->1, 3->5, 4->2. Let's analyze this orientation.
+    // Edges: 1->2, 3->1, 3->5, 4->2. Underlying tree rooted at 3? Let's see: 3 has edges to 1 and 5. 3->1 and 3->5 (both down). 1 has edge to 2: 1->2 (down). 2 has edge to 4: 4->2 (up). So from 3: down to 1, down to 5. From 1: down to 2. From 4: up to 2. So edges: 3-1: down, 3-5: down, 1-2: down, 2-4: up.
+    // Good pairs: (3,5), (3,1), (3,2), (1,2), (4,2). That's 5 pairs.
+    // Notice that 3 can reach 5,1,2. 1 can reach 2. 4 can reach 2. 5 cannot reach anyone. 2 cannot reach anyone.
+    // So the reachable sets: 3:{1,2,5}, 1:{2}, 4:{2}, others empty.
+    // This gives 3+1+1=5 good pairs.
+    // How is this structured? It seems there is a central vertex 3 that can reach its descendants in a "down" subtree, except one branch (4) is directed upwards? Actually, 4 is a leaf that points to 2. So 4 can reach 2. 2 is a sink (out-degree 0). 1 points to 2. 3 points to 1 and 5. So the graph has sinks: 2 and 5. Sources: 3 and 4? 4 has out-degree 1, in-degree 0. 3 has out-degree 2, in-degree 0. So sources: 3,4. Sinks: 2,5.
+    // Number of good pairs = 5 = n.
+    // Can we generalize? It looks like we pick a vertex (3) and make it a source that can reach some vertices. And we have another source (4) that can reach a sink (2). The total good pairs = n.
+    // Notice that the number of sources + number of sinks? Sources: 3,4 (2 sources). Sinks: 2,5 (2 sinks). n=5. Not directly.
+    // Let's look at sample 2: n=5, star-like: 1 connected to 2,3,4; 4 connected to 5. Output: 2->1, 3->1, 4->1, 5->4. So edges: 2->1 (up to 1), 3->1 (up), 4->1 (up), 5->4 (up). So all edges point towards 1? 5->4 and 4->1, so 5 points to 1 via 4. So all vertices point towards 1. Then from any vertex, you can reach 1. From 5, you can reach 4 and 1. From 4, you can reach 1. From 2,3, you can reach 1. So reachable sets: 5:{4,1}, 4:{1}, 2:{1}, 3:{1}, 1:empty. Good pairs = 2+1+1+1+0 = 5 = n. So this is the "all edges towards a single vertex" orientation, but that vertex is 1. Wait, earlier I computed for star with all edges towards center: center is sink, leaves point to center. Then leaves reach center only. Good pairs = number of leaves = n-1. But here we have an extra leaf 5 attached to 4. So the tree is not a star; it's a path of length 2 attached to center. All edges towards 1: 5->4, 4->1, 2->1, 3->1. Then reachable: 5 reaches 4 and 1 (2), 4 reaches 1 (1), 2 reaches 1 (1), 3 reaches 1 (1). Total = 5 = n. So for this tree, all edges towards a single vertex (1) gives exactly n good pairs. Why did it work here but not for a star? For a star, all edges towards center gives n-1 good pairs. For a star, if we pick a leaf as the sink, all edges towards that leaf gives more than n? Let's test star with center C and leaves L1, L2, L3. All edges towards L1: C->L1, L2->C, L3->C. Reachable: L2 reaches C and L1 (2), L3 reaches C and L1 (2), C reaches L1 (1), L1 reaches nothing. Total = 2+2+1=5, n=4. So 5 > 4. So all edges towards a leaf gives >n for star. All edges towards center gives n-1. So for star, we cannot get exactly n? But sample 3 says n=2: NO. For n=2, any orientation gives 1 good pair, not 2. For n=3 path: all edges towards one leaf gives 3 good pairs (as computed earlier). For n=3 star (which is same as path): n=3 star is a path of length 2. So it works. For n=4 star: can we get 4 good pairs? Let's try to find orientation for star with 4 vertices (center + 3 leaves) that gives 4 good pairs. We need exactly 4. Let's test all possibilities? Center C, leaves A,B,C. Edges: C-A, C-B, C-C? Actually leaves A,B,D. We need to direct the three edges. Each edge can be C->leaf or leaf->C. Let's enumerate:
+    // Case 1: all C->leaf: then C reaches all leaves (3), leaves reach nothing. Good pairs = 3.
+    // Case 2: two C->leaf, one leaf->C. Say A->C, C->B, C->D. Reachable: A reaches C, B, D (3). C reaches B, D (2). B, D reach nothing. Total = 3+2 = 5.
+    // Case 3: one C->leaf, two leaf->C. Say A->C, B->C, C->D. Reachable: A reaches C, D (2). B reaches C, D (2). C reaches D (1). D nothing. Total = 2+2+1 = 5.
+    // Case 4: all leaf->C: A->C, B->C, D->C. Reachable: A reaches C (1), B reaches C (1), D reaches C (1), C nothing. Total = 3.
+    // So for star with 4 vertices, possible good pairs are 3 or 5. Cannot get 4. So star with n=4 is impossible? But the problem statement doesn't say it's always possible. Sample 3 is n=2: NO. So for some trees it's impossible. Our task is to determine if possible and construct.
+    // So we need a condition for when it's possible.
+    // Let's analyze the number of good pairs in terms of the orientation.
+    // Let the directed tree have edges oriented. Consider the condensation? No, it's a DAG. Since underlying is a tree, the directed graph is a collection of directed paths. Actually, it's a set of edges with directions. We can think of it as a functional graph? Not exactly.
+    // Another approach: For each vertex, let out_deg(v) and in_deg(v). The number of good pairs is sum_{v} (size of reachable set from v). The reachable set from v is the set of vertices w such that the v-w path is directed from v to w.
+    // This is equivalent to: For each edge, if we cut it, the tree splits into two components. The direction of that edge determines which component can reach the other. Specifically, if edge is directed from u to v, then all vertices in the component of u (when edge is removed) can reach all vertices in the component of v? Not necessarily all, because there might be other edges that are not oriented consistently. Actually, if the edge is u->v, then for any x in u's component and y in v's component, can x reach y? Only if the path from x to u is directed towards u, and from v to y is directed away from v. But the edge u->v is just one edge. The orientation of other edges matters.
+    // However, if we consider the tree as a whole, the orientation defines a partial order. The number of good pairs is the number of pairs (x,y) such that x <= y in this partial order.
+    // This is exactly the number of pairs in a poset that is a tree. For a tree poset (where the Hasse diagram is a tree), the number of comparable pairs can be computed.
+    // Let's root the tree arbitrarily. For each edge, we assign a direction: either towards root (up) or away from root (down). Then x can reach y iff on the path from x to y, all edges are directed from x to y. That means if we go up from x to LCA and then down to y, the up edges must be directed towards the root (i.e., from child to parent) and the down edges must be directed away from root (parent to child). So x can reach y iff every edge on the path from x to LCA is child->parent, and every edge on the path from LCA to y is parent->child.
+    // This means that for a fixed orientation, the set of vertices that x can reach are those y such that LCA(x,y) has the property: the path from x to LCA is all "up", and from LCA to y is all "down".
+    // This is equivalent to: x can reach y iff x is in the "up-closure" of LCA and y is in the "down-closure" of LCA, and LCA is the LCA.
+    // Another way: Define for each vertex its "up" and "down" reach. But maybe we can count good pairs by dynamic programming on the tree.
+    // Let's do DP. Root the tree at 1. For each vertex u, we consider the subtree rooted at u. The edges inside the subtree have some directions. We want to compute the number of good pairs within the subtree, and also how the subtree interacts with the outside.
+    // However, the orientation of an edge (u, parent) determines whether u can reach its parent or vice versa. This affects reachability between vertices inside u's subtree and outside.
+    // Let's define for each vertex u, after fixing orientations of all edges in its subtree, we can compute:
+    // - dp[u] = number of good pairs (x,y) such that both x and y are in the subtree of u.
+    // But we also need to know, for vertices in the subtree, which ones can reach u, and which ones u can reach, because that affects pairs with outside.
+    // Actually, if the edge (u, parent) is directed u -> parent, then any vertex in u's subtree that can reach u will also be able to reach the parent and possibly beyond. Similarly, if parent -> u, then vertices outside that can reach parent can also reach u and possibly its descendants.
+    // So we need to track the set of vertices in the subtree that can reach u (i.e., have a directed path to u), and the set of vertices in the subtree that u can reach.
+    // Since the underlying graph is a tree, the directed paths are unique. For a vertex x in u's subtree, x can reach u iff all edges on the path from x to u are directed towards u (i.e., child->parent). Similarly, u can reach x iff all edges on the path from u to x are directed away from u (parent->child).
+    // So within the subtree, the orientation defines for each vertex whether it's in the "up-set" of u (can reach u) or "down-set" of u (u can reach it). Note that a vertex could be both if the path has mixed directions? No, because the path is a single sequence of edges; they must all be consistently oriented one way. So a vertex cannot both reach u and be reached by u unless it's u itself.
+    // So the subtree vertices are partitioned into three sets relative to u:
+    // - Up(u): vertices that can reach u (including u? u can reach itself trivially, but we consider reachability to u: u can reach u, so u is in both? Actually, u can reach u, and u can be reached by u. So u is in both. But for strict subsets, we can consider u separately.)
+    // - Down(u): vertices that u can reach.
+    // - Neither: vertices that have no directed path to/from u (the path has mixed directions).
+    // Note that if a vertex x is in Up(u), then all vertices on the path from x to u are also in Up(u). Similarly for Down(u).
+    // So Up(u) forms a connected subtree containing u, where all edges are directed towards u. Down(u) forms a connected subtree containing u, where all edges are directed away from u.
+    // The intersection of Up(u) and Down(u) is exactly {u}, because if there was another vertex, the path would have to be both all towards u and all away from u, impossible.
+    // The union of Up(u) and Down(u) is not necessarily the whole subtree; there can be vertices that are neither.
+    // Now, when we attach u to its parent p via edge (u,p), the direction of this edge determines how Up(u) and Down(u) extend to p.
+    // If edge is u -> p: then any vertex in Up(u) can now reach p (by going to u then to p). So Up(p) will include Up(u). Also, p can reach any vertex in Down(u)? No, p -> u is false, so p cannot reach u. So Down(p) does not include Down(u) unless there's another path? But p is parent, so the only path from p to u is this edge. Since it's u->p, p cannot reach u. So Down(p) does not include u or its Down(u). However, u can reach p, so u is in Up(p)? Actually, u can reach p, so u is in Up(p). And any vertex that can reach u can also reach p, so Up(u) subset of Up(p). Down(p) is separate.
+    // If edge is p -> u: then p can reach u, so Down(p) includes u and Down(u). Also, any vertex that u can reach, p can reach. So Down(u) subset of Down(p). And u can be reached by p, but can u reach p? No. So Up(p) does not include Up(u).
+    // So the DP state for a subtree rooted at u could be: the sizes of Up(u) and Down(u), and the number of good pairs entirely within the subtree. But we also need to count good pairs that involve vertices from different subtrees of u? Actually, when we combine children of u, we need to count pairs

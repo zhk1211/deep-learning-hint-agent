@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        long long a, b;
+        cin >> a >> b;
+        
+        long long ans = LLONG_MAX;
+        // Try all possible leg lengths m from 1 to about sqrt(max(a,b)) + 1e5
+        // But we can limit to sqrt(2e9) ~ 44721, plus some extra
+        long long limit = (long long)sqrt(max(a, b)) + 100000;
+        for (long long m = 1; m <= limit; m++) {
+            long long jumps_x = (a + m - 1) / m;
+            long long jumps_y = (b + m - 1) / m;
+            long long total_jumps = jumps_x + jumps_y;
+            long long moves = (m - 1) + total_jumps; // (m-1) increases + jumps
+            ans = min(ans, moves);
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

@@ -1,0 +1,64 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    vector<pair<int, int>> edges;
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        edges.emplace_back(u, v);
+    }
+
+    // Find leaves
+    vector<int> deg(n + 1);
+    for (int i = 1; i <= n; i++) deg[i] = adj[i].size();
+    vector<int> leaves;
+    for (int i = 1; i <= n; i++) if (deg[i] == 1) leaves.push_back(i);
+
+    // If number of leaves is not n - 1, impossible
+    if ((int)leaves.size() != n - 1) {
+        cout << "NO\n";
+        return;
+    }
+
+    // The tree must be a star: one center connected to all leaves
+    // Check if there is a vertex with degree n-1
+    int center = -1;
+    for (int i = 1; i <= n; i++) {
+        if (deg[i] == n - 1) {
+            center = i;
+            break;
+        }
+    }
+    if (center == -1) {
+        cout << "NO\n";
+        return;
+    }
+
+    // Direct all edges from leaves to center
+    cout << "YES\n";
+    for (auto [u, v] : edges) {
+        if (u == center) cout << v << ' ' << u << '\n';
+        else if (v == center) cout << u << ' ' << v << '\n';
+        else {
+            // Should not happen in a star
+            cout << u << ' ' << v << '\n';
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}
+```

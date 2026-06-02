@@ -1,0 +1,49 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        long long a, b;
+        cin >> a >> b;
+        if (a > b) swap(a, b);
+        
+        long long ans = LLONG_MAX;
+        // Try all possible leg lengths m from 1 to about sqrt(b) + some extra
+        // Actually we need to consider m up to max(a, b) but we can optimize
+        // For a given m, jumps needed = ceil(a/m) + ceil(b/m) + (m-1)
+        // We can find optimal m by checking around sqrt(max(a,b))
+        
+        // First approach: check m from 1 to 100000 (since a,b up to 1e9, sqrt is 31623)
+        // But we can do better: the function is convex-like, we can ternary search or just check around sqrt
+        // Let's just iterate m from 1 to 100000 and also check m = ceil(a/k) etc.
+        
+        for (long long m = 1; m <= 100000; m++) {
+            long long moves = (a + m - 1) / m + (b + m - 1) / m + (m - 1);
+            ans = min(ans, moves);
+        }
+        
+        // Also check m around b / k for small k
+        for (long long k = 1; k <= 100000; k++) {
+            long long m = (b + k - 1) / k;
+            if (m >= 1) {
+                long long moves = (a + m - 1) / m + (b + m - 1) / m + (m - 1);
+                ans = min(ans, moves);
+            }
+            m = b / k;
+            if (m >= 1) {
+                long long moves = (a + m - 1) / m + (b + m - 1) / m + (m - 1);
+                ans = min(ans, moves);
+            }
+        }
+        
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

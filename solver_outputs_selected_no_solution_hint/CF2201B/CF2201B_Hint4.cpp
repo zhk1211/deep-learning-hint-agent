@@ -1,0 +1,194 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    // The greedy algorithm always takes exactly n turns to finish if no early matches occur,
+    // but we can force extra turns by creating "delayed" matches.
+    // The maximum number of turns is n + (n-1) = 2n-1.
+    // The minimum is n.
+    if (k < n || k > 2 * n - 1) {
+        cout << "NO\n";
+        return;
+    }
+    cout << "YES\n";
+    vector<int> a(2 * n);
+    // We will construct the sequence as follows:
+    // We need exactly k turns. The base is n turns.
+    // Each "extra" turn beyond n comes from a pair that is not matched immediately
+    // when its first occurrence is seen, but later.
+    // We can achieve this by placing some numbers such that their two occurrences
+    // are separated by at least one other number that appears for the first time in between.
+    // Specifically, if we have a pattern like: x ... y ... x ... y, then when we flip the first x,
+    // we don't know where its pair is, so we flip the next unseen card (y). Then later we match x and y.
+    // This creates extra turns.
+    // Let extra = k - n. We need exactly 'extra' numbers to be "delayed".
+    // We can construct by placing numbers 1..extra+1 in a specific interleaved pattern,
+    // and the rest as immediate consecutive pairs.
+    int extra = k - n;
+    // We will use numbers 1 through extra+1 for the delayed part.
+    // The pattern: 1, 2, 3, ..., extra+1, 1, 2, 3, ..., extra+1
+    // This gives exactly n + extra turns? Let's test: n=3, extra=2 => k=5.
+    // Pattern: 1 2 3 1 2 3 => turns = 5 as in sample.
+    // For n=2, extra=1 => k=3: pattern 1 2 1 2 => turns = 3 as in sample.
+    // For n=6, extra=4 => k=10: pattern 1 2 3 4 5 1 2 3 4 5 6 6? Wait, we need all numbers 1..n exactly twice.
+    // The delayed part uses numbers 1..(extra+1). The remaining numbers (extra+2 .. n) are placed as consecutive pairs.
+    // Let's check sample: n=6, k=10 => extra=4. Delayed numbers: 1..5. Remaining: 6.
+    // Pattern: 1 2 3 4 5 1 2 3 4 5 6 6 => turns?
+    // Let's simulate: 
+    // Turn 1: flip 1,2 (diff) -> back
+    // Turn 2: flip 3,4 (diff) -> back
+    // Turn 3: flip 5,1 (diff) -> back
+    // Turn 4: flip 2,3 (diff) -> back
+    // Turn 5: flip 4,5 (diff) -> back
+    // Turn 6: flip 1,? wait, algorithm: after turn 5, we have seen 1,2,3,4,5 all once. No pair known.
+    // Next turn: first unseen is 6? Actually after turn 5, we flipped cards at positions: 1,2,3,4,5,6,7,8,9,10? Let's track carefully.
+    // Positions: 1:1, 2:2, 3:3, 4:4, 5:5, 6:1, 7:2, 8:3, 9:4, 10:5, 11:6, 12:6.
+    // Turn 1: flip pos1(1) and pos2(2) -> back.
+    // Turn 2: first unseen is pos3(3), flip pos3(3) and pos4(4) -> back.
+    // Turn 3: first unseen is pos5(5), flip pos5(5) and pos6(1) -> back.
+    // Turn 4: first unseen is pos7(2), flip pos7(2) and pos8(3) -> back.
+    // Turn 5: first unseen is pos9(4), flip pos9(4) and pos10(5) -> back.
+    // Now we have seen all of 1..5 once. No known pairs.
+    // Turn 6: first unseen is pos11(6), flip pos11(6). Is there another seen 6? No. Flip next unseen pos12(6). They match! Discard 6,6.
+    // Now remaining: positions 1..10 with numbers 1,2,3,4,5,1,2,3,4,5. But we have seen all of them once.
+    // Turn 7: There are two cards with same number seen? We have seen 1 at pos1 and pos6. So we can flip those two 1s. Discard.
+    // Turn 8: seen 2 at pos2 and pos7 -> discard.
+    // Turn 9: seen 3 at pos3 and pos8 -> discard.
+    // Turn 10: seen 4 at pos4 and pos9 -> discard.
+    // Turn 11: seen 5 at pos5 and pos10 -> discard.
+    // Total turns = 11, not 10. So this pattern gives k = n + extra + 1? Let's recalc.
+    // For n=6, extra=4, we got 11 turns. But sample output for 6 10 is YES with pattern 2 1 3 4 5 4 1 2 6 5 6 3.
+    // So my simple pattern doesn't match the required k exactly. Need to adjust.
+    // Let's analyze the sample pattern for 6 10: 2 1 3 4 5 4 1 2 6 5 6 3
+    // Numbers: 1,2,3,4,5,6 each twice.
+    // Let's simulate to see turns:
+    // Positions: 1:2, 2:1, 3:3, 4:4, 5:5, 6:4, 7:1, 8:2, 9:6, 10:5, 11:6, 12:3
+    // Turn 1: unseen: pos1(2), pos2(1) diff -> back
+    // Turn 2: unseen: pos3(3), pos4(4) diff -> back
+    // Turn 3: unseen: pos5(5), pos6(4) diff -> back (now seen 4 twice? pos4 and pos6 both 4, so we know a pair of 4s)
+    // Turn 4: we have a known pair (4 at pos4 and pos6), so flip them -> discard.
+    // Turn 5: unseen: pos7(1), pos8(2) diff -> back (now seen 1 twice? pos2 and pos7; seen 2 twice? pos1 and pos8)
+    // Turn 6: known pairs: 1 and 2. Flip 1s -> discard.
+    // Turn 7: known pair: 2s -> discard.
+    // Turn 8: unseen: pos9(6), pos10(5) diff -> back
+    // Turn 9: unseen: pos11(6), pos12(3) diff -> back (now seen 6 twice? pos9 and pos11; seen 3 twice? pos3 and pos12)
+    // Turn 10: known pair: 6s -> discard.
+    // Turn 11: known pair: 3s -> discard.
+    // Turn 12: known pair: 5s? Wait, we have 5 at pos5 and pos10, both seen. So turn 11 would be 3s, turn 12 5s. That's 12 turns, not 10.
+    // Something off. Let's re-read sample note for fourth test case (n=3, k=5): pattern 1 2 3 1 2 3 gave 5 turns.
+    // For n=3, k=5: extra=2. Pattern 1 2 3 1 2 3 -> turns = 5. Works.
+    // For n=2, k=3: extra=1. Pattern 1 2 1 2 -> turns = 3. Works.
+    // For n=6, k=10: extra=4. Sample output: 2 1 3 4 5 4 1 2 6 5 6 3. Let's simulate carefully according to algorithm.
+    // Algorithm: 
+    // - If there are two cards that you have flipped previously and have the same number, flip those two cards.
+    // - Otherwise, flip the first card that you have never flipped so far as the first one. Let's say this card has number x.
+    // - Afterwards, if there is another card that you have flipped previously and has number x, flip that card.
+    // - Otherwise, flip the first card that you have never flipped so far (including in this turn) as the second one.
+    // Let's simulate sample 4: 1 2 3 1 2 3 (n=3, k=5)
+    // Initially all unflipped.
+    // Turn 1: no known pairs. First unflipped: pos1 (1). No previously flipped 1. Second: first unflipped after pos1? "first card that you have never flipped so far (including in this turn) as the second one." So we consider all cards never flipped, including the one we just flipped? The first card never flipped so far: pos1 is now flipped, so next is pos2. So flip pos1(1) and pos2(2). Different -> back.
+    // Turn 2: known pairs? We have seen 1 and 2, no pair. First unflipped: pos3(3). No previously flipped 3. Second: first unflipped after pos3? pos4(1). Flip pos3(3) and pos4(1). Different -> back. Now we have seen 1 twice (pos1, pos4).
+    // Turn 3: known pair: 1. Flip pos1 and pos4 -> discard.
+    // Turn 4: known pairs? We have seen 2 (pos2) and 3 (pos3) once each. No pair. First unflipped: pos5(2). Previously flipped 2? Yes, pos2. So second card is pos2. Flip pos5 and pos2 -> match, discard.
+    // Turn 5: known pairs? We have seen 3 (pos3) once, and pos6(3) unflipped. First unflipped: pos6(3). Previously flipped 3? pos3. Flip pos6 and pos3 -> discard.
+    // Total 5 turns. Correct.
+    // Now sample 6 10: 2 1 3 4 5 4 1 2 6 5 6 3
+    // Let's list positions: 1:2, 2:1, 3:3, 4:4, 5:5, 6:4, 7:1, 8:2, 9:6, 10:5, 11:6, 12:3.
+    // Turn 1: no known. First unflipped: pos1(2). No prev 2. Second: first unflipped after pos1 -> pos2(1). Diff -> back. Flipped: {1,2}.
+    // Turn 2: no known pair. First unflipped: pos3(3). No prev 3. Second: pos4(4). Diff -> back. Flipped: {1,2,3,4}.
+    // Turn 3: no known pair. First unflipped: pos5(5). No prev 5. Second: pos6(4). Diff -> back. Flipped: {1,2,3,4,5,6}. Now we have seen 4 twice (pos4, pos6).
+    // Turn 4: known pair: 4. Flip pos4 and pos6 -> discard. Remaining: pos1,2,3,5,7,8,9,10,11,12. Flipped set: {1,2,3,5} (pos1,2,3,5). Wait, after discarding, those positions are removed. The "flipped previously" set should only contain cards that are still in the game? The problem says: "If there are two cards that you have flipped previously and have the same number, flip those two cards." It implies those cards are still present (not discarded). So after discarding 4s, the previously flipped cards that remain are those that were flipped and not discarded. So we have flipped pos1(2), pos2(1), pos3(3), pos5(5). They are still there.
+    // Turn 5: known pairs? We have seen 1 once (pos2), 2 once (pos1), 3 once (pos3), 5 once (pos5). No pair. First unflipped: pos7(1). Previously flipped 1? Yes, pos2. So second card is pos2. Flip pos7 and pos2 -> match, discard 1s. Now remaining: pos1(2), pos3(3), pos5(5), pos8(2), pos9(6), pos10(5), pos11(6), pos12(3). Flipped previously: pos1(2), pos3(3), pos5(5) (since pos2 discarded).
+    // Turn 6: known pairs? We have seen 2 twice? pos1 and pos8? pos8 is unflipped. We have seen 2 only at pos1. 3 at pos3. 5 at pos5. No pair. First unflipped: pos8(2). Previously flipped 2? Yes, pos1. So flip pos8 and pos1 -> match, discard 2s. Remaining: pos3(3), pos5(5), pos9(6), pos10(5), pos11(6), pos12(3). Flipped previously: pos3(3), pos5(5).
+    // Turn 7: known pairs? 3 once, 5 once. No pair. First unflipped: pos9(6). No prev 6. Second: pos10(5). Diff -> back. Flipped: pos9, pos10 added. Now flipped previously: pos3(3), pos5(5), pos9(6), pos10(5). We have seen 5 twice (pos5, pos10).
+    // Turn 8: known pair: 5. Flip pos5 and pos10 -> discard. Remaining: pos3(3), pos9(6), pos11(6), pos12(3). Flipped previously: pos3(3), pos9(6).
+    // Turn 9: known pairs? 3 once, 6 once. No pair. First unflipped: pos11(6). Previously flipped 6? Yes, pos9. Flip pos11 and pos9 -> match, discard 6s. Remaining: pos3(3), pos12(3). Flipped previously: pos3(3).
+    // Turn 10: known pair? We have seen 3 at pos3, and pos12 is unflipped. First unflipped: pos12(3). Previously flipped 3? pos3. Flip pos12 and pos3 -> discard. Done.
+    // Total 10 turns. Correct.
+    // So the pattern is not simply two blocks. It's more intricate.
+    // Let's derive the general construction.
+    // We need exactly k turns. The minimum is n (if all pairs are adjacent and we flip them in order? Actually if all pairs are adjacent like 1,1,2,2,...,n,n, the algorithm:
+    // Turn 1: flip 1,1 -> discard.
+    // Turn 2: flip 2,2 -> discard. ... n turns. So min = n.
+    // Max = 2n-1. How to achieve max? We want every pair to be separated such that we never have a known pair until the very end. The pattern 1,2,3,...,n,1,2,3,...,n gives:
+    // For n=3: 1,2,3,1,2,3 -> 5 turns = 2*3-1. For n=4: 1,2,3,4,1,2,3,4 -> turns? Let's simulate:
+    // Turn 1: 1,2 diff
+    // Turn 2: 3,4 diff
+    // Turn 3: 1,2 diff (now seen 1 twice, 2 twice)
+    // Turn 4: known 1 -> discard
+    // Turn 5: known 2 -> discard
+    // Turn 6: 3,4 diff (seen 3 twice, 4 twice)
+    // Turn 7: known 3 -> discard
+    // Turn 8: known 4 -> discard. Total 8 turns? Wait, 2n-1 = 7 for n=4. But we got 8. Let's recount carefully.
+    // n=4: positions 1..8: 1,2,3,4,1,2,3,4.
+    // Turn 1: flip 1,2 -> back. Flipped: {1,2}.
+    // Turn 2: first unflipped: 3. flip 3,4 -> back. Flipped: {1,2,3,4}.
+    // Turn 3: first unflipped: 5(1). Previously flipped 1? Yes, pos1. So flip 5 and 1 -> discard 1s. Remaining: 2,3,4,6,7,8. Flipped previously: {2,3,4} (pos2,3,4).
+    // Turn 4: known pairs? 2 once, 3 once, 4 once. No pair. First unflipped: pos6(2). Prev 2? pos2. Flip 6 and 2 -> discard 2s. Remaining: 3,4,7,8. Flipped: {3,4}.
+    // Turn 5: first unflipped: pos7(3). Prev 3? pos3. Flip 7 and 3 -> discard 3s. Remaining: 4,8. Flipped: {4}.
+    // Turn 6: first unflipped: pos8(4). Prev 4? pos4. Flip 8 and 4 -> discard 4s. Done.
+    // Total 6 turns. That's n + (n-2)? Actually 6 = 2*4 - 2? Not 7.
+    // So the simple two-block pattern gives n + (n-2) = 2n-2 turns? For n=3, 2*3-2=4, but we got 5. Inconsistent.
+    // Let's re-simulate n=3: 1,2,3,1,2,3 -> we got 5 turns. n=4 gave 6 turns. So turns = 2n-2 for n>=4? But sample n=3 gave 5 = 2*3-1. So n=3 is special.
+    // Actually, the maximum turns might be achieved by a different pattern.
+    // Let's think about the process. The algorithm essentially simulates a stack-like behavior? Or we can view it as: we maintain a set of seen cards. When we flip a new card, if its match is already seen, we match them immediately (and that takes one turn). Otherwise, we flip another new card. If that second card matches a previously seen card, we don't match immediately; we just flip it back. The matching only happens at the beginning of a turn if there is a known pair.
+    // This is equivalent to: we process cards from left to right. We maintain a list of "open" cards that have been seen exactly once. When we see a card that is already open, we don't immediately close it; instead, we continue. But at the start of each turn, if there is any pair of open cards with the same number, we close them.
+    // Actually, the algorithm: "If there are two cards that you have flipped previously and have the same number, flip those two cards." This means we can only match cards that were both flipped in previous turns (and not discarded). So a card flipped in the current turn cannot be matched in the same turn unless it matches a previously flipped card? Wait, the rule: "Afterwards, if there is another card that you have flipped previously and has the number x, flip that card." So if the first card of the turn matches a previously flipped card, we flip that previously flipped card as the second card, and they match and get discarded in the same turn. So a match can happen in the same turn if the first card matches a previously seen card. Otherwise, we flip a new card as second, and even if that second card matches some previously seen card, we don't match them; we just flip them back. They become "previously flipped" for future turns.
+    // So the only way to discard a pair is either:
+    // 1. At the start of a turn, there exists a pair of cards that were both flipped in previous turns (and not discarded). Then we flip those two and discard them. This takes one turn.
+    // 2. During a turn, the first card we flip matches a previously flipped card. Then we flip that previously flipped card as the second, and they are discarded in the same turn.
+    // Note: If the first card is new and doesn't match any previous, we flip a second new card. Even if that second card matches a previous card, we don't discard; we just flip back.
+    // So effectively, we can think of the process as: we have a set of "known" cards (flipped in previous turns). At each turn, we either:
+    // - If there is a pair in the known set, we remove it (1 turn).
+    // - Otherwise, we pick the first unknown card. If it matches a known card, we remove both (1 turn).
+    // - Otherwise, we pick the next unknown card as well, and add both to the known set (1 turn, no removal).
+    // This is exactly the process.
+    // Now, we want exactly k turns. Each turn either removes 0 or 2 cards. We start with 2n cards. We must end with 0. So total removals = n pairs. Each removal takes exactly 1 turn. But some turns may not remove anything (they just add to known set). Let x be the number of turns that remove a pair, and y be the number of turns that do not remove. Then x + y = k, and 2x = 2n => x = n. So y = k - n. So we need exactly y turns that add two new cards to the known set without removing anything. These turns occur when we flip two new cards that don't match any known cards and don't match each other (if they matched each other, they would be discarded? Wait, if we flip two new cards and they have the same number, they match each other. But the algorithm: first card new, no match; second card new. If they have the same number, do they get discarded? The rule: "If the two cards have the same number, you discard the two cards." So yes, if the two new cards match, they are discarded in the same turn. That would be a removal turn. So to have a non-removal turn, the two new cards must be different and neither matches any known card.
+    // So we need exactly y = k - n turns where we flip two new cards that are distinct and not matching any known card.
+    // The known set initially empty.
+    // We process cards from left to right. The first card of a turn is always the first unknown card. The second card is either a known match (if first matches known) or the next unknown card.
+    // This is similar to a greedy matching on a sequence. We can design the sequence to control the number of non-removal turns.
+    // Let's denote the sequence. We can think of it as: we have a set of numbers. Each number appears twice. We want to arrange them so that the greedy algorithm produces exactly y non-removal turns.
+    // Observation: A non-removal turn happens when we take two new cards that are both appearing for the first time (so they don't match any known), and they are different. After this turn, both become known (seen once). Later, when we encounter their second occurrences, we will match them.
+    // If we encounter a second occurrence of a known card as the first card of a turn, we match immediately (removal turn). If we encounter it as the second card of a turn (when the first card was new and didn't match), then we just add it to known? Wait, if the first card is new and doesn't match, we flip a second new card. If that second card happens to be a second occurrence of some known card, we don't match it; we just flip it back. So it becomes "flipped previously" but it's already known? Actually, it was already known (seen once before). Now we see it again, so it becomes a known pair? But we don't discard it immediately because the rule says we only discard at the beginning of a turn or when the first card matches a previous. So after flipping it as the second card, we have now seen it twice, so it forms a known pair. At the start of the next turn, we will discard it. So that second occurrence caused a known pair to be formed, which will be removed in the next turn (a removal turn). But the turn in which we flipped it was a non-removal turn (we flipped two new cards? Actually the second card was not new; it was a second occurrence. But the algorithm says: "Otherwise, flip the first card that you have never flipped so far (including in this turn) as the second one." So the second card must be never flipped so far. That means it cannot be a previously flipped card. So the second card is always a new card (never flipped before). Therefore, we can never flip a second occurrence as the second card of a turn! Because if it's a second occurrence, it must have been flipped before. So the second card is always a first occurrence. This is crucial.
+    // Let's verify: In turn, if first card doesn't match any previously flipped, we flip the first never-flipped card as second. That card has never been flipped, so it's a first occurrence. So both cards in a non-removal turn are first occurrences. They are both new.
+    // Therefore, in a non-removal turn, we introduce two new numbers (or two copies of the same number? They could be the same number if the number appears twice consecutively? But if they are the same number, they match and get discarded, so it's a removal turn. So for non-removal, they must be different numbers, both appearing for the first time.)
+    // So each non-removal turn consumes two distinct numbers' first occurrences.
+    // After a non-removal turn, those two numbers are in the known set (seen once). Their second occurrences are still somewhere later.
+    // When we later encounter the second occurrence of a number, it will be the first card of some turn (because it's the first unknown card). At that moment, it matches a known card, so we flip the known card as second and discard both. That's a removal turn.
+    // So the process is: we have numbers 1..n. We partition them into some that are introduced in non-removal turns (in pairs) and some that are introduced and immediately removed in the same turn? Wait, can we have a removal turn that is not matching a known card? Yes, if the first card is new and matches nothing, but the second card is also new and matches the first? That would be a removal turn with two new cards of the same number. That means the two occurrences of that number are adjacent and we flip them together. That's a removal turn that doesn't use the known set. Also, we can have a removal turn where the first card is a second occurrence (matching a known card). Or we can have a removal turn at the start of a turn where we pick a known pair.
+    // So there are three types of removal turns:
+    // 1. Immediate pair: two adjacent same numbers, both new, flipped together -> discarded.
+    // 2. First card is second occurrence, matches known first occurrence -> discarded.
+    // 3. Start of turn: known pair exists -> discarded.
+    // Note that type 3 only happens when there is a known pair that hasn't been matched yet. When does a known pair form? It forms when we flip a second occurrence as the first card? No, if we flip a second occurrence as first card, we immediately match it (type 2). So a known pair can only form if we flip a second occurrence as the second card? But we just established the second card is always a first occurrence. So how does a known pair ever form without being immediately matched? It forms when we have two first occurrences of the same number? No, they are the same number, so if they are both first occurrences, they are the two copies. If we flip them in different turns, the first time we see it, it's a first occurrence. The second time we see it, it's a second occurrence. But if we see the second occurrence as the first card of a turn, we match immediately. So the only way a known pair can exist without being matched is if we see the second occurrence as the second card? But second card is always never-flipped, so it can't be a second occurrence. Contradiction.
+    // Let's re-examine the algorithm carefully. "Otherwise, flip the first card that you have never flipped so far (including in this turn) as the second one." This means we consider all cards that have never been flipped up to this point in the game, including the card we just flipped as the first card? No, "including in this turn" means we consider the state after flipping the first card. So the first card is now flipped. The second card must be never flipped so far. So it cannot be the first card. It must be a card that hasn't been flipped in any previous turn nor in this turn yet. So it's a new card. So indeed, the second card is always a first occurrence.
+    // Then how do we ever get a known pair? A known pair means we have flipped both copies of a number in previous turns. But if the second copy is flipped, it must have been flipped either as a first card or as a second card. If it's flipped as a first card, we would have immediately matched it with the first copy (since it matches a previously flipped card). So it would be discarded immediately, not becoming a known pair. If it's flipped as a second card, it's impossible because second card must be never-flipped. So a known pair can never form! But the sample clearly had known pairs (e.g., in sample 4, turn 4 started with a known pair of 1s). How did that happen?
+    // Let's trace sample 4 again: 1 2 3 1 2 3.
+    // Turn 1: first card pos1(1) new. No match. Second card pos2(2) new. Both new, different. They are flipped and then flipped back. So after turn 1, pos1 and pos2 are "flipped previously". They are known (seen once).
+    // Turn 2: first unflipped is pos3(3) new. No match. Second card pos4(1) new? Wait, pos4 is 1. But 1 was already seen at pos1! So pos4 is a second occurrence! But the algorithm says second card must be never flipped so far. pos4 has never been flipped before. It is a new card. The fact that its number has been seen before doesn't matter; the card itself hasn't been flipped. So "never flipped" refers to the physical card, not the number. So a card with a number that has appeared before can still be "never flipped" if that specific card hasn't been turned. So second occurrences CAN be flipped as the second card! Because the second card is a new physical card, even if its number is already known.
+    // Ah! That's the key. "Never flipped so far" means the card itself (by position) has not been flipped. It doesn't care about the number. So we can flip a second occurrence as the second card. Then after flipping it, we have now seen that number twice. But we don't discard immediately because the rule for discarding during a turn only applies if the first card matched a previously flipped card. Here the first card was new and didn't match. The second card, even though it matches a previously flipped card, doesn't trigger immediate discard. They are just flipped back. So now we have a known pair (the two copies of that number are both in the "flipped previously" set). At the start of the next turn, we will discard them.
+    // So a known pair forms exactly when we flip a second occurrence as the second card of a turn (where the first card was a new, non-matching card).
+    // Also, a known pair could form if we flip a second occurrence as the first card? If we flip a second occurrence as the first card, it matches a previously flipped card, so we immediately flip that known card as second and discard both. So no known pair remains.
+    // Therefore, the only way to get a known pair is to flip a second occurrence as the second card.
+    // Now, let's categorize turns:
+    // - Turn type A (removal, immediate): First card new, matches nothing. Second card new, but has same number as first card. (Adjacent pair). They match and are discarded. (1 turn, removes 2 cards, 0 added to known set).
+    // - Turn type B (removal, match known): First card is a second occurrence (matches a known card). We flip the known card as second, discard both. (1 turn, removes 2 cards, removes 1 from known set? Actually the known card is removed, and the first card is removed, so the known set loses that number).
+    // - Turn type C (non-removal, two new different): First card new, no match. Second card new, different number from first. Both added to known set. (1 turn, 0 removed, 2 added to known set).
+    // - Turn type D (non-removal, first new, second matches known): First card new, no match. Second card new (physical), but its number matches a known card. Then both are flipped back. Now the known set has that number twice (so it becomes a known pair). This turn doesn't remove anything, but it changes the known set: it adds the first card's number (once), and adds the second card's number (making it a pair). So the known set size increases by 1? Actually, before the turn, the known set had the second card's number once. After, it has that number twice (a pair) and also the first card's number once. So net change: +1 single, +1 pair. But the pair will be removed at the start of the next turn (type E turn).
+    // - Turn type E (removal, known pair): At start of turn, there is a known pair. We flip those two cards and discard them. (1 turn, removes 2 cards, removes the pair from known set).
+    // Note: Type E turn doesn't flip any new cards; it just uses previously flipped cards.
+    // So the sequence of turns is governed by the arrangement.
+    // We want exactly k turns total. Let's denote:
+    // a = number of type A turns (immediate adjacent pairs)
+    // b = number of type B turns (first card matches known)
+    // c = number of type C turns (two new different)
+    // d = number of type D turns (first new, second matches known)
+    // e = number of type E turns (known pair removal)
+    // Total turns k = a + b + c + d + e.
+    // Total cards = 2n. Each turn removes either 2 or 0 cards. Removals: type A, B, E remove 2 cards each. Types C, D remove 0. So 2(a + b + e) = 2n => a + b + e = n.
+    // Also, every number appears twice. Let's track the "first occurrences" and "second occurrences".
+    // In type A, we consume both occurrences of a number at once.
+    // In type B, we consume a second occurrence (as first card) and a first occurrence (as second card, the known one). So it uses one second occurrence and removes one first occurrence from known set.

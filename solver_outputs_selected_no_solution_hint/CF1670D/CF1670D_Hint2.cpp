@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+ll f(ll k) {
+    if (k <= 2) return 0;
+    ll a = k / 3;
+    ll r = k % 3;
+    ll ans = 6 * a * a;
+    if (r == 1) {
+        ans += 4 * a;
+    } else if (r == 2) {
+        ans += 8 * a + 2;
+    }
+    return ans;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        ll n;
+        cin >> n;
+        ll lo = 0, hi = 1;
+        while (f(hi) < n) hi *= 2;
+        while (lo < hi) {
+            ll mid = lo + (hi - lo) / 2;
+            if (f(mid) >= n) hi = mid;
+            else lo = mid + 1;
+        }
+        cout << lo << '\n';
+    }
+    return 0;
+}

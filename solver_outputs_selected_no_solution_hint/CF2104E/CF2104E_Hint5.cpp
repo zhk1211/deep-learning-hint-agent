@@ -1,0 +1,58 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, k;
+    cin >> n >> k;
+    string s;
+    cin >> s;
+
+    vector<int> nxt(n + 2, n);
+    vector<int> pos(k, n);
+    for (int i = n - 1; i >= 0; --i) {
+        pos[s[i] - 'a'] = i;
+        int mx = 0;
+        for (int c = 0; c < k; ++c) {
+            mx = max(mx, pos[c]);
+        }
+        nxt[i] = mx;
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        string t;
+        cin >> t;
+        int cur = -1;
+        int ans = 0;
+        for (char ch : t) {
+            if (cur + 1 >= n) {
+                ++ans;
+                continue;
+            }
+            int npos = nxt[cur + 1];
+            if (npos >= n) {
+                ++ans;
+                continue;
+            }
+            int idx = -1;
+            for (int i = cur + 1; i <= npos; ++i) {
+                if (s[i] == ch) {
+                    idx = i;
+                    break;
+                }
+            }
+            if (idx == -1) {
+                ++ans;
+            } else {
+                cur = idx;
+            }
+        }
+        cout << ans << '\n';
+    }
+
+    return 0;
+}

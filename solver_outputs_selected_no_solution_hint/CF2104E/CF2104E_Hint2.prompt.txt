@@ -1,0 +1,89 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Let's call a letter allowed if it is a lowercase letter and is one of the first $ k $ letters of the Latin alphabet.
+
+You are given a string $ s $ of length $ n $ , consisting only of allowed letters.
+
+Let's call a string $ t $ pleasant if $ t $ is a subsequence of $ s $ .
+
+You are given $ q $ strings $ t_1, t_2, \dots, t_q $ . All of them consist only of allowed letters. For each string $ t_i $ , calculate the minimum number of allowed letters you need to append to it on the right so that it stops being pleasant.
+
+A sequence $ t $ is a subsequence of a sequence $ s $ if $ t $ can be obtained from $ s $ by the deletion of several (possibly, zero or all) element from arbitrary positions.
+
+Input Format
+The first line contains two integers $ n $ and $ k $ ( $ 1 \le n \le 10^6 $ ; $ 1 \le k \le 26 $ ) — the length of the string $ s $ and the number of allowed letters.
+
+The second line contains the string $ s $ , consisting of $ n $ lowercase Latin letters. Each character of the string is one of the first $ k $ letters of the Latin alphabet.
+
+The third line contains one integer $ q $ ( $ 1 \le q \le 2 \cdot 10^5 $ ) — the number of queries.
+
+The next $ q $ lines contain queries: one query per line. The $ i $ -th line contains the string $ t_i $ , consisting only of allowed letters.
+
+Additional constraint on input: the total length of all $ t_i $ does not exceed $ 10^6 $ .
+
+Output Format
+For each query, output one integer — the minimum number of allowed letters that need to be appended to the string on the right so that it stops being pleasant.
+
+Examples
+Sample 1
+Input
+7 3
+abacaba
+3
+cc
+bcb
+b
+Output
+0
+1
+2
+
+Sample 2
+Input
+5 1
+aaaaa
+6
+a
+aa
+aaa
+aaaa
+aaaaa
+aaaaaa
+Output
+5
+4
+3
+2
+1
+0
+
+Note
+In the first example:
+
+1. The string cc is already unpleasant, so nothing needs to be appended to it;
+2. bcb is pleasant, so at least one letter needs to be appended to the right: bcba will not work, but bcbb and bcbc are unpleasant.
+3. To b, at least two letters need to be appended, since ba, bb, and bc are pleasant. For example, we can obtain an unpleasant string bbb.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+Think about how to preprocess the string.
+
+**Hint 2**
+Think about which letters of the string are important.
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

@@ -1,0 +1,126 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(vector<int> &idx) {
+    cout << "? " << idx.size();
+    for (int x : idx) cout << " " << x;
+    cout << endl;
+    int res;
+    cin >> res;
+    return res;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    
+    // Find pairs using queries of size 2
+    vector<int> pairs;
+    vector<bool> used(m + 1, false);
+    
+    for (int i = 1; i <= m; i++) {
+        if (used[i]) continue;
+        // find partner for i
+        int partner = -1;
+        for (int j = i + 1; j <= m; j++) {
+            if (used[j]) continue;
+            vector<int> q = {i, j};
+            int res = query(q);
+            if (res > 0) {
+                partner = j;
+                break;
+            }
+        }
+        // Now we know i and partner have the same value, but we don't know which value.
+        // We'll determine values later.
+        pairs.push_back(i);
+        pairs.push_back(partner);
+        used[i] = used[partner] = true;
+    }
+    
+    // Now we have pairs of indices that share the same value.
+    // We need to assign values 1..n to these pairs.
+    // We can determine the value of a pair by querying it together with another pair.
+    // If we query two indices from different pairs, MAD will be the value of the pair that appears twice if they have the same value, else 0.
+    // But we need to know which value is which.
+    
+    // We can find the value of each pair by querying it with a known pair.
+    // First, find value of first pair.
+    // We can query first pair with another pair. If MAD > 0, they share the same value.
+    // But we need a base value.
+    
+    // Alternative: Use queries of size n.
+    // If we query n indices, MAD will be the maximum value that appears at least twice.
+    // If we take one index from each pair, we get n distinct values, so MAD = 0.
+    // If we take both indices from one pair and one from each other pair, MAD = value of that pair.
+    
+    // So we can determine the value of each pair by querying a set of n indices that includes both from that pair and one from each other pair.
+    
+    vector<int> value_of_pair(n, 0);
+    // pairs array has 2n indices: pairs[2*i], pairs[2*i+1] are the two indices of pair i (0-based)
+    
+    // We'll assign values 1..n to pairs.
+    // We can find the value of pair 0 by querying a set that includes both from pair 0 and one from each other pair.
+    vector<int> base_query;
+    base_query.push_back(pairs[0]);
+    base_query.push_back(pairs[1]);
+    for (int i = 1; i < n; i++) {
+        base_query.push_back(pairs[2*i]); // one from each other pair
+    }
+    int val0 = query(base_query);
+    value_of_pair[0] = val0;
+    
+    // Now for each other pair i, we can find its value by replacing one of the indices from pair 0 with the second index of pair i.
+    // Actually, we can query: both from pair i, one from pair 0, and one from each other pair (excluding pair i and pair 0).
+    // But we need exactly n indices.
+    // Let's construct a query for pair i: include both from pair i, and one from each other pair.
+    // But we already know value of pair 0, so we can use it as a reference.
+    
+    // Simpler: For each pair i from 1 to n-1, query: both from pair i, one from pair 0, and one from each other pair (excluding i and 0).
+    // That's n indices. MAD will be max(value_of_pair[i], value_of_pair[0]) if they are different, but if they are the same, it's that value.
+    // Actually, if value_of_pair[i] != value_of_pair[0], then MAD is max of the two? Wait, MAD is the maximum value that appears at least twice.
+    // In this query, value_of_pair[i] appears twice, value_of_pair[0] appears once (since we only included one from pair 0), and all other values appear once.
+    // So the only value appearing twice is value_of_pair[i]. Thus MAD = value_of_pair[i] regardless of value_of_pair[0].
+    // So we can directly get value_of_pair[i] by such a query!
+    
+    for (int i = 1; i < n; i++) {
+        vector<int> q;
+        q.push_back(pairs[2*i]);
+        q.push_back(pairs[2*i+1]);
+        // add one from each other pair
+        for (int j = 0; j < n; j++) {
+            if (j == i) continue;
+            q.push_back(pairs[2*j]); // one from pair j
+        }
+        value_of_pair[i] = query(q);
+    }
+    
+    // Now we have values for all pairs.
+    // Assign to array a.
+    for (int i = 0; i < n; i++) {
+        a[pairs[2*i]] = value_of_pair[i];
+        a[pairs[2*i+1]] = value_of_pair[i];
+    }
+    
+    // Output answer
+    cout << "!";
+    for (int i = 1; i <= m; i++) {
+        cout << " " << a[i];
+    }
+    cout << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

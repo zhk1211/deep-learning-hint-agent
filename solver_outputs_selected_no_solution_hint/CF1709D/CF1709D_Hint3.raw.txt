@@ -1,0 +1,268 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(m + 1);
+    for (int i = 1; i <= m; ++i) {
+        cin >> a[i];
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        int xs, ys, xf, yf, k;
+        cin >> xs >> ys >> xf >> yf >> k;
+
+        // Check column alignment modulo k
+        if ((ys - yf) % k != 0 || (xs - xf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // The highest row reachable in columns between ys and yf
+        // We can move up to at most n, but blocked cells restrict us.
+        // The robot can move up to the maximum possible row in the range [min(ys,yf), max(ys,yf)]
+        // which is n minus the maximum blocked height in that range.
+        // Actually, the robot can only step on unblocked cells, so the maximum row it can be at
+        // in any column c is n - a[c]. But we need to ensure we can pass through.
+        // The highest row we can reach in the entire path is limited by the minimum of (n - a[c]) over c in the range.
+        // However, we start at xs and need to go to xf. We can move up to increase row.
+        // The maximum row we can achieve is: start from xs, go up to the highest possible row in the start column,
+        // then move horizontally, then go down. But horizontal movement requires that all intermediate columns
+        // have at least that row unblocked.
+        // So the maximum row we can reach is min over c in [min(ys,yf), max(ys,yf)] of (n - a[c]).
+        // But we also need to be able to reach that row from xs using steps of size k.
+        // Since we can move up multiple times, we can reach any row >= xs that is congruent to xs mod k,
+        // as long as it's <= the maximum allowed row.
+        // Similarly, we need to reach xf from that row by moving down.
+        // So we need a row R such that:
+        // R >= xs, R >= xf
+        // R ≡ xs (mod k) and R ≡ xf (mod k) -> already ensured by (xs - xf) % k == 0
+        // R <= min_{c in [min(ys,yf), max(ys,yf)]} (n - a[c])
+        // Also, we can just go directly if xs == xf and ys == yf, but the condition covers it.
+        // Actually, we can also move down first? No, moving down from start might hit blocked cells.
+        // The robot can only move up, right, down, left. It cannot move into blocked cells.
+        // So the path must stay within unblocked cells.
+        // The maximum row we can ever be at during the journey is limited by the "bottleneck" column.
+        // So we need to check if there exists a row R satisfying the above.
+        // The maximum possible R is max_row = min_{c in [l, r]} (n - a[c]).
+        // We need the largest R <= max_row with R ≡ xs (mod k) and R >= max(xs, xf).
+        // Since we can move up multiple times, we can achieve any such R.
+        // So we just need to check if the largest such R >= max(xs, xf).
+        // That is equivalent to: max(xs, xf) <= max_row and (max_row - xs) % k == 0? No, we can choose R not necessarily equal to max_row.
+        // Actually, we can move up to any row R that is ≡ xs mod k and R <= max_row.
+        // So we need the maximum R satisfying R <= max_row and R ≡ xs (mod k). That is:
+        // R = xs + k * floor((max_row - xs) / k)
+        // Then we need R >= max(xs, xf). Since R >= xs automatically, we just need R >= xf.
+        // But wait: we also need to be able to go from R down to xf. Since we can move down multiple times,
+        // we can go from R to any row <= R that is ≡ R mod k (which is ≡ xs mod k ≡ xf mod k).
+        // So if R >= xf, we can go down to xf.
+        // So condition: xs + k * floor((max_row - xs) / k) >= xf.
+        // But note: if max_row < xs, then floor is negative, R < xs, but we can't move down initially because we might hit blocked cells?
+        // Actually, we start at xs. If max_row < xs, we cannot even stay in the start column? Wait, max_row is the minimum over columns in the range.
+        // The start column is in the range, so max_row <= n - a[ys]. But we are given that a[ys] < xs <= n, so n - a[ys] >= xs.
+        // So max_row >= xs? Not necessarily, because other columns might have lower n - a[c]. So max_row could be less than xs.
+        // In that case, we cannot even move horizontally without going down first, but going down might hit blocked cells.
+        // Actually, we can only move up, right, down, left. If we are at xs in column ys, and we want to move to another column,
+        // we must move horizontally at row xs. But if some column c has n - a[c] < xs, then row xs in column c is blocked.
+        // So we cannot move horizontally at row xs. We could move up first to a higher row, then move horizontally.
+        // But if max_row < xs, then even the highest possible row in the bottleneck column is below xs, so we cannot ever reach that column.
+        // So the condition max_row >= max(xs, xf) is necessary.
+        // But wait: what if we move down first? We can't move down from xs because the cells below might be blocked.
+        // The start cell is unblocked, but cells below it up to a[ys]+1 are blocked? Actually, a[ys] is the number of blocked cells at the bottom.
+        // So rows 1..a[ys] are blocked. xs > a[ys], so rows a[ys]+1 .. n are unblocked. So we can move down from xs to a[ys]+1.
+        // So we could move down to a lower row, then move horizontally, then move up. But moving down reduces our row, making it harder to pass over blocked columns.
+        // So the maximum row we can achieve in the path is still limited by the bottleneck column's n - a[c].
+        // But we can also go below xs? Yes, we can go down to any row >= a[ys]+1. But that doesn't help with passing columns with low n - a[c].
+        // So the critical thing is the maximum row we can be at when crossing the bottleneck column.
+        // The bottleneck column is the one with the smallest n - a[c] in the range. To cross it, we must be at a row <= n - a[c].
+        // Since we want to maximize our row to be able to go down to xf, we should cross at the highest possible row, which is n - a[c].
+        // But we can only reach rows that are ≡ xs mod k. So we need to be able to reach some row <= n - a[c] that is ≡ xs mod k and >= max(xs, xf).
+        // However, we can also adjust our row before and after crossing. For example, we can go up to a high row in the start column, cross at that row,
+        // then go down in the finish column. The maximum row we can cross at is limited by the minimum n - a[c] over the columns we cross.
+        // So the condition is exactly: let L = min(ys, yf), R = max(ys, yf). Let max_row = min_{c in [L, R]} (n - a[c]).
+        // We need to check if there exists an integer H such that:
+        // H ≡ xs (mod k)
+        // H <= max_row
+        // H >= xs (we can go up from xs to H)
+        // H >= xf (we can go down from H to xf)
+        // Since H >= xs is implied by H ≡ xs mod k and H >= xs? Not necessarily, if H < xs, then H ≡ xs mod k means H = xs - m*k, which is possible if we go down.
+        // But can we go down from xs? Yes, as long as we don't hit blocked cells. The start column has unblocked cells from a[ys]+1 to n.
+        // So we can go down to any row >= a[ys]+1 that is ≡ xs mod k.
+        // So H could be less than xs. But then we need H >= xf? Actually, if H < xf, we would need to go up from H to xf, which is possible if H <= xf and H ≡ xf mod k.
+        // So the condition is: there exists H such that:
+        // H ≡ xs (mod k)
+        // a[ys] < H <= n (since we must stay in unblocked cells in start column? Actually, we only need to be at H in the bottleneck column, not necessarily in start column.
+        // But to reach H in the bottleneck column, we must be able to reach H in the start column first? Not necessarily: we could go horizontally at a lower row,
+        // then go up in the bottleneck column? But the bottleneck column has n - a[c] as the highest unblocked row. If we go horizontally at a row lower than H,
+        // we can then go up in the bottleneck column to H, provided H <= n - a[c] and the cells between are unblocked. But going up in the bottleneck column
+        // requires that all intermediate rows are unblocked, which they are since a[c] is the number of blocked cells at the bottom, so rows a[c]+1 .. n are unblocked.
+        // So we can go up in any column as long as we stay above a[c]. So we don't need to reach H in the start column; we can reach a lower row in the start column,
+        // move horizontally at that lower row (if it's unblocked in all intermediate columns), then go up in the bottleneck column to H.
+        // But wait: if we move horizontally at a lower row, that row must be unblocked in all columns we pass through. So the row we move horizontally at must be
+        // <= n - a[c] for all c in the range. So if we move horizontally at row r, we need r <= min_{c} (n - a[c]) = max_row.
+        // Then from r, we can go up to H in the bottleneck column, but H must also be <= max_row. So effectively, the maximum row we can ever be at in any column
+        // is max_row. So we can choose to cross at any row r <= max_row that is reachable from xs and from which xf is reachable.
+        // Reachable from xs: we can go up/down in start column to any row r' such that a[ys] < r' <= n and r' ≡ xs (mod k). Then we move horizontally at row r'.
+        // But to move horizontally at row r', we need r' <= max_row. So r' must be <= max_row.
+        // Then from r' in the finish column, we can go up/down to xf: we need to reach xf from r' in the finish column, which requires that
+        // there exists a row r'' in the finish column such that a[yf] < r'' <= n, r'' ≡ xf (mod k), and we can move vertically between r' and r''.
+        // Since we can move vertically freely within unblocked cells, we can go from r' to any row between a[yf]+1 and n that is ≡ r' (mod k).
+        // So we need that xf is reachable from r', i.e., xf ≡ r' (mod k) and xf is between a[yf]+1 and n (which is given) and we can go from r' to xf
+        // without hitting blocked cells. Since the entire column's unblocked cells are contiguous from a[yf]+1 to n, we can go from r' to xf if and only if
+        // both are in that range and r' ≡ xf (mod k). But r' ≡ xs (mod k) and we already have xs ≡ xf (mod k) from the column check, so that's fine.
+        // So the only constraints on r' are:
+        // a[ys] < r' <= n
+        // r' <= max_row
+        // r' ≡ xs (mod k)
+        // And we also need to be able to reach xf from r' in the finish column: that just requires that xf is in the unblocked range (given) and
+        // we can go from r' to xf. Since we can go down/up, we need that the entire segment between r' and xf is unblocked, which is true if both are > a[yf].
+        // But wait: if r' < a[yf], then we cannot be at r' in the finish column because it's blocked. So we actually need r' > a[yf] as well.
+        // But r' is the row we move horizontally at. We move from start column to finish column at row r'. So in the finish column, we arrive at row r'.
+        // So we need r' > a[yf]. Similarly, in the start column, we need r' > a[ys]. So overall, we need r' > max(a[ys], a[yf]).
+        // But note: max_row = min_{c} (n - a[c]) <= n - a[c] for all c, so n - max_row >= a[c]. Thus a[c] <= n - max_row.
+        // So max(a[ys], a[yf]) <= n - max_row. So if r' <= max_row, then r' <= n - a[c] for all c, which implies r' + a[c] <= n, so a[c] <= n - r'.
+        // This doesn't directly give r' > a[c]. Actually, we need r' > a[c] to be unblocked. The condition for row r to be unblocked in column c is r > a[c].
+        // So we need r' > a[ys] and r' > a[yf]. Since r' <= max_row = min(n - a[c]), we have r' <= n - a[c] for all c, so a[c] <= n - r'.
+        // This does not guarantee r' > a[c]. For example, n=10, a[c]=9, then n - a[c]=1. max_row=1. r' can be 1. But a[c]=9, so r'=1 is not > a[c]? Wait, 1 > 9 is false.
+        // But if a[c]=9, then rows 1..9 are blocked, so row 1 is blocked. So r'=1 would be blocked. But max_row = n - a[c] = 1. So the highest unblocked row is 1?
+        // Actually, if a[c]=9, blocked rows are 1..9, unblocked rows are 10..n. So n - a[c] = 1 means there is 1 unblocked row? No, n - a[c] is the number of unblocked rows.
+        // The highest unblocked row is n. The lowest unblocked row is a[c]+1. So the condition for a row to be unblocked is row >= a[c]+1.
+        // So max_row should be defined as min_{c} (n - a[c])? That is the number of unblocked rows, not the maximum row index.
+        // I think I confused max_row. Let's clarify:
+        // Column c has blocked rows 1..a[c]. Unblocked rows: a[c]+1 .. n.
+        // The maximum row index that is unblocked in column c is n.
+        // The minimum row index that is unblocked in column c is a[c]+1.
+        // So if we want to move horizontally at row r, we need r to be unblocked in all columns we pass through.
+        // That means for all c in [L, R], we need a[c] < r <= n.
+        // So r must be > max_{c in [L,R]} a[c]. Let M = max_{c in [L,R]} a[c].
+        // Then we need r > M. Also r <= n.
+        // Additionally, we need to be able to reach r from xs in the start column.
+        // In the start column, we can move vertically to any row r' such that a[ys] < r' <= n and r' ≡ xs (mod k).
+        // So we need to be able to reach some r > M with r ≡ xs (mod k) and r <= n.
+        // Then from r in the finish column, we need to reach xf. We can move vertically to any row r'' with a[yf] < r'' <= n and r'' ≡ r (mod k).
+        // Since r ≡ xs ≡ xf (mod k), we can reach xf if xf > a[yf] (given) and we can go from r to xf. That requires that the entire segment between r and xf is unblocked,
+        // which is true if both are > a[yf]. But we also need to ensure we don't hit the top? No, top is n, we can't go above n.
+        // So we just need r > a[yf] as well. But since M >= a[yf], r > M implies r > a[yf].
+        // So the condition simplifies to: there exists an integer r such that:
+        // r > M
+        // r <= n
+        // r ≡ xs (mod k)
+        // and we can reach r from xs in the start column: that means we can go from xs to r using steps of size k without going out of bounds or into blocked cells.
+        // In the start column, blocked cells are 1..a[ys]. So we can move vertically as long as we stay > a[ys].
+        // So we need a path from xs to r staying within (a[ys], n] and moving in steps of k.
+        // Since we can move up and down, we can reach any row in (a[ys], n] that is ≡ xs (mod k) provided that the maximum row we can reach is at least that row,
+        // and the minimum row we can reach is at most that row. But we can always go up to n (if n ≡ xs mod k? Not necessarily, we can go up to the largest row <= n
+        // that is ≡ xs mod k). And we can go down to the smallest row > a[ys] that is ≡ xs mod k.
+        // So the set of reachable rows in the start column is { r | a[ys] < r <= n, r ≡ xs (mod k) }.
+        // So we just need that there exists r in this set with r > M.
+        // That is equivalent to: the maximum reachable row in the start column that is > M exists.
+        // The maximum reachable row overall is R_max = xs + k * floor((n - xs) / k). This is <= n.
+        // We need R_max > M.
+        // But wait: we also need to be able to go from r to xf in the finish column. In the finish column, we can move vertically to any row in (a[yf], n] that is ≡ r (mod k).
+        // Since r ≡ xf (mod k), xf is in that set if xf > a[yf] (given) and xf <= n (given). But we also need to be able to go from r down to xf without hitting blocked cells.
+        // That requires that the minimum row we can reach in the finish column is <= xf. The minimum reachable row in the finish column from r is the smallest row > a[yf] that is ≡ r (mod k).
+        // So we need that xf >= that minimum. But since we can also go up from r to xf if xf > r, we just need that xf is between the min and max reachable rows in the finish column.
+        // The reachable rows in the finish column from r are exactly those in (a[yf], n] that are ≡ r (mod k). So xf is reachable iff xf > a[yf] (given) and xf ≡ r (mod k) (given by column check).
+        // So no additional constraint from the finish column, because xf is already in the unblocked range and matches modulo.
+        // But wait: what if r < xf? Then we need to go up from r to xf. That's fine as long as xf <= n and we don't hit blocked cells going up. Since blocked cells are only at the bottom,
+        // going up from r > a[yf] to xf > a[yf] is safe. Similarly, if r > xf, going down is safe.
+        // So the only real constraint is that we can find some r in the start column's reachable set that is > M.
+        // But is that sufficient? Consider the case where we move horizontally at r. We need r to be unblocked in all columns between ys and yf.
+        // That requires r > a[c] for all c in [L, R], i.e., r > M. So yes.
+        // So the condition is: max_reachable_row_in_start_column > M, where max_reachable_row_in_start_column = the largest number <= n that is ≡ xs (mod k) and > a[ys].
+        // But wait: we can also move horizontally at different rows in different segments? No, the robot moves in straight lines of length k. We can't change direction mid-command.
+        // But we can issue multiple commands. So we can go up, then right, then down, etc. So we can change row between columns. But when moving horizontally, we move exactly k cells right or left.
+        // So if we want to move from column ys to column yf, we need to move horizontally in steps of k. That means the difference in columns must be a multiple of k, which we already checked.
+        // But we can also move vertically in between. So we can go up in the start column to some row r1, then move right by k columns to column ys + k, arriving at row r1,
+        // then go up/down in that column to r2, then move right again, etc. So we can adjust our row at each intermediate column.
+        // Therefore, the row at which we cross each column can be different! The only constraint is that when we are in a column, we must be at a row > a[that column].
+        // So we don't need a single row r that works for all columns. We can change rows at each step.
+        // This changes everything. Let's re-evaluate.
+
+        // We start at (xs, ys). We can move vertically in the start column to any row reachable via steps of k, staying > a[ys].
+        // Then we can move horizontally by k columns to the right or left. We can do this multiple times.
+        // After each horizontal move, we land in a new column at the same row. Then we can adjust vertically in that new column.
+        // So essentially, we can navigate the grid as long as we can always find a safe row in each column we visit.
+        // The goal is to reach (xf, yf).
+        // Since horizontal moves are exactly k columns, the column indices we can visit are those ≡ ys (mod k) (if we only move right/left by multiples of k).
+        // But we can also move left and right in any order. The set of reachable columns is all columns that have the same remainder modulo k as ys.
+        // Since we already checked (ys - yf) % k == 0, yf is reachable.
+        // Now, can we always find a path? We need to ensure that from start column to finish column, we can move through intermediate columns without getting stuck.
+        // This is similar to: we have columns with "ceilings" (the blocked cells). We can move vertically in each column within the unblocked range.
+        // We want to go from (xs, ys) to (xf, yf). We can think of it as: we need to find a sequence of columns from ys to yf, stepping by ±k, and in each column we choose a row,
+        // such that the row is > a[column], and the row in consecutive columns are either the same (if we moved horizontally) or differ by a multiple of k (if we moved vertically in between).
+        // But we can always move vertically in a column before moving horizontally again. So the row we are at in a column can be any reachable row in that column.
+        // The reachable rows in column c are those ≡ xs (mod k) (since all vertical moves are by k, the modulo is invariant) and > a[c] and <= n.
+        // So the set of reachable rows in column c is S_c = { r | a[c] < r <= n, r ≡ xs (mod k) }.
+        // We start at xs in column ys. We need to end at xf in column yf. Both are in their respective S_c.
+        // We can move from column c to column c±k if there exists a row r that is in both S_c and S_{c±k}? Actually, when we move horizontally, we stay at the same row.
+        // So to move from column c to column c+k, we need to be at a row r that is unblocked in both columns, i.e., r > a[c] and r > a[c+k], and r ≡ xs (mod k).
+        // Then we can just move right. But we could also move vertically in column c to some r, move right to column c+k at row r, then move vertically in column c+k.
+        // So the transition from column c to c+k is possible if S_c ∩ S_{c+k} is non-empty. Because we can go to a common row, move horizontally, then continue.
+        // But wait: we don't necessarily need a common row. We could move vertically in column c to some r1, move right to column c+k at r1, but if r1 is blocked in column c+k,
+        // we would explode. So r1 must be in S_{c+k}. So yes, we need a row that is in both S_c and S_{c+k} to make the horizontal move.
+        // However, we could also move vertically in column c+k after arriving? No, if we arrive at a blocked cell, we explode immediately. So the row we move horizontally at must be unblocked in the destination column.
+        // So the intersection must be non-empty.
+        // Therefore, the problem reduces to: we have a graph where nodes are columns with the same modulo k as ys. Two columns c and c+k are connected if S_c ∩ S_{c+k} ≠ ∅.
+        // We need to check if ys and yf are in the same connected component.
+        // But note that we can also move vertically within a column to change rows. So if we can reach a column, we can reach any row in its S_c.
+        // So the connectivity is transitive: if S_a ∩ S_b ≠ ∅ and S_b ∩ S_c ≠ ∅, then we can go from a to c via b.
+        // So we just need to check if there is a path from ys to yf in this graph.
+        // Now, what is the condition for S_c ∩ S_{c+k} ≠ ∅?
+        // S_c = { r | r > a[c], r <= n, r ≡ xs mod k }.
+        // S_{c+k} = { r | r > a[c+k], r <= n, r ≡ xs mod k }.
+        // The intersection is non-empty iff the maximum of the lower bounds is less than or equal to n, and there exists an r ≡ xs mod k in that range.
+        // More precisely, let L = max(a[c], a[c+k]) + 1. We need an r >= L, r <= n, r ≡ xs mod k.
+        // The smallest such r is: let rem = xs % k. Actually, we need r ≡ xs (mod k). The smallest r >= L with that property is:
+        // r_min = L + ((xs - L) % k + k) % k. But careful: xs and L are integers. Let's define:
+        // We need r ≡ xs (mod k). The smallest r >= L is: if L % k <= xs % k, then r = L + (xs % k - L % k); else r = L + (k - (L % k - xs % k)).
+        // Equivalently: r = L + ((xs - L) % k + k) % k.
+        // This r must be <= n.
+        // So S_c ∩ S_{c+k} ≠ ∅ iff r_min <= n.
+        // But note: we also need to be able to reach that r from our current row in column c. But since we can move vertically freely within S_c, if the intersection is non-empty, we can reach it.
+        // So the condition for direct connection between adjacent columns (in the modulo k sense) is exactly that the maximum of their a[] values is not too high.
+        // Specifically, let M = max(a[c], a[c+k]). We need that there exists a row > M that is ≡ xs mod k and <= n.
+        // That is equivalent to: the largest row ≡ xs mod k that is <= n must be > M.
+        // Let max_reachable = xs + k * floor((n - xs) / k). This is the maximum row ≡ xs mod k in [1, n].
+        // We need max_reachable > M.
+        // But wait: is that sufficient? What if M is very close to n, say M = n-1, and max_reachable = n (if n ≡ xs mod k). Then max_reachable > M holds, and the only row is n.
+        // But n > M, so it's unblocked. So yes.
+        // So two adjacent columns c and c+k are connected iff max_reachable > max(a[c], a[c+k]).
+        // But max_reachable depends only on xs, n, k. It is the same for all columns.
+        // So the graph connectivity is: columns are nodes, edges between c and c+k if max(a[c], a[c+k]) < max_reachable.
+        // This is equivalent to: both a[c] < max_reachable and a[c+k] < max_reachable? Actually, max(a[c], a[c+k]) < max_reachable iff both are < max_reachable.
+        // So an edge exists iff both endpoints have a[] < max_reachable.
+        // Therefore, the graph is simply: we can move between columns that have a[c] < max_reachable. But we also need to consider the start and finish columns themselves.
+        // We start at column ys. We can only leave ys if we can move horizontally to an adjacent column. That requires a[ys] < max_reachable and a[ys±k] < max_reachable.
+        // But we also need to be able to exist in column ys initially: we are at xs, which is > a[ys] by input. But we also need xs to be reachable, which it is.
+        // However, to move horizontally from ys, we need to be at a row that is also unblocked in the next column. That row must be > a[ys] and > a[next]. So we need to be able to reach a row > max(a[ys], a[next]).
+        // Since we can move vertically in ys, we can reach any row in S_ys. The maximum row in S_ys is max_reachable (if max_reachable > a[ys]). But wait: max_reachable is the global maximum row ≡ xs mod k in [1, n].
+        // Is it always reachable from ys? We can move up from xs to max_reachable if max_reachable >= xs and max_reachable <= n and max_reachable ≡ xs mod k. Yes, by moving up (max_reachable - xs)/k times.
+        // But we must ensure we don't hit blocked cells while moving up. In column ys, blocked cells are 1..a[ys]. Since xs > a[ys] and max_reachable >= xs, all intermediate rows are > a[ys], so safe.
+        // So we can reach max_reachable in column ys if max_reachable > a[ys]. But what if max_reachable <= a[ys]? Then we cannot even reach max_reachable because it's blocked.
+        // In that case, the maximum reachable row in column ys is the largest row <= n that is ≡ xs mod k and > a[ys]. That might be less than global max_reachable.
+        // So the actual maximum row we can reach in a given column c is: R_c = max{ r <= n : r ≡ xs mod k, r > a[c] }.
+        // This R_c could be less than the global max_reachable if a[c] is high.
+        // So for two columns c and d to be connected, we need that we can go from c to d. That requires that there is a path where each step moves between columns that share a common reachable row.
+        // But note that the set of reachable rows in column c is exactly all r ≡ xs mod k with a[c] < r <= n.
+        // So the maximum reachable row in column c is R_c = the largest such r. If a[c] >= n, then R_c might not exist? But a[c] <= n, and if a[c] = n, then no unblocked cells, but start/finish are unblocked so a[c] < n for those columns. For intermediate columns, a[c] could be n, making them impassable.
+        // So if any column in the range has a[c] >= max_reachable? Actually, we need to pass through columns. We can only enter a column if we can be at some row > a[c]. So we need R_c to exist.
+        // R_c exists iff there is some r ≡ xs mod k with r > a[c] and r <= n. That is equivalent to: the largest r ≡ xs mod k that is <= n must be > a[c]. That is exactly max_reachable > a[c].
+        // Because if max_reachable > a[c], then max_reachable itself is > a[c] and ≡ xs mod k, so R_c = max_reachable. If max_reachable <= a[c], then there is no r ≡ xs mod k that is > a[c] (since max_reachable is the maximum possible such r). So R_c does not exist.
+        // Therefore, a column c is "usable" (we can be in it) iff max_reachable > a[c].
+        // If a column is usable, we can reach the global max_reachable in it. So in any usable column, we can reach the exact same maximum row max_reachable.
+        // Therefore, any two usable columns that are adjacent (differ by k) can be connected by moving to max_reachable in the first, moving horizontally (since max_reachable > a[first] and max_reachable > a[second] because both are usable), and then we are in the second column at max_reachable.
+        // So the graph of usable columns is connected if we consider edges between c and c±k. But wait: we can only move horizontally by exactly k. So from column c, we can only go to c+k or c-k. So the usable columns form a subgraph where edges exist between c and c±k if both are usable.
+        // Since all usable columns share the same max_reachable, any edge between two usable columns is valid.
+        // So the condition to go from ys to yf is: ys and yf must be usable (i.e., max_reachable > a[ys] and max_reachable > a[yf]), and there must be a path of usable columns from ys to yf where each step is ±k.
+        // But note: we start at xs in column ys. xs might be less than max_reachable. But we can move up to max_reachable because ys is usable. Similarly, we can move down from max_reachable to xf in yf.
+        // So the problem reduces to: let max_reachable = the largest number <= n that is ≡ xs (mod k). (This is xs + k * floor((n - xs) / k)).
+        // Check if max_reachable > a[ys] and max_reachable > a[yf]. If not, answer NO.
+        // Then, we need to check if we can go from ys to yf moving

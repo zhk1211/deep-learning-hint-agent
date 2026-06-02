@@ -1,0 +1,433 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    
+    // dp[i][j] = min coins to paint first i elements, 
+    // where j indicates the state of the last element:
+    // 0 = last element is blue and we haven't started a red segment
+    // 1 = last element is red and we have some "active" red element that can still expand
+    // 2 = last element is red but the active red element is exhausted (value 0)
+    const int INF = 1e9;
+    vector<array<int, 3>> dp(n + 1, {INF, INF, INF});
+    dp[0][0] = 0;
+    
+    for (int i = 0; i < n; ++i) {
+        // state 0: no active red element
+        if (dp[i][0] != INF) {
+            // option 1: pay coin to paint a[i] red, start new active segment
+            dp[i + 1][1] = min(dp[i + 1][1], dp[i][0] + 1);
+            // option 2: leave it blue (only possible if a[i] == 0? Actually we can't leave it blue forever,
+            // but we can delay painting. However, if we leave it blue, we must eventually paint it.
+            // This state means we haven't painted it yet, so it's blue.
+            // But we can only stay in state 0 if we don't paint it. That's allowed temporarily.
+            dp[i + 1][0] = min(dp[i + 1][0], dp[i][0]);
+        }
+        
+        // state 1: active red element exists (value > 0)
+        if (dp[i][1] != INF) {
+            // we can use the active red element to paint a[i] for free, if a[i] is adjacent
+            // but we need to know the value of the active red element. 
+            // Actually, the state doesn't track the exact value, just that it's >0.
+            // When we use it, we decrease it by 1. If it becomes 0, we transition to state 2.
+            // But we don't know if it becomes 0. We need to know the value.
+            // So this DP is insufficient. We need to track the remaining value.
+        }
+    }
+    
+    // The above approach fails because we need to know the remaining value of the active red element.
+    // Let's rethink: We can model the process as choosing some elements to pay coins for,
+    // and then they can spread their value to adjacent blue elements.
+    // This is equivalent to: we have some "sources" (paid elements) with initial value a[i].
+    // They can propagate their value to neighbors, decreasing by 1 each step.
+    // The total number of coins is the number of sources.
+    // We want to cover all elements with these propagations.
+    // This is similar to placing "towers" with range equal to their value.
+    // But the propagation can go left and right, and the value is shared.
+    // Actually, each source can cover a contiguous segment around it, 
+    // but the total distance covered on both sides sums to at most a[i].
+    // However, the order of operations matters: you can't cross a zero-value element without paying.
+    // Wait, you can only propagate to adjacent blue elements. So if there's a gap of zeros,
+    // you can't jump over them without paying for a new source.
+    // So the problem reduces to: partition the array into segments, 
+    // each segment must be covered by one or more paid elements inside it.
+    // Within a segment, we can have multiple paid elements that help each other.
+    // But actually, if you have two paid elements in the same segment, 
+    // they can combine their values to cover the segment.
+    // This is getting complicated.
+    
+    // Let's look at hints: "Can you use dynamic programming?" Yes.
+    // "Think about how the red elements are used."
+    // "How does the answer change when there is only one red element?"
+    // If there's only one red element, you pay 1 coin, and it can cover a[i] distance total.
+    // "What happens when there are several red elements?"
+    // They can be used to cover gaps between them.
+    
+    // Alternative perspective: We can think of the process backwards.
+    // Or we can think of it as: we start with all blue. We pay for some elements to become red.
+    // Then we can repeatedly: pick a red element with value >0, decrease it by 1, 
+    // and paint an adjacent blue element red (with value 0 initially? No, the new red element 
+    // gets the value that was originally at that position? Wait, the problem says:
+    // "choose a red element which is not equal to 0 and a blue element adjacent to it,
+    // decrease the chosen red element by 1, and paint the chosen blue element red."
+    // The new red element gets its original value from the array? 
+    // Actually, the array values are fixed. When you paint a blue element red, 
+    // it becomes red with its original value a[i]. So if a[i] = 2, it becomes a red 2.
+    // That can then be used to spread further!
+    // So it's like you activate elements by paying or by being adjacent to an active element 
+    // that spends 1 to activate you. Once activated, you have your value to spend.
+    // This is exactly like: you have a graph (line). You can pay to activate a node.
+    // An active node with value v can spend 1 to activate a neighbor, reducing its own value by 1.
+    // The goal: activate all nodes with minimum payments.
+    
+    // This is a classic problem: "Minimum number of coins to paint all elements" 
+    // where each element has a "charge" that can be used to activate neighbors.
+    // It can be solved with DP.
+    
+    // Let dp[i] = minimum coins to activate first i elements, with the condition that 
+    // the i-th element is activated, and we may have some "excess" value that can be used 
+    // to activate elements to the right. But the excess can only be used to the right.
+    // Actually, value can be used both left and right. But in DP, we can process left to right,
+    // and keep track of how much "help" we can get from the left to activate the current element,
+    // and how much "help" we can provide to the right.
+    
+    // Let's define dp[i][j] = min coins for prefix up to i, where j is the amount of 
+    // "unused activation power" that is available at position i to the right.
+    // But j can be up to 2? Actually, values are only 0,1,2. So the maximum value is 2.
+    // But when you use an element to activate a neighbor, you decrease it by 1.
+    // So the "power" that can be passed to the right is at most the value of the element 
+    // minus the cost to activate it (if it was activated by left) plus maybe its own value.
+    // This is getting messy.
+    
+    // Let's think differently: Since n is up to 2e5, we need O(n) or O(n*constant).
+    // Values are only 0,1,2. This suggests a state machine with few states.
+    
+    // Consider the process from left to right. We want to activate all elements.
+    // At each position i, we have some "incoming" help from the left: 
+    // the left neighbor might have spent some of its value to activate i.
+    // If i is activated by the left, we don't pay a coin. Otherwise, we must pay a coin 
+    // (or be activated by the right later, but we process left to right, so we can't rely on right).
+    // However, we can also activate i by paying a coin, and then use its value to help activate i+1.
+    // So we can define DP with states representing the "status" of the current position:
+    // - State 0: position i is not yet activated (blue). We must activate it later from the right? 
+    //   But if we process left to right, we can't leave it blue because we need to activate everything.
+    //   Actually, we can leave it blue and activate it from the right in the future. 
+    //   But then we need to remember that we have an obligation to activate it.
+    //   This is like a "debt" that must be paid by the right.
+    // - State 1: position i is activated by paying a coin. It has its full value a[i] available 
+    //   to help activate neighbors.
+    // - State 2: position i is activated by the left neighbor (free). It has its full value a[i] 
+    //   available to help activate neighbors.
+    // - State 3: position i is activated, but it has already spent 1 to activate the right neighbor? 
+    //   No, that's part of the transition.
+    
+    // Actually, the value of an element can be used to activate at most a[i] neighbors.
+    // It can activate left, right, or both. But since we go left to right, 
+    // the left neighbor is already activated (or we are activating it now).
+    // So the only direction we can use the value is to the right.
+    // Wait, can we use an element's value to activate the left neighbor? 
+    // Yes, but if we process left to right, the left neighbor is already activated by the time 
+    // we reach i. So we don't need to use i's value for the left. 
+    // However, we might have activated i from the right? That would mean we process right to left.
+    // But we can just process left to right and consider that an element can provide help to the right.
+    // What about an element providing help to the left? That would be equivalent to the left element 
+    // providing help to the right. So we can just consider help flowing to the right.
+    
+    // So we can define dp[i][j] = min coins for prefix up to i, where j is the amount of 
+    // "help" that is available from the left to activate position i+1.
+    // But wait, the help comes from the element at i (or earlier) that hasn't been used yet.
+    // Actually, when we activate element i, it can provide up to a[i] help to the right.
+    // But it might also need to receive help from the left to be activated.
+    // If it receives help from the left, that help is consumed (the left element decreases by 1).
+    // So the help available to the right from position i is:
+    // - If i was paid: a[i] (since we didn't use any help from left)
+    // - If i was activated by left: a[i] (the left spent 1, but i still has its full value a[i] to use)
+    // - If i was activated by left but the left had help value h, then h-1 is the remaining help 
+    //   after activating i? No, the help is the value of the left element. 
+    //   The left element spends 1 to activate i, so its remaining value is h-1. 
+    //   But then i has its own value a[i]. So the total help available to the right from i 
+    //   is (h-1) + a[i]? No, because the left element is at position i-1, and its remaining value 
+    //   can only be used to activate i+1 if i is already activated? 
+    //   Actually, the left element can only activate adjacent blue elements. 
+    //   Once i is activated, the left element can activate i+1? No, i+1 is not adjacent to i-1.
+    //   So the left element's remaining value can only be used to activate i-2 or i? 
+    //   It can't skip over i. So after activating i, the left element's remaining value is stuck 
+    //   on the left side of i. It cannot be used to the right of i.
+    //   Therefore, the only help that can be passed to the right is the value of i itself.
+    //   So the help available to the right is exactly a[i] (if i is activated), 
+    //   regardless of how i was activated.
+    //   But wait, what if i is activated by the left, and the left element had value 2, 
+    //   spent 1 to activate i, and now has 1 left. That 1 can be used to activate i-1? 
+    //   But i-1 is already activated (since we go left to right). So it's useless.
+    //   So indeed, only the value of the rightmost activated element matters for continuing to the right.
+    
+    // However, there is a catch: What if we don't activate i immediately? 
+    // We might skip i and activate i+1 first, then use i+1 to activate i (going left).
+    // That means help can flow leftwards. So our left-to-right DP must account for the possibility 
+    // that an element is activated by its right neighbor.
+    // This is equivalent to: we can have a "gap" of blue elements that are later activated 
+    // by a paid element on the right.
+    
+    // So we need to consider both directions. This suggests a DP that keeps track of 
+    // "how many consecutive blue elements we have at the end of the prefix, 
+    // and how much help we will have from the right to activate them."
+    // But since values are small (0,1,2), the gap length can't be large if we want to activate them 
+    // from the right, because the right element's value is at most 2. 
+    // Actually, a right element with value v can activate at most v elements to its left 
+    // (one by one, each step decreasing by 1). So it can cover a gap of at most v blue elements 
+    // to its left. But those blue elements, once activated, have their own values, 
+    // which can then be used to activate further left! 
+    // Example: 0 1 0 0 2. Pay for the 2 at the end. It can activate the 0 to its left (spends 1, becomes 1). 
+    // That 0 becomes red with value 0, so it can't help further. 
+    // But if the gap had a 1, like 0 1 0 1 2, paying for 2 activates the 1 (spends 1), 
+    // that 1 becomes red with value 1, which can then activate the 0 to its left, etc.
+    // So a single paid element on the right can activate a whole chain of elements to its left, 
+    // as long as the sum of values along the chain is sufficient to "pay" for the distance.
+    // Actually, it's like: starting from the paid element, you can move left, 
+    // spending 1 to activate the next element. That element then adds its value to your "pool" 
+    // of available moves. So you have a pool of moves that increases by a[i] when you activate i.
+    // You need to have at least 1 move to activate the next left element.
+    // This is exactly the same as going right, but in reverse.
+    
+    // So the problem is symmetric. We can think of it as: we choose a set of elements to pay for.
+    // Then we can propagate activation outwards from these paid elements.
+    // The propagation can be seen as: each paid element starts a "wave" that can travel left and right.
+    // The total distance traveled by all waves from a paid element is at most its value, 
+    // but when a wave activates a new element, that element can start its own wave.
+    // This is equivalent to: we have a graph, we want to select a set of nodes such that 
+    // every node is reachable from a selected node by a path where the sum of values 
+    // (excluding the start?) is at least the distance? 
+    // Actually, if we have a path of activated elements, the condition to activate the next 
+    // is that some already activated element has value >0 and spends 1. 
+    // So it's like we have a "budget" that can be spent to expand the activated set.
+    // Initially, budget = sum of values of paid elements. 
+    // When we expand to a new element, we spend 1 budget, and then gain a[i] budget.
+    // We want to activate all elements with minimum initial budget (number of paid elements, 
+    // but each paid element costs 1 coin regardless of its value? Wait, paying a coin 
+    // activates the element and gives you its value as budget. So the cost is 1 per paid element, 
+    // and the initial budget is the sum of their values.
+    // But we want to minimize the number of paid elements, not the sum of values.
+    // So we want to cover the array with as few paid elements as possible, 
+    // such that the "budget" never runs out when expanding.
+    
+    // This is similar to the "gas station" problem but with values 0,1,2.
+    // We can think of it as: we need to ensure that for every segment between paid elements, 
+    // the sum of values in the segment (excluding the paid elements? including?) 
+    // is at least the length of the segment minus something.
+    // Let's formalize: Suppose we pay for a set S. Then we can activate everything if and only if 
+    // for every contiguous segment of blue elements, the sum of values of the elements in that segment 
+    // plus the values of the boundary paid elements? Actually, the paid elements are already red.
+    // The blue elements between them need to be activated. 
+    // Consider two paid elements at positions L and R (L < R). The elements between them are blue.
+    // We can activate them from L going right, or from R going left, or both.
+    // The condition for being able to activate all between them is that there exists some way 
+    // to partition the segment such that the budget never runs out.
+    // This is equivalent to: if we start from L with budget a[L], and move right, 
+    // spending 1 to activate each next element, and gaining its value, 
+    // we can reach R if and only if the running budget never goes negative.
+    // Similarly from R to left. But we can also meet in the middle.
+    // Actually, if we can reach from L to some point, and from R to the same point, 
+    // then we can activate everything. The condition is that the maximum prefix sum from L 
+    // (with initial budget a[L]) and the maximum suffix sum from R (with initial budget a[R]) 
+    // overlap or touch.
+    // But since values are small, we can compute this greedily.
+    
+    // However, we want to minimize the number of paid elements. This is a classic problem 
+    // that can be solved with DP: dp[i] = min coins to cover prefix up to i, 
+    // assuming i is covered and we have some "excess" budget that can be used to cover further right.
+    // But the excess budget can only come from the rightmost elements.
+    
+    // Let's try to define DP based on the idea of "how many consecutive elements at the end 
+    // are covered by the rightmost paid element's budget".
+    // Since a[i] <= 2, the maximum distance a single paid element can cover to its right 
+    // without help from other paid elements is limited. But with help from activated elements, 
+    // it can go further. However, the budget can grow if we encounter 1s and 2s.
+    // So the reach can be long.
+    
+    // Alternative approach: Greedy? 
+    // Let's think about the structure. We want to minimize coins. 
+    // Each coin gives us an element with its value. 
+    // We can think of it as: we need to "jump" over zeros. 
+    // A 2 can cover a zero on each side (total 2 distance). 
+    // A 1 can cover one zero. 
+    // But if we have multiple 1s and 2s, they can chain.
+    // Actually, this is exactly the problem of finding the minimum number of elements to select 
+    // such that every element is within "range" of a selected element, where the range is 
+    // the maximum distance we can travel given the values.
+    // But the range is not fixed; it depends on the values of the intermediate elements.
+    
+    // Let's consider the array as a sequence of values. We want to select a set of indices to pay.
+    // For any maximal contiguous segment of zeros, how do we cover it?
+    // If there's a 2 adjacent to a zero segment, it can cover up to 2 zeros.
+    // If there's a 1, it can cover 1 zero.
+    // But if a zero segment is long, we might need to pay for an element inside it or at its boundary.
+    // However, paying for a zero gives us a 0, which doesn't help cover other zeros.
+    // So we never want to pay for a 0 unless absolutely necessary (when it's isolated and no neighbor can cover it).
+    // But wait, if we pay for a 0, it becomes red with value 0, so it can't help cover anything else.
+    // So paying for a 0 is a last resort.
+    
+    // Let's look at the examples:
+    // 0 2 0 -> pay for 2, covers both 0s. Coins = 1.
+    // 0 0 1 1 -> pay for the second 1 (position 4), it covers position 3 (the first 1). 
+    //   Then that 1 (position 3) has value 1, can it cover position 2? 
+    //   Position 3 is red with value 1. It can spend 1 to activate position 2 (0). 
+    //   Then position 2 is red 0. Position 1 (0) is still blue. 
+    //   We need another coin for position 1. Total 2.
+    //   Could we do better? Pay for position 3 (1). It covers position 4? 
+    //   Position 3 spends 1 to activate 4 (1). Then 4 has value 1, can activate 2? 
+    //   No, 4 is at the end, adjacent only to 3. So 3 can activate 2 (spends its last 1? 
+    //   Wait, 3 had value 1, spent it to activate 4, so 3 becomes 0. Then 4 has value 1, 
+    //   but 4 is adjacent to 3 (already red) and nothing else. So 4's value is useless for left.
+    //   So we still need a coin for position 1. Total 2.
+    // 0 1 0 0 1 0 2 -> output 4.
+    
+    // Let's try to find a pattern. 
+    // It seems we can use DP with states representing the "help" we can get from the left.
+    // Since values are 0,1,2, the amount of help that can be passed to the right is at most 2.
+    // But wait, if we have a chain of 1s, the help can be passed along indefinitely.
+    // For example: 1 1 1 1 1 ... if we pay for the first 1, it can activate the second (spends 1, becomes 0). 
+    // The second becomes red with value 1, can activate the third, etc. 
+    // So a single coin can activate an entire chain of 1s! 
+    // Check: pay for first 1. It has value 1. Spend 1 to activate second 1. First becomes 0. 
+    // Second is red with value 1. Spend 1 to activate third 1. Second becomes 0. 
+    // Third is red with value 1... So yes, one coin covers an arbitrary number of consecutive 1s.
+    // What about 2s? A 2 can activate two 1s? Actually, a 2 can activate a 1 (spends 1, becomes 1), 
+    // then that 1 can activate another 1, etc. So a 2 can cover a chain of 1s of any length, 
+    // and also has an extra 1 to cover a 0 maybe.
+    // So the only thing that stops the chain is 0s. A 0, when activated, gives 0 budget, 
+    // so it cannot help activate the next element. Therefore, to cross a 0, 
+    // the element before the 0 must have at least 1 budget left to activate the 0, 
+    // and then the next element after the 0 must be activated by something else 
+    // (either a new paid element, or a budget that skipped over the 0? But budget can't skip over a 0 
+    // because you can only activate adjacent elements. So after activating a 0, you have 0 budget 
+    // at that position, so you cannot go further unless the next element is paid or gets help from the right).
+    
+    // So zeros act as "walls" that consume 1 budget and give nothing back.
+    // Therefore, the problem reduces to: we have segments separated by zeros? 
+    // Actually, zeros can be crossed if the element before the zero has enough budget.
+    // But after crossing a zero, the budget at the zero is 0, so we cannot cross another zero 
+    // unless we have another source of budget.
+    
+    // Let's think in terms of "components". A paid element can cover a contiguous region.
+    // The region can be extended as long as the sum of values in the covered region 
+    // (excluding the initial paid element's value used to enter?) is sufficient to cover the distance.
+    // Actually, if we start with a paid element at position i, we have budget a[i].
+    // We can move right: to activate i+1, we need budget >= 1. We spend 1, budget becomes budget - 1 + a[i+1].
+    // We can continue as long as budget >= 1 for the next step.
+    // Similarly moving left.
+    // So the condition to cover a segment [L, R] with a single paid element at some position p in [L, R] 
+    // is that starting from p with budget a[p], we can reach both L and R without budget going negative.
+    // This is equivalent to: for any prefix/suffix of the segment from p, the sum of (a[k] - 1) 
+    // plus a[p] is >= 0? Actually, the net change in budget when moving from p to p+1 is -1 + a[p+1].
+    // So the budget after activating k elements to the right is a[p] + sum_{j=p+1}^{p+k} (a[j] - 1).
+    // We need this to be >= 1 before each step (except the last? Actually, to activate the next, we need >=1 before spending).
+    // So we need the running sum to be >= 1 at all times before the last step? 
+    // Actually, to activate the first right neighbor, we need a[p] >= 1. After spending, we have a[p]-1+a[p+1].
+    // To activate the next, we need that >= 1, etc.
+    // So the condition is that the minimum prefix sum of (a[j] - 1) starting from p+1, plus a[p], is >= 1.
+    // Similarly for left.
+    
+    // But we can also have multiple paid elements in the same segment, and they can help each other.
+    // This is equivalent to: we can choose a set of paid elements such that the whole array is covered.
+    // This is exactly the problem of finding the minimum number of "starting points" such that 
+    // the "energy" never drops below 1 when expanding.
+    
+    // There is a known solution: we can use DP with states 0,1,2 representing the "excess" energy 
+    // that can be passed to the right. Since a[i] <= 2, the excess energy that can be passed 
+    // from the current prefix to the right is at most 2? 
+    // But consider a long chain of 1s: if we pay for the first 1, we have budget 1. 
+    // We use it to activate the next 1, budget becomes 0 + 1 = 1. So we always have exactly 1 budget 
+    // to pass to the right. So the excess is 1. If we have a 2, we can have excess up to 2.
+    // If we have a 0, excess becomes 0.
+    // So the excess energy that can be passed from the current element to the right is exactly 
+    // the current budget after activating the current element, which is at most 2.
+    // But wait, the budget can be larger if we accumulate? 
+    // Suppose we have 2, then 2. Start with 2. Activate right 2: spend 1, budget becomes 1+2=3.
+    // So budget can be 3! But a[i] <= 2, so how can budget be 3? 
+    // Because we had 1 left from the first 2, and gained 2 from the second 2, total 3.
+    // So the budget can exceed 2. However, do we ever need to track budget > 2? 
+    // The maximum value we can get from a single element is 2. If we have budget 3, 
+    // it means we can cross up to 3 zeros? But each zero costs 1 and gives 0. 
+    // So budget 3 can cross three zeros. But since a[i] <= 2, the maximum number of consecutive zeros 
+    // we can cross is limited by the budget we've accumulated. 
+    // But can we accumulate arbitrarily large budget? 
+    // Suppose we have many 2s: 2 2 2 2 ... Start with 2. After first 2, budget = 2. 
+    // Activate next 2: spend 1, budget = 1+2=3. Activate next: spend 1, budget = 2+2=4. 
+    // So budget can grow arbitrarily large! So we cannot limit the state to 0,1,2.
+    // But wait, do we ever need to accumulate large budget? 
+    // If we have a long chain of 2s, we can just pay for the first one and it will cover all of them, 
+    // and the budget will grow. But we don't need to track the exact budget if we are just covering 
+    // non-zero elements, because they give at least 1 back, so the budget never decreases when moving 
+    // through non-zero elements (it decreases by 1 then increases by at least 1, so net >= 0).
+    // Actually, moving through a 1: spend 1, gain 1, net 0. Budget stays same.
+    // Moving through a 2: spend 1, gain 2, net +1. Budget increases by 1.
+    // Moving through a 0: spend 1, gain 0, net -1. Budget decreases by 1.
+    // So the budget only decreases when crossing zeros. 
+    // Therefore, the only thing that matters is how many zeros we can cross.
+    // And the budget is essentially the number of zeros we can still cross.
+    // Since we want to minimize coins, we want to maximize the number of zeros crossed per coin.
+    // But the budget can be large if we have many 2s. However, we can only cross zeros that are 
+    // between non-zero elements. If there is a long segment of zeros, we might need multiple coins.
+    
+    // Let's think differently: This problem is equivalent to finding the minimum number of 
+    // "active" elements such that every element is covered. 
+    // We can model it as a graph where we need to place "tokens" that can move.
+    // There is a known greedy solution: process from left to right, maintain the current "energy".
+    // But I recall a Codeforces problem: "Paint the Array" or similar. 
+    // Actually, this is Codeforces Round #810 (Div. 2) Problem C? No.
+    // Let's search memory: There's a problem "Red and Blue" or "Painting the Array". 
+    // The hints mention dynamic programming. So DP is expected.
+    
+    // Let's try to define DP[i][j] = min coins for prefix up to i, where j is the "state" of the 
+    // rightmost part. Since the budget can be large, we need a different state.
+    // Notice that we only care about the budget when we encounter a zero. 
+    // If there are no zeros, one coin is enough if there's at least one non-zero? 
+    // Actually, if the array has no zeros, we can just pay for the first element, 
+    // and it will activate the whole array because each step gives at least 1 back. 
+    // Check: 1 1 1 -> pay first 1, budget 1. Activate second: spend 1, gain 1, budget 1. 
+    // Activate third: spend 1, gain 1, budget 1. So yes, 1 coin.
+    // What about 0 1? Pay for 1, it can activate 0 to its left? 
+    // 1 is at position 2. It can spend 1 to activate position 1 (0). So 1 coin.
+    // What about 0 0 1? Pay for 1, it can activate position 2 (0) spending 1, budget becomes 0. 
+    // Then position 2 is 0, cannot activate position 1. So we need another coin for position 1. Total 2.
+    // So zeros are the only reason we need more coins.
+    
+    // So we can think of the array as a sequence of "zero blocks" separated by non-zero elements.
+    // But non-zero elements can also be zeros? No.
+    // Actually, we can compress the array by removing non-zero elements? Not exactly.
+    
+    // Let's consider the array from left to right. We maintain the current "budget" we have 
+    // to spend on zeros to the right. Initially 0.
+    // When we see a non-zero element, we can either pay a coin to "start" a new budget, 
+    // or we can use existing budget to activate it (if budget > 0). 
+    // If we use existing budget, we spend 1 to activate it, then gain its value, 
+    // so budget = budget - 1 + a[i].
+    // If we pay a coin, we get its value as budget: budget = a[i] (but we also had previous budget? 
+    // Actually, if we pay a coin, we are starting a new "source". The previous budget might still be there? 
+    // But previous budget is from elements to the left. Can we combine budgets? 
+    // Yes, if we have budget from the left, and we also pay for the current element, 
+    // the total budget becomes old_budget + a[i] (since we didn't spend old_budget to activate this element, 
+    // we just paid for it directly). But wait, if we pay for the current element, we don't need to spend 
+    // old_budget to activate it. So old_budget remains available for future zeros to the right? 
+    // But old_budget is at the previous element. To use it on the right of the current element, 
+    // we would need to move through the current element. But the current element is already red. 
+    // Can we move budget through an already red element? 
+    // The operation says: choose a red element with value >0 and a blue element adjacent to it, 
+    // decrease the red element by 1, and paint the blue element red. 
+    // So the red element must be the one spending. If we have budget at position i-1, 
+    // and position i is already red (because we paid for it), can we use the budget at i-1 
+    // to activate i+1? No, because i-1 is not adjacent to i+1. The budget at i-1 can only activate 
+    // elements adjacent to i-1. Since i is already red, i-1's budget is stuck and cannot cross i 
+    // unless we use it to activate i (but i is already red). So budget cannot jump over red elements.
+    // Therefore, if we pay for an element, any budget to its left becomes useless for the right side.
+    // So the budget is always local to

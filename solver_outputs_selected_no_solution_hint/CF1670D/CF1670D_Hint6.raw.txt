@@ -1,0 +1,38 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+ll calc(ll k) {
+    if (k < 2) return 0;
+    ll a = k / 3;
+    ll r = k % 3;
+    ll base = 6 * (a * (a - 1) / 2) + 2 * a;
+    if (r >= 1) base += 4 * a;
+    if (r >= 2) base += 4 * a + 2;
+    return base;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        ll n;
+        cin >> n;
+        if (n == 1) {
+            cout << 2 << '\n';
+            continue;
+        }
+        ll lo = 2, hi = 1e6;
+        while (lo < hi) {
+            ll mid = (lo + hi) / 2;
+            if (calc(mid) >= n) hi = mid;
+            else lo = mid + 1;
+        }
+        cout << lo << '\n';
+    }
+    return 0;
+}
+```

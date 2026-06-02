@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool is_prime(int x) {
+    if (x < 2) return false;
+    for (int i = 2; i * i <= x; ++i)
+        if (x % i == 0) return false;
+    return true;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+
+        // find largest prime <= n
+        int largest_prime = 2;
+        for (int i = n; i >= 2; --i) {
+            if (is_prime(i)) {
+                largest_prime = i;
+                break;
+            }
+        }
+
+        vector<int> p;
+        p.push_back(largest_prime);
+        vector<bool> used(n + 1, false);
+        used[largest_prime] = true;
+
+        // put n as soon as possible if not used
+        if (!used[n]) {
+            p.push_back(n);
+            used[n] = true;
+        }
+
+        // fill remaining numbers in any order
+        for (int i = 1; i <= n; ++i) {
+            if (!used[i]) p.push_back(i);
+        }
+
+        for (int i = 0; i < n; ++i) {
+            cout << p[i] << " \n"[i == n - 1];
+        }
+    }
+    return 0;
+}

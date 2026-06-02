@@ -1,0 +1,64 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<vector<int>> a(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                cin >> a[i][j];
+            }
+        }
+
+        // Precompute inverse permutations for all a_i
+        vector<vector<int>> inv(n, vector<int>(m + 1));
+        for (int i = 0; i < n; ++i) {
+            for (int pos = 0; pos < m; ++pos) {
+                inv[i][a[i][pos]] = pos + 1; // 1-indexed positions
+            }
+        }
+
+        // Build a trie over all sequences of length up to m
+        // Each node has children for values 1..m
+        vector<array<int, 11>> trie(1);
+        trie[0].fill(0);
+        for (int i = 0; i < n; ++i) {
+            int node = 0;
+            for (int k = 1; k <= m; ++k) {
+                int val = inv[i][k];
+                if (!trie[node][val]) {
+                    trie[node][val] = trie.size();
+                    trie.emplace_back();
+                    trie.back().fill(0);
+                }
+                node = trie[node][val];
+            }
+        }
+
+        // For each i, find max beauty
+        for (int i = 0; i < n; ++i) {
+            int node = 0;
+            int beauty = 0;
+            for (int k = 1; k <= m; ++k) {
+                int val = a[i][k - 1];
+                if (trie[node][val]) {
+                    node = trie[node][val];
+                    beauty = k;
+                } else {
+                    break;
+                }
+            }
+            cout << beauty << " \n"[i == n - 1];
+        }
+    }
+    return 0;
+}
+```

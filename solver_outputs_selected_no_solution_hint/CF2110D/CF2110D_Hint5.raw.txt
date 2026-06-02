@@ -1,0 +1,204 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+const ll INF = 1e18;
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<ll> b(n);
+    for (int i = 0; i < n; ++i) cin >> b[i];
+    
+    vector<vector<pair<int, ll>>> adj(n);
+    for (int i = 0; i < m; ++i) {
+        int u, v;
+        ll w;
+        cin >> u >> v >> w;
+        --u; --v;
+        adj[u].emplace_back(v, w);
+    }
+    
+    // dp[i] = minimum batteries needed at start to reach i with exactly the batteries we have at i
+    // We use Dijkstra-like DP: state (batteries_needed, node)
+    // But we need to consider that we can pick up batteries at nodes.
+    // Let need[v] = minimum initial batteries to reach v and be able to proceed.
+    // We process nodes in increasing order of need.
+    
+    vector<ll> need(n, INF);
+    need[0] = 0;
+    
+    // Priority queue: (current_need, node)
+    priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<>> pq;
+    pq.emplace(0, 0);
+    
+    while (!pq.empty()) {
+        auto [cur_need, u] = pq.top();
+        pq.pop();
+        if (cur_need != need[u]) continue;
+        
+        // At node u, we can have up to cur_need + b[u] batteries after picking up.
+        // Actually, we start with cur_need at u, then we can pick up b[u] batteries.
+        // So total batteries we can have at u is cur_need + b[u].
+        // But we must have at least cur_need to reach u, and we can take any amount up to b[u].
+        // For an edge (u, v, w), we need to have at least w batteries to traverse.
+        // If we have X batteries at u (after pickup), we can traverse if X >= w.
+        // After traversing, we arrive at v with X batteries (recharged).
+        // But we want to minimize the initial batteries needed.
+        // So we need to find minimal initial need such that we can reach v.
+        // Let base_need = need[u]. We can increase our carried batteries by taking some from b[u].
+        // The maximum we can have at u is base_need + b[u].
+        // To traverse edge with requirement w, we need base_need + take >= w, where 0 <= take <= b[u].
+        // So we need base_need >= w - b[u] if w > b[u], else base_need can be as low as 0? No, base_need is already fixed.
+        // Actually, we start with base_need at the beginning. At node u, we have base_need batteries (since we carried them).
+        // We can then pick up additional batteries from b[u]. So total = base_need + take.
+        // We need total >= w to traverse. So we need take >= w - base_need.
+        // Since take <= b[u], we require w - base_need <= b[u] => base_need >= w - b[u].
+        // Also take >= 0, so if base_need >= w, we don't need to take any.
+        // So the required base_need to use this edge is max(base_need, w - b[u]).
+        // But wait, we can also take more batteries than needed? No, we want to minimize initial need.
+        // So the new need for v is max(need[u], w - b[u]).
+        // However, we also have the option to take batteries at u to increase our carried amount for future edges.
+        // But the problem says: "it always carries all previously collected batteries, and at each checkpoint, it recharges all previously collected batteries."
+        // So the number of batteries we have is exactly the total we have collected so far.
+        // At start, we have 0, we can take some from b[0]. So initial need = take_0.
+        // At node u, we have some amount C (collected so far). We can add take_u from b[u], so new C' = C + take_u.
+        // We need C' >= w to traverse edge. Then we arrive at v with C'.
+        // We want to minimize final C at node n-1? Actually we want to minimize the number of batteries at the end.
+        // But the problem asks: "Find the minimum number of batteries that the robot can have at the end of the journey".
+        // That is exactly the total collected batteries when reaching n-1.
+        // We start with 0, we can only take batteries at checkpoints. So total collected = sum of taken batteries.
+        // We want to minimize this sum while being able to traverse all edges.
+        // This is equivalent to: we need to choose how many to take at each node, such that for every edge (u,v,w) on the path,
+        // the cumulative sum up to u (including take_u) >= w.
+        // Let S[u] = total batteries taken up to node u (after taking at u).
+        // Then S[u] >= w for edge (u,v,w). And S[v] = S[u] + take_v, with 0 <= take_v <= b[v].
+        // We want to minimize S[n-1].
+        // This is a shortest path problem on the "batteries" dimension.
+        // We can think of it as: we want to find a path from 1 to n, and for each node we decide how much to take,
+        // such that the cumulative sum never drops below edge requirements, and we minimize final sum.
+        // Since we can always take more batteries later, but we want to minimize final, we should take as little as possible early,
+        // but enough to pass edges. This is like: we maintain current batteries C. Initially C = 0.
+        // At node u, we can increase C by any amount up to b[u]. Then for edge (u,v,w), we must have C >= w.
+        // After traversing, C remains same. We want to reach n-1 with minimal C.
+        // This is equivalent to: we need to find a sequence of nodes where we take batteries, and the maximum of (w - sum of b taken before) along edges determines the required initial? No.
+        // Let's define DP: dp[u] = minimum batteries we must have upon arriving at u (before taking at u) to be able to reach the end? Or minimum total taken to reach u?
+        // Let's think forward: we want to minimize final C. At each step, we can increase C. So we want to keep C as small as possible, only increasing when forced by an edge.
+        // So the optimal strategy: start with C = 0. At node u, if we need to traverse edge with requirement w, and C < w, we must take at least w - C batteries from b[u].
+        // If b[u] >= w - C, we can take exactly that amount, set C = w, and proceed. If b[u] < w - C, we cannot traverse this edge from u with current C.
+        // But we might have taken more batteries earlier to prepare for this edge. So we need to consider taking more earlier.
+        // This is like: we want to find a path and a sequence of takes such that for each edge, the cumulative takes before traversing the edge is at least w.
+        // Let x_u be the amount taken at u. Then for each edge (u,v,w) on the path, sum_{i in path up to u} x_i >= w.
+        // We want to minimize sum_{i in path} x_i.
+        // This is a classic problem: we can think of it as we have a resource that we can increase at nodes, and edges have minimum requirements.
+        // We can reframe: we start with 0. At node u, we can increase our resource by up to b[u]. We want to reach n-1 with minimum resource.
+        // This is exactly the problem of finding the minimum initial resource to traverse a path where you can pick up resources.
+        // But here we want to minimize the final resource, which is the same as the total picked up.
+        // Notice that the final resource is exactly the maximum over edges of (w - sum of b on nodes before that edge that we chose to take)? Not exactly.
+        // Actually, if we decide to take all possible batteries at every node we visit, we would have a lot. But we want minimum.
+        // So we should only take batteries when forced. However, we might need to take more at an earlier node because a later node has insufficient b to cover a large w.
+        // This suggests a DP where we compute the minimum required batteries to reach a node, assuming we take optimally.
+        // Let dp[u] = minimum total batteries we have when arriving at u (before taking at u) that allows us to reach u.
+        // But we can also take at u. Actually, we want to minimize the total taken overall.
+        // Let's define state: at node u, we have some amount of batteries C. We want to reach n-1 with minimal final C.
+        // Since we can always take more later, the only reason to take more now is if future edges require more than what we can take later.
+        // This is similar to the problem where we have to satisfy constraints C >= w for edges, and we can increase C at nodes by b[u].
+        // We can think backwards: let dp[u] be the minimum batteries we need to have when leaving u (after taking at u) to reach n-1.
+        // Then for an edge u->v with weight w, we need dp[u] >= w, and also dp[u] >= dp[v] - b[v]? Not exactly.
+        // Let's try backward DP: Let f[u] = minimum batteries we must have upon arriving at u (before taking at u) to be able to reach n-1.
+        // At n-1, we don't need any batteries after arriving, so f[n-1] = 0.
+        // For u, we can take up to b[u] batteries. So after taking, we have C = f[u] + take, with 0 <= take <= b[u].
+        // For each edge u->v with weight w, we can traverse if C >= w. After traversing, we arrive at v with C batteries.
+        // Then we need C >= f[v] to be able to continue from v.
+        // So we need C >= max(w, f[v]).
+        // We want to minimize f[u]. Given we can choose take, we need f[u] + take >= max(w, f[v]) => take >= max(w, f[v]) - f[u].
+        // Since take <= b[u], we need max(w, f[v]) - f[u] <= b[u] => f[u] >= max(w, f[v]) - b[u].
+        // Also take >= 0, so if f[u] >= max(w, f[v]), we can set take = 0.
+        // So the condition to be able to go from u to v is f[u] >= max(w, f[v]) - b[u].
+        // To minimize f[u], we should take f[u] = max(0, max(w, f[v]) - b[u]).
+        // But wait, f[u] is the minimum batteries we need upon arrival at u. If we arrive with f[u], we can take some to reach max(w, f[v]).
+        // So f[u] = max(0, max(w, f[v]) - b[u]).
+        // However, we might have multiple outgoing edges. We need to satisfy all? No, we only need to choose one path.
+        // So f[u] = min over edges (u,v) of max(0, max(w, f[v]) - b[u]).
+        // But this is not correct because we can take batteries at u, and the amount we take affects all future edges? No, we only take one path.
+        // So for each edge, we can decide to take enough to satisfy that edge and the rest of the path.
+        // So f[u] = min_{v} max(0, max(w, f[v]) - b[u]).
+        // Let's test with sample 1:
+        // n=3, b=[2,0,0], edges: 1-2 w=1, 2-3 w=1, 1-3 w=2.
+        // f[3]=0.
+        // f[2] = max(0, max(1, f[3]) - b[2]) = max(0, 1 - 0) = 1.
+        // f[1] = min(
+        //   edge 1-2: max(0, max(1, f[2]) - b[1]) = max(0, max(1,1)-2) = max(0, -1) = 0.
+        //   edge 1-3: max(0, max(2, f[3]) - 2) = max(0, 2-2)=0.
+        // ) = 0.
+        // But answer is 1. Why? Because f[1] is the batteries we need upon arrival at 1. But we start at 1 with 0 batteries. We can take batteries at 1. So if f[1]=0, we arrive with 0, take 0, then we have 0. But edge 1-2 requires 1. So we cannot traverse. The formula f[u] = max(0, max(w, f[v]) - b[u]) assumes we arrive with f[u] and then take. If f[u]=0, we need take >= max(w, f[v]) - 0 = 1. But b[1]=2, so we can take 1. So we should be able to go. Wait, if f[1]=0, we arrive with 0, take 1, have 1, traverse 1-2 (needs 1), arrive at 2 with 1. Then at 2, we need f[2]=1 to continue. We have exactly 1, so we can take 0, traverse 2-3 (needs 1), arrive at 3 with 1. Final batteries = 1. That matches answer. But why did I think f[1]=0 means we take 0? No, f[u] is the amount we have upon arrival. We can then take more. So if f[1]=0, we start with 0 (since we start at 1 with no batteries), then we can take up to b[1]. So we need to take at least max(w, f[v]) - f[1] = 1. So we take 1. Final batteries = 1. So f[1]=0 is correct for the minimum arrival batteries, but the final answer is the total batteries we have at the end, which is f[1] + total taken. Actually, if we start at 1 with 0, and f[1] is the required arrival batteries, then we must have at least f[1] when we arrive. Since we start at 1, we "arrive" with 0. So we need 0 >= f[1]? That would mean f[1] must be 0. So f[1] should be 0 always? No, f[u] is defined as the minimum batteries we need to have when we are at u (before taking) to be able to reach the end. At the start, we are at 1 with 0 batteries. So we need 0 >= f[1] to be able to start. Thus we require f[1] <= 0. Since f[u] >= 0, f[1] must be 0. So if we compute f[1] > 0, it's impossible. But in sample 1, f[1]=0, so possible. Then the final batteries will be the amount we have at the end. How to compute that? We can simulate forward with the optimal choices. Or we can compute the minimum final batteries directly.
+
+        // Let's define dp[u] = minimum total batteries we have when arriving at u (before taking at u) that allows us to reach u from start.
+        // This is forward DP. We want to minimize dp[n-1] + take_{n-1} (but we don't need to take at n-1).
+        // Actually, we want to minimize the total batteries we have at the end, which is the sum of takes.
+        // Let's think of it as: we want to find a path and amounts to take such that cumulative sum C satisfies C >= w for edges, and we want to minimize final C.
+        // This is equivalent to: we start with C=0. At each node, we can increase C by up to b[u]. We want to reach n-1 with minimal C.
+        // This is a shortest path problem where the "cost" is the final C, but C only increases.
+        // We can use Dijkstra on the state (C, u), but C can be up to 1e9 * 2e5, too large.
+        // However, note that we only ever need to increase C to exactly the maximum requirement of an edge we take. So C will always be equal to some edge weight or 0.
+        // Also, we can think of it as: we want to minimize the maximum over edges of (w - sum of b on nodes before that edge that we are forced to take). Not exactly.
+        // Let's use the backward DP idea but compute the answer correctly.
+        // Let f[u] = minimum batteries we need to have upon leaving u (after taking at u) to reach n-1.
+        // Then for edge u->v with weight w, we need f[u] >= w, and after arriving at v, we have f[u] batteries. Then we can take at v up to b[v], so we need f[u] >= f[v] - b[v]? Wait.
+        // If we leave u with C, we traverse edge (needs C >= w), arrive at v with C. Then at v, we can take up to b[v] to reach f[v] (the required leaving amount for v). So we need C + take_v >= f[v] with take_v <= b[v]. So C >= f[v] - b[v].
+        // Thus C >= max(w, f[v] - b[v]).
+        // We want to minimize C. So f[u] = max(w, f[v] - b[v]).
+        // But we can also take batteries at u before leaving. Actually, f[u] is the amount after taking at u. So we start at u with some arrival amount A, take up to b[u], so f[u] = A + take_u <= A + b[u]. We want to minimize A, the arrival amount. But we are computing f[u] directly as the leaving amount. Then the arrival amount at u would be f[u] - take_u. But we want to minimize the initial arrival at 1, which is 0. So we need to see if we can achieve f[1] starting from 0 at 1. At 1, we arrive with 0, we can take up to b[1], so we can achieve any f[1] <= b[1]. So if f[1] <= b[1], it's possible, and the final batteries will be f[n-1]? Wait, at n-1, we don't need to leave, so f[n-1] is the amount we have when leaving n-1? But we don't leave. Actually, we just need to arrive at n-1. So we don't need any batteries after arriving. So we can set f[n-1] = 0 (we need 0 to leave, i.e., we don't need to leave). Then for edges into n-1, f[u] = max(w, 0 - b[n-1]) = max(w, -b[n-1]) = w (since w >= 1). So f[u] = w for edges to n-1.
+        // Then we propagate backwards: f[u] = min over edges (u,v) of max(w, f[v] - b[v]).
+        // Wait, is it f[v] - b[v] or f[v] - b[u]? Let's re-derive carefully.
+
+        // Let's define state at node u: we have some amount of batteries C_u when we are at u, after taking batteries at u. We then traverse an edge to v. Requirement: C_u >= w. We arrive at v with C_u. Then at v, we can take up to b[v] batteries, so we can increase to C_v = C_u + take_v, with 0 <= take_v <= b[v]. We want to eventually satisfy the requirements for the rest of the path. So if we know the required C_v for the rest of the path, we need C_u + take_v >= required_C_v. Since we can choose take_v <= b[v], we need C_u >= required_C_v - b[v]. Also C_u >= w. So C_u >= max(w, required_C_v - b[v]).
+        // So if we let dp[u] = minimum C_u needed to reach the end from u (after taking at u), then:
+        // dp[n-1] = 0 (we don't need any batteries after arriving, we can just stop; we don't need to take any at n-1, so C_{n-1} can be 0? Actually, we don't need to leave n-1, so we don't need any batteries. But we might arrive with some batteries. The final batteries is exactly the amount we have when arriving at n-1. That is C_u from the previous node. So if we set dp[n-1] = 0, meaning we need 0 batteries after taking at n-1 to finish, then the arrival amount at n-1 is C_u. And we need C_u >= max(w, dp[n-1] - b[n-1]) = max(w, -b[n-1]) = w. So that works.)
+        // For u != n-1: dp[u] = min_{v in adj[u]} max(w, dp[v] - b[v]).
+        // But wait, this formula uses b[v], not b[u]. That means the batteries we can take at v affect the requirement for u. That makes sense: if v has a lot of batteries, we can arrive with less.
+        // Let's test sample 1:
+        // n=3, b=[2,0,0]
+        // dp[3] = 0.
+        // dp[2] = min over edges from 2: only 2->3 w=1. max(1, dp[3] - b[3]) = max(1, 0 - 0) = 1.
+        // dp[1] = min over edges from 1:
+        //   1->2 w=1: max(1, dp[2] - b[2]) = max(1, 1 - 0) = 1.
+        //   1->3 w=2: max(2, dp[3] - b[3]) = max(2, 0) = 2.
+        // dp[1] = min(1, 2) = 1.
+        // Now, we start at 1 with 0 batteries. We need to achieve dp[1] = 1 after taking at 1. We can take up to b[1]=2. So we take 1, C_1 = 1. Then we follow the path that gave dp[1]=1: 1->2. C_1=1 >= w=1, go to 2. Arrive at 2 with 1. At 2, we need to achieve dp[2]=1 after taking at 2. We already have 1, b[2]=0, so we take 0, C_2=1. Then 2->3 w=1, C_2=1 >=1, go to 3. Arrive at 3 with 1. Final batteries = 1. Matches sample.
+        // Sample 2:
+        // 5 6
+        // b = [2,2,5,0,1]
+        // edges: 1-2 w=2, 1-3 w=1, 1-4 w=3, 3-5 w=5, 2-4 w=4, 4-5 w=3
+        // dp[5] = 0
+        // dp[4]: edges to 5 w=3. max(3, dp[5]-b[5]) = max(3, 0-1)=max(3,-1)=3. So dp[4]=3.
+        // dp[3]: edge 3-5 w=5. max(5, 0-1)=5. dp[3]=5.
+        // dp[2]: edge 2-4 w=4. max(4, dp[4]-b[4]) = max(4, 3-0)=4. dp[2]=4.
+        // dp[1]: edges:
+        //   1-2 w=2: max(2, dp[2]-b[2]) = max(2, 4-2)=2.
+        //   1-3 w=1: max(1, dp[3]-b[3]) = max(1, 5-5)=1.
+        //   1-4 w=3: max(3, dp[4]-b[4]) = max(3, 3-0)=3.
+        // dp[1] = min(2,1,3) = 1.
+        // Start at 1 with 0. Need C_1 = dp[1] = 1. Take 1 (b[1]=2). C_1=1.
+        // Path 1->3 (w=1, C_1=1 >=1). Arrive at 3 with 1. Need C_3 = dp[3] = 5. We have 1, b[3]=5, take 4, C_3=5.
+        // 3->5 w=5, C_3=5 >=5. Arrive at 5 with 5. Final batteries = 5? But sample output says 4.
+        // Wait, sample 2 output is 4. My dp gave final 5. Something is wrong.
+        // Let's check sample 2 explanation: "take 2 batteries at starting point, then move to point 2, take another 2 batteries, move to point 4, and then to point 5." Final batteries = 2+2=4.
+        // Path: 1->2->4->5.
+        // Let's compute dp with that path:
+        // dp[5]=0.
+        // dp[4] = max(3, 0-1)=3.
+        // dp[2] = max(4, dp[4]-b[4]) = max(4, 3-0)=4.
+        // dp[1] = max(2, dp[2]-b[2]) = max(2, 4-2)=2.
+        // So dp[1]=2. Then start with 0, take 2 at 1, C_1=2. 1->2 w=2 ok. Arrive 2 with 2. Need C_2=4, take 2 (b[2]=2), C_2=4. 2->4 w=4 ok. Arrive 4 with 4. Need C_4=3, we have 4 >=3, take 0, C_4=4. 4->5 w=3 ok. Arrive 5 with 4. Final=4. Matches.
+        // But my dp[1] took min over edges, and got 1 from edge 1->3. That path gave final 5. But we want minimum final batteries. The final batteries is exactly the C we have at the end, which is the C_u we had when arriving at n-1. That C_u is the C of the previous node. In the backward DP, dp[u] is the required C_u after taking at u. For the start node, we need to achieve C_1 = dp[1]. The final batteries will be the C we have when arriving at n-1. That is exactly the C of the node before n-1, which is dp[v] for the edge used to enter n-1? Actually, if we enter n-1 from u, we have C_u when we leave u. We arrive at n-1 with C_u. So final batteries = C_u. And C_u = dp[u]. So the final batteries is the dp value of the node just before n-1 on the path. But we want to minimize final batteries. In my DP, I set dp[n-1]=0, and then dp[u] = max(w, dp[v] - b[v]). This DP computes the minimum C_u required to reach the end, but it might not minimize the final C if there are multiple paths? Wait, if we reach n-1, the final C is exactly the C we have when we arrive. That is the C of the previous node. So if we have two paths, one gives dp[1]=1 but final C=5, another gives dp[1]=2 but final C=4. The problem asks for minimum final C. So we should minimize the final C, not the starting C. My DP minimizes dp[1], the required starting C, but that doesn't necessarily minimize final C because we might take more batteries later. Actually, the total batteries we have at the end is the sum of all takes. If we start with less, we might have to take more later, resulting in a larger final. So we need to minimize the final C, which is the C at n-1. But wait, the final C is exactly the C we have when arriving at n-1. That is the C of the edge entering n-1. In the backward DP, if we set dp[n-1] = 0, then for an edge u->n-1 with weight w, dp[u] = max(w, 0 - b[n-1]) = w. So the final C would be w. But if we take a path that goes through other nodes, the final C is the C_u of the last edge. That C_u is determined by the requirements along the path. So the final C is exactly the dp value of the node that connects to n-1? Not exactly, because dp[u] is the required C_u to satisfy the rest of the path. If the rest of the path is just u->n-1, then dp[u] = w. So final C = w. If the path is longer, dp[u] might be larger than w because of requirements further back. But the final C is still the C_u when we leave u to go to n-1. That C_u is exactly dp[u]. So the final C is dp[u] for the u that is the predecessor of n-1 on the path. So to minimize final C, we want to minimize dp[u] over all u that can reach n-1? But dp[u] is computed based on the path from u to n-1. So we want to find a path from 1 to n-1 that minimizes the C when entering n-1. That is equivalent to: we want to minimize the C we have when we arrive at n-1. Let's call that final_C. We can think of it as: we want to find a path and taking strategy such that final_C is minimized. This is not simply the dp[1] from the backward DP because dp[1] is the required starting C, which might be smaller but force larger final_C. Actually, in the backward DP, dp[1] is the minimum C we need after taking at 1 to be able to reach the end. If we achieve that C_1, we can follow the optimal decisions to reach the end, and the final C will be determined by those decisions. But is the final C necessarily equal to the dp value of the predecessor of n-1? Yes, because we never decrease C, and we only increase when needed. The backward DP computes the minimum required C at each node to satisfy the suffix. If we follow the choices that achieve the minimum at each step, the final C will be the maximum over something? Let's trace the path that gave dp[1]=1 in sample 2: 1->3->5. dp[1]=1, dp[3]=5, dp[5]=0. The final C is the C when leaving 3 to 5, which is dp[3]=5. So final C=5. The other path gave dp[1]=2, dp[2]=4, dp[4]=3, final C=4. So the path with larger dp[1] gave smaller final C. So minimizing dp[1] does not minimize final C. We need to minimize the final C directly.
+
+        // So we need a different approach. Let's think about the problem as: we want to minimize the maximum over the path of (w - sum of b on nodes before that edge that we can take). Actually, we can decide how much to take at each node. The total taken is exactly the final C. We want to minimize final C subject to: for every edge on the path, the cumulative takes up to that point >= w.
+        // Let x_i be the amount taken at node i. For a path 1 = v0, v1, ..., vk = n, we need for each edge (v_i, v_{i+1}) with weight w_i: sum_{j=0}^{i} x_{v_j} >= w_i.
+        // We want to minimize sum_{j=0}^{k} x_{v_j}.
+        // This is a linear programming problem on a path. The optimal solution is to set the takes as small as possible while satisfying the constraints. This is equivalent to: start with C=0. For each edge in order, if C < w, we need to increase C by at least w - C. We can increase C by taking batteries at the current node or previous nodes. But we are limited by b at each node. So we need to ensure that the cumulative b available up to node v_i is enough to cover the shortfall.
+        // This is like: we want to find a path where the maximum shortfall after using available b is minimized? Not exactly.
+        // Let's consider the problem as finding a path from 1 to n that minimizes the final C. We can use a modified Dijkstra where the state is the current node and the current C. But C can be large. However, note that C only increases when we take batteries. We can think of the "cost" to reach a node with a certain C. But we want to minimize final C, so we want to reach n with as small C as possible.
+        // Alternatively, we can binary search on the final C, say X. Can we reach n with final C <= X? This is a feasibility check: starting with 0, can we reach n such that at the end we have <= X? But we can take batteries along the way, so the final C is exactly the total taken. If we require final C <= X, that means the sum of takes <= X. But we can also think of it as: we are allowed to carry at most X batteries at the end, but we can carry more during the journey? No, the batteries we carry are exactly the ones we've taken. So if we end with <= X, we never exceed X? Actually, we only take batteries, so the amount we carry is non-decreasing. So if we end with <= X, we always have <= X. So the condition is: we start with 0, and at each node we can increase our current amount C by up to b[u], but we cannot exceed X? No, we can exceed X during the journey as long as we end with <= X? But we never discard batteries, so C is non-decreasing. So if we end with <= X, then C <= X at all times. So the feasibility is: can we go from 1 to n with C <= X at all times, starting from 0, and we can increase C at node u by up to b[u] as long as C + take <= X? Actually, we want to end with exactly some C <= X. But we can take less than b[u] to keep C <= X. So the condition is: we need to traverse edges with requirement w, so we need C >= w. So we need w <= C <= X. At node u, we can increase C to any value between current C and min(current C + b[u], X). So we want to see if we can reach n with some C <= X.
+        // This is a reachability problem with a resource that can be increased up to X. We can do BFS/Dijkstra where the state is (node, C), but C is up to 1e9. However, we only care about intervals of C. Actually, for a fixed X, we can compute for each node the set of possible C values we can have when arriving. Since we can always choose to take less, if we can arrive with C, we can also arrive with any C' >= C (by taking more earlier) as long as C' <= X? Not exactly, because taking more earlier might be limited by b. But if we can arrive with C, we can also arrive with C'

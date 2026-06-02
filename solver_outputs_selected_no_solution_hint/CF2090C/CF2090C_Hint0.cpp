@@ -1,0 +1,132 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Cell {
+    int x, y;
+    bool operator<(const Cell& other) const {
+        int d1 = x + y, d2 = other.x + other.y;
+        if (d1 != d2) return d1 < d2;
+        if (x != other.x) return x < other.x;
+        return y < other.y;
+    }
+};
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int q;
+    cin >> q;
+    while (q--) {
+        int n;
+        cin >> n;
+        vector<int> t(n);
+        for (int i = 0; i < n; ++i) cin >> t[i];
+
+        set<Cell> free_cells;
+        set<Cell> free_tables; // completely unoccupied tables
+
+        // Precompute all table cells and tables
+        // We'll generate on the fly up to needed distance
+        // Since n <= 50000, max distance is around 300-400
+        // We'll generate all tables up to some limit
+        // Actually we can generate lazily
+
+        // We'll maintain a set of free table cells
+        // and a set of free tables (represented by their top-left cell (3x+1,3y+1))
+        // We'll generate new tables as needed
+
+        // To avoid generating too many, we can generate up to distance limit
+        // Distance to (x,y) is x+y
+        // We'll generate tables in increasing distance of their cells
+
+        // We'll use a priority queue or set to get nearest free cell/table
+        // But we need to generate tables dynamically
+
+        // Let's precompute all tables up to distance 1000 (safe)
+        // Actually max distance for 50000 guests is about 600
+        // We'll generate tables on demand
+
+        set<pair<int,int>> occupied_cells;
+        set<pair<int,int>> free_table_repr; // (3x+1,3y+1) for completely free tables
+        set<Cell> free_cells_set;
+
+        // We'll maintain a queue of tables to add
+        // Initially add table (0,0)
+        // We'll expand as needed
+
+        auto add_table = [&](int x, int y) {
+            // table cells: (3x+1,3y+1), (3x+1,3y+2), (3x+2,3y+1), (3x+2,3y+2)
+            vector<pair<int,int>> cells = {
+                {3*x+1, 3*y+1},
+                {3*x+1, 3*y+2},
+                {3*x+2, 3*y+1},
+                {3*x+2, 3*y+2}
+            };
+            bool all_free = true;
+            for (auto& c : cells) {
+                if (occupied_cells.count(c)) {
+                    all_free = false;
+                } else {
+                    free_cells_set.insert({c.first, c.second});
+                }
+            }
+            if (all_free) {
+                free_table_repr.insert({3*x+1, 3*y+1});
+            }
+        };
+
+        // We'll generate tables in order of distance of their cells
+        // We'll use a BFS-like approach from (0,0) table
+        // But tables are at (3x+1,3y+1) etc. Distance to (1,1) is 2
+        // We'll generate tables by increasing x+y of their cells
+        // Actually we can just generate all tables with x+y <= some limit
+        // Since n=50000, max distance is about 600, so max table coordinate is about 200
+        // We'll generate all tables with 3x+1 <= 1000, etc. That's safe.
+
+        // Let's generate all tables up to x+y <= 400 (cells up to 1200)
+        // That's more than enough
+        for (int x = 0; x <= 400; ++x) {
+            for (int y = 0; y <= 400; ++y) {
+                add_table(x, y);
+            }
+        }
+
+        // Now process guests
+        for (int i = 0; i < n; ++i) {
+            Cell chosen;
+            if (t[i] == 1) {
+                // nearest vacant table cell
+                chosen = *free_cells_set.begin();
+            } else {
+                // nearest completely unoccupied table
+                // find the table repr with smallest distance to its cells
+                // distance to table cell (x,y) is x+y
+                // table repr is (3x+1,3y+1), its cells have distances:
+                // (3x+1)+(3y+1) = 3x+3y+2, etc. The minimum distance among its cells is 3x+3y+2
+                // We need the table with smallest min distance, tie break by smallest x then y of the chosen cell
+                // But the problem says: "nearest table cell that belongs to a completely unoccupied table"
+                // So we find the nearest cell among those belonging to completely unoccupied tables.
+                // We can just iterate over free_table_repr and find the best cell.
+                // Since number of completely unoccupied tables is at most n, we can do this efficiently?
+                // n=50000, worst-case O(n^2) if we scan all. We need faster.
+                // We can maintain a set of candidate cells from completely unoccupied tables.
+                // When a table becomes partially occupied, we remove its cells from that set.
+                // We'll maintain a set "free_table_cells" for cells of completely unoccupied tables.
+                set<Cell> free_table_cells;
+                // We'll populate it initially and update as we occupy cells.
+                // But we already have free_table_repr. We can build free_table_cells from it.
+                // Let's do that.
+            }
+
+            // Actually we need to implement t[i]==0 efficiently.
+            // Let's maintain free_table_cells set.
+            // We'll initialize it with all cells from completely unoccupied tables.
+            // When a cell is occupied, if its table was completely unoccupied, we remove all its cells from free_table_cells.
+            // We'll also need to know which table a cell belongs to.
+        }
+
+        // Let's restart with proper data structures.
+    }
+    return 0;
+}

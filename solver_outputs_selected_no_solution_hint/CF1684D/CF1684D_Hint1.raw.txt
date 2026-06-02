@@ -1,0 +1,100 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        // total damage if we take all traps (no jumps)
+        long long total = 0;
+        for (int i = 0; i < n; ++i) {
+            total += a[i];
+        }
+
+        // If we jump over some traps, we avoid their base damage,
+        // but we also avoid the bonus damage that would have been added
+        // to later traps. The bonus damage added to later traps equals
+        // the number of jumps before that trap.
+        // If we jump over a trap at index i, we save a[i] (base)
+        // but we also save the bonus damage that would have been added
+        // to all traps after i. However, the bonus damage is already
+        // accounted in the total if we consider all traps taken.
+        // Alternative view: total damage if we take all traps = sum(a_i).
+        // If we jump over some set S of traps, the damage becomes:
+        // sum_{i not in S} (a_i + number of jumps before i).
+        // This equals sum_{i not in S} a_i + sum_{i not in S} (number of jumps before i).
+        // The second sum is exactly the number of pairs (jump, later trap) = sum_{j in S} (n - j).
+        // So total damage = sum_{i not in S} a_i + sum_{j in S} (n - j).
+        // We want to minimize this, which is equivalent to maximizing the savings:
+        // Savings = total - damage = sum_{j in S} a_j + sum_{j in S} (n - j) - (something)?
+        // Let's derive carefully:
+        // total = sum a_i.
+        // damage = sum_{i not in S} a_i + sum_{i not in S} (number of jumps before i).
+        // The second term: for each jump j in S, it adds 1 to all i > j not in S.
+        // So sum_{i not in S} (number of jumps before i) = sum_{j in S} (number of i > j, i not in S).
+        // This is not simply n - j because some i > j might also be jumped.
+        // Better approach: think of the total damage if we take all traps = sum a_i.
+        // If we jump over trap i, we avoid a_i damage, but we also avoid the bonus damage
+        // that would have been added to later traps. However, the bonus damage is not fixed;
+        // it depends on how many jumps we made before.
+        // Let's re-evaluate: total damage = sum_{i=1}^n (a_i + jumps_before_i) for traps we take.
+        // If we decide to jump over some traps, the jumps_before_i for a taken trap i
+        // is the number of jumped traps with index < i.
+        // So total damage = sum_{i taken} a_i + sum_{i taken} (number of jumped j < i).
+        // The second sum is exactly the number of pairs (jumped j, taken i) with j < i.
+        // This equals sum_{j jumped} (number of taken i > j).
+        // So total damage = sum_{i taken} a_i + sum_{j jumped} (number of taken i > j).
+        // We want to minimize this over choice of up to k jumps.
+        // This is equivalent to: we start with all traps taken, damage = sum a_i.
+        // If we jump over trap j, we remove a_j from the first sum, but we also
+        // remove the bonus damage that j would have caused to all taken traps after it.
+        // However, when we jump over j, the number of taken traps after j decreases by 1 (since j is no longer taken),
+        // but the bonus damage from other jumps before j remains.
+        // Actually, if we jump over j, we save a_j (base) and we also save the bonus damage
+        // that j would have added to all taken traps after j. But the bonus damage added by j
+        // is exactly 1 per taken trap after j. So savings from jumping j = a_j + (number of taken traps after j).
+        // But the number of taken traps after j depends on which other traps we jump.
+        // This suggests a greedy approach: if we decide to jump over some set S,
+        // the savings from jumping j in S is a_j + (number of taken traps after j).
+        // Since taken traps after j = (n - j) - (number of jumped traps after j).
+        // So savings = a_j + (n - j) - (number of jumped traps after j).
+        // Total savings = sum_{j in S} (a_j + n - j) - sum_{j in S} (number of jumped traps after j).
+        // The second sum is exactly the number of pairs (j1, j2) in S with j1 < j2.
+        // So total savings = sum_{j in S} (a_j + n - j) - (number of pairs in S).
+        // We want to maximize savings with |S| <= k.
+        // The number of pairs in S is C(|S|, 2) = |S|*(|S|-1)/2.
+        // So if we fix the size m = |S|, we should pick the m traps with the largest (a_j + n - j).
+        // Then savings = sum of top m values - m*(m-1)/2.
+        // We can try all m from 0 to k, compute max savings, then answer = total - max_savings.
+
+        vector<long long> vals(n);
+        for (int i = 0; i < n; ++i) {
+            vals[i] = a[i] + (n - i - 1); // using 0-indexed: position i corresponds to trap i+1, so n - (i+1) = n - i - 1
+        }
+        sort(vals.rbegin(), vals.rend());
+
+        long long max_save = 0;
+        long long sum_top = 0;
+        for (int m = 1; m <= k; ++m) {
+            sum_top += vals[m-1];
+            long long save = sum_top - (long long)m * (m - 1) / 2;
+            if (save > max_save) max_save = save;
+        }
+
+        long long ans = total - max_save;
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

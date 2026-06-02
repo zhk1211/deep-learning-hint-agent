@@ -1,0 +1,184 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const ll INF = 1e18;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<ll>> h(n, vector<ll>(n));
+        for (int i = 0; i < n; ++i)
+            for (int j = 0; j < n; ++j)
+                cin >> h[i][j];
+        vector<ll> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int j = 0; j < n; ++j) cin >> b[j];
+
+        // We need to assign each row and column a parity (0 or 1) of increments
+        // such that adjacent cells have different total increments mod 2
+        // if their original heights are equal mod 2.
+        // Actually, condition: h[i][j] + r[i] + c[j] != h[i][j+1] + r[i] + c[j+1]
+        // => (h[i][j] - h[i][j+1]) mod 2 != (c[j+1] - c[j]) mod 2
+        // Similarly for rows.
+        // This is equivalent to: for every adjacent pair, if original heights have same parity,
+        // then the increments must have different parity on the differing coordinate.
+        // This can be modeled as a 2-coloring problem on a bipartite graph of rows and columns.
+        // We can decide parities of r[i] and c[j] (0 or 1) to satisfy constraints.
+        // If impossible, answer -1.
+        // Then we need to choose actual increments (0 or 1) for each row/col to achieve the parities
+        // with minimum cost. Since increments are 0 or 1 (we never need more than 1 increment per row/col
+        // because only parity matters for the condition, and extra increments just add cost).
+        // So we can solve parity constraints first.
+
+        // Build graph: rows 0..n-1, cols n..2n-1.
+        // Edge between row i and col j if h[i][j] and h[i][j+1] have same parity => constraint on c[j] vs c[j+1]?
+        // Wait, the condition involves adjacent cells.
+        // Let's derive constraints:
+        // For horizontal adjacency (i,j) and (i,j+1):
+        // (r[i] + c[j]) mod 2 != (r[i] + c[j+1]) mod 2  <=> c[j] mod 2 != c[j+1] mod 2.
+        // So if h[i][j] % 2 == h[i][j+1] % 2, we must have c[j] % 2 != c[j+1] % 2.
+        // If they differ, no constraint.
+        // For vertical adjacency (i,j) and (i+1,j):
+        // r[i] mod 2 != r[i+1] mod 2 if h[i][j] % 2 == h[i+1][j] % 2.
+        // So constraints are only between rows or between columns, not cross.
+        // Thus rows and columns are independent in terms of parity constraints!
+        // We just need to assign parities to rows such that for every vertical edge with equal heights,
+        // the two rows have different parity. Similarly for columns.
+        // This is exactly checking if the graph of rows (with edges for equal height vertical adjacencies)
+        // is bipartite. Same for columns.
+        // If either is not bipartite, impossible => -1.
+        // Otherwise, for each component, we can choose which parity gets 0 or 1.
+        // Then we need to pick actual increments (0 or 1) for each row/col to match the chosen parity,
+        // minimizing sum of costs. Since cost of incrementing is a_i if we set r[i]=1, else 0.
+        // So for each row, if we decide its parity p, we pay a_i if p=1 else 0.
+        // But wait: we can also choose to increment by 0 or 1 to achieve that parity.
+        // Actually, if we want parity p, we can either increment 0 times (if current parity of increments is p? No, we start with 0 increments. So to get parity p, we must increment p times mod 2. Since we only consider 0 or 1 increments, we just set r[i] = p. So cost is p * a_i.
+        // So for each row, cost is a_i if we assign parity 1, else 0.
+        // Similarly for columns.
+        // But we have freedom to flip the entire component's parity assignment (swap 0 and 1) to minimize cost.
+        // So for each connected component of rows, we compute cost if we assign a fixed root parity 0 vs 1,
+        // and take the minimum. Same for columns.
+        // Total cost = sum over row components + sum over column components.
+        // However, is there any cross constraint between row and column increments?
+        // The condition only involves differences, so absolute values don't matter, only relative parities.
+        // So rows and columns are independent.
+        // But wait: what about the actual values? Could there be a situation where even if parities are satisfied,
+        // the actual heights become equal? The condition is about equality of final heights.
+        // If parities differ, final heights cannot be equal because they have different parity.
+        // If original heights had different parity, they remain different regardless of increments.
+        // If original heights had same parity, we enforce that the differing coordinate gets different increments,
+        // so final heights have different parity. So equality is impossible.
+        // Thus parity condition is necessary and sufficient.
+        // So we just need to solve bipartite coloring for rows and columns separately.
+
+        // Build row graph
+        vector<vector<int>> row_adj(n);
+        for (int i = 0; i < n - 1; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (h[i][j] % 2 == h[i+1][j] % 2) {
+                    row_adj[i].push_back(i+1);
+                    row_adj[i+1].push_back(i);
+                }
+            }
+        }
+        vector<int> row_color(n, -1);
+        bool possible = true;
+        ll row_cost = 0;
+        for (int i = 0; i < n; ++i) {
+            if (row_color[i] == -1) {
+                // BFS to color component
+                queue<int> q;
+                q.push(i);
+                row_color[i] = 0;
+                vector<int> comp;
+                while (!q.empty()) {
+                    int u = q.front(); q.pop();
+                    comp.push_back(u);
+                    for (int v : row_adj[u]) {
+                        if (row_color[v] == -1) {
+                            row_color[v] = row_color[u] ^ 1;
+                            q.push(v);
+                        } else if (row_color[v] == row_color[u]) {
+                            possible = false;
+                        }
+                    }
+                }
+                if (!possible) break;
+                // compute cost for this component with two assignments
+                ll cost0 = 0, cost1 = 0;
+                for (int u : comp) {
+                    if (row_color[u] == 0) {
+                        cost0 += 0; // parity 0 => no increment
+                        cost1 += a[u];
+                    } else {
+                        cost0 += a[u];
+                        cost1 += 0;
+                    }
+                }
+                row_cost += min(cost0, cost1);
+            }
+        }
+        if (!possible) {
+            cout << "-1\n";
+            continue;
+        }
+
+        // Build column graph
+        vector<vector<int>> col_adj(n);
+        for (int j = 0; j < n - 1; ++j) {
+            for (int i = 0; i < n; ++i) {
+                if (h[i][j] % 2 == h[i][j+1] % 2) {
+                    col_adj[j].push_back(j+1);
+                    col_adj[j+1].push_back(j);
+                }
+            }
+        }
+        vector<int> col_color(n, -1);
+        ll col_cost = 0;
+        for (int j = 0; j < n; ++j) {
+            if (col_color[j] == -1) {
+                queue<int> q;
+                q.push(j);
+                col_color[j] = 0;
+                vector<int> comp;
+                while (!q.empty()) {
+                    int u = q.front(); q.pop();
+                    comp.push_back(u);
+                    for (int v : col_adj[u]) {
+                        if (col_color[v] == -1) {
+                            col_color[v] = col_color[u] ^ 1;
+                            q.push(v);
+                        } else if (col_color[v] == col_color[u]) {
+                            possible = false;
+                        }
+                    }
+                }
+                if (!possible) break;
+                ll cost0 = 0, cost1 = 0;
+                for (int u : comp) {
+                    if (col_color[u] == 0) {
+                        cost0 += 0;
+                        cost1 += b[u];
+                    } else {
+                        cost0 += b[u];
+                        cost1 += 0;
+                    }
+                }
+                col_cost += min(cost0, cost1);
+            }
+        }
+        if (!possible) {
+            cout << "-1\n";
+        } else {
+            cout << row_cost + col_cost << "\n";
+        }
+    }
+    return 0;
+}
+```

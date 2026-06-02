@@ -1,0 +1,57 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+const ll INF = 1e18;
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<ll> b(n);
+    for (int i = 0; i < n; ++i) cin >> b[i];
+    vector<vector<pair<int, ll>>> g(n);
+    for (int i = 0; i < m; ++i) {
+        int u, v; ll w;
+        cin >> u >> v >> w;
+        --u; --v;
+        g[u].emplace_back(v, w);
+    }
+    vector<ll> dp(n, INF);
+    dp[0] = 0;
+    using state = pair<ll, int>;
+    priority_queue<state, vector<state>, greater<state>> pq;
+    pq.emplace(0, 0);
+    while (!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();
+        if (d != dp[u]) continue;
+        for (auto [v, w] : g[u]) {
+            ll need = max(w, d);
+            ll extra = max(0LL, need - d);
+            ll nd = d + extra;
+            if (nd < dp[v]) {
+                dp[v] = nd;
+                pq.emplace(nd, v);
+            }
+        }
+        if (u > 0 && b[u] > 0) {
+            ll nd = max(0LL, d - b[u]);
+            if (nd < dp[u]) {
+                dp[u] = nd;
+                pq.emplace(nd, u);
+            }
+        }
+    }
+    if (dp[n-1] == INF) cout << "-1\n";
+    else cout << dp[n-1] << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}
+```

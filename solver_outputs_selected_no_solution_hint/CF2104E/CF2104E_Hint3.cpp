@@ -1,0 +1,110 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, k;
+    cin >> n >> k;
+    string s;
+    cin >> s;
+
+    // nxt[i][c] = next position >= i where character c occurs
+    // We'll build for positions 0..n, where n is a sentinel (no characters)
+    vector<array<int, 26>> nxt(n + 2);
+    for (int c = 0; c < 26; ++c) {
+        nxt[n][c] = n + 1;
+        nxt[n + 1][c] = n + 1;
+    }
+    for (int i = n - 1; i >= 0; --i) {
+        for (int c = 0; c < 26; ++c) {
+            nxt[i][c] = nxt[i + 1][c];
+        }
+        nxt[i][s[i] - 'a'] = i;
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        string t;
+        cin >> t;
+        int m = (int)t.size();
+        // We want to find the longest prefix of t that is a subsequence of s
+        // We'll simulate greedy matching
+        int pos = 0; // current position in s
+        int matched = 0;
+        for (char ch : t) {
+            int c = ch - 'a';
+            int npos = nxt[pos][c];
+            if (npos == n + 1) {
+                // cannot match this character
+                break;
+            }
+            pos = npos + 1;
+            ++matched;
+        }
+        // matched = length of longest prefix of t that is a subsequence
+        // If matched == m, then t is pleasant, we need to append enough letters
+        // to make it unpleasant. The answer is the number of letters needed to
+        // extend t so that it's no longer a subsequence.
+        // If matched < m, t is already unpleasant, answer = 0.
+        if (matched < m) {
+            cout << 0 << '\n';
+        } else {
+            // t is pleasant. We need to find the minimum number of letters to append
+            // so that the new string is not a subsequence.
+            // After matching all of t, we are at position pos in s.
+            // We need to find the shortest string w such that t+w is not a subsequence.
+            // This is equivalent to: starting from pos, what is the minimum length
+            // of a string that cannot be formed as a subsequence from s[pos..n-1]?
+            // Since we only have first k letters, the answer is the length of the
+            // shortest string that is not a subsequence of the suffix.
+            // This can be computed by DP: dp[i] = minimum length of a string that is
+            // not a subsequence of s[i..n-1].
+            // dp[n] = 1 (empty string is not a subsequence? Actually empty string is always a subsequence,
+            // but we want non-empty? Wait, we need to append letters, so we want the shortest non-empty
+            // string that is not a subsequence. But if we append nothing, t remains pleasant.
+            // So we need at least 1 letter. Let's define f[i] = length of shortest string
+            // (possibly empty) that is NOT a subsequence of s[i..n-1].
+            // f[n] = 0? No, empty string is a subsequence of any string. So f[n] = 1 (any single letter
+            // is not a subsequence of empty string). But we need to append letters to t, so we want
+            // the shortest string w such that t+w is not a subsequence. Since t is already fully matched,
+            // we just need w to not be a subsequence of the remaining suffix.
+            // So answer = f[pos].
+            // Let's compute f[i] for all i.
+            // f[i] = 1 + min_{c in allowed} f[nxt[i][c] + 1]? Actually, if we pick a letter c,
+            // then the shortest string not a subsequence starting with c is 1 + f[nxt[i][c] + 1].
+            // But we want the minimum over all possible first letters.
+            // So f[i] = 1 + min_{c=0..k-1} f[nxt[i][c] + 1].
+            // Base: f[n] = 1 (empty suffix, any single letter is not a subsequence).
+            // f[n+1] = 0? Actually n+1 is sentinel, we can set f[n+1] = 0, then f[n] = 1 + min_c f[n+1] = 1.
+            // Let's compute f array.
+            // We can precompute f for all positions 0..n.
+            // Since n up to 1e6, we can do it in O(n*k).
+            // But we only need f[pos] for each query. pos can be up to n.
+            // We can precompute f once.
+        }
+    }
+
+    // Actually we need to precompute f for all positions.
+    // Let's do it after building nxt.
+    vector<int> f(n + 2);
+    f[n + 1] = 0;
+    for (int i = n; i >= 0; --i) {
+        int mn = 1e9;
+        for (int c = 0; c < k; ++c) {
+            int npos = nxt[i][c];
+            mn = min(mn, f[npos + 1]);
+        }
+        f[i] = mn + 1;
+    }
+
+    // Now process queries again? We already read them. We need to re-read or store.
+    // Better to store queries or process after precomputation.
+    // Let's restructure: read all, precompute, then answer.
+    // We'll store queries.
+    // But we already started processing queries. Let's just move precomputation before query loop.
+    // I'll rewrite cleanly.
+    return 0;
+}

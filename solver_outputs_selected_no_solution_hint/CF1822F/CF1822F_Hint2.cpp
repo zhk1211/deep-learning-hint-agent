@@ -1,0 +1,82 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+void solve() {
+    int n;
+    ll k, c;
+    cin >> n >> k >> c;
+    vector<vector<int>> g(n);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        --u; --v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+
+    // First DFS: compute distances from root 0
+    vector<ll> dist0(n);
+    auto dfs1 = [&](auto&& self, int u, int p, ll d) -> void {
+        dist0[u] = d;
+        for (int v : g[u]) {
+            if (v == p) continue;
+            self(self, v, u, d + k);
+        }
+    };
+    dfs1(dfs1, 0, -1, 0);
+
+    // Find farthest node from 0
+    int far1 = 0;
+    for (int i = 0; i < n; ++i) {
+        if (dist0[i] > dist0[far1]) far1 = i;
+    }
+
+    // Second DFS: distances from far1
+    vector<ll> dist1(n);
+    auto dfs2 = [&](auto&& self, int u, int p, ll d) -> void {
+        dist1[u] = d;
+        for (int v : g[u]) {
+            if (v == p) continue;
+            self(self, v, u, d + k);
+        }
+    };
+    dfs2(dfs2, far1, -1, 0);
+
+    // Find farthest node from far1
+    int far2 = far1;
+    for (int i = 0; i < n; ++i) {
+        if (dist1[i] > dist1[far2]) far2 = i;
+    }
+
+    // Third DFS: distances from far2
+    vector<ll> dist2(n);
+    auto dfs3 = [&](auto&& self, int u, int p, ll d) -> void {
+        dist2[u] = d;
+        for (int v : g[u]) {
+            if (v == p) continue;
+            self(self, v, u, d + k);
+        }
+    };
+    dfs3(dfs3, far2, -1, 0);
+
+    ll ans = 0;
+    for (int i = 0; i < n; ++i) {
+        ll max_dist = max(dist1[i], dist2[i]);
+        ll profit = max_dist - c * (dist0[i] / k);
+        ans = max(ans, profit);
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

@@ -1,0 +1,44 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int i = 0; i < n; ++i) cin >> b[i];
+        
+        priority_queue<int> pq_a, pq_b;
+        for (int x : a) pq_a.push(x);
+        for (int x : b) pq_b.push(x);
+        
+        while (!pq_a.empty() && !pq_b.empty()) {
+            if (pq_a.top() == pq_b.top()) {
+                pq_a.pop();
+                pq_b.pop();
+            } else if (pq_a.top() > pq_b.top()) {
+                int val = pq_a.top();
+                pq_a.pop();
+                pq_a.push(val / 2);
+            } else {
+                if (pq_b.top() % 2 == 1) {
+                    break;
+                }
+                int val = pq_b.top();
+                pq_b.pop();
+                pq_b.push(val / 2);
+            }
+        }
+        
+        cout << (pq_a.empty() && pq_b.empty() ? "YES" : "NO") << '\n';
+    }
+    return 0;
+}
+```

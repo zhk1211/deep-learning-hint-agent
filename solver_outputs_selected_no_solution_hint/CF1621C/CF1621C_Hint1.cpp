@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n + 1, 0);
+        vector<bool> visited(n + 1, false);
+        
+        for (int i = 1; i <= n; i++) {
+            if (!visited[i]) {
+                vector<int> cycle;
+                int cur = i;
+                while (true) {
+                    cout << "? " << i << endl;
+                    int val;
+                    cin >> val;
+                    if (val == 0) return 0;
+                    if (!cycle.empty() && val == cycle[0]) break;
+                    cycle.push_back(val);
+                }
+                int len = cycle.size();
+                for (int j = 0; j < len; j++) {
+                    int from = cycle[j];
+                    int to = cycle[(j + 1) % len];
+                    p[from] = to;
+                    visited[from] = true;
+                }
+            }
+        }
+        
+        cout << "!";
+        for (int i = 1; i <= n; i++) {
+            cout << " " << p[i];
+        }
+        cout << endl;
+    }
+    
+    return 0;
+}

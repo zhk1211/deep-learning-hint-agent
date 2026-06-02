@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n), b(m);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int i = 0; i < m; ++i) cin >> b[i];
+
+        // Find the maximum value in b
+        int max_b = *max_element(b.begin(), b.end());
+
+        // Count occurrences of each value in a
+        vector<int> cnt_a(max_b + 1, 0);
+        for (int x : a) {
+            if (x <= max_b) cnt_a[x]++;
+        }
+
+        // For each y in b, check if there exists x in a such that x divides y
+        // We can precompute for each y the smallest divisor from a
+        // Since a values are up to max_b, we can use a sieve-like approach
+        vector<int> min_div(max_b + 1, 0);
+        for (int x = 1; x <= max_b; ++x) {
+            if (cnt_a[x] > 0) {
+                for (int y = x; y <= max_b; y += x) {
+                    if (min_div[y] == 0) min_div[y] = x;
+                }
+            }
+        }
+
+        // Count how many y in b have at least one divisor in a
+        int good_count = 0;
+        for (int y : b) {
+            if (min_div[y] != 0) good_count++;
+        }
+
+        // If all numbers in b have a divisor in a, Alice wins, else Bob wins
+        if (good_count == m) {
+            cout << "Alice\n";
+        } else {
+            cout << "Bob\n";
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+void solve() {
+    int n, m, k, q;
+    cin >> n >> m >> k >> q;
+    vector<pair<int,int>> ops(q);
+    for (int i = 0; i < q; i++) {
+        cin >> ops[i].first >> ops[i].second;
+    }
+    
+    vector<bool> row_used(n+1, false), col_used(m+1, false);
+    int rows_covered = 0, cols_covered = 0;
+    long long ans = 1;
+    
+    for (int i = q-1; i >= 0; i--) {
+        int x = ops[i].first, y = ops[i].second;
+        bool useful = false;
+        if (!row_used[x] && cols_covered < m) {
+            useful = true;
+        }
+        if (!col_used[y] && rows_covered < n) {
+            useful = true;
+        }
+        if (useful) {
+            ans = (ans * k) % MOD;
+        }
+        if (!row_used[x]) {
+            row_used[x] = true;
+            rows_covered++;
+        }
+        if (!col_used[y]) {
+            col_used[y] = true;
+            cols_covered++;
+        }
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

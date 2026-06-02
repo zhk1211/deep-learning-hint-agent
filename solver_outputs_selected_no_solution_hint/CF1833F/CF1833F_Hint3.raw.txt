@@ -1,0 +1,144 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1e9 + 7;
+
+long long modpow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        sort(a.begin(), a.end());
+
+        vector<pair<int, int>> freq;
+        for (int x : a) {
+            if (freq.empty() || freq.back().first != x) {
+                freq.push_back({x, 1});
+            } else {
+                freq.back().second++;
+            }
+        }
+
+        int k = freq.size();
+        vector<long long> pref(k + 1, 1);
+        for (int i = 0; i < k; ++i) {
+            pref[i + 1] = pref[i] * freq[i].second % MOD;
+        }
+
+        long long ans = 0;
+        int r = 0;
+        for (int l = 0; l < k; ++l) {
+            while (r < k && freq[r].first - freq[l].first < m) {
+                ++r;
+            }
+            // window is [l, r-1]
+            int len = r - l;
+            if (len >= m) {
+                // product of frequencies in window
+                long long prod = pref[r] * modpow(pref[l], MOD - 2) % MOD;
+                // choose m distinct values from len distinct values
+                // but we need to multiply by combinations of choosing m distinct values
+                // Actually we need to sum over all subsets of size m of distinct values in window
+                // product of their frequencies.
+                // We can use combinatorial prefix sums? No, we need sum of products of all m-combinations.
+                // Since m is small? No, m up to n.
+                // We can use sliding window and maintain product of frequencies, but we need sum of products of m-combinations.
+                // Alternative: use two pointers and maintain a combination sum using factorials? Not directly.
+                // Let's think: we have frequencies f[l..r-1]. We need sum over all subsets S of size m of product_{i in S} f[i].
+                // This is coefficient of x^m in product (1 + f[i] x). We can compute this using DP? Too slow.
+                // But note: we only need to compute this for windows where the distinct values are within range < m.
+                // Since m can be large, we need a different approach.
+                // Actually, the problem is simpler: we need to choose m students with distinct levels, and max-min < m.
+                // Since levels are integers, if we have m distinct levels within a range of size < m, then the levels must be exactly consecutive integers? Not necessarily, but the difference between max and min is < m.
+                // If we have m distinct integers in an interval of length < m, then they must be exactly m consecutive integers! Because if you have m distinct integers, the difference between max and min is at least m-1. For it to be strictly less than m, it must be exactly m-1. So the levels must be a set of m consecutive integers.
+                // Let's verify: Suppose we have m distinct integers. The minimum possible max-min is m-1 (achieved when they are consecutive). The condition requires max-min < m, so max-min <= m-1. Thus max-min = m-1. So the levels must be exactly m consecutive integers.
+                // Wow! That simplifies everything.
+                // So the magnificent dances correspond to choosing exactly one student from each of m consecutive distinct levels.
+                // Therefore, we just need to find all windows of m consecutive distinct values in the sorted unique levels, and multiply their frequencies.
+                // But wait: the condition is "levels of every two dancers have an absolute difference strictly less than m". If we have m distinct levels, the max difference is max-min. For it to be < m, we need max-min <= m-1. Since there are m distinct integers, the only way is that they are consecutive integers. So yes, the set of levels must be exactly {x, x+1, ..., x+m-1} for some integer x.
+                // So we just need to find all x such that all levels x, x+1, ..., x+m-1 appear in the array, and then the number of ways is the product of their frequencies.
+                // But wait: the problem says "levels of all dancers are pairwise distinct". So we pick one student from each level. So product of frequencies.
+                // So we can just iterate over the sorted unique values, and for each i, if freq[i].first + m - 1 == freq[i+m-1].first, then we have a valid set, and we multiply frequencies from i to i+m-1.
+                // Let's check the examples.
+                // Example 1: n=7, m=4, a = [8,10,10,9,6,11,7] -> sorted: 6,7,8,9,10,10,11. Unique: 6,7,8,9,10,11. Frequencies: 6:1, 7:1, 8:1, 9:1, 10:2, 11:1.
+                // m=4. Consecutive sets of size 4: {6,7,8,9} -> product=1. {7,8,9,10} -> product=2. {8,9,10,11} -> product=2. Sum=5. Matches output 5.
+                // Example 2: 5 3, a=[4,2,2,3,6] -> sorted: 2,2,3,4,6. Unique: 2,3,4,6. Frequencies: 2:2, 3:1, 4:1, 6:1. m=3. Consecutive sets of size 3: {2,3,4} -> product=2*1*1=2. {3,4,6} not consecutive. Sum=2. Matches output 2.
+                // Example 3: 8 2, a=[1,5,2,2,3,1,3,3] -> sorted: 1,1,2,2,3,3,3,5. Unique: 1,2,3,5. Frequencies: 1:2, 2:2, 3:3, 5:1. m=2. Consecutive pairs: {1,2} -> 2*2=4, {2,3} -> 2*3=6, {3,5} not consecutive. Sum=10. Matches output 10.
+                // Example 4: 3 3, a=[3,3,3] -> unique: 3, freq=3. m=3. Need 3 consecutive levels, but only one level. Sum=0. Matches.
+                // Example 5: 5 1, a=[3,4,3,10,7] -> m=1. Any single student works. Number of ways = n = 5. Output 5. Matches.
+                // Example 6: 12 3, a=[5,2,1,1,4,3,5,5,5,2,7,5] -> sorted: 1,1,2,2,3,4,5,5,5,5,5,7. Unique: 1,2,3,4,5,7. Frequencies: 1:2, 2:2, 3:1, 4:1, 5:5, 7:1. m=3. Consecutive triples: {1,2,3} -> 2*2*1=4, {2,3,4} -> 2*1*1=2, {3,4,5} -> 1*1*5=5. Sum=11. Matches output 11.
+                // Example 7: 1 1 -> 1.
+                // Example 8: 3 2, a=[1,2,3] -> unique: 1,2,3. Frequencies: 1:1,2:1,3:1. m=2. Pairs: {1,2} -> 1, {2,3} -> 1. Sum=2. Matches.
+                // Example 9: 2 2, a=[1,2] -> unique: 1,2. Frequencies: 1:1,2:1. m=2. Pair: {1,2} -> 1. Sum=1. Matches.
+                // So the solution is indeed simple.
+                // We just need to compute product of frequencies for each window of m consecutive values.
+                // We can precompute prefix products of frequencies to get product in O(1) per window.
+                // Total time O(n log n) due to sorting.
+                // Edge case: m=1. Then any single student works. The number of ways is n. Our method: windows of size 1, product of frequency of each distinct value. Sum of frequencies = n. Works.
+                // So we can just implement this.
+                // Wait, the hints mentioned sliding window and binary search. But with the consecutive insight, it's even simpler.
+                // Let's double-check: Is it always true that m distinct integers with max-min < m must be consecutive? Yes, because if they are not consecutive, the difference between max and min is at least m (by pigeonhole principle: if you have m distinct integers, the difference between the smallest and largest is at least m-1; if it's strictly less than m, it must be exactly m-1, which implies they are consecutive). So it's correct.
+                // So we can just do:
+                // sort a
+                // compress to freq
+                // for i from 0 to freq.size() - m:
+                //   if freq[i+m-1].first == freq[i].first + m - 1:
+                //       ans = (ans + product of freq[i..i+m-1]) % MOD
+                // product can be computed using prefix products and modular inverse.
+                // Since MOD is prime, we can use Fermat's little theorem.
+                // We already have modpow.
+                // Let's implement.
+                // But careful: m can be up to n, and freq.size() up to n.
+                // So O(n) after sorting.
+                // Let's write the code.
+                // We'll use the existing freq and pref arrays.
+                // Reset ans = 0.
+                // For i from 0 to k - m:
+                //   if (freq[i+m-1].first == freq[i].first + m - 1) {
+                //       long long prod = pref[i+m] * modpow(pref[i], MOD-2) % MOD;
+                //       ans = (ans + prod) % MOD;
+                //   }
+                // Print ans.
+                // That's it.
+                // Let's adjust the code.
+                // We already have freq and pref computed.
+                // So we can just replace the sliding window part with this.
+                // But we need to handle m=1 separately? The loop condition i <= k-m works for m=1: i from 0 to k-1, condition freq[i].first == freq[i].first + 0, always true, product = freq[i].second, sum = n. Works.
+                // So we can just do that.
+                // Let's modify the code accordingly.
+                // We'll remove the previous sliding window logic and use this.
+                // The code will be clean.
+                // Let's produce the final answer.
+                ans = 0;
+                for (int i = 0; i + m <= k; ++i) {
+                    if (freq[i + m - 1].first == freq[i].first + m - 1) {
+                        long long prod = pref[i + m] * modpow(pref[i], MOD - 2) % MOD;
+                        ans = (ans + prod) % MOD;
+                    }
+                }
+                cout << ans << '\n';
+            }
+        }
+    }
+    return 0;
+}
+```

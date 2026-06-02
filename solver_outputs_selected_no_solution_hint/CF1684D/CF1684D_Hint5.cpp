@@ -1,0 +1,145 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+const ll INF = 1e18;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<ll> a(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+
+    // dp[i] = minimal damage to reach trap i (0-indexed) having just passed it
+    // We use a segment tree over dp[j] + something
+    // Let dp[i] = a[i] + min_{j from max(0, i-k-1) to i-1} (dp[j] + (i - j - 1))
+    // Because if we jumped over traps between j+1 and i-1, the number of jumps before i is (i - j - 1)
+    // So damage at i is a[i] + (i - j - 1)
+    // We can rewrite: dp[i] = a[i] + i - 1 + min_{j} (dp[j] - j)
+    // But careful: we can also start from beginning (no previous trap), which means we jumped over first i traps.
+    // That case: damage = a[i] + i (since i jumps before it). So dp[i] = a[i] + i.
+    // Also we can finish by jumping over last traps. The answer is min over i of (dp[i] + (n - 1 - i)) because after i we jump over the rest.
+    // But we also can jump over all traps: answer 0 if k >= n.
+    if (k >= n) {
+        cout << 0 << '\n';
+        return;
+    }
+
+    // Segment tree for range minimum query, storing dp[j] - j
+    int size = 1;
+    while (size < n) size *= 2;
+    vector<ll> seg(2 * size, INF);
+
+    auto update = [&](int pos, ll val) {
+        pos += size;
+        seg[pos] = val;
+        pos /= 2;
+        while (pos) {
+            seg[pos] = min(seg[2 * pos], seg[2 * pos + 1]);
+            pos /= 2;
+        }
+    };
+
+    auto query = [&](int l, int r) {
+        if (l > r) return INF;
+        l += size; r += size;
+        ll res = INF;
+        while (l <= r) {
+            if (l % 2 == 1) res = min(res, seg[l++]);
+            if (r % 2 == 0) res = min(res, seg[r--]);
+            l /= 2; r /= 2;
+        }
+        return res;
+    };
+
+    vector<ll> dp(n, INF);
+    ll ans = INF;
+
+    for (int i = 0; i < n; ++i) {
+        // Option 1: start from beginning, jump over first i traps
+        dp[i] = a[i] + i;
+        // Option 2: come from previous passed trap j
+        int left = max(0, i - k - 1);
+        int right = i - 1;
+        if (left <= right) {
+            ll best = query(left, right);
+            if (best != INF) {
+                dp[i] = min(dp[i], a[i] + i - 1 + best);
+            }
+        }
+        // Update segment tree with dp[i] - i
+        update(i, dp[i] - i);
+        // Update answer: after passing trap i, we can jump over the rest (n - 1 - i) traps
+        // But we must ensure total jumps <= k. Jumps before i: i - (number of passed traps before i) but easier:
+        // If we end at i, total jumps = (i - number of passed traps before i) + (n - 1 - i)
+        // Actually, if we pass trap i, the number of passed traps is (number of dp steps). Let's just compute total damage if we stop after i.
+        // Damage after i: we jump over traps i+1..n-1, so bonus for those doesn't matter. Total damage = dp[i] + (n - 1 - i) * (something?) No, jumping over them adds no damage.
+        // Wait, if we jump over traps after i, they don't deal damage. So total damage is just dp[i].
+        // But we must check if total jumps <= k. Total jumps = (i - cnt_passed) + (n - 1 - i) where cnt_passed is number of traps we passed.
+        // Actually, if we passed traps at indices j0, j1, ..., jm = i, then number of jumps = n - (m+1). Because we jumped over all other traps.
+        // So total jumps = n - (number of passed traps). We need n - passed <= k => passed >= n - k.
+        // So we only consider dp[i] if the number of passed traps up to i is >= n - k.
+        // But we don't track passed count in dp. However, we can just compute answer as min over i of dp[i] + (n - 1 - i) ??? No.
+        // Let's think: If we pass trap i, we have taken damage dp[i]. Then we jump over the remaining traps (i+1 to n-1). That adds no damage.
+        // So total damage = dp[i]. But is that always valid? We must ensure total jumps <= k.
+        // Total jumps = (i - number of passed traps before i) + (n - 1 - i) = n - 1 - number of passed traps before i.
+        // Wait, if we passed traps at indices p1 < p2 < ... < pm = i, then number of jumps before i = i - (m-1) because there are i traps before i, and we passed m-1 of them.
+        // So total jumps = (i - (m-1)) + (n - 1 - i) = n - m.
+        // So total jumps = n - m, where m is number of passed traps (including i). We need n - m <= k => m >= n - k.
+        // So we need to know m for each dp state. But dp doesn't store m. However, we can compute dp[i] as minimal damage to pass trap i with exactly some number of passed traps? That's too much.
+        // Alternative: We can think of the problem as choosing up to k traps to jump over. The damage is sum of a_i for passed traps + bonus.
+        // Bonus: if we pass a trap, the bonus added is the number of jumped traps before it.
+        // So total damage = sum_{i passed} a_i + sum_{i passed} (number of jumped traps before i).
+        // The second term is equal to sum_{j jumped} (number of passed traps after j).
+        // This is symmetric. We can decide which traps to pass. Let S be the set of passed traps. |S| = n - j, where j <= k is number of jumps.
+        // Damage = sum_{i in S} a_i + sum_{i in S} (i - rank(i)) where rank(i) is its position in S (0-indexed). Because number of jumps before i = i - (number of passed before i) = i - rank(i).
+        // So damage = sum_{i in S} (a_i + i) - sum_{i in S} rank(i).
+        // sum_{i in S} rank(i) = 0 + 1 + ... + (|S|-1) = |S|*(|S|-1)/2.
+        // So damage = sum_{i in S} (a_i + i) - |S|*(|S|-1)/2.
+        // We need to choose S of size at least n - k to minimize this.
+        // Since |S| is fixed, the term -|S|*(|S|-1)/2 is fixed. So we just need to minimize sum_{i in S} (a_i + i) for a given size |S|.
+        // But we can also choose |S| as any value from n-k to n. So we can compute for each possible size m = |S|, the minimal sum of (a_i + i) over m elements.
+        // Then answer = min_{m = n-k .. n} (min_sum(m) - m*(m-1)/2).
+        // Wait, is that correct? Let's verify with sample 2: n=4, k=1. a = [5,10,11,5]. a_i + i: [5,11,13,8] (0-indexed i). Sizes m from 3 to 4.
+        // m=4: sum = 5+11+13+8=37, minus 4*3/2=6 => 31. matches no jumps.
+        // m=3: min sum of 3 elements: choose 5,11,8? sum=24, minus 3*2/2=3 => 21. matches sample.
+        // Sample 3: n=7, k=5. a=[8,2,5,15,11,2,8]. a_i+i: [8,3,7,18,15,7,14]. m from 2 to 7. We need min over m.
+        // Let's test m=2: min two: 3 and 7? sum=10, minus 2*1/2=1 => 9. matches sample output 9.
+        // So the problem reduces to: given array b_i = a_i + i (0-indexed), find for each m from n-k to n, the minimum sum of m elements from b. Then answer = min_{m} (min_sum(m) - m*(m-1)/2).
+        // But wait, is there any constraint on the order? The derivation assumed we can pick any subset S of traps to pass, and the damage formula holds regardless of order? Yes, because the bonus only depends on the number of jumps before each passed trap, which is exactly i - rank(i) if we pass them in increasing order. Since we must go in order, the passed traps are exactly the ones we don't jump over, and they are processed in increasing index order. So the formula is correct.
+        // So we just need to pick m traps to pass, minimizing sum of b_i, where m >= n-k.
+        // That's easy: sort b_i, take smallest m elements. But wait, we can't reorder traps. The formula sum_{i in S} (a_i + i) - m*(m-1)/2 is valid for any set S, because the rank(i) is determined by the order of indices in S. Since we sum over i in S, the term sum rank(i) is always 0+1+...+(m-1) regardless of which indices are chosen, as long as we process them in increasing order. So yes, we can just pick any m indices to minimize sum of b_i. The minimal sum of m elements from b is just the sum of the m smallest b_i.
+        // So answer = min_{m = n-k .. n} (sum of m smallest b_i - m*(m-1)/2).
+        // But wait, is it always possible to achieve that sum? We can choose any subset of size m, because we can just decide to pass those traps and jump over the others. The number of jumps will be n - m <= k. So yes.
+        // Let's test sample 4: n=6, k=3. a=[1,2,3,4,5,6]. b = [1,3,5,7,9,11]. n-k=3. m from 3 to 6.
+        // m=3: smallest 3: 1,3,5 sum=9, minus 3*2/2=3 => 6.
+        // m=4: sum=1+3+5+7=16, minus 6 => 10.
+        // m=5: sum=1+3+5+7+9=25, minus 10 => 15.
+        // m=6: sum=1+3+5+7+9+11=36, minus 15 => 21.
+        // Min is 6. Sample output is 6. Correct.
+        // Sample 5: n=1, k=1. b=[7]. m from 0 to 1? n-k=0. m=0: sum=0, minus 0 => 0. m=1: sum=7, minus 0 => 7. Min 0. Correct.
+        // So the solution is O(n log n) per test case, which is fine.
+
+        vector<ll> b(n);
+        for (int i = 0; i < n; ++i) b[i] = a[i] + i;
+        sort(b.begin(), b.end());
+        vector<ll> pref(n + 1, 0);
+        for (int i = 0; i < n; ++i) pref[i + 1] = pref[i] + b[i];
+        ll ans2 = INF;
+        for (int m = n - k; m <= n; ++m) {
+            ll sum = pref[m];
+            ll val = sum - (ll)m * (m - 1) / 2;
+            ans2 = min(ans2, val);
+        }
+        cout << ans2 << '\n';
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}

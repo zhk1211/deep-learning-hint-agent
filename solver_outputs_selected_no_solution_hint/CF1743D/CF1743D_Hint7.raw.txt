@@ -1,0 +1,130 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    string s;
+    cin >> n >> s;
+
+    // Find the first '1' in the string
+    int first_one = -1;
+    for (int i = 0; i < n; ++i) {
+        if (s[i] == '1') {
+            first_one = i;
+            break;
+        }
+    }
+
+    // If there is no '1', the answer is 0
+    if (first_one == -1) {
+        cout << "0\n";
+        return 0;
+    }
+
+    // The substring from first_one to the end is the maximum possible number
+    // we can get from a single substring (without leading zeros).
+    string max_sub = s.substr(first_one);
+    int m = max_sub.size();
+
+    // We will try to find a second substring that maximizes the OR with max_sub.
+    // The second substring must be of length <= m, and we can shift it.
+    // We want to turn some zeros in max_sub into ones if possible.
+    // The best we can do is to find a substring that has a '1' at the position
+    // of the first zero in max_sub, and then we can OR it.
+    // We can try all possible starting positions for the second substring
+    // within the original string, but we only care about those that can
+    // potentially improve the result.
+
+    string best = max_sub;
+    // Find the first zero in max_sub
+    int first_zero = -1;
+    for (int i = 0; i < m; ++i) {
+        if (max_sub[i] == '0') {
+            first_zero = i;
+            break;
+        }
+    }
+
+    if (first_zero != -1) {
+        // We need to find a substring of length m that starts somewhere
+        // such that it has a '1' at position first_zero.
+        // The substring can start anywhere from first_one to first_one + first_zero.
+        // Actually, the second substring can be any substring of s.
+        // We want to maximize the OR, so we try all possible shifts.
+        // The maximum length of the second substring is m.
+        // We can try all starting positions from first_one to first_one + first_zero.
+        // But we can also try all positions where the substring can cover the first_zero.
+        // More efficiently: we can try all possible second substrings of length m
+        // that start at positions from max(0, first_one - (m - 1)) to first_one + first_zero.
+        // However, we only need to consider those that have a '1' at the relative position first_zero.
+        // Since n up to 1e6, we can just try all possible starting positions of the second substring
+        // of length m, but that's O(n*m) worst-case. We need a faster approach.
+        // Observation: The second substring can be any substring of s. We want to turn the first zero
+        // into one if possible. The best we can do is to find a substring that has a '1' at the
+        // position corresponding to the first zero of max_sub, and then we can OR it.
+        // Actually, we can just try all possible shifts of the second substring relative to max_sub.
+        // The second substring can start at any position in s. Its length can be up to m.
+        // But to maximize OR, we can just consider substrings of length m that start at some position.
+        // The number of possible shifts is at most m (since we only care about aligning with max_sub).
+        // More precisely, we can try all starting positions i from first_one to first_one + first_zero.
+        // For each such i, we take the substring of length m starting at i (if it fits), and OR it with max_sub.
+        // This is O(m^2) worst-case, but m <= n = 1e6, so we need O(n) or O(n log n).
+        // However, note that the string is random, so the first zero appears very early (expected position ~2).
+        // Thus first_zero is small, and we only need to try a few shifts.
+        // In the worst case, if the string is all ones except one zero at the end, first_zero = m-1,
+        // and we would need to try many shifts. But the problem says tests are randomly generated,
+        // so the expected first zero is at index 1 or 2. So we can just try all shifts up to first_zero.
+        // To be safe, we can try all shifts from 0 to first_zero (i.e., start positions from first_one to first_one+first_zero).
+        // That's at most m shifts, but m can be 1e6. However, in random strings, first_zero is small.
+        // But we can also optimize: we only need to consider shifts where the second substring has a '1' at the first_zero position.
+        // So we can precompute the positions of '1's and use them.
+        // Actually, we can just try all possible second substrings of length m that start at positions
+        // where s[start + first_zero] == '1'. There are at most n such positions, but we can limit to those
+        // that are within [first_one, first_one + first_zero] because starting earlier would include leading zeros
+        // which doesn't help, and starting later would shift the first_zero position out of the substring.
+        // So we only need to check start positions in [first_one, first_one + first_zero].
+        // For each such start, we compute the OR with max_sub. But doing this naively for each start is O(m * first_zero).
+        // Since first_zero is small on average, this is acceptable. But to be safe for worst-case (e.g., all ones except last zero),
+        // we can do it in O(m) total by using bitset or by noting that we only need to find the best shift.
+        // A better approach: we want to maximize the OR. The first zero is at position p = first_zero.
+        // We want to find a substring of length m that has a '1' at position p, and then we want to maximize the OR of the rest.
+        // This is equivalent to: for each possible shift d (0 <= d <= p), we consider the substring starting at first_one + d.
+        // We can compute the OR incrementally? Not easily.
+        // But we can observe that the OR of max_sub with another string of same length is just max_sub with some zeros turned to ones.
+        // The best we can do is to turn the first zero into one, and then recursively try to turn the next zero, etc.
+        // Actually, we can just try all possible shifts d from 0 to p, and for each, compute the OR string.
+        // Since p is the position of the first zero, and the string is random, p is small.
+        // In the worst-case non-random, p could be up to m-1, but the problem says all non-example tests are random.
+        // So we can safely assume p is small. We'll just implement the O(m * (p+1)) approach.
+        // To be extra safe, we can break early if we find a shift that makes the OR all ones.
+        
+        for (int d = 0; d <= first_zero; ++d) {
+            int start = first_one + d;
+            if (start + m > n) continue; // not enough characters
+            // We only care if s[start + first_zero] == '1'
+            if (s[start + first_zero] == '0') continue;
+            // Compute OR with max_sub
+            string cur = max_sub;
+            bool improved = false;
+            for (int i = 0; i < m; ++i) {
+                if (cur[i] == '0' && s[start + i] == '1') {
+                    cur[i] = '1';
+                    improved = true;
+                }
+            }
+            if (improved && cur > best) {
+                best = cur;
+                // If best is all ones, we can stop
+                if (best.find('0') == string::npos) break;
+            }
+        }
+    }
+
+    cout << best << '\n';
+    return 0;
+}
+```

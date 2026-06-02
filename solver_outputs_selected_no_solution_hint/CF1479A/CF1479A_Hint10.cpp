@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(int i) {
+    cout << "? " << i << endl;
+    int x;
+    cin >> x;
+    return x;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    cin >> n;
+    
+    if (n == 1) {
+        cout << "! 1" << endl;
+        return 0;
+    }
+    
+    int a0 = INT_MAX, an1 = INT_MAX;
+    
+    int l = 1, r = n;
+    while (l <= r) {
+        int mid = (l + r) / 2;
+        int val_mid = query(mid);
+        int val_left = (mid > 1) ? query(mid - 1) : INT_MAX;
+        int val_right = (mid < n) ? query(mid + 1) : INT_MAX;
+        
+        if (val_mid < val_left && val_mid < val_right) {
+            cout << "! " << mid << endl;
+            return 0;
+        }
+        if (val_left < val_mid) {
+            r = mid - 1;
+        } else {
+            l = mid + 1;
+        }
+    }
+    
+    return 0;
+}

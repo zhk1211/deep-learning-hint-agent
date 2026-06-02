@@ -1,0 +1,95 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        string s;
+        cin >> s;
+        vector<int> p(n);
+        for (int i = 0; i < n; i++) {
+            cin >> p[i];
+            p[i]--;
+        }
+        
+        vector<bool> visited(n, false);
+        long long ans = 1;
+        
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                vector<int> cycle;
+                int cur = i;
+                while (!visited[cur]) {
+                    visited[cur] = true;
+                    cycle.push_back(cur);
+                    cur = p[cur];
+                }
+                
+                string orig, shifted;
+                for (int idx : cycle) orig += s[idx];
+                shifted = orig;
+                int k = cycle.size();
+                int steps = 0;
+                do {
+                    steps++;
+                    string temp = shifted;
+                    for (int j = 0; j < k; j++) {
+                        shifted[j] = temp[p[cycle[j]] == cycle[j] ? j : (find(cycle.begin(), cycle.end(), p[cycle[j]]) - cycle.begin())];
+                    }
+                    // Simpler: shift by applying permutation restricted to cycle
+                    // Actually, we can just compute the shift directly:
+                    // After one operation, character at position cycle[j] goes to position where p[cycle[j]] is.
+                    // But we want to track the string on the cycle.
+                    // Let's redo: we have cycle indices c[0], c[1], ..., c[k-1] where p[c[i]] = c[(i+1)%k] (if cycle is properly ordered)
+                    // But the cycle may not be in order. Let's reorder.
+                } while (shifted != orig && steps < k);
+                // Better approach: find the order of the cycle.
+                // Actually, we can just find the cycle order:
+                // Starting from i, follow p to get the cycle in order.
+                // Then the permutation on the cycle is a cyclic shift by 1.
+                // So we can just find the minimal shift of the string on the cycle that returns to original.
+                // Let's redo the cycle extraction properly.
+            }
+        }
+        
+        // Let's redo the whole cycle processing more cleanly.
+        fill(visited.begin(), visited.end(), false);
+        ans = 1;
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                vector<int> cycle;
+                int cur = i;
+                while (!visited[cur]) {
+                    visited[cur] = true;
+                    cycle.push_back(cur);
+                    cur = p[cur];
+                }
+                // Now cycle is in order of traversal: cycle[0] -> cycle[1] -> ... -> cycle[k-1] -> cycle[0]
+                // The permutation on these indices is a cyclic shift by 1.
+                string orig;
+                for (int idx : cycle) orig += s[idx];
+                string shifted = orig;
+                int k = cycle.size();
+                int steps = 0;
+                do {
+                    steps++;
+                    // apply one operation on the cycle: each character moves to the next position in the cycle
+                    char last = shifted.back();
+                    for (int j = k-1; j > 0; j--) {
+                        shifted[j] = shifted[j-1];
+                    }
+                    shifted[0] = last;
+                } while (shifted != orig);
+                ans = lcm(ans, (long long)steps);
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

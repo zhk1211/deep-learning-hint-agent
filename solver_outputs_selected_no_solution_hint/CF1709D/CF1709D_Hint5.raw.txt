@@ -1,0 +1,203 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(m + 1);
+    for (int i = 1; i <= m; ++i) {
+        cin >> a[i];
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        int xs, ys, xf, yf, k;
+        cin >> xs >> ys >> xf >> yf >> k;
+
+        // Check column alignment modulo k
+        if (abs(ys - yf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+        // Check row alignment modulo k
+        if (abs(xs - xf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // The robot can move vertically only if it can reach a row that is
+        // strictly above all blocked cells in the columns it passes through.
+        // The maximum blocked height in the range [min(ys, yf), max(ys, yf)]
+        // must be less than the maximum row the robot can step on.
+        // The robot can step on rows congruent to xs mod k, up to n.
+        // The highest such row <= n is: n - ((n - xs) % k)
+        int max_reachable_row = n - ((n - xs) % k);
+        // But the robot must also be able to pass through the columns.
+        // The blocked cells are at rows 1..a[i]. The robot needs a clear row
+        // that is > a[i] for all i in the column range.
+        // Since the robot moves in steps of k, it can only use rows that are
+        // congruent to xs mod k. The highest such row <= n is max_reachable_row.
+        // We need max_reachable_row > max_{i in [min(ys,yf), max(ys,yf)]} a[i].
+        // But we also need to be able to start and finish, which are given as
+        // unblocked.
+        // However, we can also move vertically first, then horizontally, etc.
+        // The key is that we can always move vertically to the highest possible
+        // row (max_reachable_row) before moving horizontally, provided that
+        // row is above all obstacles in the column range.
+        // So we need to check if max_reachable_row > max_a_in_range.
+        // But we must also ensure that we can actually reach that row from
+        // start and then go to finish. Since start and finish are unblocked,
+        // and we can move vertically within the same column, we just need
+        // the existence of a clear row in the column range that is reachable.
+        // The condition is: max_reachable_row > max_a_in_range.
+        // However, if the start or finish column itself has a high block,
+        // we might not be able to reach max_reachable_row from start.
+        // Actually, we can always move up from start as long as we don't hit
+        // a blocked cell. The start cell is unblocked, and we can move up
+        // in steps of k. The highest we can go in the start column is
+        // max_reachable_row. We need that all intermediate cells are unblocked.
+        // Since a[ys] < xs, and we move up by k, we only land on rows
+        // xs + t*k. The condition that these are unblocked is that
+        // xs + t*k > a[ys] for all t. This is equivalent to xs > a[ys],
+        // which is given. But wait: if we move up, we skip rows. The blocked
+        // cells are at the bottom. So if we start above them, moving up
+        // will never hit them. So vertical movement in the same column is
+        // always safe as long as we start above the blocked cells.
+        // Similarly, moving down: we must not go into blocked cells.
+        // But we only move down if we are above them. If we move down by k,
+        // we might land on a blocked cell if we are not careful.
+        // However, we can always choose to move horizontally only at a row
+        // that is high enough. The standard solution for this problem:
+        // The answer is YES iff:
+        // 1. |ys - yf| % k == 0
+        // 2. |xs - xf| % k == 0
+        // 3. There exists a row r such that:
+        //    - r ≡ xs (mod k)
+        //    - r > max(a[i]) for i in [min(ys, yf), max(ys, yf)]
+        //    - r ≤ n
+        // The maximum such r is max_reachable_row.
+        // So condition 3 is max_reachable_row > max_a_in_range.
+        // But we also need to be able to go from start to that row and then
+        // to finish. Since we can move vertically in the start column to
+        // max_reachable_row (as argued), and then horizontally at that row
+        // (which is above all obstacles), and then vertically down to finish
+        // (which is also above obstacles in its column), it works.
+        // However, we must also ensure that we can move down from the high row
+        // to the finish row without hitting blocked cells. Since finish row
+        // xf > a[yf], and we move down by k, we only land on rows congruent
+        // to xs mod k. We need all those rows to be > a[yf]. But we only
+        // step on rows r - t*k. The smallest we step on before reaching xf
+        // is xf itself (if we stop exactly). The intermediate rows are all
+        // ≥ xf + k? Actually, if we go down from r to xf, we step on
+        // r, r-k, r-2k, ..., xf. All these are ≥ xf > a[yf]. So it's safe.
+        // So the condition is exactly as above.
+
+        int l = min(ys, yf);
+        int r = max(ys, yf);
+        // We need max a[i] in [l, r]. Since m up to 2e5, we can use segment tree
+        // or sparse table. But we can also precompute a segment tree or use
+        // a sparse table for O(1) queries. Since q up to 2e5, O(log m) per query
+        // is fine. We'll build a segment tree or use a sparse table.
+        // Let's use a sparse table for O(1) queries.
+        // But we need to build it quickly. m up to 2e5, log2(m) ~ 18.
+        // We'll build it once.
+
+        // We need to find max in [l, r] inclusive.
+        // We'll use a static array and a sparse table.
+        // Since we are inside the query loop, we need the sparse table built
+        // before. We'll move the building outside.
+        // But wait: the code structure currently has building inside main but
+        // before queries. We'll do that.
+
+        // However, we are writing the solution now. We'll just compute max
+        // using a loop? No, that would be O(m) per query, too slow.
+        // We'll build a segment tree or sparse table. Let's do sparse table.
+
+        // We'll break the code into building and then queries.
+        // But we are already inside the query loop. We need to restructure.
+        // Let's rewrite the whole solution properly.
+
+        // Actually, we can just compute the max using a segment tree that we
+        // build before the queries. We'll do that.
+    }
+
+    // The above was just a placeholder. We'll write the full solution now.
+    return 0;
+}
+```
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAXM = 200005;
+int st[MAXM][18]; // sparse table for max
+int lg[MAXM];
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(m + 1);
+    for (int i = 1; i <= m; ++i) {
+        cin >> a[i];
+    }
+
+    // Precompute log2
+    lg[1] = 0;
+    for (int i = 2; i <= m; ++i) {
+        lg[i] = lg[i / 2] + 1;
+    }
+
+    // Build sparse table for range maximum query on a[1..m]
+    for (int i = 1; i <= m; ++i) {
+        st[i][0] = a[i];
+    }
+    for (int j = 1; (1 << j) <= m; ++j) {
+        for (int i = 1; i + (1 << j) - 1 <= m; ++i) {
+            st[i][j] = max(st[i][j - 1], st[i + (1 << (j - 1))][j - 1]);
+        }
+    }
+
+    auto range_max = [&](int l, int r) {
+        int j = lg[r - l + 1];
+        return max(st[l][j], st[r - (1 << j) + 1][j]);
+    };
+
+    int q;
+    cin >> q;
+    while (q--) {
+        int xs, ys, xf, yf, k;
+        cin >> xs >> ys >> xf >> yf >> k;
+
+        if (abs(ys - yf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+        if (abs(xs - xf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+
+        int max_reachable_row = n - ((n - xs) % k);
+        int l = min(ys, yf);
+        int r = max(ys, yf);
+        int max_blocked = range_max(l, r);
+
+        if (max_reachable_row > max_blocked) {
+            cout << "YES\n";
+        } else {
+            cout << "NO\n";
+        }
+    }
+
+    return 0;
+}
+```

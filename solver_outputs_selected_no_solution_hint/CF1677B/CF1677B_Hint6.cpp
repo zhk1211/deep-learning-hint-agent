@@ -1,0 +1,235 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    string s;
+    cin >> s;
+    int total = n * m;
+    vector<int> ans(total, 0);
+    
+    // Track good columns
+    vector<int> col_good(m, 0);
+    int good_cols = 0;
+    // Track good rows
+    vector<int> row_good(n, 0);
+    int good_rows = 0;
+    // For rows, we need to know when a row gets its first serious student
+    // The row index for student i is (i / m) % n, but we need to track if row already has a '1'
+    // Actually, a row becomes good when it gets at least one '1' and stays good forever
+    // We can track the first time each row gets a '1'
+    vector<int> row_first_one(n, -1);
+    
+    for (int i = 0; i < total; ++i) {
+        int col = i % m;
+        // Update columns
+        if (s[i] == '1' && !col_good[col]) {
+            col_good[col] = 1;
+            good_cols++;
+        }
+        
+        // Update rows
+        // The row that student i enters into is (i / m) % n
+        // But careful: the row assignment shifts. Actually, after i students, the student who entered at step j is at row (j / m) % n? No.
+        // Let's think: The process is like a queue. When a new student enters at (1,1), everyone shifts right, and the last column of each row moves to first column of next row.
+        // This is equivalent to: after k students, the seats are filled in row-major order with the last k students.
+        // Specifically, the student who entered at step t (1-indexed) will be at position: row = ((t-1) / m) % n? Wait.
+        // Let's simulate: Initially empty. Student 1 enters at (1,1). Student 2 enters, student 1 moves to (1,2), student 2 at (1,1).
+        // After m students, row 1 is full: student 1 at (1,m), student 2 at (1,m-1), ..., student m at (1,1).
+        // Student m+1 enters: student 1 moves to (2,1), student 2 to (1,m), ..., student m to (1,2), student m+1 at (1,1).
+        // So after k students, the student who entered at step t is at:
+        // Let age = k - t (how many steps ago). Then its position is determined by age.
+        // age = 0 -> (1,1)
+        // age = 1 -> (1,2)
+        // ...
+        // age = m-1 -> (1,m)
+        // age = m -> (2,1)
+        // age = m+1 -> (2,2)
+        // So row = (age / m) + 1, col = (age % m) + 1.
+        // But rows are modulo n? Actually, when age >= n*m, the student would be pushed out? No, there are exactly n*m seats, so after n*m students, the hall is full.
+        // The oldest student is at row n, col m. So age goes from 0 to n*m-1.
+        // So row index (0-based) = (age / m) % n? Wait, age can be up to n*m-1. age/m gives 0..n-1. So row = age / m. Since there are n rows, age/m is in 0..n-1. So row index = age / m.
+        // So at step i (0-based), the student who entered at step j (j <= i) has age = i - j.
+        // Its row = (i - j) / m.
+        // We care about which rows contain at least one '1' after step i.
+        // A row r (0-based) will contain a '1' if there exists some j <= i such that s[j] == '1' and (i - j) / m == r.
+        // That means j = i - (r*m + c) for some c in [0, m-1]. So j = i - r*m - c.
+        // So row r has a '1' if among students j in [i - r*m - (m-1), i - r*m] there is a '1'.
+        // This is a sliding window of size m, ending at i - r*m.
+        // Alternatively, we can think: a row becomes good when a '1' enters it, and it stays good until that '1' leaves the row? But wait, does a row ever become bad again?
+        // The problem says: "Denote a row or a column good if and only if there is at least one serious student in this row or column."
+        // As students shift, a row might lose all its serious students. So rows can become bad again.
+        // In the example: n=2,m=2, s=1100.
+        // After 1: row0 has '1', row1 empty -> good rows = 1.
+        // After 2: row0 has '1','1' -> good rows = 1.
+        // After 3: row0 has '1','0'? Let's see: students: 1,2,3. Positions: age: 1: age=2 -> row=1, col=1? Wait, after 3 students:
+        // Student 1 entered at step 0: age=2 -> row=1, col=1 (0-based: row=1, col=0)
+        // Student 2: age=1 -> row=0, col=1
+        // Student 3: age=0 -> row=0, col=0
+        // So row0: students 2 (1) and 3 (0) -> has '1' -> good.
+        // row1: student 1 (1) -> has '1' -> good.
+        // So good rows = 2.
+        // After 4: student 4 enters (0). Ages: 1:3->row=1,col=1; 2:2->row=1,col=0; 3:1->row=0,col=1; 4:0->row=0,col=0.
+        // row0: students 3(0),4(0) -> no '1' -> bad.
+        // row1: students 1(1),2(1) -> good.
+        // So good rows = 1.
+        // So rows can become bad.
+        // So we need to track for each row whether it currently has a '1'.
+        // But we can't simulate all students per step.
+        // Hint 5: "Can you get the number of good rows and columns when you enter a serious student using the number of good rows and columns just before entering the student?"
+        // Hint 6: "How many students are in each row/column after the last student enters the meeting hall?" -> m students per row, n per column.
+        // Let's think about columns first.
+        // Columns: A column j (0-based) contains students with age % m == j.
+        // At step i, the students in column j are those with age = j, j+m, j+2m, ..., up to i.
+        // So column j has a '1' if there is some k such that j + k*m <= i and s[i - (j + k*m)] == '1'.
+        // That is, among indices i - j, i - j - m, i - j - 2m, ... >=0, there is a '1'.
+        // This is equivalent to: the most recent '1' in that column? Actually, once a column gets a '1', it stays good forever? Let's check.
+        // In example: n=2,m=2. Columns: after 1: col0 has '1' -> good. after 2: col0 has '1', col1 has '1' -> both good. after 3: col0: students age0,2 -> 0,1 -> good; col1: age1 -> 1 -> good. after 4: col0: age0,2 -> 0,1 -> good; col1: age1,3 -> 0,1 -> good. So columns never became bad.
+        // Is it always true? A column j contains students with ages j, j+m, j+2m,... As new students enter, the oldest student in that column might leave? But wait, the hall has exactly n*m seats. The maximum age is n*m-1. So column j will always have exactly n students (ages j, j+m, ..., j+(n-1)m) once the hall is full. But before it's full, the number of students in a column increases. Once a '1' enters a column, does it ever leave? The '1' student ages, moving to higher age, but stays in the same column? Actually, age increases, but age % m remains the same. So a student stays in the same column forever! Because column is determined by age % m. So once a '1' is in a column, it remains in that column until it leaves the hall? But the hall has limited seats; when a new student enters, the oldest student is pushed out? Wait, the problem says: "the students who are already seated will move back one seat. Specifically, the student sitting in the j-th column of the i-th row will move to the (j+1)-th column of the i-th row, and the student sitting in m-th column of the i-th row will move to the 1-st column of the (i+1)-th row." There is no mention of students leaving the hall. The hall has exactly n*m seats, and exactly n*m students enter. So after n*m students, the hall is full. No student leaves. So a student, once seated, stays in the hall forever. Therefore, a column, once it gets a '1', will always have that '1' (since the student never leaves). So columns are monotonic: good_cols only increases.
+        // So we can just track for each column whether we've seen a '1' in that column. Since column for student i is i % m, we can just check s[i] and update.
+        // That's what I did above.
+        
+        // Now rows: A row r contains students with age in [r*m, r*m + m - 1].
+        // At step i, the students in row r are those with age between r*m and min(r*m + m - 1, i).
+        // So row r has a '1' if there exists j in [i - (r*m + m - 1), i - r*m] such that s[j] == '1'.
+        // This is a sliding window of length m, but the window position depends on r and i.
+        // As i increases, the window for row r shifts to the right (higher indices).
+        // So a row can lose its '1' when the window moves past the '1'.
+        // We need to count how many rows have at least one '1' at each step.
+        // Hint 5: "Can you get the number of good rows and columns when you enter a serious student using the number of good rows and columns just before entering the student?"
+        // Maybe we can maintain the number of good rows by tracking the "expiration" of '1's.
+        // For each '1' at position i, it will be in row r at step i + age, where age determines row. Actually, at step k (k >= i), the student i has age = k - i. It is in row r = (k - i) / m. So it contributes to row r at step k as long as 0 <= r < n, i.e., k - i < n*m.
+        // So a '1' at index i will make row r good for steps k where r = floor((k - i)/m), i.e., k in [i + r*m, i + r*m + m - 1].
+        // So each '1' gives a set of intervals for each row? That seems complicated.
+        // Alternative: Since n*m <= 1e6 total, we could simulate the process efficiently? But total steps sum to 1e6, so O(total) per test case is fine. We can maintain the state of all seats? But n*m up to 1e6, and we need to output after each step, so O(total) overall is acceptable. But simulating the shifting of all students each step would be O((n*m)^2) which is too slow.
+        // We need an O(total) solution.
+        // Let's think differently. The number of good rows at step i is the number of rows that contain at least one '1' among the last m students in that row? Actually, the students in row r at step i are exactly the students with indices in [i - r*m - (m-1), i - r*m] (if those indices are >=0). So row r is good iff there is a '1' in s in that interval.
+        // So for each row r, we need to know if the window of length m ending at i - r*m contains a '1'.
+        // As i increases, the window for row r shifts right by 1 each step? No, the window for row r ends at i - r*m. When i increases by 1, the end of the window for row r increases by 1. So it's a sliding window moving right at speed 1.
+        // We can maintain for each row the position of the most recent '1' in its window? Or we can maintain the number of '1's in each row's current window.
+        // But there are n rows, and n can be up to 1e6. We can't update all rows each step.
+        // However, note that at step i, the rows that have students are only those with r*m <= i. So the number of non-empty rows is at most i/m + 1. Still could be O(n) per step.
+        // We need a smarter way.
+        // Hint 4: "When you enter a serious student, can you get the number of good rows and columns without knowing the original arrangement of students?"
+        // Hint 5: "Can you get the number of good rows and columns when you enter a serious student using the number of good rows and columns just before entering the student?"
+        // Maybe the answer changes in a predictable way when a '1' or '0' enters.
+        // Let's analyze the effect of adding a student.
+        // When a new student enters at (1,1), all existing students shift: age increases by 1.
+        // So the row of each existing student increases by 1 every m steps? Actually, age increases by 1, so row = age / m. So row increases by 1 every m steps.
+        // So the set of students in each row changes: the oldest student in a row might move to the next row, and a new student enters row 0.
+        // Specifically, at step i, the students in row r are those with indices in [i - r*m - (m-1), i - r*m].
+        // When i increases to i+1, the window for row r becomes [i+1 - r*m - (m-1), i+1 - r*m] = [i - r*m - m + 2, i - r*m + 1].
+        // So the window shifts right by 1. The leftmost index leaves, and a new index enters on the right.
+        // So for each row, we can maintain the count of '1's in its window. When we move to next step, for each row, we remove the leftmost element and add the new rightmost element.
+        // But again, updating all rows per step is O(n), total O(n * total) which is too much.
+        // However, note that only rows with r*m <= i are non-empty. The number of such rows grows up to n. But we can't do O(n) per step.
+        // We need to observe that the change in the number of good rows from step i to i+1 depends only on a few rows.
+        // Which rows change their good status?
+        // A row r changes from good to bad if it had exactly one '1' and that '1' leaves the window.
+        // A row r changes from bad to good if a '1' enters its window.
+        // At step i -> i+1, the new student is at index i (0-based). This student enters row 0 (since age=0). So row 0 gains student i.
+        // For row r > 0, the new student entering its window is the student who was at the rightmost of row r-1? Actually, the window for row r gains the student who just left row r-1? Let's see: The window for row r at step i+1 includes indices up to i+1 - r*m. The window for row r-1 at step i included indices up to i - (r-1)*m = i - r*m + m. So the student leaving row r-1's window on the left is i - r*m + m - m = i - r*m? Wait, row r-1 window at step i: [i - (r-1)*m - (m-1), i - (r-1)*m] = [i - r*m + 1, i - r*m + m].
+        // At step i+1, row r-1 window: [i+1 - r*m + 1, i+1 - r*m + m] = [i - r*m + 2, i - r*m + m + 1].
+        // So the student leaving row r-1 is i - r*m + 1.
+        // The student entering row r is i+1 - r*m.
+        // Are these the same? i - r*m + 1 vs i+1 - r*m. They are the same! So the student leaving row r-1 on the left enters row r on the right.
+        // Also, the student leaving row r on the left is i - r*m - m + 1? Actually, row r window at step i: [i - r*m - m + 1, i - r*m]. At step i+1: [i - r*m - m + 2, i - r*m + 1]. So the student leaving row r is i - r*m - m + 1. This student enters row r+1? Row r+1 at step i+1 gains i+1 - (r+1)*m = i - r*m - m + 1. Yes! So the student leaving row r enters row r+1.
+        // So the whole system is like a pipeline: each step, the new student enters row 0. The oldest student in row 0 moves to row 1, the oldest in row 1 moves to row 2, ..., the oldest in row n-1 falls off? But wait, there are only n rows. The student leaving row n-1 would go to row n, but there is no row n. However, the hall has exactly n*m seats. After n*m students, the hall is full. Before that, the number of rows that have students is limited. Actually, the maximum age is i, so the maximum row is i/m. So for i < n*m, the student leaving row n-1 doesn't exist because row n-1 might not be full yet.
+        // But the key insight: The only rows that can change good status are row 0 (gains new student) and possibly the row that loses a '1' (if that '1' was the only one). The losing happens at the row from which a student moves out. But note that a student moves from row r to row r+1. So the row r loses that student, and row r+1 gains it. So the count of '1's in row r decreases by 1 if that student was '1', and row r+1 increases by 1 if that student was '1'.
+        // So at each step, we only need to update two rows: the row that the new student enters (row 0) and the row that the shifted student enters? Actually, the shift propagates through all rows? No, the description says: "the student sitting in the j-th column ... will move ... and the student sitting in m-th column of the i-th row will move to the 1-st column of the (i+1)-th row." So only one student moves from row i to row i+1: the one in the last column. The others just shift within the row. So the set of students in a row changes by: losing the one in the last column (which goes to next row), gaining the one from the previous row's last column (or the new student for row 0). All other students remain in the row, just shift columns.
+        // So indeed, for each row r, the set of students changes by: remove the student who was at column m-1 (the oldest in that row), add the student who was at column m-1 of row r-1 (or the new student for r=0).
+        // So the count of '1's in row r changes by: -1 if the leaving student is '1', +1 if the entering student is '1'.
+        // The leaving student from row r is the one with age = r*m + m - 1 at step i. At step i, that student's index is i - (r*m + m - 1).
+        // The entering student to row r is the one with age = r*m at step i+1? Actually, at step i+1, the new student in row r is the one who was at age r*m - 1? Let's be careful.
+        // At step i, the students in row r have ages: r*m, r*m+1, ..., r*m+m-1.
+        // At step i+1, their ages increase by 1: r*m+1, ..., r*m+m.
+        // So the student with age r*m+m moves to row r+1 (since age/m = r+1).
+        // The student with age r*m (which was in row r-1 at step i? Actually, age r*m at step i means row r. At step i+1, age r*m+1 is still row r. So the new student in row r is the one with age r*m? No, the new student is the one entering from row r-1: the one with age (r-1)*m + m - 1 at step i becomes age r*m at step i+1. So the entering student to row r is the one who was at the last column of row r-1.
+        // So for row r (r>0), the entering student is the one leaving row r-1.
+        // For row 0, the entering student is the new student (index i).
+        // So we can simulate this pipeline efficiently!
+        // We maintain an array row_cnt[r] = number of '1's in row r.
+        // We also need to know which student leaves row r at each step. The leaving student from row r at step i is the one with index i - (r*m + m - 1) = i - (r+1)*m + 1.
+        // But note: this student exists only if i - (r+1)*m + 1 >= 0.
+        // So at step i, we process the new student s[i].
+        // The pipeline: 
+        // new_student = s[i] - '0'
+        // For row 0: entering = new_student. leaving = (i - m + 1 >= 0) ? s[i - m + 1] : -1 (doesn't exist).
+        // For row r>0: entering = leaving of row r-1. leaving = (i - (r+1)*m + 1 >= 0) ? s[i - (r+1)*m + 1] : -1.
+        // But we can't iterate over all rows per step. However, note that the number of rows that actually have students is at most i/m + 1. And i goes up to n*m. So total rows processed over all steps would be sum_{i=0}^{n*m-1} (i/m + 1) = O((n*m)^2 / m) = O(n^2 m) which is too big.
+        // But we can process the pipeline in a different way: we don't need to update all rows. We only need to update the counts for rows that actually change. And we only care about the number of rows with cnt > 0.
+        // Notice that the entering student for row r is exactly the leaving student of row r-1. So we can just propagate a single value down the rows? But the leaving student of row r depends on i and r. It's not a single value; each row has its own leaving student based on the index.
+        // However, we can precompute the entire sequence of students and then simulate the pipeline using a queue or by tracking the "frontier" of rows.
+        // Actually, we can think of the rows as a sliding window over the sequence s, but with a twist.
+        // Let's define for each row r, the window of indices that are currently in that row. As i increases, the window shifts. The count of '1's in row r can be maintained if we know the indices entering and leaving.
+        // But we can also compute the number of good rows directly using a different method.
+        // Consider the columns: we already have good_cols increasing monotonically.
+        // For rows: we can compute for each row the first time it becomes good and the last time it is good? But it can become good, bad, good again...
+        // However, note that a row r only changes its good status when a '1' enters or leaves. The entering '1's come from the new student (for row 0) or from the previous row's leaving '1'. The leaving '1's go to the next row or fall off.
+        // So we can simulate the pipeline by maintaining a deque or just an array of the students currently in the "last column" of each row? Actually, the student leaving row r at step i is exactly the student who entered row r at step i - m + 1? Let's trace:
+        // A student enters row r at some step. It stays in row r for exactly m steps (ages from r*m to r*m+m-1). Then it moves to row r+1.
+        // So if we know for each row the list of '1's currently in it, we could update. But we can just maintain the count of '1's per row and update only the rows that are affected.
+        // At step i, the new student enters row 0. The student leaving row 0 (if any) enters row 1. The student leaving row 1 enters row 2, etc. This is a cascade. But the cascade only goes as far as there are rows with students. The number of rows with students is min(n, i/m + 1). So at step i, we could update rows 0 to min(n-1, i/m) by shifting the "leaving" student down. That would be O(i/m) per step, total O(n^2) in worst case (if m=1). But m=1 is a special case: then each row has only 1 student. Let's analyze m=1 separately? Or we can find a better way.
+        // Wait, the total sum of n*m over test cases is 1e6. If m=1, then n = total. The O(n^2) would be 1e12, too slow. So we need a faster method.
+        // Let's re-read hints carefully.
+        // Hint 1: What happens when you enter a naughty student?
+        // Hint 2: What happens when you enter a serious student?
+        // Hint 3: How can we use the result of Hint 1 and Hint 2 to solve this problem?
+        // Hint 4: When you enter a serious student, can you get the number of good rows and columns without knowing the original arrangement of students?
+        // Hint 5: Can you get the number of good rows and columns when you enter a serious student using the number of good rows and columns just before entering the student?
+        // Hint 6: How many students are in each row/column after the last student enters the meeting hall?
+        // Maybe the answer for step i can be derived from the answer for step i-1 by adding some delta that depends only on the new student and some other simple condition.
+        // Let's denote ans[i] = good_rows + good_cols after step i.
+        // We already know good_cols is easy: it's the number of columns that have seen a '1' so far. Since column for student i is i % m, we can just keep a boolean array for columns.
+        // Now focus on good_rows.
+        // Let's try to find a pattern for good_rows.
+        // Consider the rows as buckets that hold m consecutive students from the sequence. At step i, the buckets are: row 0 holds s[i - 0*m - (m-1) ... i - 0*m], row 1 holds s[i - 1*m - (m-1) ... i - 1*m], ..., row r holds s[i - r*m - (m-1) ... i - r*m] (ignoring negative indices).
+        // So row r is good iff the subarray of length m ending at i - r*m contains a '1'.
+        // Let's define an array A where A[j] = 1 if s[j]=='1', else 0.
+        // For a fixed i, we want to count r in [0, floor(i/m)] such that sum_{k=i-r*m-m+1}^{i-r*m} A[k] > 0.
+        // Let j = i - r*m. Then r = (i - j)/m. As r goes 0 to floor(i/m), j goes i, i-m, i-2m, ..., i - floor(i/m)*m.
+        // So j takes values in the set {i, i-m, i-2m, ...} that are >=0.
+        // So good_rows = number of j in that set such that the window [j-m+1, j] contains a '1'.
+        // This is equivalent to: for each j in that set, check if there is a '1' in the last m positions ending at j.
+        // Let's define an array B[j] = 1 if there is a '1' in A[j-m+1 ... j] (with B[j]=0 for j < m-1 maybe). Then good_rows = sum over j in S_i of B[j], where S_i = {i, i-m, i-2m, ...} intersect [0, i].
+        // So we need to maintain the sum of B over a set of indices that are spaced by m, and the set shifts as i increases.
+        // When i increases by 1, the set S_i changes: S_{i+1} = {i+1} union {j+m | j in S_i, j+m <= i+1}? Actually, S_i = {i - k*m | k>=0, i - k*m >=0}. So S_{i+1} = {i+1 - k*m | k>=0, i+1 - k*m >=0} = {i+1} union { (i - k*m) + 1? No, i+1 - k*m = (i - (k-1)*m) + 1 - m? Not exactly.
+        // Let's list S_i for i=0..:
+        // i=0: {0}
+        // i=1: {1}
+        // i=2: {2}
+        // ...
+        // i=m-1: {m-1}
+        // i=m: {m, 0}
+        // i=m+1: {m+1, 1}
+        // So S_i consists of the indices i, i-m, i-2m, ... down to the remainder modulo m.
+        // So S_i is exactly the set of indices that are congruent to i mod m, but only those <= i.
+        // So good_rows = sum of B[j] for j <= i, j ≡ i (mod m).
+        // That is, for each residue class mod m, we are taking the prefix sum of B up to i, but only for the residue class that matches i mod m.
+        // Let's verify: In example n=2,m=2, s=1100.
+        // A = [1,1,0,0]
+        // B[j] = 1 if window of length 2 ending at j has a '1'.
+        // j=0: window [-1,0] -> just [0]? Actually window length 2: indices -1 and 0. We only consider existing indices. So B[0] = A[0]=1 -> 1.
+        // j=1: window [0,1] = [1,1] -> 1.
+        // j=2: window [1,2] = [1,0] -> 1.
+        // j=3: window [2,3] = [0,0] -> 0.
+        // So B = [1,1,1,0].
+        // Now i=0: S_0 = {0} (since 0 mod 2 = 0). good_rows = B[0] = 1. good_cols: col0 has '1' -> 1. total=2. matches output 2.
+        // i=1: S_1 = {1} (1 mod 2 = 1). good_rows = B[1] = 1. good_cols: col0=1, col1=1 -> 2. total=3. matches.
+        // i=2: S_2 = {2,0} (2 mod 2 = 0). good_rows = B[2]+B[0] = 1+1=2. good_cols: col0=1, col1=1 -> 2. total=4. matches.
+        // i=3: S_3 = {3,1} (3 mod 2 = 1). good_rows = B[3]+B[1] = 0+1=1. good_cols: col0=1, col1=1 -> 2. total=3. matches.
+        // Perfect!
+        // So the problem reduces to:
+        // - Compute good_cols[i] = number of columns that have seen a '1' up to student i. This is easy: maintain a boolean array for columns, update when s[i]=='1' and col i%m not yet good.
+        // - Compute good_rows[i] = sum_{j <= i, j ≡ i (mod m)} B[j], where B[j] = 1 if there is a '1' in A[j-m+1 ... j] (with j-m+1 >= 0). Actually, for j < m-1, the window is shorter, but we can just consider the window from max(0, j-m+1) to j. B[j] = 1 if any '1' in that range.
+        // Then ans[i] = good_cols[i] + good_rows[i].
+        // Now we need to compute good_rows[i] efficiently for all i.
+        // We can precompute B array of length n*m.
+        // B[j] can be computed using a sliding window of size m: maintain the number of '1's in the current window of length m. As j increases, we add A[j] and remove A[j-m] (if j>=m). B[j] = (count > 0).
+        // Then we need for each i, the sum of B[j] for j in the same residue class as i, up to i.
+        // We can maintain prefix sums of B for each residue class modulo m.
+        // Since m can be up to 1e6, but total n*m <= 1e6, we can just create an array of vectors or a 2D array flattened. But we can just keep an array pref[r] for each residue r, but we need to query the sum up to the current i for residue i%m. Since we process i sequentially, we can just maintain for each residue the running sum of B up to the current index in that residue.
+        // Specifically, we can have an array sum_mod[m] initialized to 0. Also we need to know the current index in each residue? Actually, as we iterate i from 0 to total-1, we can compute B[i] on the fly, and then add B[i] to sum_mod[i % m]. Then good_rows[i] = sum_mod[i % m].
+        // Wait, is that correct? good_rows[i] = sum of B[j] for j <= i with j ≡ i (mod m). As we process i in increasing order, when we are at step i, we have already processed all j < i. But we haven't added B[i] yet? The sum should include j = i. So we should compute B[i], add to sum_mod[i%m], then good_rows[i] = sum_mod[i%m].
+        //

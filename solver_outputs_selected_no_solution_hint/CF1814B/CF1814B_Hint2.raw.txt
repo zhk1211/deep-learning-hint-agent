@@ -1,0 +1,68 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        long long a, b;
+        cin >> a >> b;
+        if (a > b) swap(a, b);
+        
+        long long ans = LLONG_MAX;
+        // Try all possible leg lengths m up to sqrt(b) + some margin
+        // Actually we need to consider m such that we can reach (a,b)
+        // The number of moves = m - 1 (increases) + ceil(a/m) + ceil(b/m)
+        // We can iterate m up to about 1e5 and also check around critical values
+        // where ceil(a/m) or ceil(b/m) changes.
+        
+        // First, try m from 1 to 100000
+        for (long long m = 1; m <= 100000; m++) {
+            long long moves = (m - 1) + (a + m - 1) / m + (b + m - 1) / m;
+            ans = min(ans, moves);
+        }
+        
+        // Now try m around values where ceil(a/m) changes
+        // For a given k = ceil(a/m), m is in [a/k, a/(k-1)] (with care for k=1)
+        // We can iterate over k from 1 to sqrt(a) and check boundaries
+        auto try_m = [&](long long m) {
+            if (m >= 1) {
+                long long moves = (m - 1) + (a + m - 1) / m + (b + m - 1) / m;
+                ans = min(ans, moves);
+            }
+        };
+        
+        // For a
+        for (long long k = 1; k * k <= a; k++) {
+            long long m = (a + k - 1) / k;
+            try_m(m);
+            if (m > 1) try_m(m - 1);
+            m = k;
+            try_m(m);
+            if (m > 1) try_m(m - 1);
+        }
+        // For b
+        for (long long k = 1; k * k <= b; k++) {
+            long long m = (b + k - 1) / k;
+            try_m(m);
+            if (m > 1) try_m(m - 1);
+            m = k;
+            try_m(m);
+            if (m > 1) try_m(m - 1);
+        }
+        
+        // Also consider m around sqrt(a) and sqrt(b)
+        long long sq = sqrt(a);
+        for (long long m = max(1LL, sq - 2); m <= sq + 2; m++) try_m(m);
+        sq = sqrt(b);
+        for (long long m = max(1LL, sq - 2); m <= sq + 2; m++) try_m(m);
+        
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

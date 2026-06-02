@@ -1,0 +1,97 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(vector<int> idx) {
+    cout << "? " << idx.size();
+    for (int i : idx) cout << " " << i;
+    cout << endl;
+    int res; cin >> res;
+    return res;
+}
+
+void solve() {
+    int n; cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    
+    // Find pairs using queries of size 2
+    vector<int> unknown;
+    for (int i = 1; i <= m; i++) unknown.push_back(i);
+    
+    while (!unknown.empty()) {
+        int i = unknown.back(); unknown.pop_back();
+        if (a[i] != 0) continue;
+        
+        // Find j such that a[i] == a[j]
+        // Use binary search on unknown indices
+        int lo = 0, hi = (int)unknown.size() - 1;
+        int found = -1;
+        while (lo <= hi) {
+            int mid = (lo + hi) / 2;
+            vector<int> q = {i};
+            for (int k = lo; k <= mid; k++) q.push_back(unknown[k]);
+            int res = query(q);
+            if (res > 0) {
+                found = mid;
+                hi = mid - 1;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        if (found != -1) {
+            int j = unknown[found];
+            a[i] = a[j] = query({i, j});
+            unknown.erase(unknown.begin() + found);
+        } else {
+            // i is the last unpaired, its pair is the remaining unknown
+            // Actually we need to find value
+            // We can query with all known numbers to find value
+            vector<int> all_known;
+            for (int x = 1; x <= m; x++) if (a[x] != 0) all_known.push_back(x);
+            // Query i with all known to see if it matches any
+            // But we need value, not just match
+            // Better: find value by querying i with one known of each value
+            // Since each value appears twice, we can find value by checking MAD
+            // If we query i with a set that contains one copy of each value except possibly one,
+            // the MAD will be the value of i if i's value is in the set, else 0.
+            // We can do binary search on values 1..n
+            int val_lo = 1, val_hi = n;
+            while (val_lo < val_hi) {
+                int mid = (val_lo + val_hi) / 2;
+                vector<int> q = {i};
+                for (int v = val_lo; v <= mid; v++) {
+                    // find one index with value v
+                    for (int x = 1; x <= m; x++) {
+                        if (a[x] == v) { q.push_back(x); break; }
+                    }
+                }
+                int res = query(q);
+                if (res > 0) val_hi = mid;
+                else val_lo = mid + 1;
+            }
+            a[i] = val_lo;
+            // find the other index with same value
+            for (int x = 1; x <= m; x++) {
+                if (a[x] == 0 && x != i) {
+                    a[x] = val_lo;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    
+    cout << "!";
+    for (int i = 1; i <= m; i++) cout << " " << a[i];
+    cout << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t; cin >> t;
+    while (t--) solve();
+    return 0;
+}
+```

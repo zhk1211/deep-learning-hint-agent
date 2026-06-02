@@ -1,0 +1,134 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1e9 + 7;
+
+long long modpow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        sort(a.begin(), a.end());
+
+        // compress frequencies
+        vector<pair<int, int>> freq;
+        for (int x : a) {
+            if (freq.empty() || freq.back().first != x) {
+                freq.emplace_back(x, 1);
+            } else {
+                freq.back().second++;
+            }
+        }
+
+        int k = freq.size();
+        vector<long long> fact(n + 1), invfact(n + 1);
+        fact[0] = 1;
+        for (int i = 1; i <= n; ++i) {
+            fact[i] = fact[i - 1] * i % MOD;
+        }
+        invfact[n] = modpow(fact[n], MOD - 2);
+        for (int i = n - 1; i >= 0; --i) {
+            invfact[i] = invfact[i + 1] * (i + 1) % MOD;
+        }
+
+        auto nCr = [&](int N, int R) -> long long {
+            if (R < 0 || R > N) return 0;
+            return fact[N] * invfact[R] % MOD * invfact[N - R] % MOD;
+        };
+
+        long long ans = 0;
+        int j = 0;
+        long long prod = 1;
+        for (int i = 0; i < k; ++i) {
+            while (j < k && freq[j].first - freq[i].first < m) {
+                prod = prod * freq[j].second % MOD;
+                ++j;
+            }
+            // window [i, j-1] has length L = j - i
+            int L = j - i;
+            if (L >= m) {
+                // We need to choose m distinct values from these L values.
+                // But we must ensure that the maximum difference is < m, which is satisfied
+                // because all values in window are within range < m.
+                // For each chosen value, we multiply by its frequency.
+                // This is equivalent to sum over all subsets of size m of product of frequencies.
+                // We can compute this using polynomial multiplication or DP, but L <= m? Not necessarily.
+                // However, note that if L > m, then the condition max - min < m forces that the chosen m values
+                // must be consecutive in sorted order? Actually, if we pick any m distinct values from the window,
+                // their max - min < m is automatically satisfied because the whole window span is < m.
+                // So we just need sum of products of frequencies over all m-element subsets of the window.
+                // This can be computed using a DP that maintains prefix products? Since L can be up to n,
+                // we need an efficient way. But note that the window size L is at most m? Not necessarily.
+                // However, the condition max - min < m implies that if we have more than m distinct values,
+                // their span might still be < m. For example, values 1,2,3,4 with m=3: span=3 which is not < 3.
+                // So L cannot exceed m. Let's check: if we have L distinct values, the minimum difference between
+                // first and last is at least L-1 (if they are consecutive integers). For the span to be < m,
+                // we need L-1 < m => L <= m. So indeed, the number of distinct values in any valid window is at most m.
+                // Therefore L <= m. So we can just compute the product of frequencies for the whole window,
+                // but we need sum over subsets of size m. Since L <= m, the only possible subset of size m is the whole window if L == m.
+                // Wait, if L < m, we cannot choose m distinct values. So only when L == m we can form a magnificent dance.
+                // Let's verify: suppose m=3, values 1,2,4. Span = 3, not < 3. So indeed, to have span < m with m distinct values,
+                // the values must be exactly m consecutive integers? Not necessarily consecutive, but the difference between max and min
+                // must be <= m-1. With m distinct integers, the minimum possible max-min is m-1 (if they are consecutive).
+                // So the only way to have max-min < m is if max-min = m-1 and they are consecutive integers.
+                // But wait, the values don't have to be consecutive integers; they could be e.g., 1, 2, 3 with m=3 gives span 2 < 3.
+                // If they are 1, 2, 4 with m=3, span=3 not < 3. So indeed, for m distinct integers, max-min < m implies max-min = m-1
+                // and the integers must be exactly all integers from min to max. So the chosen values must form a contiguous block of integers.
+                // Therefore, in our sorted distinct values, a valid window of size m must have max - min == m-1.
+                // But our window condition is max - min < m, which for distinct values means max - min <= m-1.
+                // If the window has size L > m, then max - min >= L-1 >= m, so it cannot be < m. So L cannot exceed m.
+                // If L == m, then max - min could be m-1 (if they are consecutive) or less? If they are not consecutive, max-min > m-1, so not < m.
+                // So we need exactly L == m and max - min == m-1.
+                // But wait, the problem says "levels of every two dancers have an absolute difference strictly less than m".
+                // This is equivalent to max - min < m. For m distinct levels, the minimum possible max-min is m-1 (if they are consecutive integers).
+                // So the condition max - min < m forces max - min = m-1 and the levels must be exactly all integers from min to max.
+                // Therefore, the chosen m distinct levels must be a set of m consecutive integers.
+                // So we only need to consider windows of exactly m distinct values that are consecutive integers.
+                // In our compressed freq array, we can slide a window of size m and check if freq[i+m-1].first - freq[i].first == m-1.
+                // If so, the number of ways is the product of frequencies of these m values.
+                // Let's test with sample: m=3, a=[4,2,2,3,6]. Sorted distinct: 2 (freq 2), 3 (freq 1), 4 (freq 1), 6 (freq 1).
+                // Windows of size 3: [2,3,4] -> diff=2 == m-1, product=2*1*1=2. [3,4,6] -> diff=3 != 2. So answer 2. Matches sample.
+                // Another sample: 7 4, a=[8,10,10,9,6,11,7]. Sorted distinct: 6(1),7(1),8(1),9(1),10(2),11(1).
+                // m=4. Windows of size 4: [6,7,8,9] diff=3 -> product=1. [7,8,9,10] diff=3 -> product=1*1*1*2=2. [8,9,10,11] diff=3 -> product=1*1*2*1=2. Total=5. Matches sample.
+                // So the solution simplifies to: sort, compress, sliding window of size m, check difference condition, add product.
+                // But wait, what if there are duplicate values? The condition "levels of all dancers are pairwise distinct" means we must pick distinct levels.
+                // So we can only pick at most one student per level. Our product of frequencies accounts for choosing one student from each level.
+                // This matches.
+                // So the answer is sum over i from 0 to k-m of (if freq[i+m-1].first - freq[i].first == m-1) product(freq[j].second for j=i..i+m-1).
+                // We can compute this with a sliding window product.
+                // Let's implement this.
+
+                // But wait, the earlier reasoning that L <= m is correct, but we only need to check windows of exactly size m.
+                // So we can just do:
+                if (L == m && freq[j-1].first - freq[i].first == m-1) {
+                    ans = (ans + prod) % MOD;
+                }
+            }
+            // remove freq[i] from prod
+            prod = prod * modpow(freq[i].second, MOD-2) % MOD;
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

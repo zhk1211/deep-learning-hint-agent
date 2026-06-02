@@ -1,0 +1,286 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    vector<pair<int, int>> edges;
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        edges.emplace_back(u, v);
+    }
+
+    // Find a vertex with degree >= 3, or if none, degree 2, else degree 1
+    int root = -1;
+    for (int i = 1; i <= n; i++) {
+        if (adj[i].size() >= 3) {
+            root = i;
+            break;
+        }
+    }
+    if (root == -1) {
+        for (int i = 1; i <= n; i++) {
+            if (adj[i].size() == 2) {
+                root = i;
+                break;
+            }
+        }
+    }
+    if (root == -1) {
+        // tree is just an edge (n=2)
+        if (n == 2) {
+            cout << "NO\n";
+        } else {
+            // n>2 but all degrees 1? impossible for tree with n>2
+            cout << "NO\n";
+        }
+        return;
+    }
+
+    // BFS/DFS to direct edges away from root
+    vector<int> parent(n + 1, 0);
+    vector<vector<int>> children(n + 1);
+    vector<pair<int, int>> directed_edges;
+    queue<int> q;
+    q.push(root);
+    parent[root] = -1;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : adj[u]) {
+            if (v == parent[u]) continue;
+            parent[v] = u;
+            children[u].push_back(v);
+            directed_edges.emplace_back(u, v);
+            q.push(v);
+        }
+    }
+
+    // Count good pairs: for each vertex, number of descendants in the rooted tree
+    // plus possibly some cross edges? Actually in a directed tree away from root,
+    // good pairs are exactly pairs (u,v) where u is ancestor of v.
+    // Number of good pairs = sum over all vertices of (size of subtree - 1)
+    // We need exactly n good pairs.
+    vector<int> sz(n + 1, 0);
+    function<void(int)> dfs = [&](int u) {
+        sz[u] = 1;
+        for (int v : children[u]) {
+            dfs(v);
+            sz[u] += sz[v];
+        }
+    };
+    dfs(root);
+    long long good_pairs = 0;
+    for (int i = 1; i <= n; i++) {
+        good_pairs += sz[i] - 1;
+    }
+
+    if (good_pairs == n) {
+        cout << "YES\n";
+        for (auto &e : directed_edges) {
+            cout << e.first << " " << e.second << "\n";
+        }
+        return;
+    }
+
+    // If not, we need to flip exactly one edge? Actually we can try to flip one edge
+    // to adjust the count. The difference needed: n - good_pairs.
+    // Flipping an edge (u->v) where u is parent of v changes good pairs by:
+    // new_good = old_good - (sz[v] - 1) + (n - sz[v] - 1) = old_good + n - 2*sz[v]
+    // We need old_good + n - 2*sz[v] = n  => old_good = 2*sz[v] => sz[v] = old_good/2.
+    // So we need a subtree of size old_good/2.
+    long long need = good_pairs - n; // actually we want to reduce by (good_pairs - n)
+    // Wait: we want new_good = n, so change = n - good_pairs.
+    // change = n - 2*sz[v]  => n - 2*sz[v] = n - good_pairs => 2*sz[v] = good_pairs => sz[v] = good_pairs/2.
+    // So we need a vertex v (not root) with sz[v] == good_pairs/2.
+    if (good_pairs % 2 == 0) {
+        long long target = good_pairs / 2;
+        int flip_node = -1;
+        for (int i = 1; i <= n; i++) {
+            if (i != root && sz[i] == target) {
+                flip_node = i;
+                break;
+            }
+        }
+        if (flip_node != -1) {
+            // flip edge from parent[flip_node] -> flip_node to flip_node -> parent[flip_node]
+            cout << "YES\n";
+            for (auto &e : directed_edges) {
+                if (e.first == parent[flip_node] && e.second == flip_node) {
+                    cout << flip_node << " " << parent[flip_node] << "\n";
+                } else {
+                    cout << e.first << " " << e.second << "\n";
+                }
+            }
+            return;
+        }
+    }
+
+    // Otherwise, try flipping two edges? Actually we can also consider the case where
+    // we flip an edge and also maybe the tree structure allows another configuration.
+    // But the problem likely expects that if root degree >=3, we can always achieve n
+    // by directing all edges away from root, and if not, we might need to flip one edge.
+    // Wait, the above logic might be incomplete. Let's think: In a directed tree away from root,
+    // good_pairs = sum (sz[i]-1). For a star (root degree n-1), sz[root]=n, others 1 => good_pairs = n-1.
+    // We need n. So we need to increase by 1. Flipping one leaf edge: sz[leaf]=1, change = n - 2 = n-2,
+    // new_good = (n-1) + n - 2 = 2n-3, not n. So star cannot achieve n? But sample 2: n=5 star, output YES.
+    // Sample 2: edges 1-2,1-3,1-4,4-5. That's not a star, it's a path of length 2 attached to center.
+    // Let's analyze sample 2: n=5, edges: 1-2,1-3,1-4,4-5. Root at 1? degree 3. Direct away from 1:
+    // 1->2,1->3,1->4,4->5. sz: 5:1, 2:1,3:1,4:2,1:5. good_pairs = (1-1)+(1-1)+(1-1)+(2-1)+(5-1)=0+0+0+1+4=5 = n.
+    // So it works directly. So star (1 connected to all others) would have good_pairs = n-1, not n.
+    // But sample 2 is not a star. So maybe if max degree >=3, we can always achieve n by directing away from a vertex of degree >=3?
+    // Check: n=4, star (1 center, 2,3,4 leaves). good_pairs = 3. n=4, need 4. Not possible? Let's test: n=4 star, can we achieve 4?
+    // Try all directions? There are 2^3=8 possibilities. Let's enumerate: center 1. Edges: 1-2,1-3,1-4.
+    // If all outward: good pairs = 3. If one inward: say 2->1, others outward: paths: 2->1, 1->3,1->4 => good pairs: (2,1),(2,3),(2,4),(1,3),(1,4) = 5.
+    // If two inward: 2->1,3->1, 1->4: paths: 2->1,2->4,3->1,3->4,1->4 => 5.
+    // If all inward: 2->1,3->1,4->1: paths: (2,1),(3,1),(4,1) => 3.
+    // So possible counts: 3 or 5. n=4 not possible. So star with n=4 cannot achieve 4. But sample 3: n=2, output NO. So for n=4 star, answer should be NO? The problem doesn't give that test, but likely.
+    // So our algorithm: if there is a vertex of degree >=3, we can direct away from it and get exactly n? Not always, as we saw n=4 star fails.
+    // Wait, sample 1: n=5, tree: 1-2,2-4,1-3,3-5. Degrees: 1:2, 2:2, 3:2, 4:1,5:1. Max degree 2. Yet answer YES.
+    // So degree >=3 is not necessary.
+    // Let's rethink: The hints say: think of removing one edge, or removing a vertex.
+    // Maybe the condition for YES is that n is even? No, sample 1 n=5 odd, YES.
+    // Let's analyze the good pairs count in a directed tree. A directed tree is a tournament? No.
+    // Actually, any orientation of a tree is a DAG. The number of good pairs is the number of pairs (u,v) with a directed path.
+    // In a tree, if we pick a root and direct all edges away from root, good pairs = sum (sz[i]-1).
+    // We can also flip some edges. Flipping an edge (u->v) to (v->u) changes the reachability.
+    // Maybe we can always achieve n if we can find a vertex to root such that sum (sz[i]-1) = n, or by flipping one edge we can adjust.
+    // But we saw star n=4 fails. Let's test n=4 star with our flip logic: root at center 1, sz: 1:4, leaves:1. good_pairs = 3. need n=4. good_pairs%2=3%2=1, not even, so no single flip works. Could two flips work? Flipping two leaves: say 2->1 and 3->1, 1->4. Then paths: 2->1,2->4,3->1,3->4,1->4 => 5. Not 4. Flipping all three: 3. So 4 not possible. So NO for n=4 star.
+    // What about n=5 star? root center, sz:1:5, leaves:1. good_pairs=4. need 5. good_pairs%2=0, target=2. No leaf has sz=2. So single flip fails. Two flips? Let's test: flip two leaves: say 2->1,3->1, others outward 1->4,1->5. Paths: 2->1,2->4,2->5,3->1,3->4,3->5,1->4,1->5 => 8. Not 5. Flip one leaf and one internal? No internal. So maybe n=5 star also NO? But sample 2 is not star. So star might be NO for all n? Let's check n=3 star (1 center, 2,3 leaves). good_pairs outward: 2. need 3. Flip one leaf: 2->1,1->3: paths: 2->1,2->3,1->3 => 3. So n=3 star YES. So star n=3 works, n=4 fails, n=5? Let's test n=5 star manually: center 1, leaves 2,3,4,5. Outward: good=4. Flip one leaf: say 2->1, others outward: paths: 2->1,2->3,2->4,2->5,1->3,1->4,1->5 => 7. Flip two leaves: 2->1,3->1, others outward: paths: 2->1,2->4,2->5,3->1,3->4,3->5,1->4,1->5 => 8. Flip three leaves: 2->1,3->1,4->1,1->5: paths: 2->1,2->5,3->1,3->5,4->1,4->5,1->5 => 7. Flip all four: 4. So possible counts: 4,7,8. 5 not possible. So n=5 star NO.
+    // So star with n>=4 except n=3? n=6 star: outward good=5. Flip one: 5 + 6 - 2 = 9. Flip two: 5 + 2*(6-2) = 13? Actually formula for flipping k leaves: good = (n-1) + k*(n-2) - 2*(k choose 2)? Let's not guess.
+    // So the problem is more complex.
+
+    // Let's read hints carefully:
+    // Hint 1: Think of what happens when you remove one edge from the tree.
+    // Hint 2: Try to think of what happens when you remove a vertex.
+    // Hint 3: When you remove a vertex, the remaining graph is a forest. Try to prove that it consists of trees.
+    // This suggests a centroid-like or DP approach.
+
+    // Let's consider the number of good pairs in a directed tree. For any orientation, the graph is a DAG. The number of good pairs is the number of pairs (u,v) such that there is a directed path from u to v.
+    // In a tree, if we consider the underlying undirected tree, any directed path corresponds to a simple path in the tree where all edges are directed along the path.
+    // So a pair (u,v) is good iff the unique path between u and v in the tree is directed from u to v.
+    // So the orientation of each edge on the path must be consistent.
+    // This is equivalent to: we can assign a direction to each edge. Then for each pair, it's good if the path is consistently directed.
+    // We want exactly n good pairs.
+
+    // Let's think about the complement: bad pairs are those where the path has at least one edge in opposite direction.
+    // Total pairs = n*(n-1). We want good = n, so bad = n*(n-1) - n = n(n-2).
+    // Not sure if helpful.
+
+    // Another perspective: In any orientation of a tree, the graph is a collection of directed trees? Actually, if we consider the underlying undirected tree, the orientation can be seen as a set of directed edges. The graph is a DAG. The number of good pairs is the number of pairs with a directed path.
+    // This is equal to the number of pairs (u,v) such that u is an ancestor of v in the reachability DAG. But the DAG is not necessarily a tree.
+
+    // Let's consider the concept of "source" vertices (in-degree 0) and "sink" vertices (out-degree 0). In a tree orientation, every vertex has some in/out degree sum = degree.
+    // Maybe we can use the fact that the sum of good pairs over all vertices? Not sure.
+
+    // Let's try to find a pattern from samples and small n.
+    // n=2: only one edge. Good pairs = 1 always. Need 2 -> NO.
+    // n=3: tree is a path of length 2 (1-2-3). Possible orientations:
+    // 1->2->3: good pairs: (1,2),(1,3),(2,3) = 3. Need 3 -> YES.
+    // 1->2<-3: good: (1,2),(3,2) = 2.
+    // 1<-2->3: good: (2,1),(2,3) = 2.
+    // 1<-2<-3: good: (3,2),(3,1),(2,1) = 3.
+    // So n=3 path always YES (both directions give 3).
+    // n=3 star (center 1, leaves 2,3): as above, YES.
+    // So n=3 always YES? Check: n=3, any tree is either path or star, both YES. So n=3 YES.
+    // n=4: trees: path of length 3 (1-2-3-4), star (center 1, leaves 2,3,4), and "T" shape (1-2,2-3,2-4) i.e., degree 3 vertex.
+    // Let's test path 1-2-3-4. Can we get 4 good pairs?
+    // Orientations: all right: 1->2->3->4: good = 6. all left: 4->3->2->1: good = 6.
+    // Try to get 4. Maybe 1->2<-3->4? Paths: 1->2, 3->2, 3->4 => 3. 1->2->3<-4: 1->2,1->3,2->3,4->3 => 4? Check: 1->2, 2->3, 4->3. Paths: 1->2, 1->3 (via 2), 2->3, 4->3. That's 4! So YES.
+    // So path n=4 YES.
+    // Star n=4: we already saw NO.
+    // T shape (1-2,2-3,2-4): degrees: 2 has degree 3. Let's test if we can get 4.
+    // Try direct away from 2: 2->1,2->3,2->4. good: (2,1),(2,3),(2,4) = 3. Need 4.
+    // Flip one leaf: say 1->2, others outward: 1->2,2->3,2->4. Paths: 1->2,1->3,1->4,2->3,2->4 => 5.
+    // Flip two leaves: 1->2,3->2,2->4: paths: 1->2,1->4,3->2,3->4,2->4 => 5.
+    // Flip all three: 1->2,3->2,4->2: paths: 1->2,3->2,4->2 => 3.
+    // What about other orientations? 1->2<-3, 2->4? That's 1->2,3->2,2->4: paths: 1->2,1->4,3->2,3->4,2->4 => 5.
+    // 1->2->3, 2<-4: 1->2,1->3,2->3,4->2 => 4? Check: 1->2, 2->3, 4->2. Paths: 1->2,1->3,2->3,4->2 => 4. Yes! So T shape n=4 YES.
+    // So only star n=4 fails? What about n=4 star, is there any orientation giving 4? We enumerated all 8, got 3 or 5. So NO.
+    // So for n=4, star is NO, others YES.
+
+    // n=5: samples: first test case is a path with a branch? Actually 1-2,2-4,1-3,3-5. This is two paths of length 2 attached at 1. Degrees: 1:2, 2:2, 3:2, 4:1,5:1. Max degree 2. YES.
+    // Second test case: 1-2,1-3,1-4,4-5. Degrees: 1:3, 4:2, others 1. YES.
+    // Third: n=2 NO.
+    // Fourth: n=4: 3-1,1-2,2-4. This is a path 3-1-2-4. YES.
+
+    // So it seems the only NO cases are when the tree is a star with n=2? n=2 is star. n=3 star YES. n=4 star NO. n=5 star? Let's test n=5 star manually with code logic? We suspect NO. Let's try to see if there's any orientation giving 5.
+    // Star n=5: center 1, leaves 2,3,4,5. We want exactly 5 good pairs.
+    // Let's denote edges: for each leaf i, edge direction is either 1->i or i->1.
+    // Let x be number of edges directed outward (1->i), y inward (i->1), x+y=4.
+    // Good pairs: 
+    // - For each outward edge 1->i: we have path from 1 to i.
+    // - For each inward edge i->1: we have path from i to 1.
+    // - For two outward edges 1->i and 1->j: no path between i and j because they are leaves, no direct edge. So no.
+    // - For two inward edges i->1 and j->1: no path between i and j.
+    // - For one inward i->1 and one outward 1->j: we have path i->1->j, so (i,j) is good.
+    // So total good pairs = x (from 1 to leaves) + y (from leaves to 1) + x*y (from inward leaves to outward leaves).
+    // = x + y + xy = 4 + xy (since x+y=4).
+    // We want 4 + xy = 5 => xy = 1. But x,y integers, x+y=4, product 1 impossible. So NO.
+    // So n=5 star NO.
+    // n=6 star: x+y=5, good = 5 + xy. Want 6 => xy=1, impossible. So NO.
+    // In general, for star with n vertices (center + n-1 leaves), good = (n-1) + xy, where x+y=n-1. We want n => (n-1)+xy = n => xy = 1. So we need x=1,y=1 => n-1=2 => n=3. So only n=3 star works.
+    // So star only works for n=3.
+
+    // What about other trees? It seems if there is a vertex of degree >=3, we might be able to direct away from it and get exactly n? But we saw T shape n=4 (degree 3) gave 3 when directed away, but we could flip one edge to get 4. So maybe we can always achieve n if the tree is not a star? Or maybe the condition is that the tree is not a star, except n=3? Let's test n=5 with a tree that is a "double star" (two centers connected, each with leaves). For example: 1-2, 1-3, 1-4, 4-5. This is sample 2, YES. What about a tree that is a path of length 4 (n=5): 1-2-3-4-5. Can we get 5? Let's try: direct all right: good=10. Need 5. We can flip some edges. Let's try to find orientation with exactly 5 good pairs.
+    // We can think of the path as a sequence of edges. Each edge can be left or right. The number of good pairs is the number of pairs (i,j) with i<j such that all edges between them are directed right, plus pairs (i,j) with i>j such that all edges between them are directed left. So it's the number of contiguous subsegments directed consistently in one direction.
+    // For a path of length L (n = L+1), if we have a sequence of edge directions, the good pairs are sum over maximal contiguous blocks of same direction of (len choose 2 + len) = len*(len+1)/2? Actually, if a block has k edges all right, then the vertices in that block (k+1 vertices) have all pairs (i,j) with i<j good, so C(k+1,2) pairs. Similarly for left block. And no cross-block pairs because direction changes.
+    // So total good = sum over blocks of C(block_vertices, 2).
+    // We want total good = n.
+    // For n=5, we need sum of C(b_i,2) = 5, where sum b_i = n + (number of blocks - 1)? Actually, if we partition the n vertices into blocks of consecutive vertices where within each block all edges are same direction, and between blocks direction changes. The number of vertices in blocks sum to n + (blocks-1) because the boundary vertices are shared? Wait, careful: If we have a path of vertices 1-2-3-4-5, and edges: 1->2, 2->3, 3<-4, 4<-5. Then blocks: right block on vertices 1,2,3 (edges 1-2,2-3 right), left block on vertices 3,4,5 (edges 3-4,4-5 left). Vertex 3 is shared. So the blocks overlap at boundaries. The good pairs are: within right block: (1,2),(1,3),(2,3) = 3. Within left block: (5,4),(5,3),(4,3) = 3. Total = 6. So sum of C(size,2) for each block, but sizes are number of vertices in the block, and they overlap at the boundary vertices. So if we have blocks of sizes s1, s2, ..., sk, they overlap at k-1 vertices, so total vertices n = sum s_i - (k-1). And good = sum C(s_i, 2).
+    // We want good = n.
+    // For n=5, can we find such partition? Let s_i >=2. Try k=1: one block size 5, good=10, n=5 no.
+    // k=2: s1+s2 = n+1 =6. s1,s2>=2. C(s1,2)+C(s2,2)=5. Possible? s1=2,s2=4: C(2,2)=1, C(4,2)=6, sum=7. s1=3,s2=3: 3+3=6. s1=2,s2=4 no. s1=4,s2=2 same. So no.
+    // k=3: s1+s2+s3 = n+2 =7. s_i>=2. C(s1,2)+C(s2,2)+C(s3,2)=5. Minimum sum when all s_i=2: 1+1+1=3. Next (2,2,3): 1+1+3=5. So s=(2,2,3) works. Sum sizes = 2+2+3=7 = n+2. So possible. Example: vertices 1-2-3-4-5. Blocks: size 2 (vertices 1,2), size 2 (vertices 2,3? but they must overlap). Actually, if we have blocks of sizes 2,2,3, they overlap at two boundaries, so total vertices = 2+2+3-2=5. So we can have blocks: first block vertices {1,2} (edge 1-2 right), second block {2,3} (edge 2-3 left), third block {3,4,5} (edges 3-4,4-5 right). Check: edges: 1->2, 2<-3, 3->4, 4->5. Good pairs: block1: (1,2). block2: (3,2). block3: (3,4),(3,5),(4,5). Total = 1+1+3=5. Yes! So path n=5 YES.
+    // So path always YES for n>=3? Let's check n=4 path: we found YES. n=6 path? Likely YES.
+    // So the only problematic tree seems to be star with n!=3. Are there other trees that fail? Let's test n=6 with a tree that is a star with one edge subdivided? i.e., center 1, leaves 2,3,4,5, and 5-6. So degrees: 1:4, 5:2, others 1. This is not a star. Can we get 6? Probably yes.
+    // What about a tree that is two stars connected by an edge? e.g., n=6: 1-2,1-3,1-4,4-5,5-6. This is like sample 2 but with extra leaf. Likely YES.
+    // So maybe the only NO cases are stars with n != 3, and n=2 (which is a star). Let's verify n=1? n>=2.
+    // Check n=3 star: YES. n=4 star: NO. n=5 star: NO. n=6 star: NO.
+    // Is there any other tree that is NO? Consider a tree that is a star with one leaf replaced by a path of length 2? That's n=4: star with one edge subdivided? Actually n=4: if we have center 1, leaves 2,3, and 3-4? That's 1-2,1-3,3-4. Degrees: 1:2, 3:2, 2:1,4:1. This is a path of length 3? No, it's a "T" shape? Actually 1 connected to 2 and 3, and 3 connected to 4. So it's a path 2-1-3-4. That's a path of length 3 (n=4). We already know path n=4 YES. So not a star.
+    // What about a tree that is a star but with one edge subdivided multiple times? That becomes a path attached to center. That's not a star.
+    // So the only tree that is "all leaves attached to a single center" is a star. If there is any vertex with degree >=2 that is not the center? In a star, only center has degree >1. So if there is any other vertex with degree >=2, it's not a star.
+    // So condition: if the tree is a star (i.e., there exists a vertex connected to all other n-1 vertices), then answer is YES only if n=3, else NO.
+    // Otherwise, answer is always YES.
+    // Let's test this hypothesis against samples:
+    // Sample 1: n=5, not star -> YES.
+    // Sample 2: n=5, not star (vertex 4 has degree 2) -> YES.
+    // Sample 3: n=2, star -> NO. (n=2 star, n!=3 -> NO)
+    // Sample 4: n=4, path -> not star -> YES.
+    // Matches.
+
+    // Let's test n=3 star: our hypothesis says YES. Sample doesn't have n=3, but we know it's YES.
+    // What about n=4 star? Hypothesis says NO. We verified NO.
+    // What about n=5 star? Hypothesis says NO. We verified NO.
+    // So it seems plausible.
+
+    // But wait, is it always possible to achieve exactly n good pairs for any non-star tree? We need to construct the orientation.
+    // The construction: If the tree is not a star, we can always find a vertex to root and direct all edges away from it, and then maybe flip one edge to adjust the count to exactly n.
+    // From our earlier analysis, directing away from a root gives good_pairs = sum (sz[i]-1). We need this to equal n, or we can flip one edge to make it n.
+    // We derived that flipping edge (u->v) where u is parent of v changes good_pairs by n - 2*sz[v]. So new_good = old_good + n - 2*sz[v].
+    // We want new_good = n => old_good = 2*sz[v]. So we need a subtree of size old_good/2.
+    // So if we can find a root such that either sum(sz-1) = n, or there exists a non-root vertex with sz = sum(sz-1)/2, then we can achieve n.
+    // For a star, if we root at center, sz[center]=n, leaves=1, sum(sz-1)=n-1. old_good=n-1. We need sz[v] = (n-1)/2. For n=3, (3-1)/2=1, leaves have sz=1, so we can flip one leaf. For n=4, (4-1)/2=1.5 not integer. For n=5, 2, leaves sz=1, no. So star fails for n!=3.
+    // For non-star, can we always find such a root? Maybe we can choose a root that is not the center? For a non-star tree, there exists at least one vertex with degree >=2 that is not the center? Actually, a tree is a star iff there is a vertex of degree n-1. So non-star means max degree <= n-2. So there is at least one other vertex with degree >=2? Not necessarily: consider a tree that is a path: max degree 2, n-2 >=2 for n>=4. So path has vertices of degree 2. So there are other vertices with degree >=2.
+    // We can try to root the tree at a leaf? Or at a vertex of degree 2? Let's analyze.
+    // We need to find an orientation. The hints suggest removing a vertex and looking at the forest. Maybe we can orient the tree such that the good pairs are exactly the pairs within each component of the forest when removing a certain vertex? Not sure.
+
+    // Let's try to construct for any non-star tree.
+    // Idea: Pick a vertex v that is not a leaf. Since it's not a star, there exists at least one vertex with degree >=2 that is not the center? Actually, if the tree is not a star, then for every vertex, there is at least one other vertex at distance >=2? Not helpful.
+    // Alternative construction from the problem's hint: "When you remove a vertex, the remaining graph is a forest. Try to prove that it consists of trees." This might be pointing to a centroid-like property: we can remove a vertex such that each component has size at most n/2. Then we can direct edges in a certain way.
+    // Let's think about directing edges such that the good pairs are exactly the pairs (u,v) where u and v are in the same component after removing some vertex? No.
+
+    // Another approach: We want exactly n good pairs. In any orientation, the number of good pairs is at least n-1? Actually, in a directed tree, the sum of out-degrees? Not sure.
+    // Let's try to design an algorithm that always finds an orientation for non-star trees.
+    // We can use the following strategy:
+    // 1. Find a vertex r that has degree >=2 and is not the center of a star? Actually, if the tree is not a star, there exists at least one edge such that both endpoints have degree >=2? Not necessarily: consider a tree like a "double star": two centers connected, each with leaves. Both centers have degree >=2. So yes.
+    // 2. Root the tree at r. Direct all edges away from r. Compute sz and good_pairs.
+    // 3. If good_pairs == n, done.
+    // 4. Else, we need to flip one edge. We need a vertex v (not root) with sz[v] == good_pairs/2.
+    // 5. If such v exists, flip the edge from parent[v] to v.
+    // 6. If not, maybe we need to flip two edges? Or choose a different root?
+    // But maybe for non-star trees, such a v always exists if we choose the right root? Let's test on a path n=5. Path 1-2-3-4-5. If we root at 3 (middle), direct away: 3->2,3->4,2->1,4->5. sz: 1:1,2:2,3:5,4:2,5:1. good_pairs = (1

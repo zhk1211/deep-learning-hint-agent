@@ -1,0 +1,81 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+void solve() {
+    int n;
+    ll k, c;
+    cin >> n >> k >> c;
+    vector<vector<int>> g(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+
+    vector<int> depth(n + 1);
+    vector<int> parent(n + 1);
+    function<void(int, int, int)> dfs1 = [&](int u, int p, int d) {
+        depth[u] = d;
+        parent[u] = p;
+        for (int v : g[u]) {
+            if (v != p) {
+                dfs1(v, u, d + 1);
+            }
+        }
+    };
+    dfs1(1, 0, 0);
+
+    int far = 1;
+    for (int i = 1; i <= n; i++) {
+        if (depth[i] > depth[far]) far = i;
+    }
+
+    vector<int> dist1(n + 1);
+    function<void(int, int, int)> dfs2 = [&](int u, int p, int d) {
+        dist1[u] = d;
+        for (int v : g[u]) {
+            if (v != p) {
+                dfs2(v, u, d + 1);
+            }
+        }
+    };
+    dfs2(far, 0, 0);
+
+    int far2 = 1;
+    for (int i = 1; i <= n; i++) {
+        if (dist1[i] > dist1[far2]) far2 = i;
+    }
+
+    vector<int> dist2(n + 1);
+    dfs2 = [&](int u, int p, int d) {
+        dist2[u] = d;
+        for (int v : g[u]) {
+            if (v != p) {
+                dfs2(v, u, d + 1);
+            }
+        }
+    };
+    dfs2(far2, 0, 0);
+
+    ll ans = 0;
+    for (int i = 1; i <= n; i++) {
+        ll maxDist = max(dist1[i], dist2[i]);
+        ll profit = maxDist * k - depth[i] * c;
+        ans = max(ans, profit);
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

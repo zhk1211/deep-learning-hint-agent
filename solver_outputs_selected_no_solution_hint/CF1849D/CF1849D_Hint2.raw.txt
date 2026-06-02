@@ -1,0 +1,224 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    
+    int ans = 0;
+    int i = 0;
+    while (i < n) {
+        if (a[i] == 0) {
+            ++i;
+            continue;
+        }
+        int j = i;
+        while (j < n && a[j] != 0) {
+            ++j;
+        }
+        // segment [i, j-1] has no zeros
+        bool has_two = false;
+        for (int k = i; k < j; ++k) {
+            if (a[k] == 2) {
+                has_two = true;
+                break;
+            }
+        }
+        if (has_two) {
+            ++ans;
+            // paint the first element of segment
+            // then we can propagate to the rest
+            // but we need to handle zeros adjacent to segment
+            // Actually, if there is a 2, we can start from it and cover whole segment
+            // plus possibly one zero on each side if the 2 is at boundary?
+            // Wait, the operation: choose red element not 0 and adjacent blue.
+            // If we start with a 2, we can paint left and right.
+            // But we need to ensure we can paint all in segment.
+            // Since segment has no zeros, and has at least one 2,
+            // we can start by paying for that 2, then use it to paint neighbors,
+            // decreasing it. It can paint two neighbors (left and right) if it's 2.
+            // But if segment length > 3, we might need more coins?
+            // Let's think: if we have a 2, we can paint left and right, then those become red
+            // and if they are 1 or 2, they can continue. Actually, if we paint a 2, we can use it
+            // to paint one neighbor, it becomes 1, then we can use that neighbor (now red, value 1)
+            // to paint next, etc. So one coin for a segment with at least one 2 is enough
+            // to paint the whole segment, and also we can paint zeros adjacent to the segment?
+            // The problem: we can only paint blue adjacent to a red non-zero.
+            // If we have a segment of non-zeros, we can start with a 2, paint one neighbor,
+            // then that neighbor (if 1 or 2) can paint the next, etc. So one coin suffices for the segment.
+            // But what about zeros adjacent to the segment? They can be painted if we have a red non-zero
+            // adjacent to them. After painting the whole segment, the boundary elements of the segment
+            // are red and non-zero (if they were 1 or 2). They can paint adjacent zeros.
+            // However, if the segment is just a single 2, it can paint both adjacent zeros.
+            // If the segment has a 2 not at boundary, we can propagate to boundaries, then paint zeros.
+            // So one coin for the whole segment and its adjacent zeros?
+            // But careful: if we have multiple segments separated by zeros, we might need separate coins.
+            // The hint: "How does the answer change when there is only one red element?"
+            // If we have only one red element, we can only paint its adjacent blue elements.
+            // So we need to consider connectivity.
+            // Actually, the process is like: we pay for some elements to become red initially.
+            // Then we can spread redness using non-zero red elements.
+            // This is equivalent to: we need to select a set of elements to pay for, such that
+            // every element is reachable from a paid element via a path where each step goes from
+            // a red non-zero to an adjacent blue, and we can only use each red element's value
+            // as the number of times it can be decreased (i.e., number of blue neighbors it can paint).
+            // This is similar to covering the array with "sources" that have "charges".
+            // A 2 can paint two neighbors, a 1 can paint one neighbor.
+            // But after painting a neighbor, that neighbor becomes red and can itself paint others if non-zero.
+            // So it's like a propagation where each non-zero element can "spend" its value to paint neighbors.
+            // The total number of paintings we can do from a paid element is limited by the sum of values?
+            // Actually, if we pay for a 2, we can paint a neighbor (cost 1 from the 2), then that neighbor
+            // if it's 1, can paint another neighbor (cost its 1), etc. So the total number of elements
+            // we can paint from one paid element is the sum of values in the connected component of non-zeros?
+            // But we also need to paint zeros. Zeros don't help propagation.
+            // So we can think of the array as consisting of blocks of non-zeros separated by zeros.
+            // For each block of non-zeros, we need at least one paid element if the block has a 2?
+            // Wait, if a block has only 1s, can we paint it with one coin? Suppose block is "1 1".
+            // Pay for first 1, it becomes red. It can paint the second 1 (cost 1), so first becomes 0.
+            // Second is red and is 1, but no more blue neighbors. So one coin works.
+            // If block is "1", one coin works.
+            // So any non-zero block can be painted with one coin, because we can start at one end,
+            // pay for it, then propagate along the block. Each 1 can paint one neighbor.
+            // But what if the block has a 2? Even better.
+            // However, we also need to paint the zeros adjacent to the block.
+            // After painting the whole block, the ends of the block are red and non-zero (if they were 1 or 2).
+            // They can paint adjacent zeros. But each such end can paint only as many zeros as its value.
+            // Actually, if an end is 1, it can paint one zero. If it's 2, it can paint two zeros.
+            // But wait, after painting a zero, that zero becomes red but is 0, so it cannot paint further.
+            // So the zeros adjacent to a block can be painted by the ends of the block.
+            // But what if there are multiple zeros between blocks? They can be painted from either side.
+            // This suggests a greedy or DP approach.
+            // Let's think about the hints: "Consider the effect of decreasing the value of a red element."
+            // Decreasing a red element by 1 is like spending one "charge" to paint a neighbor.
+            // "How does the answer change when there is only one red element?"
+            // If we only pay for one element, we can only paint a contiguous segment around it,
+            // limited by the sum of values? Actually, if we start with one red element of value v,
+            // we can paint at most v neighbors directly. But those neighbors, if non-zero, can continue.
+            // So the set of elements we can paint from one paid element is exactly the connected component
+            // of non-zeros containing it, plus possibly some zeros on the boundaries, but the zeros
+            // can only be painted if the boundary non-zero has enough remaining value after propagating
+            // inside the block. This is getting complicated.
+            // Let's re-read the problem carefully. We can perform operations in any order.
+            // We want to minimize coins spent.
+            // This is equivalent to: we need to choose a set of elements to pay for (paint red directly).
+            // Then we can repeatedly apply the second operation: pick a red non-zero and an adjacent blue,
+            // decrease red by 1, paint blue red.
+            // This is exactly the process of "activating" elements.
+            // Notice that the total number of decreases we can do is bounded by the sum of values of
+            // elements we pay for plus the values of elements we paint via operation 2?
+            // Actually, when we paint a blue element via operation 2, it becomes red with its original value.
+            // So its value can be used later. So the total "charge" available is the sum of values of
+            // all elements that become red (except zeros, which give 0 charge).
+            // But we start with some paid elements. The total charge we can generate is the sum of a_i
+            // over all elements we eventually paint red. But we need to paint all elements.
+            // So total charge available is sum of all a_i. Each operation 2 consumes 1 charge from some
+            // red element and paints one blue element. We need to perform exactly (n - number_of_paid_elements)
+            // operations of type 2. The total charge consumed is exactly that number.
+            // So we need sum(a_i) >= n - paid. But sum(a_i) is fixed. So paid >= n - sum(a_i).
+            // However, this is necessary but not sufficient because the charge must be available at the
+            // right places (adjacency). For example, if all a_i = 0, sum=0, paid >= n, we must pay for all.
+            // If we have a 2 and zeros around, sum=2, n=3, paid >= 1. Indeed we can do with 1 coin.
+            // But consider array: 1 0 1. sum=2, n=3, paid >= 1. Can we do with 1 coin?
+            // Pay for the first 1. It can paint the 0 (cost 1). Now first is 0, second is 0 (red), third is 1 blue.
+            // We have no red non-zero to paint the third. So we need another coin. So paid=2.
+            // So the lower bound paid >= n - sum(a) is not tight.
+            // The actual constraint is connectivity: we need to ensure that the set of paid elements
+            // can "reach" all elements via paths where each step consumes a charge from the source.
+            // This is similar to finding a set of "roots" such that every element is in the "basin" of some root,
+            // where a root can spread its charge along paths, but zeros block propagation (they don't provide charge).
+            // Actually, zeros can be painted but they don't provide charge to continue.
+            // So a non-zero element can propagate through zeros only if it has enough charge to cross them.
+            // But wait: if we have a 2, it can paint a zero, becoming 1, then paint another zero, becoming 0.
+            // So a 2 can cross two zeros. A 1 can cross one zero.
+            // But if we have multiple non-zeros, they can combine their charges.
+            // This is exactly the problem of covering the array with "intervals" that can be paid for.
+            // Let's think differently: each paid element can be seen as starting a "chain reaction".
+            // The reaction can spread left and right. The total number of unpainted elements we can cover
+            // from a paid element is limited by the sum of values in the connected component of non-zeros
+            // that we can reach, but zeros in between consume charge without giving any back.
+            // This is similar to: we need to select a set of indices to pay for, such that for every zero,
+            // there is a paid element that can reach it, and for every non-zero, it is connected to some paid element.
+            // Actually, we can think of the array as a sequence. We can process from left to right.
+            // Let's consider the hints: "How does the answer change when there is only one red element?"
+            // If we only pay for one element, we can paint a contiguous segment around it.
+            // The maximum length of this segment depends on the values.
+            // If we pay for an element at position i with value v, we can paint leftwards up to v zeros?
+            // Not exactly, because if there is a non-zero, it can help.
+            // Actually, if we have only one paid element, the set of paintable elements is exactly
+            // the set of indices j such that there is a path from i to j where the sum of values
+            // along the path (including i but maybe excluding j?) is at least the distance?
+            // More precisely, we can model it as: we have a "potential" that starts at a_i.
+            // When we move to an adjacent blue element, we spend 1 potential. If that element is non-zero,
+            // we add its value to the potential. So we can continue as long as potential > 0.
+            // This is like exploring a graph where edges cost 1, and nodes give resources.
+            // We want to cover all nodes with minimum number of starting nodes (paid).
+            // This is a classic problem: given an array, each positive number is a resource,
+            // we can start at some nodes with initial resource equal to their value (by paying),
+            // and we can move left/right spending 1 per step, collecting resources at nodes.
+            // We want to cover all nodes. Minimum number of starts.
+            // This can be solved greedily: we can process segments separated by zeros?
+            // Actually, zeros are just nodes with 0 resource.
+            // Let's think about the array as a sequence of values. We can define a "deficit" or something.
+            // Consider the prefix sum of (a_i - 1)? Not exactly.
+            // Let's think about the necessary condition for a segment to be coverable by one paid element.
+            // If we pay for the leftmost element of a segment, we can move rightwards.
+            // Let potential be p. Start with p = a_L. For each step to i+1, p = p - 1 + a_{i+1}.
+            // We need p >= 0 before moving? Actually, to move to an adjacent blue, we need a red non-zero.
+            // So we need p > 0 to make a move. After move, we spend 1, so p decreases by 1, then we add a_{new}.
+            // So the condition to be able to move from i to i+1 is that before move, the current red element
+            // we are using has value > 0. But we can switch which red element we use? The operation says:
+            // "choose a red element which is not equal to 0 and a blue element adjacent to it".
+            // So we can use any red non-zero adjacent to the blue. So if we have multiple red non-zeros,
+            // we can choose any. So the potential is not just a single number; we have multiple red elements
+            // with their own values. But we can think of the total sum of values of red elements minus
+            // the number of blue elements we still need to paint? Actually, each operation consumes 1 from
+            // some red element and turns a blue into red (adding its value). So the total sum of values
+            // of red elements changes by (a_new - 1). So if we start with a set of paid elements,
+            // the total sum of values of red elements initially is sum_{paid} a_i.
+            // Each time we paint a blue element j, the total sum increases by a_j - 1.
+            // We need to be able to perform operations until all are red. The only obstacle is that
+            // we need a red non-zero adjacent to a blue. This is equivalent to: the set of red elements
+            // must always have at least one non-zero on the boundary of the blue set.
+            // This is a connectivity condition.
+            // There is a known solution: we can greedily pay for elements that are "peaks" or something.
+            // Let's look at the examples and try to find a pattern.
+            // Example 1: 0 2 0 -> pay for 2, then it paints both zeros. Answer 1.
+            // Example 2: 0 0 1 1 -> pay for last 1, paint 0 before it? Wait, sample says: pay for 4th (1),
+            // decrease it to paint 3rd (1). Now 3rd is red 1, 4th is red 0. Then pay for 1st (0? No, pay for 1st element? But 1st is 0, paying for 0 costs 1 coin and makes it red 0. Then decrease 3rd (1) to paint 2nd (0). So answer 2.
+            // Could we do better? If we pay for 3rd (1), we can paint 4th (1) -> 3rd becomes 0, 4th red 1. Then 4th can paint nothing else because adjacent are red. We still have 1st and 2nd blue. We need another coin. So 2.
+            // Example 3: 0 1 0 0 1 0 2 -> answer 4.
+            // Let's try to simulate greedy: we want to minimize coins. Each coin gives us a "start".
+            // We can think of the array as having "required" starts at certain places.
+            // Consider the array of a_i. If we have a 2, it can cover itself and up to two zeros (one on each side) without help? Actually, a 2 can paint two adjacent blues. If it paints a zero, it becomes 1, then can paint another zero. So a single 2 can cover itself and two zeros. If there are non-zeros adjacent, they can help.
+            // Maybe we can reduce the problem by observing that we can always "merge" adjacent non-zeros?
+            // If we have a block of non-zeros, we can always paint the whole block with one coin if we start at a 2? Or even if no 2, we can start at one end and propagate. For example, 1 1 1: pay for first 1, paint second (first becomes 0, second red 1), second paints third (second becomes 0, third red 1). So one coin works for any contiguous block of non-zeros.
+            // But zeros between blocks require separate coins? Not necessarily, because a block can "extend" through zeros if it has enough charge. For instance, 1 0 1: block of 1, zero, block of 1. Can one coin cover all? Pay for first 1. It can paint the zero (becomes 0). Now we have red: first 0, second 0, third 1 blue. No red non-zero adjacent to third. So we need another coin. So two coins.
+            // What about 2 0 1? Pay for 2. It can paint 0 (becomes 1). Now red: 2 (now 1? Wait, we decreased the 2 by 1, so it becomes 1), the zero becomes red 0. We have red: index1:1, index2:0. Index3 is blue 1. The red 1 at index1 is adjacent to index2 (red) and index? index0 out of bounds. So it cannot paint index3 because not adjacent. Index2 is red 0, cannot paint. So we are stuck. We need another coin. So answer 2.
+            // But wait, could we instead: pay for 2, then use it to paint the 1? No, 2 is adjacent to 0, not to 1. So we must paint the zero first. So 2 0 1 requires 2 coins.
+            // What about 2 1? Pay for 2, paint 1 (2 becomes 1, 1 becomes red 1). Done. 1 coin.
+            // So the presence of zeros between non-zeros forces extra coins if the non-zero on one side doesn't have enough charge to cross the zero and still have charge to activate the other side.
+            // Actually, if we have a zero between two non-zeros, we need at least one of the non-zeros to have value >= 2 to cross the zero and still be >=1 to paint the other non-zero? Let's analyze: Suppose we have L ... 0 ... R, where L and R are non-zero. If we pay for L, we can paint the zero (L decreases by 1). Now L is red with value L-1, zero is red 0. To paint R, we need a red non-zero adjacent to R. The only candidate is the zero, but it's 0. So we need L to be adjacent to R? No, there is a zero in between. After painting the zero, L and R are not adjacent unless the zero was the only element between them. So if there is exactly one zero between L and R, then after painting that zero, L and R become adjacent? Actually, indices: i (L), i+1 (0), i+2 (R). After painting i+1, red elements are i, i+1, i+2 is blue. i is adjacent to i+1, i+1 is adjacent to i+2. So i is not adjacent to i+2. So we cannot use i to paint i+2 directly. We would need to use i+1, but it's 0. So we cannot paint R unless L still has charge and is adjacent? No, adjacency is only immediate neighbors. So to paint R, we need a red non-zero at i+1 or i+3. i+1 is 0. So we cannot. Thus, a single zero between two non-zeros cannot be crossed by a single paid element unless the paid element is the zero? But zero has no charge. So we must pay for at least one of the non-zeros on each side of the zero? Wait, in example 2: 0 0 1 1, there is no zero between the 1s. They are adjacent. So one coin for the block of 1s works. But there are zeros on the left. The block of 1s can paint the zeros on the left? After painting the block, the leftmost 1 is red. It can paint the zero to its left. Then that zero becomes red 0, and the 1 becomes 0. Then we have a red 0, but there is another zero further left. The red 0 cannot paint it. So we need another coin for the far left zero. That's why answer is 2.
+            // So the problem reduces to: we have segments of non-zeros separated by zeros. Each segment of non-zeros can be painted with one coin (by paying for one element in it). Additionally, zeros can be painted by adjacent non-zero segments, but a non-zero segment can only paint zeros on its immediate boundary up to the value of its boundary elements? Actually, if a segment has a 2 at the boundary, it can paint two zeros outward. If it has a 1, it can paint one zero. But after painting a zero, the boundary element decreases, possibly becoming 0, and then cannot paint further zeros. So the number of zeros a segment can absorb on each side is limited by the value of the element at that boundary (after possibly using some charge internally). But wait, if the segment has multiple non-zeros, we can arrange the propagation so that the boundary element retains its value? For example, segment: 1 2. If we pay for the 2, we can paint the 1 (2 becomes 1, 1 becomes red 1). Now the boundary on the left is the 1 (value 1), on the right is the 2 (now 1). So we have 1 on each side. If we instead pay for the 1, we can paint the 2 (1 becomes 0, 2 becomes red 2). Then boundaries: left 0, right 2. So we can choose which boundary gets the charge by choosing where to start. So we can "direct" the charge to one side. In general, for a segment of non-zeros, the total sum of values is S. By paying one coin, we can activate the whole segment. The process of activating the segment consumes some charge internally. Specifically, to connect all elements in the segment, we need to perform (length - 1) operations internally. Each such operation consumes 1 from some element and adds the value of the newly painted element. The net change in total sum is sum of values of the segment minus (length - 1). But we start with the paid element's value. Actually, if we pay for one element, we get its value as initial charge. Then we can paint the rest. The total charge remaining after painting the whole segment is S - (L - 1), where L is the length of the segment. This remaining charge can be used to paint zeros adjacent to the segment. But this remaining charge is distributed among the red elements in the segment. However, only the boundary elements can paint zeros outside. So we need at least one boundary element to have charge > 0 to paint an adjacent zero. The total remaining charge S - L + 1 can be allocated to the boundaries depending on the order of painting. We can choose to leave charge on the left boundary, right boundary, or both. The maximum number of zeros we can paint on the left is the maximum possible value we can leave on the left boundary after activating the segment. Similarly for right.
+            // This suggests a dynamic programming approach: we process the array from left to right, and decide for each zero whether it is painted by the left segment or the right segment, or we pay for it.
+            // But n is up to 2e5, so O(n) or O(n log n) is needed.
+            // Let's think of a greedy strategy. Consider the array as a sequence of values. We can define "deficit" of charge as we go. Suppose we have a "current charge" available from the left. We start with 0. When we encounter a non-zero, we can decide to pay for it or not. If we pay, we add its value to our charge. But we also need to cover the zeros.
+            // Actually, there is a known solution for this problem (Codeforces problem "Paint the Array" or similar? It might be from a recent contest). Let's search memory: There is a problem "Red and Blue" or "Painting the Array". I recall a problem where you have 0,1,2 and you can pay to paint red, or use a red to paint adjacent. The solution is to count the number of "segments" of zeros that cannot be crossed by the available charge.
+            // Let's think about the array as consisting of "walls" of zeros. A non-zero element can "jump" over zeros if it has enough value. Specifically, a 2 can jump over one zero and still have 1 left to continue? Actually, if we have a 2, and then a zero, and then a non-zero. The 2 can paint the zero (becomes 1), but then it is not adjacent to the next non-zero. So it cannot jump over a zero to reach a non-zero on the other side. The only way to cross a zero is if the zero is painted and then the next element is adjacent to some red non-zero. But after painting the zero, the red non-zero that painted it is now on the other side of the zero. So it is not adjacent to the next element unless the next element is adjacent to the zero. Wait, indices: i (non-zero), i+1 (zero), i+2 (non-zero). After painting i+1 using i, i becomes i-1? No, i is at index i, i+1 is at i+1. They are adjacent. After painting i+1, i+1 is red. Now i+2 is blue and adjacent to i+1. But i+1 is red 0, so it cannot paint i+2. i is red but not adjacent to i+2 (distance 2). So we cannot paint i+2. Thus, a single non-zero cannot paint a non-zero on the other side of a zero, regardless of its value. Because the zero in between becomes red 0 and blocks further propagation. The only exception is if the non-zero on the other side is adjacent to the zero? It is adjacent. But the zero is 0, so it can't paint it. So we need a red non-zero adjacent to that non-zero. The only way is if the zero itself had value > 0, but it's zero. So we must have another red non-zero on the right side, or we must pay for the right non-zero.
+            // Therefore, zeros act as barriers that completely separate the array into independent segments of non-zeros? Not exactly, because a non-zero can paint zeros on its side, but cannot cross a zero to reach another non-zero. So if we have two non-zeros separated by zeros, they cannot help each other. Each contiguous block of non-zeros (with no zeros in between) must be activated independently? But wait, what if we have a zero between two non-zeros, and we pay for the zero? Paying for a zero costs 1 coin and makes it red 0. It still can't paint anything. So that doesn't help connect them.
+            // So it seems that zeros completely disconnect the non-zero segments. Each maximal contiguous segment of non-zeros must be painted by paying for at least one element in it. Additionally, zeros that are adjacent to a non-zero segment can be painted by that segment, but zeros that are between two segments cannot be painted by either? Actually, zeros between two segments: e.g., segment A, then some zeros, then segment B. The zeros adjacent to A can be painted by A (up to the charge A has left). The zeros adjacent to B can be painted by B. But what about zeros in the middle? If the number of zeros between A and B is larger than the sum of charges A and B can provide to their respective sides, then some zeros in the middle will remain unpainted and we must pay for them.
+            // But wait, can a zero in the middle be painted by A if A has enough charge to paint multiple zeros? Yes, A can paint the first zero (A's boundary decreases by 1), then that zero becomes red 0. Then A's boundary (now with less charge) is still adjacent to the next zero? No, after painting the first zero, A's boundary is now at the position of the first zero? Actually, the red element that did the painting is still at its original position. It is adjacent to the newly painted zero. The next zero is adjacent to the newly painted zero, not to the original red element. So the original red element cannot paint the second zero because it's not adjacent. The newly painted zero is red 0, so it cannot paint the next zero. Therefore, a non-zero segment can paint at most ONE zero on each side! Because after painting one zero, the boundary red element is no longer adjacent to the next zero (there is a red zero in between). So it cannot continue.
+            // Let's verify: Suppose we have segment ending at index i with value v (v>=1). Index i+1 is 0, i+2 is 0. We use the red element at i to paint i+1. i becomes v-1, i+1 becomes red 0. Now i+2 is blue. Is there any red non-zero adjacent to i+2? i+1 is red 0, not adjacent? i+1 is adjacent to i+2. But i+1 is 0, so cannot paint. i is not adjacent to i+2 (distance 2). So we cannot paint i+2. Thus, a non-zero segment can paint at most one zero on its left and one zero on its right. What if the segment has multiple non-zeros? Could we arrange so that after painting one zero, another red non-zero moves to the boundary? For example, segment: 1 2. Right boundary is 2. We want to paint two zeros to the right. If we pay for the 1, we can paint the 2 (1 becomes 0, 2 becomes red 2). Now right boundary is 2. It can paint one zero (becomes 1, zero becomes red 0). Now right boundary is the zero? No, the 2 is at index of original 2. After painting the zero to its right, the 2 becomes 1, and the zero becomes red 0. The next zero is adjacent to that red 0. The 2 (now 1) is not adjacent to the second zero. So still only one zero. What if we instead: pay for the 2, paint the 1 to the left? Then left boundary becomes 1, right boundary is 2? Actually, if we pay for 2, we can paint the 1 on its left. 2 becomes 1, 1 becomes red 1. Now left boundary is 1 (value 1), right boundary is 1 (value 1). Each can paint one zero. So total two zeros, one on each side. But can we paint two zeros on the same side? Suppose we want to paint two zeros on the right. We have 2 at right boundary. We paint the first zero: 2 becomes 1, zero red 0. Now we have a red 0 at the boundary. The 2 (now 1) is one step left. Can we somehow use the 1 to paint the second zero? The 1 is adjacent to the red 0, not to the second zero. So no. What if we had another non-zero inside that could move right? For example, segment: 1 1 2. Pay for the leftmost 1, paint the middle 1 (left becomes 0, middle red 1). Then middle paints right 2 (middle becomes 0, right red 2). Now right boundary is 2. It paints one zero (becomes 1). Can the middle (now 0) do anything? No. So still only one zero on the right.
+            // What if we pay for the 2? Then we can paint the middle 1 (2 becomes 1, middle red 1). Then middle paints left 1 (middle becomes 0, left red 1). Now boundaries: left 1, right 1. Each paints one zero. Still max one per side.
+            // So indeed, a contiguous segment of non-zeros can paint at most ONE zero on its left and ONE zero on its right. The total number of zeros it can paint is at most 2 (one on each side), and only if it has enough total charge to do so. But wait, what if the segment is just a single 2? It can paint one zero on left and one on right, total 2. If it's a single 1, it can paint one zero on one side (left or right). If it's a longer segment, it can also paint at most one on each side, because after painting one zero, the boundary is blocked by a red 0.
+            // Is there any exception? What if the segment has a 2 at the boundary, and we use it to paint a zero, it becomes 1. Then we have another non-zero inside that we haven't used? But all non-zeros in the segment are already red. Their positions are fixed. The boundary after painting the zero is the zero itself. The next zero is adjacent to that zero. No red non-zero is adjacent to the second zero. So impossible.
+            // Therefore, the problem simplifies significantly: 
+            // - Each maximal contiguous block of non-zeros (length >= 1) requires at least 1 coin to be fully painted.
+            // - Such a block can also paint at most one zero on its left and one zero on its right, provided it has "enough charge". What is "enough charge"? To paint the block itself, we need to spend (length - 1) internal operations. The total sum of the block is S. After painting the block, the remaining total charge is S - (length - 1). To paint a zero on one side, we need at least 1 charge available at that boundary. Since we can direct the charge, we can paint a zero on a side if S - (length - 1) >= 1? But we also need to consider that we might want to paint zeros on both sides. The total charge needed for external zeros is the number of zeros we paint. So if we want to paint L zeros on left and R zeros on right (each 0 or 1), we need S - (length - 1) >= L + R. But also, we need to be able to allocate the charge to the correct boundaries. Since we can always choose the starting paid element to leave charge on the desired boundaries, as long as the total remaining charge is at least the number of external zeros we want to paint, and we only paint at most one per side, it should be possible? Let's check: block of 1 1. S=2, length=2, remaining charge = 2 - 1 = 1. We can paint one zero on one side. Can we paint one on left and one on right? Need 2 charge, but we only have 1. So no. Block of 2. S=2, length=1, remaining = 2 - 0 = 2. Can paint one on left and one on right. Block of 1 2. S=3, length=2, remaining = 3 - 1 = 2. Can paint one on left and one on right. Block of 1 1 1. S=3, length=3, remaining = 3 - 2 = 1. Can paint one zero on

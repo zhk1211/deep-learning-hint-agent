@@ -1,0 +1,66 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    string s;
+    cin >> n >> s;
+
+    // Find first '1'
+    int first_one = -1;
+    for (int i = 0; i < n; ++i) {
+        if (s[i] == '1') {
+            first_one = i;
+            break;
+        }
+    }
+
+    if (first_one == -1) {
+        cout << "0\n";
+        return 0;
+    }
+
+    // The string without leading zeros
+    string t = s.substr(first_one);
+    int m = t.size();
+
+    // Find the first zero in t
+    int first_zero = -1;
+    for (int i = 0; i < m; ++i) {
+        if (t[i] == '0') {
+            first_zero = i;
+            break;
+        }
+    }
+
+    if (first_zero == -1) {
+        // All ones
+        cout << t << "\n";
+        return 0;
+    }
+
+    // We will try to maximize the substring starting at first_zero
+    // The best second substring will be of length m - first_zero
+    int len = m - first_zero;
+    string best = t; // start with t itself
+
+    // We only need to consider starting positions from 0 to first_zero
+    // because shifting further right would just lose bits
+    for (int start = 0; start <= first_zero; ++start) {
+        string cand = t;
+        for (int i = 0; i < len; ++i) {
+            if (t[first_zero + i] == '0' && t[start + i] == '1') {
+                cand[first_zero + i] = '1';
+            }
+        }
+        if (cand > best) {
+            best = cand;
+        }
+    }
+
+    cout << best << "\n";
+    return 0;
+}

@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(vector<int> idx) {
+    cout << "? " << idx.size();
+    for (int x : idx) cout << " " << x;
+    cout << endl;
+    int res;
+    cin >> res;
+    if (res == -1) exit(0);
+    return res;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    
+    // Find pairs using queries of size 2
+    vector<bool> paired(m + 1, false);
+    vector<pair<int,int>> pairs;
+    
+    for (int i = 1; i <= m; i++) {
+        if (paired[i]) continue;
+        // find j > i such that MAD(i,j) > 0
+        for (int j = i + 1; j <= m; j++) {
+            if (paired[j]) continue;
+            int res = query({i, j});
+            if (res > 0) {
+                // they are the same number
+                a[i] = a[j] = res;
+                paired[i] = paired[j] = true;
+                pairs.push_back({i, j});
+                break;
+            }
+        }
+    }
+    
+    // Now we have pairs but we need to assign correct numbers
+    // Actually we already have numbers from MAD queries
+    // But we need to verify: the MAD of two identical numbers is that number
+    // So a[i] = a[j] = res is correct.
+    
+    // Output answer
+    cout << "!";
+    for (int i = 1; i <= m; i++) {
+        cout << " " << a[i];
+    }
+    cout << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

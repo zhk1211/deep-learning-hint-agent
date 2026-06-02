@@ -1,0 +1,244 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAX_A = 1000000;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        vector<int> freq(MAX_A + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+            freq[a[i]]++;
+        }
+
+        long long ans = 0;
+        for (int j_val = 1; j_val <= MAX_A; ++j_val) {
+            int c = freq[j_val];
+            if (c == 0) continue;
+            // j is the middle element
+            // i < j < k in value, with j = i * b, k = j * b = i * b^2
+            // So i * k = j^2
+            // Iterate over possible b such that j * b <= MAX_A and j % b == 0 (so i = j / b)
+            // Actually we can iterate over divisors of j
+            // i = j / b, k = j * b
+            // b must be positive integer
+            // We need i >= 1 and k <= MAX_A
+            // So b must divide j, and j * b <= MAX_A
+            // For each such b, we have i = j / b, k = j * b
+            // Number of triples with this (i, j, k) is freq[i] * c * freq[k] * (if i != k ? 2 : 1) but wait
+            // The problem says i, j, k are pairwise distinct indices, but values can be equal.
+            // If i, j, k are distinct values, then any choice of indices with those values gives 6 permutations? Actually the triple is ordered? The problem says "triple (i, j, k) is called magic if ...". It does not say ordered triple? It says "there are no constraints on the order of integers i, j, k". That means (i, j, k) is considered as an unordered triple? Wait, the examples: first example: sequence 1 7 7 2 7. Magic triples: (2,3,5), (2,5,3), (3,2,5), (3,5,2), (5,2,3), (5,3,2). Indices: 1-based. Values: a_2=7, a_3=7, a_5=7. So all three are 7. They list all 6 permutations of these three indices. So the triple is ordered? Actually they list all permutations of the three indices. So (i,j,k) is an ordered triple of distinct indices. So if we pick three distinct indices with values x, y, z that satisfy the condition, any permutation of these three indices is a valid magic triple? The condition: there exists positive integer b such that a_i * b = a_j and a_j * b = a_k. This condition depends on the assignment of values to i, j, k. For a fixed set of three values (x, y, z) that are in geometric progression (x, y, z) with ratio b, the condition holds only if we assign i to the smallest, j to the middle, k to the largest. But the problem says "there are no constraints on the order of integers i, j, k". That means we can assign the three indices to i, j, k in any order? Wait, the condition is: there exists b such that a_i * b = a_j and a_j * b = a_k. This forces a_i < a_j < a_k (if b>1) or all equal (if b=1). So the values must be in non-decreasing order. If we have three distinct values x<y<z in geometric progression, then the only way to satisfy the condition is to set i to the index with value x, j to y, k to z. But the note says: In the first example, magic triples: (2,3,5), (2,5,3), (3,2,5), (3,5,2), (5,2,3), (5,3,2). All these have values 7,7,7. So when all three values are equal, any permutation works because b=1 works for any assignment: if a_i = a_j = a_k, then a_i * 1 = a_j and a_j * 1 = a_k holds for any ordering. So for equal values, all 6 permutations are valid. For distinct values, only the one ordering (smallest, middle, largest) works. But wait: what if two values are equal and one is different? For example, values x, x, y with x<y. Can we have a magic triple? We need a_i * b = a_j and a_j * b = a_k. If we set i and j to the two x's, then a_i * b = a_j implies x*b = x => b=1. Then a_j * b = a_k => x*1 = y => x=y, contradiction. If we set i to x, j to y, k to x: x*b = y, y*b = x => b = y/x, then y*(y/x) = x => y^2 = x^2 => y=x. So no. So only all equal or all distinct in geometric progression. But wait, what about b>1 and values not strictly increasing? If b>1, then a_i < a_j < a_k strictly. So they must be distinct. So the only cases are: all three equal (b=1), or three distinct values in geometric progression with ratio b>1.
+
+Now, how many ordered triples (i,j,k) of distinct indices satisfy the condition?
+Case 1: All three values equal to v. Number of such triples: if freq[v] >= 3, then number of ordered triples of distinct indices = freq[v] * (freq[v]-1) * (freq[v]-2). Because we pick i, j, k all distinct from the set of indices with value v. Any ordering works because b=1.
+Case 2: Three distinct values x < y < z with y = x*b, z = y*b = x*b^2, b>1 integer. Then we must assign i to an index with value x, j to y, k to z. That gives freq[x] * freq[y] * freq[z] ordered triples? But wait: the problem says "there are no constraints on the order of integers i, j, k". Does that mean we can permute i,j,k? If we permute, the condition might not hold. The condition is specifically a_i * b = a_j and a_j * b = a_k. So the roles are fixed: i is the first, j is the second, k is the third. So only the assignment (i=x, j=y, k=z) works. But the note for the first example lists all 6 permutations of the three indices with equal values. For distinct values, they didn't list any permutations. In the second example: sequence 6 2 18. Values: 2,6,18. Magic triple: (2,1,3). Indices: 1-based: a_1=6, a_2=2, a_3=18. The triple (2,1,3) means i=2 (value 2), j=1 (value 6), k=3 (value 18). That is the only one. They didn't list permutations. So for distinct values, only one ordering works. So the number of ordered triples is freq[x] * freq[y] * freq[z].
+
+But wait: could there be a case where x, y, z are not all distinct but two equal? We already argued no. So the total answer is sum over all v with freq[v]>=3 of freq[v]*(freq[v]-1)*(freq[v]-2) plus sum over all geometric progressions x, y, z with x<y<z, y=x*b, z=y*b, b>=2 integer, of freq[x]*freq[y]*freq[z].
+
+Now constraints: a_i <= 1e6, n sum <= 2e5. We can precompute or compute per test case. Since MAX_A = 1e6, we can iterate over all possible middle values y from 1 to MAX_A, and for each y, iterate over multiples? Actually we need x = y / b, z = y * b, with b integer >=2, and x, z <= MAX_A. So for a given y, we can iterate over divisors b of y? Actually b must divide y? x = y/b must be integer, so b must be a divisor of y. Also z = y*b <= MAX_A. So for each y, we can iterate over divisors d of y (where d = b). Then x = y/d, z = y*d. We need d >= 2, and z <= MAX_A. Then add freq[x]*freq[y]*freq[z].
+
+But iterating over all y up to 1e6 and all divisors might be too slow if we do it per test case? Sum of n is 2e5, but MAX_A is 1e6. The number of operations for iterating over all y up to 1e6 and their divisors could be around sum_{y=1}^{1e6} (number of divisors of y). The average number of divisors is about log(1e6) ~ 14, so total ~ 1.4e7 operations per test case? But t up to 1e4, and sum n 2e5, but MAX_A is fixed 1e6. If we do this for every test case, it would be 1e4 * 1.4e7 = 1.4e11, too slow. We need a faster approach.
+
+We can instead process all test cases together? But the frequencies are per test case. We need to compute answer per test case. Since sum of n is 2e5, the number of distinct values across all test cases is at most 2e5. We can use an approach that only considers values that actually appear. For each test case, we can collect the distinct values and their frequencies. Then we can sort the distinct values. For the equal case, we just use freq. For the geometric progression case, we can iterate over the distinct values as the middle element y. For each y, we need to find x = y / b and z = y * b for integer b >= 2. Since y <= 1e6, we can iterate over b such that y * b <= MAX_A and y % b == 0. But if we do this for each distinct y, the number of operations per test case is sum over distinct y of (number of divisors of y that are >=2 and y*divisor <= MAX_A). In the worst case, if the test case has many distinct values up to 1e6, it could be large. But sum of n is 2e5, so the total number of distinct values across all test cases is at most 2e5. However, a single test case could have up to 2e5 distinct values, each up to 1e6. The sum of divisors for all numbers up to 1e6 is about 1e6 * log(1e6) ~ 1.4e7. If we do that for one test case, it's acceptable (1.4e7 operations). But if we do it for many test cases with large distinct counts, the total could exceed time. However, the sum of n is 2e5, so the sum of distinct values across all test cases is at most 2e5. But the sum of divisors for numbers up to 1e6 is 1.4e7, but we only iterate over divisors for numbers that actually appear as y. The sum of the number of divisors for the distinct y's across all test cases is at most sum_{y in all distinct values} d(y). Since the distinct values are a subset of [1, 1e6] and total distinct count is <= 2e5, the sum of d(y) could be up to 2e5 * max divisors. The maximum number of divisors for numbers up to 1e6 is 240 (for 720720). So worst-case sum of divisors could be 2e5 * 240 = 4.8e7, which is acceptable in 1 second in C++. But we also need to check z = y * b <= MAX_A. We can precompute divisors for all numbers up to MAX_A once, or just compute on the fly. Since we only need divisors b >= 2 such that y * b <= MAX_A, we can just iterate b from 2 to MAX_A / y, and check if y % b == 0. That would be O(MAX_A / y) per y, which is too slow if y is small. So we should iterate over divisors properly.
+
+We can precompute the divisors for all numbers up to MAX_A once globally. That takes O(MAX_A log MAX_A) time and memory. MAX_A = 1e6, so memory for storing divisors: sum of number of divisors ~ 1.4e7 integers, which is about 56 MB, acceptable. But we can also just compute divisors on the fly for each y by iterating up to sqrt(y). Since we need both d and y/d as possible b. For each divisor d of y, we can set b = d or b = y/d. We need b >= 2 and y * b <= MAX_A. So we can just find all divisors of y, and for each divisor b (both d and y/d if different), if b >= 2 and y * b <= MAX_A, then x = y / b, z = y * b. This takes O(sqrt(y)) per y. For y up to 1e6, sqrt is 1000. If we have 2e5 distinct y's, total operations ~ 2e5 * 1000 = 2e8, which might be borderline but probably okay in C++ with optimizations. But we can do better: we can iterate over multiples instead of divisors. For each x (value that appears), we can iterate over b >= 2 such that x * b * b <= MAX_A. Then y = x * b, z = y * b. This way, we only iterate over x that actually appear, and for each x, we iterate over b up to sqrt(MAX_A / x). The number of operations is sum over distinct x of sqrt(MAX_A / x). In the worst case, if we have many small x, it could be large. For x=1, sqrt(1e6)=1000. For x=2, ~707, etc. The sum over x=1 to 1e6 of sqrt(1e6/x) is about 2/3 * (1e6)^(3/2)? Actually integral of sqrt(M/x) dx from 1 to M is 2*sqrt(M)*sqrt(x) evaluated? Wait, integral of sqrt(M/x) dx = sqrt(M) * integral x^{-1/2} dx = sqrt(M) * 2 sqrt(x) = 2 sqrt(M x). From 1 to M: 2M - 2sqrt(M) ~ 2M. So sum is O(M). For M=1e6, sum is ~ 2e6. So if we iterate over all possible x up to 1e6, total operations ~ 2e6. But we only iterate over x that appear. So this is very efficient! We can do: for each distinct value x in the test case, for b = 2, 3, ... while x * b * b <= MAX_A, let y = x * b, z = y * b. If freq[y] > 0 and freq[z] > 0, add freq[x]*freq[y]*freq[z]. This avoids needing divisors. The number of iterations per test case is sum over distinct x of floor(sqrt(MAX_A / x)). Since the distinct x are at most 2e5, but many might be large, the total iterations is bounded by the sum over all x in [1, MAX_A] of sqrt(MAX_A / x) if all numbers appear, which is ~ 2e6. So even if all numbers from 1 to 1e6 appear in one test case, it's only ~2e6 iterations. And sum of n is 2e5, so the total distinct values across all test cases is <= 2e5, but they could be spread out. The worst-case total iterations across all test cases is if each test case has a few small numbers. For example, many test cases with x=1. For each test case with x=1, we do 1000 iterations. If there are 1e4 test cases each with x=1, that's 1e7 iterations, which is fine. So this approach is efficient.
+
+Algorithm per test case:
+1. Read n, array a.
+2. Compute frequency of each value. Since a_i <= 1e6, we can use a global array or vector of size MAX_A+1, but we need to reset it per test case. Since sum of n is 2e5, we can just use a map or a vector and clear only the used indices. We'll use a vector<int> freq(MAX_A+1, 0) and a list of distinct values to reset later. Or we can use a global array and a vector of changed indices to reset. Since MAX_A is 1e6, creating a vector of size 1e6+1 per test case is too slow if t=1e4 (1e4 * 1e6 = 1e10). So we must not allocate O(MAX_A) per test case. We'll use a global array of size MAX_A+1, and keep a vector of values that we modify, then reset them after each test case. Or we can use unordered_map, but that might be slower. Since sum n is 2e5, we can just store frequencies in a hash map or sort the array and process. Sorting the array takes O(n log n) per test case, total O(N log N) where N = sum n = 2e5, which is very fast. Then we can get frequencies easily. Then we can get distinct values and their frequencies. Then we can do the iteration over distinct x.
+
+Steps:
+- Read n.
+- Read array a.
+- Sort a.
+- Create a vector of pairs (value, frequency) for distinct values.
+- For each distinct value v with frequency f:
+   - If f >= 3, add f * (f-1) * (f-2) to ans. (Ordered triples of distinct indices with same value)
+- For each distinct value x (we can iterate over the distinct values in increasing order):
+   - Let fx = freq[x].
+   - For b = 2; x * b * b <= MAX_A; ++b:
+        y = x * b;
+        z = y * b;
+        // We need frequencies of y and z. Since we have frequencies in a map or we can binary search in the sorted distinct values.
+        // We can store frequencies in an unordered_map or in a vector if we map values to indices. Since MAX_A is 1e6, we can use a global array but we need to clear it. We can use a global array freq_global of size MAX_A+1, and a vector used_vals. For each test case, we populate freq_global for values that appear, and push them to used_vals. After the test case, we reset freq_global for those values to 0. This is O(total n) across test cases.
+        // Then we can just check if freq_global[y] > 0 and freq_global[z] > 0.
+        // If so, ans += fx * freq_global[y] * freq_global[z].
+- Output ans.
+
+We need to use long long for ans.
+
+Let's test with sample.
+
+Sample 1:
+5
+1 7 7 2 7
+Sorted: 1,2,7,7,7
+Distinct: 1:1, 2:1, 7:3
+Equal case: 7: 3*2*1=6.
+Geometric: x=1: b=2: y=2, z=4 (freq[4]=0). b=3: y=3, z=9 (0). ... up to b=1000: y=1000, z=1000000 (0). None.
+x=2: b=2: y=4, z=8 (0). ...
+x=7: b=2: y=14, z=28 (0). ...
+Total 6. Correct.
+
+Sample 2:
+3
+6 2 18
+Sorted: 2,6,18
+Distinct: 2:1, 6:1, 18:1
+Equal: none.
+Geometric: x=2: b=3: y=6, z=18. fx=1, fy=1, fz=1 -> add 1. Total 1. Correct.
+
+Sample 3:
+9
+1 2 3 4 5 6 7 8 9
+Distinct all freq 1.
+Equal: none.
+Geometric: x=1: b=2: y=2, z=4 -> 1*1*1=1; b=3: y=3, z=9 -> 1; b=4: y=4, z=16 (0); ... b=1000: y=1000, z=1000000 (0). So for x=1, b=2 and 3 give 2.
+x=2: b=2: y=4, z=8 -> 1; b=3: y=6, z=18 (0); ... b=22: y=44, z=968 (0). So b=2 gives 1.
+x=3: b=2: y=6, z=12 (0); ...
+x=4: b=2: y=8, z=16 (0); ...
+Total: 2+1=3. Correct.
+
+Sample 4:
+4
+1000 993 986 179
+No geometric, no equal -> 0.
+
+Sample 5:
+7
+1 10 100 1000 10000 100000 1000000
+Freq all 1.
+Geometric: x=1: b=10: y=10, z=100 -> 1; b=100: y=100, z=10000 -> 1; b=1000: y=1000, z=1000000 -> 1; also b=10000? y=10000, z=100000000 > 1e6. So 3.
+x=10: b=10: y=100, z=1000 -> 1; b=100: y=1000, z=100000 -> 1; b=1000: y=10000, z=1000000? Wait 10000*1000=10^7 > 1e6. So b=10 and 100 give 2.
+x=100: b=10: y=1000, z=10000 -> 1; b=100: y=10000, z=1000000 -> 1; total 2.
+x=1000: b=10: y=10000, z=100000 -> 1; b=100: y=100000, z=10000000 > 1e6. So 1.
+x=10000: b=10: y=100000, z=1000000 -> 1.
+x=100000: b=10: y=1000000, z=10000000 > 1e6.
+Total: 3+2+2+1+1 = 9. Correct.
+
+Sample 6:
+8
+1 1 2 2 4 4 8 8
+Freq: 1:2, 2:2, 4:2, 8:2.
+Equal: none (freq < 3).
+Geometric:
+x=1: b=2: y=2, z=4 -> 2*2*2=8; b=4: y=4, z=16 (0); b=8: y=8, z=64 (0); ... b=2 only.
+x=2: b=2: y=4, z=8 -> 2*2*2=8; b=4: y=8, z=32 (0); ...
+x=4: b=2: y=8, z=16 (0); ...
+Total: 8+8=16. Correct.
+
+Sample 7:
+9
+1 1 1 2 2 2 4 4 4
+Freq: 1:3, 2:3, 4:3.
+Equal: 1: 3*2*1=6; 2: 6; 4: 6 -> total 18.
+Geometric:
+x=1: b=2: y=2, z=4 -> 3*3*3=27.
+x=2: b=2: y=4, z=8 (0).
+Total: 18+27=45. Correct.
+
+So algorithm works.
+
+Now implementation details:
+- Use global array `int freq[MAX_A + 1];` initialized to 0.
+- Use global vector `int used;` to keep track of modified indices.
+- For each test case:
+   - read n.
+   - read a_i, increment freq[a_i], and if freq[a_i] was 0 before, push a_i to used.
+   - After reading, we have frequencies.
+   - We can also sort the used vector to iterate over distinct x in increasing order. But we need to iterate over all distinct values for the equal case and for the geometric case. We can just iterate over used.
+   - For equal case: for each v in used, if freq[v] >= 3, ans += 1LL * freq[v] * (freq[v] - 1) * (freq[v] - 2).
+   - For geometric case: we need to iterate over x in used. But we need to check y and z. We can just use the freq array. Since used contains all values that appear, we can iterate over x in used. For each x, let fx = freq[x]. For b = 2; x * b * b <= MAX_A; ++b. y = x * b; z = y * b. If freq[y] > 0 and freq[z] > 0, ans += 1LL * fx * freq[y] * freq[z].
+   - After processing, reset freq[v] = 0 for v in used, and clear used.
+
+Complexity: For each test case, we do O(n) to read and count, plus O(K * sqrt(MAX_A / min_x)) where K is number of distinct values. The total operations across all test cases is bounded by sum over distinct x of sqrt(MAX_A / x). Since the distinct x across all test cases are at most 2e5, but they can repeat across test cases. However, the global array resetting ensures we only process each test case independently. The worst-case total iterations of the inner loop across all test cases is if we have many test cases with small x. For example, t=1e4, each test case has n=3, values 1,2,4. Then for each test case, we do for x=1: b up to 1000 (1000 iterations), x=2: b up to 707, x=4: b up to 500. Total per test case ~2200 iterations. 1e4 * 2200 = 2.2e7, acceptable. If we have a test case with all numbers 1..1e6, that's 2e6 iterations, but sum n is 2e5, so that test case can't have 1e6 distinct values because n <= 2e5. So the maximum distinct values in one test case is 2e5. The sum of sqrt(MAX_A / x) for 2e5 smallest x is roughly integral from 1 to 2e5 of sqrt(1e6/x) dx = 1000 * integral x^{-1/2} dx = 1000 * 2 * sqrt(x) from 1 to 2e5 = 2000 * (sqrt(2e5) - 1) ≈ 2000 * (447 - 1) ≈ 892,000. So even in the worst-case test case, it's under 1e6 iterations. So total operations across all test cases is well within limits.
+
+We must use fast I/O.
+
+Edge cases: b can be large, but we limit by x * b * b <= MAX_A, so b <= sqrt(MAX_A / x). Since x >= 1, b <= 1000. So inner loop is small.
+
+We need to use 64-bit integers for ans.
+
+Let's write the code.
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAX_A = 1000000;
+int freq[MAX_A + 1];
+vector<int> used;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        for (int i = 0; i < n; ++i) {
+            int x;
+            cin >> x;
+            if (freq[x] == 0) {
+                used.push_back(x);
+            }
+            freq[x]++;
+        }
+        
+        long long ans = 0;
+        // equal case
+        for (int v : used) {
+            int f = freq[v];
+            if (f >= 3) {
+                ans += 1LL * f * (f - 1) * (f - 2);
+            }
+        }
+        
+        // geometric case
+        // sort used to iterate in increasing order? Not necessary, but we can just iterate over all used.
+        // However, if we iterate over all used as x, we might double count? No, because x < y < z strictly, and we only consider x as the smallest. So each triple is counted exactly once.
+        for (int x : used) {
+            int fx = freq[x];
+            // b >= 2
+            for (int b = 2; 1LL * x * b * b <= MAX_A; ++b) {
+                int y = x * b;
+                int z = y * b;
+                if (freq[y] > 0 && freq[z] > 0) {
+                    ans += 1LL * fx * freq[y] * freq[z];
+                }
+            }
+        }
+        
+        cout << ans << '\n';
+        
+        // reset
+        for (int v : used) {
+            freq[v] = 0;
+        }
+        used.clear();
+    }
+    return 0;
+}
+```
+
+Check: In the geometric case, we iterate over all x in used. But what if the same triple is counted multiple times? For a triple (x, y, z) with y = x*b, z = y*b, we only consider x as the smallest. Since we iterate over all x, we will find it exactly once. There is no other x that can produce the same triple because x is uniquely the smallest. So it's correct.
+
+Also, note that b can be 1? We handled b=1 in the equal case. For b=1, x=y=z, which is the equal case. In geometric case, we start b=2, so we only get strictly increasing values. So no overlap.
+
+Time complexity: O(N + sum over distinct x of sqrt(MAX_A/x)) per test case, total well within limits.
+
+Space: O(MAX_A) for freq array (about 4 MB), plus used vector up to n.
+
+This should pass easily.
+```

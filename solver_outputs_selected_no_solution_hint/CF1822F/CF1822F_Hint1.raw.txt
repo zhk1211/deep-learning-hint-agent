@@ -1,0 +1,67 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+void solve() {
+    int n;
+    ll k, c;
+    cin >> n >> k >> c;
+    vector<vector<int>> adj(n);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        --u; --v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    vector<ll> depth(n);
+    vector<int> parent(n, -1);
+    function<void(int, int)> dfs_depth = [&](int u, int p) {
+        parent[u] = p;
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            depth[v] = depth[u] + 1;
+            dfs_depth(v, u);
+        }
+    };
+    dfs_depth(0, -1);
+
+    int far = max_element(depth.begin(), depth.end()) - depth.begin();
+
+    vector<ll> dist1(n);
+    function<void(int, int, ll)> dfs_dist = [&](int u, int p, ll d) {
+        dist1[u] = d;
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            dfs_dist(v, u, d + 1);
+        }
+    };
+    dfs_dist(far, -1, 0);
+
+    int far2 = max_element(dist1.begin(), dist1.end()) - dist1.begin();
+    vector<ll> dist2(n);
+    dfs_dist(far2, -1, 0);
+
+    ll ans = 0;
+    for (int i = 0; i < n; ++i) {
+        ll max_dist = max(dist1[i], dist2[i]);
+        ll profit = max_dist * k - depth[i] * c;
+        ans = max(ans, profit);
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

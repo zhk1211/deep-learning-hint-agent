@@ -1,0 +1,57 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<tuple<int, long long, long long>>> adj(n + 1);
+    for (int i = 2; i <= n; ++i) {
+        int p;
+        long long a, b;
+        cin >> p >> a >> b;
+        adj[p].emplace_back(i, a, b);
+    }
+    vector<int> ans(n + 1);
+    vector<long long> b_pref;
+    b_pref.reserve(n);
+    function<void(int, long long)> dfs = [&](int u, long long a_sum) {
+        for (auto &[v, a, b] : adj[u]) {
+            long long new_a = a_sum + a;
+            if (!b_pref.empty())
+                b_pref.push_back(b_pref.back() + b);
+            else
+                b_pref.push_back(b);
+            int lo = 0, hi = (int)b_pref.size() - 1;
+            int best = -1;
+            while (lo <= hi) {
+                int mid = (lo + hi) / 2;
+                if (b_pref[mid] <= new_a) {
+                    best = mid;
+                    lo = mid + 1;
+                } else {
+                    hi = mid - 1;
+                }
+            }
+            ans[v] = best + 1;
+            dfs(v, new_a);
+            b_pref.pop_back();
+        }
+    };
+    dfs(1, 0);
+    for (int i = 2; i <= n; ++i) {
+        cout << ans[i] << " \n"[i == n];
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

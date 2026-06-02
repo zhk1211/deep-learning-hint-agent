@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(const vector<int>& idx) {
+    cout << "? " << idx.size();
+    for (int i : idx) cout << " " << i;
+    cout << endl;
+    int res;
+    cin >> res;
+    return res;
+}
+
+void answer(const vector<int>& a) {
+    cout << "!";
+    for (int x : a) cout << " " << x;
+    cout << endl;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    
+    // Find pairs using queries of size 2
+    vector<int> paired(m + 1, 0);
+    vector<int> first_of(n + 1, 0);
+    
+    for (int i = 1; i <= m; ++i) {
+        if (paired[i]) continue;
+        for (int j = i + 1; j <= m; ++j) {
+            if (paired[j]) continue;
+            int res = query({i, j});
+            if (res > 0) {
+                a[i] = a[j] = res;
+                paired[i] = paired[j] = 1;
+                if (first_of[res] == 0) first_of[res] = i;
+                break;
+            }
+        }
+    }
+    
+    // Find the missing number if any
+    vector<int> freq(n + 1, 0);
+    for (int i = 1; i <= m; ++i) {
+        if (a[i] != 0) freq[a[i]]++;
+    }
+    
+    int missing = -1;
+    for (int x = 1; x <= n; ++x) {
+        if (freq[x] == 0) {
+            missing = x;
+            break;
+        }
+    }
+    
+    if (missing != -1) {
+        // Find the two positions that have 0
+        vector<int> zero_pos;
+        for (int i = 1; i <= m; ++i) {
+            if (a[i] == 0) zero_pos.push_back(i);
+        }
+        // They must be the missing number
+        a[zero_pos[0]] = a[zero_pos[1]] = missing;
+    }
+    
+    answer(vector<int>(a.begin() + 1, a.end()));
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

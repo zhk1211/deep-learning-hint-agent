@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, a, b;
+    cin >> n >> a >> b;
+    vector<vector<pair<int, int>>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w});
+    }
+    
+    vector<int> xor_from_a(n + 1, -1);
+    queue<int> q;
+    xor_from_a[a] = 0;
+    q.push(a);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto [v, w] : adj[u]) {
+            if (v == b) continue;
+            if (xor_from_a[v] == -1) {
+                xor_from_a[v] = xor_from_a[u] ^ w;
+                q.push(v);
+            }
+        }
+    }
+    
+    set<int> reachable_from_a;
+    for (int i = 1; i <= n; i++) {
+        if (xor_from_a[i] != -1) {
+            reachable_from_a.insert(xor_from_a[i]);
+        }
+    }
+    
+    vector<int> xor_from_b(n + 1, -1);
+    xor_from_b[b] = 0;
+    q.push(b);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto [v, w] : adj[u]) {
+            if (xor_from_b[v] == -1) {
+                xor_from_b[v] = xor_from_b[u] ^ w;
+                q.push(v);
+            }
+        }
+    }
+    
+    bool ok = false;
+    for (int i = 1; i <= n; i++) {
+        if (i == b) continue;
+        if (xor_from_b[i] != -1 && reachable_from_a.count(xor_from_b[i])) {
+            ok = true;
+            break;
+        }
+    }
+    
+    cout << (ok ? "YES" : "NO") << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

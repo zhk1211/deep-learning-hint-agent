@@ -1,0 +1,176 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(m + 1);
+    for (int i = 1; i <= m; ++i) {
+        cin >> a[i];
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        int xs, ys, xf, yf, k;
+        cin >> xs >> ys >> xf >> yf >> k;
+
+        // Check column alignment modulo k
+        if (abs(ys - yf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+        // Check row alignment modulo k
+        if (abs(xs - xf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // The highest row the robot can reach in the start column
+        // It can move up to the top row n, but must stay within unblocked cells.
+        // Actually, the robot can move up as long as it doesn't hit a blocked cell.
+        // Since blocked cells are at the bottom, the robot can move up to n.
+        // But to move horizontally, it must be above the blocked cells of intermediate columns.
+        // The robot can move up to any row that is a multiple of k above xs, up to n.
+        // The maximum reachable row in column ys is: xs + k * t <= n  => max_row = xs + ((n - xs) / k) * k
+        int max_row_start = xs + ((n - xs) / k) * k;
+
+        // Similarly for finish column, but we need to reach exactly xf.
+        // The robot can move vertically in the finish column to adjust row.
+        // The maximum row it can be in the finish column before moving down to xf is the same logic.
+        // But we need to ensure that there exists a row R such that:
+        // R >= max(a[ys], a[yf]) + 1 (actually, to move horizontally, the robot must be strictly above all blocked cells in the columns it passes)
+        // and R <= n, R ≡ xs (mod k), R ≡ xf (mod k) (which is already guaranteed by the modulo checks)
+        // and R can be reached from xs by moving up, and from R we can reach xf by moving down.
+        // Since we can move up/down freely (as long as we don't hit blocked cells), the condition is:
+        // There exists R such that R >= max_blocked_in_path + 1, R <= n, R ≡ xs (mod k)
+        // where max_blocked_in_path is the maximum of a[i] for i between ys and yf inclusive.
+        // But wait: the robot can also move up in the start column, then move horizontally, then move down.
+        // The horizontal move happens at some row R. The robot must be able to reach R in the start column,
+        // which means R >= a[ys] + 1 and R <= max_row_start.
+        // Also, from R in the finish column, it must be able to go down to xf, so R >= a[yf] + 1.
+        // And for all intermediate columns, the robot passes them at row R, so R >= a[i] + 1 for all i between min(ys,yf) and max(ys,yf).
+        // So R must be > max_blocked, where max_blocked = max_{i in [min(ys,yf), max(ys,yf)]} a[i].
+        // Also R must be reachable: R <= max_row_start.
+        // And R ≡ xs (mod k).
+        // So we need to find if there exists R satisfying:
+        // max_blocked + 1 <= R <= max_row_start
+        // R % k == xs % k
+        // Since max_row_start is the maximum row reachable in start column, and we can also move up in the finish column?
+        // Actually, we can move up in the start column to R, move horizontally, then move down in the finish column.
+        // But we could also move up further in the finish column? No, we need to end at xf. We can move down from R to xf.
+        // So R must be >= xf? Not necessarily, we can move down. So R can be any row >= max_blocked+1 and <= max_row_start.
+        // But wait: we can also move up in the finish column after horizontal move? No, because we need to end at xf.
+        // If we move horizontally at row R, then we are at (R, yf). From there we can move down to xf if R >= xf.
+        // If R < xf, we would need to move up, but moving up from R would go to R+k, which might be > n or hit blocked cells?
+        // Actually, we can move up in the finish column as well, but then we would overshoot xf? We can move up then down.
+        // But the problem says we can send an arbitrary number of commands. So we can do: move up to R, move horizontally, then move up/down to adjust to xf.
+        // However, moving up in the finish column is possible only if R + t*k <= n and doesn't hit blocked cells.
+        // But we need to eventually land exactly on xf. Since we can move both up and down, as long as we can reach some row from which we can reach xf by vertical moves.
+        // The condition for vertical reachability: two rows r1 and r2 in the same column are mutually reachable iff r1 ≡ r2 (mod k) and both are > a[col].
+        // So from R, we can reach xf iff R ≡ xf (mod k) and R > a[yf] and xf > a[yf] (given). Also we need to not hit blocked cells during vertical moves.
+        // Since blocked cells are at bottom, moving up from a valid row is always safe until n. Moving down is safe as long as we stay > a[col].
+        // So if R > a[yf] and R ≡ xf (mod k), we can go from R to xf by moving down (or up) in steps of k.
+        // Similarly, from xs we can reach R iff R > a[ys] and R ≡ xs (mod k) and R <= n.
+        // So the conditions are exactly: R > max_blocked, R <= n, R ≡ xs (mod k).
+        // And we also need R to be reachable from xs: that means R >= xs? Not necessarily, we can move down? But xs is unblocked, and we start at xs.
+        // We can move down from xs? If we move down, we go to xs - k. But xs - k might be <= a[ys], which is blocked. So we cannot move down if xs - k <= a[ys].
+        // Actually, we can only move down if the destination is > a[ys]. Since a[ys] < xs, xs - k could be <= a[ys] if xs - a[ys] <= k.
+        // So moving down is not always possible. But we can always move up. So to reach R, if R >= xs, we can just move up. If R < xs, we would need to move down, which might be impossible.
+        // However, we can also move up first, then horizontally, then down. So R doesn't have to be >= xs. We can move up to some R' > R, move horizontally, then move down to R, then move vertically? Wait, horizontal move is at a single row. If we move horizontally at row R', we end at (R', yf). Then we can move down to R (if R' > R and R' ≡ R (mod k)), then from R to xf? But we could just go directly from R' to xf if R' ≡ xf (mod k). So we don't need an intermediate R.
+        // The key is: we can choose the row at which we cross horizontally. Let that row be H. We need H > max_blocked, H <= n, H ≡ xs (mod k), and we need to be able to reach H from xs in the start column, and from H to xf in the finish column.
+        // Reachability from xs to H in same column: since we can only move vertically in steps of k, we need H ≡ xs (mod k). Also we need that all intermediate rows between xs and H are unblocked. Since blocked cells are only at the bottom, if H >= xs, we just move up, and all rows above xs are unblocked (since a[ys] < xs <= n). So moving up is always safe. If H < xs, we need to move down. Moving down is safe only if all rows between H and xs are > a[ys]. That means H > a[ys]. Since a[ys] < xs, if H > a[ys], then the entire range (H, xs] is > a[ys]. So condition: H > a[ys].
+        // Similarly, from H to xf in finish column: if H >= xf, moving down is safe if H > a[yf] (which is already implied by H > max_blocked >= a[yf]). If H < xf, moving up is safe because xf <= n and all rows above H are unblocked (since a[yf] < H). So the only additional condition is H > a[ys] if H < xs. But since H > max_blocked >= a[ys], this is automatically satisfied! So actually, the only conditions are: H > max_blocked, H <= n, H ≡ xs (mod k).
+        // But wait: we also need to be able to reach H from xs. If H < xs, we need to move down. Is it always possible to move down from xs to H if H > a[ys]? Yes, because we can move down in steps of k. Since xs ≡ H (mod k), we can subtract k repeatedly until we reach H. All intermediate rows are >= H > a[ys], so unblocked. So it's safe.
+        // Therefore, the condition simplifies to: there exists an integer H such that:
+        // max_blocked < H <= n
+        // H % k == xs % k
+        // Additionally, we need to be able to reach H from xs? As argued, it's always possible if H > a[ys], which is true because H > max_blocked >= a[ys]. So no extra condition.
+        // But wait: what if xs is already > max_blocked? Then we can just set H = xs? But xs might not be congruent to xf mod k? Actually we already checked xs ≡ xf (mod k). So if xs > max_blocked, we can just move horizontally directly from xs? But horizontal move is in steps of k columns. We can only move horizontally if the row we are at is > blocked cells in all intermediate columns. So if xs > max_blocked, we can move horizontally at row xs. But we need to move exactly |ys - yf| columns. Since |ys - yf| is a multiple of k, we can do it in one command. So if xs > max_blocked, answer is YES.
+        // But our condition with H covers that: we can choose H = xs if xs > max_blocked and xs % k == xs % k (trivial). So it's consistent.
+        // So the problem reduces to: does there exist H such that max_blocked < H <= n and H ≡ xs (mod k)?
+        // The smallest such H is: let r = xs % k. We need H > max_blocked. The smallest H > max_blocked with H % k == r.
+        // We can compute that H. If H <= n, then YES, else NO.
+        // But wait: is there any other constraint? The robot executes each command k times. So horizontal move of d columns requires d to be a multiple of k. We already checked that.
+        // Also, we can move up/down multiple times. The condition H <= n ensures we don't go above grid.
+        // So the algorithm:
+        // For each query:
+        // 1. If |ys - yf| % k != 0 or |xs - xf| % k != 0: NO
+        // 2. Find max_blocked = max(a[i]) for i from min(ys, yf) to max(ys, yf). Since m up to 2e5, we can use a segment tree or sparse table for range maximum queries.
+        // 3. Let r = xs % k.
+        // 4. Find smallest H > max_blocked with H % k == r.
+        //    H = max_blocked + 1 + ((r - (max_blocked + 1) % k) + k) % k
+        // 5. If H <= n, YES, else NO.
+
+        // But wait! There is a catch: The robot can also move vertically in the start column to some row, then move horizontally, then move vertically in the finish column.
+        // What if the start and finish columns are the same? Then we only need vertical movement. The condition is just xs ≡ xf (mod k) and both > a[ys]. But our formula with max_blocked = a[ys] works: H > a[ys], H <= n, H ≡ xs (mod k). Since we can move vertically directly, we don't need H to be > a[ys] if we don't move horizontally? Actually, if ys == yf, we don't need to move horizontally at all. The condition for vertical movement is just xs ≡ xf (mod k) and we can move up/down without hitting blocked cells. Since both xs and xf > a[ys], and all intermediate rows are > a[ys] (because a[ys] is the bottom blocked, and we only move between xs and xf, both > a[ys]), it's always possible. So if ys == yf, answer is YES if xs % k == xf % k. Our formula: max_blocked = a[ys]. We need H > a[ys] with H % k == xs % k. The smallest such H might be > n? But we don't actually need to move horizontally, so we don't need to find a common row H. We can just move vertically directly. So the condition H <= n is not necessary for same column. But wait, if we move vertically, we never exceed n because we only go up to max(xs, xf) which is <= n. So it's always possible. So for same column, the answer is YES if the modulo condition holds. Our algorithm would compute H and might say NO if the smallest H > a[ys] is > n. But that's incorrect because we don't need to go to that H. We only need to go to some row from which we can move horizontally. If we don't move horizontally, we don't need H. So we must handle ys == yf separately: just check modulo condition.
+
+        // What if we need to move horizontally? Then we must cross at some row H. Is it possible that we can cross at different rows for different segments? No, because horizontal move is a single command that moves k cells horizontally each time. So we move horizontally in one go, at a constant row. So we must choose one row H for the entire horizontal traversal.
+
+        // So the algorithm stands, with the special case ys == yf.
+
+        // Now, we need to compute max_blocked efficiently. Since m up to 2e5 and q up to 2e5, we can use a segment tree or a sparse table. Sparse table for RMQ is O(m log m) build and O(1) query. That's perfect.
+
+        // Let's implement Sparse Table for range maximum.
+
+        // But wait: n up to 1e9, k up to 1e9. Calculations with modulo are fine.
+
+        // Edge case: what if max_blocked == n? Then H > n is impossible, so NO. That's correct because we cannot be above the highest blocked cell if all cells are blocked up to n. But the problem says start and finish are unblocked, so a[ys] < xs <= n, so a[ys] < n. But max_blocked could be n if some column has a_i = n. Then we cannot cross that column because the entire column is blocked. So answer NO. Correct.
+
+        // Let's test with sample.
+
+        // Sample 1:
+        // n=11, m=10
+        // a = [9,0,0,10,3,4,8,11,10,8] (1-indexed)
+        // Query 1: 1 2 1 3 1
+        // xs=1, ys=2, xf=1, yf=3, k=1
+        // |2-3|=1 %1==0, |1-1|=0%1==0
+        // max_blocked between col 2 and 3: max(a[2], a[3]) = max(0,0)=0
+        // r = 1%1=0
+        // H > 0, H%1=0 => smallest H=1. 1<=11 -> YES. Correct.
+
+        // Query 2: 1 2 1 3 2
+        // k=2. |2-3|=1 %2 !=0 -> NO. Correct.
+
+        // Query 3: 4 3 4 5 2
+        // xs=4, ys=3, xf=4, yf=5, k=2
+        // |3-5|=2 %2==0, |4-4|=0%2==0
+        // max_blocked between 3 and 5: max(a[3], a[4], a[5]) = max(0,10,3)=10
+        // r = 4%2=0
+        // H > 10, H%2=0 => smallest H=12. 12 > 11 -> NO. Correct.
+
+        // Query 4: 5 3 11 5 3
+        // xs=5, ys=3, xf=11, yf=5, k=3
+        // |3-5|=2 %3 !=0 -> NO. Correct.
+
+        // Query 5: 5 3 11 5 2
+        // xs=5, ys=3, xf=11, yf=5, k=2
+        // |3-5|=2 %2==0, |5-11|=6 %2==0
+        // max_blocked between 3 and 5: max(0,10,3)=10
+        // r = 5%2=1
+        // H > 10, H%2=1 => smallest H=11. 11<=11 -> YES. Correct.
+
+        // Query 6: 11 9 9 10 1
+        // xs=11, ys=9, xf=9, yf=10, k=1
+        // |9-10|=1 %1==0, |11-9|=2 %1==0
+        // max_blocked between 9 and 10: max(a[9], a[10]) = max(10,8)=10
+        // r = 11%1=0
+        // H > 10, H%1=0 => smallest H=11. 11<=11 -> YES. Correct.
+
+        // So algorithm works.
+
+        // Now implement Sparse Table for max.
+        // Since m up to 200000, log2(m) ~ 18.
+        // Build: st[j][i] = max of range [i, i + 2^j - 1]
+        // We'll use 0-indexed internally for the array, but columns are 1-indexed in input. We'll convert.
+
+        // Let's code.
+    }
+
+    return 0;
+}
+```

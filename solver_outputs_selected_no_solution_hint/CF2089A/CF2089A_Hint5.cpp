@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool is_prime(int x) {
+    if (x < 2) return false;
+    for (int i = 2; i * i <= x; ++i)
+        if (x % i == 0) return false;
+    return true;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n);
+        if (n == 2) {
+            cout << "2 1\n";
+            continue;
+        }
+        if (n == 3) {
+            cout << "2 1 3\n";
+            continue;
+        }
+        // For n >= 4, place n at position 2 (1-indexed) and 1 at position 3
+        p[0] = 2;
+        p[1] = n;
+        p[2] = 1;
+        int cur = 3;
+        for (int i = 3; i < n; ++i) {
+            if (cur == n) ++cur;
+            p[i] = cur++;
+        }
+        for (int i = 0; i < n; ++i)
+            cout << p[i] << " \n"[i == n - 1];
+    }
+    return 0;
+}

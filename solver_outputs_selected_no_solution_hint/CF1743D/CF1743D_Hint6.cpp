@@ -1,0 +1,403 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    string s;
+    cin >> n >> s;
+    
+    // Find first '1' to skip leading zeros
+    int first_one = -1;
+    for (int i = 0; i < n; i++) {
+        if (s[i] == '1') {
+            first_one = i;
+            break;
+        }
+    }
+    
+    if (first_one == -1) {
+        cout << "0\n";
+        return 0;
+    }
+    
+    // s1 will be the whole string from first_one to end
+    string s1 = s.substr(first_one);
+    int m = s1.size();
+    
+    // Find the first zero in s1
+    int first_zero = -1;
+    for (int i = 0; i < m; i++) {
+        if (s1[i] == '0') {
+            first_zero = i;
+            break;
+        }
+    }
+    
+    if (first_zero == -1) {
+        // All ones, answer is all ones
+        cout << string(m, '1') << "\n";
+        return 0;
+    }
+    
+    // We need to find the best s2 that maximizes OR with s1
+    // s2 must be a substring of s of length m, starting at some position
+    // We only consider starting positions that allow length m
+    // And we only care about the first (first_zero) bits of s2
+    // because after that, s1 has all ones? No, s1 has zeros after first_zero.
+    // Actually, we want to maximize the OR. s1 has zeros at some positions.
+    // We can choose s2 to have ones at those positions if possible.
+    
+    string best = s1;
+    // Try all possible starting positions for s2
+    // s2 must be of length m, so start can be from 0 to n-m
+    // But we only need to consider starts that are within first_zero+1 from first_one?
+    // Actually, the first zero in s1 is at index first_zero.
+    // To cover that zero with a 1 from s2, s2 must have a 1 at position first_zero.
+    // s2 is s.substr(start, m). Its character at position first_zero is s[start + first_zero].
+    // We want this to be '1'.
+    // Also, we want to maximize the OR lexicographically from left to right.
+    
+    // We can try all possible starts from 0 to first_zero (relative to first_one)
+    // because if start > first_zero, then s2[first_zero] corresponds to s[first_one + start + first_zero]
+    // which is beyond the original string? No, start can be up to n-m.
+    // But we only need to consider starts where s[start + first_zero] == '1'
+    // and start is within [0, first_zero]? Actually, start can be negative relative to first_one?
+    // No, start is absolute index in s. s2 starts at some index L in [0, n-m].
+    // We want s[L + first_zero] == '1'.
+    // Also, we want to maximize the OR. The OR will have the same prefix as s1 until first_zero,
+    // then at first_zero it becomes '1', and then we need to maximize the rest.
+    
+    // Since m can be up to 10^6, we need an efficient way.
+    // We can find the best candidate by comparing strings.
+    // The number of candidates is at most first_zero+1 (since L can be from first_one to first_one+first_zero).
+    // But first_zero could be up to m-1, which is O(n). In worst case, n=10^6, first_zero could be ~10^6.
+    // We need a faster comparison.
+    
+    // We can use string hashing or simply note that we only need to compare suffixes.
+    // Actually, we want to maximize the OR of s1 and s2.
+    // s1 is fixed. s2 is a substring of length m.
+    // The OR will be s1 with some zeros flipped to ones where s2 has ones.
+    // We want to flip the leftmost possible zeros to ones.
+    // The first zero is at first_zero. We must choose s2 such that s2[first_zero] = '1'.
+    // Among those, we want to flip as many subsequent zeros as possible, prioritizing leftmost.
+    
+    // So we can find the best s2 by comparing the strings s2 starting from first_zero.
+    // We only need to consider L such that s[L + first_zero] == '1'.
+    // Let L0 = first_one. Then s2 candidates start at L0 + d, where d in [0, first_zero].
+    // We want to maximize the substring of s2 from index first_zero to end.
+    // That is, we compare s.substr(L0 + d + first_zero, m - first_zero).
+    // We want the lexicographically maximum such substring.
+    
+    // Since we only need the maximum suffix, we can find it in O(n) using Z-algorithm or just by comparing.
+    // But note that the length of the suffix is m - first_zero, which could be large.
+    // However, we can observe that the best candidate will be the one that gives the maximum string
+    // when we OR with s1. Since s1 has zeros at some positions, we are effectively taking the maximum
+    // of s2 in the positions where s1 has zeros? Not exactly, because OR is bitwise.
+    // Actually, if we have two candidates s2 and s2', the OR with s1 will differ only where s1 has '0'.
+    // So we want to maximize the string s2 on the positions where s1 has '0'.
+    // But s1 has '0's at various positions. The first zero is at first_zero.
+    // After we set that to '1', the next zero in s1 might be at some position > first_zero.
+    // We want to set that to '1' if possible, etc.
+    // This is equivalent to: we want to find s2 that maximizes the OR.
+    // Since s1 is fixed, maximizing OR is equivalent to maximizing s2 on the subset of indices where s1[i]='0'.
+    // But we can just compare the OR results directly.
+    
+    // A simpler approach: try all d from 0 to first_zero, but only those where s[first_one + d + first_zero] == '1'.
+    // There are at most first_zero+1 candidates. In the worst case, first_zero could be O(n).
+    // But we can compare two candidates in O(1) amortized using LCP (longest common prefix) with hashing or suffix array.
+    // Since n=10^6, we can compute Z-array or use rolling hash.
+    // However, we can also note that the number of candidates is at most the number of '1's in the range,
+    // which on average is half, but worst-case all '1's -> O(n) candidates.
+    // We need an O(n) overall algorithm.
+    
+    // Let's use string hashing with a single mod (or double mod) to compare substrings quickly.
+    // But we can also do it without hashing by noting that we only need to compare suffixes of the string s.
+    // We want the maximum suffix among those starting at positions p = first_one + d + first_zero
+    // where d in [0, first_zero] and s[p] == '1'.
+    // Actually, we want the maximum string s2 itself, not just its suffix? 
+    // The OR result is determined by the entire s2, but the prefix before first_zero is all '1's in s1,
+    // so OR with s2 doesn't change anything there. So only the part from first_zero onward matters.
+    // And for that part, we want to maximize the OR with s1's suffix.
+    // Since s1's suffix has zeros, maximizing OR is equivalent to taking the maximum of s2's suffix
+    // in the sense of bitwise OR? Not exactly: if s1 has '0' at position i, then OR result at i is s2[i].
+    // If s1 has '1', OR result is '1' regardless of s2[i].
+    // So the OR result on the suffix is: for each position, if s1 has '1' -> '1', else s2[i].
+    // So we want to maximize the string t where t[i] = s1[i] if s1[i]=='1' else s2[i].
+    // This is equivalent to: we want to choose s2 that maximizes the string formed by taking s2[i] when s1[i]=='0'.
+    // This is like comparing s2 on the subset of indices where s1 has '0'.
+    // But we can just compare the OR results directly.
+    
+    // Since we only need to output the maximum OR, we can just find the best s2.
+    // We can do this by maintaining the best candidate and comparing with new candidates.
+    // To compare two candidates s2_a and s2_b (both of length m), we can compare the OR with s1.
+    // The first difference will be at the first index i where s1[i]=='0' and s2_a[i] != s2_b[i].
+    // We want the one with '1' at that position.
+    // So we can compare by finding the first zero in s1 where the two candidates differ.
+    // This can be done by precomputing the next zero in s1 after each position.
+    // Then we can jump to the next zero and compare the characters of the candidates there.
+    // Since the number of zeros in s1 could be O(n), in worst case this could be O(n^2) if we compare many candidates.
+    // But we can use the fact that we only consider candidates with s[L+first_zero]=='1'.
+    // And we can compare candidates by their suffixes starting at first_zero.
+    // Actually, the OR result from first_zero onward is exactly the maximum of s2's suffix
+    // when we only look at positions where s1 has '0'. But s1 has '0's at some positions.
+    // If we just take the lexicographically maximum suffix of s2 (from first_zero), does that give the maximum OR?
+    // Not necessarily, because s1 might have '1's in between, which would override.
+    // Example: s1 = 101, first_zero at index 1. s2 candidates: 011 and 110.
+    // s2 suffixes from index 1: "11" and "10". Lex max is "11" -> OR = 111.
+    // The other gives OR = 111 as well? s1=101, s2=011 -> OR=111; s2=110 -> OR=111. Same.
+    // Another example: s1 = 1001, first_zero at 1. s2 candidates: 0110 and 0101.
+    // Suffixes from 1: "110" and "101". Lex max is "110". OR with s1: 
+    // s1=1001, s2=0110 -> OR=1111; s2=0101 -> OR=1101. So lex max suffix gives better OR.
+    // Is it always true that the lexicographically maximum suffix of s2 (from first_zero) gives the maximum OR?
+    // Consider s1 = 10001, first_zero=1. s2 candidates: 01110 and 01011.
+    // Suffixes: "1110" vs "1011". Lex max is "1110". OR: 11111 vs 11011. Yes.
+    // What if s1 has zeros at positions that are not contiguous? 
+    // The OR result on the suffix is: for each position i from first_zero to m-1:
+    // if s1[i]=='1' -> '1', else s2[i].
+    // So the OR string is formed by taking s2[i] at zeros of s1, and '1' at ones of s1.
+    // If we compare two OR strings, the first difference occurs at the first index i >= first_zero where s1[i]=='0' and s2_a[i] != s2_b[i].
+    // This is exactly the first index where the two s2 suffixes differ and s1 has '0'.
+    // If we just compare the s2 suffixes lexicographically, the first difference is at the first index where they differ, regardless of s1.
+    // If at that index s1 has '1', then in the OR both will be '1', so it doesn't matter.
+    // The first difference that matters is the first index where they differ AND s1 has '0'.
+    // So the lexicographically maximum suffix of s2 might not be the one that maximizes OR if the first difference is at a position where s1 has '1'.
+    // Example: s1 = 110, first_zero=2. s2 candidates: 101 and 011.
+    // Suffixes from 2: "1" and "1" -> same? Actually length from first_zero to end is 1.
+    // Let's make a better example: s1 = 1010, first_zero=1. m=4.
+    // s2 candidates: 0110 and 0101. Suffixes from 1: "110" and "101". Lex max is "110".
+    // OR with s1: s1=1010, s2=0110 -> OR=1110; s2=0101 -> OR=1111? Wait:
+    // s1=1010, s2=0101: OR = 1111. That's better! 
+    // Let's check: s1 = 1 0 1 0
+    // s2 = 0 1 0 1
+    // OR = 1 1 1 1 = 1111.
+    // The other: s2 = 0 1 1 0 -> OR = 1 1 1 0 = 1110.
+    // So lex max suffix "110" gave worse OR than "101".
+    // Why? Because at index 2, s1 has '1', so the difference between '1' and '0' in s2 doesn't matter.
+    // The next difference is at index 3, where s1 has '0', and "110" has '0' while "101" has '1'.
+    // So the lex max suffix failed because it had a '1' at a position where s1 already had '1', but then had '0' where s1 had '0'.
+    // So we cannot simply take the lex max suffix. We must compare the OR results directly.
+    
+    // However, we can still find the best candidate efficiently.
+    // We want to maximize the OR string. Let's denote the OR string as t.
+    // t[i] = '1' if s1[i]=='1' or s2[i]=='1', else '0'.
+    // We want to maximize t lexicographically.
+    // Since s1 is fixed, we can think of choosing s2 to flip some zeros in s1 to ones.
+    // The first zero in s1 is at first_zero. We must flip it if possible.
+    // So we only consider s2 with s2[first_zero] = '1'.
+    // After flipping that zero, the next zero in s1 might be at some position j > first_zero.
+    // We want to flip that too if possible, and so on.
+    // This is equivalent to: we have a set of candidate strings s2 (all of length m, starting at various positions).
+    // We want to find the one that, when ORed with s1, gives the lexicographically maximum string.
+    // This is a classic problem: given a string s1 with zeros, and a set of substrings of the original string,
+    // find the one that maximizes the OR.
+    // Since the substrings are all of the same length and are substrings of s, we can use the following:
+    // The best s2 will be the one that has '1's at the positions where s1 has '0's, as early as possible.
+    // We can find it by iterating through the zeros of s1 and filtering candidates.
+    
+    // Let Z be the sorted list of indices where s1 has '0' (starting from first_zero).
+    // We start with all candidates L in [first_one, first_one + first_zero] such that s[L + first_zero] == '1'.
+    // For each zero position pos in Z:
+    //   Among the remaining candidates, we want those with s2[pos] = '1'.
+    //   If there is at least one such candidate, we keep only those.
+    //   If none, we keep all (we can't flip this zero).
+    // At the end, any remaining candidate gives the maximum OR.
+    // The number of candidates initially is at most first_zero+1 <= m <= n.
+    // The number of zeros in s1 could be up to m.
+    // In the worst case, we might do O(n^2) work if we filter naively.
+    // But we can optimize: we only need to find the first zero where candidates differ.
+    // Actually, we can just compare two candidates at a time and keep the best.
+    // We can maintain the best candidate so far, and for each new candidate, compare it with the best.
+    // Comparing two candidates takes time proportional to the number of zeros we need to check until we find a difference.
+    // In the worst case, if all candidates are identical on all zeros, we might check all zeros for each candidate -> O(n^2).
+    // But is that possible? The candidates are substrings of length m starting at different positions.
+    // They are all different substrings (unless the string is periodic). 
+    // In a random string, they will differ very early. The expected LCP between two random substrings is O(1).
+    // Since the problem says tests are randomly generated, this approach will be very fast in practice.
+    // However, to be safe for worst-case (e.g., all zeros? but then first_one=-1), we can use a more robust method.
+    // But note: if the string is all zeros except one '1', then first_zero might be large, but candidates will be few.
+    // Actually, worst-case for this filtering is when the string has many '1's and many candidates that are very similar.
+    // For example, s = 111...111 (all ones). Then first_zero = -1, handled separately.
+    // If s = 101010... then zeros are frequent, differences appear quickly.
+    // The only potential issue is if the string has long runs of '1's between zeros.
+    // But even then, the candidates are substrings shifted by 1. They will differ at the first position where the shift causes a difference.
+    // In fact, two candidates starting at L and L' will differ at the first index i where s[L+i] != s[L'+i].
+    // This is the LCP of the suffixes starting at L and L'. 
+    // In a random string, LCP is small. In the worst case (e.g., periodic string), LCP can be large.
+    // But the problem says all non-example tests are randomly generated with P(1)=0.5.
+    // So expected LCP is very small. Thus, a simple O(n * LCP) algorithm will pass easily.
+    
+    // Let's implement the filtering with a list of candidates, but we can just keep the best candidate and update.
+    // We'll represent s2 as the starting index L.
+    // We'll compare two candidates by comparing the OR with s1.
+    // To compare OR of candidate A (start L) and candidate B (start L'):
+    // We iterate i from first_zero to m-1.
+    // If s1[i] == '1', then both ORs have '1', continue.
+    // If s1[i] == '0', then OR_A[i] = s[L+i], OR_B[i] = s[L'+i].
+    // If they differ, the one with '1' is better.
+    // If we reach the end, they are equal.
+    // This comparison takes O(number of zeros until difference).
+    // We can precompute the next zero in s1 after each position to skip '1's quickly.
+    // Let next_zero[i] = the smallest j >= i such that s1[j] == '0', or m if none.
+    // Then we can jump directly to the next zero.
+    
+    // So we'll do:
+    // best_L = first_one (the earliest start, which gives s2 = s1 itself? Actually s1 starts at first_one, so L=first_one gives s2 = s1).
+    // But wait, we need s2[first_zero] == '1'. s1[first_zero] is '0' by definition. So L=first_one gives s2[first_zero] = '0', which is invalid.
+    // So we must start with a candidate that has '1' at first_zero.
+    // We can find the first valid candidate and set it as best.
+    // Then for each other valid candidate, compare and update.
+    
+    // Valid candidates: L in [first_one, first_one + first_zero] such that s[L + first_zero] == '1'.
+    // Also L + m <= n, so L <= n - m. But first_one + first_zero <= first_one + m - 1 = n - 1? 
+    // Actually m = n - first_one, so n - m = first_one. So L can be at most first_one.
+    // Wait: m = n - first_one. So L + m <= n => L <= n - m = first_one.
+    // But we were considering L in [first_one, first_one + first_zero]. 
+    // If L > first_one, then L + m > first_one + m = n, which is out of bounds!
+    // Ah! Important: s2 must be a substring of s of length m. 
+    // The maximum starting index for a substring of length m is n - m.
+    // Since m = n - first_one, n - m = first_one.
+    // So L can only be in [0, first_one]. 
+    // But we need s2 to have length m and we want to align it with s1 such that s2[first_zero] corresponds to s[L + first_zero].
+    // We want s[L + first_zero] == '1'. 
+    // Since L <= first_one, L + first_zero <= first_one + first_zero.
+    // But first_one + first_zero is the index of the first zero in the original string? 
+    // Actually, s1 starts at first_one. The first zero in s1 is at index first_zero relative to s1.
+    // In the original string, that zero is at index first_one + first_zero.
+    // So we need s[L + first_zero] == '1'. 
+    // But L can be less than first_one. For example, if first_one > 0, we can start s2 before first_one.
+    // Then s2 will include some characters before the first '1' of s.
+    // But those characters are '0's (since first_one is the first '1' in s).
+    // So s2 will have leading zeros. That's fine; f(s2) will just be a smaller number, but OR can still be good.
+    // So L can be from 0 to first_one.
+    // And we need L + first_zero < n (since s2 has length m, and first_zero < m, so L+first_zero < L+m <= n).
+    // Actually L+m <= n, so L+first_zero < n is automatically satisfied.
+    // So valid candidates: L in [0, first_one] such that s[L + first_zero] == '1'.
+    
+    // Now, first_zero is the index in s1 of the first zero. 
+    // In the original string, that zero is at pos = first_one + first_zero.
+    // We need s[L + first_zero] == '1'. 
+    // Since L <= first_one, L + first_zero <= first_one + first_zero = pos.
+    // So we are looking at characters at or before the first zero.
+    // We want that character to be '1'. 
+    // But note: for L = first_one, L + first_zero = pos, and s[pos] = '0' (by definition). So L=first_one is invalid.
+    // So we must have L < first_one? Not necessarily; if first_zero > 0, L could be first_one - 1, then L+first_zero = pos - 1, which could be '1'.
+    // So we just check all L in [0, first_one] with s[L + first_zero] == '1'.
+    
+    // Now, the number of candidates is at most first_one + 1, which could be up to n.
+    // But again, in random strings, we can just compare.
+    
+    // Let's precompute next_zero for s1.
+    vector<int> next_zero(m, m);
+    int nxt = m;
+    for (int i = m - 1; i >= 0; i--) {
+        if (s1[i] == '0') nxt = i;
+        next_zero[i] = nxt;
+    }
+    
+    // Find the first valid candidate
+    int best_L = -1;
+    for (int L = 0; L <= first_one; L++) {
+        if (s[L + first_zero] == '1') {
+            best_L = L;
+            break;
+        }
+    }
+    
+    // If no valid candidate? That would mean we can't flip the first zero. 
+    // But we can always choose s2 = s1? No, s1 has '0' at first_zero. 
+    // If there is no '1' anywhere that can be aligned with first_zero, then we can't flip it.
+    // But wait, we can choose any two substrings. We don't have to choose s1 as the whole suffix.
+    // Our choice of s1 as the whole suffix from first_one is just one part of the pair.
+    // Actually, we are trying to maximize OR of two substrings. 
+    // We assumed one substring is the whole suffix from first_one. Is that always optimal?
+    // The hints suggest: "Can you choose your substrings so that they are both represented by the same integer?" 
+    // and "What is the maximum value you can achieve?" 
+    // The maximum possible integer we can form is the one with all bits set to 1 from the first '1' onwards.
+    // That is, we want to get a string of all '1's of length m.
+    // To achieve that, we need to be able to flip all zeros in s1.
+    // If we can't flip the first zero, then the maximum OR will have a '0' at that position.
+    // But maybe we can choose a different s1? 
+    // The maximum OR will have its most significant bit at the first '1' of the whole string.
+    // So the length of the maximum OR is exactly m = n - first_one.
+    // The first bit of the OR is '1' (since we can just take s1 as the substring starting at first_one, and s2 as something else).
+    // So the OR will start with '1'. The next bits we want to be '1' as much as possible.
+    // So s1 being the whole suffix from first_one is a good candidate for one of the substrings because it has the maximum length.
+    // Could a shorter substring be better? No, because the OR's length is determined by the longer substring.
+    // So we should always take the longest possible substring that starts with '1', which is the suffix from first_one.
+    // So our approach is correct.
+    
+    // If best_L == -1, then we cannot flip the first zero. 
+    // Then the answer is just s1 with '0' at first_zero, and we can't do better?
+    // But maybe we can choose a different s1? No, s1 is fixed as the longest suffix starting with '1'.
+    // If we can't flip the first zero, then the maximum OR will have '0' at first_zero.
+    // But wait, we could choose s2 to be the same as s1, then OR = s1. 
+    // But maybe we can choose a different s1 that doesn't have that zero? 
+    // If we choose a shorter s1, the OR will have fewer bits, which is worse because the most significant bit would be lower.
+    // So we must keep the length m.
+    // So if we can't flip the first zero, the answer is s1 with '0' at first_zero, and then we try to flip subsequent zeros.
+    // But actually, if best_L == -1, it means there is no '1' in s that can be aligned with first_zero.
+    // That means all characters in s from index 0 to first_one + first_zero are '0' except possibly some '1's? 
+    // Wait: we need s[L + first_zero] == '1' for some L in [0, first_one].
+    // L + first_zero ranges from first_zero to first_one + first_zero.
+    // So we are looking for a '1' in s in the range [first_zero, first_one + first_zero].
+    // But first_one is the first '1' in s. So the only '1' in that range could be at first_one.
+    // first_one is in the range if first_zero <= first_one <= first_one + first_zero, which is true since first_zero >= 0.
+    // So s[first_one] = '1'. For L + first_zero = first_one, we need L = first_one - first_zero.
+    // This L is in [0, first_one] if first_one >= first_zero.
+    // So if first_one >= first_zero, then L = first_one - first_zero is valid and s[L+first_zero] = s[first_one] = '1'.
+    // So best_L will be found! 
+    // If first_one < first_zero, then first_one - first_zero < 0, so no such L.
+    // But first_one < first_zero means the first '1' in s occurs after the first zero in s1? 
+    // s1 starts at first_one. first_zero is the index in s1 of the first zero.
+    // So first_zero is the number of '1's at the beginning of s1.
+    // If first_one < first_zero, that means the number of leading '1's in s1 is greater than the index of the first '1' in s?
+    // That's impossible because first_one is the index of the first '1' in s. 
+    // The number of leading '1's in s1 is the number of consecutive '1's starting at first_one.
+    // This can be larger than first_one? Yes, if first_one is small and there are many '1's.
+    // Example: s = "000111", first_one = 3, s1 = "111", first_zero = -1 (no zero). So handled.
+    // Example: s = "001011", first_one = 2, s1 = "1011", first_zero = 1. first_one=2, first_zero=1. first_one >= first_zero.
+    // Example: s = "011", first_one = 1, s1 = "11", first_zero = -1.
+    // Example: s = "010", first_one = 1, s1 = "10", first_zero = 1. first_one=1, first_zero=1.
+    // So first_one >= first_zero always? 
+    // first_one is the index of the first '1'. first_zero is the index of the first '0' in s1.
+    // s1 starts at first_one. So the first '0' in s1 is at some offset >= 0.
+    // The absolute index of that zero is first_one + first_zero.
+    // Since first_one is the first '1', there are no '1's before first_one.
+    // So the number of '1's before that zero is at most first_one? No, the '1's before that zero are exactly the '1's from first_one to first_one+first_zero-1.
+    // That's first_zero '1's. And first_one is the index of the first '1'. 
+    // Could first_zero > first_one? 
+    // first_one is the number of leading zeros in s. first_zero is the number of leading '1's in s1.
+    // These are independent. For example, s = "0" + "111" + "0" ... -> first_one = 1, s1 = "1110...", first_zero = 3.
+    // Then first_one = 1, first_zero = 3. So first_one < first_zero.
+    // In this case, L = first_one - first_zero = -2, invalid.
+    // But we need L in [0, first_one] = [0,1]. 
+    // L + first_zero ranges from 3 to 4. The characters there are s[3] and s[4]. 
+    // s[3] is the '0' after the three '1's? Actually s = "0" + "1110" -> indices: 0:'0', 1:'1', 2:'1', 3:'1', 4:'0'.
+    // first_one = 1, s1 = "1110", first_zero = 3.
+    // We need s[L+3] == '1' for L=0 or 1.
+    // L=0: s[3] = '1'? In "01110", s[3] is the third '1'? Wait: s = "01110" -> indices: 0:'0', 1:'1', 2:'1', 3:'1', 4:'0'.
+    // So s[3] = '1'. So L=0 works! L=0 is in [0,1]. So best_L = 0.
+    // So even if first_one < first_zero, L=0 might work if s[first_zero] == '1'.
+    // In this case, first_zero = 3, s[3] = '1'. So it works.
+    // So best_L will be found as long as there is some '1' in s in the range [first_zero, first_one+first_zero].
+    // Since first_one is the first '1', the only '1's are at indices >= first_one.
+    // So we need some index i in [first_one, first_one+first_zero] such that s[i] == '1' and i - first_zero is in [0, first_one].
+    // i - first_zero <= first_one => i <= first_one + first_zero, which is true.
+    // i - first_zero >= 0 => i >= first_zero.
+    // So we need a '1' in [max(first_one, first_zero), first_one+first_zero].
+    // Since first_one is the first '1', there is a '1' at first_one. So if first_one >= first_zero, then first_one is in the range.
+    // If first_one < first_zero, then the range is [first_zero, first_one+first_zero]. 
+    // Is there a '1' in that range? The first '1' is at first_one, which is less than first_zero, so not in the range.
+    // But there might be other '1's after first_one. The next '1' could be at first_one+1, etc., up to first_one+first_zero.
+    // In the example, first_one=1, first_zero=3, the '1's are at 1,2,3. The range is [3,4]. s[3]='1', so yes.
+    // So there is always at least one '1' in that range? Not necessarily. 
+    // Consider s = "0100", first_one=1, s1="100", first_zero=1. first_one=1, first_zero=1. Range [max(1,1), 1+1]=[1,2]. s[1]='1', s[2]='0'. So yes.
+    // Consider s = "0010", first_one=2, s1="10", first_zero=1. Range [max(2,1), 3]=[2,3]. s[2]='1', s[3]='0'. Yes.
+    // What if s = "01" + many zeros? s = "01000", first_one=1, s1="1000", first_zero=1. Range [1,2]. s[1]='1', s[2]='0'. Yes.
+    // It seems there is always a '1' at first_one, and first_one is in the range if first_one >= first_zero. 
+    // If first_one < first_zero, then first_one is not in the range, but the range starts at first_zero. 
+    // Since first_zero is the number of leading '1's in s1, and s1 starts at first_one, the '1's in s1 are at indices first_one to first_one+first_zero-1.
+    // So there are '1's at first_one+first_zero-1. That index is first_one+first_zero-1.

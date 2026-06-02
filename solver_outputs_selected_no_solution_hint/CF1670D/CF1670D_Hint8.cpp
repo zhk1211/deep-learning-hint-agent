@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        long long n;
+        cin >> n;
+        
+        if (n == 1) {
+            cout << 2 << "\n";
+            continue;
+        }
+        if (n == 2) {
+            cout << 2 << "\n";
+            continue;
+        }
+        if (n == 3) {
+            cout << 3 << "\n";
+            continue;
+        }
+        
+        auto count_triangles = [](long long k) -> long long {
+            if (k < 2) return 0;
+            long long m = k / 3;
+            long long rem = k % 3;
+            long long base = 6 * m * (m + 1) / 2;
+            long long extra = (rem == 1) ? 2 * m : (rem == 2) ? 4 * m + 1 : 0;
+            return base + extra;
+        };
+        
+        long long lo = 2, hi = 2000000;
+        while (lo < hi) {
+            long long mid = lo + (hi - lo) / 2;
+            if (count_triangles(mid) >= n) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        cout << lo << "\n";
+    }
+    return 0;
+}

@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Cell {
+    int x, y;
+    bool operator<(const Cell& other) const {
+        int d1 = x + y, d2 = other.x + other.y;
+        if (d1 != d2) return d1 < d2;
+        if (x != other.x) return x < other.x;
+        return y < other.y;
+    }
+};
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int q;
+    cin >> q;
+    while (q--) {
+        int n;
+        cin >> n;
+        vector<int> t(n);
+        for (int i = 0; i < n; ++i) cin >> t[i];
+        
+        // Precompute all table cells sorted by distance, then x, then y
+        vector<Cell> tables;
+        for (int x = 0; x <= 200; ++x) {
+            for (int y = 0; y <= 200; ++y) {
+                // table occupies (3x+1,3y+1), (3x+1,3y+2), (3x+2,3y+1), (3x+2,3y+2)
+                // we only need one representative cell per table, say (3x+1,3y+1)
+                tables.push_back({3*x+1, 3*y+1});
+            }
+        }
+        sort(tables.begin(), tables.end());
+        
+        // occupied cells
+        set<Cell> occupied;
+        // completely occupied tables: set of (x,y) table indices
+        set<pair<int,int>> full_tables;
+        // map from table cell to its table index
+        map<Cell, pair<int,int>> cell_to_table;
+        for (auto c : tables) {
+            int tx = (c.x - 1) / 3;
+            int ty = (c.y - 1) / 3;
+            cell_to_table[c] = {tx, ty};
+        }
+        
+        // For type 0: need nearest cell from a completely unoccupied table
+        // For type 1: nearest vacant cell
+        
+        for (int i = 0; i < n; ++i) {
+            Cell chosen;
+            if (t[i] == 1) {
+                // find nearest vacant cell
+                for (auto c : tables) {
+                    if (occupied.find(c) == occupied.end()) {
+                        chosen = c;
+                        break;
+                    }
+                }
+            } else {
+                // type 0: nearest cell from a completely unoccupied table
+                for (auto c : tables) {
+                    if (occupied.find(c) == occupied.end()) {
+                        auto [tx, ty] = cell_to_table[c];
+                        if (full_tables.find({tx, ty}) == full_tables.end()) {
+                            chosen = c;
+                            break;
+                        }
+                    }
+                }
+            }
+            cout << chosen.x << " " << chosen.y << "\n";
+            occupied.insert(chosen);
+            auto [tx, ty] = cell_to_table[chosen];
+            // check if table is now full
+            Cell c1 = {3*tx+1, 3*ty+1};
+            Cell c2 = {3*tx+1, 3*ty+2};
+            Cell c3 = {3*tx+2, 3*ty+1};
+            Cell c4 = {3*tx+2, 3*ty+2};
+            if (occupied.count(c1) && occupied.count(c2) && occupied.count(c3) && occupied.count(c4)) {
+                full_tables.insert({tx, ty});
+            }
+        }
+    }
+    return 0;
+}

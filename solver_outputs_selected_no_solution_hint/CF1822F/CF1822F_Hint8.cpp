@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+void solve() {
+    int n;
+    ll k, c;
+    cin >> n >> k >> c;
+    vector<vector<int>> g(n + 1);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    
+    // First BFS from node 1 to find farthest node A
+    vector<ll> dist(n + 1, -1);
+    queue<int> q;
+    dist[1] = 0;
+    q.push(1);
+    int A = 1;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        if (dist[u] > dist[A]) A = u;
+        for (int v : g[u]) {
+            if (dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    
+    // Second BFS from A to find farthest node B and distances from A
+    vector<ll> distA(n + 1, -1);
+    distA[A] = 0;
+    q.push(A);
+    int B = A;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        if (distA[u] > distA[B]) B = u;
+        for (int v : g[u]) {
+            if (distA[v] == -1) {
+                distA[v] = distA[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    
+    // Third BFS from B to get distances from B
+    vector<ll> distB(n + 1, -1);
+    distB[B] = 0;
+    q.push(B);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : g[u]) {
+            if (distB[v] == -1) {
+                distB[v] = distB[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    
+    ll ans = 0;
+    for (int i = 1; i <= n; ++i) {
+        ll maxDist = max(distA[i], distB[i]);
+        ll profit = maxDist * k - (dist[i] * c);
+        ans = max(ans, profit);
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

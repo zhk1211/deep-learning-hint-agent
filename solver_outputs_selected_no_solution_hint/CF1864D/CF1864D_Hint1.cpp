@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+        
+        vector<vector<int>> diff(n + 2, vector<int>(n + 2, 0));
+        vector<vector<int>> diag(n + 2, vector<int>(n + 2, 0));
+        vector<vector<int>> cur(n + 2, vector<int>(n + 2, 0));
+        
+        int ans = 0;
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 1; j <= n; ++j) {
+                cur[i][j] = cur[i][j-1] + diag[i][j];
+                int val = (grid[i-1][j-1] - '0') ^ (cur[i][j] & 1);
+                if (val) {
+                    ++ans;
+                    diff[i][j] ^= 1;
+                    cur[i][j] ^= 1;
+                    diag[i][j] ^= 1;
+                }
+                if (diff[i][j]) {
+                    if (i + 1 <= n) {
+                        int l = max(1, j - 1);
+                        int r = min(n, j + 1);
+                        diff[i+1][l] ^= 1;
+                        if (r + 1 <= n) diff[i+1][r+1] ^= 1;
+                    }
+                }
+                if (i + 1 <= n) {
+                    diag[i+1][j] += diag[i][j];
+                }
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

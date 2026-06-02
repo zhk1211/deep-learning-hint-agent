@@ -1,0 +1,240 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, k;
+    cin >> n >> k;
+    string s;
+    cin >> s;
+
+    // nxt[i][c] = next position >= i where character c occurs
+    // We'll build nxt array of size (n+2) x k
+    vector<vector<int>> nxt(n + 2, vector<int>(k, n + 1));
+    for (int c = 0; c < k; ++c) {
+        nxt[n + 1][c] = n + 1;
+    }
+    for (int i = n; i >= 0; --i) {
+        for (int c = 0; c < k; ++c) {
+            nxt[i][c] = nxt[i + 1][c];
+        }
+        if (i < n) {
+            int ch = s[i] - 'a';
+            nxt[i][ch] = i + 1; // 1-indexed positions
+        }
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        string t;
+        cin >> t;
+        int m = (int)t.size();
+        // We want the smallest length L such that t + (L letters) is not a subsequence.
+        // Equivalent: find the smallest L such that the greedy matching of t + (L letters) fails.
+        // Greedy: start at pos = 0, for each char in t, move to nxt[pos][char].
+        // After processing t, we are at some position pos_t.
+        // Then we need to append L letters. The best we can do to keep it a subsequence is to always pick the earliest occurrence.
+        // So we need the smallest L such that after L steps we exceed n.
+        // That is: starting from pos_t, we repeatedly move to nxt[pos][c] for some c.
+        // The maximum number of steps we can take before exceeding n is the length of the longest sequence we can match from pos_t.
+        // This is exactly 1 + max_{c} steps from nxt[pos_t][c].
+        // So we can precompute dp[i] = maximum number of additional characters we can match starting from position i.
+        // dp[i] = 1 + max_{c} dp[nxt[i][c]], with dp[n+1] = 0.
+        vector<int> dp(n + 2, 0);
+        dp[n + 1] = 0;
+        for (int i = n; i >= 0; --i) {
+            int mx = 0;
+            for (int c = 0; c < k; ++c) {
+                mx = max(mx, dp[nxt[i][c]]);
+            }
+            dp[i] = 1 + mx;
+        }
+
+        int pos = 0;
+        for (char ch : t) {
+            int c = ch - 'a';
+            pos = nxt[pos][c];
+            if (pos == n + 1) break;
+        }
+        // If pos == n+1, t is already not a subsequence -> answer 0
+        if (pos == n + 1) {
+            cout << 0 << '\n';
+        } else {
+            // dp[pos] is the max additional characters we can match from pos.
+            // We need L such that L > dp[pos] - 1? Wait.
+            // dp[pos] = max length of sequence we can match starting from pos (including the first character we match).
+            // Actually dp[i] = 1 + max dp[nxt[i][c]]. So dp[pos] is the max number of characters we can match starting at pos.
+            // We have already matched t, and we are at pos. We can append L characters.
+            // The maximum number of appended characters we can still match is dp[pos] - 1? Let's check.
+            // If we are at pos, we can match one character and move to nxt[pos][c], then from there match dp[nxt[pos][c]] more.
+            // So total additional characters we can match = max_c (1 + dp[nxt[pos][c]]) = dp[pos].
+            // Wait: dp[pos] = 1 + max_c dp[nxt[pos][c]]. So if we are at pos, we can match up to dp[pos] more characters (including the one we match immediately).
+            // So if we append L characters, we can match them iff L <= dp[pos].
+            // We want the smallest L such that we CANNOT match them, i.e., L > dp[pos].
+            // So answer = dp[pos] + 1? But careful: if dp[pos] is the max additional characters we can match, then if we append dp[pos] characters, we can still match them all (by picking the best choices). If we append dp[pos]+1, we cannot. So answer = dp[pos] + 1?
+            // Let's test with sample.
+            // Sample 1: s=abacaba, k=3. t=bcb.
+            // Let's compute dp manually.
+            // We'll trust the logic. For t=bcb, pos after matching: start 0.
+            // b: nxt[0][1] = 2 (s[1]='b'? s[0]='a', s[1]='b', so pos=2)
+            // c: nxt[2][2] = 4 (s[3]='c'? s: a b a c a b a -> indices 0:a,1:b,2:a,3:c,4:a,5:b,6:a. nxt[2][2]=4)
+            // b: nxt[4][1] = 6 (s[5]='b')
+            // pos=6. dp[6]? s[6]='a'. nxt[6][0]=7, nxt[6][1]=n+1=8, nxt[6][2]=8. dp[7]=0, dp[8]=0. So dp[6]=1+max(0,0,0)=1.
+            // dp[pos]=1. Then answer = dp[pos] + 1 = 2? But sample output for bcb is 1.
+            // So my dp definition is off.
+            // Let's re-evaluate.
+            // We want the minimum L such that t + (L letters) is NOT a subsequence.
+            // If we are at pos after matching t, we can try to match L additional characters.
+            // The maximum L we can match is the length of the longest sequence we can form starting from pos.
+            // Let f(pos) = maximum number of characters we can match starting from pos (including the first one we match immediately).
+            // Then if L <= f(pos), we can match. If L > f(pos), we cannot.
+            // So the smallest L that fails is f(pos) + 1.
+            // In the example, pos=6. From pos=6, we can match 'a' (index 6) and then stop. So f(6)=1.
+            // Then answer = 1 + 1 = 2. But sample says 1.
+            // Contradiction. Let's check sample manually.
+            // t = bcb. s = abacaba.
+            // Is bcb pleasant? Yes, subsequence: a b a c a b a -> b at 1, c at 3, b at 5. So pleasant.
+            // We need to append letters to make it unpleasant.
+            // Append 1 letter: bcba -> is bcba a subsequence? b c b a: b at 1, c at 3, b at 5, a at 6 -> yes, pleasant.
+            // Append bcbb: b c b b -> b at 1, c at 3, b at 5, then need another b. No b after index 5. So not a subsequence. So 1 letter is enough.
+            // So answer is 1.
+            // My f(6) gave 1, meaning we can match 1 more character. But we matched bcba (4 chars total, t=3 + a=1). So we matched 1 additional character. So f(6)=1 means we can match 1 more. Then L=1 is matchable, L=2 is not. So answer should be 2? But we found L=1 works (bcbb is not a subsequence). Wait, bcbb has L=1? t=bcb, append 'b' -> length 4. So L=1 appended character. We said bcbb is not a subsequence. So L=1 is enough. But my f(6)=1 says we can match 1 more character. If we can match 1 more, then bcbb should be matchable? But we said we cannot match bcbb. Let's check: can we match bcbb? b at 1, c at 3, b at 5, then need another b. No b after 5. So we cannot match bcbb. So f(6) should be 0? But we matched bcba. So from pos=6, we can match 'a' (index 6). So we can match 1 character if it's 'a'. But if the appended character is 'b', we cannot match it. The problem is: we are allowed to choose the appended letters arbitrarily to make it unpleasant. We want the minimum number of letters to append such that NO MATTER WHAT letters we append, the resulting string is unpleasant? No! The problem says: "calculate the minimum number of allowed letters you need to append to it on the right so that it stops being pleasant." That means we can choose which letters to append. We want to append as few as possible, and we can choose the letters. So we want to find L such that there EXISTS a string of length L (using allowed letters) that we can append to make the whole string not a subsequence. We are not forced to append specific letters; we can choose them adversarially to break the subsequence property.
+            // Ah! So we want the smallest L such that we can append L letters (of our choice) to make the resulting string not a subsequence.
+            // In other words, we want to find the minimum L such that there exists a string w of length L where t+w is not a subsequence.
+            // Equivalently, we want the maximum L such that for ALL strings w of length L, t+w IS a subsequence. Then answer is that L + 1.
+            // So we need to find the maximum L such that no matter what L letters we append, the whole string remains a subsequence.
+            // This is the length of the longest suffix we can force to be matchable.
+            // Let's think: after matching t, we are at some position pos. We want to know the maximum L such that for every possible sequence of L letters, we can match them starting from pos.
+            // That is exactly the "universal" matching length. This is related to the concept of "shortest string not a subsequence" but from a given state.
+            // We can define dp[i] = the maximum L such that from position i, we can match any string of length L.
+            // Then if we are at pos, we can match any string of length dp[pos]. So if we append L <= dp[pos], no matter what we append, it remains a subsequence. If we append L = dp[pos] + 1, we can choose a string of that length that is NOT a subsequence. So answer = dp[pos] + 1.
+            // Now compute dp[i] properly.
+            // Base: dp[n+1] = 0 (from beyond the end, we can match any string of length 0).
+            // For i from n down to 0:
+            // To match any string of length L starting from i, we need that for every possible first character c, we can match it and then from nxt[i][c] we can match any string of length L-1.
+            // So dp[i] = 1 + min_{c} dp[nxt[i][c]].
+            // Because if we want to survive all possible first characters, the worst-case (minimum) subsequent length we can guarantee is the bottleneck.
+            // Let's test with sample.
+            // s=abacaba, k=3.
+            // Compute nxt and dp.
+            // n+1=8. dp[8]=0.
+            // i=7: nxt[7][c] = 8 for all c. dp[7] = 1 + min(0,0,0) = 1.
+            // i=6: s[6]='a'. nxt[6][0]=7, nxt[6][1]=8, nxt[6][2]=8. dp[6] = 1 + min(dp[7], dp[8], dp[8]) = 1 + min(1,0,0) = 1.
+            // i=5: s[5]='b'. nxt[5][0]=6, nxt[5][1]=6? Wait, nxt[5][1] should be 6 because s[5] is 'b', so next 'b' is at 6? Actually s[5]='b', so nxt[5][1] = 6 (the position after matching this 'b'). nxt[5][0]=6 (next 'a' at 6), nxt[5][2]=8. dp[5] = 1 + min(dp[6], dp[6], dp[8]) = 1 + min(1,1,0) = 1.
+            // i=4: s[4]='a'. nxt[4][0]=5, nxt[4][1]=6, nxt[4][2]=8. dp[4] = 1 + min(dp[5], dp[6], dp[8]) = 1 + min(1,1,0) = 1.
+            // i=3: s[3]='c'. nxt[3][0]=5, nxt[3][1]=6, nxt[3][2]=4? Wait, nxt[3][2] is next 'c' after index 3. s[3] is 'c', so nxt[3][2] = 4. dp[3] = 1 + min(dp[5], dp[6], dp[4]) = 1 + min(1,1,1) = 2.
+            // i=2: s[2]='a'. nxt[2][0]=3, nxt[2][1]=4? Wait, next 'b' after 2 is at index 5? s: 0:a,1:b,2:a,3:c,4:a,5:b,6:a. So nxt[2][1]=5? Actually nxt[i][c] gives the next position >= i where c occurs, but we use 1-indexed positions for matching. Let's define nxt[i][c] as the smallest index > i such that s[index-1] == c? I used nxt[i][c] = position in 1-indexed where character c occurs, with i being the current position in the matching (0 means before start). So nxt[i][c] is the index in 1..n+1. So nxt[2][1] should be the next 'b' after index 2. s[1]='b' (index 1 in 0-based), so 1-indexed position is 2. But we are at i=2, which means we have matched up to index 2? Actually i is the position we are at. If i=2, that means we are after having matched a character at index 2? Let's clarify the definition.
+            // Standard: nxt[i][c] = smallest j > i such that s[j] == c, with j in 0..n-1, and we use 0-indexed. Then nxt[i][c] = n if not found.
+            // Let's switch to 0-indexed for clarity.
+            // Let s be 0-indexed. nxt[i][c] for i from 0 to n: smallest j >= i such that s[j] == c, or n if none.
+            // Then matching: start at i=0. For each char c, i = nxt[i][c] + 1? Actually if we match c at position j, the next search starts at j+1.
+            // So we can define nxt[i][c] as the smallest j >= i with s[j] == c, or n if none. Then after matching, new i = nxt[i][c] + 1.
+            // Let's build that.
+            // We'll recompute with 0-indexed.
+            // s length n.
+            // nxt[n][c] = n for all c.
+            // for i from n-1 down to 0:
+            //   for c: nxt[i][c] = nxt[i+1][c]
+            //   nxt[i][s[i]-'a'] = i
+            // Then dp[i] for i from 0 to n: maximum L such that from position i (meaning we start searching at index i), we can match any string of length L.
+            // dp[n] = 0.
+            // dp[i] = 1 + min_{c} dp[nxt[i][c] + 1]? Wait, if we match c at j = nxt[i][c], then the next search starts at j+1. So the subsequent dp is dp[j+1].
+            // So dp[i] = 1 + min_{c} dp[nxt[i][c] + 1].
+            // Let's test with sample.
+            // s = "abacaba", n=7.
+            // Indices: 0:a,1:b,2:a,3:c,4:a,5:b,6:a.
+            // Build nxt:
+            // nxt[7][c] = 7 for all c.
+            // i=6: s[6]='a'. nxt[6][0]=6, nxt[6][1]=7, nxt[6][2]=7.
+            // i=5: s[5]='b'. nxt[5][0]=6, nxt[5][1]=5, nxt[5][2]=7.
+            // i=4: s[4]='a'. nxt[4][0]=4, nxt[4][1]=5, nxt[4][2]=7.
+            // i=3: s[3]='c'. nxt[3][0]=4, nxt[3][1]=5, nxt[3][2]=3.
+            // i=2: s[2]='a'. nxt[2][0]=2, nxt[2][1]=5, nxt[2][2]=3.
+            // i=1: s[1]='b'. nxt[1][0]=2, nxt[1][1]=1, nxt[1][2]=3.
+            // i=0: s[0]='a'. nxt[0][0]=0, nxt[0][1]=1, nxt[0][2]=3.
+            // Now dp[7] = 0.
+            // dp[6] = 1 + min(dp[nxt[6][0]+1], dp[nxt[6][1]+1], dp[nxt[6][2]+1]) = 1 + min(dp[7], dp[8? wait nxt[6][1]=7, so 7+1=8, but dp size should be n+2. Let's allocate dp up to n+1. dp[8] would be out of bounds. Actually nxt[i][c] can be n, then n+1 is the position after end. So we need dp of size n+2, with dp[n+1]=0. nxt[i][c] is in [0..n]. So nxt[i][c]+1 is in [1..n+1]. So dp indices 0..n+1. dp[n+1]=0.
+            // Let's recompute properly.
+            // nxt size (n+1) x k, with nxt[n][c] = n.
+            // dp size n+2, dp[n+1]=0.
+            // For i from n down to 0:
+            //   dp[i] = 1 + min_{c} dp[nxt[i][c] + 1]
+            // Let's do it:
+            // dp[8]=0 (n+1=8)
+            // i=7: nxt[7][c]=7 for all c. dp[7] = 1 + min(dp[8], dp[8], dp[8]) = 1.
+            // i=6: nxt[6][0]=6 -> dp[7]=1; nxt[6][1]=7 -> dp[8]=0; nxt[6][2]=7 -> dp[8]=0. min=0. dp[6]=1.
+            // i=5: nxt[5][0]=6 -> dp[7]=1; nxt[5][1]=5 -> dp[6]=1; nxt[5][2]=7 -> dp[8]=0. min=0. dp[5]=1.
+            // i=4: nxt[4][0]=4 -> dp[5]=1; nxt[4][1]=5 -> dp[6]=1; nxt[4][2]=7 -> dp[8]=0. min=0. dp[4]=1.
+            // i=3: nxt[3][0]=4 -> dp[5]=1; nxt[3][1]=5 -> dp[6]=1; nxt[3][2]=3 -> dp[4]=1. min=1. dp[3]=2.
+            // i=2: nxt[2][0]=2 -> dp[3]=2; nxt[2][1]=5 -> dp[6]=1; nxt[2][2]=3 -> dp[4]=1. min=1. dp[2]=2.
+            // i=1: nxt[1][0]=2 -> dp[3]=2; nxt[1][1]=1 -> dp[2]=2; nxt[1][2]=3 -> dp[4]=1. min=1. dp[1]=2.
+            // i=0: nxt[0][0]=0 -> dp[1]=2; nxt[0][1]=1 -> dp[2]=2; nxt[0][2]=3 -> dp[4]=1. min=1. dp[0]=2.
+            // Now for t="bcb":
+            // Start pos=0.
+            // 'b': nxt[0][1]=1 -> pos = 1+1=2.
+            // 'c': nxt[2][2]=3 -> pos = 3+1=4.
+            // 'b': nxt[4][1]=5 -> pos = 5+1=6.
+            // pos=6. dp[6]=1.
+            // Then answer = dp[6] + 1 = 2? Still 2. But sample says 1.
+            // Let's re-evaluate t="bcb" with our dp logic.
+            // dp[6]=1 means from position 6, we can match any string of length 1. Is that true? From position 6, we have s[6]='a'. The allowed letters are a,b,c. Can we match any single character? If we need to match 'a', we can (nxt[6][0]=6). If 'b', nxt[6][1]=7 (n), so we cannot match 'b'. So we CANNOT match any string of length 1. We can only match 'a'. So dp[6] should be 0, not 1.
+            // Our dp definition: dp[i] = max L such that for ALL strings of length L, we can match them. At i=6, for L=1, the string "b" cannot be matched. So dp[6]=0.
+            // But our computation gave dp[6]=1 because we took min over c of dp[nxt[i][c]+1]. For i=6, nxt[6][0]=6 -> dp[7]=1; nxt[6][1]=7 -> dp[8]=0; nxt[6][2]=7 -> dp[8]=0. min=0. So dp[6] = 1 + 0 = 1. That's wrong because we added 1 even though the min was 0. Wait, if min is 0, then dp[i] = 1 + 0 = 1. That means we can match 1 character? But if min is 0, that means there is some character c for which dp[nxt[i][c]+1] = 0, meaning from that next position we can match any string of length 0 (trivial). So we can match that character c, and then from the next position we can match any string of length 0. So overall we can match that character c. But the requirement is that we can match ANY character as the first character. The min over c gives the bottleneck: if there is a character with dp[next] = 0, then for that character, we can only match length 1 total (that character itself). For other characters, we might match more. But the universal length L we can guarantee is 1 + min_c dp[next_c]. If min_c dp[next_c] = 0, then we can guarantee L = 1. That means we can match any single character? No! If min_c dp[next_c] = 0, it means for the worst-case character c, the subsequent guaranteed length is 0. But we can still match that character c itself. So we can match any string of length 1? Let's check: For any character c, we can match it (since nxt[i][c] exists? Not necessarily! If nxt[i][c] = n, then we cannot even match that character. In our nxt array, nxt[i][c] = n means character c does not occur from i onward. Then dp[nxt[i][c]+1] = dp[n+1] = 0. So min_c dp[next] will be 0 if there is any character that doesn't occur. Then dp[i] = 1. But we cannot match that missing character at all! So the formula is wrong because it assumes we can always match the first character. We can only match the first character if nxt[i][c] != n. If nxt[i][c] = n, we cannot even match length 1 for that character. So the guaranteed length is 0.
+            // Therefore, the correct DP: dp[i] = 0 if there exists c such that nxt[i][c] == n. Otherwise, dp[i] = 1 + min_c dp[nxt[i][c]+1].
+            // Let's recompute with this.
+            // dp[n+1] = 0.
+            // For i from n down to 0:
+            //   if any nxt[i][c] == n: dp[i] = 0
+            //   else: dp[i] = 1 + min_c dp[nxt[i][c]+1]
+            // Let's test:
+            // i=7: nxt[7][c]=7 for all c (n=7, so nxt[7][c]=7 means not found? Actually n=7, indices 0..6. nxt[7][c] is for starting at 7 (beyond end). We defined nxt[n][c] = n. So nxt[7][c]=7, which is n. So dp[7] = 0.
+            // i=6: nxt[6][0]=6 (not n), nxt[6][1]=7 (n), nxt[6][2]=7 (n). Since there are n's, dp[6]=0. Correct.
+            // i=5: nxt[5][0]=6, nxt[5][1]=5, nxt[5][2]=7 (n). dp[5]=0.
+            // i=4: nxt[4][0]=4, nxt[4][1]=5, nxt[4][2]=7 (n). dp[4]=0.
+            // i=3: nxt[3][0]=4, nxt[3][1]=5, nxt[3][2]=3. None are n. So dp[3] = 1 + min(dp[5], dp[6], dp[4]) = 1 + min(0,0,0) = 1.
+            // i=2: nxt[2][0]=2, nxt[2][1]=5, nxt[2][2]=3. None are n. dp[2] = 1 + min(dp[3], dp[6], dp[4]) = 1 + min(1,0,0) = 1.
+            // i=1: nxt[1][0]=2, nxt[1][1]=1, nxt[1][2]=3. None n. dp[1] = 1 + min(dp[3], dp[2], dp[4]) = 1 + min(1,1,0) = 1.
+            // i=0: nxt[0][0]=0, nxt[0][1]=1, nxt[0][2]=3. None n. dp[0] = 1 + min(dp[1], dp[2], dp[4]) = 1 + min(1,1,0) = 1.
+            // Now for t="bcb": pos after matching = 6. dp[6]=0. Answer = dp[6] + 1 = 1. Matches sample!
+            // For t="b": pos after matching 'b': nxt[0][1]=1 -> pos=2. dp[2]=1. Answer = 1+1=2. Sample output: 2. Correct.
+            // For t="cc": 'c': nxt[0][2]=3 -> pos=4. 'c': nxt[4][2]=7 (n) -> pos=8. Since pos=8 > n, t is not a subsequence. Answer 0. Sample: 0. Correct.
+            // Sample 2: s="aaaaa", k=1.
+            // n=5. nxt: nxt[5][0]=5. nxt[4][0]=4, nxt[3][0]=3, nxt[2][0]=2, nxt[1][0]=1, nxt[0][0]=0.
+            // dp[6]=0.
+            // i=5: nxt[5][0]=5 (n) -> dp[5]=0.
+            // i=4: nxt[4][0]=4 (not n) -> dp[4] = 1 + dp[5] = 1.
+            // i=3: nxt[3][0]=3 -> dp[3] = 1 + dp[4] = 2.
+            // i=2: dp[2] = 3.
+            // i=1: dp[1] = 4.
+            // i=0: dp[0] = 5.
+            // Queries:
+            // "a": pos after 'a': nxt[0][0]=0 -> pos=1. dp[1]=4. ans=5. Output: 5. Correct.
+            // "aa": pos=2. dp[2]=3. ans=4. Correct.
+            // "aaa": pos=3. dp[3]=2. ans=3. Correct.
+            // "aaaa": pos=4. dp[4]=1. ans=2. Correct.
+            // "aaaaa": pos=5. dp[5]=0. ans=1. Correct.
+            // "aaaaaa": after 5 'a's, pos=5? Wait: start 0. After 5 'a's: 0->1->2->3->4->5. pos=5. Then we have one more 'a': nxt[5][0]=5 (n) -> pos=6. Since pos=6 > n, t is not a subsequence. Answer 0. Correct.
+            // So the logic works.
+
+            // Now we need to compute dp array efficiently. n up to 1e6, k up to 26. O(n*k) is 2.6e7, which is acceptable in C++ with optimization.
+            // But we also need to answer queries quickly. Total length of all t_i <= 1e6. We can just simulate the greedy matching for each t to find the final position, then output dp[pos] + 1 if pos <= n, else 0.
+            // However, simulating each t character by character with nxt takes O(|t|) per query, total O(total |t|) = 1e6, which is fine.
+            // But we need to build nxt efficiently. O(n*k) memory: nxt size (n+1) x k. n=1e6, k=26 -> 26e6 ints ~ 100 MB. Might be okay but close to 256 MB limit. We can optimize memory by using vector<vector<int>> but each vector has overhead. Better to use a single flat array or vector of size (n+1)*k, or compute nxt on the fly? Actually we only need nxt to compute dp and to simulate queries. We can compute dp without storing full nxt by iterating backwards and keeping next occurrence for each character. But for queries, we need to jump quickly. We can store nxt as a 2D array using vector<int> of size (n+1)*k, or use array of vectors? Since k<=26, we can store nxt as vector<array<int,26>> or vector<vector<int>>. vector<vector<int>> might have overhead. Let's use a single vector<int> of size (n+1)*k and access via i*k + c.
+            // Even better: we can compute dp and also store for each position the next occurrence of each character. But we can also answer queries by just using the nxt array. So we need nxt.
+            // Memory: (1e6+1)*26 ints = 26,000,026 ints ~ 104 MB. Plus dp array of 1e6+2 ints ~ 4 MB. Total ~108 MB. Should be fine.
+            // But we can reduce memory by storing nxt as bytes? Positions up to 1e6 fit in 20 bits, so int is fine.
+            // Alternatively, we can avoid storing nxt for all i by building it on the fly for queries? No, we need random access for queries.
+            // We can store nxt as vector<array<int,26>> but array<int,26> is 104 bytes, vector of 1e6 of them is 104 MB. Same.
+            // Let's use vector<int> nxt((n+1)*k).
+            // We'll fill it backwards.
+
+            // Actually, we can compute dp and also store the nxt in a more memory-efficient way: we only need nxt for the simulation. We can store the positions of each character in an array of vectors, and for a given position i and character c, we can binary search the next occurrence. That would be O(log n) per character, total O(|t| log n) which might be okay for 1e6 total length? 1e6 * log2(1e6) ~ 20e6 operations, acceptable. But we also need dp. We can compute dp using the same next occurrence arrays. Let's explore that to save memory.
+            // Memory: pos[c] = vector of indices where c occurs. Total size n. Then for dp, we need to know nxt[i][c] for all i. We can compute dp by iterating i from n down to 0, and maintaining the next occurrence for each c. Actually, we can just maintain an array nxt_c[c] = the smallest index >= i where c occurs. As we go backwards, we update nxt_c. Then dp[i] = 0 if any nxt_c[c] == n, else 1 + min_c dp[nxt_c[c]+1]. We can compute dp in O(n*k) time without storing the full nxt matrix. Then for queries, we can use the pos vectors and binary search to simulate. That would save memory.
+            // Let's do that: store pos[26] = vector<int> of indices. For simulation: start at cur = 0. For each char c: find the first index >= cur in pos[c]. If none, break and answer 0. Else cur = index + 1. This is O(|t| log n) total. With total |t| <= 1e6, log n ~ 20, so 20e6 operations, fine.
+            // But we also need dp array of size n+2. That's small.
+            // Let's implement this memory-efficient approach.
+
+            // Step 1

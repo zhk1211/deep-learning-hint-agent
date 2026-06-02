@@ -1,0 +1,112 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+        
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
+        bool ok = true;
+        
+        for (int i = 0; i < n && ok; ++i) {
+            for (int j = 0; j < m && ok; ++j) {
+                if (grid[i][j] == '*' && !visited[i][j]) {
+                    // Find all cells of this connected component (by edges)
+                    vector<pair<int,int>> comp;
+                    queue<pair<int,int>> q;
+                    q.push({i, j});
+                    visited[i][j] = true;
+                    
+                    while (!q.empty()) {
+                        auto [r, c] = q.front(); q.pop();
+                        comp.push_back({r, c});
+                        
+                        for (int dr = -1; dr <= 1; ++dr) {
+                            for (int dc = -1; dc <= 1; ++dc) {
+                                if (abs(dr) + abs(dc) != 1) continue;
+                                int nr = r + dr, nc = c + dc;
+                                if (nr >= 0 && nr < n && nc >= 0 && nc < m && 
+                                    grid[nr][nc] == '*' && !visited[nr][nc]) {
+                                    visited[nr][nc] = true;
+                                    q.push({nr, nc});
+                                }
+                            }
+                        }
+                    }
+                    
+                    // An L-shape must have exactly 3 cells
+                    if (comp.size() != 3) {
+                        ok = false;
+                        break;
+                    }
+                    
+                    // Check that the 3 cells form an L-shape (not a straight line)
+                    // Sort by row then column
+                    sort(comp.begin(), comp.end());
+                    int r1 = comp[0].first, c1 = comp[0].second;
+                    int r2 = comp[1].first, c2 = comp[1].second;
+                    int r3 = comp[2].first, c3 = comp[2].second;
+                    
+                    // Check if they form a 2x2 block missing one cell
+                    // The bounding box of an L-shape is 2x2
+                    int min_r = min({r1, r2, r3});
+                    int max_r = max({r1, r2, r3});
+                    int min_c = min({c1, c2, c3});
+                    int max_c = max({c1, c2, c3});
+                    
+                    if (max_r - min_r != 1 || max_c - min_c != 1) {
+                        ok = false;
+                        break;
+                    }
+                    
+                    // Now check that no two L-shapes touch by corner or edge
+                    // We already checked edge-connectivity (they are separate components)
+                    // Now check corner-touching: for each cell in this L-shape,
+                    // check its 8 neighbors for any '*' that is not in this component.
+                    // Since we already visited all cells of this component, any other '*'
+                    // would be from a different component.
+                    for (auto [r, c] : comp) {
+                        for (int dr = -1; dr <= 1; ++dr) {
+                            for (int dc = -1; dc <= 1; ++dc) {
+                                if (dr == 0 && dc == 0) continue;
+                                int nr = r + dr, nc = c + dc;
+                                if (nr >= 0 && nr < n && nc >= 0 && nc < m && grid[nr][nc] == '*') {
+                                    // Check if (nr, nc) is in the current component
+                                    bool in_comp = false;
+                                    for (auto [cr, cc] : comp) {
+                                        if (cr == nr && cc == nc) {
+                                            in_comp = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!in_comp) {
+                                        ok = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!ok) break;
+                        }
+                        if (!ok) break;
+                    }
+                }
+            }
+        }
+        
+        cout << (ok ? "YES" : "NO") << '\n';
+    }
+    
+    return 0;
+}
+```

@@ -1,0 +1,58 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+
+    long long ans = 0;
+    for (int bit = 0; bit < 30; ++bit) {
+        vector<int> b(n);
+        for (int i = 0; i < n; ++i) {
+            b[i] = (a[i] >> bit) & 1;
+        }
+
+        vector<int> pref(n + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            pref[i + 1] = pref[i] ^ b[i];
+        }
+
+        long long sum0 = 0, sum1 = 0;
+        long long cnt0 = 0, cnt1 = 0;
+        long long bit_contrib = 0;
+
+        for (int r = 1; r <= n; ++r) {
+            if (pref[r - 1] == 0) {
+                cnt0++;
+                sum0 = (sum0 + (r - 1)) % MOD;
+            } else {
+                cnt1++;
+                sum1 = (sum1 + (r - 1)) % MOD;
+            }
+
+            if (pref[r] == 0) {
+                long long add = (cnt1 * r % MOD - sum1 + MOD) % MOD;
+                bit_contrib = (bit_contrib + add) % MOD;
+            } else {
+                long long add = (cnt0 * r % MOD - sum0 + MOD) % MOD;
+                bit_contrib = (bit_contrib + add) % MOD;
+            }
+        }
+
+        ans = (ans + bit_contrib * ((1LL << bit) % MOD)) % MOD;
+    }
+
+    cout << ans << "\n";
+    return 0;
+}
+```

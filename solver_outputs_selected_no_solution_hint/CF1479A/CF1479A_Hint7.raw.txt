@@ -1,0 +1,56 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(int i) {
+    cout << "? " << i << endl;
+    int x;
+    cin >> x;
+    return x;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    cin >> n;
+    
+    // sentinels
+    vector<int> a(n + 2);
+    a[0] = a[n + 1] = INT_MAX;
+    
+    // check boundaries first
+    a[1] = query(1);
+    a[n] = query(n);
+    
+    if (a[1] < a[2]) {
+        cout << "! 1" << endl;
+        return 0;
+    }
+    if (a[n] < a[n-1]) {
+        cout << "! " << n << endl;
+        return 0;
+    }
+    
+    int lo = 1, hi = n;
+    while (lo <= hi) {
+        int mid = (lo + hi) / 2;
+        if (a[mid] == 0) a[mid] = query(mid);
+        if (a[mid-1] == 0) a[mid-1] = query(mid-1);
+        if (a[mid+1] == 0) a[mid+1] = query(mid+1);
+        
+        if (a[mid] < a[mid-1] && a[mid] < a[mid+1]) {
+            cout << "! " << mid << endl;
+            return 0;
+        }
+        if (a[mid] > a[mid-1]) {
+            hi = mid - 1;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    
+    return 0;
+}
+```

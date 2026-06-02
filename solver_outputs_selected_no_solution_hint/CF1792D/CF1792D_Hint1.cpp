@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<vector<int>> a(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                cin >> a[i][j];
+                --a[i][j]; // 0-indexed
+            }
+        }
+
+        // Precompute for each permutation the position of each value
+        vector<vector<int>> pos(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                pos[i][a[i][j]] = j;
+            }
+        }
+
+        // For each permutation, compute the longest prefix that is a prefix of some permutation's inverse
+        // We'll build a trie of the inverse mappings
+        // For a permutation q, its inverse is defined by q_inv[value] = index
+        // The product p * q has r_j = q[p_j]. We want r_0 = 0, r_1 = 1, ..., r_{k-1} = k-1.
+        // This means q[p_0] = 0, q[p_1] = 1, ..., q[p_{k-1}] = k-1.
+        // So we need q to map p_0 -> 0, p_1 -> 1, ..., p_{k-1} -> k-1.
+        // That is, for each x from 0 to k-1, q[p_x] = x.
+        // This is equivalent to: for each x from 0 to k-1, the position of x in q is p_x.
+        // So we need a permutation q such that its inverse (position of each value) matches p on the first k elements.
+        // So we can store all inverses of given permutations in a trie, and for each p, find the longest prefix of p that exists in the trie.
+
+        // Build trie of inverses
+        vector<array<int, 10>> trie(1);
+        trie[0].fill(-1);
+        for (int i = 0; i < n; ++i) {
+            int node = 0;
+            for (int val = 0; val < m; ++val) {
+                int nxt = pos[i][val]; // position of val in permutation i
+                if (trie[node][nxt] == -1) {
+                    trie[node][nxt] = trie.size();
+                    trie.push_back({});
+                    trie.back().fill(-1);
+                }
+                node = trie[node][nxt];
+            }
+        }
+
+        // For each permutation, find longest prefix in trie
+        for (int i = 0; i < n; ++i) {
+            int node = 0;
+            int beauty = 0;
+            for (int k = 0; k < m; ++k) {
+                int nxt = a[i][k]; // we need q[p_k] = k, so inverse of q at k should be p_k
+                if (trie[node][nxt] != -1) {
+                    node = trie[node][nxt];
+                    beauty = k + 1;
+                } else {
+                    break;
+                }
+            }
+            cout << beauty << " \n"[i == n - 1];
+        }
+    }
+    return 0;
+}

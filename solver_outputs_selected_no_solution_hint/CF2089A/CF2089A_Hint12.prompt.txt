@@ -1,0 +1,84 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Given an integer $ n $ . Construct a permutation $ p_1, p_2, \ldots, p_n $ of length $ n $ that satisfies the following property:
+
+For $ 1 \le i \le n $ , define $ c_i = \lceil \frac{p_1+p_2+\ldots +p_i}{i} \rceil $ , then among $ c_1,c_2,\ldots,c_n $ there must be at least $ \lfloor \frac{n}{3} \rfloor - 1 $ prime numbers.
+
+Input Format
+The first line contains an integer $ t $ ( $ 1 \le t \le 10 $ ) — the number of test cases. The description of the test cases follows.
+
+In a single line of each test case, there is a single integer $ n $ ( $ 2 \le n \le 10^5) $ — the size of the permutation.
+
+Output Format
+For each test case, output the permutation $ p_1,p_2,\ldots,p_n $ of length $ n $ that satisfies the condition. It is guaranteed that such a permutation always exists.
+
+Examples
+Sample 1
+Input
+3
+2
+3
+5
+Output
+2 1
+2 1 3
+2 1 3 4 5
+
+Note
+In the first test case, $ c_1 = \lceil \frac{2}{1} \rceil = 2 $ , $ c_2 = \lceil \frac{2+1}{2} \rceil = 2 $ . Both are prime numbers.
+
+In the third test case, $ c_1 = \lceil \frac{2}{1} \rceil = 2 $ , $ c_2 = \lceil \frac{3}{2} \rceil = 2 $ , $ c_3 = \lceil \frac{6}{3} \rceil = 2 $ , $ c_4 = \lceil \frac{10}{4} \rceil = 3 $ , $ c_5 = \lceil \frac{15}{5} \rceil = 3 $ . All these numbers are prime.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+What if we just put all primes in the beginning?
+
+**Hint 2**
+It won't work.
+
+**Hint 3**
+How can we get rid of non-prime $c_i$ ?
+
+**Hint 4**
+We should put $n$ as soon as possible.
+
+**Hint 5**
+What is the best way to fill the remaining positions?
+
+**Hint 6**
+Consider $c_1,\ldots,c_{\lfloor \frac{n}{3} \rfloor}$
+
+**Hint 7**
+Think about how to make $c_1$ equal to some large prime number.
+
+**Hint 8**
+Think about the number of primes less than $n$.
+
+**Hint 9**
+Try to find the answer when $n$ is small.
+
+**Hint 10**
+What if we put the largest prime less than $n$ at the beginning?
+
+**Hint 11**
+How to get rid of $c_1$?
+
+**Hint 12**
+Why do we need to consider $c_1,...,c_{\lfloor \frac{n}{3} \rfloor}$?
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

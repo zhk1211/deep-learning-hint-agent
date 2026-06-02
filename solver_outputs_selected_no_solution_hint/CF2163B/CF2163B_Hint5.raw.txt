@@ -1,0 +1,128 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> p(n);
+    for (int i = 0; i < n; ++i) cin >> p[i];
+    string x;
+    cin >> x;
+
+    vector<int> pos(n + 1);
+    for (int i = 0; i < n; ++i) pos[p[i]] = i;
+
+    // Check if all x are 0 -> 0 operations
+    if (count(x.begin(), x.end(), '1') == 0) {
+        cout << "0\n";
+        return;
+    }
+
+    // Find first and last 1 in x
+    int first1 = -1, last1 = -1;
+    for (int i = 0; i < n; ++i) {
+        if (x[i] == '1') {
+            if (first1 == -1) first1 = i;
+            last1 = i;
+        }
+    }
+
+    // Check if x is constant 1
+    if (count(x.begin(), x.end(), '1') == n) {
+        // Need to set all s_i = 1
+        // We can do it with one operation if min and max are at ends
+        int mn = min_element(p.begin(), p.end()) - p.begin();
+        int mx = max_element(p.begin(), p.end()) - p.begin();
+        if ((mn == 0 && mx == n-1) || (mn == n-1 && mx == 0)) {
+            cout << "1\n" << 1 << " " << n << "\n";
+            return;
+        }
+        // Otherwise, we can do two operations: cover left part and right part
+        // Actually, we can always do it in 2 operations:
+        // Operation 1: from 1 to pos[n] (or pos[1]) to set some
+        // But we need to guarantee all become 1.
+        // Let's use the property: if we pick l=1, r=n, we set all except possibly ends.
+        // Ends are never set by any operation because condition l < i < r.
+        // So if x has 1 at ends, we cannot set them.
+        // But here x is all 1, so ends must be set, impossible.
+        cout << "-1\n";
+        return;
+    }
+
+    // General case: x has both 0 and 1
+    // We can always achieve in at most 2 operations
+    // Idea: use the minimum and maximum elements to cover the range of 1s
+    int mn_val = 1, mx_val = n;
+    int mn_idx = pos[mn_val];
+    int mx_idx = pos[mx_val];
+
+    // If the 1s are exactly the set of elements between min and max in some range?
+    // We can try one operation with l = min(first1, last1?) 
+    // Actually, we can set all positions between l and r that have values between p[l] and p[r].
+    // We want to cover all 1s and not necessarily all 0s.
+    // Strategy: pick l = first1, r = last1? But need p[l] and p[r] to be min/max in that range.
+    // Better: find the minimal segment that contains all 1s in terms of values.
+    int min_val = n+1, max_val = 0;
+    for (int i = 0; i < n; ++i) {
+        if (x[i] == '1') {
+            min_val = min(min_val, p[i]);
+            max_val = max(max_val, p[i]);
+        }
+    }
+    int L = pos[min_val];
+    int R = pos[max_val];
+    if (L > R) swap(L, R);
+
+    // Check if one operation [L+1, R+1] (1-indexed) works
+    // It will set all i between L and R with value between min_val and max_val.
+    // Since all 1s have values in [min_val, max_val] and positions between L and R? Not necessarily.
+    // We need to ensure every 1 is between L and R.
+    bool ok1 = true;
+    for (int i = 0; i < n; ++i) {
+        if (x[i] == '1') {
+            if (!(L < i && i < R)) {
+                ok1 = false;
+                break;
+            }
+        }
+    }
+    if (ok1) {
+        cout << "1\n" << L+1 << " " << R+1 << "\n";
+        return;
+    }
+
+    // Otherwise, we can do two operations: one covering left part, one covering right part
+    // We can use the global min and max to cover everything.
+    // Operation 1: from 1 to pos[n] (or pos[1])
+    // Operation 2: from pos[1] to n (or pos[n])
+    // This will set all positions except possibly ends.
+    // But we must ensure all 1s are not at ends.
+    if (x[0] == '1' || x[n-1] == '1') {
+        // Ends cannot be set, so if any end is 1, impossible with 2 ops?
+        // Actually, we might need 3 ops? But problem says at most 5.
+        // Let's check if we can cover ends by other means.
+        // Ends can only be set if they are between l and r, but condition is l < i < r, so never.
+        // So if x[0] == '1' or x[n-1] == '1', impossible.
+        cout << "-1\n";
+        return;
+    }
+
+    // Two operations: [1, pos[n]+1] and [pos[1]+1, n] (if pos[1] < pos[n]) or swapped
+    int a = pos[1], b = pos[n];
+    if (a > b) swap(a, b);
+    // a = pos of 1, b = pos of n
+    cout << "2\n";
+    cout << "1 " << b+1 << "\n";
+    cout << a+1 << " " << n << "\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}
+```

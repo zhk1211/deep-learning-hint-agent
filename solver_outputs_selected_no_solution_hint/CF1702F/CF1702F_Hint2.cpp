@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int i = 0; i < n; ++i) cin >> b[i];
+
+        multiset<int> b_set(b.begin(), b.end());
+        bool ok = true;
+
+        for (int i = n - 1; i >= 0; --i) {
+            int target = a[i];
+            while (true) {
+                auto it = b_set.find(target);
+                if (it != b_set.end()) {
+                    b_set.erase(it);
+                    break;
+                }
+                if (target == 0) {
+                    ok = false;
+                    break;
+                }
+                target /= 2;
+            }
+            if (!ok) break;
+        }
+
+        cout << (ok ? "YES" : "NO") << '\n';
+    }
+    return 0;
+}

@@ -1,0 +1,79 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<vector<int>> a(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                cin >> a[i][j];
+            }
+        }
+
+        // Precompute for each permutation its inverse and the "prefix function" of its inverse
+        // We want to know for each permutation the longest prefix of 1..k that appears as a subsequence
+        // in the inverse permutation starting from 1.
+        // Actually, we need to find for each i the max beauty over j of a_i * a_j.
+        // Beauty of p is max k such that p[0]=1, p[1]=2, ..., p[k-1]=k.
+        // For p = a_i * a_j, p[x] = a_j[ a_i[x] ].
+        // We want p[0]=1 => a_j[ a_i[0] ] = 1 => a_i[0] = pos_j[1] where pos_j is inverse of a_j.
+        // p[1]=2 => a_j[ a_i[1] ] = 2 => a_i[1] = pos_j[2].
+        // In general, for beauty >= k, we need a_i[0] = pos_j[1], a_i[1] = pos_j[2], ..., a_i[k-1] = pos_j[k].
+        // So the beauty for a given pair (i,j) is the length of the longest prefix of the sequence
+        // (pos_j[1], pos_j[2], ..., pos_j[m]) that matches the prefix of a_i.
+        // That is, the longest k such that a_i[x] == pos_j[x+1] for all x < k.
+        // So we can precompute for each permutation j the sequence S_j = (pos_j[1], pos_j[2], ..., pos_j[m]).
+        // Then for each i, we want max over j of LCP(a_i, S_j).
+        // Since m <= 10, we can encode each prefix of a_i as a bitmask or just a number.
+        // We can store for each possible prefix of length k (k from 0 to m) whether there exists some j
+        // such that S_j starts with that prefix.
+        // Then for each i, we can find the maximum k such that the prefix of a_i of length k exists in our set.
+
+        // Build a set of all prefixes of S_j sequences.
+        // Represent a prefix of length k as a tuple of k integers (or a vector).
+        // Since m <= 10, we can use a set of vectors or a trie.
+        // But n up to 5e4, m<=10, total n*m <= 5e5, so we can just use a set of vectors.
+        set<vector<int>> prefixes;
+        for (int j = 0; j < n; ++j) {
+            // compute inverse
+            vector<int> pos(m + 1);
+            for (int x = 0; x < m; ++x) {
+                pos[a[j][x]] = x + 1; // 1-indexed positions
+            }
+            // build S_j
+            vector<int> S(m);
+            for (int val = 1; val <= m; ++val) {
+                S[val - 1] = pos[val];
+            }
+            // insert all prefixes
+            for (int len = 0; len <= m; ++len) {
+                prefixes.insert(vector<int>(S.begin(), S.begin() + len));
+            }
+        }
+
+        // For each i, find max beauty
+        for (int i = 0; i < n; ++i) {
+            int best = 0;
+            // check prefixes of a_i
+            for (int len = 1; len <= m; ++len) {
+                vector<int> pref(a[i].begin(), a[i].begin() + len);
+                if (prefixes.count(pref)) {
+                    best = len;
+                } else {
+                    break; // since if length len fails, longer will also fail
+                }
+            }
+            cout << best << (i + 1 == n ? '\n' : ' ');
+        }
+    }
+    return 0;
+}
+```

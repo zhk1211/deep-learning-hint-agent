@@ -1,0 +1,250 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, m, k;
+    cin >> n >> m >> k;
+    vector<string> grid(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> grid[i];
+    }
+
+    // Prefix sums for gold
+    vector<vector<int>> gold_pref(n + 1, vector<int>(m + 1, 0));
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            gold_pref[i + 1][j + 1] = gold_pref[i][j + 1] + gold_pref[i + 1][j] - gold_pref[i][j] + (grid[i][j] == 'g' ? 1 : 0);
+        }
+    }
+
+    auto get_gold = [&](int r1, int c1, int r2, int c2) -> int {
+        if (r1 > r2 || c1 > c2) return 0;
+        r1 = max(0, r1); c1 = max(0, c1);
+        r2 = min(n - 1, r2); c2 = min(m - 1, c2);
+        if (r1 > r2 || c1 > c2) return 0;
+        return gold_pref[r2 + 1][c2 + 1] - gold_pref[r1][c2 + 1] - gold_pref[r2 + 1][c1] + gold_pref[r1][c1];
+    };
+
+    // For each empty cell, compute gold collected if dynamite placed there
+    vector<vector<int>> gold_from(n, vector<int>(m, 0));
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (grid[i][j] != '.') continue;
+            // boundary of square: cells with Chebyshev distance exactly k
+            // top row: i - k, columns j - k .. j + k
+            // bottom row: i + k, columns j - k .. j + k
+            // left column: rows i - k + 1 .. i + k - 1, column j - k
+            // right column: rows i - k + 1 .. i + k - 1, column j + k
+            int total = 0;
+            // top
+            total += get_gold(i - k, j - k, i - k, j + k);
+            // bottom
+            total += get_gold(i + k, j - k, i + k, j + k);
+            // left
+            total += get_gold(i - k + 1, j - k, i + k - 1, j - k);
+            // right
+            total += get_gold(i - k + 1, j + k, i + k - 1, j + k);
+            gold_from[i][j] = total;
+        }
+    }
+
+    // Now we need to find maximum sum of gold_from over a set of empty cells
+    // such that no two chosen cells have overlapping "destroyed" interiors.
+    // The interior destroyed is the square of side 2k-1 centered at (i,j).
+    // Actually, the problem says: "all cells within a square of side 2k+1 centered at cell (x,y) become empty."
+    // "If gold ore was located strictly inside this square (not on the boundary), it disappears."
+    // So the interior is the square of side 2k-1 (strictly inside).
+    // So if we place dynamite at two cells, their interiors must not overlap, otherwise gold in overlap is lost.
+    // But wait: the problem allows multiple explosions? The sample 3 says: "make another explosion one cell to the left".
+    // So we can detonate multiple dynamites sequentially. After first explosion, some cells become empty.
+    // The problem statement: "Smilo can blow up dynamite in any empty cell." It doesn't say only once.
+    // So we can choose a set of empty cells to detonate, possibly in some order.
+    // However, after an explosion, the interior cells become empty, so they can be used for later explosions.
+    // But gold on boundaries is collected immediately. Gold inside is destroyed.
+    // So we want to select a set of empty cells such that their boundary gold sets are disjoint? Not necessarily disjoint,
+    // because if a gold cell is on the boundary of two explosions, it would be collected twice? The problem doesn't specify,
+    // but typically each gold cell can be collected at most once. The sample 3: they get 2 gold from first explosion,
+    // then 2 from second, total 4. The gold cells are at (0,1), (0,2), (2,0), (2,1) maybe? Let's check grid:
+    // .gg.
+    // g..#
+    // g##.
+    // If they detonate at bottom right corner (2,3) with k=2: square side 5 centered at (2,3). Boundary includes cells
+    // with distance exactly 2. That would collect gold at (0,1)? Distance from (2,3) to (0,1) is max(|2-0|,|3-1|)=2 -> boundary.
+    // So they collect (0,1) and maybe others. Then they detonate at (2,2) which is now empty after first explosion?
+    // Actually first explosion makes interior empty, so (2,2) might become empty. Then second explosion collects remaining.
+    // So gold cells are collected at most once. We need to choose a set of explosions such that the collected gold is maximized.
+    // This is equivalent to selecting a set of empty cells (initial or created) to detonate, but we can only detonate in cells
+    // that are empty at the time of detonation. However, we can always detonate in any initially empty cell first,
+    // then use newly emptied cells for further explosions. The order matters because we can create new empty cells.
+    // But note: the interior of an explosion becomes empty, which can then be used for further explosions.
+    // So we can chain explosions. This looks like we can reach any cell that is in the interior of some explosion from an initial empty cell.
+    // Actually, we can start from any initial empty cell, detonate there, which makes its interior empty.
+    // Then we can detonate in any of those newly empty cells, and so on.
+    // So the set of cells we can ever use as detonation points is the set of cells reachable from some initial empty cell
+    // via steps of "being in the interior of a detonation centered at a reachable cell".
+    // This is exactly the connected components under the relation: cell A can reach cell B if B is strictly inside the square of side 2k+1 centered at A.
+    // But wait: the square is of side 2k+1, so the interior is the square of side 2k-1 (strictly inside).
+    // So B is reachable from A if Chebyshev distance <= k-1? Actually strictly inside means distance <= k-1? Let's check:
+    // Square side 2k+1 centered at (x,y): cells with row in [x-k, x+k] and col in [y-k, y+k].
+    // Strictly inside means row in [x-k+1, x+k-1] and col in [y-k+1, y+k-1].
+    // So Chebyshev distance <= k-1.
+    // So we have a directed graph: from each cell we can reach cells within Chebyshev distance <= k-1.
+    // But we can only start from initially empty cells.
+    // Then we can perform explosions at any reachable cell, and collect gold on the boundary of each explosion.
+    // However, if we explode at multiple cells, the gold collected is the union of boundaries? But careful: if a gold cell is on the boundary of one explosion,
+    // it is collected. If later another explosion also has that gold on its boundary, it's already collected, so no extra gain.
+    // Also, if a gold cell is inside the interior of some explosion, it is destroyed and cannot be collected later.
+    // So we need to choose a set of detonation cells (which must be reachable from some initial empty cell) and an ordering,
+    // such that the total collected gold is maximized. This is complex.
+    // Let's think differently: The hints say:
+    // Hint 1: What happens when we detonate the dynamite in the corner?
+    // Hint 2: Consider all cells which cannot be destroyed.
+    // Hint 3: Consider a cell, which is not reachable from any other cell.
+    // Hint 4: Consider all cells which are reachable from at least one cell.
+    // This suggests we should think about the reachability graph. Maybe the optimal strategy is to detonate at all reachable cells?
+    // But if we detonate at all reachable cells, the interiors will overlap and destroy gold. However, we can order explosions
+    // so that we first collect gold on boundaries, then later explosions destroy interiors that might contain gold?
+    // Actually, if we detonate at a cell, we collect its boundary gold immediately. Then the interior becomes empty.
+    // If we later detonate at another cell whose interior overlaps with the first's interior, the overlapping region is already empty,
+    // so no gold is lost. But if we detonate at a cell whose interior contains gold that we haven't collected yet, that gold is destroyed.
+    // So we should avoid destroying uncollected gold. Therefore, we should only detonate in cells whose interiors do not contain any gold
+    // that we intend to collect. But we can collect gold only if it's on the boundary of some explosion.
+    // So gold can be collected if it is on the boundary of some reachable cell, and it is not destroyed by any explosion before that.
+    // This suggests we can collect all gold that is on the boundary of at least one reachable cell, provided we can order explosions
+    // so that no gold is destroyed before being collected. Is that always possible?
+    // Consider a gold cell g. It might be on the boundary of some reachable cell A, and also in the interior of some other reachable cell B.
+    // If we detonate B first, g is destroyed. If we detonate A first, g is collected, then later B's interior is empty so no loss.
+    // So we just need to ensure that for every gold we want to collect, we detonate a cell that has it on its boundary before any cell that has it in its interior.
+    // Can we always do that? Maybe we can just detonate all reachable cells in some order? But there might be cycles.
+    // Actually, the reachability graph is directed: A can reach B if B is within distance k-1 from A.
+    // This is a partial order? Not necessarily, because if k-1 >= something, it could be symmetric. But Chebyshev distance is symmetric,
+    // so if B is within distance k-1 from A, then A is within distance k-1 from B. So the relation is symmetric!
+    // So the graph is undirected. The reachable set from any initial empty cell is a connected component in the graph where edges exist between cells with Chebyshev distance <= k-1.
+    // So all cells in a connected component are mutually reachable. So if we have a gold cell that is in the interior of some cell in the component,
+    // it is in the interior of all cells in the component? Not necessarily. But if it's in the interior of one cell, it might be on the boundary of another.
+    // Since the component is connected, we can potentially order explosions to collect gold on boundaries first.
+    // But wait: if a gold cell is in the interior of some cell C, then its Chebyshev distance to C is <= k-1.
+    // If it is on the boundary of some cell D, its distance to D is exactly k.
+    // Can a gold cell be both in the interior of C and on the boundary of D, with C and D in the same component?
+    // Yes, if C and D are close enough. For example, k=2. C at (0,0), D at (0,1). Distance between C and D is 1 <= k-1=1, so they are connected.
+    // Gold at (0,2): distance to C is 2 = k -> boundary of C. Distance to D is 1 <= k-1 -> interior of D.
+    // So if we detonate D first, gold is destroyed. If we detonate C first, gold is collected.
+    // So we can choose to detonate C first. Since C and D are in the same component, we can reach C from an initial empty cell (if any in the component).
+    // So we can always choose to detonate the cell that has the gold on its boundary first, provided that cell is in the component.
+    // But what if the only cell that has the gold on its boundary is not in the component? Then we can't collect it anyway.
+    // So it seems we can collect all gold that is on the boundary of at least one cell in the reachable component, and we can avoid destroying it
+    // by detonating that boundary cell first. But is there any gold that is forced to be destroyed? Suppose a gold cell is in the interior of every cell in the component?
+    // Then we can't collect it because it's never on a boundary. So we just don't get it.
+    // What if a gold cell is on the boundary of some cell A in the component, but A itself is not reachable from the initial empty cells?
+    // But A is in the component, so it is reachable. So we can detonate A.
+    // Therefore, the maximum gold collected is simply the total gold that lies on the boundary of at least one cell that is reachable from some initial empty cell.
+    // But wait: we can only detonate in cells that are empty at the time of detonation. Initially, only '.' cells are empty.
+    // After we detonate in an empty cell, its interior becomes empty. So we can then detonate in any cell within that interior.
+    // So the set of cells we can ever detonate in is exactly the set of cells that are in the same connected component as some initial empty cell,
+    // where connectivity is Chebyshev distance <= k-1. Because we can start at an initial empty cell, detonate there, which makes its interior empty,
+    // then we can move to any cell in that interior (distance <= k-1) and detonate there, and so on. So we can reach any cell in the component.
+    // So the reachable cells are exactly the union of components that contain at least one initial '.' cell.
+    // Then for each such reachable cell, we can detonate there and collect gold on its boundary.
+    // But we can only detonate once per cell? The problem doesn't say we can't detonate multiple times in the same cell, but after first detonation,
+    // the cell becomes empty (it was already empty), and the interior becomes empty again. But detonating again would collect the same boundary gold?
+    // Gold is already collected, so no extra. So we only need to consider each cell at most once.
+    // So the problem reduces to: Find all cells reachable from any initial '.' via steps of Chebyshev distance <= k-1.
+    // Then the answer is the number of gold cells that are on the boundary of at least one such reachable cell.
+    // But wait: What about stone '#'? The problem says: "Smilo can blow up dynamite in any empty cell." Stone cells are not empty.
+    // Can stone cells become empty? The explosion makes all cells within the square empty. So stone cells also become empty.
+    // So after an explosion, stone cells in the interior become empty, and we can then use them for further explosions.
+    // So stone does not block reachability. The only cells that cannot be destroyed are those outside the mine? But the explosion can extend outside.
+    // Actually, the problem says: "all cells within a square of side 2k+1 centered at cell (x,y) become empty." It doesn't exclude stone.
+    // So stone becomes empty. So reachability is not blocked by stone. So the graph is just based on coordinates, ignoring cell type.
+    // However, we can only start from initial '.' cells. So we just need to find all cells that are in the same Chebyshev-distance-<=k-1 component as some initial '.'.
+    // Then for each such cell, we consider its boundary (distance exactly k) and count gold there.
+    // But careful: If a gold cell is on the boundary of multiple reachable cells, we should count it only once.
+    // Also, what about gold that is initially in a cell that is reachable? If we detonate in that cell, the gold is in the interior? No, the cell itself is the center.
+    // The center is not strictly inside, it's the center. The boundary is distance exactly k. The interior is distance <= k-1.
+    // So if a gold cell is at distance d from a detonation center:
+    // d < k: interior -> destroyed.
+    // d = k: boundary -> collected.
+    // d > k: unaffected.
+    // So if we detonate at a cell that contains gold, that gold is at distance 0 < k, so it is destroyed. So we should never detonate at a gold cell if we want to collect it.
+    // But we might detonate at a gold cell if it helps reach other cells? But we can only detonate in empty cells. Initially, gold cells are not empty.
+    // So we cannot detonate in a gold cell initially. After some explosions, a gold cell might become empty (if it was in the interior of some explosion),
+    // but then the gold is already destroyed. So we never detonate in a cell that originally had gold, because it's either not empty or the gold is already gone.
+    // So we don't care about detonating in gold cells.
+    // So the algorithm:
+    // 1. Find all cells reachable from any initial '.' via Chebyshev distance <= k-1.
+    // 2. For each such cell, mark all cells at Chebyshev distance exactly k as "collectible".
+    // 3. Count gold cells that are collectible.
+    // But wait: Is it always possible to collect all such gold? Consider a gold cell that is on the boundary of a reachable cell A.
+    // To collect it, we must detonate at A. But A might not be empty initially. However, A is reachable, so there is a path from some initial '.' to A.
+    // We can detonate along the path to eventually make A empty, then detonate at A. But while doing so, we might destroy the gold if some intermediate explosion
+    // has the gold in its interior. We need to ensure there is an ordering that avoids destroying the gold before we collect it.
+    // Is it always possible? Suppose the gold is at distance exactly k from A. Any cell B on the path from start to A has distance to A <= k-1.
+    // By triangle inequality for Chebyshev distance: dist(B, gold) <= dist(B, A) + dist(A, gold) <= (k-1) + k = 2k-1.
+    // That doesn't guarantee it's not < k. It could be that for some B, dist(B, gold) < k, meaning the gold is in the interior of B's explosion.
+    // If we detonate B before A, the gold is destroyed. So we must detonate A before any such B.
+    // But the path goes from start to A. If we go in order from A backwards? We can't detonate A first because A might not be empty initially.
+    // We need to start from an initial empty cell and move forward. So we might be forced to detonate B before A.
+    // So there might be a conflict: to reach A, we must pass through B, but detonating B destroys the gold we want to collect at A.
+    // Can we choose a different path? Maybe we can reach A without passing through cells that have the gold in their interior.
+    // The reachability graph is undirected and we can move in any direction. We can potentially approach A from a direction that keeps the gold at distance >= k.
+    // But is that always possible? Consider k=1. Then interior is distance 0 (only the cell itself). Boundary is distance 1.
+    // Reachability: cells within distance 0 are just the cell itself. So you can only detonate in the initial empty cells, you cannot move.
+    // So reachable cells = initial '.' cells. For each such cell, boundary is the 8 neighbors. So you collect gold in neighbors.
+    // This matches sample 1: k=1, grid 2x3, empty at (0,1) and (1,1)? Actually grid:
+    // # . #
+    // g . g
+    // So '.' at (0,1) and (1,1). Reachable: only those two. Boundary of (0,1): (0,0) #, (0,2) #, (1,0) g, (1,1) ., (1,2) g. So gold at (1,0) and (1,2) collected. Total 2. Correct.
+    // Sample 2: k=2. Grid same. Reachable: from '.' at (0,1) and (1,1), distance <=1. So reachable cells: all cells within distance 1 from either '.'.
+    // That includes (0,0) #, (0,1) ., (0,2) #, (1,0) g, (1,1) ., (1,2) g. So reachable set is the whole grid except maybe? Actually all cells.
+    // Now for each reachable cell, boundary is distance exactly 2. But the grid is only 2x3, so boundary extends outside. Gold cells are at (1,0) and (1,2).
+    // Distance from (0,1) to (1,0) is max(1,1)=1 < 2, so not boundary. Distance from (1,1) to (1,0) is 1. Distance from (0,0) to (1,0) is 1.
+    // Distance from (0,2) to (1,2) is 1. Distance from (1,0) to (1,0) is 0. Distance from (1,2) to (1,2) is 0.
+    // So no reachable cell has gold at distance exactly 2. So answer 0. Correct.
+    // Sample 3: 3x4, k=2. Initial '.' at (0,0), (0,3), (1,0), (2,2)? Let's see grid:
+    // . g g .
+    // g . . #
+    // g # # .
+    // So '.' at (0,0), (0,3), (1,1), (1,2), (2,3). Reachable: distance <=1 from any of these.
+    // Let's compute reachable cells. We'll do BFS. Then for each reachable, boundary distance 2. Count gold on boundary.
+    // The sample output is 4. Let's test if our logic gives 4.
+    // Gold at: (0,1), (0,2), (1,0), (2,0).
+    // Reachable cells include (2,3) (initial '.'). Boundary of (2,3) distance 2: cells with max(|r-2|, |c-3|)=2.
+    // This includes (0,1): |0-2|=2, |1-3|=2 -> max=2 -> boundary. (0,2): |0-2|=2, |2-3|=1 -> max=2 -> boundary.
+    // (1,0): |1-2|=1, |0-3|=3 -> max=3 >2. (2,0): |2-2|=0, |0-3|=3 -> max=3.
+    // So (2,3) collects (0,1) and (0,2). That's 2 gold.
+    // Also reachable cell (2,2) is reachable? (2,2) is '#' initially, but distance from (2,3) is 1 <=1, so reachable.
+    // Boundary of (2,2): distance 2. (0,0): max(2,2)=2 -> boundary but no gold. (0,1): max(2,1)=2 -> boundary, gold. (0,2): max(2,0)=2 -> boundary, gold.
+    // (1,0): max(1,2)=2 -> boundary, gold. (2,0): max(0,2)=2 -> boundary, gold. (1,4) out of bounds.
+    // So (2,2) boundary includes all four gold! But wait, (0,1) and (0,2) are also collected by (2,3). So total unique gold = 4.
+    // So answer 4. Our logic gives 4.
+    // But is it always possible to collect all these without destroying them? In the sample, they did two explosions: first at (2,3), then at (2,2).
+    // (2,3) collects (0,1) and (0,2). Its interior is distance <=1: cells (1,2), (1,3), (2,2), (2,3), (3,2), (3,3) etc. (2,2) becomes empty.
+    // Then they detonate at (2,2). Its interior is distance <=1: includes (1,1), (1,2), (1,3), (2,1), (2,2), (2,3), (3,1), (3,2), (3,3).
+    // Does this interior contain any gold? Gold at (1,0) is distance 2 from (2,2) -> boundary, not interior. Gold at (2,0) distance 2 -> boundary.
+    // Gold at (0,1) distance 2 -> boundary. Gold at (0,2) distance 2 -> boundary. So no gold in interior. So safe.
+    // What if there was a gold at (1,1)? That would be distance 1 from (2,2) -> interior, destroyed. But (1,1) is '.' initially, so no gold.
+    // So it worked.
+    // But consider a scenario where to reach a cell that collects a gold, we must pass through a cell whose interior contains that gold.
+    // Is that possible? Suppose k=2. Gold at (0,2). We want to collect it using cell A=(0,0) because distance = 2. But A is not reachable directly from any initial '.'.
+    // Suppose the only initial '.' is at (0,1). Distance from (0,1) to A=(0,0) is 1 <= k-1=1, so A is reachable. So we can go (0,1) -> (0,0).
+    // But if we detonate at (0,1) first, its interior is distance <=1: includes (0,0), (0,1), (0,2), (1,0), (1,1), (1,2) etc. Gold at (0,2) is distance 1 from (0,1) -> interior! So it would be destroyed.
+    // So we cannot detonate at (0,1) if we want to collect (0,2) via (0,0). But we need to detonate at (0,1) to make (0,0) empty? Wait, (0,0) might already be empty? In this scenario, (0,0) is not initially empty (maybe stone or gold). But we can only detonate in empty cells.
+    // If (0,0) is not empty, we must first make it empty by detonating somewhere else. The only way is to detonate at (0,1), which destroys the gold.
+    // So we cannot collect (0,2) if (0,0) is not initially empty and the only path goes through (0,1) which destroys it.
+    // But wait, is (0,0) reachable from (0,1)? Yes, distance 1. But to use (0,0) as a detonation center, it must be empty. We can make it empty by detonating at (0,1).
+    // However, detonating at (0,1) destroys the gold. So we lose it. So in this case, the gold is not collectible even though it's on the boundary of a reachable cell.
+    // So our previous assumption that all such gold can be collected is false. We need a more careful condition.
+    // The gold can be collected if there exists a reachable cell A such that gold is on the boundary of A, AND there exists a path from an initial '.' to A such that for every cell B on the path, the gold is NOT in the interior of B. Because we can detonate along the path in order, and as long as we don't destroy the gold before reaching A, we can collect it at A.
+    // But we can choose the order: we don't have to detonate every cell on the path. We only need to detonate a sequence of cells that eventually makes A empty. Actually, to make A empty, we need to detonate some cell whose interior includes A. That cell C must have distance <= k-1 to A. Then we detonate C, A becomes empty. Then we can detonate A. So the path is just one step: C -> A. We don't need a long path; we can always jump directly from any reachable cell to any other within distance k-1. Because the reachability graph is defined by distance <= k-1. So if A is reachable, there exists a sequence of cells starting from an initial '.' where each step is distance <= k-1. But we can shortcut: the initial '.' might not be within distance k-1 of A, but there is a chain. However, we can't jump directly; we must detonate intermediate cells to make them empty. But note: after we detonate at a cell, its entire interior (distance <= k-1) becomes empty. So from that cell, we can directly detonate any cell in its interior. So we can move in steps of size up to k-1. So the reachability is exactly the transitive closure of the relation "distance <= k-1". So if A is reachable, there is a path of length L. We can detonate along that path. The gold might be destroyed if any cell on that path has the gold in its interior (distance < k). So we need a path from some initial '.' to A such that for all cells on the path, distance to gold >= k (or > k-1, i.e., not in interior). Actually, if distance = k, it's on boundary, which is fine because we haven't detonated that cell yet? Wait, if a cell on the path has the gold on its boundary, detonating that cell would collect the gold. That's even better! We could just collect it earlier. So we only care about not destroying it (distance < k). So we need a path where every cell's distance to the gold is >= k. But if we find such a path, we can collect the gold at A (or earlier). If no such path exists, then any path to A must pass through a cell that has the gold in its interior, so the gold will be destroyed before we can reach A.
+    // So the condition for a gold cell to be collectible is: There exists a reachable cell A with distance exactly k to the gold, AND there exists a path from some initial '.' to A such that all cells on the path have distance >= k to the gold. But wait, the path consists of cells we detonate. We don't have to detonate every cell on the path; we only detonate the cells we step on. The path is a sequence of detonations. So we need that for every cell we detonate before A, its distance to gold is >= k. But we can choose the path. So we need that in the reachability graph, there is a path from an initial '.' to A that avoids cells with distance < k to the gold. In other words, the gold cell should not be in the interior of any cell that is on all paths from initial '.' to A? Actually, we just need one path that avoids the "danger zone" (distance < k). So we can think of the "danger zone" of a gold cell as the set of cells from which the gold is in the interior, i.e., cells at distance <= k-1 from the gold. If all paths from initial '.' to A go through the danger zone, then we cannot avoid destroying the gold. If there is a path that stays outside the danger zone (distance >= k), then we can collect it.
+    // But note: A itself is at distance exactly k, so it is outside the danger zone. So we just need that A is reachable from some initial '.' without stepping into the danger zone. However, the danger zone is exactly the set of cells that are within distance k-1 from the gold. So if the gold's danger zone separates the initial '.' from A, then we can't reach A without entering it. But since the graph is based on distance <= k-1 steps, we can jump over the danger zone? If the danger zone is a "blocked" region, we might be able to jump over it if k-1 is large enough. But the danger zone is defined by distance <= k-1 from gold. So if we are at a cell outside the danger zone, its distance to gold is >= k. Can we jump directly to A? The step size is up to k-1. If A is outside the danger zone, the distance from a cell outside to A might be > k-1, so we might need intermediate cells. Those intermediate cells must also be outside the danger zone. So we need a path in the graph where all nodes have distance >= k to gold.
+    // This is equivalent to: In the graph of cells with edges between distance <= k-1, remove all cells with distance < k to the gold (the danger zone). Then check if A is in the same connected component as some initial '.' in this reduced graph.
+    // But we have many gold cells. We need to compute the maximum total gold we can collect. This sounds like we can collect a set of gold cells if we can find an ordering and paths that avoid destroying them. But note that collecting one gold might require destroying another? Because the danger zones of different gold cells might overlap. We need to choose a set of gold cells that can all be collected without destroying each other. This is getting complicated.
+    // Let's reconsider the problem. Maybe there's a simpler characterization. The hints say: "Consider all cells which cannot be destroyed." and "Consider a cell, which is not reachable from any other cell." and "Consider all cells which are reachable from at least one cell."
+    // Perhaps the answer is simply the total gold in cells that are on the boundary of the reachable set? Or something like that.
+    // Let's think about the "cells which cannot be destroyed". Which cells can never become empty? The explosion makes cells empty. The only cells that might not be destroyable are those outside the mine? But the explosion can extend outside. Actually, the problem says: "Dynamite can only be detonated inside the mine, but the explosion square can extend beyond the mine's boundaries." So all cells within the mine can potentially be destroyed if they fall within some explosion square. But can a cell be impossible to destroy? If no reachable cell has it in its interior or boundary? Actually, to destroy a cell, it must be in the interior of some explosion. So if a cell is not in the interior of any reachable cell, it cannot be destroyed. But we don't care about destroying stone; we care about gold. Gold is destroyed if it's in the interior. So gold that is never in the interior of any reachable cell is safe from destruction. But we want to collect gold, not destroy it.
+    // Hint 3: "Consider a cell, which is not reachable from any other cell." This might refer to cells that cannot be used as detonation centers because they are not reachable. But we already considered reachability.
+    // Hint 4: "Consider all cells which are reachable from at least one cell." That's the reachable set.
+    // Maybe the answer is simply the number of gold cells that are on the boundary of the reachable set? Let's test with the earlier counterexample: k=2, grid 1x4: . g . g ? Actually, let's construct a concrete counterexample to the simple "boundary of reachable cells" idea.
+    // Suppose n=1, m=4, k=2. Cells: 0: '.', 1: 'g', 2: '.', 3: 'g'. Initial '.' at 0 and 2.
+    // Reachable cells: distance <=1 from 0 or 2. From 0: cells 0,1. From 2:

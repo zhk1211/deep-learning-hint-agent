@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> x(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> x[i];
+        }
+
+        int best_a = x[0], best_l = 1, best_r = 1;
+        int max_len = 1;
+
+        int i = 0;
+        while (i < n) {
+            int j = i;
+            while (j < n && x[j] == x[i]) {
+                ++j;
+            }
+            int len = j - i;
+            if (len > max_len) {
+                max_len = len;
+                best_a = x[i];
+                best_l = i + 1;
+                best_r = j;
+            }
+            i = j;
+        }
+
+        cout << best_a << ' ' << best_l << ' ' << best_r << '\n';
+    }
+
+    return 0;
+}

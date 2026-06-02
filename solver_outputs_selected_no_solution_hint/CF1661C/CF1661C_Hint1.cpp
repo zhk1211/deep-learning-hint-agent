@@ -1,0 +1,66 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+ll solve_case(int n, vector<ll>& h) {
+    ll mx = *max_element(h.begin(), h.end());
+    ll lo = 0, hi = 2e14;
+    ll ans = hi;
+    while (lo <= hi) {
+        ll mid = (lo + hi) / 2;
+        ll odd_days = (mid + 1) / 2;
+        ll even_days = mid / 2;
+        ll need_odd = 0;
+        ll total_need = 0;
+        bool ok = true;
+        for (int i = 0; i < n; ++i) {
+            ll diff = mx - h[i];
+            total_need += diff;
+            need_odd += diff % 2;
+        }
+        if (total_need <= odd_days + 2 * even_days && need_odd <= odd_days) {
+            ans = mid;
+            hi = mid - 1;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    // also check mx+1
+    ll mx2 = mx + 1;
+    lo = 0, hi = 2e14;
+    while (lo <= hi) {
+        ll mid = (lo + hi) / 2;
+        ll odd_days = (mid + 1) / 2;
+        ll even_days = mid / 2;
+        ll need_odd = 0;
+        ll total_need = 0;
+        bool ok = true;
+        for (int i = 0; i < n; ++i) {
+            ll diff = mx2 - h[i];
+            total_need += diff;
+            need_odd += diff % 2;
+        }
+        if (total_need <= odd_days + 2 * even_days && need_odd <= odd_days) {
+            ans = min(ans, mid);
+            hi = mid - 1;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    return ans;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<ll> h(n);
+        for (int i = 0; i < n; ++i) cin >> h[i];
+        cout << solve_case(n, h) << '\n';
+    }
+    return 0;
+}

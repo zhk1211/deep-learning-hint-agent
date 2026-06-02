@@ -1,0 +1,159 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    
+    // The greedy algorithm takes exactly n turns if all pairs are adjacent and matched,
+    // but we need to understand the possible number of turns.
+    // After analysis, the number of turns is n + number of "extra" turns caused by mismatches.
+    // The minimum turns is n (when all pairs are adjacent and in order).
+    // The maximum turns is 2n - 1 (when the first card of each pair is in the first half,
+    // and the second card is in the second half, with no early matches).
+    // More precisely, k must be between n and 2n-1 inclusive, and k cannot be 2n-1 if n=1? Let's check.
+    // For n=1, only possible k is 1. 2n-1 = 1, so it's fine.
+    // But wait, sample has n=2, k=3 -> 2n-1=3, works.
+    // n=3, k=2 -> n=3, k=2 is less than n, so NO. Sample says NO.
+    // n=3, k=4 -> YES with 1 3 2 2 1 3. n=3, k=4 is between 3 and 5.
+    // n=3, k=5 -> YES with 1 2 3 1 2 3. k=5 = 2n-1.
+    // n=6, k=10 -> YES. n=6, k=10 is between 6 and 11.
+    // n=6, k=67 -> NO, because max is 11.
+    // So condition: n <= k <= 2n-1.
+    
+    if (k < n || k > 2 * n - 1) {
+        cout << "NO\n";
+        return;
+    }
+    
+    // We need to construct an array of length 2n with each number 1..n exactly twice.
+    // The number of turns is n + (number of "bad" first occurrences that don't match immediately).
+    // Let's define the process: we scan left to right. When we see a number for the first time,
+    // we flip it, then we look for its pair. If the pair is the very next card, we match immediately
+    // and it costs 1 turn. If not, we flip the next unseen card, which becomes a "known" card.
+    // This known card will be matched later when its pair is seen.
+    // The total turns = n + number of times we flip a new card as the second card and it doesn't match the first.
+    // Actually, each time we flip a second card that is not the pair of the first, we create a "pending" card.
+    // Later, when we flip the pair of that pending card as the first card, we immediately match it.
+    // So each such event adds 1 extra turn.
+    // The number of extra turns is exactly the number of pairs (i, j) such that the first occurrence of i
+    // is before the first occurrence of j, and the second occurrence of i is after the first occurrence of j
+    // but before the second occurrence of j? Let's think.
+    // Actually, the greedy algorithm's number of turns equals the number of "first occurrences" that are
+    // not immediately followed by their second occurrence. More precisely, if we list the positions of first occurrences,
+    // the number of turns is n + (number of first occurrences that are not immediately matched).
+    // Let's simulate: we maintain a set of "seen once" numbers. When we flip the first card of a turn,
+    // if it's in the "seen once" set, we match it with its pair (which we already know the position of? No,
+    // the algorithm says: if there are two cards flipped previously with same number, flip those two.
+    // That means if we have two known cards of the same number, we match them immediately.
+    // So the process is: we have a queue of known single cards. When we flip a new card, if its number
+    // is already known, we match them. Otherwise, we flip another new card. If that new card matches the first,
+    // we match them. Otherwise, both become known singles.
+    // This is equivalent to: we process the array left to right. We maintain a set of numbers that have been seen
+    // exactly once so far. When we encounter a number, if it's not in the set, we add it. If it is in the set,
+    // we remove it and that pair is matched. The number of turns is the number of times we add a number to the set
+    // (i.e., the number of first occurrences) plus the number of times we add a number and the set was non-empty?
+    // Let's trace: each turn we flip two cards. If the first card is already in the set, we match it with its pair
+    // (which is also in the set? Wait, if it's in the set, that means we've seen it once before. But we can only
+    // have seen it once if we flipped it as a second card in a previous turn and it didn't match. So its pair
+    // is still unknown. But the algorithm says: if there are two cards flipped previously with the same number,
+    // flip those two. That means if we have two known cards of the same number, we match them. But we only add
+    // a number to the set when we see it the first time. We never add it twice. So we can't have two known cards
+    // of the same number. The only way to have two known cards of the same number is if we flipped the same number
+    // twice as second cards? No, because when we flip a second card, if it matches the first, they are discarded
+    // immediately. If it doesn't match, both become known. So we can have at most one known card per number.
+    // Therefore, the condition "if there are two cards that you have flipped previously and have the same number"
+    // can never happen because we never flip a card that would create a second known card of the same number.
+    // Wait, but what if we flip a first card that is already known? Then its pair is the known card, so we match them.
+    // So the algorithm simplifies: we never have two known cards of the same number. The set of known cards
+    // always has distinct numbers.
+    // So the process: we scan left to right. We maintain a set S of numbers seen once.
+    // For each turn, we pick the first unseen card as first. Let its number be x.
+    // If x is in S, we match it with the known card (which is somewhere to the left), discard both, remove x from S.
+    // This takes 1 turn.
+    // If x is not in S, we then pick the next unseen card as second. Let its number be y.
+    // If y == x, we discard both. This takes 1 turn.
+    // If y != x, we add both x and y to S. This takes 1 turn, but we've added two numbers to S.
+    // So each turn either removes a number from S (if first card was in S), or adds two numbers to S (if first card not in S and second doesn't match), or adds 0 numbers (if first not in S and second matches).
+    // The game ends when all cards are discarded. Initially S empty.
+    // Let's count turns. Each pair of identical numbers must be matched eventually.
+    // The number of turns is exactly the number of times we pick a first card.
+    // Since we pick a first card for every turn, and we process all 2n cards, the number of turns is the number of times we start a turn. We start a turn for each pair? Actually, we discard two cards per turn, so there are exactly n turns if we never have to "skip"? Wait, we always discard two cards per turn? Yes, every turn discards exactly two cards. So total turns = n? But sample says n=2, k=3. How can there be 3 turns if we discard 2 cards per turn? 3 turns would discard 6 cards, but we only have 4 cards. Contradiction.
+    // Let's re-read sample 1: n=2, cards: 2 1 2 1. Turn 1: flip 2 and 1 -> different, flip back. Turn 2: flip 2 and 2 -> same, discard. Turn 3: flip 1 and 1 -> discard. So turn 1 did NOT discard cards. The problem says: "If the two cards have the same number, you discard the two cards. Otherwise, you flip them back to their original position." So if they don't match, they are NOT discarded. So we don't always discard two cards per turn. The number of turns is not simply n.
+    // So my previous model was wrong. The cards are flipped back if they don't match. So they remain in the row, but they are "known" (we have seen them). The algorithm says: "If there are two cards that you have flipped previously and have the same number, flip those two cards." So we can flip already known cards.
+    // Let's re-model: We have a row of 2n cards, all face down initially. We have a memory of cards we've seen (their positions and numbers). The algorithm:
+    // - If there is a pair of known cards with the same number, we flip those two (they are discarded).
+    // - Otherwise, we flip the first unknown card. Let its number be x.
+    // - Then, if there is a known card with number x, we flip that known card (they match and are discarded).
+    // - Otherwise, we flip the first unknown card as the second card.
+    // So the known cards are those we've flipped but not discarded. They remain in place, face down? Actually, we flip them back, so they are face down but we know their numbers and positions.
+    // So the state: some cards are known (we know their number and position), some are unknown. We can choose to flip known cards if we have a pair.
+    // The process: we always prioritize matching known pairs. If no known pairs, we reveal a new card. If it matches a known card, we match them. Otherwise, we reveal another new card. If they match, they are discarded immediately. If not, both become known.
+    // This is exactly the process of matching parentheses or something? Let's think in terms of the array order.
+    // The number of turns equals the number of times we flip a pair of cards. Each turn we flip two cards. Some turns result in a match and discard, some don't. The total number of turns is what we want to be k.
+    // Let's simulate the algorithm on an array. We can think of it as: we maintain a set of known cards (their numbers). We also have a queue of unknown cards from left to right.
+    // The algorithm: while there are cards left:
+    //   if there are two known cards with same number, match them (1 turn).
+    //   else:
+    //       take first unknown card, reveal it. If its number is in known set, match with that known card (1 turn).
+    //       else:
+    //           take next unknown card, reveal it. If it matches the first, discard both (1 turn).
+    //           else: add both to known set (1 turn, no discard).
+    // So each turn either:
+    // - matches two known cards (discard 2 known)
+    // - matches a new card with a known card (discard 1 new, 1 known)
+    // - matches two new cards (discard 2 new)
+    // - reveals two new cards that don't match (no discard, add 2 known)
+    // The game ends when all discarded.
+    // Let's find the number of turns in terms of the array.
+    // Consider the first occurrences of each number. The algorithm essentially pairs numbers in a certain order.
+    // I recall a known result: For this specific greedy algorithm, the number of turns is equal to n + (number of "inversions" between first and second occurrences?) Let's test on samples.
+    // n=2, array 2 1 2 1: first occurrences: 2 at pos1, 1 at pos2. second: 2 at pos3, 1 at pos4.
+    // The algorithm: turn1: reveal 2, then reveal 1 (no match) -> known {2,1}. turn2: known pair? No two same. Reveal first unknown: 2. 2 is known, match with known 2. Discard. turn3: known {1}. No pair. Reveal first unknown: 1. 1 is known, match. Total 3 turns. n=2, k=3. n + something = 3 -> something=1.
+    // n=3, array 1 3 2 2 1 3: first: 1,3,2. second: 2,1,3. Let's simulate: turn1: reveal 1, reveal 3 -> known {1,3}. turn2: no known pair. reveal first unknown: 2. 2 not known. reveal next unknown: 2. match! discard 2,2. turn3: known {1,3}. no pair. reveal first unknown: 1. 1 known, match with known 1. turn4: known {3}. reveal first unknown: 3. match. Total 4 turns. n=3, k=4. n+1=4.
+    // n=3, array 1 2 3 1 2 3: first: 1,2,3. second: 1,2,3. Simulate: turn1: 1,2 -> known {1,2}. turn2: no pair. reveal 3, reveal 1 -> 3 not known, 1 is known? Wait, second card is 1, which is known. But algorithm says: after revealing first card (3), if there is a known card with number 3, flip it. There isn't. So we flip the first unknown card as second. The first unknown is 1? But 1 is at position 4, which is unknown (never flipped). So we flip 1. 1 is known? Actually, we know 1 from turn1, but its position is 1. The card at position 4 is a different card with number 1. We haven't flipped it yet, so it's unknown. The algorithm says: "if there is another card that you have flipped previously and has the number x, flip that card." Here x=3, no known 3. So we flip the first card we have never flipped so far. That is position 4, number 1. So we flip 1. Now we have flipped 3 and 1. They don't match. So both become known? But we already knew 1 from position 1. Now we have two known 1's? Yes! Because we flipped position 4 and it's 1. So now we have two known cards with number 1. So the next turn, the algorithm will say: "If there are two cards that you have flipped previously and have the same number, flip those two." So turn3: flip the two 1's (positions 1 and 4) and discard them. Then turn4: known {2,3}. No pair. Reveal first unknown: 2 (position 5). 2 is known, match with known 2. turn5: known {3}. Reveal 3, match. Total 5 turns. n=3, k=5 = 2n-1.
+    // So the number of turns can be n + number of "extra" turns. The extra turns come from creating known pairs that later get matched.
+    // Let's analyze the process in terms of the array. We can think of the array as a sequence of first and second occurrences. The algorithm processes left to right. When we see a first occurrence, if we don't match it immediately, it becomes known. When we see a second occurrence, if its first occurrence is already known, we match them immediately (1 turn). If not, it means the first occurrence hasn't been revealed yet? But we process left to right, so first occurrence always comes before second occurrence. So when we see a second occurrence, its first occurrence must have been revealed already (since we go left to right). So it will always be known. Wait, but in the 1 2 3 1 2 3 example, when we revealed 3 (first occurrence), we then revealed 1 (second occurrence of 1). The first occurrence of 1 was already known. But the algorithm didn't match them immediately because the first card was 3, and we only check if there's a known card matching the first card (3). So we don't match the second card even if it matches a known card. We only match if the first card matches a known card. So the second card being a second occurrence doesn't automatically trigger a match. It only becomes known, and later we might match it with its first occurrence when we flip the first occurrence as the first card? But we already flipped the first occurrence. So we have two known cards of the same number, which will be matched in the next turn.
+    // So the process: we maintain a set of "known" numbers (first occurrences seen but not yet matched). When we flip a first card:
+    // - if it's a second occurrence (i.e., its number is in the known set), we match it with the known first occurrence. (1 turn, discard both, remove from known set)
+    // - if it's a first occurrence (not in known set), we then flip a second card:
+    //   - if the second card is the same number (i.e., its second occurrence immediately follows), we match and discard both. (1 turn, nothing added to known set)
+    //   - if the second card is a different number, we add both to known set. (1 turn, no discard)
+    // But wait, the second card could be a second occurrence of some other number. In that case, we add it to known set, so now we have two known cards of that number (the first occurrence from earlier, and this second occurrence). That will be matched in the next turn.
+    // So the number of turns is exactly the number of times we start a turn. Each turn we flip two cards. The total number of turns k = n + (number of times we add two cards to the known set). Because each time we add two cards to the known set, we use one turn without discarding, and later we will need an extra turn to match those two known cards? Actually, when we add two cards to the known set, we don't discard. Later, we will match them either by flipping one of them as the first card (if it's a second occurrence) or by matching the two known cards directly. Each pair of cards that we add to the known set in one turn will eventually require one extra turn to be discarded (either by matching the two known cards directly, or by matching a second occurrence with its known first occurrence). But note that when we match a second occurrence with a known first occurrence, that's one turn. When we match two known cards directly, that's also one turn. So each time we do a "reveal two different new cards" turn, we create two known cards that will later be matched in some turns. But those later turns might be combined? Let's count total turns.
+    // Let E be the number of turns where we reveal two different new cards (no match). In such a turn, we add 2 to the known set. Initially known set size 0. Each time we match a known pair (either by revealing a second occurrence as first card, or by matching two known cards directly), we remove 2 from the known set? Actually, matching a second occurrence with a known first occurrence removes 1 from known set (the first occurrence) and discards the new second occurrence (which wasn't in known set). Matching two known cards removes 2 from known set. Matching two new cards that are the same removes 0 from known set. So the known set size changes by: +2 on "no match" turn, -1 on "first card matches known" turn, -2 on "match two known" turn, 0 on "new pair match" turn.
+    // The total number of turns T = (turns with no match) + (turns with first card match) + (turns with two known match) + (turns with new pair match).
+    // Also, total cards = 2n. Each turn flips 2 cards. The total number of card flips is 2T. But some cards are flipped multiple times? No, once a card is discarded, it's gone. Cards that are revealed and not matched are flipped back, but they are "known" and can be flipped again later. So a card can be flipped more than once. The total number of flips is not simply 2n.
+    // Let's find a formula for T in terms of the array.
+    // Consider the sequence of first and second occurrences. Let's label positions 1..2n. For each number, let f_i be its first occurrence position, s_i its second.
+    // The algorithm's behavior depends on the order of f_i and s_i.
+    // I recall a known result from a similar problem: The number of turns is n + (number of i such that there exists j with f_i < f_j < s_i < s_j). Or something like that.
+    // Let's test on samples.
+    // n=2, 2 1 2 1: f_2=1, s_2=3; f_1=2, s_1=4. f_2 < f_1 < s_2 < s_1? 1<2<3<4 yes. So count=1. n+1=3. Matches.
+    // n=3, 1 3 2 2 1 3: f_1=1, s_1=5; f_3=2, s_3=6; f_2=3, s_2=4. Check pairs: f_1<f_3<s_1<s_3? 1<2<5<6 yes. f_1<f_2<s_1<s_2? 1<3<5<4 no. f_3<f_2<s_3<s_2? 2<3<6<4 no. So count=1. n+1=4. Matches.
+    // n=3, 1 2 3 1 2 3: f_1=1, s_1=4; f_2=2, s_2=5; f_3=3, s_3=6. f_1<f_2<s_1<s_2? 1<2<4<5 yes. f_1<f_3<s_1<s_3? 1<3<4<6 yes. f_2<f_3<s_2<s_3? 2<3<5<6 yes. Count=3. n+3=6? But k=5. So that formula gives 6, not 5. So it's not that.
+    // Maybe it's n + number of "crossings"? Let's think differently.
+    // Let's simulate the algorithm on a general array. We can think of it as: we have a stack of known cards. Actually, the known set doesn't have an order, but the algorithm always picks the first unknown card. So the order matters.
+    // Another approach: The number of turns is exactly the number of times we start a turn. Each turn we flip two cards. The process ends when all cards are discarded. We can think of the array as determining a sequence of "events". 
+    // Let's define a "block" structure. Notice that when we have a matching pair immediately adjacent (like 2,2), they are discarded in one turn without affecting the known set. So we can compress the array by removing such adjacent pairs? But the algorithm doesn't just remove adjacent pairs; it can match non-adjacent pairs.
+    // Let's try to find a pattern for constructing an array with exactly k turns.
+    // From samples, we see that k can range from n to 2n-1. Is it always possible to achieve any k in that range? For n=3, k=2 is NO, k=3? Not in sample, but can we get k=3? n=3, k=3 means n+0=3. That would require an array with no extra turns. For example, 1 1 2 2 3 3. Let's simulate: turn1: 1,1 match. turn2: 2,2 match. turn3: 3,3 match. Total 3 turns. So k=3 is possible. Sample didn't test it, but it should be YES. So k can be n.
+    // So the possible k are exactly n <= k <= 2n-1.
+    // Now we need to construct an array for any n and k in that range.
+    // Let's find a construction.
+    // We want exactly k turns. Let extra = k - n. extra can range from 0 to n-1.
+    // We need to create extra "no match" turns that add pairs to the known set.
+    // Each "no match" turn reveals two different new cards and adds them to known set. Later, these known cards will be matched, each requiring a turn (either by matching two known cards or by matching a new card with a known one). But note that when we have two known cards of the same number, they are matched in one turn. When we have a known first occurrence and later we reveal its second occurrence as the first card of a turn, that's one turn. So each "no match" turn essentially creates two known cards that will later be resolved in some number of turns. But the total extra turns is exactly the number of "no match" turns? Let's check: In n=2, extra=1. We had one "no match" turn (turn1). Then we had two turns to resolve: turn2 matched known 2 with new 2? Actually turn2: first card was 2 (new? No, 2 was known from turn1? Wait, in turn1 we revealed 2 and 1. So 2 and 1 are known. In turn2, we revealed the first unknown card, which is the second 2. But 2 is known, so we matched it with the known 2. That's one turn. Then turn3: revealed first unknown (second 1), matched with known 1. So we had 1 no-match turn, and then 2 match turns. Total turns = 1 + 2 = 3. n=2, so base n=2, extra=1. The no-match turn itself is an extra turn beyond the base n? Base n would be if all pairs were adjacent: 2 turns. Here we have 3 turns. So the no-match turn is the extra turn. The subsequent match turns are part of the base n? Actually, base n is the number of pairs. Each pair must be matched in some turn. In the adjacent case, each pair is matched in its own turn, total n turns. In the non-adjacent case, some turns don't match a pair, and some turns match a pair. The total number of turns is (number of no-match turns) + (number of match turns). And number of match turns is exactly n (since each pair is matched exactly once). So total turns = n + (number of no-match turns). So extra = number of no-match turns.
+    // Let's verify on n=3, k=4 (extra=1): array 1 3 2 2 1 3. Turn1: 1,3 no match. Turn2: 2,2 match. Turn3: 1 match with known 1. Turn4: 3 match with known 3. So 1 no-match turn, 3 match turns. Total 4 = 3+1.
+    // n=3, k=5 (extra=2): array 1 2 3 1 2 3. Turn1: 1,2 no match. Turn2: 3,1 no match? Wait, turn2: first card 3, second card 1. 1 is known? Actually, after turn1, known {1,2}. Turn2: first unknown is 3. 3 not known. Second unknown is 1. 1 is known? But the algorithm says: if there is a known card with number 3, flip it. There isn't. So flip the first unknown card, which is 1. So we flip 1. Now we have flipped 3 and 1. They don't match. So both become known. But 1 was already known, so now we have two known 1's. So turn2 is a no-match turn? It revealed two new cards (3 and the second 1) and they didn't match. So it's a no-match turn. Then turn3: match the two known 1's. Turn4: first unknown is 2 (second 2). 2 is known, match. Turn5: first unknown is 3 (second 3). 3 is known, match. So no-match turns: turn1 and turn2 (2 turns). Match turns: turn3, turn4, turn5 (3 turns). Total 5 = 3+2. So extra = number of no-match turns = 2.
+    // So indeed, k = n + number of no-match turns. And each no-match turn reveals two different new cards that are both first occurrences? Not necessarily. In turn2 of the last example, the second card was a second occurrence (of 1). But it was a new card (never flipped before). So it counts as a new card. The first card was a first occurrence (3). So the no-match turn can involve a second occurrence as the second card. But the key is that both cards flipped in that turn were "unknown" (never flipped before). And they didn't match each other. So they become "known" (if they weren't already). If one of them was already known (like 1), we now have two known cards of that number, which will be matched in the next turn.
+    // So the number of no-match turns is exactly the number of times we flip two unknown cards that are not a matching pair.
+    // How can we control this number? We can design the array such that the first few cards are first occurrences of some numbers, and we interleave them to cause no-match turns.
+    // Let's think of a construction that gives exactly extra no-match turns, for any extra from 0 to n-1.
+    // If extra = 0, we just put all pairs adjacent: 1 1 2 2 ... n n. This gives n turns.
+    // If extra = n-1, we can put all first occurrences in the first half, and all second occurrences in the second half, but in reverse order? Let's test: n=3, extra=2 (n-1=2). Array 1 2 3 1 2 3 gave extra=2. What about 1 2 3 3 2 1? Let's simulate: turn1: 1,2 no match. known {1,2}. turn2: first unknown 3, second unknown 3? Wait, first unknown is 3, second unknown is 3? The next unknown after 3 is 3? The array is 1 2 3 3 2 1. Positions: 1:1, 2:2, 3:3, 4:3, 5:2, 6:1. Turn1: flip 1,2 -> no match. known {1,2}. Turn2: first unknown is 3. 3 not known. Second unknown is 3 (position 4). They match! So turn2 discards 3,3. Turn3: known {1,2}. No pair. First unknown is 2 (position 5). 2 is known, match with known 2. Turn4: known {1}. First unknown is 1 (position 6). Match. Total 4 turns. extra=1. So that gives extra=1, not 2.
+    // To maximize extra, we want to delay matching as much as possible. The maximum extra is n-1. The construction 1 2 3 ... n 1 2 3 ... n gives extra = n-1? For n=3, it gave 2. For n=4: 1 2 3 4 1 2 3 4. Simulate: turn1: 1,2 no match. known {1,2}. turn2: first unknown 3, second unknown 4? Wait, after turn1, known {1,2}. Turn2: first unknown is 3. 3 not known. Second unknown is 4. 4 not known. So no match. known {1,2,3,4}. turn3: now we have known {1,2,3,4}. No pair of same number. First unknown is 1 (second occurrence). 1 is known, so we match with known 1. Discard 1,1. known {2,3,4}. turn4: first unknown 2, match. turn5: first unknown 3, match. turn6: first unknown 4, match. Total 6 turns. n=4, extra=2? n=4, k=6 -> extra=2. But n-1=3. So 1..n 1..n gives extra = floor(n/2)? Let's check n=3: 1 2 3 1 2 3 -> extra=2 (n-1=2). n=4: extra=2 (not 3). n=5: 1 2 3 4 5 1 2 3 4 5. Simulate: turn1: 1,2 no match. turn2: 3,4 no match. turn3: 5,1? First unknown 5, second unknown 1. 1 is known? Yes, from turn1. So 5 and 1 no match, but 1 becomes second known. known now {1,2,3,4,5} with 1 having two knowns? Actually, after turn1: known {1,2}. turn2: reveal 3,4 -> known {1,2,3,4}. turn3: first unknown 5, second unknown 1 (second occurrence). 5 not known, 1 is known. So no match, but now we have two known 1's. known {1,2,3,4,5} with 1 duplicated. turn4: match the two 1's. turn5: first unknown 2 (second occurrence), match. turn6: first unknown 3, match. turn7: first unknown 4, match. turn8: first unknown 5, match. Total 8 turns. n=5, extra=3. n-1=4. So extra=3.
+    // Pattern: for n odd, 1..n 1..n gives extra = n-1? n=3 -> 2, n=5 -> 3? Wait, n=5 extra=3, n-1=4. So not n-1.
+    // Let's compute extra for 1..n 1..n: 
+    // The process: we reveal pairs of first occurrences until we run out of first occurrences? Actually, we reveal two at a time. Each turn we reveal two first occurrences (no match) until we have revealed all first occurrences. The number of first occurrences is n. If n is even, we can reveal them in n/2 turns. If n is odd, we reveal (n-1)/2 turns of two first occurrences, then the last first occurrence is revealed along with the first second occurrence (which causes a duplicate known). So the number of no-match turns is ceil(n/2). Then we have n match turns. Total turns = n + ceil(n/2). So extra = ceil(n/2). For n=3, ceil(1.5)=2. n=4, ceil(2)=2. n=5, ceil(2.5)=3. n=6, ceil(3)=3. So extra = ceil(n/2). But we want to achieve up to n-1. So 1..n 1..n doesn't give the maximum.
+    // How to get extra = n-1? We need to have n-1 no-match turns. That means almost every turn is a no-match turn, except the last n turns are match turns? But total turns = n + extra. If extra = n-1, total turns = 2n-1. That means we have n-1 no-match turns and n match turns. But we only have 2n cards. Each no-match turn flips 2 unknown cards and doesn't discard them. So after n-1 no-match turns, we have flipped 2(n-1) cards, all unknown, and none discarded. Then we have n match turns to discard all 2n cards. But in the match turns, we flip some cards that may already be known. The total number of

@@ -1,0 +1,43 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        long long a, b;
+        cin >> a >> b;
+        if (a > b) swap(a, b);
+        // We need minimal moves to reach (a,b)
+        // Let m be the final leg length.
+        // Number of moves = (m-1) increases + ceil(a/m) + ceil(b/m) jumps.
+        // We can try m around sqrt(b) and also check m = floor(sqrt(b)) etc.
+        long long ans = LLONG_MAX;
+        // Try m from 1 to sqrt(b) + some margin
+        long long limit = (long long)sqrt(b) + 2;
+        for (long long m = 1; m <= limit; ++m) {
+            long long moves = (m - 1) + (a + m - 1) / m + (b + m - 1) / m;
+            ans = min(ans, moves);
+        }
+        // Also try m = b / k for small k
+        for (long long k = 1; k <= limit; ++k) {
+            long long m = b / k;
+            if (m >= 1) {
+                long long moves = (m - 1) + (a + m - 1) / m + (b + m - 1) / m;
+                ans = min(ans, moves);
+            }
+            m = (b + k - 1) / k; // ceil(b/k)
+            if (m >= 1) {
+                long long moves = (m - 1) + (a + m - 1) / m + (b + m - 1) / m;
+                ans = min(ans, moves);
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

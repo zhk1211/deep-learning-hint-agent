@@ -1,0 +1,205 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(m + 1);
+    for (int i = 1; i <= m; ++i) {
+        cin >> a[i];
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        int xs, ys, xf, yf, k;
+        cin >> xs >> ys >> xf >> yf >> k;
+
+        // Check column alignment modulo k
+        if (abs(ys - yf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // Check row alignment modulo k
+        if (abs(xs - xf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // The robot can only move vertically in steps of k.
+        // The maximum row it can reach in columns ys and yf is n.
+        // But it must avoid blocked cells. The highest blocked cell in column i is a[i].
+        // To move between columns, it must go up to a row that is strictly above all blocked cells
+        // in the columns it passes through.
+        // Since it moves horizontally in steps of k, it will visit columns ys, ys±k, ys±2k, ..., yf.
+        // The maximum blocked height among these columns is max_{j in path} a[j].
+        // The robot must be able to go to a row > that maximum blocked height.
+        // The highest row it can reach from start is: start row rounded up to the next multiple of k?
+        // Actually, from start row xs, it can go up to rows xs, xs+k, xs+2k, ... up to n.
+        // But it must be able to reach a row > max_blocked.
+        // Let max_blocked = max_{j from min(ys,yf) to max(ys,yf) step k} a[j].
+        // We need to check if there exists some row r such that:
+        // r > max_blocked, r <= n, r ≡ xs (mod k), and r ≡ xf (mod k) (already ensured by row alignment).
+        // The maximum reachable row from xs is: n - ((n - xs) % k).
+        // Actually, the highest row reachable from xs with step k is: xs + k * floor((n - xs) / k).
+        // Let max_reachable = xs + ((n - xs) / k) * k.
+        // We need max_reachable > max_blocked.
+        // But we also need to be able to go down to xf. Since we can move down, if we can reach a row > max_blocked,
+        // we can then move down to xf (since xf > a[yf] and xf ≡ xs mod k).
+        // So condition: max_reachable > max_blocked.
+
+        // Compute max_blocked efficiently.
+        int y_min = min(ys, yf);
+        int y_max = max(ys, yf);
+        int max_blocked = 0;
+        // We need max of a[j] for j in [y_min, y_max] with j ≡ y_min (mod k).
+        // Since m up to 2e5 and q up to 2e5, we can just loop? Worst-case k=1, loop over all columns -> O(m) per query -> too slow.
+        // We need a faster way. Notice that k can be large, but if k is small, the number of steps is large.
+        // We can precompute a segment tree for range maximum queries on a.
+        // Then for a given query, we can find the maximum in the range [y_min, y_max] by jumping in steps of k.
+        // But if k is small, there could be many steps. However, total queries 2e5, total columns 2e5.
+        // If we do a loop over steps, worst-case sum of steps over all queries could be large.
+        // We need a better approach.
+        // Observe that we only need the maximum of a over an arithmetic progression.
+        // We can use a sparse table or segment tree and iterate over the progression, but if k=1, we just query the whole range once.
+        // If k is large, few steps. If k is small, many steps but the range is small? Not necessarily.
+        // Alternative: For each query, we can find the maximum by considering the range [y_min, y_max].
+        // The columns visited are y_min, y_min+k, y_min+2k, ... up to y_max.
+        // This is equivalent to taking the maximum over the entire range [y_min, y_max] because the maximum over the progression is <= maximum over the range.
+        // But is it equal? Not necessarily, because the progression might skip the column with the maximum.
+        // However, we need the maximum over the exact columns visited. So we cannot just take the range max.
+        // But wait: The robot moves horizontally by k cells at a time. It must pass through all intermediate columns? No, it jumps exactly k columns.
+        // So it only visits those specific columns.
+        // We need the maximum of a over those columns.
+        // We can answer this by building for each remainder modulo k? But k varies per query.
+        // Since m <= 2e5, we can precompute a segment tree for range max, and then for each query, we can iterate over the steps.
+        // The number of steps is (y_max - y_min) / k + 1.
+        // Sum over queries of this number could be large if many queries have small k and large range.
+        // But we can optimize: if k is small, say k <= sqrt(m), we can precompute something? Or we can just use the fact that if k is small, the number of steps is large, but the total number of columns is only 2e5.
+        // Actually, worst-case: q=2e5, each query has k=1, y_min=1, y_max=m. Then steps = m = 2e5. Total operations = 4e10, too slow.
+        // We need a faster way to get the maximum over an arithmetic progression.
+        // Notice that the condition max_reachable > max_blocked is equivalent to: there exists a row > max_blocked that is reachable.
+        // max_reachable = xs + ((n - xs) / k) * k.
+        // So we just need max_blocked < max_reachable.
+        // How to compute max_blocked quickly?
+        // We can use a segment tree and do a "jump" query: we want the maximum in the range [y_min, y_max] among indices i with i ≡ y_min (mod k).
+        // This is a classic problem: we can build a segment tree over the array, and for a query, we can traverse the segment tree, only going into nodes that contain at least one index with the correct remainder.
+        // But that's complicated.
+        // Alternative: Since m is only 2e5, we can precompute for each possible step k? No, k up to 1e9.
+        // Another observation: The robot can only move horizontally if it can go up high enough to clear all blocked cells in the columns it visits.
+        // But actually, the robot doesn't have to go up in the start column, move horizontally, then go down. It can go up, move horizontally, go up more, etc.
+        // However, the key is that it must at some point be at a row > a[j] for all columns j it passes through.
+        // The maximum row it can reach is max_reachable. So if max_reachable > max_blocked, it can go up to some row > max_blocked, then move horizontally at that row (since all columns have blocked cells only up to a[j] < that row), then go down to finish.
+        // So condition is exactly max_reachable > max_blocked.
+        // Now, how to compute max_blocked efficiently?
+        // We can use a segment tree that stores the maximum of a. Then for a query, we can query the maximum over the entire range [y_min, y_max]. But as noted, this might overestimate max_blocked if the true maximum is not on the progression.
+        // However, if the true maximum is not on the progression, then the robot doesn't visit that column, so it doesn't need to clear it. So we cannot just take the range max.
+        // But wait: Is it possible that the maximum over the progression is smaller than the range max, and that affects the answer? Yes.
+        // So we need the exact max over the progression.
+        // Let's think differently: The robot moves horizontally in steps of k. So the columns it visits are exactly those with index ≡ y_s (mod k) between y_s and y_f.
+        // We can precompute for each remainder r modulo k? But k varies.
+        // Since m <= 2e5, we can answer each query in O(log m) using a segment tree if we can query the max over an arithmetic progression.
+        // There is a known technique: For a given k, we can build a segment tree where each node stores the maximum for each remainder modulo k? That would be too much.
+        // But note that the number of distinct k in queries is at most q. Still, k can be large.
+        // Another idea: The condition max_reachable > max_blocked can be rewritten. max_reachable is the largest number <= n that is ≡ xs (mod k). So max_reachable = n - ((n - xs) % k).
+        // We need max_blocked < max_reachable.
+        // max_blocked is the maximum of a[j] for j in the progression.
+        // Notice that a[j] are between 0 and n.
+        // If we can quickly find the maximum a[j] in the progression, we can check.
+        // Since m is only 2e5, we can use a sqrt decomposition: precompute prefix maximums for small k? Or we can just use a segment tree and do a "jump" query by manually iterating over the steps if the number of steps is small, and if the number of steps is large, then k is small. For small k, we can precompute an array for each small k? But k can be up to 1e9, small k means k <= sqrt(m) ≈ 450. We can precompute for each k from 1 to B (e.g., 450) an array of size m/k? That would be too much memory: sum_{k=1}^{450} m/k ≈ m log B ≈ 2e5 * 6 = 1.2e6, which is fine! Actually, we can precompute for each k up to B, and for each remainder, the maximum a in that residue class. But we need range queries. We can precompute prefix maximums for each (k, remainder) over the array. That is, for a fixed k, we can create an array for each remainder r in [0, k-1], but that would be k arrays of length about m/k. Total elements = m. So for each k, we store m elements. For B=450, total memory = 450 * 2e5 = 9e7 integers, which is about 360 MB, too high for 256 MB.
+        // We can reduce B. Let's see: Time limit 1s. We can set B = 200, memory = 200 * 2e5 * 4 bytes = 160 MB, maybe okay but close. We can use short? a_i up to 1e9, need int.
+        // Alternatively, we can answer queries offline: group by k. For each k, we can process all queries with that k. For a fixed k, we can build a segment tree or sparse table over the array a, but we need to query max over indices ≡ r (mod k) in a range. We can build a segment tree where each node stores the maximum for each remainder? That would be O(m * k) memory per k, too much.
+        // Better: For a fixed k, we can decompose the array into k independent arrays (one for each remainder). For each remainder, we can build a segment tree or sparse table over the compressed indices. Then for a query, we find the remainder r = y_s % k, and we need the max in the range of indices [y_s, y_f] that are ≡ r mod k. This is equivalent to querying the compressed array for remainder r from index (y_s - r)/k to (y_f - r)/k. Building a sparse table for each remainder takes O((m/k) log(m/k)) time and space. Sum over k? If we do this per query group, total time could be large if many different k.
+        // But q up to 2e5, number of distinct k could be up to 2e5. Building a sparse table for each k would be O(m log m) per k, too slow.
+        // We need a more efficient method.
+
+        // Let's reconsider the problem. Maybe there is a simpler condition.
+        // The hints say: "If a[x] != a[y] for some x != y, then the answer for k=1 is NO." and "If k=1, you can reach x-th row from y-th row iff x <= y."
+        // Wait, the hints seem to be for a different problem? They mention a[x] and a[y] as rows? Let's read carefully.
+        // Hint 5: "If a[x] != a[y] for some x != y, then the answer for k=1 is NO."
+        // Hint 6: "If k=1, you can reach x-th row from y-th row iff x <= y."
+        // These hints might be misleading or for a different interpretation. Let's think about the actual problem.
+        // The grid has columns with blocked bottom cells. The robot moves in steps of k.
+        // For k=1, the robot moves one cell at a time. It can go up, right, down, left. It cannot go into blocked cells.
+        // The start is (xs, ys), finish is (xf, yf).
+        // With k=1, the robot can reach the finish if and only if there is a path from start to finish avoiding blocked cells.
+        // The blocked cells form a "skyline" at the bottom. The unblocked region is connected? Not necessarily, because if a column has a_i = n, it's completely blocked, but the problem says a_i <= n, and start/finish are unblocked, so a_i < n for those columns. But there could be columns with a_i = n, blocking passage.
+        // Actually, the unblocked cells in column i are rows a_i+1 to n. So the unblocked region is a set of columns with varying "floor" heights.
+        // The robot can move up/down/left/right. It can only move horizontally if it is at a row > a_i for the columns it passes.
+        // So to go from column ys to yf, the robot must go up to a row that is > max(a_i) for all columns between ys and yf, then move horizontally, then go down.
+        // This is true for any k. For k=1, it can move up one by one, so it can reach any row up to n. So it can always go up to n, which is > all a_i (since a_i <= n, but if a_i = n, column is fully blocked, but start/finish are unblocked, so a_ys < n and a_yf < n. However, intermediate columns could have a_i = n, meaning they are completely blocked. If there is a column with a_i = n between ys and yf, the robot cannot pass because it would need to go to row > n, impossible. So the condition for k=1 is: max_{i between ys and yf} a_i < n. And also the robot must be able to go up from xs to that row, which is always possible since xs <= n and it can go up. But wait, it also must go down to xf. So it needs to reach a row > max_blocked, then go down to xf. Since xf > a_yf, it can go down. So the only condition is max_blocked < n. But the hints say something about a[x] != a[y]? That doesn't match.
+        // Let's re-read the hints carefully. They might be for a different problem? The hints mention "a[x]" and "a[y]" as if a is an array of rows? But in the problem, a is the number of blocked cells per column. So a[x] is the blocked height in column x. Hint 5: "If a[x] != a[y] for some x != y, then the answer for k=1 is NO." That would mean if any two columns have different blocked heights, the answer is NO. That seems too strong and doesn't match the sample. In sample 1, a = [9,0,0,10,3,4,8,11,10,8]. They have different values, yet some queries output YES for k=1? Let's check sample: first query: 1 2 1 3 1 -> start (1,2), finish (1,3), k=1. Output YES. But a[2]=0, a[3]=0, they are equal. Second query: same but k=2, output NO. Third: 4 3 4 5 2 -> start (4,3), finish (4,5), k=2. a[3]=0, a[4]=10, a[5]=3. Different, output NO. Fourth: 5 3 11 5 3 -> start (5,3), finish (11,5), k=3. a[3]=0, a[5]=3. Output NO. Fifth: same but k=2, output YES. Sixth: 11 9 9 10 1 -> start (11,9), finish (9,10), k=1. a[9]=10, a[10]=8. Different, output YES. So hint 5 is false for this problem? Wait, hint 5 says "If a[x] != a[y] for some x != y, then the answer for k=1 is NO." But in query 6, a[9]=10, a[10]=8, they are different, yet answer is YES. So the hints might be for a different problem, or I misunderstood the notation. Maybe a[x] means the row of the start/finish? No, the problem statement uses a_i for columns. The hints might be from a different problem accidentally included? Let's ignore the hints and solve from scratch.
+
+        // Let's analyze the problem properly.
+        // Grid n rows, m columns. Column i has bottom a_i cells blocked.
+        // Robot moves in steps of k: each command is executed k times.
+        // Commands: up, right, down, left.
+        // If it tries to move into blocked cell or outside, it explodes.
+        // We can send any number of commands. Robot must end exactly at finish cell.
+        // It cannot stop mid-command; if it visits finish during execution, it doesn't count.
+
+        // Since each command moves exactly k cells in one direction, the robot's position after each command changes by multiples of k in that direction.
+        // So the row and column coordinates modulo k are invariant under moves? Actually, moving up changes row by +k, so row mod k remains same. Moving right changes column by +k, so column mod k remains same. So the robot can only reach cells with (row - xs) % k == 0 and (col - ys) % k == 0. So first condition: (xf - xs) % k == 0 and (yf - ys) % k == 0. That's necessary.
+
+        // Now, the robot must avoid blocked cells. Since it moves in jumps of k, it can only be at rows that are ≡ xs (mod k). The blocked cells in column j are rows 1..a_j. So the robot can be in column j only at rows > a_j that are ≡ xs mod k.
+        // To move from column ys to yf, the robot will visit a sequence of columns. Since horizontal moves are exactly k columns left or right, the columns visited will be ys, ys ± k, ys ± 2k, ..., yf. So the set of columns visited is exactly the arithmetic progression with step k between ys and yf.
+        // The robot must be able to move vertically in each visited column to a row that is safe ( > a_j ) and also reachable from the start row and eventually to the finish row.
+        // The robot can move up and down freely within a column, as long as it stays in unblocked cells and within [1, n]. Since it moves in steps of k, from a row r, it can go to r + t*k for integer t, as long as it doesn't go below 1 or above n, and doesn't step on blocked cells. But blocked cells are at the bottom, so the only danger is going too low. So the robot can always go up to higher rows (up to n) as long as it doesn't exceed n. It can go down to lower rows, but must not enter blocked cells. The lowest safe row in column j that is ≡ xs mod k is the smallest number > a_j that is ≡ xs mod k. Let's call this low_j = smallest r > a_j with r ≡ xs (mod k). The robot can only be at rows >= low_j in column j.
+        // Similarly, the highest safe row is n (or the largest number <= n ≡ xs mod k). Let high = largest r <= n with r ≡ xs mod k.
+        // So in column j, the robot can occupy any row in the set {low_j, low_j + k, ..., high}.
+        // To move from start to finish, the robot must find a path where at each step, it moves to an adjacent column (distance k) and changes row by some multiple of k, while staying within the allowed rows for each column.
+        // This is essentially: can we go from (xs, ys) to (xf, yf) such that for each column j in the progression, there exists a row r_j in the allowed set, with r_{j} and r_{j+k} differing by a multiple of k? But since horizontal moves don't change row, when moving from column j to j+k, the row must be the same! Because a horizontal command moves exactly k columns left/right, and does not change row. So the robot must be at some row r that is allowed in both column j and column j+k. Then it can move horizontally.
+        // Wait, the robot can also move vertically within a column before moving horizontally. So the sequence of commands could be: go up in column ys to some row r, then move right k columns to column ys+k (staying at row r), then go up/down in that column, etc.
+        // So the robot can change rows between horizontal moves. Therefore, the condition is: there exists a sequence of columns c_0=ys, c_1, ..., c_t=yf (with c_{i+1} = c_i ± k) and rows r_0=xs, r_1, ..., r_t=xf such that for each i, r_i is allowed in column c_i, and |r_{i+1} - r_i| is a multiple of k (since vertical moves are in steps of k). But actually, the robot can move vertically by any multiple of k, so it can go from r_i to any r_{i+1} that is ≡ r_i mod k (which is always true since all allowed rows are ≡ xs mod k). So the only constraint is that r_i is allowed in column c_i.
+        // Moreover, the robot can move horizontally only if the row r is allowed in both columns. So if it wants to go from column c_i to c_{i+1}, it must be at a row r that is allowed in both columns.
+        // Therefore, the problem reduces to: Is there a path in the graph where nodes are (column, row) with row allowed, and edges are vertical moves (change row by ±k within same column) and horizontal moves (change column by ±k, same row)? But vertical moves are always possible between any two allowed rows in the same column because they are all congruent mod k and within [1,n]. So within a column, the allowed rows form a connected component (a path graph). So the connectivity between columns is determined by whether there exists a row that is allowed in both columns.
+        // Two adjacent columns (in the progression) j and j+k are connected if there exists a row r such that r > a_j, r > a_{j+k}, r ≡ xs mod k, and r <= n. That is, if the intersection of their allowed row sets is non-empty. The allowed row set for column j is {r | r ≡ xs mod k, a_j < r <= n}. So the intersection is non-empty iff the smallest allowed row in both columns is <= n. The smallest allowed row in column j is low_j = a_j + 1 + ((xs - (a_j + 1)) % k + k) % k? Actually, we want the smallest r > a_j with r ≡ xs mod k. That is: r = a_j + 1 + (xs - (a_j + 1)) mod k? Let's compute: let rem = (xs - (a_j + 1)) % k. If rem < 0, rem += k. Then low_j = a_j + 1 + rem. But if rem == 0, low_j = a_j + 1. So low_j = a_j + 1 + ((xs - a_j - 1) % k + k) % k. Alternatively, low_j = ((a_j + 1) + (xs - (a_j + 1)) % k + k) % k? Better: low_j = xs + ceil((a_j + 1 - xs) / k) * k? Actually, we want the smallest r >= a_j+1 with r ≡ xs mod k. That is: r = xs + k * max(0, ceil((a_j + 1 - xs) / k)). Since xs > a_j (given start is unblocked, but for other columns, xs might be <= a_j). So low_j = xs + k * max(0, (a_j + 1 - xs + k - 1) / k).
+        // The highest allowed row is high = xs + k * ((n - xs) / k).
+        // So column j is connected to column j+k if max(low_j, low_{j+k}) <= high.
+        // Since the robot can move vertically at any time, the whole path is connected if for every consecutive pair in the progression, the max of their low is <= high. That is, the maximum of low_j over all columns j in the progression must be <= high.
+        // Because if there is some column with low_j > high, then that column has no allowed rows (since low_j > high means no row ≡ xs mod k exists above a_j and <= n). But wait, low_j could be > n? Then it's impossible. But if low_j <= high, then there is at least one allowed row. For two columns to be connected, we need an overlap. The overlap condition is max(low_j, low_{j+k}) <= high. This is equivalent to low_j <= high and low_{j+k} <= high. So if all columns have low_j <= high, then any two columns share at least the row high? Not necessarily: if low_j = high, then the only allowed row is high. If low_{j+k} = high, they share high. If one has low_j < high, they share all rows from max(low) to high. So as long as every column in the progression has low_j <= high, the whole set of columns is connected via the row high (or any row >= max(low)). So the condition for being able to move from ys to yf is: for all columns j in the progression from ys to yf (inclusive), low_j <= high.
+        // But wait: The start row is xs, which is allowed in column ys (given). The finish row is xf, allowed in column yf. We also need to be able to start at xs and end at xf. Since we can move vertically within columns, we can go from xs to any allowed row in column ys, as long as xs is allowed (it is). Then we can move horizontally at some row r >= max(low), then go down to xf in column yf. So the condition is exactly: max_{j in progression} low_j <= high.
+        // Let's verify with sample.
+        // Sample 1: n=11, m=10, a = [9,0,0,10,3,4,8,11,10,8] (1-indexed).
+        // Query 1: xs=1, ys=2, xf=1, yf=3, k=1.
+        // Progression: columns 2,3. low_2: a_2=0, xs=1, k=1. low = max(1, 0+1)=1. low_3=1. high = 11 (since 1 + 1*10 = 11). max low = 1 <= 11. YES.
+        // Query 2: k=2. xs=1, ys=2, xf=1, yf=3. Progression: columns 2,? step 2 from 2 to 3: 2, 4? Wait, step k=2, from 2 to 3: 2 + 2 = 4 > 3, so only column 2? Actually, to go from 2 to 3 with step 2, you can't because 3-2=1 not divisible by 2. So first condition fails: (yf - ys) % k != 0. 1%2 !=0 -> NO. Correct.
+        // Query 3: xs=4, ys=3, xf=4, yf=5, k=2. (yf-ys)=2 divisible by 2. Progression: 3,5. low_3: a_3=0, xs=4, k=2. low = smallest >0 ≡4 mod2 => 4? 4>0, 4≡0 mod2? Wait, 4 mod2 =0, but xs=4 mod2=0. So low_3 = 4? Actually, a_3=0, so rows >0 are 1,2,... Allowed rows ≡4 mod2 => even rows. Smallest even >0 is 2. But xs=4, so low_3 = 2? Let's compute formula: low_j = xs + k * max(0, ceil((a_j + 1 - xs)/k)). a_j=0, a_j+1=1. xs=4. 1-4 = -3, ceil(-3/2) = -1, max(0,-1)=0. So low_j = 4. That means the smallest allowed row >= a_j+1 that is ≡ xs mod k is 4? But 2 is also ≡4 mod2 and >0. Why is 2 not allowed? Because the robot starts at row 4. Can it go down to 2? It can move down by k=2: from 4 to 2. So 2 is reachable. But our definition of low_j as the smallest r > a_j with r ≡ xs mod k is correct: 2 ≡ 4 mod 2, and 2 > 0. So low_j should be 2. My formula gave 4 because I used xs as the reference. Actually, the set of allowed rows is all r ≡ xs mod k, not necessarily starting from xs. The robot can move down from xs. So the smallest allowed row in column j is indeed the smallest r > a_j with r ≡ xs mod k. That is not necessarily >= xs. So low_j = smallest r > a_j such that r % k == xs % k. That is: r = a_j + 1 + ((xs % k) - (a_j + 1) % k + k) % k. If this r > n, then no allowed row. So low_j = a_j + 1 + ((xs - a_j - 1) % k + k) % k. Let's test: a_j=0, xs=4, k=2. a_j+1=1. (4-1)%2 = 3%2=1. low = 1+1=2. Correct.
+        // So low_j = a_j + 1 + ((xs - a_j - 1) % k + k) % k.
+        // high = largest r <= n with r ≡ xs mod k = n - ((n - xs) % k + k) % k? Actually, high = n - ((n - xs) % k + k) % k? Better: high = xs + ((n - xs) / k) * k.
+        // Now query 3: xs=4, k=2. high = 4 + ((11-4)/2)*2 = 4 + 3*2 = 10. (since 11-4=7, 7/2=3). So high=10.
+        // low_3: a_3=0 -> low = 0+1 + ((4-1)%2) = 1 + 1 = 2.
+        // low_5: a_5=3 -> low = 3+1 + ((4-4)%2) = 4 + 0 = 4.
+        // max low = 4 <= 10. So condition holds? But sample says NO. Why?
+        // Wait, progression is columns 3 and 5. Are they connected? We need a row r that is allowed in both columns. Allowed in col 3: rows 2,4,6,8,10. Allowed in col 5: rows 4,6,8,10. Intersection: 4,6,8,10. So they are connected. Then why NO?
+        // Let's check the start and finish: start (4,3), finish (4,5). The robot can go from (4,3) to (4,5) by moving right? But k=2, so a right command moves 2 columns right. From column 3, moving right goes to column 5. So it can just move right from (4,3) to (4,5) directly! That should be YES. But sample says NO. There must be something I missed.
+        // Ah! The robot executes each command k times. If it moves right, it moves 2 cells right. But the grid has columns 1..m. From column 3, moving right 2 steps goes to column 5. That is within grid. Row remains 4. Is (4,5) unblocked? a_5=3, so rows >3 are unblocked. 4 is unblocked. So it should be YES. Why sample says NO?
+        // Let's re-read the sample input carefully.
+        // Sample 1 input:
+        // 11 10
+        // 9 0 0 10 3 4 8 11 10 8
+        // 6
+        // 1 2 1 3 1
+        // 1 2 1 3 2
+        // 4 3 4 5 2
+        // 5 3 11 5 3
+        // 5 3 11 5 2
+        // 11 9 9 10 1
+        // Output:
+        // YES
+        // NO
+        // NO
+        // NO
+        // YES
+        // YES
+        // Query 3: 4 3 4 5 2 -> start (4,3), finish (4,5), k=2. Output NO.
+        // But according to my reasoning, it should be YES. Let's check the grid: n=11, m=10. a = [9,0,0,10,3,4,8,11,10,8] for columns 1..10.
+        // Column 3: a_3=0, unblocked rows 1..11? Wait, blocked cells are bottom a_i cells. So if a_i=0, no blocked cells, all rows 1..11 are unblocked. So column 3 is completely free.
+        // Column 5: a_5=3, blocked rows 1,2,3; unblocked 4..11.
+        // Start (4,3) is unblocked. Finish (4,5) is unblocked (row 4 > 3).
+        // k=2. Right command moves 2 columns right: from 3 to 5. Row stays 4. So it should work. Why NO?
+        // Maybe I misunderstood the movement: "if a robot attempts to move into a blocked cell or outside the grid, it explodes." When moving right by 2, does it check the intermediate cell? The command is "move right", executed k times. So it moves right one cell at a time, k times. So it would visit column 4,

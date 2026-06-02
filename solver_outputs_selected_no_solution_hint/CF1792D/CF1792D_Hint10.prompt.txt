@@ -1,0 +1,94 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+You are given $ n $ permutations $ a_1, a_2, \dots, a_n $ , each of length $ m $ . Recall that a permutation of length $ m $ is a sequence of $ m $ distinct integers from $ 1 $ to $ m $ .
+
+Let the beauty of a permutation $ p_1, p_2, \dots, p_m $ be the largest $ k $ such that $ p_1 = 1, p_2 = 2, \dots, p_k = k $ . If $ p_1 \neq 1 $ , then the beauty is $ 0 $ .
+
+The product of two permutations $ p \cdot q $ is a permutation $ r $ such that $ r_j = q_{p_j} $ .
+
+For each $ i $ from $ 1 $ to $ n $ , print the largest beauty of a permutation $ a_i \cdot a_j $ over all $ j $ from $ 1 $ to $ n $ (possibly, $ i = j $ ).
+
+Input Format
+The first line contains a single integer $ t $ ( $ 1 \le t \le 10^4 $ ) — the number of testcases.
+
+The first line of each testcase contains two integers $ n $ and $ m $ ( $ 1 \le n \le 5 \cdot 10^4 $ ; $ 1 \le m \le 10 $ ) — the number of permutations and the length of each permutation.
+
+The $ i $ -th of the next $ n $ lines contains a permutation $ a_i $ — $ m $ distinct integers from $ 1 $ to $ m $ .
+
+The sum of $ n $ doesn't exceed $ 5 \cdot 10^4 $ over all testcases.
+
+Output Format
+For each testcase, print $ n $ integers. The $ i $ -th value should be equal to the largest beauty of a permutation $ a_i \cdot a_j $ over all $ j $ ( $ 1 \le j \le n $ ).
+
+Examples
+Sample 1
+Input
+3
+3 4
+2 4 1 3
+1 2 4 3
+2 1 3 4
+2 2
+1 2
+2 1
+8 10
+3 4 9 6 10 2 7 8 1 5
+3 9 1 8 5 7 4 10 2 6
+3 10 1 7 5 9 6 4 2 8
+1 2 3 4 8 6 10 7 9 5
+1 2 3 4 10 6 8 5 7 9
+9 6 1 2 10 4 7 8 3 5
+7 9 3 2 5 6 4 8 1 10
+9 4 3 7 5 6 1 10 8 2
+Output
+1 4 4
+2 2
+10 8 1 6 8 10 1 7
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+How does the beauty change when we multiply by a fixed permutation?
+
+**Hint 2**
+What happens if the first element is not $1$?
+
+**Hint 3**
+How to compute the product of permutations?
+
+**Hint 4**
+Can the first element be anything but $1$?
+
+**Hint 5**
+If you can solve the problem for one fixed permutation, can you solve the problem for any permutation?
+
+**Hint 6**
+What is the maximum possible beauty?
+
+**Hint 7**
+Think of the product as a function of a permutation.
+
+**Hint 8**
+Is there anything special about the first element of the answer?
+
+**Hint 9**
+Does the answer depend on the permutation?
+
+**Hint 10**
+How to find the answer for one fixed permutation?
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

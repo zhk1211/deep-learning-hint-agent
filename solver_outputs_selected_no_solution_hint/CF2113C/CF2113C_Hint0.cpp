@@ -1,0 +1,231 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, m, k;
+    cin >> n >> m >> k;
+    vector<string> grid(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> grid[i];
+    }
+
+    // Prefix sum for gold cells
+    vector<vector<int>> gold_pref(n + 1, vector<int>(m + 1, 0));
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            gold_pref[i + 1][j + 1] = gold_pref[i][j + 1] + gold_pref[i + 1][j] - gold_pref[i][j] + (grid[i][j] == 'g' ? 1 : 0);
+        }
+    }
+
+    auto get_gold_sum = [&](int r1, int c1, int r2, int c2) -> int {
+        if (r1 < 0) r1 = 0;
+        if (c1 < 0) c1 = 0;
+        if (r2 > n) r2 = n;
+        if (c2 > m) c2 = m;
+        if (r1 >= r2 || c1 >= c2) return 0;
+        return gold_pref[r2][c2] - gold_pref[r1][c2] - gold_pref[r2][c1] + gold_pref[r1][c1];
+    };
+
+    // For each empty cell, compute gold on boundary of explosion square
+    // Boundary: cells with Chebyshev distance exactly k from center
+    // We'll compute max gold from a single explosion
+    int max_single = 0;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (grid[i][j] != '.') continue;
+            int r1 = i - k, r2 = i + k + 1;
+            int c1 = j - k, c2 = j + k + 1;
+            // total gold in square
+            int total = get_gold_sum(r1, c1, r2, c2);
+            // interior gold (strictly inside)
+            int interior = get_gold_sum(r1 + 1, c1 + 1, r2 - 1, c2 - 1);
+            int boundary_gold = total - interior;
+            max_single = max(max_single, boundary_gold);
+        }
+    }
+
+    // Now consider two explosions: we can place them in empty cells.
+    // The gold collected is union of boundaries of two squares.
+    // Since k <= 500, n,m <= 500, total cells <= 250k, we can try all pairs? Too slow.
+    // Observation: The boundaries are thin (width 1). The union of two boundaries can be computed
+    // by inclusion-exclusion: gold on boundary1 + gold on boundary2 - gold on intersection.
+    // Intersection is cells that are on both boundaries.
+    // We can precompute for each empty cell the set of boundary cells? Too large.
+    // Alternative: Since k is small? Not necessarily, k up to 500.
+    // But total sum n*m <= 250k, so O((n*m)^2) is too big.
+    // We need a smarter approach.
+
+    // Notice that the boundary of a square of side 2k+1 consists of 4 segments of length 2k+1 each,
+    // but corners are shared. The boundary cells are those with max(|x-i|, |y-j|) == k.
+    // For two centers (i1,j1) and (i2,j2), the intersection of boundaries is the set of cells
+    // that are at Chebyshev distance exactly k from both centers.
+    // This is equivalent to cells satisfying:
+    // max(|x-i1|, |y-j1|) == k and max(|x-i2|, |y-j2|) == k.
+    // This is a small set? Could be up to O(k) cells.
+    // We can iterate over all pairs of empty cells? Number of empty cells could be up to 250k.
+    // 250k^2 is too large.
+    // But maybe we can limit to pairs where the squares overlap? Not enough.
+
+    // Another idea: The maximum gold from two explosions is at most max_single * 2, but we can achieve
+    // more if boundaries overlap? Actually union can't exceed sum of individual boundary golds.
+    // So answer is either max_single or sum of two non-overlapping boundary golds.
+    // But we can also have overlapping boundaries where we count gold only once.
+    // So we need max_{c1,c2} (gold(B1) + gold(B2) - gold(B1 ∩ B2)).
+    // Since gold(B1 ∩ B2) is non-negative, the maximum is achieved either by a single explosion,
+    // or by two explosions with disjoint boundaries (so intersection empty).
+    // Is it always possible to find two empty cells with disjoint boundaries that achieve sum of their individual boundary golds?
+    // Not necessarily, because empty cells might be limited.
+    // But we can try to find two empty cells such that their boundaries are disjoint.
+    // If we can, then answer = max(max_single, max_{c1,c2 disjoint boundaries} (gold(B1)+gold(B2))).
+    // If no such pair exists, we might have to consider overlapping.
+
+    // However, boundaries are thin. Two boundaries are disjoint if the Chebyshev distance between centers > 2k.
+    // Because if distance <= 2k, the squares (side 2k+1) overlap, and boundaries might intersect.
+    // Actually boundaries intersect if distance <= 2k. If distance > 2k, boundaries are disjoint.
+    // So we can try to pick two empty cells with distance > 2k.
+    // Since n,m <= 500, we can maybe find the maximum gold boundary for each cell, and then combine?
+    // But we need both cells to be empty.
+
+    // Let's compute for each empty cell its boundary gold.
+    // Then we want max sum of two empty cells with Chebyshev distance > 2k.
+    // This is a maximum weight independent set in a graph where edges connect cells with distance <= 2k.
+    // That graph is a unit disk graph in Chebyshev metric. For k up to 500, the graph could be dense.
+    // But n*m <= 250k, so total cells is small. We can try to find the top two values that are far apart.
+    // Since we only need the maximum sum, we can sort empty cells by boundary gold descending,
+    // and for each cell, check the next ones until we find one with distance > 2k.
+    // Because if the highest value cell has many neighbors, we might need to check many.
+    // In worst case, all empty cells are within a 2k x 2k region, then all pairs have distance <= 2k,
+    // so no two disjoint boundaries exist. Then answer is max_single.
+    // If there are cells far apart, we will find a pair quickly because we check in descending order.
+    // The number of checks per cell is bounded by the number of cells within distance 2k, which could be up to (4k+1)^2.
+    // But k <= 500, so (4k+1)^2 ~ 4e6, which is too large if we do for many cells.
+    // However, total n*m <= 250k, so if k is large, n*m is small. If k=500, n*m <= 250k = 125000, but n,m <=500, so n*m <= 250000.
+    // Actually sum over test cases n*m <= 250k? Wait: "sum n*m across all test cases does not exceed 2.5 * 10^5". That's 250,000.
+    // So total cells across all test cases is at most 250,000. So we can afford O((n*m)^2) if n*m is small? 250k^2 is 6.25e10, too big.
+    // But we can do the sorting trick: sort empty cells by boundary gold descending.
+    // Let the sorted list be A. For i from 0 to size-1:
+    //   for j from i+1 to size-1:
+    //      if dist(A[i], A[j]) > 2k:
+    //          ans = max(ans, A[i].gold + A[j].gold)
+    //          break
+    // Because if we find a j with distance > 2k, any later j will have smaller gold, so sum will be smaller.
+    // So we can break after the first valid j for each i.
+    // The total number of inner loop iterations is the number of pairs with distance <= 2k that are checked before finding a far one.
+    // In worst case, if all cells are within a 2k x 2k region, we check all pairs, which is O(N^2) where N is number of empty cells.
+    // N could be up to 250,000 in one test case? But sum n*m <= 250k, so max N in one test case is 250,000.
+    // 250,000^2 = 6.25e10, too large.
+    // However, if all cells are within 2k x 2k, then k must be at least ~sqrt(N)/2. For N=250,000, k ~ 250.
+    // But then 2k x 2k region size is (500)^2 = 250,000, which matches N. So it's possible that all empty cells are within a 2k x 2k region.
+    // In that case, no two cells have distance > 2k, so we will check all pairs and break never happens, leading to O(N^2).
+    // We need a better approach.
+
+    // Alternative: Since boundaries are thin, maybe we can compute the maximum gold from two explosions by considering
+    // that the two squares can be placed independently if they don't overlap.
+    // We can use a sweep line or divide and conquer? Or we can note that the answer is either max_single or
+    // the sum of the two largest boundary golds from cells that are far apart.
+    // We can find the maximum boundary gold overall, and then the maximum boundary gold among cells far from it.
+    // But the optimal pair might not include the global maximum.
+
+    // Another observation: The boundary of a square of side 2k+1 is just the perimeter. The gold on it is sum of gold on four line segments.
+    // We can precompute prefix sums for rows and columns to quickly get gold on a segment.
+    // For two squares, the union of boundaries is the union of two perimeters. The intersection is at most 8 points? Actually two squares of same size can intersect in more complex ways.
+    // But maybe we can use the fact that k is the same for both explosions. The boundaries are squares of side 2k+1.
+    // Two such squares can intersect in a region that is a rectangle (possibly empty). The intersection of their boundaries is the boundary of the intersection rectangle? Not exactly.
+    // Let's think geometrically: Square A and Square B, both axis-aligned, same size. Their boundaries intersect where the perimeters cross.
+    // The intersection of the two perimeters consists of parts of the perimeters that lie inside the other square.
+    // This could be up to O(k) cells. But we can compute the intersection gold quickly using prefix sums if we can describe the intersection shape.
+    // However, we need to maximize over all pairs of empty cells. That's still O(N^2) if we try all pairs.
+
+    // Maybe we can transform the problem: Each explosion collects gold on the boundary of a square of side 2k+1 centered at an empty cell.
+    // We can place multiple explosions? The problem says "Smilo can blow up dynamite in any empty cell." It implies he can do multiple explosions?
+    // The example 3 shows two explosions. The problem statement: "Determine the maximum amount of gold that Smilo can collect."
+    // It doesn't explicitly limit the number of explosions. But the sample 3 uses two explosions.
+    // Wait, the problem might allow any number of explosions? The statement: "Smilo can blow up dynamite in any empty cell." It doesn't say only one.
+    // In sample 3, they used two explosions. So we can use multiple explosions.
+    // But then the answer could be the sum of gold on boundaries of multiple squares, but we must ensure that the squares are centered at empty cells.
+    // However, after an explosion, cells become empty. So we can chain explosions: first explosion clears some area, making new empty cells, then we can place dynamite there.
+    // But the gold is collected only at the moment of explosion from the boundary of that explosion. Gold inside the square disappears.
+    // So we can potentially collect gold from multiple boundaries, but we must be careful: if a gold cell is on the boundary of one explosion, it's collected. If it's inside another explosion later, it's already gone? Actually the problem says: "If gold ore was located strictly inside this square (not on the boundary), it disappears. However, if the gold ore was on the boundary of this square, Smilo collects that gold."
+    // So gold inside is destroyed, gold on boundary is collected. Once collected or destroyed, it's gone.
+    // So we can't collect the same gold twice. We want to maximize total collected gold over a sequence of explosions.
+    // The order matters because an explosion can destroy gold that could have been collected later.
+    // But we can choose the order to avoid destroying gold we want to collect. Since we can place dynamite in any empty cell initially, and after explosions new empty cells appear, we can potentially place many explosions.
+    // However, the grid is finite. The maximum gold we can collect is bounded by total gold on the grid.
+    // We need to find a sequence of explosions that maximizes collected gold.
+
+    // This is more complex. Let's re-read the problem statement carefully.
+    // "Smilo can blow up dynamite in any empty cell. When dynamite explodes... If gold ore was located strictly inside this square... it disappears. However, if the gold ore was on the boundary... Smilo collects that gold."
+    // "Dynamite can only be detonated inside the mine, but the explosion square can extend beyond the mine's boundaries."
+    // "Determine the maximum amount of gold that Smilo can collect."
+    // It doesn't specify the number of dynamites. It says "can blow up dynamite", implying he can do it multiple times.
+    // Sample 3 uses two explosions. So yes, multiple explosions allowed.
+
+    // So we need to choose a set of empty cells (possibly after some explosions create new empty cells) to detonate, in some order, to maximize collected gold.
+    // This is like we can place squares of side 2k+1 centered at empty cells (initially or later), and we collect gold on the boundaries, but gold inside is destroyed.
+    // We can think of it as: we can select a set of squares (centers must be empty at the time of detonation) such that no selected square's interior contains a gold cell that we want to collect on the boundary of another square? Actually we can order them so that we first collect gold on boundaries, then later destroy interiors. But if a gold cell is inside one square and on the boundary of another, we must detonate the boundary one first to collect it, then the interior one will destroy it (but it's already collected). So we can collect it.
+    // However, if a gold cell is inside a square, it's destroyed and cannot be collected later. So we should avoid destroying gold that we haven't collected yet.
+    // Therefore, an optimal strategy: we can detonate a set of squares such that no gold cell is in the interior of any square unless it has already been collected on the boundary of some square (or we don't want it). But since we want to maximize collected gold, we will only collect gold that we can get on boundaries, and we will avoid destroying uncollected gold.
+    // So we can choose a set of squares (centered at empty cells) and an ordering such that for every gold cell we collect, it is on the boundary of at least one square, and it is not in the interior of any square that is detonated before it is collected.
+    // This is equivalent to: we can collect a gold cell if there exists an empty cell such that the gold cell is on the boundary of the square centered there, and we can ensure that no other square's interior covers it before we collect it. But we can just detonate that square first.
+    // So essentially, we can collect any gold cell that is on the boundary of some square centered at an empty cell, provided we don't destroy it earlier. But we can always detonate that square first. So we can collect all gold cells that are on the boundary of at least one square centered at an empty cell? Not exactly, because to detonate that square, its center must be empty. Initially it is empty. After we detonate it, the interior becomes empty, which might include other empty cells? Actually the explosion makes all cells in the square empty. So it might create new empty cells. But we don't need them if we already collected the gold.
+    // However, if we want to collect multiple gold cells that are on boundaries of different squares, we might need to detonate multiple squares. The centers of those squares must be empty at the time of detonation. Initially they are empty. If we detonate one square, it might destroy the center of another square if that center is inside the first square? But the center is an empty cell. The explosion makes all cells in the square empty. So if another empty cell is inside the square, it remains empty (or becomes empty again). So it's still empty. So we can still detonate there later. The only issue is if the center of another square is on the boundary of the first square? The boundary cells become empty as well? The problem says: "all cells within a square of side 2k+1 centered at cell (x,y) become empty." That includes the boundary. So the entire square becomes empty. So any cell in the square becomes empty. So if another center is inside or on the boundary of the first square, it becomes empty (if it wasn't already). So it's still usable.
+    // Therefore, we can detonate any set of squares centered at initially empty cells, in any order, and the centers will remain empty (or become empty). The only restriction is that if we detonate a square, the gold inside is destroyed. So we must collect gold on boundaries before they get destroyed by being inside another square.
+    // So we can think of it as: we can choose a set of squares (centered at initially empty cells) and an ordering. For each gold cell, if it is on the boundary of at least one chosen square, we can collect it by detonating that square first (before any square that contains it in its interior). If a gold cell is in the interior of all squares that have it on boundary? That doesn't make sense. A gold cell can be on the boundary of some square and in the interior of another. We can just detonate the boundary square first, collect it, then later detonate the interior square, which will destroy the now-empty cell (no loss).
+    // So the only gold we cannot collect is gold that is never on the boundary of any square centered at an empty cell, or gold that is forced to be destroyed before collection because of ordering constraints? But we can always order: first detonate all squares that have the gold on their boundary, then detonate squares that have it in interior. Since we can detonate boundary squares first, we collect it. There is no conflict because detonating a boundary square doesn't destroy the gold (it collects it). So we can collect all gold that lies on the boundary of at least one square centered at an initially empty cell.
+    // Wait, what if a gold cell is on the boundary of square A and also on the boundary of square B? We can collect it with either. No problem.
+    // What if a gold cell is in the interior of square A and on the boundary of square B? We detonate B first, collect it, then A destroys the empty cell.
+    // So it seems we can collect exactly the union of boundaries over all squares centered at empty cells. But is there any restriction that we cannot use the same empty cell for multiple squares? We can only detonate once per cell? The problem says "blow up dynamite in any empty cell". It doesn't say we can't reuse a cell. But after detonation, the cell becomes empty again (since the whole square becomes empty). So we could potentially detonate multiple times in the same cell? The problem doesn't explicitly forbid it, but typically you can only use each dynamite once. However, the cell becomes empty again, so you could place another dynamite there. But would that be beneficial? If you detonate again in the same cell, you get the same boundary gold again? But the gold was already collected/destroyed, so no new gold. So no benefit.
+    // So we can assume we use each empty cell at most once.
+    // Therefore, the problem reduces to: given a set of empty cells, we can choose any subset of them to detonate. The total gold collected is the size of the union of the boundaries of the squares centered at these cells. We want to maximize this union size.
+    // Since we can choose any subset, the maximum union size is simply the size of the union of boundaries over all empty cells? Not necessarily, because if we include a square, its interior destroys gold that might be on the boundary of another square? But we can order to avoid that. So we can include all squares whose boundaries contain gold we want, and we can order them so that we collect all boundary gold before any of it is destroyed by interiors. The only gold that gets destroyed is gold that is strictly inside some square and never on any boundary. That gold is lost anyway if we detonate that square. But we don't have to detonate that square if it doesn't give us any boundary gold. So we can simply not detonate squares that have no boundary gold, or whose boundary gold is already covered by other squares. So we can select a subset of empty cells to maximize the union of their boundaries, and we can always order them to collect all that gold without destroying any of it prematurely.
+    // Is that true? Consider gold cell g that is on the boundary of square A and in the interior of square B. If we detonate A first, we collect g. Then we detonate B, which destroys g (already collected). Fine.
+    // What if g is in the interior of A and on the boundary of B? Detonate B first, collect g, then A destroys it. Fine.
+    // What if g is in the interior of both A and B? Then it's never on any boundary, so we can't collect it. We shouldn't detonate A or B if they don't give other gold? But if we detonate them, we destroy g without collecting it. So we might lose gold that we could have collected if we didn't detonate? But we can't collect it anyway. So no loss.
+    // What if g is on the boundary of A and also on the boundary of B? We collect it once.
+    // So indeed, we can collect exactly the union of boundaries of the squares we detonate, provided we order them appropriately. And we can always order them: just detonate all squares that have g on their boundary before any square that has g in its interior. Since the "boundary" and "interior" sets for each gold cell are fixed, we can topologically sort. There's no cycle because if g is on boundary of A and interior of B, we must do A before B. Could there be a cycle? Suppose g1 on boundary of A, interior of B; g2 on boundary of B, interior of A. Then we need A before B and B before A, impossible. Is that possible? Let's see: g1 on boundary of A means dist(g1, A) = k. g1 in interior of B means dist(g1, B) < k. g2 on boundary of B means dist(g2, B) = k. g2 in interior of A means dist(g2, A) < k. This could happen. For example, A and B close. Then we have a cycle. In that case, we cannot collect both g1 and g2 because whichever we detonate first will destroy the other gold (since it's in the interior of the first square). So we have to choose which one to collect. So the simple union bound doesn't hold in the presence of cycles.
+    // So the problem is more complex: we need to choose a set of squares and an ordering that respects the "boundary before interior" constraints for each gold cell we want to collect. This is a maximum weight closure or something? Actually we want to select a subset of gold cells to collect, and a subset of empty cells to detonate, such that for each collected gold cell, there is at least one detonated square with the gold on its boundary, and for that square, all gold cells in its interior must be either collected earlier or not collected (and thus destroyed). But we can also choose to destroy some gold without collecting it.
+    // This sounds like we can model it as: each empty cell is a "move" that collects all gold on its boundary and destroys all gold in its interior. We can perform moves in any order. We want to maximize total collected gold.
+    // This is similar to a problem where we have a set of intervals, and we want to choose a subset to maximize something. But here it's 2D.
+
+    // Given the constraints (n,m <= 500, sum n*m <= 250k), maybe we can use max flow or something? But 250k is too large for flow.
+    // Let's think differently. The explosion parameter k is the same for all. The squares are large (side 2k+1). The boundaries are thin. The interior is large. So if we detonate a square, we destroy a lot of gold inside, but only collect on the boundary. So it's only beneficial to detonate a square if its boundary contains gold that we cannot collect otherwise, and we are willing to sacrifice the interior gold.
+    // Maybe the optimal strategy is to detonate at most two squares? Sample 3 uses two. Could we need more? Consider a scenario where gold is scattered such that each square's boundary covers some gold, but interiors overlap and destroy other boundary gold. Maybe we need multiple squares.
+    // But note that if we detonate a square, we can also detonate another square far away without interference. So we can independently collect from disjoint regions.
+    // The only conflict is when squares are close (distance <= 2k). In that case, their interiors overlap and may contain gold that is on the other's boundary.
+    // So the problem decomposes into independent components based on distance > 2k? Actually if two squares have centers with Chebyshev distance > 2k, their squares (side 2k+1) are disjoint? Let's check: Square A: [x-k, x+k] x [y-k, y+k]. Square B: [x'-k, x'+k] x [y'-k, y'+k]. They are disjoint if max(|x-x'|, |y-y'|) > 2k. If distance > 2k, the intervals don't overlap, so squares are disjoint. Then there is no interaction: no cell is in both squares. So we can detonate both and collect the union of their boundaries without any destruction of the other's boundary gold. So they are independent.
+    // If distance <= 2k, the squares overlap. The overlap region is a rectangle. The boundaries may intersect, and interiors may contain the other's boundary.
+    // So we can cluster empty cells into groups where the Chebyshev distance between any two centers in the group is <= 2k? Actually the relation "distance <= 2k" is not transitive. But we can consider connected components in the graph where edges connect cells with distance <= 2k. Within a component, squares overlap and can conflict. Between components, squares are disjoint and independent.
+    // So the problem reduces to solving for each connected component independently, and summing the results.
+    // In a component, the number of empty cells might be large, but the component's spatial extent is bounded? If distance <= 2k, the maximum distance between any two cells in a component could be large if the component is a chain. But with Chebyshev distance, a chain can be long. However, the grid size is at most 500x500. So a component could be the whole grid.
+    // But maybe within a component, the optimal solution is to pick at most one square? Or maybe we can use dynamic programming?
+    // Let's analyze the conflict: For two squares A and B with distance <= 2k, their overlap region is a rectangle. The boundary of A that lies inside B's interior will be destroyed if B is detonated first. So if we want to collect gold on that part of A's boundary, we must detonate A before B. Similarly for B's boundary inside A.
+    // This is a precedence constraint. We can model it as a directed graph where an edge from A to B means A must be detonated before B to collect certain gold. But we can also choose not to collect that gold.
+    // Actually, we can think of it as: we want to select a set of squares and a linear order. For each gold cell, if it is collected, it must be on the boundary of some square that appears before any square that contains it in its interior.
+    // This is equivalent to: we can assign each gold cell to be collected by a specific square (or not collected). If collected by square A, then for any square B that contains the gold cell in its interior, A must precede B.
+    // This is a partial order on squares. We want to maximize the number of collected gold cells, subject to the partial order being acyclic (i.e., we can topologically sort). But we can also choose to not use some squares to break cycles.
+    // This looks like the Maximum Weight Acyclic Subgraph problem, which is NP-hard in general. But maybe the structure here is special.
+
+    // Wait, the problem might be simpler. Let's re-read the problem statement carefully. It says: "Smilo can blow up dynamite in any empty cell." It doesn't say he can do it multiple times in the same test case? But the sample 3 shows two explosions. So multiple.
+    // However, maybe the intended solution is to realize that you only ever need at most two explosions? Let's check sample 3: they used two explosions to get 4 gold. Could they get more with three? The grid is 3x4. Total gold: let's count: row0: . g g . -> 2 gold; row1: g . . # -> 1 gold; row2: g # # . -> 1 gold; total 4 gold. They got all 4. So max is 4.
+    // In sample 1, they got 2 gold with one explosion. Total gold is 2. So max is 2.
+    // In sample 2, k=2, they got 0. Total gold is 2. Could they get any? With k=2, square side 5. The grid is 2x3. The squares extend beyond. The empty cells are at (0,1) and (1,1)? Actually grid:
+    // # . #
+    // g . g
+    // So empty cells at (0,1) and (1,1). If they detonate at (0,1), square side 5 centered at (0,1). Boundary gold? The gold at (1,0) and (1,2) are at distance? (1,0) to (0,1): dx=1, dy=1, Chebyshev=1 < k=2? Actually k=2, so boundary is distance exactly 2. The gold are at distance 1, so they are inside, not on boundary. So they disappear. So 0 gold. If detonate at (1,1), similar. So 0.
+    // So sample 2 shows that sometimes you get 0 even if there is gold.
+
+    // Maybe the answer is simply the maximum gold on the boundary of a single square? But sample 3 gets 4 with two squares, while a single square might get less. Let's check sample 3 with k=2. Grid:
+    // . g g .
+    // g . . #
+    // g # # .
+    // Empty cells: (0,0), (0,3), (1,1), (1,2), (2,0), (2,3). Let's compute boundary gold for each:
+    // For center (0,0): square [-2,2]x[-2,2]. Boundary cells with Chebyshev distance 2. Gold on boundary? We need to check all cells with max(|x|,|y|)=2 within grid. Grid is 0..2 x 0..3. Let's list: (0,2): g? grid[0][2] is g. (1,2): . (2,2): #. (2,0): g. (2,1): #. (2,2): #. (2,3): . (0,2) is g, (2,0) is g. Also (0,0) is center, not boundary. So boundary gold = 2? But wait, (0,2) is distance max(0,2)=2, yes. (2,0) distance 2. So 2 gold. But they got 4 with two explosions. So single max is 2, but two gives 4.
+    // So we need at least two.
+
+    // Could we need more than two? Consider a grid with gold arranged such that three squares are needed. For example, three clusters far apart, each requires a square to collect its gold. Since they are far apart (distance > 2k), they are independent, so we can just sum the max gold from each cluster. But within a cluster, maybe we need multiple squares? In sample 3, the two squares are close? Their centers: they used bottom right corner (2,3) and one cell to the left (2,2)? But (2,2) is stone #, not empty. Wait, sample note: "detonate in the bottom right corner to obtain 2 gold, and then make another explosion one cell to the left to obtain the remaining 2 gold." Bottom right corner is (2,3) which is empty. One cell to the left is (2,2) which is # (stone). But after first explosion, the square becomes empty. The square centered at (2,3) with k=2 covers rows 0..4, cols 1..5. It includes (2,2) which was stone, becomes empty. So then they can detonate at (2,2). So the second center was not initially empty, but became empty after the first explosion.
+    // This is a crucial point! Dynamite can be detonated in any empty cell, including cells that become empty due to previous explosions. So we are not limited to initially empty cells. We can create new empty cells by exploding, and then use them.
+    // This changes everything. We can chain explosions to reach new centers.
+    // So the set of available centers is all cells that can be made empty by a sequence of explosions starting from initially empty cells.
+    // An explosion makes a whole square empty. So if we have an empty cell, we can make its entire k-neighborhood empty. Then we can use any cell in that neighborhood as a new center, expanding the reachable area.
+    // This is like a flood-fill: starting from initial empty cells, we can "jump" by squares of side 2k+1. The reachable cells are those that can be covered by a sequence of such squares.
+    // Actually, if we have an empty cell at (x,y), we can detonate there, making the square [x-k, x+k] x [y-k, y+k] empty. Then we can detonate at any cell in that square, expanding further. So the set of cells that can become empty is the set of cells reachable via steps of Chebyshev distance <= k from an empty cell? Wait: if we detonate at (x,y), we make all cells within distance k empty. So from an empty cell, we can "move" the center to any cell within distance k, and then detonate there, making a new square of radius k. So the reachable region is the dilation of the initial empty cells by a square of radius k, iteratively. This is equivalent to: a cell can become empty if its Chebyshev distance to some initially empty cell is at most k * d for some d? Actually, it's like we can take steps of size up to k in Chebyshev metric. So the reachable set is the set of cells whose Chebyshev distance to the set of initial empty cells is a multiple of k? Not exactly, because we can choose intermediate centers anywhere within the previous square. So we can effectively move continuously? Since we can choose any cell in the square as the next center, we can move by any vector with Chebyshev distance <= k. So the reachable set is the entire connected component in the graph where edges connect cells with Chebyshev distance <= k? But we start from empty cells.

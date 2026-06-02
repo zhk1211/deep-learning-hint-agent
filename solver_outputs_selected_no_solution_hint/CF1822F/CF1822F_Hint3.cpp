@@ -1,0 +1,94 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+void solve() {
+    int n;
+    ll k, c;
+    cin >> n >> k >> c;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    vector<ll> dist1(n + 1, -1);
+    {
+        queue<int> q;
+        q.push(1);
+        dist1[1] = 0;
+        while (!q.empty()) {
+            int u = q.front(); q.pop();
+            for (int v : adj[u]) {
+                if (dist1[v] == -1) {
+                    dist1[v] = dist1[u] + 1;
+                    q.push(v);
+                }
+            }
+        }
+    }
+
+    int far = 1;
+    for (int i = 1; i <= n; ++i) {
+        if (dist1[i] > dist1[far]) far = i;
+    }
+
+    vector<ll> distA(n + 1, -1);
+    {
+        queue<int> q;
+        q.push(far);
+        distA[far] = 0;
+        while (!q.empty()) {
+            int u = q.front(); q.pop();
+            for (int v : adj[u]) {
+                if (distA[v] == -1) {
+                    distA[v] = distA[u] + 1;
+                    q.push(v);
+                }
+            }
+        }
+    }
+
+    int far2 = far;
+    for (int i = 1; i <= n; ++i) {
+        if (distA[i] > distA[far2]) far2 = i;
+    }
+
+    vector<ll> distB(n + 1, -1);
+    {
+        queue<int> q;
+        q.push(far2);
+        distB[far2] = 0;
+        while (!q.empty()) {
+            int u = q.front(); q.pop();
+            for (int v : adj[u]) {
+                if (distB[v] == -1) {
+                    distB[v] = distB[u] + 1;
+                    q.push(v);
+                }
+            }
+        }
+    }
+
+    ll ans = 0;
+    for (int i = 1; i <= n; ++i) {
+        ll maxDist = max(distA[i], distB[i]);
+        ll profit = maxDist * k - dist1[i] * c;
+        ans = max(ans, profit);
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

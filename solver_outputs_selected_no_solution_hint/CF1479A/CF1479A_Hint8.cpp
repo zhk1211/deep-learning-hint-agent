@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(int i) {
+    cout << "? " << i << endl;
+    int x;
+    cin >> x;
+    return x;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    cin >> n;
+    
+    // sentinel values
+    auto get = [&](int i) -> int {
+        if (i < 1 || i > n) return n + 1; // +inf
+        return query(i);
+    };
+    
+    int lo = 1, hi = n;
+    while (lo < hi) {
+        int mid = (lo + hi) / 2;
+        int a = get(mid);
+        int b = get(mid + 1);
+        if (a < b) {
+            hi = mid;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    
+    cout << "! " << lo << endl;
+    return 0;
+}

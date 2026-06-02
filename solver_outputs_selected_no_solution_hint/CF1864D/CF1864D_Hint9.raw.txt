@@ -1,0 +1,76 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+        
+        // We'll maintain a 2D difference array for the "inverted pyramid" operations.
+        // diff[i][j] will store the parity of operations affecting cell (i,j) from above.
+        vector<vector<int>> diff(n + 2, vector<int>(n + 2, 0));
+        // left_diag[i][j] and right_diag[i][j] track diagonal propagation.
+        vector<vector<int>> left_diag(n + 2, vector<int>(n + 2, 0));
+        vector<vector<int>> right_diag(n + 2, vector<int>(n + 2, 0));
+        
+        int ans = 0;
+        
+        for (int i = 0; i < n; ++i) {
+            // current row prefix sum for vertical and diagonal effects
+            vector<int> cur(n + 2, 0);
+            for (int j = 0; j < n; ++j) {
+                // propagate diagonals from previous row
+                if (i > 0) {
+                    if (j > 0) left_diag[i][j] ^= left_diag[i-1][j-1];
+                    if (j + 1 < n) right_diag[i][j] ^= right_diag[i-1][j+1];
+                }
+                // combine effects
+                cur[j] ^= diff[i][j] ^ left_diag[i][j] ^ right_diag[i][j];
+                if (j > 0) cur[j] ^= cur[j-1];
+                
+                int val = grid[i][j] - '0';
+                val ^= cur[j];
+                if (val == 1) {
+                    ++ans;
+                    // apply operation at (i,j)
+                    // vertical effect: toggle diff for rows below
+                    diff[i+1][j] ^= 1;
+                    // diagonal effects
+                    if (j > 0) left_diag[i+1][j-1] ^= 1;
+                    else left_diag[i+1][j] ^= 1; // left boundary: no left diagonal, but we handle specially? Actually the condition x-i >= |y-j| means for j=0, left diagonal doesn't exist, but we can just ignore.
+                    // Actually, for j=0, left diagonal goes out of bounds, so we don't propagate.
+                    if (j + 1 < n) right_diag[i+1][j+1] ^= 1;
+                    // Also need to cancel the effect at the bottom of the pyramid.
+                    // The pyramid extends down to row n-1, with width expanding by 1 each side per row.
+                    // We can use a "difference array of difference arrays" approach.
+                    // Instead of full 2D difference, we mark the end of the vertical column and diagonals.
+                    // But simpler: we can just record the operation and let it propagate via diff/left/right.
+                    // However, the pyramid is finite: it stops at the bottom row.
+                    // We'll handle termination by adding canceling operations at the boundaries.
+                    // For vertical: it goes down to the last row, so no need to cancel if we only process up to n.
+                    // For diagonals: they expand, so we need to cancel them when they go out of the pyramid's scope.
+                    // Actually, the pyramid's shape: for a given operation at (i,j), it affects (x,y) for x>i and x-i >= |y-j|.
+                    // This is equivalent to: for each row r > i, columns from j-(r-i) to j+(r-i) inclusive.
+                    // We can implement this with a 2D difference array that adds 1 at (i+1, j) with diagonal spreads, and subtracts at the boundaries.
+                    // But we can also just use the fact that we process row by row, and we only need to know the current state.
+                    // The left_diag and right_diag arrays naturally expand as we go down, but they would continue expanding beyond the matrix if we don't stop them.
+                    // To stop them, we can place canceling tokens at the virtual row n (beyond last).
+                    // Let's do proper difference array with diagonal boundaries.
+                }
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

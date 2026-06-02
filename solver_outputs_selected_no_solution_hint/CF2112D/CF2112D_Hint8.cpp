@@ -1,0 +1,202 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+    vector<pair<int, int>> edges;
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        edges.emplace_back(u, v);
+    }
+
+    if (n == 2) {
+        cout << "NO\n";
+        return;
+    }
+
+    vector<int> deg(n + 1);
+    for (int i = 1; i <= n; i++) deg[i] = adj[i].size();
+
+    vector<int> leaves;
+    for (int i = 1; i <= n; i++) {
+        if (deg[i] == 1) leaves.push_back(i);
+    }
+
+    if (leaves.size() < 2) {
+        cout << "NO\n";
+        return;
+    }
+
+    // We need exactly n good pairs.
+    // According to hints, number of good pairs = n - number of leaves in directed tree?
+    // Actually, we need exactly n good pairs. 
+    // The hints suggest: number of good pairs = n - number of leaves (in the directed sense?).
+    // Let's analyze: In a directed tree, a leaf is a vertex with out-degree 0? Or in-degree 0?
+    // The problem statement: good pair (u,v) if path u->v exists.
+    // In a directed tree (arborescence), if we direct edges, the number of good pairs is sum over all vertices of size of reachable set.
+    // The hints say: "The number of good pairs in the tree is equal to the total number of vertices minus the number of leaves in the tree."
+    // This likely refers to a specific orientation: all edges directed away from a root (or towards a root).
+    // In a rooted tree with edges directed away from root, leaves have out-degree 0, so they can reach only themselves.
+    // Number of good pairs = sum_{v} (size of subtree of v) = something? Actually, if edges directed away from root, then u can reach v iff u is ancestor of v.
+    // Number of good pairs = number of ancestor-descendant pairs = sum_{v} depth(v) + 1? Not exactly n - leaves.
+    // Let's test: n=5, star graph: center 1, leaves 2,3,4,5. Direct all edges away from center: 1->2,1->3,1->4,1->5.
+    // Good pairs: (1,2),(1,3),(1,4),(1,5) and each leaf to itself? Wait, (u,v) distinct vertices. So (1,2),(1,3),(1,4),(1,5) = 4 pairs. n=5, leaves=4, n - leaves = 1. Not 4.
+    // So maybe the hint means something else.
+    // Let's read hint 5: "The number of good pairs in the tree is equal to the total number of vertices minus the number of leaves in the tree."
+    // This might be for a specific orientation that yields exactly n good pairs? We need exactly n good pairs.
+    // If number of good pairs = n - leaves, then to have n good pairs, we need leaves = 0, impossible.
+    // So maybe the hint is for a different problem? Let's re-read: "Consider the following statement: The number of good pairs in the tree is equal to the total number of vertices minus the number of leaves in the tree."
+    // This might be a false statement to think about? Or maybe it's for a directed tree where edges are directed towards a root? Let's test: star directed towards center: 2->1,3->1,4->1,5->1.
+    // Good pairs: (2,1),(3,1),(4,1),(5,1) = 4. n - leaves = 5 - 4 = 1. Not 4.
+    // So that statement doesn't match these examples.
+    // Let's look at sample 1: n=5, output has 5 good pairs. Sample 2: n=5, output has 5 good pairs. Sample 4: n=4, output has 4 good pairs? Wait sample 4 output YES, edges: 1->3, 2->1, 2->4. n=4, good pairs = 4? Let's count: 2->1, 2->4, 1->3, 2->1->3? Path 2->1->3 exists, so (2,3) is good. Also (1,3). (2,1). (2,4). That's 4 pairs: (2,1),(2,3),(2,4),(1,3). Exactly 4 = n.
+    // So we need exactly n good pairs.
+    // In sample 3: n=2, output NO.
+    // So for n>=3, it seems possible except maybe some cases?
+    // Let's analyze the condition for exactly n good pairs.
+    // In a directed graph, number of good pairs = number of pairs (u,v) with u!=v and path u->v.
+    // In a tree, if we direct edges, the underlying graph is a tree. The directed graph is a tournament? No, it's a directed tree (a polytree). 
+    // A directed tree can be seen as a set of directed edges. The reachability relation is a partial order.
+    // We want exactly n good pairs.
+    // Consider a directed tree. If there is a directed path from u to v, then u is an ancestor of v in some rooted sense? Not necessarily, because edges can go both ways.
+    // But if we have a directed tree, it cannot have cycles. The reachability DAG.
+    // Let's think about the number of good pairs in a directed tree. 
+    // For each vertex v, let in(v) be the number of vertices that can reach v (including itself? no, distinct). Let out(v) be number of vertices reachable from v.
+    // Total good pairs = sum_v (out(v) - 1) = sum_v (in(v) - 1).
+    // In a tree, if we orient edges, the sum of out-degrees = n-1. But out(v) is not out-degree.
+    // Let's consider a directed tree where all edges are oriented towards a single root? That's an arborescence rooted at the root with edges directed towards root. Then every vertex can reach the root, and possibly others? Actually, if all edges point towards root, then from any vertex you can only go towards the root. So the reachable set from v is the path from v to root. So out(v) = distance(v, root) + 1? No, distinct vertices: v can reach all vertices on the path from v to root (including root, excluding v? distinct, so out(v) = distance(v, root)). Then total good pairs = sum_v distance(v, root). This can vary.
+    // For a star with center as root, edges towards center: leaves distance 1, center distance 0. Sum = 4*1 = 4. n=5, 4 != 5.
+    // For a path 1-2-3-4-5, direct all edges towards 1: 2->1, 3->2, 4->3, 5->4. Then distances to 1: 2:1, 3:2, 4:3, 5:4. Sum = 10. n=5, 10 != 5.
+    // So not that.
+    // What about directing edges to create a single source and single sink? 
+    // Let's look at sample 1: edges: 1->2, 3->1, 3->5, 4->2. 
+    // Reachability: 3->5, 3->1, 3->2 (via 1), 1->2, 4->2. That's 5 pairs. 
+    // Notice that 3 can reach 5,1,2. 1 can reach 2. 4 can reach 2. 2 and 5 cannot reach anyone.
+    // So out(3)=3, out(1)=1, out(4)=1, out(2)=0, out(5)=0. Sum = 5.
+    // In this orientation, the graph has two sinks: 2 and 5. Sources: 3 and 4? 3 has in-degree 0? 3 has no incoming edges? Edges: 3->1, 3->5, so 3 is source. 4->2, so 4 is source. 1 has incoming from 3, outgoing to 2. So sources: 3,4. Sinks: 2,5.
+    // Number of good pairs = 5 = n.
+    // Sample 2: edges: 2->1, 3->1, 4->1, 5->4. 
+    // Reachability: 2->1, 3->1, 4->1, 5->4, 5->1 (via 4). That's 5 pairs. 
+    // out(2)=1, out(3)=1, out(4)=1, out(5)=2, out(1)=0. Sum=5.
+    // Sources: 2,3,5? 5 has incoming? No, 5->4, so 5 is source. 4 has incoming from 5, outgoing to 1. So sources: 2,3,5. Sinks: 1.
+    // Sample 4: n=4, edges: 1->3, 2->1, 2->4. 
+    // Reachability: 2->1, 2->4, 2->3 (via 1), 1->3. That's 4 pairs.
+    // out(2)=3, out(1)=1, out(3)=0, out(4)=0. Sum=4.
+    // Sources: 2. Sinks: 3,4.
+    // Pattern: The sum of out(v) = n. Since sum of out(v) = total good pairs + n (because each vertex can reach itself? No, good pairs are distinct, so total good pairs = sum_v (out(v) - 1) = sum_v out(v) - n. We want total good pairs = n, so sum_v out(v) = 2n. Wait, check: sample 1: out: 3,1,1,0,0 sum=5. n=5. 5 != 2n=10. So my formula is wrong.
+    // Good pairs count distinct (u,v). out(v) is number of vertices reachable from v (including v itself? Usually out(v) includes v? Let's define reachable set R(v) = {u | path v->u}. Then |R(v)| includes v. Number of good pairs = sum_v (|R(v)| - 1) = sum_v |R(v)| - n.
+    // In sample 1: R(3)={3,5,1,2} size 4; R(1)={1,2} size 2; R(4)={4,2} size 2; R(2)={2} size 1; R(5)={5} size 1. Sum of sizes = 4+2+2+1+1 = 10. Good pairs = 10 - 5 = 5. Yes.
+    // So sum_v |R(v)| = 2n. We want sum_v |R(v)| = 2n.
+    // In any directed graph, sum_v |R(v)| is the total number of reachability pairs (including self).
+    // In a directed tree, what is the maximum/minimum of this sum?
+    // For a tree, if we direct all edges in one direction (say from a root), then R(v) is the subtree of v. Sum of subtree sizes is known to be sum_v depth(v) + n? Actually, in a rooted tree, sum of subtree sizes = sum_v (size of subtree at v). This can be O(n^2) for a path.
+    // But we want exactly 2n. That means average |R(v)| = 2.
+    // So most vertices have |R(v)| = 1 or 2. 
+    // |R(v)|=1 means v cannot reach any other vertex (sink). |R(v)|=2 means v can reach exactly one other vertex.
+    // In sample 1, sizes: 4,2,2,1,1. Average 2.
+    // In sample 2, sizes: R(2)={2,1} size 2; R(3)={3,1} size 2; R(4)={4,1} size 2; R(5)={5,4,1} size 3; R(1)={1} size 1. Sum=10.
+    // In sample 4, sizes: R(2)={2,1,3,4} size 4; R(1)={1,3} size 2; R(3)={3} size 1; R(4)={4} size 1. Sum=8=2n.
+    // So we need sum |R(v)| = 2n.
+    // Let's think about the structure. In a directed tree, if we have a directed edge u->v, then R(u) includes R(v) plus u. So |R(u)| >= |R(v)| + 1? Actually, R(u) = {u} U R(v) U ... if there are other outgoing edges. But in a tree, each vertex has at most one outgoing edge? No, in a directed tree, a vertex can have multiple outgoing edges (like 3 in sample 1 has two outgoing edges). But the underlying graph is a tree, so if we have u->v and u->w, then v and w are in different subtrees, and there is no path between v and w (since tree has no cycles). So R(u) = {u} U R(v) U R(w) U ... for all outgoing edges. And these sets are disjoint except for u? Actually, R(v) and R(w) are disjoint because if there was a common vertex, there would be a cycle in the underlying tree. So |R(u)| = 1 + sum_{u->x} |R(x)|.
+    // Similarly, if a vertex has no outgoing edges, |R(v)|=1.
+    // So the sizes satisfy this recurrence.
+    // We want sum_v |R(v)| = 2n.
+    // Let S(v) = |R(v)|. Then S(v) = 1 + sum_{v->x} S(x).
+    // Sum over all v of S(v) = sum_v (1 + sum_{v->x} S(x)) = n + sum_{edges u->v} S(v).
+    // Because each edge u->v contributes S(v) to the sum.
+    // So sum S(v) = n + sum_{u->v} S(v).
+    // We want sum S(v) = 2n, so sum_{u->v} S(v) = n.
+    // There are n-1 edges. Each edge u->v contributes S(v) to the sum. So we need sum of S(v) over all edges (where v is the head of the edge) to be exactly n.
+    // Since S(v) >= 1, and there are n-1 edges, the sum is at least n-1. To get exactly n, we need exactly one edge to have S(v)=2 and all other edges to have S(v)=1. Or some combination? Since S(v) are integers >=1, and we have n-1 edges, sum = n means that the sum of (S(v)-1) over edges = 1. So exactly one edge has S(v)=2, and the rest have S(v)=1.
+    // Wait, S(v) is the size of reachable set from v. If S(v)=1, that means v has no outgoing edges (sink). So if an edge u->v has S(v)=1, then v is a sink. If S(v)=2, then v can reach exactly one other vertex (so v has exactly one outgoing edge, and that target is a sink).
+    // So the condition sum_{u->v} S(v) = n means that among all n-1 edges, exactly one edge has its head v with S(v)=2, and all other n-2 edges have heads with S(v)=1.
+    // But wait, S(v) is a property of v, not of the edge. If multiple edges point to the same v, they all contribute the same S(v). So the sum is sum_{v} (in-degree of v) * S(v). Because each edge u->v contributes S(v), and there are in-degree(v) such edges.
+    // So sum_{v} in_deg(v) * S(v) = n.
+    // We know sum in_deg(v) = n-1.
+    // Let's denote d_in(v) = in-degree of v.
+    // We want sum d_in(v) * S(v) = n.
+    // Since S(v) >= 1, and sum d_in(v) = n-1, we have sum d_in(v)*S(v) >= n-1.
+    // To get exactly n, we need sum d_in(v)*(S(v)-1) = 1.
+    // Since S(v)-1 >= 0, and d_in(v) >= 0, the only way is that there is exactly one vertex v with d_in(v) > 0 and S(v)-1 > 0, and specifically d_in(v)*(S(v)-1) = 1. Since d_in(v) is integer, either d_in(v)=1 and S(v)=2, or d_in(v)=2 and S(v)=1.5 (impossible). So we must have exactly one vertex v with d_in(v)=1 and S(v)=2, and for all other vertices with d_in(v)>0, S(v)=1.
+    // But wait, what about vertices with d_in(v)=0? They don't contribute to the sum. Their S(v) can be anything? But S(v) is determined by outgoing edges. If d_in(v)=0, v is a source. Its S(v) could be large. But does that affect the sum? The sum is only over edges, so only S(v) for v that are heads of edges matter. So sources can have large S(v) without affecting the sum directly. However, S(v) for sources is determined by their outgoing edges, which in turn depend on S of their children. So it's a global constraint.
+    // Let's analyze the recurrence: S(v) = 1 + sum_{v->x} S(x).
+    // We want exactly one vertex v (with d_in(v)=1) to have S(v)=2, and all other heads to have S(v)=1.
+    // If S(v)=1, then v has no outgoing edges (since S(v)=1 implies sum S(x)=0). So any vertex that is the head of an edge and has S(v)=1 must be a sink.
+    // The one vertex with S(v)=2 must have exactly one outgoing edge, and that edge must point to a sink (S(x)=1).
+    // So the directed graph consists of:
+    // - A set of sinks (S=1).
+    // - One vertex with S=2, which points to a sink.
+    // - All other vertices are sources? They have d_in=0, so they are not heads of any edge. They can have outgoing edges to sinks or to the S=2 vertex, etc.
+    // But wait, if a source points to the S=2 vertex, then S(source) = 1 + S(S=2 vertex) + maybe other children. That would make S(source) >= 3. That's allowed because sources don't contribute to the sum. However, we must ensure that the total sum of S(v) over all vertices equals 2n. Let's check if that imposes additional constraints.
+    // We have sum S(v) = n + sum_{u->v} S(v) = n + n = 2n. So the condition sum_{u->v} S(v) = n is exactly equivalent to sum S(v) = 2n. So if we satisfy the edge sum condition, the total sum condition is automatically satisfied. So we only need to satisfy the edge sum condition.
+    // But wait, the edge sum condition was derived from sum S(v) = n + sum_{u->v} S(v). This is always true regardless of the graph, as long as S(v) is defined by the recurrence. So if we construct a graph that satisfies the recurrence and has sum_{u->v} S(v) = n, then sum S(v) = 2n automatically. So we don't need to worry about sources' S(v) as long as the recurrence holds.
+    // So the necessary and sufficient condition for exactly n good pairs is: in the directed tree, sum_{edges u->v} S(v) = n, where S(v) = |R(v)|.
+    // And we deduced that this implies exactly one edge has head with S(v)=2 and all other edges have heads with S(v)=1.
+    // But is that really necessary? Let's check sample 1: 
+    // Edges: 1->2 (head 2, S(2)=1), 3->1 (head 1, S(1)=2), 3->5 (head 5, S(5)=1), 4->2 (head 2, S(2)=1). 
+    // Heads: 2 (twice), 1, 5. S(2)=1, S(1)=2, S(5)=1. 
+    // Sum = d_in(2)*S(2) + d_in(1)*S(1) + d_in(5)*S(5) = 2*1 + 1*2 + 1*1 = 5 = n. Yes.
+    // Here we have one head with S=2 (vertex 1), and it has d_in=1. Other heads have S=1. So exactly one vertex with d_in>0 and S>1, and it has d_in=1, S=2.
+    // Sample 2: edges: 2->1 (head 1, S(1)=1), 3->1 (head 1, S(1)=1), 4->1 (head 1, S(1)=1), 5->4 (head 4, S(4)=2). 
+    // Heads: 1 (d_in=3, S=1), 4 (d_in=1, S=2). Sum = 3*1 + 1*2 = 5 = n. 
+    // Here vertex 1 has d_in=3, S=1. Vertex 4 has d_in=1, S=2. So again exactly one vertex with S=2 (d_in=1), and all other heads have S=1.
+    // Sample 4: edges: 1->3 (head 3, S=1), 2->1 (head 1, S=2), 2->4 (head 4, S=1). 
+    // Heads: 3 (d_in=1, S=1), 1 (d_in=1, S=2), 4 (d_in=1, S=1). Sum = 1+2+1=4=n.
+    // So the pattern holds: exactly one vertex with S=2 and d_in=1, all other heads have S=1.
+    // What about vertices with d_in=0? They are sources. Their S can be >1. In sample 1, sources: 3 (S=4), 4 (S=2). In sample 2, sources: 2 (S=2), 3 (S=2), 5 (S=3). In sample 4, source: 2 (S=4).
+    // So the structure is: there is a set of sinks (S=1). There is exactly one "special" vertex with S=2, which has exactly one outgoing edge to a sink, and exactly one incoming edge (from some source). All other edges point to sinks. Sources can point to multiple sinks and/or to the special vertex.
+    // But wait, if a source points to the special vertex, then S(source) = 1 + S(special) + sum S(sinks) = 1 + 2 + (number of sinks it points to)*1. So S(source) = 3 + k. That's fine.
+    // Can a source point to another source? No, because if u->v and v is a source (d_in=0), then v has no incoming edges, but u->v gives v an incoming edge, contradiction. So sources have d_in=0, they can only have outgoing edges to non-sources.
+    // Can a sink have outgoing edges? No, S=1 means no outgoing edges.
+    // Can the special vertex (S=2) have incoming edges from multiple sources? If it had d_in > 1, then sum d_in*S would have 2 * d_in(special) >= 4, which would exceed n if n is small? But wait, the sum condition is sum d_in(v)*S(v) = n. If special has d_in=2, then contribution is 4. The remaining n-3 edges must contribute n-4. Since each other head has S=1, their contribution is their d_in. So we need sum_{v != special} d_in(v) = n-4. But total d_in sum is n-1, so d_in(special) + sum_{others} d_in = n-1 => 2 + (n-4) = n-2, not n-1. Contradiction. So d_in(special) must be 1. Let's verify: total edges = n-1. Let k = d_in(special). Then sum d_in(v)*S(v) = k*2 + (n-1 - k)*1 = n-1 + k. We want this to equal n. So n-1 + k = n => k = 1. So indeed, the special vertex must have exactly one incoming edge. And its S=2.
+    // So the special vertex has exactly one incoming edge and exactly one outgoing edge (to a sink). So it's a middle vertex in a path of length 2: source -> special -> sink.
+    // All other edges must be from sources directly to sinks.
+    // So the directed graph is a collection of stars centered at sources, with edges pointing to sinks, plus exactly one path of length 2 (source -> special -> sink). The special vertex is the only vertex with both incoming and outgoing edges. All other vertices are either sources (only outgoing) or sinks (only incoming). The special vertex has in-degree 1 and out-degree 1.
+    // Let's check if this structure always yields exactly n good pairs.
+    // Suppose we have a set of sources, a set of sinks, and one special vertex. 
+    // Edges: each source points to some sinks. The special vertex points to one sink, and one source points to the special vertex.
+    // Then S(sink)=1. S(special)=2. S(source) = 1 + S(special) + (number of sinks it points to) = 1 + 2 + k = 3 + k.
+    // Total sum of S(v) = sum_{sinks} 1 + S(special) + sum_{sources} S(source).
+    // Number of sinks = n - (number of sources) - 1 (special). Let s = number of sources. Then sinks = n - s - 1.
+    // Sum S(v) = (n-s-1)*1 + 2 + sum_{sources} (3 + k_i) = n - s + 1 + 3s + sum k_i = n + 2s + 1 + sum k_i.
+    // But sum k_i = total edges from sources to sinks. Total edges = (edges from sources to sinks) + (source->special) + (special->sink) = sum k_i + 1 + 1 = sum k_i + 2.
+    // Total edges = n-1, so sum k_i = n-3.
+    // Then sum S(v) = n + 2s + 1 + n - 3 = 2n + 2s - 2.
+    // We want sum S(v) = 2n, so 2s - 2 = 0 => s = 1.
+    // Wait! This implies there must be exactly ONE source! Let's re-evaluate.
+    // In sample 1: sources are 3 and 4? But 4 points to 2 (sink). 3 points to 1 (special) and 5 (sink). So sources: 3 and 4. s=2. But we just derived s must be 1 for sum S(v)=2n. Let's check sample 1 sum S(v) = 10 = 2n. n=5, 2n=10. s=2. According to formula: sum S(v) = 2n + 2s - 2 = 10 + 4 - 2 = 12? That's not 10. So my formula is wrong.
+    // Let's recalculate sample 1 with s=2.
+    // Sources: 3 and 4. Special: 1. Sinks: 2 and 5.
+    // Edges: 3->1 (source->special), 3->5 (source->sink), 4->2 (source->sink), 1->2 (special->sink).
+    // S(2)=1, S(5)=1. S(1)=2. S(3)=1 + S(1) + S(5) = 1+2+1=4. S(4)=1 + S(2) = 2.
+    // Sum S = 1+1+2+4+2 = 10. Correct.
+    // My formula: sum S = sinks*1 + special + sum_sources (1 + S(special if pointed) + sinks pointed). 
+    // For source 3: points to special and one sink => S=1+2+1=4.
+    // For source 4: points to one sink => S=1+1=2.
+    // So sum_sources S = (1 + 2 + k1) + (1 + k2) where k1=1, k2=1. Sum = 4+2=6.
+    // sinks=2, special=2. Total = 2+2+6=10.
+    // In general, let sources be partitioned into those that point to the special vertex and those that don't. 
+    // Actually, the special vertex has exactly one incoming edge, so exactly one source points to it. Call that source the "main source". Other sources only point to sinks.
+    // Let s be total number of sources. One main source, s-1 secondary sources.
+    // Main source: S = 1 + S(special) + (number of sinks it points to) = 3 + k_main.
+    // Secondary source: S = 1 + k_i.
+    // Sum of S over sources = (3 + k_main) + sum_{i=2..s} (1 + k_i) = 3 + (s-1) + sum k_i = s + 2 + sum k_i.
+    // Total edges = (main->special) + (special->sink) + sum k_i = 2 + sum k_i = n-1 => sum k_i = n-3.
+    // So sum sources S = s + 2 + n - 3 = n + s - 1.
+    // Total sum S = sinks + special + sum sources S = (n - s - 1) + 2 + (n + s - 1) = 2n.
+    // Wow! The s cancels out! So sum S(v) = 2n ALWAYS, regardless of the number of sources, as long as the structure is: exactly one special vertex with in-degree 1 and out-degree 1, all other edges are from sources to sinks, and the special's incoming edge comes from a source, outgoing goes to a sink. And no other edges.
+    // Let's verify: total edges = (main->special) + (special->sink) + (all other source->sink edges) = 2 + (n-3) = n-1. Correct.
+    // So ANY directed tree that has exactly one vertex with both incoming and outgoing edges (and that vertex has in-degree 1, out-degree 1), and all other vertices are either pure sources (in-degree 0, out-degree >0) or pure sinks (in-degree >0, out-degree 0), will have exactly n good pairs!
+    // Let's check if this condition is necessary. We derived that sum d_in(v)*S(v) = n implies exactly one head with S=2 and d_in=1, others S=1. That means exactly one vertex has S=2 and it has in-degree 1. S=2 means it has exactly one outgoing edge (to a sink). So that vertex has out-degree 1. All other heads have S=1, meaning they are sinks (out-degree 0). So indeed, the only vertex with both incoming and outgoing edges is that special vertex. And it has in-degree 1, out-degree 1. All other vertices are either sources (in-degree 0) or sinks (out-degree 0). This exactly matches the structure.
+    // So the problem reduces to: Can we orient the edges of the given tree such that in the resulting directed graph, there is exactly one vertex with both incoming and outgoing edges (and that vertex has exactly one incoming and one outgoing edge), and all other vertices are either sources (only outgoing) or sinks (only incoming)?
+    // In other words, we need to partition the vertices into three sets: one special vertex, a set of sources, and a set of sinks. Edges must be directed from sources to sinks, plus one path source -> special -> sink. The special vertex is connected to exactly one source and exactly one sink. All other edges go directly from a source to a sink.
+    // This is equivalent to: The tree must have a vertex of degree 2? Not necessarily. The special vertex has degree 2 in the directed sense, but in the underlying tree, it could have higher degree if some edges are oriented away from it? Wait, if special has out-degree 1 and in-degree 1, then in the tree it is incident to exactly two edges: one from its parent (source) and one to its child (sink). But in the tree, it might be connected to other vertices. However, those other connections would have to be oriented. If special had another neighbor, that edge would have to be oriented either from special to that neighbor (making special have out-degree >1) or from that neighbor to special (making special have in-degree >1). Both would violate the condition. So the special vertex must have degree exactly 2 in the tree! Because every incident edge must be oriented, and it can have at most one incoming and at most one outgoing. Since it must have exactly one incoming and one outgoing, it must have exactly two incident edges. So the special vertex must be a degree-2 vertex in the tree.
+    // Similarly, sources can have multiple incident edges, all oriented away from them. So sources can have any degree, but all their edges must be outgoing. Sinks can have any degree, all edges incoming.
+    // So the tree must be orientable such that there is exactly one vertex with degree 2 that gets one incoming and one outgoing, and all other vertices are either pure sources (all incident edges outgoing) or pure sinks (all incident edges incoming).
+    // This is equivalent to: The tree can be bipartitioned into sources and sinks, with exactly one edge connecting two sources? No, the special vertex is neither pure source nor pure sink. It has one source neighbor and one sink neighbor. So if we remove the special vertex, the tree splits into two components? Actually, the special vertex has degree 2, so removing it splits the tree into two components (if it's not a leaf, which it isn't). One component contains the source neighbor, the other contains the sink neighbor. In the component with the source neighbor, all vertices must be sources? Wait, the source neighbor is a source, so all its edges must be outgoing. That means within that component, all edges must be directed away from the source neighbor? But if there are other vertices in that component, they would have edges. If an edge connects two vertices both in the source component, one must be outgoing from one and incoming to the other. But if both are supposed to be sources, they can't have incoming edges. So actually, the entire component must be a star? Let's analyze.
+    // If a vertex is a source, it has in-degree 0. So no edge can point to it. Therefore, in the source component, all edges must be directed away from the source neighbor? But if there is a path of length >1,

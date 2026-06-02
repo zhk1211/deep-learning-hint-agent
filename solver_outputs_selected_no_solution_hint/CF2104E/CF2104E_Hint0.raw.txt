@@ -1,0 +1,91 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, k;
+    cin >> n >> k;
+    string s;
+    cin >> s;
+
+    // nxt[i][c] = next occurrence of character c at or after position i
+    // We'll build for positions 0..n, where n is one past the end.
+    vector<array<int, 26>> nxt(n + 2);
+    // Initialize nxt[n] and nxt[n+1] with n (meaning not found)
+    for (int c = 0; c < 26; ++c) {
+        nxt[n][c] = n;
+        nxt[n + 1][c] = n;
+    }
+    // Build from right to left
+    for (int i = n - 1; i >= 0; --i) {
+        nxt[i] = nxt[i + 1];
+        nxt[i][s[i] - 'a'] = i;
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        string t;
+        cin >> t;
+        int m = (int)t.size();
+        // We need to find the longest prefix of t that is a subsequence of s,
+        // but we want the minimum number of letters to append so that it stops being pleasant.
+        // Actually, we want the minimum L such that t + (some L letters) is NOT a subsequence.
+        // This is equivalent to: find the smallest L such that there exists a string of length L
+        // that when appended makes it not a subsequence.
+        // Alternatively, we can think of the automaton: we process t, and we end at some position pos in s.
+        // Then we need to append letters to reach a state where no transition exists.
+        // The minimum number of letters to append is the shortest path from pos to a "dead" state
+        // in the DFA of subsequences. The DFA state is the position in s (0..n). From state i,
+        // reading character c goes to nxt[i][c] + 1 (or n+1 if not found, but we treat n as dead).
+        // Actually, if nxt[i][c] == n, then reading c from state i leads to dead (no possible continuation).
+        // So we want the shortest string w such that from pos, reading w leads to dead.
+        // This is exactly the minimum distance to dead in the automaton.
+        // We can precompute dp[i] = minimum number of letters to append from state i to reach dead.
+        // dp[n] = 0 (already dead). For i < n, dp[i] = 1 + min_{c} dp[nxt[i][c] + 1]? Wait.
+        // From state i, on character c, next state is nxt[i][c] + 1 (if nxt[i][c] != n), else dead.
+        // If nxt[i][c] == n, then reading c leads immediately to dead, so distance = 1.
+        // So dp[i] = 1 + min_{c} (nxt[i][c] == n ? 0 : dp[nxt[i][c] + 1]).
+        // But we need dp for all i from 0 to n. We can compute it in O(n * k) which is 26e6, acceptable.
+        vector<int> dp(n + 1);
+        dp[n] = 0;
+        for (int i = n - 1; i >= 0; --i) {
+            int best = 1e9;
+            for (int c = 0; c < k; ++c) {
+                int j = nxt[i][c];
+                if (j == n) {
+                    best = 1;
+                    break; // can't get better than 1
+                } else {
+                    best = min(best, 1 + dp[j + 1]);
+                }
+            }
+            dp[i] = best;
+        }
+
+        // Now process t to find the state after reading t
+        int pos = 0;
+        for (char ch : t) {
+            int c = ch - 'a';
+            if (pos <= n) {
+                int j = nxt[pos][c];
+                if (j == n) {
+                    pos = n + 1; // dead
+                } else {
+                    pos = j + 1;
+                }
+            }
+        }
+        if (pos > n) {
+            // already dead => t is not a subsequence
+            cout << 0 << '\n';
+        } else {
+            cout << dp[pos] << '\n';
+        }
+    }
+    return 0;
+}
+```

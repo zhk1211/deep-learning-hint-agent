@@ -1,0 +1,90 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAX_A = 1000000;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        vector<int> freq(MAX_A + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+            freq[a[i]]++;
+        }
+        
+        long long ans = 0;
+        for (int j_val = 1; j_val <= MAX_A; ++j_val) {
+            int c = freq[j_val];
+            if (c == 0) continue;
+            // j is the center: a_j = j_val
+            // We need i and k such that a_i * b = j_val and j_val * b = a_k
+            // So a_i = j_val / b, a_k = j_val * b
+            // b must be positive integer, so b divides j_val
+            // Also a_i and a_k must be <= MAX_A
+            for (int b = 1; b * b <= j_val; ++b) {
+                if (j_val % b == 0) {
+                    int b1 = b;
+                    int b2 = j_val / b;
+                    
+                    // For divisor b1:
+                    int i_val = j_val / b1;
+                    int k_val = j_val * b1;
+                    if (k_val <= MAX_A) {
+                        int ci = freq[i_val];
+                        int ck = freq[k_val];
+                        if (ci > 0 && ck > 0) {
+                            if (i_val == j_val && k_val == j_val) {
+                                // all three equal
+                                if (c >= 3) {
+                                    ans += 1LL * c * (c - 1) * (c - 2);
+                                }
+                            } else if (i_val == j_val) {
+                                // i and j equal, k different
+                                ans += 1LL * c * (c - 1) * ck;
+                            } else if (k_val == j_val) {
+                                // j and k equal, i different
+                                ans += 1LL * c * (c - 1) * ci;
+                            } else {
+                                ans += 1LL * ci * c * ck;
+                            }
+                        }
+                    }
+                    
+                    if (b1 != b2) {
+                        // For divisor b2:
+                        int i_val2 = j_val / b2;
+                        int k_val2 = j_val * b2;
+                        if (k_val2 <= MAX_A) {
+                            int ci2 = freq[i_val2];
+                            int ck2 = freq[k_val2];
+                            if (ci2 > 0 && ck2 > 0) {
+                                if (i_val2 == j_val && k_val2 == j_val) {
+                                    if (c >= 3) {
+                                        ans += 1LL * c * (c - 1) * (c - 2);
+                                    }
+                                } else if (i_val2 == j_val) {
+                                    ans += 1LL * c * (c - 1) * ck2;
+                                } else if (k_val2 == j_val) {
+                                    ans += 1LL * c * (c - 1) * ci2;
+                                } else {
+                                    ans += 1LL * ci2 * c * ck2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

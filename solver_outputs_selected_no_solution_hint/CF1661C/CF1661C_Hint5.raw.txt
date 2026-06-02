@@ -1,0 +1,54 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+ll solve_case(int n, vector<int>& h) {
+    int max_h = *max_element(h.begin(), h.end());
+    ll lo = 0, hi = 1e18;
+    ll ans = hi;
+    while (lo <= hi) {
+        ll mid = (lo + hi) / 2;
+        ll odd_days = (mid + 1) / 2;
+        ll even_days = mid / 2;
+        ll need_odd = 0;
+        ll total_need = 0;
+        for (int x : h) {
+            ll diff = max_h - x;
+            total_need += diff;
+            need_odd += diff % 2;
+        }
+        ll can_cover_odd = min(need_odd, odd_days);
+        ll remaining_odd = need_odd - can_cover_odd;
+        ll remaining_even = even_days - can_cover_odd;
+        ll total_need_even = total_need - can_cover_odd;
+        if (remaining_even * 2 >= total_need_even) {
+            ans = mid;
+            hi = mid - 1;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    return ans;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> h(n);
+        for (int i = 0; i < n; ++i) cin >> h[i];
+        ll ans1 = solve_case(n, h);
+        int max_h = *max_element(h.begin(), h.end());
+        for (int& x : h) x = max_h + 1 - (max_h - x);
+        ll ans2 = solve_case(n, h);
+        cout << min(ans1, ans2) << '\n';
+    }
+    return 0;
+}
+```

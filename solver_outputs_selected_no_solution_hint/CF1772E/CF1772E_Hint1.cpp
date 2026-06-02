@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n);
+        for (int i = 0; i < n; i++) {
+            cin >> p[i];
+        }
+        
+        // Check if already sorted ascending or descending
+        bool asc = true, desc = true;
+        for (int i = 0; i < n; i++) {
+            if (p[i] != i + 1) asc = false;
+            if (p[i] != n - i) desc = false;
+        }
+        // Problem guarantees not sorted, but just in case
+        if (asc) {
+            cout << "First\n";
+            continue;
+        }
+        if (desc) {
+            cout << "Second\n";
+            continue;
+        }
+        
+        // Count fixed points for ascending and descending
+        int asc_fixed = 0, desc_fixed = 0;
+        for (int i = 0; i < n; i++) {
+            if (p[i] == i + 1) asc_fixed++;
+            if (p[i] == n - i) desc_fixed++;
+        }
+        
+        // Elements that are neither in correct ascending nor descending position
+        int both_bad = 0;
+        for (int i = 0; i < n; i++) {
+            if (p[i] != i + 1 && p[i] != n - i) both_bad++;
+        }
+        
+        // First player needs to fix asc_fixed + both_bad elements
+        // Second player needs to fix desc_fixed + both_bad elements
+        // But they share both_bad elements - coloring one blue helps both?
+        // Actually, coloring an element blue removes it from being "red fixed" for opponent.
+        // The game: players can color red elements blue, then rearrange blue elements.
+        // Winning condition: all elements in correct order for that player.
+        // If a player colors an element blue, it can be rearranged freely later.
+        // So a player wants to color elements that are NOT in their desired position.
+        // The opponent might also color elements to interfere.
+        
+        // Let a = number of elements not in ascending position = n - asc_fixed
+        // Let b = number of elements not in descending position = n - desc_fixed
+        int a = n - asc_fixed;
+        int b = n - desc_fixed;
+        
+        // First player wins if they can achieve ascending order before second achieves descending.
+        // Both players can skip.
+        // Optimal play analysis from known solution:
+        // If a <= b - 1: First wins (First can force win before Second)
+        // If b <= a - 1: Second wins
+        // Otherwise: Tie
+        
+        if (a <= b - 1) {
+            cout << "First\n";
+        } else if (b <= a - 1) {
+            cout << "Second\n";
+        } else {
+            cout << "Tie\n";
+        }
+    }
+    return 0;
+}

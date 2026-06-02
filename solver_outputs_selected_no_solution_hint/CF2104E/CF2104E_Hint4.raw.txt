@@ -1,0 +1,53 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, k;
+    cin >> n >> k;
+    string s;
+    cin >> s;
+    int q;
+    cin >> q;
+
+    // nxt[i][c] = next occurrence of character c at or after position i
+    // We'll build for positions 0..n, where n is one past the end.
+    vector<array<int, 26>> nxt(n + 2);
+    array<int, 26> last;
+    fill(last.begin(), last.end(), n);
+    for (int i = n; i >= 0; --i) {
+        nxt[i] = last;
+        if (i < n) {
+            last[s[i] - 'a'] = i;
+        }
+    }
+
+    // For each query, we simulate greedily matching t in s, but we stop
+    // when we can't match a character. The number of characters left in t
+    // after the first failure is the answer.
+    // However, total length of all t_i <= 1e6, so O(total length) is fine.
+    while (q--) {
+        string t;
+        cin >> t;
+        int pos = 0; // current position in s (0 means before first char)
+        int matched = 0;
+        for (char ch : t) {
+            int c = ch - 'a';
+            int npos = nxt[pos][c];
+            if (npos == n) {
+                // cannot match this character
+                break;
+            }
+            pos = npos + 1;
+            ++matched;
+        }
+        // answer = number of characters not matched = t.size() - matched
+        cout << (int)t.size() - matched << '\n';
+    }
+
+    return 0;
+}
+```

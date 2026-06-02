@@ -1,0 +1,66 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(vector<int> &indices) {
+    cout << "? " << indices.size();
+    for (int x : indices) cout << " " << x;
+    cout << endl;
+    int res;
+    cin >> res;
+    return res;
+}
+
+void answer(vector<int> &a) {
+    cout << "!";
+    for (int x : a) cout << " " << x;
+    cout << endl;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    
+    // Find pairs using queries of size 2
+    vector<int> paired(m + 1, 0);
+    vector<int> first_of_value(n + 1, 0);
+    
+    for (int i = 1; i <= m; i++) {
+        if (paired[i]) continue;
+        for (int j = i + 1; j <= m; j++) {
+            if (paired[j]) continue;
+            vector<int> q = {i, j};
+            int res = query(q);
+            if (res > 0) {
+                // They are the same value
+                int val = res;
+                a[i] = a[j] = val;
+                paired[i] = paired[j] = 1;
+                if (first_of_value[val] == 0) {
+                    first_of_value[val] = i;
+                }
+                break;
+            }
+        }
+    }
+    
+    // Now we have all pairs, but we might have used many queries.
+    // Actually, the above approach uses O(n^2) queries in worst case.
+    // We need a better approach.
+    
+    // Let's reset and use the hints properly.
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

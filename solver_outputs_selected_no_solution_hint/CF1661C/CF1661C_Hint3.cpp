@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+ll solve_case(int n, vector<int>& h) {
+    int mx = *max_element(h.begin(), h.end());
+    ll lo = 0, hi = 2LL * mx + 2;
+    ll ans = hi;
+    while (lo <= hi) {
+        ll mid = (lo + hi) / 2;
+        ll odd_days = (mid + 1) / 2;
+        ll even_days = mid / 2;
+        ll need_odd = 0, need_even = 0;
+        bool ok = true;
+        for (int i = 0; i < n; ++i) {
+            ll diff = mx - h[i];
+            ll take_even = min(even_days, diff / 2);
+            even_days -= take_even;
+            diff -= take_even * 2;
+            need_odd += diff;
+            if (need_odd > odd_days) {
+                ok = false;
+                break;
+            }
+        }
+        if (ok && need_odd <= odd_days) {
+            ans = mid;
+            hi = mid - 1;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    return ans;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> h(n);
+        for (int i = 0; i < n; ++i) cin >> h[i];
+        int mx = *max_element(h.begin(), h.end());
+        ll best = LLONG_MAX;
+        for (int target : {mx, mx + 1}) {
+            vector<int> h2 = h;
+            for (int i = 0; i < n; ++i) h2[i] = target - h2[i];
+            ll lo = 0, hi = 2LL * target + 2;
+            while (lo <= hi) {
+                ll mid = (lo + hi) / 2;
+                ll odd = (mid + 1) / 2;
+                ll even = mid / 2;
+                ll need_odd = 0;
+                bool ok = true;
+                ll rem_even = even;
+                for (int i = 0; i < n; ++i) {
+                    ll d = h2[i];
+                    ll take_even = min(rem_even, d / 2);
+                    rem_even -= take_even;
+                    d -= take_even * 2;
+                    need_odd += d;
+                    if (need_odd > odd) { ok = false; break; }
+                }
+                if (ok && need_odd <= odd) {
+                    best = min(best, mid);
+                    hi = mid - 1;
+                } else {
+                    lo = mid + 1;
+                }
+            }
+        }
+        cout << best << '\n';
+    }
+    return 0;
+}

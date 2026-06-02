@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // We will choose k traps to jump over.
+        // If we jump over a trap, we avoid its base damage, but it adds 1 to all later traps.
+        // Equivalent: total damage = sum of all a_i + (number of jumps) * (n - i) for each jumped trap? No.
+        // Let's think: total damage = sum_{i not jumped} (a_i + number of jumps before i).
+        // This equals sum_{all i} a_i - sum_{jumped} a_i + sum_{i not jumped} (jumps before i).
+        // The sum_{i not jumped} (jumps before i) = sum_{jumped j} (number of non-jumped traps after j).
+        // Let x_i = 1 if we jump trap i, else 0.
+        // Total damage = sum a_i - sum_{jumped} a_i + sum_{jumped j} ( (n - j) - (number of jumped traps after j) ).
+        // This is messy. Alternative: think of the bonus damage as adding 1 for each jump that occurs before the trap.
+        // So total damage = sum_{i=1}^n (a_i + (number of jumps before i)) * (1 - x_i).
+        // Let S = sum a_i. Then total damage = S - sum_{jumped} a_i + sum_{i not jumped} (jumps before i).
+        // The last term is sum_{jumped j} (number of non-jumped traps after j).
+        // Let y_j = 1 if jumped, else 0. Then number of non-jumped after j = (n - j) - sum_{t > j} y_t.
+        // So sum_{jumped j} (n - j) - sum_{jumped j} sum_{t > j} y_t.
+        // The double sum counts pairs (j, t) with j < t both jumped. That equals C(k,2) if we jump exactly k traps? Not exactly, because order matters? Actually sum_{j} sum_{t>j} y_j y_t = number of ordered pairs of jumped traps with j < t. If we jump a set of indices, this sum is the number of pairs in the set. So it's C(m,2) where m is number of jumps.
+        // So total damage = S - sum_{jumped} a_i + sum_{jumped} (n - j) - C(m,2).
+        // But we can choose any m <= k traps to jump. We want to minimize damage.
+        // So we want to maximize: sum_{jumped} a_i - sum_{jumped} (n - j) + C(m,2).
+        // Let value of jumping trap i = a_i - (n - i). Then we want to choose m <= k traps to maximize sum of values + C(m,2).
+        // Since C(m,2) depends only on m, we can try all possible m from 0 to k, and for each m, pick the m traps with largest values.
+        // But careful: C(m,2) = m*(m-1)/2. So we want max over m<=k of (sum of top m values) + m*(m-1)/2.
+        // Then minimal damage = S - (that max).
+        
+        vector<long long> values(n);
+        for (int i = 0; i < n; ++i) {
+            values[i] = a[i] - (n - 1 - i); // because n - i? Wait: i is 0-indexed. Trap i (1-indexed) has position i+1. n - (i+1) = n - i - 1.
+            // So value = a_i - (n - i - 1).
+        }
+        sort(values.rbegin(), values.rend());
+        
+        long long S = accumulate(a.begin(), a.end(), 0LL);
+        long long best_gain = 0;
+        long long sum_top = 0;
+        for (int m = 1; m <= k; ++m) {
+            sum_top += values[m-1];
+            long long gain = sum_top + (long long)m * (m - 1) / 2;
+            if (gain > best_gain) best_gain = gain;
+        }
+        // m=0 gives gain 0, already covered by best_gain initialized to 0.
+        
+        long long ans = S - best_gain;
+        cout << ans << '\n';
+    }
+    return 0;
+}

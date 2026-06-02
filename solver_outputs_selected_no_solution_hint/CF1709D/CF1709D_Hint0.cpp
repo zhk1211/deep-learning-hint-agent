@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(m + 1);
+    for (int i = 1; i <= m; ++i) {
+        cin >> a[i];
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        int xs, ys, xf, yf, k;
+        cin >> xs >> ys >> xf >> yf >> k;
+
+        // Check column alignment modulo k
+        if (abs(ys - yf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+        // Check row alignment modulo k
+        if (abs(xs - xf) % k != 0) {
+            cout << "NO\n";
+            continue;
+        }
+
+        // The robot can move vertically only if it can reach a row that is above all blocked cells
+        // in the columns it passes through. The highest blocked cell in the path is max(a[ys], a[yf])
+        // but also all columns between them if moving horizontally.
+        // Actually, the robot can move up/down freely as long as it stays above the blocked cells.
+        // The key constraint: to move horizontally between columns, the robot must be at a row
+        // that is strictly greater than the maximum blocked cell in the columns it traverses.
+        // Since it moves in steps of k, it can only be at rows congruent to xs mod k (or xf mod k).
+        // The highest reachable row is n, but we need to find the maximum row <= n that is
+        // congruent to xs mod k and is > max_blocked_in_path.
+        // If such a row exists, the robot can go up to it, move horizontally, then go down.
+
+        int max_blocked = 0;
+        if (ys <= yf) {
+            for (int col = ys; col <= yf; ++col) {
+                max_blocked = max(max_blocked, a[col]);
+            }
+        } else {
+            for (int col = yf; col <= ys; ++col) {
+                max_blocked = max(max_blocked, a[col]);
+            }
+        }
+
+        // The robot starts at xs. It can move up to rows: xs, xs+k, xs+2k, ... <= n.
+        // We need the maximum such row that is > max_blocked.
+        // Let r = xs + t*k <= n, r > max_blocked.
+        // The maximum possible r is n - ((n - xs) % k).
+        int max_reachable = n - ((n - xs) % k);
+        if (max_reachable <= max_blocked) {
+            cout << "NO\n";
+        } else {
+            cout << "YES\n";
+        }
+    }
+
+    return 0;
+}

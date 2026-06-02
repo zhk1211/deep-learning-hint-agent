@@ -1,0 +1,253 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n + 1);
+        vector<bool> used(n + 1, false);
+
+        // Place 1 at position 1
+        p[1] = 1;
+        used[1] = true;
+
+        // For positions 2..n, try to place numbers that are not equal to index
+        // to minimize fixed points, but must satisfy gcd(p[i], i) > 1.
+        // We'll try to avoid fixed points when possible.
+        // Strategy: for each i from 2 to n, if i is even, we can place an even number.
+        // If i is odd, we can place a multiple of i, or an even number if gcd > 1.
+        // To minimize fixed points, we avoid placing i at position i.
+        // We'll construct by swapping adjacent pairs where possible.
+
+        // Special handling for small n
+        if (n == 2) {
+            cout << "1 2\n";
+            continue;
+        }
+        if (n == 3) {
+            cout << "1 2 3\n";
+            continue;
+        }
+
+        // For n >= 4, we can achieve 1 fixed point (at position 1) for even n,
+        // and 2 fixed points for odd n? Let's check.
+        // Actually, we can achieve 1 fixed point for all n >= 4 except n=3?
+        // Let's construct:
+        // For even positions, we can swap pairs: p[2]=4, p[4]=2, p[6]=8, p[8]=6, etc.
+        // For odd positions > 1, we need gcd(p[i], i) > 1.
+        // If i is odd and composite, we can place a multiple of i, or an even number.
+        // If i is an odd prime, we must place an even number (since gcd(even, odd)=1? No, gcd(even, odd) can be >1 if even shares a factor. Actually gcd(even, odd) is always odd, but could be >1 if the odd number shares a factor with the even number. For prime odd, gcd(even, prime) = 1 unless the even number is a multiple of the prime. So we need to place a multiple of the prime, or an even number that is a multiple of the prime. But if prime > n/2, its only multiple in 1..n is itself. So for large primes, we might be forced to have a fixed point.
+        // This is the key: for odd primes > n/2, the only number with gcd > 1 is the prime itself. So we must place p[i] = i for those positions. That gives fixed points.
+        // So minimum fixed points = 1 (at position 1) + number of primes in (n/2, n].
+        // But wait, position 1 is always fixed? We can try to avoid fixed point at 1? gcd(p[1],1)=gcd(x,1)=1 always, so condition only applies for i>=2. So position 1 can be anything, but to minimize fixed points, we can set p[1]=1 (fixed) or not? If we set p[1]!=1, then 1 must go somewhere else. But 1 at any other position i>1 would give gcd(1,i)=1, violating condition. So 1 must be at position 1. So position 1 is always a fixed point.
+        // So minimum fixed points = 1 + count of primes in (n/2, n].
+        // Let's construct to achieve exactly that.
+
+        // We'll place numbers as follows:
+        // For even positions 2,4,6,... we can pair them up: p[2k] = 2k+2, p[2k+2] = 2k, etc. But careful with boundaries.
+        // For odd positions > 1:
+        //   If i is composite, we can place an even number that is a multiple of some factor, or place i itself? We want to avoid fixed points if possible. For composite odd i, we can place an even number that shares a factor with i. For example, if i=9, we can place 6 (gcd(9,6)=3). So we can avoid fixed point.
+        //   If i is prime > n/2, we must place i.
+        //   If i is prime <= n/2, we can place 2*i (which is even and <= n). So we can avoid fixed point.
+        // So we need to assign numbers carefully.
+
+        // Let's create a list of available numbers.
+        // We'll fill positions from 2 to n.
+        // We'll handle even positions first: we can pair them (2,4), (6,8), ... but if n is odd, the last even position might be unpaired? Actually even positions go up to n if n even, or n-1 if n odd. We can pair adjacent evens: swap 2 and 4, 6 and 8, etc. But we must ensure gcd conditions: gcd(4,2)=2>1, gcd(2,4)=2>1. So that works.
+        // For odd positions, we'll assign numbers that are multiples or share factors.
+
+        // Alternative simpler construction from known solution:
+        // For n=2: 1 2
+        // For n=3: 1 2 3
+        // For n>=4:
+        //   p[1] = 1
+        //   For even i: p[i] = i+2 if i+2 <= n and i+2 is even? Actually we can do: p[2] = 4, p[4] = 2, p[6] = 8, p[8] = 6, ... but if n is odd, the last even might be n-1, and n+1 doesn't exist. So we need to handle the last even carefully.
+        //   For odd i > 1:
+        //     If i is prime and i > n/2: p[i] = i (forced fixed point)
+        //     Else: we can place an even number that shares a factor, or place i+something.
+        // But we need a systematic assignment.
+
+        // Let's use a greedy assignment:
+        // We'll maintain a set of unused numbers.
+        // For i from 2 to n:
+        //   If i is even:
+        //     We want to place an even number != i. We can try i+2 if available, else i-2, etc.
+        //   If i is odd:
+        //     If i is prime and i > n/2: place i.
+        //     Else: find an unused number x such that gcd(x,i) > 1 and x != i. Prefer even numbers.
+        // This greedy works if we process in some order.
+
+        // But we can also use a known pattern:
+        // For n even:
+        //   p[1] = 1
+        //   For i=2 to n-2 step 2: p[i] = i+2, p[i+2] = i
+        //   For odd i: if i is prime > n/2, p[i]=i; else p[i] = something else.
+        // Actually, we can fill all odd positions > 1 with even numbers except the forced primes.
+        // Let's count how many even numbers we have: floor(n/2).
+        // Number of odd positions > 1: ceil(n/2) - 1.
+        // We need to place even numbers in odd positions, but we also need to place odd numbers in even positions? No, even positions can take even numbers (we can swap them). So we have enough even numbers to fill all odd positions? Not necessarily, because some even numbers are used in even positions. But we can also place odd numbers in odd positions if they share factors.
+
+        // Let's look at sample n=6: output 1 4 6 2 5 3
+        // Positions: 1:1, 2:4, 3:6, 4:2, 5:5, 6:3
+        // Even positions: 2->4, 4->2, 6->3 (3 is odd! gcd(3,6)=3>1)
+        // Odd positions >1: 3->6 (even), 5->5 (prime > 3, forced)
+        // So they used odd number 3 at even position 6.
+
+        // So we can mix.
+
+        // Let's design a construction that achieves the minimum fixed points.
+        // We'll first identify primes in (n/2, n]. Let P be that set.
+        // For each prime p in P, set p[p] = p.
+        // Now we have remaining numbers and remaining positions.
+        // We'll pair up the remaining numbers and positions such that gcd > 1 and no fixed points (except possibly 1).
+        // We can do this by matching even numbers with even positions, and odd composite numbers with odd positions, etc.
+
+        // A known solution from Codeforces: 
+        // For n=2: 1 2
+        // For n=3: 1 2 3
+        // For n>=4:
+        //   Initialize p[i] = i for all i.
+        //   Then swap some pairs to break fixed points while maintaining gcd condition.
+        //   Specifically, we can swap adjacent pairs for even numbers: swap(2,4), swap(6,8), ... but careful with last even.
+        //   For odd numbers, we can swap composite odds with something.
+        //   But we must ensure primes > n/2 remain fixed.
+
+        // Let's implement a simpler approach:
+        // We'll create a list of numbers 1..n.
+        // We'll place 1 at position 1.
+        // We'll collect all even numbers in a list E.
+        // We'll collect all odd numbers > 1 in a list O.
+        // We'll assign even numbers to positions that need them.
+        // Positions that must be fixed: primes > n/2. We'll set those.
+        // For remaining positions, we'll try to assign numbers such that gcd>1 and not equal to index.
+
+        // Let's do it step by step:
+        vector<int> ans(n + 1, 0);
+        vector<bool> used_num(n + 1, false);
+        ans[1] = 1;
+        used_num[1] = true;
+
+        // Identify primes > n/2
+        auto is_prime = [&](int x) {
+            if (x < 2) return false;
+            for (int d = 2; d * d <= x; ++d) {
+                if (x % d == 0) return false;
+            }
+            return true;
+        };
+
+        vector<int> forced_primes;
+        for (int i = 2; i <= n; ++i) {
+            if (i > n / 2 && is_prime(i)) {
+                forced_primes.push_back(i);
+            }
+        }
+
+        // Place forced primes at their own positions
+        for (int p : forced_primes) {
+            ans[p] = p;
+            used_num[p] = true;
+        }
+
+        // Now we have remaining positions and numbers.
+        // We'll try to assign even numbers to even positions first, but we can also assign odd numbers to even positions if gcd>1.
+        // Let's just do a greedy matching: for each position i from 2 to n, if not filled, find an unused number x such that gcd(x,i)>1 and x != i.
+        // To ensure we don't get stuck, we can process positions in an order that leaves flexibility.
+        // Since n <= 1e5, we can do this with a set and checking multiples.
+
+        set<int> unused;
+        for (int i = 2; i <= n; ++i) {
+            if (!used_num[i]) unused.insert(i);
+        }
+
+        // We'll fill positions from 2 to n.
+        // For each position i, if not filled, we try to find a suitable unused number.
+        // We'll try to pick a number that is a multiple of i, or shares a factor.
+        // To avoid fixed points, we prefer numbers != i.
+        // We can iterate over multiples of i, or over factors.
+        // Since n is up to 1e5, total operations O(n log n) is fine.
+
+        for (int i = 2; i <= n; ++i) {
+            if (ans[i] != 0) continue;
+            // Find an unused number x with gcd(x,i) > 1 and x != i.
+            // We'll look for multiples of i first, then numbers sharing a prime factor.
+            bool found = false;
+            // Try multiples of i
+            for (int m = i; m <= n; m += i) {
+                if (!used_num[m] && m != i) {
+                    ans[i] = m;
+                    used_num[m] = true;
+                    unused.erase(m);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                // Try numbers that share a factor with i
+                // We can factorize i and look for multiples of its prime factors.
+                int temp = i;
+                for (int d = 2; d * d <= temp; ++d) {
+                    if (temp % d == 0) {
+                        while (temp % d == 0) temp /= d;
+                        // look for multiples of d
+                        for (int m = d; m <= n; m += d) {
+                            if (!used_num[m] && m != i) {
+                                ans[i] = m;
+                                used_num[m] = true;
+                                unused.erase(m);
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found) break;
+                    }
+                }
+                if (!found && temp > 1) {
+                    // temp is a prime factor
+                    for (int m = temp; m <= n; m += temp) {
+                        if (!used_num[m] && m != i) {
+                            ans[i] = m;
+                            used_num[m] = true;
+                            unused.erase(m);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!found) {
+                // If still not found, we might have to use i itself (fixed point), but that should only happen for forced primes which we already placed.
+                // As a fallback, just pick any unused number that gives gcd>1, even if it's i.
+                // But we already handled forced primes, so this shouldn't happen.
+                // Just in case, pick the smallest unused number that works.
+                for (int x : unused) {
+                    if (gcd(x, i) > 1) {
+                        ans[i] = x;
+                        used_num[x] = true;
+                        unused.erase(x);
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (!found) {
+                // Last resort: place i (fixed point)
+                ans[i] = i;
+                used_num[i] = true;
+                unused.erase(i);
+            }
+        }
+
+        // Output
+        for (int i = 1; i <= n; ++i) {
+            cout << ans[i] << " \n"[i == n];
+        }
+    }
+    return 0;
+}

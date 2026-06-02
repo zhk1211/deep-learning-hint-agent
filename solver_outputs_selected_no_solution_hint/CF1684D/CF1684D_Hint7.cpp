@@ -1,0 +1,89 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // dp[i] = minimal damage to reach trap i (0-indexed) having jumped some traps,
+        // and we are about to step on trap i (i.e., we do not jump trap i).
+        // We use a segment tree over dp[j] + something to handle transitions.
+        // Actually, we can reformulate: total damage = sum of all a_i + sum over jumped traps of (n - i) - (something).
+        // Let's think differently.
+        
+        // If we jump trap i, we save a_i damage but we add 1 damage to all subsequent traps.
+        // So net effect of jumping trap i: we save a_i, but we pay (number of remaining traps we actually step on).
+        // If we decide to step on a set S of traps, and jump the rest (size <= k),
+        // total damage = sum_{i in S} (a_i + number of jumped traps before i).
+        // Let J be the set of jumped indices. |J| <= k.
+        // For i in S, number of jumped traps before i = |{j in J : j < i}|.
+        // So total damage = sum_{i in S} a_i + sum_{i in S} |{j in J : j < i}|.
+        // The second term equals sum_{j in J} (number of stepped traps after j).
+        // Let after_j = number of stepped traps with index > j.
+        // So total damage = sum_{i in S} a_i + sum_{j in J} after_j.
+        // But sum_{i in S} a_i = total_a - sum_{j in J} a_j.
+        // So total damage = total_a - sum_{j in J} a_j + sum_{j in J} after_j.
+        // = total_a + sum_{j in J} (after_j - a_j).
+        // We want to minimize this, so we want to choose J (|J| <= k) to minimize sum_{j in J} (after_j - a_j).
+        // Note that after_j depends on which other traps we jump.
+        // This is still tricky.
+        
+        // Alternative DP: process from right to left.
+        // Let dp[i][c] = minimal damage from traps i..n-1 given we have already jumped c traps before i.
+        // But c can be up to k, and n up to 2e5, so O(nk) is too slow.
+        
+        // Another perspective: The bonus damage is equivalent to: if we jump a trap, we add 1 to all future traps.
+        // So if we jump a set J, the total damage = sum_{i not in J} a_i + sum_{i not in J} (number of j in J with j < i).
+        // = sum_{i not in J} a_i + sum_{j in J} (number of i not in J with i > j).
+        // Let x_j = number of non-jumped traps after j.
+        // Then total damage = sum_{i not in J} a_i + sum_{j in J} x_j.
+        // But sum_{i not in J} a_i = total_a - sum_{j in J} a_j.
+        // So total damage = total_a + sum_{j in J} (x_j - a_j).
+        // Now, x_j = (n - 1 - j) - (number of jumped traps after j).
+        // Let y_j = number of jumped traps after j.
+        // Then x_j = (n - 1 - j) - y_j.
+        // So total damage = total_a + sum_{j in J} ( (n - 1 - j) - y_j - a_j ).
+        // = total_a + sum_{j in J} (n - 1 - j - a_j) - sum_{j in J} y_j.
+        // Now sum_{j in J} y_j = number of pairs (j1, j2) in J with j1 < j2.
+        // This is just C(|J|, 2) = |J|*(|J|-1)/2.
+        // Because for each j, y_j counts how many jumped traps are after it, so summing over all j gives each pair counted once.
+        // So total damage = total_a + sum_{j in J} (n - 1 - j - a_j) - |J|*(|J|-1)/2.
+        // This is beautiful! The term depends only on the set J, not on the order of jumps relative to steps!
+        // Let's verify: total_a is constant. We want to choose a subset J of size m <= k to minimize:
+        // total_a + sum_{j in J} (n - 1 - j - a_j) - m*(m-1)/2.
+        // Since total_a is constant, we want to minimize sum_{j in J} (n - 1 - j - a_j) - m*(m-1)/2.
+        // Let value_j = n - 1 - j - a_j. We can pick up to k indices.
+        // But note that the term -m*(m-1)/2 depends on m, the size of J.
+        // So we can try all possible m from 0 to k, and for each m, pick the m indices with smallest value_j.
+        // Then compute total damage = total_a + sum of smallest m values - m*(m-1)/2.
+        // Take the minimum over m.
+        // This is O(n log n) per test case, which is fine.
+        
+        long long total_a = accumulate(a.begin(), a.end(), 0LL);
+        vector<long long> vals(n);
+        for (int i = 0; i < n; ++i) {
+            vals[i] = (n - 1 - i) - a[i];
+        }
+        sort(vals.begin(), vals.end());
+        
+        long long ans = total_a; // m = 0
+        long long sum_vals = 0;
+        for (int m = 1; m <= k; ++m) {
+            sum_vals += vals[m-1];
+            long long cur = total_a + sum_vals - 1LL * m * (m - 1) / 2;
+            if (cur < ans) ans = cur;
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

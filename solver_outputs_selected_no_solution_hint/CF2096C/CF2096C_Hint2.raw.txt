@@ -1,0 +1,108 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long INF = 1e18;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<long long>> h(n, vector<long long>(n));
+        for (int i = 0; i < n; ++i)
+            for (int j = 0; j < n; ++j)
+                cin >> h[i][j];
+        vector<long long> a(n), b(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        for (int j = 0; j < n; ++j) cin >> b[j];
+        
+        // We will try all 4 possibilities for the parity of the top-left corner
+        // parity = (row_parity, col_parity) where 0 means even, 1 means odd
+        // row_parity = 0 -> row 0 is even (hired 0 mod 2 times), 1 -> odd
+        // col_parity = 0 -> col 0 is even, 1 -> odd
+        
+        long long ans = INF;
+        for (int rp = 0; rp < 2; ++rp) {
+            for (int cp = 0; cp < 2; ++cp) {
+                // For each cell (i,j), required parity of (row_i + col_j) mod 2
+                // must be such that adjacent cells differ.
+                // The condition: h[i][j] + row_i + col_j != h[i][j+1] + row_i + col_{j+1}
+                // => col_j != col_{j+1} mod 2
+                // Similarly row_i != row_{i+1} mod 2
+                // So rows alternate parity, columns alternate parity.
+                // Thus row_i parity = rp ^ (i % 2)
+                // col_j parity = cp ^ (j % 2)
+                
+                // Now for each cell, we need h[i][j] + row_i + col_j to be such that
+                // no two adjacent have same value. But wait, the condition is only about
+                // the final heights being different. The parity constraints already ensure
+                // that adjacent cells have different parity of (row_i + col_j), but they could
+                // still be equal if the base heights differ appropriately.
+                // Actually, if row_i and col_j are just 0/1, then the difference between
+                // adjacent cells is at least 1 in the added part, but base heights could
+                // compensate. We need to choose actual row_i, col_j (not just parity) to
+                // satisfy all inequalities.
+                
+                // Let x_i = number of times row i is hired (0 or 1? Actually we can hire at most once,
+                // so x_i in {0,1}, y_j in {0,1}).
+                // We need: h[i][j] + x_i + y_j != h[i][j+1] + x_i + y_{j+1}
+                // => y_j - y_{j+1} != h[i][j+1] - h[i][j]
+                // Similarly for rows.
+                
+                // Since x_i, y_j are 0/1, the differences are in {-1,0,1}.
+                // We can treat this as a 2-SAT or bipartite graph problem.
+                // But n <= 1000, sum n <= 1000, so we can do something smarter.
+                
+                // Let's fix the parities: x_i = rp ^ (i%2) + 2*k_i? No, x_i is 0 or 1.
+                // So x_i is exactly determined by parity: x_i = rp ^ (i%2).
+                // Similarly y_j = cp ^ (j%2).
+                // Then we just need to check if with these fixed 0/1 assignments, the final grid
+                // has no adjacent equal heights. If yes, cost is sum of a_i*x_i + b_j*y_j.
+                // But wait, we might not need to hire some workers even if parity says 1?
+                // No, if we decide parity, x_i is forced to be that parity (0 or 1). Because
+                // we can only add 0 or 1. So x_i is exactly the parity.
+                
+                // So we just try all 4 parity assignments, compute the resulting grid,
+                // check if beautiful, and take min cost.
+                
+                vector<int> x(n), y(n);
+                for (int i = 0; i < n; ++i) x[i] = rp ^ (i & 1);
+                for (int j = 0; j < n; ++j) y[j] = cp ^ (j & 1);
+                
+                bool ok = true;
+                for (int i = 0; i < n && ok; ++i) {
+                    for (int j = 0; j < n - 1; ++j) {
+                        if (h[i][j] + x[i] + y[j] == h[i][j+1] + x[i] + y[j+1]) {
+                            ok = false;
+                            break;
+                        }
+                    }
+                }
+                for (int i = 0; i < n - 1 && ok; ++i) {
+                    for (int j = 0; j < n; ++j) {
+                        if (h[i][j] + x[i] + y[j] == h[i+1][j] + x[i+1] + y[j]) {
+                            ok = false;
+                            break;
+                        }
+                    }
+                }
+                if (ok) {
+                    long long cost = 0;
+                    for (int i = 0; i < n; ++i) if (x[i]) cost += a[i];
+                    for (int j = 0; j < n; ++j) if (y[j]) cost += b[j];
+                    ans = min(ans, cost);
+                }
+            }
+        }
+        
+        if (ans == INF) cout << -1 << '\n';
+        else cout << ans << '\n';
+    }
+    return 0;
+}
+```

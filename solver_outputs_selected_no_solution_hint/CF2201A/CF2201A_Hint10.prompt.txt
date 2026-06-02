@@ -1,0 +1,103 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+This is the easy version of the problem. The difference between the versions is that in this version, you must compute a value for one sequence. You can hack only if you solved all versions of this problem.
+
+Let's define an algorithm to generate a sequence of $ m+k $ integers as follows:
+
+1. First, receive a sequence $ x $ of $ m $ integers as input. If $ k=0 $ , terminate immediately and return the sequence $ x $ .
+2. Then, select any index $ 1 \le i \le |x| $ and insert $ (x_i+1) $ immediately after the element $ x_i $ .
+3. If $ x $ contains exactly $ m+k $ integers, terminate and return the sequence $ x $ . Otherwise, return to the second step.
+
+Alice knows that this algorithm was used by an ancient civilization in order to hide their secrets safely. Alice wants to learn the knowledge that they wanted to hide, but it is not an easy job to infer the input from the output of the algorithm.
+
+Given a sequence $ a $ of $ n $ integers, determine the length of the shortest sequence that could be given as an input for the algorithm to generate $ a $ .
+
+Input Format
+Each test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \le t \le 10^4 $ ). The description of the test cases follows.
+
+The first line of each test case contains a single integer $ n $ ( $ 1 \le n \le 300\,000 $ ).
+
+The second line of each test case contains $ n $ integers $ a_1,a_2,\ldots,a_n $ ( $ 1 \le a_i \le 10^9 $ ).
+
+It is guaranteed that the sum of $ n $ over all test cases does not exceed $ 300\,000 $ .
+
+Output Format
+For each test case, output the length of the shortest sequence on a separate line.
+
+Examples
+Sample 1
+Input
+5
+5
+1 2 3 4 5
+5
+1 3 5 7 9
+5
+1 2 5 6 5
+7
+1 2 4 5 3 7 8
+9
+9 8 9 2 3 4 4 5 3
+Output
+1
+5
+3
+4
+3
+
+Note
+In the first test case, the sequence $ [1] $ can generate the sequence $ a=[1,2,3,4,5] $ by the following process:
+
+$$$
+[1] \to [1,\color{red}{2}] \to [1,2,\color{red}{3}] \to [1,2,3,\color{red}{4}] \to [1,2,3,4,\color{red}{5}]
+$$$
+
+In the second test case, the only sequence that can generate $ a=[1,3,5,7,9] $ is $ a $ itself.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+How to find a lower bound?
+
+**Hint 2**
+What happens if the array is sorted?
+
+**Hint 3**
+Try to find a way to check if the array is sorted.
+
+**Hint 4**
+If we find the longest prefix of the array that is sorted, we will be able to check if the array is sorted.
+
+**Hint 5**
+How to prove that the longest prefix of the array that is sorted is unique?
+
+**Hint 6**
+Can we find the answer without using a binary search?
+
+**Hint 7**
+If the answer is $x$ , then the first $x$ elements of the array are sorted.
+
+**Hint 8**
+What is the maximum possible value of the answer?
+
+**Hint 9**
+Is there a way to solve the problem without sorting the array?
+
+**Hint 10**
+Can we solve the problem with $O(n)$ complexity?
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

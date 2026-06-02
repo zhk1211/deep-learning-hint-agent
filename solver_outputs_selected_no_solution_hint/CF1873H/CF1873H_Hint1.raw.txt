@@ -1,0 +1,95 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, a, b;
+    cin >> n >> a >> b;
+    a--; b--;
+    vector<vector<int>> adj(n);
+    for (int i = 0; i < n; i++) {
+        int u, v;
+        cin >> u >> v;
+        u--; v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    // Find the cycle in the graph (since n edges, n nodes, exactly one cycle)
+    vector<int> parent(n, -1);
+    vector<int> color(n, 0); // 0 = unvisited, 1 = visiting, 2 = visited
+    vector<int> cycle;
+    function<void(int, int)> dfs_cycle = [&](int u, int p) {
+        color[u] = 1;
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            if (color[v] == 0) {
+                parent[v] = u;
+                dfs_cycle(v, u);
+            } else if (color[v] == 1) {
+                // Found cycle
+                int cur = u;
+                while (cur != v) {
+                    cycle.push_back(cur);
+                    cur = parent[cur];
+                }
+                cycle.push_back(v);
+            }
+        }
+        color[u] = 2;
+    };
+    dfs_cycle(0, -1);
+
+    vector<bool> in_cycle(n, false);
+    for (int x : cycle) in_cycle[x] = true;
+
+    // BFS to find distances from Marcel (a) and Valeriu (b)
+    auto bfs = [&](int start) {
+        vector<int> dist(n, -1);
+        queue<int> q;
+        dist[start] = 0;
+        q.push(start);
+        while (!q.empty()) {
+            int u = q.front(); q.pop();
+            for (int v : adj[u]) {
+                if (dist[v] == -1) {
+                    dist[v] = dist[u] + 1;
+                    q.push(v);
+                }
+            }
+        }
+        return dist;
+    };
+
+    vector<int> distA = bfs(a);
+    vector<int> distB = bfs(b);
+
+    // Find the node on the cycle that Valeriu can reach first
+    int entry = -1;
+    for (int i = 0; i < n; i++) {
+        if (in_cycle[i]) {
+            if (entry == -1 || distB[i] < distB[entry]) {
+                entry = i;
+            }
+        }
+    }
+
+    // If Valeriu can reach the cycle strictly before Marcel reaches that entry point, he can escape forever
+    if (distB[entry] < distA[entry]) {
+        cout << "YES\n";
+    } else {
+        cout << "NO\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

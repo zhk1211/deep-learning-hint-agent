@@ -1,0 +1,27 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<pair<long long, int>> pts(n);
+        for (int i = 0; i < n; ++i) {
+            long long x, y;
+            cin >> x >> y;
+            pts[i] = {x + y, i};
+        }
+        sort(pts.begin(), pts.end());
+        for (int i = 0; i < n / 2; ++i) {
+            cout << pts[i].second + 1 << ' ' << pts[n - 1 - i].second + 1 << '\n';
+        }
+    }
+    return 0;
+}
+```

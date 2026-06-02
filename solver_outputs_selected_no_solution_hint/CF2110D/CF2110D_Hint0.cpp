@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+const ll INF = 1e18;
+
+struct Edge {
+    int to;
+    ll w;
+};
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<ll> b(n);
+    for (int i = 0; i < n; ++i) cin >> b[i];
+    vector<vector<Edge>> g(n);
+    for (int i = 0; i < m; ++i) {
+        int u, v;
+        ll w;
+        cin >> u >> v >> w;
+        --u; --v;
+        g[u].push_back({v, w});
+    }
+
+    vector<ll> dp(n, INF);
+    dp[0] = 0;
+    using State = pair<ll, int>;
+    priority_queue<State, vector<State>, greater<State>> pq;
+    pq.push({0, 0});
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();
+        if (d != dp[u]) continue;
+        ll cur = max(d, b[u]);
+        for (auto &e : g[u]) {
+            ll nd = max(cur, e.w);
+            if (nd < dp[e.to]) {
+                dp[e.to] = nd;
+                pq.push({nd, e.to});
+            }
+        }
+    }
+
+    if (dp[n-1] == INF) cout << "-1\n";
+    else cout << dp[n-1] << "\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}

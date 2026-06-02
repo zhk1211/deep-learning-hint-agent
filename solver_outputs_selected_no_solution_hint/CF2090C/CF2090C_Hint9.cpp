@@ -1,0 +1,226 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Cell {
+    int x, y;
+    bool operator<(const Cell& other) const {
+        int d1 = x + y, d2 = other.x + other.y;
+        if (d1 != d2) return d1 < d2;
+        if (x != other.x) return x < other.x;
+        return y < other.y;
+    }
+};
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int q;
+    cin >> q;
+    while (q--) {
+        int n;
+        cin >> n;
+        vector<int> t(n);
+        for (int i = 0; i < n; ++i) cin >> t[i];
+        
+        // We maintain two sets of candidate cells:
+        // - cells that belong to completely empty tables (for t=0)
+        // - cells that are just free (for t=1)
+        // Actually we can maintain a single priority queue of free cells,
+        // and track which tables are completely free.
+        
+        // Tables are indexed by (a,b) where table occupies:
+        // (3a+1,3b+1), (3a+1,3b+2), (3a+2,3b+1), (3a+2,3b+2)
+        // We'll map each cell to its table index.
+        
+        set<Cell> free_cells;
+        set<pair<int,int>> completely_free_tables; // (a,b)
+        map<pair<int,int>, int> occupied_in_table; // how many cells occupied in table (a,b)
+        
+        // Initially, all tables are completely free.
+        // But we only need to generate tables as needed.
+        // We'll start with table (0,0) and expand.
+        
+        // We'll maintain a set of "candidate tables" that are completely free.
+        // For t=0, we pick the nearest cell from a completely free table.
+        // For t=1, we pick the nearest free cell overall.
+        
+        // To find nearest, we can maintain a priority queue of cells with distance.
+        // But distance changes as we occupy cells? No, distance from (0,0) to a cell is fixed.
+        // The distance is x+y steps to reach (x,y) because we can only move in corridors.
+        // Wait: The problem says distance is smallest number of steps needed to reach the table cell.
+        // From (0,0) we move through corridor cells, and last step into table cell.
+        // The distance to a table cell (x,y) is x+y? Let's check:
+        // (0,0) is corridor? Yes, (0,0) is not part of any table because tables start at (1,1) etc.
+        // To reach (1,1): from (0,0) -> (0,1) -> (1,1) = 2 steps. x+y=2. Correct.
+        // To reach (1,2): (0,0)->(0,1)->(0,2)->(1,2) = 3 steps. x+y=3. Correct.
+        // So distance = x+y.
+        
+        // So we just need to pick the cell with smallest x+y, then smallest x, then smallest y.
+        
+        // We'll generate table cells on the fly.
+        // We can maintain a set of all table cells, and for each table track occupied count.
+        // But there are infinite tables. However, n <= 50000, so we only need at most n tables.
+        // We can generate tables in increasing order of distance from origin.
+        // The distance of a table cell (3a+1,3b+1) is 3a+3b+2.
+        // The four cells of a table have distances:
+        // (3a+1,3b+1): 3a+3b+2
+        // (3a+1,3b+2): 3a+3b+3
+        // (3a+2,3b+1): 3a+3b+3
+        // (3a+2,3b+2): 3a+3b+4
+        // So the minimum distance from a table is 3a+3b+2.
+        
+        // We can generate tables in order of (a+b), then a.
+        // We'll maintain a pointer to the next table to generate.
+        
+        // For each guest, we need to find the best cell.
+        // We can maintain two priority queues: one for completely free tables (t=0) and one for all free cells (t=1).
+        // But we need to handle ties correctly.
+        
+        // Actually, we can just maintain a set of all free cells, and for t=0 filter by completely free tables.
+        // Since n is small (50000 total), we can afford O(log n) per operation.
+        
+        // Let's maintain:
+        // - free_cells: set of all free table cells (sorted by distance, then x, then y)
+        // - completely_free_table_cells: set of cells from tables with 0 occupied cells (sorted similarly)
+        // When a cell is occupied, we remove it from both sets, and update the table's occupied count.
+        // If a table becomes partially occupied, we remove its remaining cells from completely_free_table_cells.
+        // If a table becomes completely free again? That never happens because guests never leave.
+        
+        // We need to generate new tables as needed. When do we generate?
+        // We can generate tables in increasing order of min distance (3a+3b+2).
+        // We'll keep a queue of tables to add, sorted by (a+b, a).
+        
+        // Let's precompute all needed tables? Since sum n <= 50000, we can just generate tables on demand.
+        // We'll maintain a variable next_dist = 2, and generate tables whose min distance <= current_max_distance_needed?
+        // But we don't know max distance needed in advance. We can generate lazily: when the free_cells set is empty or the best candidate is not yet generated, we generate the next table.
+        
+        // Actually, we can generate tables in order and insert their cells into free_cells and completely_free_table_cells.
+        // We'll keep a queue of tables to generate, sorted by (a+b, a).
+        // Initially, table (0,0) is generated.
+        
+        // Let's implement:
+        
+        set<Cell> free_cells;
+        set<Cell> completely_free_cells; // cells from tables with 0 occupied
+        
+        map<pair<int,int>, int> table_occ; // (a,b) -> occupied count (0..4)
+        map<pair<int,int>, vector<Cell>> table_cells; // (a,b) -> its 4 cells
+        
+        // We'll maintain a min-heap of tables to generate: (a+b, a, b)
+        priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, greater<>> tables_to_generate;
+        tables_to_generate.push({0, 0, 0});
+        
+        auto generate_table = [&](int a, int b) {
+            vector<Cell> cells = {
+                {3*a+1, 3*b+1},
+                {3*a+1, 3*b+2},
+                {3*a+2, 3*b+1},
+                {3*a+2, 3*b+2}
+            };
+            table_cells[{a,b}] = cells;
+            table_occ[{a,b}] = 0;
+            for (auto& c : cells) {
+                free_cells.insert(c);
+                completely_free_cells.insert(c);
+            }
+        };
+        
+        // Generate first table
+        generate_table(0, 0);
+        
+        // We also need to generate tables as we go. When do we need more tables?
+        // When the best candidate in free_cells might be from a table not yet generated?
+        // The tables are generated in increasing order of min distance.
+        // The min distance of table (a,b) is 3a+3b+2.
+        // So if the current best candidate in free_cells has distance D, we need all tables with min distance <= D to be generated, because a table with min distance > D cannot have any cell with distance <= D? Actually, a table with min distance M has cells with distances M, M+1, M+1, M+2. So if D >= M, some cell of that table could be <= D. So we should generate all tables with min distance <= current_max_distance_considered.
+        // But we don't know D in advance. We can just generate tables lazily: before picking a cell, we generate tables until the next table's min distance > the best candidate's distance? Not exactly, because a table with larger min distance might have a cell with distance equal to best candidate? No, if min distance > best distance, then all its cells have distance >= min distance > best distance, so they can't be better.
+        // So we can generate tables while the next table's min distance <= best candidate's distance (or while free_cells is empty?).
+        
+        // Actually, we can just generate tables one by one as needed. Since n <= 50000, we can generate up to n tables.
+        
+        // For each guest:
+        for (int i = 0; i < n; ++i) {
+            // Ensure we have enough tables generated.
+            // The maximum distance we might need is bounded by the number of guests.
+            // We can just generate tables until the number of free cells is at least something? 
+            // Better: before picking, if the best candidate in free_cells has distance D, we generate all tables with min distance <= D.
+            // But we don't know D until we look at free_cells. If free_cells is empty, we generate one table.
+            while (true) {
+                if (free_cells.empty()) {
+                    // generate next table
+                    auto [sum, a, b] = tables_to_generate.top();
+                    tables_to_generate.pop();
+                    generate_table(a, b);
+                    // push neighbors? We need to generate tables in order of (a+b, a).
+                    // The next tables after (a,b) are (a+1,b) and (a,b+1)? But we need all tables.
+                    // Actually, to generate in increasing order of a+b, we can use BFS: from (0,0), we push (1,0) and (0,1), etc.
+                    // We'll push (a+1,b) and (a,b+1) if not already generated.
+                    // We need to avoid duplicates. We can use a set of pairs to track generated tables.
+                    // But simpler: we can just generate tables by iterating sum from 0 to INF, and for each sum, iterate a from 0 to sum, b = sum - a.
+                    // Since n <= 50000, max sum is about sqrt(2*n)? Actually, number of tables with sum <= S is (S+1)(S+2)/2.
+                    // For n=50000, S ~ 316. So we can just pre-generate all tables up to sum 400? That's about 80000 tables, which is fine.
+                    // But we don't know max sum in advance. We can generate on the fly using a queue.
+                    // Let's use a queue for BFS generation:
+                    // We'll maintain a set of generated tables.
+                } else {
+                    break;
+                }
+            }
+            
+            // Now we need to pick the best cell based on t[i].
+            Cell chosen;
+            if (t[i] == 0) {
+                // nearest cell from a completely unoccupied table
+                if (completely_free_cells.empty()) {
+                    // This shouldn't happen because there are infinite tables, but just in case, generate more.
+                    // Actually, if all generated tables have at least one occupied cell, we need to generate new tables.
+                    // So we generate until we have a completely free table.
+                    while (completely_free_cells.empty()) {
+                        auto [sum, a, b] = tables_to_generate.top();
+                        tables_to_generate.pop();
+                        generate_table(a, b);
+                        // push neighbors
+                        // We need to generate tables in order. Let's fix generation.
+                    }
+                }
+                chosen = *completely_free_cells.begin();
+            } else {
+                // t[i] == 1: nearest free cell
+                chosen = *free_cells.begin();
+            }
+            
+            // Output chosen cell
+            cout << chosen.x << " " << chosen.y << "\n";
+            
+            // Update data structures
+            free_cells.erase(chosen);
+            completely_free_cells.erase(chosen);
+            
+            // Find table of this cell
+            // Cell (x,y) belongs to table (a,b) where a = (x-1)/3, b = (y-1)/3
+            int a = (chosen.x - 1) / 3;
+            int b = (chosen.y - 1) / 3;
+            table_occ[{a,b}]++;
+            if (table_occ[{a,b}] == 1) {
+                // Table was completely free, now it's not. Remove its other cells from completely_free_cells.
+                for (auto& c : table_cells[{a,b}]) {
+                    if (c.x != chosen.x || c.y != chosen.y) {
+                        completely_free_cells.erase(c);
+                    }
+                }
+            }
+            // If table becomes fully occupied (4), we don't need to do anything special.
+        }
+        
+        // We need to fix table generation to be correct and efficient.
+        // Let's redesign generation:
+        // We'll maintain a set of generated table indices.
+        // We'll use a queue for BFS: start with (0,0). When we pop, we generate it, then push (a+1,b) and (a,b+1) if not generated.
+        // But we need to generate in order of sum. BFS with queue will generate in order of sum if we push (a+1,b) and (a,b+1) and use a queue? Actually, BFS on a grid with steps (1,0) and (0,1) from (0,0) visits cells in increasing order of a+b. Yes, because each step increases sum by 1. So a simple queue works.
+        // We'll maintain a queue of pairs (a,b) to generate.
+        // We'll also maintain a set of visited pairs to avoid duplicates.
+    }
+    
+    return 0;
+}

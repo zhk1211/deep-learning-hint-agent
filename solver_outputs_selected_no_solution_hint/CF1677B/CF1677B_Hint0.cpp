@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        string s;
+        cin >> s;
+        int total = n * m;
+        
+        vector<int> col_good(m, 0);
+        int good_cols = 0;
+        
+        vector<int> row_last(n, -1);
+        vector<int> row_good(total, 0);
+        
+        vector<int> ans(total);
+        
+        for (int i = 0; i < total; i++) {
+            int col = i % m;
+            if (s[i] == '1') {
+                if (!col_good[col]) {
+                    col_good[col] = 1;
+                    good_cols++;
+                }
+            }
+            
+            int row = i / m;
+            if (s[i] == '1') {
+                row_last[row] = i;
+            }
+            
+            int good_rows = 0;
+            for (int r = 0; r < n; r++) {
+                if (row_last[r] != -1 && i - row_last[r] < m) {
+                    good_rows++;
+                }
+            }
+            
+            ans[i] = good_rows + good_cols;
+        }
+        
+        for (int i = 0; i < total; i++) {
+            cout << ans[i] << (i == total - 1 ? '\n' : ' ');
+        }
+    }
+    return 0;
+}

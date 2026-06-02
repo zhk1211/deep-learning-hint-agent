@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n + 1);
+        iota(p.begin(), p.end(), 0);
+        
+        if (n >= 4) {
+            swap(p[2], p[n]);
+            if (n % 2 == 0) {
+                swap(p[n - 1], p[n]);
+            }
+        }
+        
+        for (int i = 1; i <= n; ++i) {
+            cout << p[i] << " \n"[i == n];
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,60 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long INF = 1e18;
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<pair<int, long long>>> adj(n + 1);
+    for (int i = 0; i < m; ++i) {
+        int a, b;
+        long long d;
+        cin >> a >> b >> d;
+        adj[b].push_back({a, d});
+        adj[a].push_back({b, -d});
+    }
+    vector<long long> dist(n + 1, INF);
+    vector<bool> visited(n + 1, false);
+    for (int i = 1; i <= n; ++i) {
+        if (visited[i]) continue;
+        queue<int> q;
+        q.push(i);
+        visited[i] = true;
+        dist[i] = 0;
+        vector<int> comp;
+        while (!q.empty()) {
+            int u = q.front(); q.pop();
+            comp.push_back(u);
+            for (auto &[v, w] : adj[u]) {
+                if (!visited[v]) {
+                    visited[v] = true;
+                    dist[v] = dist[u] + w;
+                    q.push(v);
+                }
+            }
+        }
+        for (int u : comp) {
+            for (auto &[v, w] : adj[u]) {
+                if (dist[u] + w != dist[v]) {
+                    cout << "NO\n";
+                    return;
+                }
+            }
+        }
+    }
+    cout << "YES\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

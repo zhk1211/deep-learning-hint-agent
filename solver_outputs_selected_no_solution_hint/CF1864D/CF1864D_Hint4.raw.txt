@@ -1,0 +1,323 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+
+        // We maintain two difference arrays for the "influence" of operations
+        // diag1[x][y] corresponds to the effect from the main diagonal direction
+        // diag2[x][y] corresponds to the effect from the anti-diagonal direction
+        vector<vector<int>> diag1(n + 2, vector<int>(n + 2, 0));
+        vector<vector<int>> diag2(n + 2, vector<int>(n + 2, 0));
+        vector<vector<int>> op(n + 2, vector<int>(n + 2, 0));
+
+        int ans = 0;
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 1; j <= n; ++j) {
+                // Propagate the difference arrays
+                diag1[i][j] += diag1[i - 1][j - 1];
+                diag2[i][j] += diag2[i - 1][j + 1];
+                op[i][j] += op[i - 1][j];
+
+                int cur = (grid[i - 1][j - 1] - '0') ^ ((diag1[i][j] + diag2[i][j] + op[i][j]) & 1);
+                if (cur == 1) {
+                    ++ans;
+                    // Apply operation at (i, j)
+                    // It affects the lower part: x > i and x - i >= |y - j|
+                    // This is equivalent to a triangular region.
+                    // We update the difference arrays to reflect this.
+                    diag1[i][j] ^= 1;
+                    diag2[i][j + 1] ^= 1;
+                    op[i + 1][j] ^= 1;
+                    // To cancel the effect beyond the triangle, we add corrections
+                    // The triangle ends at row i + (n - j) for the right side and i + (j - 1) for the left side
+                    // But we can just use the difference arrays to propagate.
+                    // Actually, the operation adds 1 to all cells (x, y) with x > i and x - i >= |y - j|
+                    // We can represent this with three difference arrays:
+                    // diag1[i][j] toggles the main diagonal starting at (i, j)
+                    // diag2[i][j+1] toggles the anti-diagonal starting at (i, j+1)
+                    // op[i+1][j] toggles the vertical line starting at (i+1, j)
+                    // However, the intersection of these three covers the triangle exactly.
+                    // But we must ensure that the effect stops at the boundaries.
+                    // The standard way: 
+                    // diag1[i][j] ^= 1;
+                    // diag2[i][j+1] ^= 1;
+                    // op[i+1][j] ^= 1;
+                    // Then we need to cancel the effect after the triangle.
+                    // The triangle's bottom row is n, but the diagonals go beyond.
+                    // We can add corrections at the boundaries.
+                    // Actually, the operation affects all x > i, so it goes to the bottom.
+                    // The difference arrays will propagate to the bottom.
+                    // But we must ensure that the effect is only within the triangle.
+                    // The triangle is defined by x - i >= |y - j|.
+                    // For a given row x, the affected columns are from j - (x - i) to j + (x - i).
+                    // This is exactly the intersection of:
+                    // - y >= j - (x - i)  =>  x - i >= j - y  =>  x - y >= i - j  (main diagonal)
+                    // - y <= j + (x - i)  =>  x - i >= y - j  =>  x + y >= i + j  (anti-diagonal)
+                    // - x >= i + 1 (vertical)
+                    // So the three difference arrays naturally cover this.
+                    // They will continue to the bottom, but that's correct because the triangle extends to the bottom.
+                    // No need for extra cancellation because the triangle goes all the way down.
+                    // Wait, the triangle does not go all the way down if j is near the edges? 
+                    // Actually, the condition x > i and x - i >= |y - j| means for a given x, y is in [j - (x-i), j + (x-i)].
+                    // This is valid as long as y is within [1, n]. The difference arrays will naturally be bounded by the grid size.
+                    // But our difference arrays are size n+2, so propagation beyond n is ignored.
+                    // However, the diagonals will continue to affect cells outside the triangle if we don't stop them.
+                    // For example, diag1[i][j] affects all (x, y) with x - y = i - j and x >= i.
+                    // But the triangle only includes those with y >= j - (x-i) => x - y <= i - j? Wait, let's re-derive.
+                    // Condition: x - i >= |y - j|.
+                    // Case 1: y >= j => x - i >= y - j => x - y >= i - j.
+                    // Case 2: y <= j => x - i >= j - y => x + y >= i + j.
+                    // So the region is: x > i, and (x - y >= i - j) AND (x + y >= i + j).
+                    // This is the intersection of two half-planes and x > i.
+                    // The difference arrays:
+                    // diag1: toggles x - y >= i - j (i.e., main diagonal and below)
+                    // diag2: toggles x + y >= i + j (anti-diagonal and below)
+                    // op: toggles x >= i+1 (vertical)
+                    // The intersection of these three is exactly the triangle.
+                    // But diag1 alone affects all cells with x - y >= i - j, which is a larger region.
+                    // However, we combine with diag2 and op to get the intersection.
+                    // Since we are adding all three, the effect outside the intersection might not cancel properly.
+                    // Let's test: For a cell (x, y) with x > i, if it satisfies both diagonal conditions, it gets +1 from diag1, +1 from diag2, +1 from op = 3 mod 2 = 1.
+                    // If it satisfies only one diagonal condition, it gets +1 from that diagonal and +1 from op = 2 mod 2 = 0.
+                    // If it satisfies neither, it gets only +1 from op = 1 mod 2 = 1? That would be wrong.
+                    // Wait, op is applied to all x > i? No, op[i+1][j] is a difference array that propagates vertically down.
+                    // Actually, op[x][y] accumulates from op[x-1][y]. So if we set op[i+1][j] ^= 1, it will affect all (x, j) for x > i.
+                    // That's a vertical line, not all x > i.
+                    // So the combination is not simply adding three independent arrays.
+                    // We need a different approach.
+
+                    // Let's think differently: The operation toggles a triangle. We can use a 2D difference array that is specifically designed for such triangles.
+                    // Observe that the operation on (i, j) affects cell (x, y) iff x > i and |y - j| <= x - i.
+                    // This is equivalent to: x > i, and j - (x - i) <= y <= j + (x - i).
+                    // We can maintain an array "effect" that tells us the current parity at (i, j) due to previous operations.
+                    // When we process row by row, we can maintain the influence of all operations from above.
+                    // For a given row i, the operations from rows < i affect a contiguous segment in row i.
+                    // Specifically, an operation at (r, c) with r < i affects row i in columns [c - (i - r), c + (i - r)].
+                    // So the set of affected columns in row i is a union of intervals.
+                    // We can maintain a difference array for the current row to apply these interval toggles efficiently.
+                    // But we need to update this difference array as we move to the next row.
+                    // When we go from row i to i+1, the intervals from each operation expand by 1 on both sides.
+                    // So we can maintain a difference array that represents the "slope" of the triangle boundaries.
+                    // This is similar to the initial idea but with careful handling.
+
+                    // Let's use two arrays: L and R, where L[j] is the number of active operations that have their left boundary at column j, and R[j] for right boundary.
+                    // Actually, an operation at (r, c) contributes to row i: left boundary = c - (i - r), right boundary = c + (i - r).
+                    // As i increases, left boundary decreases by 1, right boundary increases by 1.
+                    // So we can maintain a difference array D for the current row.
+                    // When moving to the next row, we need to expand the intervals: D[left-1] ^= 1, D[right+1] ^= 1? Not exactly.
+                    // Better: We can maintain an array "add" that stores the current parity at each column.
+                    // We can update it by keeping track of the "active" left and right boundaries.
+                    // Let's define two arrays: left_cnt[j] = number of operations whose left boundary is currently at j.
+                    // right_cnt[j] = number of operations whose right boundary is currently at j.
+                    // Then, as we move from row to row, the left boundaries shift left by 1, right boundaries shift right by 1.
+                    // We can maintain a running parity: cur_parity[j] = cur_parity[j-1] ^ (some combination).
+                    // Actually, the effect on row i is: for each column j, it is toggled if there is an odd number of operations covering it.
+                    // The coverage is an interval [L, R]. The parity of coverage can be obtained by a difference array: diff[L] ^= 1, diff[R+1] ^= 1, then prefix XOR.
+                    // So for each row, we can build a difference array from the current left and right boundaries.
+                    // But we need to update left and right boundaries for the next row.
+                    // When moving to the next row, each left boundary moves left by 1: so we can shift the left_cnt array? That would be O(n) per row, too slow.
+                    // We need O(1) per cell overall.
+
+                    // Alternative: Use the property that the operation's effect can be decomposed into three parts that are easy to maintain with 2D prefix sums.
+                    // Let's define a 2D difference array D such that the actual effect at (i, j) is the 2D prefix sum of D over a certain region.
+                    // The operation at (i, j) toggles a triangle. We can represent this triangle as the sum of three simpler shapes:
+                    // 1. A rectangle from (i, j) to (n, n)? No.
+                    // Let's look at the hints: "What happens if we perform an operation twice?" It cancels out. So we only care about parity.
+                    // "Try to find out how many operations are needed to make a certain row all 0s." We can process row by row from top to bottom.
+                    // "Consider the effect of the operation on the lower part of the selected cell." The operation only affects cells below the selected cell (x > i).
+                    // So operations in row i only affect rows > i. Therefore, we can greedily process from top to bottom.
+                    // For each cell (i, j), we know the current value (original XOR effect from operations above). If it's 1, we must perform an operation at (i, j).
+                    // Because any operation in rows below cannot affect (i, j). So the decision is forced.
+                    // This gives a greedy algorithm: For i from 1 to n, for j from 1 to n, if the current cell is 1, do an operation at (i, j), and update the effect on lower cells.
+                    // The challenge is to update the effect efficiently.
+                    // We need to apply the operation to all (x, y) with x > i and |y - j| <= x - i.
+                    // This is a triangle. We can maintain the effect using 2D difference arrays that can be updated in O(1) and queried in O(1) per cell.
+                    // Notice that the condition |y - j| <= x - i can be rewritten as:
+                    // y - x <= j - i   AND   y + x >= j + i.
+                    // Let u = y - x, v = y + x.
+                    // Then the operation at (i, j) affects all cells with x > i, u <= j - i, v >= j + i.
+                    // This is a 2D range in the (u, v) coordinates? Not exactly, because x > i is also a condition.
+                    // But we can use a 2D BIT or difference array on the original grid with a clever propagation.
+                    // Since we process row by row, we can maintain the effect of all previous operations on the current row.
+                    // For a fixed row i, the effect from an operation at (r, c) with r < i is an interval [c - (i - r), c + (i - r)].
+                    // So we need to know, for each column j, the parity of the number of intervals covering j.
+                    // As we go to the next row, the intervals expand by 1 on each side.
+                    // We can maintain two arrays: L and R, where L[j] is the number of operations that have their left boundary at j, and R[j] is the number of operations with right boundary at j.
+                    // But when moving to the next row, the left boundaries shift left by 1, and right boundaries shift right by 1.
+                    // We can avoid shifting by using an offset that changes with row.
+                    // Let offset = i (current row). For an operation at (r, c), its left boundary at row i is c - (i - r) = (c + r) - i.
+                    // Its right boundary is c + (i - r) = (c - r) + i.
+                    // So if we define for each operation a value A = c + r and B = c - r, then at row i, the interval is [A - i, B + i].
+                    // Notice that A - i decreases as i increases, B + i increases.
+                    // We can maintain two arrays: left_add[A] = number of operations with A = c + r, and right_add[B] = number of operations with B = c - r.
+                    // Then at row i, the left boundaries are at positions A - i. So we can compute the difference array for the current row by iterating over all possible A? That's too many.
+                    // But we can maintain the difference array directly and update it incrementally.
+                    // When moving from row i-1 to i, the left boundaries shift left by 1: so the difference array's left toggles move left by 1.
+                    // We can maintain the difference array as a deque or with a lazy offset.
+                    // Actually, we can maintain an array "diff" of size n+2 for the current row.
+                    // Initially, for row 1, there are no operations from above.
+                    // When we process row i, we first apply the effect of operations from rows < i to the current row's diff array.
+                    // How to get the diff array for row i from row i-1?
+                    // For each operation at (r, c) with r < i, its interval in row i-1 was [c - (i-1 - r), c + (i-1 - r)].
+                    // In row i, it is [c - (i - r), c + (i - r)] = [left - 1, right + 1].
+                    // So the difference array for row i can be obtained from row i-1 by: for each operation, we need to toggle diff[left-1] and diff[right+1]? Not exactly, because the interval expanded.
+                    // The effect on the prefix XOR is that the interval of 1s expands. In terms of difference array, if we had diff[L] ^= 1 and diff[R+1] ^= 1, then to expand, we need to set diff[L-1] ^= 1 and diff[R+2] ^= 1, and also remove the old toggles? Actually, the old toggles are still there, but the new interval is larger. The difference array for the new interval would be diff_new[L-1] ^= 1, diff_new[R+2] ^= 1. The old diff had diff[L] ^= 1, diff[R+1] ^= 1. So the change is: we need to add toggles at L-1 and R+2, and remove toggles at L and R+1? But since we are working with XOR, removing is the same as adding. So we need to toggle diff[L-1], diff[L], diff[R+1], diff[R+2].
+                    // This seems complicated to do for all operations.
+
+                    // Let's think of a simpler 2D difference array approach.
+                    // Define a 2D array "op" where op[i][j] = 1 if we perform an operation at (i, j), else 0.
+                    // The effect at (x, y) is the XOR sum of op[i][j] for all i < x and |y - j| <= x - i.
+                    // We want to compute this effect efficiently.
+                    // Let's define three 2D difference arrays:
+                    // D1[i][j] : contributes to (x, y) if x - y >= i - j and x >= i.
+                    // D2[i][j] : contributes to (x, y) if x + y >= i + j and x >= i.
+                    // D3[i][j] : contributes to (x, y) if x >= i and y == j? No.
+                    // Actually, the condition |y - j| <= x - i is equivalent to: x - y >= i - j AND x + y >= i + j.
+                    // So if we can maintain two 2D prefix sums:
+                    // Let A[x][y] = XOR sum of op[i][j] for i <= x, j <= y, with condition x - y >= i - j? That's not a standard prefix sum.
+                    // But we can transform coordinates: u = x - y, v = x + y.
+                    // Then the condition becomes: u >= i - j, v >= i + j, and also x > i.
+                    // x = (u + v)/2. The condition x > i is equivalent to u + v > 2i.
+                    // This is still not a simple rectangle in (u, v) space because of the x > i constraint.
+                    // However, note that if u >= i - j and v >= i + j, then u + v >= 2i. So x > i is automatically satisfied if the inequalities are strict? Actually, u + v >= 2i, and x = (u+v)/2, so x >= i. We need x > i, so x >= i+1. That means u + v >= 2i + 2.
+                    // But our inequalities are u >= i - j and v >= i + j. Summing gives u + v >= 2i. So it's possible that u + v = 2i, which gives x = i. But the operation only affects x > i. So we need to exclude the row x = i.
+                    // This suggests that the region is a rectangle in (u, v) coordinates minus the line x = i.
+                    // Since we process row by row, we can just ignore the effect on the same row.
+
+                    // Let's try to maintain the effect using two 2D BITs or difference arrays on the original grid.
+                    // Consider the following: The operation at (i, j) adds 1 to a triangle. We can decompose this triangle into:
+                    // - A rectangle from (i+1, 1) to (n, n)? No.
+                    // Actually, the triangle can be built by adding a parallelogram and subtracting a triangle? 
+                    // Another idea: Use a 2D difference array that supports adding 1 to all cells with x > i and |y - j| <= x - i.
+                    // This is equivalent to adding 1 to the region: x > i, y >= j - (x - i), y <= j + (x - i).
+                    // We can rewrite the lower bound as y + x >= j + i, and the upper bound as y - x <= j - i.
+                    // So the region is: x > i, y + x >= j + i, y - x <= j - i.
+                    // Let's define arrays:
+                    // diag1[x][y] = sum of operations that affect (x, y) from the main diagonal condition.
+                    // diag2[x][y] = sum from anti-diagonal.
+                    // op_col[x][y] = sum from vertical.
+                    // But as we saw, the intersection of three independent conditions is not simply the sum.
+
+                    // Let's look for a known solution: This problem is from Codeforces Round #732 (Div. 2) or similar? Actually, it's from Codeforces Round #732 (Div. 1+2)? The operation is: invert (i, j) and all (x, y) with x > i and x - i >= |y - j|.
+                    // I recall a problem "AquaMoon and Strange Sort" or something? No, this is "AquaMoon and the Matrix" maybe.
+                    // The typical solution uses two difference arrays for the diagonals and one for the columns, but with a specific combination.
+                    // Let's simulate the effect of an operation at (i, j) on the difference arrays:
+                    // We want that for any cell (x, y), the total effect is the XOR of:
+                    // diag1[x][y] (some prefix), diag2[x][y] (some prefix), and col[x][y] (some prefix).
+                    // Suppose we define:
+                    // diag1[i][j] ^= 1;
+                    // diag2[i][j+1] ^= 1;
+                    // col[i+1][j] ^= 1;
+                    // And then we define the actual effect at (x, y) as:
+                    // effect = diag1_prefix[x][y] ^ diag2_prefix[x][y] ^ col_prefix[x][y].
+                    // Where diag1_prefix[x][y] = XOR sum of diag1[a][b] for a <= x, b <= y, and a - b = x - y? That is, along the main diagonal.
+                    // Actually, if we do a 2D prefix sum on diag1 where diag1[x][y] affects all (x', y') with x' >= x, y' >= y, then that's a standard 2D suffix sum.
+                    // But we need the effect to be restricted to the triangle.
+                    // Let's test with standard 2D difference arrays:
+                    // Suppose we have a 2D array D. If we add 1 to D[i][j], and then do suffix sums (from bottom-right to top-left), the effect at (x, y) is the sum of D[a][b] for a <= x, b <= y? That's prefix sum.
+                    // If we do suffix sum (a >= x, b >= y), then adding to D[i][j] affects all (x, y) with x <= i, y <= j.
+                    // We want to affect x > i, so we need to invert the row index or use a different accumulation direction.
+                    // Let's reverse the rows: define row index from bottom to top. Then x > i becomes new_x < new_i.
+                    // Then the condition becomes: new_x < new_i and (new_i - new_x) >= |y - j|.
+                    // This is symmetric to the original but with prefix sums.
+                    // Let new_x = n - x + 1, new_i = n - i + 1. Then x > i <=> new_x < new_i.
+                    // The condition: new_i - new_x >= |y - j|.
+                    // This is the same shape but now we want to affect cells with new_x <= new_i - 1 and |y - j| <= new_i - new_x.
+                    // This is a triangle pointing upwards.
+                    // We can use 2D prefix sums to build such triangles.
+                    // Specifically, if we maintain a 2D difference array D, and we do prefix sums in the direction of increasing new_x and increasing y, we can create rectangles.
+                    // To create a triangle, we can use three difference arrays as follows:
+                    // Let's work in the original coordinates (x from 1 to n top to bottom, y from 1 to n left to right).
+                    // We want to support adding 1 to all (x, y) with x > i, y >= j - (x - i), y <= j + (x - i).
+                    // This is equivalent to: x > i, x - y <= i - j? No.
+                    // Let's use the transformation: u = x + y, v = x - y.
+                    // Then the condition becomes: x > i, u >= i + j, v >= i - j.
+                    // Also, x = (u + v)/2, y = (u - v)/2.
+                    // The region is a rectangle in (u, v) space: u >= i + j, v >= i - j, plus the condition u + v > 2i (which is x > i).
+                    // But note that u >= i + j and v >= i - j implies u + v >= 2i. So the only missing part is the line u + v = 2i, which corresponds to x = i.
+                    // So the region is exactly the rectangle [i+j, inf) x [i-j, inf) in (u, v) space, minus the line x = i.
+                    // Since we process row by row, we never need to apply the effect to row i itself when we are at row i. So we can just use the rectangle!
+                    // That is a huge simplification.
+                    // Let's verify: For an operation at (i, j), we want to affect all (x, y) with x > i and x - i >= |y - j|.
+                    // In (u, v) coordinates, u = x + y, v = x - y.
+                    // The condition x - i >= |y - j| is equivalent to:
+                    // x - i >= y - j  =>  x - y >= i - j  =>  v >= i - j
+                    // x - i >= j - y  =>  x + y >= i + j  =>  u >= i + j
+                    // So the condition is exactly: u >= i + j AND v >= i - j.
+                    // And we also need x > i. But if u >= i + j and v >= i - j, then u + v >= 2i, so x = (u+v)/2 >= i.
+                    // Could x = i? That would require u + v = 2i. Since u >= i+j and v >= i-j, the minimum of u+v is (i+j)+(i-j) = 2i. So equality holds only when u = i+j and v = i-j, which gives x = i, y = j. But the operation says x > i, so (i, j) itself is not affected by the lower part? Wait, the operation says: "invert the element in (i, j) and also invert all elements in cells (x, y) for x > i and x - i >= |y - j|." So (i, j) is inverted separately, and the lower part is x > i. So the lower part does not include (i, j). In our rectangle, the point (i, j) corresponds to u = i+j, v = i-j, which is the corner of the rectangle. So if we include the entire rectangle u >= i+j, v >= i-j, we would include (i, j) in the lower part effect, which is incorrect. But we can handle (i, j) separately: we just invert it directly when we decide to do an operation. For the lower part, we can use the rectangle u >= i+j, v >= i-j, and then we must ensure that (i, j) is not affected by this rectangle. But since we process row by row, when we are at row i, we apply the operation and update the future effects. The future effects should not include (i, j) because we are already at row i. So we can just apply the rectangle for u >= i+j, v >= i-j, and it will affect all cells with x >= i? Actually, it will affect x >= i. But we only want x > i. So we need to subtract the effect on row i. However, when we process row i, we have already passed row i, so we don't care about row i anymore. The effect on row i would only be relevant if we were to query row i later, but we don't. So we can safely apply the rectangle for u >= i+j, v >= i-j, and it will correctly affect all rows > i. Wait, does it affect row i? The rectangle includes all (x, y) with u >= i+j and v >= i-j. The smallest x in this rectangle is when u+v is minimized, which is 2i, giving x = i. So row i is included. But we only want rows > i. So if we apply this rectangle, we will incorrectly affect row i. But since we process row by row from top to bottom, when we are at row i, we are about to process row i. The operations we perform at row i should affect rows > i, not row i itself. So if we update the future effect using the rectangle, we must ensure it doesn't affect row i. We can simply apply the rectangle starting from row i+1. How to do that? We can shift the u and v thresholds.
+                    // For x > i, we need x >= i+1. The minimum u+v for x = i+1 is 2i+2.
+                    // The condition for lower part: x > i, u >= i+j, v >= i-j.
+                    // This is equivalent to: u >= i+j, v >= i-j, and u+v >= 2i+2.
+                    // This is not a simple rectangle anymore because of the u+v condition.
+                    // But note that if u >= i+j and v >= i-j, then u+v >= 2i. The additional condition u+v >= 2i+2 only removes the points where u+v = 2i or 2i+1.
+                    // u+v = 2i occurs only at (i, j). u+v = 2i+1 is impossible because u and v have the same parity (since u+v = 2x is even). So the only point removed is (i, j).
+                    // Therefore, the rectangle u >= i+j, v >= i-j exactly covers the lower part plus the single cell (i, j).
+                    // So if we apply the rectangle, it will affect (i, j) as well. But we can just invert (i, j) manually when we perform the operation, and then the rectangle will invert it again? That would cancel out.
+                    // Actually, the operation inverts (i, j) once. The lower part inverts all (x, y) with x > i and condition. If we use the rectangle to represent the lower part, it will also invert (i, j). So the net effect on (i, j) would be two inversions = no change. That's wrong.
+                    // So we need to exclude (i, j) from the rectangle.
+                    // But since we process row by row, we can just apply the rectangle to rows > i by starting the rectangle at row i+1.
+                    // How to start a rectangle in (u, v) coordinates at a specific x?
+                    // The condition x > i is equivalent to u+v > 2i.
+                    // So the region is: u >= i+j, v >= i-j, u+v > 2i.
+                    // This is a rectangle with a corner cut off.
+                    // However, we can use the following trick: Instead of applying one rectangle, we can apply the operation by updating three 2D difference arrays that naturally produce the triangle without including (i, j).
+                    // Let's go back to the difference arrays on the original grid.
+                    // We want to add 1 to all (x, y) with x > i, y >= j - (x - i), y <= j + (x - i).
+                    // We can do this by maintaining three arrays:
+                    // A[x][y] : prefix sum along main diagonal?
+                    // Let's define:
+                    // L[x][y] = L[x-1][y-1] + ... 
+                    // Actually, consider the following difference arrays:
+                    // D1[i][j] ^= 1
+                    // D2[i][j+1] ^= 1
+                    // D3[i+1][j] ^= 1
+                    // And then define the effect at (x, y) as:
+                    // effect = (prefix sum of D1 from (i,j) to (x,y) along main diagonal?) 
+                    // Let's try to compute the effect of these three toggles if we do a specific accumulation.
+                    // Suppose we define a 2D array "val" initially 0.
+                    // When we do an operation at (i, j), we do:
+                    // val[i][j] ^= 1;
+                    // val[i][j+1] ^= 1;
+                    // val[i+1][j] ^= 1;
+                    // Then we process the grid row by row, and maintain running values.
+                    // Let's define a 2D prefix sum that is not the standard one.
+                    // Let's define for each cell (x, y), we compute:
+                    // cur = val[x][y] ^ cur_left? 
+                    // I recall a known technique for this exact operation: 
+                    // We maintain two arrays: "diag" and "col".
+                    // diag[i][j] represents the effect from the main diagonal, col[i][j] from vertical.
+                    // Actually, the operation's lower part is a triangle that can be represented as:
+                    // For each row x > i, the affected columns are [j - (x-i), j + (x-i)].
+                    // This is equivalent to: for each row x > i, we toggle a segment.
+                    // We can maintain a difference array for the current row, and update it for the next row by expanding the segments.
+                    // As I thought earlier, we can maintain the left and right boundaries using arrays and shifting them.
+                    // But we can avoid shifting by using an offset that depends on the row.
+                    // Let's define an array "left" of size 2n+1, where left[k] = number of operations with c + r = k.
+                    // Similarly, "right" of size 2n+1, where right[k] = number of operations with c - r = k.
+                    // For a given row i, the left boundary of an operation with A = c+r is A - i.
+                    // The right boundary is B + i, where B = c - r.
+                    // So the interval in row i is [A - i, B + i].
+                    // We want to compute the XOR sum of all such intervals.
+                    // We can compute the difference array for row i by:
+                    // For each A, we toggle at L = A - i.
+                    // For each B, we toggle at R+1 = B + i + 1.
+                    // But there are many A and B. However, we can maintain the difference array directly by using the fact that A and B are just shifted versions of the same counts.
+                    // Let's define an array "diff" for the current row. Initially all 0.
+                    // When we move from row i-1 to i, the left boundaries shift left by 1, right boundaries shift right by 1.
+                    // So the new left toggles are at positions (A - i) = (A - (i-1)) - 1.
+                    // The new right toggles are at positions (B + i) + 1 = (B + (i-1)) + 2.
+                    // This means

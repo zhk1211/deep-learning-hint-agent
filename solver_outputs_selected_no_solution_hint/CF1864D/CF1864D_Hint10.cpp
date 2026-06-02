@@ -1,0 +1,243 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+        
+        // We'll process rows from top to bottom.
+        // For each row, we maintain the effect of operations from above.
+        // An operation at (r, c) affects cell (i, j) if i > r and i - r >= |j - c|.
+        // This is equivalent to: for a given row i, the columns affected by an operation at (r, c)
+        // are those with |j - c| <= i - r, i.e., j in [c - (i - r), c + (i - r)].
+        // So the effect on row i is a range addition (mod 2) of a "triangle" shape.
+        // We can maintain two difference arrays: one for the left boundary and one for the right boundary.
+        // Let left[j] be the number of active operations that cover column j from the left side,
+        // and right[j] for the right side. Actually, we can maintain a running "slope" of operations.
+        // Standard approach: maintain an array `op` of length n+2, where op[j] is the number of operations
+        // whose effect on the current row starts at column j (with slope 1 to the right and left).
+        // But the effect expands by 1 on each side per row. So we can maintain two arrays:
+        // `add_left` and `add_right` that represent the "derivative" of the triangle.
+        // Alternatively, we can maintain `cur` array of length n, where cur[j] is the current parity at (i, j)
+        // due to operations from above. We update it row by row.
+        
+        // Let's use a method with two arrays: `L` and `R` of size n+2.
+        // `L[j]` = number of operations whose left boundary passes through column j at current row.
+        // `R[j]` = number of operations whose right boundary passes through column j at current row.
+        // Initially all zero.
+        // For row i (0-indexed), we first compute the current effect on each cell:
+        // effect[j] = (prefix sum of L up to j) - (prefix sum of R up to j-1)? Actually, the effect of an operation
+        // at (r, c) on row i is: it adds 1 to all columns j with c - (i - r) <= j <= c + (i - r).
+        // So the left boundary is at c - (i - r), right boundary at c + (i - r).
+        // As we go down one row, the left boundary moves left by 1, right boundary moves right by 1.
+        // So we can maintain `L` and `R` as the positions of the boundaries on the current row.
+        // Initially, for row 0, no operations from above.
+        // For each row i, we compute an array `cur` of length n: cur[j] = (grid[i][j] - '0') ^ (effect from above).
+        // Then we decide where to place new operations to make this row all zeros.
+        // We can greedily process from left to right: if cur[j] == 1, we must place an operation at (i, j)
+        // to flip it and the lower triangle. This operation will affect lower rows.
+        // When we place an operation at (i, j), we need to record its boundaries for future rows.
+        // The left boundary starts at j, right boundary at j. On the next row, left boundary becomes j-1, right becomes j+1, etc.
+        // So we can maintain `L` and `R` as difference arrays: when we place an operation at (i, j),
+        // we increment L[j] by 1, and increment R[j+1] by 1? Wait.
+        // Let's think: For an operation at (r, c), on row i (i > r), the left boundary is at c - (i - r).
+        // So as i increases, the left boundary index decreases by 1 each row.
+        // If we maintain an array `L` where L[k] means "there is an operation whose left boundary is currently at column k",
+        // then when we move to the next row, all these boundaries shift left by 1. That would require O(n) per row, too slow.
+        // Instead, we can maintain the boundaries in a way that doesn't require shifting.
+        // Standard trick: use an array `add` where add[j] represents the number of operations that have their center at column j
+        // and we track the current row's effect using two running sums.
+        // Let `diag1` and `diag2` be two arrays that store the "derivative" of the triangle.
+        // Actually, we can maintain an array `op` of length n+2, where op[j] is the number of operations
+        // whose effect on the current row starts at column j (with slope 1 to the right and left).
+        // But the effect expands by 1 on each side per row. So we can maintain two arrays:
+        // `L` and `R` as the number of operations whose left/right boundary is at each column,
+        // but we don't shift them; instead, we use an offset that increases with row.
+        // Let row index be i (0-indexed). For an operation placed at (r, c), on row i,
+        // left boundary = c - (i - r) = (c + r) - i.
+        // right boundary = c + (i - r) = (c - r) + i.
+        // So left boundary depends on (c + r) and i, right boundary depends on (c - r) and i.
+        // This suggests we can group operations by (c + r) and (c - r).
+        // Let A = c + r, B = c - r.
+        // Then on row i, the operation affects columns j such that j >= A - i and j <= B + i.
+        // Also note that j must be between 0 and n-1.
+        // So we can maintain two frequency arrays: `cntA` of size 2n, and `cntB` of size 2n (shifted).
+        // For an operation at (r, c), we increment cntA[c + r] and cntB[c - r + (n-1)] (to avoid negative indices).
+        // Then on row i, the number of operations covering column j is:
+        // sum_{A} cntA[A] for A such that A - i <= j  => A <= j + i
+        // minus something? Actually, the condition is: A - i <= j <= B + i.
+        // So an operation covers j if A <= j + i AND B >= j - i.
+        // So the total effect at (i, j) is: (number of operations with A <= j + i) - (number of operations with B < j - i).
+        // Wait, we need to count operations that satisfy both. If we just take all operations with A <= j + i,
+        // they might not satisfy B >= j - i. But if we also subtract those with B < j - i, we get the intersection?
+        // Not exactly, because the sets are not independent. However, note that for a given operation, A and B are related:
+        // A = c + r, B = c - r. So A + B = 2c, A - B = 2r. So they are not independent.
+        // But we can use a 2D difference array? Too slow.
+        // Alternative: we can process row by row and maintain the effect using two running sums that we update in O(1) per column.
+        // Let's define an array `cur` of length n, initially all 0.
+        // We also maintain two arrays `L` and `R` of length n+2, initially 0.
+        // `L[j]` will store the number of operations whose left boundary is at column j on the current row.
+        // `R[j]` will store the number of operations whose right boundary is at column j on the current row.
+        // When we move from row i to row i+1, the left boundaries shift left by 1, right boundaries shift right by 1.
+        // To avoid O(n) shifting, we can keep `L` and `R` as difference arrays representing the change in the number of active operations.
+        // Actually, we can maintain a variable `active` that is the number of operations currently covering the column,
+        // and update it as we move across columns and rows.
+        // Let's think of the effect of an operation at (r, c) on row i:
+        // It adds 1 to a range of columns [c - (i - r), c + (i - r)].
+        // This is equivalent to: at row i, the operation contributes +1 to a difference array at left boundary and -1 after right boundary.
+        // So if we maintain a difference array `diff` for the current row, we can compute the effect by prefix sum.
+        // But we need to update `diff` for the next row efficiently.
+        // Notice that the left boundary moves left by 1, right boundary moves right by 1.
+        // So the difference array for the next row can be obtained by taking the current `diff`, and for each operation,
+        // we decrement the left boundary index by 1 and increment the right boundary index by 1.
+        // This is equivalent to: new_diff[j] = old_diff[j+1] (for left boundaries?) Not exactly.
+        // Let's define `L` as an array where L[j] is the number of operations whose left boundary is at j.
+        // Then the effect on the current row is: for each column j, the number of active operations is the sum of L[k] for k <= j
+        // minus the sum of R[k] for k < j? Actually, an operation with left boundary at L and right boundary at R
+        // contributes +1 to columns in [L, R]. So the effect at column j is: (number of operations with L <= j) - (number of operations with R < j).
+        // So if we maintain prefix sums of L and R, we can compute the effect.
+        // When moving to the next row, each left boundary L becomes L-1, each right boundary R becomes R+1.
+        // So the new L array is the old L array shifted right by 1? Wait: if old left boundary was at column k, new left boundary is at k-1.
+        // So the value that was at index k moves to index k-1. That means new_L[j] = old_L[j+1].
+        // Similarly, new_R[j] = old_R[j-1].
+        // So we can update L and R by shifting. But shifting the whole array is O(n). However, we can avoid shifting by using an offset.
+        // Let offsetL be such that the actual left boundary column for an operation stored at index p is p + offsetL.
+        // Initially offsetL = 0. When we go to next row, we do offsetL--. Then the actual column becomes (p + offsetL).
+        // Similarly for R, offsetR++.
+        // Then we can maintain L and R as arrays of size n+2 (with extra space for shifts).
+        // But we also need to add new operations. When we place an operation at (i, j), its left boundary on row i is j, right boundary is j.
+        // So we need to add 1 to L at the index corresponding to actual column j, and add 1 to R at index corresponding to actual column j+1? Wait: for the effect formula, we need R to be the right boundary + 1? Let's define carefully.
+        
+        // Let's define:
+        // For each operation, let its left boundary on the current row be Lb, right boundary be Rb.
+        // The operation covers columns j with Lb <= j <= Rb.
+        // We can maintain an array `addL` of size n+2, where addL[j] is the number of operations with left boundary exactly j.
+        // And `addR` of size n+2, where addR[j] is the number of operations with right boundary exactly j.
+        // Then the effect at column j is: sum_{k=0..j} addL[k] - sum_{k=0..j-1} addR[k].
+        // Because an operation with left boundary L and right boundary R contributes +1 to the range [L, R].
+        // So if we do prefix sum of addL minus prefix sum of addR (shifted by 1), we get the effect.
+        // When moving to next row, Lb becomes Lb-1, Rb becomes Rb+1.
+        // So we can maintain two arrays L and R with offsets.
+        // Let's use arrays `L` and `R` of size 2*n+5 to allow negative indices after offset.
+        // We'll maintain `offsetL` and `offsetR`. Initially offsetL = n, offsetR = n (to allow negative shifts).
+        // Actually, we can just use vectors of size n+2 and shift manually? Since n <= 3000, O(n) per row is O(n^2) total per test case, which is 9e6 operations, acceptable! The sum of n^2 over test cases is 9e6, so O(n^2) total is fine. We can just do the O(n) shift per row.
+        // Let's do that for simplicity.
+        
+        // We'll maintain:
+        // vector<int> L(n+2, 0), R(n+2, 0); // 1-indexed for convenience, size n+2 to handle boundaries.
+        // For each row i from 0 to n-1:
+        //   vector<int> effect(n, 0);
+        //   // compute effect using prefix sums of L and R
+        //   int sumL = 0, sumR = 0;
+        //   for j from 0 to n-1:
+        //       sumL += L[j+1]; // if 1-indexed
+        //       effect[j] = sumL - sumR;
+        //       sumR += R[j+1];
+        //   // now effect[j] is the number of operations covering (i, j) mod 2? We only care about parity.
+        //   // So we can keep everything modulo 2.
+        //   // We want to make grid[i][j] ^ effect[j] == 0.
+        //   // We'll process columns left to right.
+        //   // We also need to apply new operations we place on this row to the effect of later columns in the same row?
+        //   // If we place an operation at (i, j), it flips (i, j) and also lower triangle. But does it affect other cells in the same row?
+        //   // The operation says: invert (i, j) and all (x, y) for x > i and x - i >= |y - j|.
+        //   // So it does NOT affect other cells in row i. Only (i, j) itself.
+        //   // So when we decide to place an operation at (i, j), we only need to flip the current cell's state, and record the operation for lower rows.
+        //   // So we can just check each cell: if (grid[i][j] - '0') ^ (effect[j] % 2) == 1, we must place an operation here.
+        //   // Then we update L and R for future rows: this operation's left boundary on row i is j, right boundary is j.
+        //   // So we increment L[j] and R[j] (mod 2). But careful: for the effect formula, we need R to represent the right boundary.
+        //   // If we increment R[j], then in the prefix sum, sumR will include this operation starting from column j? Wait.
+        //   // Let's derive: For an operation with left Lb and right Rb, it covers [Lb, Rb].
+        //   // In our prefix sum method: effect[j] = sumL[0..j] - sumR[0..j-1].
+        //   // If we set addL[Lb] += 1 and addR[Rb+1] += 1, then for j < Lb, sumL=0, sumR=0 -> effect=0.
+        //   // For Lb <= j <= Rb, sumL includes the +1, sumR does not include the +1 (since sumR goes up to j-1, and Rb+1 > j), so effect=1.
+        //   // For j > Rb, sumL includes +1, sumR includes +1 (since j-1 >= Rb+1), effect=0.
+        //   // So the correct difference array is: addL[Lb] += 1, addR[Rb+1] += 1.
+        //   // Therefore, for an operation at (i, j) with Lb = j, Rb = j, we should do L[j] ^= 1, R[j+1] ^= 1.
+        //   // Then on the next row, Lb becomes j-1, Rb becomes j+1. So we need to shift L left by 1 and R right by 1.
+        //   // Shifting left: newL[k] = oldL[k+1]. Shifting right: newR[k] = oldR[k-1].
+        //   // We can do this in O(n) per row.
+        //   // Also, we need to apply the new operations we added on this row to the L and R arrays for the next row.
+        //   // But wait: the operations we add on row i affect row i+1 with Lb = j-1, Rb = j+1.
+        //   // So if we just add them to L and R at j and j+1, and then shift, they will automatically move to j-1 and j+2? Let's check:
+        //   // We add at row i: L[j] ^= 1, R[j+1] ^= 1.
+        //   // Then we shift for next row: newL[k] = L[k+1], newR[k] = R[k-1].
+        //   // So the operation's contribution becomes: newL[j-1] gets the L from j, newR[j+2] gets the R from j+1? Wait:
+        //   // newL[j-1] = oldL[j] = 1. newR[j+2] = oldR[j+1] = 1.
+        //   // But we want on row i+1: Lb = j-1, Rb = j+1, so we want L[j-1] and R[(j+1)+1] = R[j+2]. That matches!
+        //   // So the procedure is:
+        //   // For each row i:
+        //   //   compute effect using current L and R.
+        //   //   for j in 0..n-1:
+        //   //       if (grid[i][j] ^ effect[j]) == 1:
+        //   //           ans++
+        //   //           L[j] ^= 1
+        //   //           R[j+1] ^= 1
+        //   //   // prepare L and R for next row:
+        //   //   newL[0..n-1] = L[1..n]
+        //   //   newR[1..n] = R[0..n-1]  (with newR[0]=0)
+        //   //   L = newL, R = newR
+        //   // But careful: when we modify L[j] and R[j+1] during the row, those modifications should affect the effect computation for later columns in the same row?
+        //   // As argued, an operation at (i, j) does NOT affect other cells in row i. So we should NOT let it affect the effect of subsequent columns in the same row.
+        //   // Therefore, we should compute the entire effect array for the row first, then decide operations, and then apply the updates to L and R.
+        //   // However, if we apply updates to L and R immediately, they would affect the prefix sums for later columns, which is incorrect.
+        //   // So we must compute effect first, then loop again to apply operations.
+        //   // But we can combine: we can compute prefix sums on the fly, and if we need to place an operation, we record it in a temporary array, and after finishing the row, we apply them to L and R (and then shift).
+        //   // Let's do that.
+        
+        // Let's implement with vectors of int (mod 2).
+        // Since n <= 3000, O(n^2) per test case is fine.
+        
+        int ans = 0;
+        vector<int> L(n+2, 0), R(n+2, 0); // 1-indexed, indices 1..n, with extra for R[n+1]
+        for (int i = 0; i < n; ++i) {
+            vector<int> effect(n, 0);
+            int sumL = 0, sumR = 0;
+            for (int j = 0; j < n; ++j) {
+                sumL ^= L[j+1];
+                effect[j] = sumL ^ sumR;
+                sumR ^= R[j+1];
+            }
+            // Now decide operations
+            vector<int> addL(n+2, 0), addR(n+2, 0);
+            for (int j = 0; j < n; ++j) {
+                int val = (grid[i][j] - '0') ^ effect[j];
+                if (val == 1) {
+                    ans++;
+                    addL[j+1] ^= 1;    // 1-indexed
+                    addR[j+2] ^= 1;    // because we want R at Rb+1 = j+1+1 = j+2
+                }
+            }
+            // Apply addL and addR to L and R (they will be shifted for next row)
+            for (int j = 1; j <= n; ++j) {
+                L[j] ^= addL[j];
+                R[j] ^= addR[j];
+            }
+            // Shift L and R for next row
+            vector<int> newL(n+2, 0), newR(n+2, 0);
+            for (int j = 1; j <= n; ++j) {
+                if (L[j]) {
+                    // left boundary moves left by 1
+                    if (j-1 >= 1) newL[j-1] ^= 1;
+                }
+                if (R[j]) {
+                    // right boundary moves right by 1
+                    if (j+1 <= n+1) newR[j+1] ^= 1;
+                }
+            }
+            L = move(newL);
+            R = move(newR);
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

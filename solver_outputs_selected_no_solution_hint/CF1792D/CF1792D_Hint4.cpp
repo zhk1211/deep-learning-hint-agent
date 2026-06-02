@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<vector<int>> a(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                cin >> a[i][j];
+            }
+        }
+
+        // Precompute for each permutation the position of each value
+        vector<vector<int>> pos(n, vector<int>(m + 1));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                pos[i][a[i][j]] = j + 1; // 1-indexed positions
+            }
+        }
+
+        // For each permutation, compute the longest prefix that is 1,2,...,k
+        // when we consider the inverse mapping? Actually we need to find for each i
+        // the maximum beauty over all j of a_i * a_j.
+        // Beauty of permutation p is max k such that p_1=1, p_2=2, ..., p_k=k.
+        // For a_i * a_j, the result at position x is a_j[a_i[x]].
+        // We want a_j[a_i[1]] = 1, a_j[a_i[2]] = 2, ..., a_j[a_i[k]] = k.
+        // This means a_i[1] = pos_j[1], a_i[2] = pos_j[2], ..., a_i[k] = pos_j[k].
+        // So we need to find the longest prefix of a_i that matches the sequence
+        // pos_j[1], pos_j[2], ..., pos_j[m].
+        // Since m <= 10, we can precompute for each permutation j the sequence
+        // pos_j[1], pos_j[2], ..., pos_j[m] and store it as a vector.
+        // Then for each i, we want the maximum k such that the first k elements of a_i
+        // equal the first k elements of some pos_j sequence.
+        // We can build a trie of all pos_j sequences (each of length m) and then
+        // for each a_i, traverse the trie to find the maximum depth matched.
+
+        // Build trie
+        vector<array<int, 11>> trie(1);
+        trie.reserve(n * m + 1);
+        for (int j = 0; j < n; ++j) {
+            int node = 0;
+            for (int k = 1; k <= m; ++k) {
+                int val = pos[j][k];
+                if (trie[node][val] == 0) {
+                    trie[node][val] = (int)trie.size();
+                    trie.push_back({});
+                }
+                node = trie[node][val];
+            }
+        }
+
+        // For each i, find max beauty
+        for (int i = 0; i < n; ++i) {
+            int node = 0;
+            int beauty = 0;
+            for (int k = 0; k < m; ++k) {
+                int val = a[i][k];
+                if (trie[node][val] == 0) break;
+                node = trie[node][val];
+                beauty = k + 1;
+            }
+            cout << beauty << (i + 1 == n ? '\n' : ' ');
+        }
+    }
+    return 0;
+}

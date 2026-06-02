@@ -1,0 +1,99 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, k;
+    cin >> n >> k;
+    string s;
+    cin >> s;
+
+    // next_pos[i][c] = first position >= i where character c occurs
+    // We'll build it from right to left.
+    vector<array<int, 26>> next_pos(n + 2);
+    array<int, 26> cur;
+    fill(cur.begin(), cur.end(), n);
+    for (int i = n; i >= 0; --i) {
+        next_pos[i] = cur;
+        if (i > 0) {
+            cur[s[i - 1] - 'a'] = i - 1;
+        }
+    }
+
+    // For each position i, we want to know the length of the shortest
+    // prefix of s[i:] that contains all k letters.
+    // Let's call it jump[i] = length of shortest prefix containing all k letters.
+    // If no such prefix exists, jump[i] = INF.
+    const int INF = 1e9;
+    vector<int> jump_len(n + 1, INF);
+    vector<int> jump_to(n + 1, -1); // next position after consuming that prefix
+
+    for (int i = 0; i <= n; ++i) {
+        int max_pos = -1;
+        for (int c = 0; c < k; ++c) {
+            int pos = next_pos[i][c];
+            if (pos == n) {
+                max_pos = INF;
+                break;
+            }
+            max_pos = max(max_pos, pos);
+        }
+        if (max_pos != INF) {
+            jump_len[i] = max_pos - i + 1;
+            jump_to[i] = max_pos + 1;
+        }
+    }
+
+    // dp[i] = minimum number of letters to append to make an unpleasant string
+    // if we start matching from position i in s.
+    // dp[n] = 0 (empty suffix, any non-empty string is unpleasant)
+    // dp[i] = min over c of (1 + dp[next_pos[i][c] + 1])? Not exactly.
+    // Actually, we want: if we are at position i, and we want to form a pleasant string,
+    // we need to match characters. The minimum number of appends to make it unpleasant
+    // is the minimum over all characters c of (1 + dp[next_pos[i][c] + 1]).
+    // But we can precompute dp from right to left.
+    vector<int> dp(n + 2, 0);
+    // dp[n] = 0, dp[n+1] = 0 (out of bounds)
+    for (int i = n; i >= 0; --i) {
+        int best = INF;
+        for (int c = 0; c < k; ++c) {
+            int nxt = next_pos[i][c];
+            best = min(best, 1 + dp[nxt + 1]);
+        }
+        dp[i] = best;
+    }
+
+    // Now answer queries: for each string t, we simulate matching it in s
+    // and find the position after matching the whole t.
+    // Then answer is dp[that_position].
+    int q;
+    cin >> q;
+    while (q--) {
+        string t;
+        cin >> t;
+        int pos = 0;
+        for (char ch : t) {
+            int c = ch - 'a';
+            pos = next_pos[pos][c] + 1;
+            if (pos > n) {
+                // cannot match further, t is already unpleasant
+                // but we need to output minimum appends to make it unpleasant
+                // if it's already unpleasant, answer is 0
+                // However, we must break and set pos = n+1 to indicate out of bounds
+                pos = n + 1;
+                break;
+            }
+        }
+        if (pos > n) {
+            cout << 0 << '\n';
+        } else {
+            cout << dp[pos] << '\n';
+        }
+    }
+
+    return 0;
+}
+```

@@ -1,0 +1,199 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int INF = 1e9;
+const int MAXN = 50005;
+
+struct Cell {
+    int x, y;
+    bool operator<(const Cell& o) const {
+        int d1 = x + y, d2 = o.x + o.y;
+        if (d1 != d2) return d1 < d2;
+        if (x != o.x) return x < o.x;
+        return y < o.y;
+    }
+};
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int q;
+    cin >> q;
+    while (q--) {
+        int n;
+        cin >> n;
+        vector<int> t(n);
+        for (int i = 0; i < n; ++i) cin >> t[i];
+        
+        // Tables are indexed by (x,y) where table occupies cells:
+        // (3x+1,3y+1), (3x+1,3y+2), (3x+2,3y+1), (3x+2,3y+2)
+        // Distance from (0,0) to a table cell is min over its 4 cells of Manhattan distance.
+        // For table (x,y), the 4 cells have coordinates:
+        // (3x+1,3y+1) -> dist = 3x+3y+2
+        // (3x+1,3y+2) -> dist = 3x+3y+3
+        // (3x+2,3y+1) -> dist = 3x+3y+3
+        // (3x+2,3y+2) -> dist = 3x+3y+4
+        // So min distance = 3x+3y+2.
+        // Tie-breaking: smallest x, then smallest y.
+        
+        // We need to assign guests.
+        // t=1: nearest vacant table cell (any cell of a table, but once a cell is taken, it's occupied)
+        // t=0: nearest table cell that belongs to a completely unoccupied table (all 4 cells free)
+        
+        // Since tables are independent, we can think in terms of tables.
+        // For t=1, we need the nearest table with at least one free cell.
+        // For t=0, we need the nearest completely free table.
+        
+        // We'll maintain sets of tables.
+        // A table is identified by (x,y). Its distance = 3x+3y+2.
+        // For t=1: we need the table with smallest distance that has free cells.
+        // For t=0: we need the table with smallest distance that is completely free.
+        
+        // We can precompute tables up to some bound. Max n=50000, distance grows.
+        // Maximum distance needed: worst case all t=0, each takes a new table.
+        // Distance for table (x,y) is 3(x+y)+2. To accommodate 50000 tables, we need x+y up to ~50000.
+        // Actually number of tables with x+y <= K is (K+1)*(K+2)/2. For K=316, it's ~50000.
+        // So max distance ~ 3*316+2 = 950. So we can generate tables on the fly.
+        
+        // We'll maintain:
+        // - set of completely free tables (all 4 cells free)
+        // - set of tables with at least one free cell (partially or fully free)
+        // When a guest takes a cell, we update the table's free cell count.
+        
+        // For t=0: pick from completely free set, then remove it from completely free, and update partially free.
+        // For t=1: pick from partially free set (which includes completely free), then update.
+        
+        // We need to output the exact cell chosen.
+        // For a table, the 4 cells in order of preference (by problem's tie-breaking: smallest x, then smallest y):
+        // The cells are:
+        // (3x+1,3y+1) - x=3x+1, y=3y+1
+        // (3x+1,3y+2) - x=3x+1, y=3y+2
+        // (3x+2,3y+1) - x=3x+2, y=3y+1
+        // (3x+2,3y+2) - x=3x+2, y=3y+2
+        // Sorted by x then y: (1,1), (1,2), (2,1), (2,2) relative to table.
+        // So we can assign cells in that order.
+        
+        // We'll generate tables lazily. Since distance increases, we can just push new tables as needed.
+        // We'll keep a priority queue or set of tables by distance.
+        // But we need to extract min by distance, and also by (x,y) tie-break.
+        // Distance = 3x+3y+2, so ordering by distance is same as ordering by (x+y, x, y).
+        
+        // We'll maintain an index of tables: map from (x,y) to free cells count (0..4).
+        // And we'll maintain a set of tables for t=0 and t=1.
+        // Since we need to add tables as we go, we can pre-generate all tables up to some max distance.
+        // Max distance: for 50000 guests, if all t=0, each takes a new table. Number of tables with distance <= D:
+        // distance = 3s+2, where s = x+y. Number of tables with x+y = s is s+1.
+        // Total tables with s <= S: sum_{s=0}^S (s+1) = (S+1)(S+2)/2.
+        // We need (S+1)(S+2)/2 >= 50000 => S ~ 315. So max distance = 3*315+2 = 947.
+        // So we can just precompute all tables with x+y <= 400 (safe).
+        
+        const int MAX_S = 400;
+        vector<Cell> tables;
+        for (int s = 0; s <= MAX_S; ++s) {
+            for (int x = 0; x <= s; ++x) {
+                int y = s - x;
+                tables.push_back({x, y});
+            }
+        }
+        // Sort tables by distance, then x, then y.
+        sort(tables.begin(), tables.end(), [](const Cell& a, const Cell& b) {
+            int da = 3*(a.x+a.y)+2;
+            int db = 3*(b.x+b.y)+2;
+            if (da != db) return da < db;
+            if (a.x != b.x) return a.x < b.x;
+            return a.y < b.y;
+        });
+        
+        // Map table (x,y) to its index in sorted order, and free cells bitmask (4 bits).
+        // We'll use array of free counts: 0 to 4.
+        // We'll maintain two sets of indices: completely free (free==4) and partially free (free>0).
+        // Since we need to extract min by distance, and tables are already sorted, we can just use a pointer or set with custom comparator.
+        // But we need to remove and reinsert when free count changes.
+        // We can use std::set of indices, but we need to order by distance. Since indices are sorted by distance, we can just use std::set<int> for completely free and partially free, where int is index in tables array.
+        // However, when we take a cell from a table, its free count decreases. If it was completely free, we remove from completely free set. If free becomes 0, we remove from partially free set.
+        // For t=0: we need the smallest index in completely free set.
+        // For t=1: we need the smallest index in partially free set.
+        
+        // But wait: the problem says "nearest vacant table cell" for t=1. That means we consider individual cells, not tables.
+        // However, since all cells of a table have distances differing by at most 2, and tie-breaking is by cell coordinates, the nearest cell overall will be from the nearest table (by min distance to table).
+        // But could a cell from a farther table be closer than a cell from a nearer table? No, because min distance to table is monotonic with table index.
+        // Actually, the distance to a table cell is 3x+3y+2 for the closest cell, and 3x+3y+4 for the farthest. The next table (in sorted order) has distance at least 3x+3y+2+3 = 3x+3y+5 (if x+y increases by 1). So the farthest cell of the current table (dist+2) is still less than the closest cell of the next table (dist+3). So table order strictly dominates.
+        // Therefore, picking the nearest table with free cells is correct for t=1.
+        // For t=0, we need a completely unoccupied table, so we pick the nearest completely free table.
+        
+        // We also need to output the exact cell chosen.
+        // For a given table (x,y), the cells in order of preference (smallest x, then y):
+        // 1: (3x+1, 3y+1)
+        // 2: (3x+1, 3y+2)
+        // 3: (3x+2, 3y+1)
+        // 4: (3x+2, 3y+2)
+        // We can track which cells are taken using a bitmask (4 bits). Initially all free (mask=15).
+        // When assigning, we pick the first free cell in that order.
+        
+        int T = tables.size();
+        vector<int> free_mask(T, 15); // 4 bits
+        set<int> completely_free; // indices with free_mask == 15
+        set<int> partially_free;  // indices with free_mask > 0
+        
+        for (int i = 0; i < T; ++i) {
+            completely_free.insert(i);
+            partially_free.insert(i);
+        }
+        
+        // To speed up, we can just use vector<bool> and a pointer, but set is fine for 50000 operations.
+        // Actually, we only need to extract min. Since we always take the smallest index from the set, we can just maintain the sets.
+        
+        for (int i = 0; i < n; ++i) {
+            int idx;
+            if (t[i] == 0) {
+                // need completely free table
+                idx = *completely_free.begin();
+            } else {
+                // need any free cell
+                idx = *partially_free.begin();
+            }
+            
+            // determine which cell to take
+            int mask = free_mask[idx];
+            int cell_bit;
+            // order: bit 0: (1,1), bit 1: (1,2), bit 2: (2,1), bit 3: (2,2)
+            // We want the smallest x, then smallest y.
+            // (1,1) < (1,2) < (2,1) < (2,2)
+            // So bits in order 0,1,2,3.
+            if (mask & 1) cell_bit = 0;
+            else if (mask & 2) cell_bit = 1;
+            else if (mask & 4) cell_bit = 2;
+            else cell_bit = 3;
+            
+            // compute actual coordinates
+            int table_x = tables[idx].x;
+            int table_y = tables[idx].y;
+            int cell_x, cell_y;
+            if (cell_bit == 0) { cell_x = 3*table_x + 1; cell_y = 3*table_y + 1; }
+            else if (cell_bit == 1) { cell_x = 3*table_x + 1; cell_y = 3*table_y + 2; }
+            else if (cell_bit == 2) { cell_x = 3*table_x + 2; cell_y = 3*table_y + 1; }
+            else { cell_x = 3*table_x + 2; cell_y = 3*table_y + 2; }
+            
+            cout << cell_x << " " << cell_y << "\n";
+            
+            // update mask
+            free_mask[idx] &= ~(1 << cell_bit);
+            
+            if (free_mask[idx] == 0) {
+                partially_free.erase(idx);
+                completely_free.erase(idx); // should already be gone if it was completely free, but erase is safe
+            } else {
+                // if it was completely free, it's not anymore
+                if (completely_free.count(idx)) {
+                    completely_free.erase(idx);
+                }
+                // partially_free still contains it
+            }
+        }
+    }
+    
+    return 0;
+}
+```

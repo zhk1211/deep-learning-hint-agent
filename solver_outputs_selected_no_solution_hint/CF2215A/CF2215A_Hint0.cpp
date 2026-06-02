@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        ll p, q;
+        cin >> n >> k >> p >> q;
+        vector<ll> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        // dp[i][0] = min sum for prefix i with last operation ending before i (or no operation covering i)
+        // dp[i][1] = min sum for prefix i with an operation covering i that can be extended
+        // We'll use 1-indexed dp for convenience
+        vector<vector<ll>> dp(n + 1, vector<ll>(2, LLONG_MAX / 2));
+        dp[0][0] = 0;
+        dp[0][1] = LLONG_MAX / 2;
+        // We maintain a deque for sliding window minimum of dp[j][0] - sum_mod_j
+        // where sum_mod_j is the sum of a[t] % m for t from j+1 to i if we apply m from j+1 to i
+        // But we need to consider both m = p and m = q.
+        // We'll process each m separately and combine.
+        // Actually we can do DP with two deques for each modulus.
+        // Let's define for a fixed m:
+        // We want to transition: dp[i][1] = min_{j <= i-k} (dp[j][0] + sum_{t=j+1..i} (a[t] % m))
+        // And dp[i][0] = min(dp[i-1][0] + a[i], dp[i][1])? Wait, dp[i][0] means no active operation at i.
+        // If we end an operation at i, we can set dp[i][0] = min(dp[i][0], dp[i][1]).
+        // Also we can start an operation at any point.
+        // Let's formalize:
+        // dp[i][0] = min(dp[i-1][0] + a[i], dp[i][1])  // either keep original or end operation here
+        // dp[i][1] = min over m in {p,q} of ( min_{j <= i-k} (dp[j][0] + sum_{t=j+1..i} (a[t] % m) ) )
+        // But note that operation can be longer than k, so j can be up to i-k.
+        // We can compute prefix sums of a[t] % m to get range sums quickly.
+        // Let pref_m[i] = sum_{t=1..i} (a[t] % m)
+        // Then sum_{t=j+1..i} (a[t] % m) = pref_m[i] - pref_m[j]
+        // So dp[i][1] = min_m ( pref_m[i] + min_{j <= i-k} (dp[j][0] - pref_m[j]) )
+        // We can maintain sliding window minimum of (dp[j][0] - pref_m[j]) for j from 0 to i-k.
+        // We'll compute dp row by row.
+        // Initialize deques for p and q.
+        deque<pair<int, ll>> dq_p, dq_q; // (index, value)
+        // We'll push j=0 initially.
+        vector<ll> pref_p(n + 1, 0), pref_q(n + 1, 0);
+        for (int i = 1; i <= n; ++i) {
+            pref_p[i] = pref_p[i-1] + (a[i-1] % p);
+            pref_q[i] = pref_q[i-1] + (a[i-1] % q);
+        }
+        // Push j=0 into deques if 0 <= i-k? For i starting from 1, i-k might be >=0 later.
+        // We'll push indices as we go.
+        // We need to maintain deques for each i.
+        // For i from 1 to n:
+        //   add j = i-k to deques if i-k >= 0
+        //   then query min from deques
+        // But careful: for dp[i][1], we need j <= i-k. So when computing dp[i][1], we should have all j from 0 to i-k in deques.
+        // So before computing dp[i][1], we add j = i-k (if i-k >= 0) to deques.
+        // Initially for i=1, i-k might be negative, so deques empty -> dp[i][1] = INF.
+        // We'll iterate i from 1 to n.
+        for (int i = 1; i <= n; ++i) {
+            // Add j = i-k to deques if valid
+            if (i - k >= 0) {
+                int j = i - k;
+                ll val_p = dp[j][0] - pref_p[j];
+                while (!dq_p.empty() && dq_p.back().second >= val_p) dq_p.pop_back();
+                dq_p.push_back({j, val_p});
+                ll val_q = dp[j][0] - pref_q[j];
+                while (!dq_q.empty() && dq_q.back().second >= val_q) dq_q.pop_back();
+                dq_q.push_back({j, val_q});
+            }
+            // Remove indices that are < i - (something)? Actually j can be as small as 0, we only add j = i-k, but we never remove because j can be any <= i-k.
+            // Wait, the condition is j <= i-k. As i increases, the set of valid j expands (we add new j). We never need to remove old j because they remain valid.
+            // So no need to pop front based on index. The sliding window is not shrinking on the left; it's just accumulating.
+            // So we just maintain a monotonic queue of all added j.
+            // Compute dp[i][1]
+            ll best_p = dq_p.empty() ? LLONG_MAX / 2 : pref_p[i] + dq_p.front().second;
+            ll best_q = dq_q.empty() ? LLONG_MAX / 2 : pref_q[i] + dq_q.front().second;
+            dp[i][1] = min(best_p, best_q);
+            // Compute dp[i][0]
+            dp[i][0] = min(dp[i-1][0] + a[i-1], dp[i][1]);
+        }
+        cout << dp[n][0] << '\n';
+    }
+    return 0;
+}

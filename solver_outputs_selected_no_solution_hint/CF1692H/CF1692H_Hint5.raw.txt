@@ -1,0 +1,52 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> x(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> x[i];
+        }
+        
+        int best_a = x[0], best_l = 1, best_r = 1;
+        int max_diff = 0;
+        
+        map<int, int> first_occ;
+        map<int, int> balance;
+        
+        for (int i = 0; i < n; ++i) {
+            int val = x[i];
+            if (first_occ.find(val) == first_occ.end()) {
+                first_occ[val] = i;
+                balance[val] = 0;
+            }
+            balance[val] += 1;
+            
+            int cur_diff = balance[val];
+            if (cur_diff > max_diff) {
+                max_diff = cur_diff;
+                best_a = val;
+                best_l = first_occ[val] + 1;
+                best_r = i + 1;
+            }
+            
+            if (balance[val] <= 0) {
+                balance[val] = 1;
+                first_occ[val] = i;
+            }
+        }
+        
+        cout << best_a << " " << best_l << " " << best_r << "\n";
+    }
+    
+    return 0;
+}
+```

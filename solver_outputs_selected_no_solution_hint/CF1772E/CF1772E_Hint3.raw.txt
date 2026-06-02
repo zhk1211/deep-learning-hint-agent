@@ -1,0 +1,377 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> p[i];
+        }
+
+        // Check if already sorted ascending or descending (should not happen per problem)
+        // but we can still handle safely.
+
+        // Count inversions parity
+        // Using Fenwick tree or merge sort. Since n up to 5e5, O(n log n) is fine.
+        // We'll use Fenwick tree for simplicity.
+        vector<int> bit(n + 1, 0);
+        auto add = [&](int idx, int val) {
+            for (; idx <= n; idx += idx & -idx) bit[idx] += val;
+        };
+        auto sum = [&](int idx) {
+            int res = 0;
+            for (; idx > 0; idx -= idx & -idx) res += bit[idx];
+            return res;
+        };
+
+        long long inv = 0;
+        for (int i = n - 1; i >= 0; --i) {
+            inv += sum(p[i] - 1);
+            add(p[i], 1);
+        }
+
+        // Check if permutation is already sorted ascending or descending
+        bool asc = true, desc = true;
+        for (int i = 0; i < n; ++i) {
+            if (p[i] != i + 1) asc = false;
+            if (p[i] != n - i) desc = false;
+        }
+
+        if (asc) {
+            cout << "First\n";
+            continue;
+        }
+        if (desc) {
+            cout << "Second\n";
+            continue;
+        }
+
+        // Game logic based on parity of inversions
+        if (inv % 2 == 0) {
+            cout << "Second\n";
+        } else {
+            // Check if first can win in one move: if there exists a pair of elements
+            // that are out of order and swapping them (or coloring them blue and rearranging)
+            // can make it sorted ascending? Actually, first can win in one move if
+            // the permutation can be sorted by swapping two elements? Wait, the action
+            // is: rearrange red elements keep positions, blue can be swapped.
+            // Initially all red. So first player can color one element blue (action 2),
+            // but that doesn't sort it. Or can rearrange all red (which is all) but must keep red positions? 
+            // "rearrange the elements of the permutation in such a way that all red elements keep their positions"
+            // That means red elements cannot move. So if all are red, no rearrangement possible.
+            // So first move cannot be rearrangement. First move can be: skip, or color one red to blue.
+            // So first cannot win in one move unless it's already sorted (which it's not).
+            // So the hint "The first player can win in one move" might refer to a specific situation?
+            // Actually, the hint says "The first player can win in one move." meaning there exists a scenario
+            // where first wins immediately? But initially all red, so no rearrangement possible.
+            // Maybe the hint means after some moves? Let's re-read: "The first player can win in one move."
+            // Possibly it means if the permutation has odd parity, first can force a win? But the sample
+            // 1: 1 2 4 3 has inversions = 1 (odd), output First. Sample 2: 2 3 1 has inversions = 2 (even), output Tie.
+            // Sample 3: 3 4 5 2 1 has inversions? Let's compute: 3>2,1 (2), 4>2,1 (2), 5>2,1 (2), 2>1 (1) total 7 (odd), output Second.
+            // So odd parity does not always mean First wins. Sample 3 odd -> Second.
+            // Sample 4: 1 5 6 3 2 4: inversions? 5>3,2,4 (3), 6>3,2,4 (3), 3>2 (1), total 7? Wait 5>3,2,4 (3), 6>3,2,4 (3), 3>2 (1) = 7 odd, output Tie.
+            // So parity alone not enough.
+
+            // Let's analyze game: players can color elements blue. Blue elements can be rearranged freely among themselves,
+            // while red stay fixed. The goal: first wants ascending, second wants descending.
+            // This is a known game: "Permutation Game" maybe. The key is to look at the longest prefix that is already
+            // in correct relative order for ascending, and longest suffix for descending? 
+            // Actually, we need to determine who can force their sorted order.
+
+            // Let's think: The first player wants to sort ascending. He can color elements blue and then rearrange them.
+            // The second player can also color elements blue and rearrange them to try to get descending.
+            // But note: once an element is blue, it can be moved by either player? The action says: "rearrange the elements
+            // of the permutation in such a way that all red elements keep their positions (note that blue elements can be swapped
+            // with each other, but it's not obligatory)". So any player can rearrange blue elements arbitrarily on their turn.
+            // So both players share the set of blue elements. They can change the order of blue elements.
+            // Also, they can color a red element blue. So they gradually unlock elements.
+
+            // This is similar to a game where players take turns unlocking elements, and the first to achieve their goal wins.
+            // The game ends when the permutation becomes sorted ascending (First wins) or descending (Second wins).
+            // If it goes on too long, draw.
+
+            // Let's analyze the state: we have a set of blue indices (or elements). The red elements are fixed.
+            // The blue elements can be permuted arbitrarily. So the current permutation is determined by the fixed red elements
+            // and the order we choose for blue elements. The players can choose the order of blue elements on their turn
+            // to try to achieve their goal, or to block the opponent.
+
+            // This is a combinatorial game. I recall a similar problem: "Red and Blue" from Codeforces.
+            // The solution involves checking the longest prefix that matches the sorted order and the longest suffix
+            // that matches the reverse sorted order, and then considering the number of elements that are "misplaced"
+            // relative to both.
+
+            // Let's define:
+            // For First to win, he needs to eventually arrange all elements in ascending order.
+            // He can only move blue elements. So the red elements must already be in their correct ascending positions.
+            // Similarly, Second needs red elements to be in correct descending positions.
+            // Initially all red. So initially, the red elements are the whole permutation. For First to win immediately,
+            // the permutation must be ascending. For Second, descending. But given it's neither, no immediate win.
+
+            // Players can color elements blue. Once blue, they can be moved. So First wants to color elements that are
+            // out of place for ascending order, so he can move them to correct spots. Second wants to color elements
+            // that are out of place for descending order.
+
+            // However, both players can rearrange blue elements. So if a set of blue elements can be arranged to satisfy
+            // both ascending and descending? No, unless n<=2. So they conflict.
+
+            // The game is essentially: players take turns picking elements to "free" (color blue). The first player to
+            // achieve a state where the fixed red elements are already in their target order (ascending for First, descending for Second)
+            // and the remaining blue elements can be placed to complete the target order, wins. But since blue elements can be
+            // rearranged arbitrarily, the condition for First to win is: all red elements are already in the correct ascending positions
+            // (i.e., for every red element, its value equals its position). Because if any red element is not in its correct ascending spot,
+            // it cannot be moved, so ascending order impossible. Similarly for Second: all red elements must be in correct descending positions.
+
+            // Wait, is that true? Suppose some red elements are not in correct ascending spots, but we can rearrange blue elements
+            // to fill the gaps? No, because red elements are fixed. For the final permutation to be [1,2,...,n], the element at position i
+            // must be i. If a red element is at position i and its value is not i, then that position will never have value i,
+            // so ascending order impossible. So indeed, for First to win, every red element must satisfy p[i] = i.
+            // Similarly, for Second to win, every red element must satisfy p[i] = n - i + 1.
+
+            // Therefore, the game reduces to: players take turns coloring elements blue. First wants to eliminate all elements
+            // that are not in their correct ascending positions (i.e., p[i] != i). Second wants to eliminate all elements
+            // that are not in their correct descending positions (p[i] != n - i + 1). But note: an element can be "wrong" for both.
+            // Also, once an element is blue, it is no longer red, so it no longer imposes a fixed requirement.
+            // However, the players also can rearrange blue elements. But if all red elements satisfy p[i]=i, then the remaining
+            // blue elements can be placed in the remaining positions in any order, and First can just arrange them to complete
+            // the ascending order. So First wins immediately when the set of red elements all satisfy p[i]=i.
+            // Similarly Second wins when all red elements satisfy p[i]=n-i+1.
+
+            // But wait: what if both conditions become true simultaneously? That would require that for every red element,
+            // p[i]=i and p[i]=n-i+1, which implies i = n-i+1 => 2i = n+1 => n odd and i = (n+1)/2. So only the middle element
+            // can satisfy both. So simultaneous win impossible except maybe n=1? But n>=3.
+
+            // So the game is: players alternate coloring elements blue. First player wins if at the start of his turn (or after his move?)
+            // the condition "all red elements are in correct ascending positions" holds. Similarly Second.
+            // The rules: on a turn, a player can:
+            // 1. rearrange blue elements (but this doesn't change the set of red elements, so doesn't affect win condition based on reds).
+            // 2. change a red element to blue.
+            // 3. skip.
+
+            // So the only way to progress the game state is to color elements blue. Rearranging blue elements doesn't change the red set.
+            // So the game is essentially: players take turns removing elements from the "red" set. First wants to remove all elements
+            // that are "bad for ascending", Second wants to remove all elements that are "bad for descending".
+            // But note: an element might be bad for both, or bad for one but good for the other.
+            // Let's define:
+            // A = set of indices i where p[i] != i (bad for First)
+            // B = set of indices i where p[i] != n - i + 1 (bad for Second)
+            // First wants A to become empty. Second wants B to become empty.
+            // Initially, A and B are non-empty (since permutation not sorted).
+            // When a player colors an element blue, it is removed from both A and B (since it's no longer red).
+            // So the game is: players alternate picking an element from the remaining red elements to remove.
+            // First wins if A becomes empty, Second wins if B becomes empty.
+            // If both become empty simultaneously? That would require that the last red element satisfies both p[i]=i and p[i]=n-i+1,
+            // which as argued only possible for middle element if n odd. In that case, who wins? The player who made the move
+            // that caused the condition? The rules: "The first player wins if the permutation is sorted in ascending order.
+            // The second player wins if the permutation is sorted in descending order." After a move, the permutation consists of
+            // red elements fixed and blue elements arranged. But the player who just moved can also rearrange blue elements.
+            // So if after coloring an element blue, the red set satisfies both conditions, then the player can rearrange blue elements
+            // to achieve either ascending or descending order. But the win condition is checked after the move? The problem says:
+            // "The first player wins if the permutation is sorted in ascending order. The second player wins if ..."
+            // It doesn't specify exactly when, but typically after a move. If both are possible, who wins? Probably the player whose
+            // turn it is can choose to arrange blue elements to win. So if both conditions hold, the player who just moved can win.
+            // But we need to see if such a situation can occur. Let's analyze.
+
+            // This is a classic impartial game? Actually, it's a partisan game because players have different goals.
+            // We can model it as: there are three types of elements:
+            // Type 1: bad only for First (p[i] != i but p[i] == n-i+1). These are elements that are correct for descending but not ascending.
+            // Type 2: bad only for Second (p[i] == i but p[i] != n-i+1). Correct for ascending but not descending.
+            // Type 3: bad for both (p[i] != i and p[i] != n-i+1).
+            // Note: an element cannot be good for both unless i = n-i+1, i.e., the center element in odd n. That element could be good for both
+            // if p[i] == i (which also equals n-i+1). So that element is type 0: good for both. But initially, since permutation is not sorted
+            // ascending nor descending, there must be at least one bad element for each? Not necessarily: it could be that all elements are
+            // good for one but not the other? If all elements are good for ascending, then permutation is ascending, which is excluded.
+            // So there is at least one bad for First. Similarly at least one bad for Second.
+
+            // Let c1 = count of type 1 (bad only for First)
+            // Let c2 = count of type 2 (bad only for Second)
+            // Let c3 = count of type 3 (bad for both)
+            // First wants to eliminate all type 1 and type 3. Second wants to eliminate all type 2 and type 3.
+            // Players alternate removing one element (coloring blue). They can choose which element to remove.
+            // First will prioritize removing type 1 and type 3. Second will prioritize removing type 2 and type 3.
+            // The game ends when one player's target set becomes empty. If both become empty simultaneously, the player who just moved wins.
+
+            // This is a known game: "Duel" or "Coloring". We can determine the winner by analyzing the counts and who moves first.
+            // Let's denote:
+            // A = c1 + c3 (number of elements First needs to remove)
+            // B = c2 + c3 (number of elements Second needs to remove)
+            // The total number of elements is n. Initially all red.
+
+            // Players alternate. First moves first.
+            // On each turn, a player can remove one element from the set of remaining elements. They can choose any element.
+            // First wants to remove all elements in A. Second wants to remove all elements in B.
+            // The game ends when A is empty (First wins) or B is empty (Second wins). If both become empty on the same move,
+            // the player who made that move wins (since they can arrange blue elements to their favor).
+
+            // This is similar to a race: who can empty their set first.
+            // Let's simulate optimal play:
+            // Both players will always remove an element that is in their target set. They will never remove an element that is
+            // only in the opponent's target set, because that helps the opponent. So First will only remove from A (type 1 or 3).
+            // Second will only remove from B (type 2 or 3).
+            // The only shared elements are type 3. So there is competition for type 3 elements.
+            // First wants to remove type 3 to reduce both A and B, but it also reduces B, helping Second. However, First must remove
+            // elements from A to win. He can choose between type 1 and type 3. Removing type 1 reduces only A, not B.
+            // Removing type 3 reduces both. Second similarly can choose type 2 or type 3.
+
+            // This is a classic "two-player race with shared resources". The optimal strategy often involves comparing the counts.
+            // Let's think: Suppose c3 = 0. Then A = c1, B = c2. First needs c1 moves, Second needs c2 moves. They alternate.
+            // First moves first. First wins if c1 <= c2? Let's see: if c1 < c2, First can win on his (c1)th move, which occurs
+            // before Second's (c1)th move? Actually, turns: move 1 (First), move 2 (Second), move 3 (First), ...
+            // First's moves are on odd turns. Second's on even turns.
+            // First needs c1 moves. He will achieve his goal on his c1-th move, which is turn number 2*c1 - 1.
+            // Second needs c2 moves. He would achieve on his c2-th move, turn number 2*c2.
+            // First wins if 2*c1 - 1 < 2*c2, i.e., c1 <= c2. If c1 == c2, First's winning move is at turn 2*c1 - 1, Second's would be at 2*c1.
+            // So First wins if c1 <= c2. If c1 > c2, Second wins on his c2-th move (turn 2*c2) before First's c2+1-th move (turn 2*c2+1).
+            // So with no shared elements, First wins if c1 <= c2, else Second wins.
+
+            // Now with c3 > 0: both players can remove type 3. They will compete for them.
+            // Let's analyze: First wants to minimize the number of moves he needs. He can remove type 3, which reduces both A and B.
+            // Second also can remove type 3.
+            // The game is symmetric in some sense. We can think of it as: there are c1 "First-only" bad elements, c2 "Second-only" bad elements,
+            // and c3 "shared" bad elements. Players alternate picking an element from their allowed set (First from c1 U c3, Second from c2 U c3).
+            // They want to be the first to clear their set.
+
+            // This is a known game: it's equivalent to a subtraction game. The outcome depends on the parity of something.
+            // Let's try to derive: Let f = c1, s = c2, b = c3.
+            // First needs to remove f + b elements total. Second needs s + b.
+            // First moves first. They can choose to take from f or b. Second from s or b.
+            // Optimal play: both will prioritize taking from b if it benefits them? Actually, taking from b reduces both players' remaining counts.
+            // It's like a shared pile. The player who takes the last b might get an advantage.
+            // Let's simulate small values to find pattern.
+
+            // Consider the game state as (f, s, b) with turn = First.
+            // We can compute winner by DP for small, but we need O(1) formula.
+
+            // Let's think: The total number of moves First needs is f + b. Second needs s + b.
+            // If f + b <= s, then First can win even if Second takes all b? Let's check: If f + b <= s, then First's required moves <= Second's required moves even if Second takes all b? Actually, if Second takes all b, then b becomes 0, and First still needs f moves, Second needs s moves. Then First wins if f <= s. But f + b <= s implies f <= s - b <= s, so yes. So if f + b <= s, First wins regardless of who takes b? Let's test: f=1, s=3, b=1. f+b=2 <=3. First moves: can take b (then state f=1,s=3,b=0, Second's turn). Then Second needs 3 moves, First needs 1. Second will take from s. After Second takes one, f=1,s=2,b=0, First's turn. First takes f, wins. So First wins. If First takes f first: state f=0,s=3,b=1, Second's turn. Second can take b (f=0,s=3,b=0) or s. If Second takes b, state f=0,s=3,b=0, First's turn. First has already won? Wait, First's target set is empty? f=0, b=0 => A=0. So First wins immediately after Second's move? No, after Second's move, it's First's turn. The win condition is checked after a move? The problem: "The first player wins if the permutation is sorted in ascending order." It doesn't say exactly when, but typically after any player's move. If after Second's move the condition for First is met, does First win? The rules: "The first player wins if the permutation is sorted in ascending order." It doesn't say "on their turn". It says if the permutation becomes sorted ascending, first player wins. So if Second's move accidentally makes it ascending, First wins. So we must be careful: the game ends as soon as the condition is met, regardless of whose turn it is. So if a player's move causes the opponent's win condition, they lose.
+
+            // Therefore, players will avoid making a move that gives the opponent an immediate win.
+            // So in the game, a player will not remove the last element of the opponent's target set if it also leaves their own target set non-empty? Actually, if removing an element makes the opponent's target set empty, the opponent wins immediately. So players will only make moves that are "safe".
+
+            // Let's redefine: The game ends when A=0 (First wins) or B=0 (Second wins). A move that results in A=0 or B=0 ends the game.
+            // So players must avoid making A=0 if they are Second, and avoid making B=0 if they are First.
+            // They can only remove elements from their own target set. But removing a type 3 element reduces both A and B.
+            // If removing a type 3 element would make B=0, then First cannot remove it if A is not also 0? Actually, if First removes a type 3 and B becomes 0, then Second wins immediately. So First will not remove a type 3 if it's the last element of B, unless A also becomes 0 (i.e., it's the last element of both). If it's the last of both, then removing it makes both A=0 and B=0. Who wins? The player who made the move can arrange blue elements to win. So First would win if he makes the move that empties both. Similarly, Second would win if he makes the move that empties both.
+
+            // So the game is a normal-play game with mutual destruction.
+
+            // Let's analyze with this in mind. Let state be (f, s, b) with turn. f = number of type 1 (only First's target), s = type 2 (only Second's target), b = type 3 (both).
+            // First can remove f (if f>0) -> state (f-1, s, b). This is always safe because it doesn't affect B.
+            // First can remove b (if b>0) -> state (f, s, b-1). This is safe only if after removal, B > 0 or (B == 0 and A == 0). B = s + b. So if s + b - 1 > 0, safe. If s + b - 1 == 0, then s=0, b=1. Then after removal, B=0, A = f + 0 = f. If f>0, then A>0, so Second wins. So First will not remove the last b if s=0 and f>0. If f=0 and s=0 and b=1, then removing b makes both A=0 and B=0, so First wins.
+            // Similarly for Second: can remove s (safe), or remove b (safe if after removal A>0 or both 0).
+
+            // This is a combinatorial game. We can solve it by working backwards from end states.
+
+            // Let's denote the state as (f, s, b). The game is symmetric except for the turn.
+            // We can try to find a pattern. Notice that the total number of moves is limited. The game must end within f+s+b moves.
+            // Since n up to 5e5, we need O(1) per test case.
+
+            // Let's think about the "skip" move. A player can skip. Skipping might be useful if a player cannot make a safe move.
+            // If a player has no safe move, they might skip. But if both skip, game draws after 100^500 turns.
+            // So skipping is allowed.
+
+            // Let's analyze small cases systematically.
+
+            // We'll write a small script in mind: 
+            // State: (f,s,b), turn t (0 for First, 1 for Second).
+            // Terminal: if A=0 -> First wins. if B=0 -> Second wins. (But note: if both 0, the player who just moved wins? Actually, if state is (0,0,0), it's terminal. How did we get there? The previous move made it (0,0,0). That player wins. So from (0,0,0) it's already ended.)
+            // Moves:
+            // First: can remove f (if f>0) -> (f-1,s,b)
+            //        can remove b (if b>0) -> (f,s,b-1) provided that after move, not (B=0 and A>0). If B=0 and A=0, it's a win for First.
+            //        can skip -> state unchanged, turn passes to Second.
+            // Second: can remove s (if s>0) -> (f,s-1,b)
+            //        can remove b (if b>0) -> (f,s,b-1) provided that after move, not (A=0 and B>0). If A=0 and B=0, win for Second.
+            //        can skip.
+
+            // This is a partisan game with skipping. We need to determine the outcome with optimal play.
+
+            // Let's try to see if skipping is ever beneficial. If a player skips, they give the turn to the opponent. The opponent might then be forced to make a move that loses, or might win. Skipping is like passing.
+
+            // This resembles the game of "Dawson's Kay" or something. But maybe there's a simpler invariant.
+
+            // Let's consider the difference between the required moves. Let F = f + b (First's required moves), S = s + b (Second's required moves).
+            // First wants to reduce F to 0 before S becomes 0. Second wants to reduce S to 0 before F becomes 0.
+            // Each move by First reduces F by 1 (if he removes f or b). Each move by Second reduces S by 1 (if he removes s or b).
+            // However, removing b reduces both F and S. So it's like both players are racing to zero, but they share b moves that reduce both counters.
+
+            // This is equivalent to: there are F and S counters. On First's turn, he can decrease F by 1 (and optionally also decrease S by 1 if he chooses the shared move). On Second's turn, he can decrease S by 1 (and optionally decrease F by 1 if he chooses shared). They cannot decrease the opponent's counter alone.
+
+            // The game ends when F=0 (First wins) or S=0 (Second wins). If both become 0 simultaneously, the player who made the move wins.
+
+            // This is a known game. Let's analyze the difference D = F - S.
+            // Initially, F = f+b, S = s+b. D = f - s.
+            // When First removes f: F decreases by 1, S unchanged -> D decreases by 1.
+            // When First removes b: F decreases by 1, S decreases by 1 -> D unchanged.
+            // When Second removes s: S decreases by 1, F unchanged -> D increases by 1.
+            // When Second removes b: S decreases by 1, F decreases by 1 -> D unchanged.
+
+            // So the only moves that change D are: First removing f (D decreases), Second removing s (D increases).
+            // Removing b does not change D.
+
+            // The game ends when F=0 or S=0. In terms of D and S (or F):
+            // If F=0, then D = -S <= 0. If S=0, then D = F >= 0.
+            // So First wins if F hits 0, which means D <= 0 and S = -D. Second wins if S hits 0, which means D >= 0 and F = D.
+
+            // Players can control D by choosing whether to remove their exclusive elements or shared elements.
+            // They want to force the game to end on their terms.
+
+            // Let's think about the endgame. Suppose b=0. Then F=f, S=s. Players alternate reducing their own counter. First moves first.
+            // The game ends when one counter hits 0. This is a simple race. As analyzed, First wins if f <= s. Because:
+            // Turn 1: First reduces f to f-1. If f-1=0, First wins immediately. So if f=1, First wins on first move regardless of s.
+            // If f>1, then Second reduces s. The first player to reach 0 wins. Since they alternate, the number of moves First needs is f, Second needs s. First wins if f <= s. If f > s, Second wins.
+
+            // Now with b>0, players can choose to reduce b instead of their exclusive counters. Reducing b doesn't change D, but it reduces both F and S, bringing the game closer to end. Who benefits from reducing b? It depends on D.
+
+            // Let's consider the game as a combination of two piles: a shared pile b, and two exclusive piles f and s.
+            // This is similar to the game of "Nim" with a common pool? Not exactly.
+
+            // Let's try to find the winning conditions by analyzing small values.
+
+            // We'll do a manual DP for small f,s,b up to 2 or 3.
+
+            // Define win[f][s][b][turn] = outcome (First win, Second win, Tie? Actually, with optimal play, it's a win for one player or draw? Since skipping is allowed, infinite loops possible? But players will avoid draws if they can win. We assume optimal play means they choose moves that lead to a win, or if not possible, a draw, or if not possible, a loss. We need to see if draws can happen.
+
+            // Let's analyze if draws are possible. The game could go on forever if both players skip. But skipping is only beneficial if all other moves lead to a loss. So a player will skip only if every available move (removing f, s, or b) leads to a loss, and skipping might lead to a draw or win. If skipping leads to a draw, and losing is worse, they will skip. So draws are possible if both players prefer draw over loss.
+
+            // Let's try to compute for small values.
+
+            // We'll consider states with b=0 first.
+            // (f,s,0) First's turn:
+            // If f=0: First already won? Actually, if f=0, then A=0, so First wins immediately. So state (0,s,0) is First win.
+            // If s=0: B=0, Second wins. So (f,0,0) is Second win if f>0? Wait, if s=0 and f>0, then B=0, so Second wins. So (f,0,0) is Second win for any f>0.
+            // If f>0 and s>0: First can remove f -> (f-1,s,0). He will choose a move that leads to a win if possible.
+            // Let's compute outcomes for small f,s:
+            // (1,1,0) First's turn: First can remove f -> (0,1,0) which is First win (since f=0). So First wins. So (1,1,0) -> First.
+            // (1,2,0): First removes f -> (0,2,0) First win. So First wins.
+            // (2,1,0): First removes f -> (1,1,0) which is First's turn? Wait, after First moves, it's Second's turn. So state becomes (1,1,0) with Second's turn. We need to know (1,1,0) Second's turn.
+            // Let's compute (f,s,0) Second's turn:
+            // If s=0: Second already won? Actually, if s=0, B=0, Second wins. So (f,0,0) Second win.
+            // If f=0: A=0, First wins. So (0,s,0) First win.
+            // If both >0: Second can remove s -> (f,s-1,0) First's turn.
+            // (1,1,0) Second's turn: Second removes s -> (1,0,0) which is Second win (since s=0). So Second wins. Thus (1,1,0) with Second's turn is Second win.
+            // Back to (2,1,0) First's turn: First moves to (1,1,0) Second's turn -> Second win. So First loses if he removes f. Can First skip? If First skips, state becomes (2,1,0) Second's turn. Let's evaluate (2,1,0) Second's turn: Second can remove s -> (2,0,0) Second win. So Second wins. So First loses either way. Thus (2,1,0) First's turn is Second win.
+            // So pattern: when b=0, First wins if f <= s, else Second wins. Check: (2,1): f=2 > s=1 -> Second wins. (1,2): f=1 <=2 -> First wins. (1,1): f=1 <=1 -> First wins. Correct.
+
+            // Now with b>0.
+            // Let's consider b=1, small f,s.
+            // State (f,s,1) First's turn.
+            // Moves for First:
+            // - remove f (if f>0) -> (f-1,s,1) Second's turn.
+            // - remove b -> (f,s,0) Second's turn. But must check safety: after removal, B = s+0 = s. If s=0, then B=0, A = f+0 = f. If f>0, then A>0, so Second wins. So First cannot remove b if s=0 and f>0. If f=0 and s=0, then removing b makes both 0, First wins. If s>0, safe.
+            // - skip -> (f,s,1) Second's turn.
+
+            // We need to evaluate recursively.
+
+            // Let's compute (0,0,1) First's turn: A = 0+1=1 >0, B = 0+1=1 >0. First can remove b -> (0,0,0) and since both become 0, First wins. So (0,0,1) First wins.
+            // (0,1,1) First's turn: f=0, s=1, b=1. A=1, B=2. First's moves:
+            // - remove f: not possible (f=0).
+            // - remove b: check safety: after removal, state (0,1,0). B = 1+0=1 >0, safe. So move to (0,1,0) Second's turn.
+            // - skip: (0,1,1) Second's turn.
+            // We need (0,1,0) Second's turn: s=1>0, f=0. Second can remove s -> (0,0,0) First's turn? Wait,

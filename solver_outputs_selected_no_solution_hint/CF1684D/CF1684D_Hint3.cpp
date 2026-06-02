@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<long long> a(n);
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+        }
+        
+        // dp[i][j] = min damage considering first i traps, having jumped j traps
+        // We can optimize space to 2 rows
+        vector<long long> dp_prev(k + 1, LLONG_MAX / 2);
+        vector<long long> dp_curr(k + 1, LLONG_MAX / 2);
+        dp_prev[0] = 0;
+        
+        for (int i = 0; i < n; i++) {
+            fill(dp_curr.begin(), dp_curr.end(), LLONG_MAX / 2);
+            for (int j = 0; j <= k; j++) {
+                if (dp_prev[j] == LLONG_MAX / 2) continue;
+                // Option 1: take the trap
+                // damage = a[i] + j (bonus from previous jumps)
+                dp_curr[j] = min(dp_curr[j], dp_prev[j] + a[i] + j);
+                // Option 2: jump over the trap (if j < k)
+                if (j < k) {
+                    dp_curr[j + 1] = min(dp_curr[j + 1], dp_prev[j]);
+                }
+            }
+            swap(dp_prev, dp_curr);
+        }
+        
+        long long ans = LLONG_MAX;
+        for (int j = 0; j <= k; j++) {
+            ans = min(ans, dp_prev[j]);
+        }
+        cout << ans << '\n';
+    }
+    
+    return 0;
+}

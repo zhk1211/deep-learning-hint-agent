@@ -1,0 +1,171 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> p(n);
+    for (int i = 0; i < n; ++i) cin >> p[i];
+    string x;
+    cin >> x;
+
+    vector<int> pos(n + 1);
+    for (int i = 0; i < n; ++i) pos[p[i]] = i;
+
+    // Check if all x are '0' -> 0 operations
+    if (x.find('1') == string::npos) {
+        cout << "0\n";
+        return;
+    }
+
+    // Find first and last 1 in x
+    int first1 = -1, last1 = -1;
+    for (int i = 0; i < n; ++i) {
+        if (x[i] == '1') {
+            if (first1 == -1) first1 = i;
+            last1 = i;
+        }
+    }
+
+    // Check if all 1's are contiguous and no 0 between first1 and last1
+    bool contiguous = true;
+    for (int i = first1; i <= last1; ++i) {
+        if (x[i] == '0') {
+            contiguous = false;
+            break;
+        }
+    }
+
+    if (!contiguous) {
+        cout << "-1\n";
+        return;
+    }
+
+    // Find min and max values in the segment [first1, last1]
+    int mn = n + 1, mx = -1;
+    for (int i = first1; i <= last1; ++i) {
+        mn = min(mn, p[i]);
+        mx = max(mx, p[i]);
+    }
+
+    // Find positions of min and max values
+    int l = pos[mn], r = pos[mx];
+    if (l > r) swap(l, r);
+
+    // Check if the interval [l, r] covers all 1's
+    if (l > first1 || r < last1) {
+        cout << "-1\n";
+        return;
+    }
+
+    // Check if there is any 0 inside [l, r] that is not in [first1, last1]
+    // Actually we need to ensure that all 1's are covered and no extra 0's are forced to 1
+    // But the operation sets s_i=1 for i in (l,r) with value between min and max.
+    // Since min and max are from the segment, all values in between are exactly the ones in the segment.
+    // So the operation will set exactly the positions in (l,r) that have values between mn and mx.
+    // Those positions are exactly the indices in [first1, last1] except possibly l and r if they are endpoints.
+    // But we need to check if any position outside [first1, last1] gets set to 1.
+    // Since values outside [mn, mx] are not in the range, they won't be set.
+    // However, positions inside (l,r) but outside [first1, last1] might have values in [mn, mx]?
+    // By definition of min and max, all values in [mn, mx] appear in [first1, last1].
+    // So no other position has value in [mn, mx]. Thus safe.
+
+    // But we must also consider if l or r themselves are 1's? The operation only sets i with l < i < r.
+    // So if first1 == l or last1 == r, they won't be set. But x requires them to be 1.
+    // So we need to ensure that if x[l] == '1' or x[r] == '1', they are already covered or we need extra operations.
+    // Actually we can just output the single operation if it covers all 1's.
+    // Check if all 1's are in (l, r) or we need to handle endpoints.
+
+    bool need_extra = false;
+    if (x[l] == '1' || x[r] == '1') {
+        // We need to cover endpoints. We can do another operation with l and r as something else?
+        // But we can also just output two operations: one with l and r, and another with something that covers the endpoint.
+        // Actually, if x[l]=='1', we can set l as part of another operation where it is strictly inside.
+        // For example, choose l' < l and r' > l such that min and max include p[l].
+        // But we can also just output the single operation if it already covers all 1's? No, because l and r are not set.
+        // So we need to check if there is any 1 at l or r.
+        // If there is, we can do an operation that covers them. But we have at most 5 operations.
+        // Simple approach: if x[l]=='1' or x[r]=='1', we can just output two operations:
+        // one with (l, r) and one with (first1, last1) maybe? But careful.
+        // Actually, we can just output the operation (first1, last1) if it covers all 1's?
+        // Let's test: if we choose L = first1, R = last1, then min and max of that segment are mn and mx.
+        // Then the operation sets all i in (first1, last1) with value between mn and mx.
+        // Since all values in [first1, last1] are between mn and mx, all interior points of the segment become 1.
+        // Endpoints first1 and last1 are not set. So if x[first1]=='1' or x[last1]=='1', they remain 0.
+        // So we need to cover them separately.
+        // We can cover first1 by an operation that includes it as interior. For example, if first1 > 0, we can choose l = first1-1, r = first1+1 (if valid).
+        // But we need to ensure min and max include p[first1]. That's true if p[first1] is between min and max of that small interval.
+        // Actually, we can just do an operation with l = 0, r = n-1? That would set everything except endpoints? No, it sets interior based on min and max of whole array.
+        // The min of whole array is 1, max is n. So it would set all interior points to 1. That would cover all 1's except possibly 0 and n-1.
+        // But we can't set endpoints with a single operation if they are at the ends.
+        // However, we can use two operations: one with (0, n-1) and then one with something that covers the endpoints?
+        // Actually, if we do (0, n-1), it sets all i with 0 < i < n-1 to 1. So only 0 and n-1 might remain 0.
+        // If x[0]=='1', we can do another operation: (0, 2) if p[0] is between min and max of that? But min and max of (0,2) might not include p[0] if p[0] is extreme.
+        // Better: we can just output the operation (first1, last1) and then if first1 is 1, we need to cover it. We can cover it by choosing l = first1-1, r = first1+1, but only if first1-1 >=0.
+        // If first1 == 0, we can't cover it as interior. Then we need a different approach.
+        // Wait, the problem allows up to 5 operations. We can just output the operation (l, r) we found, and then if endpoints are 1, we can do additional operations to cover them.
+        // But is it always possible? Let's think.
+        // We have the segment [first1, last1] of 1's. The min and max of this segment are mn and mx, at positions L and R (with L <= R).
+        // The operation (L, R) sets all positions strictly between L and R that have value between mn and mx.
+        // Since all values in [first1, last1] are between mn and mx, and all such values appear only in [first1, last1], the operation sets exactly the set of indices in (L, R) that are in [first1, last1].
+        // But note that L and R are the positions of mn and mx. They might not be first1 or last1.
+        // The set of indices set to 1 is exactly [first1, last1] \ {L, R} (if L and R are inside the segment).
+        // So if x[L]=='1' or x[R]=='1', they are not set.
+        // We can cover L by another operation: choose l = L-1, r = L+1 (if L-1 >=0 and L+1 < n). The min and max of this small interval will include p[L] if p[L] is not the extreme of that interval. But p[L] is either mn or mx. In a three-element window, the min and max are the min and max of those three. p[L] will be between them unless it is the unique min or max and the other two are both greater or both smaller. But since it's a permutation, it's possible that p[L] is the global min or max, but in a three-element window, it could still be the min or max. However, the condition for setting s_i is min(p_l, p_r) < p_i < max(p_l, p_r). So if p[L] is the min of the three, and the other two are larger, then min < p[L] < max? No, if p[L] is the min, then min = p[L], so p[L] is not strictly greater than min. So it won't be set. So we need to choose l and r such that p[L] is strictly between them.
+        // This is possible if we can find two elements, one smaller and one larger than p[L], that are on opposite sides of L. Since p is a permutation, there exist elements smaller and larger than p[L] somewhere. But they need to be on opposite sides of L. Is that always possible? Not necessarily if L is at the boundary and all elements on one side are only larger or only smaller.
+        // However, we can use a different strategy: we can just output the operation (first1, last1) and then if first1 is 1, we can do an operation that covers it by extending the interval. But wait, the operation (first1, last1) sets interior points. If first1 is 1, it's not set. But we can do another operation with l = first1-1, r = last1 (if first1>0). Then the interior includes first1. The min and max of this new interval might still be mn and mx if the new element doesn't change them. If we add an element smaller than mn, then min becomes that new element, and max remains mx. Then p[first1] (which is between mn and mx) will be strictly between the new min and mx, so it will be set. Similarly if we add a larger element. So if we can extend the interval to include an element smaller than mn or larger than mx on the outside of first1 or last1, we can cover the endpoint.
+        // But what if no such element exists? That would mean all elements outside [first1, last1] are between mn and mx. But mn and mx are the min and max of the segment, so any element outside cannot be between them; it must be either < mn or > mx. So there is always an element outside that is either < mn or > mx. However, it might be on the wrong side. For example, if first1 == 0, we cannot extend to the left. But we can extend to the right: if we take l = first1, r = last1+1, then the interior includes first1? No, interior is l < i < r, so if l = first1, then first1 is not interior. To make first1 interior, we need l < first1. So if first1 == 0, we cannot make it interior by extending left. We would need to extend right but also have l < first1, which is impossible. So if first1 == 0 and x[0]=='1', we cannot set it using an operation that has it as interior. But we can set it using an operation where it is an endpoint? No, endpoints are never set. So we must set it as interior. Thus if first1 == 0 and x[0]=='1', it's impossible? Let's check the sample: in sample 3, x=001100, first1=2, last1=3, so endpoints are not at boundary. In sample 1, x=010, first1=1, last1=1, and we did (1,3) which is 1-indexed, so l=1, r=3, interior is 2, which is the only 1. So first1 was interior. In sample 6, x=00100, first1=2, last1=2, output is 2 4 (1-indexed), so l=2, r=4, interior is 3, but wait x has 1 at index 2 (0-indexed? Let's map: 1-indexed: positions 1..5, x=00100 means position 3 is 1. Output is 2 4, so interior is position 3. So first1 is interior.
+        // So if a 1 is at the very boundary (index 0 or n-1), can we set it? Suppose x[0]='1'. We need to set s[0]=1. The only way is to have an operation with l < 0 < r, which is impossible since l>=1. So we cannot set the first element to 1. Similarly for the last element. Therefore, if x[0]=='1' or x[n-1]=='1', it's impossible. Let's verify with sample 2: x=11111, n=5, first1=0, last1=4, so endpoints are 1. Output is -1. Sample 4: x=110110, n=6, first1=0, last1=3? Wait x=110110, indices 0,1 are 1, 2 is 0, 3,4 are 1, 5 is 0. So first1=0, last1=4? Actually last1=4 because index 4 is 1. So first1=0, last1=4. But there is a 0 at index 2, so not contiguous. Output -1. So indeed if there is a 1 at boundary, it might be impossible. But wait, what if the whole string is 1? Then first1=0, last1=n-1. We already saw sample 2 gives -1. So it's impossible to set the endpoints.
+        // Thus, if x[0]=='1' or x[n-1]=='1', we output -1.
+        // But is that always true? Consider n=3, x=101. first1=0, last1=2, but there is a 0 in between, so not contiguous -> -1. What about x=111? n=3, first1=0, last1=2 -> -1. So yes.
+        // So we can add a check: if x[0]=='1' or x[n-1]=='1', output -1.
+        // But wait, what if we can set the endpoint by some other operation? For example, if we do an operation with l=1, r=3 (1-indexed) on n=3, interior is 2. So index 1 and 3 are not set. So we cannot set index 1 or 3. So indeed impossible.
+        // Therefore, any 1 at the ends is impossible.
+    }
+
+    if (x[0] == '1' || x[n-1] == '1') {
+        cout << "-1\n";
+        return;
+    }
+
+    // Now we know first1 > 0 and last1 < n-1.
+    // We have the operation (l, r) where l and r are positions of mn and mx.
+    // This operation sets all 1's except possibly l and r if they are 1's.
+    // We can cover l and r by additional operations if needed.
+    // But we can also just output two operations: one with (first1-1, last1+1) maybe?
+    // Let's analyze: if we choose L = first1-1, R = last1+1, then the interior is (first1-1, last1+1), which includes first1 and last1.
+    // The min and max of this new interval: we added two elements. They could be anything. The min of the new interval is min(mn, p[first1-1], p[last1+1]), and max is max(mx, p[first1-1], p[last1+1]).
+    // For the operation to set all 1's in [first1, last1], we need that for every i in [first1, last1], p[i] is strictly between the new min and new max.
+    // Since all p[i] are between mn and mx, they will be strictly between the new min and new max as long as the new min < mn and new max > mx, OR if one of the added elements is equal to mn or mx? They can't be equal because permutation. So we need the new min to be strictly less than mn, and new max strictly greater than mx. If we can find such elements on the left of first1 and right of last1, then a single operation (first1-1, last1+1) will set all 1's correctly.
+    // Is it always possible to find such elements? We need an element < mn to the left of first1, and an element > mx to the right of last1. Or we could have an element < mn on the right and an element > mx on the left, but then we would need to choose l and r accordingly. Since we can choose any l and r, we can just pick l as the position of some element < mn (if it exists) and r as the position of some element > mx (if it exists), and ensure that all 1's are between them. But we also need that l < first1 and r > last1 to include the endpoints as interior.
+    // So we need to find an element < mn to the left of first1, and an element > mx to the right of last1. If they exist, we can do one operation (pos_small, pos_large) and we're done.
+    // What if they don't exist? For example, all elements to the left of first1 are > mx, and all elements to the right of last1 are < mn. Then we can't have both a smaller and a larger element on the appropriate sides. But we can still do two operations: one to cover the left part and one to cover the right part, or use the (l, r) from mn and mx and then cover endpoints separately.
+    // Actually, we can always cover endpoints with at most two extra operations. Let's see.
+    // We have the operation (pos_mn, pos_mx). This sets all 1's except possibly pos_mn and pos_mx if they are 1's.
+    // If pos_mn is a 1, we need to set it. We can do an operation that includes pos_mn as interior. To do that, we need l < pos_mn < r, and we need min(p_l, p_r) < p[pos_mn] < max(p_l, p_r). Since p[pos_mn] is either mn or mx, we need one element smaller and one larger on opposite sides of pos_mn. We can always find such a pair? Not necessarily on opposite sides, but we can choose l and r such that one is on the left and one on the right. Since pos_mn is not at the boundary (because if it were, and x[pos_mn]=='1', we already output -1), there is at least one element to the left and one to the right. We need one of them to be < p[pos_mn] and the other > p[pos_mn]. Is that always possible? Suppose p[pos_mn] = mn. Then all other elements are > mn. So any element to the left is > mn, and any to the right is > mn. Then we cannot find a smaller element. So we cannot set pos_mn as interior if it is the global minimum. Similarly if it is the global maximum. So if mn == 1 and x[pos_mn]=='1', we cannot set it. But wait, if mn == 1, then the global minimum is 1. If x[pos_mn]=='1', then we need to set s[pos_mn]=1. But we cannot because we can never have an element smaller than 1. So it's impossible. Similarly for mx == n. So we must check: if (mn == 1 and x[pos[1]] == '1') or (mx == n and x[pos[n]] == '1'), then impossible.
+    // Let's test: sample 1: p=[1,2,3], x=010. mn=2, mx=2? Actually segment [1,1] has p[1]=2, so mn=mx=2. pos_mn=1, pos_mx=1. x[1]='1'. mn=2 !=1, mx=2 !=3. So possible. We did (1,3) which is l=1, r=3, interior=2. That set pos_mn? pos_mn=1, but we set pos 2. Wait, in sample 1, x=010, so the 1 is at index 2 (1-indexed). So first1=2, last1=2. mn=2, mx=2, pos=2. So the operation (1,3) sets interior 2. So pos_mn is interior. So we didn't need to cover an endpoint because l and r were 1 and 3, and pos_mn=2 was interior. So our earlier analysis that l and r are positions of mn and mx might not be the only operation. We can choose l and r differently.
+    // So the strategy: we want to cover all 1's with operations. We can think of it as: we need to set s_i=1 for all i where x_i='1'. Each operation sets a contiguous range of values? No, it sets a set of indices that have values in a certain range and are between l and r.
+    // Actually, the operation sets all indices i in (l, r) such that p_i is between min(p_l, p_r) and max(p_l, p_r). This is equivalent to: if we consider the Cartesian tree or something? But we have a simple observation: if we choose l and r such that p_l is the minimum of some range and p_r is the maximum, then the operation sets all indices between them that have values in between. But we can also choose l and r to be the minimum and maximum of the whole array? Then it sets all interior indices. That would set everything except the positions of 1 and n. So if x has 1's only in the interior (not at positions of 1 or n), we can do one operation with l = pos[1], r = pos[n] (or vice versa) and we are done. But wait, that operation sets all i between them with value between 1 and n, i.e., all interior indices. So it sets everything except the endpoints. So if x has 1's only in the interior (not at the positions of 1 and n), then one operation suffices. But what if x has a 1 at the position of 1 or n? Then we cannot set it because they are endpoints. So impossible. This matches our earlier boundary check.
+    // But what if the 1's are not all interior? They might include the position of 1 or n? We already said if x[0]=='1' or x[n-1]=='1' it's impossible, but that's about indices, not values. The position of 1 might not be at index 0. So we need to check if the position of 1 is a 1 in x, and similarly for n. If x[pos[1]] == '1' or x[pos[n]] == '1', is it impossible? Let's think: if we want to set s[pos[1]] = 1, we need an operation with l < pos[1] < r and min(p_l, p_r) < 1 < max(p_l, p_r). But 1 is the minimum possible value, so min(p_l, p_r) < 1 is impossible. Therefore, we can never set the position of 1 to 1. Similarly for n. So indeed, if x[pos[1]] == '1' or x[pos[n]] == '1', it's impossible.
+    // Let's check sample 2: p=[3,4,2,1,5], x=11111. pos[1]=3 (0-indexed? 1-indexed: pos[1]=4). x[4]='1'. So impossible. Sample 4: p=[6,2,3,4,5,1], x=110110. pos[1]=5 (0-indexed: 5), x[5]='0'. pos[6]=0, x[0]='1'. So x[pos[6]]='1' -> impossible. Output -1. Correct.
+    // So we can add this check: if x[pos[1]] == '1' or x[pos[n]] == '1', output -1.
+    // Now, assuming those are not 1, we can set all other 1's with a single operation? Let's see: if we choose l = pos[1], r = pos[n] (assuming pos[1] < pos[n], else swap), then the operation sets all i in (pos[1], pos[n]) to 1. This covers all indices except pos[1] and pos[n]. Since x[pos[1]] and x[pos[n]] are '0', we don't care about them. So this single operation sets all 1's that are strictly between pos[1] and pos[n]. But what if there is a 1 outside that interval? That is, an index i < pos[1] or i > pos[n] with x[i]='1'. Is that possible? If i < pos[1], then p[i] > 1. But could x[i] be '1'? Yes, if the 1's are not contiguous? But we already checked contiguity of 1's in x. The 1's form a contiguous block [first1, last1]. If there is a 1 outside (pos[1], pos[n]), then either first1 <= pos[1] or last1 >= pos[n]. But we know x[pos[1]]='0' and x[pos[n]]='0', so first1 cannot be pos[1] and last1 cannot be pos[n]. So if first1 < pos[1], then the block of 1's extends to the left of pos[1]. But then pos[1] is inside the block? No, because x[pos[1]]='0', so the block must end before pos[1] or start after it. If first1 < pos[1], then last1 < pos[1] (since block is contiguous and doesn't include pos[1]). So all 1's are to the left of pos[1]. Similarly, if last1 > pos[n], all 1's are to the right of pos[n]. In those cases, the operation (pos[1], pos[n]) would not cover them because they are not in the interior.
+    // So we need to handle cases where the block of 1's is entirely on one side of pos[1] or pos[n].
+    // But wait, if all 1's are to the left of pos[1], then the minimum value in the block is > 1. The maximum value in the block is some mx < n? Actually mx could be n if pos[n] is to the left of pos[1]? But pos[n] is the position of n. If all 1's are left of pos[1], then pos[n] could be anywhere. But we know x[pos[n]]='0'. So pos[n] is not in the block. The block is [first1, last1] with last1 < pos[1]. The values in the block are some set. The min of the block is mn > 1, max is mx < n. We can set them by choosing l and r as the positions of mn and mx? That would set the interior of (pos[mn], pos[mx]). But we need to ensure that the endpoints of the block are covered if they are 1's. Since the block is contiguous and we already know x[pos[1]]='0' and x[pos[n]]='0', we might be able to cover them with one operation if we choose l and r appropriately.
+    // Actually, we can always cover any contiguous block of 1's that does not include pos[1] or pos[n] with at most 2 operations? Let's think.
+    // Consider the block [first1, last1]. Let mn = min(p[first1..last1]), mx = max(p[first1..last1]).
+    // Let L = pos[mn], R = pos[mx]. Assume L <= R (swap if not).
+    // The operation (L, R) sets all indices in (L, R) that have values between mn and mx. Since all values in the block are between mn and mx, and all such values appear only in the block (because if a value between mn and mx appeared outside, it would be in the block? Not necessarily, but the block is defined by indices, not values. However, if there is a value between mn and mx outside the block, its index would have x='0'. That's fine; we don't care if it gets set to 1 because x only requires 1's to be 1. So it's okay if extra indices become 1. So we don't need to worry about setting extra 0's to 1. The problem says: if x_i=1 then s_i=1; if x_i=0, s_i can be anything. So we can set extra 1's. That's a crucial point!
+    // Therefore, we can be very liberal: we just need to ensure that all x_i=1 become 1. We can set many other 0's to 1, no problem.
+    // So we can use operations that cover large ranges.
+    // With that in mind, the simplest solution: if x[pos[1]] == '0' and x[pos[n]] == '0', we can just do one operation with l = pos[1], r = pos[n] (or vice versa). This sets all indices strictly between them to 1. This will cover all 1's that are between pos[1] and pos[n]. What if there are 1's outside? That is, first1 < pos[1] or last1 > pos[n]? But if first1 < pos[1], then since x[pos[1]]='0', the block of 1's is entirely to the left of pos[1]. Then the operation (pos[1], pos[n]) does not cover them because they are not in the interior. So we need another operation for them.
+    // But wait, if the block is entirely to the left of pos[1], then all indices in the block are < pos[1]. The values in the block are all > 1. The maximum value in the block is some mx. We can set them by doing an operation with l = pos[1]? No, we need l and r such that the block is in the interior. We can choose l = first1 - 1? But first1 might be 0. If first1 == 0, we already output -1 because x[0]=='1'. So first1 > 0. So we can choose l = first1 - 1, and r = pos[1] (since pos[1] is to the right of the block). Then the interior is (first1-1, pos[1]), which includes the whole block. The min of p[l] and p[r] is min(p[first1-1], 1) = 1 (since 1 is the minimum). The max is max(p[first1-1], 1) = p[first1-1] (since p[first1-1] > 1). So the operation sets all i in (first1-1, pos[1]) with value between 1 and p[first1-1]. Since all values in the block are > 1 and <= mx, and mx <= p[first1-1]? Not necessarily. We need p[first1-1] to be >= mx to cover all values in the block. Is p[first1-1] >= mx? Not guaranteed. But we can choose r differently. We can choose r = pos[mx] if pos[mx] is to the right of the block? But pos[mx] is in the block (since mx is the max of the block). So pos[mx] <= last1 < pos[1]. So we can choose l = first1 - 1, r = pos[mx] + 1? But we need r > last1 to include the whole block as interior. We can choose r = pos[1] as before, but then we need the max of p[l] and p[r] to be >= mx. Since p[r] = 1, the max is p[l]. So we need p[first1-1] >= mx. If it's not, we can choose a different l. We can choose l such that p[l] is large. For example, we can choose l = pos[n] if pos[n] is to the left of the block? But pos[n] could be anywhere. Actually, we can just use the operation (pos[mn], pos[mx]) for the block itself, and then if endpoints are not covered, we can do additional operations. But since we can set extra 1's, we might be able to cover the block with one operation by extending to include a larger value.
+    // Let's think differently: we can always cover any contiguous block of 1's that does not include pos[1] or pos[n] with at most 2 operations? Actually, we can cover it with 1 operation if we can find l and r such that the block is strictly between them, and the min of p_l, p_r is < mn and max > mx. Since we can set extra 1's, we don't care if other indices become 1. So we just need to find two indices l and r with l < first1, r > last1, such that min(p_l, p_r) < mn and max(p_l, p_r) > mx. Is that always possible? We can try l = first1 - 1, r = last1 + 1. Then min and max of these two might not satisfy the condition. But we can search for a better pair. Since we have up to 5 operations, we can just do two operations: one to cover the left part and one for the right part, or use the (pos[mn], pos[mx]) and then cover endpoints.
+    // But wait, the problem allows up to 5 operations, and we only need to output any valid sequence. So we can just do the following:
+    // 1. If x[pos[1]] == '1' or x[pos[n]] == '1', output -1.
+    // 2. Otherwise, we can just output two operations:
+    //    - Operation 1: l = pos[1], r = pos[n] (if pos[1] < pos[n] else swap). This sets all interior between them to 1.
+    //    - Operation 2: We need to cover any 1's that are outside this interval. But are there any? If the block of 1's is entirely between pos[1] and pos[n], then operation 1 covers all 1's. If the block is entirely to the left of pos[1], then operation 1 doesn't cover it. But we can do another operation to cover the left block. Similarly for the right.
+    // But can we cover both left and right blocks with one additional operation? If there is a left block and a right block, then the 1's are not contiguous, which we already checked is impossible. So the 1's are contiguous. Therefore, the block of 1's is either entirely between pos[1] and pos[n], or entirely to the left of pos[1], or entirely to the right of pos[n]. Because if it straddles pos[1], then since x[pos[1]]='0', it would be split, violating contiguity. So the block is on one side.
+    // Thus, if the block is between pos[1] and pos[n], one operation (pos[1], pos[n]) works.
+    // If the block is entirely to the left of pos[1], then we can do one operation to cover it. How? We can choose l = first1 - 1 (since first1 > 0), and r = pos[1]. Then the interior is (first1-1, pos[1

@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(vector<int> &idx) {
+    cout << "? " << idx.size();
+    for (int x : idx) cout << " " << x;
+    cout << endl;
+    int res;
+    cin >> res;
+    return res;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    vector<int> pos[n + 1];
+    
+    // Find pairs using queries of size 2
+    for (int i = 1; i <= m; i++) {
+        if (a[i] != 0) continue;
+        bool found = false;
+        for (int j = i + 1; j <= m; j++) {
+            if (a[j] != 0) continue;
+            vector<int> q = {i, j};
+            int res = query(q);
+            if (res > 0) {
+                a[i] = a[j] = res;
+                pos[res].push_back(i);
+                pos[res].push_back(j);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            // This shouldn't happen if we query correctly, but just in case
+            // we can find the pair by querying with known elements
+            for (int v = 1; v <= n; v++) {
+                if (pos[v].size() == 2) continue;
+                if (pos[v].size() == 1) {
+                    vector<int> q = {pos[v][0], i};
+                    int res = query(q);
+                    if (res == v) {
+                        a[i] = v;
+                        a[pos[v][0]] = v;
+                        pos[v].push_back(i);
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    cout << "!";
+    for (int i = 1; i <= m; i++) {
+        cout << " " << a[i];
+    }
+    cout << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

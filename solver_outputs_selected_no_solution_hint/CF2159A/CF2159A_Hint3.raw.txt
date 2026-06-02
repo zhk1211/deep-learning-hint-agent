@@ -1,0 +1,65 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(vector<int> &indices) {
+    cout << "? " << indices.size();
+    for (int idx : indices) cout << " " << idx;
+    cout << endl;
+    int res;
+    cin >> res;
+    return res;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    
+    // Find pairs using queries of size 2
+    vector<bool> paired(m + 1, false);
+    vector<pair<int,int>> pairs;
+    
+    for (int i = 1; i <= m; i++) {
+        if (paired[i]) continue;
+        // find partner for i
+        for (int j = i + 1; j <= m; j++) {
+            if (paired[j]) continue;
+            int res = query({i, j});
+            if (res > 0) {
+                // they are the same number
+                a[i] = a[j] = res;
+                paired[i] = paired[j] = true;
+                pairs.push_back({i, j});
+                break;
+            }
+        }
+    }
+    
+    // Now we have all pairs, but we need to assign correct values
+    // Actually from the query we got the value directly
+    // But wait: MAD of two identical numbers is that number.
+    // So if res > 0, then a[i] = a[j] = res.
+    // But what if res == 0? Then they are different.
+    // So we found all pairs and their values.
+    
+    // Output answer
+    cout << "!";
+    for (int i = 1; i <= m; i++) {
+        cout << " " << a[i];
+    }
+    cout << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

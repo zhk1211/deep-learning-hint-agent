@@ -1,0 +1,48 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    long long m;
+    cin >> n >> m;
+    
+    vector<long long> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    
+    sort(a.begin(), a.end());
+    
+    long long total_download = 0;
+    for (long long x : a) total_download += x;
+    
+    long long ans = total_download + n; // download time + watch time
+    
+    long long sum = 0;
+    long long max_extra = 0;
+    for (int i = 0; i < n; i++) {
+        sum += a[i];
+        // Time when this video finishes downloading if we start downloads sequentially
+        long long finish_download = sum;
+        // We need to have watched (i) videos before we can start watching this one
+        // The watch of this video can start at max(finish_download, i + 1)
+        // But we want to minimize waiting due to disk space.
+        // Actually, we need to ensure that at any point, the sum of sizes of downloaded but unwatched videos <= m.
+        // The optimal strategy: download in non-decreasing order of size.
+        // The extra waiting time is max over i of (sum_{j=0..i} a_j - (i+1) - m) if positive.
+        // Because after watching i+1 videos, we have freed i+1 minutes of watching, but we might have downloaded more.
+        long long extra = sum - (i + 1) - m;
+        if (extra > max_extra) max_extra = extra;
+    }
+    
+    if (max_extra > 0) ans += max_extra;
+    
+    cout << ans << '\n';
+    
+    return 0;
+}
+```

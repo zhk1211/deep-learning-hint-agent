@@ -1,0 +1,60 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<vector<int>> a(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                cin >> a[i][j];
+            }
+        }
+        
+        // If total steps (n+m-1) is odd, sum can't be 0
+        if ((n + m - 1) % 2 != 0) {
+            cout << "NO\n";
+            continue;
+        }
+        
+        // min_sum[i][j] = minimum possible sum to reach (i,j)
+        // max_sum[i][j] = maximum possible sum to reach (i,j)
+        vector<vector<int>> min_sum(n, vector<int>(m));
+        vector<vector<int>> max_sum(n, vector<int>(m));
+        
+        min_sum[0][0] = max_sum[0][0] = a[0][0];
+        
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (i == 0 && j == 0) continue;
+                int mn = INT_MAX, mx = INT_MIN;
+                if (i > 0) {
+                    mn = min(mn, min_sum[i-1][j]);
+                    mx = max(mx, max_sum[i-1][j]);
+                }
+                if (j > 0) {
+                    mn = min(mn, min_sum[i][j-1]);
+                    mx = max(mx, max_sum[i][j-1]);
+                }
+                min_sum[i][j] = mn + a[i][j];
+                max_sum[i][j] = mx + a[i][j];
+            }
+        }
+        
+        if (min_sum[n-1][m-1] <= 0 && 0 <= max_sum[n-1][m-1]) {
+            cout << "YES\n";
+        } else {
+            cout << "NO\n";
+        }
+    }
+    
+    return 0;
+}
+```

@@ -1,0 +1,89 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(vector<int> &indices) {
+    cout << "? " << indices.size();
+    for (int idx : indices) cout << " " << idx;
+    cout << endl;
+    int res;
+    cin >> res;
+    if (res == -1) exit(0);
+    return res;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    
+    // Find pairs using queries of size 2
+    vector<bool> paired(m + 1, false);
+    vector<pair<int,int>> pairs;
+    
+    for (int i = 1; i <= m; i++) {
+        if (paired[i]) continue;
+        // find j > i such that MAD({i, j}) > 0
+        bool found = false;
+        for (int j = i + 1; j <= m; j++) {
+            if (paired[j]) continue;
+            int res = query({i, j});
+            if (res > 0) {
+                // they are the same number
+                a[i] = a[j] = res;
+                paired[i] = paired[j] = true;
+                pairs.push_back({i, j});
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            // i is the second occurrence of some number whose first occurrence is before i
+            // we need to find which number it is
+            // we can query with all previously found numbers
+            // but we can do better: query with all indices that are already paired
+            vector<int> all_paired;
+            for (int k = 1; k < i; k++) if (paired[k]) all_paired.push_back(k);
+            // query with i and all_paired
+            vector<int> q = all_paired;
+            q.push_back(i);
+            int res = query(q);
+            a[i] = res;
+            paired[i] = true;
+            // find the other occurrence of res
+            for (int k = 1; k < i; k++) {
+                if (a[k] == 0 && !paired[k]) {
+                    // check if k is the pair
+                    // we can query {i, k} to confirm
+                    int r2 = query({i, k});
+                    if (r2 == res) {
+                        a[k] = res;
+                        paired[k] = true;
+                        pairs.push_back({k, i});
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    // Output answer
+    cout << "!";
+    for (int i = 1; i <= m; i++) {
+        cout << " " << a[i];
+    }
+    cout << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

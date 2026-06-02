@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    string s;
+    cin >> n >> s;
+    
+    // Find first '1' to skip leading zeros
+    int first_one = -1;
+    for (int i = 0; i < n; i++) {
+        if (s[i] == '1') {
+            first_one = i;
+            break;
+        }
+    }
+    
+    if (first_one == -1) {
+        cout << "0\n";
+        return 0;
+    }
+    
+    // The string without leading zeros
+    string t = s.substr(first_one);
+    int m = t.size();
+    
+    // Find the first zero after the leading one
+    int first_zero = -1;
+    for (int i = 1; i < m; i++) {
+        if (t[i] == '0') {
+            first_zero = i;
+            break;
+        }
+    }
+    
+    if (first_zero == -1) {
+        // All ones, answer is just t
+        cout << t << "\n";
+        return 0;
+    }
+    
+    // We will try to maximize the OR by choosing a second substring
+    // that fills zeros in t starting from first_zero.
+    // The second substring must start at some position j (0 <= j <= first_zero)
+    // and have length m - first_zero (or less, but we can pad with zeros conceptually).
+    // Actually we want to OR with a shifted version of a substring of s.
+    
+    string best = t;
+    int len = m - first_zero; // length of the suffix we want to improve
+    
+    // Try all possible starting positions for the second substring
+    // The second substring can start anywhere from 0 to first_zero in t
+    // (which corresponds to indices first_one to first_one+first_zero in s)
+    for (int start = 0; start <= first_zero; start++) {
+        // Build the candidate by OR-ing t with the substring of length len starting at start
+        string cand = t;
+        for (int i = 0; i < len; i++) {
+            if (start + i < m && t[start + i] == '1') {
+                cand[first_zero + i] = '1';
+            }
+        }
+        if (cand > best) {
+            best = cand;
+        }
+    }
+    
+    cout << best << "\n";
+    return 0;
+}

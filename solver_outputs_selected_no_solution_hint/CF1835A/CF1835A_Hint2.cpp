@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+ll pow10[7];
+
+void init() {
+    pow10[0] = 1;
+    for (int i = 1; i <= 6; i++) pow10[i] = pow10[i-1] * 10;
+}
+
+// count of numbers with exactly len digits
+ll cnt_len(int len) {
+    return pow10[len] - pow10[len-1];
+}
+
+void solve() {
+    int A, B, C;
+    ll k;
+    cin >> A >> B >> C >> k;
+    
+    // iterate over possible a
+    ll min_a = pow10[A-1];
+    ll max_a = pow10[A] - 1;
+    
+    for (ll a = min_a; a <= max_a; a++) {
+        // given a, b must have B digits, c must have C digits
+        // c = a + b
+        // b must be in [pow10[B-1], pow10[B]-1]
+        // c must be in [pow10[C-1], pow10[C]-1]
+        ll min_b = pow10[B-1];
+        ll max_b = pow10[B] - 1;
+        ll min_c = pow10[C-1];
+        ll max_c = pow10[C] - 1;
+        
+        // b must satisfy: min_b <= b <= max_b
+        // and min_c <= a + b <= max_c
+        ll low = max(min_b, min_c - a);
+        ll high = min(max_b, max_c - a);
+        
+        if (low > high) continue;
+        ll cnt = high - low + 1;
+        if (k > cnt) {
+            k -= cnt;
+        } else {
+            ll b = low + k - 1;
+            ll c = a + b;
+            cout << a << " + " << b << " = " << c << "\n";
+            return;
+        }
+    }
+    cout << -1 << "\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    init();
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

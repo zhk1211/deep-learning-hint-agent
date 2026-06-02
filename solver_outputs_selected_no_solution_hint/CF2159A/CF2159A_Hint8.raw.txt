@@ -1,0 +1,105 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int query(vector<int> &v) {
+    cout << "? " << v.size();
+    for (int x : v) cout << " " << x;
+    cout << endl;
+    int res;
+    cin >> res;
+    return res;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    int m = 2 * n;
+    vector<int> a(m + 1, 0);
+    vector<int> pos[n + 1];
+    
+    // Find pairs using queries of size 2
+    for (int i = 1; i <= m; i++) {
+        if (a[i] != 0) continue;
+        bool found = false;
+        for (int j = i + 1; j <= m; j++) {
+            if (a[j] != 0) continue;
+            vector<int> q = {i, j};
+            int res = query(q);
+            if (res != 0) {
+                a[i] = a[j] = res;
+                pos[res].push_back(i);
+                pos[res].push_back(j);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            // This index belongs to the number that appears with 0 in all pairs
+            // We'll handle it later
+        }
+    }
+    
+    // Find the missing number
+    int missing = -1;
+    for (int x = 1; x <= n; x++) {
+        if (pos[x].empty()) {
+            missing = x;
+            break;
+        }
+    }
+    
+    // If all numbers found, we are done
+    if (missing == -1) {
+        cout << "!";
+        for (int i = 1; i <= m; i++) cout << " " << a[i];
+        cout << endl;
+        return;
+    }
+    
+    // Find the two indices that are still 0
+    vector<int> zero_idx;
+    for (int i = 1; i <= m; i++) {
+        if (a[i] == 0) zero_idx.push_back(i);
+    }
+    
+    // We need to determine which zero index gets the missing number
+    // Use a query of size n+1 or similar to find the missing number's position
+    // Actually, we can query one zero index with all numbers that have pairs
+    // But we need to be careful with query limits
+    
+    // Strategy: query one zero index with one index from each pair
+    // If the result is missing, that zero index has the missing number
+    // Otherwise, the other zero index has it
+    
+    vector<int> q;
+    q.push_back(zero_idx[0]);
+    for (int x = 1; x <= n; x++) {
+        if (x == missing) continue;
+        q.push_back(pos[x][0]);
+    }
+    int res = query(q);
+    if (res == missing) {
+        a[zero_idx[0]] = missing;
+        a[zero_idx[1]] = missing;
+    } else {
+        a[zero_idx[1]] = missing;
+        a[zero_idx[0]] = missing;
+    }
+    
+    cout << "!";
+    for (int i = 1; i <= m; i++) cout << " " << a[i];
+    cout << endl;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

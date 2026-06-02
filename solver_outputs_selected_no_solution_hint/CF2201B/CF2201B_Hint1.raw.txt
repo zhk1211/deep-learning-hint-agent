@@ -1,0 +1,213 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    
+    // The greedy algorithm always takes exactly n turns if we never get a match early.
+    // Actually, the minimum turns is n (when we always match on the second flip of a pair).
+    // The maximum turns is 2n-1 (when we flip all cards without matching until the very end).
+    // But wait, let's analyze the number of turns.
+    // Each turn we flip two cards. If they match, we discard them. If not, we flip them back.
+    // The algorithm's behavior: it maintains a set of "seen" numbers (flipped once and not matched).
+    // When it flips a new first card, if its number is in seen, it matches immediately (1 turn for that pair).
+    // Otherwise, it flips a second new card. If that second card's number matches the first, they match (1 turn).
+    // If not, both numbers are added to seen, and we used 1 turn but no discard.
+    // Eventually, when seen has two of the same number, the algorithm will match them in 1 turn.
+    // So each pair of identical numbers will be discarded in either 1 turn (if they are flipped together or one matches an already seen) or 2 turns (if they are both flipped separately and then matched later).
+    // More precisely, the total turns = n + (number of "extra" turns where we flip two new cards that don't match each other and don't match seen).
+    // Each such extra turn adds 1 to the total beyond n.
+    // Let's define a "bad turn" as one where we flip two new cards that are different and neither matches a seen number.
+    // In such a turn, we add two new numbers to seen. Later, when we flip a card matching one of them, we use 1 turn to discard that pair.
+    // So each bad turn increases total turns by 1.
+    // The maximum number of bad turns is n-1 (when we flip all pairs separately, then match them one by one).
+    // So total turns k can range from n to 2n-1.
+    // But wait, the sample has n=2, k=3 (2n-1=3) works. n=3, k=5 (2n-1=5) works. n=3, k=2? min is n=3, so k=2 is impossible -> NO. n=3, k=4 works? Sample says YES for 3 4. n=6, k=10 works (min=6, max=11). k=67 > 11 -> NO.
+    // So condition: n <= k <= 2n-1.
+    if (k < n || k > 2*n - 1) {
+        cout << "NO\n";
+        return;
+    }
+    
+    // We need to construct an array of length 2n with each number 1..n appearing twice.
+    // The number of bad turns = k - n. Let b = k - n.
+    // b can be from 0 to n-1.
+    // We need to design the sequence such that the greedy algorithm takes exactly b bad turns.
+    // A bad turn happens when we flip two new cards that are different and neither matches any seen number.
+    // To force a bad turn, we need to place two new numbers that haven't been seen yet as the first and second card of a turn.
+    // The algorithm always picks the first unseen card as the first card of the turn (unless there's a match in seen).
+    // So the sequence of first cards is just the order of first occurrences of numbers.
+    // The second card is either a match from seen (if the first card's number is in seen) or the next unseen card.
+    // So to get a bad turn, we need the first card's number NOT in seen, and the next unseen card (second) has a different number also NOT in seen.
+    // After that turn, both numbers are added to seen.
+    // Later, when we encounter the second occurrence of one of these numbers as a first card, it will match immediately (1 turn).
+    // So each bad turn corresponds to a pair of numbers whose first occurrences are adjacent in the sequence of first occurrences, and they are different.
+    // Actually, we can think of the process as: we have a list of first occurrences of all numbers. The algorithm scans this list. When it sees a number, if its partner hasn't been seen, it takes the next number in the list as the second card. If they are different, it's a bad turn, and both are marked seen. If they are the same, it's a good turn (they match immediately). If the number's partner is already seen, it matches immediately (good turn).
+    // So the sequence of first occurrences determines everything.
+    // Let the first occurrences be in order p_1, p_2, ..., p_n. (Each number appears exactly once in this list).
+    // The algorithm processes this list from left to right.
+    // It maintains a set S of seen numbers (first occurrences that have been flipped but not matched).
+    // For i from 1 to n:
+    //   If p_i in S: match immediately, remove p_i from S. (1 turn)
+    //   Else:
+    //     If i == n: this shouldn't happen because n numbers total, but if S is empty and only one left? Actually, if we reach the last first occurrence and it's not in S, then S must have n-1 numbers? Wait, total numbers n. If we have processed i-1 first occurrences, we have seen some numbers. The last first occurrence must match one in S because all numbers appear twice. So it will be in S. So this case won't occur.
+    //     Else: we look at p_{i+1}.
+    //       If p_i == p_{i+1}: they match, discard both, i += 2. (1 turn)
+    //       Else: we flip p_i and p_{i+1}, they are different, add both to S. (1 bad turn) i += 2.
+    // Actually, the algorithm doesn't skip: after a bad turn, both p_i and p_{i+1} are added to S. Then the next first card will be p_{i+2} (since p_i and p_{i+1} are now "seen" but not discarded; their second occurrences are still in the deck but we haven't reached them yet). Wait, the algorithm says: "If there are two cards that you have flipped previously and have the same number, flip those two cards." So after a bad turn, S contains p_i and p_{i+1}. But they are different, so no match. Then the next turn, the algorithm checks if there's a match in S. There isn't. So it flips the first unseen card, which is p_{i+2}. So the process continues.
+    // So the sequence of first occurrences is processed in chunks: we look at adjacent pairs. If they are equal, they match immediately (good). If they are different, they cause a bad turn and both go to S. Then later, when we encounter a first occurrence that is in S, it matches immediately (good).
+    // So the total number of turns = number of first occurrences processed as first cards + number of bad turns? Let's simulate:
+    // Each first occurrence becomes a first card exactly once (when it's the first unseen card). So there are n first cards.
+    // Each first card leads to a turn. So at least n turns.
+    // Additionally, each bad turn adds an extra turn? Wait, in a bad turn, we flip two first occurrences as first and second card. That's one turn. Then later, when we flip the second occurrence of one of them as a first card, that's another turn. So total turns for that pair = 2. For a good pair (adjacent equal), we flip both in one turn. For a number whose first occurrence was in a bad turn, its second occurrence will be a first card later, taking one turn. So total turns = n + (number of bad turns). Because each bad turn adds one extra turn beyond the n first cards.
+    // So b = number of bad turns = number of adjacent pairs in the first-occurrence list that are different and processed as a pair.
+    // But wait, the processing might not be strictly adjacent pairs if there are matches from S. Let's trace carefully.
+    // Let the first-occurrence list be L = [x_1, x_2, ..., x_n].
+    // We have a pointer i=1.
+    // While i <= n:
+    //   if x_i in S:
+    //     match, remove x_i from S, i++ (1 turn)
+    //   else:
+    //     if i == n: impossible, but assume not.
+    //     if x_i == x_{i+1}:
+    //       match, i += 2 (1 turn)
+    //     else:
+    //       add x_i, x_{i+1} to S, i += 2 (1 turn, this is a bad turn)
+    // So the list is partitioned into blocks. Some blocks are single elements that match S. Some are pairs that are equal (good). Some are pairs that are different (bad).
+    // The number of bad turns is exactly the number of different pairs.
+    // The number of good pairs (equal) is some number g.
+    // The number of single elements that match S is s.
+    // We have n = 2*b + 2*g + s? Wait: each bad pair consumes 2 elements from L. Each good pair consumes 2. Each single consumes 1. So 2b + 2g + s = n.
+    // Also, the singles come from S, which was populated by the bad pairs. Each bad pair adds 2 elements to S. Each single removes 1 from S. Since all elements eventually matched, the total added to S equals total removed. So 2b = s.
+    // Thus n = 2b + 2g + 2b = 4b + 2g? That would mean n is even? But n can be odd. Let's re-examine.
+    // Wait, when we have a bad pair (x, y) with x != y, we add both to S. Later, when we encounter the second occurrence of x (as a first card), it will be a single that matches S. Similarly for y. So each bad pair generates two singles later. So s = 2b.
+    // Then n = 2b (bad pair elements) + 2g (good pair elements) + s (singles) = 2b + 2g + 2b = 4b + 2g.
+    // This implies n must be even? But sample n=3, k=5 -> b = k-n = 2. Then n=3, but 4*2+2g = 8+2g >= 8 > 3. Contradiction.
+    // So my model is wrong. The first-occurrence list L is not just the order of first occurrences of all numbers. Because after a bad turn, the two numbers are "seen" but their second occurrences are still in the deck. However, the algorithm's "first card you have never flipped so far" refers to the physical cards in the row. The first occurrences in L are the first time we flip each physical card? No, the algorithm flips the first card that has never been flipped. So the sequence of first cards is exactly the order of the cards in the row, skipping those that have been flipped before (either as first or second card). But when we flip a second card, that card is also "flipped" and thus cannot be a first card later. So the set of cards that can be first cards are those that have never been flipped. Initially all 2n cards. When we do a turn, we flip two cards. If they match, they are discarded and removed. If they don't match, they are flipped back, but they are now "flipped previously" (seen). They remain in the row but are not eligible to be "first card" because they have been flipped. So the "first card" is always a card that has never been flipped. The second card can be either a previously flipped card (if it matches the first) or a never-flipped card.
+    // So the sequence of first cards is exactly the sequence of cards that are flipped for the first time as a first card. These are a subset of all cards. Each card is flipped for the first time either as a first card or as a second card (in a bad turn). Cards flipped as second card in a bad turn are never first cards. Cards flipped as first card are either matched immediately (if they match the second card, which could be a previously flipped card or the next never-flipped card) or they go to seen.
+    // Let's re-analyze from scratch with the physical row.
+
+    // We have a row of 2n cards. The algorithm:
+    // - If there is a pair in "seen" (flipped once and not discarded), flip them (they match). This takes 1 turn and discards them.
+    // - Else, pick the first never-flipped card as first card. Let its number be x.
+    // - If x is in seen, pick the other seen card with number x as second card. They match, discard both, remove x from seen. (1 turn)
+    // - Else (x not in seen), pick the first never-flipped card as second card. Let its number be y.
+    //   - If x == y, they match, discard both. (1 turn)
+    //   - Else, add both x and y to seen. Flip them back. (1 turn)
+
+    // So the process is deterministic. We want exactly k turns.
+
+    // Let's denote the row as an array a[1..2n].
+    // We can think of the sequence of "first never-flipped cards" as we scan from left to right. Initially all are never-flipped.
+    // The algorithm will pick the first never-flipped card, say at position i. Then depending on conditions, it picks a second card.
+    // If it picks a second never-flipped card, that card is the first never-flipped card after i. So it's the next never-flipped card in the row.
+    // So the first cards are exactly the never-flipped cards in order, except some never-flipped cards are consumed as second cards in bad turns.
+    // In a bad turn, we consume two never-flipped cards: the first and the next. Both become "seen". They are not discarded.
+    // Later, when we encounter a never-flipped card whose number is in seen, we match it with the seen card of the same number. That seen card was one of the two from a bad turn. The other seen card from that bad turn will be matched later similarly.
+    // So each bad turn creates two "seen" cards that will be matched later by two separate first cards.
+    // A good turn (matching immediately) can happen in two ways:
+    // 1. The first card's number is already in seen. Then we match it with the seen card. (This consumes one never-flipped card as first card, and the second card is the seen card).
+    // 2. The first card's number is not in seen, and the next never-flipped card has the same number. Then we match them immediately. (This consumes two never-flipped cards: first and second, and discards them).
+    // So the total number of turns = number of first cards + number of bad turns? Let's check:
+    // Each turn has exactly one first card (except maybe the case where we match two seen cards? But that case: "If there are two cards that you have flipped previously and have the same number, flip those two cards." In this turn, we don't flip a never-flipped card as first card. So this turn has no first card. So the number of first cards is not necessarily equal to the number of turns.
+    // Let's count turns differently.
+    // Let b = number of bad turns (where we flip two never-flipped cards that are different).
+    // Let g1 = number of good turns where we flip a never-flipped card and match it with a seen card.
+    // Let g2 = number of good turns where we flip two never-flipped cards that match.
+    // Let s = number of turns where we match two seen cards.
+    // Total turns k = b + g1 + g2 + s.
+    // Now, count how many cards are flipped as first cards: each g1 and g2 and b turn has exactly one first card (the first never-flipped card). s turns have no first card. So number of first cards = g1 + g2 + b.
+    // Total never-flipped cards initially = 2n.
+    // They are consumed as: 
+    // - first cards: g1 + g2 + b cards.
+    // - second cards in g2: g2 cards (since each g2 turn flips two never-flipped cards).
+    // - second cards in b: b cards (each bad turn flips two never-flipped cards).
+    // So total never-flipped cards used = (g1 + g2 + b) + g2 + b = g1 + 2g2 + 2b.
+    // This must equal 2n.
+    // Also, seen cards: initially 0. Each bad turn adds 2 seen cards. Each g1 turn removes 1 seen card. Each s turn removes 2 seen cards. Total seen cards must balance: 2b = g1 + 2s.
+    // We also have the total number of pairs: n pairs. Each pair is discarded either:
+    // - in a g2 turn (both cards never-flipped, matched together)
+    // - in a g1 turn (one never-flipped, one seen)
+    // - in an s turn (both seen)
+    // - in a b turn? No, b turn doesn't discard.
+    // So each pair is discarded in exactly one of g2, g1, or s turns.
+    // Number of pairs discarded in g2: g2.
+    // Number of pairs discarded in g1: g1.
+    // Number of pairs discarded in s: s.
+    // Total pairs: g2 + g1 + s = n.
+    // From 2b = g1 + 2s, we have g1 = 2b - 2s.
+    // Substitute into pairs: g2 + (2b - 2s) + s = n => g2 + 2b - s = n => s = g2 + 2b - n.
+    // Also total turns k = b + g1 + g2 + s = b + (2b - 2s) + g2 + s = 3b + g2 - s.
+    // Substitute s: k = 3b + g2 - (g2 + 2b - n) = 3b + g2 - g2 - 2b + n = n + b.
+    // Wow! So k = n + b. Exactly! So the number of bad turns b = k - n.
+    // This matches our earlier intuition. And b can range from 0 to ? 
+    // From s = g2 + 2b - n >= 0 => g2 >= n - 2b.
+    // Also g2 >= 0, g1 = 2b - 2s >= 0 => s <= b.
+    // Also s >= 0 => g2 + 2b - n >= 0 => g2 >= n - 2b.
+    // Also g2 <= n (since total pairs).
+    // Also g1 = 2b - 2s = 2b - 2(g2 + 2b - n) = 2b - 2g2 - 4b + 2n = 2n - 2b - 2g2.
+    // g1 >= 0 => 2n - 2b - 2g2 >= 0 => g2 <= n - b.
+    // So g2 can range from max(0, n - 2b) to n - b.
+    // For a solution to exist, we need some integer g2 satisfying this. So we need max(0, n - 2b) <= n - b, which is always true for b >= 0. But also g2 must be integer. So as long as there exists an integer g2 in that range, we can construct.
+    // But wait, we also need to actually construct the array. The construction will depend on choosing g2.
+    // Let's check constraints: b = k - n. Since k <= 2n-1, b <= n-1. k >= n => b >= 0.
+    // So b in [0, n-1].
+    // For b = n-1, max(0, n - 2(n-1)) = max(0, 2 - n). For n>=2, this is 0. n - b = 1. So g2 can be 0 or 1. So possible.
+    // For b = n, k = 2n, but max k is 2n-1? Let's check: can k = 2n? If b = n, then k = 2n. Is that possible? Let's see: if b = n, then from 2b = g1 + 2s, 2n = g1 + 2s. Also g1 + g2 + s = n. Then g1 = 2n - 2s. Substitute: 2n - 2s + g2 + s = n => g2 - s = -n => s = g2 + n. Since s >= 0, g2 >= -n, always true. But s <= b = n => g2 + n <= n => g2 <= 0 => g2 = 0. Then s = n. Then g1 = 2n - 2n = 0. So k = n + n = 2n. But is this possible? Let's test with n=2, k=4. Can we do it? The algorithm: we need b=2 bad turns. That means we flip two different never-flipped cards twice. Then we have 4 seen cards? But we only have 4 cards total. After two bad turns, we have flipped all 4 cards and they are all seen. Then we have two pairs in seen. Then we do s turns: match the two pairs. Total turns = 2 bad + 2 s = 4. But wait, the algorithm says: "If there are two cards that you have flipped previously and have the same number, flip those two cards." After the two bad turns, we have seen cards: say numbers 1,2,1,2. The seen cards are all four. But are there two seen cards with the same number? Yes, the two 1's. So the next turn, it will flip the two 1's. Then the next turn, the two 2's. So total 4 turns. But is this possible with the row order? Let's try to construct: We need the first never-flipped card to be, say, 1. The next never-flipped is 2. They are different -> bad turn. Seen: {1,2}. Next never-flipped cards: the remaining two cards. They must be the second occurrences of 1 and 2. The first never-flipped among them is, say, 1. But wait, 1 is in seen! So according to algorithm: "If there is another card that you have flipped previously and has the number x, flip that card." So it would match 1 immediately, not do a bad turn. So we cannot get a second bad turn because the remaining never-flipped cards will have numbers that are already in seen. So b cannot be n. The maximum b is n-1. Let's verify: after b bad turns, we have 2b seen cards. The remaining never-flipped cards are 2n - 2b. These must include the matches for the seen cards. But if we want another bad turn, we need the next never-flipped card to NOT be in seen. That means its number is not among the 2b seen numbers. But all numbers appear twice. If we have 2b seen cards, they represent some number of distinct numbers. Each seen card is one occurrence of a number. The other occurrence of that number is either already in seen (if both are in seen) or still never-flipped. For a bad turn, we need the first never-flipped card to have a number not in seen. That means both occurrences of that number are still never-flipped. So there must be at least one number with both cards never-flipped. That means the number of distinct numbers with both cards never-flipped is at least 1. The total numbers is n. The seen cards cover some numbers. Each number can have 0, 1, or 2 occurrences in seen. Let a = number of numbers with 2 occurrences in seen (these are matched in s turns). Let c = number of numbers with 1 occurrence in seen (these will be matched in g1 turns). Let d = number of numbers with 0 occurrences in seen (these will be matched in g2 turns). Then 2a + c = 2b (total seen cards). And a + c + d = n. We want to do another bad turn: we need to pick a first never-flipped card with number not in seen, so d >= 1. And we need the next never-flipped card to also be not in seen and different? Actually, for a bad turn, we need the first card's number not in seen, and the next never-flipped card's number also not in seen, and they are different. So we need d >= 2 and at least two different numbers among them. So we can continue bad turns as long as d >= 2. Each bad turn takes two numbers from d (both occurrences? No, a bad turn takes one occurrence from each of two different numbers in d. So it moves those two numbers from d to c (each gets one occurrence in seen). So after one bad turn, d decreases by 2, c increases by 2. We can do another bad turn if the new d >= 2. So the number of bad turns b is limited by floor(d_initial/2). Initially d = n. So we can do at most floor(n/2) bad turns? But wait, we can also have g2 turns (matching a number with itself immediately) which consume a number from d completely (both occurrences at once). That reduces d by 1. So the sequence of operations can interleave. The maximum b is actually n-1? Let's test n=3. Can we have b=2? k=5. Sample says YES for 3 5. So b=2 is possible with n=3. d_initial=3. To get b=2, we need to do two bad turns. First bad turn consumes two numbers from d, d becomes 1. Then we cannot do another bad turn because d=1 < 2. But wait, we could do a g1 turn in between? A g1 turn matches a seen card (from c) with a never-flipped card. That never-flipped card is the other occurrence of a number in c. That reduces c by 1, and d is unchanged. So d remains 1. Still cannot do second bad turn. So how did sample get b=2 with n=3? Let's analyze sample 4: n=3, k=5 -> b=2. Array: 1 2 3 1 2 3.
+    // Let's simulate:
+    // Initial: 1 2 3 1 2 3. Seen = {}.
+    // Turn 1: first never-flipped = 1 (pos1). Not in seen. Next never-flipped = 2 (pos2). 1 != 2. Bad turn. Seen = {1,2}. (b=1)
+    // Turn 2: check seen for pairs? No pair of same number. First never-flipped = 3 (pos3). Not in seen? 3 is not in seen. Next never-flipped = 1 (pos4). 3 != 1. But wait, 1 is in seen! The algorithm says: "Otherwise, flip the first card that you have never flipped so far as the second one." But 1 at pos4 has never been flipped? Actually, pos1 was flipped as first card, pos2 as second card. pos3 is first card this turn. The next never-flipped is pos4 (number 1). But number 1 is in seen. However, the algorithm for second card: "Otherwise, flip the first card that you have never flipped so far (including in this turn) as the second one." It doesn't check if the number is in seen. It just flips the next never-flipped card regardless of its number. So it flips pos4 (number 1). Then since 3 != 1, it's a bad turn? But wait, the algorithm says: "Afterwards, if there is another card that you have flipped previously and has the number x, flip that card." Here x=3. Is there another card flipped previously with number 3? No. So it goes to the "Otherwise" and flips the next never-flipped card. So it flips pos4. The numbers are 3 and 1. They are different. So it's a bad turn. But then seen gets both 3 and 1. But 1 was already in seen! So seen would have two 1's? That would mean a match. But the algorithm says: "If the two cards have the same number, you discard the two cards. Otherwise, you flip them back to their original position." So if they are different, they are flipped back. But seen is the set of cards flipped previously (and not discarded). So after this turn, the cards flipped are pos3 (3) and pos4 (1). Both are flipped. Previously seen had pos1 (1) and pos2 (2). So now seen has: pos1 (1), pos2 (2), pos3 (3), pos4 (1). So there are two 1's in seen! So at the start of the next turn, the algorithm will see two cards with the same number in seen, and will flip them. That's an s turn.
+    // So my earlier model of "seen" as a set of numbers with multiplicity was wrong. "Seen" is the set of physical cards that have been flipped and not discarded. So it can contain multiple cards with the same number. The algorithm checks if there are two cards in seen with the same number. If so, it flips them (they match). So a bad turn can add a card to seen even if its number is already in seen, as long as it's a different physical card. That can create a pair in seen.
+    // So the state is: a set of physical cards that are "seen" (flipped once, face down? Actually they are flipped back, but we remember their numbers). We can have multiple seen cards with the same number. Whenever we have two seen cards with the same number, the algorithm will immediately match them in the next turn (before flipping any new cards).
+    // This changes the analysis.
+
+    // Let's re-analyze with physical cards.
+    // We have a row of 2n cards. Each card has a number. The algorithm:
+    // - If there exist two seen cards with the same number, pick the leftmost such pair? The problem says: "If there are two cards that you have flipped previously and have the same number, flip those two cards." It doesn't specify which two if there are multiple. But since the strategy is uniquely determined, it must be deterministic. Probably it picks the leftmost pair? Or maybe it picks the pair that was seen earliest? The problem says "the algorithm's strategy is uniquely determined on every turn." So we need to know the exact tie-breaking. Looking at the sample note: In sample 4 turn 3: after turn 2, seen has 1,2,3,1. The two 1's are in seen. The algorithm flips them. Which two? The leftmost 1 and the other 1? The note says: "[1,2,3,1,2,3]" with red on 1 and 1? Actually the note for turn 3: "[1,2,3,1,2,3]" with red on the first 1 and the fourth 1? Wait, the note says:
+    // 3. [1,2,3,1,2,3] : The two cards have the same number, so they get discarded.
+    // The red numbers are 1 (pos1) and 1 (pos4)? But pos1 and pos4 are both 1. But pos2 and pos3 are not red. So it flipped the two 1's. Which ones? The seen cards are pos1, pos2, pos3, pos4. The two 1's are pos1 and pos4. So it flipped them. That makes sense.
+    // What if there were three 1's? Not possible since only two of each number.
+    // So the algorithm just finds any pair of seen cards with the same number. Since there are at most two of each number, it's unique.
+    // So the process is:
+    // While there is a pair in seen with same number, match them (discard both, remove from seen). This takes 1 turn.
+    // If no such pair, pick the first never-flipped card as first card. Let its number be x.
+    // If there is a seen card with number x, pick it as second card (they match, discard both, remove that seen card). (1 turn)
+    // Else, pick the first never-flipped card as second card. Let its number be y.
+    //   If x == y, discard both. (1 turn)
+    //   Else, add both to seen. (1 turn)
+
+    // Now, we want exactly k turns.
+
+    // Let's simulate the process on the sequence. We can think of it as a kind of stack or queue of seen cards.
+    // Actually, we can design the sequence to achieve a specific number of turns.
+    // Notice that the algorithm is equivalent to: we maintain a list of seen cards. When we flip a new card, if its number matches the top of the seen list? Not exactly.
+    // But we can observe that the process is very similar to matching parentheses, where each number is a type.
+    // Let's try to find a pattern for constructing sequences with a given b = k - n.
+    // From the sample, n=3, k=5 (b=2) gave 1 2 3 1 2 3.
+    // n=3, k=4 (b=1) gave 1 3 2 2 1 3.
+    // n=2, k=3 (b=1) gave 2 1 2 1.
+    // n=6, k=10 (b=4) gave 2 1 3 4 5 4 1 2 6 5 6 3.
+    // Let's analyze the structure.
+
+    // It seems we can construct the sequence by interleaving two patterns: 
+    // Pattern for b=0 (k=n): just put pairs adjacent: 1 1 2 2 3 3 ... n n. Then each turn matches a pair immediately. Total n turns.
+    // To increase b, we can "delay" matches by separating pairs.
+    // Notice that in the sample with b=1, n=3: 1 3 2 2 1 3.
+    // Simulate: 
+    // Turn 1: first never-flipped = 1. Not in seen. Next never-flipped = 3. 1!=3. Bad turn. Seen = {1,3}.
+    // Turn 2: no pair in seen. First never-flipped = 2. Not in seen. Next never-flipped = 2. 2==2. Good turn (g2). Discard both.
+    // Turn 3: seen = {1,3}. No pair. First never-flipped = 1. 1 is in seen! Match with seen 1. Discard both. Seen = {3}.
+    // Turn 4: seen = {3}. No pair. First never-flipped = 3. 3 in seen. Match. Discard. Done. Total 4 turns. k=4. b=1.
+    // So b=1 achieved by having one bad turn at the beginning, then a g2 turn, then two g1 turns.
+
+    // Sample b=2, n=3: 1 2 3 1 2 3.
+    // Turn 1: 1,2 bad. Seen={1,2}
+    // Turn 2: 3,1 bad. Seen={1,2,3,1} -> now there are two 1's in seen.
+    // Turn 3: match the two 1's (s turn). Seen={2,3}
+    // Turn 4: first never-flipped=2. 2 in seen? Yes, match with seen 2. Seen={3}
+    // Turn 5: first never-flipped=3. match. Done. Total 5 turns. b=2.
+
+    // Sample n=6, k=10 (b=4): 2 1 3 4 5 4 1 2 6 5 6 3.

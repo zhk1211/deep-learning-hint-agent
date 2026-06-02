@@ -1,0 +1,221 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> p(n);
+    for (int i = 0; i < n; ++i) cin >> p[i];
+    string x;
+    cin >> x;
+
+    vector<int> pos(n + 1);
+    for (int i = 0; i < n; ++i) pos[p[i]] = i;
+
+    // Check if x is all 0
+    if (count(x.begin(), x.end(), '1') == 0) {
+        cout << "0\n";
+        return;
+    }
+
+    // Check if x is all 1
+    if (count(x.begin(), x.end(), '0') == 0) {
+        // Need to set all positions to 1
+        // If permutation is sorted, impossible
+        bool sorted = true;
+        for (int i = 0; i < n; ++i) {
+            if (p[i] != i + 1) {
+                sorted = false;
+                break;
+            }
+        }
+        if (sorted) {
+            cout << "-1\n";
+            return;
+        }
+        // Find any inversion
+        int l = -1, r = -1;
+        for (int i = 0; i < n; ++i) {
+            if (p[i] != i + 1) {
+                l = i + 1;
+                r = pos[i + 1] + 1;
+                break;
+            }
+        }
+        cout << "1\n" << l << " " << r << "\n";
+        return;
+    }
+
+    // General case: x has both 0 and 1
+    // Find first and last 1
+    int first1 = -1, last1 = -1;
+    for (int i = 0; i < n; ++i) {
+        if (x[i] == '1') {
+            if (first1 == -1) first1 = i;
+            last1 = i;
+        }
+    }
+
+    // Check if there is any 0 between first1 and last1
+    bool has0between = false;
+    for (int i = first1; i <= last1; ++i) {
+        if (x[i] == '0') {
+            has0between = true;
+            break;
+        }
+    }
+
+    if (!has0between) {
+        // All 1s are contiguous
+        // We need to set this segment to 1
+        // Check if we can do it with one operation
+        // We need l < first1+1 < r and min(p[l],p[r]) < p[first1] < max(p[l],p[r])
+        // Actually we need to set all positions in [first1, last1] to 1
+        // Try to find l and r such that the segment is covered
+        // The operation sets s_i=1 for i in (l,r) with p_i between p_l and p_r
+        // We can try l = first1, r = last1+2? But r can be up to n
+        // Better: find min and max of p in the segment
+        int minp = n+1, maxp = -1;
+        for (int i = first1; i <= last1; ++i) {
+            minp = min(minp, p[i]);
+            maxp = max(maxp, p[i]);
+        }
+        // We need l and r such that p_l = minp-1? Not necessarily
+        // Actually we can choose l and r as the positions of minp-1 and maxp+1 if they exist
+        // Or we can choose l = first1, r = last1+2? But need to ensure condition
+        // Let's think: we want to set all i in (l,r) with p_i between p_l and p_r
+        // If we choose l = first1, r = last1+2 (if last1+2 <= n), then p_l and p_r might not cover all needed
+        // Better approach: use two operations if needed
+        // But we can always do it with at most 2 operations? Let's check hint: max operations 5
+        // Actually we can do: operation 1: l=1, r=pos[n]? Not sure
+        // Let's use the property: we can set any contiguous segment of 1s by choosing l and r as the boundaries of the segment in the permutation? No
+        // Alternative: we can set a single position i to 1 by choosing l and r such that l < i < r and p_i is between p_l and p_r
+        // So we can set each required position individually, but limited to 5 ops
+        // Since segment is contiguous, we can try to cover it with one operation if possible
+        // Find l and r such that the interval (l,r) covers [first1, last1] and all p_i for i in [first1, last1] are between p_l and p_r
+        // We can choose l = first1, r = last1+2? But r might be out of bounds
+        // Let's try l = first1, r = last1+2 if last1+2 <= n, else l = first1-1, r = last1+1? But l must be >=1
+        // Actually we can choose l and r as the positions of the minimum and maximum values in the segment, extended by 1? 
+        // Let's find the positions of minp-1 and maxp+1 if they exist and are outside the segment
+        int l = -1, r = -1;
+        if (minp > 1) {
+            l = pos[minp - 1] + 1;
+        }
+        if (maxp < n) {
+            r = pos[maxp + 1] + 1;
+        }
+        if (l != -1 && r != -1 && l < first1+1 && r > last1+1) {
+            // Check if all positions in [first1, last1] are between p_l and p_r
+            // Since p_l = minp-1, p_r = maxp+1, all p_i in segment are between them
+            // Also need l < i < r for all i in segment, which holds if l <= first1 and r >= last1+2? Actually condition is l < i < r, so l must be < first1+1 and r > last1+1
+            // Since l is index (1-based), we need l <= first1 and r >= last1+2
+            if (l <= first1 && r >= last1 + 2) {
+                cout << "1\n" << l << " " << r << "\n";
+                return;
+            }
+        }
+        // If not possible with one, we can use two operations: set first1 and last1 separately? But we need all in between
+        // Actually we can set the whole segment by two operations: one covering left part, one covering right part
+        // But we can also just output any valid sequence up to 5
+        // Let's try to set each position individually? Max 5 ops, but segment length could be large
+        // Since we have at most 5 ops, we can set up to 5 positions individually
+        // But if segment length > 5, we need a different approach
+        // However, note that we can set multiple positions with one operation if they are between l and r and their values are between p_l and p_r
+        // So we can cover a contiguous segment if we find appropriate l and r
+        // If the above fails, we can try l = first1, r = last1+2? But need to ensure p_l and p_r cover the values
+        // Let's try l = first1, r = last1+2 (if valid) and check if all p_i in segment are between p[first1] and p[last1+1]? Not necessarily
+        // Actually we can choose l and r as the positions of the minimum and maximum in the segment, but they might be inside the segment, which is not allowed because l and r must be outside (l < i < r)
+        // So we need l and r outside the segment
+        // We can try to extend the segment to include one more element on each side if they have values just outside the range
+        // If not, we can use two operations: one to set the left part, one to set the right part, with overlap
+        // Let's implement a simple fallback: output two operations that cover the segment
+        // For example, operation 1: l = first1, r = last1+2 (if last1+2 <= n) else l = first1-1, r = last1+1
+        // But we need to guarantee it works. Let's think differently.
+        // We can always set a contiguous segment of 1s by choosing l and r as the positions of the minimum and maximum values in the segment, but we need them to be outside. If minp is not at the boundary, we can choose l = pos[minp]-1? No, l and r are indices, not values.
+        // Actually, we can choose l = first1, r = last1+2? Then p_l and p_r are the values at those indices. The condition for setting s_i=1 is: l < i < r and min(p_l,p_r) < p_i < max(p_l,p_r). So if we choose l and r such that p_l and p_r are the min-1 and max+1 of the segment, it works. But if min-1 or max+1 don't exist, we can use 1 or n.
+        // Let's try to find l and r such that p_l is the smallest value less than all in segment, and p_r is the largest value greater than all in segment, and l and r are outside the segment.
+        // We can set l = pos[1]? Not necessarily.
+        // Since we have up to 5 ops, we can just set each required position individually if the segment is small, but if large, we need a covering operation.
+        // Let's use the following: we can always achieve it with at most 2 operations by using the "inversion" trick? 
+        // Wait, the hints say: "If x is not constant, what is the maximum number of operations you need to perform?" and "Can you somehow get the answer for x using the answer for x+1?" 
+        // This suggests a recursive/iterative approach: start from all 1s, then remove 1s by changing them to 0? 
+        // Actually, we can think of building the set of 1s incrementally.
+        // Let's consider the required set of indices where x_i=1. We can try to cover them with intervals.
+        // Another idea: we can always set any single position i to 1 by choosing l and r such that l < i < r and p_i is between p_l and p_r. For example, if p_i is not 1 or n, we can choose l = pos[p_i - 1], r = pos[p_i + 1]. If p_i = 1, we can choose l = i-1, r = i+1? But need p_l and p_r such that 1 is between them, so any l, r with p_l >1 and p_r >1? Actually min(p_l,p_r) < 1 < max(p_l,p_r) is impossible because 1 is the minimum. So we cannot set the position of value 1 to 1 directly if it's at the boundary? Wait, condition: min(p_l,p_r) < p_i < max(p_l,p_r). If p_i=1, there is no value less than 1, so it's impossible to set s_i=1 for the position of 1. Similarly for value n. So positions with value 1 or n can never be set to 1! That's a crucial observation.
+        // Let's verify: In the operation, we set s_i=1 if min(p_l,p_r) < p_i < max(p_l,p_r). So p_i must be strictly between p_l and p_r. Thus, the minimum value 1 and maximum value n can never be set to 1. Therefore, if x has a 1 at the position of 1 or n, it's impossible.
+        // Check sample 2: p = [3,4,2,1,5], x = 11111. Position of 1 is index 4, x_4=1. Position of 5 is index 5, x_5=1. So it's impossible. Output -1. Correct.
+        // Sample 4: p = [6,2,3,4,5,1], x = 110110. Position of 1 is index 6, x_6=0. Position of 6 is index 1, x_1=1? Wait x = 110110, so x_1=1. But p_1=6, which is maximum. So position of 6 has x=1. That should be impossible? But sample output is -1. Yes!
+        // So first check: if x has 1 at the position of value 1 or value n, output -1.
+        int pos1 = pos[1];
+        int posn = pos[n];
+        if (x[pos1] == '1' || x[posn] == '1') {
+            cout << "-1\n";
+            return;
+        }
+
+        // Now we know 1 and n are not required to be 1. They can be 0 or anything.
+        // We can use them as l or r to set other positions.
+        // In fact, we can set any position i (where p_i is not 1 or n) to 1 by choosing l = pos[1], r = pos[n]? Check: min(1,n)=1, max=n, so 1 < p_i < n holds for all other p_i. And if we choose l and r as the positions of 1 and n, then for any i between them, we set s_i=1. But i must be between l and r. So if we choose l and r such that all required positions are between them, we can set them all in one operation!
+        // So if we choose l = pos[1], r = pos[n] (or vice versa), then all indices strictly between min(l,r) and max(l,r) will be set to 1. This covers a contiguous segment from min(pos1,posn)+1 to max(pos1,posn)-1.
+        // But what if some required 1s are outside this segment? We can use additional operations to cover them.
+        // Since we have up to 5 operations, we can cover up to 5 disjoint segments? Actually each operation sets a contiguous interval (l,r) to 1. So we can cover the required 1s with at most 5 intervals.
+        // But we need to ensure that for each operation, the values p_l and p_r are such that all p_i in the interval are between them. If we always use l and r as positions of some values, we need to choose them appropriately.
+        // Observation: If we choose l and r such that p_l and p_r are the minimum and maximum of some set, then all values between them are covered. So we can cover any contiguous segment of indices if we can find l and r outside that segment with p_l and p_r being the min-1 and max+1 of the segment's values? Not exactly, but we can use the positions of 1 and n to cover a large segment.
+        // Let's think: The operation with l=pos1, r=posn sets all indices between them to 1. So if all required 1s are between pos1 and posn, one operation suffices.
+        // If not, we can use additional operations to cover the outliers.
+        // But note: we can also choose other l and r. For example, we can set a prefix or suffix by choosing l=1, r=pos of some value, etc.
+        // Let's analyze the structure: The required 1s form some set of indices. We can cover them with intervals. Each interval [L,R] (inclusive) can be set to 1 by choosing l = L-1, r = R+1, provided that p_{L-1} and p_{R+1} are such that all p_i for i in [L,R] are between them. This is equivalent to saying that the minimum value in [L,R] is > min(p_{L-1}, p_{R+1}) and the maximum is < max(p_{L-1}, p_{R+1}). So we need to find boundaries that "bracket" the values.
+        // Since we can do up to 5 operations, we can just try to cover the required 1s with a few intervals by choosing boundaries appropriately.
+        // A simpler approach: We can always achieve the goal with at most 2 operations! Let's check hint: "If x is not constant, what is the maximum number of operations you need to perform?" Possibly 2.
+        // Let's test: Can we always do it in 2 operations if possible? 
+        // Consider we have required 1s. We can use operation 1 with l = pos[1], r = pos[n] to set a middle segment. Then the remaining required 1s are either to the left of min(pos1,posn) or to the right of max(pos1,posn). We can cover the left part with another operation using l = 1, r = something? Or l = something, r = pos1? 
+        // Actually, if we have required 1s on the left of pos1, we can set them by choosing l = 1, r = pos1? But need p_1 and p_{pos1} to bracket the values. p_{pos1}=1, so min(p_1,1) = 1, max = p_1. For any i between 1 and pos1, p_i > 1? Not necessarily, but if p_i > 1, then 1 < p_i < p_1? That requires p_1 > p_i. So if we choose l=1, r=pos1, we set s_i=1 for i in (1, pos1) where p_i < p_1. This might not cover all.
+        // Alternative: We can use the fact that we can set any single position (except 1 and n) by choosing l and r as the positions of p_i - 1 and p_i + 1. So we can set individual positions. With 5 ops, we can set up to 5 individual positions. But if there are more than 5 required 1s, we need to cover them in groups.
+        // But wait, the problem allows up to 5 operations, and n can be large. So we must be able to cover many 1s with one operation.
+        // Let's think about the "inversion" method from the hints: "What happens when x is constant and p is not sorted?" If x is all 1s, we need to set all positions to 1. We already saw that if p is not sorted, we can do it in one operation by choosing l and r as the positions of an inversion? In sample 1, p=[1,2,3] is sorted, so all 1s is impossible. In sample 2, p=[3,4,2,1,5] is not sorted, but all 1s is impossible because 1 and 5 are at ends? Actually we found it's impossible because x has 1 at pos of 1 and n. So if x is all 1s, it's impossible unless 1 and n are not required? But all 1s means they are required. So all 1s is always impossible because 1 and n can never be set to 1. Wait, is that true? Let's check: Can we set the position of 1 to 1? Condition: min(p_l,p_r) < 1 < max(p_l,p_r). Since 1 is the minimum, there is no value less than 1, so min(p_l,p_r) < 1 is impossible. So indeed, the position of 1 can never become 1. Similarly for n. So if x has 1 at these positions, it's impossible. Therefore, if x is all 1s, it's impossible for n>=3 because 1 and n are in the permutation. So all 1s is always impossible. That matches sample 2.
+        // So the only possible x strings are those with 0 at pos1 and posn.
+        // Now, back to the general case: We have some required 1s. We can use the operation with l=pos1, r=posn to set all indices between them to 1. This might set some extra 1s, but that's allowed because x_i=0 can become 1. So we can overshoot.
+        // So if all required 1s are between pos1 and posn, one operation (pos1, posn) works.
+        // What if some required 1s are outside? They must be either to the left of min(pos1,posn) or to the right of max(pos1,posn). Since pos1 and posn are the positions of 1 and n, any index outside [min, max] has value between 1 and n, but its position is outside. Can we set those with additional operations?
+        // Consider a required 1 at index i < min(pos1,posn). We want to set s_i=1. We can do an operation with l = i, r = pos1? Or l = 1, r = pos1? Let's analyze: If we choose l = i, r = pos1, then for any j between them, we set s_j=1 if p_j is between p_i and p_{pos1}=1. Since 1 is the minimum, p_j is between 1 and p_i means 1 < p_j < p_i. So this operation sets all indices between i and pos1 whose values are less than p_i. This might not include i itself? Wait, the operation sets s_j for l < j < r, so i is not included because j must be strictly between. So we cannot set the endpoint. So to set i, we need l < i < r. So we need l and r on both sides of i.
+        // So to set a prefix of required 1s, we can choose l = 1, r = something > i. But then we need p_1 and p_r to bracket the values.
+        // Let's think differently: We can use the operation with l = pos[1], r = pos[n] to cover the middle. Then for the left outliers, we can use an operation with l = 1, r = pos[1]? But then we need to ensure all required 1s in (1, pos1) are set. The condition: for j in (1, pos1), s_j=1 if min(p_1, 1) < p_j < max(p_1, 1). Since min=1, max=p_1, this sets s_j=1 for all j with 1 < p_j < p_1. So it sets all indices between 1 and pos1 whose values are less than p_1. If all required 1s in that range have values < p_1, then this works. But what if some required 1 has value > p_1? Then it won't be set. Can we choose a different r? We could choose r such that p_r is large enough to cover all values in the left segment. For example, choose r = pos[n]? But then we are back to the middle segment.
+        // Actually, we can cover the left part by choosing l = 1, r = pos[n]? That would cover everything from 1 to pos[n], but then we might set unwanted 1s? That's fine. But does it set all required 1s? For j in (1, pos[n]), s_j=1 if min(p_1, n) < p_j < max(p_1, n). Since min is min(p_1, n) and max is max(p_1, n). This sets all j with p_j between p_1 and n. So if p_1 is not 1, it sets all values greater than p_1. But what about values less than p_1? They are not set. So if there is a required 1 with value < p_1, it won't be set.
+        // So the choice of l and r determines which values are set. The operation sets all indices between l and r whose values are strictly between p_l and p_r. So it sets a "value interval" within the index interval.
+        // This suggests we can think in terms of values: We want to set certain indices to 1. Each operation chooses an index interval [l,r] and a value interval (min(p_l,p_r), max(p_l,p_r)), and sets all indices in the intersection of the index interval and the value interval (where the value at that index falls in the value interval).
+        // Since we can choose l and r arbitrarily, we can cover any set of indices that can be expressed as a union of up to 5 such "rectangles" in the index-value plane.
+        // But maybe there's a simpler characterization: We can always achieve the goal with at most 2 operations if it's possible. Let's test this hypothesis.
+        // Consider we want to set a set of indices S. We can do op1: l=pos1, r=posn. This sets all indices between them. If S is a subset of that, done. If not, S has some indices left of min and some right of max. We can try to cover the left with op2: l=1, r=pos1? But as we saw, it only sets values < p_1. What if we choose l=1, r=pos of some large value? We can choose r to be the position of the maximum value among the left required 1s? But we need r > all left required indices. So we can choose r = max(left_required_indices) + 1? But then p_r might not be large enough.
+        // Let's think about the "inversion" trick from the hint: "What happens when x is constant and p is not sorted?" If x is all 0s except some 1s? Actually hint 1: Think about the case where x is constant. If x is all 0s, answer is 0. If x is all 1s, impossible. So constant x is easy.
+        // Hint 2: How would you solve the problem if you could change p? Not applicable.
+        // Hint 3: Can you use some information about x to make your solution more efficient?
+        // Hint 4: If x is not constant, what is the maximum number of operations you need to perform? Probably 2.
+        // Hint 5: Can you somehow get the answer for x using the answer for x+1? This suggests we can start from a string with more 1s and remove operations? Or we can add 1s one by one.
+        // Hint 6: What happens when x is constant and p is not sorted? Already considered.
+        // Hint 7: Can you somehow use the answer for x+1 to make your solution for x better?
+        // This hints at a constructive approach: We can always achieve the required x by first setting all possible positions to 1 (except 1 and n), then selectively "unset"? But we can't unset, we can only set. So we start from all 0 and add 1s.
+        // Maybe we can always achieve any valid x with at most 2 operations: one to set a prefix/suffix, one to set the middle? Or one to set everything except some holes?
+        // Let's look at sample 3: p = [1,3,2,4,6,5], x = 001100. Required 1s at indices 3,4 (1-based: 3 and 4? Actually x=001100 means indices 3 and 4 are 1? Wait string: 0 0 1 1 0 0, so indices 3 and 4 are 1. pos1=1, posn=5 (value 6 is at index 5). So min=1, max=5. The required 1s are at 3 and 4, which are between 1 and 5. So one operation (1,5) works? But sample output uses two operations: (1,5) and (2,6). Why two? Let's check: After (1,5), s becomes 011100? Wait, p = [1,3,2,4,6,5]. l=1, r=5. p_l=1, p_r=6. min=1, max=6. For i in (1,5): i=2,3,4. p_2=3, p_3=2, p_4=4. All are between 1 and 6, so s_2, s_3, s_4 become 1. So s = 011100. But x = 001100, so s_2=1 but x_2=0. That's allowed because x_2=0 can be 1. So s is valid. So one operation (1,5) is enough! But sample output used two operations. The note says: "After performing an operation for l=1 and r=5, then s=011100. If we also perform an operation for l=2 and r=6, then s will remain the same." So they did an extra operation that didn't change anything. So the minimum number is 1, but they output 2. So we can output any valid sequence up to 5. So for that test case, one operation is enough.
+        // So maybe we can always do it in 1 operation if all required 1s are between pos1 and posn? But wait, what if pos1 and posn are adjacent? Then there are no indices between them, so we can't set anything with that operation. But if there are required 1s elsewhere, we need other operations.
+        // Let's test: Suppose n=3, p=[2,1,3], x=010. pos1=2, posn=3. Required 1 at index 2? But index 2 is pos1, which is 1, so x_2=1 is impossible because value 1 can't be set. So x must have 0 at pos1. So required 1s can only be at indices where value is not 1 or n. In this case, value 2 is at index 1, value 3 at index 3. So required 1 could be at index 1? But index 1 has value 2, which is not 1 or n, so it can be set. x=100? But then pos1=2, posn=3. Required 1 at index 1. It is not between pos1 and posn (since min=2, max=3, index 1 is outside). So we need another operation. Can we set index 1? We need l<1<r, so l must be <1, impossible since indices start at 1. So we cannot set index 1 because there is no l < 1. So any required 1 at index 1 is impossible if n>=3? Wait, l can be 1? But condition is l < i < r, so i must be strictly greater than l. So if i=1, we need l < 1, which is impossible. So index 1 can never be set to 1! Similarly, index n can never be set to 1. So the first and last positions can never become 1. Let's verify: In the operation, we set s_i for l < i < r. So i must be strictly between l and r. Thus, i cannot be 1 or n because there is no index before 1 or after n. So s_1 and s_n can never be set to 1. Therefore, if x_1 = '1' or x_n = '1', it's impossible.
+        // Check sample 4: p = [6,2,3,4,5,1], x = 110110. x_1=1, x_6=0. So x_1=1, impossible. Output -1. Correct.
+        // So we have another necessary condition: x[0] != '1' and x[n-1] != '1'. (0-indexed)
+        // Let's check sample 1: x=010, n=3, x[0]='0', x[2]='0', ok.
+        // Sample 3: x=001100, x[0]='0', x[5]='0', ok.
+        // Sample 5: x=00000, ok.
+        // Sample 6: x=00100, n=5, x[0]='0', x[4]='0', ok.
+        // So we must check this.
+        if (x[0] == '1' || x[n-1] == '1') {
+            cout << "-1\n";
+            return;
+        }
+
+        // Now, we know that indices 1 and n can never be 1. Also indices of value 1 and n can never be 1. So the only settable positions are those with index in [2, n-1] and value in [2, n-1].
+        // Let's consider the operation with l=1, r=n. This sets all i in (1,n) such that min(p_1, p_n) < p_i < max(p_1, p_n). So it sets all indices between 2 and n-1 whose values are strictly between p_1 and p_n. This might not cover all required 1s if some required 1 has value outside that range.
+        // But we can choose other l and r. For example, we can choose l=1, r=pos[n]? Then we set i in (1, pos[n]) with values between p_1 and n. This covers a prefix up to pos[n]-1, but only values > p_1. 
+        // Actually, we can cover any required 1 by choosing l and r as the positions of the "bounding values". For a required 1 at index i with value v, we can set it by choosing l and r such that l < i < r and p_l < v < p_r (or p_r < v < p_l). Since we can choose l and r freely, we can always set a single position by picking l and r as the positions of v-1 and v+1, provided those positions are not i itself and are on opposite sides? But we need l < i < r. So if we pick l = pos[v-1], r = pos[v+1], we need pos[v-1] < i < pos[v+1] or vice versa. If that holds, then one operation sets i. If not, we might need to choose different l and r.
+        // But we have up to 5 operations, so we can set up to 5 individual positions this way. However, if there are many required 1s, we need to cover them in groups.
+        // Let's think about the structure of the permutation. The operation with l and r sets a contiguous index interval, but only a subset of values. However, we can also think of it as: if we choose l and r such that p_l and p_r are the minimum and maximum of a set of values, then all indices with values in that range that lie between l and r are set.
+        // This is similar to: we can set all indices that are in the "range" of a Cartesian tree or something.
+        // Another perspective: The operation is essentially: pick an interval [l,r], and for all i inside, if p_i is between p_l and p_r, set it. This is equivalent to: we can set any i such that there exist l < i < r with p_l < p_i < p_r. So s_i can become 1 if there is an inversion "around" i? Not exactly.
+        // Let's consider the condition for a single index i to be settable: There must exist l < i < r such that p_l < p_i < p_r or p_r < p_i < p_l. In other words, i is not a "record" from left or right? Actually, i is settable if there is a smaller element to its left and a larger element to its right, or vice versa. This is exactly the condition that i is not a left-to-right maximum or minimum? Wait: If there exists l < i with p_l < p_i and r > i with p_r > p_i, then we can set i. Similarly if there is l < i with p_l > p_i and r > i with p_r < p_i. So i is settable if it is not the case that all elements to the left are greater than p_i and all elements to the right are less than p_i, etc. Actually, i is settable unless p_i is a "valley" or "peak" that is extreme? Let's check: For i to be unsettable, for any l < i and r > i, we cannot have both p_l < p_i < p_r or both p_l > p_i > p_r. This means that either all left elements are >

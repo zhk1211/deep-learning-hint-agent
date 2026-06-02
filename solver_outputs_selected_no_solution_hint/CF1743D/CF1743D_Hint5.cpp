@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n;
+    string s;
+    cin >> n >> s;
+    
+    // Find first '1'
+    int first_one = -1;
+    for (int i = 0; i < n; i++) {
+        if (s[i] == '1') {
+            first_one = i;
+            break;
+        }
+    }
+    
+    if (first_one == -1) {
+        cout << "0\n";
+        return 0;
+    }
+    
+    // The string without leading zeros
+    string t = s.substr(first_one);
+    int m = t.size();
+    
+    // Find first zero after the leading one
+    int first_zero = -1;
+    for (int i = 1; i < m; i++) {
+        if (t[i] == '0') {
+            first_zero = i;
+            break;
+        }
+    }
+    
+    if (first_zero == -1) {
+        // All ones, answer is all ones
+        cout << string(m, '1') << "\n";
+        return 0;
+    }
+    
+    // We will try to maximize the OR by choosing a second substring
+    // that starts somewhere between 0 and first_zero, and has length m.
+    // We only need to consider starting positions where t[start] == '1'.
+    string best = t;
+    for (int start = 0; start <= first_zero; start++) {
+        if (t[start] == '0') continue;
+        string cur = t;
+        for (int i = 0; i < m - start; i++) {
+            if (t[start + i] == '1') {
+                cur[first_zero + i] = '1';
+            }
+        }
+        if (cur > best) best = cur;
+    }
+    
+    cout << best << "\n";
+    return 0;
+}

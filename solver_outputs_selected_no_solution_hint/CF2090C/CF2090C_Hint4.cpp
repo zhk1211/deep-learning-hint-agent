@@ -1,0 +1,264 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Cell {
+    int x, y;
+    bool operator<(const Cell& o) const {
+        if (x != o.x) return x < o.x;
+        return y < o.y;
+    }
+    bool operator==(const Cell& o) const {
+        return x == o.x && y == o.y;
+    }
+};
+
+int dist(int x, int y) {
+    return x + y;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int q;
+    cin >> q;
+    while (q--) {
+        int n;
+        cin >> n;
+        vector<int> t(n);
+        for (int i = 0; i < n; ++i) cin >> t[i];
+        
+        // We maintain two sets of candidate table cells:
+        // For type 0: completely free tables (all 4 cells free)
+        // For type 1: any free table cell
+        
+        // We'll maintain a set of tables (by their base coordinate (3x+1,3y+1))
+        // and track which cells are occupied.
+        // But the problem can be simplified using the hints:
+        // The first guest has limited candidates.
+        // Actually, we can simulate the process efficiently by maintaining
+        // the set of available table cells sorted by distance, then x, then y.
+        
+        // We'll use a set of available cells for type 0 (completely free tables)
+        // and type 1 (any free cell).
+        // When a table becomes partially occupied, it's removed from type0 set.
+        
+        // We need to generate candidate cells dynamically.
+        // Observations: The distance from (0,0) to (x,y) is x+y.
+        // Tables are at positions (3a+1,3b+1), (3a+1,3b+2), (3a+2,3b+1), (3a+2,3b+2).
+        // The minimal distance among these four is (3a+1)+(3b+1) = 3(a+b)+2.
+        // So tables are grouped by a+b.
+        
+        // We can maintain a pointer to the next "ring" of tables to consider.
+        // But we need to handle up to 50000 guests, so we can just simulate
+        // using priority queues or sets.
+        
+        // We'll maintain:
+        // - occupied: set of occupied cells
+        // - free_tables: set of tables (represented by (a,b)) that are completely free
+        // - free_cells: set of all free table cells
+        
+        // However, generating all possible cells up to needed distance is feasible
+        // because max distance is about O(sqrt(n))? Actually n=50000, max distance ~ 600.
+        // We can pre-generate all table cells up to some bound.
+        
+        // Let's use a BFS-like generation: we maintain a set of candidate cells
+        // that are not yet occupied, and we add new cells as needed.
+        
+        set<pair<int, Cell>> type0_candidates; // (dist, cell) for completely free tables
+        set<pair<int, Cell>> type1_candidates; // (dist, cell) for any free cell
+        
+        // We'll also maintain table occupancy count.
+        map<pair<int,int>, int> table_occ; // (a,b) -> number of occupied cells in that table
+        
+        // To avoid generating too many cells upfront, we can generate on the fly.
+        // We'll keep track of the maximum distance we have generated cells for.
+        // Since guests always pick the nearest, we can generate cells in increasing distance.
+        
+        // We'll use a queue of cells to add, sorted by distance.
+        // Actually, we can just maintain a set of "available cells" and when a guest
+        // picks one, we remove it and possibly add new cells that become reachable?
+        // No, all cells are reachable from the start; distance is just Manhattan.
+        
+        // Let's precompute all table cells up to a sufficient distance.
+        // Max distance: worst case each guest goes to a new table, distance grows.
+        // For n=50000, max distance is around 600 (since number of cells within distance D is O(D^2)).
+        // Actually number of table cells within distance D is about (D/3)^2 * 4.
+        // So D ~ sqrt(n)*3 ~ 600. So we can generate all cells up to distance 1000.
+        
+        const int MAX_DIST = 2000;
+        vector<Cell> all_cells;
+        for (int a = 0; 3*a+2 <= MAX_DIST; ++a) {
+            for (int b = 0; 3*b+2 <= MAX_DIST; ++b) {
+                int x1 = 3*a+1, y1 = 3*b+1;
+                if (x1 + y1 > MAX_DIST) continue;
+                all_cells.push_back({x1, y1});
+                all_cells.push_back({x1, y1+1});
+                all_cells.push_back({x1+1, y1});
+                all_cells.push_back({x1+1, y1+1});
+            }
+        }
+        sort(all_cells.begin(), all_cells.end(), [](const Cell& p, const Cell& q) {
+            int dp = p.x + p.y, dq = q.x + q.y;
+            if (dp != dq) return dp < dq;
+            if (p.x != q.x) return p.x < q.x;
+            return p.y < q.y;
+        });
+        all_cells.erase(unique(all_cells.begin(), all_cells.end()), all_cells.end());
+        
+        // Now we can insert all these cells into our candidate sets.
+        // But we need to know which tables are completely free initially.
+        // Initially all tables are free.
+        set<Cell> free_cells(all_cells.begin(), all_cells.end());
+        set<pair<int,int>> free_tables; // (a,b)
+        for (int a = 0; 3*a+2 <= MAX_DIST; ++a) {
+            for (int b = 0; 3*b+2 <= MAX_DIST; ++b) {
+                if (3*a+1 + 3*b+1 > MAX_DIST) continue;
+                free_tables.insert({a,b});
+            }
+        }
+        
+        // We'll maintain a pointer to the next cell to consider for type0 and type1?
+        // Actually we can just use the sorted all_cells and maintain sets of available cells.
+        // But we need to efficiently find the best cell for type0 and type1.
+        // We can maintain two sets: type0_cells and type1_cells.
+        // type1_cells is just free_cells.
+        // type0_cells is subset of free_cells that belong to completely free tables.
+        
+        set<Cell> type0_cells;
+        for (auto& cell : free_cells) {
+            int a = (cell.x - 1) / 3;
+            int b = (cell.y - 1) / 3;
+            // Check if table is completely free? Initially yes.
+            type0_cells.insert(cell);
+        }
+        
+        // But we need to update these sets when a cell is occupied.
+        // When a cell is occupied:
+        // - Remove from free_cells and type0_cells.
+        // - Increment table_occ for its table.
+        // - If table_occ becomes 1, that table is no longer completely free,
+        //   so remove all its cells from type0_cells.
+        
+        // We also need to handle the case when a guest of type 0 picks a cell:
+        // they pick from type0_cells.
+        // A guest of type 1 picks from free_cells.
+        
+        // However, we must ensure that when a type 0 guest picks a cell,
+        // they only consider tables that are completely unoccupied *at that moment*.
+        // And they pick the nearest such cell.
+        
+        // The sets will be maintained correctly.
+        
+        // But we need to output the chosen cells.
+        vector<Cell> ans;
+        
+        for (int i = 0; i < n; ++i) {
+            Cell chosen;
+            if (t[i] == 0) {
+                // pick from type0_cells
+                // The set is ordered by distance, then x, then y.
+                // But our set<Cell> uses x then y, not distance!
+                // We need to order by distance first.
+                // So we should use a set with custom comparator or maintain a priority queue.
+                // Let's change approach: we can just scan all_cells in order and pick the first
+                // that satisfies the condition. Since all_cells is sorted by distance, x, y,
+                // and we only need to find the first available cell of the required type.
+                // With n=50000 and MAX_DIST=2000, number of cells is about 4*(2000/3)^2 ~ 1.7e6.
+                // Scanning from beginning each time would be O(n * cells) = too slow.
+                // We need a faster way.
+            }
+        }
+        
+        // Let's rethink: We can maintain two priority queues or sets with custom ordering.
+        // We'll define a struct for candidate with distance, x, y.
+        struct Candidate {
+            int d, x, y;
+            bool operator<(const Candidate& o) const {
+                if (d != o.d) return d < o.d;
+                if (x != o.x) return x < o.x;
+                return y < o.y;
+            }
+        };
+        
+        set<Candidate> type0_cand;
+        set<Candidate> type1_cand;
+        
+        // We'll also need to quickly remove cells from type0_cand when a table becomes partially occupied.
+        // We can maintain for each table a list of its cells.
+        map<pair<int,int>, vector<Cell>> table_cells;
+        for (auto& cell : all_cells) {
+            int a = (cell.x - 1) / 3;
+            int b = (cell.y - 1) / 3;
+            table_cells[{a,b}].push_back(cell);
+        }
+        
+        // Initialize candidates
+        for (auto& cell : all_cells) {
+            type1_cand.insert({cell.x + cell.y, cell.x, cell.y});
+            type0_cand.insert({cell.x + cell.y, cell.x, cell.y});
+        }
+        
+        map<pair<int,int>, int> occ; // table -> count of occupied cells
+        
+        // We also need to know which tables are completely free.
+        // Initially all are free.
+        set<pair<int,int>> comp_free; // completely free tables
+        for (auto& p : table_cells) comp_free.insert(p.first);
+        
+        // Now process guests
+        for (int i = 0; i < n; ++i) {
+            Candidate chosen;
+            if (t[i] == 0) {
+                // Find first candidate in type0_cand
+                // But type0_cand may contain cells from tables that are no longer completely free.
+                // We need to ensure we only pick from completely free tables.
+                // So we can lazily clean type0_cand: while top is not from a completely free table, pop.
+                while (!type0_cand.empty()) {
+                    auto top = *type0_cand.begin();
+                    int a = (top.x - 1) / 3;
+                    int b = (top.y - 1) / 3;
+                    if (comp_free.count({a,b})) {
+                        chosen = top;
+                        break;
+                    } else {
+                        type0_cand.erase(type0_cand.begin());
+                    }
+                }
+            } else {
+                // type 1: pick from type1_cand (any free cell)
+                // type1_cand only contains free cells, but we must ensure we don't pick occupied ones.
+                // We'll maintain type1_cand as the set of free cells.
+                // So just take the top.
+                chosen = *type1_cand.begin();
+            }
+            
+            // Output
+            cout << chosen.x << " " << chosen.y << "\n";
+            
+            // Update structures
+            Cell cell = {chosen.x, chosen.y};
+            int a = (cell.x - 1) / 3;
+            int b = (cell.y - 1) / 3;
+            
+            // Remove from type1_cand
+            type1_cand.erase(chosen);
+            // Remove from type0_cand (if present)
+            type0_cand.erase(chosen);
+            
+            // Update occupancy
+            occ[{a,b}]++;
+            if (occ[{a,b}] == 1) {
+                // Table is no longer completely free
+                comp_free.erase({a,b});
+                // We don't need to immediately remove its other cells from type0_cand;
+                // they will be lazily skipped when we check comp_free.
+            }
+            
+            // Note: if a table becomes fully occupied (occ == 4), its cells are already removed from type1_cand.
+            // No further action needed.
+        }
+    }
+    
+    return 0;
+}
