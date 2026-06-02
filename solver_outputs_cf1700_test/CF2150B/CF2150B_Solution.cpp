@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -33,6 +32,67 @@ long long nCr(int n, int r) {
     return fact[n] * invfact[r] % MOD * invfact[n-r] % MOD;
 }
 
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n+1);
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    
+    // Check if total sum of a_i equals n
+    int sum_a = 0;
+    for (int i = 1; i <= n; i++) {
+        sum_a += a[i];
+    }
+    if (sum_a != n) {
+        cout << 0 << "\n";
+        return;
+    }
+    
+    // For each column j, the black cell must be in row i <= min(j, n-j+1)
+    // So the maximum row index that can have a black cell in column j is limit_j = min(j, n-j+1)
+    // We'll process rows from n down to 1.
+    // c = number of available columns for current row and rows below.
+    // Initially, for row n, available columns are those with limit_j >= n.
+    // But limit_j <= ceil(n/2). So for row > ceil(n/2), no columns available.
+    
+    long long ans = 1;
+    int available = 0;
+    // We'll maintain the number of columns that become available at each row.
+    // limit_j = min(j, n-j+1). For a given row i, columns j such that limit_j >= i.
+    // limit_j >= i  <=>  j >= i and n-j+1 >= i  <=>  i <= j <= n-i+1.
+    // So for row i, the columns that are available are j in [i, n-i+1].
+    // Number of such columns is (n-i+1) - i + 1 = n - 2*i + 2.
+    // But we must subtract columns already used by rows > i.
+    // We'll iterate i from n down to 1.
+    // At row i, new columns that become available (compared to row i+1) are those with limit_j == i.
+    // limit_j = i when min(j, n-j+1) = i.
+    // Case 1: j = i and n-j+1 >= i => n-i+1 >= i => i <= (n+1)/2.
+    // Case 2: n-j+1 = i => j = n-i+1 and j >= i => n-i+1 >= i => i <= (n+1)/2.
+    // So for i <= (n+1)/2, two new columns become available (i and n-i+1), unless i == n-i+1 (i.e., i = (n+1)/2 when n odd), then only one.
+    // For i > (n+1)/2, no new columns become available.
+    
+    for (int i = n; i >= 1; i--) {
+        // add new columns that become available at row i
+        if (i <= (n+1)/2) {
+            if (i == n-i+1) {
+                available += 1;
+            } else {
+                available += 2;
+            }
+        }
+        // we need to choose a_i columns from the available ones for this row
+        if (a[i] > available) {
+            cout << 0 << "\n";
+            return;
+        }
+        ans = ans * nCr(available, a[i]) % MOD;
+        available -= a[i];
+    }
+    cout << ans << "\n";
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -40,33 +100,7 @@ int main() {
     int t;
     cin >> t;
     while (t--) {
-        int n;
-        cin >> n;
-        vector<int> a(n+1);
-        for (int i = 1; i <= n; i++) {
-            cin >> a[i];
-        }
-        vector<int> max_row_for_col(n+1, 0);
-        for (int j = 1; j <= n; j++) {
-            max_row_for_col[j] = min(j, n - j + 1);
-        }
-        vector<int> cols_available_at_row(n+2, 0);
-        for (int j = 1; j <= n; j++) {
-            cols_available_at_row[max_row_for_col[j]]++;
-        }
-        long long ans = 1;
-        int current_available = 0;
-        for (int i = n; i >= 1; i--) {
-            current_available += cols_available_at_row[i];
-            if (a[i] > current_available) {
-                ans = 0;
-                break;
-            }
-            ans = ans * nCr(current_available, a[i]) % MOD;
-            current_available -= a[i];
-        }
-        if (current_available != 0) ans = 0;
-        cout << ans << '\n';
+        solve();
     }
     return 0;
 }

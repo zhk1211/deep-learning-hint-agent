@@ -1,18 +1,16 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
 const int MOD = 998244353;
 
-int modpow(long long a, long long e) {
-    long long res = 1;
-    a %= MOD;
+int modpow(int a, int e) {
+    int res = 1;
     while (e) {
-        if (e & 1) res = res * a % MOD;
-        a = a * a % MOD;
+        if (e & 1) res = 1LL * res * a % MOD;
+        a = 1LL * a * a % MOD;
         e >>= 1;
     }
-    return (int)res;
+    return res;
 }
 
 int main() {
@@ -29,11 +27,11 @@ int main() {
         vector<int> sa = a, sb = b;
         sort(sa.begin(), sa.end());
         sort(sb.begin(), sb.end());
-        long long prod = 1;
+        long long cur = 1;
         for (int i = 0; i < n; ++i) {
-            prod = prod * min(sa[i], sb[i]) % MOD;
+            cur = cur * min(sa[i], sb[i]) % MOD;
         }
-        cout << prod;
+        cout << cur << ' ';
         while (q--) {
             int o, x;
             cin >> o >> x;
@@ -42,18 +40,18 @@ int main() {
                 int val = a[x];
                 a[x]++;
                 int pos = upper_bound(sa.begin(), sa.end(), val) - sa.begin() - 1;
-                prod = prod * modpow(min(sa[pos], sb[pos]), MOD - 2) % MOD;
+                cur = cur * modpow(min(sa[pos], sb[pos]), MOD - 2) % MOD;
                 sa[pos]++;
-                prod = prod * min(sa[pos], sb[pos]) % MOD;
+                cur = cur * min(sa[pos], sb[pos]) % MOD;
             } else {
                 int val = b[x];
                 b[x]++;
                 int pos = upper_bound(sb.begin(), sb.end(), val) - sb.begin() - 1;
-                prod = prod * modpow(min(sa[pos], sb[pos]), MOD - 2) % MOD;
+                cur = cur * modpow(min(sa[pos], sb[pos]), MOD - 2) % MOD;
                 sb[pos]++;
-                prod = prod * min(sa[pos], sb[pos]) % MOD;
+                cur = cur * min(sa[pos], sb[pos]) % MOD;
             }
-            cout << ' ' << prod;
+            cout << cur << ' ';
         }
         cout << '\n';
     }

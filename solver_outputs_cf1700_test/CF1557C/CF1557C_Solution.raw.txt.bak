@@ -1,0 +1,67 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1'000'000'007;
+const int MAXN = 200'000;
+
+long long fact[MAXN + 5], inv_fact[MAXN + 5];
+
+long long mod_pow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+void precompute() {
+    fact[0] = 1;
+    for (int i = 1; i <= MAXN; i++) {
+        fact[i] = fact[i - 1] * i % MOD;
+    }
+    inv_fact[MAXN] = mod_pow(fact[MAXN], MOD - 2);
+    for (int i = MAXN - 1; i >= 0; i--) {
+        inv_fact[i] = inv_fact[i + 1] * (i + 1) % MOD;
+    }
+}
+
+long long nCr(int n, int r) {
+    if (r < 0 || r > n) return 0;
+    return fact[n] * inv_fact[r] % MOD * inv_fact[n - r] % MOD;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    precompute();
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        long long even_ways = 0;
+        for (int i = 0; i <= n; i += 2) {
+            even_ways = (even_ways + nCr(n, i)) % MOD;
+        }
+        long long dp_equal = 1; // dp[i][1]
+        long long dp_greater = 1; // dp[i][0]
+        long long pow2_n = mod_pow(2, n);
+        for (int i = 0; i < k; i++) {
+            long long new_dp_greater = pow2_n * dp_greater % MOD;
+            long long new_dp_equal;
+            if (n % 2 == 1) {
+                new_dp_equal = dp_equal * (even_ways + 1) % MOD;
+            } else {
+                new_dp_equal = (dp_equal * even_ways % MOD + dp_greater) % MOD;
+            }
+            dp_greater = new_dp_greater;
+            dp_equal = new_dp_equal;
+        }
+        cout << dp_equal % MOD << '\n';
+    }
+    return 0;
+}
+```

@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -18,7 +17,7 @@ int main() {
             // n is even
             // check if n is a power of 2
             if ((n & (n - 1)) == 0) {
-                // power of 2
+                // n is power of 2
                 int cnt = 0;
                 while (n > 1) {
                     n >>= 1;
@@ -34,5 +33,6 @@ int main() {
             }
         }
     }
+    
     return 0;
 }

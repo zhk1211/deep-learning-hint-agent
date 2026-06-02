@@ -1,0 +1,56 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> p(n);
+    vector<int> pos(n + 1);
+    for (int i = 0; i < n; ++i) {
+        cin >> p[i];
+        pos[p[i]] = i;
+    }
+    string x;
+    cin >> x;
+
+    // Check impossible conditions
+    if (x[0] == '1' || x[n - 1] == '1' || x[pos[1]] == '1' || x[pos[n]] == '1') {
+        cout << "-1\n";
+        return;
+    }
+
+    // We will output 5 operations that set all possible positions to 1
+    // The operations are:
+    // (1, pos_1)  (1-indexed)
+    // (1, pos_n)
+    // (pos_1, n)
+    // (pos_n, n)
+    // (pos_1, pos_n)
+    // But we must ensure l < r for each operation.
+    // Since pos_1 and pos_n are distinct and not at boundaries (due to x checks),
+    // all these intervals are valid (l < r).
+    int p1 = pos[1] + 1; // 1-indexed
+    int pn = pos[n] + 1;
+
+    // Ensure p1 < pn as assumed in editorial, but operations work either way.
+    // Actually the set of operations covers all internal indices regardless of order.
+    cout << "5\n";
+    cout << "1 " << p1 << "\n";
+    cout << "1 " << pn << "\n";
+    cout << p1 << " " << n << "\n";
+    cout << pn << " " << n << "\n";
+    cout << min(p1, pn) << " " << max(p1, pn) << "\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

@@ -10,68 +10,64 @@ void solve() {
         cin >> p[i];
     }
 
-    vector<int> q(n);
-    vector<int> odd_idx, even_idx;
+    // Find position of n (1-indexed)
+    int pos_n = -1;
     for (int i = 0; i < n; ++i) {
-        if (i % 2 == 0) odd_idx.push_back(i);
-        else even_idx.push_back(i);
-    }
-
-    // Check if n is at odd position (0-indexed even)
-    bool n_at_odd = false;
-    for (int i = 0; i < n; ++i) {
-        if (p[i] == n && i % 2 == 0) {
-            n_at_odd = true;
+        if (p[i] == n) {
+            pos_n = i;
             break;
         }
     }
 
-    if (n_at_odd) {
-        // Place large numbers (n/2+1 .. n) at odd indices
-        // Sort odd indices by p[i] ascending
-        sort(odd_idx.begin(), odd_idx.end(), [&](int i, int j) {
-            return p[i] < p[j];
-        });
-        // Place small numbers (1 .. n/2) at even indices
-        // Sort even indices by p[i] descending
-        sort(even_idx.begin(), even_idx.end(), [&](int i, int j) {
-            return p[i] > p[j];
-        });
+    vector<int> q(n);
+    if (pos_n % 2 == 0) {
+        // n is at odd position (0-indexed even)
+        // We want local maximums at odd indices (0-indexed even) except first
+        vector<pair<int, int>> odd_indices, even_indices;
+        for (int i = 0; i < n; ++i) {
+            if (i % 2 == 0) {
+                odd_indices.emplace_back(p[i], i);
+            } else {
+                even_indices.emplace_back(p[i], i);
+            }
+        }
+        // Sort odd indices by p_i ascending
+        sort(odd_indices.begin(), odd_indices.end());
+        // Sort even indices by p_i descending
+        sort(even_indices.begin(), even_indices.end(), greater<pair<int, int>>());
 
         int val = n;
-        for (int idx : odd_idx) {
-            q[idx] = val--;
+        for (auto &pr : odd_indices) {
+            q[pr.second] = val--;
         }
         val = 1;
-        for (int idx : even_idx) {
-            q[idx] = val++;
+        for (auto &pr : even_indices) {
+            q[pr.second] = val++;
         }
     } else {
-        // n is at even position, reverse p, compute q, reverse back
+        // n is at even position (0-indexed odd)
+        // Reverse p, compute q for reversed, then reverse q back
         reverse(p.begin(), p.end());
-        vector<int> q_rev(n);
-        odd_idx.clear();
-        even_idx.clear();
+        vector<pair<int, int>> odd_indices, even_indices;
         for (int i = 0; i < n; ++i) {
-            if (i % 2 == 0) odd_idx.push_back(i);
-            else even_idx.push_back(i);
+            if (i % 2 == 0) {
+                odd_indices.emplace_back(p[i], i);
+            } else {
+                even_indices.emplace_back(p[i], i);
+            }
         }
-        sort(odd_idx.begin(), odd_idx.end(), [&](int i, int j) {
-            return p[i] < p[j];
-        });
-        sort(even_idx.begin(), even_idx.end(), [&](int i, int j) {
-            return p[i] > p[j];
-        });
+        sort(odd_indices.begin(), odd_indices.end());
+        sort(even_indices.begin(), even_indices.end(), greater<pair<int, int>>());
+
         int val = n;
-        for (int idx : odd_idx) {
-            q_rev[idx] = val--;
+        for (auto &pr : odd_indices) {
+            q[pr.second] = val--;
         }
         val = 1;
-        for (int idx : even_idx) {
-            q_rev[idx] = val++;
+        for (auto &pr : even_indices) {
+            q[pr.second] = val++;
         }
-        reverse(q_rev.begin(), q_rev.end());
-        q = q_rev;
+        reverse(q.begin(), q.end());
     }
 
     for (int i = 0; i < n; ++i) {

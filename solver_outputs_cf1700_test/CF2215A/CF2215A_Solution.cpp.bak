@@ -1,0 +1,52 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        long long p, q;
+        cin >> n >> k >> p >> q;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        vector<long long> b(n), c(n), min_bc(n);
+        for (int i = 0; i < n; ++i) {
+            b[i] = a[i] % p;
+            c[i] = (a[i] % q) % p;
+            min_bc[i] = min(b[i], c[i]);
+        }
+
+        vector<long long> pref_min(n + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            pref_min[i + 1] = pref_min[i] + min_bc[i];
+        }
+
+        vector<long long> pref_b(n + 1, 0), pref_c(n + 1, 0);
+        for (int i = 0; i < n; ++i) {
+            pref_b[i + 1] = pref_b[i] + b[i];
+            pref_c[i + 1] = pref_c[i] + c[i];
+        }
+
+        long long ans = LLONG_MAX;
+        for (int l = 0; l + k <= n; ++l) {
+            int r = l + k;
+            long long sum_out = pref_min[l] + (pref_min[n] - pref_min[r]);
+            long long sum_b = pref_b[r] - pref_b[l];
+            long long sum_c = pref_c[r] - pref_c[l];
+            long long cur = sum_out + min(sum_b, sum_c);
+            ans = min(ans, cur);
+        }
+
+        cout << ans << '\n';
+    }
+
+    return 0;
+}

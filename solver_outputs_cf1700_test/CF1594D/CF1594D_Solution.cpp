@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -6,19 +5,17 @@ void solve() {
     int n, m;
     cin >> n >> m;
     vector<vector<pair<int, int>>> adj(n + 1);
-    for (int k = 0; k < m; ++k) {
-        int i, j;
-        string c;
-        cin >> i >> j >> c;
-        int w = (c == "imposter") ? 1 : 0;
-        adj[i].push_back({j, w});
-        adj[j].push_back({i, w});
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        string s;
+        cin >> u >> v >> s;
+        int w = (s == "imposter") ? 1 : 0;
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w});
     }
-
     vector<int> color(n + 1, -1);
     int ans = 0;
-
-    for (int i = 1; i <= n; ++i) {
+    for (int i = 1; i <= n; i++) {
         if (color[i] != -1) continue;
         vector<int> comp;
         queue<int> q;
@@ -31,8 +28,8 @@ void solve() {
             for (auto [v, w] : adj[u]) {
                 if (color[v] == -1) {
                     color[v] = color[u] ^ w;
-                    q.push(v);
                     comp.push_back(v);
+                    q.push(v);
                 } else if (color[v] != (color[u] ^ w)) {
                     ok = false;
                 }

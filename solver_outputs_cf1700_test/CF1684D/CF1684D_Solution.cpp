@@ -1,11 +1,10 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
+    
     int t;
     cin >> t;
     while (t--) {
@@ -15,23 +14,20 @@ int main() {
         for (int i = 0; i < n; ++i) {
             cin >> a[i];
         }
-
-        long long sum_a = accumulate(a.begin(), a.end(), 0LL);
+        
         vector<long long> b(n);
         for (int i = 0; i < n; ++i) {
-            // n - 1 - i is the number of traps after i (0-indexed)
-            b[i] = a[i] - (n - 1 - i);
+            b[i] = a[i] - (n - i - 1);
         }
-
-        // pick k largest values of b
-        sort(b.rbegin(), b.rend());
-        long long sum_b = 0;
-        for (int i = 0; i < k; ++i) {
-            sum_b += b[i];
-        }
-
+        
+        sort(b.begin(), b.end(), greater<long long>());
+        
+        long long sum_a = accumulate(a.begin(), a.end(), 0LL);
+        long long sum_b = accumulate(b.begin(), b.begin() + k, 0LL);
+        
         long long ans = sum_a - sum_b - (long long)k * (k - 1) / 2;
         cout << ans << '\n';
     }
+    
     return 0;
 }

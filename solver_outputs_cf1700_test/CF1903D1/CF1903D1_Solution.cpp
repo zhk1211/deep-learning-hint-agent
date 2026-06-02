@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -18,25 +17,22 @@ int main() {
         cin >> k;
         vector<long long> cur = a;
         long long ans = 0;
-        for (int b = 60; b >= 0; --b) {
-            long long bit = 1LL << b;
+        for (int bit = 60; bit >= 0; --bit) {
             long long need = 0;
+            long long mask = (1LL << bit);
+            vector<long long> tmp = cur;
             for (int i = 0; i < n; ++i) {
-                if (!(cur[i] & bit)) {
-                    long long r = cur[i] & (bit - 1);
-                    need += bit - r;
+                if (!(cur[i] & mask)) {
+                    long long cost = mask - (cur[i] % mask);
+                    need += cost;
+                    tmp[i] += cost;
                     if (need > k) break;
                 }
             }
             if (need <= k) {
                 k -= need;
-                ans |= bit;
-                for (int i = 0; i < n; ++i) {
-                    if (!(cur[i] & bit)) {
-                        long long r = cur[i] & (bit - 1);
-                        cur[i] += bit - r;
-                    }
-                }
+                ans |= mask;
+                cur = move(tmp);
             }
         }
         cout << ans << '\n';

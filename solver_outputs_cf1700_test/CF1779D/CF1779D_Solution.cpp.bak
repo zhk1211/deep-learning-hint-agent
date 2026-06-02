@@ -1,0 +1,74 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n), b(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    for (int i = 0; i < n; ++i) cin >> b[i];
+    int m;
+    cin >> m;
+    vector<int> x(m);
+    for (int i = 0; i < m; ++i) cin >> x[i];
+
+    // Check impossible case: a[i] < b[i]
+    for (int i = 0; i < n; ++i) {
+        if (a[i] < b[i]) {
+            cout << "NO\n";
+            return;
+        }
+    }
+
+    // Collect required cuts (b[i] where a[i] != b[i])
+    vector<int> required;
+    for (int i = 0; i < n; ++i) {
+        if (a[i] != b[i]) {
+            required.push_back(b[i]);
+        }
+    }
+
+    // Check if razors are sufficient for required cuts
+    sort(required.begin(), required.end());
+    sort(x.begin(), x.end());
+    int j = 0;
+    for (int val : required) {
+        while (j < m && x[j] < val) ++j;
+        if (j == m || x[j] != val) {
+            cout << "NO\n";
+            return;
+        }
+        ++j; // use this razor
+    }
+
+    // Simulate cuts with monotonic stack
+    vector<int> st;
+    for (int i = 0; i < n; ++i) {
+        // Remove cuts that are too small (would make a[i] < b[i])
+        while (!st.empty() && st.back() < b[i]) {
+            st.pop_back();
+        }
+        // If current top equals b[i], it's already satisfied by a previous cut
+        if (!st.empty() && st.back() == b[i]) {
+            continue;
+        }
+        // If a[i] != b[i], we need a new cut of size b[i]
+        if (a[i] != b[i]) {
+            st.push_back(b[i]);
+        }
+    }
+
+    cout << "YES\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

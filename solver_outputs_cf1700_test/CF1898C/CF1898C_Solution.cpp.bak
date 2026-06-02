@@ -1,0 +1,50 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, m, k;
+    cin >> n >> m >> k;
+    int min_steps = (n - 1) + (m - 1);
+    if (k < min_steps || (k - min_steps) % 2 != 0) {
+        cout << "NO\n";
+        return;
+    }
+    cout << "YES\n";
+    vector<vector<char>> hor(n, vector<char>(m - 1, 'R'));
+    vector<vector<char>> ver(n - 1, vector<char>(m, 'R'));
+
+    for (int j = 0; j < m - 1; ++j) {
+        hor[0][j] = (j % 2 == 0 ? 'R' : 'B');
+    }
+    for (int i = 0; i < n - 1; ++i) {
+        ver[i][m - 1] = ((i + (m - 1)) % 2 == 0 ? 'R' : 'B');
+    }
+    if ((k - min_steps) % 4 == 2) {
+        hor[0][0] = 'B';
+        hor[1][0] = 'B';
+        ver[0][0] = 'R';
+        ver[0][1] = 'R';
+    }
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m - 1; ++j) {
+            cout << hor[i][j] << " \n"[j == m - 2];
+        }
+    }
+    for (int i = 0; i < n - 1; ++i) {
+        for (int j = 0; j < m; ++j) {
+            cout << ver[i][j] << " \n"[j == m - 1];
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

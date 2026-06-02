@@ -22,44 +22,46 @@ int main() {
         cin >> t[i];
     }
 
-    vector<pair<int, int>> order;
-    order.reserve(n);
-    for (int i = 1; i <= n; ++i) {
-        order.emplace_back(t[i], i);
-    }
-    sort(order.begin(), order.end());
-
-    vector<int> color(n + 1, 0);
-    vector<int> seen(n + 2, 0);
-    int timer = 0;
-
-    vector<int> ans;
-    ans.reserve(n);
-
-    for (auto [topic, u] : order) {
-        ++timer;
+    // Observation 1: check for edges between same color
+    for (int u = 1; u <= n; ++u) {
         for (int v : adj[u]) {
-            if (color[v] != 0) {
-                seen[color[v]] = timer;
+            if (t[u] == t[v]) {
+                cout << -1 << '\n';
+                return 0;
+            }
+        }
+    }
+
+    // Create permutation sorted by color, then by index
+    vector<int> order(n);
+    iota(order.begin(), order.end(), 1);
+    sort(order.begin(), order.end(), [&](int a, int b) {
+        if (t[a] != t[b]) return t[a] < t[b];
+        return a < b;
+    });
+
+    // Simulate greedy coloring to verify
+    vector<int> color(n + 1, 0);
+    for (int u : order) {
+        // Find the smallest positive integer not present among neighbors already colored
+        vector<bool> used(t[u] + 1, false);
+        for (int v : adj[u]) {
+            if (color[v] != 0 && color[v] <= t[u]) {
+                used[color[v]] = true;
             }
         }
         int mex = 1;
-        while (seen[mex] == timer) {
-            ++mex;
-        }
-        if (mex != topic) {
+        while (mex <= t[u] && used[mex]) ++mex;
+        if (mex != t[u]) {
             cout << -1 << '\n';
             return 0;
         }
-        color[u] = mex;
-        ans.push_back(u);
+        color[u] = t[u];
     }
 
     for (int i = 0; i < n; ++i) {
-        if (i) cout << ' ';
-        cout << ans[i];
+        cout << order[i] << " \n"[i == n - 1];
     }
-    cout << '\n';
 
     return 0;
 }

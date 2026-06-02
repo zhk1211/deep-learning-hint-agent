@@ -1,0 +1,49 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, st, en;
+    cin >> n >> st >> en;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<int> depth(n + 1, -1);
+    vector<int> parent(n + 1, 0);
+    queue<int> q;
+    q.push(en);
+    depth[en] = 0;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : adj[u]) {
+            if (depth[v] == -1) {
+                depth[v] = depth[u] + 1;
+                parent[v] = u;
+                q.push(v);
+            }
+        }
+    }
+    vector<int> order(n);
+    iota(order.begin(), order.end(), 1);
+    sort(order.begin(), order.end(), [&](int a, int b) {
+        return depth[a] > depth[b];
+    });
+    for (int i = 0; i < n; i++) {
+        cout << order[i] << " \n"[i == n - 1];
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

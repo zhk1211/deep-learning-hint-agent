@@ -1,8 +1,7 @@
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
-
-typedef long long ll;
+using ll = long long;
 
 int main() {
     ios::sync_with_stdio(false);
@@ -12,9 +11,8 @@ int main() {
     while (t--) {
         int q;
         cin >> q;
-        const ll INF = 4e18;
-        ll L = 1, R = INF;
-        vector<ll> ans;
+        ll L_min = 1, L_max = 4e18; // large enough
+        bool known = false;
         while (q--) {
             int type;
             cin >> type;
@@ -29,37 +27,43 @@ int main() {
                     l = (n - 2) * (a - b) + a + 1;
                     r = (n - 1) * (a - b) + a;
                 }
-                ll newL = max(L, l);
-                ll newR = min(R, r);
-                if (newL <= newR) {
-                    L = newL;
-                    R = newR;
-                    ans.push_back(1);
+                if (!known) {
+                    L_min = l;
+                    L_max = r;
+                    known = true;
+                    cout << 1 << ' ';
                 } else {
-                    ans.push_back(0);
+                    ll new_l = max(L_min, l);
+                    ll new_r = min(L_max, r);
+                    if (new_l <= new_r) {
+                        L_min = new_l;
+                        L_max = new_r;
+                        cout << 1 << ' ';
+                    } else {
+                        cout << 0 << ' ';
+                    }
                 }
             } else {
                 ll a, b;
                 cin >> a >> b;
-                auto days = [&](ll h) -> ll {
-                    if (h <= a) return 1;
-                    ll diff = a - b;
-                    return (h - a + diff - 1) / diff + 1;
-                };
-                ll dL = days(L);
-                ll dR = days(R);
-                if (dL == dR) {
-                    ans.push_back(dL);
+                if (!known) {
+                    cout << -1 << ' ';
                 } else {
-                    ans.push_back(-1);
+                    auto days = [&](ll h) -> ll {
+                        if (h <= a) return 1;
+                        // ceil((h - a) / (a - b)) + 1
+                        ll diff = h - a;
+                        ll step = a - b;
+                        return (diff + step - 1) / step + 1;
+                    };
+                    ll d1 = days(L_min);
+                    ll d2 = days(L_max);
+                    if (d1 == d2) cout << d1 << ' ';
+                    else cout << -1 << ' ';
                 }
             }
         }
-        for (size_t i = 0; i < ans.size(); ++i) {
-            if (i > 0) cout << " ";
-            cout << ans[i];
-        }
-        cout << "\n";
+        cout << '\n';
     }
     return 0;
 }

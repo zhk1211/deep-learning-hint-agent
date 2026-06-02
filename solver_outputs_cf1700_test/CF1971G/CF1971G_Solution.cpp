@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -16,18 +15,17 @@ int main() {
             cin >> a[i];
         }
         
-        unordered_map<int, priority_queue<int, vector<int>, greater<int>>> groups;
+        map<int, priority_queue<int, vector<int>, greater<int>>> groups;
         for (int x : a) {
-            groups[x >> 2].push(x);
+            int key = x >> 2;
+            groups[key].push(x);
         }
         
         for (int i = 0; i < n; ++i) {
             int key = a[i] >> 2;
-            cout << groups[key].top() << ' ';
+            cout << groups[key].top() << " \n"[i == n - 1];
             groups[key].pop();
         }
-        cout << '\n';
     }
-    
     return 0;
 }

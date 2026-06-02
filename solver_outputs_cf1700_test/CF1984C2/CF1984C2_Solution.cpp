@@ -1,15 +1,14 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
 const int MOD = 998244353;
 
-int modpow(int a, int e) {
+int mod_pow(int base, int exp) {
     int res = 1;
-    while (e) {
-        if (e & 1) res = 1LL * res * a % MOD;
-        a = 1LL * a * a % MOD;
-        e >>= 1;
+    while (exp) {
+        if (exp & 1) res = 1LL * res * base % MOD;
+        base = 1LL * base * base % MOD;
+        exp >>= 1;
     }
     return res;
 }
@@ -20,38 +19,25 @@ void solve() {
     vector<long long> a(n);
     for (int i = 0; i < n; ++i) cin >> a[i];
     
-    vector<long long> pref(n + 1, 0);
-    for (int i = 0; i < n; ++i) pref[i + 1] = pref[i] + a[i];
+    vector<long long> pref(n);
+    pref[0] = a[0];
+    for (int i = 1; i < n; ++i) pref[i] = pref[i-1] + a[i];
     
     long long min_pref = *min_element(pref.begin(), pref.end());
     
-    // If prefix sum never becomes negative, answer is 2^n
     if (min_pref >= 0) {
-        cout << modpow(2, n) << '\n';
+        cout << mod_pow(2, n) << '\n';
         return;
     }
     
-    // Count indices where prefix sum is minimum
-    vector<int> min_indices;
-    for (int i = 0; i <= n; ++i) {
-        if (pref[i] == min_pref) min_indices.push_back(i);
-    }
-    
-    // For each minimum index i (where we could apply the important option 2),
-    // count x = number of j < i with pref[j] >= 0
-    // y = n - i
-    // contribution = 2^{x + y}
-    long long ans = 0;
+    int ans = 0;
     int cnt_nonneg = 0;
-    int ptr = 0;
-    for (int i = 0; i <= n; ++i) {
-        if (i > 0 && pref[i - 1] >= 0) cnt_nonneg++;
-        if (ptr < (int)min_indices.size() && min_indices[ptr] == i) {
-            int x = cnt_nonneg;
-            int y = n - i;
-            ans = (ans + modpow(2, x + y)) % MOD;
-            ptr++;
+    for (int i = 0; i < n; ++i) {
+        if (pref[i] == min_pref) {
+            int ways = 1LL * mod_pow(2, cnt_nonneg) * mod_pow(2, n - 1 - i) % MOD;
+            ans = (ans + ways) % MOD;
         }
+        if (pref[i] >= 0) cnt_nonneg++;
     }
     cout << ans << '\n';
 }

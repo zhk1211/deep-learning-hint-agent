@@ -3,9 +3,9 @@
 using namespace std;
 
 const int MOD = 998244353;
-const int MAXN = 500005;
+const int MAXN = 500000;
 
-long long fact[MAXN], invfact[MAXN];
+vector<long long> fact, inv_fact;
 
 long long modpow(long long a, long long e) {
     long long res = 1;
@@ -17,46 +17,59 @@ long long modpow(long long a, long long e) {
     return res;
 }
 
-void precompute() {
+void precompute_factorials(int n) {
+    fact.resize(n + 1);
+    inv_fact.resize(n + 1);
     fact[0] = 1;
-    for (int i = 1; i < MAXN; i++) {
-        fact[i] = fact[i-1] * i % MOD;
+    for (int i = 1; i <= n; i++) {
+        fact[i] = fact[i - 1] * i % MOD;
     }
-    invfact[MAXN-1] = modpow(fact[MAXN-1], MOD-2);
-    for (int i = MAXN-2; i >= 0; i--) {
-        invfact[i] = invfact[i+1] * (i+1) % MOD;
+    inv_fact[n] = modpow(fact[n], MOD - 2);
+    for (int i = n - 1; i >= 0; i--) {
+        inv_fact[i] = inv_fact[i + 1] * (i + 1) % MOD;
     }
+}
+
+void solve() {
+    vector<int> c(26);
+    int total = 0;
+    for (int i = 0; i < 26; i++) {
+        cin >> c[i];
+        total += c[i];
+    }
+
+    int odd = (total + 1) / 2;
+    int even = total / 2;
+
+    vector<long long> dp(total + 1, 0);
+    dp[0] = 1;
+    for (int i = 0; i < 26; i++) {
+        if (c[i] == 0) continue;
+        for (int j = total; j >= 0; j--) {
+            if (j + c[i] <= total) {
+                dp[j + c[i]] = (dp[j + c[i]] + dp[j]) % MOD;
+            }
+        }
+    }
+
+    long long ways = dp[odd];
+    long long ans = ways * fact[odd] % MOD * fact[even] % MOD;
+    for (int i = 0; i < 26; i++) {
+        ans = ans * inv_fact[c[i]] % MOD;
+    }
+    cout << ans << '\n';
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    precompute();
+
+    precompute_factorials(MAXN);
+
     int t;
     cin >> t;
     while (t--) {
-        int c[26];
-        int sum = 0;
-        for (int i = 0; i < 26; i++) {
-            cin >> c[i];
-            sum += c[i];
-        }
-        int odd = (sum + 1) / 2;
-        int even = sum / 2;
-        vector<long long> dp(sum + 1, 0);
-        dp[0] = 1;
-        for (int i = 0; i < 26; i++) {
-            if (c[i] == 0) continue;
-            for (int j = sum; j >= c[i]; j--) {
-                dp[j] = (dp[j] + dp[j - c[i]]) % MOD;
-            }
-        }
-        long long ans = dp[odd] * fact[odd] % MOD;
-        ans = ans * fact[even] % MOD;
-        for (int i = 0; i < 26; i++) {
-            ans = ans * invfact[c[i]] % MOD;
-        }
-        cout << ans << '\n';
+        solve();
     }
     return 0;
 }

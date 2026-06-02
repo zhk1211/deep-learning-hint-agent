@@ -18,28 +18,21 @@ int main() {
             idx[i] = i;
         }
 
-        // Sort indices by x
+        // sort indices by x
         sort(idx.begin(), idx.end(), [&](int i, int j) {
             return x[i] < x[j];
         });
-
         vector<bool> inXl(n, false);
-        for (int i = 0; i < n / 2; ++i) {
-            inXl[idx[i]] = true;
-        }
+        for (int i = 0; i < n / 2; ++i) inXl[idx[i]] = true;
 
-        // Sort indices by y
+        // sort indices by y
         sort(idx.begin(), idx.end(), [&](int i, int j) {
             return y[i] < y[j];
         });
-
         vector<bool> inYl(n, false);
-        for (int i = 0; i < n / 2; ++i) {
-            inYl[idx[i]] = true;
-        }
+        for (int i = 0; i < n / 2; ++i) inYl[idx[i]] = true;
 
-        // Four groups
-        vector<int> A, B, C, D; // A: Xl & Yl, B: Xr & Yr, C: Xl & Yr, D: Xr & Yl
+        vector<int> A, B, C, D;
         for (int i = 0; i < n; ++i) {
             if (inXl[i] && inYl[i]) A.push_back(i);
             else if (!inXl[i] && !inYl[i]) B.push_back(i);
@@ -47,7 +40,7 @@ int main() {
             else D.push_back(i);
         }
 
-        // Pair A with B, C with D
+        // pair A with B, C with D
         for (size_t i = 0; i < A.size(); ++i) {
             cout << A[i] + 1 << ' ' << B[i] + 1 << '\n';
         }

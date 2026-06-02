@@ -1,0 +1,63 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+bool is_prime(int x) {
+    if (x < 2) return false;
+    for (int i = 2; i * i <= x; ++i) {
+        if (x % i == 0) return false;
+    }
+    return true;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        
+        int L = n / 3;
+        int R = (2 * n + 2) / 3; // ceil(2n/3)
+        int p = -1;
+        for (int x = L; x <= R; ++x) {
+            if (is_prime(x)) {
+                p = x;
+                break;
+            }
+        }
+        // According to Bertrand's postulate, such p always exists.
+        
+        vector<int> perm;
+        vector<bool> used(n + 1, false);
+        
+        int low = p, high = p;
+        while (low >= 1 || high <= n) {
+            if (low >= 1 && !used[low]) {
+                perm.push_back(low);
+                used[low] = true;
+            }
+            if (high <= n && !used[high]) {
+                perm.push_back(high);
+                used[high] = true;
+            }
+            low--;
+            high++;
+        }
+        
+        // Append remaining numbers
+        for (int i = 1; i <= n; ++i) {
+            if (!used[i]) {
+                perm.push_back(i);
+            }
+        }
+        
+        for (int i = 0; i < n; ++i) {
+            cout << perm[i] << " \n"[i == n - 1];
+        }
+    }
+    return 0;
+}

@@ -5,7 +5,7 @@ using namespace std;
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
+    
     int t;
     cin >> t;
     while (t--) {
@@ -16,61 +16,60 @@ int main() {
         for (int i = 0; i < m; ++i) {
             cin >> a[i];
         }
-
+        
         vector<int> pref(m + 1, 0);
         for (int i = 0; i < m; ++i) {
             pref[i + 1] = pref[i] ^ a[i];
         }
-
+        
         while (q--) {
             int b, c;
             cin >> b >> c;
             --b;
-            int orig = a[b];
-            a[b] = c;
-
-            int pos = b;
+            
+            int cur = b;
+            int cur_skill = c;
+            int cur_size = 1;
+            int cur_xor = pref[cur] ^ pref[cur + 1];
             int ans = 0;
-            int block_size = 1;
-            int block_start = pos & ~(block_size - 1);
-            int block_xor = 0;
-            for (int i = block_start; i < block_start + block_size; ++i) {
-                block_xor ^= a[i];
-            }
-
-            while (block_size < m) {
-                int other_start;
-                if (pos % (2 * block_size) == block_start) {
-                    other_start = block_start + block_size;
+            
+            for (int round = 0; round < n; ++round) {
+                int block = 1 << round;
+                int pos_in_block = cur % (2 * block);
+                int opp_start, opp_end;
+                if (pos_in_block < block) {
+                    opp_start = cur + (block - pos_in_block);
+                    opp_end = opp_start + block - 1;
                 } else {
-                    other_start = block_start - block_size;
+                    opp_start = cur - (pos_in_block - block + 1);
+                    opp_end = opp_start + block - 1;
                 }
-                int other_xor = 0;
-                for (int i = other_start; i < other_start + block_size; ++i) {
-                    other_xor ^= a[i];
-                }
-
-                if (block_xor > other_xor || (block_xor == other_xor && block_start < other_start)) {
-                    if (pos >= other_start && pos < other_start + block_size) {
-                        ans += block_size;
+                
+                int opp_xor = pref[opp_end + 1] ^ pref[opp_start];
+                int opp_skill = opp_xor ^ a[opp_start];
+                
+                if (cur_skill > opp_skill || (cur_skill == opp_skill && cur < opp_start)) {
+                    cur_skill ^= opp_xor;
+                    cur_size += block;
+                    cur_xor ^= opp_xor;
+                    if (pos_in_block >= block) {
+                        ans += block;
                     }
-                    block_size *= 2;
-                    block_start = min(block_start, other_start);
-                    block_xor ^= other_xor;
                 } else {
-                    if (pos >= block_start && pos < block_start + block_size) {
-                        ans += block_size;
+                    if (pos_in_block < block) {
+                        ans += block;
                     }
-                    block_size *= 2;
-                    block_start = min(block_start, other_start);
-                    block_xor ^= other_xor;
+                    cur_skill = opp_skill ^ cur_xor;
+                    cur_size += block;
+                    cur_xor ^= opp_xor;
+                    cur = opp_start;
                 }
             }
-
+            
             cout << ans << '\n';
-            a[b] = orig;
         }
     }
+    
     return 0;
 }
 ```

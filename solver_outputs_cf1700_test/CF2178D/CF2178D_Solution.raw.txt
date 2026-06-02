@@ -19,56 +19,60 @@ void solve() {
 
     vector<pair<int, int>> attacks;
 
-    if (m == 0) {
+    if (m > 0) {
+        // survivors: largest m
+        // targets: next m
+        // leftovers: smallest n-2m
+        int L = n - 2 * m;
+        // leftover elves attack the next larger leftover, then the first target
+        for (int i = 0; i < L; ++i) {
+            int attacker = a[i].second;
+            int target;
+            if (i + 1 < L) {
+                target = a[i + 1].second;
+            } else {
+                target = a[L].second; // first target
+            }
+            attacks.emplace_back(attacker, target);
+        }
+        // survivors attack targets
+        for (int i = 0; i < m; ++i) {
+            int survivor = a[n - m + i].second;
+            int target = a[L + i].second;
+            attacks.emplace_back(survivor, target);
+        }
+    } else {
+        // m == 0
+        // check if largest can be killed
         long long sum_others = 0;
         for (int i = 0; i < n - 1; ++i) sum_others += a[i].first;
         if (sum_others < a[n - 1].first) {
             cout << "-1\n";
             return;
         }
-        // kill largest with some smaller ones
-        vector<int> killers;
-        long long cur = 0;
+        // collect elves to attack the largest
+        vector<int> to_attack_largest;
+        long long cur_sum = 0;
         for (int i = n - 2; i >= 0; --i) {
-            cur += a[i].first;
-            killers.push_back(i);
-            if (cur >= a[n - 1].first) break;
+            if (cur_sum >= a[n - 1].first) break;
+            to_attack_largest.push_back(i);
+            cur_sum += a[i].first;
         }
-        // remaining smaller elves attack the next larger one
+        reverse(to_attack_largest.begin(), to_attack_largest.end());
+        // remaining smaller elves attack the next larger
         vector<bool> used(n, false);
-        for (int idx : killers) used[idx] = true;
-        int last = -1;
+        for (int idx : to_attack_largest) used[idx] = true;
+        int prev = -1;
         for (int i = 0; i < n - 1; ++i) {
-            if (!used[i]) {
-                if (last != -1) {
-                    attacks.emplace_back(a[last].second, a[i].second);
-                }
-                last = i;
+            if (used[i]) continue;
+            if (prev != -1) {
+                attacks.emplace_back(a[prev].second, a[i].second);
             }
+            prev = i;
         }
-        // killers attack the largest
-        for (int idx : killers) {
+        // now the collected elves attack the largest
+        for (int idx : to_attack_largest) {
             attacks.emplace_back(a[idx].second, a[n - 1].second);
-        }
-    } else {
-        // surviving: largest m
-        // targets: next m
-        // leftovers: smallest n-2m
-        int surv_start = n - m;
-        int target_start = n - 2 * m;
-        int leftover_cnt = n - 2 * m;
-
-        // leftovers attack the next larger
-        for (int i = 0; i < leftover_cnt - 1; ++i) {
-            attacks.emplace_back(a[i].second, a[i + 1].second);
-        }
-        if (leftover_cnt > 0) {
-            // largest leftover attacks a target
-            attacks.emplace_back(a[leftover_cnt - 1].second, a[target_start].second);
-        }
-        // survivors attack targets
-        for (int i = 0; i < m; ++i) {
-            attacks.emplace_back(a[surv_start + i].second, a[target_start + i].second);
         }
     }
 

@@ -1,48 +1,41 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
 const long long INF = 1e18;
 
 void solve() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int n, k;
-        cin >> n >> k;
-        vector<int> a(n);
-        for (int i = 0; i < n; ++i) {
-            cin >> a[i];
-        }
-        // dp[i][j] - min sum using first i elements and j operations
-        vector<vector<long long>> dp(n + 1, vector<long long>(k + 1, INF));
-        dp[0][0] = 0;
-        for (int i = 0; i < n; ++i) {
-            long long cur_min = a[i];
-            for (int d = 0; d <= k && i + d < n; ++d) {
-                if (d > 0) {
-                    cur_min = min(cur_min, (long long)a[i + d]);
-                }
-                long long add = (d + 1) * cur_min;
-                // update dp[i+d+1][j+d] for all valid j
-                for (int j = 0; j <= k - d; ++j) {
-                    if (dp[i][j] != INF) {
-                        long long val = dp[i][j] + add;
-                        if (val < dp[i + d + 1][j + d]) {
-                            dp[i + d + 1][j + d] = val;
-                        }
-                    }
-                }
+    int n, k;
+    cin >> n >> k;
+    vector<long long> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    vector<vector<long long>> dp(n + 1, vector<long long>(k + 1, INF));
+    dp[0][0] = 0;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j <= k; ++j) {
+            if (dp[i][j] == INF) continue;
+            long long mn = a[i];
+            for (int d = 0; d + j <= k && i + d < n; ++d) {
+                mn = min(mn, a[i + d]);
+                dp[i + d + 1][j + d] = min(dp[i + d + 1][j + d], dp[i][j] + mn * (d + 1));
             }
         }
-        long long ans = *min_element(dp[n].begin(), dp[n].end());
-        cout << ans << '\n';
     }
+    long long ans = INF;
+    for (int j = 0; j <= k; ++j) {
+        ans = min(ans, dp[n][j]);
+    }
+    cout << ans << '\n';
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    solve();
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
     return 0;
 }

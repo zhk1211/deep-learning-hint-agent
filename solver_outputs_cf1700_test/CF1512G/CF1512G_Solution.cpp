@@ -1,2 +1,33 @@
-// Solution
+#include <bits/stdc++.h>
+using namespace std;
 
+const int MAXN = 10000000;
+int d[MAXN + 1];
+int ans[MAXN + 1];
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    for (int i = 1; i <= MAXN; ++i) {
+        for (int j = i; j <= MAXN; j += i) {
+            d[j] += i;
+        }
+    }
+
+    fill(ans, ans + MAXN + 1, -1);
+    for (int i = 1; i <= MAXN; ++i) {
+        if (d[i] <= MAXN && ans[d[i]] == -1) {
+            ans[d[i]] = i;
+        }
+    }
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int c;
+        cin >> c;
+        cout << ans[c] << '\n';
+    }
+    return 0;
+}

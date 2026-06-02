@@ -2,50 +2,56 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+using ll = long long;
+
+void solve() {
+    int n, m, q;
+    cin >> n >> m >> q;
+    vector<ll> a(n), b(m);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    for (int i = 0; i < m; ++i) cin >> b[i];
+    
+    sort(a.rbegin(), a.rend());
+    sort(b.rbegin(), b.rend());
+    
+    vector<ll> prefA(n + 1, 0), prefB(m + 1, 0);
+    for (int i = 0; i < n; ++i) prefA[i + 1] = prefA[i] + a[i];
+    for (int i = 0; i < m; ++i) prefB[i + 1] = prefB[i] + b[i];
+    
+    int maxZ = n + m;
+    vector<int> optX(maxZ + 1, 0);
+    int i = 0, j = 0;
+    for (int z = 1; z <= maxZ; ++z) {
+        if (i < n && (j >= m || a[i] >= b[j])) {
+            ++i;
+        } else {
+            ++j;
+        }
+        optX[z] = i;
+    }
+    
+    while (q--) {
+        int x, y, z;
+        cin >> x >> y >> z;
+        int takeX = optX[z];
+        if (takeX > x) {
+            takeX = x;
+        } else if (z - takeX > y) {
+            takeX = z - y;
+        }
+        int takeY = z - takeX;
+        ll ans = prefA[takeX] + prefB[takeY];
+        cout << ans << '\n';
+    }
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
     int t;
     cin >> t;
     while (t--) {
-        int n, m, q;
-        cin >> n >> m >> q;
-        vector<long long> a(n), b(m);
-        for (int i = 0; i < n; ++i) cin >> a[i];
-        for (int i = 0; i < m; ++i) cin >> b[i];
-
-        sort(a.begin(), a.end(), greater<long long>());
-        sort(b.begin(), b.end(), greater<long long>());
-
-        vector<long long> preA(n + 1, 0), preB(m + 1, 0);
-        for (int i = 0; i < n; ++i) preA[i + 1] = preA[i] + a[i];
-        for (int i = 0; i < m; ++i) preB[i + 1] = preB[i] + b[i];
-
-        int total = n + m;
-        vector<int> bestX(total + 1, 0);
-        int i = 0, j = 0;
-        for (int k = 1; k <= total; ++k) {
-            if (i < n && (j >= m || a[i] >= b[j])) {
-                bestX[k] = bestX[k - 1] + 1;
-                ++i;
-            } else {
-                bestX[k] = bestX[k - 1];
-                ++j;
-            }
-        }
-
-        while (q--) {
-            int x, y, z;
-            cin >> x >> y >> z;
-            int low = max(0, z - y);
-            int high = min(x, z);
-            int x_opt = bestX[z];
-            if (x_opt < low) x_opt = low;
-            if (x_opt > high) x_opt = high;
-            long long ans = preA[x_opt] + preB[z - x_opt];
-            cout << ans << '\n';
-        }
+        solve();
     }
     return 0;
 }

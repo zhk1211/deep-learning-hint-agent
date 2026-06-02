@@ -21,19 +21,26 @@ void solve() {
         }
     }
 
-    // Collect required cuts (b[i] where a[i] != b[i])
-    vector<int> required;
+    // Collect required cuts
+    vector<int> needed;
+    stack<int> st;
     for (int i = 0; i < n; ++i) {
-        if (a[i] != b[i]) {
-            required.push_back(b[i]);
+        while (!st.empty() && st.top() < b[i]) {
+            st.pop();
+        }
+        if (a[i] > b[i]) {
+            if (st.empty() || st.top() != b[i]) {
+                st.push(b[i]);
+                needed.push_back(b[i]);
+            }
         }
     }
 
-    // Check if razors are sufficient for required cuts
-    sort(required.begin(), required.end());
+    // Check if razors are sufficient
+    sort(needed.begin(), needed.end());
     sort(x.begin(), x.end());
     int j = 0;
-    for (int val : required) {
+    for (int val : needed) {
         while (j < m && x[j] < val) ++j;
         if (j == m || x[j] != val) {
             cout << "NO\n";
@@ -41,24 +48,6 @@ void solve() {
         }
         ++j; // use this razor
     }
-
-    // Simulate cuts with monotonic stack
-    vector<int> st;
-    for (int i = 0; i < n; ++i) {
-        // Remove cuts that are too small (would make a[i] < b[i])
-        while (!st.empty() && st.back() < b[i]) {
-            st.pop_back();
-        }
-        // If current top equals b[i], it's already satisfied by a previous cut
-        if (!st.empty() && st.back() == b[i]) {
-            continue;
-        }
-        // If a[i] != b[i], we need a new cut of size b[i]
-        if (a[i] != b[i]) {
-            st.push_back(b[i]);
-        }
-    }
-
     cout << "YES\n";
 }
 

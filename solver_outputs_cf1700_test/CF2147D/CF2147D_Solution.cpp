@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -18,15 +17,16 @@ int main() {
 
         map<int, int> freq;
         for (int x : a) {
-            if (x % 2 == 1) {
-                freq[x]++;
-            }
+            freq[x]++;
         }
 
         vector<int> odd_freqs;
-        for (auto& p : freq) {
-            odd_freqs.push_back(p.second);
+        for (auto &p : freq) {
+            if (p.first % 2 == 1) {
+                odd_freqs.push_back(p.second);
+            }
         }
+
         sort(odd_freqs.rbegin(), odd_freqs.rend());
 
         long long diff = 0;

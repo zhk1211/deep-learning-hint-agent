@@ -1,2 +1,75 @@
-// Solution
+#include <bits/stdc++.h>
+using namespace std;
 
+struct Friend {
+    int h, w, id;
+};
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<Friend> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i].h >> a[i].w;
+        a[i].id = i;
+    }
+
+    vector<int> ans(n, -1);
+
+    auto process = [&]() {
+        sort(a.begin(), a.end(), [](const Friend& x, const Friend& y) {
+            if (x.h != y.h) return x.h > y.h;
+            return x.w > y.w;
+        });
+
+        vector<int> min_w(n), min_id(n);
+        min_w[n-1] = a[n-1].w;
+        min_id[n-1] = a[n-1].id;
+        for (int i = n-2; i >= 0; --i) {
+            if (a[i].w < min_w[i+1]) {
+                min_w[i] = a[i].w;
+                min_id[i] = a[i].id;
+            } else {
+                min_w[i] = min_w[i+1];
+                min_id[i] = min_id[i+1];
+            }
+        }
+
+        for (int i = 0; i < n; ++i) {
+            int lo = i+1, hi = n-1, pos = -1;
+            while (lo <= hi) {
+                int mid = (lo + hi) / 2;
+                if (a[mid].h < a[i].h) {
+                    pos = mid;
+                    lo = mid + 1;
+                } else {
+                    hi = mid - 1;
+                }
+            }
+            if (pos != -1) {
+                if (min_w[pos] < a[i].w) {
+                    ans[a[i].id] = min_id[pos] + 1;
+                }
+            }
+        }
+    };
+
+    process();
+    for (auto& f : a) swap(f.h, f.w);
+    process();
+
+    for (int i = 0; i < n; ++i) {
+        cout << ans[i] << " \n"[i == n-1];
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

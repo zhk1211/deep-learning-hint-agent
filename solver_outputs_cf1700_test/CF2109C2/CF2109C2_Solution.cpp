@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -13,32 +12,22 @@ int main() {
         long long n;
         cin >> n;
         
-        // Step 1: mul 9
         cout << "mul 9" << endl;
-        int resp;
+        string resp;
         cin >> resp;
-        if (resp == -1) return 0;
         
-        // Step 2: digit
         cout << "digit" << endl;
         cin >> resp;
-        if (resp == -1) return 0;
         
-        // Step 3: digit
         cout << "digit" << endl;
         cin >> resp;
-        if (resp == -1) return 0;
         
-        // Step 4: add n-9
         long long add_val = n - 9;
         cout << "add " << add_val << endl;
         cin >> resp;
-        if (resp == -1) return 0;
         
-        // Answer
         cout << "!" << endl;
         cin >> resp;
-        if (resp == -1) return 0;
     }
     
     return 0;

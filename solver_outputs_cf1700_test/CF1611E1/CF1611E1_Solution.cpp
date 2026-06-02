@@ -1,72 +1,71 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
 void solve() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int n, k;
-        cin >> n >> k;
-        vector<vector<int>> adj(n + 1);
-        vector<int> friends(k);
-        for (int i = 0; i < k; i++) {
-            cin >> friends[i];
-        }
-        for (int i = 0; i < n - 1; i++) {
-            int u, v;
-            cin >> u >> v;
-            adj[u].push_back(v);
-            adj[v].push_back(u);
-        }
-
-        vector<int> dist_friend(n + 1, -1);
-        queue<int> q;
-        for (int f : friends) {
-            dist_friend[f] = 0;
-            q.push(f);
-        }
-        while (!q.empty()) {
-            int u = q.front();
-            q.pop();
-            for (int v : adj[u]) {
-                if (dist_friend[v] == -1) {
-                    dist_friend[v] = dist_friend[u] + 1;
-                    q.push(v);
-                }
-            }
-        }
-
-        vector<int> dist_root(n + 1, -1);
-        dist_root[1] = 0;
-        q.push(1);
-        while (!q.empty()) {
-            int u = q.front();
-            q.pop();
-            for (int v : adj[u]) {
-                if (dist_root[v] == -1) {
-                    dist_root[v] = dist_root[u] + 1;
-                    q.push(v);
-                }
-            }
-        }
-
-        bool can_win = false;
-        for (int i = 2; i <= n; i++) {
-            if (adj[i].size() == 1) { // leaf
-                if (dist_root[i] < dist_friend[i]) {
-                    can_win = true;
-                    break;
-                }
-            }
-        }
-        cout << (can_win ? "YES" : "NO") << '\n';
+    int n, k;
+    cin >> n >> k;
+    vector<int> friends(k);
+    for (int i = 0; i < k; ++i) {
+        cin >> friends[i];
     }
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    
+    vector<int> dist_root(n + 1, -1);
+    queue<int> q;
+    dist_root[1] = 0;
+    q.push(1);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : adj[u]) {
+            if (dist_root[v] == -1) {
+                dist_root[v] = dist_root[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    
+    vector<int> dist_friend(n + 1, -1);
+    for (int f : friends) {
+        dist_friend[f] = 0;
+        q.push(f);
+    }
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : adj[u]) {
+            if (dist_friend[v] == -1) {
+                dist_friend[v] = dist_friend[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    
+    bool can_win = false;
+    for (int u = 2; u <= n; ++u) {
+        if (adj[u].size() == 1) { // leaf
+            if (dist_root[u] < dist_friend[u]) {
+                can_win = true;
+                break;
+            }
+        }
+    }
+    
+    cout << (can_win ? "YES" : "NO") << '\n';
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    solve();
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
     return 0;
 }

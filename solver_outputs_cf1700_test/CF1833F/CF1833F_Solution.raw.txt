@@ -2,57 +2,49 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const long long MOD = 1000000007;
+const int MOD = 1e9 + 7;
 
-long long mod_pow(long long a, long long b) {
+long long modpow(long long a, long long e) {
     long long res = 1;
-    while (b) {
-        if (b & 1) res = res * a % MOD;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
         a = a * a % MOD;
-        b >>= 1;
+        e >>= 1;
     }
     return res;
 }
 
 int main() {
     ios::sync_with_stdio(false);
-    cin.tie(0);
+    cin.tie(nullptr);
+    
     int t;
     cin >> t;
     while (t--) {
         int n, m;
         cin >> n >> m;
-        map<int, int> freq;
-        for (int i = 0; i < n; ++i) {
-            int x;
-            cin >> x;
-            ++freq[x];
+        vector<int> a(n);
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
         }
-        vector<int> b;
-        vector<long long> c;
-        for (auto &p : freq) {
-            b.push_back(p.first);
-            c.push_back(p.second);
+        sort(a.begin(), a.end());
+        vector<pair<int, int>> comp;
+        for (int x : a) {
+            if (comp.empty() || comp.back().first != x) {
+                comp.push_back({x, 1});
+            } else {
+                comp.back().second++;
+            }
         }
-        int k = b.size();
-        if (m > k) {
-            cout << 0 << '\n';
-            continue;
-        }
-        vector<long long> pref(k + 1);
-        pref[0] = 1;
-        for (int i = 0; i < k; ++i) {
-            pref[i + 1] = pref[i] * c[i] % MOD;
-        }
-        vector<long long> inv_pref(k + 1);
-        inv_pref[k] = mod_pow(pref[k], MOD - 2);
-        for (int i = k; i >= 1; --i) {
-            inv_pref[i - 1] = inv_pref[i] * c[i - 1] % MOD;
+        int k = comp.size();
+        vector<long long> pref(k + 1, 1);
+        for (int i = 0; i < k; i++) {
+            pref[i + 1] = pref[i] * comp[i].second % MOD;
         }
         long long ans = 0;
-        for (int i = 0; i + m <= k; ++i) {
-            if (b[i + m - 1] - b[i] == m - 1) {
-                long long prod = pref[i + m] * inv_pref[i] % MOD;
+        for (int i = 0; i + m <= k; i++) {
+            if (comp[i + m - 1].first - comp[i].first == m - 1) {
+                long long prod = pref[i + m] * modpow(pref[i], MOD - 2) % MOD;
                 ans = (ans + prod) % MOD;
             }
         }

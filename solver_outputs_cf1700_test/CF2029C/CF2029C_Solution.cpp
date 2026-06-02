@@ -1,39 +1,41 @@
-// Solution
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
 
-int f(int x, int a) {
-    if (a > x) return x + 1;
-    if (a == x) return x;
-    return x - 1;
-}
-
-void solve() {
+int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
+    
     int t;
     cin >> t;
     while (t--) {
         int n;
         cin >> n;
-        const int INF = 1e9;
-        int dp0 = 0, dp1 = -INF, dp2 = -INF;
-        for (int i = 0; i < n; ++i) {
-            int a;
-            cin >> a;
-            int ndp0 = f(dp0, a);
-            int ndp1 = max(dp1, dp0);
-            int ndp2 = max(f(dp1, a), f(dp2, a));
-            dp0 = ndp0;
-            dp1 = ndp1;
-            dp2 = ndp2;
+        vector<int> a(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            cin >> a[i];
         }
-        cout << max(dp1, dp2) << '\n';
+        
+        // dp[i][0] : before skip interval
+        // dp[i][1] : inside skip interval
+        // dp[i][2] : after skip interval
+        vector<array<int, 3>> dp(n + 1);
+        dp[0][0] = 0;
+        dp[0][1] = dp[0][2] = -1e9;
+        
+        auto f = [&](int x, int ai) -> int {
+            if (ai > x) return x + 1;
+            if (ai == x) return x;
+            return x - 1;
+        };
+        
+        for (int i = 1; i <= n; ++i) {
+            dp[i][0] = f(dp[i-1][0], a[i]);
+            dp[i][1] = max(dp[i-1][1], dp[i-1][0]);
+            dp[i][2] = max(f(dp[i-1][1], a[i]), f(dp[i-1][2], a[i]));
+        }
+        
+        cout << max(dp[n][1], dp[n][2]) << '\n';
     }
-}
-
-int main() {
-    solve();
+    
     return 0;
 }

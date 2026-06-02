@@ -1,71 +1,93 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
 void solve() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int n, a, b;
-        cin >> n >> a >> b;
-        vector<vector<pair<int, int>>> adj(n + 1);
-        for (int i = 0; i < n - 1; ++i) {
-            int u, v, w;
-            cin >> u >> v >> w;
-            adj[u].emplace_back(v, w);
-            adj[v].emplace_back(u, w);
-        }
-
-        vector<int> xor_a(n + 1, -1);
-        queue<int> q;
-        xor_a[a] = 0;
-        q.push(a);
-        while (!q.empty()) {
-            int u = q.front();
-            q.pop();
-            for (auto &[v, w] : adj[u]) {
-                if (v == b) continue;            // do not pass through b
-                if (xor_a[v] == -1) {
-                    xor_a[v] = xor_a[u] ^ w;
-                    q.push(v);
-                }
-            }
-        }
-
-        vector<int> xor_b(n + 1, -1);
-        xor_b[b] = 0;
-        q.push(b);
-        while (!q.empty()) {
-            int u = q.front();
-            q.pop();
-            for (auto &[v, w] : adj[u]) {
-                if (xor_b[v] == -1) {
-                    xor_b[v] = xor_b[u] ^ w;
-                    q.push(v);
-                }
-            }
-        }
-
-        set<int> vals_a;
-        for (int i = 1; i <= n; ++i)
-            if (xor_a[i] != -1)
-                vals_a.insert(xor_a[i]);
-
-        bool ok = false;
-        for (int i = 1; i <= n; ++i) {
-            if (i != b && xor_b[i] != -1 && vals_a.count(xor_b[i])) {
-                ok = true;
-                break;
-            }
-        }
-
-        cout << (ok ? "YES" : "NO") << '\n';
+    int n, a, b;
+    cin >> n >> a >> b;
+    vector<vector<pair<int, int>>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        adj[u].emplace_back(v, w);
+        adj[v].emplace_back(u, w);
     }
+
+    vector<int> xor_from_a(n + 1, -1);
+    queue<int> q;
+    xor_from_a[a] = 0;
+    q.push(a);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto [v, w] : adj[u]) {
+            if (v == b) continue; // do not go past b from a
+            if (xor_from_a[v] == -1) {
+                xor_from_a[v] = xor_from_a[u] ^ w;
+                q.push(v);
+            }
+        }
+    }
+
+    vector<int> xor_from_b(n + 1, -1);
+    xor_from_b[b] = 0;
+    q.push(b);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto [v, w] : adj[u]) {
+            if (xor_from_b[v] == -1) {
+                xor_from_b[v] = xor_from_b[u] ^ w;
+                q.push(v);
+            }
+        }
+    }
+
+    // Check if any node reachable from a (except b) has same xor as some node reachable from b
+    set<int> b_xors;
+    for (int i = 1; i <= n; i++) {
+        if (xor_from_b[i] != -1) {
+            b_xors.insert(xor_from_b[i]);
+        }
+    }
+
+    // Also check if a can reach b directly (xor_from_a[b] would be 0 if we allowed it, but we didn't)
+    // Actually if there is a path from a to b with xor 0, we can just go directly without teleport.
+    // We can check if xor_from_a[b] == 0 if we allowed it, but we excluded b from BFS from a.
+    // So we can compute xor from a to b separately or just check if 0 is in b_xors and a can reach some node with xor 0.
+    // But easier: if xor_from_a[b] == 0 (if we computed it), we win. Let's compute it.
+    // We can just do a BFS from a without excluding b to get xor to b.
+    vector<int> xor_full(n + 1, -1);
+    xor_full[a] = 0;
+    q.push(a);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto [v, w] : adj[u]) {
+            if (xor_full[v] == -1) {
+                xor_full[v] = xor_full[u] ^ w;
+                q.push(v);
+            }
+        }
+    }
+    if (xor_full[b] == 0) {
+        cout << "YES\n";
+        return;
+    }
+
+    for (int i = 1; i <= n; i++) {
+        if (i == b) continue;
+        if (xor_from_a[i] != -1 && b_xors.count(xor_from_a[i])) {
+            cout << "YES\n";
+            return;
+        }
+    }
+    cout << "NO\n";
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    solve();
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
     return 0;
 }

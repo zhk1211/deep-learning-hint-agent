@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -6,7 +5,7 @@ void solve() {
     int n, st, en;
     cin >> n >> st >> en;
     vector<vector<int>> adj(n + 1);
-    for (int i = 0; i < n - 1; i++) {
+    for (int i = 0; i < n - 1; ++i) {
         int u, v;
         cin >> u >> v;
         adj[u].push_back(v);
@@ -32,7 +31,7 @@ void solve() {
     sort(order.begin(), order.end(), [&](int a, int b) {
         return depth[a] > depth[b];
     });
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; ++i) {
         cout << order[i] << " \n"[i == n - 1];
     }
 }

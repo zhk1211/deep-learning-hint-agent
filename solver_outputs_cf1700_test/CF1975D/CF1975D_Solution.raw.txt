@@ -14,62 +14,66 @@ void solve() {
         g[u].push_back(v);
         g[v].push_back(u);
     }
-
-    // Find the first vertex painted blue: the midpoint on the path from a to b
-    // that is closest to a (or the one where they meet)
-    vector<int> parent(n, -1);
-    vector<int> dist_a(n, -1);
-    queue<int> q;
-    q.push(a);
-    dist_a[a] = 0;
-    while (!q.empty()) {
-        int u = q.front(); q.pop();
-        for (int v : g[u]) {
-            if (dist_a[v] == -1) {
-                dist_a[v] = dist_a[u] + 1;
-                parent[v] = u;
-                q.push(v);
+    
+    auto bfs = [&](int s) {
+        vector<int> dist(n, -1);
+        queue<int> q;
+        dist[s] = 0;
+        q.push(s);
+        while (!q.empty()) {
+            int u = q.front(); q.pop();
+            for (int v : g[u]) {
+                if (dist[v] == -1) {
+                    dist[v] = dist[u] + 1;
+                    q.push(v);
+                }
+            }
+        }
+        return dist;
+    };
+    
+    vector<int> da = bfs(a), db = bfs(b);
+    
+    // find the vertex r that minimizes max(da[i], db[i]) but with da[i] <= db[i]?
+    // Actually we need the first vertex painted blue.
+    // P_A and P_B move towards each other. The meeting point is where they first can paint blue.
+    // The first blue vertex r is the one that minimizes the time when P_A arrives and P_B arrives later.
+    // The time when P_A reaches v is da[v], P_B reaches v is db[v].
+    // The step when v becomes blue is max(da[v], db[v])? Wait: P_A moves first, then P_B.
+    // If da[v] <= db[v], P_A arrives at step da[v], paints red. Then P_B arrives at step db[v], paints blue.
+    // So blue time = db[v]. If da[v] > db[v], P_A arrives later, but P_B arrives earlier and v is white, so P_B cannot paint blue.
+    // Actually P_B can only paint blue if v is red when P_B arrives. So we need da[v] <= db[v].
+    // The first blue vertex is the one that minimizes db[v] subject to da[v] <= db[v].
+    // But also they can meet halfway: they move simultaneously. The meeting point is on the path between a and b.
+    // The first blue vertex is the one on the path where da[v] <= db[v] and db[v] is minimized.
+    // Actually the official solution says: the first blue vertex r is the one that minimizes the meeting time.
+    // Let's find r by moving along the path from a to b.
+    // We can find the midpoint: the vertex where da[v] and db[v] are as close as possible with da[v] <= db[v].
+    // The time to first blue is db[r].
+    
+    int r = a;
+    int best = 1e9;
+    for (int i = 0; i < n; ++i) {
+        if (da[i] <= db[i]) {
+            if (db[i] < best) {
+                best = db[i];
+                r = i;
             }
         }
     }
-
-    // Reconstruct path from a to b
-    vector<int> path;
-    int cur = b;
-    while (cur != -1) {
-        path.push_back(cur);
-        cur = parent[cur];
-    }
-    reverse(path.begin(), path.end());
-    // path[0] = a, path.back() = b
-
-    int dist = path.size() - 1; // distance between a and b
-    int meet = path[dist / 2]; // the vertex where they meet (first blue)
-    // Actually, the first blue is the vertex where P_A arrives first and then P_B.
-    // The meeting point is the vertex on the path at distance ceil(dist/2) from a.
-    // But the editorial says the first blue is the vertex where P_A arrives earlier.
-    // Let's take the vertex at distance (dist+1)/2 from a (0-indexed).
-    int steps_to_meet = (dist + 1) / 2;
-    int r = path[steps_to_meet];
-
-    // Now compute the eccentricity of r (max distance from r)
-    vector<int> dist_r(n, -1);
-    queue<int> qr;
-    qr.push(r);
-    dist_r[r] = 0;
-    int maxd = 0;
-    while (!qr.empty()) {
-        int u = qr.front(); qr.pop();
-        for (int v : g[u]) {
-            if (dist_r[v] == -1) {
-                dist_r[v] = dist_r[u] + 1;
-                maxd = max(maxd, dist_r[v]);
-                qr.push(v);
-            }
-        }
-    }
-
-    int ans = 2 * (n - 1) - maxd + steps_to_meet;
+    
+    // Now compute the maximum distance from r
+    auto dr = bfs(r);
+    int maxd = *max_element(dr.begin(), dr.end());
+    
+    // Answer = 2*(n-1) - maxd + (time to first blue)
+    // But careful: the steps before first blue are already counted in the 2*(n-1) - maxd?
+    // Official solution: answer = 2*(n-1) - d + (time to first blue).
+    // Actually the formula: total steps = (steps to first blue) + (steps to cover rest).
+    // After first blue, P_A can follow P_B's path. The remaining steps = 2*(n-1) - maxd.
+    // So total = db[r] + 2*(n-1) - maxd.
+    
+    long long ans = (long long)db[r] + 2LL * (n - 1) - maxd;
     cout << ans << '\n';
 }
 

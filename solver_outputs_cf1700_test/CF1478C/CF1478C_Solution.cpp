@@ -1,2 +1,110 @@
-// Solution
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
 
+void solve() {
+    int n;
+    cin >> n;
+    vector<ll> d(2 * n);
+    for (int i = 0; i < 2 * n; ++i) {
+        cin >> d[i];
+    }
+    sort(d.begin(), d.end());
+    
+    // Check pairs
+    for (int i = 0; i < 2 * n; i += 2) {
+        if (d[i] != d[i + 1]) {
+            cout << "NO\n";
+            return;
+        }
+    }
+    // Check distinct
+    for (int i = 0; i + 2 < 2 * n; i += 2) {
+        if (d[i] == d[i + 2]) {
+            cout << "NO\n";
+            return;
+        }
+    }
+    
+    // We'll work with the unique values d[0], d[2], ..., d[2n-2]
+    // Let's call them D[0..n-1] where D[i] = d[2*i]
+    vector<ll> D(n);
+    for (int i = 0; i < n; ++i) {
+        D[i] = d[2 * i];
+    }
+    
+    // We'll compute differences a_i - a_{i-1} for i from n-1 down to 1
+    // and also track sum of a's.
+    // Let diff[i] = a_{i+1} - a_i for i=0..n-2 (0-indexed)
+    // We'll compute a_n (largest) first? Actually we compute from largest down.
+    // We have relation: D[n-1] - D[n-2] = (2n-2)*(a_n - a_{n-1})
+    // More generally, for k from n-1 down to 1:
+    // D[k] - D[k-1] = 2*k*(a_{k+1} - a_k)   (using 1-indexed a)
+    // Let's use 0-indexed for a: a[0] < a[1] < ... < a[n-1]
+    // Then D[n-1] - D[n-2] = 2*(n-1)*(a[n-1] - a[n-2])
+    // In general: D[i] - D[i-1] = 2*i*(a[i] - a[i-1]) for i from 1 to n-1.
+    
+    vector<ll> a(n);
+    // We'll compute differences and then a[0] later.
+    // First check divisibility and positivity.
+    for (int i = n - 1; i >= 1; --i) {
+        ll diff = D[i] - D[i - 1];
+        if (diff <= 0 || diff % (2 * i) != 0) {
+            cout << "NO\n";
+            return;
+        }
+        a[i] = diff / (2 * i); // this is a[i] - a[i-1]
+    }
+    
+    // Now we need to find a[0] such that D[0] matches.
+    // D[0] = sum_{j=0}^{n-1} |a[0] - a[j]| + sum_{j=0}^{n-1} |a[0] + a[j]|
+    // But since a[0] is smallest positive, a[0] < a[j] for j>0, and a[0] + a[j] > 0.
+    // So D[0] = sum_{j=0}^{n-1} (a[j] - a[0]) + sum_{j=0}^{n-1} (a[j] + a[0])
+    // = sum_{j=0}^{n-1} 2*a[j] = 2 * sum_{j=0}^{n-1} a[j]
+    // Wait, check: for j=0: |a[0]-a[0]| + |a[0]+a[0]| = 0 + 2a[0] = 2a[0].
+    // For j>0: (a[j]-a[0]) + (a[j]+a[0]) = 2a[j]. So indeed D[0] = 2 * sum a[j].
+    // So sum_a = D[0] / 2.
+    if (D[0] % 2 != 0) {
+        cout << "NO\n";
+        return;
+    }
+    ll sum_a = D[0] / 2;
+    
+    // Now we have a[i] = a[i-1] + diff_i for i>=1, where diff_i = a[i] - a[i-1].
+    // We can express sum_a = a[0] + (a[0]+diff_1) + (a[0]+diff_1+diff_2) + ...
+    // = n*a[0] + (n-1)*diff_1 + (n-2)*diff_2 + ... + 1*diff_{n-1}
+    // where diff_i = a[i] - a[i-1] for i=1..n-1.
+    // Let's compute the weighted sum of diffs.
+    ll weighted_sum = 0;
+    for (int i = 1; i < n; ++i) {
+        weighted_sum += (n - i) * a[i]; // a[i] here is actually diff_i
+    }
+    // sum_a = n * a0 + weighted_sum
+    ll rem = sum_a - weighted_sum;
+    if (rem <= 0 || rem % n != 0) {
+        cout << "NO\n";
+        return;
+    }
+    ll a0 = rem / n;
+    // a0 must be positive integer, and all a[i] distinct positive.
+    // We already ensured differences positive, so a increasing.
+    // Just need a0 > 0.
+    if (a0 <= 0) {
+        cout << "NO\n";
+        return;
+    }
+    // Also check that all a[i] are integers (they are by construction) and distinct.
+    // We already have a0 positive, diffs positive, so all positive and distinct.
+    cout << "YES\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

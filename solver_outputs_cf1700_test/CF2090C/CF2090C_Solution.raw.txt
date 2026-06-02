@@ -3,12 +3,12 @@
 using namespace std;
 
 const int MAXN = 50005;
-const int MAX_CELLS = 200000; // 4 * n, n <= 50000
+const int MAX_CELLS = 200005; // 4 * n, n <= 50000
 
 struct Cell {
-    int x, y, dist;
+    int x, y, d;
     bool operator<(const Cell& other) const {
-        if (dist != other.dist) return dist < other.dist;
+        if (d != other.d) return d < other.d;
         if (x != other.x) return x < other.x;
         return y < other.y;
     }
@@ -19,7 +19,7 @@ int dist(int x, int y) {
     return x + y + add;
 }
 
-bool is_table_cell(int x, int y) {
+bool is_table(int x, int y) {
     int mx = x % 3;
     int my = y % 3;
     return (mx == 1 || mx == 2) && (my == 1 || my == 2);
@@ -35,92 +35,75 @@ int main() {
         int n;
         cin >> n;
         vector<int> t(n);
-        for (int i = 0; i < n; ++i) cin >> t[i];
+        for (int i = 0; i < n; ++i) {
+            cin >> t[i];
+        }
 
         // Generate first 4*n table cells sorted by distance, then x, then y
         vector<Cell> cells;
         cells.reserve(MAX_CELLS);
-        // BFS-like generation up to needed distance
-        // We'll generate all table cells with distance <= some limit
-        // Since max n=50000, 4*n=200000 cells are enough
-        // We can just iterate over possible distances
-        int limit = 4 * n;
-        int cur_dist = 0;
-        while ((int)cells.size() < limit) {
-            // Generate all table cells with distance == cur_dist
-            // x from 0 to cur_dist
-            for (int x = 0; x <= cur_dist; ++x) {
-                int y = cur_dist - x;
-                // adjust for the +2 case
-                // Actually dist(x,y) = x+y+2 if x%3==2 && y%3==2 else x+y
-                // So we need to find x,y such that dist(x,y) == cur_dist
-                // Case 1: no extra +2
-                if (x + y == cur_dist) {
-                    if (is_table_cell(x, y)) {
-                        cells.push_back({x, y, cur_dist});
-                    }
-                }
-                // Case 2: with extra +2
-                if (x + y + 2 == cur_dist) {
-                    if (x % 3 == 2 && y % 3 == 2 && is_table_cell(x, y)) {
-                        cells.push_back({x, y, cur_dist});
-                    }
+        // We'll generate by distance up to some limit
+        // Since max distance needed is around 3*sqrt(n) or so, but we can just generate until we have 4*n cells
+        // Use BFS-like generation from (0,0) but only table cells
+        // Actually we can iterate over possible distances
+        // Max distance for 4*n cells is bounded by O(sqrt(n)*something) but we can just generate by increasing distance
+        // Simpler: generate all table cells with x+y <= some bound, sort
+        // Bound: we need 4*n cells. Distance roughly x+y, so max distance ~ 3*sqrt(4*n) ~ 600 for n=50000
+        // Let's just generate up to x,y < 2000, that's enough
+        for (int x = 0; x < 2000; ++x) {
+            for (int y = 0; y < 2000; ++y) {
+                if (is_table(x, y)) {
+                    cells.push_back({x, y, dist(x, y)});
                 }
             }
-            ++cur_dist;
         }
-        // Sort the generated cells to ensure order
-        sort(cells.begin(), cells.begin() + limit);
+        sort(cells.begin(), cells.end());
+        if ((int)cells.size() > 4 * n) cells.resize(4 * n);
 
-        // occupancy tracking
-        // table index: each table occupies 4 cells, we can map cell to table id
-        // table id = (x/3)*something + (y/3), but we can just use map or array
-        // Since x,y up to maybe ~6000, we can use a map from pair to int
-        // Or we can use a 2D array with offset, but easier: map<pair<int,int>, int> table_id
-        // Actually we only need to know if a table is completely unoccupied.
-        // We can track occupied count per table.
-        // Table coordinate: (X,Y) where X = (x-1)/3, Y = (y-1)/3 for cells with x%3 in {1,2}
-        // Let's define table index: for cell (x,y), table_x = (x-1)/3, table_y = (y-1)/3
-        // We'll use a map from pair to int for occupied count.
-        map<pair<int,int>, int> table_occ; // number of occupied cells in this table
-        // Also need to know if a cell is occupied
-        map<pair<int,int>, bool> cell_occ;
+        int total_cells = cells.size();
+        // Map cell coordinates to index in sorted order
+        map<pair<int,int>, int> cell_to_idx;
+        for (int i = 0; i < total_cells; ++i) {
+            cell_to_idx[{cells[i].x, cells[i].y}] = i;
+        }
 
-        // For type 0: nearest table cell that belongs to a completely unoccupied table
-        // For type 1: nearest vacant table cell
+        // occupied[i] = true if cell i is occupied
+        vector<bool> occupied(total_cells, false);
+        // For type 0: need completely unoccupied table
+        // A table consists of 4 cells: (3a+1,3b+1), (3a+1,3b+2), (3a+2,3b+1), (3a+2,3b+2)
+        // We can map each table cell to its table id (a,b)
+        // table_id = (x/3, y/3) for table cells? Actually x = 3a+1 or 3a+2, so a = (x-1)/3
+        auto get_table = [](int x, int y) -> pair<int,int> {
+            return {(x-1)/3, (y-1)/3};
+        };
+        // table_occupied_count[{a,b}] = number of occupied cells in that table
+        map<pair<int,int>, int> table_occ;
 
-        // We'll maintain pointers for type 0 and type 1
-        int ptr0 = 0, ptr1 = 0;
-
+        // For each guest
         for (int i = 0; i < n; ++i) {
             int type = t[i];
-            Cell chosen;
-            if (type == 0) {
-                while (ptr0 < limit) {
-                    Cell c = cells[ptr0];
-                    pair<int,int> table = {(c.x-1)/3, (c.y-1)/3};
-                    if (table_occ[table] == 0) {
-                        chosen = c;
+            int chosen_idx = -1;
+            // Find first suitable cell
+            for (int j = 0; j < total_cells; ++j) {
+                if (occupied[j]) continue;
+                if (type == 1) {
+                    chosen_idx = j;
+                    break;
+                } else {
+                    // type 0: table must be completely unoccupied
+                    auto [a, b] = get_table(cells[j].x, cells[j].y);
+                    if (table_occ.find({a,b}) == table_occ.end() || table_occ[{a,b}] == 0) {
+                        chosen_idx = j;
                         break;
                     }
-                    ++ptr0;
-                }
-            } else {
-                while (ptr1 < limit) {
-                    Cell c = cells[ptr1];
-                    if (!cell_occ[{c.x, c.y}]) {
-                        chosen = c;
-                        break;
-                    }
-                    ++ptr1;
                 }
             }
-            // update structures
-            cell_occ[{chosen.x, chosen.y}] = true;
-            pair<int,int> table = {(chosen.x-1)/3, (chosen.y-1)/3};
-            table_occ[table]++;
+            // Mark chosen cell as occupied
+            occupied[chosen_idx] = true;
+            auto [a, b] = get_table(cells[chosen_idx].x, cells[chosen_idx].y);
+            table_occ[{a,b}]++;
 
-            cout << chosen.x << " " << chosen.y << "\n";
+            cout << cells[chosen_idx].x << " " << cells[chosen_idx].y << "\n";
         }
     }
     return 0;

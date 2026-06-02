@@ -1,0 +1,41 @@
+// Solution
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        string sn = to_string(n);
+        int lenN = sn.size();
+        vector<pair<int, int>> ans;
+        
+        for (int a = 1; a <= 10000; a++) {
+            int minB = max(1, lenN * a - 5);
+            int maxB = lenN * a;
+            for (int b = minB; b < maxB; b++) {
+                int x = n * a - b;
+                int y = 0;
+                int digits = lenN * a - b;
+                for (int i = 0; i < digits; i++) {
+                    y = y * 10 + (sn[i % lenN] - '0');
+                }
+                if (x == y) {
+                    ans.emplace_back(a, b);
+                }
+            }
+        }
+        
+        cout << ans.size() << '\n';
+        for (auto &p : ans) {
+            cout << p.first << ' ' << p.second << '\n';
+        }
+    }
+    
+    return 0;
+}

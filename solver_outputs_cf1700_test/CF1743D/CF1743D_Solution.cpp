@@ -1,2 +1,64 @@
-// Solution
+#include <bits/stdc++.h>
+using namespace std;
 
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    string s;
+    cin >> n >> s;
+
+    // Find first '1'
+    int first_one = -1;
+    for (int i = 0; i < n; ++i) {
+        if (s[i] == '1') {
+            first_one = i;
+            break;
+        }
+    }
+
+    if (first_one == -1) {
+        cout << "0\n";
+        return 0;
+    }
+
+    // s without leading zeros
+    string t = s.substr(first_one);
+    int m = t.size();
+
+    // Find first zero after the first block of ones
+    int first_zero = -1;
+    for (int i = 0; i < m; ++i) {
+        if (t[i] == '0') {
+            first_zero = i;
+            break;
+        }
+    }
+
+    if (first_zero == -1) {
+        // All ones
+        cout << t << "\n";
+        return 0;
+    }
+
+    // The first block of ones length is first_zero
+    int block_len = first_zero;
+
+    string best = t;
+    // Try all shifts where a '1' from the first block aligns with first_zero
+    for (int shift = 1; shift <= block_len; ++shift) {
+        string candidate = t;
+        for (int i = first_zero; i < m; ++i) {
+            if (t[i - shift] == '1') {
+                candidate[i] = '1';
+            }
+        }
+        if (candidate > best) {
+            best = candidate;
+        }
+    }
+
+    cout << best << "\n";
+    return 0;
+}

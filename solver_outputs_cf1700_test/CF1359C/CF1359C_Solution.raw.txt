@@ -1,37 +1,38 @@
 ```cpp
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
+    
     int T;
     cin >> T;
     while (T--) {
-        ll h, c, t;
+        long long h, c, t;
         cin >> h >> c >> t;
-        if (t == h) {
-            cout << "1\n";
+        
+        if (t * 2 <= h + c) {
+            cout << 2 << "\n";
             continue;
         }
-        if (2 * t <= h + c) {
-            cout << "2\n";
-            continue;
-        }
-        ll k = (h - t) / (2 * t - h - c);
-        ll cups1 = 2 * k + 1;
-        ll cups2 = cups1 + 2;
-        ll A = k * (h + c) + h - t * cups1;
-        if (A < 0) A = -A;
-        ll B = (k + 1) * (h + c) + h - t * cups2;
-        if (B < 0) B = -B;
-        if (A * cups2 <= B * cups1) {
-            cout << cups1 << "\n";
+        
+        long long k = (h - t) / (2 * t - h - c);
+        
+        auto val = [&](long long k) -> long double {
+            return (long double)(k * (h + c) + h) / (2 * k + 1);
+        };
+        
+        long double diff1 = fabsl(val(k) - t);
+        long double diff2 = fabsl(val(k + 1) - t);
+        
+        if (diff1 <= diff2) {
+            cout << 2 * k + 1 << "\n";
         } else {
-            cout << cups2 << "\n";
+            cout << 2 * (k + 1) + 1 << "\n";
         }
     }
+    
     return 0;
 }
 ```

@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -7,47 +6,39 @@ void solve() {
     cin >> n >> k;
     vector<int> a(n);
     for (int i = 0; i < n; ++i) cin >> a[i];
-    
+
     if (k == 1) {
         cout << "YES\n";
         return;
     }
-    
+
     vector<int> sorted = a;
     sort(sorted.begin(), sorted.end());
     int x = sorted[k - 2]; // (k-1)-th smallest (0-indexed)
-    
+
     vector<int> b;
     for (int val : a) {
         if (val <= x) b.push_back(val);
     }
-    
-    int m = b.size();
-    int l = 0, r = m - 1;
+
+    int L = 0, R = (int)b.size() - 1;
     int deleted = 0;
-    bool ok = true;
-    
-    while (l <= r) {
-        if (b[l] == b[r]) {
-            ++l; --r;
-        } else if (b[l] == x) {
-            ++l;
+    while (L <= R) {
+        if (b[L] == b[R]) {
+            ++L; --R;
+        } else if (b[L] == x) {
+            ++L;
             ++deleted;
-        } else if (b[r] == x) {
-            --r;
+        } else if (b[R] == x) {
+            --R;
             ++deleted;
         } else {
-            ok = false;
-            break;
+            cout << "NO\n";
+            return;
         }
     }
-    
-    if (!ok) {
-        cout << "NO\n";
-        return;
-    }
-    
-    int kept = m - deleted;
+
+    int kept = (int)b.size() - deleted;
     if (kept >= k - 1) {
         cout << "YES\n";
     } else {
@@ -58,11 +49,8 @@ void solve() {
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    
     int t;
     cin >> t;
-    while (t--) {
-        solve();
-    }
+    while (t--) solve();
     return 0;
 }

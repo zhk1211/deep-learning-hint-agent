@@ -1,0 +1,58 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    if (k < n || k > 2 * n - 1) {
+        cout << "NO\n";
+        return;
+    }
+    cout << "YES\n";
+    int x = k - n + 1; // number of pairs that will use the "max" construction
+    int y = n - x;     // number of pairs that will use the "min" construction
+    vector<int> ans;
+    // Build the max part: x pairs, achieving 2x-1 operations
+    if (x > 0) {
+        // The pattern: 1, 2, 3, ..., x, 1, x+1, 2, x+2, 3, ..., x-1, 2x-2, x, 2x-1
+        // But we need to shift numbers by an offset if y > 0
+        int offset = y;
+        // First unseen part: x numbers
+        for (int i = 1; i <= x; ++i) {
+            ans.push_back(offset + i);
+        }
+        // Then interleaved: for i=1..x-1: unseen i, seen offset+x+i
+        for (int i = 1; i <= x - 1; ++i) {
+            ans.push_back(offset + i);
+            ans.push_back(offset + x + i);
+        }
+        // Finally the last seen
+        ans.push_back(offset + x);
+        ans.push_back(offset + 2 * x - 1);
+    }
+    // Build the min part: y pairs, achieving y operations
+    if (y > 0) {
+        // Pattern: 1,1,2,2,...,y,y
+        for (int i = 1; i <= y; ++i) {
+            ans.push_back(i);
+            ans.push_back(i);
+        }
+    }
+    // Output
+    for (int i = 0; i < 2 * n; ++i) {
+        cout << ans[i] << " \n"[i == 2 * n - 1];
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -16,20 +15,22 @@ int main() {
             string t;
             cin >> t;
             for (char c : t) {
-                cnt[c - 'a']++;
+                cnt[c - 'a'] ^= 1;
             }
         }
         string s;
         cin >> s;
         for (char c : s) {
-            cnt[c - 'a']++;
+            cnt[c - 'a'] ^= 1;
         }
+        char ans = 'a';
         for (int i = 0; i < 26; ++i) {
-            if (cnt[i] % 2 == 1) {
-                cout << char('a' + i) << '\n';
+            if (cnt[i]) {
+                ans = 'a' + i;
                 break;
             }
         }
+        cout << ans << '\n';
     }
     return 0;
 }

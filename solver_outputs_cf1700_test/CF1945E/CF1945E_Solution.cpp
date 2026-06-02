@@ -1,35 +1,34 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
+    
     int t;
     cin >> t;
     while (t--) {
         int n, x;
         cin >> n >> x;
         vector<int> p(n + 1);
-        vector<int> pos(n + 1);
+        int pos_x = -1;
         for (int i = 1; i <= n; ++i) {
             cin >> p[i];
-            pos[p[i]] = i;
+            if (p[i] == x) pos_x = i;
         }
-
+        
         int l = 1, r = n + 1;
         while (r - l > 1) {
             int m = (l + r) / 2;
             if (p[m] <= x) l = m;
             else r = m;
         }
-
+        
         if (p[l] == x) {
             cout << "0\n";
         } else {
             cout << "1\n";
-            cout << l << " " << pos[x] << "\n";
+            cout << l << " " << pos_x << "\n";
         }
     }
     return 0;

@@ -1,2 +1,51 @@
-// Solution
+#include <bits/stdc++.h>
+using namespace std;
 
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        string s;
+        cin >> s;
+        
+        vector<int> blocks;
+        for (int i = 0, j; i < n; i = j) {
+            j = i;
+            while (j < n && s[j] == s[i]) ++j;
+            blocks.push_back(j - i);
+        }
+        
+        int m = blocks.size();
+        int ans = 0;
+        int ptr = 0; // points to the leftmost block with size >= 2
+        
+        for (int i = 0; i < m; ++i) {
+            // advance ptr to a block with size >= 2
+            while (ptr < m && blocks[ptr] < 2) ++ptr;
+            
+            if (ptr < m) {
+                // use one character from that block
+                --blocks[ptr];
+                ++ans;
+                if (ptr <= i) {
+                    // if the block we used is already passed or current, move ptr forward
+                    ptr = i + 1;
+                }
+            } else {
+                // no block with size >= 2, we have to delete the last character of the string
+                // which corresponds to skipping the current block entirely
+                ++ans;
+                ++i; // skip the next block as well (since operation deletes prefix)
+            }
+        }
+        
+        cout << ans << '\n';
+    }
+    
+    return 0;
+}

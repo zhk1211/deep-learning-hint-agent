@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -19,6 +18,7 @@ int main() {
         int r = l + 1;
         bool hasTwo = (a[l] == 2);
         bool hasMiddleZero = false;
+        
         while (r < n) {
             if (r - 1 > l && a[r - 1] == 0) {
                 hasMiddleZero = true;

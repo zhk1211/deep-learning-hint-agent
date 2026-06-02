@@ -1,66 +1,76 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
 const int MOD = 1'000'000'007;
-const int MAXN = 200'000;
 
-long long fact[MAXN + 5], inv_fact[MAXN + 5];
-
-long long mod_pow(long long a, long long e) {
+long long modpow(long long a, long long b) {
     long long res = 1;
-    while (e) {
-        if (e & 1) res = res * a % MOD;
+    a %= MOD;
+    while (b) {
+        if (b & 1) res = res * a % MOD;
         a = a * a % MOD;
-        e >>= 1;
+        b >>= 1;
     }
     return res;
-}
-
-void precompute() {
-    fact[0] = 1;
-    for (int i = 1; i <= MAXN; i++) {
-        fact[i] = fact[i - 1] * i % MOD;
-    }
-    inv_fact[MAXN] = mod_pow(fact[MAXN], MOD - 2);
-    for (int i = MAXN - 1; i >= 0; i--) {
-        inv_fact[i] = inv_fact[i + 1] * (i + 1) % MOD;
-    }
-}
-
-long long nCr(int n, int r) {
-    if (r < 0 || r > n) return 0;
-    return fact[n] * inv_fact[r] % MOD * inv_fact[n - r] % MOD;
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    precompute();
+
     int t;
     cin >> t;
     while (t--) {
         int n, k;
         cin >> n >> k;
+
+        // Precompute factorials and inverse factorials up to n
+        vector<long long> fact(n + 1), invfact(n + 1);
+        fact[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            fact[i] = fact[i - 1] * i % MOD;
+        }
+        invfact[n] = modpow(fact[n], MOD - 2);
+        for (int i = n - 1; i >= 0; i--) {
+            invfact[i] = invfact[i + 1] * (i + 1) % MOD;
+        }
+
+        auto nCr = [&](int N, int R) -> long long {
+            if (R < 0 || R > N) return 0;
+            return fact[N] * invfact[R] % MOD * invfact[N - R] % MOD;
+        };
+
+        // Number of ways to choose an even number of indices (strictly less than n if n is even)
         long long even_ways = 0;
-        for (int i = 0; i <= n; i += 2) {
+        for (int i = 0; i < n; i += 2) {
             even_ways = (even_ways + nCr(n, i)) % MOD;
         }
+
         long long dp_equal = 1; // dp[i][1]
-        long long dp_greater = 1; // dp[i][0]
-        long long pow2_n = mod_pow(2, n);
+        long long dp_greater = 1; // dp[i][0] (And > Xor)
+
+        long long pow2_n = modpow(2, n);
+
         for (int i = 0; i < k; i++) {
-            long long new_dp_greater = pow2_n * dp_greater % MOD;
-            long long new_dp_equal;
+            long long new_dp_equal, new_dp_greater;
+
             if (n % 2 == 1) {
+                // odd n
                 new_dp_equal = dp_equal * (even_ways + 1) % MOD;
+                new_dp_greater = dp_greater * pow2_n % MOD;
             } else {
+                // even n
                 new_dp_equal = (dp_equal * even_ways % MOD + dp_greater) % MOD;
+                new_dp_greater = dp_greater * pow2_n % MOD;
             }
-            dp_greater = new_dp_greater;
+
             dp_equal = new_dp_equal;
+            dp_greater = new_dp_greater;
         }
-        cout << dp_equal % MOD << '\n';
+
+        long long ans = (dp_equal + dp_greater) % MOD;
+        cout << ans << '\n';
     }
+
     return 0;
 }

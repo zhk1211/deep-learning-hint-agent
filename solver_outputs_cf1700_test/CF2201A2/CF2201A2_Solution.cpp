@@ -1,32 +1,36 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
-
-typedef long long ll;
+using i64 = long long;
 
 void solve() {
     int n;
     cin >> n;
     vector<int> a(n);
-    for (int i = 0; i < n; ++i) cin >> a[i];
-
-    vector<pair<int, int>> st; // (value, index where it was added)
-    ll cur = 0, ans = 0;
-
     for (int i = 0; i < n; ++i) {
-        int x = a[i];
-        // merge
-        while (!st.empty() && st.back().first <= x) {
-            int val = st.back().first;
-            int idx = st.back().second;
+        cin >> a[i];
+    }
+
+    vector<pair<int, int>> st; // (value, index when added)
+    i64 cur = 0; // sum of f for all prefixes of current suffix
+    i64 ans = 0;
+
+    for (int i = n - 1; i >= 0; --i) {
+        int v = a[i];
+        int idx = i;
+        while (!st.empty() && st.back().first < v) {
+            auto [val, pos] = st.back();
             st.pop_back();
-            int prev_idx = st.empty() ? -1 : st.back().second;
-            // remove contribution of val
-            cur -= 1LL * val * (idx - prev_idx);
+            int nxt = st.empty() ? n : st.back().second;
+            cur -= (i64)(val + 1) * (nxt - pos);
+            idx = nxt;
         }
-        int prev_idx = st.empty() ? -1 : st.back().second;
-        st.push_back({x, i});
-        cur += 1LL * x * (i - prev_idx);
+        if (!st.empty() && st.back().first == v) {
+            idx = st.back().second;
+            st.pop_back();
+        }
+        st.emplace_back(v, idx);
+        int nxt = st.size() > 1 ? st[st.size() - 2].second : n;
+        cur += (i64)(v + 1) * (nxt - idx);
         ans += cur;
     }
 
@@ -38,6 +42,8 @@ int main() {
     cin.tie(nullptr);
     int t;
     cin >> t;
-    while (t--) solve();
+    while (t--) {
+        solve();
+    }
     return 0;
 }

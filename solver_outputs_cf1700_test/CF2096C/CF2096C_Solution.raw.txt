@@ -1,106 +1,326 @@
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
+using i64 = long long;
 
-const long long INF = 1e18;
+const i64 INF = 1e18;
 
 void solve() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int n;
-        cin >> n;
-        vector<vector<long long>> h(n, vector<long long>(n));
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n; ++j) {
-                cin >> h[i][j];
+    int n;
+    cin >> n;
+    vector<vector<int>> h(n, vector<int>(n));
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < n; ++j)
+            cin >> h[i][j];
+    vector<int> a(n), b(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    for (int j = 0; j < n; ++j) cin >> b[j];
+
+    // We will try all 4 parity assignments for (row0, col0)
+    i64 ans = INF;
+    for (int p0 : {0, 1}) {
+        for (int q0 : {0, 1}) {
+            // parity[i] = 1 if row i is increased odd times, else 0
+            // parity_col[j] = 1 if col j is increased odd times, else 0
+            vector<int> row_parity(n, -1);
+            vector<int> col_parity(n, -1);
+            row_parity[0] = p0;
+            col_parity[0] = q0;
+            
+            bool ok = true;
+            // Determine all parities from constraints
+            for (int i = 0; i < n && ok; ++i) {
+                for (int j = 0; j < n && ok; ++j) {
+                    if (i == 0 && j == 0) continue;
+                    // For adjacent cells, we need h[i][j] + row_parity[i] + col_parity[j] 
+                    // != h[i][j+1] + row_parity[i] + col_parity[j+1]
+                    // and similarly for vertical.
+                    // We can deduce parity relations.
+                    if (j + 1 < n) {
+                        int need = (h[i][j] != h[i][j+1]) ? 0 : 1;
+                        // need = (col_parity[j] ^ col_parity[j+1])
+                        if (col_parity[j] != -1 && col_parity[j+1] != -1) {
+                            if ((col_parity[j] ^ col_parity[j+1]) != need) ok = false;
+                        } else if (col_parity[j] != -1) {
+                            col_parity[j+1] = col_parity[j] ^ need;
+                        } else if (col_parity[j+1] != -1) {
+                            col_parity[j] = col_parity[j+1] ^ need;
+                        }
+                    }
+                    if (i + 1 < n) {
+                        int need = (h[i][j] != h[i+1][j]) ? 0 : 1;
+                        if (row_parity[i] != -1 && row_parity[i+1] != -1) {
+                            if ((row_parity[i] ^ row_parity[i+1]) != need) ok = false;
+                        } else if (row_parity[i] != -1) {
+                            row_parity[i+1] = row_parity[i] ^ need;
+                        } else if (row_parity[i+1] != -1) {
+                            row_parity[i] = row_parity[i+1] ^ need;
+                        }
+                    }
+                }
             }
-        }
-        vector<long long> a(n), b(n);
-        for (int i = 0; i < n; ++i) cin >> a[i];
-        for (int i = 0; i < n; ++i) cin >> b[i];
-
-        // rows DP
-        long long row_min = INF;
-        {
-            vector<long long> dp = {0, a[0]};
-            for (int i = 0; i < n - 1; ++i) {
-                bool can[2][2] = {};
-                // check all 4 transitions
-                for (int s1 = 0; s1 <= 1; ++s1) {
-                    for (int s2 = 0; s2 <= 1; ++s2) {
-                        int d = s2 - s1; // -1, 0, or 1
-                        bool ok = true;
-                        for (int j = 0; j < n; ++j) {
-                            if (h[i][j] - h[i+1][j] == d) {
-                                ok = false;
-                                break;
-                            }
-                        }
-                        can[s1][s2] = ok;
-                    }
-                }
-                vector<long long> ndp = {INF, INF};
-                for (int s1 = 0; s1 <= 1; ++s1) {
-                    if (dp[s1] >= INF) continue;
-                    for (int s2 = 0; s2 <= 1; ++s2) {
-                        if (can[s1][s2]) {
-                            long long cost = dp[s1] + (s2 ? a[i+1] : 0);
-                            ndp[s2] = min(ndp[s2], cost);
-                        }
-                    }
-                }
-                dp = move(ndp);
-            }
-            row_min = min(dp[0], dp[1]);
-        }
-
-        // columns DP
-        long long col_min = INF;
-        {
-            vector<long long> dp = {0, b[0]};
-            for (int j = 0; j < n - 1; ++j) {
-                bool can[2][2] = {};
-                for (int s1 = 0; s1 <= 1; ++s1) {
-                    for (int s2 = 0; s2 <= 1; ++s2) {
-                        int d = s2 - s1;
-                        bool ok = true;
-                        for (int i = 0; i < n; ++i) {
-                            if (h[i][j] - h[i][j+1] == d) {
-                                ok = false;
-                                break;
-                            }
-                        }
-                        can[s1][s2] = ok;
-                    }
-                }
-                vector<long long> ndp = {INF, INF};
-                for (int s1 = 0; s1 <= 1; ++s1) {
-                    if (dp[s1] >= INF) continue;
-                    for (int s2 = 0; s2 <= 1; ++s2) {
-                        if (can[s1][s2]) {
-                            long long cost = dp[s1] + (s2 ? b[j+1] : 0);
-                            ndp[s2] = min(ndp[s2], cost);
-                        }
-                    }
-                }
-                dp = move(ndp);
-            }
-            col_min = min(dp[0], dp[1]);
-        }
-
-        if (row_min >= INF/2 || col_min >= INF/2) {
-            cout << -1 << '\n';
-        } else {
-            cout << row_min + col_min << '\n';
-        }
-    }
-}
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    solve();
-    return 0;
-}
-```
+            if (!ok) continue;
+            
+            // Now we have some parities fixed, some free.
+            // For each row i, cost if parity = 0 is 0, if parity = 1 is a[i].
+            // But we can also increase by 2 (cost 2*a[i]) which doesn't change parity.
+            // Similarly for columns.
+            // However, we also need to satisfy that no two adjacent cells have same final height.
+            // The parity constraints already ensure that adjacent cells have different parity of total increments,
+            // but they could still be equal if base heights differ by even number and we add even increments.
+            // Actually, if h[i][j] + row_inc[i] + col_inc[j] == h[i][j+1] + row_inc[i] + col_inc[j+1]
+            // then (h[i][j] - h[i][j+1]) + (col_inc[j] - col_inc[j+1]) == 0.
+            // Since col_inc[j] and col_inc[j+1] have different parity (by construction), their difference is odd.
+            // So h[i][j] - h[i][j+1] must be odd. If it's even, we need to add extra even increments to fix.
+            // But we can add 2 to a row or column without changing parity.
+            // This becomes a problem of assigning non-negative integer increments to rows and columns
+            // with given parities, minimizing cost, such that for each edge, the difference condition holds.
+            // Actually, we can think of it as: we need to choose final increments X_i for rows, Y_j for columns.
+            // X_i = row_parity[i] + 2 * x_i, Y_j = col_parity[j] + 2 * y_j, with x_i, y_j >= 0 integers.
+            // Cost = sum a[i]*X_i + sum b[j]*Y_j.
+            // Constraint: for each adjacent pair (i,j) and (i,j+1):
+            // h[i][j] + X_i + Y_j != h[i][j+1] + X_i + Y_{j+1}
+            // => Y_{j+1} - Y_j != h[i][j] - h[i][j+1].
+            // Since Y_{j+1} - Y_j is odd (parities differ), if h[i][j] - h[i][j+1] is even, it's automatically satisfied.
+            // If it's odd, we need to ensure Y_{j+1} - Y_j != that odd number.
+            // Similarly for rows.
+            // This is a difference constraints problem. But n <= 1000, sum n <= 1000, so we can solve via min-cut or something?
+            // Actually, we can observe that we only care about the differences modulo 2? No, exact values matter.
+            // Let's analyze: For a fixed parity assignment, we need to assign non-negative even increments to rows/cols.
+            // Let x_i = X_i // 2, y_j = Y_j // 2. Then X_i = p_i + 2*x_i, Y_j = q_j + 2*y_j.
+            // Constraint for horizontal edge (i,j)-(i,j+1):
+            // (q_j + 2*y_j) - (q_{j+1} + 2*y_{j+1}) != h[i][j] - h[i][j+1]
+            // => 2*(y_j - y_{j+1}) != (h[i][j] - h[i][j+1]) - (q_j - q_{j+1}).
+            // Let D = (h[i][j] - h[i][j+1]) - (q_j - q_{j+1}).
+            // Since q_j and q_{j+1} have different parity, q_j - q_{j+1} is odd, so D is even? 
+            // h[i][j] - h[i][j+1] can be anything. If it's odd, D is even; if it's even, D is odd.
+            // But 2*(y_j - y_{j+1}) is even. So if D is odd, the inequality holds automatically.
+            // If D is even, we need 2*(y_j - y_{j+1}) != D, i.e., y_j - y_{j+1} != D/2.
+            // So for each edge, we get a forbidden difference between y_j and y_{j+1} (or x_i and x_{i+1}).
+            // Also y_j >= 0, x_i >= 0.
+            // We want to minimize sum a[i]*(p_i + 2*x_i) + sum b[j]*(q_j + 2*y_j).
+            // Since p_i, q_j are fixed, we just need to minimize sum 2*a[i]*x_i + sum 2*b[j]*y_j.
+            // This is a problem of assigning non-negative integers to nodes of a bipartite graph (rows and columns)
+            // with forbidden differences on edges of two chains (rows chain and columns chain).
+            // Actually, the constraints only involve adjacent rows and adjacent columns separately.
+            // There are no constraints mixing rows and columns!
+            // Because horizontal constraints only involve columns, vertical only involve rows.
+            // So the problem decouples into two independent 1D problems: one for rows, one for columns.
+            // For rows: we have a chain of n nodes, each node i has cost 2*a[i] per unit (x_i >= 0).
+            // For each adjacent pair (i, i+1), there is a forbidden difference d_i (maybe multiple? 
+            // Actually, for each row i and column j, vertical edge gives a constraint on x_i and x_{i+1}.
+            // But the forbidden difference might depend on j. We need x_{i+1} - x_i != something for all j.
+            // So for a given pair (i,i+1), we have a set of forbidden values for x_{i+1} - x_i.
+            // Similarly for columns.
+            // Since n <= 1000, we can solve each chain with DP or shortest path.
+            // But x_i can be large? The heights are up to 1e9, so differences can be large.
+            // However, we only care about relative differences. We can shift all x_i by a constant without affecting differences.
+            // The cost is linear, so we want to make x_i as small as possible.
+            // This is a classic problem: given a chain with forbidden differences on edges, find minimal cost non-negative assignment.
+            // We can model as a graph where we want to find potentials. Since it's a chain, we can do DP.
+            // But the state space could be large if we consider absolute values.
+            // Notice that the forbidden differences are of the form x_{i+1} - x_i != c for some set of c.
+            // We can think of it as: we want to assign integers x_i >= 0, minimizing sum w_i x_i, 
+            // such that for each edge, x_{i+1} - x_i is not in a forbidden set F_i.
+            // Since w_i > 0, the optimal x_i will be as small as possible.
+            // We can use a Dijkstra-like approach on the "difference" values? 
+            // Actually, we can observe that the constraints only restrict the relative differences.
+            // We can set x_0 = 0 (or some value) and then propagate constraints.
+            // But we also have x_i >= 0. So we might need to shift all up.
+            // This is equivalent to finding the minimum cost to assign values such that differences avoid certain values.
+            // Since n is small (sum n <= 1000), we can do a DP with state being the value of x_i modulo something? No.
+            // Let's think differently: The forbidden differences are just a set of integers. 
+            // We can always choose x_i large enough to avoid them? But we want minimum cost, so we want small x_i.
+            // Actually, if we ignore the >=0 constraint, the optimal solution is to set all x_i = 0 if no forbidden difference is 0.
+            // But if some forbidden difference is 0, we might need to increase some x_i.
+            // In fact, we can always shift the whole sequence by a constant without violating difference constraints.
+            // So we can just find the minimum possible values such that x_i >= 0 and differences are not forbidden.
+            // This is like finding the shortest path in a graph where nodes are (index, value)? Too large.
+            // But note that the forbidden differences are derived from h[i][j] - h[i+1][j] and parities.
+            // Let's compute the forbidden differences explicitly.
+            // For rows: vertical edge between (i,j) and (i+1,j).
+            // We have p_i, p_{i+1} known (0 or 1).
+            // Constraint: (p_i + 2*x_i) - (p_{i+1} + 2*x_{i+1}) != h[i+1][j] - h[i][j]   (since we want final heights unequal)
+            // Actually: final height at (i,j) = h[i][j] + p_i + 2*x_i + q_j + 2*y_j.
+            // Final height at (i+1,j) = h[i+1][j] + p_{i+1} + 2*x_{i+1} + q_j + 2*y_j.
+            // Difference: (h[i][j] - h[i+1][j]) + (p_i - p_{i+1}) + 2*(x_i - x_{i+1}) != 0.
+            // So 2*(x_i - x_{i+1}) != (h[i+1][j] - h[i][j]) - (p_i - p_{i+1}).
+            // Let RHS = (h[i+1][j] - h[i][j]) - (p_i - p_{i+1}).
+            // If RHS is odd, 2*(x_i - x_{i+1}) can never equal an odd number, so no constraint.
+            // If RHS is even, let D = RHS / 2. Then we require x_i - x_{i+1} != D.
+            // So for each vertical edge (i,i+1) and each column j, if RHS is even, we forbid the difference D.
+            // Note that D can be negative, zero, positive.
+            // Similarly for columns: for each horizontal edge (j,j+1) and each row i, 
+            // 2*(y_j - y_{j+1}) != (h[i][j+1] - h[i][j]) - (q_j - q_{j+1}).
+            // If RHS even, forbid difference D = RHS/2.
+            
+            // So for rows, we have a set of forbidden differences between i and i+1.
+            // For columns, similarly.
+            
+            // Now we need to solve two independent 1D problems:
+            // Given a chain of length n, costs c_i = 2*a[i] (or 2*b[j]), and for each edge a set of forbidden differences F_i (subset of Z),
+            // find non-negative integers x_i minimizing sum c_i x_i.
+            // Since n <= 1000, we can do a DP if we can bound the range of x_i.
+            // What is the maximum possible x_i in an optimal solution?
+            // The costs are positive, so we want x_i as small as possible.
+            // The forbidden differences are just specific integers. We can always increase all x_i by the same amount without violating constraints.
+            // So we can first find a feasible assignment (ignoring >=0) by setting x_0 = 0 and then for each i, choose x_{i+1} such that x_{i+1} - x_i not in F_i.
+            // We can always choose x_{i+1} = x_i + M where M is large enough to avoid F_i? But we want small values.
+            // Actually, we can just pick x_{i+1} = x_i + 1 if 1 not in F_i, else x_i + 2, etc. Since F_i is finite (at most n values per edge, because j varies from 0 to n-1), 
+            // we can always find a small difference. The maximum difference we might need is bounded by |F_i| + 1.
+            // But we also have the >=0 constraint. After constructing a sequence with small differences, we can shift the whole sequence up by the minimum amount to make all >=0.
+            // However, shifting up might increase cost. But maybe there's a better assignment that doesn't just shift uniformly?
+            // Since costs are linear and positive, if we have a feasible assignment, we can try to decrease some x_i while maintaining feasibility.
+            // This is equivalent to finding the minimum cost feasible potentials in a difference constraints system.
+            // Because the graph is a chain, we can solve it using a min-cost flow or by converting to a shortest path problem with node potentials.
+            // Actually, we can think of it as: we want to assign x_i such that for each edge, x_i - x_{i+1} != D.
+            // This is equivalent to: x_i - x_{i+1} <= D-1 or x_i - x_{i+1} >= D+1.
+            // So it's a disjunctive constraint. This is NP-hard in general? But here the graph is a chain, and the constraints are only on adjacent nodes.
+            // We can solve it with dynamic programming because the state space can be limited.
+            // Notice that the costs are positive, so we want x_i as small as possible. 
+            // The constraints only forbid specific differences. We can always set x_i to be the shortest path distance from a source? 
+            // Let's consider the dual: we want to minimize sum c_i x_i subject to x_i - x_{i+1} not in F_i.
+            // This is not a linear program because of the "not equal".
+            // However, since it's a chain, we can do a DP where state is the value of x_i. But x_i can be large.
+            // But observe that the forbidden differences are just a set of integers. The optimal x_i will not be unnecessarily large.
+            // In fact, we can show that there exists an optimal solution where each x_i is in [0, n * max_forbidden].
+            // But max_forbidden can be up to 1e9. So that's too large.
+            // We need a different approach.
+            
+            // Let's re-read the problem. Maybe we missed something.
+            // The official solution might use min-cut on a bipartite graph? 
+            // Actually, the constraints are: for each adjacent pair, final heights must differ.
+            // Final height = original + row_inc + col_inc.
+            // Let R_i = row_inc[i], C_j = col_inc[j].
+            // We need R_i + C_j != R_i + C_{j+1} + (h[i][j+1] - h[i][j])  => C_j - C_{j+1} != h[i][j+1] - h[i][j].
+            // Similarly R_i - R_{i+1} != h[i+1][j] - h[i][j].
+            // So the constraints are: for each adjacent column pair (j, j+1), C_j - C_{j+1} must avoid a set of values S_j (which is the set of h[i][j+1] - h[i][j] over all i).
+            // For each adjacent row pair (i, i+1), R_i - R_{i+1} must avoid a set T_i (h[i+1][j] - h[i][j] over all j).
+            // And we want to minimize sum a_i R_i + sum b_j C_j with R_i, C_j >= 0 integers.
+            // This is exactly two independent 1D problems!
+            // So we just need to solve: given a chain of length n, costs c_i > 0, and for each edge i a set of forbidden differences F_i (subset of Z),
+            // find non-negative integers x_i minimizing sum c_i x_i such that x_i - x_{i+1} not in F_i for all i.
+            // This is a classic problem that can be solved with Dijkstra on a graph where nodes represent the "slack" variables? 
+            // Let's think of it as: we want to assign x_i. The constraints are x_{i+1} - x_i != d for d in F_i.
+            // This is equivalent to: x_{i+1} - x_i can be any integer except those in F_i.
+            // Since we want to minimize sum c_i x_i, and c_i > 0, we can think of this as: we start with all x_i = 0. If any constraint is violated (i.e., 0 - 0 = 0 is in F_i), we must increase some x_i.
+            // We can model this as a shortest path problem on a graph with n+1 nodes? 
+            // Consider the differences d_i = x_i - x_{i+1}. Then x_i = x_0 - sum_{k=0}^{i-1} d_k.
+            // The cost is sum c_i x_i = sum c_i (x_0 - sum_{k=0}^{i-1} d_k) = x_0 * sum c_i - sum_{i} c_i sum_{k=0}^{i-1} d_k.
+            // Let S = sum c_i. Then cost = S * x_0 - sum_{k=0}^{n-2} d_k * (sum_{i=k+1}^{n-1} c_i).
+            // We also have x_i >= 0 => x_0 >= sum_{k=0}^{i-1} d_k for all i.
+            // And d_k not in F_k.
+            // We want to minimize cost. Since S > 0, we want x_0 as small as possible, i.e., x_0 = max(0, max_i sum_{k=0}^{i-1} d_k).
+            // Then cost = S * max(0, max_i prefix_sum_i) - sum_{k} d_k * suffix_sum_{k+1}.
+            // This is a bit messy.
+            
+            // Alternative: Since n <= 1000, we can use the fact that the forbidden differences are only at most n per edge. 
+            // We can do a DP where we keep track of the "offset" from the minimum possible value.
+            // Actually, we can observe that the constraints are monotonic in some sense? 
+            // If we have a feasible assignment, we can decrease any x_i as long as we don't violate constraints. 
+            // This is like finding the minimum cost feasible potentials in a system of difference constraints with "not equal".
+            // Because it's a chain, we can solve it by considering the "tight" constraints.
+            // Let's think about the structure of forbidden differences. They come from h differences. 
+            // For a fixed edge (i,i+1), the forbidden differences are D_j = (h[i+1][j] - h[i][j] - (p_i - p_{i+1})) / 2 for those j where the numerator is even.
+            // There are at most n such values. They can be arbitrary integers.
+            // We can always choose x_i - x_{i+1} to be something not in that set. 
+            // Since we want to minimize cost, we want x_i to be as small as possible. 
+            // This is equivalent to: we have a chain, we want to assign x_i >= 0. 
+            // We can think of it as a graph where we have a source node with x=0, and we want to find the shortest path to each node where edge weights are... 
+            // Actually, we can formulate as a min-cost flow? 
+            // Let's try to find the optimal x_i by a greedy approach: 
+            // Since costs are positive, we want to keep x_i as low as possible. 
+            // We can start with all x_i = 0. If any edge has 0 in F_i, we must increase some x_i. 
+            // Increasing x_i by 1 increases cost by c_i. Increasing x_{i+1} by 1 increases cost by c_{i+1}. 
+            // To fix the edge (i,i+1) where difference 0 is forbidden, we need to change the difference. 
+            // We can either increase x_i (which increases difference x_i - x_{i+1}) or increase x_{i+1} (which decreases difference). 
+            // But we also have to maintain non-negativity and other edges.
+            // This sounds like we can model it as a shortest path problem on a graph with n+1 nodes, where we decide the differences.
+            // Let d_i = x_i - x_{i+1}. Then x_i = x_0 - sum_{k=0}^{i-1} d_k.
+            // x_i >= 0 => sum_{k=0}^{i-1} d_k <= x_0.
+            // Cost = sum c_i x_i = sum c_i (x_0 - sum_{k=0}^{i-1} d_k) = x_0 * S - sum_{k=0}^{n-2} d_k * suffix_sum_{k+1}.
+            // Let W_k = suffix_sum_{k+1} = sum_{i=k+1}^{n-1} c_i.
+            // Then cost = S * x_0 - sum_{k=0}^{n-2} W_k d_k.
+            // We want to minimize this subject to: for each i, sum_{k=0}^{i-1} d_k <= x_0, and x_0 >= 0, and d_k not in F_k.
+            // Also x_0 must be an integer? x_0 can be anything, but since x_i are integers, x_0 is integer if we set x_0 = max_i (sum_{k=0}^{i-1} d_k) + something? Actually x_0 is just a variable we can choose.
+            // To minimize cost, for a fixed set of d_k, we should set x_0 = max(0, max_{i} sum_{k=0}^{i-1} d_k). 
+            // Then cost = S * max(0, M) - sum W_k d_k, where M = max_i prefix_sum_i.
+            // This is still not linear.
+            
+            // Maybe we can use the fact that the forbidden differences are only at most n per edge, and we can do a Dijkstra on the state (index, current_height)? 
+            // But heights can be up to 1e9 + n * something. However, we only care about relative differences. 
+            // We can compress the values? 
+            // Notice that the constraints are only on differences. If we add a constant to all x_i, the differences remain the same, and feasibility is preserved. 
+            // The cost changes by S * constant. So to minimize cost, we want to shift the whole sequence down as much as possible until some x_i hits 0.
+            // So the problem reduces to: find a sequence of differences d_k not in F_k such that the resulting x_i (with x_0 = 0) are as "low" as possible in terms of weighted sum? 
+            // Actually, if we set x_0 = 0, then x_i = - sum_{k=0}^{i-1} d_k. But x_i must be >= 0, so sum_{k=0}^{i-1} d_k <= 0 for all i. 
+            // Then cost = sum c_i x_i = - sum_{k=0}^{n-2} W_k d_k. 
+            // We want to minimize this, i.e., maximize sum W_k d_k subject to d_k not in F_k and prefix sums <= 0.
+            // But d_k can be positive or negative. W_k > 0. So we want d_k to be as large as possible. 
+            // However, if we make d_k too large, the prefix sums might become positive, violating x_i >= 0 (since x_i = -prefix_sum). 
+            // Actually, if prefix sum > 0, then x_i would be negative, which is not allowed. So we must have prefix sums <= 0.
+            // But we can always shift everything up by adding a constant to all x_i, which corresponds to increasing x_0. 
+            // So the optimal solution will have min x_i = 0. So we can assume without loss of generality that min x_i = 0.
+            // Then the problem is: choose d_k not in F_k to minimize sum c_i x_i with x_i >= 0 and min x_i = 0.
+            // This is equivalent to: find a sequence x_i >= 0 with min = 0, such that x_i - x_{i+1} not in F_i, minimizing sum c_i x_i.
+            // This is a shortest path problem! 
+            // Consider a graph with nodes 0..n-1. We want to assign potentials x_i. 
+            // The condition x_i - x_{i+1} != d is equivalent to: either x_i - x_{i+1} <= d-1 or x_i - x_{i+1} >= d+1.
+            // This is not a standard difference constraint. But we can use the fact that the graph is a chain and we can do a DP with state being the value of x_i relative to the minimum.
+            // Since min x_i = 0, the maximum x_i might be bounded? 
+            // Let's consider the maximum possible value of x_i in an optimal solution. 
+            // Suppose we have an optimal solution. If there is a large gap between some x_i and x_{i+1}, we could potentially reduce the larger one without violating constraints? 
+            // Not necessarily, because reducing it might create a forbidden difference with a neighbor.
+            // But since there are only n-1 edges and each F_i has at most n values, the number of "bad" differences is small. 
+            // We can always choose differences that are not in F_i and are small in magnitude. 
+            // In fact, we can always choose d_k such that |d_k| <= n (since there are at most n forbidden values, we can pick the smallest non-negative integer not forbidden, or the largest negative not forbidden, etc.). 
+            // But we also have the prefix sum constraint. 
+            // Actually, we can just set all d_k = 0 if 0 is not forbidden. If 0 is forbidden, we can set d_k = 1 or -1, etc. 
+            // The maximum absolute value of d_k we ever need to consider is bounded by the number of forbidden values on that edge, which is at most n. 
+            // So |d_k| <= n. Then the prefix sums are bounded by n^2. Since n <= 1000, n^2 = 1e6. That's manageable!
+            // Wait, is it true that we only need to consider d_k in a small range? 
+            // Suppose F_k = {0, 1, 2, ..., n-1}. Then we could choose d_k = n. That's still <= n. 
+            // If F_k contains all integers from -M to M, we might need to pick a larger d_k. But F_k is derived from h differences, which can be up to 1e9. 
+            // However, we are not forced to pick a d_k that is close to 0. We could pick a very large d_k, but that would increase the x_i values and thus the cost. 
+            // Since costs are positive, we want to keep x_i small. So we would never choose a d_k with large magnitude if a smaller one is available and doesn't force other x_i to be large. 
+            // But could it be that to satisfy the prefix sum constraints (min x_i = 0), we are forced to have a large d_k? 
+            // No, because we can always shift the whole sequence. The min x_i = 0 condition just anchors the sequence. 
+            // The differences d_k are independent of the shift. So we can first choose any feasible differences d_k (not in F_k), then compute x_i = x_0 - prefix_sum. 
+            // We can then choose x_0 = max(prefix_sum) to make all x_i >= 0, and then min x_i will be 0 if we set x_0 exactly to max prefix_sum. 
+            // The cost is sum c_i x_i = sum c_i (max_prefix - prefix_i). 
+            // To minimize this, we want to choose d_k such that the weighted sum of (max_prefix - prefix_i) is minimized.
+            // This is equivalent to: we want to choose d_k to minimize the "spread" of the prefixes, penalized by costs.
+            // Since we can choose d_k freely except for forbidden values, and we want to keep prefixes close to each other (to minimize max_prefix - prefix_i), 
+            // we would generally want d_k to be small. 
+            // But could there be a situation where we must choose a large d_k to avoid all forbidden values? 
+            // F_k has at most n values. They could be, say, all even numbers between -1e9 and 1e9? No, F_k is a set of specific values derived from h differences. 
+            // There are at most n values in F_k. They are just some integers. They could be large, e.g., {1000000, -1000000}. 
+            // Then we can choose d_k = 0 if 0 is not forbidden. If 0 is forbidden, we can choose 1 or -1. 
+            // So we never need to choose a d_k with absolute value larger than max(|F_k|) + 1? Not exactly: if F_k = {0, 1, 2, ..., n-1}, we can choose n. That's still O(n). 
+            // If F_k = {-n, -n+1, ..., n}, we can choose n+1. Still O(n). 
+            // In general, the forbidden set has size at most n. The smallest non-negative integer not in the set is at most n. The largest negative integer not in the set is at least -n-1. 
+            // So we can always choose a d_k with |d_k| <= n. 
+            // Therefore, the differences are bounded by O(n). Then the prefix sums are bounded by O(n^2). 
+            // Since n <= 1000, n^2 = 1e6. This is small enough for a DP!
+            
+            // Let's verify: For an edge (i,i+1), the forbidden differences are D_j = (h[i+1][j] - h[i][j] - (p_i - p_{i+1})) / 2 for those j where numerator is even.
+            // The values D_j can be large (up to 1e9). But we don't have to avoid them by picking a difference close to them; we can just pick a difference that is not in that set. 
+            // Since the set has at most n elements, there exists an integer d with |d| <= n that is not in the set. 
+            // Proof: Consider the 2n+1 integers in [-n, n]. There are 2n+1 numbers. The forbidden set has at most n numbers. So at least n+1 numbers in [-n, n] are not forbidden. 
+            // Thus we can always choose d_k in [-n, n]. 
+            // Therefore, in an optimal solution, we can assume |d_k| <= n for all k. 
+            // Then the prefix sums sum_{k=0}^{i-1} d_k are in [-n^2, n^2]. 
+            // The values x_i = x_0 - prefix_i. Since we can shift x_0, we can assume min x_i = 0, so x_0 = max_i prefix_i. 
+            // Then x_i = max_prefix - prefix_i. So x_i are in [0, 2n^2]. 
+            // That's at most 2e6. We can do a DP over the possible values of x_i!
+            
+            // Let's design the DP for the 1D problem:
+            // We have n nodes, costs c_i (which are 2*a[i] or 2*b[j]).
+            // We want to assign x_i >= 0 integers, min x_i = 0, such that x_i - x_{i+1} != d for all d in F_i.
+            // Equivalently, x_{i+1} - x_i != -d for all d in F_i. Let G_i = { -d | d in F_i }.
+            // So x_{i+1} - x_i not in G_i.
+            // We want to minimize sum c_i x_i.
+            // Since min x_i = 0, we can try all possible starting values for x_0? But x_0 can be up to 2n^2.
+            // We can do a DP from left to right: dp[i][v] = minimum cost for first i+1 nodes (0..i) with x_i = v, and satisfying constraints up to i.
+            // But we also need to ensure that eventually min x_i = 0. We can just compute the DP without the min=0 constraint, then at the end subtract the minimum value from all x_i? 
+            // Actually, if we have a feasible assignment x_i

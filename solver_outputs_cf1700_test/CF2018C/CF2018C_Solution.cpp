@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -12,35 +11,44 @@ void solve() {
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
-
+    
     vector<int> depth(n + 1), max_depth(n + 1);
-    function<void(int, int, int)> dfs = [&](int u, int p, int d) {
-        depth[u] = d;
-        max_depth[u] = d;
+    vector<int> order;
+    function<void(int, int)> dfs = [&](int u, int p) {
+        order.push_back(u);
+        max_depth[u] = depth[u];
         for (int v : adj[u]) {
             if (v == p) continue;
-            dfs(v, u, d + 1);
+            depth[v] = depth[u] + 1;
+            dfs(v, u);
             max_depth[u] = max(max_depth[u], max_depth[v]);
         }
     };
-    dfs(1, 0, 0);
-
-    int max_d = *max_element(depth.begin() + 1, depth.end());
-    vector<int> diff(max_d + 2, 0);
-    for (int i = 1; i <= n; i++) {
-        int l = depth[i];
-        int r = max_depth[i];
-        diff[l]++;
-        diff[r + 1]--;
+    depth[1] = 0;
+    dfs(1, 0);
+    
+    vector<int> diff(n + 2, 0);
+    for (int u = 2; u <= n; u++) {
+        if (adj[u].size() == 1) {
+            int a = depth[u];
+            int b = max_depth[u];
+            diff[a]++;
+            diff[b + 1]--;
+        }
     }
-
-    int cur = 0, best = 0;
-    for (int d = 0; d <= max_d; d++) {
+    
+    int best = 0, cur = 0;
+    for (int d = 0; d <= n; d++) {
         cur += diff[d];
         best = max(best, cur);
     }
-
-    cout << n - best << '\n';
+    
+    int leaves = 0;
+    for (int u = 2; u <= n; u++) {
+        if (adj[u].size() == 1) leaves++;
+    }
+    
+    cout << leaves - best << "\n";
 }
 
 int main() {

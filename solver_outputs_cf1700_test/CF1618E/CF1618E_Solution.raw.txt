@@ -5,43 +5,39 @@ using namespace std;
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
     int t;
     cin >> t;
     while (t--) {
         int n;
         cin >> n;
         vector<long long> b(n);
-        long long sumB = 0;
+        long long sum_b = 0;
         for (int i = 0; i < n; ++i) {
             cin >> b[i];
-            sumB += b[i];
+            sum_b += b[i];
         }
-
-        long long coeff = 1LL * n * (n + 1) / 2;
-        if (sumB % coeff != 0) {
+        long long total_coeff = 1LL * n * (n + 1) / 2;
+        if (sum_b % total_coeff != 0) {
             cout << "NO\n";
             continue;
         }
-
-        long long S = sumB / coeff;
+        long long S = sum_b / total_coeff;
         vector<long long> a(n);
         bool ok = true;
-
         for (int i = 0; i < n; ++i) {
-            int prev = (i + n - 1) % n;
-            long long num = S - b[i] + b[prev];
-            if (num % n != 0) {
+            int prev = (i - 1 + n) % n;
+            long long diff = b[i] - b[prev];
+            long long val = S - diff;
+            if (val % n != 0) {
                 ok = false;
                 break;
             }
-            a[i] = num / n;
+            a[i] = val / n;
             if (a[i] <= 0 || a[i] > 1000000000) {
                 ok = false;
                 break;
             }
         }
-
         if (!ok) {
             cout << "NO\n";
         } else {

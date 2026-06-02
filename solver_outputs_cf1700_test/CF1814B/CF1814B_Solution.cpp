@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -12,9 +11,9 @@ int main() {
         long long a, b;
         cin >> a >> b;
         long long ans = a + b;
-        for (int m = 1; m <= 100000; m++) {
+        for (int m = 1; m <= 100000; ++m) {
             long long cur = (a + m - 1) / m + (b + m - 1) / m + (m - 1);
-            ans = min(ans, cur);
+            if (cur < ans) ans = cur;
         }
         cout << ans << '\n';
     }

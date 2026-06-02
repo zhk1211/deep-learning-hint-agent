@@ -1,40 +1,46 @@
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    int n;
-    ll m;
-    cin >> n >> m;
-    vector<ll> a(n);
-    for (int i = 0; i < n; ++i) cin >> a[i];
-    sort(a.begin(), a.end());
-    ll total_sum = accumulate(a.begin(), a.end(), 0LL);
 
-    auto check = [&](int k) {
-        int L = n - k;
-        if (L <= 1) return true;
-        ll max_sum = 0;
-        for (int i = 0; i < L / 2; ++i) {
-            max_sum = max(max_sum, a[i] + a[L - 1 - i]);
+    int n;
+    long long m;
+    cin >> n >> m;
+    vector<long long> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    sort(a.begin(), a.end());
+
+    long long total_sum = accumulate(a.begin(), a.end(), 0LL);
+    long long base_time = n + total_sum;
+
+    auto can = [&](int k) -> bool {
+        int sz = n - k;
+        for (int i = 0; i < sz / 2; ++i) {
+            if (a[i] + a[sz - 1 - i] > m) {
+                return false;
+            }
         }
-        return max_sum <= m;
+        return true;
     };
 
-    int low = 0, high = n - 1, ans = n - 1;
-    while (low <= high) {
-        int mid = (low + high) / 2;
-        if (check(mid)) {
-            ans = mid;
-            high = mid - 1;
+    int lo = 0, hi = n - 1, best_k = n - 1;
+    while (lo <= hi) {
+        int mid = (lo + hi) / 2;
+        if (can(mid)) {
+            best_k = mid;
+            hi = mid - 1;
         } else {
-            low = mid + 1;
+            lo = mid + 1;
         }
     }
-    cout << total_sum + ans + 1 << '\n';
+
+    long long ans = base_time - (n - 1 - best_k);
+    cout << ans << "\n";
     return 0;
 }
 ```

@@ -14,62 +14,66 @@ int main() {
         int q;
         cin >> q;
         deque<ll> dq;
-        ll score = 0;
-        ll sum = 0;
-        ll sz = 0;
+        ll score = 0, sum = 0, sz = 0;
         bool rev = false;
 
-        auto get_front = [&]() -> ll& {
-            return rev ? dq.back() : dq.front();
-        };
-        auto get_back = [&]() -> ll& {
-            return rev ? dq.front() : dq.back();
-        };
-        auto pop_front = [&]() {
-            if (rev) dq.pop_back();
-            else dq.pop_front();
-        };
-        auto pop_back = [&]() {
-            if (rev) dq.pop_front();
-            else dq.pop_back();
-        };
-        auto push_front = [&](ll val) {
-            if (rev) dq.push_back(val);
-            else dq.push_front(val);
-        };
-        auto push_back = [&](ll val) {
-            if (rev) dq.push_front(val);
-            else dq.push_back(val);
+        auto get_score = [&]() -> ll {
+            if (!rev) return score;
+            // rscore = (sz + 1) * sum - score
+            return (sz + 1) * sum - score;
         };
 
         while (q--) {
             int op;
             cin >> op;
             if (op == 1) {
-                // cyclic shift: move back to front
-                ll back_val = get_back();
-                pop_back();
-                // remove back contribution
-                score -= back_val * sz;
-                // add front contribution
-                score += sum;
-                push_front(back_val);
-                // sum and sz unchanged
+                // cyclic shift
+                if (sz == 0) {
+                    cout << 0 << "\n";
+                    continue;
+                }
+                if (!rev) {
+                    // pop back, push front
+                    ll back_val = dq.back();
+                    dq.pop_back();
+                    // score decreases by back_val * sz
+                    score -= back_val * sz;
+                    // push front
+                    dq.push_front(back_val);
+                    // score increases by sum
+                    score += sum;
+                } else {
+                    // reversed: pop front, push back
+                    ll front_val = dq.front();
+                    dq.pop_front();
+                    // score decreases by sum (since front moves out)
+                    score -= sum;
+                    // push back
+                    dq.push_back(front_val);
+                    // score increases by front_val * sz
+                    score += front_val * sz;
+                }
+                cout << get_score() << "\n";
             } else if (op == 2) {
+                // reverse
                 rev = !rev;
-                // score becomes rscore = (sz + 1) * sum - score
-                score = (sz + 1) * sum - score;
+                cout << get_score() << "\n";
             } else if (op == 3) {
                 ll k;
                 cin >> k;
                 sz++;
                 sum += k;
-                // append to back
-                push_back(k);
-                // new element contributes k * sz to score
-                score += k * sz;
+                if (!rev) {
+                    dq.push_back(k);
+                    score += k * sz;
+                } else {
+                    dq.push_front(k);
+                    // rscore increases by sum (new sum)
+                    // score = (sz+1)*sum - rscore, so score increases by k*sz
+                    score += k * sz;
+                }
+                cout << get_score() << "\n";
             }
-            cout << score << '\n';
         }
     }
     return 0;

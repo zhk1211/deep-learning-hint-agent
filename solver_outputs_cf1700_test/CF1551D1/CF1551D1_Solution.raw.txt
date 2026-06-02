@@ -1,33 +1,48 @@
 ```cpp
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
+    
     int t;
     cin >> t;
     while (t--) {
         int n, m, k;
         cin >> n >> m >> k;
-
-        if (n % 2 == 0) {
-            // n even
-            if (k % 2 == 0 && k <= n * (m / 2)) {
-                cout << "YES\n";
-            } else {
-                cout << "NO\n";
+        
+        // If n is odd, we must place at least m/2 horizontal dominoes in the last row
+        // If m is odd, we must place at least n/2 vertical dominoes in the last column
+        // which means horizontal dominoes are limited
+        
+        bool possible = false;
+        
+        if (n % 2 == 0 && m % 2 == 0) {
+            // Both even: k must be even (since horizontal dominoes come in pairs to fill columns)
+            if (k % 2 == 0 && k <= n * m / 2) {
+                possible = true;
+            }
+        } else if (n % 2 == 1) {
+            // n odd, m even
+            // We must fill the last row with horizontal dominoes: m/2 horizontal dominoes
+            int min_h = m / 2;
+            if (k >= min_h && (k - min_h) % 2 == 0 && k <= n * m / 2) {
+                possible = true;
             }
         } else {
-            // n odd -> m must be even (since n*m is even)
-            if (k >= m / 2 && (k - m / 2) % 2 == 0 && k <= n * m / 2) {
-                cout << "YES\n";
-            } else {
-                cout << "NO\n";
+            // m odd, n even
+            // We can have at most (n/2) * (m-1) horizontal dominoes? Actually vertical dominoes fill the last column
+            // Horizontal dominoes must be placed in pairs of columns, so k must be even
+            // Also k <= n * (m-1) / 2
+            if (k % 2 == 0 && k <= n * (m - 1) / 2) {
+                possible = true;
             }
         }
+        
+        cout << (possible ? "YES" : "NO") << '\n';
     }
+    
     return 0;
 }
 ```

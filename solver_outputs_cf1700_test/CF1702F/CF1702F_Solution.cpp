@@ -1,45 +1,43 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    
+
     int t;
     cin >> t;
     while (t--) {
         int n;
         cin >> n;
         vector<int> a(n), b(n);
-        for (int i = 0; i < n; ++i) cin >> a[i];
-        for (int i = 0; i < n; ++i) cin >> b[i];
-        
-        // Reduce a to odd numbers
-        unordered_map<int, int> freq;
-        freq.reserve(n * 2);
-        for (int x : a) {
-            while (x % 2 == 0) x /= 2;
-            ++freq[x];
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+            while (a[i] % 2 == 0) a[i] /= 2;
         }
-        
-        // Process b in descending order
+        for (int i = 0; i < n; ++i) {
+            cin >> b[i];
+        }
+
+        multiset<int> ma(a.begin(), a.end());
         sort(b.begin(), b.end(), greater<int>());
+
         bool ok = true;
-        for (int y : b) {
-            while (y > 0) {
-                auto it = freq.find(y);
-                if (it != freq.end() && it->second > 0) {
-                    --it->second;
+        for (int x : b) {
+            while (x > 0) {
+                if (ma.count(x)) {
+                    ma.erase(ma.find(x));
                     break;
                 }
-                y /= 2;
+                if (x == 1) {
+                    ok = false;
+                    break;
+                }
+                x /= 2;
             }
-            if (y == 0) {
-                ok = false;
-                break;
-            }
+            if (!ok) break;
         }
+
         cout << (ok ? "YES" : "NO") << '\n';
     }
     return 0;

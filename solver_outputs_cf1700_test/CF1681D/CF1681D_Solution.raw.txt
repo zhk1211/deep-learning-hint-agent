@@ -1,66 +1,49 @@
 ```cpp
-#include <iostream>
-#include <queue>
-#include <unordered_set>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     int n;
-    unsigned long long x;
+    long long x;
     cin >> n >> x;
-    
-    // threshold = 10^{n-1}
-    unsigned long long threshold = 1;
-    for (int i = 1; i < n; ++i) {
-        threshold *= 10;
-    }
-    
-    // initially x is already < threshold by constraints,
-    // but safe guard
-    if (x >= threshold) {
-        cout << 0 << endl;
+
+    if (to_string(x).size() == n) {
+        cout << 0 << '\n';
         return 0;
     }
-    
-    unordered_set<unsigned long long> visited;
-    // reserve approximate capacity to help with rehashing
-    visited.reserve(2000000);
-    
-    queue<pair<unsigned long long, int>> q;
-    visited.insert(x);
-    q.push({x, 0});
-    
+
+    queue<long long> q;
+    unordered_map<long long, int> dist;
+    q.push(x);
+    dist[x] = 0;
+
     while (!q.empty()) {
-        auto [cur, steps] = q.front();
+        long long cur = q.front();
         q.pop();
-        
-        // extract digits and mark which digits >= 2 are present
-        unsigned long long tmp = cur;
-        bool has_digit[10] = {false};
-        while (tmp) {
-            int d = tmp % 10;
-            tmp /= 10;
-            if (d >= 2) {
-                has_digit[d] = true;
-            }
+        int d = dist[cur];
+        string s = to_string(cur);
+        if ((int)s.size() == n) {
+            cout << d << '\n';
+            return 0;
         }
-        
-        for (int d = 2; d <= 9; ++d) {
-            if (!has_digit[d]) continue;
-            unsigned long long nxt = cur * d;
-            if (nxt >= threshold) {
-                cout << steps + 1 << endl;
-                return 0;
-            }
-            if (visited.find(nxt) == visited.end()) {
-                visited.insert(nxt);
-                q.push({nxt, steps + 1});
+        vector<bool> used(10, false);
+        for (char c : s) {
+            int digit = c - '0';
+            if (digit > 1 && !used[digit]) {
+                used[digit] = true;
+                long long nxt = cur * digit;
+                if (dist.find(nxt) == dist.end()) {
+                    dist[nxt] = d + 1;
+                    q.push(nxt);
+                }
             }
         }
     }
-    
-    cout << -1 << endl;
+
+    cout << -1 << '\n';
     return 0;
 }
 ```

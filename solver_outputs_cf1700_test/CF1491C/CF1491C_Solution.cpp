@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -20,20 +19,16 @@ int main() {
         long long ans = 0;
 
         for (int i = 0; i < n; ++i) {
-            if (S[i] > C[i] + 1) {
-                ans += S[i] - C[i] - 1;
-                C[i] = S[i] - 1;
+            long long extra = max(0LL, S[i] - 1 - C[i]);
+            ans += extra;
+            long long cur = C[i] + extra;
+
+            if (i + 1 < n) {
+                C[i + 1] += max(0LL, cur - (S[i] - 1));
             }
 
-            long long extra = C[i] - (S[i] - 1);
-            if (extra > 0) {
-                if (i + 1 < n) {
-                    C[i + 1] += extra;
-                }
-            }
-
-            for (int j = 2; j <= S[i] && i + j < n; ++j) {
-                C[i + j]++;
+            for (int j = i + 2; j < n && j <= i + S[i]; ++j) {
+                C[j]++;
             }
         }
 

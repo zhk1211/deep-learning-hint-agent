@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -17,18 +16,17 @@ int main() {
         vector<int> b(n + 1);
         int bal = n;
         b[0] = bal;
-        int ans = 0;
-        
         for (int i = 1; i <= n; ++i) {
-            if (s[i - 1] == '+') {
-                bal += 1;
-            } else {
-                bal -= 1;
-            }
+            if (s[i - 1] == '+') bal++;
+            else bal--;
             b[i] = bal;
+        }
+        
+        int ans = 0;
+        for (int i = 1; i <= n; ++i) {
             for (int j = 0; j < i; ++j) {
                 if (b[j] >= b[i] && (b[j] - b[i]) % 3 == 0) {
-                    ++ans;
+                    ans++;
                 }
             }
         }

@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -17,42 +16,45 @@ int main() {
         }
 
         int g = gcd(n, d);
-        int L = n / g;
+        int len = n / g;
         int ans = 0;
-        bool impossible = false;
+        bool all_ones_cycle = false;
 
-        for (int start = 0; start < g; ++start) {
-            // First pass: check if the whole cycle is all ones
-            bool all_ones = true;
-            int idx = start;
-            for (int i = 0; i < L; ++i) {
-                if (a[idx] == 0) {
-                    all_ones = false;
-                    break;
-                }
-                idx = (idx + d) % n;
+        vector<bool> visited(n, false);
+        for (int start = 0; start < n; ++start) {
+            if (visited[start]) continue;
+            int cur = start;
+            vector<int> seq;
+            while (!visited[cur]) {
+                visited[cur] = true;
+                seq.push_back(a[cur]);
+                cur = (cur + d) % n;
             }
+            // seq is a cycle of length len
+            // find max consecutive ones in this cycle
+            // since it's cyclic, we can duplicate the sequence
+            int m = seq.size();
+            bool all_ones = true;
+            for (int x : seq) if (x == 0) { all_ones = false; break; }
             if (all_ones) {
-                impossible = true;
+                all_ones_cycle = true;
                 break;
             }
-
-            // Second pass: find the maximum run of consecutive 1s in the circular cycle
-            idx = start;
-            int cur = 0, mx = 0;
-            for (int i = 0; i < 2 * L; ++i) {
-                if (a[idx] == 1) {
-                    ++cur;
-                    if (cur > mx) mx = cur;
+            // find max consecutive ones in cyclic array
+            int max_ones = 0;
+            int cur_ones = 0;
+            for (int i = 0; i < 2 * m; ++i) {
+                if (seq[i % m] == 1) {
+                    cur_ones++;
+                    max_ones = max(max_ones, cur_ones);
                 } else {
-                    cur = 0;
+                    cur_ones = 0;
                 }
-                idx = (idx + d) % n;
             }
-            if (mx > ans) ans = mx;
+            ans = max(ans, max_ones);
         }
 
-        if (impossible) {
+        if (all_ones_cycle) {
             cout << -1 << '\n';
         } else {
             cout << ans << '\n';

@@ -1,48 +1,41 @@
-// Solution
-#include <iostream>
-#include <vector>
-#include <string>
+#include <bits/stdc++.h>
 using namespace std;
 
-bool check(int k, const string& s, int n) {
-    vector<int> diff(n + 1, 0);
+bool can(int k, const string& s) {
+    int n = s.size();
+    vector<int> add(n + 1, 0);
     int cur = 0;
     for (int i = 0; i < n; ++i) {
-        cur += diff[i];
-        char c = s[i];
-        if (cur & 1) {
-            c ^= 1; // flip '0' <-> '1'
-        }
-        if (c == '0') {
+        cur += add[i];
+        int val = s[i] - '0';
+        if ((val + cur) % 2 == 0) {
             if (i + k > n) return false;
-            ++cur;
-            --diff[i + k];
+            cur++;
+            add[i + k]--;
         }
     }
     return true;
 }
 
 void solve() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int n;
-        string s;
-        cin >> n >> s;
-        int ans = 1;
-        for (int k = n; k >= 1; --k) {
-            if (check(k, s, n)) {
-                ans = k;
-                break;
-            }
+    int n;
+    string s;
+    cin >> n >> s;
+    for (int k = n; k >= 1; --k) {
+        if (can(k, s)) {
+            cout << k << '\n';
+            return;
         }
-        cout << ans << '\n';
     }
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    solve();
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
     return 0;
 }

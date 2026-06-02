@@ -1,2 +1,273 @@
-// Solution
+#include <bits/stdc++.h>
+using namespace std;
 
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+        
+        // b and c arrays to track the effect of previous operations
+        // b for slope 1 (down-right), c for slope -1 (down-left)
+        // We use 1-indexed for convenience, size n+2 to avoid bounds checking
+        vector<vector<int>> b(n + 2, vector<int>(n + 2, 0));
+        vector<vector<int>> c(n + 2, vector<int>(n + 2, 0));
+        // current row effect from previous operations
+        vector<int> cur(n + 2, 0);
+        
+        int ans = 0;
+        
+        for (int i = 1; i <= n; ++i) {
+            // compute prefix sums for current row
+            for (int j = 1; j <= n; ++j) {
+                // b propagates from top-left to bottom-right
+                b[i][j] ^= b[i - 1][j - 1];
+                // c propagates from top-right to bottom-left
+                c[i][j] ^= c[i - 1][j + 1];
+                // current cell effect is combination of b and c and direct row effect
+                cur[j] = b[i][j] ^ c[i][j] ^ cur[j];
+            }
+            
+            // now decide operations on row i
+            for (int j = 1; j <= n; ++j) {
+                int val = (grid[i - 1][j - 1] - '0') ^ cur[j];
+                if (val == 1) {
+                    ++ans;
+                    // apply operation at (i, j)
+                    // update b and c for future rows
+                    b[i][j] ^= 1;
+                    c[i][j + 1] ^= 1;
+                    // update current row effect (for this row, already processed, but need for next columns in same row? 
+                    // Actually cur[j] is used for this cell, but operation at (i,j) affects cells (x,y) with x>i, so not current row.
+                    // However, we need to update cur for subsequent columns in the same row? No, operation only affects rows > i.
+                    // But we must update cur for the next columns? Wait, the operation inverts (i,j) itself, but we already processed it.
+                    // The effect on same row is only the cell itself, which we already decided to flip. So no need to update cur for same row further.
+                    // However, the editorial uses difference arrays on b and c, and cur is computed from b and c.
+                    // Since we updated b[i][j] and c[i][j+1], these will affect future rows, not current row further.
+                }
+            }
+            
+            // prepare cur for next row: shift prefix sums? Actually cur is recomputed each row from b and c.
+            // But we need to maintain cur as a running prefix for the row? The editorial uses prefix sums on b and c to get cur.
+            // In our loop, we computed cur[j] using b[i][j] and c[i][j] and previous cur[j]? That's not exactly prefix.
+            // Let's re-read editorial: "For the current row, the effect of the previous rows is obtained by maintaining the prefix sums on b and c."
+            // They maintain prefix sums horizontally? Actually, the effect on cell (i,j) from operations above is the XOR sum of b and c contributions.
+            // b[i][j] already includes propagated b from above. c[i][j] includes propagated c from above.
+            // But we also need to consider that an operation at (x,y) affects a range in row i: from column y - (i-x) to y + (i-x).
+            // This is equivalent to adding 1 to b at (x+1, y-1) and c at (x+1, y+2) and then propagating.
+            // When we compute cur[j] as b[i][j] ^ c[i][j], that gives the effect at (i,j) from all operations above.
+            // However, we also need to consider that the effect might be cumulative horizontally? Let's test with small example.
+            // Actually, the standard solution maintains two arrays: b for diagonal down-right, c for diagonal down-left.
+            // And for each row, they compute a running XOR (prefix) horizontally to get the effect.
+            // Let's look at typical implementation: 
+            // vector<int> b(n+2), c(n+2);
+            // for each row i:
+            //   for j from 1 to n:
+            //       b[j] ^= b[j-1]? No.
+            // Actually, many solutions use:
+            //   vector<int> effect(n+2, 0);
+            //   for j from 1 to n:
+            //       effect[j] = effect[j-1] ^ b[j] ^ c[j];
+            //       if ((grid[i-1][j-1] - '0') ^ effect[j]) { ans++; b[j] ^= 1; c[j+1] ^= 1; }
+            //   then shift b and c for next row: b[j] = b[j+1]? No.
+            // Let's derive properly.
+            
+            // The operation at (x,y) inverts a triangular region below.
+            // For a fixed row i > x, the columns affected are from y - (i-x) to y + (i-x).
+            // This can be represented as: add 1 to an array at column y - (i-x) and add 1 at column y + (i-x) + 1, then prefix XOR.
+            // But we need to do this for all operations above.
+            // Alternative: maintain two arrays L and R. L[j] means there is a diagonal down-left starting at column j, R[j] means diagonal down-right starting at column j.
+            // When we move to next row, L[j] becomes L[j+1] (since diagonal down-left shifts left), and R[j] becomes R[j-1] (diagonal down-right shifts right).
+            // Then the effect on row i at column j is prefix XOR of (L[j] ^ R[j])? Actually, the effect from a single operation at (x,y) on row i is a range [y - d, y + d] where d = i-x.
+            // This range can be represented by difference array: add 1 at y-d, add 1 at y+d+1. Then prefix XOR gives the effect.
+            // If we maintain for each column j the number of active diagonals that start or end at j, we can compute effect.
+            // Let's define:
+            //   diag1[j] : number of operations that have their left boundary passing through column j at current row.
+            //   diag2[j] : number of operations that have their right boundary passing through column j+1 at current row? 
+            // Actually, standard solution:
+            //   vector<int> left(n+2), right(n+2), cur(n+2);
+            //   for i = 1..n:
+            //       for j = 1..n:
+            //           cur[j] = cur[j-1] ^ left[j] ^ right[j];
+            //           if (grid[i-1][j-1] ^ cur[j]) {
+            //               ans++;
+            //               left[j] ^= 1;
+            //               right[j+1] ^= 1;
+            //           }
+            //       // shift left and right for next row
+            //       for j = 1..n:
+            //           left[j] = left[j+1];
+            //           right[j] = right[j-1]; // with right[0]=0
+            // But this is O(n^2) and works.
+            // Let's verify: operation at (i,j) adds a left boundary at column j (since left boundary of affected region in row i+1 is j-1? Wait.
+            // In row i+1, affected columns are j-1 to j+1. So left boundary is j-1, right boundary is j+1.
+            // If we use difference array on row i+1: add 1 at j-1, add 1 at j+2. Then prefix XOR.
+            // So left boundary at j-1, right boundary at j+2.
+            // When moving to row i+2, left boundary shifts left by 1: becomes j-2, right boundary shifts right by 1: becomes j+3.
+            // So if we maintain left[] as the positions of left boundaries for current row, initially after operation at (i,j), we add to left[j-1] and right[j+2] for row i+1.
+            // But in the loop above, they do left[j] ^= 1 and right[j+1] ^= 1. That corresponds to adding left boundary at j and right boundary at j+1 for the *next* row? Let's check.
+            // If we are at row i, and we decide to operate at (i,j), then for row i+1, the affected range is [j-1, j+1]. So left boundary at j-1, right boundary at j+2 (since right boundary is exclusive +1).
+            // In the code, they update left[j] and right[j+1]. That would mean left boundary at j and right boundary at j+1 for row i+1? That doesn't match.
+            // Let's test with sample: n=5, operation at (1,3). Row 2 affected: columns 2,3,4. Left boundary 2, right boundary 5 (exclusive). So left[2] and right[5] should be toggled for row 2.
+            // In the code, if we do left[3] and right[4] at row 1, then after shifting: left[j] = left[j+1] means left[2] gets left[3]'s value? That would work if we shift left leftwards.
+            // Let's define: left[j] for current row i means there is a left boundary at column j for this row. When we move to row i+1, the left boundary shifts left by 1, so left_new[j] = left_old[j+1].
+            // Similarly, right boundary shifts right by 1: right_new[j] = right_old[j-1].
+            // Initially, after operation at (i,j), we want to add a left boundary at j-1 for row i+1, and a right boundary at j+2 for row i+1.
+            // So we can set left[j-1] ^= 1 and right[j+2] ^= 1 directly for the next row. But then we need to apply the shift before processing the next row.
+            // Alternatively, we can store the boundaries for the *current* row and update them as we go.
+            // Many solutions use:
+            //   vector<int> L(n+2), R(n+2), cur(n+2);
+            //   for i=1..n:
+            //       for j=1..n:
+            //           cur[j] = cur[j-1] ^ L[j] ^ R[j];
+            //           if (grid[i-1][j-1] ^ cur[j]) {
+            //               ans++;
+            //               L[j] ^= 1;
+            //               R[j+1] ^= 1;
+            //           }
+            //       // shift for next row
+            //       for j=1..n:
+            //           L[j] = L[j+1];
+            //       for j=n; j>=1; --j:
+            //           R[j] = R[j-1];
+            // Let's test this on sample 1.
+            // Row 1: L and R all 0. cur all 0. grid[1][3] = '1'. So at j=3, cur[3]=0, val=1, ans=1. L[3]^=1, R[4]^=1.
+            // After row 1: shift L: L[1]=L[2]=0, L[2]=L[3]=1, L[3]=L[4]=0,... so L[2]=1. R: R[1]=R[0]=0, R[2]=R[1]=0, R[3]=R[2]=0, R[4]=R[3]=0, R[5]=R[4]=1? Wait, R[4] was 1. After shift: R[1]=R[0]=0, R[2]=R[1]=0, R[3]=R[2]=0, R[4]=R[3]=0, R[5]=R[4]=1. So R[5]=1.
+            // Row 2: compute cur: cur[1]=0^L[1]^R[1]=0. cur[2]=cur[1]^L[2]^R[2]=0^1^0=1. cur[3]=1^L[3]^R[3]=1^0^0=1. cur[4]=1^L[4]^R[4]=1^0^0=1. cur[5]=1^L[5]^R[5]=1^0^1=0.
+            // Grid row 2: 01110. So cells: (2,1)='0'^0=0 ok. (2,2)='1'^1=0 ok. (2,3)='1'^1=0 ok. (2,4)='1'^1=0 ok. (2,5)='0'^0=0 ok. No more operations. Answer 1. Correct.
+            // Sample 2: n=3, grid:
+            // 100
+            // 110
+            // 110
+            // Row 1: L,R all 0. cur: j=1: grid[1][1]='1' -> val=1, ans=1, L[1]^=1, R[2]^=1.
+            // j=2: cur[2]=cur[1]^L[2]^R[2]=0^0^1=1. grid[1][2]='0' -> val=1, ans=2, L[2]^=1, R[3]^=1.
+            // j=3: cur[3]=cur[2]^L[3]^R[3]=1^0^1=0. grid[1][3]='0' -> val=0.
+            // After row 1: L: L[1]=L[2]=1, L[2]=L[3]=0, L[3]=L[4]=0. R: R[1]=R[0]=0, R[2]=R[1]=0, R[3]=R[2]=1, R[4]=R[3]=1? Wait R[2] was 1, R[3] was 1. Shift R: R[1]=R[0]=0, R[2]=R[1]=0, R[3]=R[2]=1, R[4]=R[3]=1. So R[3]=1, R[4]=1.
+            // Row 2: cur[1]=0^L[1]^R[1]=0^1^0=1. grid[2][1]='1' -> val=0.
+            // cur[2]=1^L[2]^R[2]=1^0^0=1. grid[2][2]='1' -> val=0.
+            // cur[3]=1^L[3]^R[3]=1^0^1=0. grid[2][3]='0' -> val=0.
+            // No operations in row 2.
+            // Shift L: L[1]=L[2]=0, L[2]=L[3]=0, L[3]=L[4]=0. R: R[1]=R[0]=0, R[2]=R[1]=0, R[3]=R[2]=0, R[4]=R[3]=1.
+            // Row 3: cur[1]=0^0^0=0. grid[3][1]='1' -> val=1, ans=3, L[1]^=1, R[2]^=1.
+            // cur[2]=0^L[2]^R[2]=0^0^1=1. grid[3][2]='1' -> val=0.
+            // cur[3]=1^L[3]^R[3]=1^0^0=1. grid[3][3]='0' -> val=1, ans=4, L[3]^=1, R[4]^=1.
+            // Answer 4? But expected 2. So this approach is wrong.
+            
+            // Let's re-evaluate. The operation at (1,1) inverts (1,1) and all cells with x>1 and x-1 >= |y-1|. That means row 2: columns 1,2? Actually x-i >= |y-j|. For i=1,j=1: x>1, x-1 >= |y-1|. For x=2: 1 >= |y-1| => y=1,2. So row 2: (2,1),(2,2). Row 3: x=3: 2 >= |y-1| => y=1,2,3. So it's a triangle.
+            // In sample 2, they did operation at (3,3) then (1,1). Let's see effect of (3,3): only inverts (3,3) because no x>3. Then (1,1) inverts (1,1); row2: (2,1),(2,2); row3: (3,1),(3,2),(3,3). So final: (1,1) flipped twice? Actually (1,1) was 1, after (3,3) still 1, after (1,1) becomes 0. (2,1): 1 -> after (1,1) becomes 0. (2,2): 1 -> 0. (3,1): 1 -> 0. (3,2): 1 -> 0. (3,3): 0 -> after (3,3) becomes 1 -> after (1,1) becomes 0. So all zeros. So answer 2.
+            // Our simulation gave 4, so the logic is flawed.
+            
+            // Let's think about the correct difference array approach.
+            // When we perform operation at (x,y), for each row i > x, the affected columns are [y - (i-x), y + (i-x)].
+            // This is equivalent to: for row i, we XOR 1 to a range. We can maintain two arrays: 
+            //   L[j] : number of active left boundaries at column j for the current row.
+            //   R[j] : number of active right boundaries at column j+1? Actually, if we have a range [l, r], we can do diff[l] ^= 1, diff[r+1] ^= 1. Then prefix XOR gives the effect.
+            // For a single operation at (x,y), the left boundary for row i is l_i = y - (i-x), right boundary is r_i = y + (i-x).
+            // As i increases, l_i decreases by 1, r_i increases by 1.
+            // So if we maintain for each column j the number of operations whose left boundary is currently at j, and similarly for right boundaries at j+1 (since we need r_i+1 for difference array).
+            // Let's define:
+            //   L[j] = number of operations that have their left boundary at column j for the current row.
+            //   R[j] = number of operations that have their right boundary at column j-1? Wait.
+            // In difference array, we add 1 at l and 1 at r+1. So we need to know where r+1 is.
+            // For row i, r_i+1 = y + (i-x) + 1. As i increases, this increases by 1.
+            // So if we maintain an array R where R[j] is the number of operations that have their (r+1) boundary at column j for the current row.
+            // Then when moving to next row, l decreases by 1, so L_new[j] = L_old[j+1].
+            // r+1 increases by 1, so R_new[j] = R_old[j-1].
+            // Initially, after operation at (x,y), for the next row (x+1), l = y-1, r+1 = y+2.
+            // So we should toggle L[y-1] and R[y+2] for the next row.
+            // But in our loop, we are processing row i. When we decide to operate at (i,j), we want to affect rows > i. So we should update the L and R arrays that will be used for row i+1.
+            // However, if we update L and R immediately, they will affect the current row's remaining columns if we use them in the same row's prefix computation. That's why in the standard solution, they update L and R but they also use them in the prefix for the current row? Actually, in the correct solutions, they update L and R for the *current* row's difference array, but they apply the operation's effect on the current row's cell itself separately? Let's check typical code.
+            
+            // I recall a common solution:
+            //   vector<int> L(n+2), R(n+2), cur(n+2);
+            //   int ans = 0;
+            //   for (int i = 0; i < n; ++i) {
+            //       for (int j = 1; j <= n; ++j) {
+            //           cur[j] = cur[j-1] ^ L[j] ^ R[j];
+            //           int val = (grid[i][j-1] - '0') ^ cur[j];
+            //           if (val) {
+            //               ++ans;
+            //               L[j] ^= 1;
+            //               R[j+1] ^= 1;
+            //           }
+            //       }
+            //       // shift L and R
+            //       for (int j = 1; j <= n; ++j) L[j] = L[j+1];
+            //       for (int j = n; j >= 1; --j) R[j] = R[j-1];
+            //       R[1] = 0; // optional
+            //   }
+            // But we saw that gave wrong answer for sample 2. Let's re-run sample 2 carefully with this code.
+            // n=3.
+            // grid:
+            // 100
+            // 110
+            // 110
+            // Initialize L[1..4]=0, R[1..4]=0, cur[1..4]=0.
+            // i=0 (row 1):
+            // j=1: cur[1] = 0 ^ L[1] ^ R[1] = 0. val = '1'^0 = 1 -> ans=1, L[1]^=1, R[2]^=1.
+            // j=2: cur[2] = cur[1] ^ L[2] ^ R[2] = 0 ^ 0 ^ 1 = 1. val = '0'^1 = 1 -> ans=2, L[2]^=1, R[3]^=1.
+            // j=3: cur[3] = cur[2] ^ L[3] ^ R[3] = 1 ^ 0 ^ 1 = 0. val = '0'^0 = 0.
+            // After row 1: L = [1,1,0,0] (indices 1..4), R = [0,1,1,0]? Wait R[2]=1, R[3]=1, others 0.
+            // Shift L: for j=1..3: L[j] = L[j+1]. So L[1]=L[2]=1, L[2]=L[3]=0, L[3]=L[4]=0. L = [1,0,0,0].
+            // Shift R: for j=3 down to 1: R[3]=R[2]=1, R[2]=R[1]=0, R[1]=R[0]=0. R = [0,0,1,0]? Wait R[0] is out of bounds, assume 0. So R[1]=0, R[2]=0, R[3]=1, R[4]=0.
+            // i=1 (row 2):
+            // j=1: cur[1] = 0 ^ L[1] ^ R[1] = 0 ^ 1 ^ 0 = 1. val = '1'^1 = 0.
+            // j=2: cur[2] = cur[1] ^ L[2] ^ R[2] = 1 ^ 0 ^ 0 = 1. val = '1'^1 = 0.
+            // j=3: cur[3] = cur[2] ^ L[3] ^ R[3] = 1 ^ 0 ^ 1 = 0. val = '0'^0 = 0.
+            // No operations.
+            // Shift L: L[1]=L[2]=0, L[2]=L[3]=0, L[3]=L[4]=0. L = [0,0,0,0].
+            // Shift R: R[3]=R[2]=0, R[2]=R[1]=0, R[1]=R[0]=0. R = [0,0,0,0].
+            // i=2 (row 3):
+            // j=1: cur[1]=0. val='1'^0=1 -> ans=3, L[1]^=1, R[2]^=1.
+            // j=2: cur[2]=cur[1]^L[2]^R[2]=0^0^1=1. val='1'^1=0.
+            // j=3: cur[3]=cur[2]^L[3]^R[3]=1^0^0=1. val='0'^1=1 -> ans=4, L[3]^=1, R[4]^=1.
+            // End. ans=4. But expected 2.
+            // So this standard code actually gives 4? That can't be right; many people solved it this way. Let's check sample 2 manually with the operation rules.
+            // Maybe I misinterpreted the operation. The operation says: invert (i,j) and all (x,y) for x>i and x-i >= |y-j|.
+            // For (1,1): x>1, x-1 >= |y-1|.
+            // Row 2: x=2, 1 >= |y-1| => y=1,2. So (2,1) and (2,2) inverted.
+            // Row 3: x=3, 2 >= |y-1| => y=1,2,3. So (3,1),(3,2),(3,3) inverted.
+            // For (3,3): x>3 none. So only (3,3) inverted.
+            // Initial:
+            // 1 0 0
+            // 1 1 0
+            // 1 1 0
+            // After (3,3):
+            // 1 0 0
+            // 1 1 0
+            // 1 1 1
+            // After (1,1):
+            // (1,1): 1->0
+            // (2,1): 1->0, (2,2): 1->0
+            // (3,1): 1->0, (3,2): 1->0, (3,3): 1->0
+            // Result all zeros. So answer 2.
+            // Why did the simulation give 4? Because the code performed operations at (1,1), (1,2), (3,1), (3,3). That's 4 operations. But we only needed 2. So the code is doing something different: it's allowing operations on any cell, but the effect is different? Let's see what the code's operation does.
+            // In the code, when we do operation at (i,j), we toggle L[j] and R[j+1]. Then for subsequent rows, L shifts left, R shifts right. The effect on a cell (i', j') is the prefix XOR of L and R. Let's compute the effect of operation at (1,1) in the code's model.
+            // Operation at (1,1): L[1]^=1, R[2]^=1.
+            // Row 1: already passed.
+            // Row 2: L after shift: L[1] was 1, after shift L[1]=L[2]? Wait, shift L: L[j] = L[j+1]. So L[1] becomes L[2] which is 0. L[2] becomes L[3]=0. So L loses the 1? That's wrong. Actually, if we set L[1]=1 at row 1, then after shift for row 2, L[1] should become 0? No, the left boundary was at column 1 for row 1? Wait, the left boundary for row 2 should be at column 0? But columns are 1-indexed. Operation at (1,1): for row 2, affected columns are y=1,2. So left boundary l=1, right boundary r=2. In difference array, we add 1 at l=1 and 1 at r+1=3. So for row 2, we need L[1] and R[3] toggled. But in the code, we toggled L[1] and R[2] at row 1, then shifted L left (so L[1] becomes L[2]?) and R right (R[2] becomes R[1]?). That doesn't match.
+            // Let's re-analyze the shift.
+            // Suppose we have an operation at (x,y). For row i = x+1, l = y-1, r = y+1. So diff: toggle at l and r+1 = y+2.
+            // For row i = x+2, l = y-2, r = y+2. diff: toggle at y-2 and y+3.
+            // So as we go down one row, l decreases by 1, r+1 increases by 1.
+            // If we maintain an array L where L[j] means there is a toggle at column j for the current row's difference array, then when moving to next row, the toggle at j moves to j-1. So L_new[j-1] ^= L_old[j]. Equivalently, L_new[j] = L_old[j+1].
+            // Similarly, for the right toggle (which is at r+1), it moves to r+2. So R_new[j+1] ^= R_old[j]. Equivalently, R_new[j] = R_old[j-1].
+            // Initially, after operation at (x,y), we want to add toggles for row x+1: at l = y-1 and r+1 = y+2.
+            // So we should do L[y-1] ^= 1 and R[y+2] ^= 1.
+            // But in the code, they do L[j] ^= 1 and R[j+1] ^= 1 at row i. That means they are adding toggles at j and j+1 for the *current* row's difference array? No, they do it when processing row i, and then they shift for the next row. So if they do L[j] ^= 1 at row i, then after shifting L for row i+1, that toggle will be at j-1. So effectively, they added a toggle at j-1 for row i+1. Similarly, R[j+1] ^= 1 becomes R[j+2] after shifting R right? Wait, R shift: R_new[j] = R_old[j-1]. So R_old[j+1] becomes R_new[j+2]. So they added a toggle at j+2 for row i+1. That matches: L toggle at j-1, R toggle at j+2. Perfect!
+            // So the code's update L[j] and R[j+1] at row i is correct for affecting row i+1 with left boundary j-1 and right boundary j+2.
+            // But wait, in our simulation of sample 2, we did operation at (1,1) and (1,2). That would mean left boundaries for row 2: from (1,1): L[0]? But columns are 1-indexed, so j-1=0, which is out of bounds. That's a problem. In the code, they probably ignore out of bounds or use 0-indexed arrays with offset. Let's check 0-indexed version.
+            // Many solutions use 0-indexed columns. Let's convert to 0-indexed.
+            // Let columns be 0..n-1.
+            // Operation at (i,j) (0-indexed). For row i+1, affected columns: from j-1 to j+1. So left boundary l = j-1, right boundary r = j+1. diff: toggle at l and r+2? Actually r+1 = j+2. So toggle at j-1 and j+2.
+            // If we maintain L and R arrays of size n+2 (to handle out of bounds).
+            // When processing row i, if we decide to operate at (i,j), we do L[j] ^= 1 and R[j+1] ^= 1? Let's see: we want to add toggle at j-1 and j+2 for row i+1. If we do L[j] ^= 1, then after shifting L left (L_new[k] = L_old[k+1]), the toggle at j moves to j-1. Good. If we do R[j+1] ^= 1, after shifting R right (R_new[k] = R_old[k-1]), the toggle at j+1 moves to j+2. Good. So the update is L[j] ^= 1 and R[j+1] ^= 1.
+            // Now, what about the effect on the current row? The operation also inverts (i,j) itself. In our loop, we are computing cur[j] for the current row using L and R. But L and R represent toggles for the difference array of the *current* row. When we do L[j] ^= 1 and R[j+1] ^= 1, we are modifying L and R that are currently being used for the current row's prefix computation. That would affect the current row's subsequent columns! But the operation at (i,j) should only invert (i,j) in the current row, not a range. So we must be careful: the L and R arrays we maintain are for the *current* row's difference array, but they represent the effect of operations from *previous* rows. When we perform an operation on the current row, we should not let it affect the current row's other cells via L and R. It should only affect future rows. Therefore, we should not update L and R in a way that affects the current row's prefix computation. In the standard code, they update L[j] and R[j+1] immediately, and then continue the prefix computation for j+1, j+2, etc. That would cause the operation to affect a range in the current row! But wait, the operation at (i,j) inverts (i,j) and cells below. It does NOT invert other cells in the same row. So if we update L[j] and R[j+1] and then compute cur for j+1, we might incorrectly invert (i,j+1) etc. Let's test: In sample 2, at row 1, j=1, we did operation. Then at j=2, cur[2] became 1 because of R[2] being toggled. That caused us to think (1,2) needed inversion, leading to extra operation. But actually, the operation at (1,1) does not invert (1

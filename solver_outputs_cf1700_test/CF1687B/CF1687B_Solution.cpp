@@ -1,4 +1,3 @@
-// Solution
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -31,11 +30,11 @@ int main() {
         int e = idx[i];
         cur[e] = '1';
         cout << "? " << cur << endl;
-        int res;
-        cin >> res;
-        if (res == prev + len[e]) {
+        int val;
+        cin >> val;
+        if (val == prev + len[e]) {
             in_mst[e] = true;
-            prev = res;
+            prev = val;
         } else {
             cur[e] = '0';
         }
