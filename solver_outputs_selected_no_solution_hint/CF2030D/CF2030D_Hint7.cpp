@@ -1,0 +1,107 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, q;
+        cin >> n >> q;
+        vector<int> p(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            cin >> p[i];
+        }
+        string s;
+        cin >> s;
+        s = " " + s; // 1-indexed
+
+        // pos[x] = index of value x in p
+        vector<int> pos(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            pos[p[i]] = i;
+        }
+
+        // We maintain a set of "bad" indices i (1 <= i <= n-1)
+        // such that the segment [i, i+1] is not "connected" by the operations.
+        // More precisely, we consider the condition:
+        // For each i from 1 to n-1, we need to be able to swap elements across the boundary (i, i+1).
+        // This is possible if there exists some j <= i with s[j] == 'R' or some j >= i+1 with s[j] == 'L'.
+        // Equivalently, the boundary is "blocked" if the maximum value in prefix [1..i] is > i
+        // and we cannot move it right because there is no 'R' in [1..i] or no 'L' in [i+1..n]?
+        // Let's derive from hints.
+
+        // From hints: answer is YES iff for every i from 1 to n-1,
+        // max(p[1..i]) == i. Because if max(p[1..i]) > i, then some element > i is stuck in the left part
+        // and cannot be moved to the right part without a proper sequence of L/R.
+        // But the allowed moves depend on s. Actually the condition is:
+        // For each i, if max(p[1..i]) > i, then we need to be able to move that element to the right.
+        // This requires that there is at least one 'R' in [1..i] and at least one 'L' in [i+1..n].
+        // If both exist, the boundary is "passable". Otherwise it's blocked.
+        // So we maintain the set of i where max(p[1..i]) > i AND (no 'R' in [1..i] OR no 'L' in [i+1..n]).
+        // If this set is empty, answer YES, else NO.
+
+        // We can precompute prefix max of p.
+        vector<int> pref_max(n + 1);
+        pref_max[0] = 0;
+        for (int i = 1; i <= n; ++i) {
+            pref_max[i] = max(pref_max[i - 1], p[i]);
+        }
+
+        // Also maintain prefix sums of 'R' and suffix sums of 'L' to quickly check conditions.
+        vector<int> pref_R(n + 2, 0), suff_L(n + 2, 0);
+        for (int i = 1; i <= n; ++i) {
+            pref_R[i] = pref_R[i - 1] + (s[i] == 'R');
+        }
+        for (int i = n; i >= 1; --i) {
+            suff_L[i] = suff_L[i + 1] + (s[i] == 'L');
+        }
+
+        // Function to check if boundary i is blocked
+        auto is_blocked = [&](int i) -> bool {
+            if (pref_max[i] <= i) return false;
+            bool has_R = (pref_R[i] > 0);
+            bool has_L = (suff_L[i + 1] > 0);
+            return !(has_R && has_L);
+        };
+
+        set<int> blocked;
+        for (int i = 1; i < n; ++i) {
+            if (is_blocked(i)) {
+                blocked.insert(i);
+            }
+        }
+
+        while (q--) {
+            int idx;
+            cin >> idx;
+            // flip s[idx]
+            if (s[idx] == 'L') {
+                s[idx] = 'R';
+                // update prefix/suffix arrays
+                for (int i = idx; i <= n; ++i) pref_R[i]++;
+                for (int i = idx; i >= 1; --i) suff_L[i]--;
+            } else {
+                s[idx] = 'L';
+                for (int i = idx; i <= n; ++i) pref_R[i]--;
+                for (int i = idx; i >= 1; --i) suff_L[i]++;
+            }
+
+            // Only boundaries i = idx-1 and i = idx could change status
+            for (int cand : {idx - 1, idx}) {
+                if (cand >= 1 && cand < n) {
+                    if (is_blocked(cand)) {
+                        blocked.insert(cand);
+                    } else {
+                        blocked.erase(cand);
+                    }
+                }
+            }
+
+            cout << (blocked.empty() ? "YES" : "NO") << '\n';
+        }
+    }
+    return 0;
+}

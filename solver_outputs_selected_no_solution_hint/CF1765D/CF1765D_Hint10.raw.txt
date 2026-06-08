@@ -1,0 +1,230 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    long long m;
+    cin >> n >> m;
+    vector<long long> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+
+    sort(a.begin(), a.end());
+
+    long long ans = n; // watching time
+    long long free_space = m;
+    long long download_time = 0;
+
+    for (int i = 0; i < n; ++i) {
+        if (free_space >= a[i]) {
+            free_space -= a[i];
+            download_time += a[i];
+        } else {
+            // need to free space by watching some video
+            // we can free the largest currently stored video
+            // but since we process in sorted order, the largest stored is a[i-1]
+            // Actually, we can just add the needed extra download time
+            // The optimal strategy: when we can't download, we watch a video
+            // which frees its space. The total time is sum of a_i + number of times
+            // we have to wait (which is number of videos that don't fit initially)
+            // But careful: watching a video takes 1 minute, during which we can download.
+            // The total time = n (watching) + sum of download times that cannot be overlapped with watching.
+            // Actually, the total time = max( sum a_i + n, something else? )
+            // Let's think: we have n watching minutes. During each watching minute, we can download 1 MB.
+            // So we can download at most n MB during watching. The rest must be downloaded before or after.
+            // Total download needed = sum a_i. We can overlap n MB with watching.
+            // So minimum time = n + max(0, sum a_i - n)? But wait, we also have disk space constraint.
+            // The disk space constraint may force us to download some videos sequentially without overlap.
+            // The correct formula: answer = n + sum a_i - min(n, sum a_i) + extra due to disk full?
+            // Actually, the known solution: sort a, then simulate or use formula:
+            // We need to watch all videos. Total time = n (watching) + total download time - overlapped download.
+            // Overlapped download = min(n, total download time) if no disk constraint.
+            // With disk constraint, we may not be able to always download during watching if disk is full.
+            // But if we watch in non-decreasing order, we can always download the next video while watching the current one,
+            // provided we have enough space to store both the current and the next? Actually, we need space for the next video.
+            // The optimal order is non-decreasing. The total time = n + sum a_i - min(n, sum a_i) + max(0, max_prefix_sum - m)?
+            // Let's derive: We start with empty disk. We download first video (time a_0), then watch it (1 min, during which we can download).
+            // The total time = sum a_i + n - (number of minutes we can download while watching).
+            // We can download while watching if there is a video ready to be downloaded and space available.
+            // The bottleneck is disk space. If we sort a, we can always keep the smallest videos on disk.
+            // The total time = n + sum a_i - min(n, sum a_i) + max(0, max_{k} (sum_{i=1..k} a_i - m - (k-1)))? 
+            // Actually, known solution: answer = n + sum a_i - min(n, sum a_i) + max(0, max_{i} (a_i - (m - (sum of smaller)?))
+            // Let's simulate optimally:
+            // We maintain free space. For each video in sorted order:
+            // if free_space >= a_i, we download it (takes a_i time, but we can overlap with watching if we have watches left).
+            // else, we need to free space by watching a video. We watch the largest video currently stored (which is a_{i-1}).
+            // Watching takes 1 minute, during which we can download 1 MB. So we effectively increase free_space by a_{i-1} + 1? No, watching frees a_{i-1} space, and during that minute we download 1 MB, so net free space change: +a_{i-1} - 1? Wait.
+            // Actually, when we watch, we free the space of that video. During that minute, we are also downloading the new video (if we start download). So the download of the new video consumes 1 MB during that minute. So the free space after watching and downloading for 1 minute: old_free + size_of_watched_video - 1.
+            // But we need to have enough free space to start the download. So we may need to watch multiple videos.
+            // This simulation gives the answer.
+        }
+    }
+
+    // Let's implement the known correct formula:
+    // Sort a non-decreasing.
+    // Let s = sum a_i.
+    // ans = n + s - min((long long)n, s);
+    // Then we need to add extra time due to disk space limitation.
+    // The extra time is max(0, max_{i} (a_i - (m - (sum of a_j for j < i)))? Not exactly.
+    // Actually, the extra time is the number of times we are forced to wait because disk is full and we have no video to watch (i.e., all downloaded videos are watched already).
+    // But we can always watch a video if we have one downloaded. So the only waiting happens when we have no video to watch and disk is full.
+    // This happens if we have downloaded some set of videos, watched them all, and the next video doesn't fit.
+    // The total time = n + s - min(n, s) + max(0, max_{k} (sum_{i=1..k} a_i - m - (k-1)))? 
+    // Let's test with examples.
+    // Example 1: n=5, m=6, a=[1,2,3,4,5] sorted. s=15. n + s - min(n,s) = 5+15-5=15. But answer is 16. So extra = 1.
+    // Compute max_{k} (sum_{i=1..k} a_i - m - (k-1)):
+    // k=1: 1-6-0 = -5
+    // k=2: 3-6-1 = -4
+    // k=3: 6-6-2 = -2
+    // k=4: 10-6-3 = 1
+    // k=5: 15-6-4 = 5
+    // max = 5. Then ans = 15 + max(0,5) = 20? Not 16.
+    // So that formula is wrong.
+
+    // Let's think differently. The known solution for this problem (Codeforces 1791F? Actually it's from a recent contest: "Videos" maybe? I recall a problem "Watching Videos" or similar. The solution is: sort a, then simulate with a priority queue or just use two pointers.
+    // Actually, I remember the solution: we can always watch videos in non-decreasing order. We maintain the disk space. We process videos in order. For each video, if it fits, we download it. If not, we need to watch some already downloaded videos to free space. We watch the largest downloaded video (which is the last one we downloaded, since we process in increasing order). Watching a video takes 1 minute, during which we can download 1 MB of the new video. So we can simulate this process.
+    // The total time = n (watching) + total download time - overlapped download time.
+    // Overlapped download time = min(n, total download time) - (time spent waiting because disk full and no video to watch).
+    // Actually, the simulation is straightforward and O(n log n) or O(n) with two pointers.
+
+    // Let's implement simulation:
+    // We have a list of downloaded videos that are not watched yet. We process videos in sorted order.
+    // We maintain current free space = m - sum of sizes of downloaded unwatched videos.
+    // For each video a[i]:
+    // while free_space < a[i]:
+    //     if no downloaded unwatched videos: we must wait? But we always have at least one if we downloaded something? Actually, if we haven't downloaded anything, free_space = m >= a[i] because a_i <= m. So we can always download the first video.
+    //     else: we watch the largest downloaded unwatched video (which is the last one we downloaded). Watching takes 1 minute. During that minute, we can download 1 MB of a[i]. So we effectively increase free_space by size_of_watched_video - 1? Wait: we free size_of_watched_video, but we also consume 1 MB for downloading a[i] during that minute. So net free_space change = +size_of_watched_video - 1. Also, we spend 1 minute of time. But we already accounted watching time separately? Let's track total time.
+    // Total time = sum of all download times + n (watching) - overlapped time.
+    // Overlapped time = number of minutes we are downloading while watching.
+    // We can just simulate the timeline:
+    // Let current_time = 0.
+    // We have a queue of downloaded videos with their sizes.
+    // For each video in sorted order:
+    //   We need to download it. It takes a[i] minutes. We can download it in parallel with watching if we have unwatched videos.
+    //   While we have unwatched videos and download remaining > 0:
+    //       We watch one video: current_time += 1; download remaining -= 1; free_space += size_of_watched_video - 1; remove watched video.
+    //   After loop, if download remaining > 0: we must download without watching: current_time += download remaining; free_space -= download remaining.
+    //   Then we add this video to unwatched list.
+    // After processing all videos, we still have unwatched videos. We need to watch them all. Each takes 1 minute. During these minutes, we are not downloading anything. So current_time += number of unwatched videos.
+    // This simulation is O(n) if we use a stack/list for unwatched videos, because each video is added and removed once. The while loop runs at most n times total.
+
+    // Let's test with example 1: n=5, m=6, a=[1,2,3,4,5]
+    // sorted: 1,2,3,4,5
+    // free=6, unwatched=[]
+    // i=0: a=1. download_rem=1. unwatched empty. current_time += 1; free=5. unwatched=[1]
+    // i=1: a=2. download_rem=2. unwatched not empty. Watch 1: current_time+=1 (now 2); download_rem=1; free = 5 + 1 - 1 = 5; unwatched=[].
+    //   download_rem=1>0, unwatched empty. current_time+=1 (3); free=4. unwatched=[2]
+    // i=2: a=3. download_rem=3. unwatched=[2]. Watch 2: current_time+=1 (4); download_rem=2; free=4+2-1=5; unwatched=[].
+    //   download_rem=2>0, unwatched empty. current_time+=2 (6); free=3. unwatched=[3]
+    // i=3: a=4. download_rem=4. unwatched=[3]. Watch 3: current_time+=1 (7); download_rem=3; free=3+3-1=5; unwatched=[].
+    //   download_rem=3>0, unwatched empty. current_time+=3 (10); free=2. unwatched=[4]
+    // i=4: a=5. download_rem=5. unwatched=[4]. Watch 4: current_time+=1 (11); download_rem=4; free=2+4-1=5; unwatched=[].
+    //   download_rem=4>0, unwatched empty. current_time+=4 (15); free=1. unwatched=[5]
+    // After loop, unwatched=[5]. Watch it: current_time+=1 (16). Done. Answer=16. Correct.
+
+    // Example 2: n=5, m=5, a=[1,2,3,4,5]
+    // sorted: 1,2,3,4,5
+    // free=5, unwatched=[]
+    // i=0: a=1. down=1. unw empty. time+=1 (1); free=4. unw=[1]
+    // i=1: a=2. down=2. unw=[1]. watch 1: time+=1 (2); down=1; free=4+1-1=4; unw=[]
+    //   down=1>0, unw empty. time+=1 (3); free=3. unw=[2]
+    // i=2: a=3. down=3. unw=[2]. watch 2: time+=1 (4); down=2; free=3+2-1=4; unw=[]
+    //   down=2>0, unw empty. time+=2 (6); free=2. unw=[3]
+    // i=3: a=4. down=4. unw=[3]. watch 3: time+=1 (7); down=3; free=2+3-1=4; unw=[]
+    //   down=3>0, unw empty. time+=3 (10); free=1. unw=[4]
+    // i=4: a=5. down=5. unw=[4]. watch 4: time+=1 (11); down=4; free=1+4-1=4; unw=[]
+    //   down=4>0, unw empty. time+=4 (15); free=0. unw=[5]
+    // After loop, unw=[5]. watch: time+=1 (16). But answer is 17. Wait, my simulation gave 16, but expected 17. Let's re-check.
+    // In example 2, m=5, a=[1,2,3,4,5]. My simulation gave 16. Let's trace carefully.
+    // After i=3, we had free=1, unw=[4]. Then i=4: a=5. We need to download 5. free=1 < 5. We watch 4: time=11, down=4, free=1+4-1=4. unw=[].
+    // Now down=4, free=4. We cannot download because free=4 < 5? Actually, we need 5 free to start download. We have only 4. So we cannot start download yet. We have no unwatched videos to watch. So we are stuck. We must wait until we have enough free space? But we can't download because not enough space, and we can't watch because nothing to watch. So we have to wait? But waiting doesn't free space. The only way to free space is to watch a video. But we have no video. So we are deadlocked? That can't happen because we can always watch videos in some order. Actually, we must have downloaded something that we can watch. But we watched everything. So we need to download something else? But we can't download because no space. This is a problem.
+    // The issue: we cannot download a video of size 5 when free space is 4. We need to free space. But we have no video to watch. So we must have planned the order differently. The optimal order might not be strictly non-decreasing? Or we need to keep some videos unwatched to free space later.
+    // In the simulation, we watched the largest unwatched video (4) to free space, but that only gave us 4 free, not enough for 5. We need to free more space. But we have no other videos. So we are stuck. This suggests that watching the largest is not always optimal if it leaves us with insufficient space for the next video. We might need to watch a smaller video first? But watching a smaller video frees less space. So that's worse.
+    // Actually, the problem is that we need to download 5, but we only have 4 free. We need to free at least 1 more MB. The only way is to watch another video, but we have none. So we must have kept a video unwatched. But we watched 4. If we didn't watch 4, we would have 1 free and 4 on disk. We still can't download 5. So we need to download 5 first? But we can't because it doesn't fit. So we must download smaller videos first. But we already downloaded all smaller ones. So we are stuck. This means that with m=5, it's impossible to watch all videos if we download them in order 1,2,3,4,5? But the problem says it's possible. Let's think: we can download 1 (size 1), watch it, free 1. Then download 2, watch it, free 2. Then download 3, watch it, free 3. Then download 4, watch it, free 4. Then download 5, watch it. Total time: download 1 (1 min), watch 1 (1 min, during which we can download 1 MB of 2? Actually, we can start download of 2 while watching 1. So timeline:
+    // t=0: start download 1 (size 1). free=4.
+    // t=1: download 1 done. Start watch 1 (1 min). During this minute, we can start download 2? But we need 2 MB free. We have 4 free (since 1 is on disk). So we can start download 2. So at t=1, start download 2 and watch 1.
+    // t=2: watch 1 done, free 1 (now free=4+1=5? Actually, we delete 1, so free becomes 4 (previous free) + 1 = 5. But during t=1..2, we downloaded 1 MB of 2, so free decreased by 1. So at t=2, free = 5 - 1 = 4? Let's track carefully:
+    // Initial free=5.
+    // t=0: start download 1. Reserve 1. free=4.
+    // t=1: download 1 complete. Start watch 1 (takes 1 min). Also start download 2 (size 2). Reserve 2. free = 4 - 2 = 2. (We can do this because 2 <= free before reservation? free was 4, so yes.)
+    // t=2: watch 1 done. Delete 1. free = 2 + 1 = 3. Download 2 has 1 MB left (since we downloaded 1 MB during t=1..2). Continue download 2.
+    // t=3: download 2 complete. Start watch 2. free = 3 (no change yet). Start download 3? Need 3 free. free=3, so yes. Reserve 3. free=0.
+    // t=4: watch 2 done. Delete 2. free = 0 + 2 = 2. Download 3 has 2 MB left? Actually, download 3 started at t=3, size 3. During t=3..4, downloaded 1 MB. So at t=4, 2 MB left. free=2, but we need 2 MB to continue? We already reserved 3, so the space is already taken. The download continues. free is just the remaining space. Actually, free=2 means we have 2 MB available for new downloads. The ongoing download has already reserved its space. So we don't need free space for it. So at t=4, free=2, download 3 continues.
+    // t=5: download 3 complete? It had 2 MB left, so it takes 2 more minutes. t=5: 1 MB left. t=6: complete. At t=6, start watch 3. free=2. Start download 4? Need 4 free. free=2 < 4. Cannot. So we just watch 3.
+    // t=7: watch 3 done. Delete 3. free = 2 + 3 = 5. Now we can start download 4. Start download 4 (size 4). Reserve 4. free=1.
+    // t=8..11: download 4 (takes 4 minutes). t=11: complete. Start watch 4. free=1. Start download 5? Need 5 free. free=1 < 5. Cannot.
+    // t=12: watch 4 done. Delete 4. free = 1 + 4 = 5. Start download 5. Reserve 5. free=0.
+    // t=13..17: download 5 (5 minutes). t=17: complete. Start watch 5.
+    // t=18: watch 5 done.
+    // Total time = 18? But answer is 17. So my manual timeline is 18. Let's find a better order.
+    // Maybe we can download 5 earlier? If we download 5 when we have more space. For example, after watching 2, we have free=5. We could download 5 then. Let's try:
+    // t=0: download 1 (1 min). free=4.
+    // t=1: watch 1, download 2. free=2.
+    // t=2: watch 1 done, delete 1. free=3. download 2 continues.
+    // t=3: download 2 done. watch 2, download 5? free=3, need 5. Cannot. So download 3 instead. free=3, need 3. Reserve 3. free=0.
+    // t=4: watch 2 done, delete 2. free=2. download 3 continues.
+    // t=5: download 3 continues. free=2.
+    // t=6: download 3 done. watch 3. free=2. download 4? need 4, cannot. download 5? need 5, cannot. So just watch 3.
+    // t=7: watch 3 done, delete 3. free=5. Now download 5? free=5, need 5. Reserve 5. free=0. Start download 5.
+    // t=8..12: download 5 (5 min). t=12: done. watch 5. free=0. download 4? need 4, cannot.
+    // t=13: watch 5 done, delete 5. free=5. download 4. Reserve 4. free=1.
+    // t=14..17: download 4 (4 min). t=17: done. watch 4.
+    // t=18: watch 4 done. Total 18 again.
+    // What if we download 4 and 5 in parallel? Not allowed.
+    // Let's try different order: download 1, watch 1, download 5? At t=1, free=4, cannot download 5. So no.
+    // Maybe download 1, then 5? At t=1, free=4, cannot.
+    // The answer is 17. How to achieve 17?
+    // Let's think: total download = 15. Watching = 5. Overlap = min(5,15) = 5. So minimum possible without disk constraint = 15+5-5=15. With disk constraint, we need extra 2. So total 17.
+    // My simulation gave 16 for example 2, but manual gave 18. There's a discrepancy. Let's re-evaluate the simulation logic.
+    // In simulation, when we watch a video, we add 1 to time, reduce download_rem by 1, and increase free by size_of_watched - 1. This assumes we can always download 1 MB during that minute. But is that always true? We can only download if we have already started the download. In the simulation, we only start the download after we have enough free space. But during the watching minute, we are simultaneously downloading the new video. That means we must have already started the download of the new video before or at the start of that watching minute. In the simulation, we only start the download when free_space >= a[i]. But we use the watching minute to increase free_space and simultaneously download 1 MB. That implies we start the download at the beginning of the watching minute, when free_space might still be less than a[i]? Actually, the simulation logic: while free_space < a[i], we watch a video. Watching a video takes 1 minute. During that minute, we can download 1 MB of a[i]. So we effectively reduce the required free space by 1? No, the requirement to start the download is that free_space >= a[i]. If free_space < a[i], we cannot start the download. So we cannot download during that minute unless we start the download. So the simulation's assumption that we can download 1 MB during the watching minute is only valid if we start the download at the beginning of that minute. But we can't start if free_space < a[i]. So we must first free enough space to start the download. Watching a video frees its size. So after watching, free_space increases by size. Then we can start the download. But during the watching minute, we were not downloading the new video because we hadn't started it. So we lose that 1 minute of overlap.
+    // Therefore, the correct simulation: when we need to free space, we watch a video. That takes 1 minute. During that minute, we are NOT downloading the new video (because we haven't started it). After the minute, we free the space, and then we can start the download. So we don't get the -1 benefit during that minute. The -1 benefit only applies if we are already downloading the video while watching. That happens when we have enough free space to start the download, and we watch a video while the download is ongoing. In that case, the download progresses by 1 MB during the watching minute, and we free the watched video's space at the end. So net free space change = +size_of_watched - 1? Actually, if we are already downloading, the space for the download is already reserved. So free space is already reduced by a[i]. Watching a video doesn't change the reserved space for the ongoing download. It only frees the watched video's space. So free space increases by size_of_watched. The download consumes 1 MB during that minute, but that consumption was already accounted for when we reserved the space. So free space doesn't decrease by 1 during the minute; it just increases by size_of_watched at the end. Wait, careful: free space is the amount of disk space not used by any video (either downloaded or being downloaded). When we start a download, we reserve a[i] MB, so free space decreases by a[i]. During the download, the reserved space is gradually filled, but free space remains the same. When we watch a video, we delete it, so free space increases by its size. So if we are downloading a video and watching another simultaneously, free space increases by the size of the watched video at the end of the watching minute. The download doesn't affect free space during that minute because it's already reserved. So the net change in free space after the watching minute is +size_of_watched. There is no -1.
+    // But in my earlier simulation, I had free += size - 1. That was wrong. The -1 came from the idea that we are downloading 1 MB during that minute, so we "use" 1 MB of free space. But that 1 MB was already reserved when we started the download. So it doesn't reduce free space further. So the correct free space update when watching while downloading is: free += size_of_watched. The download progress increases by 1, but that doesn't change free space.
+    // However, if we are not currently downloading the new video (because we haven't started it), and we watch a video to free space, then after watching, free increases by size_of_watched. Then we can start the new download, which reserves a[i] and reduces free by a[i]. So the net effect of watching and then starting download: free changes by +size_of_watched - a[i]. But we also spent 1 minute not downloading the new video.
+    // So the simulation needs to distinguish whether the download has already started or not.
+
+    // Let's re-simulate example 2 correctly:
+    // We want to minimize total time. We can choose the order of watching and downloading.
+    // The known optimal strategy: sort videos by size. Maintain a set of downloaded videos. We can always watch the largest downloaded video to free space. But we need to decide when to start downloads.
+    // Actually, the problem is equivalent to: we have n videos, each requires a_i download time and 1 watch time. We can download and watch in parallel if we have a video to watch. Disk space m. We want to minimize makespan.
+    // This is a scheduling problem with resource constraints.
+    // I recall a solution: sort a. Then the answer is n + sum a_i - min(n, sum a_i) + max(0, max_{i} (a_i - (m - (sum of a_j for j < i))? No.
+    // Let's search memory: There is a Codeforces problem "Videos" or "Watching Videos" (maybe 1765B? No). I think it's from Codeforces Round #844 (Div. 1 + Div. 2) problem C? Actually, there is a problem "Watching Videos" with disk space. The solution is to sort a, then simulate with a priority queue of downloaded videos, always watching the largest when space is insufficient. The total time is the sum of download times + n - (number of minutes we can overlap). The overlap is exactly the number of minutes we spend watching while a download is in progress. We can calculate this by tracking the amount of "free" download time that can be overlapped.
+    // Another approach: The total time = n + sum a_i - min(n, sum a_i) + extra. Extra is the number of times we are forced to wait because we have no video to watch and the disk is full. This happens when the sum of sizes of the smallest k videos exceeds m + (k-1)? Let's test.
+    // For example 2: a=[1,2,3,4,5], m=5.
+    // k=1: 1 <= 5+0=5 -> ok
+    // k=2: 1+2=3 <= 5+1=6 -> ok
+    // k=3: 6 <= 5+2=7 -> ok
+    // k=4: 10 <= 5+3=8? 10 > 8. So extra = 10 - 8 = 2? Then total = 5+15-5+2=17. Matches!
+    // Example 1: m=6, a=[1,2,3,4,5]
+    // k=1: 1<=6+0=6 ok
+    // k=2: 3<=6+1=7 ok
+    // k=3: 6<=6+2=8 ok
+    // k=4: 10<=6+3=9? 10>9, extra=1. Total=5+15-5+1=16. Matches!
+    // Example 3: n=4, m=3, a=[1,3,2,3] -> sorted: 1,2,3,3. sum=9. n+sum-min(n,sum)=4+9-4=9.
+    // k=1: 1<=3+0=3 ok
+    // k=2: 3<=3+1=4 ok
+    // k=3: 6<=3+2=5? 6>5, extra=1.
+    // k=4: 9<=3+3=6? 9>6, extra=3. max extra=3. Total=9+3=12. Matches!
+    // So the formula is: sort a. Let s = sum a_i. base = n + s - min((long long)n, s). Then extra = max(0, max_{k=1..n} (sum_{i=1}^k a_i - (m + k - 1))). Answer = base + extra.
+    // Let's verify with a case where s < n. Suppose n=3, m=10, a=[1,1,1]. s=3. base = 3+3-3=3. extra: k=1: 1<=10+0 ok; k=2: 2<=10+1 ok; k=3: 3<=10+2 ok. extra=0. total=3. Correct: download 1 (1 min), watch 1 (1 min, download next 1), etc. Total 3.
+    // Another case: n=2, m=1, a=[1,1]. s=2. base=2+2-2=2. extra: k=1: 1<=1+0 ok; k=2: 2<=1+1=2 ok. extra=0. total=2. Correct: download 1 (1 min), watch 1 (1 min, download next 1 during watch? Actually, m=1. Start download 1 (size 1), free=0. t=1: done. Watch 1, free=0. During watch, can we download next 1? We need 1 free. free=0, so no. So we watch 1 (t=1..2). At t=2, free=1. Start download 1 (t=2..3). t=3: done. Watch 1 (t=3..4). Total 4? Wait, my manual says 4. But formula says 2. Contradiction.
+    // Let's re-evaluate: n=2, m=1, a=[1,1]. Can we do it in 2 minutes? 
+    // t=0: start download video 1 (size 1). free=0.
+    // t=1: download 1 done. Start watch video 1 (1 min). Can we start download video 2? Need 1 MB free. free=0. So no.
+    // t=2: watch 1 done. Delete 1. free=1. Start download video 2 (1 min).
+    // t=3: download 2 done. Start watch video 2 (1 min).
+    // t=4: done. Total 4.
+    // But formula gave 2. So formula is wrong for this case. Let's check the condition: a_i <= m. Here a_i=1, m=1, ok.
+    // Why did formula fail? Because base = n + s - min(n,s) = 2+2-2=2. extra = max(0, max_k (sum_{1..k} a_i - (m + k - 1))). k=1: 1 - (1+0)=0. k=2: 2 - (1+1)=0. So extra=0. Total=2. But actual is 4.
+    // So the formula is incorrect. The issue is that when s <= n, the base formula assumes we can overlap all download with watching. But we can only overlap if we have enough disk space to store the next video while watching the current one. In this case, m=1, we can only store one video at a time. So we cannot download the next video while watching the current one because the disk is full. So we lose overlap.
+    // Therefore, the disk space constraint affects even when s <= n. The formula I derived earlier only works when m is large enough? Let's check example 1: m=6, s=15 > n=5. Example 2: m=5, s=15 > 5. Example 3: m=3, s=9 > 4. In all examples, s > n. So maybe the formula only works when s >= n? But the problem doesn't guarantee that.
+    // Let's test with s < n and small m. The correct answer should be computed by simulation.
+
+    // Let's develop a correct simulation.
+    // We process videos in sorted order. We maintain a list of downloaded videos that are not yet watched. We also maintain the current free space.
+    // We want to minimize total time. We can decide to watch a video at any time after it's downloaded. Watching takes 1 minute and frees its space. During that minute, we can also download if we have an active download. But

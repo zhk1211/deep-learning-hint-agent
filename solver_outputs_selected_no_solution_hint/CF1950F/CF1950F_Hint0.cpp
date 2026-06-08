@@ -1,0 +1,311 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+        
+        // Check necessary condition: c must be a + 1
+        if (c != a + 1) {
+            cout << -1 << "\n";
+            continue;
+        }
+        
+        if (a == 0) {
+            // Only b nodes with 1 child and c leaves
+            // The tree is a path: root has 1 child, etc.
+            // Height = b (since c = 1 when a=0, so b nodes with 1 child)
+            cout << b << "\n";
+            continue;
+        }
+        
+        // Calculate height
+        // First, find the minimum height to place all 'a' nodes (with 2 children)
+        // We build a perfect binary tree of 'a' internal nodes
+        // Height h can accommodate up to 2^{h+1} - 1 nodes with 2 children
+        // But we need exactly 'a' such nodes
+        // Let's find the smallest h such that we can place 'a' nodes in a tree of height h
+        // Actually, we want to minimize the overall height
+        
+        // We can think of it as: we have a full binary tree part (using 'a' nodes)
+        // The height of the tree is determined by the deepest leaf
+        // We can place 'b' nodes (with 1 child) along the paths to extend height
+        
+        // Let's compute the number of leaves at each level if we build a complete binary tree
+        // But we don't need a complete tree; we can have any shape
+        
+        // Optimal strategy: build a tree that is as balanced as possible
+        // The height is the maximum depth of any leaf
+        // We have 'a' nodes with 2 children, 'b' nodes with 1 child, and c = a+1 leaves
+        
+        // We can think of the tree as a binary tree where some nodes have 1 child instead of 2
+        // The height is the length of the longest root-to-leaf path
+        
+        // Let's compute the minimum possible height
+        // We can place 'a' nodes in levels: at level 0 (root), level 1, etc.
+        // The number of nodes at level i is at most 2^i
+        // We want to fill levels as much as possible to minimize height
+        
+        // Let's find the maximum number of 'a' nodes we can place in a tree of height H
+        // A tree of height H can have at most 2^{H+1} - 1 nodes with 2 children (if full binary)
+        // But we also have 'b' nodes with 1 child, which can extend the height
+        
+        // Actually, we can use 'b' nodes to increase the height beyond what 'a' alone would give
+        // The height is determined by the deepest leaf
+        // We can attach 'b' nodes as a chain to some leaf to increase height
+        
+        // So the height = (height from 'a' nodes) + (some additional from 'b')
+        // But we can also interleave 'b' nodes within the tree
+        
+        // Let's think differently: we have c = a+1 leaves
+        // Each leaf has a depth. The height is the maximum depth.
+        // We have 'a' internal nodes with 2 children, 'b' with 1 child
+        // Total nodes = a + b + c = 2a + b + 1
+        
+        // We can construct the tree level by level
+        // At each level, we have some number of "slots" (nodes that need children)
+        // Initially, at level 0, we have 1 slot (the root)
+        // For each slot, we can either:
+        // - place a node with 2 children: consumes 1 slot, creates 2 new slots (uses 1 'a')
+        // - place a node with 1 child: consumes 1 slot, creates 1 new slot (uses 1 'b')
+        // - place a leaf: consumes 1 slot, creates 0 slots (uses 1 'c')
+        
+        // We want to minimize the maximum depth (which is the level when we place the last leaf)
+        // We have exactly 'a' nodes of type 2, 'b' of type 1, 'c' of type 0
+        // We must use all of them
+        
+        // We can simulate the process greedily: at each level, we have some number of available slots
+        // We want to use as many 'a' nodes as possible early to increase slots for later,
+        // but we also need to save some slots for 'b' and 'c'
+        
+        // Since c = a+1, the total slots created by 'a' nodes is 2a, and by 'b' nodes is b
+        // Total slots created = 2a + b
+        // Total slots consumed = a + b + c = 2a + b + 1
+        // So it balances exactly: we start with 1 slot, and end with 0 slots.
+        
+        // We can compute the minimum height by simulating the process:
+        // We maintain the number of nodes at the current level that need children (slots)
+        // We try to fill them with 'a' nodes first (to increase slots for next level),
+        // but we must ensure we don't run out of slots for 'b' and 'c' later.
+        
+        // Actually, we can compute the height directly:
+        // The height is the number of edges on the longest path.
+        // We can think of the tree as a binary tree where some branches are extended by 'b' nodes.
+        
+        // Let's find the minimum height H such that we can place all nodes.
+        // We can binary search on H, or compute directly.
+        
+        // For a given height H, what is the maximum number of 'a' nodes we can have?
+        // If we have a full binary tree of height H, it has 2^{H+1} - 1 internal nodes (with 2 children)
+        // and 2^H leaves. But we have 'b' nodes with 1 child, which can be used to extend some paths.
+        
+        // Alternative approach: The height is determined by the deepest leaf.
+        // We can place 'a' nodes in a tree of height h_a = ceil(log2(a+1)) - 1? Not exactly.
+        
+        // Let's simulate level by level:
+        // We have slots at current level. We want to minimize the number of levels.
+        // At each level, we can use 'a' nodes to double the slots (minus those used for 'a' themselves)
+        // Actually, if we use k 'a' nodes at a level, we consume k slots and create 2k slots for next level.
+        // Net change in slots: +k.
+        // If we use 'b' nodes, net change 0.
+        // If we use 'c' nodes, net change -1 per leaf.
+        
+        // We start with 1 slot at level 0.
+        // We must end with 0 slots after placing all nodes.
+        // We want to minimize the number of levels (which is the height, since root is level 0, height = max level of a node).
+        
+        // We can greedily use as many 'a' nodes as possible at each level to push slots to deeper levels,
+        // but we must ensure we have enough 'b' and 'c' to consume the slots eventually.
+        
+        // Since c = a+1, and each 'a' creates 2 slots but consumes 1, the total slots created by 'a' is a.
+        // 'b' creates 0 net slots. So we start with 1, add a from 'a', and then consume a+1 leaves to get 0.
+        // So the number of slots at any level is at most something.
+        
+        // We can compute the minimum height by simulating the process optimally:
+        // We want to use 'a' nodes to increase the number of slots at the next level,
+        // but we also need to leave some slots for 'b' nodes if we want to increase height further without using 'a'.
+        // Actually, 'b' nodes don't increase the number of slots, they just maintain them.
+        // So to increase height, we need slots at deeper levels. Slots are increased only by 'a' nodes.
+        
+        // Let's compute the maximum number of leaves (c) we can have at a given height if we use all 'a' and 'b' optimally.
+        // But we have fixed c = a+1.
+        
+        // Let's find the minimum height H such that we can construct the tree.
+        // We can think of it as: we have a full binary tree part of some height h, and then we extend some leaves with chains of 'b' nodes.
+        // The total height = h + max chain length.
+        // But 'b' nodes can also be placed higher up.
+        
+        // Let's try to compute the height directly:
+        // We can always construct the tree by first building a full binary tree with 'a' nodes (as balanced as possible),
+        // and then distributing the 'b' nodes along the paths from root to leaves.
+        // The height will be the height of the full binary tree plus the maximum number of 'b' nodes on any path.
+        
+        // But we can also use 'b' nodes to replace some 'a' nodes? No, we have fixed counts.
+        
+        // Let's find the minimum possible height of a tree with 'a' nodes of degree 2 (internal) and 'b' nodes of degree 1, and c = a+1 leaves.
+        // This is equivalent to: we have a binary tree where some internal nodes have only 1 child.
+        // The height is the maximum depth.
+        
+        // We can use a greedy level-by-level simulation:
+        // At level 0: slots = 1
+        // For each level, we decide how many 'a', 'b', 'c' to place.
+        // We want to minimize the number of levels until all nodes are placed.
+        // We should use 'a' nodes as early as possible to increase slots for later, but we must not run out of 'b' or 'c' too early.
+        
+        // Since c = a+1, we must place exactly a+1 leaves. The leaves can only be placed when we have slots.
+        // We also have 'b' nodes that can be placed at any level, they don't change slot count.
+        
+        // Let's simulate optimally:
+        // We maintain slots at current level.
+        // We want to use as many 'a' as possible, but we must ensure that the remaining slots can be filled by the remaining 'b' and 'c' in subsequent levels.
+        // Actually, we can just use all 'a' as soon as possible, and then use 'b' to extend the tree, and finally place leaves.
+        // But if we use all 'a' early, we might create too many slots that we can't fill without increasing height too much? No, more slots allow us to place leaves sooner, reducing height.
+        // Wait, more slots mean we can place more leaves per level, so we can finish in fewer levels. So using 'a' early is good.
+        
+        // However, we also have 'b' nodes. They don't increase slots, so they just consume a slot and create one slot for the next level. They effectively extend a path by 1 without branching.
+        // To minimize height, we should use 'b' nodes only when we have slots that we don't want to branch (because we don't have enough 'a' to branch, or we want to push leaves deeper? Actually, we want to minimize height, so we want to place leaves as early as possible. So we should avoid using 'b' unless necessary to consume slots? But 'b' doesn't consume slots net, it just passes them to next level. So using 'b' increases height without helping to finish. So we should use 'b' only when we have no 'a' left and we need to push slots to deeper levels to place remaining leaves? But we have exactly a+1 leaves, and total slots created by 'a' is a (net). Starting with 1 slot, total slots available over all levels is 1 + a (if we sum the net increases). But we need to place a+1 leaves, each consumes 1 slot. So the total slots consumed by leaves is a+1. The total slots created by 'a' is a. So we start with 1, add a, total a+1 slots are available to be consumed by leaves. This means that if we never use 'b', we would have exactly enough slots to place all leaves without any leftover slots. But 'b' nodes don't change the net slots; they just shift slots to the next level. So if we use 'b', we are effectively delaying the consumption of slots by leaves, which increases height. Therefore, to minimize height, we should use 'b' as little as possible, and only when forced? But we have a fixed number of 'b' nodes; we must use all of them. So we have to incorporate 'b' nodes, which will inevitably increase the height because they push some slots deeper.
+        
+        // So the problem reduces to: we have a tree with 'a' internal nodes of degree 2, 'b' internal nodes of degree 1, and a+1 leaves. We want to minimize height.
+        // We can think of the tree as a binary tree where some edges are subdivided by 'b' nodes.
+        // The height is the maximum number of edges from root to leaf.
+        
+        // Let's consider the full binary tree part. Suppose we arrange the 'a' nodes into a binary tree (not necessarily full, but all have 2 children). This tree will have a+1 leaves. The height of this binary tree is minimized when it is as balanced as possible. The minimum height h for a binary tree with L = a+1 leaves is ceil(log2(L))? Actually, a full binary tree with L leaves has height at least ceil(log2(L)) if we measure height as max edges from root to leaf. For L leaves, the minimum height is ceil(log2(L)) (since a perfect binary tree of height h has 2^h leaves). But we also have 'b' nodes that can be inserted along the edges.
+        
+        // If we insert 'b' nodes along the edges, they increase the length of those paths. To minimize the maximum height, we should distribute the 'b' nodes as evenly as possible among the paths from root to leaves, or attach them to the shallowest leaves? Actually, to minimize the maximum depth, we should add 'b' nodes to the paths that are currently shortest, to balance the depths. But we can also attach 'b' nodes as chains at the leaves.
+        
+        // Let's formalize: We have a base binary tree with 'a' internal nodes (all with 2 children) and L = a+1 leaves. This tree has some leaf depths. We can then add 'b' nodes of degree 1. Each such node can be inserted on any edge, increasing the depth of all leaves in that subtree by 1. Alternatively, we can think of it as extending some leaves by chains.
+        // We want to minimize the maximum leaf depth after adding 'b' nodes.
+        
+        // The optimal strategy: Start with a balanced binary tree of 'a' internal nodes. The leaf depths will be as equal as possible. Then, we can add 'b' nodes one by one, each time increasing the depth of the shallowest leaf (or the leaf that currently has the minimum depth) by 1. This is like using a priority queue of leaf depths, repeatedly popping the smallest, incrementing it, and pushing back, 'b' times. The final maximum depth will be the answer.
+        
+        // But we also have the freedom to choose the shape of the initial binary tree. To minimize the final maximum depth, we should make the initial leaf depths as small and as equal as possible. The most balanced binary tree with L leaves has leaf depths either k or k+1 where k = floor(log2(L)). Specifically, a perfect binary tree of height h has 2^h leaves. If L is not a power of 2, we can have a tree where all leaves are at depth h or h+1, with h = floor(log2(L)). The number of leaves at depth h+1 is L - 2^h, and at depth h is 2^h - (L - 2^h) = 2^{h+1} - L.
+        
+        // Then we add 'b' nodes. We can simulate the process of adding to the smallest depth.
+        // But we can also compute the final maximum depth analytically.
+        
+        // Let's denote the initial multiset of leaf depths. We have L = a+1 leaves.
+        // Let h = floor(log2(L)). Let full = 2^h. Let remaining = L - full.
+        // Actually, the minimum height of a binary tree with L leaves is h if L <= 2^h, but wait: a perfect binary tree of height h has 2^h leaves. So if L <= 2^h, we can have all leaves at depth <= h. But we need exactly L leaves. The minimum possible maximum depth is ceil(log2(L)). Let H0 = ceil(log2(L)). Then we can have a tree where all leaves are at depth H0 or H0-1? Actually, if L is a power of 2, all leaves can be at depth log2(L). If not, some leaves must be at depth ceil(log2(L)). The minimum possible maximum depth is ceil(log2(L)). So we can achieve a tree where the maximum leaf depth is H0 = ceil(log2(L)), and the other leaves are at depth H0 or H0-1. Specifically, we can have:
+        // Let H0 = ceil(log2(L)).
+        // Then we can have a tree with leaf depths: some at H0, some at H0-1.
+        // The number of leaves at depth H0 is: 2*L - 2^{H0}? Let's derive.
+        // In a full binary tree, the number of nodes at depth d is at most 2^d.
+        // We want to place L leaves. The optimal is to fill levels completely until the last level.
+        // Let H = floor(log2(L)). Then 2^H <= L < 2^{H+1}.
+        // We can have 2^H leaves at depth H, and the remaining L - 2^H leaves at depth H+1? But wait, if we put leaves at depth H, they consume slots that could have been used to create deeper leaves. Actually, to minimize the maximum depth, we want as many leaves as possible at shallower depths. So we should put as many leaves as possible at depth H, and the rest at depth H+1. But can we have leaves at depth H? Yes, if we don't give them children. So we can have a tree where we have a perfect binary tree of height H-1 (which has 2^{H-1} leaves at depth H-1? No, let's be careful.
+        
+        // Let's define depth of root as 0.
+        // A perfect binary tree of height h (max depth h) has 2^h leaves at depth h.
+        // If we want L leaves, we can take a perfect binary tree of height H = ceil(log2(L)) and remove some leaves? Actually, we can build a tree where we fill levels from the top.
+        // The standard way: we have L leaves. We can build a binary tree by repeatedly combining two subtrees. The minimum height is ceil(log2(L)). We can achieve this by having a tree where all leaves are at depth ceil(log2(L)) or ceil(log2(L))-1. Specifically, if L is a power of 2, all at depth log2(L). If not, let H = floor(log2(L)). Then we can have 2^{H+1} - L leaves at depth H, and 2L - 2^{H+1} leaves at depth H+1? Let's check with L=3. H=1, 2^{2}=4. 4-3=1 leaf at depth 1, and 2*3-4=2 leaves at depth 2. That gives max depth 2, which is ceil(log2(3))=2. Correct.
+        // For L=5: H=2, 2^3=8. 8-5=3 leaves at depth 2, 2*5-8=2 leaves at depth 3. Max depth 3 = ceil(log2(5))=3. Correct.
+        // For L=6: H=2, 8-6=2 at depth 2, 12-8=4 at depth 3. Max depth 3 = ceil(log2(6))=3.
+        // So formula: Let H = floor(log2(L)). Then number of leaves at depth H is 2^{H+1} - L, and at depth H+1 is 2L - 2^{H+1}. The maximum depth is H+1 if L > 2^H, else H.
+        // Actually, if L is a power of 2, say L=4, H=2, 2^{3}=8, 8-4=4 at depth 2, 8-8=0 at depth 3. So max depth 2 = log2(4). Works.
+        
+        // So we have initial leaf depths: some at depth D = floor(log2(L)), some at D+1.
+        // Let small = 2^{D+1} - L (number of leaves at depth D)
+        // Let large = 2L - 2^{D+1} (number of leaves at depth D+1)
+        // Note: small + large = L.
+        // Also, D = floor(log2(L)).
+        
+        // Now we have 'b' nodes of degree 1. Each such node can be thought of as increasing the depth of one leaf by 1 (by attaching a chain to that leaf). But we can also insert them higher up, which would increase depths of multiple leaves. However, to minimize the maximum depth, it's always optimal to apply the 'b' nodes to the shallowest leaves first, effectively increasing their depth by 1 each time. This is equivalent to: we have a multiset of leaf depths. We repeatedly take the smallest depth, increment it by 1, and put it back, 'b' times. The final maximum depth is the answer.
+        
+        // We can simulate this efficiently using a priority queue, but since b can be up to 1e5 and sum a+b+c up to 3e5, we can just simulate. However, we can also compute it directly.
+        
+        // Let's simulate with a min-heap. Initially, push the leaf depths: small copies of D, large copies of D+1.
+        // Then for i=1 to b:
+        //   pop the smallest depth d
+        //   push d+1
+        // After all, the answer is the maximum element in the heap.
+        
+        // But wait: is it always optimal to just increase the shallowest leaf? Could we instead use a 'b' node to increase a whole subtree, affecting multiple leaves? That would increase the depths of multiple leaves by 1, which might be worse for the maximum if some of those leaves are already deep. But if we only increase one leaf, we can keep the others shallow. Since we want to minimize the maximum, we should increase the shallowest leaves first. So the greedy strategy of incrementing the smallest depth is optimal.
+        
+        // However, we must also consider that 'b' nodes can be placed not only at leaves but also as internal nodes with 1 child. But placing a 'b' node internally on an edge increases the depth of all leaves in that subtree by 1. That is equivalent to taking a subset of leaves and increasing their depths by 1 simultaneously. But we have a limited number of 'b' nodes. To minimize the maximum, we would never want to increase a deep leaf if we can increase a shallow leaf instead. So the best we can do is to distribute the 'b' nodes as evenly as possible among the leaves, which is exactly the greedy algorithm of always incrementing the smallest depth.
+        
+        // So the algorithm:
+        // For each test case:
+        // if c != a + 1: output -1
+        // else if a == 0: output b (since c=1, tree is a path of b edges, height = b)
+        // else:
+        //   L = a + 1
+        //   D = floor(log2(L))
+        //   small = (1 << (D+1)) - L
+        //   large = L - small
+        //   Use a min-heap, push small copies of D, large copies of D+1
+        //   for i=0 to b-1:
+        //      d = heap.top(); heap.pop();
+        //      heap.push(d+1);
+        //   answer = heap's maximum (or just keep track of max during pushes)
+        //   output answer
+        
+        // But we can optimize: we don't need to simulate all b steps if b is large. We can compute the final depths directly.
+        // Notice that the process is like we have a set of numbers. We are adding 1 to the smallest number b times. This is equivalent to: we want to find the minimum value M such that we can make all numbers at least M by adding a total of b? No, we are not making all numbers equal; we are just incrementing the smallest each time. The final configuration will be such that the numbers are as equal as possible. After b increments, the multiset will have all numbers either some value X or X+1, where X is roughly the average increased by something.
+        
+        // Let's compute the final maximum directly.
+        // We have initial multiset with sum S = small*D + large*(D+1).
+        // After b increments, the sum becomes S + b.
+        // The number of leaves is L.
+        // If we could make all leaves equal, the average would be (S+b)/L.
+        // The maximum will be ceil((S+b)/L) if we can distribute perfectly. But we can only increase by 1 each time, and we start with some distribution. The final maximum is the ceiling of the average, but we need to ensure it's achievable.
+        
+        // Actually, the greedy process of always incrementing the minimum results in a final multiset where the difference between max and min is at most 1. So the final maximum is either floor((S+b)/L) or ceil((S+b)/L). Specifically, if (S+b) % L == 0, then all are equal to (S+b)/L. Otherwise, some are floor and some are ceil, and the maximum is ceil((S+b)/L).
+        
+        // But we must also consider that we cannot decrease any number. So the final maximum cannot be less than the initial maximum. So the answer is max(initial_max, ceil((S+b)/L)).
+        // Let's check if this is always correct.
+        // Initial max = D+1 (if large > 0) else D.
+        // After adding b, the average increases. The final maximum is the maximum of the initial max and the ceiling of the average? But wait, if we add b, we might increase the initial max as well. The greedy process will increase the smallest numbers until they catch up to the largest. Once all numbers are equal, further increments will increase all numbers together (by incrementing one, it becomes max+1, then the next smallest is max, etc.). So the final maximum is indeed max(initial_max, ceil((S+b)/L)).
+        
+        // Let's test with an example: a=2, b=1, c=3 => L=3, D=1, small=1 (depth 1), large=2 (depth 2). S=1*1+2*2=5. b=1, S+b=6, L=3, avg=2. ceil=2. initial_max=2. max(2,2)=2. Output 2. Correct.
+        
+        // Example: a=0, b=1, c=1 => L=1, D=0, small=1? Let's compute: L=1, D=floor(log2(1))=0. 2^{1}=2, small=2-1=1, large=2*1-2=0. So initial depths: one leaf at depth 0. S=0. b=1, S+b=1, avg=1, ceil=1. initial_max=0. max(0,1)=1. Output 1. But wait, the sample says for 0 1 1 output is 1. Correct.
+        
+        // Example: a=1, b=0, c=2 => L=2, D=1, small=2^{2}-2=2? 2^{D+1}=4, small=4-2=2, large=4-4=0? Actually L=2, D=1, 2^{2}=4, small=4-2=2, large=2*2-4=0. So two leaves at depth 1. S=2. b=0, avg=1, ceil=1, initial_max=1. Output 1. Sample: 1 0 2 -> output 1. Correct.
+        
+        // Example: a=1, b=1, c=2? Wait sample has 1 1 3 -> c=3, a=1, so c != a+1 (3 != 2) -> -1. Correct.
+        
+        // Example: a=3, b=1, c=4 => L=4, D=2, small=2^{3}-4=8-4=4, large=8-8=0. So all 4 leaves at depth 2. S=8. b=1, S+b=9, avg=9/4=2.25, ceil=3. initial_max=2. max(2,3)=3. Output 3. Sample: 3 1 4 -> output 3. Correct.
+        
+        // Example: a=8, b=17, c=9 => L=9, D=3 (since 2^3=8 <=9<16), 2^{4}=16, small=16-9=7 at depth 3, large=18-16=2 at depth 4. S=7*3+2*4=21+8=29. b=17, S+b=46, L=9, avg=46/9=5.111..., ceil=6. initial_max=4. max(4,6)=6. Output 6. Sample: 8 17 9 -> output 6. Correct.
+        
+        // Example: a=24, b=36, c=48 => c != a+1 (48 != 25) -> -1. Sample: -1. Correct.
+        
+        // Example: a=1, b=0, c=0? But a+b+c >=1, and c must be a+1. So 1 0 0 is invalid because c=0 != 2. Sample: 1 0 0 -> output -1. Correct.
+        
+        // Example: a=0, b=3, c=1 => L=1, D=0, small=1, large=0. S=0. b=3, S+b=3, avg=3, ceil=3. initial_max=0. max=3. Output 3. Sample: 0 3 1 -> output 3. Correct.
+        
+        // So the formula seems to work!
+        
+        // But wait, is it always true that the initial multiset of leaf depths can be exactly as described? We assumed we can achieve a binary tree with exactly 'a' internal nodes of degree 2, and leaves at depths D and D+1 with those counts. Is that always possible for any a? Yes, because we can always build a full binary tree with L leaves where the leaf depths are as balanced as possible. The construction is standard: take a perfect binary tree of height D, which has 2^D leaves. We need L leaves. If L <= 2^D, we can just take a perfect binary tree of height D-1? Actually, we need to match the counts. The formula gives the number of leaves at each depth for the tree that minimizes the maximum depth. It is known that such a tree exists (e.g., Huffman tree with equal weights). So it's valid.
+        
+        // However, we must also consider that we have 'b' nodes of degree 1. Our greedy simulation assumes we can independently increment leaf depths. But is it always possible to insert 'b' nodes into the tree to achieve those final leaf depths? We need to ensure that we can add 'b' edges to the tree without violating the degree constraints. Each 'b' node has exactly 1 child, so it can be inserted on any edge, effectively increasing the depth of all leaves in the subtree below that edge by 1. But our greedy algorithm increments one leaf at a time. Can we always achieve an arbitrary set of leaf depth increments by inserting 'b' nodes? We might need to insert a 'b' node above a leaf to increase its depth by 1. That is always possible: just replace the leaf with a 'b' node that has the leaf as its only child. This increases that leaf's depth by 1 and doesn't affect other leaves. So yes, we can always increment a single leaf's depth by 1 using one 'b' node. Therefore, the greedy simulation is valid.
+        
+        // So the algorithm is:
+        // if c != a + 1: return -1
+        // if a == 0: return b (since c=1, tree is a path of b nodes with 1 child, height = b)
+        // L = a + 1
+        // D = floor(log2(L))
+        // small = (1 << (D+1)) - L
+        // large = L - small
+        // S = small * D + large * (D+1)
+        // ans = max((large > 0 ? D+1 : D), (S + b + L - 1) / L)  // ceil((S+b)/L)
+        // output ans
+        
+        // Let's double-check with a=0 case: if a=0, then c=1, L=1. D=0, small=2-1=1, large=0. S=0. b can be anything. ans = max(0, ceil(b/1)) = b. Correct.
+        // But wait, our formula for a=0 gives D=0, small=1, large=0, S=0, ans = max(0, ceil(b/1)) = b. So we don't need a special case for a=0! Let's test: a=0, b=0, c=1 -> L=1, D=0, small=1, large=0, S=0, b=0, ans = max(0, 0) = 0. Sample: 0 0 1 -> output 0. Correct.
+        // a=0, b=1, c=1 -> ans = max(0, 1) = 1. Correct.
+        // a=0, b=3, c=1 -> ans = max(0, 3) = 3. Correct.
+        
+        // So the formula works for a=0 as well.
+        
+        // Let's test another case: a=2, b=0, c=3 -> L=3, D=1, small=4-3=1, large=2. S=1*1+2*2=5. b=0, ans = max(2, ceil(5/3)=2) = 2. Sample: 2 1 3 has b=1, but 2 0 3 should be height 2? Let's think: a=2, c=3, no b. Can we make height 2? Yes, a full binary tree with 2 internal nodes has 3 leaves, height 2 (root has 2 children, one is leaf, other has 2 children). So height 2. Correct.
+        
+        // What about a=3, b=0, c=4 -> L=4, D=2, small=8-4=4, large=0. S=8. b=0, ans = max(2, ceil(8/4)=2) = 2. But wait, a perfect binary tree of height 2 has 4 leaves and 3 internal nodes? Actually, a perfect binary tree of height 2 has 2^2=4 leaves, and 2^2 -1 = 3 internal nodes. So a=3, c=4 gives height 2. Correct.
+        
+        // What about a=4, b=0, c=5 -> L=5, D=2, small=8-5=3 at depth 2, large=10-8=2 at depth 3. S=3*2+2*3=6+6=12. b=0, ans = max(3, ceil(12/5)=3) = 3. So height 3. Is that minimal? With 5 leaves, minimum height of binary tree is

@@ -1,0 +1,77 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+You are given a string $ s $ , consisting of lowercase Latin letters and/or question marks.
+
+A tandem repeat is a string of an even length such that its first half is equal to its second half.
+
+A string $ a $ is a substring of a string $ b $ if $ a $ can be obtained from $ b $ by the deletion of several (possibly, zero or all) characters from the beginning and several (possibly, zero or all) characters from the end.
+
+Your goal is to replace each question mark with some lowercase Latin letter in such a way that the length of the longest substring that is a tandem repeat is maximum possible.
+
+Input Format
+The first line contains a single integer $ t $ ( $ 1 \le t \le 1000 $ ) — the number of testcases.
+
+The only line of each testcase contains a string $ s $ ( $ 1 \le |s| \le 5000 $ ), consisting only of lowercase Latin letters and/or question marks.
+
+The total length of the strings over all testcases doesn't exceed $ 5000 $ .
+
+Output Format
+For each testcase, print a single integer — the maximum length of the longest substring that is a tandem repeat after you replace each question mark in the string with some lowercase Latin letter.
+
+If it's impossible to make any tandem repeat substrings in the string, print $ 0 $ .
+
+Examples
+Sample 1
+Input
+4
+zaabaabz
+?????
+code?????s
+codeforces
+Output
+6
+4
+10
+0
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+Consider two cases: when the answer is even and when it's odd.
+
+**Hint 2**
+What should the first half of the longest tandem repeat look like?
+
+**Hint 3**
+How many letters we can put before the first half of the longest tandem repeat?
+
+**Hint 4**
+Can we replace question marks in such a way that we can get the longest tandem repeat from the string?
+
+**Hint 5**
+If the answer is even, how many letters we can put after the second half of the longest tandem repeat?
+
+**Hint 6**
+Is it possible to get the answer when the length is odd?
+
+**Hint 7**
+How many letters we can put after the second half of the longest tandem repeat?
+
+**Hint 8**
+What should the second half of the longest tandem repeat look like?
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

@@ -1,0 +1,73 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> r(n);
+        for (int i = 0; i < n; i++) {
+            cin >> r[i];
+            r[i]--;
+        }
+        
+        // We'll simulate the process.
+        // State: vector<int> of size n with values 0 or 1.
+        // Initial state: all 1.
+        vector<int> cur(n, 1);
+        map<vector<int>, int> seen;
+        seen[cur] = 0;
+        
+        int year = 0;
+        while (true) {
+            // Check if stable: same as previous year's state before exchange.
+            // But we need to check before exchange.
+            // We store state before exchange.
+            // At year 1, state is all 1, then exchange happens.
+            // We want to find first year where state before exchange equals state before exchange of previous year.
+            // So we simulate: for year y, we have state S_y before exchange.
+            // S_1 = all 1.
+            // Then we compute S_{y+1} from S_y by applying exchange and capping at 1.
+            // We stop when S_{y+1} == S_y.
+            
+            // Compute next state
+            vector<int> nxt(n, 0);
+            for (int i = 0; i < n; i++) {
+                if (cur[i] == 1) {
+                    nxt[r[i]]++;
+                }
+            }
+            for (int i = 0; i < n; i++) {
+                nxt[i] = min(nxt[i], 1);
+            }
+            
+            year++;
+            if (nxt == cur) {
+                cout << year + 1 << "\n"; // stable year is the year when state equals previous year's state before exchange.
+                // Actually: if S_{y+1} == S_y, then year y+1 is stable because before exchange it has S_{y+1} which equals S_y (previous year's before exchange).
+                break;
+            }
+            
+            if (seen.count(nxt)) {
+                // We've seen this state before. The process will cycle.
+                // But we need the first stable year. Since we didn't find stability yet, it might never become stable?
+                // Actually in this version, it always becomes stable because of the cap.
+                // But just in case, we can break if cycle detected without stability.
+                // However, with cap, it's known to stabilize.
+                break;
+            }
+            
+            seen[nxt] = year;
+            cur = nxt;
+        }
+    }
+    
+    return 0;
+}
+```

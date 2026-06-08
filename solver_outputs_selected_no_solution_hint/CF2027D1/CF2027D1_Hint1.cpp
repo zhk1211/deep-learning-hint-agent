@@ -1,0 +1,135 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        vector<long long> b(m);
+        for (int i = 0; i < m; ++i) {
+            cin >> b[i];
+        }
+
+        // dp[i] = min cost to remove prefix a[0..i-1]
+        // dp[0] = 0
+        // We'll compute dp from 1 to n
+        const long long INF = 1e18;
+        vector<long long> dp(n + 1, INF);
+        dp[0] = 0;
+
+        // For each k from 1 to m, we can use b_{k-1} as limit
+        // We'll process k from m down to 1? Actually we can process k from 1 to m
+        // but we need to consider that we can increase k at any time.
+        // The cost of using limit b_{k-1} is (m - k).
+        // We can use multiple prefixes with same k, but after increasing k we cannot go back.
+        // So we can think of it as: we choose a sequence of k values (non-decreasing) and for each k we take some prefixes.
+        // Equivalent to: we partition array into segments, each segment sum <= some b_{k_i} where k_i is non-decreasing.
+        // The total cost = sum over segments of (m - k_i).
+        // Since b is strictly decreasing, larger k means smaller limit but cheaper cost.
+        // We can use DP: dp[i] = min over j < i, k in [1..m] such that sum(a[j..i-1]) <= b_{k-1} of dp[j] + (m - k)
+        // But n*m <= 3e5, so we can do something O(n*m) overall? Not exactly, n*m <= 3e5 total over test cases.
+        // So we can afford O(n*m) per test case if n*m is small.
+        // However, n and m individually up to 3e5, but product bounded.
+        // We can iterate over k and update dp using two pointers/sliding window because for fixed k, we need sum <= b_{k-1}.
+        // For each k, we can find for each i the furthest j such that sum(a[j..i-1]) <= b_{k-1}.
+        // Then dp[i] = min(dp[i], min_{j in [L_i, i-1]} dp[j] + (m - k)).
+        // We can maintain a sliding window minimum of dp[j] for each k.
+        // Since n*m <= 3e5, we can just do for each k: two pointers to find valid j range, and use a deque to get min dp in window.
+        // Complexity O(n*m) total over test cases, which is fine.
+
+        for (int k = 1; k <= m; ++k) {
+            long long limit = b[k - 1];
+            long long cost = m - k;
+            // We'll compute new_dp as min of old dp and using this k
+            // Actually we can update dp in place because we are considering using this k for the last segment.
+            // But careful: we might use multiple segments with same k? Yes, we can use multiple prefixes with same k.
+            // The DP transition with same k can be chained: dp[i] = min(dp[i], min_{j} dp[j] + cost) where sum(a[j..i-1]) <= limit.
+            // This is like we can take several segments with same k, each adding cost.
+            // So we can run a standard DP for this k: for i from 1 to n, we find the smallest j such that sum(a[j..i-1]) <= limit,
+            // then dp[i] = min(dp[i], min_{t in [j, i-1]} dp[t] + cost).
+            // We can do this with a deque maintaining minimum of dp[t] in the window.
+            // Since we update dp[i] using previous dp values (which may already include segments with this k), it's correct.
+            // We'll do this for each k sequentially.
+            // But note: we can also increase k between segments, so we should allow using previous k's dp values as base.
+            // By doing k from 1 to m, dp already contains optimal costs using k' <= k.
+            // When we process k, we consider adding one more segment with this k, possibly after segments with smaller or equal k.
+            // This works because we update dp in place and the sliding window uses current dp values (which may already include this k).
+            // However, we must ensure we don't use the same k multiple times incorrectly? It's fine because cost is additive.
+            // We'll do for each k: two pointers to maintain window of valid j for each i.
+            // Since n*m <= 3e5, we can just do a loop over i and maintain left pointer.
+            
+            int left = 0;
+            long long current_sum = 0;
+            deque<int> dq; // indices of dp values in window [left, i-1]
+            // We'll iterate i from 1 to n
+            // For i=1, window is [left, 0], we need to consider j=0.
+            // We'll maintain dq for the range of j that are valid for current i.
+            // As i increases, we add a[i-1] to sum, and while sum > limit, we move left forward and pop from dq if needed.
+            // Then the valid j's are from left to i-1.
+            // We need min dp[j] in that range.
+            // We'll update dp[i] = min(dp[i], (dq.empty()? INF : dp[dq.front()]) + cost).
+            // Then we add dp[i] to dq for future i's.
+            // But careful: dp[i] might be updated later by other k's, but for the current k's sliding window, we should use the dp values as they are at the moment we process i.
+            // Since we process i sequentially, when we add dp[i] to dq, it's the current dp[i] (which may have been improved by this k or previous k's).
+            // This is correct for chaining segments with the same k.
+            
+            // Reset for this k
+            left = 0;
+            current_sum = 0;
+            dq.clear();
+            // We'll process i from 1 to n
+            for (int i = 1; i <= n; ++i) {
+                current_sum += a[i - 1];
+                while (current_sum > limit) {
+                    current_sum -= a[left];
+                    left++;
+                }
+                // Remove indices from dq that are < left
+                while (!dq.empty() && dq.front() < left) {
+                    dq.pop_front();
+                }
+                // Now valid j in [left, i-1]
+                // Before updating dp[i], we need to have dp[i-1] in dq? Actually we need dp[j] for j in [left, i-1].
+                // We should add dp[i-1] to dq before computing for i? Let's think:
+                // For i, the segment is a[j..i-1] with j in [left, i-1]. So j can be i-1.
+                // So we need dp[i-1] available in dq.
+                // We can add dp[i-1] to dq after processing i-1, but before processing i.
+                // So we'll add dp[i-1] at the end of previous iteration, or at start of this iteration before computing min.
+                // Let's do: at the start of iteration for i, we add dp[i-1] to dq (if i-1 >= left? Actually we add it unconditionally, but we'll later remove those < left).
+                // But careful: dp[i-1] might be INF, we can still add it.
+                if (i - 1 >= 0) {
+                    // add dp[i-1] to dq
+                    while (!dq.empty() && dp[dq.back()] >= dp[i - 1]) {
+                        dq.pop_back();
+                    }
+                    dq.push_back(i - 1);
+                }
+                // Now remove out-of-window
+                while (!dq.empty() && dq.front() < left) {
+                    dq.pop_front();
+                }
+                // Update dp[i]
+                if (!dq.empty()) {
+                    long long val = dp[dq.front()] + cost;
+                    if (val < dp[i]) dp[i] = val;
+                }
+            }
+        }
+
+        if (dp[n] >= INF) {
+            cout << -1 << '\n';
+        } else {
+            cout << dp[n] << '\n';
+        }
+    }
+    return 0;
+}

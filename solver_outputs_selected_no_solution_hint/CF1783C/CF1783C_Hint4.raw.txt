@@ -5,7 +5,7 @@ using namespace std;
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    
+
     int t;
     cin >> t;
     while (t--) {
@@ -15,10 +15,12 @@ int main() {
         for (int i = 0; i < n; ++i) {
             cin >> a[i];
         }
-        
+
+        // We want to maximize our wins.
+        // Sort opponents by preparation time.
         vector<int> sorted_a = a;
         sort(sorted_a.begin(), sorted_a.end());
-        
+
         int max_wins = 0;
         long long sum = 0;
         for (int i = 0; i < n; ++i) {
@@ -29,25 +31,46 @@ int main() {
                 break;
             }
         }
-        
+
+        // If we can win against everyone, place is 1.
         if (max_wins == n) {
-            cout << 1 << "\n";
+            cout << 1 << '\n';
             continue;
         }
-        
-        if (max_wins == 0) {
-            cout << n + 1 << "\n";
-            continue;
-        }
-        
-        int idx = max_wins;
-        if (a[idx] <= sorted_a[max_wins - 1] || sum - sorted_a[max_wins - 1] + a[idx] <= m) {
-            cout << n - max_wins + 1 << "\n";
+
+        // Check if we can win against the opponent with index max_wins.
+        // The opponent with index max_wins (0-based) has max_wins wins if we don't beat them.
+        // If we can beat them, we take their place, otherwise we are behind them.
+        // To beat them, we need to include a[max_wins] in our wins.
+        // We can try to replace one of our current wins with a[max_wins] if needed.
+        bool can_beat = false;
+        if (max_wins > 0) {
+            // We have max_wins wins from the smallest elements.
+            // We can try to include a[max_wins] by removing the largest among our wins.
+            // The largest among our wins is sorted_a[max_wins - 1].
+            long long new_sum = sum - sorted_a[max_wins - 1] + a[max_wins];
+            if (new_sum <= m) {
+                can_beat = true;
+            }
         } else {
-            cout << n - max_wins + 2 << "\n";
+            // max_wins == 0, we have no wins. Can we beat opponent max_wins?
+            if (a[max_wins] <= m) {
+                can_beat = true;
+            }
         }
+
+        // If we can beat opponent max_wins, we take their place (max_wins + 1).
+        // Otherwise, we are behind them, so place is max_wins + 2.
+        int place;
+        if (can_beat) {
+            place = n - max_wins;
+        } else {
+            place = n - max_wins + 1;
+        }
+
+        cout << place << '\n';
     }
-    
+
     return 0;
 }
 ```

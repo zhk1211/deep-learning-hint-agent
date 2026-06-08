@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+const int MAXN = 500000;
+
+long long fact[MAXN + 5], invfact[MAXN + 5];
+
+long long modpow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+void precompute() {
+    fact[0] = 1;
+    for (int i = 1; i <= MAXN; i++) {
+        fact[i] = fact[i-1] * i % MOD;
+    }
+    invfact[MAXN] = modpow(fact[MAXN], MOD - 2);
+    for (int i = MAXN; i >= 1; i--) {
+        invfact[i-1] = invfact[i] * i % MOD;
+    }
+}
+
+long long nCr(int n, int r) {
+    if (r < 0 || r > n) return 0;
+    return fact[n] * invfact[r] % MOD * invfact[n-r] % MOD;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    precompute();
+    int t;
+    cin >> t;
+    while (t--) {
+        int c[26];
+        int total = 0;
+        int odd_count = 0;
+        bool possible = true;
+        for (int i = 0; i < 26; i++) {
+            cin >> c[i];
+            total += c[i];
+            if (c[i] % 2 == 1) odd_count++;
+            if (c[i] >= 3) possible = false;
+        }
+        if (!possible || odd_count > 1) {
+            cout << 0 << '\n';
+            continue;
+        }
+        if (total == 0) {
+            cout << 1 << '\n';
+            continue;
+        }
+        int odd_positions = (total + 1) / 2;
+        int even_positions = total / 2;
+        long long ans = 1;
+        int placed_odd = 0;
+        for (int i = 0; i < 26; i++) {
+            if (c[i] == 0) continue;
+            if (c[i] == 2) {
+                ans = ans * nCr(odd_positions - placed_odd, 1) % MOD;
+                placed_odd++;
+            } else if (c[i] == 1) {
+                if (odd_count == 1) {
+                    ans = ans * nCr(odd_positions - placed_odd, 1) % MOD;
+                    placed_odd++;
+                }
+            }
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> r(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> r[i];
+            --r[i];
+        }
+
+        vector<int> indeg(n, 0);
+        for (int i = 0; i < n; ++i) {
+            indeg[r[i]]++;
+        }
+
+        vector<int> q;
+        for (int i = 0; i < n; ++i) {
+            if (indeg[i] == 0) q.push_back(i);
+        }
+
+        vector<int> dist(n, -1);
+        for (int v : q) {
+            dist[v] = 0;
+        }
+
+        for (int idx = 0; idx < (int)q.size(); ++idx) {
+            int u = q[idx];
+            int v = r[u];
+            if (dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                q.push_back(v);
+            }
+        }
+
+        int ans = 2;
+        for (int i = 0; i < n; ++i) {
+            if (dist[i] == -1) {
+                int cur = i;
+                vector<int> cycle;
+                while (dist[cur] == -1) {
+                    dist[cur] = 0;
+                    cycle.push_back(cur);
+                    cur = r[cur];
+                }
+                ans = max(ans, (int)cycle.size() + 2);
+            }
+        }
+
+        cout << ans << '\n';
+    }
+    return 0;
+}

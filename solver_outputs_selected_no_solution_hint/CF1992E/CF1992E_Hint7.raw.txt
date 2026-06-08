@@ -1,0 +1,222 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        string n_str;
+        cin >> n_str;
+        int n_len = (int)n_str.size();
+        long long n_val = stoll(n_str);
+
+        vector<pair<long long, long long>> ans;
+        // a from 1 to 10000
+        for (long long a = 1; a <= 10000; ++a) {
+            long long len_s = a * n_len;
+            // b must be less than len_s to have non-empty string
+            // also b <= min(10000, a * n_val)
+            long long max_b = min({10000LL, a * n_val, len_s - 1});
+            // We need to find b such that:
+            // The string s = n repeated a times
+            // After removing last b chars, the remaining string (length len_s - b)
+            // when converted to integer equals a * n_val - b.
+            // Let d = len_s - b (number of remaining digits).
+            // Then d is between 1 and len_s.
+            // The remaining string is the prefix of s of length d.
+            // Since s is periodic with period n_len, the prefix of length d
+            // is just the first d characters of the infinite repetition of n.
+            // Let the integer value of that prefix be X.
+            // We need X = a * n_val - b.
+            // Also b = len_s - d.
+            // So X = a * n_val - (len_s - d) = a * n_val - len_s + d.
+            // Rearranging: a * n_val - X = len_s - d = b.
+            // Since b is positive and <= max_b, we can try possible d.
+            // But d can be up to len_s which is up to 10000 * len(n) <= 10000*3=30000.
+            // We can iterate over possible d? That might be too slow if we do for each a.
+            // Instead, note that X is formed by taking the first d digits of the repeated n.
+            // Since n is small (<=100), we can precompute the prefix values.
+            // But we need to find d such that X = a * n_val - b and b = len_s - d.
+            // So X = a * n_val - len_s + d.
+            // Also X is the integer formed by first d digits of s.
+            // Let's denote the string S = n repeated a times.
+            // We can compute X for each possible d by building the number incrementally.
+            // But a up to 10000, len_s up to 30000, total operations could be 10000*30000 = 3e8, too high.
+            // We need a smarter way.
+
+            // Observe that n is small (<=100). The length of n is at most 3.
+            // The number of digits d in the answer is len_s - b.
+            // Since b <= 10000, d >= len_s - 10000.
+            // Also b <= a * n_val, but a * n_val can be large (up to 10000*100 = 1e6).
+            // However b is also <= 10000 by problem statement.
+            // So b is at most 10000. Thus d >= len_s - 10000.
+            // Since len_s = a * n_len, and a up to 10000, len_s up to 30000.
+            // So d is at least len_s - 10000, which could be small.
+            // But we can iterate over possible b? b from 1 to max_b, but max_b up to 10000.
+            // For each a, we can iterate b from 1 to max_b, compute d = len_s - b.
+            // Then we need to check if the prefix of length d of S equals a * n_val - b.
+            // How to get that prefix efficiently?
+            // Since n is short, we can precompute the string n, and then for a given d,
+            // we can compute the number by taking (d / n_len) full copies of n and then the remainder.
+            // That number can be computed quickly using precomputed powers of 10.
+            // Let's precompute val_n = integer value of n, and len_n.
+            // For a given d, let full = d / len_n, rem = d % len_n.
+            // The prefix number X = (val_n repeated full times) concatenated with first rem digits of n.
+            // We can compute X using formula: X = val_n * (10^{len_n * full} - 1) / (10^{len_n} - 1) * 10^{rem} + prefix_rem.
+            // But that involves division and may be heavy. Since d is at most 30000, we can just build the number as a string and convert? That would be too slow if done for each b.
+            // However, note that for a fixed a, as b increases, d decreases. We can compute X incrementally.
+            // But maybe we can find a pattern: The answer seems to have very few pairs per n.
+            // Looking at sample: n=2 gives 3 pairs, n=3 gives 1 pair, n=10 gives 1 pair.
+            // The pairs have a specific form: a is around 20, 219, 2218 for n=2; 165 for n=3; 1262 for n=10.
+            // Notice that b = a * n_val - X, and X is the prefix.
+            // Also X must equal a * n_val - b.
+            // Since b = len_s - d, we have X = a * n_val - len_s + d.
+            // But X is also the prefix of length d.
+            // This implies that the prefix of length d, when you add len_s - d, equals a * n_val.
+            // That is: X + (len_s - d) = a * n_val.
+            // But len_s = a * n_len.
+            // So X + a * n_len - d = a * n_val.
+            // => X - d = a * (n_val - n_len).
+            // This is a key equation! Let's check:
+            // X = a * n_val - b, and b = len_s - d = a * n_len - d.
+            // So X = a * n_val - a * n_len + d = a * (n_val - n_len) + d.
+            // Thus X - d = a * (n_val - n_len).
+            // So for a given a and d, we need X - d = a * (n_val - n_len).
+            // Here X is the integer formed by the first d digits of the repeated n.
+            // This is a huge simplification! We don't need to iterate b.
+            // We just need to find d (1 <= d < len_s) such that X - d = a * (n_val - n_len).
+            // And then b = len_s - d.
+            // Also we need b <= 10000 and b <= a * n_val (but a * n_val is usually larger, so the main constraint is b <= 10000).
+            // And b >= 1.
+            // So for each a, we need to find d in [max(1, len_s - 10000), len_s - 1] such that X - d = a * (n_val - n_len).
+            // Since len_s - d = b <= 10000, d is in [len_s - 10000, len_s - 1].
+            // That's at most 10000 values of d per a. Still too many if we do for all a.
+            // But note that n_val - n_len is a constant for the test case. Let C = n_val - n_len.
+            // Then we need X - d = a * C.
+            // X is the prefix number of length d.
+            // Since d is close to len_s, the prefix is almost the entire string s.
+            // s is just n repeated a times. So X is almost a * (value of n repeated a times? No, X is the first d digits of that repetition).
+            // Let's think about the structure of X.
+            // Let n_len = L, n_val = V.
+            // s = n repeated a times. Length = a*L.
+            // d = a*L - b, with 1 <= b <= 10000.
+            // So d = a*L - b.
+            // X is the integer formed by the first d digits of s.
+            // Since s is periodic with period L, the first d digits consist of (a-1) full copies of n, plus the first (L - b) digits of n? Wait:
+            // d = a*L - b. If b < L, then d = (a-1)*L + (L - b). So X = (a-1) full copies of n followed by the first (L - b) digits of n.
+            // If b >= L, then it's more complicated: we might drop entire copies.
+            // But b <= 10000, and L <= 3. So b can be much larger than L. So we might drop many full copies.
+            // Let k = b / L (integer division), and rem = b % L.
+            // Then b = k*L + rem, with 0 <= rem < L.
+            // Then d = a*L - k*L - rem = (a - k)*L - rem.
+            // Since d > 0, we need (a - k)*L > rem, so a - k >= 1.
+            // The first d digits of s: s has a copies. Removing last b characters means removing last k full copies and then rem characters from the next copy.
+            // So the remaining string is the first (a - k) full copies, but then we also remove rem from the end of that? Wait:
+            // Original: copy 1, copy 2, ..., copy a.
+            // Remove last b = k*L + rem characters.
+            // That removes the last k copies entirely, and then rem characters from the end of the (a - k)-th copy.
+            // So the remaining string is: first (a - k - 1) full copies, followed by the first (L - rem) characters of the next copy.
+            // So X = (a - k - 1) full copies of V, followed by the prefix of V of length (L - rem).
+            // Let q = a - k - 1, and r = L - rem. Then X = q full copies of V concatenated with the first r digits of V.
+            // Note: if rem == 0, then r = L, and we have q+1 full copies? Let's check: if rem=0, then b = k*L. We remove exactly k full copies. Remaining: a - k full copies. So q = a - k, and r = L. But our formula gave q = a - k - 1, r = L. That would be one less full copy. So we need to adjust: if rem == 0, then q = a - k, r = 0? Actually, if rem=0, the remaining is exactly (a-k) full copies. So we can treat it as q = a - k, and no extra prefix. To unify, we can say: let b = k*L + rem with 0 <= rem < L. If rem == 0, then k = b/L, rem = 0. Then remaining copies = a - k. So X = (a - k) full copies of V. If rem > 0, then remaining copies = a - k - 1 full copies, plus prefix of length L - rem. So X = (a - k - 1) full copies of V concatenated with first L - rem digits of V.
+            // Now, we need X - d = a * C.
+            // Let's express X and d in terms of a, k, rem.
+            // Case 1: rem == 0.
+            // d = a*L - k*L = (a - k)*L.
+            // X = (a - k) copies of V. Let's denote the number formed by m copies of V as f(m). f(m) = V * (10^{mL} - 1) / (10^L - 1).
+            // So X = f(a - k).
+            // Equation: f(a - k) - (a - k)*L = a * C.
+            // But C = V - L.
+            // So f(a - k) - (a - k)*L = a * (V - L).
+            // => f(a - k) = a*V - a*L + (a - k)*L = a*V - k*L.
+            // But note that a*V - k*L = a*V - b (since b = k*L). And we know the correct answer is a*V - b. So X should equal that. And indeed X = f(a - k). So the equation becomes f(a - k) = a*V - k*L.
+            // But we also have b = k*L <= 10000, and b <= a*V.
+            // This seems to always hold? Wait, no: X is the string prefix converted to integer. The condition is that this integer equals the correct answer. So we need f(a - k) = a*V - k*L. But is that automatically true? Not necessarily. f(a - k) is the number formed by (a - k) copies of V. a*V - k*L is a different number. They are equal only for specific values.
+            // Let's test with sample: n=2, V=2, L=1. C = 1.
+            // For a=20, b=18. L=1, so b=18, k=18, rem=0. a - k = 2. f(2) = 22. a*V - b = 40 - 18 = 22. Works.
+            // For a=219, b=216. L=1, k=216, a-k=3. f(3)=222. a*V - b = 438 - 216 = 222. Works.
+            // So for L=1, it seems f(a - k) = number with (a - k) digits all '2'. And a*V - b = 2a - b. Since b = k, we need 2a - k = number with (a - k) digits all 2. That is a specific equation.
+            // For general L, we need to find a, b such that the prefix number equals a*V - b.
+            // Since b <= 10000, and a <= 10000, we can just iterate a from 1 to 10000, and for each a, we can try possible b? But b can be up to 10000, so 10000*10000 = 1e8, borderline but maybe okay in C++ with simple operations? 1e8 operations might be too slow for 1 second, especially with multiple test cases (t up to 100, but n distinct, so total n is 100, but each n we do up to 1e8? That's 1e10, too much).
+            // We need a more efficient approach.
+
+            // Let's go back to the equation: X - d = a * C.
+            // We know d = len_s - b = a*L - b.
+            // So X - (a*L - b) = a*C => X + b = a*(C + L) = a*V.
+            // But X + b = a*V is exactly the correct answer! Because correct answer is a*V - b, and we want X = a*V - b, so X + b = a*V. This is just restating the condition.
+            // So we need X + b = a*V, with X being the prefix of length d = a*L - b.
+            // This means that if we take the string s (n repeated a times), and remove the last b characters, the remaining string X, when we add b to it, we get a*V.
+            // That is: X = a*V - b.
+            // This is a string concatenation and integer equality condition.
+
+            // Another perspective: The operation is: string s = n repeated a times. Remove last b chars to get string t. Convert t to integer X. We want X = a*V - b.
+            // Note that a*V - b is an integer. Its decimal representation has some number of digits. That number of digits must equal the length of t, which is d = a*L - b.
+            // So we need the number of digits of (a*V - b) to be exactly a*L - b.
+            // Let D = a*V - b. We need D's decimal length = a*L - b.
+            // Also, the decimal representation of D must equal t, which is the first d digits of s.
+            // Since s is periodic, t is determined by d.
+            // So we need: the first d digits of the infinite repetition of n form exactly the decimal representation of D.
+            // And D = a*V - b, with d = a*L - b.
+            // So D + b = a*V, and length(D) = d = a*L - b.
+            // This implies length(D) + b = a*L.
+            // But length(D) is the number of digits of D.
+            // Let's denote lenD = number of digits of D.
+            // Then lenD = a*L - b.
+            // Also D = a*V - b.
+            // So we have D + b = a*V, and lenD + b = a*L.
+            // Subtract: (D + b) - (lenD + b) = a*V - a*L => D - lenD = a*(V - L) = a*C.
+            // This is the same equation.
+            // So we need D - lenD = a*C, where D is an integer whose decimal representation is the prefix of length lenD of the repeated n.
+            // And also D = a*V - b, so b = a*V - D.
+            // And we need 1 <= b <= min(10000, a*V).
+            // Also lenD = a*L - b, so lenD = a*L - (a*V - D) = D - a*(V - L) = D - a*C. Which matches D - lenD = a*C.
+
+            // Now, note that D is formed by taking the first lenD digits of the repeated n.
+            // Since n is short (L <= 3), the sequence of digits is periodic with period L.
+            // Let's denote the infinite string P = n + n + n + ...
+            // For a given lenD, D is the integer formed by the first lenD digits of P.
+            // We need D - lenD = a*C.
+            // Here a is the number of repetitions in the original problem, but note that a is also related to lenD and b: a = (lenD + b)/L.
+            // But we can think of this as: For a given D that is a prefix of P, we can compute lenD = length(D). Then we can compute a = (D - lenD) / C, provided C != 0.
+            // If C == 0, i.e., V == L, then n is a single digit? V is the integer value, L is length. V == L only possible if n is a single digit and that digit is 1? No, V is the integer value, e.g., n=2, V=2, L=1, so V != L. For n=1, V=1, L=1, then C=0. So C=0 when n is a single digit '1'? Actually, if n is any single digit, V is that digit, L=1, so C = V - 1. For n=1, C=0. For n=2, C=1. So C=0 only for n=1.
+            // We'll handle C=0 separately.
+
+            // Assume C != 0.
+            // Then a = (D - lenD) / C. For this to be an integer, (D - lenD) must be divisible by C.
+            // Also, we need a to be between 1 and 10000.
+            // Then we can compute b = a*V - D.
+            // We need 1 <= b <= min(10000, a*V).
+            // Also we need lenD = a*L - b, which will automatically hold if D = a*V - b and lenD = length(D), because then a*L - b = a*L - (a*V - D) = D - a*(V - L) = D - a*C = lenD. So that's consistent.
+            // Also we need that the original string s had length a*L, and we removed b characters, so we need b < a*L (so that the resulting string is non-empty). Since lenD = a*L - b > 0, this is equivalent to b < a*L. But b = a*V - D. Since D is a prefix of P of length lenD, and P is made of n, D is at most the number formed by lenD digits of n. Actually, D can be up to 10^{lenD} - 1. But we need D = a*V - b, and b >= 1, so D < a*V. Also b < a*L implies a*V - D < a*L => D > a*(V - L) = a*C. Since lenD = D - a*C, this means lenD > 0, which is true. So b < a*L is equivalent to lenD > 0, which is required for non-empty string.
+            // So the conditions reduce to: Find a prefix D of the infinite string P (n repeated) such that:
+            // 1. D - length(D) is divisible by C (if C != 0).
+            // 2. a = (D - length(D)) / C is between 1 and 10000.
+            // 3. b = a*V - D is between 1 and min(10000, a*V).
+            // 4. Additionally, we need that the original string s had exactly a copies, meaning that the length of s is a*L, and we removed b characters to get D. But D is just the first lenD digits of P. For this to correspond to a valid (a, b), we need that lenD = a*L - b. Since we defined a and b this way, it's automatically satisfied. However, we also need that b <= a*L - 1 (so lenD >= 1), which is b < a*L. As argued, this is equivalent to lenD > 0, which is true since D is non-empty.
+            // But wait: Is it possible that D is a prefix of P, but the corresponding a and b do not satisfy that s = n repeated a times has length a*L, and removing b chars gives exactly D? Yes, because we defined a and b from D. The only potential issue is that a must be such that the original string had a copies. But a is computed as (D - lenD)/C. We need to ensure that a is a positive integer and that the original string length a*L is at least b+1. That's covered.
+            // However, there is another constraint: The original problem says b <= min(10000, a * n). Here n is the integer value V. So b <= a*V. That's condition 3.
+            // Also a <= 10000, V <= 10000? Actually n <= 100, so V <= 100. a <= 10000.
+            // So we can just generate all possible prefixes D of P up to some maximum length, and check these conditions.
+            // What is the maximum length of D? Since b <= 10000, and lenD = a*L - b, and a <= 10000, L <= 3, so a*L <= 30000. Thus lenD <= 30000. Also b >= 1, so lenD <= 30000 - 1. So D can have at most 30000 digits. That's too large to iterate all prefixes as integers (they would be huge). But we don't need to generate D as an integer; we can work with strings and modular arithmetic? Actually, D can be huge (up to 10^30000), but we only need D - lenD to be divisible by C, and then compute a and b. However, we can't store D as a standard integer. We need to handle large numbers.
+            // But note that n is small (<=100), and the period L is at most 3. The number of possible prefixes D is infinite, but we only care about those that yield a <= 10000 and b <= 10000. Since a <= 10000, lenD = a*L - b <= 30000. So we only need to consider prefixes of length up to 30000. That's 30000 prefixes. For each test case, we could generate the string P of length 30000 by repeating n, and then for each length len from 1 to 30000, compute D as an integer? But D can have 30000 digits, which is too big for standard integer types. We need to do big integer arithmetic or find a pattern.
+            // However, we don't need the full value of D. We only need D mod something? We need D - lenD divisible by C. C is at most V - L <= 100 - 1 = 99. So C is small (<=99). We can compute D mod C? But we need (D - lenD) mod C == 0. That is D ≡ lenD (mod C). So we only need D mod C. Since C is small, we can compute D mod C easily as we build the string. Also we need a = (D - lenD) / C. This requires the actual value of D divided by C. But a is at most 10000, so (D - lenD) is at most a*C <= 10000 * 99 = 990,000. Wait! That's a crucial observation!
+            // a <= 10000, C <= 99, so a*C <= 990,000. Therefore D - lenD <= 990,000. Since lenD is up to 30000, D <= 990,000 + 30000 = 1,020,000. So D is actually not huge! D is at most around 1 million. Why? Because D - lenD = a*C, and a <= 10000, C <= 99, so a*C <= 990,000. lenD is at most 30000, so D = a*C + lenD <= 1,020,000. That means D is a relatively small integer! Even though the string length can be up to 30000, the integer value D is bounded by about 1e6. This is because D is the prefix of the repeated n, but if the repeated n has many digits, the integer value would be huge. However, the condition D - lenD = a*C forces D to be small. Let's verify with sample: n=2, a=2218, b=2214. L=1, V=2, C=1. a*C = 2218. lenD = a*L - b = 2218 - 2214 = 4. D = a*C + lenD = 2218 + 4 = 2222. Indeed D=2222, which is small. So D is small because a*C is at most 1e6. So we don't need to handle huge integers! D is within 32-bit integer range.
+            // This is the key insight! D is small. So we can just iterate over possible D? But D is the integer formed by a prefix of the repeated n. We can generate all possible prefixes of the repeated n that are <= 1,020,000 (or a bit more to be safe). Since n <= 100, the repeated string will quickly exceed 1e6 in integer value. For example, if n=100, L=3, V=100. The prefixes: 1, 10, 100, 1001, 10010, 100100, ... The integer values grow exponentially. The value exceeds 1e6 after a few repetitions. So there are only a limited number of prefixes D that are <= 1,020,000. We can just generate them by repeatedly appending n to a string and converting to integer until it exceeds the maximum possible D.
+            // What is the maximum possible D? a <= 10000, C <= 99, so a*C <= 990,000. lenD = a*L - b. Since b >= 1, lenD <= a*L - 1 <= 10000*3 - 1 = 29999. So D = a*C + lenD <= 990,000 + 29,999 = 1,019,999. So D <= 1,019,999. Let's set maxD = 2,000,000 to be safe.
+            // So we can generate all prefixes D of the infinite string P that are <= maxD. For each such D, we compute lenD = number of digits of D. Then we check if (D - lenD) % C == 0 (if C != 0). Then a = (D - lenD) / C. Check 1 <= a <= 10000. Then b = a*V - D. Check 1 <= b <= min(10000, a*V). Also we need to ensure that the prefix D actually corresponds to the first lenD digits of P. But by construction, D is a prefix of P, so that's satisfied. However, we must also ensure that lenD = a*L - b. Let's check if this holds automatically: b = a*V - D, so a*L - b = a*L - a*V + D = D - a*(V - L) = D - a*C = D - (D - lenD) = lenD. Yes, it holds. So all conditions are satisfied.
+            // But wait: Is it possible that for some D, the computed a and b satisfy all conditions, but the original string s had a copies, and we removed b characters, but the resulting string's integer value is D, yet D is not exactly the first lenD digits of P? By construction, D is a prefix of P, so it is exactly the first lenD digits. So it's valid.
+            // However, we must also ensure that b < a*L (so the string is non-empty). Since lenD = a*L - b > 0, this holds.
+            // Also, we need to consider the case where C == 0 (i.e., n = "1"). Then V=1, L=1, C=0. The equation D - lenD = a*C = 0, so D = lenD. This means D must equal its number of digits. The only numbers with D = lenD are D=1 (len=1), D=2? len=1, not equal. Actually, D = lenD implies D is a one-digit number equal to 1? Because if D has d digits, D >= 10^{d-1}. For d=1, D can be 1. For d=2, D >= 10, but lenD=2, so D=2 impossible. So only D=1 works. Let's check: n=1, V=1, L=1. D=1, lenD=1. Then C=0, so we can't divide. We need to handle C=0 separately.
+            // For n=1, the problem: n=1, a apples given by each friend? Actually n is the number of friends? Wait, the problem statement: "Noobish_Monk has n friends. Each gave him a apples. He returned b apples." So n is the number of friends. The string n is the value of n as a string. So if n=1, then the string is "1". The correct answer is n*a - b = 1*a - b = a - b. The string operation: s = "1" repeated a times = "111...1" (a times). Remove last b chars. The remaining string is "1" repeated (a - b) times, which is the integer consisting of (a - b) ones. We need this integer to equal a - b. So we need a number consisting of (a - b) ones to equal a - b. This is only possible if a - b = 1, because 1 is the only number with all digits 1 that equals its value? Actually, 1 works, 11 != 2, 111 != 3, etc. So a - b = 1, and the remaining string is "1", which equals 1. So b = a - 1. Constraints: a <= 10000, b <= min(10000, a*1) = min(10000, a). So b = a - 1 <= 10000 => a <= 10001. Also b >= 1 => a >= 2. So for n=1, the valid pairs are (a, a-1) for a from 2 to 10000? But wait, b <= 10000, so a-1 <= 10000 => a <= 10001. Since a <= 10000, a from 2 to 10000 gives b from 1 to 9999. Also need b <= a*V = a, which is true. So there are many pairs. But the sample output for n=10 gives only 1 pair. For n=1, we might have many pairs. Let's check the problem statement: n is distinct in all test cases, and n up to 100. So n=1 might appear. We'll handle C=0 separately.
+
+            // For C != 0, we can generate all prefixes D of P that are <= maxD. How to generate? Start with an empty string, and repeatedly append n_str. Convert to integer. If it exceeds maxD, we can stop? But careful: The prefix D could be a partial prefix, not just full copies. For example, n=2, P = "2222...". Prefixes: 2, 22, 222, 2222, ... All these are just numbers with all digits 2. We need to consider all prefixes, not just full copies. So we should generate the string P incrementally by adding characters one by one from the repeated n. Since L <= 3, we can just build a string by repeating n enough times to cover maxD digits. maxD is about 1e6, so the string length needed to reach 1e6 in integer value is small. For n=100, the integer grows quickly: 1, 10, 100, 1001, 10010, 100100, 1001001, ... The value exceeds 1e6 after about 7 digits? Actually, 1001001 is > 1e6. So the number of prefixes is small. For n=99, 99, 999, 9999, 99999, 999999, 9999999 > 1e6. So at most about 7-8 digits. For n=2, 2, 22, 222, 2222, 22222, 222222, 2222222 > 1e6? 2,222,222 > 1e6. So 7 digits. So the number of prefixes D to check is very small! At most around 10-20 per test case. This is extremely fast.
+
+            // Let's formalize the algorithm for C != 0:
+            // maxD = 2000000 (or compute as 10000 * maxC + 30000, maxC = V - L, but V <= 100, L >= 1, so maxC = 99. So maxD = 10000*99 + 30000 = 1,020,000. Set maxD = 2,000,000).
+            // Generate all prefixes of the infinite string P = n_str + n_str + ... that are <= maxD.
+            // To do this, we can build a string current = "", and keep appending n_str until the integer value of current + n_str exceeds maxD? But we need all prefixes, including those that cut off in the middle of n_str. So we can just build a string by taking the first len characters of P for len = 1, 2, 3, ... until the integer value of the prefix exceeds maxD. Since the integer value is monotonic with length (except leading zeros? n has no leading zeros because n >= 1, so the first digit is non-zero), we can stop when the integer exceeds maxD.
+            // For each prefix string, convert to integer D. lenD = prefix.length()

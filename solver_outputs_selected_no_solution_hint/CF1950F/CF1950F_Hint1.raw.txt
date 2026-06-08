@@ -1,0 +1,75 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+
+        // Check necessary condition: a + 1 == c
+        if (a + 1 != c) {
+            cout << -1 << '\n';
+            continue;
+        }
+
+        if (a == 0) {
+            // Only b and c, with c = 1
+            // Tree is a path of b + 1 vertices
+            cout << b << '\n';
+            continue;
+        }
+
+        // Build the tree level by level
+        // Start with root at level 0
+        int height = 0;
+        // Number of nodes in current level that can have children
+        int cur = 1;
+        // Remaining a and b
+        int rem_a = a;
+        int rem_b = b;
+
+        while (rem_a > 0 || rem_b > 0) {
+            // Next level will have nodes equal to total children from current level
+            int next = 0;
+            // Use a-nodes first (they give 2 children)
+            int use_a = min(cur, rem_a);
+            rem_a -= use_a;
+            next += 2 * use_a;
+            cur -= use_a;
+
+            // If still capacity, use b-nodes (1 child)
+            if (cur > 0 && rem_b > 0) {
+                int use_b = min(cur, rem_b);
+                rem_b -= use_b;
+                next += use_b;
+                cur -= use_b;
+            }
+
+            // If we couldn't fill current level capacity, but still have nodes, impossible
+            // Actually, if cur > 0 after using all a and b, we can't place remaining c?
+            // But c is fixed by a+1, so we must have exactly enough leaves.
+            // If cur > 0 and no more a or b, then we have extra capacity that should be leaves,
+            // but leaves are already counted in c. This means invalid.
+            if (cur > 0 && rem_a == 0 && rem_b == 0) {
+                // Remaining capacity in current level will be leaves, but we already have c = a+1 leaves.
+                // This would create extra leaves, contradiction.
+                height = -1;
+                break;
+            }
+
+            cur = next;
+            height++;
+        }
+
+        cout << height << '\n';
+    }
+
+    return 0;
+}
+```

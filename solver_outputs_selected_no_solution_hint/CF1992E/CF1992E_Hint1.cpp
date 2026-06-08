@@ -1,0 +1,105 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        string n_str;
+        cin >> n_str;
+        int n_int = stoi(n_str);
+        int len = (int)n_str.size();
+
+        vector<pair<int, int>> ans;
+
+        // a from 1 to 10000
+        for (int a = 1; a <= 10000; ++a) {
+            // The string s = n_str repeated a times
+            // Its length = a * len
+            // We need b <= min(10000, a * n_int) and b < a * len (so that string non-empty)
+            // The resulting string after removing last b chars has length L = a*len - b
+            // This string must equal the integer value: n_int * a - b
+            // Let correct = n_int * a - b
+            // The string representation of correct must have length L and match the prefix of s
+            // Since s is just n_str repeated, the prefix of length L is determined by L
+            // We can compute the expected prefix directly from n_str and L
+            // Then convert that prefix to integer and check if it equals correct
+
+            int max_b = min(10000, a * n_int);
+            // b must be at least 1, and also b < a*len
+            // We can iterate over possible lengths L = a*len - b, so L from 1 to a*len - 1
+            // But a*len can be up to 10000*4 = 40000, which is too large to iterate all L
+            // Instead, note that correct = n_int * a - b, and b = a*len - L
+            // So correct = n_int*a - (a*len - L) = a*(n_int - len) + L
+            // Also L is the length of the string representation of correct
+            // So we need L = number of digits of correct
+            // correct = a*(n_int - len) + L
+            // Since n_int and len are fixed for given n, we can iterate over possible L
+            // L is at most the number of digits of max possible correct, which is <= 10000*100 = 1e6 -> 7 digits
+            // But L also cannot exceed a*len - 1, and a up to 10000, len up to 3 (since n<=100), so L up to ~30000
+            // However, we can just iterate L from 1 to min(7, a*len - 1)? Not exactly, because correct could have more digits if a is large? 
+            // Max correct = n_int*a - 1 <= 100*10000 = 1e6, so at most 7 digits.
+            // So L <= 7.
+            // But wait: if n_int is small, say n=2, len=1, a=10000, correct up to 20000, L up to 5.
+            // So L is small. We can iterate L from 1 to 7.
+            // For each L, we can compute correct = a*(n_int - len) + L
+            // Then b = a*len - L
+            // Check if b in [1, max_b] and b < a*len (automatically if L>=1)
+            // Also check if correct >= 0? Since b <= a*n_int, correct >=0.
+            // Also need to check that the string formed by taking first L characters of s equals the string representation of correct.
+            // Since s is periodic with period len, we can easily get the prefix of length L.
+
+            // Precompute the repeated pattern for quick prefix? We can just build the prefix on the fly.
+            // Since L <= 7, it's trivial.
+
+            // But wait: is it always true that L = number of digits of correct? Yes, by definition of conversion to integer.
+            // So we can just iterate L from 1 to 7.
+            // However, we must ensure that the computed b is within bounds and that the prefix matches.
+            // Also note: n_int - len could be negative? n_int >=1, len = number of digits of n_int.
+            // For n=2, len=1, n_int - len = 1 >0.
+            // For n=10, len=2, n_int - len = 8 >0.
+            // For n=99, len=2, n_int - len = 97 >0.
+            // For n=100, len=3, n_int - len = 97 >0.
+            // So n_int >= len always? For n=1..9, len=1, n_int>=1 => n_int - len >=0.
+            // For n=10..99, len=2, n_int>=10 => n_int - len >=8.
+            // For n=100, len=3, n_int=100 => n_int - len =97.
+            // So n_int - len >=0 always.
+            // Thus correct = a*(n_int - len) + L >= L >=1, so correct positive.
+
+            for (int L = 1; L <= 7; ++L) {
+                long long correct = 1LL * a * (n_int - len) + L;
+                // correct must be exactly representable as integer with L digits? Not necessarily; it could have fewer digits?
+                // But we defined L as the length of the string after removal, which is the length of the string representation of correct.
+                // So correct must have exactly L digits (no leading zeros). Since correct >0, its string length is floor(log10(correct)) + 1.
+                // So we need that length == L.
+                int digits = 0;
+                long long tmp = correct;
+                while (tmp) { digits++; tmp /= 10; }
+                if (digits != L) continue;
+
+                long long b = 1LL * a * len - L;
+                if (b < 1 || b > max_b) continue;
+                // Now check prefix
+                // Build prefix of length L from repeated n_str
+                string prefix;
+                for (int i = 0; i < L; ++i) {
+                    prefix += n_str[i % len];
+                }
+                // Convert prefix to integer
+                long long prefix_val = stoll(prefix);
+                if (prefix_val == correct) {
+                    ans.emplace_back(a, (int)b);
+                }
+            }
+        }
+
+        cout << ans.size() << '\n';
+        for (auto &p : ans) {
+            cout << p.first << ' ' << p.second << '\n';
+        }
+    }
+    return 0;
+}

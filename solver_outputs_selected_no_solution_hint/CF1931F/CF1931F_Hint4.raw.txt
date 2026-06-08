@@ -1,0 +1,134 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> a(k, vector<int>(n));
+    for (int i = 0; i < k; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cin >> a[i][j];
+        }
+    }
+    if (k == 1) {
+        cout << "YES\n";
+        return;
+    }
+    vector<int> order;
+    // Try to deduce order from first two screenshots
+    int p1 = -1, p2 = -1;
+    for (int i = 1; i < n; ++i) {
+        if (a[0][i] == a[1][0]) p1 = i;
+        if (a[1][i] == a[0][0]) p2 = i;
+    }
+    auto build = [&](int pos) -> vector<int> {
+        vector<int> res;
+        for (int i = 1; i < n; ++i) {
+            if (i == pos) continue;
+            res.push_back(a[0][i]);
+        }
+        return res;
+    };
+    vector<int> cand;
+    if (p1 == -1 || p2 == -1) {
+        // One of them sees the other at position 1? Actually both see themselves first.
+        // If p1 == -1, then a[1][0] is not in a[0][1..n-1]? Impossible because all numbers 1..n appear.
+        // But it's possible if a[1][0] == a[0][0]? No, authors are different.
+        // So p1 and p2 always exist.
+    }
+    // Two possible orders: insert a[1][0] before p1 or after p1? Actually we need to place a[1][0] relative to the sequence of a[0] without a[0][0].
+    // The sequence from a[0] without a[0][0] is the base order.
+    // In a[1], a[0][0] is at position p2. The elements before p2 (except a[1][0]) are the same as in base order before the insertion point.
+    // The insertion point of a[1][0] in base order is such that the relative order of other elements matches.
+    // Actually, we can try both possibilities: insert a[1][0] right before the element that is at position p1 in a[0]? Wait.
+    // Let's derive: base = a[0][1..n-1]. In a[1], the sequence is a[1][0] followed by some permutation of base.
+    // a[1][0] is inserted somewhere into base. The position of a[0][0] in a[1] tells us where the insertion happened relative to a[0][0]'s position in base? No, a[0][0] is not in base.
+    // Actually, a[1] = [a[1][0]] + (base with a[1][0] inserted at some position). But a[1][0] is the author, so it's at front.
+    // Let's think: The true order is some permutation P. For user x, the seen order is [x] + (P without x).
+    // So for user a[0][0], seen order is [a[0][0]] + (P without a[0][0]).
+    // For user a[1][0], seen order is [a[1][0]] + (P without a[1][0]).
+    // So a[0][1..n-1] is P without a[0][0].
+    // a[1][1..n-1] is P without a[1][0].
+    // Therefore, the relative order of all elements except a[0][0] and a[1][0] must be the same in both.
+    // Let's check that. If not, impossible -> NO.
+    // Then we can reconstruct P by taking a[0][1..n-1] and inserting a[0][0] at the position that makes it consistent with a[1].
+    // In a[1], a[0][0] appears somewhere. Its position relative to the common elements tells us where a[0][0] should be in P relative to them.
+    // But we also need to place a[1][0]. In a[0], a[1][0] appears somewhere. Its position relative to common elements tells us where a[1][0] should be in P.
+    // So we can reconstruct P uniquely (if consistent).
+    // Let's extract the common sequence from a[0][1..n-1] by removing a[1][0].
+    vector<int> base;
+    for (int i = 1; i < n; ++i) {
+        if (a[0][i] != a[1][0]) base.push_back(a[0][i]);
+    }
+    // Now check that a[1][1..n-1] without a[0][0] matches base.
+    vector<int> base2;
+    for (int i = 1; i < n; ++i) {
+        if (a[1][i] != a[0][0]) base2.push_back(a[1][i]);
+    }
+    if (base != base2) {
+        cout << "NO\n";
+        return;
+    }
+    // Now we need to insert a[0][0] and a[1][0] into base to form P.
+    // The position of a[0][0] in a[1] (1-indexed, after the first element) tells us its position in base + 1? Actually a[1] = [a[1][0]] + (base with a[0][0] inserted somewhere).
+    // Let idx0 be the index in a[1] (0-indexed) of a[0][0]. Since a[1][0] is at index 0, idx0 >= 1.
+    // The number of elements before a[0][0] in a[1] is idx0 - 1. These are exactly the elements of base that come before a[0][0] in P.
+    // So a[0][0] should be inserted after the first (idx0 - 1) elements of base.
+    // Similarly, a[1][0] in a[0] is at some index idx1 (>=1). It should be inserted after the first (idx1 - 1) elements of base.
+    // But wait: base does not contain a[0][0] or a[1][0]. When we insert both, the positions might shift if one is inserted before the other.
+    // We can just construct P by placing both into base according to their relative order.
+    // Let pos0 = idx0 - 1 (0-indexed position in base where a[0][0] should be inserted; i.e., before the element at that index).
+    // Let pos1 = idx1 - 1 (position in base where a[1][0] should be inserted).
+    // But note: when we insert a[0][0] into base, the indices for inserting a[1][0] might change if pos1 >= pos0.
+    // Actually, we can just build P by merging: start with empty, iterate through base, and insert a[0][0] and a[1][0] at their respective positions.
+    // Since we know the exact positions in the final P? Not exactly, because the positions are given relative to base without the other author.
+    // Let's think: In a[1], the elements are [a[1][0]] + (base with a[0][0] inserted). So the position of a[0][0] in a[1] is exactly its position in the sequence [a[1][0]] + base, but with a[1][0] removed? No.
+    // Actually, a[1] = [a[1][0]] + (P without a[1][0]). P without a[1][0] is base with a[0][0] inserted somewhere.
+    // So the index of a[0][0] in a[1] (0-indexed) is exactly its index in P (0-indexed) because a[1][0] is at index 0 and is not a[0][0]. So idx0 is the index of a[0][0] in P.
+    // Similarly, idx1 is the index of a[1][0] in P.
+    // Therefore, we can construct P by taking base and inserting a[0][0] at index idx0 and a[1][0] at index idx1. But we must be careful: base does not contain either. The indices idx0 and idx1 are in the final P of size n.
+    // Let's sort the two insertions by index.
+    vector<pair<int, int>> inserts;
+    inserts.push_back({idx0, a[0][0]});
+    inserts.push_back({idx1, a[1][0]});
+    sort(inserts.begin(), inserts.end());
+    vector<int> P;
+    int b = 0;
+    for (auto &ins : inserts) {
+        int pos = ins.first;
+        int val = ins.second;
+        while (b < base.size() && P.size() < pos) {
+            P.push_back(base[b++]);
+        }
+        P.push_back(val);
+    }
+    while (b < base.size()) {
+        P.push_back(base[b++]);
+    }
+    // Now P should have size n.
+    // Verify all screenshots
+    for (int i = 0; i < k; ++i) {
+        int author = a[i][0];
+        vector<int> expected;
+        expected.push_back(author);
+        for (int x : P) if (x != author) expected.push_back(x);
+        if (expected != a[i]) {
+            cout << "NO\n";
+            return;
+        }
+    }
+    cout << "YES\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

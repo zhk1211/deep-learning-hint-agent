@@ -17,57 +17,69 @@ int main() {
             }
         }
 
-        // Precompute for each permutation its inverse and the "prefix function" of its inverse
-        // We want to know for each permutation the longest prefix of 1..k that appears as a subsequence
-        // in the inverse permutation starting from 1.
-        // Actually, we need to find for each i the max beauty over j of a_i * a_j.
-        // Beauty of p is max k such that p[0]=1, p[1]=2, ..., p[k-1]=k.
-        // For p = a_i * a_j, p[x] = a_j[ a_i[x] ].
-        // We want p[0]=1 => a_j[ a_i[0] ] = 1 => a_i[0] = pos_j[1] where pos_j is inverse of a_j.
-        // p[1]=2 => a_j[ a_i[1] ] = 2 => a_i[1] = pos_j[2].
-        // In general, for beauty >= k, we need a_i[0] = pos_j[1], a_i[1] = pos_j[2], ..., a_i[k-1] = pos_j[k].
-        // So the beauty for a given pair (i,j) is the length of the longest prefix of the sequence
-        // (pos_j[1], pos_j[2], ..., pos_j[m]) that matches the prefix of a_i.
-        // That is, the longest k such that a_i[x] == pos_j[x+1] for all x < k.
-        // So we can precompute for each permutation j the sequence S_j = (pos_j[1], pos_j[2], ..., pos_j[m]).
-        // Then for each i, we want max over j of LCP(a_i, S_j).
-        // Since m <= 10, we can encode each prefix of a_i as a bitmask or just a number.
-        // We can store for each possible prefix of length k (k from 0 to m) whether there exists some j
-        // such that S_j starts with that prefix.
-        // Then for each i, we can find the maximum k such that the prefix of a_i of length k exists in our set.
-
-        // Build a set of all prefixes of S_j sequences.
-        // Represent a prefix of length k as a tuple of k integers (or a vector).
-        // Since m <= 10, we can use a set of vectors or a trie.
-        // But n up to 5e4, m<=10, total n*m <= 5e5, so we can just use a set of vectors.
-        set<vector<int>> prefixes;
-        for (int j = 0; j < n; ++j) {
-            // compute inverse
-            vector<int> pos(m + 1);
-            for (int x = 0; x < m; ++x) {
-                pos[a[j][x]] = x + 1; // 1-indexed positions
-            }
-            // build S_j
-            vector<int> S(m);
-            for (int val = 1; val <= m; ++val) {
-                S[val - 1] = pos[val];
-            }
-            // insert all prefixes
-            for (int len = 0; len <= m; ++len) {
-                prefixes.insert(vector<int>(S.begin(), S.begin() + len));
+        // Precompute for each permutation its "prefix function" mapping:
+        // For each length k (1..m), what is the position of k in the permutation?
+        // Actually we need: given a permutation p, we want to know for each k,
+        // the sequence of positions of 1..k. But we need to match with q.
+        // Let pos[i][x] = index (0-based) where x appears in a[i].
+        vector<vector<int>> pos(n, vector<int>(m + 1));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                pos[i][a[i][j]] = j;
             }
         }
 
-        // For each i, find max beauty
+        // For each permutation i, compute the "inverse" mapping:
+        // inv[i][j] = value at position j (0-based) in the inverse permutation.
+        // Actually we need: for a given q, we want to know the longest prefix of p
+        // that is mapped to 1,2,... by q. That is: we need q[p[0]] = 1, q[p[1]] = 2, ...
+        // So q must map p[0] -> 1, p[1] -> 2, ..., p[k-1] -> k.
+        // This means q's inverse must map 1 -> p[0], 2 -> p[1], ..., k -> p[k-1].
+        // So for a fixed p, the condition on q is: q_inv[1] = p[0], q_inv[2] = p[1], ...
+        // So we can precompute for each q its "inverse prefix" signature:
+        // For each length k, the tuple (q_inv[1], q_inv[2], ..., q_inv[k]).
+        // Since m <= 10, we can encode this as an integer (or string) and store in a set.
+        // Then for each p, we check the longest k such that (p[0], p[1], ..., p[k-1]) is present.
+
+        // Build a set of all possible "prefix signatures" from all permutations.
+        // Signature for length k: a vector of length k, but we can encode as a single integer
+        // using base m+1 or just use a trie / set of vectors.
+        // Since m <= 10, total possible signatures per permutation = m, total n*m <= 5e5.
+        // We can just use a set of strings or a boolean array.
+
+        // We'll use a 2D boolean array: exists[k][signature] but signature space is large.
+        // Better: use a set of vectors, or a trie. Since m <= 10, we can just use a set of
+        // vector<int> and it will be fast enough.
+
+        set<vector<int>> signatures;
         for (int i = 0; i < n; ++i) {
+            // Compute inverse permutation of a[i]
+            vector<int> inv(m + 1);
+            for (int j = 0; j < m; ++j) {
+                inv[a[i][j]] = j;
+            }
+            // For each length k from 1 to m, insert the prefix of inv starting at 1
+            vector<int> prefix;
+            for (int k = 1; k <= m; ++k) {
+                prefix.push_back(inv[k]);
+                signatures.insert(prefix);
+            }
+        }
+
+        // Now for each permutation i, we want max beauty over j.
+        // For a fixed p = a[i], we need to find the longest k such that
+        // (p[0], p[1], ..., p[k-1]) is in signatures.
+        // Because p[0] is the value that must map to 1, p[1] to 2, etc.
+        // So we just check prefixes of p.
+        for (int i = 0; i < n; ++i) {
+            vector<int> prefix;
             int best = 0;
-            // check prefixes of a_i
-            for (int len = 1; len <= m; ++len) {
-                vector<int> pref(a[i].begin(), a[i].begin() + len);
-                if (prefixes.count(pref)) {
-                    best = len;
+            for (int k = 0; k < m; ++k) {
+                prefix.push_back(a[i][k]);
+                if (signatures.count(prefix)) {
+                    best = k + 1;
                 } else {
-                    break; // since if length len fails, longer will also fail
+                    break; // once a prefix fails, longer ones will also fail
                 }
             }
             cout << best << (i + 1 == n ? '\n' : ' ');

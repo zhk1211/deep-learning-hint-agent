@@ -4,273 +4,35 @@ using namespace std;
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    
+
     int n;
     long long m;
     cin >> n >> m;
-    
     vector<long long> a(n);
     for (int i = 0; i < n; ++i) {
         cin >> a[i];
     }
-    
+
     sort(a.begin(), a.end());
-    
-    long long total_download = accumulate(a.begin(), a.end(), 0LL);
-    long long total_watch = n; // 1 minute per video
-    
-    // We need to find the minimum time T such that we can schedule all downloads and watches.
-    // The key insight: we can watch at most m videos while downloading others, because each watched video frees its space.
-    // Actually, the maximum number of videos that can be stored simultaneously is limited by m.
-    // But we can delete videos after watching, so the constraint is on the sum of sizes of videos being downloaded or waiting to be watched.
-    
-    // Let's binary search on the answer T.
-    long long low = total_download + total_watch; // lower bound: download everything sequentially + watch time
-    // upper bound: download everything sequentially, but we can overlap watching with downloading.
-    // Worst case: download all, then watch all: total_download + n
-    // But we can do better.
-    long long high = total_download + n;
-    
-    auto can = [&](long long T) -> bool {
-        // We have T minutes total.
-        // We need to schedule downloads and watches.
-        // We can think of it as: we have a disk of size m.
-        // At any time, the sum of sizes of videos that are downloaded but not yet watched cannot exceed m.
-        // We can download at most 1 unit per minute.
-        // We can watch at most 1 video per minute (each takes 1 minute).
-        // We want to finish all downloads and watches within T.
-        
-        // Let's process videos in some order. Since we can choose order, we should download larger videos earlier? Or later?
-        // Actually, to minimize peak disk usage, we should download larger videos when we have more free space.
-        // But we can also watch videos to free space.
-        // The optimal strategy: always download the largest possible video that fits, and watch videos as soon as possible to free space.
-        // However, we need to check feasibility for a given T.
-        
-        // Alternative view: We have T minutes. In those T minutes, we can do downloads and watches.
-        // The total download time needed is sum a_i. The total watch time is n.
-        // Since watching and downloading can overlap, the total time T must be at least max(total_download, n) + something?
-        // Actually, we can't watch more than T videos, so n <= T.
-        // Also, total download <= T.
-        // But there is a disk constraint: at any time, the sum of sizes of downloaded but unwatched videos <= m.
-        // This is the main constraint.
-        
-        // Let's think about the maximum number of videos we can have downloaded but unwatched.
-        // Since each video takes 1 minute to watch, we can watch at most T videos total, but we need to watch all n.
-        // The disk constraint means that we cannot accumulate too many large videos.
-        
-        // We can model this as: we have a sequence of downloads and watches.
-        // We want to assign each video a download start time and a watch start time (watch must be after download finishes).
-        // Download of video i takes a_i minutes, watch takes 1 minute.
-        // At any time t, the total size of videos that have finished downloading but have not finished watching <= m.
-        
-        // This is similar to scheduling with a buffer of size m.
-        // We can use a greedy approach: process videos in decreasing order of size.
-        // But we need to check feasibility for a given T.
-        
-        // Let's think differently: The total time T = total_download + idle_time.
-        // Idle time happens when we cannot download because disk is full and we are not watching anything to free space.
-        // To minimize idle time, we should always have something to watch if disk is full.
-        // So we should schedule watches such that we free space as soon as possible.
-        
-        // Consider the following: We can watch a video only after it's downloaded.
-        // If we sort videos by size, we might want to download small videos first to quickly have something to watch?
-        // Or download large videos first to get them out of the way?
-        
-        // Let's analyze the hints:
-        // Hint 3: What is the maximum number of videos Monocarp can watch at the same time? (He can only watch one at a time, but the question probably means how many videos can be stored simultaneously? Actually, "watch at the same time" is 1, but maybe it means how many videos can be in the "downloaded but unwatched" state? That is limited by m.)
-        // Hint 4: How should Monocarp choose which videos to watch first? Probably watch the ones that free the most space? But all videos take 1 minute to watch, so watching a larger video frees more space per minute of watching. So we should prioritize watching larger videos to free space faster.
-        // Hint 5: Does it make sense to download videos that don't fit into the hard disk? They all fit individually (a_i <= m), but together they might not. So we need to manage space.
-        
-        // So the strategy: always download the largest video that fits, and when disk is full, watch the largest downloaded video to free space.
-        // This is like a knapsack-like scheduling.
-        
-        // To check if T is feasible, we can simulate this greedy strategy? But T is the total time, we need to see if we can finish within T.
-        // Alternatively, we can compute the minimum time needed using a greedy algorithm and compare with T.
-        
-        // Let's try to compute the minimum time directly.
-        // We have n videos. We can think of the process as: we have a buffer (disk) of size m.
-        // We can add videos to the buffer (download) at rate 1 MB/min.
-        // We can remove videos from the buffer (watch) at rate 1 video/min, but each removal takes exactly 1 minute and frees its size.
-        // We want to minimize the makespan.
-        
-        // This is similar to scheduling with machine setup times or something.
-        // Actually, it's known that the optimal order is to download videos in non-decreasing order of size? Or non-increasing?
-        // Let's test with examples.
-        
-        // Example 1: n=5, m=6, a=[1,2,3,4,5]. Sorted: 1,2,3,4,5.
-        // If we download in increasing order: 
-        // t=0: start download 1 (size 1). Disk: 1/6.
-        // t=1: download 1 finishes. Start watch 1? Or start download 2?
-        // We can watch 1 and simultaneously download 2.
-        // t=1: start watch 1 (takes 1 min) and start download 2 (size 2). Disk: 1 (from video 1 still there until watch ends) + 2 = 3/6.
-        // t=2: watch 1 ends, free 1. Disk: 2/6. Download 2 continues? It started at t=1, takes 2 mins, so finishes at t=3.
-        // t=2: we can start download 3? Disk has 2 used, 4 free. Download 3 size 3: need 3, so we can start. Disk: 2+3=5/6.
-        // t=3: download 2 finishes. We can watch 2? But we are already watching? No, watch 1 ended at t=2. So we can start watch 2 at t=3. Also download 3 continues (finishes at t=2+3=5? Wait, download 3 started at t=2, takes 3 mins, so finishes at t=5).
-        // t=3: start watch 2 (1 min). Disk: video 2 (size 2) + video 3 (size 3) = 5/6.
-        // t=4: watch 2 ends, free 2. Disk: 3/6. Download 3 still going (finishes at t=5). We can start download 4? Size 4, need 4, disk has 3 free? No, 3 free, so cannot start download 4. Must wait.
-        // t=5: download 3 finishes. Disk: video 3 (size 3). We can watch 3? Yes, start watch 3. Also we can start download 4? Disk has 3 used, 3 free. Download 4 needs 4, so cannot. We wait.
-        // t=5: start watch 3 (1 min). Disk: 3.
-        // t=6: watch 3 ends, free 3. Disk: 0. Now we can start download 4 (size 4). Disk: 4/6.
-        // t=6: start download 4. Takes 4 mins, finishes at t=10.
-        // t=10: download 4 finishes. Start watch 4? Disk: 4. Start watch 4 (1 min). Also can start download 5? Size 5, need 5, disk has 4 used, 2 free? Actually m=6, so 2 free. Cannot start download 5.
-        // t=10: start watch 4.
-        // t=11: watch 4 ends, free 4. Disk: 0. Start download 5 (size 5). Takes 5 mins, finishes at t=16.
-        // t=16: download 5 finishes. Start watch 5 (1 min), ends at t=17.
-        // Total time = 17. But sample output says 16. So increasing order gives 17, not optimal.
-        
-        // What if we download in decreasing order? a=[5,4,3,2,1].
-        // t=0: start download 5 (size 5). Disk: 5/6.
-        // t=5: download 5 finishes. Start watch 5? Disk: 5. Start watch 5 (1 min). Can we start download 4? Size 4, need 4, disk has 5 used, 1 free. Cannot.
-        // t=5: start watch 5.
-        // t=6: watch 5 ends, free 5. Disk: 0. Start download 4 (size 4). Disk: 4/6.
-        // t=10: download 4 finishes. Start watch 4? Disk: 4. Start watch 4 (1 min). Can start download 3? Size 3, need 3, disk has 4 used, 2 free. Cannot.
-        // t=10: start watch 4.
-        // t=11: watch 4 ends, free 4. Disk: 0. Start download 3 (size 3). Disk: 3/6.
-        // t=14: download 3 finishes. Start watch 3? Disk: 3. Start watch 3 (1 min). Can start download 2? Size 2, need 2, disk has 3 used, 3 free. Yes! Start download 2.
-        // t=14: start watch 3 and download 2.
-        // t=15: watch 3 ends, free 3. Disk: 2 (from download 2). Download 2 continues (started at 14, size 2, finishes at 16).
-        // t=15: can we start download 1? Size 1, need 1, disk has 2 used, 4 free. Yes! Start download 1.
-        // t=16: download 2 finishes. Disk: video 2 (size 2) + video 1 (size 1) = 3/6. We can watch 2? Start watch 2 (1 min). Download 1 continues? It started at 15, size 1, so it finishes at 16 as well? Actually download 1 takes 1 min, so it finishes at t=16.
-        // t=16: download 1 finishes. Start watch 1? But we are watching 2. So we can watch 1 after.
-        // t=16: start watch 2.
-        // t=17: watch 2 ends, free 2. Disk: video 1 (size 1). Start watch 1 (1 min), ends at t=18.
-        // Total time = 18. Worse.
-        
-        // So neither extreme works. The optimal for example 1 is 16.
-        // Let's find a schedule that gives 16.
-        // Maybe: download 3 first? 
-        // Let's try: 3, then 4? No.
-        // The sample output 16 suggests total idle time = 16 - (sum a_i + n) = 16 - (15+5) = -4? That's impossible. Wait, sum a_i = 1+2+3+4+5 = 15. n=5. Total download + watch = 20. But we can overlap. The minimum possible time is max(total_download, n) + something? Actually, if we could perfectly overlap, time would be max(total_download, n) = 15. But we have disk constraint, so it's 16. So idle time = 1.
-        
-        // Let's think about the constraint: At any time, the sum of sizes of downloaded but unwatched videos <= m.
-        // This is like a buffer of size m. We download videos into the buffer, and we can remove them by watching.
-        // The total time is the time to download all videos plus the time we are forced to wait because buffer is full and we can't watch anything (because nothing is downloaded) or we are watching but buffer is full and we can't download.
-        // Actually, we can always watch if there is a downloaded video. So we only wait if buffer is full and we have no downloaded video to watch? But if buffer is full, there must be downloaded videos, so we can watch one. So we should never be idle if buffer is full. The only idle time is when buffer is not full but we have no videos to download? No, we always have videos to download until all are downloaded. So idle time occurs when we want to download a video but it doesn't fit in the remaining space, and we are currently watching something (so we can't free space until the watch ends). So we have to wait for the current watch to finish to free space.
-        
-        // So the process: we always have at most one download and at most one watch happening simultaneously.
-        // We can think of it as: we have a queue of downloaded videos waiting to be watched.
-        // We can download a video if its size <= free space.
-        // We can watch a video if there is one downloaded.
-        // We want to minimize makespan.
-        
-        // This is similar to scheduling with a single machine and buffer constraints.
-        // There is a known greedy strategy: always download the largest video that fits, and when you can't download, watch the largest video in the buffer to free space. But does that give optimal?
-        
-        // Let's try to simulate with a priority queue.
-        // We have a list of videos sorted by size? Or we can choose any order.
-        // We want to minimize the completion time.
-        
-        // Let's consider the problem as: we need to order the videos for downloading. Once a video is downloaded, it can be watched at any later time. Watching takes 1 minute and can be done in parallel with downloading.
-        // The constraint: at any time, the sum of sizes of videos that have been downloaded but not yet watched <= m.
-        // This is equivalent to: if we consider the sequence of downloads and watches, the maximum "inventory" is bounded by m.
-        
-        // We can think of it as a two-machine flow shop? No.
-        
-        // Another perspective: The total time T = total_download + total_watch - overlap.
-        // Overlap is the time when both download and watch are happening.
-        // We want to maximize overlap. Overlap is limited by the disk constraint.
-        // When we watch a video, we free space, allowing more downloads. So we want to watch videos as soon as possible to free space for large downloads.
-        // But we can only watch a video after it's downloaded.
-        
-        // Let's sort videos by size. Suppose we download in some order. The peak disk usage occurs when we have downloaded several videos but haven't watched them yet.
-        // To minimize peak disk usage, we should download small videos first? That way we can accumulate many small videos without exceeding m, and then watch them to free space? But watching small videos frees little space.
-        // Alternatively, download large videos first, but then we can't fit many.
-        
-        // Let's analyze the constraint mathematically.
-        // Suppose we have a sequence of downloads and watches. Let d_i be the download time of video i, w_i be the watch start time. w_i >= d_i + a_i.
-        // At any time t, the set of videos with d_i + a_i <= t < w_i + 1 (i.e., downloaded but not yet finished watching) must have sum of sizes <= m.
-        // We want to minimize max_i (w_i + 1).
-        
-        // This is NP-hard? But n up to 2e5, so there must be a greedy or simple formula.
-        
-        // Let's look at the hints again.
-        // Hint 3: What is the maximum number of videos Monocarp can watch at the same time? He can watch only one at a time. But maybe it means how many videos can be in the "downloaded" state? That's limited by m, but not by number.
-        // Hint 4: How should Monocarp choose which videos to watch first? Probably watch the ones that free the most space, i.e., largest videos first.
-        // Hint 5: Does it make sense to download videos that don't fit into the hard disk? They all fit individually, but together they might not. So we need to free space by watching.
-        
-        // So the strategy: always watch the largest downloaded video when we need to free space.
-        // And for downloading, we should download videos in an order that minimizes waiting time.
-        // What if we always download the smallest video that fits? That would allow us to accumulate many videos, but then we have to watch many small videos to free space for large ones, which might be inefficient because watching a small video frees little space but takes 1 minute.
-        // Conversely, if we download large videos first, we can't fit many, so we have to watch them immediately, which frees a lot of space quickly.
-        
-        // Let's test with example 1 using the strategy: always download the largest video that fits; if none fits, watch the largest downloaded video.
-        // Videos: 5,4,3,2,1. m=6.
-        // t=0: download 5? fits (5<=6). Start download 5.
-        // t=5: download 5 done. Buffer: [5]. Watch? We can watch 5. But maybe we want to download something else? Free space = 1. Largest that fits is 1? 1 fits. So we could download 1 while watching 5? But we can do both. So at t=5, start watch 5 and start download 1? Download 1 takes 1 min, finishes at t=6. Watch 5 takes 1 min, ends at t=6.
-        // t=6: watch 5 ends, free 5. Download 1 done. Buffer: [1]. Free space = 5. Largest that fits: 4 (size 4). Start download 4. Also we can watch 1? Start watch 1.
-        // t=7: watch 1 ends, free 1. Download 4 continues (started at 6, size 4, ends at 10). Buffer: [4]. Free space = 2. Largest that fits: 2? size 2 fits. Start download 2.
-        // t=9: download 2 done (started at 7, size 2, ends at 9). Buffer: [4,2]. Free space = 0. We are watching? No, watch 1 ended at 7. So we can watch something. Watch largest: 4. Start watch 4.
-        // t=10: watch 4 ends? Watch 4 started at 9, ends at 10. Download 4 ends at 10. So at t=10, both finish. Buffer: [2]. Free space = 4. Largest that fits: 3? size 3 fits. Start download 3. Also watch 2? Start watch 2.
-        // t=11: watch 2 ends, free 2. Download 3 continues (started at 10, size 3, ends at 13). Buffer: [3]. Free space = 3. Largest that fits: none? 3 is already downloading, next is? We only have 3 left? Actually we downloaded 5,1,4,2,3. All done? We downloaded 5,1,4,2,3. That's all 5 videos. So at t=11, all downloads are either done or in progress. Download 3 is in progress. We have watched 5,1,4,2. Remaining to watch: 3. But 3 is still downloading. So we wait until download 3 finishes.
-        // t=13: download 3 done. Start watch 3, ends at 14.
-        // Total time = 14? That's even better than 16! But is this valid? Let's check disk constraints.
-        // At t=5: start download 1 and watch 5. Disk: video 5 (size 5) + video 1 (size 1) = 6. OK.
-        // At t=6: watch 5 ends, free 5. Download 1 ends. Disk: video 1 (size 1). Then start download 4 and watch 1. Disk: video 1 (1) + video 4 (4) = 5. OK.
-        // At t=7: watch 1 ends, free 1. Disk: video 4 (4). Start download 2. Disk: 4+2=6. OK.
-        // At t=9: download 2 ends. Disk: 4+2=6. Start watch 4. Disk: 4+2=6 (watch hasn't freed yet).
-        // At t=10: watch 4 ends, free 4. Download 4 ends? Wait, download 4 started at t=6, size 4, so it ends at t=10. So at t=10, download 4 ends and watch 4 ends. Disk: video 2 (size 2). Then start download 3 and watch 2. Disk: 2+3=5. OK.
-        // At t=11: watch 2 ends, free 2. Disk: video 3 (3). Download 3 continues until t=13.
-        // At t=13: download 3 ends. Disk: 3. Start watch 3, ends at 14.
-        // Total time = 14. But sample output says 16. So my schedule is invalid? Why?
-        // Let's check the rules: "Once the download is started, it cannot be interrupted. It is not allowed to run two or more downloads in parallel."
-        // "Once a video is fully downloaded to the hard disk, Monocarp can watch it. Watching each video takes exactly 1 minute and does not occupy the Internet connection, so Monocarp can start downloading another video while watching the current one."
-        // "When Monocarp finishes watching a video, he doesn't need it on the hard disk anymore, so he can delete the video, instantly freeing the space it occupied on a hard disk."
-        // My schedule seems to obey all rules. Why is the answer 16? Maybe I missed that you cannot watch a video while it's being downloaded? No, you can only watch after fully downloaded.
-        // In my schedule, at t=5, video 5 is fully downloaded, so we can watch it. Video 1 starts downloading at t=5, so it's not watched until t=6 when it's fully downloaded. That's fine.
-        // At t=6, video 1 is fully downloaded, we start watching it. Video 4 starts downloading. That's fine.
-        // At t=7, video 1 watch ends, we free it. Video 4 is still downloading. We start downloading video 2. That's fine.
-        // At t=9, video 2 finishes downloading. We start watching video 4? But video 4 is still downloading! It started at t=6, size 4, so it finishes at t=10. So at t=9, video 4 is NOT fully downloaded. We cannot watch it! Ah! That's the mistake. We can only watch a video after it's fully downloaded. So at t=9, we cannot watch video 4 because it's still downloading. We could watch video 2, which is fully downloaded. So we should watch video 2 instead.
-        // Let's correct: at t=9, download 2 finishes. Buffer: video 4 (still downloading, so not available for watching) and video 2 (fully downloaded). So we can watch video 2. Start watch 2.
-        // t=10: watch 2 ends, free 2. Download 4 finishes. Buffer: video 4 (fully downloaded now). Start watch 4? Or start download 3? We can do both. Start watch 4 and start download 3. Disk: video 4 (4) + video 3 (3) = 7 > 6! That violates disk constraint. So we cannot start download 3 until we free space. We are watching 4, which will free 4 at t=11. So we must wait until t=11 to start download 3.
-        // So at t=10: start watch 4. Disk: video 4 (4). Free space = 2. Download 3 needs 3, so cannot start.
-        // t=11: watch 4 ends, free 4. Disk: 0. Start download 3 (size 3). Takes 3 mins, finishes at t=14.
-        // t=14: download 3 finishes. Start watch 3, ends at t=15.
-        // Total time = 15? Let's check: we also need to watch video 5,1,2,4,3. We watched 5 (t=5-6), 1 (t=6-7), 2 (t=9-10), 4 (t=10-11), 3 (t=14-15). All watched. Total time = 15. Still not 16.
-        // But wait, we started download 5 at t=0, finished at t=5. Then we started download 1 at t=5, finished at t=6. Then we started download 4 at t=6, finished at t=10. Then we started download 2 at t=7, finished at t=9. Then we started download 3 at t=11, finished at t=14. Total downloads: 5,1,4,2,3. All downloaded. Total time = 15. But sample says 16. So 15 is not possible? Let's check disk constraint at all times.
-        // We need to track disk usage carefully. Disk usage includes videos that are fully downloaded and not yet deleted, PLUS videos that are currently being downloaded (since space is reserved immediately).
-        // At t=0: start download 5. Disk used: 5.
-        // t=5: download 5 finishes. Disk used: 5 (video 5 is fully downloaded, not watched yet). Start download 1: disk used becomes 5+1=6. Start watch 5: video 5 is still on disk until watch ends. So disk used = 6.
-        // t=6: watch 5 ends, free 5. Disk used: 1 (video 1 fully downloaded? download 1 started at 5, size 1, so it finishes at 6). At t=6, download 1 finishes. So disk used: video 1 (1). Then we start download 4: disk used = 1+4=5. Start watch 1: video 1 still on disk. Disk used = 5.
-        // t=7: watch 1 ends, free 1. Disk used: 4 (video 4 still downloading, started at 6, size 4, so it's using 4). Start download 2: disk used = 4+2=6.
-        // t=9: download 2 finishes. Disk used: video 4 (4, still downloading) + video 2 (2, fully downloaded) = 6. Start watch 2: video 2 still on disk. Disk used = 6.
-        // t=10: watch 2 ends, free 2. Disk used: video 4 (4). At t=10, download 4 finishes. So disk used: video 4 (4). Start watch 4: disk used = 4. Can we start download 3? It would add 3, making 7 > 6. So no.
-        // t=11: watch 4 ends, free 4. Disk used: 0. Start download 3: disk used = 3.
-        // t=14: download 3 finishes. Disk used: 3. Start watch 3: disk used = 3.
-        // t=15: watch 3 ends. Done.
-        // Total time = 15. So why is the sample output 16? Am I missing something?
-        // Let's re-read the problem statement carefully.
-        // "Once Monocarp starts the download of a video of size s, the s megabytes are immediately reserved on a hard disk. If there are less than s megabytes left, the download cannot be started until the required space is freed."
-        // "Once the download is started, it cannot be interrupted. It is not allowed to run two or more downloads in parallel."
-        // "Once a video is fully downloaded to the hard disk, Monocarp can watch it. Watching each video takes exactly 1 minute and does not occupy the Internet connection, so Monocarp can start downloading another video while watching the current one."
-        // "When Monocarp finishes watching a video, he doesn't need it on the hard disk anymore, so he can delete the video, instantly freeing the space it occupied on a hard disk. Deleting a video takes negligible time."
-        // Everything seems correct. Maybe the initial download of video 5 takes 5 minutes, so from t=0 to t=5, we are downloading. At t=5, we start watching 5 and downloading 1. That's fine.
-        // But wait: "Watching each video takes exactly 1 minute" — so watching video 5 takes from t=5 to t=6. At t=6, we delete it. That's what I did.
-        // Is there any rule that we cannot start a download and a watch at the exact same time? No, it says "Monocarp can start downloading another video while watching the current one." So simultaneous start is allowed.
-        // Maybe the issue is that when we start downloading video 1 at t=5, the space for video 5 is still reserved because we haven't finished watching it. So we need 5+1=6 <= m, which is true.
-        // Everything seems valid. So why 16?
-        // Let's check sample 1 manually from the problem statement. Maybe the answer 16 is for a different strategy? Let's see if there's any other constraint.
-        // "All videos are published on the Internet. A video should be downloaded before it can be watched." — ok.
-        // "Monocarp's computer has a hard disk of m megabytes. The disk is used to store the downloaded videos." — so it stores downloaded videos. Does it also store partially downloaded videos? "Once Monocarp starts the download of a video of size s, the s megabytes are immediately reserved on a hard disk." So yes, the space is reserved for the entire video as soon as download starts.
-        // So my disk usage calculation is correct.
-        // Maybe the order of watching matters? I watched 5, then 1, then 2, then 4, then 3. Is that allowed? Yes, any order.
-        // Let's try to find a schedule that takes 16. Maybe we cannot achieve 15 because of some subtle timing.
-        // Let's simulate with a different order: download 3 first? 
-        // Try to get 16: sum a_i = 15, n=5, so total work = 20. Overlap of 4 gives 16. My schedule gave overlap of 5 (total time 15). So maybe 15 is possible and the sample is wrong? Unlikely.
-        // Let's re-read the input: 5 6, a = 1 2 3 4 5. Output 16.
-        // Let's try to see if my schedule violates "Once the download is started, it cannot be interrupted." No.
-        // Maybe I cannot start watching video 5 at t=5 and simultaneously start downloading video 1? The rule: "Monocarp can start downloading another video while watching the current one." This implies that while watching, you can start a download. It doesn't say you can start them at the exact same instant, but usually in such problems, you can. Even if you need a tiny delay, it wouldn't add a full minute.
-        // Perhaps the issue is that when a download finishes, you can't instantly start watching and also start a new download in the same minute? But time is continuous? The problem says "it takes exactly 1 minute to download 1 megabyte", so time is continuous in minutes? Usually in such problems, time is integer minutes, and events happen at integer times. You can start a download at integer time t, it finishes at t + a_i. You can start watching at integer time t, it finishes at t+1. You can do multiple things at the same integer time if they don't conflict.
-        // Let's check if at t=5, we have video 5 fully downloaded. We can start watching it. We can also start downloading video 1. The disk space: video 5 is still there (since we haven't deleted it), so space used = 5. We want to start download of size 1, so we need 1 free. Total space = 6, so 5+1=6, exactly fits. So it's allowed.
-        // At t=6, watch 5 ends, we delete it, freeing 5. Download 1 ends, so video 1 is fully downloaded. We can start watching 1 and start downloading 4. Space: video 1 (1) + new download 4 (4) = 5 <= 6. OK.
-        // At t=7, watch 1 ends, delete it, freeing 1. Download 4 is still going (started at 6, size 4, so it has 3 minutes left? Actually at t=7, it has been downloading for 1 minute, so 3 minutes left). Space used: 4. We start download 2 (size 2). Space used: 4+2=6. OK.
-        // At t=9, download 2 finishes. Space used: 4 (download 4) + 2 (video 2) = 6. We can start watching 2. Space used: 6. OK.
-        // At t=10, watch 2 ends, delete it, freeing 2. Download 4 finishes. Space used: 4 (video 4). We start watching 4. Space used: 4. Can we start download 3? Need 3, space used would be 4+3=7 > 6. So no.
-        // At t=11, watch 4 ends, delete it, freeing 4. Space used: 0. Start download 3 (size 3). Space used: 3.
-        // At t=14, download 3 finishes. Start watch 3, ends at 15.
-        // Total time 15. So why 16?
-        // Maybe I missed that you cannot delete a video while it's being watched? "When Monocarp finishes watching a video, he doesn't need it on the hard disk anymore, so he can delete the video" — so deletion happens after watching finishes. That's what I did.
-        // Maybe the download of video 4 started at t=6, but at t=6, we also started watching video 1. Is it allowed to start a download and a watch at the same time? Yes.
-        // Let's check if there's any constraint that you can only start one action per minute? No.
-        // Perhaps the problem considers that you cannot start a download and a watch at the exact same time because they both require some action from Monocarp? But the problem says "Monocarp can start downloading another video while watching the current one." That implies they can be done simultaneously.
-        // Let's look for an official solution or think differently.
-        // Another idea: The
+
+    long long free_space = m;
+    long long total_time = 0;
+    long long watch_time = 0;
+
+    for (int i = 0; i < n; ++i) {
+        long long need = a[i];
+        if (free_space < need) {
+            long long deficit = need - free_space;
+            total_time += deficit;
+            free_space += deficit;
+        }
+        free_space -= need;
+        total_time += need;
+        watch_time += 1;
+    }
+
+    total_time += watch_time;
+    cout << total_time << "\n";
+
+    return 0;
+}

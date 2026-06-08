@@ -1,0 +1,123 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> screens(k, vector<int>(n));
+    for (int i = 0; i < k; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cin >> screens[i][j];
+        }
+    }
+    if (k == 1) {
+        cout << "YES\n";
+        return;
+    }
+    vector<int> pos_in_first(n + 1);
+    for (int i = 0; i < n; ++i) {
+        pos_in_first[screens[0][i]] = i;
+    }
+    vector<int> order;
+    for (int i = 1; i < n; ++i) {
+        order.push_back(screens[0][i]);
+    }
+    int first_author = screens[0][0];
+    int second_author = screens[1][0];
+    int pos_second_author_in_first = -1;
+    for (int i = 1; i < n; ++i) {
+        if (screens[0][i] == second_author) {
+            pos_second_author_in_first = i;
+            break;
+        }
+    }
+    vector<int> order2;
+    for (int i = 1; i < n; ++i) {
+        order2.push_back(screens[1][i]);
+    }
+    vector<int> order_without_second;
+    for (int x : order) {
+        if (x != second_author) {
+            order_without_second.push_back(x);
+        }
+    }
+    vector<int> order2_without_first;
+    for (int x : order2) {
+        if (x != first_author) {
+            order2_without_first.push_back(x);
+        }
+    }
+    if (order_without_second != order2_without_first) {
+        cout << "NO\n";
+        return;
+    }
+    vector<int> base_order;
+    bool inserted = false;
+    for (int x : order) {
+        if (x == second_author) {
+            if (!inserted) {
+                base_order.push_back(first_author);
+                inserted = true;
+            }
+        }
+        base_order.push_back(x);
+    }
+    if (!inserted) {
+        base_order.push_back(first_author);
+    }
+    vector<int> alt_order;
+    inserted = false;
+    for (int x : order) {
+        if (x == second_author) {
+            alt_order.push_back(x);
+            alt_order.push_back(first_author);
+            inserted = true;
+        } else {
+            alt_order.push_back(x);
+        }
+    }
+    if (!inserted) {
+        alt_order.push_back(first_author);
+    }
+    auto check = [&](const vector<int>& ord) -> bool {
+        vector<int> pos(n + 1);
+        for (int i = 0; i < n; ++i) {
+            pos[ord[i]] = i;
+        }
+        for (int i = 0; i < k; ++i) {
+            int author = screens[i][0];
+            if (pos[author] != 0) return false;
+            vector<int> expected;
+            expected.push_back(author);
+            for (int x : ord) {
+                if (x != author) {
+                    expected.push_back(x);
+                }
+            }
+            for (int j = 1; j < n; ++j) {
+                if (screens[i][j] != expected[j]) return false;
+            }
+        }
+        return true;
+    };
+    if (check(base_order)) {
+        cout << "YES\n";
+    } else if (check(alt_order)) {
+        cout << "YES\n";
+    } else {
+        cout << "NO\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

@@ -1,0 +1,120 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<string> grid(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> grid[i];
+        }
+
+        // DSU for connected components of '#'
+        vector<int> parent(n * m);
+        vector<int> sz(n * m, 1);
+        iota(parent.begin(), parent.end(), 0);
+
+        function<int(int)> find = [&](int x) {
+            return parent[x] == x ? x : parent[x] = find(parent[x]);
+        };
+        auto unite = [&](int x, int y) {
+            x = find(x);
+            y = find(y);
+            if (x == y) return;
+            if (sz[x] < sz[y]) swap(x, y);
+            parent[y] = x;
+            sz[x] += sz[y];
+        };
+
+        const int dx[] = {1, -1, 0, 0};
+        const int dy[] = {0, 0, 1, -1};
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (grid[i][j] == '#') {
+                    for (int k = 0; k < 4; ++k) {
+                        int ni = i + dx[k];
+                        int nj = j + dy[k];
+                        if (ni >= 0 && ni < n && nj >= 0 && nj < m && grid[ni][nj] == '#') {
+                            unite(i * m + j, ni * m + nj);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Precompute component sizes for each cell (only for '#')
+        vector<int> comp_size(n * m, 0);
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (grid[i][j] == '#') {
+                    comp_size[i * m + j] = sz[find(i * m + j)];
+                }
+            }
+        }
+
+        int ans = 0;
+
+        // Try each row
+        for (int r = 0; r < n; ++r) {
+            int total = 0;
+            unordered_set<int> seen_comps;
+            for (int j = 0; j < m; ++j) {
+                if (grid[r][j] == '#') {
+                    int root = find(r * m + j);
+                    if (seen_comps.insert(root).second) {
+                        total += comp_size[r * m + j];
+                    }
+                } else {
+                    total += 1; // will become '#'
+                }
+                // check adjacent rows (r-1, r+1) for components touching this column
+                for (int dr : {-1, 1}) {
+                    int nr = r + dr;
+                    if (nr >= 0 && nr < n && grid[nr][j] == '#') {
+                        int root = find(nr * m + j);
+                        if (seen_comps.insert(root).second) {
+                            total += comp_size[nr * m + j];
+                        }
+                    }
+                }
+            }
+            ans = max(ans, total);
+        }
+
+        // Try each column
+        for (int c = 0; c < m; ++c) {
+            int total = 0;
+            unordered_set<int> seen_comps;
+            for (int i = 0; i < n; ++i) {
+                if (grid[i][c] == '#') {
+                    int root = find(i * m + c);
+                    if (seen_comps.insert(root).second) {
+                        total += comp_size[i * m + c];
+                    }
+                } else {
+                    total += 1;
+                }
+                for (int dc : {-1, 1}) {
+                    int nc = c + dc;
+                    if (nc >= 0 && nc < m && grid[i][nc] == '#') {
+                        int root = find(i * m + nc);
+                        if (seen_comps.insert(root).second) {
+                            total += comp_size[i * m + nc];
+                        }
+                    }
+                }
+            }
+            ans = max(ans, total);
+        }
+
+        cout << ans << '\n';
+    }
+    return 0;
+}

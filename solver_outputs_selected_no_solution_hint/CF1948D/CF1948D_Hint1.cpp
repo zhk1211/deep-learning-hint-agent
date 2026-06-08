@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        string s;
+        cin >> s;
+        int n = (int)s.size();
+        int ans = 0;
+        
+        for (int len = n / 2 * 2; len >= 2; len -= 2) {
+            bool found = false;
+            for (int i = 0; i + len <= n; i++) {
+                bool ok = true;
+                for (int j = 0; j < len / 2; j++) {
+                    if (s[i + j] != '?' && s[i + j + len / 2] != '?' && s[i + j] != s[i + j + len / 2]) {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (ok) {
+                    ans = len;
+                    found = true;
+                    break;
+                }
+            }
+            if (found) break;
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}

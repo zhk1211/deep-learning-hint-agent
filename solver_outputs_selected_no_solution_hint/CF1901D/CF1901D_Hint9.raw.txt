@@ -1,0 +1,69 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    cin >> n;
+    vector<long long> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+
+    if (n == 1) {
+        cout << a[0] << "\n";
+        return 0;
+    }
+
+    vector<long long> b = a;
+    sort(b.begin(), b.end());
+    long long max_a = b.back();
+
+    long long ans = max_a;
+    for (int i = 0; i < n; ++i) {
+        long long cand = a[i];
+        if (i > 0) cand = max(cand, a[i - 1] + 1);
+        if (i < n - 1) cand = max(cand, a[i + 1] + 1);
+        ans = max(ans, cand);
+    }
+
+    long long low = ans, high = max_a + n;
+    while (low < high) {
+        long long mid = (low + high) / 2;
+        bool ok = false;
+        for (int start = 0; start < n; ++start) {
+            long long x = mid;
+            bool possible = true;
+            int l = start, r = start;
+            vector<bool> used(n, false);
+            used[start] = true;
+            for (int step = 0; step < n; ++step) {
+                long long dmg = x - step;
+                if (step == 0) {
+                    if (dmg < a[start]) { possible = false; break; }
+                } else {
+                    int chosen = -1;
+                    if (l > 0 && !used[l - 1]) chosen = l - 1;
+                    if (r < n - 1 && !used[r + 1]) {
+                        if (chosen == -1 || a[r + 1] > a[chosen]) chosen = r + 1;
+                    }
+                    if (chosen == -1) { possible = false; break; }
+                    if (dmg < a[chosen]) { possible = false; break; }
+                    used[chosen] = true;
+                    if (chosen == l - 1) l--;
+                    else r++;
+                }
+            }
+            if (possible) { ok = true; break; }
+        }
+        if (ok) high = mid;
+        else low = mid + 1;
+    }
+
+    cout << low << "\n";
+    return 0;
+}
+```

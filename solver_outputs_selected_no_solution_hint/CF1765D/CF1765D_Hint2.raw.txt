@@ -9,40 +9,141 @@ int main() {
     int n;
     long long m;
     cin >> n >> m;
-    
     vector<long long> a(n);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; ++i) {
         cin >> a[i];
     }
     
     sort(a.begin(), a.end());
     
-    long long total_download = 0;
-    for (long long x : a) total_download += x;
+    long long total_download = accumulate(a.begin(), a.end(), 0LL);
+    long long total_watch = n; // 1 minute per video
     
-    long long ans = total_download + n; // download time + watch time
+    // We need to find the minimum time T such that we can schedule all downloads and watches.
+    // The key insight: we can watch at most floor(T) videos, and we can download at most T - (something) data.
+    // Actually, we can think of it as: we have T minutes total.
+    // We must watch n videos, each takes 1 minute, so T >= n.
+    // During the time we are watching, we can also download.
+    // The hard disk constraint: at any time, the sum of sizes of downloaded but not yet watched videos <= m.
+    // Since we can delete after watching, the maximum storage needed at any point is the sum of sizes of videos that are downloaded
+    // but not yet watched. If we order downloads and watches properly, we can minimize the peak storage.
+    // The optimal strategy: download videos in some order, and watch them as soon as possible to free space.
+    // Since watching takes 1 minute and we can download while watching, we can interleave.
+    // The problem reduces to: can we finish in time T?
+    // We can binary search on T.
     
-    long long sum = 0;
-    long long max_extra = 0;
-    for (int i = 0; i < n; i++) {
-        sum += a[i];
-        // Time when this video finishes downloading if we start downloads sequentially
-        long long finish_download = sum;
-        // We need to have watched (i) videos before we can start watching this one
-        // The watch of this video can start at max(finish_download, i + 1)
-        // But we want to minimize waiting due to disk space.
-        // Actually, we need to ensure that at any point, the sum of sizes of downloaded but unwatched videos <= m.
-        // The optimal strategy: download in non-decreasing order of size.
-        // The extra waiting time is max over i of (sum_{j=0..i} a_j - (i+1) - m) if positive.
-        // Because after watching i+1 videos, we have freed i+1 minutes of watching, but we might have downloaded more.
-        long long extra = sum - (i + 1) - m;
-        if (extra > max_extra) max_extra = extra;
-    }
-    
-    if (max_extra > 0) ans += max_extra;
-    
-    cout << ans << '\n';
-    
-    return 0;
-}
-```
+    auto can = [&](long long T) -> bool {
+        if (T < n) return false; // need at least n minutes to watch all
+        // We have T minutes total.
+        // We can watch at most T videos (since each watch takes 1 minute).
+        // But we have exactly n videos to watch, so we need to watch n videos in T minutes.
+        // The total download time needed is sum a_i.
+        // However, we can download while watching. The total time available for downloading is T minutes,
+        // but we must also spend n minutes watching (though these can overlap with downloads).
+        // Actually, watching and downloading can happen in parallel, so the total time T must be at least
+        // the total download time? Not exactly, because we can download while watching.
+        // The only constraint is that we cannot download more than one video at a time, and we cannot watch more than one at a time.
+        // But we can do both simultaneously.
+        // So the total time T must be at least max(total_download, n)? No, because we can download during watch.
+        // Actually, the total time T must be at least the sum of download times? No, because we can download while watching.
+        // The only real constraint is the hard disk space.
+        // We need to schedule downloads and watches such that at any time, the sum of sizes of fully downloaded but not yet watched videos <= m.
+        // Since we can delete immediately after watching, the peak storage is the maximum over time of the sum of sizes of videos that have been downloaded but not yet watched.
+        // We can choose the order of downloads and the timing of watches.
+        // The optimal strategy: download videos in non-decreasing order of size? Or maybe we want to watch as soon as possible to free space.
+        // Since watching takes 1 minute, we can watch a video as soon as it's downloaded, but we might want to delay watching to allow more downloads?
+        // Actually, watching frees space, so we want to watch as soon as possible.
+        // The best is to watch a video immediately after it finishes downloading, if we have no other video to watch.
+        // But we can only watch one video at a time, and each watch takes 1 minute.
+        // So if we download videos one by one, we can watch them in the order they finish downloading.
+        // The hard disk will hold the videos that are downloaded but not yet watched.
+        // If we download in some order, the peak storage is the maximum prefix sum of sizes of downloaded videos minus the number of videos we have watched by that time?
+        // More precisely, let's model time continuously.
+        // Suppose we decide the order of downloads: permutation p.
+        // We start downloading video p_1 at time 0. It takes a_{p_1} minutes. During this time, we cannot watch anything because no video is ready.
+        // At time a_{p_1}, video p_1 is ready. We can start watching it immediately, which takes 1 minute. While watching, we can start downloading video p_2.
+        // So at time a_{p_1}, we start watching p_1 and downloading p_2.
+        // At time a_{p_1} + 1, we finish watching p_1, free its space. The download of p_2 might still be ongoing.
+        // At time a_{p_1} + a_{p_2}, p_2 finishes downloading. Then we can watch it, etc.
+        // However, we might not always watch immediately if we want to download something else? But watching frees space, so it's always beneficial to watch as soon as a video is ready, unless we are already watching something. Since we can only watch one at a time, if a video finishes downloading while we are watching another, we have to wait until the current watch finishes.
+        // So the schedule is: we have a queue of downloaded videos. We can watch them one by one, each taking 1 minute. We can download the next video whenever we have enough free space and we are not currently downloading.
+        // The download of a video of size s requires s free space at the moment it starts.
+        // The free space at any time is m - (sum of sizes of downloaded but not yet watched videos).
+        // We want to find if there exists an order such that we never exceed m.
+        // This is similar to scheduling with a buffer.
+        // Known result: to minimize peak buffer usage, we should download videos in increasing order of size? Or maybe we should watch the smallest videos first to free space quickly?
+        // Let's think: we have n videos, each has size a_i. We need to download all, and watch all.
+        // The total time T must be at least n + total_download? No, because we can overlap.
+        // Actually, the total time T is the time when the last watch finishes.
+        // The last watch finishes at time = (time when last download finishes) + 1? Not necessarily, because we might have a backlog of unwatched videos.
+        // Let's denote the download times as d_i, and watch times as w_i. Each watch takes 1 minute, and must happen after the corresponding download finishes.
+        // We can have multiple videos downloaded and waiting to be watched.
+        // The hard disk constraint: at any time t, the total size of videos that have been downloaded but not yet watched by time t is <= m.
+        // Since we can delete instantly after watching, the space is freed at the end of the watch minute.
+        // This is equivalent to: we have a sequence of downloads and watches. Downloads take a_i time, watches take 1 time. We can do downloads and watches in parallel, but only one download at a time and only one watch at a time.
+        // The hard disk space: when a download of size s starts, we need s free space. The free space is m minus the sum of sizes of videos that have finished downloading but whose watch has not yet finished.
+        // This is exactly the problem of scheduling jobs with processing times (download) and post-processing (watch) with limited buffer.
+        // There is a known greedy strategy: always download the video with the smallest size that can fit? Or always watch the video that frees the most space? But we have to watch all anyway.
+        // Let's consider the binary search on T.
+        // For a fixed T, we want to know if we can finish by time T.
+        // The total time available for downloading is T, but we also have to spend n minutes watching. However, these n minutes can overlap with downloads. The only constraint is that we cannot watch more than T videos (obviously) and we cannot download more than T total time (since we can only download one at a time, and total download time is sum a_i, so we need sum a_i <= T? Not necessarily, because we can download while watching, so the total download time can be up to T, but we also need to fit the watches. Actually, if we download continuously for T minutes, we can download at most T megabytes. So we must have total_download <= T. But is that sufficient? No, because of the hard disk constraint.
+        // Wait: we can download and watch simultaneously. So the total time T must be at least max(total_download, n)? No, because we can do both at the same time. For example, if total_download = 10, n = 5, we can finish in 10 minutes: download for 10 minutes, and during those 10 minutes, we watch 5 videos (each taking 1 minute, but they can be interleaved). So T = 10 works. If total_download = 5, n = 10, we need at least 10 minutes because we have to watch 10 videos, and we can download during those 10 minutes. So T >= max(total_download, n)? Actually, if total_download > n, T must be at least total_download, because we can't download faster than 1 MB/min. If n > total_download, T must be at least n, because we can't watch more than 1 video per minute. So T >= max(total_download, n). But is that always achievable? Not necessarily, due to the hard disk limit.
+        // The hard disk limit might force us to wait before starting some downloads, increasing T.
+        // So the problem is to find the minimum T >= max(total_download, n) such that we can schedule without exceeding m.
+        // How to check if T is feasible?
+        // We can think of the process as: we have a buffer of size m. We need to process n items, each has size a_i. Processing an item consists of: load into buffer (takes a_i time, requires a_i free space at start), then stay in buffer for at least 1 minute (watching), then leave. We can load and unload continuously? Actually, loading is download (takes a_i time), unloading is watching (takes 1 time). We can load and unload simultaneously? Yes, we can download a new video while watching an already downloaded one. So the buffer occupancy changes over time.
+        // This is similar to a flow shop or buffer scheduling.
+        // There is a known result: the minimum time to process all items with a buffer of size m is achieved by sorting items by size? Let's test small cases.
+        // Consider two videos: sizes a and b. m >= max(a,b). We can download a, then watch a while downloading b. The peak buffer is max(a, a+b?) Actually, when we start downloading b, a is still in buffer (being watched). So buffer has a + (amount of b downloaded so far). The peak is when b finishes downloading: buffer has a + b. But we need a+b <= m? Not necessarily, because we can delete a as soon as we finish watching it. If we watch a while downloading b, the watch of a finishes after 1 minute. If b takes longer than 1 minute to download, then a will be deleted before b finishes. So the peak buffer might be max(a, a + min(b, 1)?) Actually, let's simulate: start download a at time 0. At time a, a finishes. Start watch a and download b. At time a+1, watch a finishes, delete a. Download b continues. At time a+b, b finishes. Start watch b. At time a+b+1, finish watch b. Total time = a+b+1? But we can overlap: total time = max(a+b, a+1+b?) Actually, the total time is a + b + 1? No, because we can watch b immediately after it finishes, so total time = a + b + 1? Wait, we watched a from a to a+1, and b from a+b to a+b+1. So the last finish is a+b+1. But we could have started downloading b earlier? No, we started at time a. So total time = a+b+1. But we can also watch a later? No, watching earlier frees space. So total time = a + b + 1? But we have n=2, total_download = a+b, n=2. max(total_download, n) = a+b (if a+b >=2). But our total time is a+b+1, which is larger. Why? Because we had to wait for a to download before we could watch anything. Actually, we can't watch anything until at least one video is downloaded. So the first watch starts at time a (if we download a first). Then the total time is a + b + 1? But we can also download b first? Same. So the total time is a + b + 1? But wait, we can watch a while downloading b, so the total time is the time when b finishes plus 1 minute to watch b. That is a + b + 1. But is it possible to finish earlier? What if we download a, then watch a, but we don't start downloading b until after we finish watching a? Then total time = a + 1 + b + 1 = a+b+2, worse. So the best is a+b+1. But the problem statement says for n=2, m large, what is the minimum time? Let's test with sample? Sample 1: n=5, m=6, a=[1,2,3,4,5]. Total download=15, n=5. max=15. Output is 16. So T = 16 = total_download + 1? 15+1=16. Sample 2: n=5, m=5, a=[1,2,3,4,5]. Total download=15, output=17. So T = total_download + 2? Sample 3: n=4, m=3, a=[1,3,2,3]. Total download=9, n=4. max=9. Output=12. So T = 12 = total_download + 3? So the extra time depends on m and the sizes.
+        // So the total time T = total_download + extra, where extra is the number of "idle" minutes where we cannot download because the buffer is full and we are not watching anything? Or we are forced to wait.
+        // Let's think about the process more formally.
+        // We have n videos. We need to download all and watch all. Watching takes 1 minute per video. We can download and watch in parallel.
+        // Let's denote the times we start watching each video. Since watching takes 1 minute and we can only watch one at a time, the watch intervals are disjoint and each is length 1. We can assume we watch videos in some order, and the watch start times are t_1 < t_2 < ... < t_n, with t_{i+1} >= t_i + 1.
+        // For each video i, its download must finish before its watch starts. Let d_i be the time download of video i finishes. We have d_i <= t_i.
+        // The download of video i takes a_i time, and it must start at some time s_i = d_i - a_i. We cannot have overlapping downloads: the intervals [s_i, d_i] must be disjoint (except possibly at endpoints? No, cannot run in parallel, so they must be disjoint in time, but we can start a download exactly when another finishes? Yes, one finishes at d, another can start at d. So they can be back-to-back.)
+        // The hard disk constraint: at any time t, the sum of sizes of videos that have been downloaded (d_i <= t) but not yet watched (t_i > t) must be <= m. Since we delete instantly after watching, at time t_i + 1, the video is removed.
+        // We want to minimize the makespan, which is max_i (t_i + 1) (or equivalently, the time the last watch finishes).
+        // This is a scheduling problem. We can think of it as: we have a sequence of downloads and watches. The total download time is fixed (sum a_i). The total watch time is fixed (n). The only flexibility is the order of downloads and the timing of watches relative to downloads.
+        // Since we want to minimize the total time, we should avoid idle time on the download "machine" as much as possible. The download machine can only be idle if we cannot start a new download because the buffer is full (i.e., the sum of sizes of downloaded but unwatched videos is m, and the next video we want to download has size > free space). In that case, we must wait until a watch finishes and frees space.
+        // So the total time T = total_download + idle_time. And idle_time is the total time the download machine is forced to wait.
+        // When does idle time occur? It occurs when we have a set of downloaded videos waiting to be watched, their total size is m, and the next video to download is larger than the space that will be freed by the next watch? Actually, if the buffer is full (sum = m), we cannot start any download until some space is freed. Space is freed only when a watch finishes. Each watch frees the size of the watched video. So if the buffer is full, we must wait until the current watch finishes. If we are not currently watching, we can start a watch immediately (if there is a downloaded video). So we should always be watching if there is a downloaded video, to free space. So idle time happens only when the buffer is full and we are not watching? But if the buffer is full, there is at least one downloaded video, so we can watch it. So we should never be idle if there is a downloaded video. The only time we might be idle is when the buffer is not full but we have no downloaded video to watch? That would mean we haven't finished downloading any video yet. At the very beginning, we have to download the first video before we can watch anything. During that first download, the download machine is busy, so no idle time. After the first download finishes, we can immediately start watching it and start downloading the next video. So the download machine is busy from time 0 until the total download time is completed, except possibly when it is forced to wait because the buffer is full and we cannot start the next download. But if the buffer is full, we are watching something, and when that watch finishes, space is freed. So the download machine might have to wait if the next video's size is larger than the space that will be freed? Actually, the space freed is exactly the size of the video we just finished watching. So if the next video's size is > the size of the video we are about to finish watching, we might not be able to start it immediately? But we can start downloading it as soon as the space is freed. The space is freed at the end of the watch. So we can start the download exactly at that moment. So there is no idle time if we always have a video ready to download that fits in the space that will be freed. But what if the next video is larger than the space that will be freed? Then we cannot start it because the free space after the watch is only the size of the watched video. But wait, the buffer might have other videos? The buffer is full, so sum = m. After watching one video of size s, the new sum = m - s. The free space is s. So we can only start a download of size <= s. If all remaining videos have size > s, we cannot start any download. Then we are forced to watch another video to free more space. But we can only watch one video at a time. So we might have to watch several videos in a row without downloading, until the cumulative freed space is enough for the next download. During those watches, the download machine is idle. That is the idle time.
+        // So the problem reduces to: we have a set of videos. We need to order them for downloading and watching. We want to minimize the total idle time of the download machine.
+        // This is exactly the problem of scheduling with a buffer, where we want to minimize the number of "stalls" (idle periods). There is a known greedy strategy: always download the largest possible video that fits? Or always watch the smallest video to free space quickly? Actually, to minimize idle time, we want to avoid situations where the buffer is full and the next download is too large. So we should try to keep the buffer as empty as possible, or rather, we should download large videos when the buffer has a lot of free space. Since we can choose the order of downloads, we can sort the videos by size and download them in increasing order? Or decreasing order?
+        // Let's think: if we download small videos first, they will be watched quickly and free small amounts of space. Then when we get to large videos, the buffer might be full of large videos? Actually, if we download small videos first, we can watch them quickly and they don't take much space. But if we download a large video, it takes a long time to download, during which we can watch many small videos and free space. So maybe we should download large videos early? Let's test with a simple case: m=5, videos: 4, 1. If we download 4 first: time 0-4 download 4. At time 4, start watch 4 and download 1. At time 5, watch 4 finishes, free 4. Download 1 finishes at time 5? Actually, download 1 takes 1 minute, so it finishes at time 5. Then watch 1 from 5 to 6. Total time = 6. Buffer peak: during time 4-5, buffer has 4 (being watched) + 1 (being downloaded) = 5, okay. If we download 1 first: time 0-1 download 1. At time 1, start watch 1 and download 4. Watch 1 finishes at time 2, free 1. Buffer during time 1-2: 1 (watched) + 4 (downloading) = 5? Actually, at time 1, we start downloading 4, so buffer has 1 (the downloaded 1) + 0 (just started 4). As 4 downloads, buffer increases. At time 2, watch 1 finishes, free 1. Buffer then has the partially downloaded 4. At time 5, 4 finishes. Then watch 4 from 5 to 6. Total time = 6. Same. So order doesn't matter here.
+        // Another case: m=5, videos: 3, 3, 3. Total download=9, n=3. What is min time? Let's try: download 3 (0-3), watch 3 (3-4) and download 3 (3-6). At time 4, watch finishes, free 3. Buffer at time 4: the second 3 is still downloading (needs 2 more minutes). Buffer has 3? Actually, the second 3 has downloaded 1 minute by time 4? Wait: start download second 3 at time 3. At time 4, it has downloaded 1 MB. So buffer has 1 MB of second 3. The first 3 is deleted at time 4. So buffer = 1. Then at time 6, second 3 finishes. Start watch second 3 (6-7) and download third 3 (6-9). At time 7, watch finishes, free 3. Buffer at time 7: third 3 has downloaded 1 MB. Then at time 9, third 3 finishes. Watch 9-10. Total time = 10. But can we do better? What if we download 3, then watch 3, but don't start next download immediately? That would only increase time. So 10 seems minimal. max(total_download, n) = max(9,3)=9. So T=10 = total_download + 1. So idle time = 1? When did idle happen? Let's check: download machine busy: 0-3 (first), 3-6 (second), 6-9 (third). No idle time! But total time is 10 because the last watch ends at 10. The download machine finishes at 9, then we watch the last video from 9 to 10. So the total time is total_download + 1? But wait, we had n=3 watches. The last watch starts at 9 and ends at 10. So total time = 9 + 1 = 10. But total_download = 9, so T = total_download + 1. But earlier with n=2, a+b=5, we got T=6 = total_download + 1. So is T always total_download + 1? No, sample 2 has total_download=15, T=17, so +2. Sample 3: total_download=9, T=12, +3. So the extra time is not always 1.
+        // In the 3,3,3 case with m=5, we got T=10. But wait, is it possible to finish in 9? No, because we have to watch 3 videos, each takes 1 minute, and they can't all be watched during the downloads because the first watch can only start after the first download finishes at 3. The last download finishes at 9, then we need 1 minute to watch it. So T >= total_download + 1? Actually, if we can watch the last video while downloading something else? But the last video is the last download, so there is nothing else to download. So the last watch must happen after the last download finishes. So T >= (finish time of last download) + 1. The finish time of last download is at least total_download (if no idle time). So T >= total_download + 1. But sample 1 has total_download=15, T=16, so +1. Sample 2 has +2, sample 3 has +3. So the extra time beyond total_download + 1 is due to idle time on the download machine? Let's check sample 3: n=4, m=3, a=[1,3,2,3]. Sorted: 1,2,3,3. Total download=9. If we download in order 1,2,3,3: 
+        // 0-1: download 1. At 1, start watch 1 (1-2) and download 2 (1-3). At 2, watch 1 finishes, free 1. Buffer: 2 has downloaded 1 MB. Free space: 3 - 1 = 2? Actually, buffer has the 1 MB of 2, so free space = 2. We can start download 3? But we are already downloading 2. We can only download one at a time. So we continue downloading 2. At 3, 2 finishes. Start watch 2 (3-4) and download 3 (3-6). At 4, watch 2 finishes, free 2. Buffer: 3 has downloaded 1 MB. Free space = 3 - 1 = 2. We cannot start another download because we are already downloading 3. At 6, 3 finishes. Start watch 3 (6-7) and download the last 3 (6-9). At 7, watch 3 finishes, free 3. Buffer: last 3 has downloaded 1 MB. At 9, last 3 finishes. Watch 9-10. Total time = 10? But sample output is 12! So my simulation gives 10, but the answer is 12. Why? Let's check the constraints: m=3. In my simulation, at time 1, we start downloading 2. The buffer has the downloaded 1 (size 1) and we start downloading 2. The download of 2 requires 2 MB free space at the start. At time 1, the buffer has 1 (the first video), so free space is 2. So we can start downloading 2. That's fine. At time 3, we start downloading 3. At time 3, buffer has the second video (size 2, fully downloaded) and we are watching it? Actually, at time 3, we start watching 2 and downloading 3. The download of 3 requires 3 MB free space at start. At time 3, the buffer has video 2 (size 2) and video 1 is already deleted. So buffer = 2, free space = 1. But we need 3 MB free to start downloading 3! So we cannot start downloading 3 at time 3! That's the mistake. The download of size s requires s free megabytes at the moment it starts. So at time 3, free space is only 1, so we cannot start the download of 3. We must wait until more space is freed. We are watching video 2 from 3 to 4. At time 4, video 2 is deleted, freeing 2 MB. Then free space becomes 3. So we can start downloading 3 at time 4. So the correct schedule:
+        // 0-1: download 1.
+        // 1-2: watch 1, download 2 (needs 2 free, buffer has 1, free=2, ok).
+        // 2: watch 1 ends, delete 1. Buffer now has partially downloaded 2 (1 MB downloaded so far? Actually, at time 2, download 2 has been going for 1 minute, so 1 MB downloaded. Buffer = 1. Free = 2.
+        // 2-3: continue download 2. At time 3, download 2 finishes. Buffer = 2. Free = 1.
+        // 3-4: watch 2. Cannot start download 3 because free=1 < 3. So download machine idle.
+        // 4: watch 2 ends, delete 2. Free = 3.
+        // 4-7: download 3 (size 3).
+        // 7-8: watch 3, and we want to download the next 3? At time 7, buffer has 3 (the one just downloaded). Free = 0. Cannot start download.
+        // 8: watch 3 ends, delete 3. Free = 3.
+        // 8-11: download last 3.
+        // 11-12: watch last 3.
+        // Total time = 12. Matches sample!
+        // So idle time occurred at 3-4 (1 minute) and 7-8 (1 minute)? Actually, at 7-8 we were watching, but download was idle because free space 0. So total idle time = 2 minutes. Total download time = 9. Total time = 9 + 2 (idle) + 1 (final watch) = 12. But wait, the final watch is included in the total time: the last download finishes at 11, watch 11-12, so total 12. The idle time is the time the download machine is not working when it could be. In this schedule, download machine worked: 0-1, 1-3, 4-7, 8-11. Total busy = 1+2+3+3 = 9. Idle = 3-4 (1 min) and 7-8 (1 min) = 2. Total time = 9 + 2 + 1? Actually, the total time is from 0 to 12, which is 12. The download machine finishes at 11. The last watch is 11-12. So total time = (total download time) + (idle time) + 1? 9+2+1=12. Yes.
+        // So the problem is to minimize the idle time. The idle time occurs when we want to start a download but the free space is less than the size of the next video we want to download. At that moment, we are forced to watch some videos to free space. But we can only watch one video at a time, and each watch takes 1 minute. So if we need to free a total of X space, and the videos we watch have sizes s1, s2, ..., we need to watch enough videos so that the sum of their sizes >= the required space. But we can only watch them sequentially. So the idle time is the number of watches we have to do without downloading, i.e., the number of minutes we spend watching while the download machine is idle.
+        // Actually, the download machine can be idle even if we are not watching? No, if we are not watching and the buffer is not empty, we should watch to free space. So idle time only happens when we are watching but cannot download because the next video is too large. So idle time is exactly the number of minutes we spend watching where we could not start a download. But note that we might also have idle time at the end after all downloads are done? That's the final watch, which is not idle time for the download machine (it's already finished). So the total time T = total_download + I + 1, where I is the total idle time of the download machine (in minutes). And we want to minimize I.
+        // How to minimize I? We can choose the order of downloads and which video to watch next (among downloaded ones) to free space optimally.
+        // This is equivalent to: we have a set of videos. We process them one by one. At any point, we have a multiset of downloaded videos waiting to be watched. We can choose to watch one (takes 1 minute, frees its size). We can also choose to download a new video, which takes its size time and requires its size free space at the start. We want to finish all downloads and watches as early as possible.
+        // This is a classic problem: "video watching with limited storage" or "scheduling with buffer". It can be solved by a greedy algorithm: always download the largest possible video that fits? Or always watch the video that frees the most space? Let's think.
+        // Consider the state: we have some free space F. We have a set of remaining videos to download. We want to minimize idle time. Idle time occurs when we cannot download any remaining video because all are larger than F. Then we must watch a video to increase F. Which video should we watch? We should watch the one that increases F the most, i.e., the largest downloaded video. Because that minimizes the number of watches needed to reach the required size. So the strategy: among downloaded videos, always watch the largest one first. This is intuitive: to free space quickly, delete the largest.
+        // What about download order? We should download videos in an order that minimizes the chance of getting stuck. If we download large videos when F is large, we avoid getting stuck. So we should download videos in decreasing order of size? Or increasing? Let's test with the sample: a=[1,3,2,3], m=3. Sorted decreasing: 3,3,2,1.
+        // Try: F=3.
+        // Download 3: needs 3, F=3 -> ok. F becomes 0. Download takes 3 minutes. During this, we can't watch anything because no video is ready. After 3 minutes, video 3 is ready. F=0. We can watch it (takes 1 min, frees 3). While watching, can we download? F=0, so no. After watch, F=3.
+        // Now remaining: 3,2,1. F=3. Download 3: needs 3, ok. F=0. Download 3 minutes. Then watch 3 (1 min, F=0 during watch, then F=3). 
+        // Then download 2: needs 2, F=3 ok. F=1. Download 2 minutes. During download, we can watch? We have no other video. After download, watch 2 (1 min, F=1+2=3). 
+        // Then download 1: needs 1, F=3 ok. Download 1 min, watch 1. Total time: 3+1+3+1+2+1+1+1 = 13? Let's calculate carefully:
+        // 0-3: download 3.
+        // 3-4: watch 3 (idle download).
+        // 4-7: download 3.
+        // 7-8: watch 3.
+        // 8-10: download 2.
+        // 10-11: watch 2.
+        // 11-12: download 1.
+        // 12-13: watch 1.
+        // Total = 13. But sample output is 12. So decreasing order gives 13, which is worse than the 12 we got with increasing order? Wait, our increasing order (1,2,3,3) gave 12. Let's check increasing order with the greedy watch strategy (always watch largest ready). In the increasing order schedule we did earlier, we watched in the order they were downloaded? Actually, we watched 1

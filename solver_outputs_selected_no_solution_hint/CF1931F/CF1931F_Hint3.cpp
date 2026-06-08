@@ -1,0 +1,165 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> a(k, vector<int>(n));
+    for (int i = 0; i < k; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cin >> a[i][j];
+        }
+    }
+    if (k == 1) {
+        cout << "YES\n";
+        return;
+    }
+    vector<int> order;
+    // Try to deduce order from first two screenshots
+    int x = a[0][0], y = a[1][0];
+    // Find positions of x in second and y in first
+    int pos_x_in_1 = -1, pos_y_in_0 = -1;
+    for (int j = 0; j < n; ++j) {
+        if (a[1][j] == x) pos_x_in_1 = j;
+        if (a[0][j] == y) pos_y_in_0 = j;
+    }
+    // Build candidate order from first screenshot, removing its author
+    vector<int> base0, base1;
+    for (int j = 1; j < n; ++j) base0.push_back(a[0][j]);
+    for (int j = 1; j < n; ++j) base1.push_back(a[1][j]);
+    // Two possible orders: one from first, one from second, with authors placed appropriately
+    vector<vector<int>> candidates;
+    // Candidate 1: order from first screenshot's perspective, but with second author possibly inserted
+    {
+        vector<int> cand = base0;
+        // Insert y at position relative to x as in second screenshot
+        // In second screenshot, y is at top, x is at pos_x_in_1
+        // In candidate, x is at some position, we need to place y such that relative order of others matches
+        // Actually, we can just take base0 and insert y before x if in second screenshot y is before x? No, y is always first in its own screenshot.
+        // Better: construct order from first screenshot's base, then place y such that the relative order of all except x and y matches both.
+        // We'll just try both base0 and base1 as the underlying order, and check consistency.
+    }
+    // Simpler approach: The relative order of all participants except the two authors must be the same in both screenshots (after removing authors).
+    // Check if base0 and base1 are consistent when ignoring x and y.
+    vector<int> rel0, rel1;
+    for (int v : base0) if (v != y) rel0.push_back(v);
+    for (int v : base1) if (v != x) rel1.push_back(v);
+    if (rel0 != rel1) {
+        cout << "NO\n";
+        return;
+    }
+    // Now we have a relative order of n-2 elements. We need to place x and y.
+    // In first screenshot: x is first, then base0 (which includes y somewhere).
+    // In second screenshot: y is first, then base1 (which includes x somewhere).
+    // Let the common relative order be R (size n-2).
+    // In first: x, then R with y inserted at some position p (0-indexed, p=0 means y right after x, p=n-2 means y at end).
+    // In second: y, then R with x inserted at some position q.
+    // We need to find positions p and q such that they are consistent with a global order.
+    // Global order must have x and y placed somewhere in R.
+    // Let global order be: some sequence where x and y are inserted into R.
+    // From first: x is before all of R? No, x is first, so x is before everything in R, and y is somewhere in R.
+    // From second: y is first, so y is before everything in R, and x is somewhere in R.
+    // This is only possible if x and y are adjacent? Let's analyze.
+    // Suppose global order is ... x ... y ... or ... y ... x ...
+    // In first screenshot, x is first, so x must be before all others in global order. Thus x is the absolute first element in global order.
+    // In second screenshot, y is first, so y must be before all others in global order. Thus y is the absolute first element.
+    // Contradiction unless x = y, but authors are distinct. So global order cannot have both x and y as first.
+    // Wait, the screenshots show the order from the perspective of the author, where the author sees themselves at top.
+    // The actual global order is some permutation P. For a user u, the order they see is: u, then the rest of P in the same relative order as in P.
+    // So if global order is P, then for user x, the screenshot is [x] + (P with x removed).
+    // For user y, screenshot is [y] + (P with y removed).
+    // So base0 = P with x removed, base1 = P with y removed.
+    // We have base0 and base1. We need to find P.
+    // base0 and base1 are both P minus one element. They must be consistent: removing x from P gives base0, removing y gives base1.
+    // So base0 and base1 should be almost the same, except base0 has y where base1 has x? Actually, base0 has y, base1 has x. The rest should be identical.
+    // We already checked that rel0 == rel1 (the rest).
+    // Now we need to find P. P is base0 with x inserted somewhere, and also base1 with y inserted somewhere, and they must match.
+    // Let R = rel0 = rel1. R has size n-2.
+    // base0 = R with y inserted at some index p (0 <= p <= n-2). base1 = R with x inserted at some index q.
+    // P must be R with both x and y inserted.
+    // From base0: P = R with y at p, and x inserted somewhere. But base0 is P without x, so x is not in base0. So P is base0 with x inserted somewhere.
+    // From base1: P is base1 with y inserted somewhere.
+    // So we need to find positions i and j such that inserting x into base0 at i gives the same as inserting y into base1 at j.
+    // Since base0 and base1 differ only by swapping x and y (base0 has y, base1 has x), this is possible if and only if the relative order of x and y in P can be determined.
+    // Actually, we can just try to reconstruct P from base0 and base1.
+    // Let's find the position of y in base0 (p) and position of x in base1 (q).
+    int p = find(base0.begin(), base0.end(), y) - base0.begin();
+    int q = find(base1.begin(), base1.end(), x) - base1.begin();
+    // Now we need to insert x into base0 and y into base1 to get the same P.
+    // There are at most two possibilities for P: either x is before y in P, or y before x.
+    // If x is before y in P, then in base0 (which lacks x), y is at some position. In base1 (which lacks y), x is at some position.
+    // Let's try both relative orders.
+    vector<int> P;
+    // Case 1: x before y in P.
+    // Then in base0, y is at position p. Since x is before y, x must be inserted somewhere before y in base0.
+    // In base1, x is at position q. Since y is after x, y must be inserted after x in base1.
+    // We can try to insert x into base0 at position p (i.e., before y) and see if it matches inserting y into base1 at position q+1 (after x).
+    // Actually, we can just construct P by taking R and inserting x and y.
+    // If x before y, then P = R with x inserted at some position i, and y inserted at some position j > i.
+    // base0 = P without x = R with y at j-1 (since x removed before y). So p = j-1.
+    // base1 = P without y = R with x at i. So q = i.
+    // Thus i = q, j = p+1. And we need i <= j, i.e., q <= p+1. Also i and j must be valid: 0 <= i <= j <= n-2? Actually j can be n-1? R size n-2, so indices 0..n-2 for insertion positions (before, between, after). Inserting at position i means before the i-th element of R (0-indexed). So i can be 0..n-2, and j can be i..n-2? Wait, if we insert two elements, the indices shift.
+    // Let's just construct P by trying both orders.
+    // Candidate P1: x before y.
+    // We can build P by taking R, inserting x at q, then inserting y at p+1 (since after inserting x, the position of y in base0 shifts if x is before y? Actually base0 has y at p. If we insert x before y, then in the new sequence, y's index becomes p+1. So we insert y at p+1.)
+    // But careful: base0 doesn't have x. So if we take R and insert x at q, we get a sequence of size n-1. Then we need to insert y such that the result matches base0 with x inserted? Let's just try to build P from R and check against both screenshots.
+    // Simpler: try all possible positions of x in base0 (0..n-1) and see if it matches base1 with y inserted somewhere. But n up to 2e5, k small? n*k <= 2e5, so n can be large but k small. We can't try all positions.
+    // Since we only have two screenshots, we can deduce the exact positions.
+    // Let's analyze the two cases:
+    // Case A: x before y in P.
+    // Then base0 = P \ {x} has y at position (position of y in P) - 1 (because x is before y and removed). So p = pos_y - 1.
+    // base1 = P \ {y} has x at position pos_x (since y is after x, removing y doesn't affect x's position). So q = pos_x.
+    // We need pos_x < pos_y. So q < p+1, i.e., q <= p.
+    // And we can construct P by taking R, inserting x at q, then inserting y at p+1? Let's check: R has size n-2. Insert x at index q (0..n-2). Now sequence size n-1. The original y in base0 was at index p. In P, y is after x. The elements of R are in the same order. After inserting x at q, the elements of R that were before q remain at indices < q. The element at q in R moves to q+1, etc. The position of y in base0 is p. In the new sequence (with x inserted), y's position depends on whether x was inserted before or after y. Since x is before y, we have q <= p. After inserting x, y's index becomes p+1. So we insert y at p+1. That gives P.
+    // Case B: y before x in P.
+    // Then base0 = P \ {x} has y at position pos_y (since x is after y, removing x doesn't affect y's position). So p = pos_y.
+    // base1 = P \ {y} has x at position pos_x - 1 (since y is before x and removed). So q = pos_x - 1.
+    // We need pos_y < pos_x, so p < q+1, i.e., p <= q.
+    // Construct P: take R, insert y at p, then insert x at q+1? Let's check: Insert y at p. Now sequence size n-1. Original x in base1 was at q. Since y is before x, p <= q. After inserting y, x's index becomes q+1. So insert x at q+1.
+    // So we have two possible P constructions. We can build both and check if they satisfy all k screenshots.
+    // But wait, what if p and q don't satisfy either condition? Then no P exists.
+    // Also, we must consider that the authors are distinct, and the screenshots must match exactly.
+    // Let's implement this logic.
+    vector<int> R = rel0; // size n-2
+    vector<int> P1, P2;
+    bool ok1 = false, ok2 = false;
+    if (q <= p) { // x before y
+        P1 = R;
+        P1.insert(P1.begin() + q, x);
+        P1.insert(P1.begin() + p + 1, y);
+        ok1 = true;
+    }
+    if (p <= q) { // y before x
+        P2 = R;
+        P2.insert(P2.begin() + p, y);
+        P2.insert(P2.begin() + q + 1, x);
+        ok2 = true;
+    }
+    // Now check candidates against all screenshots
+    auto check = [&](const vector<int>& P) -> bool {
+        for (int i = 0; i < k; ++i) {
+            int author = a[i][0];
+            vector<int> expected = P;
+            expected.erase(find(expected.begin(), expected.end(), author));
+            expected.insert(expected.begin(), author);
+            if (expected != a[i]) return false;
+        }
+        return true;
+    };
+    if ((ok1 && check(P1)) || (ok2 && check(P2))) {
+        cout << "YES\n";
+    } else {
+        cout << "NO\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

@@ -1,0 +1,147 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long INF = 1e18;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        vector<long long> b(m);
+        for (int i = 0; i < m; ++i) cin >> b[i];
+        
+        // prefix sums of a
+        vector<long long> pref(n + 1, 0);
+        for (int i = 0; i < n; ++i) pref[i + 1] = pref[i] + a[i];
+        
+        // dp[i] = min cost to remove a[i..n-1] given we are at some k
+        // We'll compute dp from right to left.
+        // dp[i] = min over j > i such that sum(a[i..j-1]) <= b[k] of (m - k) + dp[j]
+        // But k is not fixed; we can increase k before taking a segment.
+        // Actually, we can think of it as: we start with k=1, and we can increase k at any time (cost 0) as long as array not empty.
+        // The cost of a segment taken with current k is (m - k).
+        // Since b is strictly decreasing, larger k means smaller allowed sum, but cheaper cost.
+        // We want to partition array into segments, each segment sum <= some b[k], and we can choose k for each segment, but k must be non-decreasing? 
+        // Actually we can increase k at any time, but we cannot decrease k. So the sequence of k's used for segments is non-decreasing.
+        // Since cost = m - k, we want k as large as possible for each segment to minimize cost, but larger k means smaller allowed sum.
+        // So we need to assign a k to each segment, non-decreasing, such that segment sum <= b[k].
+        // Equivalent: we can choose for each segment the smallest possible cost = m - k, i.e., largest possible k such that b[k] >= segment sum.
+        // But k must be non-decreasing across segments.
+        // Let f(x) = max k such that b[k] >= x (or 0 if none). Since b is decreasing, f is non-increasing.
+        // We need to partition array into segments, and assign to each segment a k_i, with k_1 <= k_2 <= ... <= k_p, and segment sum <= b[k_i].
+        // To minimize sum (m - k_i), we want k_i as large as possible, but non-decreasing constraint.
+        // This is similar to: we can take a segment with sum S, and we pay cost = m - max possible k for S, but we can also choose a smaller k (larger cost) if needed to satisfy non-decreasing.
+        // Actually, if we take a segment with sum S, the minimum cost we can achieve for that segment (ignoring non-decreasing) is m - f(S). But if f(S) < previous k, we must use previous k (or increase to something <= f(S)? Wait, k can only increase, so if previous k is larger than f(S), we cannot use f(S) because that would require decreasing k. So we must use a k >= previous k, but then the sum S must be <= b[k] for that k. Since b is decreasing, if k >= previous k, b[k] <= b[previous k]. So if S > b[previous k], we cannot take this segment with current k, we must increase k? But increasing k makes b[k] even smaller, so that doesn't help. So we cannot take a segment with sum > b[current k] unless we increase k? No, increasing k makes allowed sum smaller. So if S > b[current k], we cannot take it at all. So we must ensure that for the chosen k, S <= b[k]. Since we want k as large as possible to minimize cost, but k must be >= previous k, the best we can do for a segment with sum S is to use k = max(previous k, f(S))? But f(S) is the largest k with b[k] >= S. If previous k > f(S), then b[previous k] < S, so we cannot use previous k. So we must increase k? But increasing k makes b smaller, so even worse. So it's impossible to take this segment if previous k > f(S). Therefore, we must have previous k <= f(S). Then we can set k = f(S) (or any between previous k and f(S)), and cost = m - k. To minimize cost, we want k as large as possible, so we set k = f(S). So the non-decreasing constraint just means we can only take segments whose f(S) >= previous k. And then we update previous k = f(S).
+        // So the problem reduces to: partition array into segments, let S_i be sum of segment i. Let k_i = f(S_i). We require k_1 <= k_2 <= ... <= k_p. Cost = sum (m - k_i).
+        // Since m is constant, minimizing cost is equivalent to maximizing sum k_i.
+        // We can think of it as: we start with k=1. For each segment, we can choose any k' >= k such that b[k'] >= segment sum, then set k = k', and gain profit k' (since cost = m - k'). We want to maximize total profit.
+        // This is a DP: dp[i] = max total profit we can get from suffix a[i..n-1] given current k (but k is determined by previous choices). However, k is just the last chosen k. So we can define dp[i][k] = max profit from i..n-1 given current k. But k can be up to m, and n*m <= 3e5, so we can do DP with state (i, k) if we are careful.
+        // But note that k only increases, and there are at most m distinct values. n*m <= 3e5, so total states across all test cases is small. We can do DP with memoization or iterative.
+        // However, we need to compute f(S) quickly. f(x) = max k such that b[k] >= x. Since b is decreasing, we can binary search on b (1-indexed). Or precompute an array of b and use upper_bound.
+        // Let's define dp[i][k] = min cost to remove a[i..n-1] given current k. We want dp[0][1]. But k can be up to m. n*m <= 3e5, so we can have a 2D array, but n and m vary per test case. We can use a vector of vectors, or a single vector of size n*m flattened.
+        // Since sum of n*m over test cases <= 3e5, we can allocate a vector for each test case of size (n+1)*(m+1) and fill with INF.
+        // dp[i][k] = min over j > i such that sum(i..j-1) <= b[k] of (m - k) + dp[j][k]? Wait, after taking segment with current k, we can increase k before next segment. So we can either stay at k or increase to some k' >= k. But increasing k costs 0, so we can always assume we increase k to the optimal value for the next segment. So from state (i, k), we can choose a segment [i, j-1] with sum S <= b[k]. Then we pay cost m - k, and then we can choose any k' >= k for the next state. So dp[i][k] = min_{j > i, sum(i..j-1) <= b[k]} (m - k + min_{k' >= k} dp[j][k']).
+        // Let best[j][k] = min_{k' >= k} dp[j][k']. Then dp[i][k] = min_{j: sum(i..j-1) <= b[k]} (m - k + best[j][k]).
+        // We can compute dp from right to left. For a fixed k, we need to find j such that sum(i..j-1) <= b[k]. Since a_i are positive, the condition is monotonic: as j increases, sum increases. So for each i and k, the valid j are i+1 up to some max_r[i][k]. We can precompute max_r[i][k] using two pointers or binary search on prefix sums.
+        // Then dp[i][k] = m - k + min_{j in (i, max_r[i][k]]} best[j][k].
+        // We can compute this efficiently using a segment tree or by maintaining suffix minima of best[j][k] for each k. Since we process i decreasing, for a fixed k, we can maintain an array suffix_min[j][k] = min_{t >= j} best[t][k]. Then dp[i][k] = m - k + suffix_min[i+1][k] (but only up to max_r[i][k]). Actually we need min over j from i+1 to max_r[i][k]. So we can use a segment tree or sparse table, but n*m <= 3e5, so we can afford O(n*m) total if we do it carefully. Since we process i from n down to 0, for each k, we can maintain a data structure that supports range minimum queries. But we can also just compute for each k, the values best[j][k] for all j, and then build a suffix minimum array? But the range is up to max_r[i][k], which varies with i. So we need RMQ.
+        // However, note that for a fixed k, max_r[i][k] is non-decreasing as i decreases? Actually as i decreases, the prefix sum from i increases, so the allowed j decreases. So max_r[i][k] is non-increasing as i decreases. So we can use a monotonic queue or just a segment tree.
+        // Since total states n*m <= 3e5, we can use a segment tree for each k? That would be O(m * n log n) which might be too much. But we can do it in O(n*m) by using the fact that we only need range minimum queries on best[j][k] for j in [i+1, max_r[i][k]]. We can precompute for each k an array best_j and then build a sparse table? But building sparse table for each k takes O(n log n) per k, total O(m n log n) which might be okay if n*m <= 3e5? Actually n*m <= 3e5, so n <= 3e5, m <= 3e5, but product is small. The worst case is n=1, m=3e5 or n=3e5, m=1. If m=1, then only one k, O(n log n) is fine. If n=1, then m=3e5, but n=1 means array length 1, so DP is trivial. The product is small, so O(n*m log n) might be acceptable? But log n up to 19, 3e5 * 19 ~ 5.7e6, which is fine. However, we can do even simpler: since we process i from n down to 0, for each k, we can maintain a segment tree or a Fenwick tree for range minimum? Fenwick doesn't do range min easily. We can use a simple array and update as we go, but we need range min. Since max_r[i][k] is non-increasing, we can use a sliding window minimum? Not exactly, because we query ranges that end at max_r[i][k] and start at i+1. As i decreases, the start decreases, and the end also decreases. So it's a range that shifts left. We can maintain a multiset of values in the current range? But we have multiple k. We can just do the O(n*m) by iterating j for each i? That would be O(n^2 * m) which is too slow.
+        // Alternative perspective: The problem is equivalent to: we want to partition array into segments, each segment sum <= b[k] for some k, and k non-decreasing. We can think of it as: we choose a sequence of k's, and for each k, we take a maximal segment? Not necessarily maximal.
+        // Another approach: Since cost = m - k, and we want to minimize total cost, we want to use as few segments as possible with large k. But large k means small b[k]. So we want to pack as many elements as possible into segments with large k.
+        // Let's think differently. For each possible k from 1 to m, we can consider what is the maximum prefix we can remove if we are at k? Actually, we can increase k at any time. So we can think of the process as: we start at k=1. We can remove some prefix with sum <= b[1]. Then we can increase k to 2, remove some prefix with sum <= b[2], etc. But we don't have to increase k after every segment; we can stay at the same k for multiple segments. However, increasing k gives cheaper cost for subsequent segments. So we want to increase k as soon as possible, but we can only increase if the remaining array is not empty. Also, we can only increase by 1 each time? The problem says: "If the value of k is less than m and the array a is not empty, you can increase the value of k by 1." So we can only increase by 1 at a time, and we can do it multiple times. So we can increase from 1 to any k' by doing k'-1 operations of type 1. But those operations cost 0. So effectively we can jump to any k' >= current k instantly, as long as we do it before the array becomes empty? Wait, the operation says: "If the value of k is less than m and the array a is not empty, you can increase the value of k by 1." So we can only increase k when the array is not empty. So we cannot increase k after the array is empty. But that doesn't matter because we stop when array is empty. So we can increase k as much as we want as long as there are still elements left. So effectively, we can choose any non-decreasing sequence of k's for the segments, with the only restriction that we cannot increase k after the last segment (but that's fine). So the DP formulation above is correct.
+        // Now, to compute DP efficiently: dp[i][k] = min cost to clear a[i..n-1] given current k. We want dp[0][1].
+        // We can compute dp[i][k] for i from n down to 0, and for each k from m down to 1? Actually, best[j][k] = min_{k' >= k} dp[j][k']. So if we compute dp for a fixed j and all k, we can compute best[j][k] by taking suffix minimum over k. Then for each i, we need to compute dp[i][k] using best[j][k] for j > i.
+        // Let's define dp[i][k] for i=0..n, k=1..m. Base: dp[n][k] = 0 for all k (empty array, cost 0). Then best[n][k] = 0.
+        // For i from n-1 down to 0:
+        //   For each k from 1 to m:
+        //     We need to find the minimum of best[j][k] for j in [i+1, max_r[i][k]], where max_r[i][k] is the largest j such that sum(i..j-1) <= b[k].
+        //     Then dp[i][k] = (m - k) + that minimum.
+        //   After computing dp[i][k] for all k, we compute best[i][k] = min(dp[i][k], best[i][k+1]) (with best[i][m+1] = INF).
+        // The challenge is to compute the range minimum quickly.
+        // Notice that for a fixed k, as i decreases, max_r[i][k] is non-increasing. Let R[i][k] = max_r[i][k]. We need min_{j=i+1..R[i][k]} best[j][k].
+        // We can process i from n-1 down to 0, and for each k, maintain a data structure that supports adding best[i+1][k] at position i+1, and querying min in [i+1, R[i][k]]. Since we add elements as we go left, we can use a segment tree for each k? But there are m k's, and building a segment tree for each would be O(m * n). Since n*m <= 3e5, we can actually just use a 2D array and compute the minimum by iterating? But iterating j from i+1 to R[i][k] for each i, k would be O(sum over i,k (R[i][k] - i)) which could be O(n^2 m) in worst case.
+        // However, note that R[i][k] is the maximal j such that sum(i..j-1) <= b[k]. Since a_i are positive, R[i][k] is monotonic in i: if i1 < i2, then R[i1][k] >= R[i2][k]. So the intervals [i+1, R[i][k]] are nested? Not exactly, but they are moving left. We can use a two-pointer approach? For a fixed k, we want to compute dp[i][k] for all i. We can process i from n-1 down to 0, and maintain the minimum of best[j][k] for j in the current window. But the window is [i+1, R[i][k]]. As i decreases, the left endpoint i+1 decreases, and the right endpoint R[i][k] also decreases. So we can maintain a multiset of best[j][k] for j in the current window, and update it by adding new j's on the left and removing j's on the right as the window shrinks. But we need to do this for each k independently. That would be O(m * n log n) if we use multiset, but total n*m <= 3e5, so O(n*m log n) is acceptable! Actually, for each k, we can do a sliding window where the window is not contiguous in the usual sense? The window is [i+1, R[i][k]]. As i goes from n-1 down to 0, i+1 goes from n down to 1. R[i][k] is non-increasing. So we can start with an empty window at i = n-1? Let's think carefully.
+        // For a fixed k:
+        // We want to compute for each i from n-1 down to 0: min_{j = i+1 .. R[i][k]} best[j][k].
+        // We can maintain a data structure of best[j][k] for j in some range. Let L = i+1, R = R[i][k]. As i decreases, L decreases by 1, and R might decrease (or stay same). So we can maintain a multiset. Initially, for i = n-1, L = n, R = R[n-1][k]. But R[n-1][k] is the max j such that sum(n-1..j-1) <= b[k]. Since sum(n-1..n-1) = a[n-1], if a[n-1] <= b[k], then R = n, else R = n-1 (empty range). So we can start with i = n-1, window empty? Actually if L > R, min is INF. Then we move i to n-2: L becomes n-1, R becomes R[n-2][k] which is >= R[n-1][k]? Wait, as i decreases, the prefix sum from i increases, so the allowed sum for the segment decreases, so the maximal j decreases. So R[i][k] is non-increasing as i decreases. So R[n-2][k] <= R[n-1][k]? Let's check: i1 < i2 => sum(i1..j-1) >= sum(i2..j-1). So if sum(i2..j-1) <= b[k], then sum(i1..j-1) might be > b[k]. So the condition is stricter for smaller i. Thus R[i][k] <= R[i2][k] for i1 < i2. So as i decreases, R[i][k] decreases or stays same. So R is non-increasing as i decreases. L = i+1 is decreasing as i decreases. So both L and R are decreasing. So the window [L, R] shifts left, and its size might change. We can maintain a multiset of best[j][k] for j in [L, R]. When i decreases by 1, L decreases by 1, so we add best[new L][k] to the multiset. R might decrease, so we remove best[j][k] for j > new R. Since R only decreases, we can just remove elements from the right end. This is exactly a sliding window that moves left. We can use a multiset (or a monotonic queue? But we need min, and we are adding and removing arbitrary elements, so multiset is fine). The total number of additions and removals for a fixed k is O(n) because each j is added once and removed at most once. So for each k, we can do this in O(n log n) with multiset, or O(n) if we use a data structure that supports push_back, pop_back, and get_min? But we are adding on the left and removing on the right. A deque with monotonic queue only works for sliding window where we add on one end and remove on the other, and we want min. Here we add on the left and remove on the right. We can reverse the array? If we reverse the indexing, then L and R increase as i decreases? Let's reverse the array a. Then we are looking at prefixes instead of suffixes. It might be symmetric. But multiset is simpler and given n*m <= 3e5, O(n*m log n) is fine. Actually, total operations across all k: sum over k of O(n log n) = O(m n log n). With n*m <= 3e5, m n log n <= 3e5 * log(3e5) ~ 3e5 * 19 = 5.7e6, which is very fast.
+        // But wait, we need to compute best[j][k] before we can use it in the sliding window. We are computing dp[i][k] from i = n-1 down to 0. For a fixed k, when we are at i, we need best[j][k] for j > i. But best[j][k] depends on dp[j][k] and best[j][k+1]. So we need to compute dp[j][k] for all j > i before we can compute best[j][k]. That means we must process i from n-1 down to 0, and for each i, we compute dp[i][k] for all k. But the sliding window for a fixed k requires best[j][k] for j > i. If we process i decreasing, then when we are at i, we have already computed dp[j][k] for all j > i, and thus best[j][k] is available. So we can do the sliding window for each k independently as we go? But we need to compute dp[i][k] for all k at the same i, because best[i][k] depends on dp[i][k] and best[i][k+1]. So we can process i from n-1 down to 0:
+        //   For each k from 1 to m:
+        //     compute dp[i][k] using the sliding window for k (which contains best[j][k] for j in [i+1, R[i][k]]).
+        //   Then for each k from m down to 1:
+        //     best[i][k] = min(dp[i][k], best[i][k+1]) (with best[i][m+1] = INF).
+        // But the sliding window for k needs to be maintained as i decreases. We can maintain for each k a multiset and the current window boundaries. Since we process i decreasing, we can update the window for each k at step i.
+        // Let's detail the sliding window for a fixed k:
+        // We need to query min in [i+1, R[i][k]].
+        // Let L = i+1, R = R[i][k].
+        // We maintain a multiset of best[j][k] for j in the current window [cur_L, cur_R]. Initially, for i = n, we don't need anything. For i = n-1, we set cur_L = n, cur_R = R[n-1][k]. We add best[n][k]? But best[n][k] = 0. Actually j goes up to n (since prefix sum up to n means taking the rest of the array). So j can be n. So we need best[n][k] which is 0. So we should have best[n][k] = 0 for all k.
+        // So we can initialize for each k: cur_L = n, cur_R = n? Actually for i = n-1, L = n, R = R[n-1][k]. If R[n-1][k] >= n, then window includes n. We can start with an empty multiset, and then as we move i from n-1 down to 0, we update the window.
+        // But it's easier to process i from n-1 down to 0, and for each k, we first update the window to the new [i+1, R[i][k]].
+        // Since L decreases by 1 each step, we add best[i+1][k] to the multiset. Then we need to remove any j > R[i][k]. Since R[i][k] is non-increasing, we can just while cur_R > R[i][k], remove best[cur_R][k] and cur_R--.
+        // But wait, we also need to set cur_L = i+1. Initially, before processing any i, we can set for each k: cur_L = n+1? Actually we can start with i = n-1, and before that, we have no window. We can initialize for each k: multiset empty, cur_L = n, cur_R = n-1 (empty window). Then for i = n-1 down to 0:
+        //   For each k:
+        //     // expand window to the left: new L = i+1. Since cur_L is currently i+2 (from previous step), we need to add j = i+1.
+        //     add best[i+1][k] to multiset, cur_L = i+1.
+        //     // shrink window from the right: while cur_R > R[i][k], remove best[cur_R][k], cur_R--.
+        //     // also, if cur_R < cur_L, window is empty.
+        //     // query min: if window not empty, min_val = multiset.begin(), else INF.
+        //     dp[i][k] = (m - k) + min_val.
+        // But wait, we need R[i][k] for all i, k. We can precompute R[i][k] efficiently.
+        // How to compute R[i][k]? For a given i and k, R[i][k] is the largest j in [i, n] such that pref[j] - pref[i] <= b[k]. Since pref is increasing, we can binary search for each i, k. That would be O(n*m log n). With n*m <= 3e5, that's fine. We can precompute R as a 2D array? But n*m can be up to 3e5, storing an int for each is okay (3e5 * 4 bytes = 1.2 MB). But we can also compute on the fly? We need R[i][k] for each i, k during the DP. We can precompute and store in a vector of vectors, or since we process i decreasing, we can compute R[i][k] on the fly using binary search. But doing binary search for each state during DP would add another log factor. Since we already have O(n*m log n) from multiset, adding binary search might be okay, but we can precompute R to save time.
+        // However, n*m <= 3e5, so we can allocate a 2D vector of size n x m? But n and m can be up to 3e5 individually, but product is small. So we can use a vector<vector<int>> R(n, vector<int>(m))? That would be n vectors each of size m, total n*m elements. That's fine.
+        // But wait, the sum of n*m over test cases is <= 3e5. So we can allocate per test case.
+        // Let's check memory: n*m ints is 4 * 3e5 = 1.2 MB, plus other arrays, well within 256 MB.
+        // So we can precompute R[i][k] for all i, k.
+        // But we need to be careful with 0-indexing vs 1-indexing.
+        // Let a be 0-indexed: a[0..n-1]. pref[0]=0, pref[i+1] = pref[i] + a[i].
+        // b is 1-indexed in problem, but we can use 0-indexed: b[0..m-1] with b[0] > b[1] > ... > b[m-1].
+        // k in problem is 1..m, cost = m - k. So if we use 0-indexed k (0..m-1), cost = m - 1 - k? Actually if k=1 in problem, cost = m-1. If k=m, cost=0. So with 0-indexed k (0 corresponds to k=1), cost = (m - 1) - k? Let's map: problem k = our_k + 1. Cost = m - (our_k + 1) = (m - 1) - our_k. So cost = (m - 1) - k. We can just use this.
+        // Alternatively, we can keep 1-indexed for k to match problem. Let's use 1-indexed for k: k = 1..m. cost = m - k.
+        // We'll make b 1-indexed: b[1..m].
+        // Then R[i][k] for i=0..n-1, k=1..m: largest j in [i+1, n] such that pref[j] - pref[i] <= b[k]. (j is the end index, exclusive? Actually if we take prefix a[i..j-1], sum = pref[j] - pref[i]. So j can be from i+1 to n. So R[i][k] is the max j.)
+        // We can compute R[i][k] by binary search on pref.
+        // Now DP: dp[i][k] for i=0..n, k=1..m. dp[n][k] = 0.
+        // best[i][k] = min_{k' >= k} dp[i][k']. We can compute best[i][k] after dp[i][k] is computed.
+        // We process i from n-1 down to 0.
+        // For each k, we maintain a multiset of best[j][k] for j in the current window.
+        // Initialize for each k: multiset empty, cur_L = n+1, cur_R = n. (window empty)
+        // For i = n-1 down to 0:
+        //   For k = 1 to m:
+        //     // add j = i+1
+        //     if (i+1 <= n) {
+        //         multiset[k].insert(best[i+1][k]);
+        //         cur_L[k] = i+1;
+        //     }
+        //     // remove j > R[i][k]
+        //     while (cur_R[k] > R[i][k]) {
+        //         multiset[k].erase(multiset[k].find(best[cur_R[k]][k]));
+        //         cur_R[k]--;
+        //     }
+        //     // if window is empty (cur_L > cur_R), min_val = INF
+        //     // else min_val = *multiset[k].begin()
+        //     // dp[i][k] = (m - k) + min_val
+        //   // after computing dp[i][k] for all k, compute best[i][k]
+        //   best[i][m+1] = INF
+        //   for k = m down to 1:
+        //     best[i][k] = min(dp[i][k], best[i][k+1])
+        // But wait, we need best[i+1][k] to be already computed when we add it. Since we process i decreasing, when we are at i, we have already computed best[j][k] for all j > i. So best[i+1][k] is ready.
+        // However, note that best[i+1][k] depends on dp[i+1][k] and best[i+1][k+1]. So we must have computed dp[i+1][k] for all k before we can compute best[i+1][k]. That means we need to process i+1 completely before moving to i. Our loop does that: we finish i+1, compute its best, then move to i.
+        // But there is a catch: when we are at i, we need best[i+1][k] for all k. That is available because we computed it in the previous iteration (i+1). So we can just use it.
+        // However, the multiset for k contains best[j][k] for j in [cur_L, cur_R]. When we move from i+1 to i, we add best[i+1][k] to the multiset. But best[i+1][k] was computed at the end of the i+1 iteration. So we must ensure that we add it after it's computed. In our loop, we first add best[i+1][k] (which was computed in the previous iteration), then we adjust the window, then we compute dp[i][k]. That's correct.
+        // But wait: for i = n-1, we need best[n][k]. We should initialize best[n][k] = 0 for all k. And we need to add best[n][k] to the multiset when i = n-1? Actually for i = n-1, L = n. So we need to add best[n][k] to the multiset. But our loop adds best[i+1][k] at the beginning of the i iteration. So for i = n-1, it adds best[n][k]. That's correct. But we must have best[n][k] already computed. So before the loop, we should set best[n][k] = 0 for all k, and also dp[n][k] = 0.
+        // Also, we need to initialize cur_L[k] and cur_R[k]. Initially, before any i, we can set cur_L[k] = n+1, cur_R[k] = n, multiset empty. Then for i = n-1, we add best[n][k], so cur_L becomes n, and we set cur_R to R[n-1][k] by removing elements > R. But initially cur_R is n, so we might need to remove best[n][k] if R[n-1][k] < n. That's fine.
+        // Let's trace: For a fixed k, initially cur_L = n+1, cur_R = n, multiset empty.
+        // i = n-1:
+        //   add best[n][k]: multiset has {0}, cur_L = n.
+        //   while cur_R > R[n-1][k]: cur_R is n. If R[n-1][k] < n, we remove best[n][k], cur_R becomes n-1. Then window empty.
+        //   dp[n-1][k] = (m-k) + (multiset empty? INF : *begin).
+        // This works.
+        // But wait: R[i][k] is the max j such that sum(i..j-1) <= b[k]. j can be up to n. So if a[i] <= b[k], R[i][k] >= i+1. If a[i] > b[k], then no j >= i+1 satisfies, so R[i][k] = i (meaning empty segment). In that case, window should be empty. Our while loop will remove all j > i, so cur_R becomes i, and cur_L = i+1, so cur_L > cur_R, window empty. Good.
+        // Now, we need to compute R[i][k] for all i, k. We can do this by binary search on pref. Since pref is size n+1, for each

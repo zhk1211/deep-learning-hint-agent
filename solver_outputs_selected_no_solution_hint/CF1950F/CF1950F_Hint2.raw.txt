@@ -1,0 +1,99 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+        
+        // Check if tree is possible: number of vertices with 2 children must be c - 1
+        if (a + 1 != c) {
+            cout << -1 << '\n';
+            continue;
+        }
+        
+        // If no vertices with children, height is 0 (only root with 0 children)
+        if (a == 0 && b == 0) {
+            cout << 0 << '\n';
+            continue;
+        }
+        
+        // Calculate height greedily
+        // First, build the tree using vertices with 2 children to create a full binary tree
+        // Then attach vertices with 1 child to the deepest possible positions
+        
+        // Find the height of the full binary tree part
+        int height = 0;
+        int nodes_at_level = 1; // start with root
+        int remaining_a = a;
+        
+        // We'll simulate level by level
+        while (remaining_a > 0) {
+            int can_place = min(nodes_at_level, remaining_a);
+            remaining_a -= can_place;
+            // Each placed node with 2 children adds 2 children for next level
+            // The rest of nodes at this level (nodes_at_level - can_place) will have 0 or 1 child
+            // But we don't know yet, we'll handle b later
+            // For now, just calculate next level's nodes from the 2-children nodes
+            nodes_at_level = can_place * 2;
+            height++;
+        }
+        
+        // Now we have some nodes at the last level that are not yet assigned children
+        // They can take b vertices with 1 child
+        // We want to minimize height, so we attach 1-child vertices as deep as possible
+        
+        // The current nodes_at_level are the potential parents for b vertices
+        // If b > 0, we need to extend the height
+        if (b > 0) {
+            // We can attach b vertices to the current level's nodes
+            // Each node at current level can take at most one 1-child vertex (since it already has 0 or 2 children?)
+            // Wait, nodes at current level are those that will have children from the 2-children nodes
+            // Actually, after placing a nodes with 2 children, the remaining nodes at the last level
+            // are exactly the ones that will have 0 children (c) or 1 child (b)
+            // But we already know c = a + 1, so the number of leaf nodes is fixed.
+            
+            // Let's recalculate: total vertices = a + b + c
+            // In a tree, sum of children = a*2 + b*1 + c*0 = 2a + b
+            // Also sum of children = total vertices - 1 (since root has no parent)
+            // So 2a + b = a + b + c - 1 => a = c - 1, which we already checked.
+            
+            // Now, to minimize height, we want to place b vertices with 1 child as deep as possible.
+            // The deepest level is the current height.
+            // We have nodes_at_level nodes at the current deepest level.
+            // We can attach b vertices to these nodes, each adding a new level below.
+            // But we can only attach one 1-child vertex per node at the current level.
+            // If b <= nodes_at_level, we just add 1 to height.
+            // If b > nodes_at_level, we need to go deeper.
+            
+            if (b <= nodes_at_level) {
+                height += 1;
+            } else {
+                // We use all nodes_at_level to attach one 1-child vertex each
+                b -= nodes_at_level;
+                height += 1;
+                // Now we have nodes_at_level new nodes at the next level, each can take one 1-child vertex
+                // But wait, these new nodes are the ones we just added, they have 1 child each? No, they are the 1-child vertices themselves.
+                // Actually, when we attach a 1-child vertex to a parent, that 1-child vertex becomes a new node at the next level.
+                // It can then have its own 1-child vertex, etc.
+                // So we can chain them: each 1-child vertex can be parent of another 1-child vertex.
+                // So we can just add ceil(b / nodes_at_level) to height?
+                // Let's think: after placing first layer of b, we have nodes_at_level new nodes.
+                // Each can take one more 1-child vertex. So we can place another nodes_at_level vertices.
+                // This forms a chain. The number of additional levels needed is ceil(b / nodes_at_level).
+                height += (b + nodes_at_level - 1) / nodes_at_level;
+            }
+        }
+        
+        cout << height << '\n';
+    }
+    
+    return 0;
+}
+```

@@ -14,319 +14,104 @@ int main() {
         cin >> a[i];
     }
 
-    sort(a.begin(), a.end());
-
-    long long total_download = 0;
-    for (long long x : a) {
-        total_download += x;
-    }
-
-    long long low = 0, high = total_download + n; // upper bound: download all + watch all
-    long long ans = high;
-
-    auto can = [&](long long T) -> bool {
-        // We need to schedule n watches, each takes 1 minute, and downloads.
-        // Total download time is fixed = total_download.
-        // The total time T must be at least total_download + n? Not necessarily,
-        // because we can watch while downloading.
-        // But we need to check if we can finish by time T.
-        // We can think of it as: we have T minutes. In each minute we can either
-        // download 1 MB or watch a video (if downloaded). Watching takes 1 minute.
-        // We need to download all videos and watch all videos.
-        // Equivalent to: we have T slots. Some slots are used for watching (n slots).
-        // The remaining T - n slots can be used for downloading.
-        // But we also have disk constraint m.
-        // However, we can delete videos after watching, so disk space is only
-        // constrained by the maximum sum of sizes of videos that are downloaded
-        // but not yet watched at any time.
-        // Since we can choose order, we should watch videos in increasing order of size
-        // to minimize disk usage? Actually, to maximize download concurrency,
-        // we want to free space quickly. Watching small videos first frees little space,
-        // watching large videos first frees more space. But we need to download them first.
-        // The optimal strategy: sort videos by size. We can download in any order,
-        // but we must watch in some order. The disk constraint: at any time,
-        // sum of sizes of completely downloaded but not yet watched videos <= m.
-        // Since we can delete immediately after watching, the peak disk usage
-        // is the maximum over time of (downloaded - watched_deleted).
-        // If we download in order of increasing size, and watch in order of increasing size,
-        // we can pipeline: download a video, then watch it, then delete.
-        // But we can also download multiple videos before watching any.
-        // The key is to find the minimum T such that we can schedule.
-        // Another perspective: total time = total_download + n - overlap,
-        // where overlap is the time we spend downloading while watching.
-        // Overlap is limited by disk space: we can only have at most m MB of videos
-        // downloaded ahead of watching.
-        // So the maximum overlap is the maximum amount of download we can do
-        // while we are watching videos, which is limited by m.
-        // More precisely, we can think of the process as:
-        // We start downloading. At some point we start watching.
-        // While watching, we can continue downloading as long as disk space permits.
-        // The total time = total_download + n - (time spent downloading during watching).
-        // The time spent downloading during watching is at most m, because
-        // we can only download up to m MB ahead of the current watch point.
-        // Actually, if we watch videos in some order, the total download during watching
-        // cannot exceed the sum of sizes of videos that are watched? No.
-        // Let's formalize: Let the watching order be a permutation.
-        // At the moment we start watching video i, we must have downloaded it.
-        // The total downloaded before starting to watch video i is at least sum of sizes
-        // of videos watched up to i (including i). The disk usage at that moment
-        // is total downloaded minus total deleted (which is sum of sizes of already watched).
-        // So disk usage = downloaded - watched_so_far_sizes.
-        // This must be <= m at all times.
-        // To minimize total time, we want to maximize the overlap between downloading and watching.
-        // The maximum overlap is achieved when we keep the disk as full as possible.
-        // The total time = total_download + n - overlap.
-        // Overlap is the amount of download that happens after the first watch starts.
-        // The first watch can start as soon as the first video is downloaded.
-        // Then we can download during the n-1 remaining watches.
-        // The total download during watching is at most m * (number of watches?) No.
-        // Actually, during each minute of watching, we can download 1 MB if disk space allows.
-        // The total download during watching is limited by the total free disk space
-        // that becomes available as we watch and delete videos.
-        // Each watched video frees its size. So total freed space during watching = sum of sizes
-        // of all videos except possibly the first one? Actually, we start with some downloaded videos.
-        // The total download during watching = min(total_download - size_of_first_video, 
-        // sum of sizes of videos watched after the first + initial free space?).
-        // This is getting complicated.
-
-        // Alternative: binary search on T and simulate greedily.
-        // Given T, can we finish? We have T minutes.
-        // We can decide the schedule: at each minute, we can either download a part of a video
-        // or watch a video (if fully downloaded). We want to finish all.
-        // Since watching takes 1 minute and we have n videos, we must reserve n minutes for watching.
-        // The remaining T - n minutes are for downloading. But we can download during watching too.
-        // Actually, total download time needed is total_download. We have T total minutes.
-        // In those T minutes, we can do at most T minutes of work (download or watch).
-        // Watching takes n minutes, so we have T - n minutes left for pure downloading
-        // if we never overlap. But we can overlap: while watching, we can also download.
-        // So the total download we can do is (T - n) + (overlap minutes).
-        // Overlap minutes = minutes where we are both watching and downloading.
-        // Since we have n watch minutes, overlap <= n.
-        // Also overlap is limited by disk: we can only download if there is free disk space.
-        // The maximum overlap is the maximum amount of download we can do during the n watch minutes.
-        // This is equivalent to: we can have at most m MB of "buffer" ahead of the watch pointer.
-        // So the total download we can do = min(total_download, (T - n) + min(n, m + something?)).
-        // Actually, if we have infinite disk, overlap = n (we download every minute we watch).
-        // Then total download capacity = T (since we can download every minute, including watch minutes).
-        // So we need T >= total_download + n? No, if we download every minute including watch minutes,
-        // total download = T, we need T >= total_download, and we also need to fit n watches,
-        // but watches take time from downloading? If we download during watches, we are doing both.
-        // So total time T must satisfy: we can do n watches and total_download downloads.
-        // Since they can overlap, the total time T must be at least max(total_download, n)?
-        // But we can't watch before downloading. So we need T >= total_download + 1? No.
-        // Example: one video of size 5, m=5. total_download=5, n=1.
-        // We download 5 minutes, then watch 1 minute. Total = 6. T=6.
-        // Here T = total_download + n = 6. Overlap = 0.
-        // If we had two videos: sizes 1,1. total_download=2, n=2.
-        // Download first (1 min), then watch first (1 min) while downloading second (1 min).
-        // Total time: download first (1), then watch first + download second (1), then watch second (1).
-        // Total = 3. T = total_download + n - overlap = 2+2-1=3.
-        // Overlap = 1.
-        // So T = total_download + n - overlap.
-        // Overlap is the number of minutes we download while watching.
-        // Maximum overlap is limited by disk: we can only download up to m MB ahead of the current watch.
-        // More precisely, at any time during watching, the amount of downloaded but unwatched data
-        // cannot exceed m. This means the total download during watching cannot exceed
-        // the sum of sizes of videos that are watched after the download? Hmm.
-
-        // Let's think of the process as a sequence of downloads and watches.
-        // We can reorder videos arbitrarily. Optimal order: sort by size ascending?
-        // Or descending? Let's test with examples.
-        // Example 1: n=5, m=6, a=[1,2,3,4,5]. Sorted: 1,2,3,4,5. Output 16.
-        // total_download=15, n=5. T=16 => overlap = 15+5-16=4.
-        // Example 2: m=5, same a. Output 17 => overlap=3.
-        // Example 3: n=4, m=3, a=[1,3,2,3] sorted: 1,2,3,3. total=9, n=4. Output 12 => overlap=1.
-        // So overlap depends on m and the sizes.
-
-        // Let's try to derive formula: minimum T = total_download + n - max_overlap.
-        // max_overlap = maximum amount of download we can do during the n watch minutes.
-        // During the n watch minutes, we can download at most n MB (since 1 minute = 1 MB).
-        // But we are limited by disk: we can only have at most m MB of unwatched videos.
-        // So the total download during watching is limited by the total size of videos
-        // that we can "pre-download" before watching them, which is constrained by m.
-        // Actually, consider we watch videos in some order. Let the order be p_1, p_2, ..., p_n.
-        // We start by downloading some videos. At time t_0, we start watching p_1.
-        // From then on, we watch one video per minute. During the minute we watch p_i,
-        // we can download the next videos. The total downloaded before watching p_i
-        // must be at least sum_{j=1}^i a_{p_j}. The disk usage at the start of watching p_i
-        // is (total downloaded so far) - sum_{j=1}^{i-1} a_{p_j} (since previous watched are deleted).
-        // This must be <= m. Also, we cannot download more than the remaining sizes.
-        // To maximize overlap, we want to keep the disk as full as possible.
-        // The maximum total download during watching is the sum over i=1 to n-1 of
-        // min(1, free space at that minute)? Actually, each watch minute we can download 1 MB
-        // if there is free disk space. The free disk space at the start of watch i is
-        // m - (downloaded - watched_so_far). But we can also free space by finishing a watch.
-        // This is equivalent to: we have a buffer of size m. We can fill it with downloads.
-        // When we watch a video of size s, we remove s from the buffer (freeing space).
-        // During the watch minute, we can add up to 1 MB to the buffer (download).
-        // So the buffer size changes by (1 - s) during that minute? Actually, we watch for 1 minute,
-        // and during that minute we can download 1 MB. At the end of the minute, we delete the video,
-        // freeing s MB. So net change in buffer: +1 (download) - s (deletion) = 1 - s.
-        // But the deletion happens at the end of the watch. The buffer constraint must hold
-        // at all times. The maximum buffer size is m. Initially buffer = 0.
-        // We can download before any watch to fill the buffer up to m.
-        // Then we start watching. For each watch of size s:
-        // - We must have at least s in the buffer? Actually, the video must be fully downloaded
-        //   before we start watching it. So the buffer must contain the video's data.
-        //   But the buffer represents all downloaded unwatched data. So before watching,
-        //   the buffer must have at least s (the video we are about to watch is part of it).
-        // - During the watch minute, we can download 1 MB, so buffer can increase by 1,
-        //   but must not exceed m. Then at the end, we delete s, so buffer decreases by s.
-        // So the sequence of buffer sizes: start with B0 = some initial downloads (<= m).
-        // For i=1..n:
-        //   require B_{i-1} >= a_{p_i} (video must be downloaded).
-        //   During watch: B can increase by up to 1, so B_i' = min(m, B_{i-1} + 1).
-        //   Then delete: B_i = B_i' - a_{p_i}.
-        // We want to maximize total download during watches = sum of (B_i' - B_{i-1}) over i,
-        // which is at most n (since each watch minute we can add at most 1).
-        // But we also have initial downloads before first watch: B0.
-        // Total downloads = B0 + sum (download during watches) + downloads after last watch?
-        // Actually, after last watch, we don't need to download anything else.
-        // So total_download = B0 + sum_{i=1}^n (B_i' - B_{i-1}) + (downloads after last watch? No, all done).
-        // Wait, we must download all videos. The total downloaded is sum a_i.
-        // The downloads can happen before first watch, during watches, and after last watch?
-        // But after last watch, we are done, so no downloads after. So all downloads happen
-        // before or during watches. So total_download = B0 + sum_{i=1}^n d_i, where d_i is download during watch i (0 or 1).
-        // Also, the buffer evolution: B_i = B_{i-1} + d_i - a_{p_i}, with 0 <= d_i <= 1, B_{i-1} + d_i <= m, B_{i-1} >= a_{p_i}.
-        // And B_n = 0 (all watched and deleted).
-        // We want to minimize total time T = (time before first watch) + n.
-        // Time before first watch = B0 (since we download B0 MB at 1 MB/min).
-        // So T = B0 + n.
-        // But wait, is there any download after the last watch? No, because we finish.
-        // So total time = B0 + n.
-        // And total_download = B0 + sum d_i.
-        // We want to minimize B0 + n given that we can choose order p and d_i in {0,1} such that
-        // B_i = B_{i-1} + d_i - a_{p_i}, B_{i-1} >= a_{p_i}, B_{i-1} + d_i <= m, B_n = 0.
-        // Also B0 <= m.
-        // Since total_download is fixed, minimizing B0 is equivalent to maximizing sum d_i.
-        // Because total_download = B0 + sum d_i => B0 = total_download - sum d_i.
-        // So T = total_download - sum d_i + n.
-        // Thus we want to maximize sum d_i (total download during watches).
-        // sum d_i <= n, and also constrained by buffer dynamics.
-        // The buffer dynamics: B_i = B_{i-1} + d_i - a_{p_i}.
-        // Summing over i=1..n: B_n - B0 = sum d_i - sum a_{p_i} => 0 - B0 = sum d_i - total_download.
-        // So B0 = total_download - sum d_i, consistent.
-        // The constraints: for each i, B_{i-1} >= a_{p_i} and B_{i-1} + d_i <= m.
-        // Also B_i >= 0 (since buffer can't be negative). But B_i = B_{i-1} + d_i - a_{p_i} >= 0 is automatically
-        // satisfied if B_{i-1} >= a_{p_i} and d_i >= 0? Actually, if d_i=0, B_i = B_{i-1} - a_{p_i} >= 0 by the first constraint.
-        // So the main constraints: a_{p_i} <= B_{i-1} <= m - d_i.
-        // Since d_i is 0 or 1, B_{i-1} <= m if d_i=0, or B_{i-1} <= m-1 if d_i=1.
-        // Also B_{i-1} must be at least a_{p_i}.
-        // We start with B0. We want to choose order and d_i to maximize sum d_i.
-        // This is like: we have a buffer that starts at B0. We process videos in some order.
-        // For each video, we must have buffer >= its size. We can optionally increase buffer by 1
-        // during processing (if buffer < m), then we subtract its size.
-        // We want to maximize the number of times we increase buffer (i.e., d_i=1).
-        // Since total_download is fixed, B0 is determined by sum d_i.
-        // But B0 must be <= m. So sum d_i >= total_download - m.
-        // Also sum d_i <= n.
-        // So sum d_i is bounded below by max(0, total_download - m) and above by n.
-        // But we also have the ordering constraints: can we achieve a given sum d_i?
-        // Let's think: we want to maximize sum d_i. The maximum possible is n (always download during watch).
-        // Can we always achieve sum d_i = n? That would require B0 = total_download - n.
-        // And we need B0 <= m, so total_download - n <= m => total_download <= m + n.
-        // Also we need to be able to schedule the videos such that we never exceed m and always have enough buffer.
-        // If we set d_i=1 for all i, then B_i = B_{i-1} + 1 - a_{p_i}.
-        // We need B_{i-1} >= a_{p_i} and B_{i-1} + 1 <= m => B_{i-1} <= m-1.
-        // So we need a_{p_i} <= B_{i-1} <= m-1.
-        // Starting from B0 = total_download - n. We need B0 <= m-1.
-        // And we need to order videos so that these constraints hold.
-        // This is similar to scheduling with buffer. The optimal order is to process videos in increasing order of size?
-        // Let's test: if we process small videos first, B decreases slowly, so we might keep B within bounds.
-        // If we process large videos first, B drops quickly, which might violate B_{i-1} >= a_{p_i} for later large videos?
-        // Actually, we need B_{i-1} >= a_{p_i}. If we process large videos when B is large, it's okay.
-        // But we also need B_{i-1} <= m-1. If B0 is close to m, we might exceed if we add 1.
-        // So we want to keep B as low as possible to avoid exceeding m, but as high as possible to cover large videos.
-        // The classic result: to maximize the number of videos we can process with a buffer constraint,
-        // we should sort videos by size? There's a known problem: "Downloading and watching videos" 
-        // The optimal strategy is to sort videos by size ascending? Or descending?
-        // Let's think about the buffer constraint: B_i = B_{i-1} + d_i - a_i.
-        // We want to keep B_i between 0 and m.
-        // If we always download during watch (d_i=1), then B_i = B_{i-1} + 1 - a_i.
-        // This is like a random walk. We want to choose order to keep B_i in [0, m].
-        // Since a_i >= 1, B_i tends to decrease if a_i > 1, or stay same if a_i=1.
-        // To avoid hitting 0 (which would prevent downloading larger videos later), we should process larger videos earlier when B is larger.
-        // To avoid hitting m, we should process smaller videos when B is near m? Actually, if B is near m, adding 1 might exceed m, so we cannot download during that watch. So we might need to set d_i=0 for some watches.
-        // So the maximum sum d_i is not always n. It depends on the sizes and m.
-        // Let's try to find a greedy algorithm to compute max sum d_i for a given order.
-        // Since we can choose order, we want to find the maximum possible sum d_i over all orders and valid d_i sequences.
-        // This is equivalent to: we have n items with sizes a_i. We want to sequence them.
-        // We start with B0. For each item, we can optionally increase B by 1 (if B < m), then subtract a_i.
-        // We require B >= a_i before subtraction. We want to maximize the number of increases.
-        // Since total_download = B0 + sum d_i, and B0 = total_download - sum d_i, B0 is determined by sum d_i.
-        // So we are choosing sum d_i, and then we need to check if there exists a sequence with that many increases.
-        // Alternatively, we can binary search T, and check if T >= total_download + n - max_possible_overlap.
-        // But we need to compute max_overlap efficiently.
-
-        // Let's think differently: The total time T = total_download + n - overlap.
-        // Overlap is the number of minutes we download while watching.
-        // We can think of the process as: we have a buffer of size m. We can fill it by downloading.
-        // Watching a video takes 1 minute and frees its size at the end.
-        // During the watch minute, we can download 1 MB if buffer is not full.
-        // So the maximum overlap is the maximum number of watch minutes during which we can download.
-        // This is equivalent to: we have n watches. We can download during a watch if the buffer
-        // has free space at the start of the watch (or during). Actually, we can always download
-        // during the watch as long as buffer < m at the start of the watch? But buffer might become full
-        // during the watch if we download? We can only download 1 MB per minute, so if buffer <= m-1,
-        // we can download that 1 MB. So condition to download during watch i is: B_{i-1} <= m-1.
-        // Also we need B_{i-1} >= a_{p_i} to have the video downloaded.
-        // So we want to maximize the number of i such that B_{i-1} <= m-1 and B_{i-1} >= a_{p_i}.
-        // And we can choose order and initial B0.
-        // B0 = total_download - sum d_i. Since sum d_i is the number of watches with download,
-        // let k = sum d_i. Then B0 = total_download - k.
-        // We need B0 <= m (since buffer can't exceed m initially). So k >= total_download - m.
-        // Also B0 >= 0, so k <= total_download.
-        // But k <= n.
-        // So k is in [max(0, total_download - m), min(n, total_download)].
-        // We want to maximize k.
-        // For a given k, B0 = total_download - k.
-        // We need to find an ordering and a set of k watches where we download (d_i=1) and n-k watches where we don't (d_i=0).
-        // The constraints: B_i = B_{i-1} + d_i - a_{p_i}.
-        // B_{i-1} >= a_{p_i} for all i.
-        // B_{i-1} <= m - d_i (since if d_i=1, B_{i-1} <= m-1; if d_i=0, B_{i-1} <= m).
-        // Also B_i >= 0 automatically if B_{i-1} >= a_{p_i}.
-        // We want to know the maximum k achievable.
-
-        // This looks like we can process videos in some order, and we have a "resource" B that changes.
-        // We can think of it as: we have a sequence of operations. Each operation is either "download then watch" (d=1) or just "watch" (d=0).
-        // For d=1: B must be in [a, m-1], then B <- B + 1 - a.
-        // For d=0: B must be in [a, m], then B <- B - a.
-        // We start with B0. We want to end with B_n = 0.
-        // Notice that the total change in B is sum (d_i - a_i) = k - total_download = -B0.
-        // So B_n = B0 + k - total_download = 0, consistent.
-        // We want to maximize k.
-        // This is similar to: we have items with sizes a_i. We want to choose k items to be "with download" and the rest "without".
-        // But the order matters because B must stay within bounds.
-        // Let's try to find a greedy strategy. Suppose we decide which items get d=1 and which get d=0.
-        // Can we always order them to satisfy constraints if certain conditions hold?
-        // Consider the net effect on B: for d=1, B decreases by (a_i - 1); for d=0, B decreases by a_i.
-        // So B decreases faster with d=0. To keep B from dropping below required a_j, we should do operations that decrease B less (i.e., d=1 or small a) earlier? Or later?
-        // Actually, we need B to be large enough for large a_j. So we should process large a_j when B is large.
-        // B starts at B0 and decreases. So we should process larger a_j earlier.
-        // Also, to avoid exceeding m, we should process items with d=1 when B is not too close to m.
-        // If we process large a_j early, B drops quickly, which might help avoid exceeding m later.
-        // This suggests sorting by a_i descending might be good.
-        // Let's test with examples.
-        // Example 1: a=[1,2,3,4,5], m=6. total=15, n=5. Max k?
-        // If we sort descending: 5,4,3,2,1.
-        // Try k=5 (all d=1): B0 = 15-5=10. But B0 must be <= m=6. So k=5 impossible because B0=10>6.
-        // So k <= total_download - m? Actually B0 = total_download - k <= m => k >= total_download - m = 15-6=9. But k<=n=5. Contradiction: k>=9 and k<=5 impossible. So k cannot be 5. Wait, B0 = total_download - k. If k=5, B0=10 > m=6, invalid. So we need B0 <= m => total_download - k <= m => k >= total_download - m = 9. But k<=5, so no solution with k=5. So maximum k is at most 5, but we need k>=9? That's impossible. So my formula B0 = total_download - k assumes all downloads happen either before first watch or during watches. But wait, we can also download after the last watch? No, after last watch we are done. So all downloads must happen before or during watches. So total_download = B0 + k. Thus B0 = total_download - k. Since B0 <= m, we have total_download - k <= m => k >= total_download - m. For example 1, total_download=15, m=6 => k >= 9. But k <= n=5. So it's impossible to finish if we only download before and during watches? But the answer is 16, which is total_download + n - overlap = 15+5-4=16 => overlap=4. So k=4. Then B0 = 15-4=11. But B0=11 > m=6! Contradiction.
-        // So my assumption that all downloads happen before first watch or during watches is wrong. We can download after some watches? No, after all watches we are done. But we can download before the first watch, and during watches, and also between watches? There are no "between watches" because we watch consecutively? The problem says: "Once a video is fully downloaded... Monocarp can watch it. Watching each video takes exactly 1 minute... so Monocarp can start downloading another video while watching the current one." It doesn't say he must watch videos back-to-back. He can have idle time between watches? But idle time would just increase total time without benefit. So optimal schedule has no idle time: either downloading or watching. But we can have periods where we only download (no watch). That would be before the first watch, or after a watch if we choose not to start the next watch immediately? But if we don't start the next watch immediately, we are just downloading, which could be done during the next watch if we had started it. So to minimize total time, we should always be either watching or downloading. And we should start watching as soon as possible. So the schedule consists of: some initial downloading (B0 minutes), then a sequence of n watches, each taking 1 minute, during which we may also download (if possible). There is no downloading after the last watch because we are done. There is no downloading between watches because watches are back-to-back (otherwise we waste time). So the total time is B0 + n. And total downloaded = B0 + (download during watches). So B0 = total_download - k, where k is download during watches. So B0 = 15 - 4 = 11 in example 1. But B0 cannot exceed m=6. So how can B0 be 11? That means we downloaded 11 MB before starting the first watch. But disk size is only 6! That's impossible. So my model is flawed: we cannot download 11 MB before the first watch because disk is only 6. We must delete some videos before we can download more. But we can only delete after watching. So we must watch some videos to free space. Therefore, we cannot download all 11 MB before the first watch. We must interleave downloads and watches more finely. The initial download B0 is limited by m. So B0 <= m. Then during the first watch, we can download 1 MB, then delete the first video, freeing space. So the total downloaded before the first watch is at most m. The rest must be downloaded during or after some watches. But after the first watch, we have freed some space, so we can download more. So the total download is not just B0 + k; it's B0 + (download during watches) + (download between watches?) But we said no idle time. Actually, we can have a schedule where we watch a video, then download a bit, then watch another, etc. But that would mean there is a gap between watches where we only download. That gap would increase total time. However, we can instead do that download during the next watch if we had started the next watch earlier? Not necessarily, because to start the next watch, we need the next video fully downloaded. If it's not fully downloaded, we cannot start watching it. So we might have to wait (download) before starting the next watch. That waiting time is pure download time, not overlapped with watching. So the total time is: (initial download) + (watch 1) + (download after watch 1 if needed before watch 2) + (watch 2) + ... So the total time = sum of all download times + n, but some download times overlap with watches. The non-overlapped download time is the time we spend downloading while not watching. The total time = (non-overlapped download time) + n. The total download time = total_download. So non-overlapped download time = total_download - overlapped download time. Thus total time = total_download - overlap + n. This is the same formula. But now B0 is not the initial download before first watch; it's the total non-overlapped download time. That can be larger than m because we can have non-overlapped download between watches. So my previous B0 was the total non-overlapped download, not just the initial buffer. Let's redefine:
-
-        Let T = total time.
-        We have n watches, each 1 minute. The remaining T - n minutes are pure download minutes (no watch). During the n watch minutes, we can also download up to n MB, but limited by disk.
-        So total download = (T - n) + overlap, where overlap is the amount downloaded during watch minutes.
-        So T = total_download + n - overlap.
-        Overlap is the number of watch minutes during which we download.
-        Let k = overlap. Then T = total_download + n - k.
-        We want to minimize T, so maximize k.
-        k <= n.
-        Also, the total non-overlapped download is total_download - k. This is the time we spend downloading while not watching. This time can be distributed before the first watch and between watches. The disk constraint: at any time, the amount of downloaded but unwatched data <= m.
-        This imposes a constraint on how much we can download ahead of watching.
-        Let's think of the process as a sequence of events. We have a buffer of unwatched data. Initially 0. We can download to increase buffer (up to m). We can watch to decrease buffer by the video size (after a 1-minute watch during which we may also download 1 MB). The total time is the number of minutes elapsed.
-        We want to finish all watches and have buffer 0.
-        This is exactly the problem of scheduling downloads and watches to minimize makespan.
-        There is a known greedy solution: sort videos by size? Let's search memory: There is a Codeforces problem "Videos" or "Downloading" where you sort by size and then simulate or use a formula. I recall a problem: "Monocarp and the videos" or similar. The solution often involves sorting the array and then using a greedy approach with a multiset or two pointers.
-        Let's think about the optimal order of watching. Since we can delete after watching, the order of watching determines when space is freed. To maximize overlap, we want to free space as early as possible so we can download more during later watches. Freeing space early means watching large videos early? Or small videos early? If we watch a large video, we free a lot of space, which then allows more download during subsequent watches. But to watch a large video, we need to have it downloaded, which requires a lot of space initially. So there's a trade-off.
-        Consider we have a set of videos. We can think of the process as: we need to download all videos. We can watch them in any order. The total time is the sum of download times plus the number of watches minus the overlap. The overlap is the amount of download we can do while watching. During a watch, we can download 1 MB if there is free disk space. The free disk space at the start of a watch is m - (buffer size). The buffer size is the sum of sizes of videos that are downloaded but not yet watched. When we watch a video of size s, the buffer size decreases by s (after the watch). During the watch, we can increase buffer by 1. So the net change in buffer during watch i is 1 - s_i (if we download), or -s_i (if we don't). To maximize the number of watches with download, we want the buffer to be as small as possible so that we have free space to download. But we also need the buffer to be at least the size of the next video we want to watch.
-        This is similar to the
+    // We need to find the minimum time T such that we can finish all videos.
+    // Total time = sum(a_i) + n (download + watch) + idle time.
+    // We can binary search on the total time T.
+    // For a given T, we check if we can schedule all downloads and watches.
+    // The key is to maximize the number of videos we can watch while downloading others.
+    // We can watch a video only after it's downloaded, and watching takes 1 minute.
+    // During watching, we can download another video.
+    // The disk constraint: at any time, the sum of sizes of currently downloading + downloaded but not yet watched videos <= m.
+    // Since we delete immediately after watching, the disk usage is just the sum of sizes of videos that have started download but not yet finished watching.
+    // We can think of it as: we need to order the videos. At time t, we have downloaded some total megabytes, and watched some videos.
+    // Let's sort videos by size? Actually, to minimize time, we want to keep disk usage low, so we should download larger videos later? Or earlier?
+    // Consider the process: we start downloading a video, it takes a_i minutes. After it finishes, we can watch it (1 minute) while starting another download.
+    // The disk holds the video during download + during watch (if not deleted early, but we delete after watch).
+    // So a video occupies space for a_i + 1 minutes from the start of its download.
+    // We want to pack these intervals on the disk of size m.
+    // This is similar to scheduling with resource constraints.
+    // Another perspective: total time = sum a_i + n + idle. Idle happens when we cannot start a new download because disk is full.
+    // We can always watch a video as soon as it's downloaded if we have no other video to watch? But we can only watch one at a time.
+    // Actually, watching is sequential: we can only watch one video at a time. But we can download while watching.
+    // So the process: at any minute, we are either downloading (if disk space allows and there are videos left) or idle (if disk full or all downloads started).
+    // Also, we are watching a video if there is a downloaded video that we haven't watched yet.
+    // We can watch videos in any order. The total watch time is n minutes, and they must happen after their respective downloads finish.
+    // This is like: we have n jobs, each with processing time a_i (download) and a mandatory 1-minute post-processing (watch) that can overlap with other downloads.
+    // The disk constraint: at any time, the sum of sizes of jobs that have started but not yet finished (including the 1-minute watch) <= m.
+    // We want to minimize makespan.
+    // This is known to be solvable by sorting videos by size? Let's think.
+    // Suppose we decide the order of downloads. The finish time of download i is start_i + a_i. The watch of i can start anytime after finish_i, but we have only one watcher.
+    // Since watching takes only 1 minute, we can always watch immediately after download if we are not watching something else. But we might delay watch if we are watching another.
+    // However, delaying watch keeps the video on disk longer, which is bad. So we should watch as soon as possible.
+    // So the optimal strategy: whenever a download finishes, if we are not currently watching, we start watching it immediately. If we are watching, we queue it? But we can only watch one at a time, so the next watch will start after the current watch finishes.
+    // This means the watch order is the same as the download completion order, possibly with some delays if multiple finish at the same time? But they finish at different times because downloads take integer minutes and we can start them at integer times? Actually, we can start downloads at any integer minute? The problem says "it takes exactly 1 minute to download 1 megabyte", so time is continuous in minutes. We can start a download at the beginning of a minute. Watching also takes exactly 1 minute. So we can model time as discrete minutes.
+    // Let's think of a greedy approach: we want to minimize idle time. Idle time occurs when we want to start a download but the disk is full. Disk is full if the sum of sizes of currently downloading videos + videos that are downloaded but not yet watched > m - s, where s is the size of the new video.
+    // To avoid idle, we should keep the disk as empty as possible. That suggests downloading smaller videos first? Or larger videos first?
+    // Consider two videos: sizes x and y. If we download x then y, the disk usage during x's download is x, then during x's watch we can download y, so disk usage during that minute is x + y (since x is still on disk during its watch). After x's watch, we delete x, so disk usage becomes y. Total time = x + 1 + y + 1? Actually, start x at time 0, finishes at x. Watch x from x to x+1. During that minute, we can download y. So y finishes at x+1+y? Wait, if we start y at time x, it finishes at x+y. But we are watching x from x to x+1. So at time x+1, we finish watching x and delete it. Then we can watch y immediately? y finishes at x+y. If y > 1, then y is still downloading after x+1. So we watch y after it finishes, at x+y to x+y+1. Total time = x+y+1+1? Actually, the last watch ends at x+y+1. So total time = x+y+2? But sum a_i = x+y, plus n=2 gives x+y+2. No idle.
+    // If we download y then x: start y at 0, finishes at y. Watch y from y to y+1, download x from y to y+x. x finishes at y+x. Watch x from y+x to y+x+1. Total time = y+x+2. Same.
+    // So order doesn't matter if no idle? But disk constraint: during the minute we watch the first video and download the second, disk usage is size_first + size_second. This must be <= m. So if x+y > m, we cannot do that. We would have to wait until the first video is deleted before starting the second download. That causes idle.
+    // So if we have two videos with x+y > m, we must download one, watch it, delete it, then download the other. Total time = x+1 + y+1 = x+y+2. But wait, if we do sequentially, total time is x+1 + y+1 = x+y+2. But if we could overlap, it would be max(x+1, y+1) + something? Actually, if we overlap, the total time is max(x, y) + 2? No, in the overlapped case, total time = x+y+2? That's not right. Let's recalc:
+    // Sequential: start x at 0, finish x at x. Watch x from x to x+1. Then start y at x+1, finish at x+1+y. Watch y from x+1+y to x+2+y. Total = x+2+y.
+    // Overlapped: start x at 0, finish x at x. At time x, start y and watch x. x watch ends at x+1. y finishes at x+y. Then watch y from x+y to x+y+1. Total = x+y+1. Wait, that's less! Because we saved one minute by overlapping the watch of x with the download of y. But in the sequential case, we didn't overlap. Actually, in sequential, we could also start y right after x finishes downloading, but we have to watch x first. If we start y at x, we are downloading y while watching x. That is the overlapped case. So sequential means we don't start y until after x is watched and deleted. That would be if disk is full. So if x+y > m, we cannot start y at x because disk would have x (during watch) + y > m. So we must wait until x is deleted (after watch) to start y. That means start y at x+1. Total time = x+1 + y+1 = x+y+2. Overlapped gives x+y+1. So the difference is 1 minute idle.
+    // So idle happens when we cannot start the next download because the current watching video + new video > m.
+    // In general, we want to order videos to minimize the number of times we have to wait.
+    // This is similar to scheduling with a buffer. We have a buffer of size m. Each video occupies its size during download, and during its watch it still occupies its size. We can only have one watch at a time. We want to minimize makespan.
+    // I recall a known problem: "Video Watching" or similar. The optimal strategy is to sort videos by size? Let's think about the disk constraint: at any time, the sum of sizes of videos that have been downloaded but not yet watched (including the one currently being watched) plus the currently downloading video <= m.
+    // Since we can only watch one at a time, the videos that are downloaded and waiting to be watched form a queue. Their total size plus the downloading one must be <= m.
+    // To minimize idle time, we want to keep the disk as empty as possible so we can start new downloads. That suggests we should download smaller videos first? Or larger?
+    // Consider we have videos sorted. Suppose we download in increasing order of size. Then when we watch a small video, we can start a larger download? But if the next video is large, the sum might exceed m. If we download in decreasing order, we watch a large video while downloading a smaller one, sum might be smaller? Actually, if we watch a large video, its size is large, so adding even a small video might exceed m. So it's better to watch small videos while downloading large ones? But we can only watch a video after it's downloaded. So if we download a large video first, we have to wait a long time before we can watch anything. During that time, we can't download anything else because disk is occupied by the large video. That seems bad.
+    // Let's test with examples.
+    // Example 1: n=5, m=6, a=[1,2,3,4,5]. Output 16.
+    // Sum a_i = 15, n=5, total if no idle = 20? Wait, sum a_i + n = 20. But output is 16, which is less than 20! How? Because we can overlap downloads and watches. Actually, total time = sum a_i + n - overlap? Overlap happens when we download while watching. Each time we watch a video, we can download for 1 minute. So we can save up to n minutes? But we have n watches, each gives 1 minute of potential download time. However, we might not be able to use all because of disk constraints. In example 1, total time 16 means we saved 4 minutes? 15+5=20, 20-4=16. So we overlapped 4 minutes.
+    // Let's try to find a schedule for example 1.
+    // Videos: 1,2,3,4,5. m=6.
+    // One possible order: download 1 (size 1). Time 0-1: download 1. Disk: 1.
+    // At time 1, 1 finishes. Start watching 1 (1-2). Can we start another download? Disk space left: 6 - 1 (watching) = 5. We can download up to size 5. Let's download 5. Time 1-6: download 5. Disk: 1 (watch) + 5 = 6. At time 2, watch ends, delete 1. Disk: 5.
+    // At time 6, 5 finishes. Start watching 5 (6-7). Disk: 5. Can we start another? Space left: 1. We can download 1? But 1 is already done. Next smallest is 2. 2 > 1, so cannot. So we must wait until watch ends? But we can watch 5 and do nothing, or we could have started something else earlier? At time 2, after deleting 1, disk has 5 (downloading). We could start another download? But we are already downloading 5. We can only download one at a time. So at time 2, we are still downloading 5. So no.
+    // At time 6, 5 finishes. We watch 5 (6-7). Disk: 5. We cannot start 2 because 5+2=7>6. So idle during 6-7? But we are watching, so we can't download anyway? Actually, we can download while watching. But disk space is only 1, and we need 2. So we cannot start 2. So we must wait until 7 to start 2. At time 7, watch ends, delete 5. Disk: 0. Start 2 (7-9). Disk: 2. At 9, 2 finishes. Watch 2 (9-10). Disk: 2. Can we start another? Space left: 4. We can start 3 (size 3) or 4 (size 4). Let's start 4. Time 9-13: download 4. Disk: 2+4=6. At 10, watch ends, delete 2. Disk: 4. At 13, 4 finishes. Watch 4 (13-14). Disk: 4. Space left: 2. We need to download 3 (size 3). Cannot. So idle during 13-14? Wait, we are watching 4, disk has 4. We need 3, but 4+3=7>6. So cannot start 3. At 14, watch ends, delete 4. Start 3 (14-17). Disk: 3. At 17, 3 finishes. Watch 3 (17-18). Total time = 18. That's 18, not 16.
+    // So my schedule is bad. Let's try a different order.
+    // Maybe we can download multiple small videos while watching a large one? But we can only download one at a time.
+    // Let's think differently: we want to maximize the amount of downloading done during watches. Each watch gives 1 minute of download time. We have n watches, so at most n minutes of download can be overlapped with watches. But we also have to download all a_i megabytes. The total download time is sum a_i. If we can overlap all watches with downloads, total time = sum a_i + n - n = sum a_i? But we also need to watch the last video after its download, so total time = sum a_i + 1? Actually, if we perfectly overlap, the last watch happens after the last download finishes. The total time would be sum a_i + 1? Let's check: if we start download at time 0, and we can always download while watching, then the process ends when the last watch finishes. The last watch starts after the last download finishes. So total time = sum a_i + 1? But in example 1, sum a_i=15, 15+1=16. That matches output 16! So in example 1, we achieved perfect overlap: every watch minute was used to download, and there was no idle. How?
+    // Let's try to schedule to achieve 16.
+    // We need to finish all downloads and watches in 16 minutes. That means the last watch ends at 16. The last download must finish by 15, so watch from 15 to 16. Total download time = 15. So we must be downloading continuously from time 0 to 15, except we have 5 watches that take 1 minute each, but they overlap with downloads. So we are downloading for 15 minutes total, and watching for 5 minutes, but they overlap perfectly? That would mean during each of the 5 watch minutes, we are also downloading. And the rest 10 minutes we are downloading without watching. So total time = 15 (download) + 1 (last watch) = 16? Actually, if we download continuously for 15 minutes, and we have 5 watches that happen during those 15 minutes, then the total time is max(15, end of last watch). The last watch could be at the end of a download. If we finish a download at 15, watch from 15 to 16, total 16. So we need to schedule 5 downloads and 5 watches such that the sum of download times is 15, and we never violate disk capacity m=6.
+    // Let's try to find an order. We need to keep disk usage <=6 at all times. Disk usage = sum of sizes of videos currently downloading + videos downloaded but not yet watched.
+    // Since we want to download continuously, we must always have a download running, except possibly at the very end. So at any time, there is exactly one download in progress. The disk usage is (size of current download) + (sum of sizes of videos that have finished downloading but are waiting to be watched, plus the one currently being watched if any).
+    // We have a queue of watched videos? Actually, we can only watch one at a time. So the finished downloads queue up. Their total size plus the current download must be <= m.
+    // This is like a buffer of size m. We feed videos into the buffer by downloading them. They stay in the buffer until we watch them (which takes 1 minute each, and we can only process one at a time). During the watch, the video is still in the buffer. After watch, it's removed.
+    // We want to process all videos. The download times are given. We can choose the order of downloads. We can also choose when to watch, but watching should be as soon as possible to free space. So we should watch immediately when a download finishes if we are not already watching. If we are watching, the finished download waits in the buffer.
+    // This is exactly a scheduling problem: we have a single machine (the downloader) that produces items of size a_i, taking a_i time. We have a buffer of capacity m. We have a single consumer (the watcher) that consumes items one by one, each taking 1 time unit. The consumer can only consume an item after it's produced. The item occupies space in the buffer from the start of its production until its consumption is complete. We want to minimize makespan.
+    // This is similar to a flow shop with limited buffer. The optimal strategy is known: sort items by size? Actually, to minimize makespan, we should process items in order of increasing size? Or decreasing? Let's think about the buffer constraint: at any time, the sum of sizes of items in the buffer (including the one being produced) <= m.
+    // Suppose we have a set of items in the buffer. The consumer is busy for the next k minutes if there are k items waiting. The producer will add more items. To avoid blocking the producer, we need the buffer to have enough space for the next item to produce. So we should produce items in an order that keeps the buffer occupancy low. That suggests producing smaller items first? Because smaller items take less space, so we can accumulate more of them without exceeding m? But they also take less time to produce, so they might finish quickly and be consumed quickly, freeing space. Larger items take more space and more time, so they block the buffer for a long time. It might be better to produce larger items later when the buffer is emptier? Or earlier?
+    // Consider we have a large item. If we produce it early, it occupies a lot of space for a long time, preventing us from producing other items. So we should produce large items as late as possible. That suggests sorting by size descending? Or ascending?
+    // Let's test with example 1: a = [1,2,3,4,5]. If we sort ascending: 1,2,3,4,5. Let's simulate with greedy consumption (watch as soon as possible).
+    // We need to define the state: current time t, buffer contents (sizes of finished but not watched), current download remaining time, etc.
+    // Let's simulate with order 1,2,3,4,5.
+    // t=0: start download 1 (size 1). Buffer: {1} (downloading). Space used: 1.
+    // t=1: download 1 finishes. Start watch 1 (1-2). Buffer: {1} (watching). Can we start next download? Space left: 6-1=5. Next is 2, size 2 <=5. Start download 2. Buffer: {1 (watching), 2 (downloading)}. Space: 1+2=3.
+    // t=2: watch 1 ends, remove 1. Buffer: {2 (downloading)}. Space: 2. Download 2 continues.
+    // t=3: download 2 finishes? Wait, download 2 started at t=1, size 2, so finishes at t=3. At t=3: download 2 finishes. Start watch 2 (3-4). Buffer: {2 (watching)}. Space: 2. Can we start next? Space left: 4. Next is 3, size 3 <=4. Start download 3. Buffer: {2 (watching), 3 (downloading)}. Space: 2+3=5.
+    // t=4: watch 2 ends, remove 2. Buffer: {3 (downloading)}. Space: 3.
+    // t=6: download 3 finishes? Started at 3, size 3, finishes at 6. At t=6: download 3 finishes. Start watch 3 (6-7). Buffer: {3 (watching)}. Space: 3. Space left: 3. Next is 4, size 4 >3. Cannot start! So we must wait until watch ends? But we can't start download. So we are idle during t=6 to 7? But we are watching, so we can't download anyway? Actually, we can download while watching. But we don't have space. So we must wait until t=7 to start 4. At t=7: watch 3 ends, remove 3. Buffer empty. Start download 4 (size 4) at t=7. Finishes at 11. Watch 4 (11-12). At t=11, start watch 4. Space left: 6-4=2. Next is 5, size 5 >2. Cannot start. Wait until t=12. Start 5 at 12, finishes at 17. Watch 5 (17-18). Total 18. Not 16.
+    // So ascending order gives 18.
+    // Try descending: 5,4,3,2,1.
+    // t=0: start 5. Buffer: {5}. Space:5.
+    // t=5: finish 5. Watch 5 (5-6). Space:5. Left:1. Next 4, size 4 >1. Cannot start. Idle during 5-6? Wait, we are watching, but cannot download. So idle. At t=6: watch ends, remove 5. Start 4 at 6. Finishes at 10. Watch 4 (10-11). Space:4. Left:2. Next 3, size 3 >2. Cannot. Idle 10-11. At 11: start 3, finishes 14. Watch 3 (14-15). Space:3. Left:3. Next 2, size 2 <=3. Start 2 at 14? But we are watching 3 from 14 to 15. At t=14, we start watch 3. Can we start download 2? Space: 3 (watching) + 2 = 5 <=6. Yes! So start 2 at 14. Buffer: {3 (watching), 2 (downloading)}. Space:5.
+    // t=15: watch 3 ends, remove 3. Buffer: {2 (downloading)}. Space:2. Download 2 continues (started 14, size 2, finishes 16).
+    // t=16: finish 2. Watch 2 (16-17). Space:2. Left:4. Next 1, size 1 <=4. Start 1 at 16. Buffer: {2 (watching), 1 (downloading)}. Space:3.
+    // t=17: watch 2 ends, remove 2. Buffer: {1 (downloading)}. Space:1. Download 1 finishes at 17? Started 16, size 1, finishes 17. At t=17: finish 1. Watch 1 (17-18). Total 18.
+    // Still 18.
+    // So neither ascending nor descending gives 16. There must be a better order.
+    // Let's try to find an order that achieves 16. We need to never have idle time where we are not downloading while we could be. That means whenever a watch starts, we should be able to start the next download immediately if there is one. So at the start of each watch, the space left (m - size of currently watching video) must be >= the size of the next video to download. Also, we need to ensure that during the download, the buffer doesn't overflow. But since we only add one video at a time, the buffer occupancy is the sum of sizes of videos that are waiting to be watched plus the one being watched plus the one being downloaded. Since we watch immediately when possible, the queue of waiting videos should be empty most of the time. Actually, if we always start a download at the same time we start a watch, then the buffer contains the watching video and the downloading video. Their sum must be <= m. That's the condition for no idle: for each consecutive pair (current watch, next download), we need size_watch + size_next <= m. But wait, the watch only lasts 1 minute. The download takes size_next minutes. During that 1 minute, both are on disk. After the watch ends, the watched video is deleted, so only the downloading video remains. So the condition to start the next download at the same time as starting the watch is exactly size_current_watch + size_next_download <= m. If this holds for all steps, we can chain them without idle.
+    // But we also need to consider the very first video: we start downloading it without any watch. That's fine.
+    // So if we can order the videos such that for every i from 1 to n-1, the size of the video we watch at step i plus the size of the video we download next (which will be watched at step i+1) is <= m, then we can achieve total time = sum a_i + 1? Let's check: The first video downloads, then we watch it and simultaneously start the next download. The next download finishes, we watch it and start the next, etc. The last video: we watch it without starting a new download. So total time = a_1 + 1 + a_2 + 1 + ... + a_n + 1? No, that would be sum a_i + n. But we are overlapping: the watch of video i happens during the first minute of download of video i+1. So the total time is: start download 1 at 0. Finish at a_1. Then for i=1 to n-1: watch i (1 min) and simultaneously download i+1 (a_{i+1} min). The download i+1 finishes at a_1 + 1 + a_2 + 1 + ...? Let's compute carefully.
+    // Let t=0: start download 1.
+    // Download 1 takes a_1, finishes at a_1.
+    // At time a_1: start watch 1 (ends at a_1+1) AND start download 2.
+    // Download 2 takes a_2, so it finishes at a_1 + a_2? No, it starts at a_1, so finishes at a_1 + a_2.
+    // But watch 1 ends at a_1+1. At that time, download 2 is still going if a_2 > 1. So at a_1+1, we finish watch 1. We can then start watch 2? But download 2 hasn't finished yet. We can only watch 2 after it finishes. So we have a gap: between a_1+1 and a_1+a_2, we are just downloading 2, no watching. Then at a_1+a_2, download 2 finishes, we start watch 2 (ends a_1+a_2+1) AND start download 3. And so on.
+    // So the total time = a_1 + (a_2 + 1) + (a_3 + 1) + ... + (a_n + 1)? Let's see: after download 1 finishes, we have a sequence of (download i + watch i) for i=2..n, but they overlap? Actually, the time from start of download 2 to end of watch n is: download 2 (a_2) + watch 2 (1) + download 3 (a_3) + watch 3 (1) + ... + download n (a_n) + watch n (1). But note that watch i happens after download i finishes, and during watch i we start download i+1. So the total time from start of download 2 is sum_{i=2}^n (a_i + 1). Then add a_1. So total = a_1 + sum_{i=2}^n (a_i + 1) = sum a_i + (n-1). Then we also have the first watch? Wait, we included watch 1? In this schedule, watch 1 happens from a_1 to a_1+1. That is during the first minute of download 2. So the time a_1+1 is included in the a_2? Actually, download 2 takes a_2 minutes, starting at a_1. So it ends at a_1 + a_2. The watch 1 is inside that interval. So the total time from 0 to end of watch n is: a_1 + a_2 + 1 + a_3 + 1 + ... + a_n + 1? Let's trace with n=2: a_1=1, a_2=5. Total = 1 + 5 + 1 = 7? But earlier we had 1+5+1=7? Actually, with overlap, we had total = x+y+1 = 1+5+1=7. But sum a_i + n = 1+5+2=8. So we saved 1 minute. The formula sum a_i + (n-1) + 1? For n=2, sum a_i + (2-1) = 6+1=7. Yes. For n=5, sum a_i=15, n-1=4, total=19? But we want 16. So that formula gives 19, not 16. So my assumption that we only overlap watch with the next download is not enough. We can overlap more? How to get 16?
+    // Wait, in the perfect overlap scenario, we are downloading continuously for 15 minutes, and we have 5 watches that happen during those 15 minutes. The total time is 16 because the last watch takes 1 minute after the last download. So the total time = sum a_i + 1 = 16. That means we must have all watches completely overlapped with downloads, except the last watch which extends 1 minute beyond the last download. But how can all watches be overlapped? That would require that during every minute of download, we are also watching something? But we only have 5 minutes of watching total. So we can't be watching all the time. The continuous download means we are always downloading. The watches happen at specific minutes. To achieve total time = sum a_i + 1, the schedule must be: we start download 1 at 0. We finish all downloads by time sum a_i. During that time, we also do all 5 watches. The last watch starts exactly at sum a_i and ends at sum a_i+1. So all watches must be completed by the time the last download finishes? No, the last watch happens after the last download. So the last download finishes at sum a_i, then we watch the last video. But what about the other watches? They must happen earlier, during the downloads. So we need to interleave watches and downloads such that we never have idle time where we are neither downloading nor watching? Actually, we can be downloading without watching. The key is that we never have a situation where we want to start a download but can't because of disk space. That means whenever a download finishes, we must be able to immediately start the next download, possibly while watching something. But if we start the next download immediately, we might need to watch the just-finished video. If we watch it, that takes 1 minute. During that minute, we are downloading the next video. So that's fine. But what if the next video is large and the just-finished video is also large, and their sum > m? Then we can't start the next download immediately; we have to wait until the watch ends. That causes idle time. So to avoid idle, we need that for every video we finish, its size plus the size of the next video we want to download is <= m. But wait, we might not watch the just-finished video immediately. We could delay watching it if we have other videos already downloaded and waiting? But delaying watching keeps it on disk, which is worse. So we should watch immediately. So the condition for no idle is: we can order the videos such that for each i from 1 to n-1, the size of the i-th video watched plus the size of the (i+1)-th video downloaded is <= m. But the watch order is the same as the download completion order. So if we download in order v1, v2, ..., vn, then we watch in that same order. The condition becomes: for each i, a_{v_i} + a_{v_{i+1}} <= m? But wait, when we finish downloading v_i, we start watching v_i and start downloading v_{i+1}. At that moment, disk has v_i (watching) and v_{i+1} (downloading). Their sum must be <= m. So yes, a_{v_i} + a_{v_{i+1}} <= m. If this holds for all consecutive pairs, then we can chain them without idle. But is that sufficient? Let's check with example 1: we need to order the 5 numbers such that every adjacent pair sum <= 6. The numbers are 1,2,3,4,5. Can we order them so that adjacent sums <=6? Possible orders: 1,5,1? But we only have one of each. We need a permutation. Let's try: 1,5,? 1+5=6 ok. Next to 5 we need a number x such that 5+x<=6 => x<=1. Only 1 is available, but we already used 1. So 5 cannot be adjacent to anything except 1. So 5 must be at an end, and its neighbor must be 1. So the sequence must start or end with 5, and next to it is 1. Then we have 2,3,4 left. They need adjacent sums <=6. 2+4=6 ok, 3+3=6 but we don't have two 3s. 2+3=5 ok, 3+4=7 >6. So 3 and 4 cannot be adjacent. So we need to separate 3 and 4. Possible order: 5,1,2,4,3? Check sums: 5+1=6, 1+2=3, 2+4=6, 4+3=7 >6. Not good. 5,1,3,2,4: 5+1=6, 1+3=4, 3+2=5, 2+4=6. All <=6! So order: 5,1,3,2,4. Let's test this order.
+    // Order: download 5, then 1, then 3, then 2, then 4? Wait, the condition is on the watch order, which is the same as download order. So we download in order: 5, 1, 3, 2, 4.
+    // Simulate:
+    // t=0: start download 5. Disk: 5.
+    // t=5: finish 5. Start watch 5 (5-6). Start download

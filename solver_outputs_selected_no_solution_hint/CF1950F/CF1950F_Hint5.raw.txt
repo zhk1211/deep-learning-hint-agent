@@ -1,0 +1,406 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+        
+        // Check if the tree is possible
+        // A tree with a+b+c vertices must have a+b+c-1 edges
+        // Also, sum of children = 2*a + 1*b + 0*c = 2a + b
+        // In a rooted tree, sum of children = number of edges = total vertices - 1
+        // So we need 2a + b = a + b + c - 1 => a = c - 1
+        if (a != c - 1) {
+            cout << "-1\n";
+            continue;
+        }
+        
+        // Special case: only root
+        if (a == 0 && b == 0 && c == 1) {
+            cout << "0\n";
+            continue;
+        }
+        
+        // Build the tree level by level
+        // We start with root at level 0
+        // We have 'a' vertices with 2 children, 'b' with 1 child, 'c' leaves
+        // We want to minimize height, so we should fill levels as much as possible
+        // At each level, we have some number of "slots" for children
+        // Initially, root provides 2 slots if a>0 or 1 slot if a=0 and b>0, etc.
+        // But we can simulate the process greedily
+        
+        int height = 0;
+        int slots = 1; // current level has 1 vertex (root) that needs children? Actually root is already placed
+        // We need to place all a and b vertices as parents, and c leaves as children
+        // We process level by level: at current level, we have some number of parent nodes
+        // that need to be assigned children from the pool of a, b, c.
+        
+        int remaining_a = a;
+        int remaining_b = b;
+        int remaining_c = c;
+        
+        // The root is already counted? Let's think differently.
+        // We have total vertices = a+b+c. Root is one of them.
+        // We need to assign children to each vertex according to its type.
+        // We can simulate BFS: at each level, we have a set of vertices that are parents.
+        // Their children will be at next level.
+        // We want to minimize height, so we should use as many 'a' vertices as possible early
+        // to create more slots for next levels.
+        
+        // Actually, we can compute the minimum height directly.
+        // The tree is a full binary tree except some nodes have 1 child.
+        // The minimum height is achieved by making the tree as "bushy" as possible.
+        // We can think of it as: we have a perfect binary tree part (from 'a' vertices)
+        // and then we attach 'b' vertices as chains.
+        
+        // Let's simulate level by level.
+        // At level 0, we have 1 node (the root). It can be type a, b, or c.
+        // But we know total counts. We need to decide the type of each node.
+        // To minimize height, we should make higher levels have as many children as possible.
+        // So we should use 'a' nodes first, then 'b' nodes, then 'c' nodes.
+        
+        // We can simulate: start with a queue of nodes that need children.
+        // Initially, we have 1 node that needs children (the root).
+        // But we don't know its type yet. We can decide its type based on remaining counts.
+        // Actually, we can just simulate the process of assigning children.
+        
+        // Let's use a variable 'nodes_at_current_level' = number of parents at current level.
+        // Their children will be placed at next level.
+        // We start with root at level 0. We need to assign children to it.
+        // We'll keep track of how many nodes we have placed in total.
+        
+        // Alternative approach: The minimum height is the number of levels needed to place all leaves.
+        // We can compute the number of nodes at each level if we fill greedily.
+        
+        // Let's simulate:
+        int current_level_nodes = 1; // root
+        int total_placed = 1; // root placed
+        height = 0;
+        
+        // We need to place remaining a+b+c-1 nodes.
+        while (total_placed < a + b + c) {
+            // current_level_nodes are the parents at this level.
+            // They will generate children for next level.
+            int next_level_nodes = 0;
+            // We need to assign children to each of the current_level_nodes.
+            // We can choose their types from remaining a, b, c.
+            // To minimize height, we should use 'a' first, then 'b', then 'c'.
+            // But 'c' nodes have 0 children, so they don't contribute to next level.
+            // So we should avoid using 'c' as parents unless forced.
+            // Actually, 'c' nodes are leaves, they cannot be parents.
+            // So current_level_nodes must be either 'a' or 'b' nodes.
+            // We have remaining_a and remaining_b to use as parents.
+            // We need to assign children to them.
+            
+            // For each parent at current level, we need to decide its number of children.
+            // We want to maximize next_level_nodes to reduce height.
+            // So we should use as many 'a' as possible.
+            
+            // We have 'current_level_nodes' parents. We can use up to remaining_a 'a' nodes,
+            // and the rest must be 'b' nodes if we have enough, but we also need to ensure
+            // we have enough leaves for the children.
+            // Actually, we don't need to assign types to parents yet; we just need to know
+            // how many children they produce.
+            
+            // Let's think: we need to place all a, b, c nodes.
+            // The total number of children needed is 2a + b.
+            // We already placed root. The remaining nodes to place as children are (a+b+c-1).
+            // At each level, we have some number of parents. Their children become the next level's parents.
+            // The process stops when we have placed all nodes.
+            
+            // We can simulate by maintaining the number of "slots" for children at current level.
+            // But we also need to account for the types of the parents themselves.
+            
+            // Let's do a BFS simulation:
+            // We have a queue of nodes that need to be processed (assigned children).
+            // Initially, we have one node (root). We don't know its type.
+            // We can decide its type greedily: if a>0, make it 'a'; else if b>0, make it 'b'; else 'c'.
+            // But 'c' has 0 children, so if root is 'c', then total nodes =1, which is handled.
+            
+            // Since we want to minimize height, we should use 'a' nodes as early as possible.
+            // So we can just simulate level by level, deciding the types of nodes at each level.
+            
+            // Let's use an array for the number of parents at each level.
+            // We'll build the tree top-down.
+            
+            // We know total nodes = a+b+c.
+            // We can compute the number of nodes at each level if we fill greedily:
+            // At level 0: 1 node (root). We assign it the best type: if a>0, type a (2 children); else if b>0, type b (1 child); else type c (0 children).
+            // Then level 1 will have that many children.
+            // We continue until we run out of a and b, then all remaining nodes are leaves and must be placed at the last level.
+            
+            // But we must ensure that we don't use more 'a' or 'b' than available.
+            // Also, the total number of leaves must be exactly c.
+            // The leaves are the nodes that are not assigned as parents. They are the children that are not further expanded.
+            
+            // Let's simulate with a queue of "parent slots".
+            // We start with 1 parent slot (the root needs to be assigned a type).
+            // Actually, we can think of it as: we have a certain number of nodes at current level that are parents.
+            // Their types are not yet determined, but we can determine them greedily.
+            
+            // Let's do this:
+            // remaining_a, remaining_b, remaining_c.
+            // We have a variable 'parents' = number of nodes at current level that will be assigned children.
+            // Initially, parents = 1 (the root). But the root itself is one of the a, b, or c.
+            // So we need to account for the root's type.
+            
+            // Let's just simulate level by level, keeping track of how many nodes are at the current level
+            // that need to be "expanded" (i.e., they are not leaves). We'll decide their types on the fly.
+            
+            // We'll maintain 'nodes_at_level' = number of nodes at current level (all are parents initially,
+            // but some might be leaves if we run out of a and b? No, leaves have 0 children, so they don't contribute to next level.
+            // So nodes at current level are either a or b. We need to assign them types.
+            
+            // Let's use a variable 'current_parents' = number of nodes at current level that we need to assign children to.
+            // Initially, we have 1 node at level 0. We don't know its type yet.
+            // We can decide: if a>0, we can make it 'a', then it contributes 2 children to next level, and we decrement a.
+            // If a==0 and b>0, make it 'b', contributes 1 child, decrement b.
+            // If both are 0, then it must be 'c', but then it has 0 children, so if there are more nodes, impossible.
+            
+            // But we have many nodes at the same level. We can assign types in bulk.
+            
+            // Let's do a BFS level by level:
+            // Start with level 0 having 1 node. We need to assign its type.
+            // We'll keep a queue of the number of children each parent will produce.
+            // Actually, we can just compute the number of nodes at each level.
+            
+            // Let's use an array 'level_nodes' where level_nodes[i] is the number of nodes at level i.
+            // We'll fill it greedily.
+            
+            // We know total nodes = a+b+c.
+            // We want to minimize height, so we want as many nodes as possible at lower levels.
+            // The maximum number of nodes at level i is 2^i if we use only 'a' nodes, but we have limited 'a'.
+            
+            // We can compute the minimum height by simulating the process of "spending" a and b to create children.
+            // We have a pool of 'a' and 'b' parents. Each 'a' creates 2 children, each 'b' creates 1 child.
+            // The children can be of any type (a, b, or c) depending on what we need.
+            // We start with 1 node (root). We need to place all a+b+c nodes.
+            // At each level, we have some number of parents. We can choose how many of them are 'a' and how many are 'b'.
+            // Their children will be the nodes at the next level.
+            // We continue until we have placed all nodes.
+            
+            // Let's simulate with variables:
+            // 'nodes_placed' = number of nodes placed so far.
+            // 'current_parents' = number of parents at current level.
+            // 'next_parents' = number of parents at next level (children that will become parents).
+            // But we also need to account for leaves: some children might be leaves (c).
+            
+            // Actually, we can think of it as: we need to place all 'a' and 'b' as parents, and all 'c' as leaves.
+            // The tree structure is determined by the order we place them.
+            // To minimize height, we should place 'a' as early as possible, then 'b', then 'c'.
+            // So we can just simulate the process of creating the tree level by level, using 'a' first, then 'b', then 'c' for the children.
+            
+            // Let's do this:
+            // We have a queue of "parent slots" that need to be filled.
+            // Initially, we have 1 slot (the root). The root itself is a node that we need to account for.
+            // We can think of the root as already placed. We need to assign its children.
+            // So we start with 'current_level_slots' = 1 (the root needs children assigned).
+            // But the root's type is not yet determined. We can determine it as we assign children.
+            
+            // Alternative: We can compute the minimum height by finding the smallest h such that we can fit all nodes in a tree of height h.
+            // We can binary search on height, but constraints are small enough to simulate directly.
+            
+            // Let's simulate greedily:
+            // We maintain 'remaining_a', 'remaining_b', 'remaining_c'.
+            // We maintain 'current_level_nodes' = number of nodes at current level that are parents (i.e., they will have children).
+            // Initially, we have 1 node at level 0. We don't know its type. We can decide its type now:
+            // If a > 0, we make it 'a', so it will have 2 children. a--.
+            // Else if b > 0, we make it 'b', so it will have 1 child. b--.
+            // Else, it's 'c', but then total nodes = 1, which is handled.
+            // Then we move to level 1 with the children.
+            
+            // But wait, the root itself is one of the a, b, or c. So we must decrement the corresponding count.
+            // Let's do that first.
+            
+            // We'll simulate level by level:
+            // Start with level 0: we have 1 node. We need to assign its type.
+            // We'll keep a variable 'parents_at_level' = number of nodes at current level that need to be assigned children.
+            // Initially, parents_at_level = 1.
+            // But we haven't assigned the type of this node yet. We can assign it now.
+            
+            // Let's use a loop:
+            // height = 0
+            // nodes_placed = 0
+            // current_level_nodes = 1 (nodes at level 0, all need to be assigned types)
+            // We'll process level by level.
+            
+            // At each level, we have 'current_level_nodes' nodes. We need to decide their types.
+            // We want to use as many 'a' as possible, then 'b', then 'c'.
+            // But 'c' nodes have 0 children, so they don't contribute to next level.
+            // So we should use 'a' and 'b' first.
+            
+            // Let's do:
+            // For each level:
+            //   We have 'current_level_nodes' nodes.
+            //   We can use up to remaining_a 'a' nodes, and up to remaining_b 'b' nodes.
+            //   But we also need to ensure that we don't exceed the total counts.
+            //   We'll assign as many 'a' as possible, then 'b', then the rest must be 'c' (if any left).
+            //   However, if we assign 'c' at this level, they are leaves and don't produce children.
+            //   The children produced by 'a' and 'b' will be the nodes at the next level.
+            //   We then update remaining_a, remaining_b, remaining_c.
+            //   The next level's nodes will be the children. They will be processed in the next iteration.
+            //   We also need to account for the fact that the children themselves will later be assigned types (a, b, or c).
+            //   But we don't assign their types yet; we just know how many children there are.
+            //   So next level's 'current_level_nodes' = 2 * (number of 'a' used at this level) + 1 * (number of 'b' used at this level).
+            //   We continue until we have placed all nodes (i.e., remaining_a + remaining_b + remaining_c == 0).
+            //   The height is the number of levels processed minus 1? Actually, if we process level 0, then level 1, etc., the height is the maximum level index that has nodes.
+            //   We can increment height each time we move to the next level.
+            
+            // But wait: we also need to place the 'c' nodes. They are leaves. They can be at any level.
+            // In our simulation, when we assign types to current_level_nodes, we might assign some as 'c'.
+            // Those 'c' nodes are placed at this level and don't produce children.
+            // So we must include them in the count of nodes at this level.
+            
+            // Let's refine:
+            // We have total nodes to place: a+b+c.
+            // We'll simulate level by level, starting at level 0.
+            // At each level, we have a certain number of "positions" that need to be filled by nodes.
+            // Initially, at level 0, we have 1 position (the root).
+            // We need to fill these positions with nodes of types a, b, or c.
+            // We want to minimize height, so we should fill higher levels with 'a' and 'b' as much as possible,
+            // and put 'c' as low as possible? Actually, to minimize height, we want the tree to be as wide as possible early on,
+            // so we should use 'a' nodes at higher levels to create many children, and put 'c' nodes at the bottom.
+            // So we should use 'a' first, then 'b', then 'c' at each level? No, we want to use 'a' at the current level to produce many children for the next level.
+            // So at the current level, we should use as many 'a' as possible, then 'b', and only use 'c' if we have filled all 'a' and 'b' and still have positions left.
+            // But if we use 'c' at a higher level, they don't produce children, which might increase height because we then need more levels to place remaining nodes.
+            // So we should avoid using 'c' until we have placed all 'a' and 'b'? Actually, we have exactly c leaves. They must be placed somewhere.
+            // The best is to place them at the very bottom levels.
+            
+            // So the greedy strategy: at each level, we have some number of nodes that need to be assigned types.
+            // We should assign as many 'a' as possible, then 'b', and if there are still positions left, we must assign 'c' (but we want to delay 'c' as much as possible).
+            // However, we can't delay 'c' arbitrarily because we have a fixed number of positions at each level.
+            // Actually, we can choose to not fill all positions at a level? No, every position must be filled by exactly one node.
+            // So if we have more positions than available 'a'+'b', we must fill the rest with 'c'.
+            // But we can also choose to use fewer 'a' and 'b' at a level to save them for later? That would only increase height because we would have fewer children at next level, making the tree deeper.
+            // So to minimize height, we should maximize the number of children at each level, i.e., use as many 'a' as possible, then 'b'.
+            
+            // Let's test this greedy on sample cases.
+            
+            // We'll simulate:
+            // remaining_a = a, remaining_b = b, remaining_c = c.
+            // current_level_nodes = 1 (level 0)
+            // height = 0
+            // while (remaining_a + remaining_b + remaining_c > 0) {
+            //     // We have current_level_nodes positions to fill at this level.
+            //     // We want to fill them with available types.
+            //     // First, use 'a':
+            //     int use_a = min(remaining_a, current_level_nodes);
+            //     remaining_a -= use_a;
+            //     current_level_nodes -= use_a;
+            //     // Next, use 'b':
+            //     int use_b = min(remaining_b, current_level_nodes);
+            //     remaining_b -= use_b;
+            //     current_level_nodes -= use_b;
+            //     // The rest must be 'c':
+            //     int use_c = current_level_nodes; // remaining positions
+            //     remaining_c -= use_c;
+            //     // current_level_nodes is now 0 for this level's positions.
+            //     // The children produced by the 'a' and 'b' we used will be the positions for the next level.
+            //     int next_level_nodes = 2 * use_a + 1 * use_b;
+            //     // If next_level_nodes == 0 and there are still nodes left, it's impossible.
+            //     if (next_level_nodes == 0 && (remaining_a + remaining_b + remaining_c > 0)) {
+            //         impossible.
+            //     }
+            //     current_level_nodes = next_level_nodes;
+            //     height++;
+            // }
+            // // After loop, height is the number of levels? Let's check.
+            // // If we start at level 0 with 1 node, and we process it, we assign its type and produce children.
+            // // Then we move to level 1. So the height is the number of times we moved to the next level.
+            // // But if the tree has only root (level 0), height is 0.
+            // // In our loop, we process level 0: we assign root's type, produce children, height becomes 1.
+            // // But if there are no children, we exit loop, and height would be 1, but actual height is 0.
+            // // So we need to adjust.
+            
+            // Let's rethink:
+            // We can consider the height as the maximum level index.
+            // Level 0: root. If no other nodes, height = 0.
+            // If there are children, they are at level 1, so height >= 1.
+            // So we can start with height = 0, and increment height only when we move to the next level and that level has nodes.
+            // In the loop, we process the current level's nodes (which are already placed). We assign their types and compute children for next level.
+            // If next level has nodes, then height will be at least current height + 1.
+            // So we can do:
+            // height = 0;
+            // current_level_nodes = 1;
+            // while (total_placed < a+b+c) {
+            //     // process current level
+            //     ...
+            //     if (next_level_nodes > 0) height++;
+            //     current_level_nodes = next_level_nodes;
+            // }
+            // But we also need to account for the fact that the current level's nodes are already counted in total_placed.
+            // Let's track total_placed.
+            
+            // Let's simulate properly:
+            
+            int rem_a = a, rem_b = b, rem_c = c;
+            int level_nodes = 1; // nodes at current level (level 0)
+            int h = 0;
+            bool possible = true;
+            int total_nodes = a + b + c;
+            int placed = 0; // number of nodes placed so far
+            
+            while (placed < total_nodes) {
+                // The nodes at this level are 'level_nodes' many.
+                // We need to assign types to them.
+                // But we haven't placed them yet? Actually, they are the nodes that we are currently placing.
+                // In the first iteration, level_nodes = 1 (root). We place it now.
+                // So we add level_nodes to placed.
+                placed += level_nodes;
+                
+                // Now, we need to decide how many of these level_nodes are a, b, c.
+                // We want to use as many 'a' as possible, then 'b', then 'c'.
+                int use_a = min(rem_a, level_nodes);
+                rem_a -= use_a;
+                int remaining_slots = level_nodes - use_a;
+                
+                int use_b = min(rem_b, remaining_slots);
+                rem_b -= use_b;
+                remaining_slots -= use_b;
+                
+                int use_c = remaining_slots;
+                rem_c -= use_c;
+                
+                // Check if we have enough c
+                if (rem_c < 0) {
+                    possible = false;
+                    break;
+                }
+                
+                // The children for next level
+                int next_level = 2 * use_a + 1 * use_b;
+                
+                // If we have placed all nodes, break
+                if (placed == total_nodes) {
+                    break;
+                }
+                
+                // If next_level == 0 but we still have nodes to place, impossible
+                if (next_level == 0) {
+                    possible = false;
+                    break;
+                }
+                
+                // Move to next level
+                level_nodes = next_level;
+                h++;
+            }
+            
+            if (!possible || rem_a != 0 || rem_b != 0 || rem_c != 0) {
+                cout << "-1\n";
+            } else {
+                cout << h << "\n";
+            }
+        }
+    }
+    
+    return 0;
+}
+```

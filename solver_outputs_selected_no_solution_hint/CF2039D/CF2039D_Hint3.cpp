@@ -1,0 +1,169 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> s(m);
+        for (int i = 0; i < m; ++i) {
+            cin >> s[i];
+        }
+
+        // If m == 1, we need to check if n == 1, else impossible
+        if (m == 1) {
+            if (n == 1) {
+                cout << s[0] << '\n';
+            } else {
+                cout << "-1\n";
+            }
+            continue;
+        }
+
+        // If n == 1, any element works, pick largest
+        if (n == 1) {
+            cout << s.back() << '\n';
+            continue;
+        }
+
+        // For n >= 2, we need at least two distinct elements
+        // because gcd(i,j)=1 occurs for many pairs, forcing a[1] != gcd(a[i],a[j])
+        // Actually, we need to check if there exists a valid assignment.
+        // The key observation: For all i,j with gcd(i,j)=1, we need a[1] != gcd(a[i],a[j]).
+        // If we set a[1] = max element, and all other positions to some other element x,
+        // then gcd(a[i],a[j]) = x for i,j > 1 with gcd(i,j)=1? Not necessarily.
+        // But we can construct: a[1] = largest, a[2..n] = second largest (or any other).
+        // Then for pair (1, k) with k>1, gcd(1,k)=1, so a[1] != gcd(a[1], a[k]) = gcd(largest, other).
+        // This requires gcd(largest, other) != largest, which is true if other does not divide largest.
+        // For pairs (i,j) with i,j>1 and gcd(i,j)=1, we need a[1] != gcd(other, other) = other.
+        // So we need largest != other, which is true if distinct.
+        // For pairs with gcd(i,j)=d>1, we need a[d] != gcd(a[i],a[j]).
+        // If we set all a[i] for i>1 to the same value x, then for d>1, a[d] = x (since d>1),
+        // and gcd(a[i],a[j]) = x, so a[d] == gcd, which violates condition.
+        // So we cannot set all non-1 positions to the same value.
+        // We need a more careful assignment.
+
+        // Let's think: We want lexicographically largest.
+        // Try to set a[1] = max(S). Then we need to assign a[2..n] such that conditions hold.
+        // Consider the condition for pairs (i,j) with gcd(i,j)=d.
+        // If we set a[i] based on the prime factors or something?
+        // Another approach: Since n <= 1e5, we can try to assign greedily.
+        // For each position i from 1 to n, try to assign the largest possible value from S
+        // that doesn't conflict with already assigned positions.
+        // Conflict condition: For any j < i, let d = gcd(i,j). We need a[d] != gcd(a[i], a[j]).
+        // Since d <= j < i, a[d] is already assigned (if d < i).
+        // So we can check all j < i? That's O(n^2) too slow.
+        // But note that d = gcd(i,j) can be any divisor of i. For a fixed i, we need to ensure
+        // for all j < i, if we set a[i] = val, then for each divisor d of i with d < i,
+        // we need a[d] != gcd(val, a[j]) for all j such that gcd(i,j)=d.
+        // This seems complicated.
+
+        // Let's use the hints.
+        // Hint 1: How many pairs (i,j) with gcd(i,j)=1? Many, about 6/pi^2 n^2.
+        // Hint 2: When m = n, answer? Probably we can just assign a[i] = i? But S is given.
+        // If m=n, S = {1,2,...,n}. Then we can set a[i] = something?
+        // Hint 3: Is it always possible when m <= n? Not always, as sample 3 shows (n=2,m=1 impossible).
+
+        // Let's analyze the condition more deeply.
+        // We need a[gcd(i,j)] != gcd(a[i], a[j]) for all i<j.
+        // Consider i=1. Then gcd(1,j)=1 for all j>1. So a[1] != gcd(a[1], a[j]) for all j>1.
+        // This implies that for all j>1, gcd(a[1], a[j]) != a[1]. So a[1] cannot divide a[j] for any j>1.
+        // In particular, a[1] cannot be 1 if 1 is in S and used elsewhere? Actually if a[1]=1, then gcd(1, a[j])=1 = a[1], violation. So a[1] cannot be 1 if n>=2.
+        // Also, if a[1] = x, then for any j>1, x cannot divide a[j]. So a[j] cannot be a multiple of x.
+        // This is a strong condition.
+
+        // Now consider i=2, j=4. gcd(2,4)=2. So a[2] != gcd(a[2], a[4]).
+        // This means a[2] cannot divide a[4] (since gcd(a[2],a[4]) would be a[2] if a[2]|a[4]).
+        // Similarly for any i and j where i divides j, gcd(i,j)=i, so a[i] != gcd(a[i], a[j]).
+        // Thus a[i] cannot divide a[j] whenever i|j and i<j.
+        // This is a necessary condition: For any i|j with i<j, a[i] does not divide a[j].
+
+        // Is this condition also sufficient? Let's check.
+        // Suppose for all i|j, a[i] ∤ a[j]. Does that guarantee a[gcd(i,j)] != gcd(a[i],a[j])?
+        // Let d = gcd(i,j). Then d|i and d|j. We have a[d] ∤ a[i] and a[d] ∤ a[j]? Not necessarily, the condition only says for indices that divide each other. Here d divides i and j, so we have a[d] ∤ a[i] and a[d] ∤ a[j]. But we need a[d] != gcd(a[i],a[j]). Could it be that a[d] = gcd(a[i],a[j]) even if a[d] doesn't divide a[i] or a[j]? If a[d] = g = gcd(a[i],a[j]), then g divides a[i] and a[j], so a[d] divides a[i] and a[j]. But we have a[d] ∤ a[i] from the condition (since d|i and d<i unless d=i, but if d=i then i|j so we have a[i] ∤ a[j], and gcd(a[i],a[j]) would be a[i] if a[i]|a[j], but it's not, so gcd(a[i],a[j]) < a[i]. So a[d] cannot equal g if g divides a[i] and a[d] doesn't. Wait, if a[d] = g, then g divides a[i], so a[d] divides a[i], contradiction. So indeed, the condition "for all i|j, a[i] does not divide a[j]" is sufficient to ensure a[gcd(i,j)] != gcd(a[i],a[j]) for all i<j. Let's verify: For any i<j, let d=gcd(i,j). Then d|i and d|j. If d=i, then i|j, so a[i] ∤ a[j], so gcd(a[i],a[j]) < a[i] = a[d]. If d<j (always true since d<=i<j), then a[d] ∤ a[i] and a[d] ∤ a[j]. If a[d] = gcd(a[i],a[j]), then a[d] divides a[i], contradiction. So indeed, the condition is exactly equivalent to: For all i|j with i<j, a[i] does not divide a[j].
+
+        // So the problem reduces to: Assign a[1..n] from S such that for any i|j (i<j), a[i] ∤ a[j].
+        // And we want lexicographically largest.
+
+        // Now, note that the divisibility condition on indices is a partial order (divisibility poset).
+        // We need to assign values such that if i|j, then a[i] does not divide a[j].
+        // This is reminiscent of assigning values to nodes in a DAG (i -> j if i|j) with a "non-divisibility" constraint.
+        // Since we want lexicographically largest, we should try to put large values early.
+        // But we have constraints from smaller indices to larger indices: if i|j, a[i] cannot divide a[j].
+        // This means that if we assign a[i] = x, then for all multiples j of i, we cannot assign any multiple of x to a[j].
+        // Also, for a given j, it cannot be a multiple of any a[i] for i|j.
+
+        // We can process indices from 1 to n. For each i, we want to pick the largest available element from S
+        // that is not forbidden by the condition with its divisors.
+        // For a given i, the forbidden values are those that are multiples of a[d] for any d|i, d<i.
+        // Because if we pick a value that is a multiple of some a[d], then a[d] divides a[i], violating the condition.
+        // So for each i, we need to avoid all multiples of a[d] for d|i, d<i.
+        // Since S is a subset of [1..n] and n<=1e5, we can maintain a boolean array or set of available values.
+        // But we need to do this efficiently for all i.
+
+        // Let's think about the structure. The condition only restricts a[i] from being a multiple of a[d] for d|i.
+        // This is a local condition: when assigning a[i], we only need to look at its proper divisors.
+        // We can precompute divisors for all numbers up to n.
+        // Then for each i from 1 to n, we check divisors d of i (d < i). The forbidden set is the union of multiples of a[d] that are in S.
+        // We want the largest element in S not in this forbidden set.
+        // Since S size m <= n, we could maintain a frequency array or a set of available values, and for each i, temporarily remove forbidden values, pick the max, then restore? That would be O(m * number_of_divisors) which might be too slow if we do it naively.
+
+        // But note that the forbidden values are multiples of a[d]. Since a[d] <= n, the number of multiples in S could be up to n/a[d].
+        // Summing over all d|i could be large. However, we can use a greedy assignment that works without explicitly computing forbidden sets each time.
+
+        // Let's try to find a pattern or a constructive algorithm.
+        // Consider the lexicographically largest array. We want a[1] as large as possible.
+        // a[1] cannot divide any a[j] for j>1. So if we pick a[1] = x, then no a[j] can be a multiple of x.
+        // To maximize lexicographically, we should pick the largest x in S such that there exists a valid assignment for the rest.
+        // But we also need to assign a[2], a[3], etc.
+
+        // Observe that the condition only cares about divisibility of values, not their actual magnitudes except for ordering.
+        // Since we want lexicographically largest, we should try to assign the largest possible values to small indices.
+        // But we have constraints: if i|j, a[i] ∤ a[j]. This means that if we assign a large value to a[i], it might restrict many multiples.
+        // However, if we assign a[i] = 1, it would restrict everything (since 1 divides everything), so 1 is very bad. Indeed, if 1 is in S, we can only use it if n=1, otherwise it would divide everything and violate condition for any i|j. So if 1 in S and n>=2, we cannot use 1 at all? Actually, if we put 1 at some position i, then for any multiple j of i, a[i]=1 divides a[j], violation. So 1 can only be placed at positions that have no proper multiples <= n. That is, only at i > n/2. But even then, if i has a multiple j<=n, it's invalid. So 1 can only be used at indices that are > n/2 and have no multiples? Actually, every i <= n/2 has at least 2i <= n, so 1 cannot be used at any i <= n/2. For i > n/2, the only multiple is i itself, so no j>i with i|j. So 1 can be placed at i > n/2. But then for any d|i with d<i, we need a[d] ∤ 1. Since 1 is divisible by everything, a[d] ∤ 1 means a[d] cannot be 1 (which is fine if we don't use 1 elsewhere) but also a[d] cannot divide 1, which means a[d] must be >1 or not a divisor of 1. The only divisor of 1 is 1. So if a[d] > 1, it does not divide 1. So 1 can be placed at large indices if no divisor has value 1. So 1 is usable but very restrictive.
+
+        // Let's think about the structure of S. Since S is sorted and unique, and elements are <= n.
+        // Maybe we can assign a[i] = s[ something ] based on the number of prime factors or something.
+
+        // Another angle: The condition a[i] ∤ a[j] for i|j is equivalent to saying that the mapping i -> a[i] is an order-reversing? No, it's just that the divisibility relation in values is forbidden along the divisibility relation in indices.
+        // This is similar to graph coloring where edges are between i and j if i|j, and we need a[i] not divide a[j]. But it's directed.
+
+        // Let's try to construct a valid assignment for any S with m>=2 (except maybe some edge cases).
+        // Suppose we sort S descending. Can we assign a[i] = the i-th largest? Not necessarily.
+        // Consider n=6, S={3,4,6}. Sample output: 6 4 4 3 4 3.
+        // Indices: 1:6, 2:4, 3:4, 4:3, 5:4, 6:3.
+        // Check divisibility: 1|2: 6∤4? 6 does not divide 4, ok. 1|3: 6∤4 ok. 1|4: 6∤3 ok. 1|5: 6∤4 ok. 1|6: 6∤3 ok.
+        // 2|4: 4∤3? 4 does not divide 3, ok. 2|6: 4∤3 ok. 3|6: 4∤3 ok.
+        // So it works.
+
+        // Notice that in the sample, a[1]=6 (largest), a[2]=4 (second largest), a[3]=4, a[4]=3 (smallest), a[5]=4, a[6]=3.
+        // It seems they put the largest at 1, then for other numbers, they used the remaining values but avoided multiples.
+        // 6 is at 1. Multiples of 6 in S: only 6 itself. So no restriction on others from 6.
+        // 4 is at 2,3,5. 4's multiples in S: only 4. So no restriction.
+        // 3 is at 4,6. 3's multiples: 3,6. But 6 is at 1, and 1|4? 1|4 is true, so a[1]=6, a[4]=3. 6 does not divide 3, ok. 1|6: 6∤3 ok.
+        // So it works because the multiples of smaller numbers are larger numbers, but we placed the larger numbers at smaller indices, and since larger numbers don't divide smaller numbers, the condition holds. Wait, the condition is a[i] ∤ a[j] for i|j. If we place larger numbers at smaller indices, then for i|j, i<j, a[i] is larger, a[j] is smaller. A larger number cannot divide a smaller number (unless the smaller is 0, but positive integers). So if we can arrange the array such that for all i|j, a[i] > a[j], then the condition automatically holds! Because if a[i] > a[j], then a[i] cannot divide a[j] (since divisor <= number). So the condition a[i] ∤ a[j] is satisfied.
+        // Is it possible to assign values such that for all i|j, a[i] > a[j]? That would mean the sequence is strictly decreasing along the divisibility poset. This is exactly an antichain? No, it's a strict order-reversing mapping from the divisibility poset to the usual order.
+        // If we can assign values in decreasing order of magnitude along any chain of divisibility, then we are good.
+        // Since we want lexicographically largest, we want a[1] as large as possible, then a[2] as large as possible, etc.
+        // But we have the constraint that if i|j, a[i] > a[j]. This means that for any chain 1 = d1 | d2 | d3 | ... | dk, we need a[1] > a[d2] > a[d3] > ... > a[dk].
+        // So the values along any chain must be strictly decreasing.
+        // The maximum length of a chain is the number of prime factors (with multiplicity) plus one? Actually, the longest chain in divisibility poset up to n is when you multiply by 2 repeatedly: 1,2,4,8,... length about log2(n). So we need at least as many distinct values as the length of the longest chain.
+        // But we also have multiple chains interleaving.
+
+        // Can we always assign values to satisfy a[i] > a[j] for all i|j? This is equivalent to finding a linear extension of the partial order? Actually, we need to assign distinct values? Not necessarily distinct, but if a[i] = a[j] and i|j, then a[i] divides a[j] (since equal), violation. So we cannot have equal values along a divisibility chain. So values along any chain must be strictly decreasing, hence distinct. So the number of distinct values in S must be at least the length of the longest chain. The longest chain length is the maximum number of times you can divide? Actually, it's the maximum number of divisors in a chain, which is floor(log2(n)) + 1. For n=1e5, log2(1e5) ~ 17, so chain length <= 18. So we need at least 18 distinct values? But m can be as small as 2. Wait, sample 1 has n=6, m=3, chain length: 1,2,4 (length 3) or 1,3,6 (length 3). They used 3 distinct values, and it worked. But what if m=2? Can we do it? Let's test n=6, m=2, S={4,6}. Can we assign? We need a[1] > a[2] > a[4] (since 1|2|4). So we need 3 distinct values, but we only have 2. So impossible? Let's check: If we assign a[1]=6, a[2]=4, a[4]=? We only have 4 and 6. If a[4]=4, then a[2]=4, a[4]=4, but 2|4 so a[2] divides a[4] (4|4), violation. If a[4]=6, then a[1]=6, a[4]=6, 1|4 so 6|6 violation. So indeed impossible. So m must be at least the length of the longest chain? But wait, the chain length depends on n. For n=2, longest chain: 1,2 (length 2). m=1 in sample 3 gave impossible. So m must be at least the maximum length of a chain of divisibility? But in sample 1, n=6, chain length 3, m=3 works. What about n=4, m=2? Chain: 1,2,4 (length 3). So m=2 would be impossible. Let's test: n=4, S={2,3}. Can we assign? We need a[1] > a[2] > a[4]. Only two values, impossible. So indeed, we need at least as many distinct values as the length of the longest chain. But is that sufficient? Not necessarily, because we also have branching. For example, 1|2 and 1|3, and 2|4, 3|6? But we need a[1] > a[2] and a[1] > a[3], and a[2] > a[4], a[3] > a[6], etc. This is like labeling the divisibility poset with a strictly decreasing function to a chain of values. This is possible iff the poset can be colored with a number of colors equal to the chain length? Actually, it's the dual: we need an order-preserving map from the divisibility poset to the reversed order of the values. This is equivalent to a chain decomposition? By Dilworth's theorem, the minimum number of chains needed to cover the poset is the size of the largest antichain. But we are mapping to a chain of values (the sorted S in descending order). We want to assign each element a value from S such that if i|j, then a[i] > a[j]. This is exactly an order-preserving map from (N, |) to (S, >). This is possible iff the length of the longest chain in (N, |) is <= |S|. Because we can just assign the largest value to the minimal elements of the poset? Wait, the minimal element is 1 (since 1 divides everything). So 1 is the minimum in the divisibility poset. We want a[1] to be the maximum? Actually, if i|j, then i <= j in the usual order, but in the divisibility poset, i is "less than or equal to" j. We want a[i] > a[j]. So we are mapping the poset to the reversed order of values. This is an order-reversing map. The condition for existence of such a map is that the size of the longest chain in the domain is <= size of the codomain. Because if there is a chain of length L, we need L distinct values in strictly decreasing order. So we need |S| >= L, where L is the length of the longest chain in the divisibility poset on {1..n}. But wait, we don't have to use all values of S? We can use a subset of S? The problem says a_i in S, so we must use elements from S. We can reuse elements as long as they don't violate the condition. But if we reuse an element, we cannot have it on a chain because that would give equality. So along any chain, all values must be distinct. So the number of distinct values we actually use must be at least the chain length. Since we can only use elements from S, we need |S| >= chain length. But is that sufficient? We can assign the largest value to 1, the second largest to all numbers that are not multiples of anything? No, we need to assign values to all numbers such that along any chain, values are strictly decreasing. This is equivalent to assigning a "level" to each number based on the longest chain ending at it? Actually, the length of the longest chain from 1 to i (i.e., the maximum number of divisors in a chain) is the number of prime factors with multiplicity? More precisely, if we define rank(i) as the maximum length of a chain 1 = d0 | d1 | ... | dk = i. Then rank(1)=1. For any i>1, rank(i) = max_{d|i, d<i} rank(d) + 1. This is exactly the length of the longest path in the DAG. Then if we assign a[i] = the (R - rank(i) + 1)-th largest element of S, where R is the maximum rank, then for i|j, rank(i) < rank(j), so a[i] will be from a larger index in the sorted S (since we go descending), so a[i] > a[j]. This would satisfy the condition! And we only need |S| >= R. But wait, we need to assign values from S, and we can reuse values as long as they are not on the same chain. If we assign based on rank, then elements with the same rank can have the same value, and they are incomparable in the divisibility poset (no one divides another), so no violation. So this gives a valid assignment!
+
+        // Let's verify: Define rank[i] = length of longest chain from 1 to i. rank[1]=1. For i>1, rank[i] = max_{d|i, d<i} rank[d] + 1. This is well-defined. Then let R = max_i rank[i]. If m >= R, we can sort S in descending order, let the sorted values be v[0] > v[1] > ... > v[m-1]. Then assign a[i] = v[rank[i] - 1]? Wait, if rank[i] is from 1 to R, we want a[i] to be decreasing as rank increases. So we can map rank 1 to the largest value, rank 2 to the second largest, ..., rank R to the R-th largest. So a[i] = v[rank[i] - 1]. This uses the top R values of S. Since S is sorted ascending in input, we can reverse it. Then for any i|j, rank[i] < rank[j], so a[i] = v[rank[i]-1] > v[rank[j]-1] = a[j] (since v is descending). Thus a[i] > a[j], so a[i] cannot divide a[j]. Condition satisfied!
+
+        // But wait: Is it always true that if i|j, then rank[i] < rank[j]? Yes, because if i|j, then any chain ending at i can be extended by j, so the longest chain ending at j is at least rank[i]+1. So rank[j] >= rank[i]+1 > rank[i]. So strict inequality holds.
+
+        // So this construction works for any S with m >= R. And it's easy to compute.
+        // But is it lexicographically largest? We want the lexicographically largest array. Our construction gives a specific array. Can we do better? We want to maximize a[1], then a[2], etc. In our construction, a[1] = v[0] (the maximum element of S). That's clearly the maximum possible for a[1] because a[1] can be any element of S, and we can always set a[1] to the max if we can complete the array. But can we always complete the array if we set a[1] to the max? Our construction does exactly that. What about a[2]? In our construction, a[2] = v[rank[2]-1]. rank[2] = rank[1]+1 = 2, so a[2] = v[1] (second largest). Can we make a[2] larger? The only larger element is v[0], but if we set a[2] = v[0], then since 1|2, we would have a[1] = v[0] and a[2] = v[0], so a[1] divides a[2] (equal), violation. So a[2] cannot be equal to a[1]. Could a[2] be something else? The next largest is v[1]. So a[2] is forced to be at most v[1]. Our construction achieves v[1]. So it's optimal for a[2] as well. Similarly, for any i, the value is constrained by the values of its divisors. To maximize a[i], we want to pick the largest value that is strictly less than all a[d] for d|i, d<i. This is exactly the problem of finding the maximum element in S that is less than the minimum of a[d] over d|i. In our rank-based assignment, we set a[i] based on the length of the longest chain, which ensures it's less than all its divisors. But is it the maximum possible? Suppose S has more than R elements. We only use the top R. Could we use a larger value for some a[i] by not strictly following the rank? For example, if S has many elements, maybe we can assign a[i] a value that is not the (rank[i])-th largest, but something larger, as long as it's less than all its divisors. But the divisors themselves are assigned values. The maximum possible value for a[i] is the largest element in S that is strictly less than min_{d|i, d<i} a[d]. If we want lexicographically largest, we should process i from 1 to n, and for each i, pick the largest valid value given the already assigned divisors. This greedy approach might yield a lexicographically larger array than the rank-based one, because we might be able to assign larger values to some indices if their divisors are assigned smaller values than in the rank construction. But wait, in the rank construction, we assign the largest possible to 1, then the largest possible to 2 (which is second largest), etc. But for i=3, rank[3]=2 (since 1|3). Divisors: 1. min a[d] = a[1] = max. So a[3] must be < a[1]. The largest possible is the second largest, which is v[1]. So a[3] also gets v[1]. So a[2] and a[3] both get v[1]. That's fine because 2 and 3 are incomparable. Now for i=4, divisors: 1,2. min a[d] = min(a[1], a[2]) = a[2] = v[1]. So a[4] must be < v[1]. The largest possible is v[2] (third largest). So a[4] = v[2]. In the rank construction, rank[4] = 3, so a[4] = v[2]. So it matches the greedy choice. For i=5, divisors: 1. min = a[1] = v[0]. So a[5] can be v[1] (second largest). Rank[5]=2, so a[5]=v[1]. For i=6, divisors: 1,2,3. min = min(v[0], v[1], v[1]) = v[1]. So a[6] must be < v[1], so v[2]. Rank[6]=3? Let's check: chains: 1|2|6 (length 3), 1|3|6 (length 3). So rank[6]=3, a[6]=v[2]. So greedy matches rank.
+
+        // What if S has more elements than R? For example, n=6, S={2,3,4,5,6}. R = max rank = 3 (chain 1,2,4). S has 5 elements. Sorted descending: 6,5,4,3,2. Rank construction: a[1]=6, a[2]=5, a[3]=5, a[4]=4, a[5]=5, a[6]=4. Is this lexicographically largest? Let's see if we can do better. a[1]=6 is max. a[2]: divisors {1}, min=6, so a[2] can be 5 (largest <6). a[3]: same, can be 5. a[4]: divisors {1,2}, min=5, so a[4] can be 4. a[5]: divisors {1}, min=6, so a[5] can be 5. a[6]: divisors {1,2,3}, min=5, so a[6] can be 4. So greedy gives exactly the same. So the rank construction is exactly the greedy algorithm! Because when we process i in increasing order, the set of divisors are all smaller indices, and we have already assigned them optimally. The greedy choice for a[i] is the largest element in S strictly less than the minimum of a[d] for d|i, d<i. This minimum is exactly the value assigned to the divisor that has the smallest value? Actually, since values are decreasing along chains, the divisor with the smallest value is the one with the largest rank among divisors. That is exactly the divisor that is "closest" to i in the chain. The minimum value among divisors is the value of the divisor with the maximum rank. So a[i] must be less than that. The largest such element in S is the next smaller element after that divisor's value. If we always pick the next smaller element in the sorted S, we get the rank construction. But wait, what if there are gaps in S? The greedy choice would pick the largest element in S that is less than that minimum. That might not be the immediate next in the sorted order if some values are missing. But the rank construction as I defined uses the sorted S and picks the (rank[i])-th largest. That assumes we use consecutive elements from the top. But if S has gaps, the greedy might pick a value that is not the (rank[i])-th largest, but some other value that is larger than the (rank[i])-th largest? No, because the (rank[i])-th largest is exactly the largest element available if we have already used the top (rank[i]-1) elements for smaller ranks. But wait, in the greedy algorithm, we don't pre-allocate values to ranks; we just pick the largest valid at each step. Since we process i in increasing order, when we get to i, we have already assigned values to all divisors. The minimum among them is some value x. We need a[i] < x. The largest such element in S is the predecessor of x in S. This is exactly the next smaller element in S. If we always pick the predecessor, then the sequence of values assigned will be a decreasing sequence along any chain, and the values used will be some subsequence of S. This is exactly the same as assigning each element the value from S that is the (rank[i])-th largest? Not necessarily, because if S has gaps, the predecessor of x might not be the immediate next in the sorted order of all S? Actually, if S is sorted descending: v[0] > v[1] > ... > v[m-1]. If we assign a[1] = v[0]. Then for any i with rank 2, the minimum divisor value is v[0], so we need < v[0]. The largest such is v[1]. So a[i] = v[1] for all rank 2. For rank 3, the minimum divisor value will be v[1] (since all divisors of rank 2 have value v[1], and rank 1 has v[0], so min is v[1]). So we need < v[1], largest is v[2]. So indeed, it uses v[0], v[1], v[2], ... in order. So the greedy algorithm always picks the top R elements of S in descending order, regardless of gaps! Because the minimum among divisors is always the value assigned to the divisor with the highest rank, which is exactly the value from the previous rank. And since we always pick the largest element less than that, we just walk down the sorted S. So the construction is: a[i] = the (rank[i])-th largest element of S. This requires m >= R. If m < R, it's impossible.
+
+        // But wait, is it always true that the minimum among divisors is exactly the value of the divisor with the

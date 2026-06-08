@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> a(k, vector<int>(n));
+    for (int i = 0; i < k; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> a[i][j];
+        }
+    }
+    if (k == 1) {
+        cout << "YES\n";
+        return;
+    }
+    vector<int> order;
+    // Try to deduce order from first two screenshots
+    int p1 = -1, p2 = -1;
+    for (int i = 0; i < n; i++) {
+        if (a[0][i] == a[1][0]) p1 = i;
+        if (a[1][i] == a[0][0]) p2 = i;
+    }
+    // Build order without the first element of first screenshot
+    vector<int> base;
+    for (int i = 1; i < n; i++) base.push_back(a[0][i]);
+    // Try inserting a[0][0] at two possible positions
+    vector<vector<int>> candidates;
+    // Position before the element that is first in second screenshot
+    if (p1 >= 2) {
+        vector<int> cand = base;
+        cand.insert(cand.begin() + (p1 - 1), a[0][0]);
+        candidates.push_back(cand);
+    }
+    // Position after that element
+    if (p1 >= 1) {
+        vector<int> cand = base;
+        cand.insert(cand.begin() + p1, a[0][0]);
+        candidates.push_back(cand);
+    }
+    // Also consider the case where a[0][0] is at the very beginning
+    {
+        vector<int> cand = base;
+        cand.insert(cand.begin(), a[0][0]);
+        candidates.push_back(cand);
+    }
+    // Remove duplicates
+    sort(candidates.begin(), candidates.end());
+    candidates.erase(unique(candidates.begin(), candidates.end()), candidates.end());
+    for (auto &ord : candidates) {
+        bool ok = true;
+        for (int i = 0; i < k && ok; i++) {
+            int first = a[i][0];
+            int idx = find(ord.begin(), ord.end(), first) - ord.begin();
+            vector<int> expected(n);
+            expected[0] = first;
+            int pos = 1;
+            for (int j = 0; j < n; j++) {
+                if (ord[j] != first) expected[pos++] = ord[j];
+            }
+            if (expected != a[i]) ok = false;
+        }
+        if (ok) {
+            cout << "YES\n";
+            return;
+        }
+    }
+    cout << "NO\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}

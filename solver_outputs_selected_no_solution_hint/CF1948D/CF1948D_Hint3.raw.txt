@@ -1,0 +1,44 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        string s;
+        cin >> s;
+        int n = (int)s.size();
+        int ans = 0;
+        
+        // Check all possible lengths L (even)
+        for (int L = 2; L <= n; L += 2) {
+            int half = L / 2;
+            bool ok = false;
+            // Check all starting positions for substring of length L
+            for (int i = 0; i + L <= n; ++i) {
+                bool match = true;
+                for (int j = 0; j < half; ++j) {
+                    char c1 = s[i + j];
+                    char c2 = s[i + j + half];
+                    if (c1 != '?' && c2 != '?' && c1 != c2) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) {
+                    ok = true;
+                    break;
+                }
+            }
+            if (ok) ans = L;
+        }
+        
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

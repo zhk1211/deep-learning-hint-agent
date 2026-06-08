@@ -1,0 +1,87 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> r(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> r[i];
+            --r[i];
+        }
+        
+        vector<int> indeg(n, 0);
+        for (int i = 0; i < n; ++i) {
+            indeg[r[i]]++;
+        }
+        
+        queue<int> q;
+        for (int i = 0; i < n; ++i) {
+            if (indeg[i] == 0) q.push(i);
+        }
+        
+        vector<int> topo;
+        vector<bool> in_cycle(n, true);
+        while (!q.empty()) {
+            int u = q.front(); q.pop();
+            in_cycle[u] = false;
+            topo.push_back(u);
+            int v = r[u];
+            if (--indeg[v] == 0) q.push(v);
+        }
+        
+        vector<int> cycle_id(n, -1);
+        vector<vector<int>> cycles;
+        for (int i = 0; i < n; ++i) {
+            if (in_cycle[i] && cycle_id[i] == -1) {
+                vector<int> cyc;
+                int cur = i;
+                do {
+                    cycle_id[cur] = (int)cycles.size();
+                    cyc.push_back(cur);
+                    cur = r[cur];
+                } while (cur != i);
+                cycles.push_back(cyc);
+            }
+        }
+        
+        vector<int> dist(n, 0);
+        reverse(topo.begin(), topo.end());
+        for (int u : topo) {
+            int v = r[u];
+            dist[u] = dist[v] + 1;
+        }
+        
+        int ans = 0;
+        for (int cid = 0; cid < (int)cycles.size(); ++cid) {
+            const auto& cyc = cycles[cid];
+            int len = (int)cyc.size();
+            if (len == 1) {
+                int u = cyc[0];
+                ans = max(ans, dist[u] + 2);
+            } else {
+                vector<int> max_in = dist;
+                for (int u : cyc) {
+                    int v = r[u];
+                    if (dist[u] + 1 > dist[v]) {
+                        dist[v] = dist[u] + 1;
+                    }
+                }
+                for (int u : cyc) {
+                    ans = max(ans, dist[u] + 2);
+                }
+            }
+        }
+        
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

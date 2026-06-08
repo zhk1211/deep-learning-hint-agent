@@ -5,7 +5,7 @@ using namespace std;
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
+    
     int t;
     cin >> t;
     while (t--) {
@@ -17,46 +17,84 @@ int main() {
                 cin >> a[i][j];
             }
         }
-
-        // Precompute inverse permutations for all a_i
-        vector<vector<int>> inv(n, vector<int>(m + 1));
+        
+        // For each permutation, compute the position of each value
+        vector<vector<int>> pos(n, vector<int>(m + 1));
         for (int i = 0; i < n; ++i) {
-            for (int pos = 0; pos < m; ++pos) {
-                inv[i][a[i][pos]] = pos + 1; // 1-indexed positions
+            for (int j = 0; j < m; ++j) {
+                pos[i][a[i][j]] = j + 1; // 1-indexed positions
             }
         }
-
-        // Build a trie over all sequences of length up to m
-        // Each node has children for values 1..m
-        vector<array<int, 11>> trie(1);
-        trie[0].fill(0);
+        
+        // For each permutation, compute the longest prefix that is a permutation of 1..k
+        // i.e., the beauty of the permutation itself
+        vector<int> self_beauty(n);
         for (int i = 0; i < n; ++i) {
-            int node = 0;
-            for (int k = 1; k <= m; ++k) {
-                int val = inv[i][k];
-                if (!trie[node][val]) {
-                    trie[node][val] = trie.size();
-                    trie.emplace_back();
-                    trie.back().fill(0);
-                }
-                node = trie[node][val];
+            int k = 0;
+            while (k < m && a[i][k] == k + 1) {
+                ++k;
+            }
+            self_beauty[i] = k;
+        }
+        
+        // We need to find max beauty of a_i * a_j over j.
+        // For a fixed i, we want the maximum k such that there exists j with (a_i * a_j) having prefix 1..k.
+        // This means: for all x = 1..k, (a_i * a_j)_x = x.
+        // By definition: (a_i * a_j)_x = a_j[a_i[x]].
+        // So we need a_j[a_i[x]] = x for all x=1..k.
+        // Let p = a_i. Then we need a_j[p[x]] = x for x=1..k.
+        // This is equivalent to: a_j maps p[1] -> 1, p[2] -> 2, ..., p[k] -> k.
+        // In other words, the permutation a_j must have the property that its inverse maps x to p[x] for x=1..k.
+        // Or: the positions of 1..k in a_j must be exactly p[1], p[2], ..., p[k] in that order.
+        // So for a fixed i, the maximum k is the length of the longest prefix of p (which is a_i) such that
+        // there exists some a_j whose first k elements (in terms of values) match the required positions.
+        
+        // We can precompute for each possible "state" (a bitmask of which values 1..k are placed correctly in order)
+        // the maximum k achievable by any a_j.
+        // Since m <= 10, we can represent the condition as: for a permutation q, consider the sequence of positions of 1,2,...,m.
+        // Let f(q) be the longest prefix of this sequence that matches some "target" sequence.
+        // Actually, we want to answer for each i: given target sequence pos_of_1, pos_of_2, ..., pos_of_m from a_i,
+        // what is the longest prefix of this target that appears as a prefix of the position-sequence of some a_j.
+        
+        // Let's define for each permutation a_j its "position sequence": s_j[x] = position of x in a_j (1-indexed).
+        // Then for a given i, we need the longest k such that s_j[1..k] equals pos_i[1..k] for some j.
+        // So we can insert all s_j sequences into a trie (or just a set of prefixes) and for each i query the longest prefix of pos_i that exists.
+        
+        // Since m <= 10, total possible prefixes are at most sum over j of m = n*m <= 5e4*10 = 5e5, which is fine.
+        // We can use a set of vectors, or a trie implemented via map.
+        
+        // Build a set of all prefixes of position sequences of all a_j
+        set<vector<int>> prefixes;
+        for (int j = 0; j < n; ++j) {
+            vector<int> seq(m);
+            for (int x = 1; x <= m; ++x) {
+                seq[x-1] = pos[j][x];
+            }
+            // insert all prefixes
+            vector<int> pref;
+            for (int k = 0; k < m; ++k) {
+                pref.push_back(seq[k]);
+                prefixes.insert(pref);
             }
         }
-
-        // For each i, find max beauty
+        
+        // For each i, query the longest prefix of its position sequence that is in the set
         for (int i = 0; i < n; ++i) {
-            int node = 0;
-            int beauty = 0;
-            for (int k = 1; k <= m; ++k) {
-                int val = a[i][k - 1];
-                if (trie[node][val]) {
-                    node = trie[node][val];
-                    beauty = k;
+            vector<int> seq(m);
+            for (int x = 1; x <= m; ++x) {
+                seq[x-1] = pos[i][x];
+            }
+            int best = 0;
+            vector<int> pref;
+            for (int k = 0; k < m; ++k) {
+                pref.push_back(seq[k]);
+                if (prefixes.count(pref)) {
+                    best = k + 1;
                 } else {
                     break;
                 }
             }
-            cout << beauty << " \n"[i == n - 1];
+            cout << best << (i+1 == n ? '\n' : ' ');
         }
     }
     return 0;

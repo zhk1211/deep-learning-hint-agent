@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> marked(k);
+    vector<bool> is_marked(n + 1, false);
+    for (int i = 0; i < k; ++i) {
+        cin >> marked[i];
+        is_marked[marked[i]] = true;
+    }
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    if (k == 0) {
+        cout << 0 << '\n';
+        return;
+    }
+    // Find one endpoint of diameter of marked vertices
+    vector<int> dist(n + 1, -1);
+    function<void(int, int)> dfs = [&](int u, int p) {
+        for (int v : adj[u]) {
+            if (v != p) {
+                dist[v] = dist[u] + 1;
+                dfs(v, u);
+            }
+        }
+    };
+    int start = marked[0];
+    dist[start] = 0;
+    dfs(start, 0);
+    int far = start;
+    for (int i = 1; i <= n; ++i) {
+        if (is_marked[i] && dist[i] > dist[far]) {
+            far = i;
+        }
+    }
+    // Second BFS from far
+    vector<int> dist1(n + 1, -1);
+    dist1[far] = 0;
+    dfs(far, 0);
+    int other = far;
+    for (int i = 1; i <= n; ++i) {
+        if (is_marked[i] && dist1[i] > dist1[other]) {
+            other = i;
+        }
+    }
+    // Third BFS from other
+    vector<int> dist2(n + 1, -1);
+    dist2[other] = 0;
+    dfs(other, 0);
+    int ans = INT_MAX;
+    for (int i = 1; i <= n; ++i) {
+        ans = min(ans, max(dist1[i], dist2[i]));
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

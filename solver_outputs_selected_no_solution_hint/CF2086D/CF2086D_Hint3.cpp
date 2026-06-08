@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+const int MAXN = 500000;
+
+long long fact[MAXN + 5], invfact[MAXN + 5];
+
+long long modpow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+void precompute() {
+    fact[0] = 1;
+    for (int i = 1; i <= MAXN; i++) {
+        fact[i] = fact[i-1] * i % MOD;
+    }
+    invfact[MAXN] = modpow(fact[MAXN], MOD-2);
+    for (int i = MAXN-1; i >= 0; i--) {
+        invfact[i] = invfact[i+1] * (i+1) % MOD;
+    }
+}
+
+long long nCr(int n, int r) {
+    if (r < 0 || r > n) return 0;
+    return fact[n] * invfact[r] % MOD * invfact[n-r] % MOD;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    precompute();
+    int t;
+    cin >> t;
+    while (t--) {
+        vector<int> c(26);
+        int total = 0;
+        int odd = 0, even = 0;
+        bool bad = false;
+        for (int i = 0; i < 26; i++) {
+            cin >> c[i];
+            total += c[i];
+            if (c[i] % 2 == 1) odd++;
+            else if (c[i] > 0) even++;
+            if (c[i] >= 3) bad = true;
+        }
+        if (bad) {
+            cout << 0 << '\n';
+            continue;
+        }
+        if (odd > 1) {
+            cout << 0 << '\n';
+            continue;
+        }
+        int pos_even = total / 2;
+        int pos_odd = total - pos_even;
+        long long ways = fact[pos_even] * fact[pos_odd] % MOD;
+        for (int i = 0; i < 26; i++) {
+            if (c[i] == 2) {
+                ways = ways * invfact[1] % MOD * invfact[1] % MOD;
+            } else if (c[i] == 1) {
+                if (odd == 1 && c[i] % 2 == 1) {
+                    ways = ways * invfact[1] % MOD;
+                } else {
+                    ways = ways * invfact[1] % MOD;
+                }
+            }
+        }
+        cout << ways << '\n';
+    }
+    return 0;
+}

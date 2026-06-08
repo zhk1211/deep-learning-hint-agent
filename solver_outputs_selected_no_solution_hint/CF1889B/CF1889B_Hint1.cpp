@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+void solve() {
+    int n;
+    ll c;
+    cin >> n >> c;
+    vector<ll> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    
+    // We'll keep track of connected components using DSU
+    // But we can also use a greedy approach:
+    // Sort indices 1..n-1 by (i+1)*c - a[i]
+    // Start with component containing node 0 (1-indexed as 1)
+    // Keep sum of a in current component
+    // Try to merge with smallest (i+1)*c - a[i]
+    
+    vector<int> idx(n-1);
+    iota(idx.begin(), idx.end(), 1); // indices 1..n-1 (0-based)
+    sort(idx.begin(), idx.end(), [&](int i, int j) {
+        return (i+1)*c - a[i] < (j+1)*c - a[j];
+    });
+    
+    ll sum = a[0];
+    bool ok = true;
+    for (int i : idx) {
+        if (sum + a[i] >= (i+1) * c) {
+            sum += a[i];
+        } else {
+            ok = false;
+            break;
+        }
+    }
+    
+    cout << (ok ? "YES" : "NO") << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

@@ -1,0 +1,105 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    vector<ll> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    vector<ll> pref(n + 1, 0);
+    for (int i = 0; i < n; ++i) {
+        pref[i + 1] = pref[i] + a[i];
+    }
+    ll total = pref[n];
+    auto range_sum = [&](ll l, ll r) -> ll {
+        if (l > r) return 0;
+        // 1-indexed l, r in the infinite concatenated array of a
+        // sum of a[l..r] where a is 1-indexed and repeats
+        auto sum_prefix = [&](ll idx) -> ll {
+            if (idx <= 0) return 0;
+            ll full = idx / n;
+            ll rem = idx % n;
+            return full * total + pref[rem];
+        };
+        return sum_prefix(r) - sum_prefix(l - 1);
+    };
+    // b is concatenation of cyclic shifts: c_1 + c_2 + ... + c_n
+    // length of b is n * n
+    // For a position x in b (1-indexed), we can map to original array
+    // Let x = (i - 1) * n + j, where i in [1, n] is shift index, j in [1, n] is position within shift
+    // c_i[j] = a[(i + j - 2) % n + 1]
+    // So b[x] = a[(i + j - 2) % n + 1]
+    // We can compute sum over range [l, r] by iterating over full rows and partial rows
+    auto query = [&](ll l, ll r) -> ll {
+        ll row_l = (l - 1) / n + 1;
+        ll col_l = (l - 1) % n + 1;
+        ll row_r = (r - 1) / n + 1;
+        ll col_r = (r - 1) % n + 1;
+        if (row_l == row_r) {
+            // same shift i = row_l
+            ll i = row_l;
+            ll start_idx = (i + col_l - 2) % n + 1;
+            ll len = col_r - col_l + 1;
+            // sum of a starting at start_idx, length len, wrapping around
+            if (start_idx + len - 1 <= n) {
+                return pref[start_idx + len - 1] - pref[start_idx - 1];
+            } else {
+                ll first_part = pref[n] - pref[start_idx - 1];
+                ll rem = len - (n - start_idx + 1);
+                return first_part + pref[rem];
+            }
+        } else {
+            ll ans = 0;
+            // first row
+            ll i = row_l;
+            ll start_idx = (i + col_l - 2) % n + 1;
+            ll len = n - col_l + 1;
+            if (start_idx + len - 1 <= n) {
+                ans += pref[start_idx + len - 1] - pref[start_idx - 1];
+            } else {
+                ll first_part = pref[n] - pref[start_idx - 1];
+                ll rem = len - (n - start_idx + 1);
+                ans += first_part + pref[rem];
+            }
+            // last row
+            i = row_r;
+            start_idx = (i + 1 - 2) % n + 1; // col=1
+            len = col_r;
+            if (start_idx + len - 1 <= n) {
+                ans += pref[start_idx + len - 1] - pref[start_idx - 1];
+            } else {
+                ll first_part = pref[n] - pref[start_idx - 1];
+                ll rem = len - (n - start_idx + 1);
+                ans += first_part + pref[rem];
+            }
+            // full rows between
+            if (row_l + 1 <= row_r - 1) {
+                // each full row is sum of entire array = total
+                ans += total * (row_r - row_l - 1);
+            }
+            return ans;
+        }
+    };
+    while (q--) {
+        ll l, r;
+        cin >> l >> r;
+        cout << query(l, r) << '\n';
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```

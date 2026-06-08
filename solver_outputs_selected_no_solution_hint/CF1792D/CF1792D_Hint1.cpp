@@ -14,59 +14,60 @@ int main() {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < m; ++j) {
                 cin >> a[i][j];
-                --a[i][j]; // 0-indexed
             }
         }
 
-        // Precompute for each permutation the position of each value
-        vector<vector<int>> pos(n, vector<int>(m));
+        // Precompute position arrays for each permutation
+        vector<vector<int>> pos(n, vector<int>(m + 1));
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < m; ++j) {
-                pos[i][a[i][j]] = j;
+                pos[i][a[i][j]] = j + 1; // 1-indexed positions
             }
         }
 
-        // For each permutation, compute the longest prefix that is a prefix of some permutation's inverse
-        // We'll build a trie of the inverse mappings
-        // For a permutation q, its inverse is defined by q_inv[value] = index
-        // The product p * q has r_j = q[p_j]. We want r_0 = 0, r_1 = 1, ..., r_{k-1} = k-1.
-        // This means q[p_0] = 0, q[p_1] = 1, ..., q[p_{k-1}] = k-1.
-        // So we need q to map p_0 -> 0, p_1 -> 1, ..., p_{k-1} -> k-1.
-        // That is, for each x from 0 to k-1, q[p_x] = x.
-        // This is equivalent to: for each x from 0 to k-1, the position of x in q is p_x.
-        // So we need a permutation q such that its inverse (position of each value) matches p on the first k elements.
-        // So we can store all inverses of given permutations in a trie, and for each p, find the longest prefix of p that exists in the trie.
+        // For each permutation, compute the longest prefix that is a permutation of 1..k
+        // and store the sequence of positions of 1..k in that permutation.
+        // We'll store for each i the sequence of positions of 1..k for k=0..m.
+        // Actually we need to find for each i the maximum beauty over all j.
+        // Beauty of a_i * a_j is the largest k such that (a_i * a_j)_x = x for x=1..k.
+        // (a_i * a_j)_x = a_j[a_i[x]].
+        // So we need a_j[a_i[1]] = 1, a_j[a_i[2]] = 2, ..., a_j[a_i[k]] = k.
+        // This means that in permutation a_j, the element 1 is at position a_i[1], element 2 at position a_i[2], etc.
+        // Equivalently, the sequence of positions of 1..k in a_j must match the sequence a_i[1..k].
+        // So for each i, we want the maximum k such that there exists j with pos[j][x] == a_i[x] for all x=1..k.
+        // We can precompute for each j the sequence of positions of 1..m, and store them in a trie.
+        // Then for each i, we traverse the trie with the sequence a_i[1..m] and find the maximum depth.
 
-        // Build trie of inverses
-        vector<array<int, 10>> trie(1);
-        trie[0].fill(-1);
-        for (int i = 0; i < n; ++i) {
+        // Build trie of sequences pos[j][1..m]
+        // Since m <= 10, we can use a simple structure.
+        // Each node: map from position value to child node index.
+        vector<unordered_map<int, int>> trie(1);
+        for (int j = 0; j < n; ++j) {
             int node = 0;
-            for (int val = 0; val < m; ++val) {
-                int nxt = pos[i][val]; // position of val in permutation i
-                if (trie[node][nxt] == -1) {
-                    trie[node][nxt] = trie.size();
-                    trie.push_back({});
-                    trie.back().fill(-1);
+            for (int x = 1; x <= m; ++x) {
+                int val = pos[j][x];
+                if (!trie[node].count(val)) {
+                    trie[node][val] = trie.size();
+                    trie.emplace_back();
                 }
-                node = trie[node][nxt];
+                node = trie[node][val];
             }
         }
 
-        // For each permutation, find longest prefix in trie
+        // For each i, find max k
         for (int i = 0; i < n; ++i) {
             int node = 0;
-            int beauty = 0;
-            for (int k = 0; k < m; ++k) {
-                int nxt = a[i][k]; // we need q[p_k] = k, so inverse of q at k should be p_k
-                if (trie[node][nxt] != -1) {
-                    node = trie[node][nxt];
-                    beauty = k + 1;
+            int k = 0;
+            for (int x = 1; x <= m; ++x) {
+                int val = a[i][x - 1];
+                if (trie[node].count(val)) {
+                    node = trie[node][val];
+                    k = x;
                 } else {
                     break;
                 }
             }
-            cout << beauty << " \n"[i == n - 1];
+            cout << k << (i + 1 == n ? '\n' : ' ');
         }
     }
     return 0;

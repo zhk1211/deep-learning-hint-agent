@@ -1,0 +1,51 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        if (k >= n) {
+            long long sum = accumulate(a.begin(), a.end(), 0LL);
+            cout << sum << "\n";
+            continue;
+        }
+
+        const long long INF = 1e18;
+        vector<vector<long long>> dp(n + 1, vector<long long>(k + 1, INF));
+        dp[0][0] = 0;
+
+        for (int i = 0; i < n; ++i) {
+            long long min_val = a[i];
+            for (int j = i; j < n && j - i <= k; ++j) {
+                min_val = min(min_val, a[j]);
+                int len = j - i + 1;
+                int ops = len - 1;
+                for (int p = 0; p + ops <= k; ++p) {
+                    if (dp[i][p] != INF) {
+                        dp[j + 1][p + ops] = min(dp[j + 1][p + ops], dp[i][p] + min_val * len);
+                    }
+                }
+            }
+        }
+
+        long long ans = INF;
+        for (int p = 0; p <= k; ++p) {
+            ans = min(ans, dp[n][p]);
+        }
+        cout << ans << "\n";
+    }
+    return 0;
+}
+```

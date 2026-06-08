@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<vector<int>> a(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                cin >> a[i][j];
+                --a[i][j];
+            }
+        }
+
+        vector<vector<int>> pos(n, vector<int>(m));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                pos[i][a[i][j]] = j;
+            }
+        }
+
+        vector<int> max_beauty(n, 0);
+        vector<int> best_for_prefix(m + 1, 0);
+
+        for (int i = 0; i < n; ++i) {
+            fill(best_for_prefix.begin(), best_for_prefix.end(), 0);
+            for (int j = 0; j < n; ++j) {
+                int k = 0;
+                while (k < m && a[i][k] == a[j][k]) {
+                    ++k;
+                }
+                best_for_prefix[k] = max(best_for_prefix[k], k);
+            }
+            for (int k = m - 1; k >= 0; --k) {
+                best_for_prefix[k] = max(best_for_prefix[k], best_for_prefix[k + 1]);
+            }
+            max_beauty[i] = best_for_prefix[0];
+        }
+
+        for (int i = 0; i < n; ++i) {
+            cout << max_beauty[i] << " \n"[i == n - 1];
+        }
+    }
+    return 0;
+}

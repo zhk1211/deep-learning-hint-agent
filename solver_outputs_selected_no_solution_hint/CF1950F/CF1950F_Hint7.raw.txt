@@ -1,0 +1,83 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+        
+        // Check if total vertices condition holds: a + b + c must be 1 + 2*a + b
+        // Because each node with 2 children contributes 2 children, with 1 child contributes 1 child.
+        // Total children count = 2*a + b. Total nodes = 1 (root) + total children.
+        if (c != a + 1) {
+            cout << "-1\n";
+            continue;
+        }
+        
+        // If no nodes with children, only root exists
+        if (a == 0 && b == 0) {
+            cout << "0\n";
+            continue;
+        }
+        
+        // We build tree level by level.
+        // At each level we have some number of "slots" (nodes that can have children).
+        // Initially root has 2 slots if a>0? Actually root can have 2 or 1 children depending on a and b.
+        // But we want minimum height, so we should fill slots with 2-children nodes first (to increase slots faster)
+        // and then with 1-children nodes.
+        
+        // We simulate levels.
+        int height = 0;
+        int slots = 1; // current level nodes that can take children
+        int next_slots = 0;
+        
+        while (a > 0 || b > 0) {
+            // If no slots, impossible (should not happen if c = a+1)
+            if (slots == 0) {
+                height = -1;
+                break;
+            }
+            
+            // Use as many 2-children nodes as possible in this level
+            int use_a = min(slots, a);
+            a -= use_a;
+            slots -= use_a;
+            next_slots += use_a * 2;
+            
+            // If still slots left, use 1-child nodes
+            if (slots > 0 && b > 0) {
+                int use_b = min(slots, b);
+                b -= use_b;
+                slots -= use_b;
+                next_slots += use_b * 1;
+            }
+            
+            // Move to next level
+            height++;
+            slots = next_slots;
+            next_slots = 0;
+        }
+        
+        // After processing all a and b, we should have exactly c leaves.
+        // The remaining slots should equal c (the leaves). But we already checked c = a+1.
+        // However, we might have leftover slots that are not filled with leaves? 
+        // Actually leaves are the nodes with 0 children. In our construction, slots at the end are the leaves.
+        // So we need slots == c. But c = a+1, and we used all a and b. 
+        // The number of slots at the end should be exactly c.
+        // If not, it's impossible (but with c = a+1 it should be guaranteed if we didn't run out of slots early).
+        if (height != -1 && slots != c) {
+            height = -1;
+        }
+        
+        cout << height << "\n";
+    }
+    
+    return 0;
+}
+```

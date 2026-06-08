@@ -1,0 +1,398 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> screens(k, vector<int>(n));
+    for (int i = 0; i < k; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> screens[i][j];
+        }
+    }
+    
+    if (k == 1) {
+        cout << "YES\n";
+        return;
+    }
+    
+    // Build relative order from first screenshot (skip author at index 0)
+    vector<int> order1;
+    for (int j = 1; j < n; j++) {
+        order1.push_back(screens[0][j]);
+    }
+    
+    // Find position of each element in order1
+    vector<int> pos1(n + 1, -1);
+    for (int i = 0; i < n - 1; i++) {
+        pos1[order1[i]] = i;
+    }
+    
+    // For each other screenshot, try to determine the relative order
+    // We'll build a directed graph of constraints: u -> v means u comes before v
+    vector<vector<int>> adj(n + 1);
+    vector<int> indeg(n + 1, 0);
+    
+    // We'll also track if there's a known order for the whole sequence
+    // We'll try to merge all screenshots into a single order
+    
+    // First, let's extract the sequence from each screenshot (excluding author)
+    // and see if they are consistent with a single order
+    
+    // We can think of it as: each screenshot gives a sequence of n-1 elements.
+    // The author is always first in their own view.
+    // The true order is some permutation P.
+    // For a screenshot by author A, the view is: A, then the rest of P with A moved to front.
+    // So the relative order of all other elements is the same as in P.
+    
+    // So all screenshots should have the same relative order of the n-1 non-author elements,
+    // except possibly the author is missing from that sequence.
+    
+    // Let's check if all sequences (excluding author) are consistent.
+    // We can take the first screenshot's sequence as reference.
+    // For each other screenshot, we remove its author, and check if the remaining sequence
+    // is a subsequence of the reference sequence.
+    
+    // But wait: the reference sequence might not be the true order if the first screenshot's author
+    // is not first in the true order. However, the relative order of all other elements should be the same.
+    
+    // Actually, if we have multiple screenshots, we can deduce the true order by looking at
+    // the relative order of elements that appear in all screenshots.
+    
+    // Let's build a graph of immediate successors.
+    // For each screenshot, for i from 1 to n-2, we add edge a[i] -> a[i+1].
+    // This gives constraints on the order.
+    // If the graph has a cycle, it's impossible.
+    // Otherwise, we can check if there's a Hamiltonian path that satisfies all constraints.
+    // Since each screenshot gives a total order of n-1 elements (excluding author),
+    // the constraints should form a set of paths that can be merged.
+    
+    // Actually, the constraints from all screenshots should be consistent with a single permutation.
+    // The graph of immediate successors should have maximum out-degree 1 and maximum in-degree 1,
+    // and no cycles. Then it forms a set of chains. We can then check if these chains can be
+    // ordered to form a valid permutation that respects all screenshot views.
+    
+    // But we also need to consider the position of the author. The author is always first in their view.
+    // This means that in the true order, the author must come before all other elements that appear
+    // after them in their screenshot? Actually, in the true order, the author could be anywhere,
+    // but in their view, they are first and the rest keep their relative order.
+    // So if author A is at position p in true order, then in A's view, the order is:
+    // A, then elements before A in true order (in original order), then elements after A (in original order).
+    // Wait, the problem statement: "each person sees himself at the top of the list."
+    // Example: order [2,3,1,4]. User 1 sees [1,2,3,4]. User 2 sees [2,3,1,4]. User 3 sees [3,2,1,4]. User 4 sees [4,2,3,1].
+    // So if true order is P, then user P[i] sees: P[i], then P[0..i-1] (in order), then P[i+1..n-1] (in order).
+    // So the sequence after the author is: all elements except author, in the same relative order as in P.
+    // That is, the relative order of all other elements is exactly the same as in P.
+    
+    // Therefore, for any two screenshots by different authors, the sequences of the n-1 other elements
+    // must be exactly the same! Because they both represent the same relative order of all elements except the author.
+    // But wait: if author A and author B are different, then A's screenshot shows all elements except A,
+    // in the true order. B's screenshot shows all elements except B, in the true order.
+    // So if we remove A from B's screenshot, we should get the same sequence as removing B from A's screenshot?
+    // Let's check: True order P. A's view: A, then P without A. B's view: B, then P without B.
+    // So if we take A's view and remove A, we get P without A.
+    // If we take B's view and remove B, we get P without B.
+    // These two sequences are not necessarily identical, but they are both subsequences of P.
+    // However, their relative order of common elements must be the same.
+    
+    // So we can check pairwise consistency: for any two screenshots, the relative order of the intersection
+    // of their sets (excluding authors) must be the same.
+    
+    // Since n*k <= 2e5, we can do this efficiently.
+    // We can take the first screenshot as reference. Let its sequence (excluding author) be ref_seq.
+    // For each other screenshot, let its sequence (excluding author) be seq.
+    // We check if seq is a subsequence of ref_seq? Not necessarily, because ref_seq might be missing
+    // the author of the other screenshot. But ref_seq contains all elements except the first author.
+    // The other screenshot contains all elements except its own author.
+    // So the common elements are all except the two authors. Their relative order must be the same
+    // in both sequences. That means if we take seq and remove the first author (if present),
+    // we should get a sequence that is a subsequence of ref_seq? Actually, ref_seq has all elements
+    // except author1. seq has all elements except author2. So the common elements are all except
+    // author1 and author2. In both sequences, these common elements appear in the same relative order.
+    // So if we take seq and remove author1 (if present), we get a sequence of elements that are all
+    // in ref_seq, and they must appear in the same order as in ref_seq.
+    // That is equivalent to: when we iterate through ref_seq, the elements of seq (excluding author1)
+    // should appear in the same order as in seq.
+    
+    // So we can check: for each other screenshot, let author2 = screens[i][0].
+    // Let seq = screens[i] without the first element.
+    // We check if seq is a subsequence of ref_seq after possibly removing author2 from ref_seq?
+    // Actually, ref_seq does not contain author1. seq does not contain author2.
+    // We need to check if the common elements appear in the same order.
+    // We can just check if seq is a subsequence of (author1 + ref_seq) with author2 removed?
+    // Better: build position map for ref_seq. Then iterate through seq, ignoring author1,
+    // and check that their positions in ref_seq are strictly increasing.
+    
+    // But wait: what if the first screenshot is not the "correct" reference? The true order P
+    // is unknown. But any valid screenshot's sequence (excluding author) is exactly P without that author.
+    // So if we take any screenshot as reference, its sequence (excluding author) is P without that author.
+    // For any other screenshot, its sequence (excluding author) is P without its author.
+    // So the relative order of common elements must match.
+    // So the check with the first screenshot as reference should work if a valid P exists.
+    // However, if the first screenshot is invalid (i.e., no valid P exists), we might still pass
+    // this check? But we need to detect if ANY valid P exists. So we should also check that
+    // the constraints from all screenshots are mutually consistent.
+    
+    // Let's think differently: we can try to reconstruct P from the screenshots.
+    // For each screenshot, we know the exact order of all elements except the author.
+    // This gives us a total order on n-1 elements.
+    // If we have at least two screenshots with different authors, we can merge them to get the full order.
+    // For example, if we have screenshot from author A and author B.
+    // A's view: A, then sequence S_A (all except A).
+    // B's view: B, then sequence S_B (all except B).
+    // In S_A, B appears somewhere. In S_B, A appears somewhere.
+    // The true order P can be reconstructed by inserting A into S_B at the position where A appears in S_A?
+    // Actually, S_A is P without A. S_B is P without B.
+    // So if we take S_B and insert A at the same relative position as in S_A (i.e., before the same elements),
+    // we should get P. But we need to know where to insert A.
+    // In S_A, the elements are in order P without A. So the position of B in S_A tells us the relative order
+    // of A and B in P: if B appears before the position where A would be in P? Wait.
+    // Let P = [x1, x2, ..., xn].
+    // S_A = P without A. So the order of elements in S_A is the same as in P, just skipping A.
+    // Similarly S_B = P without B.
+    // So if we look at S_A, the elements before B in S_A are exactly the elements that are before B in P
+    // (excluding A). The elements after B in S_A are exactly the elements after B in P (excluding A).
+    // So the position of B in S_A tells us the set of elements that are before B in P.
+    // Similarly, the position of A in S_B tells us the set of elements before A in P.
+    // This gives us constraints on the relative order of A and B.
+    
+    // Actually, we can build a directed graph of all elements. For each screenshot, the sequence
+    // (excluding author) gives a total order. So for any two elements X, Y (both != author),
+    // we know their relative order. We can add directed edges X -> Y if X comes before Y.
+    // But we don't need all pairs; we can just add edges between consecutive elements in each screenshot.
+    // Then the graph of these edges should be acyclic and its transitive closure should give a total order.
+    // Since each screenshot gives a total order on n-1 elements, the graph of consecutive edges
+    // from all screenshots should have a unique topological order if it's a DAG with a Hamiltonian path.
+    // But we must also consider the authors. The author is not in the sequence, but we know that
+    // in the true order, the author is somewhere. The author's position relative to others is not
+    // directly given, except that in their own view, they are first. That doesn't give constraints
+    // on their position relative to others in P. Wait, it does! In the true order P, the author A
+    // is at some position. In A's view, the order is A, then all elements before A in P, then all
+    // elements after A in P. So the sequence S_A is: (elements before A) followed by (elements after A).
+    // So S_A is exactly P with A removed, but the order is the same as P.
+    // So S_A gives the relative order of all other elements. It does NOT give any constraint on
+    // where A is relative to others, except that A is not in the sequence.
+    // However, if we have another screenshot from B, S_B gives the relative order of all elements except B.
+    // From S_A and S_B, we can deduce the relative order of A and B.
+    // In S_A, B is at some position. The elements before B in S_A are exactly the elements before B in P
+    // (excluding A). The elements after B are after B in P (excluding A).
+    // In S_B, A is at some position. The elements before A in S_B are exactly the elements before A in P
+    // (excluding B).
+    // So if we know the set of elements before B in P, and the set before A in P, we can determine
+    // whether A is before B or vice versa.
+    // Specifically, if A is before B in P, then in S_A, B appears after all elements that are before B,
+    // which includes A? But A is not in S_A. So we can't directly see A's position.
+    // However, in S_B, A appears. The elements before A in S_B are exactly the elements before A in P
+    // (excluding B). If A is before B, then B is not before A, so B is not in the set of elements
+    // before A. So in S_B, A appears, and all elements before A in S_B are exactly the elements
+    // before A in P. Since B is after A, B is not among them. So the position of A in S_B tells us
+    // the set of elements before A. Similarly, the position of B in S_A tells us the set before B.
+    // If A is before B, then the set before A is a subset of the set before B (since B is after A,
+    // the set before B includes A and all before A). But we don't have A in S_A, so we can't directly
+    // compare sets. However, we can compare the sets of elements that appear before B in S_A and
+    // before A in S_B. If A is before B, then the set before A (from S_B) should be exactly the
+    // set of elements that are before B in S_A, minus possibly some elements? Actually, if A is before B,
+    // then the elements before A are exactly the elements before B that are also before A.
+    // So the set before A is a subset of the set before B. Moreover, all elements in the set before A
+    // appear before B in S_A. And the elements between A and B in P would appear after A in S_B
+    // and before B in S_A. So we can deduce the exact position of A relative to B by comparing
+    // the sequences.
+    
+    // A simpler approach: Since n*k <= 2e5, we can just try to reconstruct the true order P
+    // by taking one screenshot as base and inserting the missing author using another screenshot.
+    // Then verify that all screenshots are consistent with this P.
+    
+    // Let's pick the first screenshot. Let author1 = screens[0][0].
+    // Let base_seq = screens[0][1..n-1] (all except author1).
+    // This base_seq is P without author1.
+    // Now we need to find where author1 should be inserted to get P.
+    // If k == 1, any order works? Actually, with one screenshot, we only know the relative order
+    // of all other elements. The author can be anywhere. So there's always a valid P (just put author
+    // anywhere and keep the rest in the given order). So YES.
+    // If k >= 2, we can use another screenshot to find the position of author1.
+    // Take the second screenshot. Let author2 = screens[1][0].
+    // If author2 == author1, impossible because authors are distinct. So author2 != author1.
+    // In the second screenshot, the sequence is P without author2.
+    // So author1 appears in this sequence. The position of author1 in screens[1] tells us
+    // the set of elements before author1 in P (excluding author2).
+    // In base_seq (P without author1), author2 appears. The position of author2 in base_seq
+    // tells us the set of elements before author2 in P (excluding author1).
+    // We can use these to insert author1 into base_seq at the correct position.
+    // Specifically, in screens[1], author1 is at some index idx1 (1-indexed in the screenshot,
+    // but 0-indexed in the array: screens[1][0] is author2, so author1 is at some position pos1_in_second
+    // where pos1_in_second >= 1). The elements before author1 in screens[1] are exactly the elements
+    // before author1 in P, except author2 (since author2 is first and not in that part? Wait:
+    // screens[1] is: author2, then elements before author2 in P, then elements after author2 in P.
+    // So the sequence after author2 is: (elements before author2) followed by (elements after author2).
+    // So author1 appears either in the "before author2" part or the "after author2" part.
+    // If author1 is before author2 in P, then author1 will be in the "before author2" part of screens[1].
+    // If author1 is after author2, it will be in the "after author2" part.
+    // In either case, the elements before author1 in screens[1] are exactly the elements before author1 in P,
+    // except author2 (if author2 is before author1, author2 is not in that list because it's at the very front;
+    // if author2 is after author1, author2 is not before author1 anyway).
+    // So the set of elements before author1 in screens[1] is exactly the set of elements before author1 in P,
+    // minus author2 if author2 is before author1. But since author2 is either before or after,
+    // we can determine the exact set.
+    
+    // Let's formalize: We have base_seq (P without author1). We want to insert author1.
+    // We look at screens[1]. Let idx be the index of author1 in screens[1] (1-indexed, so idx >= 1).
+    // The elements before author1 in screens[1] are screens[1][1..idx-1].
+    // These elements are exactly the elements that are before author1 in P, except possibly author2
+    // if author2 is before author1. But author2 is at screens[1][0], so it's not in the range 1..idx-1.
+    // So the set of elements before author1 in P is exactly the set of elements in screens[1][1..idx-1]
+    // plus possibly author2 if author2 is before author1. How do we know if author2 is before author1?
+    // We can check the position of author2 in base_seq. base_seq is P without author1.
+    // So if author2 is before author1 in P, then in base_seq, author2 appears before the position
+    // where author1 would be inserted. But we don't know that position yet.
+    // However, we can determine the relative order of author1 and author2 by comparing the sets.
+    // Actually, we can just try both possibilities? But there's a deterministic way.
+    
+    // Alternative: We can build the full order P by taking the union of constraints.
+    // For each screenshot i, we have a sequence S_i of length n-1 (excluding author a_i).
+    // We can add directed edges between consecutive elements in S_i: S_i[j] -> S_i[j+1].
+    // This gives a set of edges. If the true order P exists, then these edges must be consistent
+    // with a total order. Moreover, the edges form a set of paths that cover all vertices?
+    // Actually, each S_i is a total order on n-1 vertices. So the edges from all screenshots
+    // will form a graph where each vertex has at most one outgoing edge and at most one incoming edge?
+    // Not necessarily, because different screenshots might give different successors for the same vertex.
+    // But if they are all consistent with a single total order P, then for any vertex, its successor
+    // in P is unique. So all screenshots must agree on the immediate successor of each vertex
+    // (when that successor is present in the screenshot). That is, if two screenshots both contain
+    // vertices X and Y, and X is immediately before Y in one screenshot, then in any other screenshot
+    // that contains both X and Y, X must be before Y, but not necessarily immediately.
+    // However, if X is immediately before Y in one screenshot, and in another screenshot X and Y
+    // are both present but not adjacent, that's fine as long as X is before Y.
+    // So the edges we add (consecutive) are just a subset of the total order constraints.
+    // The graph of all such edges must be acyclic. But it might not be a set of paths; a vertex
+    // could have multiple outgoing edges (if different screenshots give different immediate successors).
+    // But if P exists, then all these edges are consistent with a total order, so the graph is acyclic.
+    // However, acyclicity is not sufficient; we also need that the total order exists that respects
+    // all these edges AND also respects the condition that each author is first in their own view.
+    // The author condition is automatically satisfied if we take P and then for each author,
+    // their view is generated as described. So we just need to find any P that is a topological
+    // ordering of the graph and also satisfies that for each screenshot i, the sequence S_i
+    // is exactly P with a_i removed. But if P is a topological ordering of the graph, does it
+    // guarantee that S_i is exactly P without a_i? Not necessarily, because the edges only enforce
+    // immediate successors, not the full order. For example, if we have vertices 1,2,3 and edges
+    // 1->2 and 2->3, then P=[1,2,3] works. But if we have edges 1->3 and 2->3, then P could be
+    // [1,2,3] or [2,1,3]. Both satisfy the edges, but only one might match the screenshots.
+    // So we need to reconstruct the exact total order from the screenshots.
+    
+    // Since we have the full sequences S_i, we can just try to merge them.
+    // With two screenshots from different authors, we can uniquely determine P.
+    // Let's take screenshots 0 and 1. Let a0 = screens[0][0], a1 = screens[1][0].
+    // We have S0 = screens[0][1..n-1] (P without a0)
+    // S1 = screens[1][1..n-1] (P without a1)
+    // We want to find P.
+    // We know that S0 and S1 are both subsequences of P, and they differ by exactly one element:
+    // S0 has a1 but not a0; S1 has a0 but not a1.
+    // So if we take S1 and insert a1 at the correct position, we should get P.
+    // The correct position of a1 in S1 is the same as its position relative to the other elements in P.
+    // In S0, a1 appears at some position. The elements before a1 in S0 are exactly the elements
+    // before a1 in P (since a0 is not in S0, and a0 could be before or after a1).
+    // So the set of elements before a1 in P is exactly the set of elements before a1 in S0,
+    // plus possibly a0 if a0 is before a1. But we don't know if a0 is before a1.
+    // However, we can determine the relative order of a0 and a1 by looking at S1.
+    // In S1, a0 appears. The elements before a0 in S1 are exactly the elements before a0 in P
+    // (excluding a1). So if a1 is before a0, then a1 is not in that set. If a1 is after a0,
+    // then a1 is not before a0 anyway. So the set before a0 in S1 is exactly the set before a0 in P,
+    // minus a1 if a1 is before a0. But again, we don't know.
+    
+    // Let's think differently: The relative order of all elements except a0 and a1 is the same
+    // in both S0 and S1. So if we remove a1 from S0 and a0 from S1, we get the same sequence
+    // (the order of the other n-2 elements). Let's call this common sequence C.
+    // C is exactly P without {a0, a1}.
+    // Now, where do a0 and a1 go in C? In S0, a1 is inserted somewhere in C.
+    // In S1, a0 is inserted somewhere in C.
+    // The true order P is C with a0 and a1 inserted at specific positions.
+    // The positions can be determined by the positions of a1 in S0 and a0 in S1.
+    // Specifically, let pos1 be the index in S0 where a1 appears (0-indexed).
+    // This means that in P, a1 is after the first pos1 elements of C (since S0 is C with a1 inserted,
+    // and a0 is not in C). But wait: S0 is P without a0. So S0 consists of C plus a1.
+    // The order in S0 is: the elements of C in order, with a1 inserted at some position.
+    // So the position of a1 in S0 tells us exactly where a1 is relative to the elements of C.
+    // Similarly, the position of a0 in S1 tells us where a0 is relative to C.
+    // So we can reconstruct P by taking C and inserting a0 and a1 at their respective positions.
+    // But we need to know the order of a0 and a1 if they are inserted at the same position?
+    // They can't be at the same position because all elements are distinct.
+    // If we insert a0 at position p0 (meaning before the element at index p0 in C) and a1 at p1,
+    // then if p0 < p1, a0 comes before a1; if p0 > p1, a1 comes before a0.
+    // But wait: when we insert both, the indices shift. We can just insert them in order of their
+    // positions: the one with smaller index goes first. But we need to be careful: if p0 == p1,
+    // that's impossible because they would occupy the same spot. But could p0 == p1?
+    // If p0 == p1, that would mean a0 and a1 are both inserted at the same position in C,
+    // which would imply they are adjacent in P? Actually, if they are both inserted at the same
+    // position, one must come before the other. The screenshots would show: in S0, a1 is at position p1,
+    // meaning a1 is after p1 elements of C. In S1, a0 is at position p0, meaning a0 is after p0
+    // elements of C. If p0 == p1, then both are after the same number of elements of C.
+    // But then in P, they would be adjacent, and their relative order would determine which is first.
+    // How do we know their relative order? We can look at S0: if a0 is before a1 in P, then in S0
+    // (which lacks a0), a1's position would be p1. If a0 is after a1, then in S0, a1's position
+    // would be p1 as well? Actually, if a0 is before a1, then in P, the sequence is:
+    // [C[0..p0-1], a0, a1, C[p0..]]. Then S0 (P without a0) is [C[0..p0-1], a1, C[p0..]].
+    // So a1 is at index p0 (0-indexed) in S0. So p1 = p0.
+    // If a0 is after a1, then P is [C[0..p0-1], a1, a0, C[p0..]]. Then S0 is [C[0..p0-1], a1, C[p0..]].
+    // So a1 is still at index p0. So in both cases, p1 = p0. So we cannot distinguish the relative
+    // order of a0 and a1 just from their positions in the opposite screenshots if they are adjacent.
+    // But does it matter? If they are adjacent, swapping them might still produce a valid P?
+    // Let's check: If we swap a0 and a1 when they are adjacent, does it change the screenshots?
+    // Suppose true P has a0 immediately before a1. Then S0 (by a0) is P without a0: a1 is immediately
+    // after the prefix before a0. S1 (by a1) is P without a1: a0 is immediately before the suffix after a1.
+    // If we swapped them, P' has a1 before a0. Then S0' would be P' without a0: a1 is still at the same
+    // position relative to C? Actually, if we swap, the set C is the same. In P', a1 is before a0.
+    // Then S0' (by a0) is P' without a0: the sequence is C with a1 inserted at the position before a0.
+    // That position is the same as before? Let's test with n=3. Suppose P = [1,2,3]. Authors 1 and 2.
+    // S1 (by 1) = [2,3]. S2 (by 2) = [1,3].
+    // Now suppose we swap 1 and 2: P' = [2,1,3]. S1' = [1,3]? Wait, author 1 sees: [1,2,3]? No,
+    // if P' = [2,1,3], then author 1 sees [1,2,3] (since 1 is first, then elements before 1: [2], then after: [3]).
+    // So S1' = [2,3]. Author 2 sees [2,1,3] -> S2' = [1,3].
+    // So both P and P' give the SAME screenshots for authors 1 and 2!
+    // Indeed, if two authors are adjacent in P, swapping them does not change their views,
+    // because each sees themselves first and the other in the same relative position to the rest.
+    // So the true order is not uniquely determined if there are adjacent authors.
+    // But the problem only asks if AT LEAST ONE order exists. So if we can find any P that works,
+    // we output YES. So we don't need to distinguish between adjacent authors; any order that
+    // satisfies the screenshots is fine.
+    
+    // So we can reconstruct a candidate P as follows:
+    // Take screenshots 0 and 1. Build C = common sequence of S0 and S1 after removing the other's author.
+    // Actually, we can just take S0 and remove a1, and take S1 and remove a0; they should be identical.
+    // If they are not identical, then NO.
+    // Then we have positions: in S0, a1 is at index p1 (0-indexed). In S1, a0 is at index p0.
+    // We can construct P by starting with C, then inserting a0 and a1.
+    // If p0 <= p1, we can insert a0 at p0, then a1 at p1+1? Wait, if we insert a0 first, the indices shift.
+    // It's easier: we know the exact order of all elements from the two screenshots.
+    // We can just take S1 (which is P without a1) and insert a1 at the position it appears in S0?
+    // But S0 is P without a0. The position of a1 in S0 is the number of elements before a1 in P,
+    // minus 1 if a0 is before a1? Actually, if a0 is before a1, then in S0 (without a0), a1's index
+    // is one less than its index in P. If a0 is after a1, a1's index in S0 is the same as in P.
+    // So we don't know if we should adjust by 1.
+    // However, we can just try both possibilities? But we can also use the fact that S1 gives the
+    // position of a0. We can determine the relative order by comparing p0 and p1.
+    // If p0 < p1, then a0 is before a1? Let's analyze:
+    // Let P have indices 0..n-1. Let idx(a) be index in P.
+    // S0 = P without a0. So for any x != a0, its index in S0 is:
+    // if idx(x) < idx(a0): same as in P.
+    // if idx(x) > idx(a0): idx(x) - 1.
+    // S1 = P without a1. Similarly.
+    // Let p0 = index of a0 in S1.
+    // Let p1 = index of a1 in S0.
+    // We want to find idx(a0) and idx(a1).
+    // Case 1: idx(a0) < idx(a1).
+    // Then in S0 (without a0), a1's index p1 = idx(a1) - 1 (since a0 is before a1, so a1 shifts left by 1).
+    // In S1 (without a1), a0's index p0 = idx(a0) (since a1 is after a0, so a0's index unchanged).
+    // So p0 = idx(a0), p1 = idx(a1) - 1. Since idx(a0) < idx(a1), we have p0 <= p1? Actually, idx(a0) < idx(a1) => p0 < p1 + 1 => p0 <= p1.
+    // Case 2: idx(a1) < idx(a0).
+    // Then p1 = idx(a1) (unchanged), p0 = idx(a0) - 1.
+    // So p1 = idx(a1), p0 = idx(a0) - 1. Since idx(a1) < idx(a0), we have p1 < p0 + 1 => p1 <= p0.
+    // So if p0 <= p1, then idx(a0) < idx(a1) (a0 before a1).
+    // If p0 > p1, then idx(a1) < idx(a0) (a1 before a0).
+    // If p0 == p1, then both cases are possible? Let's check: if p0 == p1, then from case 1: p0 = idx(a0), p1 = idx(a1)-1 => idx(a0) = idx(a1)-1 => adjacent with a0 before a1.
+    // From case 2: p1 = idx(a1), p0 = idx(a0)-1 => idx(a1) = idx(a0)-1 => adjacent with a1 before a0.
+    // So p0 == p1 means they are adjacent, and we can choose either order.
+    // So we can decide: if p0 <= p1, assume a0 before a1; else a1 before a0.
+    // Then we can reconstruct P by taking C and inserting a0 and a1 in that order at the appropriate positions.
+    // But we need to know the exact positions. We can just build P by taking S1 (which has a0 and C) and inserting a1 at the correct place.
+    // In S1, we have all elements except a1. We know the relative order of a0 and a1 from above.
+    // If a0 before a1, then in P, a1 is after a0. In S1, a0 is at index p0. The elements after

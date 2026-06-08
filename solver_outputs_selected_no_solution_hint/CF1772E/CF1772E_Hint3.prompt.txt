@@ -55,13 +55,13 @@ Memory limit per test: 256 megabytes
 
 === HINTS ===
 **Hint 1**
-Consider the parity of the number of inversions in the permutation.
+If there is a blue element between two red elements, then the two red elements cannot be swapped.
 
 **Hint 2**
-The first player can win in one move.
+Consider the number of red elements that are smaller than all the blue elements.
 
 **Hint 3**
-If the permutation has even parity, the second player wins.
+What happens when the number of red elements is equal to the number of blue elements?
 
 The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
 

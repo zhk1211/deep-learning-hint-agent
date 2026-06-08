@@ -1,0 +1,188 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        vector<long long> b(m);
+        for (int i = 0; i < m; ++i) cin >> b[i];
+        
+        // prefix sums of a
+        vector<long long> pref(n + 1, 0);
+        for (int i = 0; i < n; ++i) pref[i + 1] = pref[i] + a[i];
+        
+        // dp[i] = min cost to remove prefix of length i
+        const long long INF = 1e18;
+        vector<long long> dp(n + 1, INF);
+        dp[0] = 0;
+        
+        // For each k from 1 to m, we can remove segments with sum <= b[k-1]
+        // We process k from m down to 1 to use the best previous dp values
+        // But we need to consider that we can increase k at any time (cost 0)
+        // So we can use any k' >= current k for future removals.
+        // We'll compute dp for each k separately and take min over k.
+        
+        // We'll maintain the best dp value for each position considering all k processed so far.
+        // Since we can increase k freely, if we process k from m down to 1,
+        // when we are at k, we can use results from larger k (which we already processed).
+        // We'll keep an array best_dp = dp after considering all k' >= current k.
+        
+        vector<long long> best_dp(n + 1, INF);
+        best_dp[0] = 0;
+        
+        for (int k = m; k >= 1; --k) {
+            long long limit = b[k - 1];
+            // We want to update dp using this k.
+            // For each i from 0 to n-1, if best_dp[i] is not INF,
+            // we can remove a segment starting at i with sum <= limit.
+            // We need to find the furthest j such that pref[j] - pref[i] <= limit.
+            // Since a_i > 0, we can use two pointers.
+            // But we have to do this efficiently.
+            // We'll compute new_dp from best_dp using this k.
+            vector<long long> new_dp = best_dp;
+            int j = 0;
+            for (int i = 0; i < n; ++i) {
+                if (best_dp[i] >= INF) continue;
+                while (j <= n && pref[j] - pref[i] <= limit) ++j;
+                // j is the first index where sum > limit, so valid j's are i+1..j-1
+                // We can update new_dp for all positions in [i+1, j-1] with cost best_dp[i] + (m - k)
+                // But doing this naively is O(n^2). We need a faster way.
+                // Since we only need the minimum over all k, we can instead compute for each position
+                // the minimum cost to reach it using any k.
+                // Actually, we can reverse the perspective: for each position j, we want the minimum
+                // cost to reach j. We can use a segment tree or monotonic queue.
+                // But n*m <= 3e5, so we can afford O(n*m) if careful? No, n*m sum over test cases <= 3e5,
+                // so total n*m is small. We can do O(n*m) per test case? Actually n*m <= 3e5 total,
+                // so we can do O(n*m) overall! That's small.
+                // Wait, n*m <= 3e5 means product is small. So we can do O(n*m) per test case.
+                // But we have m up to 3e5 and n up to 3e5, but product is bounded.
+                // So we can just iterate over all k and for each k, iterate over all i and find j with two pointers.
+                // That would be O(n*m) which is acceptable because sum of n*m <= 3e5.
+                // Let's do that.
+            }
+            // Since sum of n*m is small, we can just do a simple DP for each k.
+            // We'll recompute dp from scratch for each k? No, we need to consider increasing k.
+            // The state is: we are at some position in a, and current k. But k only increases.
+            // We can define dp[i] = min cost to remove first i elements.
+            // We can process k from 1 to m. For each k, we can update dp using this k.
+            // But we can also skip using k (i.e., increase k without removing anything).
+            // So dp[i] = min over k of (cost to reach i using some sequence ending with k).
+            // Since we can increase k freely, the cost to remove a segment with k is (m - k) plus the cost to reach the start of that segment with some k' <= k.
+            // So we can process k from 1 to m, and for each k, we update dp using the current dp values (which represent best using k' <= k).
+            // This is like: for each k, we can extend from any previously reachable position i to j if sum(i..j-1) <= b_k, with additional cost (m - k).
+            // Since we process k increasingly, when we are at k, dp already contains the best using k' < k.
+            // Then we can use this k to improve dp.
+            // This is O(n * m) if we do two pointers for each k.
+            // But sum of n*m <= 3e5, so O(n*m) total is fine.
+        }
+        
+        // Let's implement the O(n*m) DP.
+        // dp[i] = min cost to remove first i elements.
+        // Initialize dp[0] = 0, others INF.
+        // For k = 1 to m:
+        //   We have b[k-1].
+        //   We can use this k to extend from any i to j.
+        //   Since we process k increasingly, we can just do:
+        //   For each i from 0 to n-1, if dp[i] != INF, we can move j as far as possible.
+        //   But we need to update dp[j] for all j in (i, ...). 
+        //   To do it efficiently for each k, we can use two pointers: for each i, we find max j.
+        //   Then we need to update dp[j] = min(dp[j], dp[i] + (m - k)) for all j in (i, max_j].
+        //   We can do this by keeping a temporary array next_dp initialized to dp, and for each i, we update next_dp[j] = min(next_dp[j], dp[i] + cost).
+        //   But doing this for each i naively is O(n^2) per k. However, we can note that if we process i from 0 to n-1, and we maintain the minimum dp[i] + cost for the current j.
+        //   Actually, we can use a two-pointer approach: as i increases, the max j also increases (since prefix sums are increasing).
+        //   We can maintain a pointer j that only moves forward. For each i, we advance j while sum(i..j) <= b_k.
+        //   Then we want to update dp for all positions up to j. But we can just update dp[j] = min(dp[j], dp[i] + cost) and later propagate? No, because we can stop at any intermediate point.
+        //   However, note that if we can reach j, we can also reach any j' < j by just taking a smaller prefix. So if we update dp[j] with the minimum over i of dp[i] + cost for which j is reachable, then for any j' < j, we can also reach it with the same cost? Not exactly, because the cost is per removal, not per element. If we remove a segment from i to j, we pay cost once. We could instead remove a smaller segment from i to j' with the same cost. So if we can reach j with cost C, we can also reach any j' in between with the same cost C (by just removing a smaller prefix). So we can just update dp[j] and then later do a prefix min: dp[j] = min(dp[j], dp[j-1])? But careful: the cost is per operation, so if we remove a segment, we pay cost. If we remove a smaller segment, we still pay the same cost. So if we have a way to remove up to j with cost C, we can also remove up to any j' < j with cost C. Therefore, after processing a k, we can do: for j from 1 to n, dp[j] = min(dp[j], dp[j-1]). But wait, this would mean we can extend removals without paying additional cost? No, because each removal operation pays cost. If we remove a segment from i to j, we pay cost once. If we later remove another segment, we pay again. But within the same operation, we can choose any prefix length up to the maximum allowed. So if we can reach j with one operation from i, we can also reach any intermediate point with that same operation. So yes, we can do dp[j] = min(dp[j], dp[j-1]) after considering all i for a fixed k? Actually, we need to be careful: dp[j] represents the minimum cost to remove the first j elements. If we have a way to remove first j elements with cost C, then we can also remove first j-1 elements with cost C by just stopping earlier in the last operation. So dp[j-1] should be at most dp[j]. So we can maintain dp as non-decreasing? Not necessarily, because we might have a cheaper way to remove more elements? That doesn't make sense: removing more elements can't be cheaper than removing fewer, because you can always just ignore the extra elements. So dp should be non-decreasing. We can enforce dp[j] = min(dp[j], dp[j-1]) after each k, or just at the end.
+        // Let's formalize:
+        // For each k from 1 to m:
+        //   cost = m - k
+        //   We want to consider all i where dp[i] is known, and extend to j.
+        //   We can compute an array best_extend[j] = min over i < j such that sum(i..j-1) <= b_k of (dp[i] + cost).
+        //   Then new_dp[j] = min(dp[j], best_extend[j]).
+        //   Since we can always stop earlier, we can then do new_dp[j] = min(new_dp[j], new_dp[j-1]) for j from 1 to n.
+        //   Then dp = new_dp.
+        // This is O(n) per k if we can compute best_extend efficiently.
+        // We can compute best_extend using a two-pointer and a monotonic queue or just keeping the minimum dp[i] in the window.
+        // For a fixed k, as i increases, the allowed j increases. We can maintain a pointer j that is the maximum index such that sum(i..j-1) <= b_k.
+        // Actually, we want for each j, the minimum dp[i] + cost over all i such that sum(i..j-1) <= b_k.
+        // This is equivalent to: for each i, we can update a range [i+1, max_j] with value dp[i] + cost.
+        // We can do this with a difference array or just by noting that we only need the minimum at each j.
+        // Since we process i in increasing order, and max_j is non-decreasing, we can maintain a variable min_val = INF.
+        // But the range updates are not simply a single value because different i have different dp[i].
+        // However, we can use a priority queue or a monotonic queue to keep track of the minimum dp[i] for which the current j is still within the allowed range.
+        // Specifically, for each i, we know the maximum j it can reach. We can add dp[i] to a data structure when we start considering i, and remove it when j exceeds its max_j.
+        // Then for each j, the best_extend[j] is the minimum in the data structure plus cost.
+        // Since we only move i and j forward, we can do this in O(n) per k.
+        // Let's do that.
+        
+        vector<long long> dp(n + 1, INF);
+        dp[0] = 0;
+        
+        for (int k = 1; k <= m; ++k) {
+            long long cost = m - k;
+            long long limit = b[k - 1];
+            // We'll compute new_dp
+            vector<long long> new_dp = dp; // we can also use dp directly and update in place? Better to use new_dp.
+            // We need to find for each j, min over i < j with sum(i..j-1) <= limit of dp[i] + cost.
+            // We'll use two pointers: i is the start index, j is the end index.
+            // We'll maintain a deque of pairs (i, dp[i]) to get minimum dp[i] in the current window.
+            // But the window for a given j is all i such that sum(i..j-1) <= limit.
+            // As j increases, the condition sum(i..j-1) <= limit becomes harder for a fixed i, so the allowed i's for a given j are those with pref[j] - pref[i] <= limit => pref[i] >= pref[j] - limit.
+            // So for a fixed j, the allowed i are those with pref[i] >= pref[j] - limit and i < j.
+            // As j increases, pref[j] increases, so the threshold pref[j] - limit increases, meaning we drop smaller i's.
+            // So we can maintain a pointer i_min that is the smallest i such that pref[i] >= pref[j] - limit.
+            // Then the allowed i are in [i_min, j-1].
+            // We need the minimum dp[i] in that range.
+            // We can maintain a segment tree or a monotonic queue? Since the range is a sliding window that only moves right (both i_min and j increase), we can use a monotonic queue to get the minimum in the window.
+            // But note: the window is [i_min, j-1]. As j increases, i_min also increases (or stays same). So it's a sliding window minimum.
+            // We can maintain a deque of indices i in the current window, with increasing dp[i].
+            // When j increases, we add j-1 to the window (if dp[j-1] is not INF? Actually we only consider i with dp[i] != INF, but we can just add all and INF will never be minimum if there's a finite value).
+            // Then we advance i_min while pref[i_min] < pref[j] - limit, and remove from deque if front is < i_min.
+            // Then the minimum dp[i] in the window is dp[deque.front()].
+            // Then new_dp[j] = min(new_dp[j], min_dp + cost).
+            // After processing all j, we also need to propagate: new_dp[j] = min(new_dp[j], new_dp[j-1]) because we can stop earlier.
+            // But wait: if we update new_dp[j] with min_dp + cost, that means we are removing a segment from i to j-1. We can also remove a smaller segment from i to j'-1 for j' < j with the same cost. So after we finish the loop, we should do for j from 1 to n: new_dp[j] = min(new_dp[j], new_dp[j-1]).
+            // However, doing this propagation inside the loop might interfere with the sliding window because we are using dp[i] (the old dp) for the window, not new_dp. So we should compute all new_dp[j] using the old dp, then after the loop, do the propagation, then set dp = new_dp.
+            
+            int i_min = 0;
+            deque<int> dq;
+            // We'll iterate j from 1 to n.
+            // Before starting, we need to add i=0 to the window if it's allowed for j=1? We'll do it inside the loop.
+            for (int j = 1; j <= n; ++j) {
+                // Add i = j-1 to the window
+                if (dp[j-1] < INF) {
+                    while (!dq.empty() && dp[dq.back()] >= dp[j-1]) dq.pop_back();
+                    dq.push_back(j-1);
+                }
+                // Advance i_min to maintain pref[i_min] >= pref[j] - limit
+                while (i_min < j && pref[i_min] < pref[j] - limit) {
+                    if (!dq.empty() && dq.front() == i_min) dq.pop_front();
+                    ++i_min;
+                }
+                // Now the window contains i in [i_min, j-1] with dp[i] < INF
+                if (!dq.empty()) {
+                    long long min_dp = dp[dq.front()];
+                    new_dp[j] = min(new_dp[j], min_dp + cost);
+                }
+            }
+            // Propagate: we can always stop earlier in the last operation
+            for (int j = 1; j <= n; ++j) {
+                new_dp[j] = min(new_dp[j], new_dp[j-1]);
+            }
+            dp = move(new_dp);
+        }
+        
+        long long ans = dp[n];
+        if (ans >= INF) cout << -1 << '\n';
+        else cout << ans << '\n';
+    }
+    return 0;
+}

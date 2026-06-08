@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        long long n;
+        int x, y;
+        cin >> n >> x >> y;
+        vector<long long> a(x);
+        for (int i = 0; i < x; ++i) {
+            cin >> a[i];
+        }
+        sort(a.begin(), a.end());
+        
+        long long ans = x - 2;
+        vector<long long> gaps;
+        for (int i = 0; i < x; ++i) {
+            long long cur = a[i];
+            long long nxt = a[(i + 1) % x];
+            long long diff = (nxt - cur + n) % n;
+            if (diff >= 2) {
+                gaps.push_back(diff);
+            }
+        }
+        
+        sort(gaps.begin(), gaps.end(), [](long long a, long long b) {
+            if ((a % 2) != (b % 2)) return (a % 2) < (b % 2);
+            return a < b;
+        });
+        
+        for (long long g : gaps) {
+            if (y <= 0) break;
+            long long need = g / 2;
+            if (g % 2 == 0) {
+                long long take = min((long long)y, need);
+                ans += take * 2;
+                if (take == need) ans++;
+                y -= take;
+            } else {
+                long long take = min((long long)y, need);
+                ans += take * 2;
+                y -= take;
+            }
+        }
+        
+        cout << ans << '\n';
+    }
+    return 0;
+}

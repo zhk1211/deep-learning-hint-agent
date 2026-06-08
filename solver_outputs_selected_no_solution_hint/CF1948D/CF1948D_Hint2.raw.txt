@@ -1,0 +1,42 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        string s;
+        cin >> s;
+        int n = (int)s.size();
+        int ans = 0;
+        
+        // Check all possible lengths L (even)
+        for (int L = 2; L <= n; L += 2) {
+            int half = L / 2;
+            // For each starting position i, check if substring of length L can be tandem
+            for (int i = 0; i + L <= n; ++i) {
+                bool ok = true;
+                for (int j = 0; j < half; ++j) {
+                    char c1 = s[i + j];
+                    char c2 = s[i + half + j];
+                    if (c1 != '?' && c2 != '?' && c1 != c2) {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (ok) {
+                    ans = L;
+                    break;
+                }
+            }
+            if (ans == L) continue; // already found for this L, try larger L
+        }
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```

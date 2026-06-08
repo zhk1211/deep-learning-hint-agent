@@ -1,0 +1,183 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> S(m);
+        for (int i = 0; i < m; ++i) {
+            cin >> S[i];
+        }
+
+        // If 1 is not in S, impossible for n >= 2
+        if (S[0] != 1) {
+            cout << -1 << '\n';
+            continue;
+        }
+
+        vector<int> a(n + 1);
+        a[1] = S.back(); // largest element
+
+        // For positions > 1, we need to assign values such that condition holds.
+        // The condition: a[gcd(i,j)] != gcd(a[i], a[j])
+        // We can set a[i] = 1 for all i > 1, but we want lexicographically largest.
+        // Actually, we can set a[i] = 1 for all i > 1, but check condition:
+        // For i>1, j>1: gcd(i,j) could be 1, then a[1] = maxS, gcd(a[i],a[j]) = gcd(1,1)=1, condition holds.
+        // For i=1, j>1: gcd(1,j)=1, a[1]=maxS, gcd(a[1],a[j]) = gcd(maxS,1)=1, condition holds.
+        // So array: [maxS, 1, 1, ..., 1] works if 1 is in S.
+        // But we want lexicographically largest. Can we put larger numbers?
+        // If we put a[i] > 1 for some i>1, we might break condition with some j.
+        // Let's analyze: For any i>1, if a[i] > 1, then for j such that gcd(i,j)=1, we need a[1] != gcd(a[i],a[j]).
+        // a[1] is maxS. If a[i] and a[j] are both >1, their gcd could be >1, possibly equal to maxS? maxS is largest in S.
+        // To maximize lexicographically, we want early positions as large as possible.
+        // Observation: For i>1, we can set a[i] = maxS if and only if for all j < i, condition holds.
+        // But condition involves all pairs, not just prefix.
+        // Let's think differently: The condition must hold for all pairs.
+        // If we set a[i] = maxS for some i>1, then for j with gcd(i,j)=1, we need a[1] != gcd(maxS, a[j]).
+        // Since a[1]=maxS, gcd(maxS, a[j]) could be maxS if a[j] is multiple of maxS. But maxS is the maximum element in S, so no larger multiple exists. So a[j] cannot be multiple of maxS unless a[j]=maxS. If a[j]=maxS, then gcd(maxS,maxS)=maxS, which equals a[1], violation.
+        // So we cannot have two positions with value maxS if their gcd is 1? Wait, condition is for pair (i,j): a[gcd(i,j)] != gcd(a[i],a[j]).
+        // If both are maxS, then gcd(a[i],a[j]) = maxS. We need a[gcd(i,j)] != maxS.
+        // So if gcd(i,j) = 1, then a[1] = maxS, violation. So we cannot have two indices with value maxS if their gcd is 1.
+        // But if gcd(i,j) > 1, then a[gcd(i,j)] might not be maxS, so it could be okay.
+        // To maximize lexicographically, we want a[2] as large as possible.
+        // Can a[2] = maxS? Then for j=1, gcd(1,2)=1, a[1]=maxS, gcd(a[1],a[2])=maxS, violation. So a[2] cannot be maxS.
+        // What about a[2] = second largest? Let's test: a[1]=maxS, a[2]=x. For pair (1,2): a[1] != gcd(maxS, x). Since gcd(maxS, x) <= x < maxS (if x not multiple of maxS, but maxS is max, so x < maxS, gcd <= x < maxS). So condition holds.
+        // For pair (2,3): a[1] != gcd(x, a[3]). If we set a[3] appropriately.
+        // It seems we can set a[i] for i>1 to any value as long as we avoid conflicts.
+        // Let's try to construct lexicographically largest:
+        // We want a[1] = maxS.
+        // For i from 2 to n, we want to assign the largest possible value from S such that for all j < i, condition holds.
+        // But condition also involves future j > i? The problem says "over all pairs 1 <= i < j <= n". So we must ensure all pairs satisfy.
+        // So greedy assignment from left to right might not work because later assignments could break earlier ones.
+        // However, note that condition only depends on gcd of indices and gcd of values.
+        // Let's analyze the structure.
+        // We have a constraint: For every pair (i,j), a[gcd(i,j)] != gcd(a[i], a[j]).
+        // This is equivalent to: For every d, and for every i,j with gcd(i,j)=d, we have a[d] != gcd(a[i], a[j]).
+        // In particular, for any i, take j such that gcd(i,j)=i? That would require i divides j. Then gcd(i,j)=i, so condition: a[i] != gcd(a[i], a[j]) = a[i] (since a[i] divides a[j]? Not necessarily). Actually gcd(a[i], a[j]) could be less than a[i]. So a[i] != gcd(a[i], a[j]) is automatically true unless a[i] divides a[j] and a[j] is multiple of a[i], then gcd = a[i], violation.
+        // So if there exist i < j with i|j and a[i] | a[j], then a[i] = gcd(a[i], a[j]), violation.
+        // Thus, we cannot have a[i] divides a[j] whenever i divides j.
+        // More generally, for any d, if there exist i,j with gcd(i,j)=d, then a[d] cannot equal gcd(a[i], a[j]).
+        // This is a complex constraint.
+
+        // Let's look for patterns. The sample: n=6, S={3,4,6}, output: 6 4 4 3 4 3.
+        // a = [6,4,4,3,4,3]
+        // Check pairs:
+        // (1,2): gcd=1, a[1]=6, gcd(6,4)=2 !=6 ok.
+        // (1,3): gcd=1, a[1]=6, gcd(6,4)=2 ok.
+        // (1,4): gcd=1, a[1]=6, gcd(6,3)=3 ok.
+        // (1,5): gcd=1, a[1]=6, gcd(6,4)=2 ok.
+        // (1,6): gcd=1, a[1]=6, gcd(6,3)=3 ok.
+        // (2,3): gcd=1, a[1]=6, gcd(4,4)=4 ok.
+        // (2,4): gcd=2, a[2]=4, gcd(4,3)=1 !=4 ok.
+        // (2,5): gcd=1, a[1]=6, gcd(4,4)=4 ok.
+        // (2,6): gcd=2, a[2]=4, gcd(4,3)=1 ok.
+        // (3,4): gcd=1, a[1]=6, gcd(4,3)=1 ok.
+        // (3,5): gcd=1, a[1]=6, gcd(4,4)=4 ok.
+        // (3,6): gcd=3, a[3]=4, gcd(4,3)=1 ok.
+        // (4,5): gcd=1, a[1]=6, gcd(3,4)=1 ok.
+        // (4,6): gcd=2, a[2]=4, gcd(3,3)=3 ok.
+        // (5,6): gcd=1, a[1]=6, gcd(4,3)=1 ok.
+        // All good.
+
+        // Notice that a[1]=6 (max), a[2]=4, a[3]=4, a[4]=3, a[5]=4, a[6]=3.
+        // It seems that for prime indices? 2,3,5 are primes? 2,3,5 are primes, they have 4,4,4. 4 and 6 are composites, they have 3,3.
+        // Actually, 1 is special. For i>1, the value seems to be the largest element in S that is not a multiple of something?
+        // Let's think about a known solution: We can set a[i] = 1 for all i>1, but we want larger.
+        // Consider the condition for i=1: For any j>1, gcd(1,j)=1, so a[1] != gcd(a[1], a[j]). This means gcd(a[1], a[j]) != a[1], i.e., a[j] is not a multiple of a[1]. Since a[1] is the maximum, a[j] can only be a multiple if a[j]=a[1]. So we cannot have any other position with value a[1]. So a[1] is unique in the array.
+        // Now consider i=2: For any j, if gcd(2,j)=2 (i.e., j even), then a[2] != gcd(a[2], a[j]). This means a[j] cannot be a multiple of a[2] when j is even? Actually gcd(a[2], a[j]) = a[2] iff a[2] divides a[j]. So for all even j>2, we must not have a[2] | a[j].
+        // Similarly, for any i, for all multiples j of i, we must not have a[i] | a[j].
+        // This suggests a divisibility constraint: For any i, and any multiple j of i, a[i] does not divide a[j].
+        // Is this condition sufficient? Let's check: If for all pairs (i,j) with i|j, we have a[i] ∤ a[j], does that guarantee the original condition?
+        // Original: for any i<j, let d=gcd(i,j). Then we need a[d] != gcd(a[i], a[j]).
+        // Note that d divides both i and j. So a[d] ∤ a[i] and a[d] ∤ a[j] by the condition? Not exactly, the condition we derived is for pairs where one divides the other. Here d divides i, so we have a[d] ∤ a[i]. Similarly a[d] ∤ a[j]. But does that imply a[d] != gcd(a[i], a[j])?
+        // Not necessarily. For example, a[d]=4, a[i]=6, a[j]=6. Then a[d] does not divide 6 (4∤6). But gcd(6,6)=6, and 4!=6, so it's fine. What if a[d]=4, a[i]=6, a[j]=10? gcd(6,10)=2, 4!=2. It seems if a[d] does not divide either, it could still equal their gcd? Suppose a[d]=2, a[i]=6, a[j]=10. Then a[d] divides both? Actually 2 divides 6 and 10, so a[d] | a[i] and a[d] | a[j], which violates the divisibility condition because d|i and d|j. So if we enforce that for all d|i, a[d] ∤ a[i], then a[d] cannot be a common divisor of a[i] and a[j], hence cannot equal their gcd (since gcd is a common divisor). Wait, gcd(a[i], a[j]) is a divisor of both a[i] and a[j]. If a[d] equals gcd(a[i], a[j]), then a[d] divides both a[i] and a[j]. But we have d|i and d|j, so by our condition, a[d] ∤ a[i] and a[d] ∤ a[j]. Contradiction. Therefore, the condition "for all i|j, a[i] ∤ a[j]" is sufficient to guarantee the original condition!
+        // Let's verify: Suppose for all i|j, a[i] does not divide a[j]. Take any pair (i,j) with d=gcd(i,j). Then d|i and d|j. So a[d] ∤ a[i] and a[d] ∤ a[j]. If a[d] = gcd(a[i], a[j]), then a[d] divides both a[i] and a[j], contradiction. So a[d] != gcd(a[i], a[j]). Perfect.
+        // Is it necessary? The original condition only requires a[d] != gcd(a[i], a[j]). It does not forbid a[d] dividing a[i] as long as it's not the gcd. But if a[d] divides a[i], then for some j (maybe j=i?), we might get equality? Actually, if a[d] divides a[i], then take j such that gcd(i,j)=d and a[j] is a multiple of a[d]? Not necessarily. But the derived condition is stronger. However, if we can satisfy the stronger condition, we are good. And maybe to maximize lexicographically, we need to satisfy this stronger condition? Let's check the sample: a[1]=6, a[2]=4, a[4]=3. Check 1|2: 6 ∤ 4? 6 does not divide 4, ok. 1|4: 6 ∤ 3, ok. 2|4: 4 ∤ 3, ok. So the sample satisfies the divisibility condition.
+        // So the problem reduces to: Assign a[i] in S such that for all i|j, a[i] does not divide a[j]. And we want lexicographically largest array.
+        // This is a poset condition: i divides j implies a[i] ∤ a[j].
+        // We want to maximize the sequence a[1], a[2], ..., a[n] lexicographically.
+        // Since a[1] is first, we want it as large as possible. The only constraint on a[1] is that for all j>1, a[1] ∤ a[j]. Since a[1] is the maximum in S, it cannot divide any other element unless that element is equal to a[1]. But if a[j] = a[1], then a[1] divides a[j], violation. So no other element can be equal to a[1]. So a[1] can be the maximum element, and we must ensure no other position gets that value. That's fine.
+        // Now for i=2: We want a[2] as large as possible. Constraints: a[1] ∤ a[2] (already satisfied if a[2] != a[1]), and for all multiples j of 2, a[2] ∤ a[j]. So a[2] cannot divide any a[j] for even j>2.
+        // Similarly for each i.
+        // This looks like we can assign values greedily from left to right? But the constraint for a[i] involves future multiples. So if we set a[i] to some value, we restrict what can appear at multiples of i. To maximize lexicographically, we want early positions large, even if it forces later positions to be small. That's acceptable because lexicographical order prioritizes earlier positions.
+        // So we can try to assign a[i] from i=1 to n, picking the largest available value from S that does not violate constraints with already assigned divisors? Wait, the constraint is a[d] ∤ a[i] for all d|i, d<i. So when assigning a[i], we must ensure that for every divisor d of i (d<i), a[d] does not divide a[i]. Also, we must ensure that a[i] does not divide any future a[j] for multiples j? But we haven't assigned those yet. However, if we pick a[i] that divides some value, we can later choose a[j] not divisible by a[i]. Since we want to maximize lexicographically, we can always choose later values to avoid being multiples of a[i]? But we also want later values to be as large as possible. There's a trade-off.
+        // Actually, the condition is symmetric in the sense that if a[i] divides a[j], it's a violation regardless of order. So when we set a[i], we are committing that for all future multiples j, a[j] will not be a multiple of a[i]. This restricts the choices for those j. To maximize lexicographically, we might want to set a[i] as large as possible, but if that large value divides many other elements in S, it might force later positions to be very small. However, lexicographical order cares more about earlier positions. So we should still pick the largest possible a[i] that can be extended to a valid full array. But we need to know if a valid extension exists.
+        // This suggests a greedy approach with backtracking? But n up to 1e5, sum n 3e5, so O(n * number of divisors) might be okay if we can check feasibility quickly.
+        // Let's analyze the structure more deeply.
+        // The condition a[i] ∤ a[j] for i|j means that if we consider the poset of indices under divisibility, the values assigned must be such that no value divides another along the order.
+        // This is equivalent to: For each value v in S, the set of indices where a[i]=v must be an antichain under divisibility? Not exactly. If a[i]=v and a[j]=v, then v divides v, so if i|j, violation. So no two indices with the same value can have one dividing the other. So each value can be assigned to a set of indices that are pairwise incomparable under divisibility.
+        // Moreover, if a[i]=u and a[j]=v with u|v, then we cannot have i|j.
+        // So the assignment is an order-preserving map from the divisibility poset to the poset (S, divides) that is "strict" in the sense that x|y implies f(x) ∤ f(y). Actually, it's an order-reversing? No, it's just that the image of a chain cannot be a chain in the same order; it must break the divisibility relation.
+        // To maximize lexicographically, we want a[1] max, a[2] max, etc.
+        // Let's consider the set S. Since 1 is in S (otherwise impossible for n>=2), 1 divides everything. So if we put 1 at any index i, then for any multiple j, a[i]=1 divides a[j] regardless of a[j], causing violation. Therefore, 1 can only be placed at indices that have no proper multiples in the array. That is, only at indices i such that there is no j>i with i|j. In other words, 1 can only be placed at indices that are maximal in the divisibility poset (i.e., i > n/2). Because if i <= n/2, then 2i <= n, so i has a multiple. So 1 can only appear at positions > n/2.
+        // Similarly, any value v that divides some other value in S must be careful. If v divides w, and we put v at i, w at j, then we cannot have i|j.
+        // This suggests that the divisibility relations in S constrain the assignment.
+        // Let's sort S. Since S contains 1, and all elements <= n.
+        // We want to assign the largest possible values to small indices.
+        // Consider the set of values that are "maximal" in S under divisibility? Actually, we want to use large values at small indices, but large values might divide few things (since they are large, their multiples might exceed n and not be in S). So they are less restrictive.
+        // Let's try to construct the lexicographically largest array by a greedy algorithm:
+        // For i from 1 to n:
+        //   Try to assign the largest available value from S that satisfies: for all d|i, d<i, a[d] does not divide this value.
+        //   Also, we must ensure that this assignment can be completed. But maybe the greedy choice always works if we also consider that later we can always put 1 at positions > n/2? Not necessarily.
+        // Let's test small cases.
+        // Suppose n=2, S={1,2}. Greedy: a[1]=2. For a[2]: divisors of 2 are 1. a[1]=2 does not divide? We need a[1] ∤ a[2]. 2 divides 2, so a[2] cannot be 2. Can a[2]=1? Check: 1|2, a[1]=2, a[2]=1. 2 ∤ 1, ok. Also, 2 has no multiples, so 1 is fine. So array [2,1] works. But sample 3: n=2, S={2} (no 1) gives -1. Our condition requires 1 in S for n>=2? Actually, if S={2}, then a[1]=2, a[2]=2 violates because 1|2 and 2|2. So indeed 1 is necessary. So with S={1,2}, [2,1] is valid. Lexicographically largest? [2,1] > [1,2]? Compare: first element 2>1, so yes. So greedy works.
+        // Another test: n=3, S={1,2,3}. Greedy: a[1]=3. a[2]: divisors {1}. 3 ∤ a[2], so a[2] can be 2 or 1. Largest is 2. a[3]: divisors {1}. 3 ∤ a[3], so a[3] can be 2 or 1. Largest is 2. Check: a=[3,2,2]. Check pairs: (1,2): a[1]=3, gcd(3,2)=1 ok. (1,3): a[1]=3, gcd(3,2)=1 ok. (2,3): gcd=1, a[1]=3, gcd(2,2)=2 ok. Also check divisibility: 1|2: 3∤2 ok; 1|3: 3∤2 ok; 2∤3? 2 does not divide 3, so no constraint. So valid. Is there a lexicographically larger? a[1]=3 is max. a[2]=2 is max possible. a[3]=2 is max. So [3,2,2] is optimal.
+        // What about n=4, S={1,2,3,4}? Greedy: a[1]=4. a[2]: divisors {1}. 4∤a[2], so can be 3. a[3]: divisors {1}. 4∤a[3], can be 3. a[4]: divisors {1,2}. a[1]=4∤a[4], a[2]=3∤a[4]. So a[4] can be 2 or 1. Largest 2. Array: [4,3,3,2]. Check divisibility: 1|2: 4∤3 ok; 1|3: 4∤3 ok; 1|4: 4∤2 ok; 2|4: 3∤2 ok. Valid. Lexicographically largest? Could we have a[2]=4? No, because 1|2 and 4|4. Could a[2]=3, a[3]=4? a[3]=4: divisors {1}, 4∤4? 4 divides 4, so a[3] cannot be 4 because a[1]=4 and 1|3. So a[3] cannot be 4. So [4,3,3,2] seems optimal.
+        // What if S={1,2,4}? n=4. Greedy: a[1]=4. a[2]: can be 2 (since 4∤2). a[3]: can be 2. a[4]: divisors {1,2}. a[1]=4∤a[4], a[2]=2∤a[4]. So a[4] cannot be 2 (since 2|2), cannot be 4 (4|4), so must be 1. Array: [4,2,2,1]. Check: 1|2: 4∤2 ok; 1|4: 4∤1 ok; 2|4: 2∤1 ok. Valid. Is there a better? a[2]=2 is max possible (since 4 is forbidden). a[3]=2 max. a[4]=1 forced. So optimal.
+        // It seems greedy works: at each i, pick the largest element in S that is not divisible by any a[d] for d|i, d<i. But we also need to ensure that this choice doesn't make it impossible to fill later positions. Is it always possible to complete if we pick greedily? Let's test a potential counterexample.
+        // Suppose S = {1, 2, 6}. n=6.
+        // Greedy: a[1]=6.
+        // i=2: divisors {1}. 6∤a[2]. Largest available: 2 (since 6 is forbidden). So a[2]=2.
+        // i=3: divisors {1}. 6∤a[3]. Largest: 2. a[3]=2.
+        // i=4: divisors {1,2}. a[1]=6∤a[4], a[2]=2∤a[4]. So a[4] cannot be 2 (2|2), cannot be 6 (6|6), so must be 1. a[4]=1.
+        // i=5: divisors {1}. 6∤a[5]. Largest: 2. a[5]=2.
+        // i=6: divisors {1,2,3}. a[1]=6∤a[6], a[2]=2∤a[6], a[3]=2∤a[6]. So a[6] cannot be 2, cannot be 6, must be 1. a[6]=1.
+        // Array: [6,2,2,1,2,1]. Check divisibility: 1|2: 6∤2 ok; 1|3: 6∤2 ok; 1|4: 6∤1 ok; 1|5: 6∤2 ok; 1|6: 6∤1 ok; 2|4: 2∤1 ok; 2|6: 2∤1 ok; 3|6: 2∤1 ok. Valid.
+        // Is there a lexicographically larger? Could we set a[2]=6? No, 1|2 and 6|6. a[2]=2 is max. a[3]=2 max. a[4]=1 forced. a[5]=2 max. a[6]=1 forced. So optimal.
+        // What if S = {1, 3, 4}? n=4.
+        // Greedy: a[1]=4.
+        // i=2: divisors {1}. 4∤a[2]. Largest: 3. a[2]=3.
+        // i=3: divisors {1}. 4∤a[3]. Largest: 3. a[3]=3.
+        // i=4: divisors {1,2}. a[1]=4∤a[4], a[2]=3∤a[4]. Largest available: 3? But 3 is not divisible by 4 or 3? Wait, 3∤3? 3 divides 3, so a[2]=3 divides 3, so a[4] cannot be 3. So a[4] cannot be 3, cannot be 4, must be 1. Array: [4,3,3,1]. Check: 1|2: 4∤3 ok; 1|3: 4∤3 ok; 1|4: 4∤1 ok; 2|4: 3∤1 ok. Valid.
+        // Could we do better? a[2]=3 is max. a[3]=3 max. a[4]=1 forced. So optimal.
+        // What if S = {1, 2, 3, 6}? n=6.
+        // Greedy: a[1]=6.
+        // i=2: divisors {1}. 6∤a[2]. Largest: 3? 3 is not divisible by 6. So a[2]=3.
+        // i=3: divisors {1}. 6∤a[3]. Largest: 3. a[3]=3.
+        // i=4: divisors {1,2}. a[1]=6∤a[4], a[2]=3∤a[4]. Largest: 2? 2 is not divisible by 6 or 3. So a[4]=2.
+        // i=5: divisors {1}. 6∤a[5]. Largest: 3. a[5]=3.
+        // i=6: divisors {1,2,3}. a[1]=6∤a[6], a[2]=3∤a[6], a[3]=3∤a[6]. Largest: 2? 2 is not divisible by 6 or 3. So a[6]=2.
+        // Array: [6,3,3,2,3,2]. Check divisibility: 1|2: 6∤3 ok; 1|3: 6∤3 ok; 1|4: 6∤2 ok; 1|5: 6∤3 ok; 1|6: 6∤2 ok; 2|4: 3∤2 ok; 2|6: 3∤2 ok; 3|6: 3∤2 ok. Valid.
+        // Is there a better? Could a[2]=6? No. a[2]=3 is max. a[3]=3 max. a[4]=2 max? Could a[4]=3? 3 is divisible by a[2]=3? 3|3, so no. Could a[4]=6? 6|6? a[1]=6 divides 6, so no. So 2 is max. a[5]=3 max. a[6]=2 max. So optimal.
+        // It seems greedy works. But is there a case where greedy choice leads to dead end?
+        // Consider S = {1, 2, 4, 8}? But elements <= n, and n=8 maybe.
+        // n=8, S={1,2,4,8}. Greedy:
+        // a[1]=8.
+        // i=2: can be 4 (since 8∤4). a[2]=4.
+        // i=3: can be 4. a[3]=4.
+        // i=4: divisors {1,2}. a[1]=8∤a[4], a[2]=4∤a[4]. Largest: 2? 2 not divisible by 8 or 4. a[4]=2.
+        // i=5: can be 4. a[5]=4.
+        // i=6: divisors {1,2,3}. a[1]=8, a[2]=4, a[3]=4. Largest: 2? 2 not divisible by 8 or 4. a[6]=2.
+        // i=7: can be 4. a[7]=4.
+        // i=8: divisors {1,2,4}. a[1]=8, a[2]=4, a[4]=2. Largest: ? 1 is only left? Check: 8∤1, 4∤1, 2∤1. So a[8]=1. Array: [8,4,4,2,4,2,4,1]. Valid.
+        // Could we have done better? a[2]=4 is max. a[4]=2 max. a[8]=1 forced. Seems fine.
+        // What if S = {1, 3, 9}? n=9? But elements <= n, so 9 is allowed if n>=9. n=9, S={1,3,9}. Greedy:
+        // a[1]=9.
+        // i=2: can be 3. a[2]=3.
+        // i=3: can be 3. a[3]=3.
+        // i=4: divisors {1,2}. a[1]=9, a[2]=3. Largest: 1? 3 is divisible by 3? a[2]=3 divides 3, so 3 forbidden. 9 forbidden. So a[4]=1.
+        // i=5: can be 3. a[5]=3.
+        // i=6: divisors {1,2,3}. a[1]=9, a[2]=3, a[3]=3. 3 forbidden, 9 forbidden, so a[6]=1.
+        // i=7: can be 3. a[7]=3.
+        // i=8: divisors {1,2,4}. a[1]=9, a[2]=3, a[4]=1. 3 forbidden? a[2]=3 divides 3, so 3 forbidden. 9 forbidden. So a[8]=1.
+        // i=9: divisors {1,3}. a[1]=9, a[3]=3. 3 forbidden, 9 forbidden, so a[9]=1.
+        // Array: [9,3,3,1,3,1,3,1,1]. Valid.
+        // Is there a better? Could we set a[2]=9? No. a[2]=3 is max. a[3]=3 max. a[4]=1 forced. So optimal.
+        // It seems greedy never gets stuck because we can always fall back to 1 for positions that have no other choice, and 1 is always available (since S contains 1). But wait, 1 can only be used at positions that have no multiples? Actually, if we put 1 at position i, and there is a multiple j, then a[i]=1 divides a[j] (since 1 divides everything), violation. So 1 can only be placed at indices that have no proper multiples in the range [1,n]. That is, i > n/2. In the greedy assignments above, we placed 1 at positions 4,6,8,9 in the last example. 4 has multiple 8, so 1 at 4 would violate with 8 if a[8] is anything. But in our array, a[8]=1. Then 1|1, so 1 divides 1, violation! Let's check: n=9, a[4]=1, a[8]=1. 4|8, and a[4]=1 divides a[8]=1. This violates the condition! I missed this. The divisibility condition says: for all i|j, a[i] ∤ a[j]. If a[i]=1 and a[j]=1, then 1|1, violation. So we cannot have 1 at both 4 and 8 if 4|8. In my array, a[4]=1, a[8]=1, 4|8, so 1 divides 1, violation. So the array [9,3,3,1,3,1,3,1,1] is invalid!
+        // Let's verify with original condition: pair (4,8): gcd(4,8)=4, a[4]=1, gcd(a[4],a[8])=gcd(1,1)=1, so a[4] = gcd,

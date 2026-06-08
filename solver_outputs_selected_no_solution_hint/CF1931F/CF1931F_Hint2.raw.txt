@@ -1,0 +1,82 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> a(k, vector<int>(n));
+    for (int i = 0; i < k; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cin >> a[i][j];
+        }
+    }
+    if (k == 1) {
+        cout << "YES\n";
+        return;
+    }
+    vector<int> order;
+    // Try to deduce order from first two screenshots
+    int p1 = -1, p2 = -1;
+    for (int i = 0; i < n; ++i) {
+        if (a[0][i] == a[1][0]) p1 = i;
+        if (a[1][i] == a[0][0]) p2 = i;
+    }
+    // Build candidate order from first screenshot, inserting a[0][0] at possible positions
+    vector<int> base;
+    for (int i = 1; i < n; ++i) base.push_back(a[0][i]);
+    // Try inserting a[0][0] before p1-1 (0-indexed in base) or after
+    vector<vector<int>> cands;
+    if (p1 >= 2) {
+        vector<int> cand = base;
+        cand.insert(cand.begin() + (p1 - 1), a[0][0]);
+        cands.push_back(cand);
+    }
+    if (p1 >= 1) {
+        vector<int> cand = base;
+        cand.insert(cand.begin() + p1, a[0][0]);
+        cands.push_back(cand);
+    }
+    // Also try from second screenshot
+    vector<int> base2;
+    for (int i = 1; i < n; ++i) base2.push_back(a[1][i]);
+    if (p2 >= 2) {
+        vector<int> cand = base2;
+        cand.insert(cand.begin() + (p2 - 1), a[1][0]);
+        cands.push_back(cand);
+    }
+    if (p2 >= 1) {
+        vector<int> cand = base2;
+        cand.insert(cand.begin() + p2, a[1][0]);
+        cands.push_back(cand);
+    }
+    // Remove duplicates
+    sort(cands.begin(), cands.end());
+    cands.erase(unique(cands.begin(), cands.end()), cands.end());
+    for (auto &ord : cands) {
+        bool ok = true;
+        for (int i = 0; i < k && ok; ++i) {
+            int author = a[i][0];
+            // Build expected view
+            vector<int> expected;
+            expected.push_back(author);
+            for (int x : ord) if (x != author) expected.push_back(x);
+            if (expected != a[i]) ok = false;
+        }
+        if (ok) {
+            cout << "YES\n";
+            return;
+        }
+    }
+    cout << "NO\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}
+```

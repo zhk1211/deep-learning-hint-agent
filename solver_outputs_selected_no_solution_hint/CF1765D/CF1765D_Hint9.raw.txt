@@ -1,0 +1,176 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    long long m;
+    cin >> n >> m;
+    vector<long long> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    sort(a.begin(), a.end());
+
+    long long total_download = accumulate(a.begin(), a.end(), 0LL);
+    long long ans = total_download + n; // download all + watch all
+
+    long long free_space = m;
+    long long saved = 0;
+    for (int i = 0; i < n; ++i) {
+        if (free_space >= a[i]) {
+            free_space -= a[i];
+            saved += 1; // we can watch this video while downloading next
+        } else {
+            // need to free space by watching some video
+            // but we already counted watching time separately
+            free_space = m - a[i];
+        }
+    }
+
+    // Actually the saved time is the number of videos we can watch in parallel with downloads
+    // The formula: total time = total_download + n - max_parallel_watches
+    // max_parallel_watches = number of videos we can start downloading without waiting for space
+    // after sorting, we can simulate: we start with m free space.
+    // For each video in sorted order, if current free >= a[i], we can download it immediately,
+    // and after download we watch it (takes 1 min) during which we can download next.
+    // But careful: watching frees space only after 1 minute.
+    // Better approach: we need to find maximum k such that we can schedule without idle time.
+    
+    // Let's recompute properly:
+    free_space = m;
+    long long parallel = 0;
+    for (int i = 0; i < n; ++i) {
+        if (free_space >= a[i]) {
+            free_space -= a[i];
+            parallel++;
+        } else {
+            // we must have watched some video to free space
+            // but we can only free after watching, which takes 1 minute after download completes.
+            // In optimal schedule, we always have something to watch if we have downloaded something.
+            // Actually, we can think of it as: we need to wait until some download finishes and we watch it.
+            // The number of videos we can download without waiting for a watch to complete is limited by disk.
+            // After sorting, the greedy works: we can always free exactly a[i] space by watching the largest downloaded video? 
+            // Let's use the known solution: answer = total_download + n - (number of videos that can be downloaded without waiting)
+            // where waiting means we have to finish watching a video to free space.
+            // The maximum number of videos we can download without waiting is the maximum prefix of sorted a
+            // such that sum of those <= m? No, because we can delete after watching.
+            // Actually, we can maintain available space. Initially m. For each video in sorted order:
+            // if space >= a[i], we download it, space -= a[i], and we increment a counter of "extra" videos we can watch in parallel.
+            // But after downloading, we can watch it, which takes 1 minute, during which we can download next video.
+            // However, the space is only freed after watching finishes. So we need to model time.
+            // Simpler: answer = total_download + n - max_k, where max_k is the maximum number of videos we can watch
+            // while downloading others. This is equivalent to: we can pipeline k videos.
+            // The condition for k: there exists an ordering such that we never wait for disk space.
+            // It is known that sorting ascending and checking if we can schedule without idle time gives k = number of videos
+            // we can download before we run out of space and need to wait for a watch to complete.
+            // Let's just simulate with a priority queue of download finish times? No, time limit.
+            // There is a known formula: answer = total_download + n - (number of videos we can fit in disk initially? No)
+            // Let's think: we start downloading a[0] (smallest). It takes a[0] mins. During that time, we can't do anything else.
+            // After download, we watch it (1 min). During that 1 min, we can download another video if space allows.
+            // But we need space for the new video. Initially we have m. After downloading a[0], used space = a[0].
+            // While watching a[0], we can start downloading a[1] if m - a[0] >= a[1]. If yes, we do.
+            // After watching a[0], we delete it, free space becomes m - a[1] (if we started a[1]).
+            // Then we watch a[1] (1 min) and can download a[2] if space >= a[2], etc.
+            // This is exactly the greedy simulation.
+            // The number of videos we can "pipeline" is the number of times we can start a download while watching the previous.
+            // That is exactly the number of videos for which we have enough space at the moment of starting download.
+            // We can compute this by iterating sorted a, maintaining current free space.
+            // Initially free = m. For each video x:
+            // if free >= x, we can download it immediately (either at time 0 or during a watch).
+            // Then we will watch it later, which frees x after 1 minute of watch.
+            // But we need to account that we can only free after watching, which happens after download + possibly waiting.
+            // Actually, the greedy simulation with a queue of events is O(n log n) and works.
+            // Let's do that: we maintain current time, and a priority queue of times when a download finishes.
+            // But we can simplify: we want minimum total time.
+            // Alternative: we can compute the answer as total_download + n - max_saved, where max_saved is the maximum number
+            // of minutes we can overlap watching with downloading.
+            // Overlap happens when we watch a video while downloading the next.
+            // We can overlap at most n-1 times (since after last video we don't download).
+            // The condition to overlap video i and i+1: after downloading video i, we have enough space to start video i+1.
+            // But we also need to have video i downloaded before we can watch it.
+            // Let's simulate with a priority queue of download end times.
+            // We process videos in sorted order.
+            // We maintain current time cur = 0, and free space = m.
+            // For each video x:
+            //   if free >= x:
+            //      we can start download immediately at time cur.
+            //      download ends at cur + x.
+            //      we push cur + x to a priority queue (min-heap) of download finish times.
+            //      free -= x.
+            //   else:
+            //      we must wait until some download finishes and we watch it to free space.
+            //      we pop the smallest finish time t from heap.
+            //      cur = max(cur, t) + 1 (we watch the video, which takes 1 minute after download finishes).
+            //      free += size_of_that_video (but we don't know which video it was? We need to store sizes).
+            //      Then we retry downloading x.
+            // This simulation is O(n log n) and correct.
+            // Let's implement this.
+            break; // we will rewrite cleanly
+        }
+    }
+
+    // Clean implementation of event-based simulation
+    sort(a.begin(), a.end());
+    priority_queue<long long, vector<long long>, greater<long long>> download_end_times; // min-heap of times when downloads finish
+    // We also need to know the size of the video that finishes, to free space.
+    // So we should store pairs (end_time, size) in the heap.
+    priority_queue<pair<long long, long long>, vector<pair<long long, long long>>, greater<pair<long long, long long>>> pq;
+    long long cur_time = 0;
+    long long free = m;
+    int idx = 0;
+    while (idx < n || !pq.empty()) {
+        if (idx < n && free >= a[idx]) {
+            // start download immediately
+            long long end_time = cur_time + a[idx];
+            pq.push({end_time, a[idx]});
+            free -= a[idx];
+            idx++;
+        } else {
+            // must wait for a download to finish and watch it
+            if (pq.empty()) {
+                // should not happen because we can always download something if idx < n? 
+                // But if free < a[idx] and no downloads in progress, impossible because a_i <= m.
+                // Actually, if free < a[idx] and no downloads, that means we have some used space but no pending downloads?
+                // That can't happen because used space only from active downloads.
+                // So pq is not empty.
+                break;
+            }
+            auto [end_time, size] = pq.top(); pq.pop();
+            // we can only start watching after the download finishes
+            cur_time = max(cur_time, end_time) + 1; // watch for 1 minute
+            free += size;
+            // after watching, we can possibly start new downloads in the same iteration
+        }
+    }
+    // After processing all videos, we still need to watch the remaining downloaded videos.
+    // The total time is the time when the last watch finishes.
+    // We have cur_time as the time after some watches, but we might have pending downloads that haven't been watched.
+    // We need to watch all videos. Each video requires 1 minute watch after its download finishes.
+    // The final time is max over all videos of (download_end_time + 1).
+    // But we also have to account for the fact that we can only watch one at a time.
+    // Actually, the simulation above already watches videos as soon as possible.
+    // After the loop, there might be videos in pq that haven't been watched.
+    // We need to process them: for each, we watch it, which takes 1 minute, and we can do them sequentially.
+    // Since we can only watch one at a time, we just need to schedule the remaining watches.
+    // The remaining downloads have end times. We can sort them and watch them in order.
+    // The finish time of the last watch will be the answer.
+    // Let's collect all download end times from pq and compute.
+    vector<long long> end_times;
+    while (!pq.empty()) {
+        end_times.push_back(pq.top().first);
+        pq.pop();
+    }
+    sort(end_times.begin(), end_times.end());
+    long long ans_time = cur_time;
+    for (long long t : end_times) {
+        ans_time = max(ans_time, t) + 1;
+    }
+    cout << ans_time << "\n";
+
+    return 0;
+}
+```

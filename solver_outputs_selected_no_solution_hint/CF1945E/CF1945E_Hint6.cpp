@@ -1,0 +1,290 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, x;
+    cin >> n >> x;
+    vector<int> p(n + 1);
+    int pos_x = -1;
+    for (int i = 1; i <= n; ++i) {
+        cin >> p[i];
+        if (p[i] == x) pos_x = i;
+    }
+
+    int l = 1, r = n + 1;
+    while (r - l > 1) {
+        int m = (l + r) / 2;
+        if (p[m] <= x) l = m;
+        else r = m;
+    }
+
+    if (p[l] == x) {
+        cout << "0\n";
+        return;
+    }
+
+    // We need at most 2 swaps.
+    // First, swap x into the position that will be l at the end.
+    // But we can also swap something else to fix the path.
+    // Strategy: swap x to pos_x? Actually we need p[l] == x.
+    // We can just swap pos_x with l.
+    // But that might change the binary search path if we do it before.
+    // However we can do swaps before the search.
+    // If we swap pos_x and l, then x is at l, and the search path might change.
+    // But we can do up to 2 swaps. We can first ensure the search path leads to l where x is.
+    // Actually, we can just swap pos_x with l. Then x is at l. But the search might not end at l anymore.
+    // We need to ensure that after swaps, the binary search ends at the position containing x.
+    // Let's simulate the binary search on the original array to find the sequence of m's.
+    // The final l is the position where the search ends.
+    // If we swap x into l, then the search might end at a different position because the values at m's change.
+    // But we can do two swaps: first swap x to some position that will be l after the search, and also adjust the path.
+    // Known solution: find the position where x should be (pos_x) and the final l from the original search.
+    // If we swap p[pos_x] and p[l], then x is at l. But the search path might change.
+    // However, we can also swap p[l] with something else to fix the path.
+    // Actually, the standard solution: we can just output two swaps: (pos_x, l) and (pos_x, some position that was wrongly compared).
+    // Let's find all m's visited during the binary search.
+    // We need that for every m visited, if m is on the path, the comparison p[m] <= x must be correct for the search to go towards x.
+    // Since x is at pos_x, we want the search to go towards pos_x.
+    // The binary search without swaps ends at l. We want it to end at pos_x.
+    // We can swap pos_x with l. Then x is at l. But the search might not go to l anymore.
+    // However, we can also swap something to make the search go to l.
+    // Actually, we can just do: swap(pos_x, l) and then swap(l, some position that was incorrectly directing the search).
+    // Let's find the first m where the direction was wrong relative to pos_x.
+    // But there's a simpler known solution: 
+    // 1. Swap pos_x with l.
+    // 2. Then simulate the binary search again. If it ends at l (which now has x), we are done with 1 swap.
+    // If not, we need a second swap. We can find the first m where the search goes wrong, and swap that m with l.
+    // But wait, after first swap, x is at l. The search might go wrong because some m has value > x but we need to go left, etc.
+    // Actually, the known solution from editorial: 
+    // - Find the sequence of m's in the binary search on the original array.
+    // - Let l be the final position.
+    // - If p[l] == x, output 0.
+    // - Else, we can just output two swaps: (pos_x, l) and (pos_x, some position that was compared and had wrong value).
+    // But we can also just do one swap if possible.
+    // Let's think: We want the search to end at pos_x. So we can swap x into some position that will be the final l after we fix the path.
+    // Actually, we can just swap pos_x with l. Then x is at l. But the search path might change. 
+    // However, we can also swap the element at l (which is now the original p[l]) with some position that was compared and had the wrong value.
+    // Let's find all m's visited. For each m, we know whether the search went left or right.
+    // We want the search to go towards pos_x. So for each m, if m < pos_x, we need p[m] <= x to go right; if m > pos_x, we need p[m] > x to go left.
+    // If we swap pos_x and l, then x is at l. Now we need the search to go towards l.
+    // So for each m, if m < l, we need p[m] <= x; if m > l, we need p[m] > x.
+    // We can check if after swapping pos_x and l, the condition holds for all m visited. If yes, 1 swap is enough.
+    // If not, we can do a second swap: swap the element at l (which is original p[l]) with the element at the first m that violates the condition.
+    // But wait, after the first swap, the element at l is original p[l], and x is at pos_x? No, we swapped pos_x and l, so x is at l, and original p[l] is at pos_x.
+    // So after first swap, p[l] = x. The element at pos_x is original p[l].
+    // Now we simulate the search on the modified array. If it ends at l, done.
+    // If not, it will end at some other position. But we can fix it by swapping the element at l (which is x) with some position? No, we don't want to move x from l.
+    // Actually, the known solution: we can just output two swaps: (pos_x, l) and (pos_x, the position that was the first m where the direction was wrong relative to pos_x).
+    // Let's recall the exact solution from Codeforces problem "Binary Search" (or similar). 
+    // The problem is from Codeforces Round 838 (Div 2) or similar? Actually it's "Binary Search" from some contest.
+    // The solution: 
+    // 1. Find the position of x, say pos.
+    // 2. Perform binary search on the original array to find the final l.
+    // 3. If p[l] == x, output 0.
+    // 4. Else, output 2 swaps: (pos, l) and (pos, the first index m in the binary search path that is on the wrong side of pos).
+    // Wait, we need to be careful: the binary search path is the sequence of m's. 
+    // We want the search to go towards pos. For each m, if m < pos, we need p[m] <= x; if m > pos, we need p[m] > x.
+    // The first m where this condition is violated, let's call it bad.
+    // Then we can swap pos with l, and then swap pos with bad? But after first swap, pos has original p[l], and l has x.
+    // If we then swap pos and bad, we put original p[l] at bad, and p[bad] at pos. 
+    // This might fix the condition at bad, but might break others.
+    // Actually, the known solution: we can just swap pos with l, and then swap pos with the first m that is on the wrong side? 
+    // Let's check the sample:
+    // Test case 2: n=6, x=5, p = [3,1,6,5,2,4]
+    // pos_x = 4 (1-indexed). Binary search:
+    // l=1, r=7, m=4, p[4]=5 <=5 -> l=4
+    // r-l=3, m=(4+7)/2=5, p[5]=2 <=5 -> l=5
+    // r-l=2, m=(5+7)/2=6, p[6]=4 <=5 -> l=6
+    // r-l=1, end. l=6. p[6]=4 !=5.
+    // Output: 1 swap: 3 4. 
+    // If we swap 3 and 4: p becomes [3,1,5,6,2,4]. Now binary search:
+    // l=1, r=7, m=4, p[4]=6 >5 -> r=4
+    // l=1, r=4, m=2, p[2]=1 <=5 -> l=2
+    // l=2, r=4, m=3, p[3]=5 <=5 -> l=3
+    // r-l=1, end. l=3, p[3]=5 == x. So 1 swap worked.
+    // How did they get 3 4? They swapped pos_x (4) with something else? Actually they swapped 3 and 4. pos_x=4, they swapped with 3.
+    // In this case, l was 6. They didn't swap with l. So the known solution with swapping pos and l is not the only way.
+    // Let's think differently.
+    // The binary search path is determined by the values at m's. We want the search to end at pos_x.
+    // We can just swap x into the position that will be the final l after we fix the path.
+    // Actually, we can do the following: 
+    // - Find the sequence of m's.
+    // - We want the search to go towards pos_x. So for each m, if m < pos_x, we need p[m] <= x; if m > pos_x, we need p[m] > x.
+    // - If there is an m that violates this, we can swap p[m] with something to fix it.
+    // - But we also need x to be at the final l. So we can swap x into the position that will be l after all fixes.
+    // - Since we can do 2 swaps, we can fix at most 2 positions.
+    // - The final l will be pos_x if the search goes correctly. So we want the search to end at pos_x. That means we need the condition to hold for all m's, and the final l will be pos_x.
+    // - But wait, the binary search always ends at some l. If we make the condition hold for all m's relative to pos_x, will the search end exactly at pos_x? 
+    // - Not necessarily, because the sequence of m's itself depends on the values. If we change values, the m's change.
+    // - However, we are allowed to do swaps BEFORE the search. So we can change the array, then the search runs on the modified array.
+    // - We want the search on the modified array to end at some position l' such that p[l'] = x.
+    // - We can just simulate the search on the original array to find the sequence of m's. Then we can try to make the search end at pos_x by swapping.
+    // - Actually, there is a known trick: The binary search path is a set of indices that are compared. If we swap x into one of those indices, we might be able to direct the search.
+    // - Let's look at the hints: "What if x is in the middle of the array?" "Try to figure out what is wrong with the binary search."
+    // - The binary search assumes the array is sorted. The problem is that some comparisons give wrong directions.
+    // - We can fix the comparisons by swapping elements so that for the visited m's, the comparison p[m] <= x gives the correct direction towards x.
+    // - Since we can do 2 swaps, we can fix at most 2 wrong comparisons.
+    // - But we also need x to be at the final position.
+    // - The final position l is the last index where p[m] <= x. So if we ensure that for all visited m's, the direction is correct, then the search will end at the position of x? Not exactly, because the search might not visit pos_x if the array is not sorted. But if we force the direction towards pos_x at each step, the search will narrow down to a range containing pos_x, and eventually l will be pos_x? Actually, binary search on an unsorted array with forced directions might not end at pos_x. But if we make the comparisons consistent with a sorted array where x is at pos_x, then the search will find it. But we don't need to sort the whole array, just fix the comparisons on the path.
+    // - The standard solution for this problem (Codeforces 1730B? Actually it's 1760F? No, it's "Binary Search" from Codeforces Round 838 Div 2? Let's search memory: There is a problem "Binary Search" where you can do 2 swaps. The solution is:
+    //   - Find the position of x, say pos.
+    //   - Perform binary search on the original array, record the sequence of m's.
+    //   - Let l be the final position.
+    //   - If p[l] == x, output 0.
+    //   - Else, we can just output two swaps: (pos, l) and (pos, the first m in the sequence that is on the wrong side of pos).
+    //   - Wait, but in sample 2, they output 1 swap: (3,4). pos=4, l=6. They didn't swap with l. So that solution would output 2 swaps, but they did 1. So we can do better.
+    // - Actually, we can always do it in at most 2 swaps, but sometimes 1 is enough.
+    // - Let's think: We want the search to end at some position where x is. We can just swap x with the element at the final l of the original search. Then x is at l. But the search path might change. However, if we also swap the element that was at l (now at pos_x) with some other position to fix the path, we can do it in 2 swaps.
+    // - But can we do it in 1 swap? Yes, if we can find a position to swap with x such that the search ends at that position.
+    // - In sample 2, they swapped x (at 4) with the element at 3. Then the search ended at 3. Why did that work? Because after swap, the search path changed and ended at 3.
+    // - So we can just try to find a single swap that makes the search end at x's new position.
+    // - Since n is up to 2e5, we can't try all swaps. But we can analyze the binary search path.
+    // - Let's simulate the binary search on the original array and record the sequence of m's. Let the sequence be m_1, m_2, ..., m_k. The final l is the last m where p[m] <= x, or if none, l=1? Actually l starts at 1, and if p[m] <= x, l=m. So l is the maximum m visited where p[m] <= x. If no such m, l remains 1.
+    // - We want to make the search end at some position pos (which will contain x after swap). 
+    // - If we swap x with some position i, then x is at i. We want the search to end at i. That means for all visited m's, if m < i, we need p[m] <= x; if m > i, we need p[m] > x. Also, the final l should be i, which means the last m where p[m] <= x should be i (if i is visited) or the closest to i? Actually, the search ends when r-l=1. The final l is the last index where we went right. So if i is visited and p[i] <= x, then l will become i. If i is not visited, the search might end at some l near i. But we want p[l] = x, so x must be at l. So we need the search to end exactly at the position where x is.
+    // - So we need to choose a swap such that after swap, the binary search ends at the new position of x.
+    // - Let's consider swapping x with some position i. After swap, x is at i, and the original p[i] is at pos_x. The binary search will run on the modified array. We want the final l to be i.
+    // - The binary search path depends on the values. We can't easily predict the new path without simulation. But we can simulate the binary search for a candidate swap in O(log n) time. Since we can do up to 2 swaps, we can try a few candidates.
+    // - What are good candidates for i? The position should be such that if x is there, the search might end there. Typically, i could be the original l, or some m in the path.
+    // - In fact, the known solution: 
+    //   1. Find pos_x.
+    //   2. Simulate binary search on original array to find the final l.
+    //   3. If p[l] == x, output 0.
+    //   4. Otherwise, we can always fix it with at most 2 swaps by:
+    //      - Swap pos_x with l.
+    //      - Then simulate binary search again. If it ends at l (which now has x), we are done with 1 swap.
+    //      - If not, we need a second swap. We can find the first m in the new search where the direction is wrong relative to l, and swap l with that m.
+    //   But wait, after the first swap, x is at l. The new search might not end at l. We can then swap l with the first m that is on the wrong side of l. That will put x at that m, and then the search might end there? Actually, we want x to be at the final l. So if we swap l (which has x) with some m, x moves to m. Then we want the search to end at m. This might require more swaps.
+    // - Let's look at the sample 3: 
+    //   5 1
+    //   3 5 4 2 1
+    //   pos_x = 5. Binary search:
+    //   l=1, r=6, m=3, p[3]=4 >1 -> r=3
+    //   l=1, r=3, m=2, p[2]=5 >1 -> r=2
+    //   l=1, r=2, end. l=1, p[1]=3 !=1.
+    //   Output: 
+    //   2
+    //   2 4
+    //   1 5
+    //   Let's see: first swap 2 and 4: array becomes [3,2,4,5,1]. Then swap 1 and 5: array becomes [1,2,4,5,3].
+    //   Now binary search:
+    //   l=1, r=6, m=3, p[3]=4 >1 -> r=3
+    //   l=1, r=3, m=2, p[2]=2 >1 -> r=2
+    //   l=1, r=2, end. l=1, p[1]=1 == x. Works.
+    //   Notice they swapped x (at 5) with l (1) as the second swap. The first swap was 2 and 4. Why?
+    //   If we just swap pos_x (5) with l (1), array becomes [1,5,4,2,3]. Binary search:
+    //   l=1, r=6, m=3, p[3]=4 >1 -> r=3
+    //   l=1, r=3, m=2, p[2]=5 >1 -> r=2
+    //   l=1, r=2, end. l=1, p[1]=1 == x. Wait, that works with 1 swap! But the sample output uses 2 swaps. The problem says "you do not need to minimize the number of operations". So 1 swap would be valid, but they output 2. So the sample output is not minimal. So we can always output 2 swaps using a simple strategy.
+    // - So the strategy that always works in 2 swaps: 
+    //   - Swap pos_x with l (the final l from original search).
+    //   - Then swap pos_x with the first m in the original search path that is on the wrong side of pos_x? Or something like that.
+    // - Let's derive a robust 2-swap strategy.
+    // - We want the search to end at pos_x. So we want x at pos_x? No, we can move x. But it's easier to keep x at pos_x and make the search end there.
+    // - If we don't move x, we need the search to end at pos_x. That means for all m visited, if m < pos_x, p[m] <= x; if m > pos_x, p[m] > x.
+    // - We can record the sequence of m's from the original search. Let's call this sequence S. The final l is some position.
+    // - If we just swap x with the element at l, then x is at l. Now we want the search to end at l. The original sequence S might change, but we can force the search to go towards l by ensuring that for any m in the new search, the comparison is correct relative to l.
+    // - Actually, we can do the following: 
+    //   1. Find pos_x.
+    //   2. Simulate binary search on original array, record all m's and the final l.
+    //   3. If p[l] == x, output 0.
+    //   4. Otherwise, we will do two swaps:
+    //      - Swap pos_x and l.
+    //      - Now x is at l. The element originally at l is at pos_x.
+    //      - Now we need to fix the search path so that it ends at l.
+    //      - We can simulate the binary search on the array after the first swap. If it ends at l, we are done (1 swap). If not, we find the first m in this new search where the direction is wrong relative to l. That is, if m < l but p[m] > x, or m > l but p[m] <= x. Let this be bad.
+    //      - Then we swap l and bad. This puts x at bad, and the element at bad (which was causing wrong direction) at l. Now the search should end at bad? But we want x at the final l. So we need the final l to be bad. Will it be? After swapping l and bad, x is at bad. The element at l is now the original p[bad]. We need the search to end at bad. This might not be guaranteed.
+    // - Let's test this on sample 3:
+    //   Original: [3,5,4,2,1], x=1, pos_x=5.
+    //   Original search: m=3 (p=4>1) -> r=3; m=2 (p=5>1) -> r=2; end l=1.
+    //   Swap pos_x (5) and l (1): array becomes [1,5,4,2,3].
+    //   New search: m=3 (p=4>1) -> r=3; m=2 (p=5>1) -> r=2; end l=1. It ends at l=1, which has x=1. So 1 swap works. We would output 1 swap.
+    // - Sample 4:
+    //   6 3
+    //   4 3 1 5 2 6
+    //   pos_x = 2 (since p[2]=3). x=3.
+    //   Original search: l=1, r=7, m=4, p[4]=5 >3 -> r=4
+    //   l=1, r=4, m=2, p[2]=3 <=3 -> l=2
+    //   l=2, r=4, m=3, p[3]=1 <=3 -> l=3
+    //   end l=3, p[3]=1 !=3.
+    //   Output: 
+    //   2
+    //   4 5
+    //   2 4
+    //   Let's see: first swap 4 and 5: array becomes [4,3,1,2,5,6]
+    //   second swap 2 and 4: array becomes [4,2,1,3,5,6]? Wait, after first swap, p[4]=2, p[5]=5. Then swap 2 and 4: p[2]=3, p[4]=2 -> becomes p[2]=2, p[4]=3. So final array: [4,2,1,3,5,6].
+    //   Now search: l=1, r=7, m=4, p[4]=3 <=3 -> l=4
+    //   l=4, r=7, m=5, p[5]=5 >3 -> r=5
+    //   end l=4, p[4]=3 == x. Works.
+    //   Here pos_x=2, l=3. They didn't swap pos_x with l. They swapped 4 and 5, then 2 and 4.
+    //   Notice that after swaps, x is at 4. The final l is 4. So they moved x to 4.
+    // - So the strategy of swapping pos_x with l is not the only one, and sometimes not optimal.
+    // - But we can always do the following: 
+    //   - Find the sequence of m's in the original binary search.
+    //   - We want to make the search end at some position where x will be.
+    //   - We can choose to put x at the original l, or at some m.
+    //   - Actually, we can just do this: 
+    //     - Swap pos_x with l.
+    //     - Then simulate the search. If it ends at l, done.
+    //     - If not, find the first m in the NEW search where the direction is wrong relative to l. Swap l with that m.
+    //     - This will put x at that m. Then the search might end at that m? Let's test on sample 4.
+    //       Original: pos_x=2, l=3.
+    //       Swap pos_x and l: array becomes [4,1,3,5,2,6] (p[2]=1, p[3]=3). x=3 is now at 3.
+    //       New search: l=1, r=7, m=4, p[4]=5 >3 -> r=4
+    //       l=1, r=4, m=2, p[2]=1 <=3 -> l=2
+    //       l=2, r=4, m=3, p[3]=3 <=3 -> l=3
+    //       end l=3, p[3]=3 == x. So 1 swap works! But sample output used 2 swaps. So 1 swap is enough. The sample just didn't minimize.
+    // - So the strategy of swapping pos_x with l works in 1 swap for sample 4? Let's check: original l=3, pos_x=2. Swap 2 and 3: array becomes [4,1,3,5,2,6]. Search: m=4 (5>3) r=4; m=2 (1<=3) l=2; m=3 (3<=3) l=3; end l=3, p[3]=3. Yes, 1 swap works.
+    // - Sample 5:
+    //   3 2
+    //   3 2 1
+    //   pos_x=2, x=2.
+    //   Original search: l=1, r=4, m=2, p[2]=2 <=2 -> l=2
+    //   l=2, r=4, m=3, p[3]=1 <=2 -> l=3
+    //   end l=3, p[3]=1 !=2.
+    //   Output: 1 swap: 1 3
+    //   Swap 1 and 3: array becomes [1,2,3]. Search: m=2 (2<=2) l=2; m=3 (3>2) r=3; end l=2, p[2]=2. Works.
+    //   Here pos_x=2, l=3. Swap pos_x with l? That would be swap 2 and 3: array becomes [3,1,2]. Search: m=2 (1<=2) l=2; m=3 (2<=2) l=3; end l=3, p[3]=2. That also works! So swap pos_x with l works here too.
+    // - So it seems swapping pos_x with l often works in 1 swap. But does it always work? Let's test a counterexample.
+    //   Suppose n=4, x=2, p=[4,1,3,2]. pos_x=4.
+    //   Original search: l=1, r=5, m=3, p[3]=3 >2 -> r=3
+    //   l=1, r=3, m=2, p[2]=1 <=2 -> l=2
+    //   end l=2, p[2]=1 !=2.
+    //   Swap pos_x (4) and l (2): array becomes [4,2,3,1].
+    //   New search: l=1, r=5, m=3, p[3]=3 >2 -> r=3
+    //   l=1, r=3, m=2, p[2]=2 <=2 -> l=2
+    //   end l=2, p[2]=2 == x. Works.
+    // - Another: n=4, x=3, p=[2,4,1,3]. pos_x=4.
+    //   Original: l=1, r=5, m=3, p[3]=1 <=3 -> l=3
+    //   l=3, r=5, m=4, p[4]=3 <=3 -> l=4
+    //   end l=4, p[4]=3 == x. 0 swaps.
+    // - Another: n=5, x=3, p=[5,1,4,2,3]. pos_x=5.
+    //   Original: l=1, r=6, m=3, p[3]=4 >3 -> r=3
+    //   l=1, r=3, m=2, p[2]=1 <=3 -> l=2
+    //   end l=2, p[2]=1 !=3.
+    //   Swap pos_x (5) and l (2): array becomes [5,3,4,2,1].
+    //   New search: l=1, r=6, m=3, p[3]=4 >3 -> r=3
+    //   l=1, r=3, m=2, p[2]=3 <=3 -> l=2
+    //   end l=2, p[2]=3 == x. Works.
+    // - Is there a case where swapping pos_x and l fails?
+    //   Consider when the search path changes such that the new l is not the old l, and x is at old l, but the new search ends elsewhere.
+    //   For the new search to end at old l, we need that for all m visited in the new search, if m < old l, p[m] <= x; if m > old l, p[m] > x.
+    //   After swapping pos_x and l, the only elements changed are at pos_x and l. So the condition might be violated at some m that is compared.
+    //   Could there be an m that was not visited originally but is visited in the new search, causing a problem? The new search might visit different m's because the comparisons changed.
+    //   Let's try to construct a counterexample.
+    //   We need: original search ends at l, p[l] != x. We swap pos_x and l. Now x is at l. The new search might go differently.
+    //   The new search's first m is always (1+n+1)/2 = (n+2)/2, same as original. The path diverges when a comparison gives a different result.
+    //   The comparison at m depends on p[m]. The only p that changed are at pos_x and l. So if m is not pos_x or l, the comparison is the same as original.
+    //   So the new search will follow the original path until it hits either pos_x or l.
+    //   If it hits l first: originally at l, p[l] was some value. Now p[l] = x. The comparison p[l] <= x is true (since x <= x). So if originally p[l] <= x, the comparison is the same (true). If originally p[l] > x, the comparison changes from false to true. This could change the direction.
+    //   If it hits pos_x first: originally p[pos_x] = x. Now p[pos_x] = old p[l]. The comparison p[pos_x] <= x becomes old p[l] <= x. This could be different from original (which was true).
+    //   So the path can change at the first encounter of either pos_x or l.
+    //   We want the new search to end at l. That means eventually l must be the last index where p[m] <= x.
+    //   Since x is at l, p[l] <= x is true. So l will be set as l whenever it is visited and p[l] <= x. But we need the search to not go past l to the right if there are elements > x, or stop before l if there are elements <= x to the left.
+    //   Actually, the binary search always narrows down to a single element. The final l is the largest index visited with p[m] <= x. So if l is visited and p[l] <= x, l will be a candidate. The final l will be the maximum such index visited.
+    //   If there is some m > l visited with p[m] <= x, then the final l will be >= that m > l. So we need that for all visited m > l, p[m] > x.
+    //   Similarly, if there is some m < l visited with p[m] > x, the search might go left and never reach l? Actually, if m < l and p[m] > x, we set r = m, so the search space becomes [l, m] with m < l? Wait, l is the left bound. If we set r = m and m < l, then r < l, which breaks the invariant l < r. But the algorithm starts with l=1, r=n+1. At each step, we set l or r to m. Since m is between l and r, l < m < r. So we never have m < l. So if we visit m, it's always in (l, r). So if we visit m > current l, it's > l. If we visit m < current r, it's < r.
+    //   So the search will always maintain l < r. The final l is the last m where we went right.
+    //   To have final l = L, we need that for all m visited that are > L, p[m] > x (so we go left), and for all m visited that are < L, p[m] <= x (so we go right). Also, L itself must be visited and p[L] <= x, or if not visited, the search ends at L because it's the left bound of the final interval? Actually, the final interval is [l, r] with r = l+1. The final l is the last index where we set l = m. So if L is never visited, it can still be the final l if it was the left bound from the start? No, l starts at 1. If we never set l to anything else, l remains 1. So the final l is always some m that was visited and had p[m] <= x, or 1 if no such m.
+    //   So L must be visited and p[L] <= x.
+    //   Therefore, to have final l

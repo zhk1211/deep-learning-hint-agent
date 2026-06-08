@@ -1,0 +1,101 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 998244353;
+const int MAXN = 500000;
+
+vector<long long> fact, invfact;
+
+long long modpow(long long a, long long e) {
+    long long res = 1;
+    while (e) {
+        if (e & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+void precompute(int n) {
+    fact.resize(n + 1);
+    invfact.resize(n + 1);
+    fact[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        fact[i] = fact[i - 1] * i % MOD;
+    }
+    invfact[n] = modpow(fact[n], MOD - 2);
+    for (int i = n - 1; i >= 0; i--) {
+        invfact[i] = invfact[i + 1] * (i + 1) % MOD;
+    }
+}
+
+long long nCr(int n, int r) {
+    if (r < 0 || r > n) return 0;
+    return fact[n] * invfact[r] % MOD * invfact[n - r] % MOD;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    precompute(MAXN);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        vector<int> c(26);
+        int total = 0;
+        for (int i = 0; i < 26; i++) {
+            cin >> c[i];
+            total += c[i];
+        }
+
+        int odd_positions = (total + 1) / 2;
+        int even_positions = total / 2;
+
+        vector<int> odd_counts, even_counts;
+        int sum_odd = 0, sum_even = 0;
+        bool possible = true;
+        for (int i = 0; i < 26; i++) {
+            if (c[i] == 0) continue;
+            if (c[i] % 2 == 1) {
+                odd_counts.push_back(c[i]);
+                sum_odd += c[i];
+            } else {
+                even_counts.push_back(c[i]);
+                sum_even += c[i];
+            }
+        }
+
+        if (odd_counts.size() > 1) {
+            cout << "0\n";
+            continue;
+        }
+
+        int odd_val = odd_counts.empty() ? 0 : odd_counts[0];
+        if (odd_val > 0) {
+            if (odd_val > odd_positions) {
+                cout << "0\n";
+                continue;
+            }
+        }
+
+        long long ways_odd = 1;
+        if (odd_val > 0) {
+            ways_odd = nCr(odd_positions, odd_val);
+        }
+
+        long long ways_even = 1;
+        int remaining_even = even_positions;
+        for (int cnt : even_counts) {
+            int half = cnt / 2;
+            ways_even = ways_even * nCr(remaining_even, half) % MOD;
+            remaining_even -= half;
+        }
+
+        long long ans = ways_odd * ways_even % MOD;
+        cout << ans << "\n";
+    }
+
+    return 0;
+}

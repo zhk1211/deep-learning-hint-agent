@@ -14,59 +14,62 @@ int main() {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < m; ++j) {
                 cin >> a[i][j];
-                --a[i][j]; // 0-indexed
+                --a[i][j];
             }
         }
         
-        // Precompute inverse permutations for all a_j
-        vector<vector<int>> inv(n, vector<int>(m));
+        vector<vector<int>> pos(n, vector<int>(m));
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < m; ++j) {
-                inv[i][a[i][j]] = j;
+                pos[i][a[i][j]] = j;
             }
         }
         
-        // For each a_i, we want max beauty of a_i * a_j over j
-        // beauty of permutation p is largest k such that p[0]=0, p[1]=1, ..., p[k-1]=k-1
-        // For a_i * a_j, r[x] = a_j[a_i[x]]
-        // We need r[0]=0, r[1]=1, ..., r[k-1]=k-1
-        // So a_j[a_i[0]] = 0, a_j[a_i[1]] = 1, ..., a_j[a_i[k-1]] = k-1
-        // This means a_j maps a_i[x] to x for x=0..k-1
-        // Equivalently, a_j[pos] = inv_i[pos] for pos = a_i[0], a_i[1], ..., a_i[k-1]
-        // So we need to find the longest prefix of the sequence (a_i[0], a_i[1], ..., a_i[m-1])
-        // such that there exists some a_j whose inverse matches inv_i on those positions.
-        // Actually, a_j[ a_i[x] ] = x means inv_j[x] = a_i[x] for x=0..k-1.
-        // So we need the longest prefix of (0,1,...,m-1) where inv_j[x] == a_i[x].
-        // So for each i, we want max over j of LCP between sequence a_i and inv_j.
+        vector<int> max_beauty(n, 0);
+        vector<int> trie(1, -1);
+        vector<array<int, 10>> nxt(1);
+        for (int i = 0; i < 10; ++i) nxt[0][i] = -1;
         
-        // Build a trie over all sequences inv_j (each is a permutation of 0..m-1)
-        // Then for each a_i, traverse the trie to find max depth.
-        
-        // Since m <= 10, we can just use a simple trie with arrays.
-        vector<array<int, 10>> trie(1);
-        trie.reserve(n * m + 1);
-        for (int j = 0; j < n; ++j) {
+        auto insert = [&](const vector<int>& p) {
             int node = 0;
-            for (int x = 0; x < m; ++x) {
-                int val = inv[j][x];
-                if (trie[node][val] == 0) {
-                    trie[node][val] = trie.size();
-                    trie.push_back({});
+            for (int i = 0; i < m; ++i) {
+                int c = p[i];
+                if (nxt[node][c] == -1) {
+                    nxt[node][c] = trie.size();
+                    trie.push_back(node);
+                    nxt.push_back({});
+                    for (int j = 0; j < 10; ++j) nxt.back()[j] = -1;
                 }
-                node = trie[node][val];
+                node = nxt[node][c];
             }
+        };
+        
+        auto query = [&](const vector<int>& p) {
+            int node = 0;
+            int len = 0;
+            for (int i = 0; i < m; ++i) {
+                int c = p[i];
+                if (nxt[node][c] == -1) break;
+                node = nxt[node][c];
+                ++len;
+            }
+            return len;
+        };
+        
+        for (int i = 0; i < n; ++i) {
+            vector<int> inv(m);
+            for (int j = 0; j < m; ++j) {
+                inv[a[i][j]] = j;
+            }
+            insert(inv);
         }
         
         for (int i = 0; i < n; ++i) {
-            int node = 0;
-            int beauty = 0;
-            for (int x = 0; x < m; ++x) {
-                int val = a[i][x];
-                if (trie[node][val] == 0) break;
-                node = trie[node][val];
-                ++beauty;
-            }
-            cout << beauty << (i + 1 == n ? '\n' : ' ');
+            max_beauty[i] = query(a[i]);
+        }
+        
+        for (int i = 0; i < n; ++i) {
+            cout << max_beauty[i] << " \n"[i == n - 1];
         }
     }
     return 0;

@@ -1,0 +1,133 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, q;
+        cin >> n >> q;
+        vector<int> p(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            cin >> p[i];
+        }
+        string s;
+        cin >> s;
+        s = " " + s; // 1-indexed
+
+        // We need to check if the permutation can be sorted.
+        // The key observation: we can swap adjacent elements if the direction allows.
+        // This is equivalent to: for each i from 1 to n-1, if s[i] == 'R' and s[i+1] == 'L',
+        // we can swap p[i] and p[i+1] freely? Actually, we need to think in terms of connected components.
+        // The operations allow moving elements left if s[i] == 'L' (swap with left) and right if s[i] == 'R' (swap with right).
+        // This is like a sorting network on a line with directed edges.
+        // It is known that the permutation can be sorted iff for every i, the element that should be at position i (which is i)
+        // can reach position i. But we have the original permutation p.
+        // Actually, we need to sort p to [1,2,...,n]. So we need to move value v to position v.
+        // The allowed moves: from i to i-1 if s[i] == 'L', from i to i+1 if s[i] == 'R'.
+        // This is equivalent to: we can move an element from i to j if there is a path following the directed edges.
+        // The graph is a set of directed edges: i -> i-1 if s[i]=='L', i -> i+1 if s[i]=='R'.
+        // Note that s[1] is 'R' and s[n] is 'L' by problem statement.
+        // We need to check if for all v, there is a path from position of v to v.
+        // But we have updates to s. We need to answer after each update.
+        // Let's analyze the structure. The edges are local. The graph is a line with some edges missing.
+        // Actually, we can think of it as: we can swap adjacent elements if the edge between them is bidirectional?
+        // Wait: if s[i] == 'L', we can swap p[i] and p[i-1]. That means we can move element at i to i-1, and element at i-1 to i?
+        // The operation says: choose i such that s[i] = 'L', swap p[i] and p[i-1]. So both elements move.
+        // So effectively, we can swap any adjacent pair (i, i+1) if s[i+1] == 'L' (swap i+1 with i) OR s[i] == 'R' (swap i with i+1).
+        // So the pair (i, i+1) can be swapped if s[i] == 'R' or s[i+1] == 'L'.
+        // Thus, the allowed swaps are exactly those adjacent pairs where at least one of the two conditions holds.
+        // This is equivalent to: we cannot swap (i, i+1) only if s[i] == 'L' and s[i+1] == 'R'.
+        // So the forbidden edges are those where s[i] == 'L' and s[i+1] == 'R'.
+        // In all other cases, we can swap the adjacent pair.
+        // Therefore, the permutation can be sorted iff we can sort using adjacent swaps, but some adjacent swaps are forbidden.
+        // It is known that with adjacent swaps, we can sort the permutation iff for every i, the set of elements that need to cross the cut between i and i+1
+        // can actually cross it. The cut between i and i+1 can be crossed if the swap (i, i+1) is allowed.
+        // More precisely, consider the number of elements from the left part that belong to the right part in the sorted order.
+        // For the permutation to be sortable, we need that for every i from 1 to n-1, the number of elements among p[1..i] that are > i
+        // must be able to move to the right across the cut (i,i+1). But they can only move if the swap is allowed.
+        // Actually, if the swap is forbidden, then no element can cross that boundary in either direction.
+        // So the condition is: for every i, if the cut (i,i+1) is forbidden (i.e., s[i]=='L' and s[i+1]=='R'), then the set of elements on the left side
+        // must already be exactly {1..i} (i.e., the prefix is sorted and contains the correct elements). Otherwise, we cannot fix it.
+        // Let's verify: if the cut is forbidden, we cannot move any element from left to right or right to left.
+        // So the multiset of values in the left segment must equal {1..i}. That means max(p[1..i]) must be i.
+        // Conversely, if max(p[1..i]) == i for all forbidden cuts, can we always sort? Yes, because we can sort within each connected component
+        // (where cuts are allowed) using adjacent swaps, and the forbidden cuts already have the correct partition.
+        // So the condition for sortability is: for every i from 1 to n-1, if s[i] == 'L' and s[i+1] == 'R', then max(p[1..i]) == i.
+        // Let's check with the sample.
+        // Sample 1: n=5, p=[1,4,2,5,3], s=RLRLL (1-indexed: s1=R, s2=L, s3=R, s4=L, s5=L)
+        // Forbidden cuts: i such that s[i]=='L' and s[i+1]=='R'.
+        // i=1: s1=R, s2=L -> not forbidden.
+        // i=2: s2=L, s3=R -> forbidden. Check max(p[1..2]) = max(1,4)=4 != 2 -> NO.
+        // i=3: s3=R, s4=L -> not forbidden.
+        // i=4: s4=L, s5=L -> not forbidden.
+        // So initially, it would be NO. But the problem asks after each query. The first query changes index 2 from L to R.
+        // After that, s=RRRLL. Forbidden cuts: i=1: R,R no; i=2: R,R no; i=3: R,L no; i=4: L,L no. So no forbidden cuts -> YES. Matches sample.
+        // Second query changes index 4 from L to R: s=RRRRL. Forbidden cuts: i=4: s4=R, s5=L -> not forbidden (need L then R). So no forbidden cuts -> YES.
+        // Third query changes index 3 from R to L: s=RRLRL. Forbidden cuts: i=2: s2=R,s3=L no; i=3: s3=L,s4=R -> forbidden. Check max(p[1..3])=max(1,4,2)=4 != 3 -> NO. Matches sample.
+        // So the condition works!
+        // Now we need to handle updates efficiently. We have q updates, each toggling s[i] for i in [2, n-1].
+        // We need to maintain the set of "bad" indices i where the condition fails: i.e., forbidden cut i (s[i]=='L' and s[i+1]=='R') and max(p[1..i]) != i.
+        // If the number of bad indices is 0, answer YES, else NO.
+        // We can precompute prefix maximums: pref_max[i] = max(p[1..i]).
+        // Then for each i, we can check if it's a forbidden cut and pref_max[i] != i.
+        // When s[i] changes, it affects the forbidden status of cuts i-1 and i (since cut i-1 depends on s[i-1] and s[i], cut i depends on s[i] and s[i+1]).
+        // So we only need to update the status of at most two cuts.
+        // We can maintain a count of bad cuts, or a set of bad cuts.
+        // Since n and q sum to 2e5, we can just recompute the condition for the affected cuts and update a counter.
+        // Let's implement:
+        // pref_max[0] = 0
+        // for i=1..n: pref_max[i] = max(pref_max[i-1], p[i])
+        // auto is_forbidden = [&](int i) -> bool { return s[i] == 'L' && s[i+1] == 'R'; }
+        // auto is_bad = [&](int i) -> bool { return is_forbidden(i) && pref_max[i] != i; }
+        // Initially compute bad_count = count of i in [1, n-1] where is_bad(i).
+        // For each query: index idx (2 <= idx <= n-1).
+        // Toggle s[idx].
+        // For cut i = idx-1 and i = idx (if within 1..n-1), we remove its old bad status, then add new bad status.
+        // Update bad_count accordingly.
+        // Output YES if bad_count == 0 else NO.
+        // Note: s[1] is always 'R', s[n] is always 'L', and we only toggle indices 2..n-1, so s[1] and s[n] never change.
+        // This is O(n + q) per test case.
+        
+        vector<int> pref_max(n + 1, 0);
+        for (int i = 1; i <= n; ++i) {
+            pref_max[i] = max(pref_max[i-1], p[i]);
+        }
+        
+        auto is_forbidden = [&](int i) -> bool {
+            return s[i] == 'L' && s[i+1] == 'R';
+        };
+        auto is_bad = [&](int i) -> bool {
+            return is_forbidden(i) && pref_max[i] != i;
+        };
+        
+        int bad_count = 0;
+        for (int i = 1; i < n; ++i) {
+            if (is_bad(i)) ++bad_count;
+        }
+        
+        while (q--) {
+            int idx;
+            cin >> idx;
+            // update cuts idx-1 and idx
+            for (int cut : {idx-1, idx}) {
+                if (cut >= 1 && cut < n) {
+                    if (is_bad(cut)) --bad_count;
+                }
+            }
+            // toggle s[idx]
+            s[idx] = (s[idx] == 'L' ? 'R' : 'L');
+            // re-evaluate
+            for (int cut : {idx-1, idx}) {
+                if (cut >= 1 && cut < n) {
+                    if (is_bad(cut)) ++bad_count;
+                }
+            }
+            cout << (bad_count == 0 ? "YES" : "NO") << '\n';
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,82 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, q;
+        cin >> n >> q;
+        vector<int> p(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            cin >> p[i];
+        }
+        string s;
+        cin >> s;
+        s = " " + s; // 1-indexed
+
+        // pos[x] = index i where p[i] = x
+        vector<int> pos(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            pos[p[i]] = i;
+        }
+
+        // We maintain a set of "bad" indices i (1 <= i <= n-1)
+        // such that the segment [1..i] is not a permutation of 1..i.
+        // This happens if max_{j<=i} p[j] > i.
+        // We also need to consider the movement constraints:
+        // For the segment [1..i] to be sortable independently,
+        // we need that there is no "barrier" between i and i+1.
+        // A barrier exists if s[i] == 'L' and s[i+1] == 'R'.
+        // Actually, the condition for the whole array to be sortable
+        // is that for every i from 1 to n-1, if max_{j<=i} p[j] > i,
+        // then we must have a way to move elements across the boundary i|i+1.
+        // The boundary is "open" if s[i] == 'R' or s[i+1] == 'L'.
+        // Equivalently, it's blocked if s[i] == 'L' and s[i+1] == 'R'.
+        // So we maintain a set of i where the segment [1..i] is "invalid"
+        // (i.e., max > i) AND the boundary is blocked.
+
+        set<int> bad;
+        vector<int> pref_max(n + 1, 0);
+        for (int i = 1; i <= n; ++i) {
+            pref_max[i] = max(pref_max[i - 1], p[i]);
+        }
+
+        auto is_blocked = [&](int i) {
+            // boundary between i and i+1 is blocked if s[i]=='L' and s[i+1]=='R'
+            return (s[i] == 'L' && s[i + 1] == 'R');
+        };
+
+        for (int i = 1; i < n; ++i) {
+            if (pref_max[i] > i && is_blocked(i)) {
+                bad.insert(i);
+            }
+        }
+
+        auto update = [&](int idx) {
+            // idx is the position where s changed.
+            // Boundaries affected: idx-1 (between idx-1 and idx) and idx (between idx and idx+1)
+            for (int i : {idx - 1, idx}) {
+                if (i >= 1 && i < n) {
+                    if (pref_max[i] > i && is_blocked(i)) {
+                        bad.insert(i);
+                    } else {
+                        bad.erase(i);
+                    }
+                }
+            }
+        };
+
+        while (q--) {
+            int idx;
+            cin >> idx;
+            s[idx] = (s[idx] == 'L' ? 'R' : 'L');
+            update(idx);
+            cout << (bad.empty() ? "YES" : "NO") << '\n';
+        }
+    }
+    return 0;
+}

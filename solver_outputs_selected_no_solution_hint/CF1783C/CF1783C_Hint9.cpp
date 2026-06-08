@@ -1,0 +1,129 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        
+        // We want to maximize our wins.
+        // Sort opponents by preparation time.
+        vector<int> b = a;
+        sort(b.begin(), b.end());
+        
+        int wins = 0;
+        long long sum = 0;
+        for (int i = 0; i < n; ++i) {
+            if (sum + b[i] <= m) {
+                sum += b[i];
+                wins++;
+            } else {
+                break;
+            }
+        }
+        
+        // If we can beat all opponents, place is 1.
+        if (wins == n) {
+            cout << 1 << "\n";
+            continue;
+        }
+        
+        // Check if we can beat the opponent with index wins (0-based).
+        // That opponent originally has index wins in sorted order of a? No, we need original index.
+        // The opponent we need to beat to have strictly more wins than opponent (wins+1)th place.
+        // Actually, we need to see if we can beat the opponent who would have wins+1 wins if we don't beat them.
+        // The opponent with original index corresponding to the (wins)-th win? Let's think.
+        // If we have 'wins' wins, then there are 'wins' opponents we beat. The opponent we didn't beat that has the smallest index? 
+        // The place is determined by number of wins. Opponents have wins based on their index.
+        // Opponent i beats all j < i. So opponent i has exactly i-1 wins from other opponents, plus possibly a win against us if we don't prepare.
+        // If we beat opponent i, they have i-1 wins; if we lose, they have i wins.
+        // Our wins = number of opponents we beat.
+        // We want to minimize our place = 1 + number of participants with strictly more wins.
+        // Participants with strictly more wins: those opponents who have > our wins.
+        // Opponent i has wins = (i-1) + (1 if we lose to i else 0).
+        // So if we beat opponent i, they have i-1 wins. If we lose, they have i wins.
+        // We want to count how many opponents have wins > our wins.
+        // Let our wins = W.
+        // For opponent i:
+        //   if we beat i: they have i-1 wins. They have > W iff i-1 > W => i > W+1.
+        //   if we lose to i: they have i wins. They have > W iff i > W.
+        // So to minimize place, we want to choose which opponents to beat (subject to sum a_i <= m) to minimize the count of opponents with > W wins.
+        // This is equivalent to maximizing W, but also we can sometimes beat a specific opponent to reduce their wins.
+        // Standard solution: sort by a_i, try to get W wins. Then check if we can beat the opponent with index W (1-based) in the original ordering.
+        // Because if we beat that opponent, they have W-1 wins instead of W wins, which might reduce the number of opponents with > W wins.
+        // Let's formalize:
+        // Suppose we pick a set S of opponents to beat, |S| = W, sum a_i <= m.
+        // Place = 1 + number of opponents i not in S with i > W (since they have i wins > W) 
+        //            + number of opponents i in S with i-1 > W (i > W+1).
+        // So place = 1 + (number of i > W) - (number of i in S with i == W+1? Actually if i = W+1 and we beat them, they have W wins, not > W, so they don't count. If we lose, they have W+1 > W, count.)
+        // So place = 1 + (n - W) - (1 if W+1 <= n and we beat opponent W+1 else 0).
+        // Wait, check: opponents with i > W: there are n - W of them. All of them have at least i wins >= W+1 > W? 
+        // If i > W, then i >= W+1. If we beat them, they have i-1 wins. For i > W+1, i-1 >= W+1 > W, so they still have > W wins. 
+        // Only i = W+1, if we beat them, they have W wins, not > W. So they are the only one that can drop from >W to <=W.
+        // So place = 1 + (n - W) - (1 if we beat opponent W+1 else 0).
+        // But wait, what if W = 0? Then n - 0 = n, place = 1 + n - (1 if beat opponent 1 else 0). If we beat opponent 1, they have 0 wins, not >0, so place = n. If we don't, place = n+1. But there are n+1 participants, so max place is n+1. Correct.
+        // So to minimize place, we want to maximize W, and if possible, also beat opponent W+1.
+        // But we can't always beat opponent W+1 because we might not have enough time left after picking W easiest opponents.
+        // So algorithm:
+        // 1. Find max W by greedy on sorted a.
+        // 2. If W == n, place = 1.
+        // 3. Else, check if we can beat opponent with original index such that its 1-based index is W+1? Wait, opponent numbering is 1..n based on input order? The problem says opponents numbered 1 to n. Their strength is their index: i beats j iff i > j. So opponent 1 is weakest, opponent n is strongest. The input a_i corresponds to opponent i. So opponent i has index i.
+        // So we need to check if we can beat opponent (W+1). But we might have already included opponent (W+1) in our W wins if its a_i is small. If we already beat them, then place = 1 + (n - W) - 1 = n - W + 1? Wait, if we already beat opponent W+1, then they are in S, so they have W wins, not >W. So the formula gives place = 1 + (n - W) - 1 = n - W. But is that correct? Let's test: n=4, W=2, we beat opponents including opponent 3. Then opponents: 1 (we beat? maybe), 2, 3 (we beat), 4. Our wins=2. Opponent 1: if we beat, 0 wins; if lose, 1 win. Opponent 2: if beat, 1 win; if lose, 2 wins. Opponent 3: we beat, so 2 wins. Opponent 4: we lose? maybe, 4 wins. Who has >2 wins? Only opponent 4. So place = 1+1=2. n - W = 4-2=2. Correct.
+        // If we didn't beat opponent W+1, place = 1 + (n - W). Example: n=4, W=2, we beat opponents 1 and 2. Opponent 3 not beaten, so has 3 wins >2. Opponent 4 has 4 wins >2. So place = 1+2=3. n-W+1=3. Correct.
+        // So place = n - W + 1 if we beat opponent W+1, else n - W + 2? Wait: if we beat opponent W+1, place = n - W. If not, place = n - W + 1. But max place is n+1. If W=0, n-W = n, place = n if beat opponent 1, else n+1. So place = n - W + (1 if we don't beat opponent W+1 else 0)? Actually: place = 1 + (n - W) - (beat W+1). So if beat W+1, place = n - W. If not, place = n - W + 1.
+        // But wait, what if W+1 > n? That means W = n, already handled.
+        // So we just need to check if we can achieve a set of W wins that includes opponent W+1, or if we can swap one of the W wins with opponent W+1 without exceeding m.
+        // Since we want to minimize place, we want to beat opponent W+1 if possible.
+        // How to check? We have the greedy W wins using the smallest a_i. If opponent W+1 is already among them, then we already beat them, place = n - W.
+        // If not, we can try to replace the largest a_i in our W wins with a_{W+1} and see if the sum is still <= m.
+        // Because we want to include opponent W+1 while keeping W wins. The optimal way is to take the W smallest a_i, but if a_{W+1} is not among them, we can try to swap it with the largest among the W smallest.
+        // So we compute sum of W smallest a_i. Let that be sumW. If we replace the largest in that set (which is b[W-1] if b is sorted) with a[W] (0-indexed, opponent W+1), the new sum = sumW - b[W-1] + a[W]. If this <= m, then we can beat opponent W+1 and still have W wins. Then place = n - W.
+        // Otherwise, we cannot beat opponent W+1 while keeping W wins, so place = n - W + 1.
+        // But wait: what if we can beat opponent W+1 by dropping a different opponent? The greedy set of W smallest is optimal for minimizing sum. If we can't include opponent W+1 by swapping with the largest in that set, then any other set of W wins will have sum >= sumW - b[W-1] + a[W]? Actually, if we want to include opponent W+1, the minimum sum of W wins including opponent W+1 is achieved by taking opponent W+1 and the W-1 smallest other opponents. That sum is exactly sumW - b[W-1] + a[W] if a[W] is not already in the W smallest. If a[W] is already in the W smallest, then sumW already includes it, so we can just use sumW. So the condition is correct.
+        // Edge case: W could be 0. Then sumW = 0, b[W-1] doesn't exist. We just check if a[0] <= m. If yes, we can beat opponent 1, place = n - 0 = n. Else place = n + 1. That matches formula if we handle W=0 separately.
+        
+        if (wins == 0) {
+            if (a[0] <= m) {
+                cout << n << "\n";
+            } else {
+                cout << n + 1 << "\n";
+            }
+            continue;
+        }
+        
+        // wins > 0
+        // Check if opponent wins+1 (1-indexed) is already beaten in our greedy selection.
+        // We need to know if a[wins] (0-indexed, opponent wins+1) is among the wins smallest.
+        // Since we sorted b, we can check if a[wins] <= b[wins-1] (the largest in the selected set).
+        // But careful: b[wins-1] is the largest in the selected set. If a[wins] <= b[wins-1], then it is among the wins smallest (or equal to the largest, so we can swap without increasing sum). Actually, if a[wins] < b[wins-1], then it must be in the set because we took the wins smallest. If a[wins] == b[wins-1], it might not be the exact same opponent, but we can swap them without changing sum, so we can effectively beat opponent wins+1.
+        // So condition: if a[wins] <= b[wins-1], then we can beat opponent wins+1 with sum <= sumW (since sumW already includes b[wins-1], replacing with a[wins] <= b[wins-1] gives sum <= sumW <= m). So place = n - wins.
+        // Else, we need to check if sumW - b[wins-1] + a[wins] <= m.
+        // But wait: sumW is the sum of the wins smallest a_i. We computed sum during greedy. That sum is exactly sumW.
+        // So we can just do:
+        bool can_beat_plus_one = false;
+        if (a[wins] <= b[wins-1]) {
+            can_beat_plus_one = true;
+        } else {
+            long long new_sum = sum - b[wins-1] + a[wins];
+            if (new_sum <= m) {
+                can_beat_plus_one = true;
+            }
+        }
+        
+        if (can_beat_plus_one) {
+            cout << n - wins << "\n";
+        } else {
+            cout << n - wins + 1 << "\n";
+        }
+    }
+    return 0;
+}

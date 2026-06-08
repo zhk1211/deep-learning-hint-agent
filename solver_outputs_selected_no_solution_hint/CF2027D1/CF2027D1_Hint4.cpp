@@ -1,0 +1,220 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        vector<long long> b(m);
+        for (int i = 0; i < m; ++i) cin >> b[i];
+
+        // dp[i] = min cost to remove suffix starting at i
+        // We'll compute from right to left.
+        const long long INF = 1e18;
+        vector<long long> dp(n + 1, INF);
+        dp[n] = 0;
+
+        // For each k from m down to 1, we try to use b[k-1] to make jumps.
+        // We maintain a sliding window of positions that can be reached with current b.
+        // Since b is decreasing, we process k from m down to 1.
+        // For a fixed k, we can remove a prefix with sum <= b[k-1].
+        // We want to find for each i the min dp[j] where sum(i..j-1) <= b[k-1].
+        // We can use two pointers + multiset for sliding window minimum.
+
+        for (int k = m; k >= 1; --k) {
+            long long limit = b[k - 1];
+            int r = 0;
+            long long cur_sum = 0;
+            multiset<long long> window;
+            // We'll compute new_dp[i] = min over j>i with sum(i..j-1) <= limit of dp[j] + (m - k)
+            // Actually we can update dp in-place if we process from right to left.
+            // But careful: dp[j] already includes costs from higher k? 
+            // We process k decreasing, so dp[j] currently holds min cost using k' >= k.
+            // For current k, we can take one segment with cost (m - k) and then use dp[j].
+            // So new_dp[i] = min(dp[i], min_{j: sum(i..j-1) <= limit} (dp[j] + (m - k))).
+            // We can compute this with two pointers from left to right? 
+            // Let's fix i from n-1 down to 0.
+            // We maintain r = i, sum = 0, and window of dp values for j in (i, r] where sum <= limit.
+            // Actually easier: for each i, we want the minimum dp[j] for j in (i, some_r] where sum(i..j-1) <= limit.
+            // We can use two pointers expanding r as we move i left.
+            // Since limit is fixed for this k, we can do:
+            // r = i, sum = 0, window clear.
+            // For i from n-1 down to 0:
+            //   add a[i] to sum, r = i? No.
+            // Let's do: start with i = n-1, r = i, sum = a[i], window = {dp[i+1]}.
+            // Actually we need j > i, so for i, the possible j start from i+1.
+            // We can maintain r as the furthest index such that sum(i..r-1) <= limit.
+            // As i decreases, sum increases, so r may need to decrease.
+            // So we can move r leftwards.
+            // Initialize r = n, sum = 0, window empty.
+            // For i from n-1 down to 0:
+            //   sum += a[i]
+            //   while sum > limit and r > i:
+            //       sum -= a[r-1]
+            //       window.erase(window.find(dp[r]))
+            //       r--
+            //   // now window contains dp[j] for j in (i, r] (since r is exclusive? careful)
+            //   Actually if r is the first index not included, then j can be i+1..r.
+            //   So we need dp[r] in window? Let's define r as the last index included in sum.
+            //   Better: maintain r as the rightmost index such that sum(i..r-1) <= limit.
+            //   Then j can be i+1 .. r.
+            //   So window should contain dp[j] for j = i+1 .. r.
+            //   When we move i to i-1, we add a[i] to sum, and we may need to remove some rightmost elements.
+            //   We can start with r = n, sum = 0, window empty.
+            //   For i from n-1 down to 0:
+            //       sum += a[i]
+            //       // insert dp[i+1] into window? Actually we need to insert dp[i+1] because j can be i+1.
+            //       // But we haven't inserted it yet. We can insert dp[i+1] at the beginning of loop.
+            //       window.insert(dp[i+1])
+            //       while sum > limit and r > i+1:
+            //           sum -= a[r-1]
+            //           window.erase(window.find(dp[r]))
+            //           r--
+            //       // now window holds dp[j] for j in [i+1, r]
+            //       if (!window.empty()) {
+            //           dp[i] = min(dp[i], *window.begin() + (m - k));
+            //       }
+            //   But careful: r starts at n, sum=0. For i=n-1, we insert dp[n], sum = a[n-1], then while sum>limit we remove from right. Since r=n initially, we remove a[n-1] if needed, r becomes n-1, window loses dp[n]. That's correct.
+            //   However, we need to reset window and r for each k? Yes, because limit changes.
+            //   Complexity: O(n) per k, total O(n*m) which is too large (n*m up to 3e5 overall, so O(n*m) is acceptable! The sum of n*m over test cases <= 3e5, so O(n*m) is fine.)
+            //   Wait, n*m <= 3e5 total, so we can afford O(n*m) per test case? Actually sum of n*m over all test cases <= 3e5, so total operations O(total n*m) is 3e5, which is perfectly fine.
+            //   So we can just do the two pointers for each k.
+            //   But we must be careful: dp array is shared across k, and we update dp[i] with min of previous dp[i] and new cost.
+            //   Since we process k from m down to 1, dp[j] already contains the best cost using k' >= k (i.e., higher or equal k, meaning lower cost m-k'? Actually m-k' is smaller for larger k', so using larger k' gives smaller cost. But we are allowed to increase k, so we can use any k' >= current k. So dp[j] should represent min cost to clear suffix starting at j using any sequence of operations where the first operation uses some k' >= current k? Wait, the operations: we can increase k at any time, but we cannot decrease. So if we are at state with current k, we can either remove a prefix with sum <= b_k (cost m-k), or increase k to k+1 (cost 0) and then continue. So the DP state should be: dp[i][k] = min cost to clear suffix starting at i with current k. But k can be up to m, and n*m is small, so we could do DP with two dimensions? n*m <= 3e5, so we can have dp[i][k] but that's too many states if we store all? Actually n*m <= 3e5, so total states across all test cases is at most 3e5. We can just do DP with state (i, k). But we need to handle transitions efficiently.
+            //   Let's think differently: Since we can increase k for free, the optimal strategy is to use some sequence of k values: k1 <= k2 <= ... <= kp, and for each we remove a segment with sum <= b_{k_j}. The cost is sum (m - k_j). We want to partition array into segments, each segment assigned a k value (non-decreasing), such that sum of segment <= b_k, and minimize sum (m - k).
+            //   This is equivalent to: we can choose for each segment a threshold from the b array, but thresholds must be non-increasing in terms of b values? Actually b is decreasing, so larger k means smaller b_k. Since we can increase k, the allowed sum for segments can only decrease or stay same? Wait, increasing k means we move to smaller b_k, so the allowed sum decreases. So the sequence of b_k used must be non-increasing. So we partition array into segments, and assign each segment a b value from the array such that the assigned b values are non-increasing, and segment sum <= assigned b. Cost = sum (m - index_of_b). Minimize cost.
+            //   Since m - index is smaller for larger index, we want to use as large k as possible (i.e., smaller b) to reduce cost? Actually cost = m - k, so larger k gives smaller cost. But larger k has smaller b, so it's harder to satisfy sum <= b. So there's a trade-off.
+            //   We can think of DP: dp[i] = min cost to clear suffix starting at i. Then dp[i] = min_{j>i, sum(i..j-1) <= b_k, for some k} ( (m - k) + dp[j] ). But k can be chosen freely as long as we can achieve it. However, we can also increase k after removing some segments. So the k used for the first segment can be any value, and then for the rest we can use k' >= k. So dp[j] should represent the min cost to clear suffix starting at j, assuming we can start with any k? That's not right because the cost depends on the k we choose for the first segment. If we define dp[i] as min cost to clear suffix starting at i with the ability to choose any starting k, then dp[i] = min_{k} ( min_{j: sum <= b_k} (m - k + dp[j]) ). But then dp[j] would also have the ability to choose any starting k, which might be smaller than the k we used for the first segment. That would violate the non-decreasing k condition. So we need to enforce that the k used for later segments is >= the k used for the current segment.
+            //   So we need to know the current k. Since n*m is small, we can do DP with state (i, k): dp[i][k] = min cost to clear suffix starting at i, given that the current k is k (meaning we have already increased to k, and we can only use k' >= k from now on). Then:
+            //   dp[i][k] = min( dp[i][k+1], min_{j>i, sum(i..j-1) <= b_k} (m - k + dp[j][k]) )
+            //   Wait, if we use operation type 2 with current k, we pay m-k, and then we can continue with the same k (since we haven't increased it). But we could also increase k before the next operation. So after removing a segment with k, we can continue with any k' >= k. So the remaining cost is min_{k' >= k} dp[j][k']. But since dp[j][k] already considers the option of increasing k (by dp[j][k+1]), we can just use dp[j][k] as the min cost from j with current k. So transition: dp[i][k] = min( dp[i][k+1], min_{j: sum <= b_k} (m - k + dp[j][k]) ).
+            //   Base: dp[n][k] = 0 for all k.
+            //   We want dp[0][1] (since initial k=1).
+            //   The number of states is n * m, which is up to 3e5 total. For each state (i,k), we need to find the best j. We can precompute for each k and each i the furthest j such that sum(i..j-1) <= b_k. Then we need min over j in (i, R[i][k]] of dp[j][k]. This can be done with a segment tree or by processing i decreasing and maintaining a multiset, similar to the two pointers idea. Since n*m is small, we can afford O(n*m) or O(n*m log n) total.
+            //   Let's design the DP:
+            //   We have m thresholds. For each k from m down to 1:
+            //       We compute dp[i][k] for all i.
+            //       dp[i][k] = min( dp[i][k+1], min_{j in (i, R[i][k]]} (m - k + dp[j][k]) )
+            //       where R[i][k] is the largest index such that sum(i..R[i][k]-1) <= b_k.
+            //   We can compute R[i][k] using two pointers because for fixed k, as i increases, R[i][k] also increases.
+            //   Then we need range minimum query on dp[j][k] for j in (i, R[i][k]].
+            //   Since we compute dp[i][k] for i from n down to 0, we can maintain a data structure that supports adding dp[i][k] at position i and querying min in a range. We can use a segment tree or a Fenwick tree for prefix minimums? Actually we need range minimum on [i+1, R], which is a suffix of the already processed indices (since we go from n down to 0, the processed indices are i+1..n). So we can maintain a segment tree over positions 0..n, initially all INF. When we compute dp[i][k], we first query min on [i+1, R[i][k]], then we update position i with dp[i][k]. But careful: dp[i][k] depends on dp[j][k] for j>i, which are already computed and inserted. So we can do:
+            //       For k from m down to 1:
+            //           Initialize segment tree with INF.
+            //           Insert dp[n][k] = 0 at position n.
+            //           For i from n-1 down to 0:
+            //               R = rightmost index such that sum(i..R-1) <= b_k. (We can precompute or compute on the fly with two pointers.)
+            //               query min dp[j][k] for j in [i+1, R]
+            //               candidate = (m - k) + query_result
+            //               dp[i][k] = min(dp[i][k+1], candidate)
+            //               update segment tree at i with dp[i][k]
+            //       But wait, dp[i][k+1] is already computed from the previous iteration (since we go k decreasing). We need to store dp for all i and k? We can just keep a 1D array for current k, and a 1D array for previous k (k+1). Because dp[i][k] only depends on dp[i][k+1] and dp[j][k] for j>i. So we can do:
+            //       vector<long long> dp_curr(n+1, INF), dp_next(n+1, INF);
+            //       dp_next[n] = 0; // for k = m+1? Actually we need dp[i][m+1] = INF? No, we can't increase beyond m. So for k = m, dp[i][m+1] is not an option. We can treat dp_next as dp for k+1. Initially, for k = m, dp_next should be INF except dp_next[n]=0? Wait, if we are at k=m, we cannot increase k further. So the option dp[i][k+1] is not available. So we should set dp_next[i] = INF for all i, except dp_next[n] = 0? Actually dp[i][m] = min( INF, min_{j} (0 + dp[j][m]) ) because m - m = 0. So we don't need dp[i][m+1]. So we can start with dp_next all INF, dp_next[n] = 0. Then for k = m down to 1:
+            //           dp_curr = dp_next (this gives the option of increasing k, because dp[i][k+1] is already the min cost starting with k+1)
+            //           Then we try to improve dp_curr[i] by using operation type 2 with current k.
+            //           We'll compute new values using segment tree and update dp_curr.
+            //           After finishing k, dp_next = dp_curr.
+            //       Finally, answer is dp_next[0] (which corresponds to k=1).
+            //   Let's verify: For k=m, dp_curr initially = dp_next (which is INF except dp_next[n]=0). Then we compute for i from n-1 down to 0: R[i][m], query min dp_curr[j] for j in [i+1, R], candidate = 0 + min. Update dp_curr[i] = min(dp_curr[i], candidate). Then insert dp_curr[i] into seg tree. This correctly computes dp[i][m] because we can only use k=m (cost 0) and we cannot increase k. The initial dp_curr[i] is INF (except n), so candidate will be chosen if possible. Then dp_next becomes dp_curr. For k=m-1, dp_curr initially = dp_next (which is dp[i][m]). This gives the option to increase k to m (cost 0) and then use dp[i][m]. Then we also consider using k=m-1 directly: cost = 1 + dp[j][m-1]? Wait, the transition is: if we use operation type 2 with k=m-1, we pay m - (m-1) = 1, and then we can continue with any k' >= m-1. The min cost from j with k' >= m-1 is exactly dp[j][m-1] (which we are currently computing). But note that dp[j][m-1] already includes the option of increasing to m. So it's correct to use dp_curr[j] in the query, because dp_curr[j] currently holds the best of dp[j][m] (from initialization) and possibly improved by using k=m-1 directly? Wait, when we process i from n down to 0, we update dp_curr[i] and then insert into seg tree. So for a given i, when we query for j > i, the seg tree contains dp_curr[j] that have already been computed (which include the option of using k=m-1 for their first segment). That's exactly what we want: dp[j][m-1]. So the DP is correct.
+            //   Complexity: For each k, we do a pass over i from n down to 0. We need to compute R[i][k] quickly. We can precompute prefix sums of a. Then for each k, we can use two pointers to find R[i][k] for all i. Since we process i decreasing, we can maintain r and sum. Actually we want for each i the max j such that sum(i..j-1) <= b_k. As i decreases, the sum increases, so the max j decreases. So we can start with i = n-1, r = n, sum = 0. Then for i from n-1 down to 0:
+            //       sum += a[i]
+            //       while sum > b_k and r > i:
+            //           sum -= a[r-1]
+            //           r--
+            //       R[i] = r
+            //   This gives R[i] in O(n) per k. Total O(n*m) for all k, which is acceptable.
+            //   Then we need a segment tree for range minimum. We can use a simple segment tree with point update and range query. Since n <= 3e5 per test case but sum of n*m <= 3e5, the total n over all test cases might be up to 3e5, but for a single test case n could be 3e5 and m=1, then n*m=3e5. Building a segment tree of size n+1 for each k would be O(n) per k, total O(n*m) which is fine. But we can also just use a Fenwick tree for prefix minimums if we reverse the order? Actually we need range minimum on [i+1, R]. Since we process i decreasing, the queried range is always to the right of i. We can use a segment tree that supports point update and range minimum. Or we can use a multiset with two pointers? But we need to query min in a range that shrinks as i decreases. The two pointers + multiset approach from earlier works without segment tree! Let's revisit that.
+            //   For a fixed k, we want to compute for each i: best = min_{j in (i, R[i]]} dp_curr[j]. We can do this with a sliding window. As i decreases, R[i] also decreases (or stays same). So the window of valid j (i+1 to R[i]) shrinks from the right. We can maintain a multiset of dp_curr[j] for j in the current window. We start with i = n-1, window contains j from n? Actually for i = n-1, window is j in [n, R[n-1]]. R[n-1] is at most n. So window could be just {dp_curr[n]}. Then as i decreases, we add dp_curr[i+1] to the window, and we remove any j > R[i] from the window. Since R[i] is non-increasing as i decreases, we can just maintain a pointer r_ptr starting at n, and a multiset. Let's detail:
+            //   For a fixed k:
+            //       Compute R[i] for all i using two pointers (as above, store in array R).
+            //       Initialize multiset window.
+            //       int r_ptr = n; // window will contain dp_curr[j] for j in [i+1, r_ptr]
+            //       // Actually we want window to contain exactly j in (i, R[i]]. So we can set r_ptr = R[i] and maintain window.
+            //       // Start with i = n-1:
+            //       // window should contain dp_curr[n] if R[n-1] == n.
+            //       // We can just build the window for i = n-1 by inserting dp_curr[j] for j = n down to R[n-1]? Better to start with empty window and expand as we go? Since we process i decreasing, we can start with i = n, but we need i from n-1 down to 0. Let's do:
+            //       window.clear();
+            //       r_ptr = n;
+            //       // We'll maintain window = { dp_curr[j] for j in [i+1, r_ptr] }.
+            //       // Initially for i = n-1, we want r_ptr = R[n-1]. So we can set r_ptr = n, then for i = n-1, we add dp_curr[n]? Actually we need to insert dp_curr[i+1] at each step. So:
+            //       for i = n-1 down to 0:
+            //           // insert dp_curr[i+1] into window
+            //           window.insert(dp_curr[i+1]);
+            //           // now window has j up to r_ptr, but we need to shrink r_ptr to R[i]
+            //           while (r_ptr > R[i]) {
+            //               window.erase(window.find(dp_curr[r_ptr]));
+            //               r_ptr--;
+            //           }
+            //           // now window contains exactly j in [i+1, R[i]]
+            //           if (!window.empty()) {
+            //               candidate = (m - k) + *window.begin();
+            //               dp_curr[i] = min(dp_curr[i], candidate);
+            //           }
+            //       }
+            //   This avoids segment tree and is O(n log n) per k due to multiset. Total O(n*m log n) which might be okay for sum n*m <= 3e5? 3e5 * log(3e5) ~ 3e5 * 19 ~ 5.7e6, very fast.
+            //   But wait: dp_curr[i] is updated during the loop, and then we insert dp_curr[i+1] at the beginning of the next iteration? Actually we insert dp_curr[i+1] before shrinking. But dp_curr[i+1] was already computed in the previous iteration (since we go decreasing). So that's correct.
+            //   However, there's a catch: dp_curr[i] might be updated using candidate that comes from window containing dp_curr[j] for j > i. Those dp_curr[j] are already final for this k. So it's correct.
+            //   Let's test with a small example.
+            //   Example 1: n=4, m=2, a=[9,3,4,3], b=[11,7]
+            //   Prefix sums: [9,12,16,19]
+            //   k=2: b_2=7, cost = 0.
+            //   dp_next initially: [INF, INF, INF, INF, 0]
+            //   dp_curr = dp_next
+            //   Compute R[i] for k=2:
+            //   i=3: sum=3 <=7, r=4 -> R[3]=4
+            //   i=2: sum=4+3=7 <=7, r=4 -> R[2]=4
+            //   i=1: sum=3+4+3=10 >7, remove a[3]=3, sum=7, r=3 -> R[1]=3
+            //   i=0: sum=9+3+4=16 >7, remove a[2]=4, sum=12 >7, remove a[1]=3, sum=9 >7, remove a[0]=9? Wait, we need to be careful: when i=0, we start with sum including a[0]? The two pointers method: start with i=n-1, r=n, sum=0. For i=3: sum+=a[3]=3, while sum>7? no, r=4, R[3]=4. For i=2: sum+=a[2]=4 -> sum=7, R[2]=4. For i=1: sum+=a[1]=3 -> sum=10 >7, remove a[3]=3, sum=7, r=3, R[1]=3. For i=0: sum+=a[0]=9 -> sum=16 >7, remove a[2]=4, sum=12 >7, remove a[1]=3, sum=9 >7, remove a[0]? No, we only remove from the right (r-1). We cannot remove a[0] because it's the current i. So we remove a[1]? Actually r is currently 3, so we remove a[r-1] = a[2] = 4, sum=12, r=2. Still >7, remove a[1] = 3, sum=9, r=1. Still >7, but r == i+1? i=0, r=1, so we cannot remove a[0] because that's the element at i. So we stop when r == i+1? The condition should be while sum > b_k and r > i+1. So we stop when r == i+1. Then R[0] = r = 1. So R[0]=1. That means from i=0, we can only take prefix of length 1 (just a[0]=9) but 9 > 7, so actually no valid prefix. R[0]=1 means j can be up to 1, but j must be > i, so j=1 is the only option, but sum(0..0) = 9 > 7, so it's invalid. Our window method: for i=0, we insert dp_curr[1], then shrink r_ptr to R[0]=1. Window will contain dp_curr[1]. Then candidate = 0 + dp_curr[1]. But is sum(0..0) <= 7? No. So we would incorrectly allow it. The problem is that R[i] computed as the largest j such that sum(i..j-1) <= b_k. If sum(i..i) > b_k, then R[i] should be i (meaning no valid j). In our two pointers, we got R[0]=1, but sum(0..0) = 9 > 7, so actually R[0] should be 0. We need to adjust: after the while loop, if sum > b_k, then even the single element a[i] exceeds b_k, so R[i] = i. Otherwise R[i] = r. So we should do:
+            //       sum += a[i]
+            //       while sum > b_k and r > i+1:
+            //           sum -= a[r-1]
+            //           r--
+            //       if sum > b_k:
+            //           R[i] = i
+            //       else:
+            //           R[i] = r
+            //   Let's recompute R for k=2:
+            //   i=3: sum=3 <=7, R[3]=4.
+            //   i=2: sum=7 <=7, R[2]=4.
+            //   i=1: sum=10 >7, remove a[3]=3, sum=7, r=3, sum<=7, R[1]=3.
+            //   i=0: sum=9+7? Wait, we need to be careful with sum accumulation. The two pointers should maintain sum of a[i..r-1]. Initially r=n, sum=0. For i=3: sum=0+a[3]=3, r=4, sum<=7 -> R[3]=4. For i=2: sum=3+a[2]=7, r=4, sum<=7 -> R[2]=4. For i=1: sum=7+a[1]=10, r=4, sum>7, remove a[3]=3, sum=7, r=3, sum<=7 -> R[1]=3. For i=0: sum=7+a[0]=16, r=3, sum>7, remove a[2]=4, sum=12, r=2, sum>7, remove a[1]=3, sum=9, r=1, now r == i+1, stop. sum=9 >7, so R[0]=0. Correct.
+            //   So with this R array, the window method: for i, we want j in [i+1, R[i]]. If R[i] <= i, then no valid j, window should be empty. In our loop, we insert dp_curr[i+1], then shrink r_ptr to R[i]. If R[i] <= i, then r_ptr will become <= i, but we only inserted up to i+1, so we might need to remove dp_curr[i+1] if R[i] == i. Let's see: if R[i] == i, then after inserting dp_curr[i+1], r_ptr is currently something >= i+1. We shrink while r_ptr > R[i] = i. So we will remove dp_curr[r_ptr] for r_ptr down to i+1. So window becomes empty. That's correct.
+            //   So the window method works.
+            //   Now back to example:
+            //   k=2: dp_curr = [INF, INF, INF, INF, 0]
+            //   R = [0, 3, 4, 4] for i=0..3? Wait indices: i=0:0, i=1:3, i=2:4, i=3:4.
+            //   Process i=3: insert dp_curr[4]=0, r_ptr initially? We need to initialize r_ptr. Let's set r_ptr = n = 4. window empty.
+            //   i=3: insert dp_curr[4]=0 -> window={0}. Shrink r_ptr to R[3]=4. r_ptr=4, no shrink. window={0}. candidate = 0 + 0 = 0. dp_curr[3] = min(INF, 0) = 0.
+            //   i=2: insert dp_curr[3]=0 -> window={0,0}. Shrink r_ptr to R[2]=4. r_ptr=4, no shrink. candidate = 0+0=0. dp_curr[2]=0.
+            //   i=1: insert dp_curr[2]=0 -> window={0,0,0}. Shrink r_ptr to R[1]=3. r_ptr=4 > 3, remove dp_curr[4]=0, r_ptr=3. window={0,0}. candidate = 0+0=0. dp_curr[1]=0.
+            //   i=0: insert dp_curr[1]=0 -> window={0,0,0}. Shrink r_ptr to R[0]=0. r_ptr=3 > 0, remove dp_curr[3]=0, r_ptr=2; remove dp_curr[2]=0, r_ptr=1; remove dp_curr[1]=0, r_ptr=0. window empty. candidate not applied. dp_curr[0] remains INF.
+            //   So after k=2: dp_curr = [INF, 0, 0, 0, 0]. dp_next = dp_curr.
+            //   k=1: b_1=11, cost = 1.
+            //   dp_curr = dp_next = [INF, 0, 0, 0, 0]
+            //   Compute R for k=1:
+            //   i=3: sum=3 <=11, R[3]=4
+            //   i=2: sum=7 <=11, R[2]=4
+            //   i=1: sum=10 <=11, R[1]=4
+            //   i=0: sum=19 >11, remove a[3]=3 ->16>11, remove a[2]=4 ->12>11, remove a[1]=3 ->9<=11, r=1? Wait, careful: start r=4, sum=0.
+            //   i=3: sum=3, r=4, R[3]=4
+            //   i=2: sum=7, r=4, R[2]=4
+            //   i=1: sum=10, r=4, R[1]=4
+            //   i=0: sum=19, r=4, remove a[3]=3 -> sum=16, r=3; remove a[2]=4 -> sum=12, r=2; remove a[1]=3 -> sum=9, r=1; stop since r==i+1. sum=9 <=11, so R[0]=1.
+            //   So R = [1, 4, 4, 4]
+            //   Process:
+            //   Initialize r_ptr = 4, window empty.
+            //   i=3: insert dp_curr[4]=0 -> {0}. shrink to R[3]=4 -> {0}. candidate = 1+0=1. dp_curr[3] = min(0, 1) = 0.
+            //   i=2: insert dp_curr[3]=0 -> {0,0}. shrink to 4 -> {0,0}. candidate = 1. dp_curr[2] = min(0,1)=0.
+            //   i=1: insert dp_curr[2]=0 -> {0,0,0}. shrink to 4 -> {0,0,0}. candidate = 1. dp_curr[1] = min(0,1)=0.
+            //   i=0: insert dp_curr[1]=0 -> {0,0,0,0}. shrink to R[0]=1: r_ptr=4 > 1, remove dp_curr[4]=0, r_ptr=3; remove dp_curr[3]=0, r_ptr=2; remove dp_curr[2]=0, r_ptr=1. window={0}. candidate = 1+0=1. dp_curr[0] = min(INF, 1) = 1.
+            //   Final dp_curr[0] = 1. Answer = 1. Correct.
+            //   Example 2: n=1, m=2, a=[20], b=[19,18]
+            //   k

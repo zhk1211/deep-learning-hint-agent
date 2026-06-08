@@ -1,0 +1,108 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> p(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> p[i];
+        }
+        
+        // Find longest prefix that matches 1,2,3...
+        int pref = 0;
+        for (int i = 0; i < n; ++i) {
+            if (p[i] == i + 1) {
+                pref++;
+            } else {
+                break;
+            }
+        }
+        
+        // Find longest suffix that matches n, n-1, ...
+        int suff = 0;
+        for (int i = n - 1; i >= 0; --i) {
+            if (p[i] == n - (n - 1 - i)) {
+                suff++;
+            } else {
+                break;
+            }
+        }
+        
+        // Count elements that are already in correct position for ascending
+        int asc_fixed = 0;
+        for (int i = 0; i < n; ++i) {
+            if (p[i] == i + 1) asc_fixed++;
+        }
+        
+        // Count elements that are already in correct position for descending
+        int desc_fixed = 0;
+        for (int i = 0; i < n; ++i) {
+            if (p[i] == n - i) desc_fixed++;
+        }
+        
+        // Determine the result based on the analysis
+        // First wins if he can force ascending before Second forces descending
+        // Second wins if he can force descending before First forces ascending
+        // Otherwise Tie
+        
+        // Key insight: The game is determined by how many elements are already
+        // in the correct positions for each player's goal.
+        // First wants ascending: needs to fix n - asc_fixed elements
+        // Second wants descending: needs to fix n - desc_fixed elements
+        
+        // But they can interfere with each other's progress.
+        // The actual condition derived from game analysis:
+        // First wins if asc_fixed >= n/2 + 1? No, more nuanced.
+        
+        // Let's use the known solution approach:
+        // Count elements that are NOT in correct position for ascending
+        int bad_for_first = n - asc_fixed;
+        // Count elements that are NOT in correct position for descending
+        int bad_for_second = n - desc_fixed;
+        
+        // Count elements that are bad for both (i.e., in neither correct position)
+        int bad_for_both = 0;
+        for (int i = 0; i < n; ++i) {
+            if (p[i] != i + 1 && p[i] != n - i) {
+                bad_for_both++;
+            }
+        }
+        
+        // First can win if he can fix all his bad elements before Second fixes his,
+        // considering that some elements are bad for both.
+        // First's required moves: bad_for_first
+        // Second's required moves: bad_for_second
+        // But they share bad_for_both elements.
+        
+        // Let a = bad_for_first - bad_for_both (elements only bad for First)
+        // Let b = bad_for_second - bad_for_both (elements only bad for Second)
+        // Let c = bad_for_both
+        
+        int a = bad_for_first - bad_for_both;
+        int b = bad_for_second - bad_for_both;
+        int c = bad_for_both;
+        
+        // First wins if a + c <= b (he can fix all his before Second fixes all his)
+        // Second wins if b + c < a (he can fix all his before First fixes all his)
+        // Otherwise Tie
+        
+        if (a + c <= b) {
+            cout << "First\n";
+        } else if (b + c < a) {
+            cout << "Second\n";
+        } else {
+            cout << "Tie\n";
+        }
+    }
+    
+    return 0;
+}
+```

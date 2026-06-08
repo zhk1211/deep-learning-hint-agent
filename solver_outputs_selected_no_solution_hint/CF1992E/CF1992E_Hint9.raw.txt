@@ -1,0 +1,82 @@
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        string n_str;
+        cin >> n_str;
+        int n_len = (int)n_str.size();
+        long long n_val = stoll(n_str);
+
+        vector<pair<long long, long long>> ans;
+        // a ranges from 1 to 10000
+        for (long long a = 1; a <= 10000; ++a) {
+            long long total_len = a * n_len;
+            // b must be at most min(10000, a * n_val) and also < total_len to keep non-empty
+            long long max_b = min(10000LL, a * n_val);
+            // We need to find b such that:
+            // The string after removing last b chars equals the integer n_val * a - b
+            // The string is n_str repeated a times, then last b chars removed.
+            // The resulting string length is total_len - b.
+            // Let the resulting integer be X. We need X = n_val * a - b.
+            // Also X must be exactly the string formed by first (total_len - b) chars.
+            // Since n_str is small (len <= 3 for n<=100), we can try possible lengths of X.
+            // The length of X in digits is L = total_len - b.
+            // So b = total_len - L.
+            // We need 1 <= b <= max_b and b < total_len.
+            // Also X = n_val * a - b.
+            // So X = n_val * a - (total_len - L) = n_val * a - a * n_len + L.
+            // X must be a positive integer with exactly L digits (no leading zeros).
+            // Also X must equal the prefix of length L of the repeated string.
+            // Since n_len is small, L can be at most total_len, but we can iterate L from 1 to min(6, total_len-1)?
+            // Actually X can be up to n_val*a - 1, which can be large, but L is bounded by total_len.
+            // total_len = a * n_len <= 10000 * 3 = 30000.
+            // We can't iterate L up to 30000 for each a (10000*30000 = 3e8 too big).
+            // But note that n_val is at most 100, a up to 10000, so n_val*a up to 1e6.
+            // The correct answer n_val*a - b is at most 1e6, so its length L <= 7.
+            // Because max n_val*a = 100*10000 = 1,000,000 (7 digits).
+            // So L is small! We can iterate L from 1 to 7.
+            // Also b = total_len - L must be between 1 and max_b, and b < total_len.
+            // Then we check if X = n_val * a - b equals the integer formed by the first L characters of the repeated string.
+            // But we must also ensure that the string prefix of length L, when converted to integer, has exactly L digits (no leading zeros).
+            // Since n_str may have leading zeros? n is integer 1..100, so no leading zeros in n_str.
+            // The repeated string consists of copies of n_str, so its first character is non-zero, so any prefix has no leading zeros.
+            // So we just need to check if the prefix matches X.
+            // To avoid constructing huge strings, we can compute the prefix integer by taking characters from n_str cyclically.
+            // Since L <= 7, we can just build the prefix string of length L by iterating i from 0 to L-1, char = n_str[i % n_len].
+            // Then convert to integer and compare with X.
+            for (int L = 1; L <= 7; ++L) {
+                if (L >= total_len) break; // b must be >=1
+                long long b = total_len - L;
+                if (b < 1 || b > max_b) continue;
+                long long X = n_val * a - b;
+                if (X <= 0) continue;
+                // Check length of X
+                int x_len = 0;
+                long long tmp = X;
+                while (tmp) { ++x_len; tmp /= 10; }
+                if (x_len != L) continue;
+                // Build prefix string of length L
+                string prefix;
+                for (int i = 0; i < L; ++i) {
+                    prefix += n_str[i % n_len];
+                }
+                if (stoll(prefix) == X) {
+                    ans.emplace_back(a, b);
+                }
+            }
+        }
+        cout << ans.size() << '\n';
+        for (auto &p : ans) {
+            cout << p.first << ' ' << p.second << '\n';
+        }
+    }
+    return 0;
+}
+```

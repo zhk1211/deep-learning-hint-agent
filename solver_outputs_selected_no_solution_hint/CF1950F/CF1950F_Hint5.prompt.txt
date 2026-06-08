@@ -1,0 +1,89 @@
+You are solving a Codeforces problem.
+
+=== PROBLEM STATEMENT ===
+Description
+Find the minimum height of a rooted tree $ ^{\dagger} $ with $ a+b+c $ vertices that satisfies the following conditions:
+
+- $ a $ vertices have exactly $ 2 $ children,
+- $ b $ vertices have exactly $ 1 $ child, and
+- $ c $ vertices have exactly $ 0 $ children.
+
+If no such tree exists, you should report it. ![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF1950F/0c6b0806a993f448977c57ce3c99533fc6610921.png)The tree above is rooted at the top vertex, and each vertex is labeled with the number of children it has. Here $ a=2 $ , $ b=1 $ , $ c=3 $ , and the height is $ 2 $ .
+
+$ ^{\dagger} $ A rooted tree is a connected graph without cycles, with a special vertex called the root. In a rooted tree, among any two vertices connected by an edge, one vertex is a parent (the one closer to the root), and the other one is a child.
+
+The distance between two vertices in a tree is the number of edges in the shortest path between them. The height of a rooted tree is the maximum distance from a vertex to the root.
+
+Input Format
+The first line contains an integer $ t $ ( $ 1 \leq t \leq 10^4 $ ) — the number of test cases.
+
+The only line of each test case contains three integers $ a $ , $ b $ , and $ c $ ( $ 0 \leq a, b, c \leq 10^5 $ ; $ 1 \leq a + b + c $ ).
+
+The sum of $ a + b + c $ over all test cases does not exceed $ 3 \cdot 10^5 $ .
+
+Output Format
+For each test case, if no such tree exists, output $ -1 $ . Otherwise, output one integer — the minimum height of a tree satisfying the conditions in the statement.
+
+Examples
+Sample 1
+Input
+10
+2 1 3
+0 0 1
+0 1 1
+1 0 2
+1 1 3
+3 1 4
+8 17 9
+24 36 48
+1 0 0
+0 3 1
+Output
+2
+0
+1
+1
+-1
+3
+6
+-1
+-1
+3
+
+Note
+The first test case is pictured in the statement. It can be proven that you can't get a height smaller than $ 2 $ .
+
+In the second test case, you can form a tree with a single vertex and no edges. It has height $ 0 $ , which is clearly optimal.
+
+In the third test case, you can form a tree with two vertices joined by a single edge. It has height $ 1 $ , which is clearly optimal.
+
+=== LIMITS ===
+Time limit per test: 1 second
+Memory limit per test: 256 megabytes
+
+=== HINTS ===
+**Hint 1**
+Can we solve the problem for a single test case?
+
+**Hint 2**
+Can we find the answer greedily?
+
+**Hint 3**
+What is the answer for $a=b=c=1$?
+
+**Hint 4**
+How do we connect two trees?
+
+**Hint 5**
+What happens if $a=1$, $b=2$, $c=0$?
+
+The hints are important. Carefully think through every provided hint and use them to derive the algorithm before writing code. Do not ignore the hints.
+
+Write a complete C++17 solution.
+
+Requirements:
+- Return only one C++17 code block.
+- Do not explain.
+- The solution must read from standard input and write to standard output.
+- Use standard C++17.
+- The algorithm must fit within the given time and memory limits.

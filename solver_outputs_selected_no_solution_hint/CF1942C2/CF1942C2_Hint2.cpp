@@ -1,0 +1,64 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t--) {
+        long long n;
+        int x, y;
+        cin >> n >> x >> y;
+        vector<long long> a(x);
+        for (int i = 0; i < x; ++i) {
+            cin >> a[i];
+        }
+        sort(a.begin(), a.end());
+        
+        long long ans = x - 2; // triangles from chosen vertices alone
+        
+        vector<long long> gaps;
+        for (int i = 0; i < x; ++i) {
+            long long diff;
+            if (i + 1 < x) {
+                diff = a[i + 1] - a[i];
+            } else {
+                diff = a[0] + n - a[i];
+            }
+            if (diff > 1) {
+                gaps.push_back(diff);
+            }
+        }
+        
+        sort(gaps.begin(), gaps.end(), [](long long d1, long long d2) {
+            int p1 = (d1 % 2 == 0) ? 1 : 0;
+            int p2 = (d2 % 2 == 0) ? 1 : 0;
+            if (p1 != p2) return p1 < p2;
+            return d1 < d2;
+        });
+        
+        int remaining = y;
+        for (long long d : gaps) {
+            if (remaining == 0) break;
+            if (d % 2 == 1) {
+                long long add = min((long long)remaining, (d - 1) / 2);
+                ans += add * 2;
+                remaining -= add;
+            } else {
+                long long need = d / 2;
+                if (remaining >= need) {
+                    ans += d - 1;
+                    remaining -= need;
+                } else {
+                    ans += remaining * 2;
+                    remaining = 0;
+                }
+            }
+        }
+        
+        cout << ans << '\n';
+    }
+    return 0;
+}

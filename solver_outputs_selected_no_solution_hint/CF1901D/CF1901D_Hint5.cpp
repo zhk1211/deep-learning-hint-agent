@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    cin >> n;
+    vector<long long> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+
+    if (n == 1) {
+        cout << a[0] << "\n";
+        return 0;
+    }
+
+    vector<long long> left_max(n), right_max(n);
+    for (int i = 0; i < n; ++i) {
+        left_max[i] = a[i] + (n - 1 - i);
+        right_max[i] = a[i] + i;
+    }
+
+    vector<long long> pref_left(n), suff_right(n);
+    pref_left[0] = left_max[0];
+    for (int i = 1; i < n; ++i) {
+        pref_left[i] = max(pref_left[i - 1], left_max[i]);
+    }
+    suff_right[n - 1] = right_max[n - 1];
+    for (int i = n - 2; i >= 0; --i) {
+        suff_right[i] = max(suff_right[i + 1], right_max[i]);
+    }
+
+    long long ans = LLONG_MAX;
+    for (int i = 0; i < n; ++i) {
+        long long cand = a[i];
+        if (i > 0) {
+            cand = max(cand, pref_left[i - 1] - (n - 1 - i));
+        }
+        if (i + 1 < n) {
+            cand = max(cand, suff_right[i + 1] - i);
+        }
+        ans = min(ans, cand);
+    }
+
+    cout << ans << "\n";
+    return 0;
+}

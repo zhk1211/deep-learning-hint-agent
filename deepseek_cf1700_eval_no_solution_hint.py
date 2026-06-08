@@ -50,6 +50,23 @@ For a single problem:
     --mode both \
     --hint_source auto \
     --overwrite
+    
+    
+python3 deepseek_cf1700_eval_no_solution_hint.py \
+  --prefix_file selected_no_solution_hint_prefixes.txt \
+  --output_dir solver_outputs_selected_no_solution_hint \
+  --solver_model deepseek-v4-pro \
+  --thinking disabled \
+  --mode both \
+  --samples_per_condition 1 \
+  --hint_source auto \
+  --hint_context no_solution \
+  --base_model_path ./qwen-coder-7b \
+  --lora_path ./cf_hint_lora_model_budgeted/checkpoint-175 \
+  --num_candidates 5 \
+  --candidate_batch_size 1 \
+  --parallel_solver_workers 6 \
+  --overwrite
 """
 
 import argparse

@@ -1,0 +1,81 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> marked(k);
+    for (int i = 0; i < k; i++) {
+        cin >> marked[i];
+        marked[i]--;
+    }
+    vector<vector<int>> adj(n);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        u--; v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    if (k == 0) {
+        cout << 0 << '\n';
+        return;
+    }
+    vector<int> dist1(n, -1);
+    queue<int> q;
+    q.push(marked[0]);
+    dist1[marked[0]] = 0;
+    int far1 = marked[0];
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : adj[u]) {
+            if (dist1[v] == -1) {
+                dist1[v] = dist1[u] + 1;
+                q.push(v);
+                if (dist1[v] > dist1[far1]) far1 = v;
+            }
+        }
+    }
+    vector<int> dist2(n, -1);
+    q.push(far1);
+    dist2[far1] = 0;
+    int far2 = far1;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : adj[u]) {
+            if (dist2[v] == -1) {
+                dist2[v] = dist2[u] + 1;
+                q.push(v);
+                if (dist2[v] > dist2[far2]) far2 = v;
+            }
+        }
+    }
+    vector<int> dist3(n, -1);
+    q.push(far2);
+    dist3[far2] = 0;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : adj[u]) {
+            if (dist3[v] == -1) {
+                dist3[v] = dist3[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    int ans = INT_MAX;
+    for (int i = 0; i < n; i++) {
+        ans = min(ans, max(dist2[i], dist3[i]));
+    }
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}

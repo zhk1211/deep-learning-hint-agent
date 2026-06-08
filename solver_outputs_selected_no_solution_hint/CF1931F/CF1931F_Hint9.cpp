@@ -1,0 +1,116 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> screens(k, vector<int>(n));
+    for (int i = 0; i < k; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cin >> screens[i][j];
+        }
+    }
+    if (k == 1) {
+        cout << "YES\n";
+        return;
+    }
+    vector<int> pos_in_first(n + 1);
+    for (int i = 0; i < n; ++i) {
+        pos_in_first[screens[0][i]] = i;
+    }
+    vector<int> order;
+    for (int i = 1; i < n; ++i) {
+        order.push_back(screens[0][i]);
+    }
+    int first_author = screens[0][0];
+    int second_author = screens[1][0];
+    int pos_first_in_second = -1;
+    for (int i = 0; i < n; ++i) {
+        if (screens[1][i] == first_author) {
+            pos_first_in_second = i;
+            break;
+        }
+    }
+    vector<int> order_without_first;
+    for (int i = 1; i < n; ++i) {
+        if (screens[1][i] != first_author) {
+            order_without_first.push_back(screens[1][i]);
+        }
+    }
+    vector<int> candidates;
+    if (pos_first_in_second == 1) {
+        candidates.push_back(0);
+    } else {
+        int before_first = screens[1][pos_first_in_second - 1];
+        int idx_in_order = -1;
+        for (int i = 0; i < (int)order.size(); ++i) {
+            if (order[i] == before_first) {
+                idx_in_order = i;
+                break;
+            }
+        }
+        if (idx_in_order != -1) {
+            candidates.push_back(idx_in_order + 1);
+        }
+        if (pos_first_in_second + 1 < n) {
+            int after_first = screens[1][pos_first_in_second + 1];
+            int idx2 = -1;
+            for (int i = 0; i < (int)order.size(); ++i) {
+                if (order[i] == after_first) {
+                    idx2 = i;
+                    break;
+                }
+            }
+            if (idx2 != -1) {
+                candidates.push_back(idx2);
+            }
+        }
+    }
+    sort(candidates.begin(), candidates.end());
+    candidates.erase(unique(candidates.begin(), candidates.end()), candidates.end());
+    for (int pos : candidates) {
+        vector<int> full_order = order;
+        full_order.insert(full_order.begin() + pos, first_author);
+        bool ok = true;
+        for (int i = 0; i < k && ok; ++i) {
+            int author = screens[i][0];
+            int author_pos = -1;
+            for (int j = 0; j < n; ++j) {
+                if (full_order[j] == author) {
+                    author_pos = j;
+                    break;
+                }
+            }
+            vector<int> expected(n);
+            expected[0] = author;
+            int idx = 1;
+            for (int j = 0; j < n; ++j) {
+                if (full_order[j] != author) {
+                    expected[idx++] = full_order[j];
+                }
+            }
+            for (int j = 0; j < n; ++j) {
+                if (expected[j] != screens[i][j]) {
+                    ok = false;
+                    break;
+                }
+            }
+        }
+        if (ok) {
+            cout << "YES\n";
+            return;
+        }
+    }
+    cout << "NO\n";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
